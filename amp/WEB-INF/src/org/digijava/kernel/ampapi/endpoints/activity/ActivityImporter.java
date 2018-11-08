@@ -39,6 +39,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -106,7 +107,7 @@ public class ActivityImporter extends ObjectImporter {
 
     public ActivityImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getActivityValidators()),
-                AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getAllAvailableFields());
+                AmpFieldsEnumerator.getPrivateEnumerator().getActivityFields());
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {

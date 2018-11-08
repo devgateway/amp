@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
@@ -52,7 +52,7 @@ public class ResourceImporter extends ObjectImporter {
 
     public ResourceImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getResourceValidators()),
-                AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getResourceFields());
+                AmpFieldsEnumerator.getPrivateEnumerator().getResourceFields());
     }
 
     /**

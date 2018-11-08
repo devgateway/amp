@@ -53,8 +53,8 @@ import org.apache.jackrabbit.util.ISO8601;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.AmpARFilterParams;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
-import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
-import org.digijava.kernel.ampapi.endpoints.activity.FieldsEnumerator;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.CachingFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.currency.CurrencyService;
@@ -107,7 +107,7 @@ public class SyncService implements InitializingBean {
             new BeanPropertyRowMapper<>(ActivityChange.class);
 
     private PossibleValuesEnumerator possibleValuesEnumerator = PossibleValuesEnumerator.INSTANCE;
-    private FieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.PRIVATE_ENUMERATOR;
+    private CachingFieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.getPrivateEnumerator();
     private CurrencyService currencyService = CurrencyService.INSTANCE;
 
     private AmpOfflineChangelogRepository ampOfflineChangelogRepository = AmpOfflineChangelogRepository.INSTANCE;

@@ -12,28 +12,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.nireports.ImmutablePair;
-import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
-import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.util.ProgramUtil;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -49,12 +43,12 @@ public class FieldsEnumerator {
     /**
      * Fields that are importable & required by AMP Offline clients.
      */
-    public static final Set<String> OFFLINE_REQUIRED_FIELDS = new ImmutableSet.Builder<String>()
+    private static final Set<String> OFFLINE_REQUIRED_FIELDS = new ImmutableSet.Builder<String>()
             .add(ActivityFieldsConstants.IS_DRAFT)
             .add(ActivityFieldsConstants.APPROVAL_STATUS)
             .build();
 
-    private boolean internalUse = false;
+    private boolean internalUse;
 
     private FieldInfoProvider fieldInfoProvider;
 
@@ -62,17 +56,24 @@ public class FieldsEnumerator {
 
     private TranslatorService translatorService;
 
+    private InterchangeDependencyResolver interchangeDependencyResolver;
+
+    private Function<String, Boolean> allowMultiplePrograms;
+
     /**
      * Fields Enumerator
      * 
      * @param internalUse flags if additional information for internal use is needed 
      */
     public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-                            TranslatorService translatorService, boolean internalUse) {
+                            TranslatorService translatorService, boolean internalUse,
+            Function<String, Boolean> allowMultiplePrograms) {
         this.fieldInfoProvider = fieldInfoProvider;
         this.fmService = fmService;
         this.translatorService = translatorService;
         this.internalUse = internalUse;
+        interchangeDependencyResolver = new InterchangeDependencyResolver(fmService);
+        this.allowMultiplePrograms = allowMultiplePrograms;
     }
 
     /**
@@ -115,7 +116,8 @@ public class FieldsEnumerator {
         if (interchangeable.percentageConstraint()){
             apiField.setPercentage(true);
         }
-        List<String> actualDependencies = InterchangeDependencyResolver.getActualDependencies(interchangeable.dependencies());
+        List<String> actualDependencies =
+                interchangeDependencyResolver.getActualDependencies(interchangeable.dependencies());
         if (actualDependencies != null) {
             apiField.setDependencies(actualDependencies);
         }
@@ -216,22 +218,6 @@ public class FieldsEnumerator {
             label = interchangeable.label();
         }
         return label;
-    }
-
-    public List<APIField> getAllAvailableFields() {
-        return getAllAvailableFields(AmpActivityFields.class);
-    }
-
-    public List<APIField> getContactFields() {
-        return getAllAvailableFields(AmpContact.class);
-    }
-    
-    public List<APIField> getResourceFields() {
-        return getAllAvailableFields(AmpResource.class);
-    }
-    
-    public List<APIField> getCommonSettingsFields() {
-        return getAllAvailableFields(CommonSettings.class);
     }
 
     List<APIField> getAllAvailableFields(Class<?> clazz) {
@@ -348,27 +334,9 @@ public class FieldsEnumerator {
         return null;
     }
     
-    public List<String> findActivityFieldPaths(Predicate<Field> fieldFilter) {
+    List<String> findFieldPaths(Predicate<Field> fieldFilter, Class<?> clazz) {
         FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
-        visit(AmpActivityFields.class, visitor, new VisitorContext());
-        return visitor.fields;
-    }
-
-    public List<String> findContactFieldPaths(Predicate<Field> fieldFilter) {
-        FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
-        visit(AmpContact.class, visitor, new VisitorContext());
-        return visitor.fields;
-    }
-    
-    public List<String> findResourceFieldPaths(Predicate<Field> fieldFilter) {
-        FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
-        visit(AmpResource.class, visitor, new VisitorContext());
-        return visitor.fields;
-    }
-    
-    public List<String> findCommonFieldPaths(Predicate<Field> fieldFilter) {
-        FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
-        visit(CommonSettings.class, visitor, new VisitorContext());
+        visit(clazz, visitor, new VisitorContext());
         return visitor.fields;
     }
 
@@ -493,13 +461,9 @@ public class FieldsEnumerator {
      */
     private boolean hasMaxSizeValidatorEnabled(Field field, FEContext context) {
         if (AmpActivityProgram.class.equals(InterchangeUtils.getGenericClass(field))) {
-            try {
-                AmpActivityProgramSettings setting = ProgramUtil.getAmpActivityProgramSettings(
-                        context.getIntchStack().peek().discriminatorOption());
-                return setting != null && !setting.isAllowMultiple();
-            } catch (DgException e) {
-                throw new RuntimeException(e);
-            }
+            return allowMultiplePrograms.apply(context.getIntchStack().peek().discriminatorOption());
+
+
         } else {
             return hasValidatorEnabled(context, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
         }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
@@ -29,7 +29,7 @@ public class ContactImporter extends ObjectImporter {
 
     public ContactImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getContactValidators()),
-                AmpFieldsEnumerator.PRIVATE_CONTACT_ENUMERATOR.getContactFields());
+                AmpFieldsEnumerator.getPrivateContactEnumerator().getContactFields());
     }
 
     public List<ApiErrorMessage> createContact(JsonBean newJson) {

@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 
 import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
 import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
-import org.digijava.kernel.services.sync.SyncService;
+import org.digijava.kernel.services.sync.SyncDAO;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpContact;
 
@@ -20,7 +20,7 @@ import org.digijava.module.aim.dbentity.AmpContact;
  */
 public class CachingFieldsEnumerator {
 
-    private SyncService syncService;
+    private SyncDAO syncDAO;
 
     private FieldsEnumerator fieldsEnumerator;
 
@@ -28,8 +28,8 @@ public class CachingFieldsEnumerator {
 
     private Timestamp cachedUpToDate;
 
-    public CachingFieldsEnumerator(SyncService syncService, FieldsEnumerator fieldsEnumerator) {
-        this.syncService = syncService;
+    public CachingFieldsEnumerator(SyncDAO syncDAO, FieldsEnumerator fieldsEnumerator) {
+        this.syncDAO = syncDAO;
         this.fieldsEnumerator = fieldsEnumerator;
     }
 
@@ -53,7 +53,7 @@ public class CachingFieldsEnumerator {
      * Cached version of {@link FieldsEnumerator#getAllAvailableFields(Class)}
      */
     private List<APIField> getAllAvailableFields(Class<?> clazz) {
-        Timestamp lastModificationDate = syncService.getLastModificationDateForFieldDefinitions();
+        Timestamp lastModificationDate = syncDAO.getLastModificationDateForFieldDefinitions();
         if (cachedUpToDate == null) {
             cachedUpToDate = lastModificationDate;
         }

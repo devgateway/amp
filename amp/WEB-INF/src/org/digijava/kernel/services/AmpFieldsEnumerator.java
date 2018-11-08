@@ -10,7 +10,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.CachingFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
-import org.digijava.kernel.services.sync.SyncService;
+import org.digijava.kernel.services.sync.SyncDAO;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.springframework.beans.factory.InitializingBean;
@@ -31,7 +31,7 @@ public final class AmpFieldsEnumerator implements InitializingBean {
     private static CachingFieldsEnumerator privateContactEnumerator;
 
     @Autowired
-    private SyncService syncService;
+    private SyncDAO syncDAO;
 
     public static CachingFieldsEnumerator getPublicEnumerator() {
         return publicEnumerator;
@@ -65,18 +65,18 @@ public final class AmpFieldsEnumerator implements InitializingBean {
         Function<String, Boolean> allowMultiplePrograms = new AllowMultipleProgramsPredicate();
 
         AMPFMService fmService = new AMPFMService();
-        publicEnumerator = new CachingFieldsEnumerator(syncService,
+        publicEnumerator = new CachingFieldsEnumerator(syncDAO,
                 new ActivityFieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE,
                         false, allowMultiplePrograms));
-        privateEnumerator = new CachingFieldsEnumerator(syncService,
+        privateEnumerator = new CachingFieldsEnumerator(syncDAO,
                 new ActivityFieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE,
                         true, allowMultiplePrograms));
 
         AmpFieldInfoProvider contactFieldInfoProvider = new AmpFieldInfoProvider(AmpContact.class);
-        publicContactEnumerator = new CachingFieldsEnumerator(syncService,
+        publicContactEnumerator = new CachingFieldsEnumerator(syncDAO,
                 new FieldsEnumerator(contactFieldInfoProvider, fmService, AMPTranslatorService.INSTANCE,
                         false, allowMultiplePrograms));
-        privateContactEnumerator = new CachingFieldsEnumerator(syncService,
+        privateContactEnumerator = new CachingFieldsEnumerator(syncDAO,
                 new FieldsEnumerator(contactFieldInfoProvider, fmService, AMPTranslatorService.INSTANCE,
                         true, allowMultiplePrograms));
     }

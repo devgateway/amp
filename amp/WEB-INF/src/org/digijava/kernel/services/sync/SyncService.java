@@ -4,7 +4,6 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.ACTIVITY_PROGRAM_SETTINGS;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CONTACT;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.EXCHANGE_RATES;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.FEATURE_MANAGER;
@@ -50,7 +49,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import com.google.common.collect.ImmutableList;
 import org.apache.jackrabbit.util.ISO8601;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.AmpARFilterParams;
@@ -181,15 +179,6 @@ public class SyncService implements InitializingBean {
                 systemDiff.updateTimestamp(changelog.getOperationTime());
             }
         }
-    }
-
-    public Timestamp getLastModificationDateForFieldDefinitions() {
-        return jdbcTemplate.queryForObject(
-                "SELECT max(operation_time) "
-                + "FROM amp_offline_changelog "
-                + "WHERE entity_name in (:entities)",
-                singletonMap("entities", ImmutableList.of(FEATURE_MANAGER, TRANSLATION, ACTIVITY_PROGRAM_SETTINGS)),
-                Timestamp.class);
     }
 
     private boolean shouldSyncTranslations(SystemDiff systemDiff, Date lastSyncTime) {

@@ -24,6 +24,7 @@ import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -59,6 +60,7 @@ import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -75,7 +77,6 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -305,7 +306,6 @@ public class ActivityUtil {
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
-        updatePerformanceIssues(a);
     
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
@@ -315,6 +315,8 @@ public class ActivityUtil {
             session.saveOrUpdate(a);
             //session.update(a);
         }
+        
+        updatePerformanceRules(oldA, a);
 
         if (newActivity){
             a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
@@ -323,20 +325,17 @@ public class ActivityUtil {
         return a;
     }
 
-    private static void updatePerformanceIssues(AmpActivityVersion a) {
+    private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityVersion a) {
         PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
 
-        Set<AmpCategoryValue> matchedLevels = new HashSet<>();
+        Set<AmpPerformanceRule> matchedRules = new HashSet<>();
 
         if (ruleManager.canActivityContainPerformanceIssues(a)) {
-            matchedLevels = ruleManager.getPerformanceLevelsFromIssues(ruleManager.findPerformanceIssues(a));
+            matchedRules = ruleManager.getPerformanceRulesFromIssues(ruleManager.findPerformanceIssues(a));
         }
         
-        Set<AmpCategoryValue> activityLevels = ruleManager.getPerformanceIssuesFromActivity(a);
-        
-        if (!ruleManager.isEqualPerformanceLevelCollection(matchedLevels, activityLevels)) {
-            ruleManager.updatePerformanceIssuesInActivity(a, activityLevels, matchedLevels);
-        }
+        ruleManager.deleteActivityPerformanceRule(PersistenceManager.getSession(), oldA.getAmpActivityId());
+        ruleManager.updateActivityPerformanceRules(a.getAmpActivityId(), matchedRules);
     }
 
     /**
@@ -423,7 +422,11 @@ public class ActivityUtil {
                             a.setApprovedBy(ampCurrentMember);
                             a.setApprovalDate(Calendar.getInstance().getTime());
                         } else {
-                            a.setApprovalStatus(Constants.STARTED_STATUS);
+                            if (StringUtils.equals(oldA.getApprovalStatus(), Constants.STARTED_STATUS)) {
+                                a.setApprovalStatus(Constants.STARTED_STATUS);
+                            } else {
+                                a.setApprovalStatus(Constants.EDITED_STATUS);
+                            }
                         }
                     }
                 }

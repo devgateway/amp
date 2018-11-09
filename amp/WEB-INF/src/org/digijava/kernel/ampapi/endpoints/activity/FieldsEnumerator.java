@@ -234,21 +234,24 @@ public class FieldsEnumerator {
     private List<APIField> getAllAvailableFields(Class<?> clazz, FEContext context) {
         List<APIField> result = new ArrayList<>();
         //StopWatch.next("Descending into", false, clazz.getName());
-        Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class);
-        for (Field field : fields) {
-            Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+        for (Field field : InterchangeUtils.getFieldsAnnotatedWith(clazz,
+                Interchangeable.class, InterchangeableDiscriminator.class)) {
+
             if (!internalUse && InterchangeUtils.isAmpActivityVersion(field.getType())) {
                 continue;
             }
-            context.getIntchStack().push(interchangeable);
-            if (!InterchangeUtils.isCompositeField(field)) {
+            Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+            if (interchangeable != null) {
+                context.getIntchStack().push(interchangeable);
                 if (isFieldVisible(context)) {
                     APIField descr = describeField(field, context);
                     descr.setFieldValueReader(new SimpleFieldValueReader(field.getName()));
                     result.add(descr);
                 }
-            } else {
-                InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
+                context.getIntchStack().pop();
+            }
+            InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
+            if (discriminator != null) {
                 Interchangeable[] settings = discriminator.settings();
                 for (int i = 0; i < settings.length; i++) {
                     context.getDiscriminationInfoStack().push(getDiscriminationInfo(field, settings[i]));
@@ -265,7 +268,6 @@ public class FieldsEnumerator {
                     context.getDiscriminationInfoStack().pop();
                 }
             }
-            context.getIntchStack().pop();
         }
         return result;
     }
@@ -371,27 +373,31 @@ public class FieldsEnumerator {
 
     // TODO how to reuse this logic?
     private void visit(Class<?> clazz, InterchangeVisitor visitor, VisitorContext context) {
-        for (Field field : FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class)) {
+        for (Field field : InterchangeUtils.getFieldsAnnotatedWith(clazz,
+                Interchangeable.class, InterchangeableDiscriminator.class)) {
+
             Interchangeable ant = field.getAnnotation(Interchangeable.class);
-            context.feContext.getIntchStack().push(ant);
-            if (!InterchangeUtils.isCompositeField(field)) {
+            if (ant != null) {
+                context.feContext.getIntchStack().push(ant);
                 if (isFieldVisible(context.feContext)) {
                     visit(field, InterchangeUtils.underscorify(ant.fieldTitle()), ant, visitor, context);
                 }
-            } else {
-                InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
+                context.feContext.getIntchStack().pop();
+            }
+
+            InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
+            if (antd != null) {
                 Interchangeable[] settings = antd.settings();
                 for (Interchangeable ants : settings) {
                     context.feContext.getDiscriminationInfoStack().push(getDiscriminationInfo(field, ants));
                     context.feContext.getIntchStack().push(ants);
                     if (isFieldVisible(context.feContext)) {
-                        visit(field, InterchangeUtils.underscorify(ants.fieldTitle()), ant, visitor, context);
+                        visit(field, InterchangeUtils.underscorify(ants.fieldTitle()), ants, visitor, context);
                     }
                     context.feContext.getIntchStack().pop();
                     context.feContext.getDiscriminationInfoStack().pop();
                 }
             }
-            context.feContext.getIntchStack().pop();
         }
     }
 

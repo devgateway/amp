@@ -12,6 +12,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
@@ -106,6 +107,10 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
             if (ant != null && !ant.pickIdOnly() && !InterchangeUtils.isSimpleType(field.getType())) {
                 fillFieldsLengthInformation(InterchangeUtils.getClassOfField(field));
             }
+            InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
+            if (antd != null && !InterchangeUtils.isSimpleType(field.getType())) {
+                fillFieldsLengthInformation(InterchangeUtils.getClassOfField(field));
+            }
         }
     }
 
@@ -115,7 +120,8 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
         while (wClass != Object.class) {
             Field[] declaredFields = wClass.getDeclaredFields();
             for (Field field : declaredFields) {
-                if (field.getAnnotation(Interchangeable.class) != null) {
+                if (field.isAnnotationPresent(Interchangeable.class)
+                        || field.isAnnotationPresent(InterchangeableDiscriminator.class)) {
                     interFields.put(field.getName(), field);
                 }
             }

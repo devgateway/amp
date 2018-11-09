@@ -187,7 +187,6 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Disbursement Date")
     protected Date disbursmentsDate;
     
-    @Interchangeable(fieldTitle = "Sectors", importable = true, fmPath = "/Activity Form/Sectors")
     @VersionableCollection(fieldTitle = "Sectors")
     @InterchangeableDiscriminator(discriminatorField = "classificationConfig.name",
             configurer = AmpActivitySectorDiscriminationConfigurer.class,
@@ -217,7 +216,6 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.LOCATIONS)
     protected Set<AmpActivityLocation> locations ;
     
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.ORG_ROLE, importable = true, fmPath = "/Activity Form/Organizations")
     @VersionableCollection(fieldTitle = "Org. Role")
     @InterchangeableDiscriminator(discriminatorField = "role.roleCode",
             configurer = AmpOrgRoleDiscriminationConfigurer.class, settings = {
@@ -299,7 +297,6 @@ LoggerIdentifiable, Cloneable {
     protected String contactName;
     //protected AmpTeamMember updatedBy; !!! Use modifiedBy
     
-    @Interchangeable(fieldTitle = "Project Costs", importable = true)
     @InterchangeableDiscriminator(discriminatorField = "funType",
             configurer = AmpFundingAmountDiscriminationConfigurer.class,
             settings = {
@@ -394,7 +391,6 @@ LoggerIdentifiable, Cloneable {
 //  @Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Fax")
     protected String secMiCntFaxNumber;
 
-    @Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = ActivityEPConstants.CONTACTS_PATH)
     @VersionableCollection(fieldTitle = "Activity Contacts")
     @InterchangeableDiscriminator(discriminatorField = "contactType", settings = {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.DONOR_CONTACT, importable = true, discriminatorOption = Constants.DONOR_CONTACT, 
@@ -535,7 +531,6 @@ LoggerIdentifiable, Cloneable {
     protected Set<AmpActivityDocument> activityDocuments = null;
     
     /* Categories */
-    @Interchangeable(fieldTitle = "Categories", importable = true)
     @InterchangeableDiscriminator(discriminatorField = "ampCategoryClass.keyName",
     settings = {
         @Interchangeable(fieldTitle = "Activity Status", importable=true, multipleValues=false, required = ActivityEPConstants.REQUIRED_ALWAYS,
@@ -670,7 +665,6 @@ LoggerIdentifiable, Cloneable {
     protected Boolean humanitarianAid;
 
     //Can be Primary, Secondary,Tertiary or National Plan Objective
-    @Interchangeable(fieldTitle = "Act. Programs", importable = true, fmPath = "/Activity Form/Program")
     @VersionableCollection(fieldTitle = "Act. Programs")
     @InterchangeableDiscriminator(discriminatorField = "programSetting.name",
             configurer = AmpActivityProgramDiscriminatorConfigurer.class, settings = {

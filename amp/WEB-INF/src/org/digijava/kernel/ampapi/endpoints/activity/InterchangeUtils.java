@@ -83,7 +83,7 @@ public class InterchangeUtils {
     /**
      * map from discriminated field name (i.e. "orgroles") to actual field title (i.e. "Donor Organization")
      */
-    public static Map<String, List<String>> discriminatedFieldTitlesByFieldName = new HashMap<>();
+    private static Map<String, List<String>> discriminatedFieldTitlesByFieldName = new HashMap<>();
     static {
         addUnderscoredTitlesToMap(AmpActivityFields.class);
         addUnderscoredTitlesToMap(AmpContact.class);
@@ -93,6 +93,10 @@ public class InterchangeUtils {
     private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>();
 
     private static TranslatorService translatorService = AMPTranslatorService.INSTANCE;
+
+    public static Map<String, List<String>> getDiscriminatedFieldTitlesByFieldName() {
+        return discriminatedFieldTitlesByFieldName;
+    }
 
     public static void setTranslatorService(TranslatorService translatorService) {
         InterchangeUtils.translatorService = translatorService;

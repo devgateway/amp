@@ -49,7 +49,7 @@ public class ComponentFundingOrgsValidator extends InputValidator {
     private Set<Long> getOrgIds(JsonBean activity) {
         Set<Long> orgIds = new HashSet<>();
 
-        List<String> orgRoleFields = InterchangeUtils.discriminatedFieldTitlesByFieldName.get("orgrole");
+        List<String> orgRoleFields = InterchangeUtils.getDiscriminatedFieldTitlesByFieldName().get("orgrole");
 
         for (String field : orgRoleFields) {
             Object orgRolesObj = InterchangeUtils.getFieldValuesFromJsonActivity(activity, field);

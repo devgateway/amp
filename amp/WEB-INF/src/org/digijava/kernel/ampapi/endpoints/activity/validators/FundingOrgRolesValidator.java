@@ -92,7 +92,7 @@ public class FundingOrgRolesValidator extends InputValidator {
 
         Map<String, Long> roleIdsByCode = getOrgRoleIdsByCode();
 
-        List<String> orgRoleFields = InterchangeUtils.discriminatedFieldTitlesByFieldName.get("orgrole");
+        List<String> orgRoleFields = InterchangeUtils.getDiscriminatedFieldTitlesByFieldName().get("orgrole");
 
         for (String field : orgRoleFields) {
             Object orgRolesObj = InterchangeUtils.getFieldValuesFromJsonActivity(activity, field);

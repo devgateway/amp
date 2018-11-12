@@ -214,11 +214,12 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
     public CacheHitsCounter hiersTrackerCounter = new CacheHitsCounter();
     public final Predicate<Long> yearRangeSettingsPredicate;
 
-    public final IReportEnvironment reportEnvironment;
+    private final IReportEnvironment reportEnvironment;
     
     HierarchiesTracker rootEmptyTracker = HierarchiesTracker.buildEmpty(hiersTrackerCounter);
     
-    public NiReportsEngine(NiReportsSchema schema, ReportSpecification reportSpec, IReportEnvironment reportEnvironment) {
+    public NiReportsEngine(NiReportsSchema schema, ReportSpecification reportSpec,
+            IReportEnvironment reportEnvironment) {
         this.schema = schema;
         this.spec = reportSpec;
         this.reportEnvironment = reportEnvironment;
@@ -801,4 +802,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
         return snapshot.getCachingIdsAcceptor(coos);
     }
 
+    public IReportEnvironment getReportEnvironment() {
+        return reportEnvironment;
+    }
 }

@@ -1324,7 +1324,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      * adds a date field ties to a degenerate dimension
      * @param columnName
      * @param viewName
-     * @param dim
+     * @param levelColumn
      * @return
      */
     private AmpReportsSchema date_column(String columnName, String viewName, LevelColumn levelColumn) {
@@ -1398,7 +1398,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      * @return
      */
     protected Set<Long> _getWorkspaceActivities(NiReportsEngine engine) {
-        return AmpReportsScratchpad.get(engine).environment.getIds();
+        return AmpReportsScratchpad.get(engine).getEnvironment().getIds();
     }
         
     @Override

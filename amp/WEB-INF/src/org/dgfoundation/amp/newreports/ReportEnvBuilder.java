@@ -11,11 +11,14 @@ import org.digijava.module.aim.helper.TeamMember;
 /**
  * @author Octavian Ciubotaru
  */
-public class ReportEnvBuilder {
+public final class ReportEnvBuilder {
 
     private static final GlobalActivityIdsGenerator GLOBAL_ACTIVITY_IDS_GENERATOR = new GlobalActivityIdsGenerator();
 
-    private static ConcurrentMap<TeamMember, IdsGeneratorSource> teamMemberCache = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<TeamMember, IdsGeneratorSource> TEAM_MEMBER_CACHE = new ConcurrentHashMap<>();
+
+    private ReportEnvBuilder() {
+    }
 
     /**
      * Return global report environment. Includes all activities except the ones not assigned to a workspace.
@@ -44,7 +47,7 @@ public class ReportEnvBuilder {
         if (tm == null) {
             return from(new CompleteWorkspaceFilter(null));
         } else {
-            return from(teamMemberCache.computeIfAbsent(tm, z -> new CompleteWorkspaceFilter(tm)));
+            return from(TEAM_MEMBER_CACHE.computeIfAbsent(tm, z -> new CompleteWorkspaceFilter(tm)));
         }
     }
 

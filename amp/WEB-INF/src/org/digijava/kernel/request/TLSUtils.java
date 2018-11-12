@@ -3,7 +3,6 @@ package org.digijava.kernel.request;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;

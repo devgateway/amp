@@ -121,9 +121,9 @@ public class AmpARFilter extends PropertyListable {
      */
     public final static long DUMMY_SUPPLEMENTARY_PLEDGE_FETCHING_REPORT_ID = -996L;
 
-    public static final Set<String> SETTINGS_PROPERTIES = new HashSet<>(Arrays.asList("amountinthousand", "calendarType",
-            "customusegroupings", "decimalseparator", "groupingsize", "maximumFractionDigits", "renderEndYear",
-            "renderStartYear", "sortByAsc", "sortBy"));
+    public static final Set<String> SETTINGS_PROPERTIES = new HashSet<>(Arrays.asList("amountinthousand",
+            "calendarType", "customusegroupings", "decimalseparator", "groupingsize", "maximumFractionDigits",
+            "renderEndYear", "renderStartYear", "sortByAsc", "sortBy"));
 
     public final static Map<String, Integer> activityApprovalStatus = Collections.unmodifiableMap(new HashMap<String, Integer>(){{
         this.put("Existing Unvalidated", 0);
@@ -860,7 +860,7 @@ public class AmpARFilter extends PropertyListable {
         AmpReports ampReport = ampReportId == null ? null : DbUtil.getAmpReport(ampReportId);
         if (ampReport != null)
         {
-            this.budgetExport   = ampReport.getBudgetExporter()==null ? false:ampReport.getBudgetExporter();
+            this.budgetExport = ampReport.getBudgetExporter() == null ? false : ampReport.getBudgetExporter();
             if (ampReport.getType() == ArConstants.PLEDGES_TYPE){
                     this.pledgeFilter = true;
             }
@@ -892,8 +892,7 @@ public class AmpARFilter extends PropertyListable {
             //Check if the reportid is not nut for public mondrian reports
             if (ampReport != null)
             {
-                if (ampReport != null && ampReport.getWorkspaceLinked() && ampReport.getOwnerId() != null)
-                {
+                if (ampReport != null && ampReport.getWorkspaceLinked() && ampReport.getOwnerId() != null) {
                     teamMemberId = ampReport.getOwnerId().getAmpTeamMemId();
                 } else
                 {
@@ -904,52 +903,6 @@ public class AmpARFilter extends PropertyListable {
         }
 
         //FormatHelper.tlocal.set(null); // somewhat ugly hack, as this shouldn't belong in here
-    }
-
-    private int getCalendarYear(AmpApplicationSettings settings, Integer settingsYear, String globalSettingsKey)
-    {
-        Long defaultCalendarId;
-
-        if (settings != null){
-            if (settings.getFiscalCalendar() != null){
-                defaultCalendarId = settings.getFiscalCalendar().getAmpFiscalCalId();
-            }else{
-                defaultCalendarId = Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
-            }
-        }
-
-        Integer result = null;
-        // Check if there is value on workspace or member setting
-        if (settingsYear != null && settingsYear.intValue() != 0) {
-            result = settingsYear;
-        } else
-        {
-            // global setting
-            String gvalue = FeaturesUtil.getGlobalSettingValue(globalSettingsKey);
-            if (gvalue != null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0) {
-                result = Integer.parseInt(gvalue);
-            }
-        }
-
-        //TODO-CONSTANTIN: strange conversion between calendars
-        if (result == null)
-            return -1;
-
-        result = FiscalCalendarUtil.getYearOnCalendar(calendarType.getAmpFiscalCalId(), result, settings);
-        //TODO:Constantin: used the ReportsFilterPickerForm-ported between-calendars conversion utilities (migrated by me to FiscalCalendarUtils) as the code looks more maintained. In case it is faulty, we could try our luck with the commented code below
-
-//      if (result != null && result > 0 && calendarType != null && calendarType.getAmpFiscalCalId().equals(defaultCalendarId) ){
-//          ICalendarWorker worker = calendarType.getworker();
-//          try {
-//              Date checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + result);
-//              worker.setTime(checkDate);
-//              result = worker.getYear();
-//          } catch (Exception e) {
-//              e.printStackTrace();
-//          }
-//      }
-
-        return result == null ? -1 : result;
     }
 
     /**
@@ -1070,7 +1023,8 @@ public class AmpARFilter extends PropertyListable {
     }
 
     /**
-     * returns true iff the filter has been changed compared to its "default" value. The default value is the one which the filter had when {@link #rememberDefaultValues()} has been called last
+     * returns true iff the filter has been changed compared to its "default" value. The default value is the one
+     * which the filter had when {@link #rememberDefaultValues()} has been called last
      * @return
      */
     @PropertyListableIgnore
@@ -1329,7 +1283,8 @@ public class AmpARFilter extends PropertyListable {
             if(DYNAMIC_FILTER_ADD_OP.equals(op)){/* + */
                 //start date is always the first date of the selected period
                 if(DYNAMIC_FILTER_YEAR.equals(currentPeriod)){/*years*/
-                    dfromDate = FiscalCalendarUtil.getCalendarStartDateForCurrentYear(calendarType.getAmpFiscalCalId());//first date of current fiscal year
+                    //first date of current fiscal year
+                    dfromDate = FiscalCalendarUtil.getCalendarStartDateForCurrentYear(calendarType.getAmpFiscalCalId());
                 }else if(DYNAMIC_FILTER_MONTH.equals(currentPeriod)){/*months*/
                     dfromDate = FiscalCalendarUtil.getFirstDateOfCurrentMonth();//first date of current month
                 }else{ /*days*/
@@ -1341,7 +1296,8 @@ public class AmpARFilter extends PropertyListable {
             }else{/* - */
                 //end date is always the last date of the selected period
                 if(DYNAMIC_FILTER_YEAR.equals(currentPeriod)){/*years*/
-                    dtoDate = FiscalCalendarUtil.getCalendarEndDateForCurrentYear(calendarType.getAmpFiscalCalId());//first date of current fiscal year
+                    // first date of current fiscal year
+                    dtoDate = FiscalCalendarUtil.getCalendarEndDateForCurrentYear(calendarType.getAmpFiscalCalId());
                 }else if(DYNAMIC_FILTER_MONTH.equals(currentPeriod)){/*months*/
                     dtoDate = FiscalCalendarUtil.getLastDateOfCurrentMonth();//last date of current month
                 }else{ /*days*/
@@ -2744,7 +2700,8 @@ public class AmpARFilter extends PropertyListable {
     }
 
     /**
-     * only call this function directly if you NEED to know that the underlying value is null. In case you just want to know the value of the option, call computeEffectiveAmountInThousand
+     * only call this function directly if you NEED to know that the underlying value is null. In case you just want
+     * to know the value of the option, call computeEffectiveAmountInThousand
      * @return
      */
     public Integer getAmountinthousand() {
@@ -2954,7 +2911,7 @@ public class AmpARFilter extends PropertyListable {
 
     public void setTeamMemberId(Long teamMemberId)
     {
-        this.teamMemberId =teamMemberId;
+        this.teamMemberId = teamMemberId;
     }
 
     public boolean getNeedsTeamFilter()

@@ -45,7 +45,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toCollection;
 
 /**
  * the {@link NiReportColumn} which fetches funding cells. This class is the common ancestors for all the coordinates-based funding cells in the AMP schema 
@@ -124,7 +124,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
     private SubDimensions subDimensions;
 
     /**
-     * delegates to {@link #AmpFundingColumn(String, String, Behaviour)} with {@link TrivialMeasureBehaviour} as a behaviour
+     * delegates to {@link #AmpFundingColumn(String, LocalizableLabel, String, Behaviour, SubDimensions)}
+     * with {@link TrivialMeasureBehaviour} as a behaviour
      */
     public AmpFundingColumn(String columnName, String viewName, SubDimensions subDimensions) {
         this(columnName, new LocalizableLabel(columnName), viewName, TrivialMeasureBehaviour.getInstance(), subDimensions);
@@ -241,22 +242,16 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
     private List<CategAmountCell> materialize(NiReportsEngine engine, AmpReportsScratchpad scratchpad,
             AmpReportsSchema schema, List<CategAmountCellProto> protos) {
 
-        // cmp begin
         long start = System.currentTimeMillis();
+
+        AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
         CachingCalendarConverter calendar = engine.calendar;
         CurrencyConvertor currencyConvertor = schema.currencyConvertor;
         NiPrecisionSetting precisionSetting = scratchpad.getPrecisionSetting();
-        List<CategAmountCell> cells = protos.stream()
-                .map(cacp -> cacp.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting))
-                .collect(toList());
-        long delta = System.currentTimeMillis() - start;
-        engine.timer.putMetaInNode("materialize_time", delta);
-        // cmp end Ș return cells;
 
-        List<CategAmountCell> res = new ArrayList<>();
-        AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
-        res.addAll(protos.stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar,
-                schema.currencyConvertor, scratchpad.getPrecisionSetting(), false)).collect(toList()));
+        List<CategAmountCell> res = protos.stream()
+                .map(cacp -> cacp.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, false))
+                .collect(toCollection(ArrayList::new));
 
         /*
          * AMP-27571
@@ -264,11 +259,14 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
         */
         if (engine.spec.isShowOriginalCurrency()) {
             // generate cells for original currency only (except used currency)
-            res.addAll(protos.stream()
-                    .map(cacp -> cacp.materialize(usedCurrency, engine.calendar,
-                            schema.currencyConvertor, scratchpad.getPrecisionSetting(), true))
-                    .collect(toList()));
+            protos.stream()
+                    .map(cacp -> cacp.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, true))
+                    .forEach(res::add);
         }
+
+        long delta = System.currentTimeMillis() - start;
+        engine.timer.putMetaInNode("materialize_time", delta);
+
         return res;
     }
 

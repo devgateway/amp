@@ -19,10 +19,7 @@ import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportEnvironment;
-import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -32,9 +29,7 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiReportsEngineForTesting;
 import org.dgfoundation.amp.nireports.TestcasesReportsSchema;
-import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
-import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
@@ -46,7 +41,6 @@ import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -85,23 +79,6 @@ public abstract class ReportingTestCase extends AmpTestCase {
         return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria);
     }
         
-    protected GeneratedReport runReportOnNiReports(ReportSpecification spec, String locale, List<String> entities,
-            Class<? extends ReportAreaImpl> areaType) {
-        try {
-            org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
-            if (TLSUtils.getRequest() == null)
-                TLSUtils.getThreadLocalInstance().request = mockRequest;
-            
-            TLSUtils.getRequest().setAttribute(ReportEnvironment.OVERRIDDEN_WORKSPACE_FILTER, new ActivityIdsFetcher(entities));
-            ReportExecutor generator = new NiReportsGenerator(AmpReportsSchema.getInstance(), false, null);
-            GeneratedReport res = generator.executeReport(spec);
-            return res;
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-            
     protected ReportSpecificationImpl buildActivityListingReportSpec(String name) {
         ReportSpecificationImpl spec = buildSpecification(name, 
                 Arrays.asList(ColumnConstants.PROJECT_TITLE), 

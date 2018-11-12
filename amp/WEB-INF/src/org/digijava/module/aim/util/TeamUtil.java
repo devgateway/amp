@@ -2017,7 +2017,8 @@ public class TeamUtil {
         tm.setAppSettings(appSettings);
         session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
         session.setAttribute("currentMember", tm);
-        initCompleteTeamFilter(session, tm);
+        session.setMaxInactiveInterval(
+                FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.MAX_INACTIVE_SESSION_INTERVAL));
         return tm;
     }
     
@@ -2026,8 +2027,6 @@ public class TeamUtil {
         CompleteWorkspaceFilter res = new CompleteWorkspaceFilter(tm);
         if (session != null) {
             session.setAttribute(Constants.COMPLETE_TEAM_FILTER, res);
-            try {session.setMaxInactiveInterval(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.MAX_INACTIVE_SESSION_INTERVAL).intValue());}
-            catch(UnsupportedOperationException e) {}; // for testcases
         }
         return res;
     }

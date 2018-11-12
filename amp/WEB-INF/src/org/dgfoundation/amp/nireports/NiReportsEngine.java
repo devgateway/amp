@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.timing.RunNode;
+import org.dgfoundation.amp.newreports.IReportEnvironment;
 import org.dgfoundation.amp.nireports.output.NiReportFilterResult;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
@@ -212,12 +213,15 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
     
     public CacheHitsCounter hiersTrackerCounter = new CacheHitsCounter();
     public final Predicate<Long> yearRangeSettingsPredicate;
+
+    public final IReportEnvironment reportEnvironment;
     
     HierarchiesTracker rootEmptyTracker = HierarchiesTracker.buildEmpty(hiersTrackerCounter);
     
-    public NiReportsEngine(NiReportsSchema schema, ReportSpecification reportSpec) {
+    public NiReportsEngine(NiReportsSchema schema, ReportSpecification reportSpec, IReportEnvironment reportEnvironment) {
         this.schema = schema;
         this.spec = reportSpec;
+        this.reportEnvironment = reportEnvironment;
         this.yearRangeSettingsPredicate = spec.getSettings() == null ? (z -> true) : spec.getSettings().buildYearSettingsPredicate();
     }
 

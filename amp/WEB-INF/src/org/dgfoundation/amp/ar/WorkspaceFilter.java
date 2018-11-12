@@ -11,6 +11,7 @@ import clover.com.google.common.base.Joiner;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
+import org.dgfoundation.amp.newreports.ReportEnvBuilder;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
@@ -132,7 +133,7 @@ public class WorkspaceFilter
      */
     private Set<Long> getActivitiesByFilter(FilterDataSetInterface filter) {
         AmpARFilter af = FilterUtil.buildFilterFromSource(filter);
-        return TLSUtils.inGlobalFilterContext(() -> ActivityFilter.getInstance().filter(af));
+        return ActivityFilter.getInstance().filter(af, ReportEnvBuilder.global());
     }
 
     private Set<Long> getActivitiesByOrgs(Set orgs) {

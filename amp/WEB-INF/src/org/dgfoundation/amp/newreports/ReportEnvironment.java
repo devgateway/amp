@@ -17,8 +17,6 @@ import org.digijava.module.aim.util.TeamUtil;
  */
 public class ReportEnvironment {
 
-    private static final GlobalActivityIdsGenerator GLOBAL_ACTIVITY_IDS_GENERATOR = new GlobalActivityIdsGenerator();
-
     public final String locale;
     public final IdsGeneratorSource workspaceFilter;
     public final IdsGeneratorSource pledgesFilter;
@@ -41,11 +39,7 @@ public class ReportEnvironment {
 
     public static ReportEnvironment buildFor(HttpServletRequest request) {
         IdsGeneratorSource workspaceFilter;
-        if (TLSUtils.isFilterGlobally()) {
-            workspaceFilter = GLOBAL_ACTIVITY_IDS_GENERATOR;
-        } else if (request != null && request.getAttribute(OVERRIDDEN_WORKSPACE_FILTER) != null) {
-            workspaceFilter = (IdsGeneratorSource) request.getAttribute(OVERRIDDEN_WORKSPACE_FILTER);
-        } else if (request != null && request.getSession() != null
+        if (request != null && request.getSession() != null
                 && request.getSession().getAttribute(Constants.COMPLETE_TEAM_FILTER) != null) {
             workspaceFilter = (IdsGeneratorSource) request.getSession().getAttribute(Constants.COMPLETE_TEAM_FILTER);
         } else {
@@ -57,6 +51,4 @@ public class ReportEnvironment {
         String currencyCode = AmpARFilter.getDefaultCurrency().getCurrencyCode();
         return new ReportEnvironment(TLSUtils.getEffectiveLangCode(), workspaceFilter, currencyCode);
     }
-
-    public static final String OVERRIDDEN_WORKSPACE_FILTER = "overrideWorkspaceFilter";
 }

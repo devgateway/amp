@@ -42,6 +42,8 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.newreports.ReportEnvBuilder;
+import org.dgfoundation.amp.newreports.IReportEnvironment;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
@@ -1273,12 +1275,20 @@ public class AmpARFilter extends PropertyListable {
         }
     }
 
+    public void generateFilterQuery() {
+        generateFilterQuery(ReportEnvBuilder.forSession());
+    }
+
+    public void generateFilterQuery(TeamMember teamMember) {
+        generateFilterQuery(ReportEnvBuilder.forTeamMember(teamMember));
+    }
+
     /**
      * This method generates a query that returns filtered activities from either current workspace or
      * publicly visible activities.
      */
-    public void generateFilterQuery() {
-        Set<Long> ids = ActivityFilter.getInstance().filter(this);
+    public void generateFilterQuery(IReportEnvironment reportEnvironment) {
+        Set<Long> ids = ActivityFilter.getInstance().filter(this, reportEnvironment);
         generatedFilterQuery = String.format(
                 "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN (%s)",
                 Util.toCSString(ids));
@@ -1298,26 +1308,6 @@ public class AmpARFilter extends PropertyListable {
     public StringGenerator getOverridingTeamFilter()
     {
         return overridingTeamFilter;
-    }
-
-    private String[] calculateDateFilters(String startDate, String lastDate, String currentPeriod, Integer amount, String op, String xPeriod){
-        
-        String fromDate = startDate;
-        String toDate = lastDate;
-        
-        Date[] ddates = calculateDateFiltersAsDate(currentPeriod, amount, op, xPeriod);
-        
-        Date dfromDate = ddates[0];
-        Date dtoDate = ddates[1];
-        
-        if (dfromDate != null){
-            fromDate = FormatHelper.formatDate(dfromDate);
-        }
-        if (dtoDate != null){
-            toDate = FormatHelper.formatDate(dtoDate);
-        }
-
-        return new String[]{fromDate, toDate};
     }
 
     private Date[] calculateDateFiltersAsDate(String currentPeriod, Integer amount, String op, String xPeriod){

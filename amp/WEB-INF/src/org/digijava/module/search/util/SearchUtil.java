@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ActivityFilter;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.newreports.ReportEnvBuilder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.helper.AmpActivityFake;
@@ -279,7 +280,7 @@ public class SearchUtil {
 
         session = PersistenceManager.getSession();
 
-        Set<Long> ids = ActivityFilter.getInstance().filter(filter);
+        Set<Long> ids = ActivityFilter.getInstance().filter(filter, ReportEnvBuilder.forSession());
 
         // not a very nice solution, but I kept the old code and idea and just
         // added some speed

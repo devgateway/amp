@@ -38,7 +38,6 @@ public class TLSUtils {
     public Site site;
     public HttpServletRequest request;
     private static String forcedLangCode = null;
-    private boolean filterGlobally;
     private Boolean forcedSSCWorkspace;
 
     public static String getLangCode() {
@@ -267,21 +266,6 @@ public class TLSUtils {
             }
         });
         return s;
-    }
-
-    public static boolean isFilterGlobally() {
-        return getThreadLocalInstance().filterGlobally;
-    }
-
-    public static <K> K inGlobalFilterContext(Supplier<K> supplier) {
-        TLSUtils tls = getThreadLocalInstance();
-        boolean oldFilterGlobally = tls.filterGlobally;
-        try {
-            tls.filterGlobally = true;
-            return supplier.get();
-        } finally {
-            tls.filterGlobally = oldFilterGlobally;
-        }
     }
 
     public static void forceLangCodeToSiteLangCode() {

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
+import org.dgfoundation.amp.newreports.IReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
@@ -17,13 +18,6 @@ import org.digijava.module.aim.util.LuceneUtil;
 
 /**
  * This class is used to filter activities according to filters.
- *
- * Filtering can happen in two contexts:
- * <ul>
- * <li>global - useful for computed workspaces, does not depend on TLSUtils
- * <li>current workspace - useful for search, depends on TLSUtils, see more in
- * {@link org.dgfoundation.amp.newreports.ReportEnvironment ReportEnvironment}
- * </ul>
  *
  * @author Octavian Ciubotaru
  */
@@ -41,8 +35,8 @@ public class ActivityFilter {
      * Returns activities that match the filter.
      * Order of returned activities may be important.
      */
-    public Set<Long> filter(AmpARFilter filter) {
-        Set<Long> activityIds = niReportsFilter(filter);
+    public Set<Long> filter(AmpARFilter filter, IReportEnvironment env) {
+        Set<Long> activityIds = niReportsFilter(filter, env);
 
         if (StringUtils.isNotBlank(filter.getIndexText())) {
             Set<Long> luceneIds = luceneSearch(filter);
@@ -56,14 +50,14 @@ public class ActivityFilter {
     /**
      * Filter activities according to AmpARFilter.
      */
-    private Set<Long> niReportsFilter(AmpARFilter arFilter) {
+    private Set<Long> niReportsFilter(AmpARFilter arFilter, IReportEnvironment env) {
         AmpARFilterConverter ampARFilterConverter = new AmpARFilterConverter(arFilter);
         AmpReportFilters filters = ampARFilterConverter.buildFilters();
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl("filter", ArConstants.DONOR_TYPE);
         spec.setFilters(filters);
 
-        NiReportsEngine engine = new NiReportsEngine(AmpReportsSchema.getInstance(), spec);
+        NiReportsEngine engine = new NiReportsEngine(AmpReportsSchema.getInstance(), spec, env);
         NiReportFilterResult result = engine.executeFilter();
 
         logger.info("NiFilter activities: " + result.getActivityIds().size());

@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -2020,15 +2019,6 @@ public class TeamUtil {
         session.setMaxInactiveInterval(
                 FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.MAX_INACTIVE_SESSION_INTERVAL));
         return tm;
-    }
-    
-    public static CompleteWorkspaceFilter initCompleteTeamFilter(HttpSession session, TeamMember tm) {
-        logger.info(String.format("creating a CompleteWorkspaceFilter for user %s", tm));
-        CompleteWorkspaceFilter res = new CompleteWorkspaceFilter(tm);
-        if (session != null) {
-            session.setAttribute(Constants.COMPLETE_TEAM_FILTER, res);
-        }
-        return res;
     }
     
     public static void getTeams(AmpTeam team, List<AmpTeam> teams) {

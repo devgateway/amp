@@ -7,8 +7,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import clover.com.google.common.base.Joiner;
-
+import com.google.common.base.Joiner;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.newreports.ReportEnvBuilder;

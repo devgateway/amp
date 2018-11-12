@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -104,7 +105,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 import org.joda.time.Period;
 
-import clover.org.apache.commons.lang.StringUtils;
+import javax.servlet.http.HttpSession;
 
 public class ActivityUtil {
 

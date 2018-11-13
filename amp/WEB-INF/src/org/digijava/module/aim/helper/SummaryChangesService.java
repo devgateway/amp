@@ -82,15 +82,15 @@ public final class SummaryChangesService {
 
 
         //we first need to fetch all ws in which we can see the activities 
-        Map<Long, java.util.Set<String>> activityWs = getActivityWsVisibilityToNotify();
+        Map<Long, Set<Long>> activityWs = getActivityWsVisibilityToNotify();
         if (activityWs.size() > 0) {
-            Map<String, List<String>> approversAndManagers = getApproversAndManagers();
+            Map<Long, List<String>> approversAndManagers = getApproversAndManagers();
             activities.keySet().stream().forEach(activityId -> {
                 AmpActivityVersion currentActivity = ActivityUtil.loadAmpActivity(activityId);
                 //we go and see every ws in which the activity is visible
                 Optional.ofNullable(activityWs.get(activityId)).orElse(emptySet()).stream()
-                        .forEach(strTeamId -> {
-                            Optional.ofNullable(approversAndManagers.get(strTeamId)).orElse(emptyList()).
+                        .forEach(teamId -> {
+                            Optional.ofNullable(approversAndManagers.get(teamId)).orElse(emptyList()).
                                     stream().forEach(approver -> {
                                 //we add the activity to the users who will get notifications
                                 if (results.get(approver) == null) {
@@ -112,7 +112,7 @@ public final class SummaryChangesService {
      * or managers
      * @return
      */
-    private static Map<Long, java.util.Set<String>> getActivityWsVisibilityToNotify()  {
+    private static Map<Long, Set<Long>> getActivityWsVisibilityToNotify()  {
         AmpJobsUtil.populateRequest();
 
         final String query = "select min(tm.amp_team_mem_id) from amp_team_member tm ,amp_team t, "
@@ -123,7 +123,7 @@ public final class SummaryChangesService {
                 + "and  tm.amp_team_id=t.amp_team_id  and sns.amp_team_id=t.amp_team_id "
                 + "and (sns.notify_approver = true or sns.notify_manager = true) group by tm.amp_team_id ";
         ValueWrapper<List<Long>> ampTeamMemberId = AmpJobsUtil.getTeamMembers(query);
-        Map<Long, java.util.Set<String>> activitiesWs = new HashMap<>();
+        Map<Long, Set<Long>> activitiesWs = new HashMap<>();
 
         if (ampTeamMemberId.value.size() > 0) {
             List<AmpTeamMember> ampTeamMembers = TeamUtil.getAmpTeamMembers(ampTeamMemberId.value);
@@ -140,11 +140,8 @@ public final class SummaryChangesService {
      * Fetch all approvers and managers based con the configuration for summary changes notification
      * @return
      */
-    private static Map<String, List<String>> getApproversAndManagers() {
-        //Team id should be String but we have a map that is storing string as id
-        //its outside of the scope  of the current implementation to refactor that map
-        //it will be covered in AMP-27844
-        final Map<String, List<String>> approversAndManagersPerWS = new HashMap<>();
+    private static Map<Long, List<String>> getApproversAndManagers() {
+        final Map<Long, List<String>> approversAndManagersPerWS = new HashMap<>();
         final String qryApproversAndManagers = "select t.amp_team_id as amp_team_id, u.email as email "
                 + "from amp_team t, amp_team_member atm, amp_team_member_roles tmr, amp_summary_notification_settings"
                 + " sns, dg_user u where t.amp_team_id =atm.amp_team_id "
@@ -157,14 +154,15 @@ public final class SummaryChangesService {
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
                 RsInfo rsManagersAndApproversPerWS = SQLUtils.rawRunQuery(conn, qryApproversAndManagers, null);
-                String lastTeamId = "-1";
+                Long lastTeamId = -1L;
 
                 while (rsManagersAndApproversPerWS.rs.next()) {
-                    if (!lastTeamId.equals(rsManagersAndApproversPerWS.rs.getString("amp_team_id"))) {
-                        lastTeamId = rsManagersAndApproversPerWS.rs.getString("amp_team_id");
+                    if (!lastTeamId.equals(rsManagersAndApproversPerWS.rs.getLong("amp_team_id"))) {
+                        lastTeamId = rsManagersAndApproversPerWS.rs.getLong("amp_team_id");
                         approversAndManagersPerWS.put(lastTeamId, new ArrayList<>());
                     }
-                    approversAndManagersPerWS.get(lastTeamId).add(rsManagersAndApproversPerWS.rs.getString("email"));
+                    approversAndManagersPerWS.get(lastTeamId)
+                            .add(rsManagersAndApproversPerWS.rs.getString("email"));
                 }
                 rsManagersAndApproversPerWS.close();
             }

@@ -67,13 +67,15 @@ public class ApiErrorMessage {
         if (values != null) {
             newValues.addAll(values);
         }
-        newValues.add(value);
+        if (value != null) {
+            newValues.add(value);
+        }
         return new ApiErrorMessage(id, description, prefix, newValues);
     }
 
     /**
      * Configures an {@link #ApiErrorMessage(Integer, String, String)} with more details
-     * @param values details, see {@link #values}
+     * @param details details, see {@link #values}
      */
     public ApiErrorMessage withDetails(List<String> details) {
         List<String> newValues = new ArrayList<>();

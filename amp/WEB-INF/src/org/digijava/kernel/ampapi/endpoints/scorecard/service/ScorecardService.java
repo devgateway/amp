@@ -14,9 +14,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ActivityUpdate;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ColoredCell;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ColoredCell.Colors;
@@ -41,9 +45,6 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
-
-import clover.org.apache.commons.lang.StringUtils;
-import clover.org.apache.log4j.Logger;
 
 /**
  * Service class for Scorecard generation
@@ -694,10 +695,12 @@ public class ScorecardService {
                         orgCount.inc(rs.getInt("count"));
                     }
                     rsi.close();
-                    
-                }  catch (Exception e) {
-                    logger.error("Exception while getting org types amount:" + e.getMessage());
+                } catch (SQLException e) {
+                    throw new ApiRuntimeException(
+                            ApiError.toError("Exception while getting org types amount: " + e.getMessage()));
                 }
+                throw new ApiRuntimeException(
+                        ApiError.toError("Exception while getting org types amount: "));
             }
         });
         
@@ -751,8 +754,9 @@ public class ScorecardService {
                     }
                     rsi.close();
                     
-                }  catch (Exception e) {
-                    logger.error("Exception while getting past quarter objects:" + e.getMessage());
+                }  catch (SQLException e) {
+                    throw new ApiRuntimeException(
+                            ApiError.toError("Exception while getting past quarter objects: " + e.getMessage()));
                 }
             }
         });

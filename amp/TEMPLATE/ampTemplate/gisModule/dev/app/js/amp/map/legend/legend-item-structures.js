@@ -4,6 +4,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var Template = fs.readFileSync(__dirname + '/legend-item-structures.html', 'utf8');
 var SettingsUtils = require('../../../libs/local/settings-utils.js');
+var Constants = require('../../../libs/local/constants.js'); 
 
 module.exports = Backbone.View.extend({
 
@@ -19,10 +20,27 @@ module.exports = Backbone.View.extend({
 	  var self = this;
 	  //getStructuresWithActivities was null...
 	  self.model.structuresCollection.getStructuresWithActivities().then(function() {
+			  var geoJSON = self.model.structuresCollection.toGeoJSON();
+			var customStructureColors = []
+			geoJSON.features.forEach(function(feature) {
+				if (feature.properties.color && feature.properties.color.indexOf(Constants.STRUCTURE_COLORS_DELIMITER) != -1) {
+					var splits = feature.properties.color.split(Constants.STRUCTURE_COLORS_DELIMITER);
+					if (customStructureColors.find(function(c) {
+						return c.color === splits[0]
+					}) == null) {
+						customStructureColors.push({
+							color : splits[0],
+							label : splits[1]
+						});
+					}
+				}
+			});
+		  
 		  var renderObject = {
 				  status: 'loaded',
 				  colourBuckets: self.model.structuresCollection.palette.colours,
-				  selectedVertical: self.model.get('filterVertical')
+				  selectedVertical: self.model.get('filterVertical'),
+				  customStructureColors: customStructureColors
 		  };
 
 		  //TODO: Move this code to a config class.
@@ -33,7 +51,7 @@ module.exports = Backbone.View.extend({
 		  if (useIconsForSectors !== undefined && useIconsForSectors === true) {
 			  if (maxLocationIcons !== undefined && maxLocationIcons !== '') {
 				  if (maxLocationIcons === 0) {
-					  MAX_NUM_FOR_ICONS = 99999; //always show
+					  MAX_NUM_FOR_ICONS = -1; //always show
 				  } else {
 					  MAX_NUM_FOR_ICONS = maxLocationIcons;
 				  }
@@ -45,7 +63,7 @@ module.exports = Backbone.View.extend({
 		  }
 
 		  // render icons if available
-		  if (self.model.structuresCollection.length < MAX_NUM_FOR_ICONS &&
+		  if ((MAX_NUM_FOR_ICONS === -1 || self.model.structuresCollection.length < MAX_NUM_FOR_ICONS) &&
 				  self.model.get('filterVertical') === 'Primary Sector') {
 			  renderObject.imageBuckets = self.model.iconMappings;
 			  renderObject.DEFAULT_ICON_CODE =  self.model.DEFAULT_ICON_CODE;
@@ -60,20 +78,26 @@ module.exports = Backbone.View.extend({
 			  });
 
 		  });
-		  self.app.translator.translateList({
-			  'amp.gis:legend-popover': 'If there are less than',
-			  'amp.gis:legend-popover-2': 'points map will show icons otherwise: show coloured circles.',
-			  'amp.gis:title-Region': 'Region'
-		  }).then(function(legendPopoverList) {
-			  var legendPopover = [legendPopoverList['amp.gis:legend-popover'],
-			                       ' ',
-			                       MAX_NUM_FOR_ICONS,
-			                       ' ',
-			                       legendPopoverList['amp.gis:legend-popover-2']
-			  ].join('');
-			  self.$('[data-toggle="popover"]').popover();
-			  self.$('[data-toggle="popover"]').attr('data-content', legendPopover);
-		  });
+		  
+		  if (MAX_NUM_FOR_ICONS != -1) {
+			  self.app.translator.translateList({
+				  'amp.gis:legend-popover': 'If there are less than',
+				  'amp.gis:legend-popover-2': 'points map will show icons otherwise: show coloured circles.',
+				  'amp.gis:title-Region': 'Region'
+			  }).then(function(legendPopoverList) {
+				  var legendPopover = [legendPopoverList['amp.gis:legend-popover'],
+				                       ' ',
+				                       MAX_NUM_FOR_ICONS,
+				                       ' ',
+				                       legendPopoverList['amp.gis:legend-popover-2']
+				  ].join('');
+				  self.$('[data-toggle="popover"]').popover();
+				  self.$('[data-toggle="popover"]').attr('data-content', legendPopover);
+				  self.$('[data-toggle="popover"]').show();
+			  });
+		  } else {
+			  self.$('[data-toggle="popover"]').hide();
+		  }
 
 
 

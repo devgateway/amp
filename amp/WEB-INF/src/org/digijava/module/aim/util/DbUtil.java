@@ -19,6 +19,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -93,15 +94,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
-
-import com.tonbeller.wcf.utils.SqlUtils;
-
-import clover.org.apache.commons.lang.StringEscapeUtils;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -730,12 +726,12 @@ public class DbUtil {
         return ampAppSettings;
     }
 
-    public static boolean isUserTranslator(User user) {
+    public static boolean isUserTranslator(User u) {
 
         logger.debug("In isUserTranslator()");
+        User user = (User) PersistenceManager.getSession().get(User.class, u.getId());
         boolean flag = false;
         try {
-
             Iterator itr = user.getGroups().iterator();
             if (!itr.hasNext()) {
                 logger.debug("No groups");
@@ -1619,37 +1615,6 @@ public class DbUtil {
         }
     }
 
-    public static Collection getQuarters(Long ampFundingId, Integer transactionType, Integer adjustmentType,
-            Integer fiscalYear) {
-        logger.debug("getQuarters() with ampFundingId=" + ampFundingId.longValue() + " fiscalYear=" + fiscalYear);
-
-        Session session = null;
-        Query q = null;
-        Collection c = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = new String();
-            queryString = "select f.fiscalQuarter from " + AmpFundingDetail.class.getName()
-                    + " f where (f.ampFundingId=:ampFundingId) " + " and (f.transactionType=:transactionType) "
-                    + " and (f.adjustmentType=:adjustmentType) " + " and (f.fiscalYear=:fiscalYear) "
-                    + " group by f.fiscalQuarter";
-
-            q = session.createQuery(queryString);
-            q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
-            q.setParameter("transactionType", transactionType, IntegerType.INSTANCE);
-            q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
-            q.setParameter("fiscalYear", fiscalYear, IntegerType.INSTANCE);
-            c = q.list();
-            logger.debug("No of Quarters : " + q.list().size());
-        } catch (Exception ex) {
-            logger.error("Unable to get  Quarters from database", ex);
-        }
-
-        logger.debug("getQuarters() collection size returned : " + (c != null ? c.size() : 0));
-        return c;
-    }
-
     public static Collection<AmpOrganisation> getDonors() {
         Session session = null;
         Query q = null;
@@ -2080,6 +2045,14 @@ public class DbUtil {
     }
 
     public static Collection getOrgByCode(String action, String code, Long id) {
+        return getOrgByCodeAndAcronym(action, code, null, id);
+    }
+
+    public static Collection getOrgByAcronym(String action, String acronym, Long id) {
+        return getOrgByCodeAndAcronym(action, null, acronym, id);
+    }
+
+    public static Collection getOrgByCodeAndAcronym(String action, String code, String acronym, Long id) {
 
         Session sess = null;
         Collection col = new ArrayList();
@@ -2088,16 +2061,26 @@ public class DbUtil {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            if ("create".equals(action)) {
-                queryString = "select o from " + AmpOrganisation.class.getName()
-                        + " o where (o.orgCode=:code) and (o.deleted is null or o.deleted = false) ";
-                qry = sess.createQuery(queryString);
+            queryString = "select o from " + AmpOrganisation.class.getName()
+                    + " o where (o.deleted is null or o.deleted = false) ";
+            if (code != null) {
+                queryString += " AND (o.orgCode=:code) ";
+            }
+            if (acronym != null) {
+                queryString += " AND (o.acronym=:acronym) ";
+            }
+            if ("edit".equals(action)) {
+
+                queryString += " and (o.ampOrgId!=:id) ";
+            }
+            qry = sess.createQuery(queryString);
+            if (code != null) {
                 qry.setParameter("code", code, StringType.INSTANCE);
-            } else if ("edit".equals(action)) {
-                queryString = "select o from " + AmpOrganisation.class.getName()
-                        + " o where (o.orgCode=:code) and (o.ampOrgId!=:id) and (o.deleted is null or o.deleted = false) ";
-                qry = sess.createQuery(queryString);
-                qry.setParameter("code", code, StringType.INSTANCE);
+            }
+            if (acronym != null) {
+                qry.setParameter("acronym", acronym, StringType.INSTANCE);
+            }
+            if ("edit".equals(action)) {
                 qry.setParameter("id", id, LongType.INSTANCE);
             }
             col = qry.list();
@@ -2785,7 +2768,7 @@ public class DbUtil {
     }
 
     /**
-     * This class is used for soring organisations by acronym.
+     * This class is used for sorting organisations by acronym.
      * 
      * @author Dare Roinishvili
      * 

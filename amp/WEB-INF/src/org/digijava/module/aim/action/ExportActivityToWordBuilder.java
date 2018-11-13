@@ -20,6 +20,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.google.common.base.Strings;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.util.Units;
@@ -116,8 +117,6 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
 
-import clover.com.google.common.base.Strings;
-
 /**
  * Created by apicca.
  */
@@ -136,6 +135,8 @@ public class ExportActivityToWordBuilder {
     public static final int TABLE_SEPARATOR_LENGTH = 100;
     public static final int COLUMNS_2 = 2;
     private static final int CELL_LEFT_INDENT_SPACE = 50;
+    private static final String NO_BR_SPACE = "\u00a0";
+    
     private static Logger logger = Logger.getLogger(ExportActivityToWordBuilder.class);
 
     public static final String CELLCOLORGRAY = "F2F2F2";
@@ -351,55 +352,75 @@ public class ExportActivityToWordBuilder {
 
     private void getProgramsTables() throws Exception {
         String columnVal;
-        if (FeaturesUtil.isVisibleFeature("NPD Programs")) {
-            addSectionTitle(TranslatorWorker.translateText("programs").toUpperCase());
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Program")) {
+            addSectionTitle(TranslatorWorker.translateText("Program").toUpperCase());
             
             XWPFTable programsTbl = buildXwpfTable(2);
 
             if (FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective")) {
                 if (hasContent(programs.getNationalPlanObjectivePrograms())) {
-
-                    columnVal = buildProgramsOutput(programs.getNationalPlanObjectivePrograms());
-                    generateOverAllTableRows(programsTbl, TranslatorWorker.translateText("National Plan Objective")
-                            .toUpperCase(), columnVal, null);
+                    buildProgramRow(programsTbl, programs.getNationalPlanObjectivePrograms(), 
+                            "National Plan Objective");
                 }
             }
-            if (FeaturesUtil.isVisibleModule("/Activity Form/Program")) {
-
-                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs")) {
-                    if (hasContent(programs.getPrimaryPrograms())) {
-
-                        columnVal = buildProgramsOutput(programs.getPrimaryPrograms());
-                        generateOverAllTableRows(programsTbl, TranslatorWorker.translateText("Primary Programs")
-                                .toUpperCase(), columnVal, null);
-                    }
-                }
-
-
-                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs")) {
-                    if (hasContent(programs.getSecondaryPrograms())) {
-                        columnVal = buildProgramsOutput(programs.getSecondaryPrograms());
-                        generateOverAllTableRows(programsTbl, TranslatorWorker.translateText("Secondary Programs")
-                                .toUpperCase(), columnVal, null);
-                    }
-                }
-                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs")) {
-                    if (hasContent(programs.getTertiaryPrograms())) {
-                        columnVal = buildProgramsOutput(programs.getTertiaryPrograms());
-                        generateOverAllTableRows(programsTbl, TranslatorWorker.translateText("Tertiary Programs")
-                                .toUpperCase(), columnVal, null);
-                    }
-                }
-                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description")) {
-                    if (programs.getProgramDescription() != null) {
-                        columnVal = processEditTagValue(request, programs.getProgramDescription());
-                        generateOverAllTableRows(programsTbl, TranslatorWorker.translateText("Program Description")
-                                .toUpperCase(), columnVal, null);
-                    }
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs")) {
+                if (hasContent(programs.getPrimaryPrograms())) {
+                    buildProgramRow(programsTbl, programs.getPrimaryPrograms(), "Primary Programs");
                 }
             }
 
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs")) {
+                if (hasContent(programs.getSecondaryPrograms())) {
+                    buildProgramRow(programsTbl, programs.getSecondaryPrograms(), "Secondary Programs");
+                }
+            }
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs")) {
+                if (hasContent(programs.getTertiaryPrograms())) {
+                    buildProgramRow(programsTbl, programs.getTertiaryPrograms(), "Tertiary Programs");
+                }
+            }
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description")) {
+                String programDescription = null;
+                if (programs.getProgramDescription() != null) { 
+                    programDescription = processEditTagValue(request, programs.getProgramDescription());
+                }
+                
+                if (StringUtils.isNotBlank(programDescription)) {
+                    buildProgramTitle(programsTbl, "Program Description");
+                    generateOverAllTableRows(programsTbl, programDescription, "", null);
+                }
+            }
         }
+    }
+
+    /**
+     * @param programsTbl
+     * @param programs
+     * @param programTypeName
+     * @throws Exception
+     */
+    private void buildProgramRow(XWPFTable programsTbl, List<AmpActivityProgram> programs, String programTypeName)
+            throws Exception {
+        
+        buildProgramTitle(programsTbl, programTypeName);
+        
+        for (AmpActivityProgram pr : programs) {
+            String columnVal = pr.getHierarchyNames();
+            generateOverAllTableRows(programsTbl, columnVal, pr.getProgramPercentage() + NO_BR_SPACE + "% ", null);
+        }
+    }
+
+    /**
+     * @param programsTbl
+     * @param programTypeName
+     */
+    private void buildProgramTitle(XWPFTable programsTbl, String programTypeName) {
+        String programName = TranslatorWorker.translateText(programTypeName).toUpperCase();
+        XWPFTableRow programsTblTitleRow = programsTbl.createRow();
+        XWPFParagraph programTitleParagraphs = programsTblTitleRow.getCell(0).getParagraphs().get(0);
+        setOrientation(programTitleParagraphs);
+        setRun(programTitleParagraphs.createRun(), 
+                new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), programName, false);
     }
 
     private void getSectorsTables() throws Exception  {
@@ -428,7 +449,7 @@ public class ExportActivityToWordBuilder {
                         XWPFParagraph sectorTitleParagraphs = sectorsTblTitleRow.getCell(0).getParagraphs().get(0);
                         setOrientation(sectorTitleParagraphs);
                         setRun(sectorTitleParagraphs.createRun(), 
-                                new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false), sector.toUpperCase(), false);
+                                new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), sector.toUpperCase(), false);
                     }
                     if (sectors.getActivitySectors() != null) {
                         for (ActivitySector actSect : sectors.getActivitySectors()) {
@@ -443,8 +464,8 @@ public class ExportActivityToWordBuilder {
                                 if (actSect.getSubsectorLevel2Name() != null) {
                                     columnVal += " - " + actSect.getSubsectorLevel2Name();
                                 }
-                                generateOverAllTableRows(sectorsTbl, columnVal, actSect.getSectorPercentage() + " %",
-                                        null);
+                                generateOverAllTableRows(sectorsTbl, columnVal, 
+                                        actSect.getSectorPercentage() + NO_BR_SPACE + "%", null);
                             }
                         }
                     }
@@ -2287,7 +2308,7 @@ public class ExportActivityToWordBuilder {
             // Delivery Rate
             if (activityForm.getFunding().getDeliveryRate() != null
                     && activityForm.getFunding().getDeliveryRate().length() > 0) {
-                addTotalsOutput(fundingTotalsDetails, "Delivery Rate",
+                addTotalsOutput(fundingTotalsDetails, "Delivery rate",
                         activityForm.getFunding().getDeliveryRate().replace("%", ""), "%");
             }
 
@@ -2657,7 +2678,7 @@ public class ExportActivityToWordBuilder {
         List<ExportSectionHelperRowData> mtefProjection = new ArrayList<ExportSectionHelperRowData>();
 
         for (AmpFundingMTEFProjection projection : mtefList) {
-            String projectedType = projection.getProjected().getValue();
+            String projectedType = projection.getProjection().getValue();
             FundingDetail fd = getCalculatedMtefFundingDetail(calc, projection);
 
             String transactionAmount = fd == null ? formatNumber(projection.getAmount()) : fd.getTransactionAmount();

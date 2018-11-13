@@ -220,9 +220,7 @@ public class SQLUtils {
         }
         
         ResultSet rs = ps.executeQuery();
-        if (!connection.getMetaData().getDatabaseProductName().equals("MonetDB"))
-            rs.setFetchSize(500);
-        
+
         return new RsInfo(rs, ps);
     }
     
@@ -242,6 +240,25 @@ public class SQLUtils {
         catch(SQLException ex) {
             throw new RuntimeException(ex);
         }
+        return res;
+    }
+    
+    /**
+     * fetches an ArrayList of Strings
+     * @param connection
+     * @param query
+     * @return
+     */
+    public static List<String> fetchStrings(Connection connection, String query) {
+        List<String> res = new ArrayList<>();
+        try (RsInfo rsi = rawRunQuery(connection, query, null)) {
+            while (rsi.rs.next()) {
+                res.add(rsi.rs.getString(1));
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        
         return res;
     }
     

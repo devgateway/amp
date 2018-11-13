@@ -6,7 +6,6 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,20 +30,22 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.dbentity.AmpStructureType;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.StructuresUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class AmpStructuresFormSectionFeature extends
         AmpFormSectionFeaturePanel {
 
     private static final long serialVersionUID = -6654390083754446344L;
+
+    private static final int COLOR_OFFSET_CATEGORY_VALUE = 7;
     
     protected Collection<AmpStructureType> structureTypes;
 
@@ -147,7 +148,7 @@ public class AmpStructuresFormSectionFeature extends
                     }
                 });
                 item.add(shape);
-                
+
                 ListEditorRemoveButton delbutton = new ListEditorRemoveButton("deleteStructure", "Delete Structure"){
 
                     @Override
@@ -167,7 +168,7 @@ public class AmpStructuresFormSectionFeature extends
                     
                 };
                 item.add(delbutton);
-                
+
                 final AmpAjaxLinkField viewCoords = new AmpAjaxLinkField("viewCoords", "Map", "View") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -203,10 +204,28 @@ public class AmpStructuresFormSectionFeature extends
                         target.add(latitude);
                         target.add(longitude);
                         target.add(viewCoords);
-                        target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0]); return false;");
-                }
+                        
+                        JsonBean data = new JsonBean();
+                        List<JsonBean> structureColors = new ArrayList<>();
+                        
+                        Collection<AmpCategoryValue> categoryValues = CategoryManagerUtil
+                                .getAmpCategoryValueCollectionByKeyExcludeDeleted(
+                                        CategoryConstants.GIS_STRUCTURES_COLOR_CODING_KEY);
+                        for (AmpCategoryValue v : categoryValues) {
+                            JsonBean value = new JsonBean();
+                            value.set("id", v.getId());
+                            value.set("value", v.getValue());
+                            structureColors.add(value);
+                        }
+
+                        data.set("structureColors", structureColors);
+                        data.set("structure", getJsonBeanFromStructureModel(structureModel));
+
+                        target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0], '" + data.asJsonString()
+                                + "'); return false;");
+                    }
                 };
-                item.add(openMapPopup); 
+                item.add(openMapPopup);
 
                 final TextField<String> coords = new TextField<String>("coords",
                         new PropertyModel<String>(structureModel, "coords"));
@@ -218,7 +237,7 @@ public class AmpStructuresFormSectionFeature extends
                             List<Map<String, String>> coordinates = (List<Map<String, String>>) data.get("coordinates");
                             AmpStructure structure = structureModel.getObject();
                             if (structure.getCoordinates() == null) {
-                                structure.setCoordinates(new LinkedHashSet<>());
+                                structure.setCoordinates(new ArrayList<>());
                             } else {
                                 structure.getCoordinates().clear();
                             }
@@ -252,6 +271,24 @@ public class AmpStructuresFormSectionFeature extends
                 });                
                 item.add(tempId);
                 
+                final TextField<String> structureColorId = new TextField<String>("structureColorId",
+                        new PropertyModel<String>(structureModel, "structureColorId"));
+                structureColorId.setOutputMarkupId(true);
+                structureColorId.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        AmpStructure structure = structureModel.getObject();
+                        if (structureColorId.getDefaultModelObject() == null) {
+                            structure.setStructureColor(null);
+                        } else {
+                            Long id = Long.parseLong(structureColorId.getDefaultModelObject().toString());
+                            structure.setStructureColor(CategoryManagerUtil.getAmpCategoryValueFromDb(id));
+                        }
+                        target.add(structureColorId);
+                    }
+                });
+                item.add(structureColorId);               
+                
                 latitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
                 longitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
                 viewCoords.getButton().setEnabled(hasCoordinates(structureModel));
@@ -269,7 +306,6 @@ public class AmpStructuresFormSectionFeature extends
             public void onClick(AjaxRequestTarget target) {
                 AmpStructure stru = new AmpStructure();
                 list.addItem(stru);
-
                 target.add(this.getParent());
                 target.add(containter);
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
@@ -284,11 +320,36 @@ public class AmpStructuresFormSectionFeature extends
         
         
     }
-    
+
+    public JsonBean getJsonBeanFromStructureModel(IModel<AmpStructure> structureModel) {
+        JsonBean structureData = new JsonBean();
+        AmpStructure structure = structureModel.getObject();
+
+        List<JsonBean> coordinates = new ArrayList<>();
+        if (structure.getCoordinates() != null) {
+            for (AmpStructureCoordinate coord : structure.getCoordinates()) {
+                JsonBean coordinate = new JsonBean();
+                coordinate.set("latitude", coord.getLatitude());
+                coordinate.set("longitude", coord.getLongitude());
+                coordinates.add(coordinate);
+            }
+        }
+
+        String colorValue = structure.getStructureColor() != null
+                ? structure.getStructureColor().getValue().substring(0, COLOR_OFFSET_CATEGORY_VALUE) : null;
+
+        structureData.set("latitude", structure.getLatitude() != null ? structure.getLatitude() : "");
+        structureData.set("longitude", structure.getLongitude() != null ? structure.getLongitude() : "");
+        structureData.set("shape", structure.getShape() != null ? structure.getShape() : "");
+        structureData.set("title", structure.getTitle());
+        structureData.set("coordinates", coordinates);
+        structureData.set("color-value", colorValue);
+
+        return structureData;
+    }
+
     private boolean hasCoordinates(IModel<AmpStructure> structureModel) {
         return structureModel.getObject().getCoordinates() != null && structureModel.getObject().
                 getCoordinates().size() > 0;
     }
-    
-
 }

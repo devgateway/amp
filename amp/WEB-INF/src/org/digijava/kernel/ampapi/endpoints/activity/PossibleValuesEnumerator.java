@@ -21,6 +21,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyCommonPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.GenericInterchangeableValueProvider;
@@ -37,6 +38,7 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -83,6 +85,7 @@ public class PossibleValuesEnumerator {
                 .putAll(AmpTeam.class, Entities.WORKSPACES)
                 .putAll(User.class, Entities.USER)
                 .putAll(AmpComponentType.class, Entities.COMPONENT_TYPE)
+                .putAll(AmpFiscalCalendar.class, Entities.CALENDAR)
                 .build();
 
     private PossibleValuesDAO possibleValuesDAO;
@@ -270,19 +273,18 @@ public class PossibleValuesEnumerator {
         List<Object[]> items;
         Class<?> clazz = InterchangeUtils.getClassOfField(field);
         if (clazz.equals(AmpSector.class)) {
-            items = possibleValuesDAO.getSectors(configValue);
+            return getPossibleSectors(field, configValue);
         } else if (clazz.equals(AmpTheme.class)) {
-            items = possibleValuesDAO.getThemes(configValue);
+            return getPossibleThemes(field, configValue);
         } else if (clazz.equals(AmpCategoryValue.class)){
             return getPossibleCategoryValues(field, configValue);
         } else if (clazz.equals(AmpClassificationConfiguration.class)) {
             return getPossibleValuesGenericCase(clazz,
                     () -> Collections.singletonList(possibleValuesDAO.getAmpClassificationConfiguration(configValue)));
-        } else {
-            //not a complex field, after all
-            return getPossibleValuesForField(field);
         }
-        return setProperties(items, false, null);
+
+        //not a complex field, after all
+        return getPossibleValuesForField(field);
     }
     
     /**
@@ -304,6 +306,12 @@ public class PossibleValuesEnumerator {
             return getComponentTypes();
         if (clazz.isAssignableFrom(AmpContact.class)) {
             return getPossibleContacts();
+        }
+        if (clazz.isAssignableFrom(AmpOrganisation.class)) {
+            return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getOrganisations());
+        }
+        if (clazz.isAssignableFrom(AmpCurrency.class)) {
+            return getPossibleCurrencies();
         }
         return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
     }
@@ -389,20 +397,24 @@ public class PossibleValuesEnumerator {
 
         List<Object[]> possibleLocations = possibleValuesDAO.getPossibleLocations();
         for (Object[] item : possibleLocations) {
-            Long locId = ((Number)(item[0])).longValue();
-            Long locCatId = item[1] == null ? null : ((Number)(item[1])).longValue(); // FIXME should be non-null AMP-25735
+            Long locId = ((Number) item[PossibleValuesDAO.LOC_ID_POS]).longValue();
+
+            // FIXME should be non-null AMP-25735
+            Long locCatId = getLongOrNull((Number) item[PossibleValuesDAO.LOC_CAT_ID_POS]);
+
             if (locCatId != null) {
                 locCatToLocId.put(locCatId, locId);
             }
         }
 
         for (Object[] item : possibleLocations) {
-            Long locId = ((Number)(item[0])).longValue();
-            String locCatName = ((String)(item[2]));
-            Long parentLocCatId = item[3] == null? null : ((Number)(item[3])).longValue();
-            String parentLocCatName = item[4] == null? null : ((String)(item[4]));
-            Long categoryValueId = item[5] == null? null : ((Number)(item[5])).longValue();
-            String categoryValueName = item[6] == null? null : ((String)(item[6]));
+            Long locId = ((Number) item[PossibleValuesDAO.LOC_ID_POS]).longValue();
+            String locCatName = ((String) item[PossibleValuesDAO.LOC_CAT_NAME_POS]);
+            Long parentLocCatId = getLongOrNull((Number) item[PossibleValuesDAO.LOC_PARENT_CAT_ID_POS]);
+            String parentLocCatName = ((String) item[PossibleValuesDAO.LOC_PARENT_CAT_NAME_POS]);
+            Long categoryValueId = getLongOrNull((Number) item[PossibleValuesDAO.LOC_CAT_VAL_ID_POS]);
+            String categoryValueName = ((String) item[PossibleValuesDAO.LOC_CAT_VAL_NAME_POS]);
+            String iso = ((String) item[PossibleValuesDAO.LOC_ISO]);
 
             // FIXME remove this filter during AMP-25735
             if (locCatName == null && parentLocCatId == null && parentLocCatName == null
@@ -413,12 +425,35 @@ public class PossibleValuesEnumerator {
             Long parentLocId = locCatToLocId.get(parentLocCatId);
 
             LocationExtraInfo extraInfo = new LocationExtraInfo(parentLocId, parentLocCatName,
-                    categoryValueId, categoryValueName);
+                    categoryValueId, categoryValueName, iso);
 
             Map<String, String> translatedValues = translatorService.translateLabel(locCatName);
             groupedValues.put(parentLocId, new PossibleValue(locId, locCatName, translatedValues, extraInfo));
         }
         return convertToHierarchical(groupedValues);
+    }
+    
+    private List<PossibleValue> getPossibleSectors(Field field, String configValue) {
+        List<Object[]> items = possibleValuesDAO.getSectors(configValue);
+        return setProperties(items, false, this::getSectorExtraInfo);
+    }
+    
+    private List<PossibleValue> getPossibleThemes(Field field, String configValue) {
+        List<Object[]> items = possibleValuesDAO.getThemes(configValue);
+        return setProperties(items, false, this::getThemeExtraInfo);
+    }
+
+    private List<PossibleValue> getPossibleCurrencies() {
+        CurrencyCommonPossibleValuesProvider provider = new CurrencyCommonPossibleValuesProvider();
+        return provider.getPossibleValues(translatorService);
+    }
+
+    private Long getLongOrNull(Number number) {
+        if (number != null) {
+            return number.longValue();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -519,5 +554,17 @@ public class PossibleValuesEnumerator {
     private Object getCategoryValueExtraInfo(Object[] item) {
         Integer index = ((Number) (item[CategoryValueExtraInfo.EXTRA_INFO_START_INDEX])).intValue();
         return new CategoryValueExtraInfo(index);
+    }
+    
+    private Object getSectorExtraInfo(Object[] item) {
+        Long parentSectorId = item.length > 2 ? (Long) item[PossibleValuesDAO.SECTOR_PARENT_ID_POS] : null;
+        
+        return new SectorExtraInfo(parentSectorId);
+    }
+    
+    private Object getThemeExtraInfo(Object[] item) {
+        Long parentProgramId = item.length > 2 ? (Long) item[PossibleValuesDAO.THEME_PARENT_ID_POS] : null;
+        
+        return new ProgramExtraInfo(parentProgramId);
     }
 }

@@ -31,9 +31,13 @@ public class SyncConstants {
         public static final String ROLE = "role";
         public static final String CURRENCY = "currency";
         public static final String CONTACT = "contact";
+        public static final String CALENDAR = "calendar";
+        public static final String RESOURCE = "resource";
         public static final String ACTIVITY_PROGRAM_SETTINGS = "activity program settings";
         public static final String COMPONENT_TYPE = "component type";
         public static final String EXCHANGE_RATES = "exchange rates";
         public static final String FEATURE_MANAGER = "feature manager";
+        public static final String MAP_TILES = "map_tiles";
+        public static final String LOCATORS = "locators";
     }
 }

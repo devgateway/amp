@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -18,11 +20,15 @@ import com.vividsolutions.jts.geom.Geometry;
 
 
 @Entity (name="amp_locator")
+@JsonIgnoreProperties({ "geonameId", "asciiName", "alternateNames", "featureClass", "countryIso", "featureCode",
+    "cc2", "countryIso", "admin1", "admin2", "admin3", "admin4", "population", "elevation", "gtopo30", "timezone", 
+    "lastModified", "theGeometry", "anglicizedName", "anglicizedKeyword", "distance" })
 public class AmpLocator implements Serializable{
 
     @Id
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
+    @JsonProperty
     private Long id;
     
     @Basic
@@ -31,6 +37,7 @@ public class AmpLocator implements Serializable{
     
     @Basic
     @Column (name="name")
+    @JsonProperty
     private String name;
     
     @Basic
@@ -43,10 +50,12 @@ public class AmpLocator implements Serializable{
     
     @Basic
     @Column (name="latitude")
+    @JsonProperty
     private String latitude;
     
     @Basic
     @Column (name="longitude")
+    @JsonProperty
     private String longitude;
     
     // http://www.geonames.org/source-code/javadoc/org/geonames/FeatureClass.html

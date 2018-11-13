@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Describes an AMP Installation. Used by AMP Registry for AMP discovery.
  *
@@ -16,6 +18,9 @@ public class AmpInstallation {
     private Map<String, String> name;
 
     private String iso2;
+
+    @JsonProperty("server-id")
+    private String serverId;
 
     private List<String> urls;
 
@@ -43,11 +48,31 @@ public class AmpInstallation {
         this.iso2 = iso2;
     }
 
+    public String getServerId() {
+        return serverId;
+    }
+
+    public void setServerId(String serverId) {
+        this.serverId = serverId;
+    }
+
     public List<String> getUrls() {
         return urls;
     }
 
     public void setUrls(List<String> urls) {
+        this.urls = urls;
+    }
+
+    public AmpInstallation() {
+    }
+
+    public AmpInstallation(Long id, Map<String, String> name, String iso2, String serverId,
+            List<String> urls) {
+        this.id = id;
+        this.name = name;
+        this.iso2 = iso2;
+        this.serverId = serverId;
         this.urls = urls;
     }
 

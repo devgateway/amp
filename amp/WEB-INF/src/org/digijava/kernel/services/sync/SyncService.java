@@ -4,7 +4,20 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.*;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CONTACT;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.EXCHANGE_RATES;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.FEATURE_MANAGER;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.GLOBAL_SETTINGS;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.LOCATORS;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.MAP_TILES;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.RESOURCE;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CALENDAR;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.TRANSLATION;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACES;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_FILTER_DATA;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_MEMBER;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_ORGANIZATIONS;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_SETTINGS;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.DELETED;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.UPDATED;
 
@@ -13,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,33 +38,49 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
 
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Property;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.apache.jackrabbit.util.ISO8601;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.AmpARFilterParams;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldsEnumerator;
-import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.currency.CurrencyService;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
+import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceUtil;
 import org.digijava.kernel.ampapi.endpoints.sync.SyncRequest;
 import org.digijava.kernel.request.Site;
-import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.sync.model.ActivityChange;
-import org.digijava.kernel.services.sync.model.AmpOfflineChangelog;
 import org.digijava.kernel.services.sync.model.ExchangeRatesDiff;
 import org.digijava.kernel.services.sync.model.ListDiff;
+import org.digijava.kernel.services.sync.model.ResourceChange;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.repository.AmpOfflineChangelogRepository;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.contentrepository.helper.CrConstants;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -79,6 +109,8 @@ public class SyncService implements InitializingBean {
     private PossibleValuesEnumerator possibleValuesEnumerator = PossibleValuesEnumerator.INSTANCE;
     private FieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.PRIVATE_ENUMERATOR;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
+
+    private AmpOfflineChangelogRepository ampOfflineChangelogRepository = AmpOfflineChangelogRepository.INSTANCE;
 
     private static class AmpOfflineChangelogMapper implements RowMapper<AmpOfflineChangelog> {
 
@@ -114,11 +146,16 @@ public class SyncService implements InitializingBean {
         updateDiffForUsers(systemDiff, lastSyncTime);
         updateDiffsForActivities(systemDiff, syncRequest);
         updateDiffsForContacts(systemDiff, syncRequest);
+        updateDiffsForResources(systemDiff, syncRequest);
+        updateDiffsForMapTilesAndLocators(systemDiff, lastSyncTime);
+        updateDiffsForCalendars(systemDiff, syncRequest);
 
         systemDiff.setTranslations(shouldSyncTranslations(systemDiff, lastSyncTime));
 
         systemDiff.setActivityPossibleValuesFields(findChangedPossibleValuesFields(systemDiff, lastSyncTime));
         systemDiff.setContactPossibleValuesFields(findChangedContactPossibleValuesFields(systemDiff, lastSyncTime));
+        systemDiff.setResourcePossibleValuesFields(findChangedResourcePossibleValuesFields(systemDiff, lastSyncTime));
+        systemDiff.setCommonPossibleValuesFields(findChangedCommonPossibleValuesFields(systemDiff, lastSyncTime));
 
         systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
 
@@ -179,6 +216,16 @@ public class SyncService implements InitializingBean {
     private List<String> findChangedContactPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
         Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
         return fieldsEnumerator.findContactFieldPaths(fieldFilter);
+    }
+    
+    private List<String> findChangedResourcePossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
+        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+        return fieldsEnumerator.findResourceFieldPaths(fieldFilter);
+    }
+    
+    private List<String> findChangedCommonPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
+        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+        return fieldsEnumerator.findCommonFieldPaths(fieldFilter);
     }
 
     private Predicate<Field> getChangedFields(SystemDiff systemDiff, Date lastSyncTime) {
@@ -302,9 +349,10 @@ public class SyncService implements InitializingBean {
         StringJoiner sql = new StringJoiner(" UNION ");
         for (AmpTeamMember teamMember : teamMembers) {
 
-            AmpARFilter computedWsFilter = FilterUtil.buildFilterFromSource(teamMember.getAmpTeam());
+            TeamMember tm = teamMember.toTeamMember();
+            AmpARFilter computedWsFilter = FilterUtil.buildFilterFromSource(teamMember.getAmpTeam(), tm);
 
-            AmpARFilterParams params = AmpARFilterParams.getParamsForWorkspaceFilter(teamMember.toTeamMember(), null);
+            AmpARFilterParams params = AmpARFilterParams.getParamsForWorkspaceFilter(tm, null);
             computedWsFilter.generateFilterQuery(params);
 
             sql.add(computedWsFilter.getGeneratedFilterQuery());
@@ -319,6 +367,45 @@ public class SyncService implements InitializingBean {
             List<AmpOfflineChangelog> changeLogs = loadChangeLog(syncRequest.getLastSyncTime(), asList(CONTACT));
             systemDiff.setContacts(toListDiffWithLongs(changeLogs, systemDiff));
         }
+    }
+
+    private void updateDiffsForCalendars(SystemDiff systemDiff, SyncRequest syncRequest) {
+        if (syncRequest.getLastSyncTime() == null) {
+            systemDiff.setCalendars(new ListDiff<>(emptyList(), findAllCalendarIds()));
+        } else {
+            List<AmpOfflineChangelog> changeLogs = loadChangeLog(syncRequest.getLastSyncTime(), asList(CALENDAR));
+            systemDiff.setCalendars(toListDiffWithLongs(changeLogs, systemDiff));
+        }
+    }
+    
+    private void updateDiffsForResources(SystemDiff systemDiff, SyncRequest syncRequest) {
+        if (syncRequest.getLastSyncTime() == null) {
+            systemDiff.setResources(new ListDiff<>(emptyList(), ResourceUtil.getAllNodeUuids()));
+        } else {
+            List<String> updated = new ArrayList<>();
+            
+            if (resourcesChanged(syncRequest.getLastSyncTime())) {
+                List<ResourceChange> allChanges = getAllResourceChanges(syncRequest.getLastSyncTime());
+                for (ResourceChange resourceChange : allChanges) {
+                    systemDiff.updateTimestamp(resourceChange.getAddingDate());
+                    updated.add(resourceChange.getUuid());
+                }
+            }
+
+            List<String> removed = new ArrayList<>();
+            List<AmpOfflineChangelog> removedLogs =
+                    ampOfflineChangelogRepository.findRemovedResources(syncRequest.getLastSyncTime());
+            for (AmpOfflineChangelog removedLog : removedLogs) {
+                removed.add(removedLog.getEntityId());
+                systemDiff.updateTimestamp(removedLog.getOperationTime());
+            }
+
+            systemDiff.setResources(new ListDiff<>(removed, updated));
+        }
+    }
+    
+    private boolean resourcesChanged(Date lastSyncTime) {
+        return !loadChangeLog(lastSyncTime, asList(RESOURCE)).isEmpty();
     }
 
     private void updateDiffForUsers(SystemDiff systemDiff, Date lastSyncTime) {
@@ -339,6 +426,10 @@ public class SyncService implements InitializingBean {
 
     private List<Long> findAllUserIds() {
         return jdbcTemplate.query("select id from dg_user", emptyMap(), ID_MAPPER);
+    }
+    
+    private List<Long> findAllCalendarIds() {
+        return jdbcTemplate.query("select amp_fiscal_cal_id from amp_fiscal_calendar", emptyMap(), ID_MAPPER);
     }
 
     private List<AmpOfflineChangelog> findChangedUsers(Date lastSyncTime) {
@@ -380,13 +471,37 @@ public class SyncService implements InitializingBean {
             systemDiff.setWorkspaceSettings(true);
         }
     }
+    
+    private void updateDiffsForMapTilesAndLocators(SystemDiff systemDiff, Date lastSyncTime) {
+        boolean isMapTilesPublished = MapTilesService.getInstance().getMapTilesNodeWrapper() != null;
+        if (lastSyncTime != null) {
+            List<AmpOfflineChangelog> changelogs = findChangedMapTilesAndLocators(lastSyncTime);
+
+            for (AmpOfflineChangelog changelog : changelogs) {
+                if (changelog.getEntityName().equals(MAP_TILES)) {
+                    systemDiff.setMapTiles(isMapTilesPublished);
+                }
+                if (changelog.getEntityName().equals(LOCATORS)) {
+                    systemDiff.setLocators(true);
+                }
+                systemDiff.updateTimestamp(changelog.getOperationTime());
+            }
+        } else {
+            systemDiff.setMapTiles(isMapTilesPublished);
+            systemDiff.setLocators(true);
+        }
+    }
 
     private List<AmpOfflineChangelog> findChangedWsAndGs(Date lastSyncTime) {
         return loadChangeLog(lastSyncTime,
                 asList(GLOBAL_SETTINGS, WORKSPACES, WORKSPACE_SETTINGS, WORKSPACE_FILTER_DATA, 
                         WORKSPACE_ORGANIZATIONS));
     }
-
+    
+    private List<AmpOfflineChangelog> findChangedMapTilesAndLocators(Date lastSyncTime) {
+        return loadChangeLog(lastSyncTime, asList(MAP_TILES, LOCATORS));
+    }
+    
     private void updateDiffForWorkspaceMembers(SystemDiff systemDiff, Date lastSyncTime) {
         if (lastSyncTime == null) {
             List<Long> workspaceMemberIds = findWorkspaceMembers();
@@ -524,5 +639,41 @@ public class SyncService implements InitializingBean {
                 + "from amp_offline_changelog "
                 + "where operation_time > :lastSyncTime "
                 + "and entity_name in (:entities) ", args, ROW_MAPPER);
+    }
+    
+    private List<ResourceChange> getAllResourceChanges(Date lastSyncTime) {
+        List<ResourceChange> changedResources = new ArrayList<>();
+        changedResources.addAll(getLastUpdatedUuids("private", lastSyncTime));
+        changedResources.addAll(getLastUpdatedUuids("team", lastSyncTime));
+        
+        return changedResources;
+    }
+
+    private static List<ResourceChange> getLastUpdatedUuids(String path, Date syncDate) {
+        Session session = DocumentManagerUtil.getReadSession(TLSUtils.getRequest());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(syncDate);
+        String formattedDate = ISO8601.format(cal);
+        
+        List<ResourceChange> resources = new ArrayList<>();
+        try {
+            QueryManager queryManager = session.getWorkspace().getQueryManager();
+            Query query = queryManager.createQuery(String.format("SELECT * FROM nt:base WHERE %s "
+                    + "IS NOT NULL AND jcr:path LIKE '/%s/%%/' AND %s >= TIMESTAMP '%s'", 
+                    CrConstants.PROPERTY_CREATOR, path, CrConstants.PROPERTY_ADDING_DATE, formattedDate), Query.SQL);
+            NodeIterator nodes = query.execute().getNodes();
+            while (nodes.hasNext()) {
+                Node node = nodes.nextNode();
+                Property dateProp = DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_ADDING_DATE);
+                ResourceChange resourceChange = new ResourceChange();
+                resourceChange.setUuid(node.getIdentifier());
+                resourceChange.setAddingDate(dateProp.getDate().getTime());
+                resources.add(resourceChange);
+            }
+        } catch (RepositoryException e) {
+            throw new RuntimeException(e);
+        }
+ 
+        return resources;
     }
 }

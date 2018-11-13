@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -33,11 +34,9 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.currencies.CalculateExchangeRatesEtlJob;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.monet.EtlStrategy;
-import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.mondrian.monet.OlapDbConnection;
 import org.dgfoundation.amp.mondrian.monet.PostgresConnection;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -45,8 +44,6 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.time.StopWatch;
 import org.hibernate.Session;
-
-import clover.com.google.common.base.Joiner;
 
 import com.google.common.base.Predicate;
 
@@ -62,7 +59,6 @@ public class MondrianETL {
     public static int IDS_BATCH_SIZE = 200;
     public static boolean ENABLE_DIRECTED_DISBURSEMENTS = false;
     
-    //public static EtlStrategy ETL_STRATEGY = MonetConnection.buildStrategy();
     public static EtlStrategy ETL_STRATEGY = PostgresConnection.buildStrategy();
 
     public final static boolean IS_COLUMNAR = ETL_STRATEGY.isColumnarDatabase();
@@ -162,12 +158,12 @@ public class MondrianETL {
      * @param activities
      * @param activitiesToRemove
      */
-    public MondrianETL(java.sql.Connection postgresConn, OlapDbConnection monetConn, boolean forceFullEtl) {
+    public MondrianETL(java.sql.Connection postgresConn, OlapDbConnection olapConn, boolean forceFullEtl) {
         logger.warn("Mondrian ETL started");
         
         this.conn = postgresConn;
-        this.olapConn = monetConn;
-        this.forceFullEtl = forceFullEtl | !monetConn.tableExists(Fingerprint.FINGERPRINT_TABLE);
+        this.olapConn = olapConn;
+        this.forceFullEtl = forceFullEtl | !olapConn.tableExists(Fingerprint.FINGERPRINT_TABLE);
         this.locales = new LinkedHashSet<>(TranslatorUtil.getLanguages());
     }
     
@@ -243,13 +239,16 @@ public class MondrianETL {
         int oldNrComponents = components.size();
 
         String componentIdCondition = "amp_component_id IN (" + Util.toCSStringForIN(components) + ")";
-        activities.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(amp_activity_id) FROM amp_activity_components WHERE " + componentIdCondition));
+        activities.addAll(SQLUtils.fetchLongs(conn,
+                "SELECT DISTINCT(amp_activity_id) FROM amp_components WHERE " + componentIdCondition));
 
         String pledgeIdsCondition = "afd.pledge_id IN (" + Util.toCSStringForIN(pledges) + ")";
         activities.addAll(SQLUtils.fetchLongs(conn, "select distinct(af.amp_activity_id) from amp_funding_detail afd JOIN amp_funding af on afd.amp_funding_id = af.amp_funding_id WHERE " + pledgeIdsCondition));
         pledges.addAll(SQLUtils.fetchLongs(conn, "SELECT distinct(pledge_id) FROM amp_funding_detail afd JOIN amp_funding af ON afd.amp_funding_id = af.amp_funding_id WHERE af.amp_activity_id IN (" + Util.toCSStringForIN(activities) + ")"));
 
-        components.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(amp_component_id) FROM amp_activity_components WHERE amp_activity_id IN (" + Util.toCSStringForIN(activities) + ")"));
+        components.addAll(SQLUtils.fetchLongs(conn,
+                "SELECT DISTINCT(amp_component_id) FROM amp_components WHERE amp_activity_id IN ("
+                        + Util.toCSStringForIN(activities) + ")"));
         
         agreements.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(agreement) FROM amp_funding WHERE amp_activity_id IN (" + Util.toCSStringForIN(activities) + ")"));
         
@@ -427,7 +426,7 @@ private EtlResult execute() throws Exception {
         SQLUtils.executeQuery(conn, 
             String.format(Locale.US, "UPDATE amp_etl_log SET duration = %.2f, cache_invalidated=%b, nr_affected_entries=%d, nr_affected_dates=%d, full_etl_reason=%s WHERE etl_id = %d",
                 res.duration, res.cacheInvalidated, res.nrAffectedEntities, res.nrAffectedDates,
-                SQLUtils.stringifyObject(Joiner.on(';').join(res.fullEtlReasons)),
+                SQLUtils.stringifyObject(res.fullEtlReasons.stream().collect(Collectors.joining(";"))),
                 currentEtlId));
         SQLUtils.flush(conn);
     }

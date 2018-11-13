@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import clover.org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ComponentsUtil;
@@ -103,7 +104,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     @Override
     public List<Object[]> getPossibleLocations() {
         String queryString = "SELECT loc.id, acvl.id, acvl.name, acvlParent.id, acvlParent.name, "
-                + "parentCat.id, parentCat.value "
+                + "parentCat.id, parentCat.value, acvl.iso "
                 + " FROM " + AmpLocation.class.getName() + " loc "
                 + " LEFT JOIN loc.location AS acvl"
                 + " LEFT JOIN acvl.parentLocation AS acvlParent"
@@ -136,6 +137,19 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     public List<AmpContact> getContacts() {
         return InterchangeUtils.getSessionWithPendingChanges()
                 .createCriteria(AmpContact.class)
+                .setCacheable(true)
+                .setCacheRegion(CACHE)
+                .list();
+    }
+    
+    @Override
+    public List<AmpOrganisation> getOrganisations() {
+        return InterchangeUtils.getSessionWithPendingChanges()
+                .createCriteria(AmpOrganisation.class)
+                .add(Restrictions.or(
+                        Restrictions.eq("deleted", false),
+                        Restrictions.isNull("deleted")
+                    ))
                 .setCacheable(true)
                 .setCacheRegion(CACHE)
                 .list();

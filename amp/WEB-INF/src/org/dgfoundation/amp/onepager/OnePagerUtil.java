@@ -14,6 +14,9 @@ import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -22,19 +25,11 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.SetModel;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpFundingFlowsOrgRoleSelector;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
 
 /**
  * Various utility methods for the {@link OnePager}
@@ -56,7 +51,7 @@ public final class OnePagerUtil {
      public static String jsonMarshal(Object o) {
             StringWriter sw = new StringWriter();
             try {
-                JsonGenerator gen = jf.createJsonGenerator(sw);
+                JsonGenerator gen = jf.createGenerator(sw);
                 new ObjectMapper().writeValue(gen, o);
                 return sw.toString();
             } catch(Exception e) {

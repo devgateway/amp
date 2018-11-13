@@ -270,7 +270,7 @@ function collapseAll() {
 
 <!-- MAIN CONTENT PART START -->
 <div class="content-dir">
-<logic:present scope="request" parameter="editError">
+<logic:present scope="request" parameter="editingUserId">
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
 	     <tr>
 		     <td align="center">
@@ -367,7 +367,7 @@ function collapseAll() {
 					</td>
 					<td>
 						<c:set var="showWordSetting" scope="page" value="false"/>
-						<%if(FeaturesUtil.isVisibleModule("Show Editable Export Formats")){ %>
+						<%if(FeaturesUtil.showEditableExportFormats()){ %>
 							<c:set var="showWordSetting" scope="page" value="true"/>
 						<%}%>
 						<c:if test="${(sessionScope.currentMember != null) || (showWordSetting)}">
@@ -1538,18 +1538,6 @@ function collapseAll() {
 </module:display>
 
 <!-- LOCATIONS SECTION -->
-<module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
-	<c:set var="programs_list" value="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}" />
-	<c:set var="programs_name"></c:set>
-	<fieldset>
-		<legend>
-			<span class="legend_label" style="cursor: pointer;"><digi:trn>National Plan</digi:trn></span>
-		</legend>
-		<div class="toggleDiv">
-		<%@include file="activitypreview/programs.jspf" %>
-		</div>
-	</fieldset>
-</module:display>
 
 <!-- PROGRAM SECTION -->
 <module:display name="/Activity Form/Program" parentModule="/Activity Form">
@@ -1558,6 +1546,11 @@ function collapseAll() {
 		<span class="legend_label" style="cursor: pointer;"><digi:trn>Program</digi:trn></span>
 	</legend>
 	<div class="toggleDiv">
+	    <module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
+            <c:set var="programs_list" value="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}" />
+            <c:set var="programs_name"><digi:trn>National Plan Objective</digi:trn></c:set>
+            <%@include file="activitypreview/programs.jspf" %>
+        </module:display>
 		<module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form">
 			<c:set var="programs_list" value="${aimEditActivityForm.programs.primaryPrograms}" />
 			<c:set var="programs_name"><digi:trn>Primary Programs</digi:trn></c:set>

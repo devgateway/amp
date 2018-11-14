@@ -254,9 +254,8 @@ public class ReportsUtil {
             if (original.getDinamic() != null) {
                 newParams.setDynamic(true);
             }
-            if (queryModel.get(EPConstants.INCLUDE_LOCATION_CHILDREN) != null) {
-                newParams.set(EPConstants.INCLUDE_LOCATION_CHILDREN, 
-                        queryModel.get(EPConstants.INCLUDE_LOCATION_CHILDREN));
+            if (queryModel.getIncludeLocationChildren() != null) {
+                newParams.setIncludeLocationChildren(queryModel.getIncludeLocationChildren());
             }
         }
         
@@ -530,9 +529,10 @@ public class ReportsUtil {
      * @param specImpl
      * @param formParams
      */
-    private static void configureIncludeLocationChildrenFilters(ReportSpecificationImpl specImpl, JsonBean formParams) {
-        if (formParams.get(EPConstants.INCLUDE_LOCATION_CHILDREN) != null) {
-            boolean includeLocationChildren = (boolean) formParams.get(EPConstants.INCLUDE_LOCATION_CHILDREN);
+    private static void configureIncludeLocationChildrenFilters(ReportSpecificationImpl specImpl,
+                                                                ReportFormParameters formParams) {
+        if (formParams.getIncludeLocationChildren() != null) {
+            boolean includeLocationChildren = formParams.getIncludeLocationChildren();
             if (!includeLocationChildren) {
                 List<String> locationIds = new ArrayList<>();
                 AmpReportFilters filterRules = (AmpReportFilters) specImpl.getFilters();

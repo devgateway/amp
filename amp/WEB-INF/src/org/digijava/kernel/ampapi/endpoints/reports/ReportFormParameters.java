@@ -129,6 +129,9 @@ public class ReportFormParameters {
             value = "JQGrid style sort param. Default order when not specified at column level.",
             allowableValues = "asc, desc")
     private String sord;
+    
+    @JsonProperty(EPConstants.INCLUDE_LOCATION_CHILDREN)
+    private Boolean includeLocationChildren;
 
     public static ReportFormParameters fromString(String value) {
         try {
@@ -337,5 +340,13 @@ public class ReportFormParameters {
 
     public void setAdditionalMeasures(List<String> additionalMeasures) {
         this.additionalMeasures = additionalMeasures;
+    }
+    
+    public Boolean getIncludeLocationChildren() {
+        return includeLocationChildren;
+    }
+    
+    public void setIncludeLocationChildren(Boolean includeLocationChildren) {
+        this.includeLocationChildren = includeLocationChildren;
     }
 }

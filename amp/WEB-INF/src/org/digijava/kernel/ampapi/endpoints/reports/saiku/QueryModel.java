@@ -30,6 +30,9 @@ public class QueryModel implements Cloneable {
 
     @ApiModelProperty("Second currency for report. Supported only in excel exports.")
     private String secondCurrency;
+    
+    @ApiModelProperty("Should location option in filters include children or not.")
+    private Boolean includeLocationChildren;
 
     public Integer getPage() {
         return page;
@@ -78,7 +81,15 @@ public class QueryModel implements Cloneable {
     public void setSecondCurrency(String secondCurrency) {
         this.secondCurrency = secondCurrency;
     }
-
+    
+    public Boolean getIncludeLocationChildren() {
+        return includeLocationChildren;
+    }
+    
+    public void setIncludeLocationChildren(Boolean includeLocationChildren) {
+        this.includeLocationChildren = includeLocationChildren;
+    }
+    
     @Override
     public final QueryModel clone() {
         try {

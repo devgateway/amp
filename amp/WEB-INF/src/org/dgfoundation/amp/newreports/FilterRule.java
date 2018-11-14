@@ -15,6 +15,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 
 /**
  * Filter rule that can be of one of {@link FilterType} type

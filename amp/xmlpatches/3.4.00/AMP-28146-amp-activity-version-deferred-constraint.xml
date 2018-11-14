@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-28146</jira>
+    <keyword>Adjust unique constraint for amp_activity_group to allow hibernate to delete activities without violating the constraint.</keyword>
+    <author>ociubotaru</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+                ALTER TABLE amp_activity_group
+                    DROP CONSTRAINT fk3b88712ab061d8d8;
+                ALTER TABLE amp_activity_group
+                    ADD CONSTRAINT fk_activity
+                    FOREIGN KEY (amp_activity_last_version_id) REFERENCES amp_activity_version
+                    DEFERRABLE INITIALLY DEFERRED;
+
+                ALTER TABLE amp_activity_version
+                    DROP CONSTRAINT fkadea60c362016f31;
+                ALTER TABLE amp_activity_version
+	                ADD CONSTRAINT fk_merge_source1
+		            FOREIGN KEY (merge_source1) REFERENCES amp_activity_version
+		            DEFERRABLE INITIALLY DEFERRED;
+
+                ALTER TABLE amp_activity_version
+                    DROP CONSTRAINT fkadea60c362016f32;
+                ALTER TABLE amp_activity_version
+	                ADD CONSTRAINT fk_merge_source2
+		            FOREIGN KEY (merge_source2) REFERENCES amp_activity_version
+		            DEFERRABLE INITIALLY DEFERRED;
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

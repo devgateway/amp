@@ -150,9 +150,7 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
     }
 
     @Override
-    public void touch() {
-        if (ampActivityId != null) {
-            ampActivityId.touch();
-        }
+    public AuditableEntity getParent() {
+        return ampActivityId;
     }
 }

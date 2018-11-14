@@ -137,9 +137,7 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable, Auditabl
     }
 
     @Override
-    public void touch() {
-        if (ampGPINiSurvey != null) {
-            ampGPINiSurvey.touch();
-        }
+    public AuditableEntity getParent() {
+        return ampGPINiSurvey;
     }
 }

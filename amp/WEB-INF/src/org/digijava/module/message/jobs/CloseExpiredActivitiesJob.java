@@ -12,6 +12,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
@@ -51,7 +52,6 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
     {       
         AmpActivityVersion prevVersion = oldActivity.getAmpActivityGroup().getAmpActivityLastVersion();
         oldActivity.getAmpActivityGroup().setAutoClosedOnExpiration(true);
-        oldActivity.setModifiedBy(member);
 
         oldActivity.setApprovalStatus(newStatus);
         oldActivity.getCategories().remove(CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, oldActivity.getCategories()));
@@ -59,11 +59,14 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
         
         AmpActivityVersion auxActivity = null;
         try {
+            AuditActivityInfo.getThreadLocalInstance().setModifiedBy(member);
             auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(oldActivity, null, 
                     member, oldActivity.getDraft(), session, SaveContext.job());
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
+        } finally {
+            AuditActivityInfo.getThreadLocalInstance().clean();
         }
         session.flush();
         

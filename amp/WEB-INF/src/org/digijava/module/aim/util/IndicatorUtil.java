@@ -872,7 +872,7 @@ public class IndicatorUtil {
                 Hibernate.initialize(act);
                 Hibernate.initialize(act.getActivityContacts());
                 AmpActivityGroup tmpGroup = act.getAmpActivityGroup();
-                act = ActivityVersionUtil.cloneActivity(act,member);
+                act = ActivityVersionUtil.cloneActivity(act);
                 ContentTranslationUtil.cloneTranslations(act);
                 act.setAmpActivityId(null);
                                 

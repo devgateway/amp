@@ -181,9 +181,7 @@ public class AmpComments implements Serializable, Cloneable, Versionable, Audita
     }
 
     @Override
-    public void touch() {
-        if (ampActivityId != null) {
-            ampActivityId.touch();
-        }
+    public AuditableEntity getParent() {
+        return ampActivityId;
     }
 }

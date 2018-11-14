@@ -62,9 +62,7 @@ public class AmpGPINiSurvey implements Serializable, Cloneable, Comparable<AmpGP
     }
 
     @Override
-    public void touch() {
-        if (ampOrgRole != null) {
-            ampOrgRole.touch();
-        }
+    public AuditableEntity getParent() {
+        return ampOrgRole;
     }
 }

@@ -44,6 +44,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
+import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -208,7 +209,7 @@ public class ActivityImporter extends ObjectImporter {
                 
                 newActivity = oldActivity;
                 // REFACTOR: we may no longer need to use old activity
-                oldActivity = ActivityVersionUtil.cloneActivity(oldActivity, teamMember);
+                oldActivity = ActivityVersionUtil.cloneActivity(oldActivity);
                 oldActivity.setAmpId(newActivity.getAmpId());
                 oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
 
@@ -228,6 +229,7 @@ public class ActivityImporter extends ObjectImporter {
             
             newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, newJsonParent, 
                     oldJsonParent, null);
+            AuditActivityInfo.getThreadLocalInstance().setModifiedBy(teamMember);
             if (newActivity != null && errors.isEmpty()) {
                 // save new activity
                 prepareToSave();
@@ -260,6 +262,7 @@ public class ActivityImporter extends ObjectImporter {
             }
         } finally {
             ActivityGatekeeper.unlockActivity(activityId, key);
+            AuditActivityInfo.getThreadLocalInstance().clean();
         }
         
         return new ArrayList<ApiErrorMessage>(errors.values());

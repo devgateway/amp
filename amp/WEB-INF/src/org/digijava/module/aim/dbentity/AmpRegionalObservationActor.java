@@ -58,9 +58,7 @@ public class AmpRegionalObservationActor implements Serializable, Cloneable, Aud
     }
 
     @Override
-    public void touch() {
-        if (measure != null) {
-            measure.touch();
-        }
+    public AuditableEntity getParent() {
+        return measure;
     }
 }

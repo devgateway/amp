@@ -56,9 +56,7 @@ public class AmpActor  implements Serializable, Cloneable, AuditableEntity {
 
 
     @Override
-    public void touch() {
-        if (measure != null) {
-            measure.touch();
-        }
+    public AuditableEntity getParent() {
+        return measure;
     }
 }

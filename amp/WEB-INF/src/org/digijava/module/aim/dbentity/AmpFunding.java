@@ -880,9 +880,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Auditab
     }
 
     @Override
-    public void touch() {
-        if (ampActivityId != null) {
-            ampActivityId.touch();
-        }
+    public AuditableEntity getParent() {
+        return ampActivityId;
     }
 }

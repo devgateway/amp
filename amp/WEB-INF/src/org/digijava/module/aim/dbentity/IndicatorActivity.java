@@ -190,9 +190,7 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
     }
 
     @Override
-    public void touch() {
-        if (activity != null) {
-            activity.touch();
-        }
+    public AuditableEntity getParent() {
+        return activity;
     }
 }

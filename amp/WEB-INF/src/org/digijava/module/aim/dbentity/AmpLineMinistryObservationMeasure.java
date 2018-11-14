@@ -77,9 +77,7 @@ public class AmpLineMinistryObservationMeasure implements Serializable, Cloneabl
     }
 
     @Override
-    public void touch() {
-        if (lineMinistryObservation != null) {
-            lineMinistryObservation.touch();
-        }
+    public AuditableEntity getParent() {
+        return lineMinistryObservation;
     }
 }

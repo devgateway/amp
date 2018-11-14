@@ -124,10 +124,8 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable, 
     }
 
     @Override
-    public void touch() {
-        if (activityId != null) {
-            activityId.touch();
-        }
+    public AuditableEntity getParent() {
+        return activityId;
     }
 
 }

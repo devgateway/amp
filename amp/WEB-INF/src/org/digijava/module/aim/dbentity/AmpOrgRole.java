@@ -277,9 +277,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     }
 
     @Override
-    public void touch() {
-        if (activity != null) {
-            activity.touch();
-        }
+    public AuditableEntity getParent() {
+        return activity;
     }
 }

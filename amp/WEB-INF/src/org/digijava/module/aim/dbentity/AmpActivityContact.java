@@ -125,9 +125,7 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
     }
 
     @Override
-    public void touch() {
-        if (activity != null) {
-            activity.touch();
-        }
+    public AuditableEntity getParent() {
+        return activity;
     }
 }

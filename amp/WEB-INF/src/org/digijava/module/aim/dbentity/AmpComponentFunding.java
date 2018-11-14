@@ -259,9 +259,7 @@ public class AmpComponentFunding implements Cloneable, Serializable, AuditableEn
     }
 
     @Override
-    public void touch() {
-        if (component != null) {
-            component.touch();
-        }
+    public AuditableEntity getParent() {
+        return component;
     }
 }

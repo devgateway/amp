@@ -76,9 +76,7 @@ public class AmpRegionalObservationMeasure implements Serializable, Cloneable, A
     }
 
     @Override
-    public void touch() {
-        if (regionalObservation != null) {
-            regionalObservation.touch();
-        }
+    public AuditableEntity getParent() {
+        return regionalObservation;
     }
 }

@@ -205,9 +205,7 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
     }
 
     @Override
-    public void touch() {
-        if (ampActivityId != null) {
-            ampActivityId.touch();
-        }
+    public AuditableEntity getParent() {
+        return ampActivityId;
     }
 }

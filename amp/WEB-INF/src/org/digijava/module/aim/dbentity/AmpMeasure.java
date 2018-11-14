@@ -69,9 +69,7 @@ public class AmpMeasure  implements Serializable, Cloneable, AuditableEntity {
     }
 
     @Override
-    public void touch() {
-        if (issue != null) {
-            issue.touch();
-        }
+    public AuditableEntity getParent() {
+        return issue;
     }
 }

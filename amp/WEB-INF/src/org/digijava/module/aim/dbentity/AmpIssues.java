@@ -194,9 +194,7 @@ public class AmpIssues implements Serializable, Versionable, Cloneable, Auditabl
     }
 
     @Override
-    public void touch() {
-        if (activity != null) {
-            activity.touch();
-        }
+    public AuditableEntity getParent() {
+        return activity;
     }
 }

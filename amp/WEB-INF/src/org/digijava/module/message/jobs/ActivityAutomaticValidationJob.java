@@ -8,6 +8,7 @@ import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
@@ -39,8 +40,6 @@ public class ActivityAutomaticValidationJob extends ConnectionCleaningJob implem
      * @throws CloneNotSupportedException
      */
     protected AmpActivityVersion validateActivity(Session session, AmpTeamMember member, AmpActivityVersion oldActivity) throws CloneNotSupportedException {
-        AmpActivityVersion prevVersion = oldActivity.getAmpActivityGroup().getAmpActivityLastVersion();
-        oldActivity.setModifiedBy(member);
 
         oldActivity.setApprovalStatus(Constants.APPROVED_STATUS);
         oldActivity.setApprovedBy(member);
@@ -48,11 +47,14 @@ public class ActivityAutomaticValidationJob extends ConnectionCleaningJob implem
 
         AmpActivityVersion auxActivity = null;
         try {
+            AuditActivityInfo.getThreadLocalInstance().setModifiedBy(member);
             auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivity(oldActivity, null, member, SiteUtils.getDefaultSite(),
                     new java.util.Locale("en"), AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, oldActivity.getDraft(), SaveContext.job());
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
+        } finally {
+            AuditActivityInfo.getThreadLocalInstance().clean();
         }
         session.flush();
 

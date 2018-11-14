@@ -102,9 +102,7 @@ public class AmpActivityInternalId implements Serializable, Versionable, Cloneab
     }
 
     @Override
-    public void touch() {
-        if (ampActivity != null) {
-            ampActivity.touch();
-        }
+    public AuditableEntity getParent() {
+        return ampActivity;
     }
 }

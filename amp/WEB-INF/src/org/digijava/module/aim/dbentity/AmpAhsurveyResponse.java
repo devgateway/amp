@@ -129,9 +129,7 @@ public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable
     }
 
     @Override
-    public void touch() {
-        if (ampAHSurveyId != null) {
-            ampAHSurveyId.touch();
-        }
+    public AuditableEntity getParent() {
+        return ampAHSurveyId;
     }
 }

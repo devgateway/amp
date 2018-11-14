@@ -286,9 +286,7 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
     }
 
     @Override
-    public void touch() {
-        if (ampFunding != null) {
-            ampFunding.touch();
-        }
+    public AuditableEntity getParent() {
+        return ampFunding;
     }
 }

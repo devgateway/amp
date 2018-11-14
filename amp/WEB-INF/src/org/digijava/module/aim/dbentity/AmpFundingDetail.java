@@ -660,9 +660,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     }
 
     @Override
-    public void touch() {
-        if (ampFundingId != null) {
-            ampFundingId.touch();
-        }
+    public AuditableEntity getParent() {
+        return ampFundingId;
     }
 }

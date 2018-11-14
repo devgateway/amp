@@ -27,6 +27,7 @@ import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
@@ -2174,17 +2175,30 @@ LoggerIdentifiable, Cloneable, AuditableEntity {
             }
             this.costAmounts.add(costAmount);
         }
+    
+    @Override
+    public AuditableEntity getParent() {
+        return null;
+    }
 
     @Override
     public void touch() {
+    
         Date updateDate = Calendar.getInstance().getTime();
+        
         setUpdatedDate(updateDate);
         setModifiedDate(updateDate);
-
-        AmpTeamMember currentAmpTeamMember = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
-        if (currentAmpTeamMember != null) {
-            setModifiedBy(currentAmpTeamMember);
+    
+        AmpTeamMember modifiedBy = AuditActivityInfo.getThreadLocalInstance().getModifiedBy();
+        if (modifiedBy == null) {
+            modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
         }
+        
+        if (modifiedBy == null) {
+            throw new RuntimeException("Modified team member cannot be null");
+        }
+        
+        setModifiedBy(modifiedBy);
     }
 
 }

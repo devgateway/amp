@@ -62,10 +62,8 @@ public class AmpGPISurveyResponse implements Versionable, Cloneable, Serializabl
     }
 
     @Override
-    public void touch() {
-        if (ampGPISurveyId != null) {
-            ampGPISurveyId.touch();
-        }
+    public AuditableEntity getParent() {
+        return ampGPISurveyId;
     }
 
     public static class AmpGPISurveyResponseComparator implements Comparator<AmpGPISurveyResponse>, Serializable {

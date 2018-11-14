@@ -248,9 +248,7 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable,
     }
 
     @Override
-    public void touch() {
-        if (activity != null) {
-            activity.touch();
-        }
+    public AuditableEntity getParent() {
+        return activity;
     }
 }

@@ -307,9 +307,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     }
 
     @Override
-    public void touch() {
-        if (activity != null) {
-            activity.touch();
-        }
+    public AuditableEntity getParent() {
+        return activity;
     }
 }

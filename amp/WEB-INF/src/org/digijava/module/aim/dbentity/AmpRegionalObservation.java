@@ -180,10 +180,8 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
     }
 
     @Override
-    public void touch() {
-        if (activity != null) {
-            activity.touch();
-        }
+    public AuditableEntity getParent() {
+        return activity;
     }
 
     public static class RegionalObservationComparator implements Comparator<AmpRegionalObservation>, Serializable {

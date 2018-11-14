@@ -183,10 +183,8 @@ public class AmpLineMinistryObservation implements Serializable, Versionable, Cl
     }
 
     @Override
-    public void touch() {
-        if (activity != null) {
-            activity.touch();
-        }
+    public AuditableEntity getParent() {
+        return activity;
     }
 
 

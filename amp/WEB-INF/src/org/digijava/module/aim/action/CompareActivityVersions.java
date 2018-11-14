@@ -34,6 +34,7 @@ import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
+import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
@@ -568,8 +569,8 @@ public class CompareActivityVersions extends DispatchAction {
 
             AmpActivityVersion oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, vForm
                     .getOldActivity().getAmpActivityId());
-            
-            
+    
+            AuditActivityInfo.getThreadLocalInstance().setModifiedBy(member);
             
             // Insert fields selected by user into AmpActity properties.
             Iterator<CompareOutput> iter = auxData.iterator();
@@ -641,7 +642,7 @@ public class CompareActivityVersions extends DispatchAction {
             }
 
             ContentTranslationUtil.cloneTranslations(oldActivity);
-            AmpActivityVersion auxActivity = ActivityVersionUtil.cloneActivity(oldActivity, member);
+            AmpActivityVersion auxActivity = ActivityVersionUtil.cloneActivity(oldActivity);
             auxActivity.setAmpActivityId(null);
 
             session.evict(oldActivity);
@@ -692,6 +693,7 @@ public class CompareActivityVersions extends DispatchAction {
             transaction.rollback();
         } finally {
             PersistenceManager.closeSession(session);
+            AuditActivityInfo.getThreadLocalInstance().clean();
         }
         return mapping.findForward("index");
     }

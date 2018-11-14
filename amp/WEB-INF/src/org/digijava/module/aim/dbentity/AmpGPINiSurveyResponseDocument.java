@@ -40,9 +40,7 @@ public class AmpGPINiSurveyResponseDocument extends ObjectReferringDocument impl
     }
 
     @Override
-    public void touch() {
-        if (surveyResponse != null) {
-            surveyResponse.touch();
-        }
+    public AuditableEntity getParent() {
+        return surveyResponse;
     }
 }

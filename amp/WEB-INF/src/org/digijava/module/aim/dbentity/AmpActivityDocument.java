@@ -114,9 +114,7 @@ public class AmpActivityDocument extends ObjectReferringDocument implements Seri
     }
 
     @Override
-    public void touch() {
-        if (ampActivity != null) {
-            ampActivity.touch();
-        }
+    public AuditableEntity getParent() {
+        return ampActivity;
     }
 }

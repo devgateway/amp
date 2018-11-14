@@ -26,6 +26,7 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 
@@ -131,7 +132,7 @@ public class FieldsEnumerator {
         
         /* list type */
         
-        apiField.setIdOnly(interchangeable.pickIdOnly());
+        apiField.setIdOnly(hasPossibleValues(field, interchangeable));
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             if (InterchangeUtils.isCollection(field)) {
@@ -193,6 +194,10 @@ public class FieldsEnumerator {
         }
 
         return apiField;
+    }
+
+    private boolean hasPossibleValues(Field field, Interchangeable interchangeable) {
+        return interchangeable.pickIdOnly() || field.isAnnotationPresent(PossibleValues.class);
     }
 
     private Class<?> getType(Field field, FEContext context) {

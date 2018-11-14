@@ -82,6 +82,7 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -111,6 +112,9 @@ public class SyncService implements InitializingBean {
     private CurrencyService currencyService = CurrencyService.INSTANCE;
 
     private AmpOfflineChangelogRepository ampOfflineChangelogRepository = AmpOfflineChangelogRepository.INSTANCE;
+
+    @Autowired
+    private SyncDAO syncDAO;
 
     private static class AmpOfflineChangelogMapper implements RowMapper<AmpOfflineChangelog> {
 
@@ -159,6 +163,8 @@ public class SyncService implements InitializingBean {
 
         systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
 
+        systemDiff.setFields(shouldSyncFieldsDefinitions(syncRequest.getLastSyncTime()));
+
         updateDiffForFeatureManager(systemDiff, syncRequest);
 
         if (systemDiff.getTimestamp() == null) {
@@ -166,6 +172,15 @@ public class SyncService implements InitializingBean {
         }
 
         return systemDiff;
+    }
+
+    private boolean shouldSyncFieldsDefinitions(Date lastSyncTime) {
+        if (lastSyncTime == null) {
+            return true;
+        } else {
+            Timestamp dateModified = syncDAO.getLastModificationDateForFieldDefinitions();
+            return dateModified == null || dateModified.after(lastSyncTime);
+        }
     }
 
     private void updateDiffForFeatureManager(SystemDiff systemDiff, SyncRequest syncRequest) {

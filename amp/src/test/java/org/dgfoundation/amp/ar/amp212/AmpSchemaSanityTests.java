@@ -605,7 +605,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
     
     @Test
     public void test_AMP_18499_should_fail_for_now() {
-        // for running manually: open http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=73 OR http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/73
+        // for running manually: open http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=73 OR http://localhost:8080/TEMPLATE/ampTemplate/saikuui_reports/index.html#report/open/73
         NiReportModel cor = new NiReportModel("AMP-18499")
             .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 2))",
@@ -628,7 +628,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
     
     @Test
     public void test_AMP_18504_should_fail_for_now() {
-        // for running manually: http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=24 or http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/24
+        // for running manually: http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=24 or http://localhost:8080/TEMPLATE/ampTemplate/saikuui_reports/index.html#report/open/24
         
         NiReportModel cor = new NiReportModel("AMP-18504")
                 .withHeaders(Arrays.asList(

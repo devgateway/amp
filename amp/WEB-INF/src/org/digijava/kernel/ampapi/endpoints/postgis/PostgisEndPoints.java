@@ -1,7 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.postgis;
 
+import com.fasterxml.jackson.databind.node.TextNode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.node.TextNode;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
@@ -18,35 +21,19 @@ import java.util.Comparator;
 import java.util.List;
 
 @Path("postgis")
+@Api("postgis")
 public class PostgisEndPoints {
 
     private static final Logger logger = Logger.getLogger(PostgisEndPoints.class);
     private static final int MAX_DISTANCE_METERS = 5 * 1000;
 
-    /**
-     * Retrieve and provide a list of locations by name.
-     * </br>
-     * <dl>
-     * The JSON object holds information regarding:
-     * <dt><b>type</b><dd> - the type of the collection (FeatureCollection)
-     * <dt><b>features</b><dd> - the list of features
-     * </dl></br></br>
-     *
-     * <h3>Sample Output:</h3><pre>
-     * {
-     *   "type": "FeatureCollection",
-     *   "features": []
-     * }</pre>
-     *
-     * @param locationName name to query for location name
-     * @param includeCloseBy indicates if the close locations are included
-     *
-     * @return a GeoJSON object with a Feature Collection
-     */
     @GET
     @Path("/location/{locationName}/{includeCloseBy}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public FeatureCollectionGeoJSON locations(@PathParam("locationName") String locationName,@PathParam ("includeCloseBy") Boolean includeCloseBy) {
+    @ApiOperation("Retrieve and provide GeoJSON Feature Collection of locations by name.")
+    public FeatureCollectionGeoJSON locations(@PathParam("locationName") String locationName,
+            @ApiParam("indicates if the close locations are included")
+            @PathParam ("includeCloseBy") Boolean includeCloseBy) {
         List<AmpLocator> locations = QueryUtil.getLocationsFromKeyword(locationName.toLowerCase());
         List <Long> idLists = QueryUtil.getIdsList(locations);
         FeatureCollectionGeoJSON featureCollection = new FeatureCollectionGeoJSON();

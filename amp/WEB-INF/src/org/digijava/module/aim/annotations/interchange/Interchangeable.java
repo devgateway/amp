@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ContextMatcher;
 import org.digijava.kernel.ampapi.endpoints.activity.DefaultContextMatcher;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Interchangeable {
@@ -84,7 +85,26 @@ public @interface Interchangeable {
      */
     String[] dependencies() default {};
     
-    /** configured with option value, like "Primary Sector" */
+    /**
+     * <p>Filter objects by specified discriminator value.
+     * Must be specified in {@link InterchangeableDiscriminator#settings}.
+     * <p>When annotating {@link AmpCategoryValue}, this value must be specified to allow listing possible values for a
+     * category class. Can be used inside {@link InterchangeableDiscriminator#settings} or standalone.
+     * <p>Category in discriminated field example:
+     * <pre>
+     * &#64;InterchangeableDiscriminator(discriminatorField="categories",
+     *   settings = {
+     *     &#64;Interchangeable(fieldTitle = "Activity Status", discriminatorOption = "act_status", pickIdOnly=true),
+     *     &#64;Interchangeable(fieldTitle = "Type of Cooperation", discriminatorOption = "coop_type", pickIdOnly=true)
+     * })
+     * protected Set&#60;AmpCategoryValue&#62; categories;
+     * </pre>
+     * <p>Standalone category example:
+     * <pre>
+     * &#64;Interchangeable(fieldTitle = "Adjustment Type", discriminatorOption = "adj_type", pickIdOnly = true)
+     * private AmpCategoryValue adjustmentType;
+     * </pre>
+     */
     String discriminatorOption() default "";
     
     Validators validators() default @Validators;

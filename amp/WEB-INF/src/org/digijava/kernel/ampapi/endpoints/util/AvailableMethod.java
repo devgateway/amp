@@ -1,21 +1,39 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class AvailableMethod {
     public AvailableMethod() {
         this.ui = false;
     }
 
     private String name;
+
+    @ApiModelProperty("Should be visible in UI?")
     private Boolean ui;
+
+    @ApiModelProperty("Path to operation")
     private String endpoint;
+
+    @ApiModelProperty("Http method")
     private String method;
+
     private String id;
+
+    @ApiModelProperty("Used to group filters under different tabs")
     private String tab;
+
+    @ApiModelProperty("Columns linked to this filter")
     private String[] columns;
+  
     private FilterType[] filterType;
+  
     private FilterFieldType fieldType;
+  
     private FilterDataType dataType;
+  
     private FilterComponentType[] componentType;
+  
     private boolean multiple;
 
     public String getName() {

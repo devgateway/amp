@@ -2,9 +2,9 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-15850</jira>
+	<jira>AMP-28397</jira>
 	<keyword>add global setting to use old preview</keyword>
-	<author>jdewanquin</author>
+	<author>jdeanquin</author>
 	<description>Adding global setting to use the old activity preview. will be removed once the new preview is
 		ready</description>
 	<trigger type="all">

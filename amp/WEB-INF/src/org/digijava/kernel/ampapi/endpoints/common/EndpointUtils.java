@@ -20,6 +20,7 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 
+import com.sun.jersey.api.NotFoundException;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -39,9 +40,7 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterDefinition;
 import org.digijava.kernel.ampapi.endpoints.util.FilterReportType;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -154,18 +153,18 @@ public class EndpointUtils {
     /**
      * Retrieves a common specification configuration based on the incoming json request
      * 
-     * @param config
+     * @param reportType
      * @return report specification
      */
-    public static ReportSpecificationImpl getReportSpecification(JsonBean config, String reportName) {
+    public static ReportSpecificationImpl getReportSpecification(String reportType, String reportName) {
         // identify report type
-        String typeCode = getSingleValue(config, EPConstants.REPORT_TYPE, EPConstants.DEFAULT_REPORT_TYPE);
-        Integer reportType = EPConstants.REPORT_TYPE_ID_MAP.get(typeCode);
-        if (reportType == null) {
-            reportType = ArConstants.DONOR_TYPE;
+        String typeCode = getSingleValue(reportType, EPConstants.DEFAULT_REPORT_TYPE);
+        Integer reportTypeId = EPConstants.REPORT_TYPE_ID_MAP.get(typeCode);
+        if (reportTypeId == null) {
+            reportTypeId = ArConstants.DONOR_TYPE;
         }
         
-        return new ReportSpecificationImpl(reportName, reportType);
+        return new ReportSpecificationImpl(reportName, reportTypeId);
     }
     
     /**
@@ -223,82 +222,46 @@ public class EndpointUtils {
             return (T) formParams.get(key);
         return defaultValue;
     }
-    
-    
-    public static List<JsonBean> getApiStateList(String type) {
-        List<JsonBean> maps = new ArrayList<JsonBean>();
 
-        try {
-            List<AmpApiState> l = QueryUtil.getMapList(type);
-            for (AmpApiState map : l) {
-                maps.add(getJsonBeanFromApiState(map, Boolean.FALSE));
-            }
-            return maps;
-        } catch (DgException e) {
-            logger.error("Cannot get maps list", e);
-            throw new WebApplicationException(e);
-        }
+    public static <T> T getSingleValue(T value, T defaultValue) {
+        return value != null ? value : defaultValue;
     }
-    private static JsonBean getJsonBeanFromApiState(AmpApiState map, Boolean getBlob) {
-        JsonBean jMap = new JsonBean();
 
-        jMap.set("id", map.getId());
-        jMap.set("title", map.getTitle());
-        jMap.set("description", map.getDescription());
-        if (getBlob) {
-            jMap.set("stateBlob", map.getStateBlob());
-        }
-        jMap.set("created", GisUtil.formatDate(map.getCreatedDate()));
-        if(map.getLastAccesedDate()!=null){
-            jMap.set("lastAccess", GisUtil.formatDate(map.getLastAccesedDate()));
-        }
-        return jMap;
-    }   
     
-    public static AmpApiState getSavedMap(Long mapId) throws AmpApiException {
+    public static List<AmpApiState> getApiStateList(String type) {
+        return QueryUtil.getMapList(type);
+    }
+
+    public static AmpApiState getSavedMap(Long mapId) {
         Session s = PersistenceManager.getSession();
         AmpApiState map = (AmpApiState) s.load(AmpApiState.class, mapId);
-        map.setLastAccesedDate(new Date());
         s.merge(map);
         return map;
     }
 
-    public static JsonBean getApiState(Long mapId) {
-        JsonBean jMap = null;
+    public static AmpApiState getApiState(Long mapId) {
         try {
-            AmpApiState map = getSavedMap(mapId);
-            jMap = getJsonBeanFromApiState(map, Boolean.TRUE);
+            return getSavedMap(mapId);
         } catch (ObjectNotFoundException e) {
-            jMap = new JsonBean();
-        } catch (AmpApiException e) {
-            logger.error("cannot get map by id " + mapId, e);
-            throw new WebApplicationException(e);
+            throw new NotFoundException();
         }
-        return jMap;
-    }   
+    }
     
-    public static JsonBean saveApiState(final JsonBean pMap,String type) {
+    public static MapIdWrapper saveApiState(AmpApiState map, String type) {
         Date creationDate = new Date();
-        JsonBean mapId = new JsonBean();
 
-        AmpApiState map = new AmpApiState();
-        map.setTitle(pMap.getString("title"));
-        map.setDescription(pMap.getString("description"));
-        map.setStateBlob(pMap.getString("stateBlob"));
         map.setCreatedDate(creationDate);
         map.setUpdatedDate(creationDate);
-        map.setLastAccesedDate(creationDate);
         map.setType(type);
         try {
             Session s = PersistenceManager.getSession();
             s.save(map);
             s.flush();
-            mapId.set("mapId", map.getId());
+            return new MapIdWrapper(map.getId());
         } catch (Exception e) {
             logger.error("Cannot Save map", e);
             throw new WebApplicationException(e);
         }
-        return mapId;
     }
     
     public static List<AvailableMethod> getAvailableMethods(String className) {

@@ -19,6 +19,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.xml.parsers.ParserConfigurationException;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -65,6 +68,7 @@ import com.sun.jersey.spi.container.ContainerRequest;
  * 
  */
 @Path("security")
+@Api("security")
 public class Security implements ErrorReportingEndpoint {
     private static final Logger logger = Logger.getLogger(Security.class);
     private static String SITE_CONFIG_PATH = "TEMPLATE" + System.getProperty("file.separator") + "ampTemplate"
@@ -76,10 +80,6 @@ public class Security implements ErrorReportingEndpoint {
     @Context
     private HttpServletRequest httpRequest;
 
-    /**
-     * 
-     * @return
-     */
     @GET
     @Path("/user/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -149,45 +149,39 @@ public class Security implements ErrorReportingEndpoint {
         return portPart;
     }
 
-    /**
-     * Authenticate user with via API.
-     * <p>This endpoint is used to authenticate users via API. Mandatory fields are username and password. Password
-     * value is a sha1 hash of the actual password. Third parameter is workspaceId which allows to preselect
-     * active workspace.</p>
-     * Workspace parameter is optional. If specified all with calls issued with the provided token will be handled
-     * for respective workspace.
-     *
-     * <h3>Sample input:</h3>
-     * <pre>
-     * {
-     *   "username": "atl@amp.org",
-     *   "password": "a7848b4c1b75cb7bb7449069fe0e114b730c0448",
-     *   "workspaceId": 4
-     * }
-     * </pre>
-     *
-     * <h3>Sample output:</h3>
-     * <pre>
-     * {
-     *   "token": "34bf1c55-f2d1-43bb-bef4-e98b6077f66f",
-     *   "token-expiration": 1483433179305,
-     *   "url": "http://localhost:8080/showLayout.do?layout=login",
-     *   "team": "Espace de Travail Cellule Technique du COMOREX",
-     *   "user-name": "atl@amp.org",
-     *   "user-id": 2,
-     *   "is-admin": false,
-     *   "add-activity": true,
-     *   "view-activity": true
-     * }
-     * </pre>
-     *
-     * @param authentication Json bean with username/password/workspace information
-     * @return JSON with the response, error or user info
-     */
     @POST
     @Path("/user/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public JsonBean authenticate(final JsonBean authentication) {
+    @ApiOperation(value = "Authenticate user with via API.",
+            notes = "<p>This endpoint is used to authenticate users via API. Mandatory fields are username and "
+                    + "password. Password value is a sha1 hash of the actual password. Third parameter is "
+                    + "workspaceId which allows to preselect active workspace.</p>\n"
+                    + "Workspace parameter is optional. If specified all with calls issued with the provided token "
+                    + "will be handled for respective workspace.\n"
+                    + "<h3>Sample input:</h3>\n"
+                    + "<pre>\n"
+                    + "{\n"
+                    + "  \"username\": \"atl@amp.org\",\n"
+                    + "  \"password\": \"a7848b4c1b75cb7bb7449069fe0e114b730c0448\",\n"
+                    + "  \"workspaceId\": 4\n"
+                    + "}\n"
+                    + "</pre>\n"
+                    + "<h3>Sample output:</h3>\n"
+                    + "<pre>\n"
+                    + "{\n"
+                    + "  \"token\": \"34bf1c55-f2d1-43bb-bef4-e98b6077f66f\",\n"
+                    + "  \"token-expiration\": 1483433179305,\n"
+                    + "  \"url\": \"http://localhost:8080/showLayout.do?layout=login\",\n"
+                    + "  \"team\": \"Espace de Travail Cellule Technique du COMOREX\",\n"
+                    + "  \"user-name\": \"atl@amp.org\",\n"
+                    + "  \"user-id\": 2,\n"
+                    + "  \"is-admin\": false,\n"
+                    + "  \"add-activity\": true,\n"
+                    + "  \"view-activity\": true\n"
+                    + "}\n"
+                    + "</pre>")
+
+    public JsonBean authenticate(@ApiParam("username/password/workspace") final JsonBean authentication) {
         String username = authentication.getString("username");
         String password = authentication.getString("password");
         Integer workspaceIdInt = (Integer) authentication.get("workspaceId");
@@ -256,102 +250,48 @@ public class Security implements ErrorReportingEndpoint {
         session.setAttribute("ampAdmin", ApiAuthentication.isAdmin(user, TLSUtils.getRequest()) ? "yes": "no");
     }
 
-    /**
-     * Provides a list of users information
-     * <p>
-     * <dl>
-     * Each user info JSON structure from the list, can hold the following fields (only those that are not null):
-     * <dt><b>id</b><dd> user id
-     * <dt><b>first-name</b><dd> user first name
-     * <dt><b>last-name</b><dd> user last name
-     * <dt><b>email</b><dd> user email address
-     * <dt><b>password-changed-at</b><dd> timestamp for the last changed, in time zoned ISO-8601 format
-     * <dt><b>is-banned</b><dd> flags if the user is banned
-     * <dt><b>is-active</b><dd> flags if the user is active
-     * <dt><b>is-pledger</b><dd> flags if the user is pledger
-     * <dt><b>is-admin</b><dd> flags if the user is global AMP admin
-     * <dt><b>lang-iso2</b><dd> the user preferred language as iso2
-     * <dt><b>country-iso2</b><dd> user registered country iso2
-     * <dt><b>org-type-id</b><dd> user organization type id
-     * <dt><b>org-group-id</b><dd> user organization group id
-     * <dt><b>org-id</b><dd> user organization id
-     * <dt><b>assigned-org-id</b><dd> user assigned organization id
-     * <dt><b>assigned-org-ids</b><dd> user assigned organizations ids
-     * <dt><b>group-keys</b><dd> user groups keys
-     *
-     * <h3> Sample Output: </h3>
-     * <pre>
-     * {
-     *     "id": 225,
-     *     "email": "princettav@gmail.com",
-     *     "first-name": "Princetta",
-     *     "last-name": "Clinton-Varmah",
-     *     "password-changed-at": "2016-12-26T20:31:04.828+02:00"
-     *     "is-banned": false,
-     *     "is-active": false,
-     *     "is-pledger": false,
-     *     "is-admin": false,
-     *     "lang-iso2": "en",
-     *     "country-iso2": "lr",
-     *     "org-type-id": 1,
-     *     "org-group-id": 6,
-     *     "org-id": 702,
-     *     "group-keys": [
-     *         "MEM",
-     *         "EDT"
-     *     ]
-     * }
-     * </pre>
-     * @param ids a comma separated list of users ids for which to provide the information, invalid ids are ignored,
-     *            if list is empty then all users will be returned
-     * @return a list of User information
-     */
     @GET
     @Path("/users")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "users", name = "Users", authTypes = {AuthRule.AUTHENTICATED})
+    @ApiOperation("Provides a list of users information")
     public List<org.digijava.kernel.ampapi.endpoints.security.dto.User> getUsersInfo(
+            @ApiParam("User ids. Invalid ids are ignored. If list is empty then all users are returned.")
             @DefaultValue("") @QueryParam("ids") ListOfLongs ids) {
         return SpringUtil.getBean(UserService.class).getUserInfo(ids);
     }
 
-    /**
-     * @return menu structure for the current view, user and state
-     */
     @GET
     @Path("/menus") 
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "Menu", name = "Menu")
+    @ApiOperation("menu structure for the current view, user and state")
     public List<JsonBean> getMenu() {
         return SecurityService.getMenu();
     }
     
-    /**
-     * For the user response
-     * if there'is a logged user it returns
-     * 
-     * <code>
-     *  {
-        "id": "45678",
-        "email": "atl@amp.org",
-        "firstName": "ATL",
-        "lastName": "ATL",
-        "workspace": "Ministry of Finance",
-        "administratorMode": "false"
-        }   
-        </code> <code>
-        if not logged it it returns 
-        {
-            username: null
-        }
-        </code>
-     * 
-     * @return
-     */
     @GET
     @Path("/layout")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "Layout", name = "Layout")
+    @ApiOperation(value = "",
+            notes = "For the user response if there'is a logged user it returns:\n"
+                    + "<code>\n"
+                    + " {\n"
+                    + " \"id\": \"45678\",\n"
+                    + " \"email\": \"atl@amp.org\",\n"
+                    + " \"firstName\": \"ATL\",\n"
+                    + " \"lastName\": \"ATL\",\n"
+                    + " \"workspace\": \"Ministry of Finance\",\n"
+                    + " \"administratorMode\": \"false\"\n"
+                    + " }   \n"
+                    + " </code>"
+                    + "if not logged it it returns"
+                    + "<code>\n"
+                    + " {\n"
+                    + "     username: null\n"
+                    + " }\n"
+                    + " </code>")
     public JsonBean getLayout() throws ParserConfigurationException, SAXException, IOException 
     {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
@@ -402,116 +342,46 @@ public class Security implements ErrorReportingEndpoint {
         return layout;
     }
     
-    /**
-     * Provides a list of workspace member definition
-     * <p>
-     * <dl>
-     * Each workspace member JSON structure from the list will hold the following fields:
-     * <dt><b>id</b><dd> workspace member id
-     * <dt><b>user-id</b><dd> user id
-     * <dt><b>workspace-id</b><dd> workspace id
-     * <dt><b>role-id</b><dd> workspace member role id
-     *
-     * <h3> Sample Output: </h3>
-     * <pre>
-     * [
-     *   {
-     *       "id": 12,
-     *       "user-id": 1,
-     *       "workspace-id": 100,
-     *       "role-id": 1,
-     *   },
-     *   ...
-     * ]
-     * </pre>
-     * @param ids comma separated list of workspace member ids, if empty all members will be returned
-     * @return list of workspace member definitions
-     */
     @GET
     @Path("/workspace-member")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "workspace-member", name = "Workspace Member", authTypes = {AuthRule.AUTHENTICATED})
-    public List<WorkspaceMember> getWorkspaceMembers(@DefaultValue("") @QueryParam("ids") ListOfLongs ids) {
+    @ApiOperation("Provides a list of workspace member definition")
+    public List<WorkspaceMember> getWorkspaceMembers(
+            @ApiParam("workspace member ids, if empty all members will be returned")
+            @DefaultValue("") @QueryParam("ids") ListOfLongs ids) {
         return SpringUtil.getBean(WorkspaceMemberService.class).getWorkspaceMembers(ids);
     }
 
-    /**
-     * Returns workspace settings for a specified workspaces.
-     *
-     * <p>Each workspace setting JSON structure from the list will hold the following fields:
-     * <dl>
-     * <dt><b>id</b><dd> - workspace setting id
-     * <dt><b>workspace-id</b><dd> - workspace id
-     * <dt><b>default-records-per-page</b><dd> - number of rows in report
-     * <dt><b>number-of-pages-to-display</b><dd> - maximum number of pages in report
-     * <dt><b>report-start-year</b><dd> - in reports, display year columns starting from this year
-     * <dt><b>report-end-year</b><dd> - in reports, display year columns up to this year
-     * <dt><b>currency</b><dd> - currency code
-     * <dt><b>fiscal-calendar</b><dd> - id of the fiscal calendar
-     * <dt><b>language</b><dd> - language
-     * <dt><b>validation</b><dd> - activity validation setting
-     * <dt><b>show-all-countries</b><dd> - whenever all countries should be displayed in filters
-     * <dt><b>default-team-report</b><dd> - default displayed report id
-     * <dt><b>default-reports-per-page</b><dd> - number of reports per page
-     * <dt><b>allow-add-team-res</b><dd> - documents adding policy (1-3)
-     * <dt><b>allow-share-team-res</b><dd> - documents sharing policy (1-2)
-     * <dt><b>allow-publishing-resources</b><dd> - documents sharing policy (1-3)
-     * </dl>
-     *
-     * <h3>Sample Output:</h3>
-     * <pre>
-     * [
-     *   {
-     *     "workspace-id": 60,
-     *     "currency": "USD",
-     *     "language": "en",
-     *     "validation": "allEdits",
-     *     "id": 71,
-     *     "default-records-per-page": 100,
-     *     "report-start-year": 0,
-     *     "report-end-year": 0,
-     *     "fiscal-calendar": 4,
-     *     "show-all-countries": false,
-     *     "default-team-report": null,
-     *     "default-reports-per-page": 0,
-     *     "allow-add-team-res": 1,
-     *     "allow-share-team-res": 1,
-     *     "allow-publishing-resources": 1,
-     *     "number-of-pages-to-display": null
-     *   }
-     * ]
-     * </pre>
-     */
     @GET
     @Path("/workspace-settings")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "workspace-settings", name = "Workspace Settings", authTypes = AuthRule.AUTHENTICATED)
+    @ApiOperation("Returns workspace settings for a specified workspaces.")
     public List<AmpApplicationSettings> getWorkspaceSettings(
             @DefaultValue("") @QueryParam("workspace-ids") ListOfLongs ids) {
         return DbUtil.getTeamAppSettings(ids);
     }
 
-    /**
-     * Return the list of workspaces the user has access to.
-     *
-     * <h3>Sample Output:</h3>
-     * <pre>
-     * [
-     *   {
-     *     "id": 1,
-     *     "name": "Main workspace"
-     *   },
-     *   {
-     *     "id": 2,
-     *     "name": "Test workspace"
-     *   }
-     * ]
-     * </pre>
-     */
     @GET
     @Path("/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id="workspaces", ui=false, authTypes = AuthRule.AUTHENTICATED)
+    @ApiOperation(
+            value = "Return the list of workspaces the user has access to.",
+            notes = "<h3>Sample Output:</h3>\n"
+                    + "<pre>\n"
+                    + "[\n"
+                    + "  {\n"
+                    + "    \"id\": 1,\n"
+                    + "    \"name\": \"Main workspace\"\n"
+                    + "  },\n"
+                    + "  {\n"
+                    + "    \"id\": 2,\n"
+                    + "    \"name\": \"Test workspace\"\n"
+                    + "  }\n"
+                    + "]\n"
+                    + "</pre>")
     public Collection<JsonBean> getWorkspaces() {
         return SecurityService.getWorkspaces();
     }

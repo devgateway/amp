@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +16,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.log4j.Logger;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.dto.Language;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -29,9 +34,8 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.TranslationManager;
 
 @Path("translations")
+@Api("translations")
 public class TranslationsEndPoints {
-    
-    private static final Logger LOGGER = Logger.getLogger(TranslationsEndPoints.class); 
     
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -39,9 +43,6 @@ public class TranslationsEndPoints {
         return EndpointUtils.getAvailableMethods(TranslationsEndPoints.class.getName());
     }
 
-    /**
-     * @implicitParam User-Agent|string|header
-     */
     @POST
     @Path("/label-translations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -51,9 +52,6 @@ public class TranslationsEndPoints {
         return getLangPack(null, param);
     }
 
-    /**
-     * @implicitParam User-Agent|string|header
-     */
     @POST
     @Path("/translate-labels/{langCode}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -89,19 +87,16 @@ public class TranslationsEndPoints {
         DgUtil.switchLanguage(locale, TLSUtils.getRequest(), response);
     }
     
-    
-    /**
-     * Gets the list of available languages for a site when multilingual is enabled.
-     * When multilingual is disabled it returns the effective language (e.g. either the currently-set one OR 
-     * the default one ("en")). 
-     * @return List <SimpleJsonBean> with the available Locale
-     */
     @SuppressWarnings("rawtypes")
     @GET
     @Path("/multilingual-languages/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "multilingualLanguages")
+    @ApiOperation(
+            value = "Gets the list of available languages for a site when multilingual is enabled.",
+            notes = "When multilingual is disabled it returns the effective language (e.g. either the currently-set "
+                    + "one OR the default one (\"en\")). ")
     public List<SimpleJsonBean> getMultilingualLanguages() {
         List<SimpleJsonBean> languages = new ArrayList<SimpleJsonBean>();
         List<String[]> locales = TranslationManager.getLocale(PersistenceManager.getSession());
@@ -115,38 +110,12 @@ public class TranslationsEndPoints {
         return languages;
     }
 
-    /**
-     * Translate a list of labels in multiple languages at once.
-     * Response body is map of translation grouped by labels and locale code.
-     *
-     * <h3>Sample Request:</h3>
-     * GET /rest/translations/translate?translations=en|fr
-     * <p>
-     * Body:
-     * <pre>
-     * ["User", "Password"]
-     * </pre>
-     *
-     * <h3>Sample Response:</h3>
-     * <pre>
-     * {
-     *   "User": {
-     *     "en": "user",
-     *     "fr": "utilisateur"
-     *   },
-     *   "Password": {
-     *     "en": "Password",
-     *     "fr": "Mot de Passe"
-     *   }
-     * }
-     * </pre>
-     * @param labels a list of labels
-     * @implicitParam translations|string|query|false|||||false|pipe separated list of language codes
-     */
     @POST
     @Path("/translate")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Translate a list of labels in multiple languages at once.")
+    @ApiResponses(@ApiResponse(code = SC_OK, message = "Map of translation grouped by labels and locale code."))
     public Map<String, Map<String, String>> translateLabels(List<String> labels) {
         return TranslationUtil.translateLabels(labels);
     }

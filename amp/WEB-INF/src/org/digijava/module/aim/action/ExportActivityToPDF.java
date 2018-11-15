@@ -1296,7 +1296,7 @@ public class ExportActivityToPDF extends Action {
                 buildRelatedDocsPart(myForm, mainLayout, event,ampContext);
             }
     
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Line Ministry Observations")){
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Line Ministry Observations")) {
                 buildLineMinistryObservationsPart(myForm, mainLayout);
             }
 
@@ -1921,7 +1921,8 @@ public class ExportActivityToPDF extends Action {
         mainLayout.addCell(issuesCell2);
     }
     
-    private void buildLineMinistryObservationsPart(EditActivityForm myForm, PdfPTable mainLayout) throws WorkerException {
+    private void buildLineMinistryObservationsPart(EditActivityForm myForm, PdfPTable mainLayout)
+            throws WorkerException {
         ArrayList<Issues> lmo = myForm.getLineMinistryObservations().getIssues();
         if (lmo == null || lmo.isEmpty()) {
             return;

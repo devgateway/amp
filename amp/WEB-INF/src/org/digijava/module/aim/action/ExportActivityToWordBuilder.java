@@ -1884,8 +1884,8 @@ public class ExportActivityToWordBuilder {
                             String measureName = measure.getName();
                             eshLmoSection.addRowData((new ExportSectionHelperRowData(" \u2022" + measureName, null,
                                     null, false)));
-                            if (measure.getActors() != null && !measure.getActors().isEmpty() &&
-                                    FeaturesUtil.isVisibleModule(lmoActorPath)) {
+                            if (measure.getActors() != null && !measure.getActors().isEmpty()
+                                    && FeaturesUtil.isVisibleModule(lmoActorPath)) {
                                 for (AmpLineMinistryObservationActor actor : measure.getActors()) {
                                     eshLmoSection.addRowData((new ExportSectionHelperRowData(" \t \u2022" + actor
                                             .getName(), null, null, false)));

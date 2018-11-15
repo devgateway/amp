@@ -21,6 +21,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyCommonPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.GenericInterchangeableValueProvider;
@@ -37,6 +38,7 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -83,6 +85,7 @@ public class PossibleValuesEnumerator {
                 .putAll(AmpTeam.class, Entities.WORKSPACES)
                 .putAll(User.class, Entities.USER)
                 .putAll(AmpComponentType.class, Entities.COMPONENT_TYPE)
+                .putAll(AmpFiscalCalendar.class, Entities.CALENDAR)
                 .build();
 
     private PossibleValuesDAO possibleValuesDAO;
@@ -304,6 +307,12 @@ public class PossibleValuesEnumerator {
         if (clazz.isAssignableFrom(AmpContact.class)) {
             return getPossibleContacts();
         }
+        if (clazz.isAssignableFrom(AmpOrganisation.class)) {
+            return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getOrganisations());
+        }
+        if (clazz.isAssignableFrom(AmpCurrency.class)) {
+            return getPossibleCurrencies();
+        }
         return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
     }
 
@@ -432,6 +441,11 @@ public class PossibleValuesEnumerator {
     private List<PossibleValue> getPossibleThemes(Field field, String configValue) {
         List<Object[]> items = possibleValuesDAO.getThemes(configValue);
         return setProperties(items, false, this::getThemeExtraInfo);
+    }
+
+    private List<PossibleValue> getPossibleCurrencies() {
+        CurrencyCommonPossibleValuesProvider provider = new CurrencyCommonPossibleValuesProvider();
+        return provider.getPossibleValues(translatorService);
     }
 
     private Long getLongOrNull(Number number) {

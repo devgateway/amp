@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -30,8 +31,6 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.LongType;
-
-import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * Project List generation class
@@ -80,7 +79,7 @@ public class ProjectList {
         List<Long> editableIds = ActivityUtil.getEditableActivityIdsNoSession(tm);
         
         // get list of the workspaces where the user is member of and can edit each activity
-        Map<Long, Set<String>> activitiesWs = getEditableWorkspacesForActivities(tm);
+        Map<Long, Set<Long>> activitiesWs = getEditableWorkspacesForActivities(tm);
         
         List<JsonBean> notViewableActivities = getActivitiesByIds(viewableIds, activitiesWs, tm, false, false);
         
@@ -100,8 +99,8 @@ public class ProjectList {
         return activityMap.values();
     }
 
-    public static Map<Long, Set<String>> getEditableWorkspacesForActivities(TeamMember tm) {
-        Map<Long, Set<String>> activitiesWs = new HashMap<>();
+    public static Map<Long, Set<Long>> getEditableWorkspacesForActivities(TeamMember tm) {
+        Map<Long, Set<Long>> activitiesWs = new HashMap<>();
         try {
             User currentUser = UserUtils.getUserByEmail(tm.getEmail());
             Collection<AmpTeamMember> currentTeamMembers = TeamMemberUtil.getAllAmpTeamMembersByUser(currentUser);
@@ -166,11 +165,11 @@ public class ProjectList {
      * @param activityIds List with the ids (amp_activity_id) of the activities to include or exclude
      * @param activitiesWs 
      * @param viewable whether the list of activities is viewable or not
-     * @param editable whether the list of activities is editable or not
      * @return List <JsonBean> of the activities generated from including/excluding the List<Long> of activityIds
      */
-    public static List<JsonBean> getActivitiesByIds(final List<Long> activityIds, final Map<Long, Set<String>> activitiesWs, final TeamMember tm, final boolean include,
-            final boolean viewable) {
+    public static List<JsonBean> getActivitiesByIds(final List<Long> activityIds,
+                                                    final Map<Long, Set<Long>> activitiesWs, final TeamMember tm,
+                                                    final boolean include, final boolean viewable) {
         final List<JsonBean> activitiesList = new ArrayList<JsonBean>();
         
         String iatiIdAmpField = InterchangeUtils.getAmpIatiIdentifierFieldName();
@@ -195,8 +194,8 @@ public class ProjectList {
                     ResultSet rs = rsi.rs;
                     while (rs.next()) {
                         long actId = rs.getLong("amp_activity_id");
-                        Set<String> workspaces = activitiesWs.containsKey(actId) ? activitiesWs.get(actId) : null;
-                        boolean editable = workspaces != null ? workspaces.contains(tm.getTeamId().toString()) : false;
+                        Set<Long> workspaces = activitiesWs.containsKey(actId) ? activitiesWs.get(actId) : null;
+                        boolean editable = workspaces != null ? workspaces.contains(tm.getTeamId()) : false;
 
                         JsonBean bean = new JsonBean();
                         bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), rs.getLong("amp_activity_id"));

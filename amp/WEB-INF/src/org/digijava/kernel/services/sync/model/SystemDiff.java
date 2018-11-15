@@ -3,15 +3,16 @@ package org.digijava.kernel.services.sync.model;
 import java.util.Date;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author Octavian Ciubotaru
  */
 public class SystemDiff {
 
-    @JsonProperty @JsonSerialize(using = ISO8601TimeStampSerializer.class)
+    @JsonProperty
+    @JsonSerialize(using = ISO8601TimeStampSerializer.class)
     private Date timestamp;
 
     @JsonProperty("global-settings")
@@ -33,6 +34,9 @@ public class SystemDiff {
     private boolean locators;
     
     @JsonProperty
+    private ListDiff<Long> calendars;
+    
+    @JsonProperty
     private ListDiff<Long> users;
 
     @JsonProperty
@@ -52,6 +56,9 @@ public class SystemDiff {
     
     @JsonProperty("resource-possible-values-fields")
     private List<String> resourcePossibleValuesFields;
+    
+    @JsonProperty("common-possible-values-fields")
+    private List<String> commonPossibleValuesFields;
 
     @JsonProperty
     private boolean translations;
@@ -123,6 +130,10 @@ public class SystemDiff {
     public void setResourcePossibleValuesFields(List<String> resourcePossibleValuesFields) {
         this.resourcePossibleValuesFields = resourcePossibleValuesFields;
     }
+    
+    public void setCommonPossibleValuesFields(List<String> commonPossibleValuesFields) {
+        this.commonPossibleValuesFields = commonPossibleValuesFields;
+    }
 
     public void setExchangeRates(boolean exchangeRates) {
         this.exchangeRates = exchangeRates;
@@ -139,4 +150,9 @@ public class SystemDiff {
     public void setLocators(boolean locators) {
         this.locators = locators;
     }
+
+    public void setCalendars(ListDiff<Long> calendars) {
+        this.calendars = calendars;
+    }
+    
 }

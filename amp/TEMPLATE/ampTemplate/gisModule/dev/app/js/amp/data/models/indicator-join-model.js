@@ -163,7 +163,12 @@ loadAll: function(options) {
 	  if(!_.isFunction(this.url) && !_.isUndefined(this.url) && this.url.indexOf('/rest/gis/indicators/') !== -1){	
 		  response.id = app.constants.JOIN_BOUNDARIES_PREFIX +  response.id;
 	  }
-	  return response;	  
+	  if (typeof response.title !== "string") {
+          response.title = StringUtil.getMultilangString(response, 'name', app.data.generalSettings);
+          response.description = StringUtil.getMultilangString(response, 'description', app.data.generalSettings);
+          response.unit = StringUtil.getMultilangString(response, 'unit', app.data.generalSettings);
+      }
+      return response;
   },
   updatePaletteRange: function() {
     var min = +Infinity,

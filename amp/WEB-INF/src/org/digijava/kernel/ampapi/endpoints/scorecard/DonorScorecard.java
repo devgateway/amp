@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.scorecard;
 
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -18,8 +20,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
 import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardExcelExporter;
 import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardNoUpdateDonor;
@@ -46,24 +55,18 @@ import net.sf.json.JSONObject;
  */
 
 @Path("scorecard")
+@Api("scorecard")
 public class DonorScorecard {
 
-
-    /**
-     * Retrieve an excel file with all the quarters, desired period, donors and the updated projects.
-     * </br>
-     * <dl>
-     * Creates an excel workbook having the headers with all the Quarters spanning the desired period,
-     * the donors as columns and each cell (for a given donor and quarter) painted with a color depending on the number
-     * of updated projects for a given donor on a quarter.
-     * </dl></br></br>
-     *
-     * @return StreamingOutput with the excel file
-     */
     @GET
     @Path("/export")
     @Produces("application/vnd.ms-excel")
     @ApiMethod(ui = false, id = "DonorScorecar")
+    @ApiOperation(
+            value = "Retrieve an excel file with all the quarters, desired period, donors and the updated projects.",
+            notes = "Creates an excel workbook having the headers with all the Quarters spanning the desired period, "
+                    + "the donors as columns and each cell (for a given donor and quarter) painted with a color "
+                    + "depending on the number of updated projects for a given donor on a quarter.")
     public StreamingOutput getDonorScorecard(@Context HttpServletResponse webResponse) {
 
         webResponse.setHeader("Content-Disposition", "attachment; filename=donorScorecard.xls");
@@ -86,29 +89,24 @@ public class DonorScorecard {
 
     }
     
-    /**
-     * Retrieve a quick view of the audit logger .
-     * </br>
-     * <dl>
-     * The JSON object holds information regarding:
-     * <dt><b>oranizations</b><dd> - the count of active organisations for the past quarter
-     * <dt><b>projects</b><dd> - the count of projects with action in the past quarter
-     * <dt><b>users</b><dd> - the count of users logged into the System in the past quarter
-     * </dl></br></br>
-     *
-     * </br>
-     * <h3>Sample Output:</h3><pre>
-     * {
-     *   "organizations": 52,
-     *   "projects": 181,
-     *   "users": 23
-     * }</pre>
-     *
-     * @return a JSON object with the numbers {oranizations, projects, users}
-     */
     @GET
     @Path("/quickStats")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(
+            value = "Retrieve a quick view of the audit logger.",
+            notes = "<dl>\n"
+                    + "The JSON object holds information regarding:\n"
+                    + "<dt><b>oranizations</b><dd> - the count of active organisations for the past quarter\n"
+                    + "<dt><b>projects</b><dd> - the count of projects with action in the past quarter\n"
+                    + "<dt><b>users</b><dd> - the count of users logged into the System in the past quarter\n"
+                    + "</dl></br></br>\n"
+                    + "</br>\n"
+                    + "<h3>Sample Output:</h3><pre>\n"
+                    + "{\n"
+                    + "  \"organizations\": 52,\n"
+                    + "  \"projects\": 181,\n"
+                    + "  \"users\": 23\n"
+                    + "}</pre>")
     public JsonBean getPastQuarterOrganizationsCount() {
         ScorecardService scorecardService = new ScorecardService();
         
@@ -120,34 +118,21 @@ public class DonorScorecard {
         return jsonBean;
     }
     
-    /**
-     * Save the donor scorecard settings.
-     * </br>
-     * <dl>
-     * The JSON object holds information regarding:
-     * <dt><b>oranizations</b><dd> - the number of organizations
-     * <dt><b>projects</b><dd> - the number of projects
-     * <dt><b>users</b><dd> - the number of users
-     * </dl></br></br>
-     *
-     * </br>
-     * <h3>Sample Input:</h3><pre>
-     *{
-     *    "validationPeriod": true,
-     *    "percentageThreshold": 10,
-     *    "validationTime": 5,
-     *    "categoryValues": [{
-     *       "id": 1
-     *    }]
-     *}</pre>
-     *
-     * @param settingsBean a JSONObject with the fields of settings
-     *
-     * @return empty or a string with the error
-     */
     @POST
     @Path("/manager/settings")
     @Consumes(MediaType.APPLICATION_JSON)
+    @ApiOperation(
+            value = "Save the donor scorecard settings.",
+            notes = "<h3>Sample Input:</h3><pre>\n"
+                    + "{\n"
+                    + "   \"validationPeriod\": true,\n"
+                    + "   \"percentageThreshold\": 10,\n"
+                    + "   \"validationTime\": 5,\n"
+                    + "   \"categoryValues\": [{\n"
+                    + "      \"id\": 1\n"
+                    + "   }]\n"
+                    + "}</pre>")
+    @ApiResponses(@ApiResponse(code = SC_OK, message = "empty or a string with the error"))
     public String saveScorecardSettings(final JSONObject settingsBean) {
         String message = null;
         List<AmpScorecardSettings> scorecardSettingsList = (List<AmpScorecardSettings>) DbUtil.getAll(AmpScorecardSettings.class);
@@ -190,33 +175,29 @@ public class DonorScorecard {
         try {
             DbUtil.saveOrUpdateObject(settings);
         } catch (Exception e) {
-            message = e.getLocalizedMessage();
+            throw new ApiRuntimeException(
+                    ApiError.toError("Exception while saving settings object: " + e.getMessage()));
         }
         
         return message;
     }
     
-    /**
-     * Save the noUpdate donors.
-     * </br>
-     * <dl>
-     * Used in Scorecard Manager (admin section), receive a list of donors that are not to be excluded in the scorecard.
-     * </dl></br></br>
-     *
-     * </br>
-     * <h3>Sample Input:</h3><pre>
-     * {
-     *   "donorsNoUpdates": [26]
-     * }</pre>
-     *
-     * @param donorsBean a JSONObject with the list of donors.
-     *
-     * @return empty or a string with the error
-     */
     @POST
     @Path("/manager/donors/noupdates")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String getDonorsNoUpdates(final JSONObject donorsBean) {
+    @ApiOperation(
+            value = "Save the noUpdate donors.",
+            notes = "<dl>\n"
+                    + "Used in Scorecard Manager (admin section), receive a list of donors that are not to be "
+                    + "excluded in the scorecard.\n"
+                    + "</dl></br></br>\n"
+                    + "</br>\n"
+                    + "<h3>Sample Input:</h3><pre>\n"
+                    + "{\n"
+                    + "  \"donorsNoUpdates\": [26]\n"
+                    + "}</pre>")
+    @ApiResponses(@ApiResponse(code = SC_OK, message = "empty or a string with the error"))
+    public String getDonorsNoUpdates(@ApiParam("list of donors") final JSONObject donorsBean) {
         String message = null;
         
         JSONArray donorsArray = donorsBean.getJSONArray("donorsNoUpdates");
@@ -236,7 +217,8 @@ public class DonorScorecard {
                 try {
                     DbUtil.saveOrUpdateObject(org);
                 } catch (Exception e) {
-                    message = e.getLocalizedMessage();
+                    throw new ApiRuntimeException(
+                            ApiError.toError("Exception while saving settings object: " + e.getMessage()));
                 }
             }
         }
@@ -244,52 +226,46 @@ public class DonorScorecard {
         return message;
     }
 
-    /**
-     * Retrieve and provide a list of the filtered donors.
-     * </br>
-     * <dl>
-     * Used in Scorecard Manager (admin section), receive the list of selected donors in the scorecard manager that are to be excluded in the scorecard.
-     * The JSON object holds information regarding:
-     * <dt><b>allFilteredDonors</b><dd> - the list of the filtered donors
-     * <dt><b>noUpdatesFilteredDonors</b><dd> - the list of noupdate donors
-     * </dl></br></br>
-     *
-     * </br>
-     * <h3>Sample Input:</h3><pre>
-     * {
-     *    "donorIds": [671]
-     * }</pre>
-     * </br>
-     * <h3>Sample Output:</h3><pre>
-     * {
-     *   "allFilteredDonors": [
-     *     {
-     *       "id": 22,
-     *       "name": "Irish Aid"
-     *     },
-     *     {
-     *       "id": 1640,
-     *       "name": "Anti-Crime Capacity Building Program"
-     *     },
-     *  ...
-     *   ],
-     *   "noUpdatesFilteredDonors": [
-     *     {
-     *       "id": 26,
-     *       "name": "Irish Aid"
-     *     }
-     *   ]
-     * }</pre>
-     *
-     * @param donorsBean a JSONObject with a list of donors
-     *
-     * @return a JSON object with a list of donors
-     */
     @POST
     @Path("/manager/donors/filtered")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public JsonBean getFilteredDonors(final JSONObject donorsBean) {
+    @ApiOperation(
+            value = "Retrieve and provide a list of the filtered donors.",
+            notes = "<dl>\n"
+                    + "Used in Scorecard Manager (admin section), receive the list of selected donors in the "
+                    + "scorecard manager that are to be excluded in the scorecard.\n"
+                    + "The JSON object holds information regarding:\n"
+                    + "<dt><b>allFilteredDonors</b><dd> - the list of the filtered donors\n"
+                    + "<dt><b>noUpdatesFilteredDonors</b><dd> - the list of noupdate donors\n"
+                    + "</dl></br></br>\n"
+                    + "</br>\n"
+                    + "<h3>Sample Input:</h3><pre>\n"
+                    + "{\n"
+                    + "   \"donorIds\": [671]\n"
+                    + "}</pre>\n"
+                    + "</br>\n"
+                    + "<h3>Sample Output:</h3><pre>\n"
+                    + "{\n"
+                    + "  \"allFilteredDonors\": [\n"
+                    + "    {\n"
+                    + "      \"id\": 22,\n"
+                    + "      \"name\": \"Irish Aid\"\n"
+                    + "    },\n"
+                    + "    {\n"
+                    + "      \"id\": 1640,\n"
+                    + "      \"name\": \"Anti-Crime Capacity Building Program\"\n"
+                    + "    },\n"
+                    + " ...\n"
+                    + "  ],\n"
+                    + "  \"noUpdatesFilteredDonors\": [\n"
+                    + "    {\n"
+                    + "      \"id\": 26,\n"
+                    + "      \"name\": \"Irish Aid\"\n"
+                    + "    }\n"
+                    + "  ]\n"
+                    + "}</pre>")
+    public JsonBean getFilteredDonors(@ApiParam("list of donors") final JSONObject donorsBean) {
         ScorecardService scorecardService = new ScorecardService();
         String message = null;
         
@@ -308,8 +284,8 @@ public class DonorScorecard {
             try {
                 DbUtil.saveOrUpdateObject(org);
             } catch (Exception e) {
-                // todo think of the exception type we're throwing here
-                throw new RuntimeException("Failed to load donor list");
+                throw new ApiRuntimeException(
+                        ApiError.toError("Exception while saving scorecard organization object: " + e.getMessage()));
             }
             
             donorIds.add(donorId);
@@ -346,51 +322,46 @@ public class DonorScorecard {
         return jsonBean;
     }
 
-    /**
-     * Retrieve and provide a list of all the donors.
-     * </br>
-     * <dl>
-     * Used for filter tree in Donor Scorecard Manager.
-     * The JSON object holds information regarding:
-     * <dt><b>key</b><dd> - the key of the donor
-     * <dt><b>title</b><dd> - the title of the donors
-     * <dt><b>folder</b><dd> - true|false
-     * <dt><b>children</b><dd> - array or childres with the same structure than the donors JSON
-     * </dl></br></br>
-     *
-     * </br>
-     * <h3>Sample Output:</h3><pre>
-     * {
-     *   "title": "Donors",
-     *   "children": [
-     *     {
-     *       "key": 1,
-     *       "title": "Government of Timor-Leste",
-     *       "folder": true,
-     *       "children": [
-     *         {
-     *           "key": 70,
-     *           "title": "RDTL Line Ministry",
-     *           "folder": true,
-     *           "children": [
-     *             {
-     *               "key": 153,
-     *               "title": "Ministry of Health",
-     *               "folder": false,
-     *               "selected": true
-     *             }
-     *           ]
-     *         },
-     *  ......
-     *     }
-     *    ]
-     *  }</pre>
-     *
-     * @return a JSON object with all donors
-     */
     @GET
     @Path("/manager/donors")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(
+            value = "Retrieve and provide a list of all the donors.",
+            notes = "<dl>\n"
+                    + "Used for filter tree in Donor Scorecard Manager.\n"
+                    + "The JSON object holds information regarding:\n"
+                    + "<dt><b>key</b><dd> - the key of the donor\n"
+                    + "<dt><b>title</b><dd> - the title of the donors\n"
+                    + "<dt><b>folder</b><dd> - true|false\n"
+                    + "<dt><b>children</b><dd> - array or childres with the same structure than the donors JSON\n"
+                    + "</dl></br></br>\n"
+                    + "</br>\n"
+                    + "<h3>Sample Output:</h3><pre>\n"
+                    + "{\n"
+                    + "  \"title\": \"Donors\",\n"
+                    + "  \"children\": [\n"
+                    + "    {\n"
+                    + "      \"key\": 1,\n"
+                    + "      \"title\": \"Government of Timor-Leste\",\n"
+                    + "      \"folder\": true,\n"
+                    + "      \"children\": [\n"
+                    + "        {\n"
+                    + "          \"key\": 70,\n"
+                    + "          \"title\": \"RDTL Line Ministry\",\n"
+                    + "          \"folder\": true,\n"
+                    + "          \"children\": [\n"
+                    + "            {\n"
+                    + "              \"key\": 153,\n"
+                    + "              \"title\": \"Ministry of Health\",\n"
+                    + "              \"folder\": false,\n"
+                    + "              \"selected\": true\n"
+                    + "            }\n"
+                    + "          ]\n"
+                    + "        },\n"
+                    + " ......\n"
+                    + "    }\n"
+                    + "   ]\n"
+                    + " }</pre>")
     public JsonBean getAllDonors() {
         
         List<JsonBean> orgs = QueryUtil.getDonors(false);

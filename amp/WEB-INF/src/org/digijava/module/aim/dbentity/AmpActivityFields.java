@@ -548,7 +548,7 @@ LoggerIdentifiable, Cloneable {
                  * also confirmed via AMP-20899
                  */
                 discriminatorOption = CategoryConstants.MODALITIES_KEY, fmPath="/Activity Form/Funding/Overview Section/Modalities", pickIdOnly=true),
-        @Interchangeable(fieldTitle = "A C Chapter", importable=true, multipleValues=false,
+        @Interchangeable(fieldTitle = "A C Chapter", label = "A.C. Chapter", importable = true, multipleValues = false,
                 discriminatorOption = CategoryConstants.ACCHAPTER_KEY, fmPath="/Activity Form/Identification/A.C. Chapter", pickIdOnly=true), 
         @Interchangeable(fieldTitle = "Activity Budget", importable=true, multipleValues=false, required = "/Activity Form/Identification/Required Validator for Activity Budget", 
                 discriminatorOption = CategoryConstants.ACTIVITY_BUDGET_KEY, fmPath="/Activity Form/Identification/Activity Budget", pickIdOnly=true), 

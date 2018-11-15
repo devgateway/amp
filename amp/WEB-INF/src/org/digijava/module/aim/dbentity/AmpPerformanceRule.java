@@ -2,9 +2,11 @@ package org.digijava.module.aim.dbentity;
 
 import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonManagedReference;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.performance.AmpCategoryValueSerializer;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -14,11 +16,12 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author Viorel Chihai
  *
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AmpPerformanceRule {
 
     private Long id;
 
+    @ApiModelProperty(example = "No disbursements")
     private String name;
 
     private String description;

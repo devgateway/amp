@@ -19,6 +19,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -93,15 +94,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
-
-import com.tonbeller.wcf.utils.SqlUtils;
-
-import clover.org.apache.commons.lang.StringEscapeUtils;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -1617,37 +1613,6 @@ public class DbUtil {
         } catch (Exception e) {
             logger.error("Error while trying to delete Lucene db stamps: ", e);
         }
-    }
-
-    public static Collection getQuarters(Long ampFundingId, Integer transactionType, Integer adjustmentType,
-            Integer fiscalYear) {
-        logger.debug("getQuarters() with ampFundingId=" + ampFundingId.longValue() + " fiscalYear=" + fiscalYear);
-
-        Session session = null;
-        Query q = null;
-        Collection c = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = new String();
-            queryString = "select f.fiscalQuarter from " + AmpFundingDetail.class.getName()
-                    + " f where (f.ampFundingId=:ampFundingId) " + " and (f.transactionType=:transactionType) "
-                    + " and (f.adjustmentType=:adjustmentType) " + " and (f.fiscalYear=:fiscalYear) "
-                    + " group by f.fiscalQuarter";
-
-            q = session.createQuery(queryString);
-            q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
-            q.setParameter("transactionType", transactionType, IntegerType.INSTANCE);
-            q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
-            q.setParameter("fiscalYear", fiscalYear, IntegerType.INSTANCE);
-            c = q.list();
-            logger.debug("No of Quarters : " + q.list().size());
-        } catch (Exception ex) {
-            logger.error("Unable to get  Quarters from database", ex);
-        }
-
-        logger.debug("getQuarters() collection size returned : " + (c != null ? c.size() : 0));
-        return c;
     }
 
     public static Collection<AmpOrganisation> getDonors() {

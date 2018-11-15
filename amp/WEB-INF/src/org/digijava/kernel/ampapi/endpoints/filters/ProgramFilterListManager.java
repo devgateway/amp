@@ -100,7 +100,7 @@ public class ProgramFilterListManager implements FilterListManager {
             Map<Long, AmpThemeSkeleton> programs = AmpThemeSkeleton.populateThemesTree(setting.getDefaultHierarchyId());
             
             programItems.add(getPrograms(programs.get(setting.getDefaultHierarchyId())));
-            programItems.add(UNDEFINED_OPTION);
+            programItems.add(getUndefinedOption());
             items.put(PROGRAM_NAME_TO_ITEMS_NAME.get(programSettingName), programItems);
         }
 

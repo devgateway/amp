@@ -365,7 +365,7 @@ public class ExportActivityToWordBuilder {
 
             if (FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective")) {
                 if (hasContent(programs.getNationalPlanObjectivePrograms())) {
-                    buildProgramRow(programsTbl, programs.getNationalPlanObjectivePrograms(), 
+                    buildProgramRow(programsTbl, programs.getNationalPlanObjectivePrograms(),
                             "National Plan Objective");
                 }
             }
@@ -387,7 +387,7 @@ public class ExportActivityToWordBuilder {
             }
             if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description")) {
                 String programDescription = null;
-                if (programs.getProgramDescription() != null) { 
+                if (programs.getProgramDescription() != null) {
                     programDescription = processEditTagValue(request, programs.getProgramDescription());
                 }
                 
@@ -425,7 +425,7 @@ public class ExportActivityToWordBuilder {
         XWPFTableRow programsTblTitleRow = programsTbl.createRow();
         XWPFParagraph programTitleParagraphs = programsTblTitleRow.getCell(0).getParagraphs().get(0);
         setOrientation(programTitleParagraphs);
-        setRun(programTitleParagraphs.createRun(), 
+        setRun(programTitleParagraphs.createRun(),
                 new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), programName, false);
     }
 
@@ -470,7 +470,7 @@ public class ExportActivityToWordBuilder {
                                 if (actSect.getSubsectorLevel2Name() != null) {
                                     columnVal += " - " + actSect.getSubsectorLevel2Name();
                                 }
-                                generateOverAllTableRows(sectorsTbl, columnVal, 
+                                generateOverAllTableRows(sectorsTbl, columnVal,
                                         actSect.getSectorPercentage() + NO_BR_SPACE + "%", null);
                             }
                         }
@@ -1906,8 +1906,8 @@ public class ExportActivityToWordBuilder {
                             String measureName = measure.getName();
                             eshLmoSection.addRowData((new ExportSectionHelperRowData(" \u2022" + measureName, null,
                                     null, false)));
-                            if (measure.getActors() != null && !measure.getActors().isEmpty() &&
-                                    FeaturesUtil.isVisibleModule(lmoActorPath)) {
+                            if (measure.getActors() != null && !measure.getActors().isEmpty()
+                                    && FeaturesUtil.isVisibleModule(lmoActorPath)) {
                                 for (AmpLineMinistryObservationActor actor : measure.getActors()) {
                                     eshLmoSection.addRowData((new ExportSectionHelperRowData(" \t \u2022" + actor
                                             .getName(), null, null, false)));

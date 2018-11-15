@@ -8,7 +8,15 @@
     <description>Remove saiku from menus and FM.</description>
     <apply>
         <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+                ALTER TABLE amp_menu_entry_view
+                    ADD CONSTRAINT amp_menu_entry_view_amp_visibility_rule_id_fk
+                    FOREIGN KEY (rule_id) REFERENCES amp_visibility_rule (id);
+            ]]></lang>
+        </script>
+        <script>
             <lang delimiter=";" type="bsh"><![CDATA[
+                org.digijava.kernel.xmlpatches.MenuRemover.removeUnusedVisibilityRules();
                 org.digijava.kernel.xmlpatches.MenuRemover.remove(new String[] {"Reports Menu", "Saiku"});
                 org.digijava.kernel.xmlpatches.FMRemover.removeModuleOld("/REPORTING/Saiku");
             ]]></lang>

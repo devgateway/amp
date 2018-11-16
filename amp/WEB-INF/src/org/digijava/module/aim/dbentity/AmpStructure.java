@@ -54,7 +54,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
             fmPath = "/Activity Form/Structures/Structure Type")
     private AmpStructureType type;
     
-    private Set<AmpActivityVersion> activities;
+    private AmpActivityVersion activity;
     
     private Set<AmpStructureImg> images;
     
@@ -70,12 +70,12 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     private Long structureColorId;
     private Integer tempId; // client side id used for identifying structures
 
-    public Set<AmpActivityVersion> getActivities() {
-        return activities;
+    public AmpActivityVersion getActivity() {
+        return activity;
     }
 
-    public void setActivities(Set<AmpActivityVersion> activities) {
-        this.activities = activities;
+    public void setActivity(AmpActivityVersion activity) {
+        this.activity = activity;
     }
 
     public Long getAmpStructureId() {
@@ -177,8 +177,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpStructure aux = (AmpStructure) clone();
-        aux.setActivities(new HashSet<AmpActivityVersion>());
-        aux.getActivities().add(newActivity);
+        aux.setActivity(newActivity);
         aux.setAmpStructureId(null);
         
         if (aux.getImages() != null && aux.getImages().size() > 0) {

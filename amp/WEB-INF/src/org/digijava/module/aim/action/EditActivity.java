@@ -1739,7 +1739,6 @@ public class EditActivity extends Action {
       for(AmpStructure struc:structures)
       {
           AmpStructure z = (AmpStructure) struc.clone();
-          z.setActivities(new HashSet(z.getActivities()));
           z.setImages(new HashSet(struc.getImages()));
           /*z.setActivities(new HashSet(struc.getActivities()));
           z.setAmpStructureId(struc.getAmpStructureId());

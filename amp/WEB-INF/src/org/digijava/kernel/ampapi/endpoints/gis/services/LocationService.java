@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 
+import com.google.common.collect.ImmutableSet;
 import com.fasterxml.jackson.databind.node.POJONode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -53,7 +54,6 @@ import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpStructure;
@@ -375,8 +375,9 @@ public class LocationService {
     public static List<AmpStructure> getStructures(PerformanceFilterParameters config) throws AmpApiException {
         List<AmpStructure> al = null;
         Set<Long> activitiesId = getActivitiesForFiltering(config, null);
-        String queryString = "select s from " + AmpStructure.class.getName() + " s inner join s.activities a where"
-                    + " a.ampActivityId in (" + Util.toCSStringForIN(activitiesId) + " )";
+        String queryString = "select s from " + AmpStructure.class.getName() + " s where"
+                    + " s.activity in (" + Util.toCSStringForIN(activitiesId) + " )";
+
         Query q = PersistenceManager.getSession().createQuery(queryString);
         al = q.list();
         return al;
@@ -398,18 +399,11 @@ public class LocationService {
             if (structure.getStructureColor() != null) {
                 AmpCategoryValue cValue = structure.getStructureColor();
                 if (isValidColor(cValue.getValue())) {
-                    fgj.properties.put("color", new TextNode(TranslatorWorker.translateText(cValue.getValue())));
-                }
-            }
-
-            Set<AmpActivityVersion> av = structure.getActivities();
-            List<Long> actIds = new ArrayList<Long>();
-
-            for (AmpActivityVersion ampActivity : av) {
-                actIds.add(ampActivity.getAmpActivityId());
-            }
-
-            fgj.properties.put("activity", new POJONode(actIds));
+                    fgj.properties.put("color", new TextNode(TranslatorWorker.translateText(cValue.getValue())));  
+                }                
+            }            
+            
+            fgj.properties.put("activity", new POJONode(ImmutableSet.of(structure.getActivity().getAmpActivityId())));
         } catch (NumberFormatException e) {
             logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
                     + structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "

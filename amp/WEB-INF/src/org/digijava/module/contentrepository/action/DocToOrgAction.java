@@ -25,7 +25,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations;
 import org.digijava.module.contentrepository.form.DocToOrgForm;
-import org.digijava.module.contentrepository.util.DocToOrgDAO;
+import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
 import org.digijava.module.contentrepository.util.DocumentManagerRights;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
@@ -82,45 +82,47 @@ public class DocToOrgAction extends MultiAction {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         
-        DocToOrgForm docToOrgForm           = (DocToOrgForm) form;
-        List<AmpOrganisation> existingOrgs  = DocToOrgDAO.getOrgsObjByUuid( docToOrgForm.getUuidForOrgsShown() );
+        DocToOrgForm docToOrgForm = (DocToOrgForm) form;
+        List<AmpOrganisation> existingOrgs = DocumentOrganizationManager.getInstance()
+                .getOrganizationsByUUID(docToOrgForm.getUuidForOrgsShown());
         boolean orgAdded =false;
-        for (AmpOrganisation org: docToOrgForm.getAddedOrgs() ) {
-            if ( !existingOrgs.contains(org) ) {
-                CrDocumentsToOrganisations docToOrgObj  = new CrDocumentsToOrganisations(docToOrgForm.getUuidForOrgsShown(), org);
-                DocToOrgDAO.saveObject(docToOrgObj);
-                orgAdded=true;
+        for (AmpOrganisation org : docToOrgForm.getAddedOrgs()) {
+            if (!existingOrgs.contains(org)) {
+                CrDocumentsToOrganisations docToOrgObj = new CrDocumentsToOrganisations(
+                        docToOrgForm.getUuidForOrgsShown(), org);
+                DocumentOrganizationManager.getInstance().saveObject(docToOrgObj);
+                orgAdded = true;
             }
         }
         
         docToOrgForm.getAddedOrgs().clear();
-        if(orgAdded){           
-            if(docToOrgForm.getMessages()==null){
+        if (orgAdded) {
+            if (docToOrgForm.getMessages() == null) {
                 docToOrgForm.setMessages(new ArrayList<String>());
             }
             docToOrgForm.getMessages().add(TranslatorWorker.translateText("Organisation(s) added to the document."));
         }
-        
     }
     
-    public void modeDelete(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
-        
-        DocToOrgForm docToOrgForm           = (DocToOrgForm) form;
-        
-        if(isLoggeedIn(request)){
-            Node n      = DocumentManagerUtil.getReadNode(docToOrgForm.getRemovingUuid(), request);
+    public void modeDelete(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+
+        DocToOrgForm docToOrgForm = (DocToOrgForm) form;
+
+        if (isLoggeedIn(request)) {
+            Node n = DocumentManagerUtil.getReadNode(docToOrgForm.getRemovingUuid(), request);
             if (n != null && DocumentManagerRights.hasAddParticipatingOrgRights(n, request)) {
-                DocToOrgDAO.deleteDocToOrgObjs(docToOrgForm.getRemovingUuid(), docToOrgForm.getRemovingOrgId() );
-                if(docToOrgForm.getMessages()==null){
+                DocumentOrganizationManager.getInstance().deleteDocumentOrganization(docToOrgForm.getRemovingUuid(),
+                        docToOrgForm.getRemovingOrgId());
+                if (docToOrgForm.getMessages() == null) {
                     docToOrgForm.setMessages(new ArrayList<String>());
                 }
-                docToOrgForm.getMessages().add(TranslatorWorker.translateText("Organisation(s) removed from the Document."));
+                docToOrgForm.getMessages()
+                        .add(TranslatorWorker.translateText("Organisation(s) removed from the Document."));
             }
             DocumentManagerUtil.logoutJcrSessions(request);
         }
-        
+
         docToOrgForm.setRemovingUuid(null);
         docToOrgForm.setRemovingOrgId(null);
     }
@@ -152,7 +154,8 @@ public class DocToOrgAction extends MultiAction {
         }
         docToOrgForm.setOrgs(new TreeSet<AmpOrganisation>() );
         if (uuid != null) {
-            List<CrDocumentsToOrganisations> docsToOrgsList = DocToOrgDAO.getDocToOrgObjsByUuid(uuid);
+            List<CrDocumentsToOrganisations> docsToOrgsList = DocumentOrganizationManager.getInstance()
+                    .getDocToOrgObjsByUuid(uuid);
             if ( docsToOrgsList != null ) {
                 for ( CrDocumentsToOrganisations dto: docsToOrgsList ) {
                     docToOrgForm.getOrgs().add( dto.getAmpOrganisation() );

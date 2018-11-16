@@ -106,7 +106,7 @@ public class IndicatorService {
         return result;
     }
 
-    public static JsonBean saveIndicator(JsonBean indicator) {
+    public static JsonBean saveIndicator(SaveIndicatorRequest indicator) {
         JsonBean result = new JsonBean();
         ApiEMGroup errors = new ApiEMGroup();
         List<AmpContentTranslation> translations = new ArrayList<>();
@@ -143,7 +143,7 @@ public class IndicatorService {
         return result;
     }
     
-    public static AmpIndicatorLayer getIndicatorLayer(JsonBean indicator, ApiEMGroup errors, 
+    public static AmpIndicatorLayer getIndicatorLayer(SaveIndicatorRequest indicator, ApiEMGroup errors,
             List<AmpContentTranslation> translations) {
         IndicatorUpdater updater = new IndicatorUpdater(indicator);
         Long indicatorId = updater.getIndicatorId();
@@ -158,13 +158,13 @@ public class IndicatorService {
             errors.add(updater.getApiErrors());
         } else {
             AmpIndicatorLayer existingIndicator = DynLocationManagerUtil.getIndicatorLayerByName(indLayer.getName());
-            if (existingIndicator != null && existingIndicator.getId() != indLayer.getId()) {
+            if (existingIndicator != null && !existingIndicator.getId().equals(indLayer.getId())) {
                 errors.addApiErrorMessage(IndicatorErrors.EXISTING_NAME, indLayer.getName());
             }
             boolean isAuthenticated = MenuUtils.getCurrentView() != AmpView.PUBLIC;
             if (isAuthenticated && indLayer.getAccessType() == IndicatorAccessType.TEMPORARY) {
                 errors.addApiErrorMessage(IndicatorErrors.FIELD_INVALID_VALUE, 
-                        IndicatorEPConstants.ACCESS_TYPE_ID + " = " + indicator.get(IndicatorEPConstants.ACCESS_TYPE_ID));
+                        IndicatorEPConstants.ACCESS_TYPE_ID + " = " + indicator.getAccessTypeId());
             }
             if (translations != null) {
                 translations.addAll(updater.getContentTranslator().getTranslations());

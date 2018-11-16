@@ -6,14 +6,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.ExceptionRunnable;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.monet.OlapDbConnection;
 
 import com.google.common.base.Predicate;
-
-import clover.com.google.common.base.Joiner;
 
 /**
  * a class holding the fingerprint of some kind of AMP OLTP state (usually the hash of a table)

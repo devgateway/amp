@@ -23,7 +23,6 @@ import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.FiltersEndpoint;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersProcessor;
@@ -88,7 +87,6 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.JOINT_CRITERIA, ColumnConstants.JOINT_CRITERIA);
         mapSimpleColumn(FiltersConstants.LOCATION, ColumnConstants.LOCATION);
         mapSimpleColumn(FiltersConstants.MODE_OF_PAYMENT, ColumnConstants.MODE_OF_PAYMENT);
-        mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
@@ -111,7 +109,6 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SECTORS, ColumnConstants.PLEDGES_QUATERNARY_SECTORS);
         mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SECTORS, ColumnConstants.PLEDGES_QUINARY_SECTORS);
         mapSimpleColumn(FiltersConstants.PLEDGES_TITLES, ColumnConstants.PLEDGES_TITLES);
-        mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM, ColumnConstants.PRIMARY_PROGRAM);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_1, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_2, ColumnConstants.PRIMARY_PROGRAM_LEVEL_2);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_3, ColumnConstants.PRIMARY_PROGRAM_LEVEL_3);
@@ -127,7 +124,6 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PROJECT_IMPLEMENTING_UNIT, ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
         mapSimpleColumn(FiltersConstants.REGION, ColumnConstants.REGION);
         mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
-        mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_1, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_2, ColumnConstants.SECONDARY_PROGRAM_LEVEL_2);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_3, ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
@@ -142,7 +138,6 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.SECTOR_TAG, ColumnConstants.SECTOR_TAG);
         mapSimpleColumn(FiltersConstants.STATUS, ColumnConstants.STATUS);
         mapSimpleColumn(FiltersConstants.TEAM, ColumnConstants.TEAM);
-        mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM, ColumnConstants.TERTIARY_PROGRAM);
         mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_1, ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_2, ColumnConstants.TERTIARY_PROGRAM_LEVEL_2);
         mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_3, ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
@@ -390,26 +385,19 @@ public class FilterUtils {
         return "";
     }
     
-    /**
-     * 
-     * @param JsonBean 
-     * @param value
-     * @return
-     */
-    public static String getSettingbyName(JsonBean config, String value){
-        Map<String, Object> settings = config == null ? null : (Map<String, Object>) config.get(EPConstants.SETTINGS);
+    public static String getSettingbyName(Map<String, Object> settings, String value) {
         String retval = settings == null ? null : (String) settings.get(value);
         return retval;
     }
-    
+
     /**
      * AMP-26444 When switching to ETH-CALENDAR or to GREG-CALENDAR with offsets (m, d), the selected year for
-     * date should be updated. 
+     * date should be updated.
      * We have to update explicitly the dates. E.g.: If in GPI
      * was selected 2009 in ETH-Calendar, we have to update the date
      * filter in Gregorian CAL 2009: "01/01/2009 to 31/12/2009" in ETH Calendar
      * equals to "11/09/2016 to 10/09/2017" in GREG
-     * 
+     *
      * @param formParams
      * @param spec
      */
@@ -418,17 +406,17 @@ public class FilterUtils {
 
         CalendarConverter calendarConverter = (spec.getSettings() != null && spec.getSettings().getCalendar() != null)
                 ? spec.getSettings().getCalendar() : AmpARFilter.getDefaultCalendar();
-                
+
         boolean shouldFilterDatesToBeConverted = false;
         if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
             AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
-            shouldFilterDatesToBeConverted = !calendar.getBaseCal().equals(BaseCalendar.BASE_GREGORIAN.getValue()) 
+            shouldFilterDatesToBeConverted = !calendar.getBaseCal().equals(BaseCalendar.BASE_GREGORIAN.getValue())
                     || calendar.getStartMonthNum() != 1 || calendar.getStartDayNum() != 1;
         }
-        
+
         if (shouldFilterDatesToBeConverted) {
             AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
-            
+
             // update all date filter columns
             if (filters.getDateFilterRules() != null && !filters.getDateFilterRules().isEmpty()) {
                 filters.getDateFilterRules().entrySet().forEach(entry -> {
@@ -439,14 +427,14 @@ public class FilterUtils {
                     }
                 });
             }
-            
+
             // update date filter
             Optional<Entry<ReportElement, FilterRule>> dateRuleEntry = spec.getFilters()
                     .getFilterRules().entrySet().stream()
                     .filter(entry -> entry.getKey().type.equals(ElementType.DATE))
                     .filter(entry -> entry.getKey().entity == null)
                     .findAny();
-            
+
             if (dateRuleEntry.isPresent() && dateRuleEntry.get().getValue() != null) {
                 FilterRule dateFilterRule = dateRuleEntry.get().getValue();
                 FilterRule convertedFilterRule = convertDateFilterRule(calendar, dateFilterRule);
@@ -454,7 +442,7 @@ public class FilterUtils {
             }
         }
     }
-    
+
     /**
      * Get year from date
      * @param date
@@ -463,10 +451,10 @@ public class FilterUtils {
     public static int getYearFromDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        
+
         return calendar.get(Calendar.YEAR);
     }
-    
+
     /**
      * @param sourceCalendar
      * @param gregFilterRule

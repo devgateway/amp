@@ -30,7 +30,6 @@ public class PostgresConnection extends OlapDbConnection {
 
     private PostgresConnection() throws SQLException {
         super(getDirectConnection(), getMapper());
-        //this.conn = DriverManager.getConnection("jdbc:monetdb://localhost/amp_moldova_210", "monetdb", "monetdb");
     }
 
     /**

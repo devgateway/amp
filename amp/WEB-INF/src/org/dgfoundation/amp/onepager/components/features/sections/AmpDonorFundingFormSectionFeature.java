@@ -57,12 +57,15 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 /**
  * The donor funding section of the activity form. Includes selecting an org,
@@ -345,7 +348,26 @@ public class AmpDonorFundingFormSectionFeature extends
                 fg.setTabIndex(item.getIndex());
                 item.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
                 listItems.put(orgRole, fg);
+
+                FundingOrganization fo = new FundingOrganization();
+                fo.setAmpOrgId(orgRole.getOrganisation().getAmpOrgId());
+                //TODO We should probably need to find another way to pass the current organisation and to test
+                //TODO if we shouldn't pass wht current role instead of FUNDING_AGENCY hardcoded
+                //TODO this hardcoded value will probably affect funding flow, but this code is old,
+                //TODO from permission first implementation AMP-28443 is the followup ticket for this
+                //TODO Everything nested under AmpDonorFundingFormSectionFeature needs the current organisation
+                //TODO to be able to test the gates
+                //TODO Putting the scope here we guarantee that every object underneath receives the proper information
+                //TODO and we avoid duplicate code
+                PermissionUtil.putInScope(((AmpAuthWebSession) getSession()).getHttpSession(),
+                        GatePermConst.ScopeKeys.CURRENT_ORG, fo);
+                PermissionUtil.putInScope(((AmpAuthWebSession) getSession()).getHttpSession(),
+                        GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
                 item.add(fg);
+                AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+                PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
+                PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
+
             }
 
             @Override

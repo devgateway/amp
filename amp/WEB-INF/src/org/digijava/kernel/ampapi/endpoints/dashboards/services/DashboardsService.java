@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -204,7 +205,7 @@ public class DashboardsService {
         spec.getHierarchies().addAll(spec.getColumns());
         // applies settings, including funding type as a measure
         SettingsUtils.applyExtendedSettings(spec, config);
-        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), SiteUtils.isEffectiveLangRTL()));
+        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), Boolean.FALSE));
 
         AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
         if (filterRules != null) {
@@ -261,6 +262,11 @@ public class DashboardsService {
                 totalPositive += amount;
             }
         }
+
+        if (SiteUtils.isEffectiveLangRTL()) {
+            Collections.reverse(values);
+        }
+
         retlist.set("values", values);
 
         retlist.set("total", rawTotal);

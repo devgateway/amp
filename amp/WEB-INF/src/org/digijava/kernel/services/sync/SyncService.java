@@ -152,7 +152,7 @@ public class SyncService implements InitializingBean {
 
         systemDiff.setTranslations(shouldSyncTranslations(systemDiff, lastSyncTime));
 
-        systemDiff.setActivityPossibleValuesFields(findChangedPossibleValuesFields(systemDiff, lastSyncTime));
+        systemDiff.setActivityPossibleValuesFields(findChangedPossibleValuesFields(systemDiff, syncRequest));
         systemDiff.setContactPossibleValuesFields(findChangedContactPossibleValuesFields(systemDiff, lastSyncTime));
         systemDiff.setResourcePossibleValuesFields(findChangedResourcePossibleValuesFields(systemDiff, lastSyncTime));
         systemDiff.setCommonPossibleValuesFields(findChangedCommonPossibleValuesFields(systemDiff, lastSyncTime));
@@ -208,9 +208,27 @@ public class SyncService implements InitializingBean {
         return !findDaysWithModifiedRates(lastSyncTime).isEmpty();
     }
 
-    private List<String> findChangedPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
-        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
-        return fieldsEnumerator.findActivityFieldPaths(fieldFilter);
+    private List<String> findChangedPossibleValuesFields(SystemDiff systemDiff, SyncRequest syncRequest) {
+        Date lastSyncTime = syncRequest.getLastSyncTime();
+        Set<String> changedActivityPossibleValuesFields = new HashSet<>();
+        List<String> possibleValuesFields = new ArrayList<>();
+        
+        List<String> offlineActivityPossibleValuesFields = new ArrayList<>();
+        if (syncRequest.getActivityPossibleValuesFields() != null) {
+            offlineActivityPossibleValuesFields.addAll(syncRequest.getActivityPossibleValuesFields());
+        }
+    
+        if (lastSyncTime != null) {
+            Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+            changedActivityPossibleValuesFields.addAll(fieldsEnumerator.findContactFieldPaths(fieldFilter));
+        }
+        
+        possibleValuesFields = findAllActivityPossibleValues();
+        possibleValuesFields.removeAll(offlineActivityPossibleValuesFields);
+        
+        changedActivityPossibleValuesFields.addAll(possibleValuesFields);
+    
+        return new ArrayList<String>(changedActivityPossibleValuesFields);
     }
 
     private List<String> findChangedContactPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
@@ -245,6 +263,10 @@ public class SyncService implements InitializingBean {
         }
         return fieldFilter;
     }
+    
+    private List<String> findAllActivityPossibleValues() {
+        return fieldsEnumerator.findActivityFieldPaths(possibleValuesEnumerator.fieldsWithPossibleValues());
+    }
 
     private void updateDiffsForActivities(SystemDiff systemDiff, SyncRequest syncRequest) {
         List<Long> userIds = syncRequest.getUserIds();
@@ -258,7 +280,7 @@ public class SyncService implements InitializingBean {
         if (syncRequest.getAmpIds() != null) {
             offlineAmpIds.addAll(syncRequest.getAmpIds());
         }
-
+    
         Set<String> deleted = new HashSet<>();
         Set<String> modified = new HashSet<>();
 

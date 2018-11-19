@@ -1,9 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class JSONResult {
     private ReportMetadata metadata;
     private String mdx = "";
+
+    @ApiModelProperty("Error message if report cannot be found or loaded.")
     private String errorMessage = "";
     
     public String getMdx() {

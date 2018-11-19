@@ -24,11 +24,6 @@ public class MondrianETLQuartzJob extends ConnectionCleaningJob implements State
         logger.warn("Starting Mondrian ETL...");
         EtlResult res = MondrianETL.runETL(false);
         logger.warn("the ETL result is: " + res);
-        
-        if (res.cacheInvalidated) {
-            logger.warn("invalidating Mondrian cache...");
-            MondrianReportUtils.flushCache();
-        }
     }
     
     /**

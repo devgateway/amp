@@ -10,6 +10,7 @@
         <script>
             <lang delimiter=";" type="postgres">
             	ALTER TABLE AMP_COLOR_THRESHOLD DROP CONSTRAINT IF EXISTS uk_r9niqudmkb31472mgm5id4rja;
+            	ALTER TABLE AMP_COLOR_THRESHOLD DROP CONSTRAINT IF EXISTS unique_threshold_start;
             	ALTER TABLE AMP_COLOR_THRESHOLD ADD CONSTRAINT unique_threshold_start UNIQUE (threshold_start) DEFERRABLE INITIALLY DEFERRED;
             </lang>
         </script>

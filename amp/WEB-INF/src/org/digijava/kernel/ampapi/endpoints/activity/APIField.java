@@ -2,16 +2,16 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonPropertyOrder;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * @author Octavian Ciubotaru
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "field_name", "id", "field_type", "field_label", "required", "importable", "dependencies",
         "id_only", "multiple_values", "percentage_constraint", "unique_constraint", "tree_collection", "translatable",
         "regex_pattern", "regex_constraint", "field_length", "size_limit" })

@@ -1,7 +1,6 @@
 package org.digijava.module.message.jobs;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -57,17 +56,16 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
         oldActivity.getCategories().remove(CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, oldActivity.getCategories()));
         oldActivity.getCategories().add(CategoryManagerUtil.getAmpCategoryValueFromDb(closedProjectStatusCategoryValue));
         
-        AmpActivityVersion auxActivity = null;
-        try {
-            AuditActivityInfo.getThreadLocalInstance().setModifiedBy(member);
-            auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(oldActivity, null, 
-                    member, oldActivity.getDraft(), session, SaveContext.job());
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new RuntimeException(e);
-        } finally {
-            AuditActivityInfo.getThreadLocalInstance().clean();
-        }
+        AmpActivityVersion auxActivity = AuditActivityInfo.doInTeamMemberContext(member, () -> {
+            try {
+                return org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(oldActivity, null,
+                        member, oldActivity.getDraft(), session, SaveContext.job());
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                throw new RuntimeException(e);
+            }
+        });
+        
         session.flush();
         
         java.util.Locale javaLocale = new java.util.Locale("en");

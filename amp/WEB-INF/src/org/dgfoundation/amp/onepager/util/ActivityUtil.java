@@ -168,16 +168,14 @@ public class ActivityUtil {
         }
 
         boolean newActivity = oldA.getAmpActivityId() == null;
-        AmpActivityVersion a=null;
-        try {
-            AuditActivityInfo.getThreadLocalInstance().setModifiedBy(ampCurrentMember);
-            a = saveActivityNewVersion(oldA, values, ampCurrentMember, draft, session, saveContext);
-        } catch (Exception exception) {
-            logger.error("Error saving activity:", exception); // Log the exception
-            throw new RuntimeException("Can't save activity:", exception);
-        } finally {
-            AuditActivityInfo.getThreadLocalInstance().clean();
-        }
+        AmpActivityVersion a = AuditActivityInfo.doInTeamMemberContext(ampCurrentMember, () -> {
+            try {
+                return saveActivityNewVersion(oldA, values, ampCurrentMember, draft, session, saveContext);
+            } catch (Exception e) {
+                logger.error("Error saving activity:", e); // Log the exception
+                throw new RuntimeException("Can't save activity:", e);
+            }
+        });
         
         if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(a.getApprovalStatus())) {
             new ActivityValidationWorkflowTrigger(a);

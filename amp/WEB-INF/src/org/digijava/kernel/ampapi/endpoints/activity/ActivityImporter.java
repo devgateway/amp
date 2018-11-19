@@ -229,14 +229,21 @@ public class ActivityImporter extends ObjectImporter {
             
             newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, newJsonParent, 
                     oldJsonParent, null);
-            AuditActivityInfo.getThreadLocalInstance().setModifiedBy(teamMember);
             if (newActivity != null && errors.isEmpty()) {
                 // save new activity
                 prepareToSave();
                 boolean updateApprovalStatus = !AmpOfflineModeHolder.isAmpOfflineMode();
-                newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
-                        translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
-                        PersistenceManager.getSession(), SaveContext.api(updateApprovalStatus));
+                
+                newActivity = AuditActivityInfo.doInTeamMemberContext(teamMember, () -> {
+                    try {
+                        return org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
+                                translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
+                                PersistenceManager.getSession(), SaveContext.api(updateApprovalStatus));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                
                 postProcess();
             } else {
                 // undo any pending changes
@@ -262,7 +269,6 @@ public class ActivityImporter extends ObjectImporter {
             }
         } finally {
             ActivityGatekeeper.unlockActivity(activityId, key);
-            AuditActivityInfo.getThreadLocalInstance().clean();
         }
         
         return new ArrayList<ApiErrorMessage>(errors.values());

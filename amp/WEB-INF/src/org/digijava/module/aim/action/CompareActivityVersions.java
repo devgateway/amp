@@ -544,8 +544,21 @@ public class CompareActivityVersions extends DispatchAction {
             vForm.setMethod("enableMerge");
             return mapping.findForward("forward");
         }
+    
+    
+        TeamMember currentTeamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
+        AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(currentTeamMember.getMemberId());
+    
+        AuditActivityInfo.doInTeamMemberContext(member, () -> {
+            saveActivity(member, vForm, auxData, request);
+        });
         
-        
+        return mapping.findForward("index");
+    }
+    
+    private void saveActivity(AmpTeamMember member, CompareActivityVersionsForm vForm,
+                              List<CompareOutput> auxData, HttpServletRequest request) {
+    
         // The main idea is: once we have the collection with fields selected by
         // the user we need to COPY one of the AmpActivity objects and call the
         // getters from these fields and push those values into the matching
@@ -556,22 +569,17 @@ public class CompareActivityVersions extends DispatchAction {
         // implement Versionable, in those cases we need to call a specific
         // method to get the value of the field in a right format for inserting
         // into a new activity, ie: set the activityid property, etc.
+        
         Session session = null;
         Transaction transaction = null;
         try {
             session = PersistenceManager.openNewSession();
             session.setFlushMode(FlushMode.COMMIT);
             transaction = session.beginTransaction();
-
-
-            TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");
-            AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class, tm.getMemberId());
-
+    
             AmpActivityVersion oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, vForm
                     .getOldActivity().getAmpActivityId());
     
-            AuditActivityInfo.getThreadLocalInstance().setModifiedBy(member);
-            
             // Insert fields selected by user into AmpActity properties.
             Iterator<CompareOutput> iter = auxData.iterator();
             while (iter.hasNext()) {
@@ -583,12 +591,12 @@ public class CompareActivityVersions extends DispatchAction {
                 Object remOriginalValueObject = co.getOriginalValueOutput()[1];
                 // Check if implements Versionable and call prepareMerge.
                 if (addOriginalValueObject != null) {
-                    /* cloning of whole activity is done later
-                    if (ActivityVersionUtil.implementsVersionable(addOriginalValueObject.getClass().getInterfaces())) {
-                        Versionable auxVersionableValueObject = (Versionable) addOriginalValueObject;
-                        addOriginalValueObject = auxVersionableValueObject.prepareMerge(auxActivity);
-                    }
-                    */
+                /* cloning of whole activity is done later
+                if (ActivityVersionUtil.implementsVersionable(addOriginalValueObject.getClass().getInterfaces())) {
+                    Versionable auxVersionableValueObject = (Versionable) addOriginalValueObject;
+                    addOriginalValueObject = auxVersionableValueObject.prepareMerge(auxActivity);
+                }
+                */
                     Class[] params = auxMethod.getParameterTypes();
                     if (params != null && params[0].getName().contains("java.util.Set")) {
                         Method auxGetMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
@@ -604,17 +612,17 @@ public class CompareActivityVersions extends DispatchAction {
                     }
                     //session.update(auxActivity);
                 }
-                
+        
                 if (remOriginalValueObject != null){
                     Class[] params = auxMethod.getParameterTypes();
                     if (params != null && params[0].getName().contains("java.util.Set")) {
                         Class clazz = remOriginalValueObject.getClass();
                         String idProperty = session.getSessionFactory().getClassMetadata(clazz)
-                        .getIdentifierPropertyName();
-                        
+                                .getIdentifierPropertyName();
+                
                         Method method = clazz.getMethod("get" + Strings.capitalize(idProperty));
                         Long remId = (Long) method.invoke(remOriginalValueObject);
-
+                
                         Method auxGetMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
                                 AmpActivityVersion.class, "get");
                         Set auxSet = (Set) auxGetMethod.invoke(oldActivity);
@@ -623,7 +631,7 @@ public class CompareActivityVersions extends DispatchAction {
                             while (it.hasNext()) {
                                 Object tmp = (Object) it.next();
                                 Long tmpId = (Long) method.invoke(tmp);
-                                
+                        
                                 if (tmpId.compareTo(remId) == 0){
                                     it.remove();
                                     break;
@@ -640,30 +648,30 @@ public class CompareActivityVersions extends DispatchAction {
                     }
                 }
             }
-
+    
             ContentTranslationUtil.cloneTranslations(oldActivity);
             AmpActivityVersion auxActivity = ActivityVersionUtil.cloneActivity(oldActivity);
             auxActivity.setAmpActivityId(null);
-
+    
             session.evict(oldActivity);
-            
+    
             // Code related to versioning.
             AmpActivityGroup auxActivityGroup = (AmpActivityGroup) session.load(AmpActivityGroup.class, vForm
                     .getOldActivity().getAmpActivityGroup().getAmpActivityGroupId());
             AmpActivityVersion prevVersion      = auxActivityGroup.getAmpActivityLastVersion();
             auxActivityGroup.setAmpActivityLastVersion(auxActivity);
             session.save(auxActivityGroup);
-            
+    
             Date updatedTime = Calendar.getInstance().getTime();
             auxActivity.setAmpActivityGroup(auxActivityGroup);
-
+    
             auxActivity.setMergedActivity(true);
             auxActivity.setMergeSource1(vForm.getActivityOne());
             auxActivity.setMergeSource2(vForm.getActivityTwo());
-
+    
             String ampId = ActivityUtil.generateAmpId(member.getUser(), prevVersion.getAmpActivityId(), session);
             auxActivity.setAmpId(ampId);
-
+    
             AmpActivityContact actCont;
             Set<AmpActivityContact> contacts = new HashSet<AmpActivityContact>();
             Set<AmpActivityContact> activityContacts = auxActivity.getActivityContacts();
@@ -678,24 +686,24 @@ public class CompareActivityVersions extends DispatchAction {
                 }
                 auxActivity.setActivityContacts(contacts);
             }
+        
             session.save(auxActivity);
             transaction.commit();
-
+        
             logger.warn("Activity Saved.");
-            
+        
             Site site = RequestUtils.getSite(request);
             Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
             java.util.Locale locale = new java.util.Locale(navigationLanguage.getCode());
-            LuceneUtil.addUpdateActivity(request.getSession().getServletContext().getRealPath("/"), true, site, locale, auxActivity, prevVersion);
+            LuceneUtil.addUpdateActivity(request.getSession().getServletContext().getRealPath("/"), true, site,
+                    locale, auxActivity, prevVersion);
             AuditLoggerUtil.logObject(request, auxActivity, "add", "merged");
         } catch (Exception e) {
             logger.error("Can't save merged activity:", e);
             transaction.rollback();
         } finally {
             PersistenceManager.closeSession(session);
-            AuditActivityInfo.getThreadLocalInstance().clean();
         }
-        return mapping.findForward("index");
     }
 
     private void setAdvancemode(CompareActivityVersionsForm vForm, HttpServletRequest request){

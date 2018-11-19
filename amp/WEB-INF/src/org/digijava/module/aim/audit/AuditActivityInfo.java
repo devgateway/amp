@@ -1,14 +1,18 @@
 package org.digijava.module.aim.audit;
 
+import java.util.function.Supplier;
+
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 
-public class AuditActivityInfo {
+public final class AuditActivityInfo {
     
     private static ThreadLocal<AuditActivityInfo> threadLocalInstance = new ThreadLocal<AuditActivityInfo>();
     
+    private AuditActivityInfo() { }
+    
     private AmpTeamMember modifiedBy;
     
-    public static AuditActivityInfo getThreadLocalInstance() {
+    private static AuditActivityInfo getThreadLocalInstance() {
         AuditActivityInfo auditActivityInfo = threadLocalInstance.get();
         
         if (auditActivityInfo == null) {
@@ -19,16 +23,34 @@ public class AuditActivityInfo {
         return auditActivityInfo;
     }
     
-    public AmpTeamMember getModifiedBy() {
-        return modifiedBy;
+    public static AmpTeamMember getModifiedTeamMember() {
+        return getThreadLocalInstance().modifiedBy;
     }
     
-    public void setModifiedBy(AmpTeamMember modifiedBy) {
-        this.modifiedBy = modifiedBy;
+    /**
+     * Execute a method in team member context
+     * @param member takes as input the team member
+     */
+    public static void doInTeamMemberContext(AmpTeamMember member, Runnable fn) {
+        doInTeamMemberContext(member, () -> {
+            fn.run();
+            return Void.class;
+        });
     }
     
-    public void clean() {
-        this.modifiedBy = null;
+    /**
+     * Execute a method in team member context
+     * @param member takes as input the team member
+     * @param <R> return type
+     * @return result of the supplier
+     */
+    public static <R> R doInTeamMemberContext(AmpTeamMember member, Supplier<R> fn) {
+        try {
+            getThreadLocalInstance().modifiedBy = member;
+            return fn.get();
+        } finally {
+            getThreadLocalInstance().modifiedBy = null;
+        }
     }
     
 }

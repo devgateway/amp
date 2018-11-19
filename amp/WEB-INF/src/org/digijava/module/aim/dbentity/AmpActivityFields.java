@@ -2189,7 +2189,7 @@ LoggerIdentifiable, Cloneable, AuditableEntity {
         setUpdatedDate(updateDate);
         setModifiedDate(updateDate);
     
-        AmpTeamMember modifiedBy = AuditActivityInfo.getThreadLocalInstance().getModifiedBy();
+        AmpTeamMember modifiedBy = AuditActivityInfo.getModifiedTeamMember();
         if (modifiedBy == null) {
             modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
         }

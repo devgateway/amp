@@ -200,11 +200,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put("/Activity Form/Planning/Proposed Start Date", ColumnConstants.PROPOSED_START_DATE);
         put("/Activity Form/Planning/Original Completion Date", ColumnConstants.ORIGINAL_COMPLETION_DATE);
         put("/Activity Form/Planning/Project Implementation Delay", ColumnConstants.PROJECT_IMPLEMENTATION_DELAY);
-        put("/Activity Form/Program/National Plan Objective", ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
-        put("/Activity Form/Program/Primary Programs", ColumnConstants.PRIMARY_PROGRAM);
         put("/Activity Form/Program/Program Description", ColumnConstants.PROGRAM_DESCRIPTION);
-        put("/Activity Form/Program/Secondary Programs", ColumnConstants.SECONDARY_PROGRAM);
-        put("/Activity Form/Program/Tertiary Programs", ColumnConstants.TERTIARY_PROGRAM);
         put("/Activity Form/Regional Observations", ColumnConstants.REGIONAL_OBSERVATIONS);
         put("/Activity Form/Organizations/Beneficiary Agency", ColumnConstants.BENEFICIARY_AGENCY);
         put("/Activity Form/Organizations/Contracting Agency", ColumnConstants.CONTRACTING_AGENCY);

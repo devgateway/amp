@@ -22,5 +22,7 @@ public final class ResourceErrors {
             new ApiErrorMessage(7, "Creator email is not member of team");
     public static final ApiErrorMessage PRIVATE_RESOURCE_SUPPORTED_ONLY = new ApiErrorMessage(7, 
             "Only private resources are supported");
+    public static final ApiErrorMessage FILE_NOT_FOUND = new ApiErrorMessage(8, "File not found");
+    public static final ApiErrorMessage RESOURCE_TYPE_INVALID = new ApiErrorMessage(9, "Resource type is not valid");
     
 }

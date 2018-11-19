@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digijava.kernel.AbstractIntegrationTest;
 import org.digijava.kernel.ampapi.endpoints.security.dto.WorkspaceMember;
 import org.digijava.kernel.ampapi.endpoints.security.services.WorkspaceMemberService;

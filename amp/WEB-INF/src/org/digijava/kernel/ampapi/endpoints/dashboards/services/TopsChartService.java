@@ -18,18 +18,18 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardFormParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportErrors;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -37,6 +37,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -52,7 +53,7 @@ import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 public class TopsChartService {
     private static final Logger LOGGER = Logger.getLogger(TopsChartService.class);
 
-    private JsonBean config;
+    private DashboardFormParameters config;
     private ReportSpecificationImpl spec;
     private GeneratedReport report;
     private Long id;
@@ -63,14 +64,14 @@ public class TopsChartService {
     private OutputSettings outSettings;
     private Integer limit;
 
-    public TopsChartService(JsonBean config, String type, Integer limit) {
+    public TopsChartService(DashboardFormParameters config, String type, Integer limit) {
         this.config = config;
         this.type = type;
         this.limit = limit;
         this.isDisaggregate = false;
     }
 
-    public TopsChartService(JsonBean config, String type, Long id) {
+    public TopsChartService(DashboardFormParameters config, String type, Long id) {
         this.config = config;
         this.type = type;
         this.id = id;
@@ -88,35 +89,35 @@ public class TopsChartService {
         switch (this.type.toUpperCase()) {
             case "DO":
                 if (FeaturesUtil.isVisibleField("Show Names As Acronyms")) {
-                    setColumn(MoConstants.ATTR_ORG_ACRONYM);
+                    setColumn(ColumnConstants.DONOR_ACRONYM);
                 } else {
-                    setColumn(MoConstants.DONOR_AGENCY);
+                    setColumn(ColumnConstants.DONOR_AGENCY);
                 }
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.DONOR_AGENCY));
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.DONOR_AGENCY));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
                 name = DashboardConstants.TOP_DONOR_AGENCIES;
                 break;
             case "RO":
-                setColumn(MoConstants.RESPONSIBLE_AGENCY);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.RESPONSIBLE_AGENCY));
+                setColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.RESPONSIBLE_ORGANIZATION));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_RESPONSIBLE_ORGS);
                 name = DashboardConstants.TOP_RESPONSIBLE_ORGS;
                 break;
             case "BA":
-                setColumn(MoConstants.BENEFICIARY_AGENCY);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.BENEFICIARY_AGENCY));
+                setColumn(ColumnConstants.BENEFICIARY_AGENCY);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.BENEFICIARY_AGENCY));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_BENEFICIARY_ORGS);
                 name = DashboardConstants.TOP_BENEFICIARY_ORGS;
                 break;
             case "IA":
-                setColumn(MoConstants.IMPLEMENTING_AGENCY);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.IMPLEMENTING_AGENCY));
+                setColumn(ColumnConstants.IMPLEMENTING_AGENCY);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.IMPLEMENTING_AGENCY));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_IMPLEMENTING_ORGS);
                 name = DashboardConstants.TOP_IMPLEMENTING_ORGS;
                 break;
             case "EA":
-                setColumn(MoConstants.EXECUTING_AGENCY);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.EXECUTING_AGENCY));
+                setColumn(ColumnConstants.EXECUTING_AGENCY);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.EXECUTING_AGENCY));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_EXECUTING_ORGS);
                 name = DashboardConstants.TOP_EXECUTING_ORGS;
                 break;
@@ -128,8 +129,8 @@ public class TopsChartService {
                 spec.setReportCollapsingStrategy(ReportCollapsingStrategy.NEVER);
                 break;
             case "PS":
-                setColumn(MoConstants.PRIMARY_SECTOR);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.PRIMARY_SECTOR));
+                setColumn(ColumnConstants.PRIMARY_SECTOR);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.PRIMARY_SECTOR));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_SECTORS);
                 name = DashboardConstants.TOP_SECTORS;
                 break;
@@ -140,8 +141,8 @@ public class TopsChartService {
                 name = DashboardConstants.TOP_DONOR_GROUPS;
                 break;
             case "NDD":
-                setColumn(ColumnConstants.SECONDARY_PROGRAM);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.SECONDARY_PROGRAM));
+                setColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1));
                 name = DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS;
                 title = TranslatorWorker.translateText(DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS);
                 this.limit = 99999; // This chart has no limit of categories (no 'Others').
@@ -160,7 +161,7 @@ public class TopsChartService {
                 peaceFilter.put(FiltersConstants.PROCUREMENT_SYSTEM, peaceFilterOptions);
                 LinkedHashMap<String, Object> filters = null;
                 if (config != null) {
-                    filters = (LinkedHashMap<String, Object>) config.get(EPConstants.FILTERS);
+                    filters = (LinkedHashMap<String, Object>) config.getFilters();
                 }
                 if (filters == null) {
                     filters = new LinkedHashMap<>();
@@ -173,8 +174,8 @@ public class TopsChartService {
 
                 break;
             default:
-                setColumn(MoConstants.DONOR_AGENCY);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.DONOR_AGENCY));
+                setColumn(ColumnConstants.DONOR_AGENCY);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.DONOR_AGENCY));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
                 name = DashboardConstants.TOP_DONOR_AGENCIES;
                 break;
@@ -186,8 +187,8 @@ public class TopsChartService {
                 }});
 
         // applies settings, including funding type as a measure
-        SettingsUtils.applyExtendedSettings(spec, config);
-        ReportsUtil.configureFilters(spec, config);
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
+        ReportsUtil.configureFilters(spec, config.getFilters());
 
         setOrder();
 
@@ -213,7 +214,7 @@ public class TopsChartService {
     public void applyFilter(String column) {
         Map<String, Object> filters = null;
         if (config != null) {
-            filters = (Map<String, Object>) config.get(EPConstants.FILTERS);
+            filters = config.getFilters();
         }
         if (filters == null) {
             filters = new LinkedHashMap<>();
@@ -287,6 +288,9 @@ public class TopsChartService {
             if (amount > 0) {
                 totalPositive += amount;
             }
+        }
+        if (SiteUtils.isEffectiveLangRTL()) {
+            Collections.reverse(values);
         }
         retlist.set("values", values);
 

@@ -5,11 +5,13 @@ package org.digijava.module.contentrepository.form;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.helper.DocumentData;
+import org.digijava.module.contentrepository.helper.TeamMemberMail;
 
 /**
  * @author Alex Gartner
@@ -45,13 +47,15 @@ public class DocumentManagerForm extends ActionForm {
     private String docListInSession         = null;
     private String showSharedDocs           = null;
     private String filterOrganisations = null;
+    
+    private Long keywordMode = null;
 
     
     private String docIndex = null;
     private String docCategory = null;
     
     private TeamMember teamMember           = null;
-    private Collection teamMembers          = null;
+    private List<TeamMemberMail> teamMembers          = null;
     
     private boolean teamLeader              = false;
     
@@ -188,11 +192,11 @@ public class DocumentManagerForm extends ActionForm {
         this.teamMember = teamMember;
     }
 
-    public Collection getTeamMembers() {
+    public List<TeamMemberMail> getTeamMembers() {
         return teamMembers;
     }
 
-    public void setTeamMembers(Collection teamMembers) {
+    public void setTeamMembers(List<TeamMemberMail> teamMembers) {
         this.teamMembers = teamMembers;
     }
 
@@ -461,6 +465,14 @@ public class DocumentManagerForm extends ActionForm {
     public void setFilterOrganisations(String org)
     {
         this.filterOrganisations = org;
+    }
+
+    public Long getKeywordMode() {
+        return keywordMode;
+    }
+
+    public void setKeywordMode(Long keywordMode) {
+        this.keywordMode = keywordMode;
     }
     
 }

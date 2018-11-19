@@ -21,7 +21,6 @@ public class FMSettingsMediator {
     public static final String FMGROUP_COLUMNS = "COLUMNS";
     public static final String FMGROUP_MEASURES = "MEASURES";
     public static final String FMGROUP_MODULES = "MODULES";
-    public static final String FMGROUP_DASHBOARDS = "DASHBOARDS";
     public static final String FMGROUP_MENU = "MENU";
 
     /** stores all fm groups classes that are manageable via this proxy */
@@ -37,7 +36,6 @@ public class FMSettingsMediator {
         groups.put(FMGROUP_COLUMNS, ColumnsVisibility.class);
         groups.put(FMGROUP_MEASURES, MeasuresVisibility.class);
         groups.put(FMGROUP_MODULES, ModulesVisibility.class);
-        groups.put(FMGROUP_DASHBOARDS, DashboardsFMSettings.class);
         groups.put(FMGROUP_MENU, MenuVisibility.class);
         
         return Collections.synchronizedMap(groups);

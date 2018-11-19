@@ -15,7 +15,6 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.EtlConfiguration;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
-import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.mondrian.monet.OlapDbConnection;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -164,7 +163,6 @@ public class CalculateExchangeRatesEtlJob {
             olapConnection.flush();
         }       
         logger.warn("... done generating exchange rates ETL...");
-        //monetConn.copyTableFromPostgres(this.conn, MONDRIAN_EXCHANGE_RATES_TABLE);
     }
     
     /**

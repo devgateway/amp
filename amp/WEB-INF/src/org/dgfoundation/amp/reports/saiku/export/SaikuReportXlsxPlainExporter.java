@@ -35,7 +35,7 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
     protected void renderReportData(SXSSFSheet sheet, GeneratedReport report) {
         Row row = sheet.createRow(initHeaderRowOffset + report.generatedHeaders.size());
         renderTableRow(sheet, report, report.reportContents, 0, row, new ArrayList<>());
-        if (report.hasMeasures()) {
+        if (report.hasTotals()) {
             renderTableTotals(sheet, report, report.reportContents);
         }
     }

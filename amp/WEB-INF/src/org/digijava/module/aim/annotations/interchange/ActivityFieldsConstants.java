@@ -41,6 +41,7 @@ public class ActivityFieldsConstants {
     public static final String PRIMARY_CONTACT = "Mark as primary";
     public static final String TRANSACTION_TYPE = "Transaction Type";
     public static final String FUNDING_DETAILS = "Funding Details";
+    public static final String MTEF_PROJECTIONS = "MTEF Projections";
     public static final String LOCATIONS = "Locations";
     public static final String ORG_ROLE = "Org. Role";
     public static final String COMPONENTS = "Components";

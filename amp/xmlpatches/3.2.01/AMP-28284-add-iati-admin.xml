@@ -6,6 +6,15 @@
     <keyword>Admin</keyword>
     <author>jdeanquin</author>
     <description>Add menu entry for iati in admin</description>
+    <trigger type="all">
+        <condition type="custom">
+            <script returnVar="y">
+                <lang type="sql">select count(*) from amp_menu_entry_view where menu_id =
+                    (SELECT id FROM amp_menu_entry WHERE name = 'IATI Importer') and view_type =1</lang>
+            </script>
+            <test>y.intValue()==0</test>
+        </condition>
+    </trigger>
     <apply>
         <script>
             <lang delimiter=";" type="postgres">

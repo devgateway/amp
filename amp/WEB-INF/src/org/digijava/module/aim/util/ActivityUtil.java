@@ -1084,9 +1084,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
               .list();
   }
   
-  public static List <AmpActivityGroup> getActivityGroups(Session session , Long actId){
-      String queryString ="select group from "+ AmpActivityGroup.class.getName()+" group where group.ampActivityLastVersion.ampActivityId="+actId;
-      return session.createQuery(queryString).list();
+  private static AmpActivityGroup getActivityGroups(Session session, Long actId){
+      String queryString = "select group from " + AmpActivityGroup.class.getName() + " group "
+                      + "where group.ampActivityLastVersion.ampActivityId=:actId";
+      return (AmpActivityGroup) session.createQuery(queryString)
+              .setParameter("actId", actId)
+              .uniqueResult();
   }
 
     public static void deleteActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
@@ -1726,22 +1729,20 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
     public static void deleteAmpActivityWithVersions(Long ampActId) throws Exception {
         Session session = PersistenceManager.getSession();
-        List<AmpActivityGroup> groups = getActivityGroups(session, ampActId);
-        for (AmpActivityGroup ampActivityGroup : groups) {
-            Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();
-            if (activityversions != null && activityversions.size() > 0) {
-                for (AmpActivityVersion ampActivityVersion : activityversions) {
-                    deleteFullActivityContent(ampActivityVersion, session);
+        AmpActivityGroup ampActivityGroup = getActivityGroups(session, ampActId);
+        Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();
+        if (activityversions != null && activityversions.size() > 0) {
+            for (AmpActivityVersion ampActivityVersion : activityversions) {
+                deleteFullActivityContent(ampActivityVersion, session);
 
-                    session.delete(ampActivityVersion);
-                }
-            } else {
-                AmpActivityVersion ampAct = (AmpActivityVersion) session.load(AmpActivityVersion.class, ampActId);
-                deleteFullActivityContent(ampAct, session);
-                session.delete(ampAct);
+                session.delete(ampActivityVersion);
             }
-            session.delete(ampActivityGroup);
+        } else {
+            AmpActivityVersion ampAct = (AmpActivityVersion) session.load(AmpActivityVersion.class, ampActId);
+            deleteFullActivityContent(ampAct, session);
+            session.delete(ampAct);
         }
+        session.delete(ampActivityGroup);
     }
     
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{

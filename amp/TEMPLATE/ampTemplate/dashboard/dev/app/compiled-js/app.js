@@ -3301,7 +3301,6 @@ var EnabledChartsCollection = Backbone.Collection.extend({
                 console.error('error loading charts.');
             },
             success: function (collection, response) {
-                // console.log(response);
             }
         });
     }
@@ -5136,6 +5135,21 @@ var modalTemplate = _.template("<div class=\"modal fade\" data-keyboard=\"false\
 var EnabledChartsCollection = require('../models/enabled-charts-collection');
 var HeatmapsConfigCollection = require('../models/heatmaps-config-collection');
 
+var DO = '/Dashboards[true]/Top Donors[true]';
+var DG = '/Dashboards[true]/Top Donor Group[true]';
+var RE = '/Dashboards[true]/Top Regions[true]';
+var PS = '/Dashboards[true]/Top Sectors[true]';
+var AP = '/Dashboards[true]/Aid Predictability[true]';
+var FTYPE = '/Dashboards[true]/Funding Type[true]';
+var RO = '/Dashboards[true]/Responsible Organizations[true]';
+var BA = '/Dashboards[true]/Beneficiary Agencies[true]';
+var IA = '/Dashboards[true]/Implementing Agencies[true]';
+var EA = '/Dashboards[true]/Executing Agencies[true]';
+var NDD = '/Dashboards[true]/Peace-building and State-building Goals[true]';
+var SEC = '/Dashboards[true]/Sector Fragmentation[true]';
+var LOC = '/Dashboards[true]/Location Fragmentation[true]';
+var PRG = '/Dashboards[true]/Program Fragmentation[true]';
+
 module.exports = BackboneDash.View.extend({
 
     initialize: function (options) {
@@ -5160,84 +5174,84 @@ module.exports = BackboneDash.View.extend({
 
         var col = [];
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item.indexOf('/Dashboards[true]/Top Donors[true]') > -1;
+            return item.indexOf(DO) > -1;
         })) {
             col.push(new TopsChart(
                 {name: 'Top Donor Agencies', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/do'}));
         }
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item === '/Dashboards[true]/Top Donor Group[true]';
+            return item === DG;
         })) {
             col.push(new TopsChart(
                 {name: 'Top Donor Groups', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/dg'}));
         }
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item === '/Dashboards[true]/Top Regions[true]';
+            return item === RE;
         })) {
             col.push(new TopsChart(
                 {name: 'Top Regions', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/re'}));
         }
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item === '/Dashboards[true]/Top Sectors[true]';
+            return item === PS;
         })) {
             col.push(new TopsChart(
                 {name: 'Top Sectors', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/ps'}));
         }
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item === '/Dashboards[true]/Aid Predictability[true]';
+            return item === AP;
         })) {
             col.push(new PredictabilityChart(
                 {name: 'Aid Predictability'},
                 {app: this.app, url: '/rest/dashboard/aid-predictability'}));
         }
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item === '/Dashboards[true]/Funding Type[true]';
+            return item === FTYPE;
         })) {
             col.push(new FundingTypeChart(
                 {name: 'Funding Type'},
                 {app: this.app, url: '/rest/dashboard/ftype'}));
         }
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item === '/Dashboards[true]/Responsible Organizations[true]';
+            return item === RO;
         })) {
             col.push(new TopsChart(
                 {name: 'Responsible Organizations', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/ro'}));
         }
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item === '/Dashboards[true]/Beneficiary Agencies[true]';
+            return item === BA;
         })) {
             col.push(new TopsChart(
                 {name: 'Beneficiary Agencies', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/ba'}));
         }
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item === '/Dashboards[true]/Executing Agencies[true]';
+            return item === EA;
         })) {
             col.push(new TopsChart(
                 {name: 'Executing Agencies', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/ea'}));
         }
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item === '/Dashboards[true]/Implementing Agencies[true]';
+            return item === IA;
         })) {
             col.push(new TopsChart(
                 {name: 'Implementing Agencies', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/ia'}));
         }
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item === '/Dashboards[true]/Peace-building and State-building Goals[true]';
+            return item === NDD;
         })) {
             col.push(new TopsChart(
                 {name: 'Peace-building and State-building Goals', big: true, showCategoriesInfo: true, view: 'pie'},
                 {app: this.app, url: '/rest/dashboard/tops/ndd'}));
         }
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item === '/Dashboards[true]/Sector Fragmentation[true]';
+            return item === SEC;
         })) {
             col.push(new HeatMapChart(
                 {
@@ -5251,7 +5265,7 @@ module.exports = BackboneDash.View.extend({
                 {app: this.app, url: '/rest/dashboard/heat-map/sec'}));
         }
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item === '/Dashboards[true]/Location Fragmentation[true]';
+            return item === LOC;
         })) {
             col.push(new HeatMapChart(
                 {
@@ -5265,7 +5279,7 @@ module.exports = BackboneDash.View.extend({
                 {app: this.app, url: '/rest/dashboard/heat-map/loc'}));
         }
         if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
-            return item === '/Dashboards[true]/Program Fragmentation[true]';
+            return item === PRG;
         })) {
             col.push(new HeatMapChart(
                 {
@@ -31983,6 +31997,7 @@ module.exports = Backbone.View.extend({
       case 'effective-funding-date':
       case 'funding-closing-date':
       case 'concessionality-level':
+      case 'on-off-treasury-budget':
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;
       case 'status':

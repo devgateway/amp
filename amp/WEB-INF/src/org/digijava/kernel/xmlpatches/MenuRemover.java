@@ -36,11 +36,11 @@ public final class MenuRemover {
                 String.format("select rule_id from amp_menu_entry_view where menu_id in (%s)",
                         Util.toCSStringForIN(menuIds)));
 
-        deleteVisibilityRules(c, ruleIds);
-
         execDeleteInQuery(c, "amp_menu_entry_view", "menu_id", menuIds);
         execDeleteInQuery(c, "amp_menu_entry_dg_group", "menu_id", menuIds);
         execDeleteInQuery(c, "amp_menu_entry", "id", menuIds);
+
+        deleteVisibilityRules(c, ruleIds);
     }
 
     private static void execDeleteInQuery(Connection c, String table, String column, List values) {

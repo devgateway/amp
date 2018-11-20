@@ -2,11 +2,20 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class AmpIndicatorColor implements Serializable{
 
     private String color;
+
+    @JsonIgnore
     private AmpIndicatorLayer indicatorLayer;
+
+    @JsonIgnore
     private Long indicatorColorId;
+
+    @JsonProperty("order")
     private Long payload;
     
     

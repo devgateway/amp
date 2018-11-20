@@ -7,7 +7,7 @@ import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEqua
 
 import java.io.IOException;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digijava.kernel.AbstractIntegrationTest;
 import org.digijava.module.aim.util.TeamUtil;
 import org.junit.Test;

@@ -35,8 +35,7 @@ import org.apache.lucene.util.Version;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
 import org.digijava.module.aim.util.LuceneUtil;
-
-import clover.org.jfree.util.Log;
+import org.jfree.util.Log;
 
 /**
  * Lucene worker contains general code for working with Lucene.

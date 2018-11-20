@@ -9,9 +9,10 @@ import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.Identifiable;
 
 @TranslatableClass (displayName = "Structure Type")
-public class AmpStructureType implements ARDimensionable, Serializable{
+public class AmpStructureType implements ARDimensionable, Serializable, Identifiable {
 //IATI-check: not to be ignored
     private static final long serialVersionUID = 1L;
     @PossibleValueId
@@ -96,4 +97,8 @@ public class AmpStructureType implements ARDimensionable, Serializable{
         return InternationalizedModelDescription.getForProperty(AmpStructureType.class, "name").getSQLFunctionCall(idSource + ".typeId");
     }
 
+    @Override
+    public Object getIdentifier() {
+        return typeId;
+    }
 }

@@ -21,7 +21,7 @@
 							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="left"><b class="ins_title"><wicket:trn key="trn:shape">Shape</wicket:trn></b></td>	
 							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="left"><b class="ins_title">&nbsp;</b></td>	
 						</tr>
-						<tr>
+						<tr class="structureRow">
 							<td class="inside add_form_title"><span  wicket:id="name" /></td>
 							<td class="inside add_form_description"><span wicket:id="description" /></td>
 							<td class="inside add_form_latitude"><span wicket:id="latitude" /></td>
@@ -33,6 +33,12 @@
 	                            <div style="display:none; overflow: hidden;">
 	                               <span><input wicket:id="coords" style="width:2px;border: 1px solid #FFFFFF;background-color: #FFFFFF;color: white;overflow:hidden;" /></span> <span wicket:id="shape" />
 	                            </div>
+	                            <div style="display:none; overflow: hidden;">
+	                               <span><input wicket:id="tempId" style="width:2px;border: 1px solid #FFFFFF;background-color: #FFFFFF;color: white;overflow:hidden;" /></span>	                               
+	                            </div>
+	                            <div style="display:none; overflow: hidden;">
+	                               <span><input wicket:id="structureColorId" style="width:2px;border: 1px solid #FFFFFF;background-color: #FFFFFF;color: white;overflow:hidden;" /></span>	                               
+	                            </div> 
 	                            <div id="dialog">
 	                            </div>	                             
 	                        </td>						

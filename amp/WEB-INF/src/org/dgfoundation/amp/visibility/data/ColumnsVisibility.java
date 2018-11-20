@@ -35,7 +35,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
     protected static final Logger logger = Logger.getLogger(ColumnsVisibility.class);
     
     public static final int PROGRAM_LEVEL_COUNT = 8;
-    
+
     private static final Set<String> columnsSet = ConstantsUtil.getConstantsSet(ColumnConstants.class);
 
     /*
@@ -304,7 +304,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Budget Program", ColumnConstants.BUDGET_PROGRAM);
             put("Budget Sector", ColumnConstants.BUDGET_SECTOR);
             put("Calculated Project Life", ColumnConstants.CALCULATED_PROJECT_LIFE);
-            put("Capital - Expenditure", ColumnConstants.CAPITAL___EXPENDITURE);
+            put("Capital Expenditure", ColumnConstants.CAPITAL_EXPENDITURE);
             put("Component Name", ColumnConstants.COMPONENT_NAME);
             put("Component description", ColumnConstants.COMPONENT_DESCRIPTION);
             put("Component Funding Organization", ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
@@ -331,6 +331,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Overage Project", ColumnConstants.OVERAGE_PROJECT);
             put("Payment Capital - Recurrent", ColumnConstants.PAYMENT_CAPITAL___RECURRENT);
             put("Performance Alert Level", ColumnConstants.PERFORMANCE_ALERT_LEVEL);
+            put("Performance Alert Type", ColumnConstants.PERFORMANCE_ALERT_TYPE);
             put("Pledges sectors", ColumnConstants.PLEDGES_SECTORS);
             put("Pledges Aid Modality", ColumnConstants.PLEDGES_AID_MODALITY);
             put("Pledge Contact 1 - Organization", ColumnConstants.PLEDGE_CONTACT_1___MINISTRY);
@@ -366,17 +367,17 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Variance Of Commitments", ColumnConstants.VARIANCE_OF_COMMITMENTS);
             put("Variance Of Disbursements", ColumnConstants.VARIANCE_OF_DISBURSEMENTS);
             put("Disaster Response Marker", ColumnConstants.DISASTER_RESPONSE_MARKER);
-            
+
             // replicating the same approach as in the ReportWizard (until AMP-20480 is considered)
-            String[] colPrefixList = new String[] {"National Planning Objectives Level ", "Primary Program Level ", 
+            String[] colPrefixList = new String[] {"National Planning Objectives Level ", "Primary Program Level ",
                     "Secondary Program Level ", "Tertiary Program Level "};
             for (String colPrefix : colPrefixList) {
                 for (int i = 1; i <= PROGRAM_LEVEL_COUNT; i++) {
-                    String level = colPrefix + i; 
+                    String level = colPrefix + i;
                     put(level, level);
                 }
             }
-            
+
             put(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR);
             put(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR);
             put(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR);
@@ -385,21 +386,21 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR);
             put(ColumnConstants.EFFECTIVE_FUNDING_DATE, ColumnConstants.EFFECTIVE_FUNDING_DATE);
             put(ColumnConstants.FUNDING_CLOSING_DATE, ColumnConstants.FUNDING_CLOSING_DATE);
-            
+
             putAll(getMtefColumns());
         }
 
         private Map<String, String> getMtefColumns() {
             String regex = "^(MTEF|Real MTEF"
-                    + "|" + MeasureConstants.MTEF_PROJECTIONS 
-                    + "|" + MeasureConstants.PIPELINE_MTEF_PROJECTIONS 
-                    + "|" + MeasureConstants.PROJECTION_MTEF_PROJECTIONS 
+                    + "|" + MeasureConstants.MTEF_PROJECTIONS
+                    + "|" + MeasureConstants.PIPELINE_MTEF_PROJECTIONS
+                    + "|" + MeasureConstants.PROJECTION_MTEF_PROJECTIONS
                     + ").*$";
-            
+
             Map<String, String> mtefColumns = AdvancedReportUtil.getColumnList().stream()
                     .filter(col -> col.getColumnName().matches(regex))
                     .collect(Collectors.toMap(AmpColumns::getColumnName, AmpColumns::getColumnName));
-            
+
             return mtefColumns;
         }
     };

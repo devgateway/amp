@@ -104,14 +104,16 @@ function showUser(email){
 
 function setStripsTable(tableId, classOdd, classEven) {
 	var tableElement = document.getElementById(tableId);
-	rows = tableElement.getElementsByTagName('tr');
-	for(var i = 0, n = rows.length; i < n; ++i) {
-		if(i%2 == 0)
-			rows[i].className = classEven;
-		else
-			rows[i].className = classOdd;
+	if (tableElement) {
+		rows = tableElement.getElementsByTagName('tr');
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			if(i%2 == 0)
+				rows[i].className = classEven;
+			else
+				rows[i].className = classOdd;
+		}
+		rows = null;
 	}
-	rows = null;
 }
 function setHoveredTable(tableId, hasHeaders) {
 
@@ -388,7 +390,7 @@ function exportScorecard () {
 									</c:choose>
 								</td>
 								<td align="center" width="150" title="${log.objectTypeTrimmed}">
-									<digi:trn key="aim:ObjectType${log.objectTypeTrimmed}"><bean:write name="log" property="objectTypeTrimmed"/></digi:trn>									
+									<bean:write name="log" property="objectTypeTrimmed"/>
 								</td>
 								<td align="center" width="100" title="${log.teamName}">
 									<bean:write name="log" property="teamName"/>									

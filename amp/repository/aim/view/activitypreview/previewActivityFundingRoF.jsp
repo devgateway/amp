@@ -40,13 +40,12 @@
 			style="border-top: 1px solid #000000; text-transform: uppercase">
 			<digi:trn>Subtotal Planned Release of Funds</digi:trn>
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">
+		<td nowrap="nowrap" class="preview-align preview-funding-total" bgcolor="#eeeeee">
 			<c:if test="${not empty funding.subtotalPlannedRoF}">
-          		  <b>${funding.subtotalPlannedRoF} ${aimEditActivityForm.currCode}</b>
+          		  <b><span dir="ltr">${funding.subtotalPlannedRoF}</span> ${aimEditActivityForm.currCode}</b>
             </c:if>&nbsp;
 			</td>
-		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+		<td bgcolor="#eeeeee" class="preview-align preview-funding-total">&nbsp;</td>
 	</tr>
 	</c:if>
 	</c:if>
@@ -75,14 +74,13 @@
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
             <digi:trn>Subtotal Actual RoF</digi:trn>:
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">
+		<td nowrap="nowrap" class="preview-align preview-funding-total" bgcolor="#eeeeee">
 			 <c:if test="${not empty funding.subtotalActualRoF}">
-                <b>${funding.subtotalActualRoF} ${aimEditActivityForm.currCode}</b>
+                <b><span dir="ltr">${funding.subtotalActualRoF}</span> ${aimEditActivityForm.currCode}</b>
              </c:if>&nbsp;
         </td>
                    
-		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+		<td bgcolor="#eeeeee" class="preview-align preview-funding-total">&nbsp;</td>
 	</tr>
 </c:if>
 </c:if>
@@ -105,17 +103,15 @@
 	<!-- End Actual RoF -->
 
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000"><digi:trn>Subtotal Pipeline RoF</digi:trn>:
+		<td colspan="2" bgcolor="#eeeeee" class="preview-funding-total"><digi:trn>Subtotal Pipeline RoF</digi:trn>:
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">
+		<td nowrap="nowrap" class="preview-align preview-funding-total" bgcolor="#eeeeee">
 			 <c:if test="${not empty funding.subtotalPipelineRoF}">
-                <b>${funding.subtotalPipelineRoF} ${aimEditActivityForm.currCode}</b>
+                <b><span dir="ltr">${funding.subtotalPipelineRoF}</span> ${aimEditActivityForm.currCode}</b>
              </c:if>&nbsp;
         </td>
                    
-		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+		<td bgcolor="#eeeeee" class="preview-funding-total">&nbsp;</td>
 	</tr>
 </c:if>
 </c:if>

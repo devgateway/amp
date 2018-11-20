@@ -15,8 +15,8 @@
 
 				UPDATE amp_modules_visibility SET name = 'Line Ministry Observations' where name = 'Line Ministries';
 
-				DELETE FROM dg_message where message_key = '-1579315767'; <!-- Line Ministries	 -->
-				DELETE FROM dg_message where message_key = '1055121086';  <!-- Line Ministries Observations -->
+				DELETE FROM dg_message where message_key = '-1579315767'; /* Line Ministries	 */
+				DELETE FROM dg_message where message_key = '1055121086';  /* Line Ministries Observations */
 
 				DELETE FROM amp_report_column WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Line Ministries Observations');
 

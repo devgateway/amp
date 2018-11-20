@@ -65,7 +65,7 @@ public abstract class ObjectExporter<T> {
         Object fieldValue = field.getFieldValueReader().get(object);
 
         if (field.isIdOnly()) {
-            jsonValue = readId(fieldValue);
+            jsonValue = readFieldWithPossibleValues(field, fieldValue);
         } else if (field.getFieldType().equals(ActivityEPConstants.FIELD_TYPE_LIST)) {
             if (field.getFieldName().equals("activity_group")) { // FIXME hack because APIField.type cannot be object
                 jsonValue = getObjectJson(fieldValue, field.getChildren(), fieldPath);
@@ -80,24 +80,41 @@ public abstract class ObjectExporter<T> {
     }
 
     /**
-     * Convert an object to id.
+     * Read value for a field that has possible values API.
      * <p>When a field is discriminated, then value is list. In this case the value is expected to be a collection
-     * with one {@link Identifiable} item.
+     * with one item.
+     * <p>If the value is {@link Identifiable} then it's id is returned.
      */
-    private Long readId(Object value) {
-        Object identifiable = null;
+    private Object readFieldWithPossibleValues(APIField field, Object value) {
+        Object singleValue = getSingleValue(value);
+        if (Identifiable.class.isAssignableFrom(field.getType())) {
+            return singleValue == null ? null : ((Identifiable) singleValue).getIdentifier();
+        } else if (InterchangeUtils.isSimpleType(field.getType())) {
+            return singleValue;
+        } else {
+            throw new RuntimeException("Invalid field mapping. Must be either of simple type or identifiable. "
+                    + "Field: " + field.getFieldName());
+        }
+    }
+
+    /**
+     * <p>When a field is discriminated, then value is list. In this case the value is expected to be a collection
+     * with one item.
+     */
+    private Object getSingleValue(Object value) {
+        Object singleValue = null;
         if (value instanceof Collection) {
             Iterator iterator = ((Collection) value).iterator();
             if (iterator.hasNext()) {
-                identifiable = iterator.next();
+                singleValue = iterator.next();
             }
             if (iterator.hasNext()) {
                 throw new RuntimeException("Value is a collection with more than one element.");
             }
         } else {
-            identifiable = value;
+            singleValue = value;
         }
-        return InterchangeUtils.getId(identifiable);
+        return singleValue;
     }
 
     /**

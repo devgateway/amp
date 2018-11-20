@@ -47,15 +47,12 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         //yet to strip the mainPath dynamically, committed hardcoded for testing purposes
         String mainPath="/rest";
         siteDomain = SiteCache.getInstance().getSiteDomain(httpRequest.getServerName(), mainPath);
-        httpRequest.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE, siteDomain);
 
         // configure requested language
         addLanguage(siteDomain);
         
         // configure translastions if exist
         addTranslations(siteDomain);
-        
-        TLSUtils.populate(httpRequest);
         
         addDefaultTreeVisibility();
         //we check for authentication exclude /rest/security/user and include only /activity/ for now

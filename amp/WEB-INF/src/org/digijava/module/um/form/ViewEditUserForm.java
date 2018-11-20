@@ -16,6 +16,7 @@ public class ViewEditUserForm extends ActionForm {
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
         this.pledger = false;
+        this.pledgeSuperUser = false;
         this.nationalCoordinator = false;
         this.exemptFromDataFreezing = false;
         this.notificationEmailEnabled = false;
@@ -59,6 +60,7 @@ public class ViewEditUserForm extends ActionForm {
     private String event;
     private Boolean ban;
     private Boolean pledger;
+    private Boolean pledgeSuperUser;
     private String confirmNewPassword;
     private String newPassword;
     private Boolean displaySuccessMessage;
@@ -319,6 +321,14 @@ public class ViewEditUserForm extends ActionForm {
      */
     public void setPledger(Boolean pledger) {
         this.pledger = pledger;
+    }
+
+    public Boolean getPledgeSuperUser() {
+        return pledgeSuperUser;
+    }
+
+    public void setPledgeSuperUser(Boolean pledgeSuperUser) {
+        this.pledgeSuperUser = pledgeSuperUser;
     }
 
     public boolean isAddWorkspace() {

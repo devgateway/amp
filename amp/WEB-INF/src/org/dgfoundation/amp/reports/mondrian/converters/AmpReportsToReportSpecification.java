@@ -75,6 +75,7 @@ public class AmpReportsToReportSpecification {
 
         spec.setEmptyOutputForUnspecifiedData(report.getDrilldownTab() == null || !report.getDrilldownTab());
         spec.setAlsoShowPledges(report.shouldInjectPledgeColumnsAsProjectColumns());
+        spec.setShowOriginalCurrency(report.getShowOriginalCurrency());
         
         //configure filters & settings
         AmpARFilterConverter arFilterTranslator = new AmpARFilterConverter(arFilter);

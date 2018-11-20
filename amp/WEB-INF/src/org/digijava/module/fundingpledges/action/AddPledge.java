@@ -1,12 +1,5 @@
 package org.digijava.module.fundingpledges.action;
 
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,20 +9,15 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.ARUtil;
-import org.dgfoundation.amp.forms.ItemGateKeeper;
-import org.dgfoundation.amp.forms.LockVerificationResult;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
-
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 
 public class AddPledge extends Action {
     
@@ -55,16 +43,24 @@ public class AddPledge extends Action {
         session.removeAttribute(PLEDGE_TIMESTAMP_EDITED_BY_CURRENT_SESSION_ATTR);
     }
 
-    public String editRightCheck(PledgeForm plForm, HttpServletRequest request, HttpServletResponse response){
+
+    public String editRightCheck(PledgeForm plForm, HttpServletRequest request, HttpServletResponse response,
+                                 FundingPledges fp) {
         TeamMember currentMember = TeamMemberUtil.getLoggedInTeamMember();
         
         // check that logged in
         if (currentMember == null){
             return TranslatorWorker.translateText("Only logged-in members can edit pledges");
-        };
-        
-        if (currentMember.getPledger() == null || !currentMember.getPledger())
+        }
+
+        if (currentMember.getPledger() == null || !currentMember.getPledger() || !((currentMember.getPledgeSuperUser()
+                || (fp != null && UserUtils.hasVerfifiedOrgGroup(currentMember.getUserId(), fp
+                .getOrganizationGroup().getAmpOrgGrpId())) || (fp == null && !UserUtils.getVerifiedOrgs(currentMember
+                .getUserId()).isEmpty())) || !FeaturesUtil
+                        .isVisibleFeature("Pledges",
+                                        "Limit Pledge Edition"))) {
             return TranslatorWorker.translateText("You are not allowed to edit pledges");
+        }
         
         Long timeStamp = (Long) request.getSession().getAttribute(PLEDGE_TIMESTAMP_EDITED_BY_CURRENT_SESSION_ATTR);
         if (timeStamp != null){
@@ -99,23 +95,27 @@ public class AddPledge extends Action {
                 doHeartBeat(plForm, request.getParameter("heartBeat"));
                 return null;
             }
-            
-            if (request.getParameter("pledgeId") != null){
-                plForm.setPledgeId(Long.parseLong(request.getParameter("pledgeId")));
-            }
-                
-            String editRightsMsg = editRightCheck(plForm, request, response);
-            if (editRightsMsg != null){
+
+        if (request.getParameter("pledgeId") != null) {
+            plForm.setPledgeId(Long.parseLong(request.getParameter("pledgeId")));
+        } else {
+            plForm.reset();
+        }
+        //we need the pledge loaded to see if the user can edit it
+        FundingPledges fp = null;
+
+        if (plForm.getPledgeId() != null) {
+            fp = PledgesEntityHelper.getPledgesById(plForm.getPledgeId());
+        }
+
+            String editRightsMsg = editRightCheck(plForm, request, response, fp);
+            if (editRightsMsg != null) {
                 request.getSession().setAttribute("PNOTIFY_ERROR_MESSAGE", editRightsMsg);
                 request.getSession().setAttribute("PNOTIFY_ERROR_TITLE", TranslatorWorker.translateText("Error"));
-                if (plForm.getPledgeId() == null)
-                    response.sendRedirect("/viewPledgesList.do"); // cannot view empty
-                else
-                {
+                if (plForm.getPledgeId() == null) {
+                    response.sendRedirect("/viewPledgesList.do");
+                } else {
                     response.sendRedirect("/viewPledge.do?id=" + plForm.getPledgeId());
-//                  String s = (String) request.getAttribute("PNOTIFY_ERROR_MESSAGE");
-//                  String z = (String) request.getAttribute("PNOTIFY_ERROR_TITLE");                    
-                    //response.sendRedirect("/viewPledge.do?id=" + plForm.getPledgeId() + "&PNOTIFY_ERROR_MESSAGE=" + URLEncoder.encode(s, "UTF-8") + "&PNOTIFY_ERROR_TITLE=" + URLEncoder.encode(z, "UTF-8"));
                 }
                 return null;
             }
@@ -130,7 +130,6 @@ public class AddPledge extends Action {
                 plForm.reset();
                 request.getSession().removeAttribute("reset");
             } else if ((plForm.getPledgeId() != null) && (plForm.getPledgeId() > 0)){
-                FundingPledges fp = PledgesEntityHelper.getPledgesById(plForm.getPledgeId());
                 plForm.reset();
                 plForm.importPledgeData(fp);
                 request.getSession().removeAttribute("pledgeId");

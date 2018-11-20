@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-26775</jira>
+	<keyword>Fix translations</keyword>
+	<author>apicca</author>
+	<description>Fix translations</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres"><![CDATA[
+ 				delete from dg_message where message_key = '1717341293';
+ 				delete from dg_message where message_key = '-1557164945';
+ 				delete from dg_message where message_key = '-865500523';
+
+ 				delete from dg_message where message_key = '1161649181';
+ 				delete from dg_message where message_key = '-1488284173';
+
+ 				delete from dg_message where message_key = '94185230';
+ 				delete from dg_message where message_key = '1262372724';
+ 				delete from dg_message where message_key = '1048199224';
+ 				delete from dg_message where message_key = '-803532066';
+
+ 				delete from dg_message where message_key = '-1358963668';
+ 				delete from dg_message where message_key = '-1260390705';
+ 				delete from dg_message where message_key = '1242913565';
+
+ 				delete from dg_message where message_key = '1355668861';
+
+ 				delete from dg_message where message_key = '-364446313';
+ 				delete from dg_message where message_key = '857555912';
+
+ 				update dg_message set message_utf8 = 'Related organization additional info' where message_key = '-1850397248' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Related organization percentage total' where message_key = '-2069313057' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Add release of Funds' where message_key = '-1150122550' and lang_iso = 'en';
+
+ 				update dg_message set message_utf8 = 'Use donor''s own structure' where message_key = '1611885249' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Use donor''s own system' where message_key = '434759585' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Joint implementation through gov''t and non-gov''t entity' where message_key = '-1071863669' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Rely on other donor''s institutions' where message_key = '140749611' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Rely on other donor''s system' where message_key = '1384177567' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'National implementation throug gov''t entity' where message_key = '-2076443594' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Direct implementation through non-gov''t entity' where message_key = '-1953041045' and lang_iso = 'en';
+
+ 				update dg_message set message_utf8 = '(Only valid when feature is enabled) The status corresponding to the ''''Activity has ended'''' state' where message_key = '-1044116490' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Add & Edit Activity' where message_key = '-1995983965' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Default number format for all funding items.Here you have to use the '''','''' character for the grouping separator and the ''''.'''' character for the decimal separator(example format: ###,###.##).' where message_key = '-1195611650' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Whether the Excel Export menu should have the ''''Rich Export'''' enabled by default' where message_key = '-1469047951' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Automatically change the status of activities which have passed their Actual End Date to a preset one (usually ''''Closed'''')' where message_key = '-721047659' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'In Activity form''s organizations step, set the default value of Responsible Organization Group' where message_key = '944839999' and lang_iso = 'en';
+
+ 				update amp_menu_entry set title = 'DASHBOARDS' where title = 'NEW DASHBOARD (BETA)';
+ 				delete from dg_message where message_key = '936655517';
+
+ 				delete from dg_message where message_key = '-795002540';
+ 				update amp_fields_visibility set name='Capital Expenditure', description='Capital Expenditure' where name='Capital - Expenditure' and parent=(select id from amp_features_visibility where name='Funding Information');
+
+				update dg_message set message_utf8 = 'Actual Commitments for pledges and activities reports' where message_key = '-364446313';
+
+				update dg_message set message_utf8 = 'Search M&e' where message_key = '1161649181' and lang_iso = 'en';
+				update dg_message set message_utf8 = 'Search Sectors For M&e' where message_key = '-1488284173' and lang_iso = 'en';
+			]]></lang>
+		</script>
+	</apply>
+</tns:patch>

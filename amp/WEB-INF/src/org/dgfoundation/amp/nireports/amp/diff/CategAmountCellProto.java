@@ -47,18 +47,37 @@ public class CategAmountCellProto extends Cell {
     }
     
     /**
-     * materializes this instance into a full transaction. The operation is O(1) cheap because the heavyweight components of a cell are deeply immutable structures
+     * Materializes this instance into a full transaction. 
+     * The operation is O(1) cheap because the heavyweight components of a cell are deeply immutable structures
      * which are shared between with the prototype (namely, {@link #metaInfo} and {@link #getCoordinates()})
+     * If the informativeAmount parameter is set to true, the amount will have the same value as the origAmount
+     * 
      * @param usedCurrency the {@link AmpCurrency} to use for converting the natural transaction to
      * @param calendarConverter the O(1) {@link CalendarConverter} to use for translating the natural transaction's date
      * @param currencyConvertor the O(1) {@link CurrencyConvertor} to use for for converting amounts between currencies
-     * @param precisionSetting the precision settings to use while doing the amount conversions and to store in the generated {@link MonetaryAmount}
+     * @param precisionSetting the precision settings to use while doing the amount conversions 
+     * and to store in the generated {@link MonetaryAmount}
+     * @param isInformativeAmount if the amount is informative (amount not converted) or not
      * @return
      */
-    public CategAmountCell materialize(AmpCurrency usedCurrency, CachingCalendarConverter calendarConverter, CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting) {
-        BigDecimal usedExchangeRate = BigDecimal.valueOf(currencyConvertor.getExchangeRate(origCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
-        MonetaryAmount amount = new MonetaryAmount(origAmount.multiply(usedExchangeRate), origAmount, origCurrency, transactionDate, precisionSetting);
-        CategAmountCell cell = new CategAmountCell(activityId, amount, metaInfo, coordinates, calendarConverter.translate(transactionMoment));
+    public CategAmountCell materialize(AmpCurrency usedCurrency, CachingCalendarConverter calendarConverter, 
+            CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting, boolean isInformativeAmount) {
+        
+        BigDecimal amount = origAmount;
+        
+        if (!isInformativeAmount) {
+            BigDecimal usedExchangeRate = BigDecimal.valueOf(currencyConvertor.getExchangeRate(
+                    origCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), 
+                    fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
+            amount = origAmount.multiply(usedExchangeRate);
+        }
+        
+        MonetaryAmount monetaryAmount = new MonetaryAmount(amount, origAmount, origCurrency, transactionDate, 
+                precisionSetting);
+        
+        CategAmountCell cell = new CategAmountCell(activityId, monetaryAmount, metaInfo, coordinates, 
+                calendarConverter.translate(transactionMoment), isInformativeAmount);
+        
         return cell;
     }
 

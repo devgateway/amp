@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -45,6 +46,7 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -203,7 +205,7 @@ public class DashboardsService {
         spec.getHierarchies().addAll(spec.getColumns());
         // applies settings, including funding type as a measure
         SettingsUtils.applyExtendedSettings(spec, config);
-        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
+        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), Boolean.FALSE));
 
         AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
         if (filterRules != null) {
@@ -260,6 +262,11 @@ public class DashboardsService {
                 totalPositive += amount;
             }
         }
+
+        if (SiteUtils.isEffectiveLangRTL()) {
+            Collections.reverse(values);
+        }
+
         retlist.set("values", values);
 
         retlist.set("total", rawTotal);
@@ -461,7 +468,7 @@ public class DashboardsService {
         // also configures funding type
         SettingsUtils.applyExtendedSettings(spec, filter);
         
-        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
+        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), SiteUtils.isEffectiveLangRTL()));
                 
         if (filter != null) {
             LinkedHashMap<String, Object> filters = (LinkedHashMap<String, Object>) filter.get(EPConstants.FILTERS);
@@ -531,7 +538,7 @@ public class DashboardsService {
         OutputSettings outSettings = new OutputSettings(new HashSet<String>(){{add(ColumnConstants.PROJECT_TITLE);}});
         // applies settings, including funding type as a measure
         SettingsUtils.applyExtendedSettings(spec, config);
-        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
+        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), SiteUtils.isEffectiveLangRTL()));
         
         LinkedHashMap<String, Object> filters = null;
         if (config != null) {

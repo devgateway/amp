@@ -94,6 +94,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
     private List<AmpActivityContact> projCoordinatorContacts;
     private List<AmpActivityContact> implExecutingAgencyContacts;
     private List<AmpStructure> structures;
+    private Issues regionalObservations = new Issues();
     private Issues lineMinistryObservations = new Issues();
     
     /**
@@ -6599,6 +6600,10 @@ public class EditActivityForm extends ActionForm implements Serializable {
         return this.structures;
     }
     
+    public Issues getRegionalObservations() {
+        return this.regionalObservations;
+    }
+    
     @java.lang.SuppressWarnings("all")
     public Issues getLineMinistryObservations() {
         return this.lineMinistryObservations;
@@ -6827,6 +6832,10 @@ public class EditActivityForm extends ActionForm implements Serializable {
     @java.lang.SuppressWarnings("all")
     public void setStructures(final List<AmpStructure> structures) {
         this.structures = structures;
+    }
+    
+    public void setRegionalObservations(final Issues lineMinistryObservations) {
+        this.regionalObservations = regionalObservations;
     }
     
     @java.lang.SuppressWarnings("all")

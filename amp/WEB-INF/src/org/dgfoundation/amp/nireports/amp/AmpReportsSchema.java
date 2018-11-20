@@ -424,6 +424,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         degenerate_dimension(ColumnConstants.PERFORMANCE_ALERT_LEVEL, "v_performance_alert_level", catsDimension);
         degenerate_dimension(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget", boolDimension);
         degenerate_dimension(ColumnConstants.INSTITUTIONS, "v_institutions", catsDimension, true);
+        no_dimension(ColumnConstants.LINE_MINISTRY_OBSERVATIONS, "v_line_ministry_observations");
+        no_dimension(ColumnConstants.LINE_MINISTRY_OBSERVATIONS_ACTORS, "v_line_ministry_observations_actors");
+        date_column(ColumnConstants.LINE_MINISTRY_OBSERVATIONS_DATE, "v_line_ministry_observations_date");
+        no_dimension(ColumnConstants.LINE_MINISTRY_OBSERVATIONS_MEASURES, "v_line_ministry_observations_measures");
         no_dimension(ColumnConstants.MEASURES_TAKEN, "v_measures_taken");
         no_entity(ColumnConstants.MINORITIES, "v_minorities", DG_EDITOR_POSTPROCESSOR);
         degenerate_dimension(ColumnConstants.MODALITIES, "v_modalities", catsDimension, true);

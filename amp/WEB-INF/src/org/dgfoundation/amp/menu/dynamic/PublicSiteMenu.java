@@ -28,7 +28,6 @@ public class PublicSiteMenu implements DynamicMenu {
             parent.getChildren().set(pos, menuItem);
         } else {
             logger.warn(menuItem.name + " cannot be configured: no public site url in global settings");
-            menuItem.getParent().getChildren().remove(menuItem);
         }
     }
 

@@ -160,7 +160,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put("/Activity Form/Identification/Project Comments", ColumnConstants.PROJECT_COMMENTS);
         put("/Activity Form/Identification/Project Impact", ColumnConstants.PROJECT_IMPACT);
         put("/Activity Form/Identification/Project Implementing Unit", ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
-        put("/Activity Form/Identification/Project Management", ColumnConstants.PROJECT_MANAGEMENT);
         put("/Activity Form/Identification/Project Title", ColumnConstants.PROJECT_TITLE);
         put("/Activity Form/Identification/Purpose", ColumnConstants.PURPOSE);
         put("/Activity Form/Identification/Humanitarian Aid", ColumnConstants.HUMANITARIAN_AID);
@@ -354,6 +353,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Project Age Ratio", ColumnConstants.PROJECT_AGE_RATIO);
             put("Project Implementation Delay", ColumnConstants.PROJECT_IMPLEMENTATION_DELAY);
             put("Project Description", ColumnConstants.PROJECT_DESCRIPTION);
+            put("Project Management", ColumnConstants.PROJECT_MANAGEMENT);
             put("Project Period", ColumnConstants.PROJECT_PERIOD);
             put("Related Projects", ColumnConstants.RELATED_PROJECTS);
             put("Related Pledges", ColumnConstants.RELATED_PLEDGES);

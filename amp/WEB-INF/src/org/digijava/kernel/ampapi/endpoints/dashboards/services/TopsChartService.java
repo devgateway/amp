@@ -29,6 +29,7 @@ import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -36,6 +37,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -286,6 +288,9 @@ public class TopsChartService {
             if (amount > 0) {
                 totalPositive += amount;
             }
+        }
+        if (SiteUtils.isEffectiveLangRTL()) {
+            Collections.reverse(values);
         }
         retlist.set("values", values);
 

@@ -2,14 +2,11 @@ package org.dgfoundation.amp.newreports;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.helper.TeamMember;
@@ -67,7 +64,7 @@ public class GeneratedReport {
     public final boolean isEmpty;
 
     private final boolean hasTotals;
-    
+
     public GeneratedReport(ReportSpecification spec, int generationTime, TeamMember requestingUser, 
             ReportArea reportContents, List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders, 
             List<List<HeaderCell>> generatedHeaders, RunNode timings, SortedMap<Long, SortedSet<ReportWarning>> reportWarnings, boolean isEmpty) {
@@ -94,7 +91,7 @@ public class GeneratedReport {
     public boolean hasTotals() {
         return hasTotals;
     }
-    
+
 }
 
     

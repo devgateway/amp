@@ -3,9 +3,8 @@ package org.dgfoundation.amp.reports.xml;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 public class XmlReportUtil {
 
@@ -14,21 +13,21 @@ public class XmlReportUtil {
      * @param reportParameter
      * @return
      */
-    public static JsonBean convertXmlCustomReportToJsonObj(ReportParameter reportParameter) {
-        JsonBean reportConfig = new JsonBean();
+    public static ReportFormParameters convertXmlCustomReportToJsonObj(ReportParameter reportParameter) {
+        ReportFormParameters reportConfig = new ReportFormParameters();
 
-        reportConfig.set(EPConstants.REPORT_NAME, reportParameter.getName());
+        reportConfig.setReportName(reportParameter.getName());
         
         if (reportParameter.getColumns() != null) {
-            reportConfig.set(EPConstants.ADD_COLUMNS, reportParameter.getColumns().getColumn());
+            reportConfig.setAdditionalColumns(reportParameter.getColumns().getColumn());
         }
         
         if (reportParameter.getMeasures() != null) {
-            reportConfig.set(EPConstants.ADD_MEASURES, reportParameter.getMeasures().getMeasure());
+            reportConfig.setAdditionalMeasures(reportParameter.getMeasures().getMeasure());
         }
         
         if (reportParameter.getHierarchies() != null) {
-            reportConfig.set(EPConstants.ADD_HIERARCHIES, reportParameter.getHierarchies().getHierarchy());
+            reportConfig.setAdditionalHierarchies(reportParameter.getHierarchies().getHierarchy());
         }
 
         if (reportParameter.getSettings() != null) {
@@ -90,15 +89,15 @@ public class XmlReportUtil {
                 settings.put(SettingsConstants.AMOUNT_FORMAT_ID, amountFormat);
             }
     
-            reportConfig.set(EPConstants.SETTINGS, settings);
+            reportConfig.setSettings(settings);
         }
         
         if (reportParameter.isSummary() != null) {
-            reportConfig.set(EPConstants.SUMMARY, reportParameter.isSummary());
-            reportConfig.set(EPConstants.GROUPING_OPTION, "");
+            reportConfig.setSummary(reportParameter.isSummary());
+            reportConfig.setGroupingOption("");
             
             if (reportParameter.getGroupingOption() != null) {
-                reportConfig.set(EPConstants.GROUPING_OPTION, reportParameter.getGroupingOption().value());
+                reportConfig.setGroupingOption(reportParameter.getGroupingOption().value());
             }
         }
         
@@ -117,7 +116,7 @@ public class XmlReportUtil {
                 }
             }
             
-            reportConfig.set(EPConstants.FILTERS, filters);
+            reportConfig.setFilters(filters);
         }
 
         return reportConfig;

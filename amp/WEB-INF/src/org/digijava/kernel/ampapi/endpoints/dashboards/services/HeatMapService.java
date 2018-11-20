@@ -33,11 +33,11 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardHMFormParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
@@ -61,7 +61,7 @@ public class HeatMapService {
     private static final BigDecimal ZERO = new BigDecimal(0);
     public static final int SCALE = 6;
 
-    private JsonBean config;
+    private DashboardHMFormParameters config;
     private Long xId;
     private Long yId;
     private String xCol;
@@ -80,14 +80,14 @@ public class HeatMapService {
     private ReportOutputColumn yOutCol;
     private ReportOutputColumn mOutCol;
     
-    public HeatMapService(JsonBean config, Long xId, Long yId) {
+    public HeatMapService(DashboardHMFormParameters config, Long xId, Long yId) {
         this.config = config;
         this.visibleColumns = ColumnsVisibility.getVisibleColumns();
         this.xId = xId;
         this.yId = yId;
     }
 
-    public HeatMapService(JsonBean config) {
+    public HeatMapService(DashboardHMFormParameters config) {
         this.config = config;
         this.visibleColumns = ColumnsVisibility.getVisibleColumns();
     }
@@ -409,10 +409,10 @@ public class HeatMapService {
     }
 
     private ReportSpecification getCustomReportRequest() {
-        this.xCol = readXYColumn(DashboardConstants.X_COLUMN);
-        this.yCol = readXYColumn(DashboardConstants.Y_COLUMN);
-        this.xCount = readXYCount(DashboardConstants.X_COUNT, DEFAULT_X_COUNT);
-        this.yCount = readXYCount(DashboardConstants.Y_COUNT, DEFAULT_Y_COUNT);
+        this.xCol = readXYColumn(DashboardConstants.X_COLUMN, config.getColumnXAxis());
+        this.yCol = readXYColumn(DashboardConstants.Y_COLUMN, config.getColumnYAxis());
+        this.xCount = readXYCount(config.getCountXAxis(), DEFAULT_X_COUNT);
+        this.yCount = readXYCount(config.getCountYAxis(), DEFAULT_Y_COUNT);
 
         String rName = String.format("HeatMap by %s and %s (xCount = %d, yCount = %d)", xCol, yCol, xCount, yCount);
         LOGGER.info(String.format("Generating Chart '%s'%s", rName, errors.isEmpty() ? "" : " - aborted due to errors"));
@@ -428,8 +428,8 @@ public class HeatMapService {
         spec.getHierarchies().addAll(spec.getColumns());
 
         // also configures Measures - consistent with other Dashboards
-        SettingsUtils.applyExtendedSettings(spec, config);
-        ReportsUtil.configureFilters(spec, config);
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
+        ReportsUtil.configureFilters(spec, config.getFilters());
 
         // sort ascending by Y axis (aka Donor Group)
         spec.addSorter(new SortingInfo(yRepCol, true));
@@ -446,8 +446,10 @@ public class HeatMapService {
      */
     private ReportSpecification getCustomReportDetailRequest() {
         String rName = "";
-        this.xCol = FilterUtils.INSTANCE.idFromColumnName(readXYColumn(DashboardConstants.X_COLUMN));
-        this.yCol = FilterUtils.INSTANCE.idFromColumnName(readXYColumn(DashboardConstants.Y_COLUMN));
+        this.xCol = FilterUtils.INSTANCE.idFromColumnName(
+                readXYColumn(DashboardConstants.X_COLUMN, config.getColumnXAxis()));
+        this.yCol = FilterUtils.INSTANCE.idFromColumnName(
+                readXYColumn(DashboardConstants.Y_COLUMN, config.getColumnYAxis()));
         ReportSpecificationImpl spec = new ReportSpecificationImpl(rName, ArConstants.DONOR_TYPE);
 
         spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
@@ -455,7 +457,7 @@ public class HeatMapService {
 
         Map<String, Object> filters = null;
         if (this.config != null) {
-            filters = (Map<String, Object>) this.config.get(EPConstants.FILTERS);
+            filters = this.config.getFilters();
         }
         if (filters == null) {
             filters = new LinkedHashMap<>();
@@ -469,16 +471,15 @@ public class HeatMapService {
         spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
 
         // also configures Measures - consistent with other Dashboards
-        SettingsUtils.applyExtendedSettings(spec, config);
-        ReportsUtil.configureFilters(spec, config);
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
+        ReportsUtil.configureFilters(spec, config.getFilters());
 
         this.decimalFormatter = ReportsUtil.getDecimalFormatOrDefault(spec);
 
         return spec;
     }
 
-    private String readXYColumn(String param) {
-        String colName = config.getString(param);
+    private String readXYColumn(String param, String colName) {
         // only if visible, since a generic EP
         if (!visibleColumns.contains(colName)) {
             errors.addApiErrorMessage(DashboardErrors.INVALID_COLUMN, param + " = " + colName);
@@ -486,17 +487,13 @@ public class HeatMapService {
         return colName;
     }
     
-    private Integer readXYCount(String param, Integer defaultValue) {
-        Object count = config.get(param);
+    private Integer readXYCount(Integer count, Integer defaultValue) {
         if (count == null) {
             count = defaultValue;
-        } else if (!Integer.class.isAssignableFrom(count.getClass())) {
-            errors.addApiErrorMessage(DashboardErrors.INVALID_NUMBER, param + " = " + count);
-            count = null;
-        } else if (((Integer) count) < 0 ) {
+        } else if (count < 0) {
             count = null; // no limit
         }
-        return (Integer) count;
+        return count;
     }
     
     private String getOthersTrn() {

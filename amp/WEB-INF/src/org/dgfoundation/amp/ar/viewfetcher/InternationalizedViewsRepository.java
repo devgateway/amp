@@ -22,12 +22,12 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * repository class holding the configuration for all the internationalized views' i18n columns
@@ -151,7 +151,11 @@ public class InternationalizedViewsRepository {
                                                 
                 addViewDef(this, new I18nViewDescription("v_actors").
                         addColumnDef(new I18nViewColumnDescription("name", "amp_actor_id", AmpActor.class, "name")));
-                
+    
+                addViewDef(this, new I18nViewDescription("v_regional_observations_actors").
+                        addColumnDef(new I18nViewColumnDescription("name", "amp_reg_obs_actor_id",
+                                AmpRegionalObservationActor.class, "name")));
+    
                 addViewDef(this, new I18nViewDescription("v_agreement_close_date").
                         addColumnDef(new I18nViewColumnDescription("agreement_title", "id", AmpAgreement.class, "title")).
                         addCalculatedColDef(AGREEMENT_TITLE_AND_CODE, agreement_title_code_calculator).
@@ -323,7 +327,11 @@ public class InternationalizedViewsRepository {
 
                 addViewDef(this, new I18nViewDescription("v_measures_taken").
                         addColumnDef(new I18nViewColumnDescription("name", "amp_measure_id", AmpMeasure.class, "name")));
-                
+    
+                addViewDef(this, new I18nViewDescription("v_regional_observations_measures").
+                        addColumnDef(new I18nViewColumnDescription("name", "amp_reg_obs_measure_id",
+                                AmpRegionalObservationMeasure.class, "name")));
+    
                 addViewDef(this, new I18nViewDescription("v_mtef_funding").
                         addColumnDef(new I18nViewColumnDescription("donor_name", "org_id", AmpOrganisation.class, "name")).
                         addColumnDef(new I18nViewColumnDescription("org_grp_name", "org_grp_id", AmpOrgGroup.class, "orgGrpName")).
@@ -530,7 +538,6 @@ public class InternationalizedViewsRepository {
 //              addViewDef(this, new I18nViewDescription("v_activity_pledges_title").
 //                      addColumnDef(new I18nViewColumnDescription("pledge_title", "pledge_id", AmpCategoryValue.class, "value")));
                 
-                
                 // DG_EDITOR-backed translations start HERE
                 addViewDef(this, new I18nViewDescription("v_purposes").
                         addDgEditorColumnDef("ebody", "locale"));
@@ -548,6 +555,9 @@ public class InternationalizedViewsRepository {
                         addDgEditorColumnDef("ebody", "locale"));
 
                 addViewDef(this, new I18nViewDescription("v_project_comments").
+                        addDgEditorColumnDef("ebody", "locale"));
+    
+                addViewDef(this, new I18nViewDescription("v_project_management").
                         addDgEditorColumnDef("ebody", "locale"));
                 
                 addViewDef(this, new I18nViewDescription("v_equalopportunity").

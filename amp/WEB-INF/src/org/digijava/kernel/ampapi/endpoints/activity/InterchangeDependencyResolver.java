@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ComponentFundingOrgsValidator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.FundingPledgesValidator;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
@@ -19,8 +20,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
-
-import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * 
@@ -253,6 +252,37 @@ public class InterchangeDependencyResolver {
     }
     
     /**
+     * Checks if required dependency is fullfilled
+     *
+     * @param value
+     * @param importer
+     * @param fieldDescription
+     * @param fieldParent
+     * @return
+     */
+    public static boolean shouldCheckForRequired(Object value, ObjectImporter importer,
+                                                 APIField fieldDescription, Map<String, Object> fieldParent) {
+        
+        List<String> deps = fieldDescription.getDependencies();
+        boolean result = true;
+        if (deps != null) {
+            if (deps.contains(COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY)) {
+                if (isPartOfCorrectTransaction(value, importer, fieldParent, Constants.COMMITMENT)) {
+                    return deps.contains(COMMITMENTS_DISASTER_RESPONSE_REQUIRED);
+                } else if (isPartOfCorrectTransaction(value, importer, fieldParent, Constants.DISBURSEMENT)) {
+                    return deps.contains(DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED);
+                }
+            } else if (deps.contains(COMMITMENTS_PRESENT_KEY)) {
+                return deps.contains(COMMITMENTS_DISASTER_RESPONSE_REQUIRED);
+            } else if (deps.contains(DISBURSEMENTS_PRESENT_KEY)) {
+                return deps.contains(DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED);
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
      * check if activity is on budget or not
      * 
      * @return 
@@ -402,15 +432,17 @@ public class InterchangeDependencyResolver {
             break;
         case COMMITMENTS_DISASTER_RESPONSE_REQUIRED:
             // do not mention commitments dependency key required setting if not enabled
-            if (!FMVisibility.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null) ||
-                    !FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Required Validator for Disaster Response", null))
+            if (!FMVisibility.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)
+                || !FMVisibility.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_REQUIRED_FM_PATH, null)) {
                 return null;
+            }
             break;
         case DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED:
             // do not mention disbursements dependency key required setting if not enabled
-            if (!FMVisibility.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null) ||
-                    !FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Required Validator for Disaster Response", null))
+            if (!FMVisibility.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)
+                || !FMVisibility.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_REQUIRED_PATH, null)) {
                 return null;
+            }
             break;
         }
         // provide back the dependency key if no changes detected so far 

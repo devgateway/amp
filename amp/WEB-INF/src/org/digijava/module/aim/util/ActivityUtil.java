@@ -1084,7 +1084,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
               .list();
   }
   
-  private static AmpActivityGroup getActivityGroups(Session session, Long actId){
+  private static AmpActivityGroup getActivityGroups(Session session, Long actId) {
       String queryString = "select group from " + AmpActivityGroup.class.getName() + " group "
                       + "where group.ampActivityLastVersion.ampActivityId=:actId";
       return (AmpActivityGroup) session.createQuery(queryString)

@@ -1288,12 +1288,16 @@ public class ExportActivityToPDF extends Action {
             if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section")){
                 buildIssuesPart(myForm, mainLayout,ampContext,session);
             }
-
+    
             /**
              * related documents
              */
             if(FeaturesUtil.isVisibleModule("/Activity Form/Related Documents")){
                 buildRelatedDocsPart(myForm, mainLayout, event,ampContext);
+            }
+    
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Regional Observations")) {
+                buildRegionalObservationsPart(myForm, mainLayout);
             }
     
             if (FeaturesUtil.isVisibleModule("/Activity Form/Line Ministry Observations")) {
@@ -1919,6 +1923,71 @@ public class ExportActivityToPDF extends Action {
             }
         }
         mainLayout.addCell(issuesCell2);
+    }
+    
+    private void buildRegionalObservationsPart(EditActivityForm myForm, PdfPTable mainLayout)
+            throws WorkerException {
+        ArrayList<Issues> regObs = myForm.getRegionalObservations().getIssues();
+        if (regObs == null || regObs.isEmpty()) {
+            return;
+        }
+        
+        PdfPCell regObsTitleCell = new PdfPCell();
+        regObsTitleCell.setBackgroundColor(BACKGROUND_COLOR);
+        regObsTitleCell.setBorder(0);
+        
+        Paragraph p1;
+        p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("Regional Observations")), titleFont);
+        p1.setAlignment(Element.ALIGN_RIGHT);
+        
+        regObsTitleCell.addElement(p1);
+        mainLayout.addCell(regObsTitleCell);
+        
+        PdfPCell regObsValuesCell = new PdfPCell();
+        regObsValuesCell.setBackgroundColor(BACKGROUND_COLOR_WHITE);
+        regObsValuesCell.setBorder(0);
+        
+        String regObsModulePath = "/Activity Form/Regional Observations/Observation";
+        String regObsDatePath = regObsModulePath + "/Date";
+        String regObsMeasurePath = regObsModulePath + "/Measure";
+        String regObsActorPath = regObsMeasurePath + "/Actor";
+        
+        for (Issues issue : regObs) {
+            com.lowagie.text.List issuesList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+            issuesList.setListSymbol(new Chunk("\u2022"));
+            String issueName = issue.getName();
+            if (FeaturesUtil.isVisibleModule(regObsDatePath)) {
+                issueName += " \t" + issue.getIssueDate();
+            }
+            
+            ListItem issueItem = new ListItem(new Phrase(issueName, plainFont));
+            issuesList.add(issueItem);
+            if (issue.getMeasures() != null && issue.getMeasures().size() > 0
+                    && FeaturesUtil.isVisibleModule(regObsMeasurePath)) {
+                com.lowagie.text.List measuresSubList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+                measuresSubList.setListSymbol("-");
+                
+                for (Measures measure : issue.getMeasures()) {
+                    ListItem measureItem = new ListItem(new Phrase(measure.getName(), plainFont));
+                    measuresSubList.add(measureItem);
+                    
+                    if (measure.getActors() != null && measure.getActors().size() > 0
+                            && FeaturesUtil.isVisibleModule(regObsActorPath)) {
+                        com.lowagie.text.List actorsSubList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+                        actorsSubList.setListSymbol(new Chunk("\u2022"));
+                        
+                        for (AmpActor actor : measure.getActors()) {
+                            ListItem actorItem = new ListItem(new Phrase(actor.getName(), plainFont));
+                            actorsSubList.add(actorItem);
+                        }
+                        measuresSubList.add(actorsSubList);
+                    }
+                }
+                issuesList.add(measuresSubList);
+            }
+            regObsValuesCell.addElement(issuesList);
+        }
+        mainLayout.addCell(regObsValuesCell);
     }
     
     private void buildLineMinistryObservationsPart(EditActivityForm myForm, PdfPTable mainLayout)

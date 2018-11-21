@@ -167,7 +167,7 @@ public class EditActivity extends Action {
     AmpTeam currentTeam = null;
     if(tm != null)
         currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
-    boolean isPreview = mapping.getPath().trim().endsWith("editingUserId");
+    boolean isPreview = mapping.getPath().trim().endsWith("viewActivityPreview");
 
     String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 

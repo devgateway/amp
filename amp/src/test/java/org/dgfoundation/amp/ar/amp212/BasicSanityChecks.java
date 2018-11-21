@@ -8,8 +8,8 @@ import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.ExceptionRunnable;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -24,7 +24,6 @@ import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.TrailCellsDigest;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
-import org.digijava.module.aim.util.DbUtil;
 import org.junit.Test;
 
 /**

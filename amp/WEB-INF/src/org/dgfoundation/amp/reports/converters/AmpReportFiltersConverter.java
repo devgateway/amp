@@ -162,7 +162,7 @@ public class AmpReportFiltersConverter {
     /**
      * Convert one of the Mondrian Filters to one of the fields in AmpARFilters and add it to the new filter.
      * 
-     * @param mondrianFilterColumnName
+     * @param filterColumnName
      *          is the constant name in the new filters.
      * @param ampARFilterFieldClass
      *          is the Class of the field in AmpARFilters.
@@ -171,7 +171,8 @@ public class AmpReportFiltersConverter {
      * @param cleanup
      *          if true then old values will be replaced.
      */
-    private void addFilter(String mondrianFilterColumnName, Class ampARFilterFieldClass, String ampARFilterFieldName, boolean cleanup) {
+    private void addFilter(String filterColumnName, Class ampARFilterFieldClass, String ampARFilterFieldName,
+            boolean cleanup) {
         try {
             Session session = PersistenceManager.getSession();
             // Use reflection to dynamically call the setter method on AmpARFilter class, that includes generating the setter
@@ -183,7 +184,8 @@ public class AmpReportFiltersConverter {
             Method setterMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(ampARFilterFieldName), param);
 
             // Get values from Reports API filters.
-            FilterRule filterRule = this.filters.getAllFilterRules().get(new ReportElement(new ReportColumn(mondrianFilterColumnName)));
+            FilterRule filterRule = this.filters.getAllFilterRules().get(
+                    new ReportElement(new ReportColumn(filterColumnName)));
 
             if (filterRule != null) {
                 if (paramClass.getName().equals("java.util.Set") || paramClass.getName().equals("java.util.Collection")) {
@@ -214,21 +216,21 @@ public class AmpReportFiltersConverter {
                     }
                     // Use reflection to call the setter.
                     setterMethod.invoke(this.ampARFilter, values);
-                    logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + values.toString());
+                    logger.info("Found filter: " + filterColumnName + " with values: " + values.toString());
                 } else if (paramClass.getName().equals("java.lang.String")) {
                     setterMethod.invoke(this.ampARFilter, filterRule.toString());
-                    logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + filterRule.toString());
+                    logger.info("Found filter: " + filterColumnName + " with values: " + filterRule.toString());
                 } else if (paramClass.getName().equals("java.lang.Integer")) {
                     setterMethod.invoke(this.ampARFilter, Integer.valueOf(filterRule.toString()));
-                    logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + filterRule.toString());
+                    logger.info("Found filter: " + filterColumnName + " with values: " + filterRule.toString());
                 } else if (paramClass.getName().equals("java.lang.Double")) {
                     setterMethod.invoke(this.ampARFilter, Double.valueOf(filterRule.toString()));
-                    logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + filterRule.toString());
+                    logger.info("Found filter: " + filterColumnName + " with values: " + filterRule.toString());
                 } else {
                     throw new RuntimeException(paramClass.getName());
                 }
             } else {
-                logger.info("Not found filter: " + mondrianFilterColumnName);
+                logger.info("Not found filter: " + filterColumnName);
             }
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException e) {

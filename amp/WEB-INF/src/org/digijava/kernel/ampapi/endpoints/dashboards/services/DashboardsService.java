@@ -33,7 +33,8 @@ import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
+import org.dgfoundation.amp.reports.ReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardFormParameters;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
@@ -43,7 +44,6 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -142,8 +142,10 @@ public class DashboardsService {
         List<ReportArea> undefinedAreas = new ArrayList<>();
         for (ReportArea ra : report.reportContents.getChildren()) {
             // detect those undefined for countries, but skip those that are really undefined for regions
-            if (ra.getOwner() != null && ra.getOwner().id < 0 && (ra.getOwner().id != -MoConstants.UNDEFINED_KEY))
+            if (ra.getOwner() != null && ra.getOwner().id < 0
+                    && (ra.getOwner().id != ColumnReportData.UNALLOCATED_ID)) {
                 undefinedAreas.add(ra);
+            }
         }
         // if no countries are found, then nothing to update
         if (undefinedAreas.isEmpty()) {
@@ -542,7 +544,7 @@ public class DashboardsService {
      */
     public static void setCustomSettings(DashboardFormParameters config, ReportSpecificationImpl spec) {
         LinkedHashMap<String, Object> userSettings = (LinkedHashMap<String, Object>) config.getSettings();
-        ReportSettingsImpl defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
+        ReportSettingsImpl defaultSettings = ReportUtils.getCurrentUserDefaultSettings();
         defaultSettings.setUnitsOption(AmountsUnits.getDefaultValue());
         if (userSettings.get(SettingsConstants.CURRENCY_ID) != null) {
             defaultSettings.setCurrencyCode(userSettings.get(SettingsConstants.CURRENCY_ID).toString());

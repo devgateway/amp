@@ -11,7 +11,7 @@ import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.currency.CurrencyInflationUtil;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.currency.inflation.InflationRateGenerator;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.ReportingTestCase;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;

@@ -55,7 +55,7 @@ import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
+import org.dgfoundation.amp.reports.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportExportType;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportHtmlRenderer;

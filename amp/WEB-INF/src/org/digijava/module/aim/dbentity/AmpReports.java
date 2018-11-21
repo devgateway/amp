@@ -21,7 +21,6 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
-import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -612,45 +611,6 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
         for(AmpReportColumn column:getColumns())
             res.add(column.getColumn().getColumnName());
         return res;
-    }
-    
-    /**
-     * returns true if at least one of the measures of this report is implemented in Mondrian
-     * @return
-     */
-    public boolean hasAvailableMeasures() {
-        Set<String> reportMeasures = getMeasureNames();
-        Set<String> availableMeasures = new HashSet<>(AmpReportsSchema.getInstance().getMeasures().keySet());
-        reportMeasures.retainAll(availableMeasures);
-        return !reportMeasures.isEmpty();
-    }
-
-    public boolean hasAvailableColumns() {
-        Set<String> reportColumns = getColumnNames();
-        Set<String> availableColumns = new HashSet<>(AmpReportsSchema.getInstance().getColumns().keySet());
-        reportColumns.retainAll(availableColumns);
-        return !reportColumns.isEmpty();
-
-    }
-
-    /**
-     * returns true iff this report can be opened in Mondrian
-     * @return
-     */
-    public boolean isImplementedInMondrian() {
-        return (this.getType().intValue() == ArConstants.DONOR_TYPE || this.getType().intValue() == ArConstants.COMPONENT_TYPE || this.getType().intValue() == ArConstants.PLEDGES_TYPE)
-                && (hasAvailableMeasures() || hasMtefColumn());
-    }
-    
-    /**
-     * returns true iff any of the report's columns are MTEFs
-     * @return
-     */
-    protected boolean hasMtefColumn() {
-        for(AmpReportColumn arc:this.columns)
-            if (arc.getColumn().isMtefColumn())
-                return true;
-        return false;
     }
     
     public AmpMeasures[] getOrderedMeasures() {

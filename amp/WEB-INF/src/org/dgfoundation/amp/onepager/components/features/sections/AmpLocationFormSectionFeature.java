@@ -183,8 +183,9 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
             AmpCategoryValueLocations defaultCountry = null;
             defaultCountry = DynLocationManagerUtil.getDefaultCountry();
 
-            if (target!=null){ //we're in an ajax context, and not in init
+            if (target != null) { //we're in an ajax context, and not in init
                 locationsTable.locationSelected(defaultCountry, am, disablePercentagesForInternational,true);
+                locationsTable.reloadValidationFields(target);
                 target.add(locationsTable);
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
             }

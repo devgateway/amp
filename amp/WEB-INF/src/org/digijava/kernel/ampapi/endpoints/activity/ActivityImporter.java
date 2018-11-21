@@ -620,7 +620,7 @@ public class ActivityImporter extends ObjectImporter {
     }
     
     private void initStructure(AmpActivityVersion activity, AmpStructure structure) {
-        structure.setActivities(new HashSet<>(Arrays.asList(activity)));
+        structure.setActivity(activity);
         if (structure.getCoordinates() != null) {
             structure.getCoordinates().forEach(coord -> initStructureCoordinate(structure, coord));
         }

@@ -2,13 +2,13 @@ package org.digijava.kernel.ampapi.endpoints.dto;
 
 import java.util.List;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
 /**
  * 
  * @author jdeanquin elfleco
  *
  */
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SimpleJsonBean {
     Object id;
     String code;

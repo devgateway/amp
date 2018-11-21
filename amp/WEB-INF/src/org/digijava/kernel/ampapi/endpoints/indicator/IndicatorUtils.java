@@ -1,9 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,17 +7,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONSerializer;
+import javax.ws.rs.core.Response;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
+import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevel;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
+import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
@@ -33,12 +29,10 @@ import org.digijava.module.aim.dbentity.AmpIndicatorWorkspace;
 import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
@@ -122,47 +116,40 @@ public class IndicatorUtils {
     }
 
 
-    public static JsonBean buildSerializedIndicatorLayerJson(AmpIndicatorLayer indicator, JsonBean indicatorJson) {
+    public static Indicator buildSerializedIndicatorLayerJson(AmpIndicatorLayer indicator,
+            SaveIndicatorRequest indicatorJson) {
 
-        indicatorJson.set(IndicatorEPConstants.ID, (long) System.identityHashCode(indicator));
-        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
-        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getValue());
-        indicatorJson.set(IndicatorEPConstants.ADMIN_LEVEL, IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex());
-        indicatorJson.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
+        indicatorJson.setId((long) System.identityHashCode(indicator));
+        indicatorJson.setAdmLevelId(indicator.getAdmLevel().getId());
+        indicatorJson.setAdmLevelName(indicator.getAdmLevel().getValue());
+        String admLevelLabel = IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex();
+        indicatorJson.setAdminLevel(AdmLevel.fromString(admLevelLabel));
+        indicatorJson.setCreatedOn(indicator.getCreatedOn());
 
         if (indicator.getColorRamp() != null) {
-            int i=0;
-            Collection<JsonBean> colorRampList = new ArrayList<JsonBean>();
-            for (AmpIndicatorColor indicatorColor: indicator.getColorRamp()){
-                JsonBean colorRamp = new JsonBean();
-                colorRamp.set("color",indicatorColor.getColor());
-                colorRamp.set("order",indicatorColor.getPayload());
-                colorRampList.add(colorRamp);
-            }
-            indicatorJson.set(IndicatorEPConstants.COLOR_RAMP, colorRampList);
+            indicatorJson.setColorRamp(new ArrayList<>(indicator.getColorRamp()));
         }
 
         if (indicator.getIndicatorValues() != null) {
-            Collection<JsonBean> indicatorValues = new ArrayList<JsonBean>();
+            List<IndicatorValue> indicatorValues = new ArrayList<>();
             for (AmpLocationIndicatorValue indicatorValue: indicator.getIndicatorValues()){
                 indicatorValues.add(getLocationIndicatorValueBean(indicatorValue));
             }
-            indicatorJson.set(IndicatorEPConstants.VALUES, indicatorValues);
+            indicatorJson.setValues(indicatorValues);
         }
 
-        indicatorJson.set(IndicatorEPConstants.NUMBER_OF_IMPORTED_RECORDS, (indicator.getIndicatorValues()!=null ? indicator.getIndicatorValues().size() : 0));
+        indicatorJson.setNumberOfImportedRecords(
+                indicator.getIndicatorValues() != null ? indicator.getIndicatorValues().size() : 0);
 
         return indicatorJson;
     }
 
-    public static JsonBean getLocationIndicatorValueBean(AmpLocationIndicatorValue indicatorValue) {
-        JsonBean indicatorValueJson = new JsonBean();
-        indicatorValueJson.set(IndicatorEPConstants.VALUE, indicatorValue.getValue());
-        indicatorValueJson.set(IndicatorEPConstants.GEO_CODE_ID, indicatorValue.getLocation().getGeoCode());
-        indicatorValueJson.set(IndicatorEPConstants.NAME, indicatorValue.getLocation().getName());
-        indicatorValueJson.set(IndicatorEPConstants.ID, indicatorValue.getLocation().getId());
-
-        return indicatorValueJson;
+    private static IndicatorValue getLocationIndicatorValueBean(AmpLocationIndicatorValue indicatorValue) {
+        return new IndicatorValue(
+                indicatorValue.getLocation().getId(),
+                new BigDecimal(indicatorValue.getValue()),
+                indicatorValue.getLocation().getGeoCode(),
+                indicatorValue.getLocation().getName());
     }
 
     public static boolean isAdmin() {
@@ -243,7 +230,7 @@ public class IndicatorUtils {
     
     /**
      * Get unique Population Layer designated for the given implementation location
-     * @param implLoc the implementation location (Region, etc)
+     * @param implementationLocation the implementation location (Region, etc)
      * @return the population layer or null if no unique layer found
      */
     public static AmpIndicatorLayer getPopulationLayer(AmpCategoryValue implementationLocation) {
@@ -270,16 +257,18 @@ public class IndicatorUtils {
      * @param isGapAnalysis
      * @return
      */
-    public static JsonBean getIndicatorsAndLocationValues(Long indicatorId, JsonBean input, boolean isGapAnalysis) {
+    public static Indicator getIndicatorsAndLocationValues(Long indicatorId, PerformanceFilterParameters input,
+            boolean isGapAnalysis) {
         AmpIndicatorLayer indicator = (AmpIndicatorLayer) DbUtil.getObjectOrNull(AmpIndicatorLayer.class, indicatorId);
         if (indicator == null) {
-            return ApiError.toError(IndicatorErrors.INVALID_ID.withDetails(String.valueOf(indicatorId)));
+            JsonBean error = ApiError.toError(IndicatorErrors.INVALID_ID.withDetails(String.valueOf(indicatorId)));
+            throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, error);
         }
         return getIndicatorsAndLocationValues(indicator, input, isGapAnalysis);
     }
     
-    public static JsonBean getIndicatorsAndLocationValues(AmpIndicatorLayer indicator, JsonBean input, 
-            boolean isGapAnalysis) {
+    public static Indicator getIndicatorsAndLocationValues(AmpIndicatorLayer indicator,
+            PerformanceFilterParameters input, boolean isGapAnalysis) {
      
         GapAnalysis gapAnalysis = isGapAnalysis ? new GapAnalysis(indicator, input) : null;
         boolean doingGapAnalysis = gapAnalysis != null && gapAnalysis.isReadyForGapAnalysis();
@@ -295,36 +284,37 @@ public class IndicatorUtils {
         }
         
         // build general indicator info
-        JsonBean response = new JsonBean();
-        response.set(EPConstants.NAME, indicator.getName());
-        // TODO: unify Indicator Layers and GIS API, use FIELD_NUMBER_OF_CLASSES
-        response.set("classes", indicator.getNumberOfClasses());
-        response.set(IndicatorEPConstants.ID, indicator.getId());
-        response.set(IndicatorEPConstants.UNIT, unit);
-        response.set(IndicatorEPConstants.DESCRIPTION, indicator.getDescription());
-        response.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
-        response.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
-        response.set(IndicatorEPConstants.DO_GAP_ANALYSIS, doingGapAnalysis);
-        response.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
-        response.set(IndicatorEPConstants.FIELD_ZERO_CATEGORY_ENABLED, indicator.getZeroCategoryEnabled());
-        
+        Indicator response = new Indicator();
+        response.setName(TranslationUtil.getTranslatableFieldValue(
+                IndicatorEPConstants.NAME, indicator.getName(), indicator.getId()));
+        response.setNumberOfClasses(indicator.getNumberOfClasses());
+        response.setId(indicator.getId());
+        response.setUnit(TranslationUtil.getTranslatableFieldValue(
+                IndicatorEPConstants.UNIT, unit, indicator.getId()));
+        response.setDescription(TranslationUtil.getTranslatableFieldValue(
+                IndicatorEPConstants.DESCRIPTION, indicator.getDescription(), indicator.getId()));
+        response.setAdmLevelId(indicator.getAdmLevel().getId());
+        response.setAdmLevelName(indicator.getAdmLevel().getLabel());
+        response.setGapAnalysis(doingGapAnalysis);
+        response.setIndicatorTypeId(indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
+        response.setZeroCategoryEnabled(indicator.getZeroCategoryEnabled());
+
         // build locations values
-        List<JsonBean> values = new ArrayList<>();
+        List<IndicatorValue> values = new ArrayList<>();
         for (AmpLocationIndicatorValue locIndValue : indicator.getIndicatorValues()) {
-            JsonBean object = new JsonBean();
             String geoCode = locIndValue.getLocation().getGeoCode();
             BigDecimal value = BigDecimal.valueOf(locIndValue.getValue());
             if (doingGapAnalysis) {
                 value = gapAnalysis.getGapAnalysisAmount(value, geoCode);
             }
-            object.set(IndicatorEPConstants.ID, locIndValue.getLocation().getId());
-            object.set(IndicatorEPConstants.VALUE, value);
-            object.set(IndicatorEPConstants.GEO_CODE_ID, geoCode);
-            object.set(IndicatorEPConstants.NAME, locIndValue.getLocation().getName());
-            
-            values.add(object);
+
+            values.add(new IndicatorValue(
+                    locIndValue.getLocation().getId(),
+                    value,
+                    geoCode,
+                    locIndValue.getLocation().getName()));
         }
-        response.set(IndicatorEPConstants.VALUES, values);
+        response.setValues(values);
         return response;
     }
     

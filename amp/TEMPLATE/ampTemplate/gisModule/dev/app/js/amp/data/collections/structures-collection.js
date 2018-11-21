@@ -197,10 +197,10 @@ module.exports = Backbone.Collection
             //or planned project with no funding) there needs to be a 'none' option for project sites
             //in the GIS legends
             if (activity.get('matchesFilters')[filterVertical] !== undefined) {
-              return self.appData.translator.translateSync ('amp.gis:legend-none', 'None');
+              return this.app.translator.translateSync ('amp.gis:legend-none', 'None');
             } else {
               console.warn('Activity is missing desired vertical');
-              return self.appData.translator.translateSync ('amp.gis:legend-na', 'n/a');
+              return this.app.translator.translateSync ('amp.gis:legend-na', 'n/a');
             }
           }
         })

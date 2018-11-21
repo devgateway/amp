@@ -2,9 +2,9 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-15138</jira>
+	<jira>AMP-28492</jira>
 	<keyword>Views</keyword>
-	<author>Dolghier Constantin</author>
+	<author>Viorel Chihai</author>
 	<description>recreate view, this will always be the last version of the view</description>
 	<trigger type="all">
 		<condition type="custom">
@@ -18,13 +18,12 @@
 	</trigger> 
 	<apply>
 		<script>
-			<lang delimiter=";" type="postgres">
-			    CREATE OR REPLACE VIEW v_structures AS 
-					SELECT DISTINCT a.amp_activity_id, s.title, s.amp_structure_id
+			<lang delimiter=";" type="postgres"><![CDATA[
+				CREATE OR REPLACE VIEW v_project_management AS
+					SELECT a.amp_activity_id, btrim(e.body) AS ebody, e.language AS locale
 						FROM amp_activity_version a
-					JOIN amp_structure s ON s.amp_activity_id = a.amp_activity_id;
-        	</lang>
+							JOIN dg_editor e ON a.project_management = e.editor_key AND btrim(e.body) != '';
+			]]></lang>
 		</script>
 	</apply>
 </tns:patch>
-				

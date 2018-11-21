@@ -1280,10 +1280,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
     private static void saveStructures(AmpActivityVersion a, Session session) throws Exception {
         if (a.getAmpActivityId() != null) {
             for (AmpStructure structure : a.getStructures()) {
-                if (structure.getActivities() == null) {
-                    structure.setActivities(new HashSet<AmpActivityVersion>());
-                    structure.getActivities().add(a);
-                }
+                structure.setActivity(a);
                 session.saveOrUpdate(structure);
             }
         }

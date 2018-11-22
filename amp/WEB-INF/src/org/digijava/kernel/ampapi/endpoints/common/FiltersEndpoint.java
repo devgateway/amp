@@ -235,8 +235,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Path("/proposedStartDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_START_DATE, columns = ColumnConstants.PROPOSED_START_DATE,
-            id = FiltersConstants.PROPOSED_START_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.PROPOSED_START_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getProposedStartDate(){
         return new JsonBean();
     }
@@ -245,8 +244,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Path("/actualStartDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_START_DATE, columns = ColumnConstants.ACTUAL_START_DATE,
-            id = FiltersConstants.ACTUAL_START_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.ACTUAL_START_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getActualStartDate(){
         return new JsonBean();
     }
@@ -255,8 +253,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Path("/proposedCompletionDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_COMPLETION_DATE, columns = ColumnConstants.PROPOSED_COMPLETION_DATE,
-            id = FiltersConstants.PROPOSED_COMPLETION_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.PROPOSED_COMPLETION_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getProposedCompletionDate(){
         return new JsonBean();
     }
@@ -265,8 +262,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Path("/actualCompletionDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_COMPLETION_DATE, columns = ColumnConstants.ACTUAL_COMPLETION_DATE,
-            id = FiltersConstants.ACTUAL_COMPLETION_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.ACTUAL_COMPLETION_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getActualCompletionDate(){
         return new JsonBean();
     }
@@ -275,8 +271,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Path("/finalDateContracting/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING,
-            id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, tab = EPConstants.TAB_OTHER)
     public JsonBean getDateForContracting() {
         return new JsonBean();
     }
@@ -285,8 +280,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Path("/issueDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.ISSUE_DATE, columns = ColumnConstants.ISSUE_DATE,
-            id = FiltersConstants.ISSUE_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.ISSUE_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getIssueDate() {
         return new JsonBean();
     }
@@ -295,8 +289,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Path("/proposedApprovalDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_APPROVAL_DATE, columns = ColumnConstants.PROPOSED_APPROVAL_DATE,
-            id = FiltersConstants.PROPOSED_APPROVAL_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.PROPOSED_APPROVAL_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getProposedApprovalDate() {
         return new JsonBean();
     }   
@@ -305,8 +298,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Path("/actualApprovalDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_APPROVAL_DATE, columns = ColumnConstants.ACTUAL_APPROVAL_DATE,
-            id = FiltersConstants.ACTUAL_APPROVAL_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB, FilterType.GPI_REPORTS }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.ACTUAL_APPROVAL_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getActualApprovalDate() {
         return new JsonBean();
     }   
@@ -847,7 +839,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Path("/computed-year")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.COMPUTED_YEAR, name = "Computed Year",
-        columns = ColumnConstants.COMPUTED_YEAR, filterType = {FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+        columns = ColumnConstants.COMPUTED_YEAR, tab = EPConstants.TAB_OTHER)
     public SettingField getComputedYear() {
         return FiltersBuilder.buildComputedYears();
     }

@@ -118,7 +118,7 @@ var Workspace = Backbone.View
 						.template(template)
 						(
 								{
-									cube_navigation : Saiku.session.sessionworkspace.cube_navigation
+                                    cube_navigation: {} //Saiku.session.sessionworkspace.cube_navigation
 								});
 			},
 

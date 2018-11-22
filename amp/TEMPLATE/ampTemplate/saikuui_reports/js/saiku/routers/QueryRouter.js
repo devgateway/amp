@@ -34,8 +34,12 @@ var QueryRouter = Backbone.Router.extend({
     	$.getJSON(Settings.AMP_PATH + "/run/" + report_token, process_spec);	
     },    
     open_report: function(report_id) {
-    	Saiku.logger.log("QueryRouter.open_report");
-        $.getJSON(Settings.AMP_PATH + "/" + report_id, process_spec);
+        Saiku.logger.log("QueryRouter.open_report");
+        if (Saiku.originalReportMetadata) {
+            process_spec(Saiku.originalReportMetadata);
+        } else {
+            $.getJSON(Settings.AMP_PATH + "/" + report_id, process_spec);
+        }
     },
     open_query: function(query_name) {
     	Saiku.logger.log("QueryRouter.open_query");        

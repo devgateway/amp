@@ -20,7 +20,9 @@ public class UpdateEventBehavior<T> extends Behavior {
     public void onEvent(Component component, IEvent<?> event) {
         if (event.getPayload().getClass().isAssignableFrom(triggerEvent)){
             AbstractAjaxUpdateEvent ajaxUpdateEvent = (AbstractAjaxUpdateEvent) event.getPayload();
-            ajaxUpdateEvent.getTarget().add(parent);
+            if (parent.isVisibleInHierarchy()) {
+                ajaxUpdateEvent.getTarget().add(parent);
+            }
         }
     }
 

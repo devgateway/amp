@@ -14,6 +14,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.dgfoundation.amp.menu.dynamic.DynamicMenu;
 import org.dgfoundation.amp.menu.dynamic.EmailMenu;
 import org.dgfoundation.amp.menu.dynamic.LanguageMenu;
+import org.dgfoundation.amp.menu.dynamic.PublicSiteMenu;
 import org.dgfoundation.amp.menu.dynamic.WorkspaceMenu;
 import org.dgfoundation.amp.visibility.data.FMSettingsMediator;
 import org.digijava.kernel.request.TLSUtils;
@@ -156,6 +157,7 @@ public class MenuItemsProcessor {
         put(MenuConstants.LANGUAGE, new LanguageMenu());
         put(MenuConstants.PUBLIC_LANGUAGE, new LanguageMenu());
         put(MenuConstants.EMAIL, new EmailMenu());
+        put(MenuConstants.PUBLIC_SITE, new PublicSiteMenu());
     }};
     
     private static final Map<String, DynamicMenu> dynamicPerRequest = new HashMap<String, DynamicMenu>() {{

@@ -65,6 +65,9 @@ import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpRegionalObservation;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
@@ -221,6 +224,8 @@ public class ExportActivityToWordBuilder {
             getComponentTables();
 
             getIssuesTables();
+    
+            getRegionObservationsTables();
     
             getLineMinistryObservationsTables();
 
@@ -1872,6 +1877,53 @@ public class ExportActivityToWordBuilder {
             }
         }
 
+    }
+    
+    /*
+     * Regional Observations
+     */
+    private void getRegionObservationsTables() throws WorkerException {
+        String regObsModulePath = "/Activity Form/Regional Observations/Observation";
+        String regObsDatePath = regObsModulePath + "/Date";
+        String regObsMeasurePath = regObsModulePath + "/Measure";
+        String regObsActorPath = regObsMeasurePath + "/Actor";
+        
+        if (FeaturesUtil.isVisibleModule(regObsModulePath)) {
+            ExportSectionHelper eshTitle = new ExportSectionHelper("Regional Observations", true)
+                    .setWidth(WIDTH).setAlign(STJc.LEFT);
+            createSectionTable(eshTitle);
+            
+            if (activity.getRegionalObservations() != null && !activity.getRegionalObservations().isEmpty()) {
+                Set<AmpRegionalObservation> regObsValues = activity.getRegionalObservations();
+                
+                ExportSectionHelper eshRegObsSection = new ExportSectionHelper(null, false)
+                        .setWidth(WIDTH).setAlign(STJc.LEFT);
+                for (AmpRegionalObservation regObs : regObsValues) {
+                    String issueName = regObs.getName();
+                    if (FeaturesUtil.isVisibleModule(regObsDatePath)) {
+                        issueName += "  " + DateConversion.convertDateToLocalizedString(regObs.getObservationDate());
+                    }
+                    eshRegObsSection.addRowData(new ExportSectionHelperRowData(issueName, null, null, false));
+                    if (FeaturesUtil.isVisibleModule(regObsMeasurePath)
+                            && regObs.getRegionalObservationMeasures() != null
+                            && !regObs.getRegionalObservationMeasures().isEmpty()) {
+                        for (AmpRegionalObservationMeasure measure : regObs.getRegionalObservationMeasures()) {
+                            String measureName = measure.getName();
+                            eshRegObsSection.addRowData((new ExportSectionHelperRowData(" \u2022" + measureName, null,
+                                    null, false)));
+                            if (measure.getActors() != null && !measure.getActors().isEmpty()
+                                    && FeaturesUtil.isVisibleModule(regObsActorPath)) {
+                                for (AmpRegionalObservationActor actor : measure.getActors()) {
+                                    eshRegObsSection.addRowData((new ExportSectionHelperRowData(" \t \u2022" + actor
+                                            .getName(), null, null, false)));
+                                }
+                            }
+                        }
+                    }
+                }
+                createSectionTable(eshRegObsSection);
+            }
+        }
     }
     
     /*

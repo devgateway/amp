@@ -17,6 +17,8 @@ public final class ReportEnvBuilder {
 
     private static final ConcurrentMap<TeamMember, IdsGeneratorSource> TEAM_MEMBER_CACHE = new ConcurrentHashMap<>();
 
+    private static IdsGeneratorSource publicFilter;
+
     private ReportEnvBuilder() {
     }
 
@@ -45,7 +47,10 @@ public final class ReportEnvBuilder {
      */
     public static IReportEnvironment forTeamMember(TeamMember tm) {
         if (tm == null) {
-            return from(new CompleteWorkspaceFilter(null));
+            if (publicFilter == null) {
+                publicFilter = new CompleteWorkspaceFilter(null);
+            }
+            return from(publicFilter);
         } else {
             return from(TEAM_MEMBER_CACHE.computeIfAbsent(tm, z -> new CompleteWorkspaceFilter(tm)));
         }

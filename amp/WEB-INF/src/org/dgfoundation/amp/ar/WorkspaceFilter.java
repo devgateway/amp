@@ -46,7 +46,7 @@ public class WorkspaceFilter
     }
     
     private void prepareTeams() {
-        if (teamMemberId.equals(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES)) {
+        if (inPublicView()) {
             // special case: simulate like "all management workspaces" has been selected
             setAmpTeams(TeamUtil.getRelatedTeamsForTeams(TeamUtil.getAllManagementWorkspaces()));
         } else {
@@ -56,6 +56,10 @@ public class WorkspaceFilter
             }
             setAmpTeams(TeamUtil.getRelatedTeamsForMember(teamMember));
         }
+    }
+
+    private boolean inPublicView() {
+        return teamMemberId.equals(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES);
     }
 
     /**
@@ -79,11 +83,16 @@ public class WorkspaceFilter
      */
     private String getManagementWorkspaceQuery() {
         String approvalStatus = Util.toCSString(AmpARFilter.validatedActivityStatus);
-        return "SELECT amp_activity_id "
-                + "FROM amp_activity "
-                + "WHERE approval_status IN (" + approvalStatus + ") "
+        String activityTable = inPublicView() ? "cached_amp_activity" : "amp_activity";
+        String teamIds = Util.toCSStringForIN(ampTeams);
+        return String.format("SELECT amp_activity_id "
+                + "FROM %s "
+                + "WHERE approval_status IN (%s) "
                 + "AND draft<>true "
-                + "AND amp_team_id IN (" + Util.toCSStringForIN(ampTeams) + ")";
+                + "AND amp_team_id IN (%s)",
+                activityTable,
+                approvalStatus,
+                teamIds);
     }
 
     /**

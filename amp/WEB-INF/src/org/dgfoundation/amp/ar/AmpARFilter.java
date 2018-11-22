@@ -2782,15 +2782,6 @@ public class AmpARFilter extends PropertyListable {
         this.showArchived = showArchived;
     }
 
-    @PropertyListableIgnore
-    public static String getOffLineQuery(String query) {
-        String result = query;
-        Pattern p = Pattern.compile(ArConstants.AMP_ACTIVITY_TABLE);
-        Matcher m = p.matcher(result);
-        result = m.replaceAll(ArConstants.CACHED_ACTIVITY_TABLE);
-        return result;
-    }
-
     /**
      * modified copy-paste from (now-deleted) CategAmountColWorker::isRenderizable()
      * @param year

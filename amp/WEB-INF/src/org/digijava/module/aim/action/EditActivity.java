@@ -167,7 +167,7 @@ public class EditActivity extends Action {
     AmpTeam currentTeam = null;
     if(tm != null)
         currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
-    boolean isPreview = mapping.getPath().trim().endsWith("editingUserId");
+    boolean isPreview = mapping.getPath().trim().endsWith("viewActivityPreview");
 
     String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 
@@ -1178,12 +1178,9 @@ public class EditActivity extends Action {
           eaForm.getDocuments().setReferenceDocs(null);
 
           eaForm=setSectorsToForm(eaForm, activity);
-            if (isPreview) {
-                //we load classificationConfigs for been displayed in preview and printer friendly for issue AMP-16421
-                List<AmpClassificationConfiguration> classificationConfigs = SectorUtil
-                        .getAllClassificationConfigsOrdered();
-                eaForm.getSectors().setClassificationConfigs(classificationConfigs);
-            }    
+          
+          List<AmpClassificationConfiguration> classificationConfigs = SectorUtil.getAllClassificationConfigsOrdered();
+          eaForm.getSectors().setClassificationConfigs(classificationConfigs);
           
           if (activity.getProgramDescription() != null)
               eaForm.getPrograms().setProgramDescription(activity

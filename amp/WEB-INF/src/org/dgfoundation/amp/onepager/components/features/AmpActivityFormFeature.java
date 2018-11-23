@@ -13,8 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -100,7 +98,6 @@ import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 import org.dgfoundation.amp.onepager.validators.StringRequiredValidator;
 import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -116,7 +113,6 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -323,17 +319,18 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             AmpRequiredComponentContainer ifs, IVisit<Void> visit, boolean stopVisit) {
         List <FormComponent<?>> requiredComponents = ifs.getRequiredFormComponents();
         for (FormComponent<?> component : requiredComponents) {
-        String js = String.format("$('#%s').blur();",
-                component.getMarkupId());
-        component.setRequired(enabled);
-        target.appendJavaScript(js);
-        target.add(component);
+            if (component.isVisibleInHierarchy()) {
+                String js = String.format("$('#%s').blur();", component.getMarkupId());
+                component.setRequired(enabled);
+                target.appendJavaScript(js);
+                target.add(component);
+            }
         }
         // some components like AmpProjectCost do not need to stop and process all elements
         if (stopVisit)
             visit.stop();
     }
-    
+
     private ListView<AmpComponentPanel> featureList;
 
     /**

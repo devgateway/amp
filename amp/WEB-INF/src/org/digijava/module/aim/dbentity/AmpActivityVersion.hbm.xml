@@ -195,11 +195,10 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponent" />
 		</set>
 		
-		<set name="structures" table="AMP_ACTIVITY_STRUCTURES" lazy="true" inverse="true" cascade="all-delete-orphan">
+		<set name="structures" cascade="all-delete-orphan" inverse="true" lazy="false">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpStructure"
-				column="amp_structure_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpStructure" />
 		</set>
 				
 		<set name="member" table="AMP_MEMBER_ACTIVITIES" lazy="true">

@@ -7,10 +7,8 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorTypeDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
-import org.digijava.module.aim.helper.donorReport.OrganizationReportColumn;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
@@ -18,13 +16,10 @@ import org.digijava.module.aim.util.NameableOrIdentifiable;
 @TranslatableClass (displayName = "Organisation Type")
 public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimensionable, HierarchyListable, NameableOrIdentifiable {
     //IATI-check: to not be ignored
-    @Interchangeable(fieldTitle="Organization Type ID", id = true)
     private Long ampOrgTypeId;
-    @Interchangeable(fieldTitle="Organization Type", value = true)
     @TranslatableField
     private String orgType;
     
-    @Interchangeable(fieldTitle="Organization Type Code")
     @TranslatableField
     private String orgTypeCode;
     @Deprecated
@@ -32,12 +27,10 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
     //private Set organizations;
     
     // NGO, Governmental etc.
-    @Interchangeable(fieldTitle="Classification")
     private String classification;
     
     private boolean translateable   = true;
     
-    @Interchangeable(fieldTitle="Organization Groups", pickIdOnly=true)
     private Set<AmpOrgGroup> orgGroups;
     
     public String getClassification() {

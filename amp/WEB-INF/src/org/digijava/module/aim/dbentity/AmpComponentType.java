@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
@@ -14,7 +13,6 @@ public class AmpComponentType implements ARDimensionable, Serializable, Identifi
 
     private static final long serialVersionUID = 1L;
 
-    @Interchangeable(fieldTitle="Id", id = true)
     private Long type_id;
 
     @TranslatableField

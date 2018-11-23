@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -26,9 +25,10 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.AmpGeneralSettings;
+import org.digijava.kernel.ampapi.endpoints.common.CurrencySettings;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -56,7 +56,7 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
  * @author Nadejda Mandrescu
  */
 public class SettingsUtils {
-
+    
     protected static final Logger logger = Logger.getLogger(SettingsUtils.class);
 
     /**
@@ -375,57 +375,56 @@ public class SettingsUtils {
     /**
      * Returns general settings.
      *
-     * @return general settings in <i>property: value</i> format
+     * @return general settings object
      */
-    public static JsonBean getGeneralSettings() {
-        JsonBean settings = new JsonBean();
-
-        settings.set("use-icons-for-sectors-in-project-list",
+    public static AmpGeneralSettings getGeneralSettings() {
+        AmpGeneralSettings settings = new AmpGeneralSettings();
+        
+        settings.setUseIconsForSectorsInProjectList(
                 FeaturesUtil.isVisibleFeature(GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST));
-
-        settings.set("project-sites", FeaturesUtil.isVisibleFeature(GisConstants.PROJECT_SITES));
-
-        settings.set("max-locations-icons",
+        
+        settings.setProjectSites(FeaturesUtil.isVisibleFeature(GisConstants.PROJECT_SITES));
+        
+        settings.setMaxLocationsIcons(
                 FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.MAX_LOCATIONS_ICONS));
 
-        settings.set("number-format",
-                MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat().toPattern());
+        settings.setNumberFormat(MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat().toPattern());
 
-        settings.set("number-group-separator",
+        settings.setNumberGroupSeparator(
                 FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR));
 
-        settings.set("number-decimal-separator",
+        settings.setNumberDecimalSeparator(
                 FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR));
 
-        settings.set("number-divider", AmountsUnits.getDefaultValue().divider);
+        settings.setNumberDivider(AmountsUnits.getDefaultValue().divider);
 
-        settings.set("language", TLSUtils.getEffectiveLangCode());
+        settings.setLanguage(TLSUtils.getEffectiveLangCode());
+    
+        settings.setDefaultLanguage(TLSUtils.getSite().getDefaultLanguage().getCode());
+    
+        settings.setMultilingual(ContentTranslationUtil.multilingualIsEnabled());
+        
+        settings.setRtlDirection(SiteUtils.isEffectiveLangRTL());
 
-        settings.set("rtl-direction", SiteUtils.isEffectiveLangRTL());
+        settings.setDefaultDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
 
-        settings.set("default-language", TLSUtils.getSite().getDefaultLanguage().getCode());
+        settings.setHideEditableExportFormatsPublicView(!FeaturesUtil.showEditableExportFormats());
 
-        settings.set("multilingual", ContentTranslationUtil.multilingualIsEnabled());
+        settings.setDownloadMapSelector(FeaturesUtil.isVisibleFeature(GisConstants.DOWNLOAD_MAP_SELECTOR));
 
-        settings.set("default-date-format",
-                FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
+        settings.setGapAnalysisMap(FeaturesUtil.isVisibleFeature("Gap Analysis Map"));
 
-        settings.set("hide-editable-export-formats-public-view", !FeaturesUtil.showEditableExportFormats());
-
-        settings.set("download-map-selector", FeaturesUtil.isVisibleFeature(GisConstants.DOWNLOAD_MAP_SELECTOR));
-
-        settings.set("gap-analysis-map", FeaturesUtil.isVisibleFeature("Gap Analysis Map"));
-
-        settings.set("has-ssc-workspaces", !TeamUtil.getAllSSCWorkspaces().isEmpty());
-
-        DecimalFormatSymbols formatSymbols = FormatHelper.getDefaultFormat().getDecimalFormatSymbols();
-        settings.set("number-group-separator", formatSymbols.getGroupingSeparator());
-        settings.set("number-decimal-separator", formatSymbols.getDecimalSeparator());
-
-        adddEffectiveCurrency(settings);
-
-        settings.set(SettingsConstants.REORDER_FUNDING_ITEM_ID,
+        settings.setHasSscWorkspaces(!TeamUtil.getAllSSCWorkspaces().isEmpty());
+    
+        settings.setReorderFundingItemId(
                 FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.REORDER_FUNDING_ITEMS));
+    
+        settings.setPublicVersionHistory(FeaturesUtil.isVisibleFeature("Version History"));
+    
+        settings.setPublicChangeSummary(FeaturesUtil.isVisibleField("Show Change Summary"));
+    
+        AmpCurrency effCurrency = CurrencyUtil.getEffectiveCurrency();
+        settings.setEffectiveCurrency(new CurrencySettings(effCurrency.getId(), effCurrency.getCurrencyCode()));
 
         if (MenuUtils.getCurrentView() == AmpView.TEAM) {
             addWorkspaceSettings(settings);
@@ -433,59 +432,57 @@ public class SettingsUtils {
 
         addDateRangeSettingsForDashboardsAndGis(settings);
 
-        settings.set("public-version-history", FeaturesUtil.isVisibleFeature("Version History"));
-        settings.set("public-change-summary", FeaturesUtil.isVisibleField("Show Change Summary"));
-
         return settings;
     }
 
-    private static void adddEffectiveCurrency(JsonBean settings) {
-        JsonBean currency = new JsonBean();
-        AmpCurrency effectiveCurrency = CurrencyUtil.getEffectiveCurrency();
-        currency.set(SettingsConstants.ID, effectiveCurrency.getAmpCurrencyId());
-        currency.set(SettingsConstants.CODE, effectiveCurrency.getCurrencyCode());
-        settings.set(SettingsConstants.EFFECTIVE_CURRENCY, currency);
-    }
-
-    private static void addWorkspaceSettings(JsonBean settings) {
+    private static void addWorkspaceSettings(AmpGeneralSettings settings) {
         TeamMember teamMember = TeamUtil.getCurrentMember();
         AmpTeam ampTeam = EndpointUtils.getAppSettings().getTeam();
 
-        settings.set("team-id", ampTeam.getAmpTeamId().toString());
-
-        settings.set("team-lead", teamMember.getTeamHead());
-
-        settings.set("team-validator", teamMember.isApprover());
-
-        settings.set("cross_team_validation", ampTeam.getCrossteamvalidation());
-
-        settings.set("workspace_type", ampTeam.getAccessType());
+        settings.setTeamId(ampTeam.getAmpTeamId().toString());
+        settings.setTeamLead(teamMember.getTeamHead());
+        settings.setTeamValidator(teamMember.isApprover());
+        settings.setCrossTeamValidation(ampTeam.getCrossteamvalidation());
+        settings.setWorkspaceType(ampTeam.getAccessType());
 
         if (ampTeam.getWorkspacePrefix() != null) {
-            settings.set("workspace-prefix", ampTeam.getWorkspacePrefix().getValue());
+            settings.setWorkspacePrefix(ampTeam.getWorkspacePrefix().getValue());
         }
     }
 
-    private static void addDateRangeSettingsForDashboardsAndGis(JsonBean settings) {
+    private static void addDateRangeSettingsForDashboardsAndGis(AmpGeneralSettings settings) {
         long defaultCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
         AmpFiscalCalendar gsFiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
         AmpFiscalCalendar currentCalendar = AmpARFilter.getDefaultCalendar();
 
-        addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE, "dashboard-default-max-date",
-                "dashboard-default-max-year-range", gsFiscalCalendar, currentCalendar, true);
-        addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE, "dashboard-default-min-date",
-                "dashboard-default-min-year-range", gsFiscalCalendar, currentCalendar, false);
-        addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MAX_YEAR_RANGE, "gis-default-max-date",
-                "gis-default-max-year-range", gsFiscalCalendar, currentCalendar, true);
-        addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE, "gis-default-min-date",
-                "gis-default-min-year-range", gsFiscalCalendar, currentCalendar, false);
+        addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE,
+                SettingsConstants.DASHBOARD_DEFAULT_MAX_DATE, SettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE,
+                gsFiscalCalendar, currentCalendar, true);
+        addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE,
+                SettingsConstants.DASHBOARD_DEFAULT_MIN_DATE, SettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE,
+                gsFiscalCalendar, currentCalendar, false);
+        addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MAX_YEAR_RANGE,
+                SettingsConstants.GIS_DEFAULT_MAX_DATE, SettingsConstants.GIS_DEFAULT_MAX_YEAR_RANGE,
+                gsFiscalCalendar, currentCalendar, true);
+        addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE,
+                SettingsConstants.GIS_DEFAULT_MIN_DATE, SettingsConstants.GIS_DEFAULT_MIN_YEAR_RANGE,
+                gsFiscalCalendar, currentCalendar, false);
     }
 
-    private static void addDateSetting(JsonBean settings, String globalSettingsName, String dateSettingsName,
+    private static void addDateSetting(AmpGeneralSettings settings, String globalSettingsName, String dateSettingsName,
             String yearSettingsName, AmpFiscalCalendar gsCalendar, AmpFiscalCalendar currentCalendar, boolean yearEnd) {
 
         String yearNumber = FeaturesUtil.getGlobalSettingValue(globalSettingsName);
-        settings.set(yearSettingsName, yearNumber);
+        
+        if (yearSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE)) {
+            settings.setDashboardDefaultMaxYearRange(yearNumber);
+        } else if (yearSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE)) {
+            settings.setDashboardDefaultMinYearRange(yearNumber);
+        } else if (yearSettingsName.equals(SettingsConstants.GIS_DEFAULT_MAX_YEAR_RANGE)) {
+            settings.setGisDefaultMaxYearRange(yearNumber);
+        } else if (yearSettingsName.equals(SettingsConstants.GIS_DEFAULT_MIN_YEAR_RANGE)) {
+            settings.setGisDefaultMinYearRange(yearNumber);
+        }
 
         if (!StringUtils.equals(yearNumber, "-1")) {
             int yearDelta = yearEnd ? 1 : 0;
@@ -498,8 +495,17 @@ public class SettingsUtils {
              * available Date date = FiscalCalendarUtil.convertDate(gsCalendar,
              * gsDate, currentCalendar);
              */
-            Date date = gsDate;
-            settings.set(dateSettingsName, DateTimeUtil.formatDateForPicker2(date, Constants.CALENDAR_DATE_PICKER));
+            String formattedDate = DateTimeUtil.formatDateForPicker2(gsDate, Constants.CALENDAR_DATE_PICKER);
+            
+            if (dateSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MAX_DATE)) {
+                settings.setDashboardDefaultMaxDate(formattedDate);
+            } else if (dateSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MIN_DATE)) {
+                settings.setDashboardDefaultMinDate(formattedDate);
+            } else if (dateSettingsName.equals(SettingsConstants.GIS_DEFAULT_MAX_DATE)) {
+                settings.setGisDefaultMaxDate(formattedDate);
+            } else if (dateSettingsName.equals(SettingsConstants.GIS_DEFAULT_MIN_DATE)) {
+                settings.setGisDefaultMinDate(formattedDate);
+            }
         }
     }
 

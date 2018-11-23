@@ -20,7 +20,6 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.common.MapIdWrapper;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
@@ -404,7 +403,7 @@ public class EndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "SaveChart")
     @ApiOperation("Save the state of a chart")
-    public MapIdWrapper savedMaps(@JsonView(AmpApiState.DetailView.class) AmpApiState pChart) {
+    public AmpApiState savedMaps(@JsonView(AmpApiState.DetailView.class) AmpApiState pChart) {
         return EndpointUtils.saveApiState(pChart,"C");
     }
 

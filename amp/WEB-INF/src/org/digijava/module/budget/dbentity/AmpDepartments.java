@@ -3,7 +3,6 @@ package org.digijava.module.budget.dbentity;
 import java.io.Serializable;
 import java.util.Set;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 public class AmpDepartments implements Serializable,Comparable {
@@ -15,14 +14,10 @@ public class AmpDepartments implements Serializable,Comparable {
 
     public AmpDepartments() {
     }
-    @Interchangeable(fieldTitle = "ID", id = true)
     private Long id;
-    @Interchangeable(fieldTitle = "Name", value = true)
     private String name;
-    @Interchangeable(fieldTitle = "Code")
     private String code;
-    @Interchangeable(fieldTitle = "Organizations", pickIdOnly = true)
-    private Set<AmpOrganisation> organisations; 
+    private Set<AmpOrganisation> organisations;
     
     
     public Set<AmpOrganisation> getOrganisations() {

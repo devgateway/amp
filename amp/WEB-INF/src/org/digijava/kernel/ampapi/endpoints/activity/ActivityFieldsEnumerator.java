@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
+import java.util.function.Function;
 
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
@@ -19,8 +20,8 @@ public class ActivityFieldsEnumerator extends FieldsEnumerator {
 
     public ActivityFieldsEnumerator(FieldInfoProvider fieldInfoProvider,
             FMService fmService, TranslatorService translatorService,
-            boolean internalUse) {
-        super(fieldInfoProvider, fmService, translatorService, internalUse);
+            boolean internalUse, Function<String, Boolean> allowMultiplePrograms) {
+        super(fieldInfoProvider, fmService, translatorService, internalUse, allowMultiplePrograms);
         this.iatiIdentifierField = InterchangeUtils.getAmpIatiIdentifierFieldName();
     }
 

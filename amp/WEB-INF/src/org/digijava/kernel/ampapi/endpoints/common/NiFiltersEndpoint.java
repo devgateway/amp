@@ -427,8 +427,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.COMPUTED_YEAR, name = ColumnConstants.COMPUTED_YEAR)
     @FilterDefinition(tab = EPConstants.TAB_OTHER,  columns = ColumnConstants.COMPUTED_YEAR,
-                         fieldType = FilterFieldType.OPTIONS, multiple = false,
-                         componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+                         fieldType = FilterFieldType.OPTIONS, multiple = false)
     public FilterList getComputedYear() {
         return FiltersManager.getInstance().getComputedYearFilter();
     }
@@ -489,8 +488,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.PROPOSED_START_DATE, name = ColumnConstants.PROPOSED_START_DATE)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_START_DATE,
-                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE, 
-                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     public FilterList getProposedStartDate() {
         return new FilterList();
     }
@@ -507,8 +505,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.ACTUAL_START_DATE, name = ColumnConstants.ACTUAL_START_DATE)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_START_DATE,
-                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
-                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     public FilterList getActualStartDate() {
         return new FilterList();
     }
@@ -525,8 +522,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.ACTUAL_APPROVAL_DATE, name = ColumnConstants.ACTUAL_APPROVAL_DATE)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_APPROVAL_DATE,
-                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
-                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     public FilterList getActualApprovalDate() {
         return new FilterList();
     }
@@ -543,8 +539,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.ACTUAL_COMPLETION_DATE, name = ColumnConstants.ACTUAL_COMPLETION_DATE)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_COMPLETION_DATE,
-                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
-                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     public FilterList getActualCompletionDate() {
         return new FilterList();
     }
@@ -561,8 +556,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.EFFECTIVE_FUNDING_DATE, name = ColumnConstants.EFFECTIVE_FUNDING_DATE)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.EFFECTIVE_FUNDING_DATE,
-                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
-                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     public FilterList getEffectiveFundingDate() {
         return new FilterList();
     }
@@ -579,8 +573,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING,
-                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
-                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     public FilterList getFinalDateForContracting() {
         return new FilterList();
     }
@@ -597,8 +590,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.FUNDING_CLOSING_DATE, name = ColumnConstants.FUNDING_CLOSING_DATE)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.FUNDING_CLOSING_DATE,
-                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
-                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     public FilterList getFundingClosingDate() {
         return new FilterList();
     }
@@ -615,8 +607,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.ISSUE_DATE, name = ColumnConstants.ISSUE_DATE)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ISSUE_DATE,
-                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
-                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     public FilterList getIssueDate() {
         return new FilterList();
     }
@@ -633,8 +624,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.PROPOSED_APPROVAL_DATE, name = ColumnConstants.PROPOSED_APPROVAL_DATE)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_APPROVAL_DATE,
-                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
-                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     public FilterList getProposedApprovalDate() {
         return new FilterList();
     }  
@@ -651,8 +641,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.PROPOSED_COMPLETION_DATE, name = ColumnConstants.PROPOSED_COMPLETION_DATE)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_COMPLETION_DATE,
-                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
-                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     public FilterList getProposedCompletionDate() {
         return new FilterList();
     }

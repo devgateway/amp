@@ -244,7 +244,7 @@ public class EndpointUtils {
         }
     }
     
-    public static MapIdWrapper saveApiState(AmpApiState map, String type) {
+    public static AmpApiState saveApiState(AmpApiState map, String type) {
         Date creationDate = new Date();
 
         map.setCreatedDate(creationDate);
@@ -254,7 +254,7 @@ public class EndpointUtils {
             Session s = PersistenceManager.getSession();
             s.save(map);
             s.flush();
-            return new MapIdWrapper(map.getId());
+            return map;
         } catch (Exception e) {
             logger.error("Cannot Save map", e);
             throw new WebApplicationException(e);

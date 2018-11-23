@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -320,7 +321,7 @@ public class ObjectImporter {
             throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
         }
         if (InterchangeUtils.isSimpleType(objectType)) {
-            return value;
+            return ConvertUtils.convert(value, objectType);
         } else {
             return InterchangeUtils.getObjectById(objectType, Long.valueOf(value.toString()));
         }

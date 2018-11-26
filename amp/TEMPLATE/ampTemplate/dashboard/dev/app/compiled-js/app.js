@@ -211,7 +211,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
 module.exports = App;
 
-},{"./backbone-dash":3,"./check-support":15,"./models/amp-user.js":16,"./models/saved-dashes-collection.js":26,"./views/fail":36,"./views/main":38,"amp-filter/src/main":70,"amp-settings/src/index":94,"amp-state/index":98,"amp-translate":99,"amp-url/index":100,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
+},{"./backbone-dash":3,"./check-support":15,"./models/amp-user.js":16,"./models/saved-dashes-collection.js":26,"./views/fail":36,"./views/main":38,"amp-filter/src/main":70,"amp-settings/src/index":95,"amp-state/index":99,"amp-translate":100,"amp-url/index":101,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -391,7 +391,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":101,"../../ugly/util":45,"./customized/customizedLegend":11,"d3":"d3"}],5:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":102,"../../ugly/util":45,"./customized/customizedLegend":11,"d3":"d3"}],5:[function(require,module,exports){
 /*
  * Drawing a bar chart in AMP? Please use ./chart.js instead.
  */
@@ -441,7 +441,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":101,"../../ugly/util":45,"./customized/heatMapChart":12,"d3":"d3","underscore":"underscore"}],6:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":102,"../../ugly/util":45,"./customized/heatMapChart":12,"d3":"d3","underscore":"underscore"}],6:[function(require,module,exports){
 /*
  * Drawing a multibar chart in AMP? Please use ./chart.js instead.
  */
@@ -506,7 +506,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":101,"./customized/multiBarChart.js":13}],7:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":102,"./customized/multiBarChart.js":13}],7:[function(require,module,exports){
 /*
  * Drawing a pie chart in AMP? Please use ./chart.js instead.
  */
@@ -3347,10 +3347,6 @@ module.exports = HeatmapsConfigCollection;
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
-
-var API_ID_KEY = 'mapId';
-
-
 module.exports = BackboneDash.Model.extend({
 
   defaults: {
@@ -3359,27 +3355,9 @@ module.exports = BackboneDash.Model.extend({
     stateBlob: undefined
   },
 
-  // parse and toJSON map the id field to mapId for the API.
-  parse: function(obj) {
-    if (_(obj).has(API_ID_KEY)) {
-      obj.id = obj[API_ID_KEY];
-      delete obj[API_ID_KEY];
-    }
-    return obj;
-  },
-
   initialize: function(attrs, options) {
     this.app = options.app;
     this.url = options.url;
-  },
-
-  toJSON: function() {
-    var copy = BackboneDash.Model.prototype.toJSON.apply(this, arguments);
-    if (_(copy).has('id')) {
-      copy[API_ID_KEY] = copy.id;
-      delete copy.id;
-    }
-    return copy;
   }
 
 }, {
@@ -5094,12 +5072,13 @@ module.exports = BackboneDash.View.extend({
   getAppliedDateObject: function(filterObject, filterKey){
 	  var filterField = filterObject.filters[filterKey];
 	  var dateRangeText = '';
+	  var filterName = filterField.filterName ? filterField.filterName : filterKey;
 	  if(filterKey === 'date') {
 		  dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
 	  } else if(filterKey === 'computed-year') {
 		  dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
 	  } else {
-		  dateRangeText = app.translator.translateSync("amp.dashboard:" + filterKey.replace(/[^\w]/g, '-'), filterKey);
+		  dateRangeText = app.translator.translateSync("amp.dashboard:" + filterName.replace(/[^\w]/g, '-'), filterName);
 	  }
 	  var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
 	  return {
@@ -5113,7 +5092,7 @@ module.exports = BackboneDash.View.extend({
   }
 });
 
-},{"../../../../../../../reamp/tools/log":101,"../backbone-dash":3,"underscore":"underscore"}],38:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":102,"../backbone-dash":3,"underscore":"underscore"}],38:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -5331,7 +5310,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":17,"../models/chart-funding-type":18,"../models/chart-heatmaps":19,"../models/chart-tops":21,"../models/charts-collection":22,"../models/enabled-charts-collection":23,"../models/heatmaps-config-collection":24,"./charts":33,"./controls":34,"amp-boilerplate":49,"amp-state/index":98,"underscore":"underscore"}],39:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":17,"../models/chart-funding-type":18,"../models/chart-heatmaps":19,"../models/chart-tops":21,"../models/charts-collection":22,"../models/enabled-charts-collection":23,"../models/heatmaps-config-collection":24,"./charts":33,"./controls":34,"amp-boilerplate":49,"amp-state/index":99,"underscore":"underscore"}],39:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -21794,7 +21773,7 @@ module.exports = {
 };
 window.boilerplate = Widget;
 
-},{"./src/models/amp-layout-model.js":53,"./src/views/footer-view.js":57,"./src/views/header-view.js":58,"amp-translate":99,"backbone":"backbone","bootstrap/dist/js/bootstrap":50,"jquery":"jquery","underscore":"underscore"}],50:[function(require,module,exports){
+},{"./src/models/amp-layout-model.js":53,"./src/views/footer-view.js":57,"./src/views/header-view.js":58,"amp-translate":100,"backbone":"backbone","bootstrap/dist/js/bootstrap":50,"jquery":"jquery","underscore":"underscore"}],50:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -28474,26 +28453,23 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 var Backbone = require('backbone');
 var _ = require('underscore');
 var $ = require('jquery');
-
 var GenericFilterModel = require('../models/generic-filter-model');
 var OrgRoleFilterModel = require('../models/org-role-filter-model');
 var YearsFilterModel = require('../models/years-filter-model');
 var YearsOnlyFilterModel = require('../models/years-only-filter-model');
-
+var Constants = require('../utils/constants');
 
 //TODO: move most code from filters-view here.
 module.exports = Backbone.Collection.extend({
-  url: '/rest/filters',
+  url: Constants.ALL_FILTERS_URL,
   _loaded: null,
   _allDeferreds: [],
-  orgCollection: null,
-  orgGroupCollection: null,
-  orgTypeCollection: null,
   componentCaller: null,
-
+  translator: null,
   initialize: function(models,options) {
     this.on('add', this._cleanUpAfterAdd);
     this.load();
+    this.translator = options.translator;
     if (options.caller) {
     	componentCaller = options.caller;
     }
@@ -28501,11 +28477,8 @@ module.exports = Backbone.Collection.extend({
 
   load: function() {
     var self = this;
-
     if(!this._loaded){
       this._loaded = new $.Deferred();
-      this._allDeferreds.push(this._createOrgFilters());
-
       this.fetch({remove: false}).then(function() {
         // when all child calls are done resolve.
         $.when.apply($, self._allDeferreds)
@@ -28518,6 +28491,7 @@ module.exports = Backbone.Collection.extend({
   },
 
   _cleanUpAfterAdd: function(model) {
+		  
     var self = this;
     // remove if ui false also catches empty dummy filters we add in 'model' function below.
     if (!model.get('ui')) {
@@ -28526,12 +28500,11 @@ module.exports = Backbone.Collection.extend({
     //remove if the endpoint returns the filter type (dashboard,tabs,reports and/or GIS) for which
     //the model should be visible and the caller is not of the same tpe
     
-    if (model.get('filterType')) {
-    	// CONSTANTIN: here filtering irrelevant columns for the set filter type are filtered out
-    	var isOfRequiredType = _.some( model.get('filterType'), function( type ) {
-    	    return type === componentCaller || type === "ALL";
+    if (model.get('componentType')) {
+    	var isOfRequiredType = _.some( model.get('componentType'), function( type ) {
+    	    return type === componentCaller || type === Constants.COMPONENT_TYPE_ALL;
     	});
-    	//console.log("decided whether to show column " + model.get("name") + ": " + isOfRequiredType)
+    	
     	if (!isOfRequiredType) {
     		self.remove (model);
     	}
@@ -28541,285 +28514,147 @@ module.exports = Backbone.Collection.extend({
   },
 
 
-//  contains: function(key) {
-//	  if ()
-//  },
-  
   parse: function(data) {
     //only keep filters with ui == true;
     data = _.filter(data, function(obj) {
       return obj.ui;
     });
 
-    //remove orgs, groups, and types, because they are not filters on their own.
-    // We use them down below.
-    data = _.filter(data, function(obj) {
-      return (obj.endpoint !== '/rest/filters/org-groups' &&
-        obj.endpoint !== '/rest/filters/org-types' &&
-        obj.endpoint !== '/rest/filters/org-roles' &&
-        obj.endpoint !== '/rest/filters/orgs');
-    });
-
-
     return data;
   },
-
-
+  
   model: function(attrs, options) {
     var tmpModel = null;
-
-    // slightly unconventional, but model is special case since it's called with
-    // new so 'this' wont be the collection.
     var self = options.collection;
-
+    attrs.translator = self.translator;
     // switch for model polymorphism.
-    switch (attrs.id) {
-      case 'Programs':
-      case 'Sectors':
-        self._allDeferreds.push(self._goOneDeeper(self, attrs));
-        //tmp hack because we need to return something.
-        tmpModel = new Backbone.Model({ui:false});
-        break;
-        
-      default:
-    	  
-    	  if (attrs.id == 'date' || (attrs.id.indexOf('-date') != -1 ) || (attrs.id.indexOf('date-') != -1 )) {
-    		  tmpModel = new YearsFilterModel(attrs);  // hacky but less hacky than enumerating them. Long term solution -> the endpoint should return a field telling the type of a field
-    	  } else if (attrs.id == 'computed-year') {
-    		  tmpModel = new YearsOnlyFilterModel(attrs);
-    	  } else {
-    		  tmpModel = new GenericFilterModel(attrs);
-    		  self._allDeferreds.push(tmpModel.getTree());
-    	  }
+    
+    if (attrs.fieldType === Constants.FIELD_DATA_TYPE_TREE && attrs.dataType === Constants.FIELD_DATA_TYPE_TEXT) {
+    	 self._allDeferreds.push(self._buildTreeImplementation(self, attrs));
+         tmpModel = new Backbone.Model({ui:false});
+    } else {
+    	if (attrs.id == Constants.FILTER_ID_DATE|| (attrs.id.indexOf('-date') != -1 ) || (attrs.id.indexOf('date-') != -1 )) {
+  		  tmpModel = new YearsFilterModel(attrs);  // hacky but less hacky than enumerating them. Long term solution -> the endpoint should return a field telling the type of a field
+  	  } else if (attrs.id == Constants.FILTER_ID_COMPUTED_YEAR) {
+  		  tmpModel = new YearsOnlyFilterModel(attrs);
+  	  } else {    		  
+  		  tmpModel = new GenericFilterModel(attrs);
+  		  self._allDeferreds.push(tmpModel.getTree());
+  	 }
     }
+    
+    
 
     return tmpModel;
   },
-
-  // get endpoint's children and load them into self...
-  _goOneDeeper: function(self, attrs) {
-    var url = attrs.endpoint;
-    var deferred = $.Deferred();
-    var tmpDeferreds = [];
-
-    var tmpCollection = new Backbone.Collection();
-    tmpCollection.url = url;
-    tmpCollection.fetch().then(function(data) {
-      _.each(data, function(APIFilter) {
-        var tmpModel = new GenericFilterModel({
-          url: url + '/' + APIFilter.id,
-          name: APIFilter.name,
-          tab: APIFilter.tab,
-          ui: true,
-          group: attrs.id,
-          empty: false
+  
+ _getGroup: function(definition, attrs) {
+	  var group = definition.name;
+	  if (attrs.id === Constants.FILTER_ID_ORGS && definition.name !== Constants.FILTER_NAME_DONOR) {
+		  group = Constants.ROLE;
+	  }
+	  
+	  if (attrs.id === Constants.FILTER_ID_SECTOR) {
+		  group = Constants.SECTORS;
+	  }
+	  
+	  if (attrs.id === Constants.FILTER_ID_PROGRAM) {
+		  group = Constants.PROGRAMS;
+	  }	 
+	  
+	  return group;
+   },
+  _buildTreeImplementation: function(self, attrs) {
+	    var url = attrs.endpoint;
+	    var deferred = $.Deferred();
+	    var tmpDeferreds = [];
+	    var self = this; 	   
+	    
+	    $.get(url, function( data ) {  
+	       if (data && !_.isEmpty(data)) {
+	    	   var listDefinitions = data.listDefinitions;                    
+	           _.each(listDefinitions, function(def) {          	  
+	         	  var items = data.items[def.items];         	   
+	         	  var tree = self._createTree(items, def);    
+	         	  var tmpModel = new GenericFilterModel({
+	         	       id: def.name || def.id,        	    
+	                   data: tree,
+	                   name: def.name,
+	                   tab: def.tab,
+	                   ui: true,
+	                   group: self._getGroup(def, attrs),
+	                   empty: false
+	                 });
+	         	  
+	         	  	 self.add(tmpModel);       
+	 	         	 tmpDeferreds.push(tmpModel.getTree());	         	    
+	                                    
+	           });  
+	      }            
+          
+          $.when.apply($, tmpDeferreds).then(function() {
+              deferred.resolve();
+            });
         });
-        self.add(tmpModel);
-        tmpDeferreds.push(tmpModel.getTree());
-      });
-
-      if (_.isEmpty(data)) {
-        console.warn('Filters API returned empty', url);
-        // Create empty model so the view doesnt fail.
-        var tmpModel = new GenericFilterModel({
-            url: url,
-            name: attrs.name,
-            ui: true,
-            group: attrs.id,
-            empty: true
-          });
-          self.add(tmpModel);
-          tmpDeferreds.push(tmpModel.getTree());
-      }
+	    
+	    return deferred;
+	  },
       
-      $.when.apply($, tmpDeferreds).then(function() {
-          deferred.resolve();
-        });
-
-    });
-
-    return deferred;
-  },
-
-
-// ---------------------
-// Special org and donor specific code since it has special behaviour
-// ---------------------
-
-  _createOrgFilters:function() {
-    var self = this;
-
-    // Create 'joins' for each type add ref to groups, and for each group add refs to orgs.
-    return this._fetchOrgCollections().then(function() {
-
-      // jsonify orgs and set them as children in groups.
-
-      self.makeTreeHelper(self.orgGroupCollection, self.orgCollection, 'orgIds', 'children');
-
-
-      // For each role create a filter with collection of just orgs that match.
-      self.orgRolesCollection.each(function(role) {
-        var tmpJSON = role.toJSON();
-
-        // treat donor differently...
-        if (role.get('name') === 'Donor') {
-          self.makeTreeHelper(self.orgTypeCollection, self.orgGroupCollection, 'groupIds', 'children');
-          // Create tree rootNode and raw JSON.
-          _.extend(tmpJSON,
-            {
-              ui: true,
-              group: 'Donor',
-              tab: 'Funding Organizations',
-              data: self.orgTypeCollection.toJSON()
-            });
-
-          // filter orgs...
-          tmpJSON.data = self._filterDonorOrgs(tmpJSON.data, role.id);
-        } else {
-          // Create tree rootNode and raw JSON.
-          _.extend(tmpJSON,
-            {
-              ui: true,
-              group: 'Role', //TODO: ?should this be 'Role' or role.id or role.get('name')?
-              tab: 'All Agencies',
-              data: self.orgGroupCollection.toJSON()
-            });
-
-          //remove all orgs that don't belong in this role
-          tmpJSON.data = self._filterOrgs(tmpJSON.data, role.id);
-        }
-
-        if (tmpJSON.data.length > 0) {
-        	var currentFilterId;
-        	if (role.get('filterId')) {
-        		currentFilterId = role.get('filterId');
-        	} else {
-        		currentFilterId = role.get('name') + " Id";
-        	}        	
-        	tmpJSON.data = self._setFilterId(tmpJSON.data, currentFilterId);            
-        	self.add(new OrgRoleFilterModel(tmpJSON));
-        }
-      });
-
-      //only needed for donor if we want to do special listening....:
-      // self.joinHelper(self.orgTypeCollection, self.orgGroupCollection, 'groupIds', 'groups');
-      // self.joinHelper(self.orgGroupCollection, self.orgCollection, 'orgIds', 'orgs');
-    });
-  },
-
-  // explicitly sets the filter id on all the orgs.
-  _setFilterId: function(collection, filterId){
-    var self = this;
-    _.each(collection, function(org) {
-      //only set filterId on orgs, not group or type, or it will cause bugs.
-      if(org.rolesIds){
-        org.filterId = filterId;
-      }
-      if(org.children){
-        org.children = self._setFilterId(org.children, filterId);
-      }
-    });
-
-    return collection;
-  },
-
-
-
-  // filter orgs tree to only orgs that appear as the given roleID
-  _filterOrgs: function(orgGroupsJSON, roleID) {
-    orgGroupsJSON = _.filter(orgGroupsJSON, function(group) {
-      group.isOrgGroup = true;
-      group.children = _.filter(group.children, function(org) {
-        return (org.rolesIds.indexOf(roleID) > -1);
-      });
-      group.isSelectable = false; //stops tree from creating 'unkown' children.
-      return (group.children.length > 0);
-    });
-    return orgGroupsJSON;
-  },
-
-
-	  // special case for donor tree, since it has type
-	_filterDonorOrgs : function(orgTypesJSON, roleID) {
-		var self = this;
-		orgTypesJSON = _.filter(orgTypesJSON, function(type) {
-			type.children = self._filterOrgs(type.children, roleID);
-			_.each(type.children, function(group) {
-				group.filterId = 'donor-group';
-			});	
-
-			type.filterId = 'donor-type';
-			type.isSelectable = false; // stops tree from creating 'unkown' children.
-			return (type.children.length > 0);
-		});
-		return orgTypesJSON;
-	},
-
-    // 1. get all orgs, groups, types, and roles
-  _fetchOrgCollections: function() {
-    var filterDeferreds = [];
-
-    this.orgCollection = new Backbone.Collection();
-    this.orgCollection.url = '/rest/filters/orgs';
-    filterDeferreds.push(this.orgCollection.fetch());
-
-    this.orgGroupCollection = new Backbone.Collection();
-    this.orgGroupCollection.url = '/rest/filters/org-groups';
-    filterDeferreds.push(this.orgGroupCollection.fetch());
-
-    this.orgTypeCollection = new Backbone.Collection();
-    this.orgTypeCollection.url = '/rest/filters/org-types';
-    filterDeferreds.push(this.orgTypeCollection.fetch());
-
-    this.orgRolesCollection = new Backbone.Collection();
-    this.orgRolesCollection.url = '/rest/filters/org-roles';
-    filterDeferreds.push(this.orgRolesCollection.fetch({}));
-
-    return $.when.apply($, filterDeferreds);
-  },
-
-
-  // Adds references to collectionB into collectionA joining on given foreign key
-  // TODO: option to add bi-directional reference.
-  joinHelper: function(collectionA, collectionB, keyForForeignID, keyForCollectionDestination) {
-    collectionA.each(function(modelA) {
-      var idsToJoin = modelA.get(keyForForeignID);
-      var tempCollection = collectionB.filter(function(modelB) {
-        return _.indexOf(idsToJoin, modelB.get('id')) >= 0;
-      });
-
-      modelA.set(keyForCollectionDestination, tempCollection);
-    });
-  },
-
-  makeTreeHelper : function(parentCollection, childCollection, keyForForeignID, keyForCollectionDestination) {
-	  var self = this;
-	  var donorRole = _.filter(self.orgRolesCollection.models, function(item) {
-			return item.get('name') === 'Donor';
-		})[0];
-		parentCollection.each(function(parent) {
-			var idsToJoin = parent.get(keyForForeignID);
-			var tempCollection = childCollection.toJSON();
-			
-			// Because of the business logic of old filters, if an organization has been used as a funding org
-			// (present in amp_funding) then we need to
-			// add it to the list of 'Donors' no matter which is the 'role' of that organization, so in order to
-			// make it appear in the tree we also need to
-			// add the 'DN' rol to it, otherwise it will be ignored even if its in tempCollection.
-			tempCollection = _.each(tempCollection,function(aux) {
-				if (aux.hasFundings === true && aux.rolesIds != undefined) {
-					aux.rolesIds.push(donorRole);
-				}
-			});
-			tempCollection = _.filter(tempCollection,function(val) {
-				return _.contains(idsToJoin, val.id);
-			});
-			parent.set(keyForCollectionDestination, tempCollection);
-		});
-	}
+	  _createTree: function(data, definition) {
+		  var self = this;
+		  var dataCopy = jQuery.extend(true, {}, data);
+		  var tree = [];	  
+		  
+		  _.each(dataCopy, function(level1) {
+			  var level1 = $.extend({}, level1);
+			  if (definition.filterIds) {
+				  level1.filterId = definition.filterIds[0];
+				  level1.level = Constants.LEVEL_ONE;
+				  
+				  if (level1.children && level1.children.length > 0) {				  
+					    level1.children = self._updateLevelData(level1, definition, Constants.LEVEL_TWO, definition.filterIds[1]);
+					    
+					  _.each(level1.children, function(level2) {					  
+						  if (level2.children && level2.children.length > 0) {
+							  level2.children = self._updateLevelData(level2, definition, Constants.LEVEL_THREE, definition.filterIds[2]);	
+							  
+							  _.each(level2.children, function(level3) {							  
+								  if (level3.children && level3.children.length > 0) {								  
+									   level3.children = self._updateLevelData(level3, definition, Constants.LEVEL_FOUR, definition.filterIds[3]);								  
+									   level3.children.map(function(item) {
+									   item.children = [];  //ignore 4th level, filtering supports 3 levels
+									});
+								  }
+								  							  
+							  })
+						  }		
+						  
+					  })
+				  }  
+			  }			 
+			  
+			  tree.push(level1);			  
+		   });          
+		  
+		  return tree;
+	  },
+	  
+	  _updateLevelData: function(node, definition, level, filterId) {				  
+		  return node.children.filter(function(item) {
+			  if (item.listDefinitionIds) {
+				  return item.listDefinitionIds.includes(definition.id);
+			  }
+			  return true;							  
+		  }).map(function(item) {
+			  item.filterId = filterId;
+			  item.level = level;
+			  return item;
+		  });	  
+  
+}
 });
 
-},{"../models/generic-filter-model":73,"../models/org-role-filter-model":74,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],68:[function(require,module,exports){
+},{"../models/generic-filter-model":73,"../models/org-role-filter-model":74,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"../utils/constants":79,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],68:[function(require,module,exports){
 /*! jQuery UI - v1.10.4 - 2014-01-17
 * http://jqueryui.com
 * Includes: jquery.ui.datepicker-af.js, jquery.ui.datepicker-ar-DZ.js, jquery.ui.datepicker-ar.js, jquery.ui.datepicker-az.js, jquery.ui.datepicker-be.js, jquery.ui.datepicker-bg.js, jquery.ui.datepicker-bs.js, jquery.ui.datepicker-ca.js, jquery.ui.datepicker-cs.js, jquery.ui.datepicker-cy-GB.js, jquery.ui.datepicker-da.js, jquery.ui.datepicker-de.js, jquery.ui.datepicker-el.js, jquery.ui.datepicker-en-AU.js, jquery.ui.datepicker-en-GB.js, jquery.ui.datepicker-en-NZ.js, jquery.ui.datepicker-eo.js, jquery.ui.datepicker-es.js, jquery.ui.datepicker-et.js, jquery.ui.datepicker-eu.js, jquery.ui.datepicker-fa.js, jquery.ui.datepicker-fi.js, jquery.ui.datepicker-fo.js, jquery.ui.datepicker-fr-CA.js, jquery.ui.datepicker-fr-CH.js, jquery.ui.datepicker-fr.js, jquery.ui.datepicker-gl.js, jquery.ui.datepicker-he.js, jquery.ui.datepicker-hi.js, jquery.ui.datepicker-hr.js, jquery.ui.datepicker-hu.js, jquery.ui.datepicker-hy.js, jquery.ui.datepicker-id.js, jquery.ui.datepicker-is.js, jquery.ui.datepicker-it.js, jquery.ui.datepicker-ja.js, jquery.ui.datepicker-ka.js, jquery.ui.datepicker-kk.js, jquery.ui.datepicker-km.js, jquery.ui.datepicker-ko.js, jquery.ui.datepicker-ky.js, jquery.ui.datepicker-lb.js, jquery.ui.datepicker-lt.js, jquery.ui.datepicker-lv.js, jquery.ui.datepicker-mk.js, jquery.ui.datepicker-ml.js, jquery.ui.datepicker-ms.js, jquery.ui.datepicker-nb.js, jquery.ui.datepicker-nl-BE.js, jquery.ui.datepicker-nl.js, jquery.ui.datepicker-nn.js, jquery.ui.datepicker-no.js, jquery.ui.datepicker-pl.js, jquery.ui.datepicker-pt-BR.js, jquery.ui.datepicker-pt.js, jquery.ui.datepicker-rm.js, jquery.ui.datepicker-ro.js, jquery.ui.datepicker-ru.js, jquery.ui.datepicker-sk.js, jquery.ui.datepicker-sl.js, jquery.ui.datepicker-sq.js, jquery.ui.datepicker-sr-SR.js, jquery.ui.datepicker-sr.js, jquery.ui.datepicker-sv.js, jquery.ui.datepicker-ta.js, jquery.ui.datepicker-th.js, jquery.ui.datepicker-tj.js, jquery.ui.datepicker-tr.js, jquery.ui.datepicker-uk.js, jquery.ui.datepicker-vi.js, jquery.ui.datepicker-zh-CN.js, jquery.ui.datepicker-zh-HK.js, jquery.ui.datepicker-zh-TW.js
@@ -30823,7 +30658,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 });
 
 module.exports = Widget;
-},{"./lib/jquery-ui-i18n":68,"./views/filters-view":81,"backbone":"backbone","bootstrap/dist/js/bootstrap":61,"jquery":"jquery","jquery-ui/draggable":64,"underscore":"underscore"}],71:[function(require,module,exports){
+},{"./lib/jquery-ui-i18n":68,"./views/filters-view":82,"backbone":"backbone","bootstrap/dist/js/bootstrap":61,"jquery":"jquery","jquery-ui/draggable":64,"underscore":"underscore"}],71:[function(require,module,exports){
 var Backbone = require('backbone');
 
   // Parent model for filters.
@@ -30859,32 +30694,35 @@ var _ = require('underscore');
 
 var BaseFilterModel = require('../models/base-filter-model');
 var TreeNodeModel = require('../tree/tree-node-model');
+var Constants = require('../utils/constants');
 
 
 module.exports = BaseFilterModel.extend({
 
-  initialize:function(options) {
+  initialize:function(options) {	
     BaseFilterModel.prototype.initialize.apply(this, [options]);
-    this.set('modelType', 'TREE');
-    this.getTree(); // starts getTree calls
+    this.set('modelType', Constants.FIELD_DATA_TYPE_TREE);
+    if (options.data) {
+    	this.set('data', options.data);
+    	this.getTree();
+    }        
   },
 
   // load tree if needed, else return what we already have..
   getTree: function() {
     var self = this;
-    var loaded = this.get('_loaded');
-
+    var loaded = this.get('_loaded');    
     if (!loaded) {
       self.set('_loaded', this._createTree().then(function() {
-
         // trickle up numSelected.
-    	  if(self.get('tree')!= undefined){
-        self.get('tree').on('change:numSelected', function(model, value) {
-          self.set('numSelected', value);
-          self.set('numPossible', self.get('tree').get('numPossible'));
+    	if (self.get('tree') != undefined) {
+            self.get('tree').on('change:numSelected', function(model, value) {
+            self.set('numSelected', value);
+            self.set('numPossible', self.get('tree').get('numPossible'));
         });
-    	  }
-        return self.get('tree');
+       }
+       
+       return self.get('tree');
       }));
       
     }
@@ -30937,78 +30775,83 @@ module.exports = BaseFilterModel.extend({
     }
   },
 
-  _createTree: function() {
-    if (!this.url) {
-      this.url = this.get('endpoint');
-    }
+  _createTree: function() {  
+	  var self = this;
+	 if (this.get('data')) {
+		var deferred = new $.Deferred();		
+        this.createTreeNode(this.get('data'))        
+        deferred.resolve( this.get('tree'));         
+        return deferred.promise();
+     
+	} else {
+		  if (!this.url) {
+		      this.url = this.get('endpoint');
+		  } 
 
-    return this.fetch({
-      type: this.get('method'),
-      data:'{}'
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-      console.error('failed to get filter ', jqXHR, textStatus, errorThrown);
-    });
+		  return this.fetch({
+		     type: this.get('method'),
+		     data:'{}'
+		  })
+		  .fail(function(jqXHR, textStatus, errorThrown) {
+			  if (self.get('translator')) {
+				  alert(self.get('translator').translateSync('amp.gis:error-loading-data', 'An error occcured while loading filters data') + ':' + self.get('name') );
+			  } else {
+				  alert('An error occcured while loading filters data:' + self.get('name'));
+			  }			  
+		      console.error('failed to get filter ', jqXHR, textStatus, errorThrown);
+		  });
+	}	
+  
   },
 
   parse: function(data) {
-    var self = this;    
-
-    //if it's an obj, jam it into an array first, helps solve inconsistancy in API format.
-    if (!_.isArray(data)) {
-      data = [data];
-    }
-
-    if (_.isArray(data) && data.length > 0) {
-      var rootNodeObj = null;
-      // Builds tree of views from returned data
-      // If data is a single element, just make it the root..
-      
-      /* TODO-CONSTANTIN: temporary comment until I finish learning Filters frontend
-      console.log("iterating " + data.length + " elems...");
-      _.each(data, function(elem) {
-    	  console.log("\tname = " + elem.name + ", id = " + elem.id);
-      });
-      */
-      if (data.length === 1) {
-    	if(data[0].filterId && !data[0].name) {
-          data[0].name =  data[0].filterId;
-        }
-        if(data[0].values){
-          data[0].children =  data[0].values;
-        }
-
-        data[0].isSelectable = false;
+	  return this.createTreeNode(data);
+  },
+  
+  createTreeNode: function(data) {
+	    var self = this;    
         
-        //data[0].filterName = data[0].displayName;
+	    //if it's an obj, jam it into an array first, helps solve inconsistancy in API format.
+	    if (!_.isArray(data)) {
+	      data = data ? [data] : [];
+	    }
 
-        rootNodeObj = data[0];
+	     var rootNodeObj = null;	    
+	     if (data.length === 1 ) {
+	    	if(data[0].filterId && !data[0].name) {
+	          data[0].name =  data[0].filterId;
+	        }
+	        if(data[0].values){
+	          data[0].children =  data[0].values;
+	        }
 
-      } else {
-        rootNodeObj = {
-          id: -1,
-          code: '-1',
-          name: self.get('name'),
-          children: data,
-          selected: undefined,
-          expanded: false,
-          isSelectable: false,
-          createUnkowns: true/*,
-          filterName: self.get('displayName')*/
-        };
-      }
+	        data[0].isSelectable = false;
+	        rootNodeObj = data[0];
+         } else {
+	        rootNodeObj = {
+	          id: -1,
+	          code: '-1',
+	          name: self.get('name'),
+	          children: data,
+	          selected: undefined,
+	          expanded: false,
+	          isSelectable: false,
+	          createUnkowns: true
+	         
+	        };
+	     }
+	      
+	    var treeModel = new TreeNodeModel(rootNodeObj);
+	    self.set('tree', treeModel);	    
 
-      var treeModel = new TreeNodeModel(rootNodeObj);
-      self.set('tree', treeModel);
-    }
-
-    return;
+	    return;  
   }
+  
 
 });
 
 
-},{"../models/base-filter-model":71,"../tree/tree-node-model":77,"underscore":"underscore"}],74:[function(require,module,exports){
+},{"../models/base-filter-model":71,"../tree/tree-node-model":77,"../utils/constants":79,"underscore":"underscore"}],74:[function(require,module,exports){
 var $ = require('jquery');
 
 var GenericFilterModel = require('../models/generic-filter-model');
@@ -31091,8 +30934,7 @@ module.exports = BaseFilterModel.extend({
 	   * just filter by "name"
 	   */ 
 	  	
-	  //console.error('SYNCING YEARS MODEL: ' + this.get('name'));
-	  return $.when(true);
+	   return $.when(true);
   },
 
   initialize: function(options) {
@@ -31177,12 +31019,8 @@ module.exports = BaseFilterModel.extend({
     this.set('selectedEnd', this.get('endYear'));
   },
 
-  // converts: 03/01/1961 ==> 1961-01-01 IF NEEDED.
-  // DOES NOT CONVERT from the "-" format to "/" format anymore
-  // 
-  // amp expects with '-' and jQuery wants with '/'
-  _dateConvert: function(input){
-	  console.log('asked to convert input: ' + input);
+   // converts: 03/01/1961 ==> 1961-01-01 IF NEEDED.
+  _dateConvert: function(input){	
     var output = null;
     if (input) {
       if (input.indexOf('/')>-1){
@@ -31190,12 +31028,7 @@ module.exports = BaseFilterModel.extend({
         output = input[2] + '-' + input[1] + '-' + input[0];
       } else {
     	  output = input;
-      }
-      /* else if(input.indexOf('-')>-1){
-      }
-        input = input.split('-');
-        output = input[2] + '/' + input[1] + '/' + input[0];
-      }*/
+      }   
     }
     return output;
   }
@@ -31335,7 +31168,7 @@ serialize: function(options) {
             //Until we refactor filters in 3.x we will serialize even if the whole tree is selected
             this._serializeChildren(tmpSerialized, children, options);
       } else {
-    	  //no children so just return self.
+    	  //no children so just return self.    	  
     	  if (this.get('selected')) {
     		  if (this.get('filterId') && !this._isInIgnoreList(this.get('filterId')) ) {
     			  	tmpSerialized[this.get('filterId')] = (options.wholeModel? [this]:[this.id]);
@@ -31524,14 +31357,6 @@ var TreeNodeView = Backbone.View.extend({
 
   tagName: 'li',
   className: 'parent_li',
-
-  //TODO: debug after usability testing, currently setting in addUIListeners
-  // won't work on second use of widget.
-  // events: {
-  //   'click .selectable': 'select',
-  //   'click  .toggle-nav': 'clickName'
-  // },
-
   template: _.template(Template),
   isRoot: false,
   initialize:function(options) {
@@ -31707,6 +31532,50 @@ var TreeNodeView = Backbone.View.extend({
 module.exports = TreeNodeView;
 
 },{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],79:[function(require,module,exports){
+
+   
+var  constants = {
+	FILTER_ID_ORGS: 'organizations',
+	FILTER_NAME_DONOR: 'Donor',
+	FILTER_ID_SECTOR: 'sectors',
+	FILTER_ID_PROGRAM: 'programs',
+	FILTER_ID_LOCATION: 'locations',
+	FILTER_ID_DATE: 'date',
+	FILTER_ID_COMPUTED_YEAR: 'computed-year',
+	LEVEL_ONE: 1,
+    LEVEL_TWO: 2,
+    LEVEL_THREE: 3,
+    LEVEL_FOUR: 4,
+    ALL_FILTERS_URL: '/rest/nifilters',
+    ACTIVITY_BUDGET_LIST: 'ActivityBudgetList',
+    TYPE_OF_ASSISTANCE: 'type-of-assistance',
+    MODE_OF_PAYMENT: 'mode-of-payment',
+    EXPENDITURE_CLASS: 'expenditure-class',
+    FINANCING_INSTRUMENT: 'financing-instrument',
+    FUNDING_STATUS: 'funding-status',
+    EFFECTIVE_FUNDING_DATE: 'effective-funding-date',
+    FUNDING_CLOSING_DATE: 'funding-closing-date',
+    CONCESSIONALITY_LEVEL: 'concessionality-level',
+    STATUS:'Status',
+    PERFORMANCE_ALERT_LEVEL: 'performance-alert-level',
+    PERFORMANCE_ALERT_TYPE:'performance-alert-type',
+    APPROVAL_STATUS: 'approval-status',
+    PROGRAMS: 'Programs',
+    SECTORS: 'Sectors',
+    DONOR: 'Donor',
+    ROLE: 'Role',
+    LOCATIONS: 'Locations',
+    COMPONENT_TYPE_ALL: 'ALL',
+    FIELD_DATA_TYPE_TREE: 'TREE',
+    FIELD_DATA_TYPE_TEXT: 'TEXT',
+    DATE_RANGE_VALUES: 'DATE-RANGE-VALUES',
+    YEAR_SINGLE_VALUE: 'YEAR-SINGLE-VALUE',
+    CONTEXT_DASHBOARD: 'DASHBOARD',
+    CONTEXT_GIS: 'GIS'    
+};
+
+module.exports = constants;
+},{}],80:[function(require,module,exports){
 var _ = require('underscore');
 
 var extractDates = function(settings, filtersOut, minName, maxName) {
@@ -31732,7 +31601,7 @@ module.exports = {
 		extractDates: extractDates
 }
 
-},{"underscore":"underscore"}],80:[function(require,module,exports){
+},{"underscore":"underscore"}],81:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -31758,23 +31627,25 @@ module.exports = Backbone.View.extend({
   },
 
   renderTitle: function() {	  
-    var self = this;
-    this.titleEl = this.titleTemplate(this.model.toJSON());
-    this.$titleEl = $(this.titleEl);
-    this.$titleEl.on('click', function(evt) {
-      $(this).siblings().removeClass('active');
-      $(this).addClass('active');
-      self.$el.html('');
-      self.renderFilters();
-      return false;
-    });
-
+    var self = this;    
+    if (this.model.get('name')) {
+    	 this.titleEl = this.titleTemplate(this.model.toJSON());
+    	    this.$titleEl = $(this.titleEl);
+    	    this.$titleEl.on('click', function(evt) {
+    	      $(this).siblings().removeClass('active');
+    	      $(this).addClass('active');
+    	      self.$el.html('');
+    	      self.renderFilters();
+    	      return false;
+    	    });
+    } 
+    
     return this;
   }
 
 });
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],81:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],82:[function(require,module,exports){
 /**
  * this is the view which renders the big Filter contents (the tabs)
  */
@@ -31782,30 +31653,25 @@ module.exports = Backbone.View.extend({
 var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
-
 var Translator = require('amp-translate');
-
 var TopLevelFilterView = require('../views/top-level-filter-view');
 var AllFilterCollection = require('../collections/all-filters-collection');
-
-
 var Template = "<%\n  // this renders the \"big\" filter list (the tabs)\n%>\n<div class=\"panel-heading\">\n  <a type=\"button\" class=\"close cancel\"  aria-hidden=\"true\">&times;</a>\n  <h3 data-i18n=\"amp.gis:title-filters\" class=\"panel-title\">Filters</h3>\n</div>\n<div class=\"panel-body filter-body\">\n\n  <ul class=\"nav nav-tabs filter-titles\" role=\"tablist\">\n  </ul>\n\n  <div class=\"tab-content filter-options\">\n    <img src=\"img_2/loading-icon.gif\" />\n  </div>\n</div>\n<div class=\"panel-footer\">\n  &nbsp;\n  <div class=\"pull-right\" style=\"display: inline-block; margin-bottom: 5px;\">\n    <button type=\"button\" class=\"btn btn-sm btn-danger reset\"  data-i18n=\"amp.gis:button-reset\"  title=\"Turn off all filters.\">Reset</button>\n    <button type=\"button\" class=\"btn btn-sm btn-warning cancel\"  data-i18n=\"amp.gis:button-cancel\"  title=\"Revert filters to state when opened.\">Cancel</button>\n    <button type=\"button\" class=\"btn btn-sm btn-success apply\"  data-i18n=\"amp.gis:button-apply\" >Apply</button>\n  </div>\n</div>\n";
 var TitleTemplate = "<%\n// renders the title of a tab \n%>\n<li class=\"\"><a data-i18n=\"amp.gis:pane-filters-<%= name.replace(/ /g,'') %>\" href=\"#filter-pane-<%= name.replace(/ /g,'') %>\" role=\"tab\" data-toggle=\"tab\"><%= name %></a></li>\n";
 var filtersViewLog = require("../../../../../reamp/tools/log")('amp:filters:top-level:view');
-
 var GeneralSettings = require('../models/general-settings');
-
 var DateUtils = require('../utils/date-utils');
+var Constants = require('../utils/constants');
 
 var filterInstancesNames = {donors: 'Funding Organizations', sectors : 'Sectors', programs: 'Programs', 
 	  activity: 'Activity', allAgencies: 'All Agencies', financials: 'Financial',
-		  locations: 'Location', others: 'Other'};
+		  locations: 'Locations', others: 'Other'};
 
 
 module.exports = Backbone.View.extend({
   id: 'tool-filters',
   name: 'Filters',
-  apiURL: '/rest/filters',
+  apiURL: Constants.ALL_FILTERS_URL,
 
   events: {
     'click .apply': 'applyFilters',
@@ -31814,6 +31680,7 @@ module.exports = Backbone.View.extend({
   },
   PARAMS_DATE_FORMAT:'yy-mm-dd', //backend expects filters to be submitted in this format
   initialize:function(options) {
+      console.log('inicitalize');
     var self = this;
     this.draggable = options.draggable;
     this.caller = options.caller;
@@ -31830,12 +31697,13 @@ module.exports = Backbone.View.extend({
     
     if(options.translator === undefined) {
       this.createTranslator();
+      options.translator = this.translator;
     } else {
       this.translator = options.translator;
     }
 
     this.firstRender = true;
-    this._createTopLevelFilterViews();
+    this._createTopLevelFilterViews();    
     this.allFilters = new AllFilterCollection([],options);
     this._loaded =  this.allFilters._loaded;
     this._getFilterList().then(function() {    	
@@ -31847,11 +31715,10 @@ module.exports = Backbone.View.extend({
     					// remove tab if there is no data for the tab
     					delete filterInstancesNames[key];
     					delete self.filterViewsInstances[key];
-    				}    				
-    				
+    				}     				
     			}
     		}      		
-      	  }else{
+      	  } else {
       		self._createFilterViews(model);  
       	  }
       	  
@@ -31864,8 +31731,7 @@ module.exports = Backbone.View.extend({
 
   _createTopLevelFilterViews: function() {    
     		for (key in filterInstancesNames) {
-    			if (filterInstancesNames.hasOwnProperty(key)) {
-    				
+    			if (filterInstancesNames.hasOwnProperty(key)) {    				
     				this.filterViewsInstances[key] = new TopLevelFilterView({name:filterInstancesNames[key], translator: this.translator, translate: this.translate, filterView: this});
     			}
     		}    		
@@ -31878,7 +31744,6 @@ module.exports = Backbone.View.extend({
     if (this.draggable) {
       this.$el.draggable({cursor: 'move', containment: 'window' });
     }
-    this.firstRender = true;
 
     if (this.firstRender) {
       this.$el.html(this.template({}));
@@ -31919,7 +31784,7 @@ module.exports = Backbone.View.extend({
 
   createTranslator: function(force) {
     var self = this;
-    var filterTranslateKeys = JSON.parse("{\n  \"amp.gis:title-Country\": \"Country\",\n  \"amp.gis:title-Region\": \"Region\",\n  \"amp.gis:title-Zone\": \"Zone\",\n  \"amp.gis:title-District\": \"District\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:pane-filters-search\": \"Go\",\n  \"amp.gis:pane-filters-select\": \"select all\",\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\n  \"amp.gis:pane-filters-Sectors\": \"Sectors\",\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\n  \"amp.gis:pane-filters-Location\": \"Location\",\n  \"amp.gis:pane-filters-Other\": \"Other\",\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\n  \"amp.gis:pane-subfilters-ComponentFundingOrganization\": \"Component Funding Organization\",\n  \"amp.gis:pane-subfilters-ComponentSecondResponsibleOrganization\": \"Component Second Responsible Organization\",\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\n  \"amp.gis:pane-subfilters-RegionalGroup\": \"Regional Group\",\n  \"amp.gis:pane-subfilters-SectorGroup\": \"Sector Group\",\n  \"amp.gis:pane-subfilters-TertiarySectors\": \"Tertiary Sectors\",\n  \"amp.gis:pane-subfilters-FinancingInstruments\": \"Financing Instruments\",\n  \"amp.gis:pane-filters-all\": \"all\",\n  \"amp.gis:button-reset\": \"Reset\",\n  \"amp.gis:button-cancel\": \"Cancel\",\n  \"amp.gis:button-apply\": \"Apply\",\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\",\n  \"amp.gis:date-from\": \"From\",\n  \"amp.gis:date-until\": \"Until\"\n}\n");
+    var filterTranslateKeys = JSON.parse("{\n  \"amp.gis:title-Country\": \"Country\",\n  \"amp.gis:title-Region\": \"Region\",\n  \"amp.gis:title-Zone\": \"Zone\",\n  \"amp.gis:title-District\": \"District\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:pane-filters-search\": \"Go\",\n  \"amp.gis:pane-filters-select\": \"select all\",\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\n  \"amp.gis:pane-filters-Sectors\": \"Sectors\",\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\n  \"amp.gis:pane-filters-Location\": \"Location\",\n  \"amp.gis:pane-filters-Other\": \"Other\",\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\n  \"amp.gis:pane-subfilters-ComponentFundingOrganization\": \"Component Funding Organization\",\n  \"amp.gis:pane-subfilters-ComponentSecondResponsibleOrganization\": \"Component Second Responsible Organization\",\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\n  \"amp.gis:pane-subfilters-RegionalGroup\": \"Regional Group\",\n  \"amp.gis:pane-subfilters-SectorGroup\": \"Sector Group\",\n  \"amp.gis:pane-subfilters-TertiarySectors\": \"Tertiary Sectors\",\n  \"amp.gis:pane-subfilters-FinancingInstruments\": \"Financing Instruments\",\n  \"amp.gis:pane-filters-all\": \"all\",\n  \"amp.gis:button-reset\": \"Reset\",\n  \"amp.gis:button-cancel\": \"Cancel\",\n  \"amp.gis:button-apply\": \"Apply\",\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\",\n  \"amp.gis:date-from\": \"From\",\n  \"amp.gis:date-until\": \"Until\",\n  \"amp.gis:error-loading-data\": \"An error occcured while loading filters data\"\n}\n");
     // setup any popovers as needed...
     self.popovers = self.$('[data-toggle="popover"]');
     self.popovers.popover();
@@ -31986,45 +31851,44 @@ module.exports = Backbone.View.extend({
   },
 
   _createFilterViews: function(tmpModel) {
-    // TODO: magic strings are dangerous, config somewhere...
-	switch (tmpModel.get('group')) {
-      case 'ActivityBudgetList':
-      case 'type-of-assistance':
-      case 'mode-of-payment':
-      case 'expenditure-class':
-      case 'financing-instrument':
-      case 'funding-status':
-      case 'effective-funding-date':
-      case 'funding-closing-date':
-      case 'concessionality-level':
+     switch (tmpModel.get('group')) {
+      case Constants.ACTIVITY_BUDGET_LIST:
+      case Constants.TYPE_OF_ASSISTANCE:
+      case Constants.MODE_OF_PAYMENT:
+      case Constants.EXPENDITURE_CLASS:
+      case Constants.FINANCING_INSTRUMENT:
+      case Constants.FUNDING_STATUS:
+      case Constants.EFFECTIVE_FUNDING_DATE:
+      case Constants.FUNDING_CLOSING_DATE:
+      case Constants.CONCESSIONALITY_LEVEL:
       case 'on-off-treasury-budget':
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;
-      case 'status':
-      case 'performance-alert-level':
-      case 'performance-alert-type':
-      case 'approval-status':
+      case Constants.STATUS:
+      case Constants.PERFORMANCE_ALERT_LEVEL:
+      case Constants.PERFORMANCE_ALERT_TYPE:
+      case Constants.APPROVAL_STATUS:
         this.filterViewsInstances.activity.filterCollection.add(tmpModel);
         break;
-      case 'Programs':
+      case Constants.PROGRAMS:
         this.filterViewsInstances.programs.filterCollection.add(tmpModel);
         break;
-      case 'Sectors':
+      case Constants.SECTORS:
         this.filterViewsInstances.sectors.filterCollection.add(tmpModel);
         break;
-      case 'Donor':
-        this.filterViewsInstances.donors.filterCollection.add(tmpModel);
+      case Constants.DONOR:
+    	this.filterViewsInstances.donors.filterCollection.add(tmpModel);
         break;
-      case 'Role':
+      case Constants.ROLE:
         this.filterViewsInstances.allAgencies.filterCollection.add(tmpModel);
         break;
-      case 'location':
+      case Constants.LOCATIONS:
         this.filterViewsInstances.locations.filterCollection.add(tmpModel);
         break;
       default:
         this.filterViewsInstances.others.filterCollection.add(tmpModel);
     }
-
+	
   },
   
   serializeToModels: function(filter) {
@@ -32077,8 +31941,8 @@ module.exports = Backbone.View.extend({
     this.allFilters.each(function(filter) {
       // TODO: build a util for bettermerge that concat's array if
       // duplicate keys in objects...
-      if (filter.get('id') || filter.url) {
-        if (filter.get('modelType') === 'DATE-RANGE-VALUES' || filter.get('modelType') === 'YEAR-SINGLE-VALUE') {
+      if (filter.get('id') || filter.url) {   
+        if (filter.get('modelType') === Constants.DATE_RANGE_VALUES || filter.get('modelType') === Constants.YEAR_SINGLE_VALUE) {
           _.extend(serializedFilters.filters, filter.serialize(options));
         } else {
           var serialized = filter.serialize(options);
@@ -32114,7 +31978,7 @@ module.exports = Backbone.View.extend({
       that.allFilters.each(function(filter) {
     	filter.reset();
         if (filter.get('id') || filter.url) {
-          if(filter.get('modelType') === 'DATE-RANGE-VALUES') {
+          if(filter.get('modelType') === Constants.DATE_RANGE_VALUES) {
          	that.setDefaultDates(blob);            
             filter.deserialize(blob);
           } else{
@@ -32131,6 +31995,7 @@ module.exports = Backbone.View.extend({
   },
 
   showFilters: function() {
+      console.log('showFilters');
     this.render();
     this.filterStash = null;  // in case they haven't loaded yet, don't try to .serialize()
     this._loaded.done(_.bind(function() { this.filterStash = this.serialize({}); }, this));
@@ -32145,7 +32010,7 @@ module.exports = Backbone.View.extend({
 	var self = this;
 	 var blob = !_.isUndefined(this.initialFilters) ? JSON.parse(JSON.stringify(this.initialFilters)) : {};//clone initial filters
     this.allFilters.each(function(filter) {
-    if (filter.get('modelType') === 'DATE-RANGE-VALUES') {
+    if (filter.get('modelType') === Constants.DATE_RANGE_VALUES) {
     	 self.setDefaultDates(blob);          	 
     	 filter.deserialize(blob);
      }else{
@@ -32173,7 +32038,7 @@ module.exports = Backbone.View.extend({
 				this.dFormat = foundMapping.datepickerformat;
 			}
 	  }	  
-	  if(!this.dFormat){
+	  if (!this.dFormat) {
 		  this.dFormat = this.PARAMS_DATE_FORMAT;
 	  }	  
 	  return this.dFormat;
@@ -32184,9 +32049,9 @@ module.exports = Backbone.View.extend({
    }, 
    setDefaultDates: function(blob){
 	 var self = this;
-  	 if(self.caller === "DASHBOARD"){
+  	 if(self.caller === Constants.CONTEXT_DASHBOARD){
   		 return DateUtils.extractDates(self.settings, blob, 'dashboard-default-min-date', 'dashboard-default-max-date'); 	 
-  	 }else if(self.caller === "GIS"){
+  	 }else if(self.caller === Constants.CONTEXT_GIS){
   		return DateUtils.extractDates(self.settings, blob, 'gis-default-min-date', 'gis-default-max-date');
   	 }
   	 return blob
@@ -32200,7 +32065,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"../../../../../reamp/tools/log":101,"../collections/all-filters-collection":67,"../models/general-settings":72,"../utils/date-utils":79,"../views/top-level-filter-view":83,"amp-translate":99,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],82:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":102,"../collections/all-filters-collection":67,"../models/general-settings":72,"../utils/constants":79,"../utils/date-utils":80,"../views/top-level-filter-view":84,"amp-translate":100,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],83:[function(require,module,exports){
 
 var _ = require('underscore');
 
@@ -32233,7 +32098,7 @@ module.exports = BaseFilterView.extend({
     // Create tree view
     // TODO: make tree loading content responsibility of model, not view...
     this.model.getTree().then(function(treeModel) {
-      if (treeModel) {
+      if (treeModel) {   	
         self._updateCountInMenu();
         treeModel.on('change:numSelected', function() {
           self._updateCountInMenu();
@@ -32321,7 +32186,7 @@ module.exports = BaseFilterView.extend({
 });
 
 
-},{"../tree/tree-node-view":78,"../views/base-filter-view":80,"underscore":"underscore"}],83:[function(require,module,exports){
+},{"../tree/tree-node-view":78,"../views/base-filter-view":81,"underscore":"underscore"}],84:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -32451,7 +32316,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../../../../../reamp/tools/log":101,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"../views/generic-filter-view":82,"../views/years-filter-view":84,"../views/years-only-filter-view":85,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],84:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":102,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"../views/generic-filter-view":83,"../views/years-filter-view":85,"../views/years-only-filter-view":86,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],85:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -32488,10 +32353,8 @@ module.exports = BaseFilterView.extend({
     this.$el.html(this.template(this.model.toJSON()));
 
     this._loaded.then(function() {
-      //self._renderSlider();
       self._renderDatePickers();
-      self._updateTitle();
-      
+      self._updateTitle();      
       // We need to re-translate some strings from the right panel.
       self.translate(self);
     });
@@ -32620,7 +32483,7 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../lib/jquery.nouislider.min.js":69,"../views/base-filter-view":80,"jquery-ui/datepicker":63,"underscore":"underscore"}],85:[function(require,module,exports){
+},{"../lib/jquery.nouislider.min.js":69,"../views/base-filter-view":81,"jquery-ui/datepicker":63,"underscore":"underscore"}],86:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -32659,7 +32522,7 @@ module.exports = BaseFilterView.extend({
 		var self = this;
 		var selector = this.$('#year-select');
 		selector.append($("<option>").attr('value', '').text(''));
-		_.each(this.model.get('value').options, function(item, i) {
+		_.each(this.model.get('items').values, function(item, i) {
 			var option = $("<option>").attr('value', item.value).text(item.value);
 			if (item.value === self.model.get('selectedYear').toString()) {
 				$(option).attr('selected', 'selected');
@@ -32679,17 +32542,17 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../views/base-filter-view":80,"underscore":"underscore"}],86:[function(require,module,exports){
+},{"../views/base-filter-view":81,"underscore":"underscore"}],87:[function(require,module,exports){
 module.exports=require(50)
-},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":50}],87:[function(require,module,exports){
+},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":50}],88:[function(require,module,exports){
 module.exports=require(62)
-},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":62,"jquery":"jquery"}],88:[function(require,module,exports){
+},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":62,"jquery":"jquery"}],89:[function(require,module,exports){
 module.exports=require(64)
-},{"./core":87,"./mouse":89,"./widget":90,"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":64,"jquery":"jquery"}],89:[function(require,module,exports){
+},{"./core":88,"./mouse":90,"./widget":91,"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":64,"jquery":"jquery"}],90:[function(require,module,exports){
 module.exports=require(65)
-},{"./widget":90,"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":65,"jquery":"jquery"}],90:[function(require,module,exports){
+},{"./widget":91,"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":65,"jquery":"jquery"}],91:[function(require,module,exports){
 module.exports=require(66)
-},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":66,"jquery":"jquery"}],91:[function(require,module,exports){
+},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":66,"jquery":"jquery"}],92:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -32776,12 +32639,12 @@ module.exports  = Backbone.Collection.extend({
 });
 
 
-},{"../common/config":92,"../common/constants":93,"../models/settings-definitions":96,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],92:[function(require,module,exports){
+},{"../common/config":93,"../common/constants":94,"../models/settings-definitions":97,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],93:[function(require,module,exports){
 module.exports = {
 	IS_POPUP : true
 };
 
-},{}],93:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 module.exports = {
 	YEAR_RANGE_ID : 'year-range',
 	CALENDAR_ID : 'calendar-id',
@@ -32801,7 +32664,7 @@ module.exports = {
 		TABS : 'TABS'
 	}
 }
-},{}],94:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 
 var jQuery = require('jquery');
 var _ = require('underscore');
@@ -32867,7 +32730,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 });
 module.exports = {SettingsWidget: Widget, GeneralSettings: GeneralSettings}
 window.AMPSettings = {SettingsWidget: Widget, GeneralSettings: GeneralSettings};
-},{"./collections/settings-definitions-collection":91,"./common/config":92,"./common/constants":93,"./models/general-settings":95,"./views/settings-view":97,"backbone":"backbone","bootstrap/dist/js/bootstrap":86,"jquery":"jquery","jquery-ui/draggable":88,"underscore":"underscore"}],95:[function(require,module,exports){
+},{"./collections/settings-definitions-collection":92,"./common/config":93,"./common/constants":94,"./models/general-settings":96,"./views/settings-view":98,"backbone":"backbone","bootstrap/dist/js/bootstrap":87,"jquery":"jquery","jquery-ui/draggable":89,"underscore":"underscore"}],96:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -32896,12 +32759,12 @@ module.exports = Backbone.Model.extend({
 		return this.loaded.promise();
 	}
 });
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],96:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],97:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 module.exports = Backbone.Model.extend({	
 });
-},{"backbone":"backbone","underscore":"underscore"}],97:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],98:[function(require,module,exports){
 
 var $ = require('jquery');
 var _ = require('underscore');
@@ -33155,7 +33018,7 @@ module.exports = Backbone.View.extend({
 	}
 
 });
-},{"../common/constants":93,"amp-translate":99,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],98:[function(require,module,exports){
+},{"../common/constants":94,"amp-translate":100,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],99:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -33365,7 +33228,7 @@ _.extend(State.prototype, Backbone.Events, {
 State.StateLoadError = StateLoadError;
 module.exports = State;
 
-},{"backbone":"backbone","underscore":"underscore"}],99:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],100:[function(require,module,exports){
 // TODO: move this up a dir, and instantiate and attach to the app
 
 
@@ -33581,7 +33444,7 @@ function Translator(options) {
 
 module.exports = Translator;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],100:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],101:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -33632,7 +33495,7 @@ _.extend(URL.prototype, Backbone.Events, {
 
 module.exports = URL;
 
-},{"backbone":"backbone","underscore":"underscore"}],101:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],102:[function(require,module,exports){
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

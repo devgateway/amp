@@ -18,6 +18,7 @@ import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
 import org.dgfoundation.amp.gpi.reports.export.GPIReportExportType;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
+import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 
@@ -128,8 +129,10 @@ public final class GPIReportService {
             
             if (doc != null) {
                 logger.info("Send GPI export data to browser...");
+                
+                MediaType mediaType = EndpointUtils.getMediaType(type);
 
-                return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
+                return Response.ok(doc, mediaType)
                         .header("content-disposition", "attachment; filename = " + fileName)
                         .header("content-length", doc.length).build();
             } else {
@@ -157,7 +160,7 @@ public final class GPIReportService {
         int output = EndpointUtils.getSingleValue(formParams.getOutput(), 1);
         
         switch (type) {
-            case GPIReportConstants.XLSX: 
+            case AMPReportExportConstants.XLSX:
                 switch (indicatorCode) {
                     case GPIReportConstants.REPORT_1 :
                         if (output == 2) {
@@ -182,7 +185,7 @@ public final class GPIReportService {
                         exporter = GPIReportExportType.XLSX;
                     } 
                 break;
-            case GPIReportConstants.PDF: 
+            case AMPReportExportConstants.PDF:
                 switch (indicatorCode) {
                     case GPIReportConstants.REPORT_1 :
                         if (output == 2) {

@@ -182,7 +182,7 @@ public class UpdateTeamActivities extends Action {
                         logger.info("updating " + activity.getName());
                         DbUtil.update(activity);
                         new ActivitySaveTrigger(activity);
-                        if(!activity.getApprovalStatus().equals(ApprovalStatus.APPROVED_STATUS)){
+                        if (!activity.getApprovalStatus().equals(ApprovalStatus.APPROVED_STATUS)) {
                             new NotApprovedActivityTrigger(activity);
                         }
                         

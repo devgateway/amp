@@ -99,11 +99,12 @@ public class WorkspaceFilter
 //      activityStatus.add(Constants.STARTED_STATUS);
 //      String NO_MANAGEMENT_ACTIVITIES="";
                 
-        String used_approval_status = this.getAccessTypeManagement() ? 
-                Util.toCSString(AmpARFilter.validatedActivityStatus) :          // Management workspace: validated activities only
-                (approved ? // non-management workspace, but only validated activities wanted nevertheless
-                        Util.toCSString(AmpARFilter.validatedActivityStatus) :
-                        Util.toCSString(AmpARFilter.activityStatus) // other workspaces: all kinds of activities
+        String used_approval_status = this.getAccessTypeManagement() ?
+                // Management workspace: validated activities only
+                Util.toCSString(AmpARFilter.VALIDATED_ACTIVITY_STATUS)
+                : (approved ? // non-management workspace, but only validated activities wanted nevertheless
+                        Util.toCSString(AmpARFilter.VALIDATED_ACTIVITY_STATUS) :
+                        Util.toCSString(AmpARFilter.ACTIVITY_STATUS) // other workspaces: all kinds of activities
                 );
         
         if (this.getAccessTypeManagement()) {

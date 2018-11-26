@@ -914,12 +914,12 @@ public class Reports implements ErrorReportingEndpoint {
         Map<String, Object> colorSettings = new HashMap<String, Object>();
         
         Set<Integer> validatedStatuses = new HashSet<Integer>();
-        for (ApprovalStatus s : AmpARFilter.validatedActivityStatus) {
+        for (ApprovalStatus s : AmpARFilter.VALIDATED_ACTIVITY_STATUS) {
             validatedStatuses.add(s.getId());
         }
         
         Set<Integer> unvalidatedStatuses = new HashSet<Integer>();
-        for (ApprovalStatus s : AmpARFilter.unvalidatedActivityStatus) {
+        for (ApprovalStatus s : AmpARFilter.UNVALIDATED_ACTIVITY_STATUS) {
             unvalidatedStatuses.add(s.getId());
         }
         

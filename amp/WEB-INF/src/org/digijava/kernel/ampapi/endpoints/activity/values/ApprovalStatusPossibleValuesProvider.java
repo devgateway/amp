@@ -15,7 +15,7 @@ public class ApprovalStatusPossibleValuesProvider extends PossibleValuesProvider
     @Override
     public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
         List<PossibleValue> values = new ArrayList<>();
-        for (ApprovalStatus status : AmpARFilter.activityStatus) {
+        for (ApprovalStatus status : AmpARFilter.ACTIVITY_STATUS) {
             values.add(new PossibleValue(status.getId().longValue(), status.getDbName(), ImmutableMap.of()));
         }
         return values;

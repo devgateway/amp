@@ -96,10 +96,23 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
         
             Long closedCategoryValue = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);
             
-            String filterQuery = "SELECT amp_activity_last_version_id FROM amp_activity_group aag WHERE aag.autoclosedonexpiration = false AND " + 
-                " aag.amp_activity_last_version_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft IS NULL or draft=false) AND (amp_team_id IS NOT NULL) AND (deleted IS NULL OR deleted = false) AND approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") AND actual_completion_date < now())" +
-                " AND aag.amp_activity_last_version_id IN (select amp_activity_id FROM v_status WHERE amp_status_id != " + closedCategoryValue + ")" +
-                "";
+            String filterQuery = "SELECT amp_activity_last_version_id "
+                    + "FROM amp_activity_group aag "
+                    + "WHERE aag.autoclosedonexpiration = false "
+                    + "AND aag.amp_activity_last_version_id IN ("
+                    + "  SELECT amp_activity_id "
+                    + "  FROM amp_activity "
+                    + "  WHERE (draft IS NULL or draft=false) "
+                    + "  AND (amp_team_id IS NOT NULL) "
+                    + "  AND (deleted IS NULL OR deleted = false) "
+                    + "  AND approval_status IN (" + Util.toCSString(AmpARFilter.VALIDATED_ACTIVITY_STATUS) + ") "
+                    + "  AND actual_completion_date < now()"
+                    + ") "
+                    + "AND aag.amp_activity_last_version_id IN ("
+                    + "  select amp_activity_id "
+                    + "  FROM v_status "
+                    + "  WHERE amp_status_id != " + closedCategoryValue
+                    + ")";
         
             List<Long> eligibleIds = DbHelper.getInActivities(filterQuery);
             //java.util.Map<Long, Long> statusIdsByActivityIds = getStatuses(session, eligibleIds);                     

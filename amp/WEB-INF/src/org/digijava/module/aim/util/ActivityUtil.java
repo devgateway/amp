@@ -107,8 +107,6 @@ import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 import org.joda.time.Period;
 
-import javax.servlet.http.HttpSession;
-
 public class ActivityUtil {
 
   private static Logger logger = Logger.getLogger(ActivityUtil.class);
@@ -2070,7 +2068,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
     public static List<Long> getValidatedActivityIds() {
-        return getActivityIdsByApprovalStatus(AmpARFilter.validatedActivityStatus);
+        return getActivityIdsByApprovalStatus(AmpARFilter.VALIDATED_ACTIVITY_STATUS);
     }
 
     /**

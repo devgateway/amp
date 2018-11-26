@@ -95,7 +95,7 @@ public final class PledgesDonorFilterListManager implements FilterListManager {
                 orgItems.add(typeNode);
             }
         }
-        orgItems.add(UNDEFINED_OPTION);
+        orgItems.add(getUndefinedOption());
         
         items.put(PLEDGES_DONORS_ITEMS_NAME, orgItems);
 

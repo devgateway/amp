@@ -45,7 +45,7 @@
 			    		amp_activity_version a
 			    			JOIN amp_activities_categoryvalues aac ON aac.amp_activity_id = a.amp_activity_id
 			    			JOIN amp_category_value acv ON acv.id = aac.amp_categoryvalue_id
-			    			JOIN amp_category_class acc ON acc.id = acv.amp_category_class_id AND acc.keyname='SSC_activity_budget';
+			    			JOIN amp_category_class acc ON acc.id = acv.amp_category_class_id AND acc.keyname='SSC_activity_budget'
 			    ) v
                 ON aav.amp_activity_id = v.amp_activity_id;
 

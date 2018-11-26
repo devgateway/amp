@@ -41,7 +41,8 @@ public class AmpResourcesSearchModel extends
             AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
             Session jcrWriteSession = DocumentManagerUtil.getWriteSession(SessionUtil.getCurrentServletRequest());
 
-            Node otherHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, session.getCurrentMember());
+            Node otherHomeNode = DocumentManagerUtil.getOrCreateUserPrivateNode(jcrWriteSession,
+                    session.getCurrentMember());
             Iterator<Node> nit = otherHomeNode.getNodes();
             input = (!StringUtils.isEmpty(input) ? input.trim() : input);
             while (nit.hasNext()) {

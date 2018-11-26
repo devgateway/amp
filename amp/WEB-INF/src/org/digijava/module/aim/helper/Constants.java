@@ -1,6 +1,10 @@
 package org.digijava.module.aim.helper ;
 
 import java.awt.Color;
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 
 public final class Constants {
 
@@ -180,13 +184,6 @@ public final class Constants {
 
     public static final String ANNUAL = "A" ;
     public static final String QUARTERLY = "Q" ;
-    public static final String STARTED_APPROVED_STATUS  = "startedapproved";
-    public static final String APPROVED_STATUS  = "approved";
-    public static final String STARTED_STATUS   = "started";
-    public static final String EDITED_STATUS    = "edited";
-    public static final String NOT_APPRVED = "not_approved";
-    public static final String REJECTED_STATUS = "rejected";
-    //TODO better to have APPROVAL_APROVED, APPROVAL_NOT_APROVED and something like that
 
     //proudly added by Alex Gartner
     public static final String ACTIVITY_STATUS_PLANNED          = "Planned";
@@ -197,6 +194,10 @@ public final class Constants {
     public static final String ACTIVITY_STATUS_PROPOSED         = "Proposed";
     public static final String ACTIVITY_STATUS_CONSIDERED       = "Considered";
     
+    public static final Set<ApprovalStatus> ACTIVITY_NEEDS_APPROVAL_STATUS_SET = ImmutableSet.of(
+            ApprovalStatus.STARTED_STATUS,
+            ApprovalStatus.EDITED_STATUS,
+            ApprovalStatus.REJECTED_STATUS);
     public static final String ACTIVITY_NEEDS_APPROVAL_STATUS   = "'created', 'started', 'edited', 'rejected'";
 
 

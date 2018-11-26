@@ -73,6 +73,7 @@ import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
@@ -176,7 +177,7 @@ public class ActivityUtil {
             throw new RuntimeException("Can't save activity:", exception);
         }
         
-        if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(a.getApprovalStatus())) {
+        if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS_SET.contains(a.getApprovalStatus())) {
             new ActivityValidationWorkflowTrigger(a);
         }
         
@@ -360,10 +361,10 @@ public class ActivityUtil {
         return additionalDetails;
     }
 
-    private static boolean isApproved(AmpActivityVersion activity) {
-        String approvalStatus = activity.getApprovalStatus();
-        return Constants.APPROVED_STATUS.equals(approvalStatus)
-                || Constants.STARTED_APPROVED_STATUS.equals(approvalStatus);
+    public static boolean isApproved(AmpActivityVersion activity) {
+        ApprovalStatus approvalStatus = activity.getApprovalStatus();
+        return ApprovalStatus.APPROVED_STATUS.equals(approvalStatus)
+                || ApprovalStatus.STARTED_APPROVED_STATUS.equals(approvalStatus);
     }
 
 private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityVersion a) {
@@ -478,23 +479,23 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
             if (teamLeadFlag) {
                 if (draft) {
                     if (rejected) {
-                        a.setApprovalStatus(Constants.REJECTED_STATUS);
+                        a.setApprovalStatus(ApprovalStatus.REJECTED_STATUS);
                     } else {
                         if (newActivity) {
-                            a.setApprovalStatus(Constants.STARTED_STATUS);
+                            a.setApprovalStatus(ApprovalStatus.STARTED_STATUS);
                         } else {
                             if (oldA.getApprovalStatus() != null
-                                    && Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus()) == 0)
-                                a.setApprovalStatus(Constants.STARTED_STATUS);
+                                    && ApprovalStatus.STARTED_STATUS.equals(oldA.getApprovalStatus()))
+                                a.setApprovalStatus(ApprovalStatus.STARTED_STATUS);
                             else
-                                a.setApprovalStatus(Constants.EDITED_STATUS);
+                                a.setApprovalStatus(ApprovalStatus.EDITED_STATUS);
                         }
                     }
                 } else {
                     // If activity belongs to the same workspace where TL/AP is
                     // logged set it validated
                     if (isSameWorkspace) {
-                        a.setApprovalStatus(Constants.APPROVED_STATUS);
+                        a.setApprovalStatus(ApprovalStatus.APPROVED_STATUS);
                         a.setApprovedBy(ampCurrentMember);
                         a.setApprovalDate(Calendar.getInstance().getTime());
                     } else {
@@ -504,14 +505,14 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                          * set it validated
                          */
                         if (crossTeamValidation) {
-                            a.setApprovalStatus(Constants.APPROVED_STATUS);
+                            a.setApprovalStatus(ApprovalStatus.APPROVED_STATUS);
                             a.setApprovedBy(ampCurrentMember);
                             a.setApprovalDate(Calendar.getInstance().getTime());
                         } else {
-                            if (StringUtils.equals(oldA.getApprovalStatus(), Constants.STARTED_STATUS)) {
-                                a.setApprovalStatus(Constants.STARTED_STATUS);
+                            if (ApprovalStatus.STARTED_STATUS.equals(oldA.getApprovalStatus())) {
+                                a.setApprovalStatus(ApprovalStatus.STARTED_STATUS);
                             } else {
-                                a.setApprovalStatus(Constants.EDITED_STATUS);
+                                a.setApprovalStatus(ApprovalStatus.EDITED_STATUS);
                             }
                         }
                     }
@@ -520,28 +521,28 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                 if ("newOnly".equals(validation)) {
                     if (newActivity) {
                         // all the new activities will have the started status
-                        a.setApprovalStatus(Constants.STARTED_STATUS);
+                        a.setApprovalStatus(ApprovalStatus.STARTED_STATUS);
                     } else {
                         // if we edit an existing not validated status it will
                         // keep the old status - started
                         if (oldA.getApprovalStatus() != null
-                                && Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus()) == 0)
-                            a.setApprovalStatus(Constants.STARTED_STATUS);
+                                && ApprovalStatus.STARTED_STATUS.equals(oldA.getApprovalStatus()))
+                            a.setApprovalStatus(ApprovalStatus.STARTED_STATUS);
                         // if we edit an existing activity that is validated or
                         // startedvalidated or edited
                         else
-                            a.setApprovalStatus(Constants.APPROVED_STATUS);
+                            a.setApprovalStatus(ApprovalStatus.APPROVED_STATUS);
                     }
                 } else {
                     if ("allEdits".equals(validation)) {
                         if (newActivity) {
-                            a.setApprovalStatus(Constants.STARTED_STATUS);
+                            a.setApprovalStatus(ApprovalStatus.STARTED_STATUS);
                         } else {
                             if (oldA.getApprovalStatus() != null
-                                    && Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus()) == 0)
-                                a.setApprovalStatus(Constants.STARTED_STATUS);
+                                    && ApprovalStatus.STARTED_STATUS.equals(oldA.getApprovalStatus()))
+                                a.setApprovalStatus(ApprovalStatus.STARTED_STATUS);
                             else
-                                a.setApprovalStatus(Constants.EDITED_STATUS);
+                                a.setApprovalStatus(ApprovalStatus.EDITED_STATUS);
                         }
                     }
                 }
@@ -551,9 +552,9 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         } else {
             // Validation is OF in GS activity approved
             if (newActivity) {
-                a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
+                a.setApprovalStatus(ApprovalStatus.STARTED_APPROVED_STATUS);
             } else {
-                a.setApprovalStatus(Constants.APPROVED_STATUS);
+                a.setApprovalStatus(ApprovalStatus.APPROVED_STATUS);
             }
             a.setApprovedBy(ampCurrentMember);
             a.setApprovalDate(Calendar.getInstance().getTime());

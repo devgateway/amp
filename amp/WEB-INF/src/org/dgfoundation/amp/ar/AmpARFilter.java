@@ -37,6 +37,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
@@ -59,6 +60,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Constants.GlobalSettings;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -137,32 +139,28 @@ public class AmpARFilter extends PropertyListable {
         this.put("Validated Activities", 4);
     }});
     
-    
-    // change this together with v_mondrian_activity_fixed_texts.xml
-    public final static Map<String, Integer> activityStatusToNr = Collections.unmodifiableMap(new HashMap<String, Integer>(){{
-        this.put(Constants.APPROVED_STATUS, 1);
-        this.put(Constants.EDITED_STATUS, 2);
-        this.put(Constants.STARTED_APPROVED_STATUS, 3);
-        this.put(Constants.STARTED_STATUS, 4);
-        this.put(Constants.NOT_APPRVED, 5);
-        this.put(Constants.REJECTED_STATUS, 6);     
-    }});
-    
     /**
      * list of all legal values of AmpActivity::"approvalStatus". DO NOT CHANGE, make a different set with a subset of these if you need the subset only
      */
-    public final static Set<String> activityStatus = activityStatusToNr.keySet();
-    
-    public final static Set<String> validatedActivityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
-                                                        this.add(Constants.APPROVED_STATUS);
-                                                        this.add(Constants.STARTED_APPROVED_STATUS);
-        }});
+    public final static Set<ApprovalStatus> activityStatus = ImmutableSet.of(
+            ApprovalStatus.APPROVED_STATUS,
+            ApprovalStatus.EDITED_STATUS,
+            ApprovalStatus.STARTED_APPROVED_STATUS,
+            ApprovalStatus.STARTED_STATUS,
+            ApprovalStatus.NOT_APPROVED,
+            ApprovalStatus.REJECTED_STATUS
 
-    public final static Set<String> unvalidatedActivityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
-        this.add(Constants.STARTED_STATUS);
-        this.add(Constants.EDITED_STATUS);
-        this.add(Constants.REJECTED_STATUS);
-    }});
+    );
+    
+    public final static Set<ApprovalStatus> validatedActivityStatus = ImmutableSet.of(
+            ApprovalStatus.APPROVED_STATUS,
+            ApprovalStatus.STARTED_APPROVED_STATUS);
+
+    public final static Set<ApprovalStatus> unvalidatedActivityStatus = ImmutableSet.of(
+            ApprovalStatus.STARTED_STATUS,
+            ApprovalStatus.EDITED_STATUS,
+            ApprovalStatus.REJECTED_STATUS
+    );
 
 
     /**

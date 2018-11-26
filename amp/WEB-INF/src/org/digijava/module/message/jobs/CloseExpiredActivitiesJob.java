@@ -14,7 +14,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.startup.AmpBackgroundActivitiesUtil;
@@ -47,7 +47,8 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
      * @return
      * @throws CloneNotSupportedException
      */
-    protected AmpActivityVersion cloneActivity(Session session, AmpTeamMember member, AmpActivityVersion oldActivity, String newStatus, Long closedProjectStatusCategoryValue) throws CloneNotSupportedException
+    protected AmpActivityVersion cloneActivity(Session session, AmpTeamMember member, AmpActivityVersion oldActivity,
+            ApprovalStatus newStatus, Long closedProjectStatusCategoryValue) throws CloneNotSupportedException
     {       
         AmpActivityVersion prevVersion = oldActivity.getAmpActivityGroup().getAmpActivityLastVersion();
         oldActivity.getAmpActivityGroup().setAutoClosedOnExpiration(true);
@@ -111,12 +112,13 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
                       " aav " + "where aav.ampActivityId IN (" + Util.toCSString(eligibleIds) + ")";
                 closeableActivities = session.createQuery(queryString).list();
             }
-            
-            String newStatus = Constants.APPROVED_STATUS;
+
+            ApprovalStatus newStatus = ApprovalStatus.APPROVED_STATUS;
             session.setFlushMode(FlushMode.MANUAL);
             for(AmpActivityVersion ver:closeableActivities) {
                 if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))) {
-                     newStatus = ver.getApprovalStatus().equals(Constants.STARTED_APPROVED_STATUS) ? Constants.STARTED_STATUS : Constants.EDITED_STATUS;
+                     newStatus = ver.getApprovalStatus().equals(ApprovalStatus.STARTED_APPROVED_STATUS)
+                             ? ApprovalStatus.STARTED_STATUS : ApprovalStatus.EDITED_STATUS;
                 }
                 
                 AmpCategoryValue oldActivityStatus = CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, ver.getCategories());

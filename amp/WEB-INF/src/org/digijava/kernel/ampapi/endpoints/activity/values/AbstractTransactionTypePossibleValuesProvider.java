@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activity.discriminators;
+package org.digijava.kernel.ampapi.endpoints.activity.values;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,18 +46,6 @@ public abstract class AbstractTransactionTypePossibleValuesProvider extends Poss
         return values;
     }
 
-    @Override
-    public Object toJsonOutput(Object obj) {
-        Integer intValue = (Integer) obj;
-        for (Map.Entry<String, Integer> entry : getTransactionTypeMap().entrySet()) {
-            if (entry.getValue().equals(intValue)) {
-                return entry.getKey();
-            }
-        }
-
-        return null;
-    }
-
     public abstract boolean isVisibleInFeatureManager(Integer transactionTypeId);
 
     private Map<String, Integer> getTransactionTypeMap() {
@@ -84,15 +72,5 @@ public abstract class AbstractTransactionTypePossibleValuesProvider extends Poss
 
     private boolean isIncluded(AmpCategoryValue categoryValue) {
         return !filterByValues || values.contains(categoryValue.getValue());
-    }
-
-    @Override
-    public Long getIdOf(Object value) {
-        return Long.decode(value.toString());
-    }
-
-    @Override
-    public Object toAmpFormat(Object obj) {
-        return obj;
     }
 }

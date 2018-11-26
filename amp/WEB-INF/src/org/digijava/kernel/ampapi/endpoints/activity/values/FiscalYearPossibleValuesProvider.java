@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activity.discriminators;
+package org.digijava.kernel.ampapi.endpoints.activity.values;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,20 +22,4 @@ public class FiscalYearPossibleValuesProvider extends PossibleValuesProvider {
         
         return values;
     }
-
-    @Override
-    public Object toJsonOutput(Object object) {
-        return object;
-    }
-
-    @Override
-    public Long getIdOf(Object value) {
-        return null;
-    }
-
-    @Override
-    public Object toAmpFormat(Object obj) {
-        return obj;
-    }
-
 }

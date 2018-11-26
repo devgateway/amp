@@ -2,8 +2,10 @@ package org.digijava.module.aim.helper ;
 
 import java.awt.Color;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableSet;
+import org.apache.commons.lang3.StringUtils;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 
 public final class Constants {
@@ -195,10 +197,14 @@ public final class Constants {
     public static final String ACTIVITY_STATUS_CONSIDERED       = "Considered";
     
     public static final Set<ApprovalStatus> ACTIVITY_NEEDS_APPROVAL_STATUS_SET = ImmutableSet.of(
+            ApprovalStatus.CREATED,
             ApprovalStatus.STARTED_STATUS,
             ApprovalStatus.EDITED_STATUS,
             ApprovalStatus.REJECTED_STATUS);
-    public static final String ACTIVITY_NEEDS_APPROVAL_STATUS   = "'created', 'started', 'edited', 'rejected'";
+
+    public static final String ACTIVITY_NEEDS_APPROVAL_STATUS = ACTIVITY_NEEDS_APPROVAL_STATUS_SET.stream()
+            .map(z -> StringUtils.wrap(z.getDbName(), "'"))
+            .collect(Collectors.joining(", "));
 
 
 

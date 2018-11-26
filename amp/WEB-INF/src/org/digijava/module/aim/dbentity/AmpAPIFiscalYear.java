@@ -1,7 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.FiscalYearPossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.FiscalYearPossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 

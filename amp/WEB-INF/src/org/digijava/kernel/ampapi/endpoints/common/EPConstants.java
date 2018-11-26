@@ -48,7 +48,6 @@ public class EPConstants {
     public static final String FORCE_HEADERS = "forceHeaders";
     public static final String PROJECT_TYPE = "projectType";
     public static final String REPORT_TYPE = "reportType";
-    public static final String NI_REPORT = "nireport";
     public static final String INFO = "info";
     public static final String GENERATED_HEADERS = "generatedHeaders";
     public static final String STATS = "stats";

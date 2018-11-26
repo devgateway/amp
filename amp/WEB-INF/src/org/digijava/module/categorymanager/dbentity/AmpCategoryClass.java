@@ -1,42 +1,26 @@
-/**
- * 
- */
 package org.digijava.module.categorymanager.dbentity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 /**
  * @author Alex Gartner
  *
  */
 public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryClass> {
-    @Interchangeable(fieldTitle="ID")
     private Long id;
-    @Interchangeable(fieldTitle="Name")
     private String name;
-    @Interchangeable(fieldTitle="Description")
     private String description;
-    @Interchangeable(fieldTitle="Key Name")
     private String keyName;
     private boolean isMultiselect   = false;
     private boolean isOrdered       = false;
     
-    @Interchangeable(fieldTitle="Possible Values", pickIdOnly=true)
     private List<AmpCategoryValue> possibleValues;
     
-    @Interchangeable(fieldTitle="Used Categories", pickIdOnly = true)
     private List<AmpCategoryClass> usedCategories;
-    @Interchangeable(fieldTitle="Used By Categories", pickIdOnly=true)
     private Set<AmpCategoryClass> usedByCategories;
     
-    @Interchangeable(fieldTitle="Used By Category Single Select")
     private Boolean usedByCategorySingleSelect; //how this category class is linked with current usedByCategory
     
     public String getDescription() {

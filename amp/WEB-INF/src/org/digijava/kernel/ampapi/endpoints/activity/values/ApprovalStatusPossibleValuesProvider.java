@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activity.discriminators;
+package org.digijava.kernel.ampapi.endpoints.activity.values;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,26 +19,5 @@ public class ApprovalStatusPossibleValuesProvider extends PossibleValuesProvider
             values.add(new PossibleValue(status.getId().longValue(), status.getDbName(), ImmutableMap.of()));
         }
         return values;
-    }
-
-    @Override
-    public Object toJsonOutput(Object object) {
-        return object;
-    }
-
-    @Override
-    public Long getIdOf(Object value) {
-        return ((ApprovalStatus) value).getId().longValue();
-    }
-
-    @Override
-    public Object toAmpFormat(Object obj) {
-        if (obj == null) {
-            return null;
-        }
-        if (obj instanceof Integer) {
-            return ApprovalStatus.fromId((Integer) obj);
-        }
-        throw new IllegalArgumentException("Unknown approval status: " + obj);
     }
 }

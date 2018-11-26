@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
@@ -20,11 +22,14 @@ public class APIField {
     @JsonProperty(ActivityEPConstants.FIELD_NAME)
     private String fieldName;
 
-    @JsonProperty(ActivityEPConstants.ID)
-    private Boolean id;
-
     @JsonProperty(ActivityEPConstants.FIELD_TYPE)
     private String fieldType;
+
+    /**
+     * Meaningful only when fieldType is list.
+     */
+    @JsonIgnore
+    private Class<?> elementType;
 
     @JsonProperty(ActivityEPConstants.FIELD_LABEL)
     private JsonBean fieldLabel;
@@ -36,7 +41,8 @@ public class APIField {
     private String required;
 
     @JsonProperty(ActivityEPConstants.ID_ONLY)
-    private Boolean idOnly;
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
+    private boolean idOnly;
 
     @JsonProperty(ActivityEPConstants.IMPORTABLE)
     private Boolean importable;
@@ -78,7 +84,47 @@ public class APIField {
     private Integer sizeLimit;
 
     @JsonIgnore
-    private String discriminator;
+    private String discriminatorField;
+
+    @JsonIgnore
+    private String discriminatorValue;
+
+    @JsonIgnore
+    private Class<? extends DiscriminationConfigurer> discriminationConfigurer;
+
+    @JsonIgnore
+    private Class<?> type;
+
+    @JsonIgnore
+    private Class<? extends PossibleValuesProvider> possibleValuesProviderClass;
+
+    @JsonIgnore
+    private FieldValueReader fieldValueReader;
+
+    public void setFieldValueReader(FieldValueReader fieldValueReader) {
+        this.fieldValueReader = fieldValueReader;
+    }
+
+    public FieldValueReader getFieldValueReader() {
+        return fieldValueReader;
+    }
+
+    public Class<? extends PossibleValuesProvider> getPossibleValuesProviderClass() {
+        return possibleValuesProviderClass;
+    }
+
+    public void setPossibleValuesProviderClass(
+            Class<? extends PossibleValuesProvider> possibleValuesProviderClass) {
+        this.possibleValuesProviderClass = possibleValuesProviderClass;
+    }
+
+    public Class<?> getType() {
+        return type;
+    }
+
+    public void setType(Class<?> type) {
+        this.type = type;
+    }
 
     public String getFieldName() {
         return fieldName;
@@ -120,19 +166,11 @@ public class APIField {
         this.required = required;
     }
 
-    public Boolean isId() {
-        return id;
-    }
-
-    public void setId(Boolean id) {
-        this.id = id;
-    }
-
-    public Boolean isIdOnly() {
+    public boolean isIdOnly() {
         return idOnly;
     }
 
-    public void setIdOnly(Boolean idOnly) {
+    public void setIdOnly(boolean idOnly) {
         this.idOnly = idOnly;
     }
 
@@ -156,16 +194,16 @@ public class APIField {
         return multipleValues;
     }
 
+    public void setMultipleValues(Boolean multipleValues) {
+        this.multipleValues = multipleValues;
+    }
+
     public Boolean isActivity() {
         return activity;
     }
 
     public void setActivity(Boolean activity) {
         this.activity = activity;
-    }
-
-    public void setMultipleValues(Boolean multipleValues) {
-        this.multipleValues = multipleValues;
     }
 
     public String getUniqueConstraint() {
@@ -240,17 +278,42 @@ public class APIField {
         this.percentage = percentage;
     }
 
-    public String getDiscriminator() {
-        return discriminator;
+    public String getDiscriminatorValue() {
+        return discriminatorValue;
     }
 
-    public void setDiscriminator(String discriminator) {
-        this.discriminator = discriminator;
+    public void setDiscriminatorValue(String discriminatorValue) {
+        this.discriminatorValue = discriminatorValue;
+    }
+
+    public String getDiscriminatorField() {
+        return discriminatorField;
+    }
+
+    public void setDiscriminatorField(String discriminatorField) {
+        this.discriminatorField = discriminatorField;
+    }
+
+    public Class<? extends DiscriminationConfigurer> getDiscriminationConfigurer() {
+        return discriminationConfigurer;
+    }
+
+    public void setDiscriminationConfigurer(
+            Class<? extends DiscriminationConfigurer> discriminationConfigurer) {
+        this.discriminationConfigurer = discriminationConfigurer;
+    }
+
+    public Class<?> getElementType() {
+        return elementType;
+    }
+
+    public void setElementType(Class<?> elementType) {
+        this.elementType = elementType;
     }
 
     @Override
     public String toString() {
-        return "APIField{" + "fieldName='" + fieldName + '\'' + ", id=" + id + ", fieldType='" + fieldType + '\''
+        return "APIField{" + "fieldName='" + fieldName + '\'' + ", fieldType='" + fieldType + '\''
                 + ", fieldLabel=" + fieldLabel + ", fieldNameInternal='" + fieldNameInternal + '\'' + ", required='"
                 + required + '\'' + ", idOnly=" + idOnly + ", importable=" + importable + ", translatable="
                 + translatable + ", multipleValues=" + multipleValues + ", activity=" + activity

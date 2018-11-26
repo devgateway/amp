@@ -22,12 +22,13 @@ import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
+import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 
@@ -443,8 +444,9 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     @ApiOperation("Retrieve gpi report in XLSX format.")
     public final Response exportXlsGPIReport(
             @ApiParam(allowableValues = "1,5a,5b,6,9") @PathParam("indicatorCode") String indicatorCode,
+            @ApiParam("Stringified body parameter as documented in POST /data/saikureport/{report_id}")
             @FormParam("formParams") GpiFormParameters formParams) {
-        return GPIReportService.getInstance().exportGPIReport(indicatorCode, formParams, GPIReportConstants.XLSX);
+        return GPIReportService.getInstance().exportGPIReport(indicatorCode, formParams, AMPReportExportConstants.XLSX);
     }
 
     @POST
@@ -454,8 +456,9 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     @ApiOperation("Retrieve gpi report in PDF format.")
     public final Response exportPdfGPIReport(
             @ApiParam(allowableValues = "1,5a,5b,6,9") @PathParam("indicatorCode") String indicatorCode,
+            @ApiParam("Stringified body parameter as documented in POST /data/saikureport/{report_id}")
             @FormParam("formParams") GpiFormParameters formParams) {
-        return GPIReportService.getInstance().exportGPIReport(indicatorCode, formParams, GPIReportConstants.PDF);
+        return GPIReportService.getInstance().exportGPIReport(indicatorCode, formParams, AMPReportExportConstants.PDF);
     }
 
     @GET

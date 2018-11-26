@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpContactPhoneProperty;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrgRecipient;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
@@ -206,12 +207,12 @@ public class ExportNGOToPdf extends Action {
                         currentRecord = property.getValue(); 
                         emails+= BULLETCHAR + currentRecord + ";\n";
                     }else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-                        currentRecord =
-                                TranslatorWorker.translateText(property.getPhoneCategory()) + " " + property.getValue();
-                        phones+= BULLETCHAR + currentRecord + ";\n";
+                        String phoneCategory = ((AmpContactPhoneProperty) property).getPhoneCategory();
+                        currentRecord = TranslatorWorker.translateText(phoneCategory) + " " + property.getValue();
+                        phones += BULLETCHAR + currentRecord + ";\n";
                     }else{
-                        currentRecord = property.getValue(); 
-                        faxes+=BULLETCHAR + currentRecord + ";\n";
+                        currentRecord = property.getValue();
+                        faxes += BULLETCHAR + currentRecord + ";\n";
                     }
                 }
                 

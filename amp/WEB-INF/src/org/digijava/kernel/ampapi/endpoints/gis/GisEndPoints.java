@@ -34,7 +34,6 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.common.MapIdWrapper;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
@@ -169,7 +168,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "SaveMap")
     @ApiOperation("Save map state")
-    public MapIdWrapper savedMaps(final @JsonView(AmpApiState.DetailView.class) AmpApiState pMap) {
+    public AmpApiState savedMaps(final @JsonView(AmpApiState.DetailView.class) AmpApiState pMap) {
         return EndpointUtils.saveApiState(pMap,"G");
     }
 

@@ -19,7 +19,6 @@ import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.Workspace;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
@@ -403,7 +402,6 @@ public class NodeWrapper{
                 if (formFile != null) {
                     ActionMessages errors = new ActionMessages();
                     if (!DocumentManagerUtil.checkFileSize(formFile, errors)) {
-                        errorAppeared = true;
                         String error = StreamUtils.asStream((Iterator<Object>) errors.get())
                                 .map(m -> m.toString())
                                 .collect(Collectors.joining("; "));
@@ -789,10 +787,11 @@ public class NodeWrapper{
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (RepositoryException e) {
             logger.error("Error occurred while fetching labels information", e);
+            throw new RuntimeException(e);
         }
-        
+    
         return labels;
     }
     

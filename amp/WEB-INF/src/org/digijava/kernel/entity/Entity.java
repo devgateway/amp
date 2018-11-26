@@ -33,11 +33,13 @@ import java.security.Principal;
 import java.util.Date;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 
 public abstract class Entity
     implements Principal {
 
-    @Interchangeable(fieldTitle = "Id", id = true)
+    @Interchangeable(fieldTitle = "Id")
+    @PossibleValueId
     protected Long id;
     protected String name;
     private Entity creationEntity;

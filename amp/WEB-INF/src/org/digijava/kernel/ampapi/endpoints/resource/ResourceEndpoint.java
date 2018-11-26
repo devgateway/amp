@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.io.FileUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
@@ -59,7 +59,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
             notes = "Return JSON with fields information. See "
                     + "[Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
     public List<APIField> getAvailableFields() {
-        return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getResourceFields();
+        return AmpFieldsEnumerator.getPublicEnumerator().getResourceFields();
     }
     
     @POST
@@ -76,16 +76,17 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
         if (fields == null) {
             response = emptyMap();
         } else {
+            List<APIField> apiFields = AmpFieldsEnumerator.getPublicEnumerator().getResourceFields();
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
-                    .collect(toMap(identity(), this::possibleValuesFor));
+                    .collect(toMap(identity(), fieldName -> possibleValuesFor(fieldName, apiFields)));
         }
         return response;
     }
 
-    private List<PossibleValue> possibleValuesFor(String fieldName) {
-        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpResource.class, null);
+    private List<PossibleValue> possibleValuesFor(String fieldName, List<APIField> apiFields) {
+        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, apiFields);
     }
     
     @GET

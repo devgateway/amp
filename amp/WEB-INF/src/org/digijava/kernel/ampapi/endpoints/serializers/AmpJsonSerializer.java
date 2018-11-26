@@ -66,9 +66,9 @@ public abstract class AmpJsonSerializer<T extends Identifiable> extends JsonSeri
             Field field = value.get().getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
             Object fieldValue = field.get(value.get());
-            return InterchangeUtils.getTranslationValues(field, clazz, fieldValue, (Long) value.get().getIdentifier());
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException | EditorException | NoSuchFieldException e) {
+            return InterchangeUtils.getTranslationValues(field, clazz, fieldValue, value.get().getIdentifier());
+        } catch (SecurityException | IllegalAccessException | IllegalArgumentException
+                | EditorException | NoSuchFieldException e) {
             throw new IOException(e);
         }
     }

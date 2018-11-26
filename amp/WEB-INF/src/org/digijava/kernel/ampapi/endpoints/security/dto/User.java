@@ -6,8 +6,8 @@ package org.digijava.kernel.ampapi.endpoints.security.dto;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityConstants;
 
@@ -16,7 +16,7 @@ import org.digijava.kernel.ampapi.endpoints.security.SecurityConstants;
  * 
  * @author Nadejda Mandrescu
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
     @JsonProperty(EPConstants.ID)
     private Long id;

@@ -2,13 +2,12 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ComponentFundingOrgsValidator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.FundingPledgesValidator;
-import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -19,8 +18,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
-
-import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * 
@@ -74,32 +71,11 @@ public class InterchangeDependencyResolver {
     private final static String IMPLEMENTATION_LOCATION_PATH = "implementation_location";
     private final static String AGREEMENT_CODE_PATH = "code";
     private final static String AGREEMENT_TITLE_PATH = "title";
-    
-    /**
-     * static constructor to init paths and values
-     */
-    static{
-        codeToPath = new HashMap<String, String>();
-    }
-    
-    
-    /**
-     * Dependency code to dependency path (like: sectors~sector_id)
-     */
-    private static Map<String, String> codeToPath;
-    
-    /**
-     * Dependency code to dependency object value
-     */
-    
-    /**
-     * 
-     * @param code the code from the "Dependency codes section" of 
-     * <InterchangeDependencyMapper> 
-     * @return path as String (like: "sectors~sector_id")
-     */
-    public static String getPath(String code) {
-        return codeToPath.get(code);
+
+    private FMService fmService;
+
+    public InterchangeDependencyResolver(FMService fmService) {
+        this.fmService = fmService;
     }
 
     /**
@@ -253,6 +229,37 @@ public class InterchangeDependencyResolver {
     }
     
     /**
+     * Checks if required dependency is fullfilled
+     *
+     * @param value
+     * @param importer
+     * @param fieldDescription
+     * @param fieldParent
+     * @return
+     */
+    public static boolean shouldCheckForRequired(Object value, ObjectImporter importer,
+                                                 APIField fieldDescription, Map<String, Object> fieldParent) {
+
+        List<String> deps = fieldDescription.getDependencies();
+        boolean result = true;
+        if (deps != null) {
+            if (deps.contains(COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY)) {
+                if (isPartOfCorrectTransaction(value, importer, fieldParent, Constants.COMMITMENT)) {
+                    return deps.contains(COMMITMENTS_DISASTER_RESPONSE_REQUIRED);
+                } else if (isPartOfCorrectTransaction(value, importer, fieldParent, Constants.DISBURSEMENT)) {
+                    return deps.contains(DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED);
+                }
+            } else if (deps.contains(COMMITMENTS_PRESENT_KEY)) {
+                return deps.contains(COMMITMENTS_DISASTER_RESPONSE_REQUIRED);
+            } else if (deps.contains(DISBURSEMENTS_PRESENT_KEY)) {
+                return deps.contains(DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED);
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * check if activity is on budget or not
      * 
      * @return 
@@ -382,35 +389,37 @@ public class InterchangeDependencyResolver {
      * @param dependencyKey
      * @return this or any other dependency key or null if no dependency key should be actually considered
      */
-    public static String getActualDependency(String dependencyKey) {
+    private String getActualDependency(String dependencyKey) {
         // verify any custom keys processing
         switch (dependencyKey) {
         case COMMITMENTS_PRESENT_KEY:
-            if (!FMVisibility.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
+            if (!fmService.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
                 return null;
-            } else if (FMVisibility.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
+            } else if (fmService.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
                 return COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY;
             }
             break;
         case DISBURSEMENTS_PRESENT_KEY:
-            if (!FMVisibility.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
+            if (!fmService.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
                 return null;
-            } else if (FMVisibility.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
+            } else if (fmService.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
                 // since it will be or was provided as part of COMMITMENTS_PRESENT_KEY
                 return null;
             }
             break;
         case COMMITMENTS_DISASTER_RESPONSE_REQUIRED:
             // do not mention commitments dependency key required setting if not enabled
-            if (!FMVisibility.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null) ||
-                    !FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Required Validator for Disaster Response", null))
+            if (!fmService.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)
+                    || !fmService.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_REQUIRED_FM_PATH, null)) {
                 return null;
+            }
             break;
         case DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED:
             // do not mention disbursements dependency key required setting if not enabled
-            if (!FMVisibility.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null) ||
-                    !FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Required Validator for Disaster Response", null))
+            if (!fmService.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)
+                    || !fmService.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_REQUIRED_PATH, null)) {
                 return null;
+            }
             break;
         }
         // provide back the dependency key if no changes detected so far 
@@ -459,7 +468,7 @@ public class InterchangeDependencyResolver {
      * @param dependecies
      * @return actual dependencies list or null if no dependency
      */
-    public static List<String> getActualDependencies(String[] dependecies) {
+    public List<String> getActualDependencies(String[] dependecies) {
         if (dependecies == null || dependecies.length == 0)
             return null;
         List<String> actualDependecies = new ArrayList<String>();

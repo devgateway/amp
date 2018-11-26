@@ -49,6 +49,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.contentrepository.helper.TeamMemberMail;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -85,6 +86,7 @@ public class TeamMemberUtil {
         {
             ampMember = getAmpTeamMember(id);
             if (id != null && ampMember != null) {
+                Hibernate.initialize(ampMember.getUser().getAssignedOrgs());
                 atmUsers.put(id, ampMember);
             }
             return ampMember;
@@ -378,7 +380,7 @@ public class TeamMemberUtil {
             List<AmpTeamMember> atms = qry.list();
             List<TeamMemberMail> members = new ArrayList<>();
             for (AmpTeamMember atm : atms) {
-                members.add(new TeamMemberMail(atm.getAmpTeamMemId(), 
+                members.add(new TeamMemberMail(atm.getAmpTeamMemId(),
                         atm.getAmpTeam().getAmpTeamId(), atm.getUser().getEmail()));
             }
 
@@ -1454,7 +1456,7 @@ public class TeamMemberUtil {
         }
     }
 
-    public static void getActivitiesWsByTeamMemberComputed(Map<Long, Set<String>> activitiesWs, AmpTeamMember atm) {
+    public static void getActivitiesWsByTeamMemberComputed(Map<Long, Set<Long>> activitiesWs, AmpTeamMember atm) {
         CompleteWorkspaceFilter completeWSFilter = (CompleteWorkspaceFilter)
                 TLSUtils.getRequest().getSession().getAttribute(Constants.COMPLETE_TEAM_FILTER);
         if (completeWSFilter != null) {
@@ -1465,21 +1467,21 @@ public class TeamMemberUtil {
         }
     }
 
-    public static void getActivitiesWsByTeamMember(Map<Long, Set<String>> activitiesWs, AmpTeamMember atm) {
+    public static void getActivitiesWsByTeamMember(Map<Long, Set<Long>> activitiesWs, AmpTeamMember atm) {
         TeamMember teamMember = new TeamMember(atm);
         List<Long> editableIds = ActivityUtil.getEditableActivityIdsNoSession(teamMember);
-        processActivitiesId(activitiesWs, teamMember, Optional.ofNullable(editableIds).orElse(Collections.emptyList()
-        ).stream());
+        processActivitiesId(activitiesWs, teamMember, Optional.ofNullable(editableIds)
+                .orElse(Collections.emptyList()).stream());
 
     }
 
-    private static void processActivitiesId(Map<Long, Set<String>> activitiesWs, TeamMember teamMember,
+    private static void processActivitiesId(Map<Long, Set<Long>> activitiesWs, TeamMember teamMember,
                                             Stream<Long> activityStream) {
         activityStream.forEach(actId -> {
             if (!activitiesWs.containsKey(actId)) {
-                activitiesWs.put(actId, new HashSet<String>());
+                activitiesWs.put(actId, new HashSet<Long>());
             }
-            activitiesWs.get(actId).add(teamMember.getTeamId().toString());
+            activitiesWs.get(actId).add(teamMember.getTeamId());
         });
     }
 }

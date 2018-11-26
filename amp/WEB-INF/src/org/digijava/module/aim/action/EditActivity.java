@@ -1631,6 +1631,9 @@ public class EditActivity extends Action {
                 }
         }
     }
+    
+    setRegionalObservationsToForm(activity, eaForm);
+    
     setLineMinistryObservationsToForm(activity, eaForm);
 
     //structures
@@ -1736,7 +1739,6 @@ public class EditActivity extends Action {
       for(AmpStructure struc:structures)
       {
           AmpStructure z = (AmpStructure) struc.clone();
-          z.setActivities(new HashSet(z.getActivities()));
           z.setImages(new HashSet(struc.getImages()));
           /*z.setActivities(new HashSet(struc.getActivities()));
           z.setAmpStructureId(struc.getAmpStructureId());
@@ -1757,9 +1759,46 @@ public class EditActivity extends Action {
       }
       return activityId;
 }
+    
+    
+    private void setRegionalObservationsToForm(AmpActivityVersion activity, EditActivityForm eaForm) {
+        if (activity.getRegionalObservations() != null && activity.getRegionalObservations().size() > 0) {
+            ArrayList issueList = new ArrayList();
+            
+            for (AmpRegionalObservation aro : activity.getRegionalObservations()) {
+                Issues issue = new Issues();
+                issue.setId(aro.getAmpRegionalObservationId());
+                issue.setName(aro.getName());
+                issue.setIssueDate(FormatHelper.formatDate(aro.getObservationDate()));
+                ArrayList measureList = new ArrayList();
+                if (aro.getRegionalObservationMeasures() != null) {
+                    for (AmpRegionalObservationMeasure ampMeasure : aro.getRegionalObservationMeasures()) {
+                        Measures measure = new Measures();
+                        measure.setId(ampMeasure.getAmpRegionalObservationMeasureId());
+                        measure.setName(ampMeasure.getName());
+                        ArrayList actorList = new ArrayList();
+                        if (ampMeasure.getActors() != null) {
+                            for (AmpRegionalObservationActor actor : ampMeasure.getActors()) {
+                                AmpActor auxAmpActor = new AmpActor();
+                                auxAmpActor.setAmpActorId(actor.getAmpRegionalObservationActorId());
+                                auxAmpActor.setName(actor.getName());
+                                actorList.add(auxAmpActor);
+                            }
+                        }
+                        measure.setActors(actorList);
+                        measureList.add(measure);
+                    }
+                }
+                issue.setMeasures(measureList);
+                issueList.add(issue);
+            }
+            eaForm.getRegionalObservations().setIssues(issueList);
+        } else {
+            eaForm.getRegionalObservations().setIssues(null);
+        }
+    }
 
-
-private void setLineMinistryObservationsToForm(AmpActivityVersion activity, EditActivityForm eaForm){
+    private void setLineMinistryObservationsToForm(AmpActivityVersion activity, EditActivityForm eaForm) {
         if(activity.getLineMinistryObservations() != null && activity.getLineMinistryObservations().size()>0){
                 ArrayList issueList = new ArrayList();
 
@@ -1797,7 +1836,7 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
                 eaForm.getLineMinistryObservations().setIssues(null);
             }
 
-  }
+    }
 
   private EditActivityForm setSectorsToForm(EditActivityForm form, AmpActivityVersion activity) {
         Collection<AmpActivitySector> sectors = activity.getSectors();

@@ -19,6 +19,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -93,15 +94,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
-
-import com.tonbeller.wcf.utils.SqlUtils;
-
-import clover.org.apache.commons.lang.StringEscapeUtils;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -728,33 +724,6 @@ public class DbUtil {
             logger.error("Unable to get TeamAppSettings", e);
         }
         return ampAppSettings;
-    }
-
-    public static boolean isUserTranslator(User u) {
-
-        logger.debug("In isUserTranslator()");
-        User user = (User) PersistenceManager.getSession().get(User.class, u.getId());
-        boolean flag = false;
-        try {
-            Iterator itr = user.getGroups().iterator();
-            if (!itr.hasNext()) {
-                logger.debug("No groups");
-            }
-            while (itr.hasNext()) {
-                Group grp = (Group) itr.next();
-                logger.debug("Group key is " + grp.getKey());
-                if ((grp.getKey() != null) && "TRN".equals(grp.getKey().trim())) {
-                    logger.debug("setting flag as true");
-                    flag = true;
-                    break;
-                } else {
-                    logger.debug("in else");
-                }
-            }
-        } catch (Exception ex) {
-            logger.error("Unable to get team member ", ex);
-        }
-        return flag;
     }
 
     /*

@@ -871,9 +871,8 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
 
                 tdd.setWebLink(temp.getWebLink());
 
-                ActionMessages messages = new ActionMessages();
                 try {
-                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
+                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest());
 
                     AmpActivityDocument aad = new AmpActivityDocument();
                     aad.setAmpActivity(a);
@@ -1118,9 +1117,8 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
 
                 tdd.setWebLink(temp.getWebLink());
 
-                ActionMessages messages = new ActionMessages();
                 try {
-                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
+                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest());
 
                     AmpGPINiSurveyResponseDocument responseDocument = new AmpGPINiSurveyResponseDocument();
 

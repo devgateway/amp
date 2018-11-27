@@ -13,7 +13,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
 
-public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Comparable<AmpAhsurvey> {
+public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Comparable<AmpAhsurvey>, AuditableEntity {
 
     @Interchangeable(fieldTitle = "ID")
     private Long ampAHSurveyId;
@@ -202,5 +202,10 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
         if(this.getAmpActivityId()!=null && o.getAmpAHSurveyId()!=null)
             return this.getAmpAHSurveyId().compareTo(o.getAmpAHSurveyId());
         else return -1;
+    }
+
+    @Override
+    public AuditableEntity getParent() {
+        return ampActivityId;
     }
 }

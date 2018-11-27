@@ -25,7 +25,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.REQUIRED_ALWAYS;
 
 @TranslatableClass(displayName = "Funding")
-public class AmpFunding implements Serializable, Versionable, Cloneable {
+public class AmpFunding implements Serializable, Versionable, Cloneable, AuditableEntity {
     //IATI-check: not ignored!
     private static final long serialVersionUID = 1L;
     
@@ -877,5 +877,10 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     
     public AmpCategoryValue getConcessionalityLevel() {
         return this.concessionalityLevel;
+    }
+
+    @Override
+    public AuditableEntity getParent() {
+        return ampActivityId;
     }
 }

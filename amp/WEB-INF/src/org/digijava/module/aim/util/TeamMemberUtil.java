@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -47,6 +48,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
+import org.digijava.module.contentrepository.helper.TeamMemberMail;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -83,6 +86,7 @@ public class TeamMemberUtil {
         {
             ampMember = getAmpTeamMember(id);
             if (id != null && ampMember != null) {
+                Hibernate.initialize(ampMember.getUser().getAssignedOrgs());
                 atmUsers.put(id, ampMember);
             }
             return ampMember;
@@ -327,11 +331,9 @@ public class TeamMemberUtil {
 
     public static List<TeamMember> getAllTeamMembers(Long teamId) {
         try {
+            
             Session session = PersistenceManager.getSession();
             String queryString = "select distinct tm from " + AmpTeamMember.class.getName() + " tm "
-                    + "inner join fetch tm.user as usr "
-                    + "inner join fetch tm.ampMemberRole "
-                    + "inner join fetch tm.ampTeam "
                     + "where (tm.deleted is null or tm.deleted = false) ";
 
             if (teamId != null) {
@@ -346,12 +348,41 @@ public class TeamMemberUtil {
 
             List<AmpTeamMember> atms = qry.list();
             List<TeamMember> members = new ArrayList<>();
-
             for (AmpTeamMember atm : atms) {
                 members.add(new TeamMember(atm));
+                
+            }
+            Collections.sort((List<TeamMember>) members, new TeamMemberUtil.TeamMemberComparator());
+
+            return members;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public static List<TeamMemberMail> getAllTeamMembersMail(Long teamId) {
+        try {
+
+            Session session = PersistenceManager.getSession();
+            String queryString = "select distinct tm from " + AmpTeamMember.class.getName() + " tm "
+                    + "where (tm.deleted is null or tm.deleted = false) ";
+
+            if (teamId != null) {
+                queryString += " and (tm.ampTeam=:teamId)";
             }
 
-            Collections.sort((List<TeamMember>) members, new TeamMemberUtil.TeamMemberComparator());
+            Query qry = session.createQuery(queryString);
+
+            if (teamId != null) {
+                qry.setParameter("teamId", teamId, LongType.INSTANCE);
+            }
+
+            List<AmpTeamMember> atms = qry.list();
+            List<TeamMemberMail> members = new ArrayList<>();
+            for (AmpTeamMember atm : atms) {
+                members.add(new TeamMemberMail(atm.getAmpTeamMemId(),
+                        atm.getAmpTeam().getAmpTeamId(), atm.getUser().getEmail()));
+            }
 
             return members;
         } catch (Exception e) {
@@ -484,33 +515,13 @@ public class TeamMemberUtil {
     }
 
 
-    public static Collection<User> getAllTeamMemberUsers() {
-        Session session = null;
-        Query qry = null;
-        Collection<User> users = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select tm from "
-                    + AmpTeamMember.class.getName()
-                    + " tm where (tm.deleted is null or tm.deleted = false) ";
-
-            qry = session.createQuery(queryString);
-
-            Collection teamMembers = qry.list();
-            if (teamMembers != null) {
-                users = new ArrayList();
-                Iterator itr = teamMembers.iterator();
-                while (itr.hasNext()) {
-                    AmpTeamMember ampMem = (AmpTeamMember) itr.next();
-                    users.add(ampMem.getUser());
-                }
-            }
-        } catch (Exception e) {
-            logger.error("Unable to get all team members", e);
-        }
-        logger.debug("returning members");
-        return users;
+    public static List<String> getAllTeamMemberUserMails() {
+        return PersistenceManager.getSession().doReturningWork(conn -> {
+            String query =  "SELECT DISTINCT email FROM dg_user u "
+                    + "JOIN amp_team_member tm ON tm.user_ = u.id "
+                    + "WHERE tm.deleted IS NOT TRUE";
+            return SQLUtils.fetchAsList(conn, query, 1);
+        });
     }
 
     public static Collection getAllMembersUsingActivity(Long activityId) {
@@ -995,36 +1006,6 @@ public class TeamMemberUtil {
                 }
             };
 
-    public static Collection getTMTeamMembers(String email) {
-        User user = org.digijava.module.aim.util.DbUtil.getUser(email);
-        if (user == null) {
-            return null;
-        }
-
-        Session session = null;
-        Query qry = null;
-        Collection col = new ArrayList();
-
-        try {
-            session = PersistenceManager.getSession();
-            String queryString = "select tm from " + AmpTeamMember.class.getName() +
-                    " tm where (tm.deleted is null or tm.deleted = false) and (tm.user=:user)";
-            qry = session.createQuery(queryString);
-            qry.setParameter("user", user.getId(), LongType.INSTANCE);
-            Collection results = qry.list();
-            Iterator itr = results.iterator();
-
-            while (itr.hasNext()) {
-                TeamMember tm = new TeamMember((AmpTeamMember) itr.next());
-                col.add(tm);
-            }
-        } catch (Exception e) {
-            logger.error("Unable to get TeamMembers" + e.getMessage());
-            e.printStackTrace(System.out);
-        }
-        return col;
-    }
-
     public static void assignActivitiesToMember(Long memberId, Long activities[]) {
         Session session = null;
         AmpTeamMember member = null;
@@ -1337,7 +1318,7 @@ public class TeamMemberUtil {
 
         User user = DbUtil.getUser(email);
         if (user == null) {
-            return null;
+            return Collections.emptyList();
         }
 
         Session session = null;
@@ -1475,7 +1456,7 @@ public class TeamMemberUtil {
         }
     }
 
-    public static void getActivitiesWsByTeamMemberComputed(Map<Long, Set<String>> activitiesWs, AmpTeamMember atm) {
+    public static void getActivitiesWsByTeamMemberComputed(Map<Long, Set<Long>> activitiesWs, AmpTeamMember atm) {
         CompleteWorkspaceFilter completeWSFilter = (CompleteWorkspaceFilter)
                 TLSUtils.getRequest().getSession().getAttribute(Constants.COMPLETE_TEAM_FILTER);
         if (completeWSFilter != null) {
@@ -1486,22 +1467,21 @@ public class TeamMemberUtil {
         }
     }
 
-    public static void getActivitiesWsByTeamMember(Map<Long, Set<String>> activitiesWs, AmpTeamMember atm) {
+    public static void getActivitiesWsByTeamMember(Map<Long, Set<Long>> activitiesWs, AmpTeamMember atm) {
         TeamMember teamMember = new TeamMember(atm);
-        String wsFilterQuery = WorkspaceFilter.generateWorkspaceFilterQuery(teamMember);
-        List<Long> editableIds = ActivityUtil.getEditableActivityIds(teamMember, wsFilterQuery);
-        processActivitiesId(activitiesWs, teamMember, Optional.ofNullable(editableIds).orElse(Collections.emptyList()
-        ).stream());
+        List<Long> editableIds = ActivityUtil.getEditableActivityIdsNoSession(teamMember);
+        processActivitiesId(activitiesWs, teamMember, Optional.ofNullable(editableIds)
+                .orElse(Collections.emptyList()).stream());
 
     }
 
-    private static void processActivitiesId(Map<Long, Set<String>> activitiesWs, TeamMember teamMember,
+    private static void processActivitiesId(Map<Long, Set<Long>> activitiesWs, TeamMember teamMember,
                                             Stream<Long> activityStream) {
         activityStream.forEach(actId -> {
             if (!activitiesWs.containsKey(actId)) {
-                activitiesWs.put(actId, new HashSet<String>());
+                activitiesWs.put(actId, new HashSet<Long>());
             }
-            activitiesWs.get(actId).add(teamMember.getTeamId().toString());
+            activitiesWs.get(actId).add(teamMember.getTeamId());
         });
     }
 }

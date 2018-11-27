@@ -10,13 +10,12 @@ import java.util.Set;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpIssues  implements Serializable, Versionable, Cloneable
-{
+public class AmpIssues implements Serializable, Versionable, Cloneable, AuditableEntity {
 
     //IATI-check: to be ignored
     private Long ampIssueId ;
 
-    @Interchangeable(fieldTitle = "Name", importable = true)
+    @Interchangeable(fieldTitle = "Name", label = "Issue", importable = true)
     private String name ;
 
     private AmpActivityVersion activity;
@@ -192,5 +191,10 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
     public Object clone() throws CloneNotSupportedException {
         // TODO Auto-generated method stub
         return super.clone();
+    }
+
+    @Override
+    public AuditableEntity getParent() {
+        return activity;
     }
 }

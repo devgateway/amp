@@ -241,7 +241,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
                 renderTableRow(sheet, report, subReportArea, 0, new ArrayList<>());
             }
         }
-        if (report.hasMeasures()) {
+        if (report.hasTotals()) {
             renderTableTotals(sheet, report, report.reportContents);
         }
     }
@@ -313,9 +313,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
             renderTableRow(sheet, report, subReportArea, level + 1, hierarchyCells);
         }
 
-        if (report.hasMeasures()) {
-            renderSubTotalRow(sheet, report, reportContents, level);
-        }
+        renderSubTotalRow(sheet, report, reportContents, level);
 
         createHierarchyCellMergeRegion(sheet, level, rowPosInit + 1);
     }

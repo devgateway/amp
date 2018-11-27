@@ -7,19 +7,20 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivityInternalId implements Serializable, Versionable, Cloneable {
+public class AmpActivityInternalId implements Serializable, Versionable, Cloneable, AuditableEntity {
     //IATI-check: used. 
     private static final long serialVersionUID = 469552292854192522L;
     
     private Long id;
 
-    @Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true)
+    @Interchangeable(fieldTitle = "Organization", importable = true, pickIdOnly = true)
     private AmpOrganisation organisation;
 
-    @Interchangeable(fieldTitle="AMP Activity", pickIdOnly=true)
+    @Interchangeable(fieldTitle = "AMP Activity", pickIdOnly = true)
     private AmpActivityVersion ampActivity;
     
-    @Interchangeable(fieldTitle="Internal ID", importable=true)
+    @Interchangeable(fieldTitle = "Internal ID", importable = true,
+            fmPath = "/Activity Form/Activity Internal IDs/Internal IDs/internalId")
     private String internalId;
 
     public Long getId() {
@@ -98,5 +99,10 @@ public class AmpActivityInternalId implements Serializable, Versionable, Cloneab
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    @Override
+    public AuditableEntity getParent() {
+        return ampActivity;
     }
 }

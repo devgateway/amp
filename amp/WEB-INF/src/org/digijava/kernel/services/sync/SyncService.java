@@ -11,6 +11,7 @@ import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.GLO
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.LOCATORS;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.MAP_TILES;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.RESOURCE;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CALENDAR;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.TRANSLATION;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACES;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_FILTER_DATA;
@@ -52,8 +53,8 @@ import org.apache.jackrabbit.util.ISO8601;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.AmpARFilterParams;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
-import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
-import org.digijava.kernel.ampapi.endpoints.activity.FieldsEnumerator;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.CachingFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.currency.CurrencyService;
@@ -74,6 +75,7 @@ import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.repository.AmpOfflineChangelogRepository;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -105,7 +107,7 @@ public class SyncService implements InitializingBean {
             new BeanPropertyRowMapper<>(ActivityChange.class);
 
     private PossibleValuesEnumerator possibleValuesEnumerator = PossibleValuesEnumerator.INSTANCE;
-    private FieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.PRIVATE_ENUMERATOR;
+    private CachingFieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.getPrivateEnumerator();
     private CurrencyService currencyService = CurrencyService.INSTANCE;
 
     private AmpOfflineChangelogRepository ampOfflineChangelogRepository = AmpOfflineChangelogRepository.INSTANCE;
@@ -146,10 +148,11 @@ public class SyncService implements InitializingBean {
         updateDiffsForContacts(systemDiff, syncRequest);
         updateDiffsForResources(systemDiff, syncRequest);
         updateDiffsForMapTilesAndLocators(systemDiff, lastSyncTime);
+        updateDiffsForCalendars(systemDiff, syncRequest);
 
         systemDiff.setTranslations(shouldSyncTranslations(systemDiff, lastSyncTime));
 
-        systemDiff.setActivityPossibleValuesFields(findChangedPossibleValuesFields(systemDiff, lastSyncTime));
+        systemDiff.setActivityPossibleValuesFields(findChangedAndNewPossibleValuesFields(systemDiff, syncRequest));
         systemDiff.setContactPossibleValuesFields(findChangedContactPossibleValuesFields(systemDiff, lastSyncTime));
         systemDiff.setResourcePossibleValuesFields(findChangedResourcePossibleValuesFields(systemDiff, lastSyncTime));
         systemDiff.setCommonPossibleValuesFields(findChangedCommonPossibleValuesFields(systemDiff, lastSyncTime));
@@ -205,7 +208,19 @@ public class SyncService implements InitializingBean {
         return !findDaysWithModifiedRates(lastSyncTime).isEmpty();
     }
 
-    private List<String> findChangedPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
+    private List<String> findChangedAndNewPossibleValuesFields(SystemDiff systemDiff, SyncRequest syncRequest) {
+        Date lastSyncTime = syncRequest.getLastSyncTime();
+        Set<String> changedAndNewPossibleValueFields = new HashSet<>();
+    
+        changedAndNewPossibleValueFields.addAll(findChangedActivityPossibleValuesFields(systemDiff, lastSyncTime));
+    
+        List<String> newActivityPossibleValuesFields = findNewActivityPossibleValuesFields(systemDiff, syncRequest);
+        changedAndNewPossibleValueFields.addAll(newActivityPossibleValuesFields);
+    
+        return new ArrayList<String>(changedAndNewPossibleValueFields);
+    }
+    
+    private List<String> findChangedActivityPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
         Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
         return fieldsEnumerator.findActivityFieldPaths(fieldFilter);
     }
@@ -242,7 +257,25 @@ public class SyncService implements InitializingBean {
         }
         return fieldFilter;
     }
-
+    
+    private List<String> findNewActivityPossibleValuesFields(SystemDiff systemDiff, SyncRequest syncRequest) {
+        List<String> newActivityPossibleValuesFields = new ArrayList<>();
+    
+        List<String> offlineActivityPossibleValuesFields = new ArrayList<>();
+        if (syncRequest.getActivityPossibleValuesFields() != null) {
+            offlineActivityPossibleValuesFields.addAll(syncRequest.getActivityPossibleValuesFields());
+        }
+    
+        newActivityPossibleValuesFields = findAllActivityFieldsWithPossibleValues();
+        newActivityPossibleValuesFields.removeAll(offlineActivityPossibleValuesFields);
+        
+        return newActivityPossibleValuesFields;
+    }
+    
+    private List<String> findAllActivityFieldsWithPossibleValues() {
+        return fieldsEnumerator.findActivityFieldPaths(possibleValuesEnumerator.fieldsWithPossibleValues());
+    }
+    
     private void updateDiffsForActivities(SystemDiff systemDiff, SyncRequest syncRequest) {
         List<Long> userIds = syncRequest.getUserIds();
         Date lastSyncTime = syncRequest.getLastSyncTime();
@@ -255,7 +288,7 @@ public class SyncService implements InitializingBean {
         if (syncRequest.getAmpIds() != null) {
             offlineAmpIds.addAll(syncRequest.getAmpIds());
         }
-
+    
         Set<String> deleted = new HashSet<>();
         Set<String> modified = new HashSet<>();
 
@@ -346,9 +379,10 @@ public class SyncService implements InitializingBean {
         StringJoiner sql = new StringJoiner(" UNION ");
         for (AmpTeamMember teamMember : teamMembers) {
 
-            AmpARFilter computedWsFilter = FilterUtil.buildFilterFromSource(teamMember.getAmpTeam());
+            TeamMember tm = teamMember.toTeamMember();
+            AmpARFilter computedWsFilter = FilterUtil.buildFilterFromSource(teamMember.getAmpTeam(), tm);
 
-            AmpARFilterParams params = AmpARFilterParams.getParamsForWorkspaceFilter(teamMember.toTeamMember(), null);
+            AmpARFilterParams params = AmpARFilterParams.getParamsForWorkspaceFilter(tm, null);
             computedWsFilter.generateFilterQuery(params);
 
             sql.add(computedWsFilter.getGeneratedFilterQuery());
@@ -362,6 +396,15 @@ public class SyncService implements InitializingBean {
         } else {
             List<AmpOfflineChangelog> changeLogs = loadChangeLog(syncRequest.getLastSyncTime(), asList(CONTACT));
             systemDiff.setContacts(toListDiffWithLongs(changeLogs, systemDiff));
+        }
+    }
+
+    private void updateDiffsForCalendars(SystemDiff systemDiff, SyncRequest syncRequest) {
+        if (syncRequest.getLastSyncTime() == null) {
+            systemDiff.setCalendars(new ListDiff<>(emptyList(), findAllCalendarIds()));
+        } else {
+            List<AmpOfflineChangelog> changeLogs = loadChangeLog(syncRequest.getLastSyncTime(), asList(CALENDAR));
+            systemDiff.setCalendars(toListDiffWithLongs(changeLogs, systemDiff));
         }
     }
     
@@ -413,6 +456,10 @@ public class SyncService implements InitializingBean {
 
     private List<Long> findAllUserIds() {
         return jdbcTemplate.query("select id from dg_user", emptyMap(), ID_MAPPER);
+    }
+    
+    private List<Long> findAllCalendarIds() {
+        return jdbcTemplate.query("select amp_fiscal_cal_id from amp_fiscal_calendar", emptyMap(), ID_MAPPER);
     }
 
     private List<AmpOfflineChangelog> findChangedUsers(Date lastSyncTime) {

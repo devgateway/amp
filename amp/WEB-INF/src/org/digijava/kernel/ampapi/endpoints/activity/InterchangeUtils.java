@@ -1,7 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -19,8 +19,8 @@ import java.util.TimeZone;
 
 import javax.ws.rs.core.PathSegment;
 
+import com.sun.jersey.spi.container.ContainerRequest;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -29,6 +29,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -39,6 +40,7 @@ import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -46,20 +48,28 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.ValidationStatus;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 
-import com.sun.jersey.spi.container.ContainerRequest;
+import static java.util.function.Function.identity;
+
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /**
  * Activity Import/Export Utility methods 
@@ -68,13 +78,12 @@ import com.sun.jersey.spi.container.ContainerRequest;
 public class InterchangeUtils {
 
     public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
-    private static Map<String, String> underscoreToTitleMap = new HashMap<String, String>();
     private static Map<String, String> titleToUnderscoreMap = new HashMap<String, String>();
     
-    /**map from discriminator title (i.e. "Primary Sectors") to actual field name (i.e. "Sectors")
+    /**
+     * map from discriminated field name (i.e. "orgroles") to actual field title (i.e. "Donor Organization")
      */
-    private static Map<String, String> discriminatorMap = new HashMap<String, String> ();
-    public static Map<String, List<String>> discriminatedFieldsByFieldTitle = new HashMap<>();
+    private static Map<String, List<String>> discriminatedFieldTitlesByFieldName = new HashMap<>();
     static {
         addUnderscoredTitlesToMap(AmpActivityFields.class);
         addUnderscoredTitlesToMap(AmpContact.class);
@@ -85,33 +94,26 @@ public class InterchangeUtils {
 
     private static TranslatorService translatorService = AMPTranslatorService.INSTANCE;
 
+    public static Map<String, List<String>> getDiscriminatedFieldTitlesByFieldName() {
+        return discriminatedFieldTitlesByFieldName;
+    }
+
     public static void setTranslatorService(TranslatorService translatorService) {
         InterchangeUtils.translatorService = translatorService;
     }
 
-    public static String getDiscriminatedFieldTitle(String fieldName) {
-        return discriminatorMap.get(deunderscorify(fieldName));
-    }
-
     /**
-     * Decides whether a field is enumerable (may be called in the Possible Values EP)
+     * Decides whether a class is enumerable (may be called in the Possible Values EP)
      *  
-     * @param inputField
+     * @param clazz
      * @return true if possible values are limited to a set for this field, false if otherwise
      */
-    public static boolean isFieldEnumerable(Field inputField) {
-        Class<?> clazz = getClassOfField(inputField);
+    public static boolean isEnumerable(Class<?> clazz) {
         if (isSimpleType(clazz)) {
             return false;
         }
-        Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class);
-        for (Field field : fields) {
-            Interchangeable ant = field.getAnnotation(Interchangeable.class); 
-            if (ant.id()) {
-                return true;
-            }
-        }
-        return false;
+        Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, PossibleValueId.class);
+        return fields.length > 0;
     }
 
     public static String getAmpIatiIdentifierFieldName() {
@@ -136,25 +138,27 @@ public class InterchangeUtils {
      * @param clazz
      */
     private static void addUnderscoredTitlesToMap(Class<?> clazz) {
-        for (Field field : FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class)) {
+        for (Field field : getFieldsAnnotatedWith(clazz, Interchangeable.class, InterchangeableDiscriminator.class)) {
             Interchangeable ant = field.getAnnotation(Interchangeable.class);
-            if (!isCompositeField(field)) {
-                underscoreToTitleMap.put(underscorify(ant.fieldTitle()), ant.fieldTitle());
+            if (ant != null) {
                 titleToUnderscoreMap.put(ant.fieldTitle(), underscorify(ant.fieldTitle()));
-            } else {
-                InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
-                Interchangeable[] settings = antd.settings();
-                for (Interchangeable ants : settings) {
-                    underscoreToTitleMap.put(underscorify(ants.fieldTitle()), ants.fieldTitle());
-                    titleToUnderscoreMap.put(ants.fieldTitle(), underscorify(ants.fieldTitle()));
-                    discriminatorMap.put(ants.fieldTitle(), ant.fieldTitle());
-                    discriminatedFieldsByFieldTitle
-                            .computeIfAbsent(ant.fieldTitle(), z -> new ArrayList())
-                            .add(underscorify(ants.fieldTitle()));
+                if (!isSimpleType(getClassOfField(field)) && !ant.pickIdOnly()) {
+                    addUnderscoredTitlesToMap(getClassOfField(field));
                 }
             }
-            if (!isSimpleType(getClassOfField(field)) && !ant.pickIdOnly()) {
-                addUnderscoredTitlesToMap(getClassOfField(field));
+
+            InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
+            if (antd != null) {
+                Interchangeable[] settings = antd.settings();
+                for (Interchangeable ants : settings) {
+                    titleToUnderscoreMap.put(ants.fieldTitle(), underscorify(ants.fieldTitle()));
+                    discriminatedFieldTitlesByFieldName
+                            .computeIfAbsent(field.getName(), z -> new ArrayList<>())
+                            .add(underscorify(ants.fieldTitle()));
+                }
+                if (!isSimpleType(getClassOfField(field))) {
+                    addUnderscoredTitlesToMap(getClassOfField(field));
+                }
             }
         }
     }
@@ -163,7 +167,7 @@ public class InterchangeUtils {
      * Gets the value at the specified path from the JSON description of the activity. 
      * 
      * @param activity a JsonBean description of the activity
-     * @param fieldPath path to the field 
+     * @param path path to the field
      * @return null if the path abruptly stops before reaching the end, or the value itself,
      * if the end of the path is reached
      */
@@ -258,26 +262,6 @@ public class InterchangeUtils {
         return bld.toString();
     }
 
-    public static String deunderscorify(String input) {
-        if (underscoreToTitleMap.containsKey(input)) 
-            return underscoreToTitleMap.get(input);
-        StringBuilder bld = new StringBuilder();
-        boolean upcaseMarker = true;
-        for (int i = 0; i < input.length(); i++) {
-            if (upcaseMarker) {
-                bld.append(Character.toUpperCase(input.charAt(i)));
-                upcaseMarker = false;
-            } else
-                if (input.charAt(i) == '_') {
-                    upcaseMarker = true;
-                } else {
-                    bld.append(input.charAt(i));
-                }
-            
-        }
-        return bld.toString();
-    }
-    
     /**
      * Obtains the possible values provider class of the field, if it has one
      * @param field
@@ -329,7 +313,21 @@ public class InterchangeUtils {
     public static JsonBean getActivity(Long projectId) {
         return getActivity(projectId, null);
     }
-    
+
+    public static AmpActivityVersion loadActivity(Long projectId) {
+        AmpActivityVersion activity = null;
+        try {
+            activity = ActivityUtil.loadActivity(projectId);
+            if (activity == null) {
+                //so far project will never be null since an exception will be thrown
+                //I leave the code prepared to throw the appropriate response code
+                ApiErrorResponse.reportResourceNotFound(ActivityErrors.ACTIVITY_NOT_FOUND);
+            }
+        } catch (DgException e) {
+            throw new RuntimeException(e);
+        }
+        return activity;
+    }
     /**
      * Activity Export as JSON 
      * 
@@ -338,20 +336,13 @@ public class InterchangeUtils {
      * @return
      */
     public static JsonBean getActivity(Long projectId, JsonBean filter) {
-        try {
-            AmpActivityVersion activity = ActivityUtil.loadActivity(projectId);
-            
-            return getActivity(activity, filter);
-        } catch (DgException e) {
-            LOGGER.error("Coudn't load activity with id: " + projectId + ". " + e.getMessage());
-            throw new RuntimeException(e);
-        }
+        return getActivity(loadActivity(projectId), filter);
     }
     
     /**
      * Activity Export as JSON 
      * 
-     * @param AmpActivityVersion is the activity
+     * @param activity is the activity
      * @param filter is the JSON with a list of fields
      * @return Json Activity
      */
@@ -369,15 +360,14 @@ public class InterchangeUtils {
     /**
      * Get the translation values of the field.
      * @param field
-     * @param class used for retrieving translation
+     * @param clazz class used for retrieving translation
      * @param fieldValue 
      * @param parentObject is the parent that contains the object in order to retrieve translations throu parent object id
      * @return object with the translated values
      * @throws NoSuchFieldException 
      */
     public static Object getTranslationValues(Field field, Class<?> clazz, Object fieldValue, Object parentObject) 
-            throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, 
-            InvocationTargetException, EditorException, NoSuchFieldException {
+            throws IllegalAccessException, EditorException, NoSuchFieldException {
         
         TranslationSettings translationSettings = TranslationSettings.getCurrent();
         
@@ -466,30 +456,7 @@ public class InterchangeUtils {
             return null;
         }
     }   
-    
-    /**
-     * TODO replace this method with (PropertyUtils or PropertyUtilsBean).getProperty()
-     * generates a string that should hit with the getter method name
-     * @param fieldName
-     * @return
-     */
-    public static String getGetterMethodName(String fieldName) {
-        return "get" + WordUtils.capitalize(fieldName);
-    }   
-    
-    /**
-     * TODO replace this method with (PropertyUtils or PropertyUtilsBean).setProperty()
-     * generates a string that should hit with the setter method name
-     * @param fieldName
-     * @return
-     */
-    public static String getSetterMethodName(String fieldName) {
-        if (fieldName.length() == 1)
-            return "set" + Character.toUpperCase(fieldName.charAt(0));
-        return "set" + Character.toUpperCase(fieldName.charAt(0)) + 
-                ((fieldName.length() > 1) ? fieldName.substring(1) : "");
-    }
-    
+
     /**
      * Gets the ID of an enumerable object (used in Possible Values EP)
      * @param obj
@@ -519,7 +486,7 @@ public class InterchangeUtils {
 
     /**
      * Imports or Updates an activity
-     * @param json new activity configuration
+     * @param newJson new activity configuration
      * @param update flags whether this is an import or an update request
      * @param endpointContextPath full API method path where this method has been called
      *
@@ -558,7 +525,7 @@ public class InterchangeUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static boolean validateFilterActivityFields(JsonBean filterJson, JsonBean result) {
+    public static boolean validateFilterActivityFields(JsonBean filterJson, JsonBean result, List<APIField> fields) {
         List<String> filteredItems = new ArrayList<String>();
         
         if (filterJson != null) {
@@ -579,7 +546,7 @@ public class InterchangeUtils {
 
         try {
             for (String field : filteredItems) {
-                PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(field, AmpActivityFields.class, null);
+                PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(field, fields);
             }
         } catch (ApiRuntimeException e) {
             result.set(ApiError.JSON_ERROR_CODE, e.getUnwrappedError());
@@ -603,7 +570,7 @@ public class InterchangeUtils {
      */
     public static boolean isEditableActivity(TeamMember teamMember, Long activityId) {
         // we reuse the same approach as the one done by Project List EP
-        return activityId != null && ProjectList.getEditableActivityIdsNoSession(teamMember).contains(activityId);
+        return activityId != null && ActivityUtil.getEditableActivityIdsNoSession(teamMember).contains(activityId);
     }
 
     /**
@@ -724,11 +691,9 @@ public class InterchangeUtils {
 
     /**
      * Determine if this is an AmpActivityVersion field reference
-     * @param field
-     * @return
      */
     public static boolean isAmpActivityVersion(Class<?> clazz) {
-        return clazz.isAssignableFrom(AmpActivityVersion.class);
+        return AmpActivityVersion.class.isAssignableFrom(clazz);
     }
 
     /**
@@ -745,95 +710,125 @@ public class InterchangeUtils {
         return session;
     }
     
+    public static ActivityInformation getActivityInformation(Long projectId) {
+        AmpActivityVersion project = loadActivity(projectId);
+
+        ActivityInformation activityInformation = new ActivityInformation(projectId);
+        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        activityInformation.setActivityTeam(project.getTeam());
+        if (tm != null) {
+            activityInformation.setEdit(isEditableActivity(tm, projectId));
+            if (activityInformation.isEdit()) {
+                activityInformation.setValidate(ActivityUtil.canValidateAcitivty(project, tm));
+            }
+            activityInformation.setValidationStatus(ActivityUtil.getValidationStatus(project, tm));
+            if (activityInformation.getValidationStatus() == ValidationStatus.AUTOMATIC_VALIDATION) {
+                activityInformation.setDaysForAutomaticValidation(ActivityUtil.daysToValidation(project));
+            }
+
+            AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+
+            boolean isCurrentWorkspaceManager = ampCurrentMember.getAmpMemberRole().getTeamHead();
+            boolean isPartOfMamanagetmentWorkspace = ampCurrentMember.getAmpTeam().getAccessType()
+                    .equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT);
+
+            activityInformation.setUpdateCurrentVersion(isCurrentWorkspaceManager && !isPartOfMamanagetmentWorkspace);
+            activityInformation.setVersionHistory(ActivityUtil.getActivityHistories(projectId));
+        } else {
+            // if not logged in but the show version history in public preview is on, then we should show
+            // version history information
+            if (FeaturesUtil.isVisibleFeature("Version History")) {
+                activityInformation.setVersionHistory(ActivityUtil.getActivityHistories(projectId));
+                activityInformation.setUpdateCurrentVersion(false);
+            }
+        }
+
+        activityInformation.setAmpActiviylastVersionId(ActivityVersionUtil.getLastVersionForVersion(projectId));
+
+        return activityInformation;
+    }
+
+    public static boolean canViewActivityIfCreatedInPrivateWs(ContainerRequest containerReq) {
+        Long id = getRequestId(containerReq);
+        AmpActivityVersion project = InterchangeUtils.loadActivity(id);
+        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        return !(project.getTeam().getIsolated() && (tm == null || !tm.getTeamId().equals(project.getTeam().
+                getAmpTeamId())));
+    }
+
     /**
-     * Gets the instance of the field by long field name (e.g.: primary_sectors, secondary_programs, locations~id}
-     * 
-     * @param longFieldName
+     * Get values for requested ids of fields
+     *
+     * @param fieldIds
+     * @param apiFields
      * @return
      */
-    public static Field getFieldByLongName(String longFieldName) {
-        return getFieldByLongName(longFieldName, AmpActivityFields.class);
-    }
-    
-    /**
-     * Gets the instance of the field by long field name (e.g.: primary_sectors, secondary_programs, locations~id}
-     * 
-     * @param longFieldName 
-     * @param clazz Class where the field should be searched
-     * @return Field instance of the field
-     */
-    private static Field getFieldByLongName(String longFieldName, Class<?> clazz) {
+    public static Map<String, List<FieldIdValue>> getIdValues(Map<String, List<Long>> fieldIds,
+            List<APIField> apiFields) {
+        Map<String, List<FieldIdValue>> response = new HashMap<>();
 
-        if (longFieldName.contains("~")) {
-            String fieldName = longFieldName.substring(0, longFieldName.indexOf('~'));
-            Field field = getPotentiallyDiscriminatedField(clazz, fieldName);
-            
-            if (field != null) {
-                return getFieldByLongName(longFieldName.substring(longFieldName.indexOf('~') + 1),
-                        getClassOfField(field));
-            }
-        } else {
-            return getPotentiallyDiscriminatedField(clazz, longFieldName);
-        }
-        
-        return null;
-    }
-    
-    /**
-     * Gets the discriminator option of the field by fieldName
-     * 
-     * @param longFieldName
-     * @param field
-     * @return String discriminator option
-     */
-    public static String getConfigValue(String longFieldName, Field field) {
-        String fieldTitle = InterchangeUtils.deunderscorify(longFieldName);
-        InterchangeableDiscriminator ant = field.getAnnotation(InterchangeableDiscriminator.class);
-        for (Interchangeable inter : ant.settings()) {
-            if (inter.fieldTitle().equals(fieldTitle)) {
-                return inter.discriminatorOption();
-            }
-        }
-        
-        return null;
-    }
-    
-    /**
-     * * Gets the field instance by field name   
-     * 
-     * @param clazz
-     * @param fieldName
-     * @return Field the instance of the discriminated field from the Class clazz
-     */
-    public static Field getPotentiallyDiscriminatedField(Class<?> clazz, String fieldName){ 
-        Field field = getField(clazz, InterchangeUtils.deunderscorify(fieldName));
-        if (field == null) {
-            //attempt to check if it's a composite field
-            String discriminatedFieldName = getDiscriminatedFieldTitle(fieldName);
-            
-            if (discriminatedFieldName != null)
-                return getField(clazz, discriminatedFieldName);
+        if (fieldIds != null) {
+            for (Entry<String, List<Long>> field : fieldIds.entrySet()) {
+                String fieldName = field.getKey();
+                List<Long> ids = field.getValue();
 
-        }
-        return field;
-    }
-    
-    /**
-     * Gets the field instance by field name 
-     * 
-     * @param clazz
-     * @param fieldname
-     * @return Field the instance of the field from the Class clazz
-     */
-    private static Field getField(Class<?> clazz, String fieldname) {
-        
-        for (Field field : FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class)) {
-            Interchangeable ant = field.getAnnotation(Interchangeable.class);
-            if (fieldname.equals(ant.fieldTitle())) {
-                return field;
+                List<PossibleValue> allValues = possibleValuesFor(fieldName, apiFields).stream()
+                        .map(PossibleValue::flattenPossibleValues)
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList());
+
+                Map<Object, PossibleValue> allValuesMap = allValues.stream()
+                        .collect(Collectors.toMap(PossibleValue::getId, identity()));
+
+                List<FieldIdValue> idValues = ids.stream()
+                        .map(id -> getIdValue(id, allValuesMap))
+                        .collect(Collectors.toList());
+
+                response.put(fieldName, idValues);
             }
         }
-        
+        return response;
+    }
+
+    private static FieldIdValue getIdValue(Long id, Map<Object, PossibleValue> allValuesMap) {
+        if (allValuesMap.containsKey(id)) {
+            PossibleValue pv = allValuesMap.get(id);
+            return new FieldIdValue((Long) pv.getId(), pv.getValue(), pv.getTranslatedValues(),
+                    getAncestorValues(allValuesMap, pv.getId(), new ArrayList<>()));
+        }
+
+        return new FieldIdValue(id);
+    }
+
+    private static List<String> getAncestorValues(Map<Object, PossibleValue> allValuesMap, Object id,
+            List<String> values) {
+        PossibleValue obj = allValuesMap.get(id);
+        List<String> ancestorValues = new ArrayList<>(values);
+        if (obj.getExtraInfo() instanceof ParentExtraInfo) {
+            ParentExtraInfo parentExtraInfo = (ParentExtraInfo) obj.getExtraInfo();
+            if (parentExtraInfo.getParentId() != null) {
+                ancestorValues.addAll(getAncestorValues(allValuesMap, parentExtraInfo.getParentId(), ancestorValues));
+            }
+            ancestorValues.add(obj.getValue());
+            return ancestorValues;
+        }
+
         return null;
+    }
+
+    public static List<PossibleValue> possibleValuesFor(String fieldName, List<APIField> apiFields) {
+        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, apiFields);
+    }
+
+    public static List<Field> getFieldsAnnotatedWith(Class<?> cls, Class<? extends Annotation> annotationCls1,
+            Class<? extends Annotation> annotationCls2) {
+        final List<Field> allFields = FieldUtils.getAllFieldsList(cls);
+        final List<Field> annotatedFields = new ArrayList<Field>();
+        for (final Field field : allFields) {
+            if (field.getAnnotation(annotationCls1) != null || field.getAnnotation(annotationCls2) != null) {
+                annotatedFields.add(field);
+            }
+        }
+        return annotatedFields;
     }
 }

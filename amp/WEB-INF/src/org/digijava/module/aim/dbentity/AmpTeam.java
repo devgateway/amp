@@ -11,8 +11,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
@@ -20,7 +20,8 @@ import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.ampapi.endpoints.serializers.AmpTeamSerializer;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
+import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.ar.util.FilterUtil;
@@ -33,10 +34,10 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versionable,*/ FilterDataSetInterface<AmpTeamFilterData>,  
                                     NameableOrIdentifiable {
     private static final Logger logger = Logger.getLogger(AmpTeam.class);
-    @Interchangeable(fieldTitle = "id", id = true)
+    @PossibleValueId
     private Long ampTeamId;
     @TranslatableField
-    @Interchangeable(fieldTitle = "name", value = true)
+    @PossibleValueValue
     private String name;
     
     private Boolean addActivity;

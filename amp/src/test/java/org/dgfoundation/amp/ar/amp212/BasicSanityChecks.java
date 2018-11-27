@@ -838,7 +838,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     
     @Test
     public void test_AMP_18497() {
-        // for running manually: open http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/32 on the AMP 2.10 testcases database
+        // for running manually: open http://localhost:8080/TEMPLATE/ampTemplate/saikuui_reports/index.html#report/open/32 on the AMP 2.10 testcases database
         
         NiReportModel cor = new NiReportModel("AMP-18497")
                 .withHeaders(Arrays.asList(

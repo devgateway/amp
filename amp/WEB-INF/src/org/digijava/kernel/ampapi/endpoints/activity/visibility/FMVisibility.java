@@ -11,10 +11,13 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -31,6 +34,8 @@ public class FMVisibility {
     private static Date lastTreeVisibilityUpdate;
 
     /**
+     * FIXME refactor without using the annotation?
+     *
      * Checks if a given FM path is enabled 
      * @param fmPath, the String with the FM path
      * @return true if is enabled, false otherwise
@@ -122,7 +127,24 @@ public class FMVisibility {
         } else {
             isVisible = isFmPathEnabled(fmPath, intchStack);
         }
-        return isVisible;
+
+        return isVisible && isFieldVisibleInPublicView(fmPath);
+    }
+
+    /**
+     * Check if the field is visible in public view or not.
+     * Usually all the fields are visible by default. There are few exceptions, like Contacts field from Activity
+     *
+     * @param fmPath
+     * @return
+     */
+    private static boolean isFieldVisibleInPublicView(String fmPath) {
+        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        if (tm == null && ActivityEPConstants.CONTACTS_PATH.equals(fmPath)) {
+            return FeaturesUtil.isVisibleFeature("Contacts");
+        }
+
+        return true;
     }
 
     /**

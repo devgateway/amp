@@ -22,8 +22,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
@@ -31,6 +33,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -126,8 +129,9 @@ public class FieldsEnumeratorTest {
 
         when(invisibleFmService.isVisible(any(), any())).thenReturn(false);
 
-        List<APIField> actual = new FieldsEnumerator(provider, invisibleFmService, translatorService, false)
-                .getAllAvailableFields(OneFieldClass.class);
+        List<APIField> actual =
+                new FieldsEnumerator(provider, invisibleFmService, translatorService, false, name -> true)
+                        .getAllAvailableFields(OneFieldClass.class);
 
         assertEquals(Collections.emptyList(), actual);
     }
@@ -149,6 +153,7 @@ public class FieldsEnumeratorTest {
         List<APIField> actual = fieldsFor(Composition.class);
 
         APIField expected = newListField();
+        expected.setMultipleValues(false);
         APIField nestedField = newLongField();
 //        nestedField.setFieldLabel(fieldLabelFor(nestedField.getFieldName()));
         expected.setChildren(Arrays.asList(nestedField));
@@ -251,25 +256,25 @@ public class FieldsEnumeratorTest {
         assertEqualsSingle(expected, actual);
     }
 
-    private static class IdClass {
+    private static class LongFieldClass {
 
-        @Interchangeable(fieldTitle = "field", id = true)
+        @Interchangeable(fieldTitle = "field")
         private Long field;
     }
 
     @Test
     public void testId() {
-        List<APIField> actual = fieldsFor(IdClass.class);
+        List<APIField> actual = fieldsFor(LongFieldClass.class);
 
         APIField expected = newAPIField();
         expected.setFieldType(FIELD_TYPE_LONG);
-        expected.setId(true);
 
         assertEqualsSingle(expected, actual);
     }
 
     private static class PickIdOnlyClass {
 
+        // FIXME such annotations should be illegal
         @Interchangeable(fieldTitle = "field", pickIdOnly = true)
         private Long field;
     }
@@ -292,13 +297,6 @@ public class FieldsEnumeratorTest {
                 @Interchangeable(fieldTitle = "type_b", discriminatorOption = "b")
         })
         private Long field;
-
-        @Interchangeable(fieldTitle = "field2")
-        @InterchangeableDiscriminator(discriminatorField = "type", settings = {
-                @Interchangeable(fieldTitle = "type_c", discriminatorOption = "c"),
-                @Interchangeable(fieldTitle = "type_d", discriminatorOption = "d")
-        })
-        private Object field2;
     }
 
     @Test
@@ -415,10 +413,7 @@ public class FieldsEnumeratorTest {
 
     private static class RefActivity {
 
-        @Interchangeable(fieldTitle = "field1")
-        private AmpActivityVersion activity1;
-
-        @Interchangeable(fieldTitle = "field2", pickIdOnly = true)
+        @Interchangeable(fieldTitle = "field1", pickIdOnly = true)
         private AmpActivityVersion activity2;
     }
 
@@ -426,20 +421,14 @@ public class FieldsEnumeratorTest {
     public void testActivityFlag() {
         List<APIField> fields = fieldsForInternal(RefActivity.class);
 
-        APIField expected1 = newListField();
+        APIField expected1 = newLongField();
         expected1.setFieldName("field1");
         expected1.setFieldLabel(fieldLabelFor("field1"));
-        expected1.setFieldNameInternal("activity1");
+        expected1.setFieldNameInternal("activity2");
+        expected1.setIdOnly(true);
         expected1.setActivity(true);
 
-        APIField expected2 = newLongField();
-        expected2.setFieldName("field2");
-        expected2.setFieldLabel(fieldLabelFor("field2"));
-        expected2.setFieldNameInternal("activity2");
-        expected2.setIdOnly(true);
-        expected2.setActivity(true);
-
-        assertEqualsDigest(Arrays.asList(expected1, expected2), fields);
+        assertEqualsDigest(Arrays.asList(expected1), fields);
     }
 
     private static class MaxLen {
@@ -460,13 +449,13 @@ public class FieldsEnumeratorTest {
 
     @Test(expected = RuntimeException.class)
     public void testExceptionInTranslator() {
-        new FieldsEnumerator(provider, fmService, throwingTranslatorService, false)
+        new FieldsEnumerator(provider, fmService, throwingTranslatorService, false, name -> true)
                 .getAllAvailableFields(OneFieldClass.class);
     }
 
     @Test
     public void testDefaultTranslation() {
-        List<APIField> fields = new FieldsEnumerator(provider, fmService, emptyTranslatorService, false)
+        List<APIField> fields = new FieldsEnumerator(provider, fmService, emptyTranslatorService, false, name -> true)
                 .getAllAvailableFields(OneFieldClass.class);
 
         assertEquals(1, fields.size());
@@ -487,6 +476,17 @@ public class FieldsEnumeratorTest {
         expected.setDependencies(Arrays.asList("dep1", "dep2"));
 
         assertEqualsSingle(expected, fields);
+    }
+
+    /**
+     * This test relies on the fact that database is not accessible at the time it is executed.
+     */
+    @Test
+    public void testDatabaseIsNotAccessed() {
+        fieldsForInternal(AmpActivityVersion.class);
+        fieldsForInternal(AmpContact.class);
+        fieldsForInternal(CommonSettings.class);
+        fieldsForInternal(AmpResource.class);
     }
 
     private APIField newListField() {
@@ -523,12 +523,12 @@ public class FieldsEnumeratorTest {
     }
 
     private List<APIField> fieldsFor(Class<?> theClass) {
-        return new FieldsEnumerator(provider, fmService, translatorService, false)
+        return new FieldsEnumerator(provider, fmService, translatorService, false, name -> true)
                 .getAllAvailableFields(theClass);
     }
 
     private List<APIField> fieldsForInternal(Class<?> theClass) {
-        return new FieldsEnumerator(provider, fmService, translatorService, true)
+        return new FieldsEnumerator(provider, fmService, translatorService, true, name -> true)
                 .getAllAvailableFields(theClass);
     }
 

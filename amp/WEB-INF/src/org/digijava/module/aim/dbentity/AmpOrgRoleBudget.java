@@ -6,7 +6,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 
-public class AmpOrgRoleBudget implements Serializable, Comparable<AmpOrgRoleBudget>, Cloneable {
+public class AmpOrgRoleBudget implements Serializable, Comparable<AmpOrgRoleBudget>, Cloneable, AuditableEntity {
     
     private Long ampOrgRoleBudgetId;
     
@@ -62,4 +62,8 @@ public class AmpOrgRoleBudget implements Serializable, Comparable<AmpOrgRoleBudg
     }
 
 
+    @Override
+    public AuditableEntity getParent() {
+        return ampOrgRole;
+    }
 }

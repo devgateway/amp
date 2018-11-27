@@ -9,8 +9,8 @@ import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.FundingePledgesValueProvider;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypePossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.FundingePledgesValueProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.TransactionTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -20,7 +20,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
-public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem {
+public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem, AuditableEntity {
 
     public static class FundingDetailComparatorByTransactionDateAsc implements Comparator<AmpFundingDetail>, Serializable {
 
@@ -124,6 +124,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
             return arg0.hashCode() - arg1.hashCode();
         }
     }
+    @Interchangeable(fieldTitle = "Transaction ID")
     private Long ampFundDetailId;
     private Integer fiscalYear;
     private Integer fiscalQuarter;
@@ -138,7 +139,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
      * public static final int ARREAR = 10;
      */
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true, pickIdOnly = true,
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true,
             required = REQUIRED_ALWAYS)
     @PossibleValues(TransactionTypePossibleValuesProvider.class)
     private Integer transactionType;
@@ -195,10 +196,19 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     
     @Interchangeable(fieldTitle = "Capital Spending Percentage", importable = true)
     private Float capitalSpendingPercentage;
-    @Interchangeable(fieldTitle = "Recipient Organization", importable = true, pickIdOnly = true)
+    
+    @Interchangeable(fieldTitle = "Recipient Organization", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_RECIPIENT_ORG_FM_PATH
+                    + "|" + ActivityEPConstants.DISB_RECIPIENT_ORG_FM_PATH,
+            dependencies = {InterchangeDependencyResolver.COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY})
     private AmpOrganisation recipientOrg;
-    @Interchangeable(fieldTitle = "Recipient Role", importable = true, pickIdOnly = true)
+    
+    @Interchangeable(fieldTitle = "Recipient Role", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_RECIPIENT_ROLE_FM_PATH 
+                    + "|" + ActivityEPConstants.DISB_RECIPIENT_ROLE_FM_PATH,
+            dependencies = {InterchangeDependencyResolver.COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY})
     private AmpRole recipientRole;
+    
     @Interchangeable(fieldTitle = "Expenditure Category", importable = true)
     private String expCategory;
     @Interchangeable(fieldTitle = "Disbursement Order ID", importable = true)
@@ -208,7 +218,8 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     private Long checkSum;
     
     @Interchangeable(fieldTitle = "Disaster Response", importable = true, required = REQUIRED_ALWAYS,
-            fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH + "|" + ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH,
+            fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH
+                    + "|" + ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH,
             dependencies = {
             InterchangeDependencyResolver.COMMITMENTS_PRESENT_KEY,
             InterchangeDependencyResolver.DISBURSEMENTS_PRESENT_KEY,
@@ -647,5 +658,10 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 
     public void setCheckSum(Long checkSum) {
         this.checkSum = checkSum;
+    }
+
+    @Override
+    public AuditableEntity getParent() {
+        return ampFundingId;
     }
 }

@@ -51,7 +51,7 @@ module.exports = Backbone.View.extend({
 		  if (useIconsForSectors !== undefined && useIconsForSectors === true) {
 			  if (maxLocationIcons !== undefined && maxLocationIcons !== '') {
 				  if (maxLocationIcons === 0) {
-					  MAX_NUM_FOR_ICONS = 99999; //always show
+					  MAX_NUM_FOR_ICONS = -1; //always show
 				  } else {
 					  MAX_NUM_FOR_ICONS = maxLocationIcons;
 				  }
@@ -63,7 +63,7 @@ module.exports = Backbone.View.extend({
 		  }
 
 		  // render icons if available
-		  if (self.model.structuresCollection.length < MAX_NUM_FOR_ICONS &&
+		  if ((MAX_NUM_FOR_ICONS === -1 || self.model.structuresCollection.length < MAX_NUM_FOR_ICONS) &&
 				  self.model.get('filterVertical') === 'Primary Sector') {
 			  renderObject.imageBuckets = self.model.iconMappings;
 			  renderObject.DEFAULT_ICON_CODE =  self.model.DEFAULT_ICON_CODE;
@@ -78,20 +78,26 @@ module.exports = Backbone.View.extend({
 			  });
 
 		  });
-		  self.app.translator.translateList({
-			  'amp.gis:legend-popover': 'If there are less than',
-			  'amp.gis:legend-popover-2': 'points map will show icons otherwise: show coloured circles.',
-			  'amp.gis:title-Region': 'Region'
-		  }).then(function(legendPopoverList) {
-			  var legendPopover = [legendPopoverList['amp.gis:legend-popover'],
-			                       ' ',
-			                       MAX_NUM_FOR_ICONS,
-			                       ' ',
-			                       legendPopoverList['amp.gis:legend-popover-2']
-			  ].join('');
-			  self.$('[data-toggle="popover"]').popover();
-			  self.$('[data-toggle="popover"]').attr('data-content', legendPopover);
-		  });
+		  
+		  if (MAX_NUM_FOR_ICONS != -1) {
+			  self.app.translator.translateList({
+				  'amp.gis:legend-popover': 'If there are less than',
+				  'amp.gis:legend-popover-2': 'points map will show icons otherwise: show coloured circles.',
+				  'amp.gis:title-Region': 'Region'
+			  }).then(function(legendPopoverList) {
+				  var legendPopover = [legendPopoverList['amp.gis:legend-popover'],
+				                       ' ',
+				                       MAX_NUM_FOR_ICONS,
+				                       ' ',
+				                       legendPopoverList['amp.gis:legend-popover-2']
+				  ].join('');
+				  self.$('[data-toggle="popover"]').popover();
+				  self.$('[data-toggle="popover"]').attr('data-content', legendPopover);
+				  self.$('[data-toggle="popover"]').show();
+			  });
+		  } else {
+			  self.$('[data-toggle="popover"]').hide();
+		  }
 
 
 

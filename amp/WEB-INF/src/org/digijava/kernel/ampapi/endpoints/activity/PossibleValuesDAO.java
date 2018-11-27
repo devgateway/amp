@@ -5,6 +5,7 @@ import java.util.List;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
  * @author Octavian Ciubotaru
@@ -19,6 +20,9 @@ public interface PossibleValuesDAO {
     int LOC_CAT_VAL_ID_POS = 5;
     int LOC_CAT_VAL_NAME_POS = 6;
     int LOC_ISO = 7;
+    
+    int SECTOR_PARENT_ID_POS = 2;
+    int THEME_PARENT_ID_POS = 2;
 
     List<Object[]> getCategoryValues(String discriminatorOption);
 
@@ -35,5 +39,7 @@ public interface PossibleValuesDAO {
     List<AmpComponentType> getComponentTypes();
     
     List<AmpContact> getContacts();
+    
+    List<AmpOrganisation> getOrganisations();
     
 }

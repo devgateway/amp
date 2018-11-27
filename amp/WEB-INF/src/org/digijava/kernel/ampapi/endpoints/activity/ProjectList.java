@@ -6,16 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -23,7 +19,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -35,8 +31,6 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.LongType;
-
-import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * Project List generation class
@@ -82,10 +76,10 @@ public class ProjectList {
         List<JsonBean> editableActivities = new ArrayList<JsonBean>();
         
         final List<Long> viewableIds = getViewableActivityIds(tm);
-        List<Long> editableIds = ActivityUtil.getEditableActivityIds(tm);
+        List<Long> editableIds = ActivityUtil.getEditableActivityIdsNoSession(tm);
         
         // get list of the workspaces where the user is member of and can edit each activity
-        Map<Long, Set<String>> activitiesWs = getEditableWorkspacesForActivities(tm);
+        Map<Long, Set<Long>> activitiesWs = getEditableWorkspacesForActivities(tm);
         
         List<JsonBean> notViewableActivities = getActivitiesByIds(viewableIds, activitiesWs, tm, false, false);
         
@@ -105,8 +99,8 @@ public class ProjectList {
         return activityMap.values();
     }
 
-    public static Map<Long, Set<String>> getEditableWorkspacesForActivities(TeamMember tm) {
-        Map<Long, Set<String>> activitiesWs = new HashMap<>();
+    public static Map<Long, Set<Long>> getEditableWorkspacesForActivities(TeamMember tm) {
+        Map<Long, Set<Long>> activitiesWs = new HashMap<>();
         try {
             User currentUser = UserUtils.getUserByEmail(tm.getEmail());
             Collection<AmpTeamMember> currentTeamMembers = TeamMemberUtil.getAllAmpTeamMembersByUser(currentUser);
@@ -135,47 +129,6 @@ public class ProjectList {
                 activityMap.put((String) activity.get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID)), activity);
             }
         }
-    }
-
-    /**
-     * Get the activities ids for the current workspace
-     * 
-     * @param session HttpSession
-     * @return List<Long> with the editable activity Ids
-     */
-    public static List<Long> getEditableActivityIds(TeamMember tm) {
-        HttpSession session = TLSUtils.getRequest().getSession();
-        String query = WorkspaceFilter.getWorkspaceFilterQuery(session);
-        
-        return getEditableActivityIds(tm, query);
-    }
-
-    /**
-     * Get list of editable activity ids for the team member.
-     * Useful for cases when you need to check list of editable activities for a team member that is not a principal.
-     * I.e. this team member is not authenticated right now.
-     * @return List<Long> with the editable activity Ids
-     */
-    public static List<Long> getEditableActivityIdsNoSession(TeamMember tm) {
-        String query = WorkspaceFilter.generateWorkspaceFilterQuery(tm);
-        return getEditableActivityIds(tm, query);
-    }
-
-    /**
-     * Get the activities ids for the current workspace
-     * 
-     * @param session HttpSession
-     * @return List<Long> with the editable activity Ids
-     */
-    public static List<Long> getEditableActivityIds(TeamMember tm, String query) {
-        // based on AMP-20520 research the only rule found when activities are not editable is when in Mng WS
-        if (TeamMemberUtil.isManagementWorkspace(tm))
-            return Collections.emptyList();
-        
-        List<Long> result = PersistenceManager.getSession().createSQLQuery(query)
-                .addScalar("amp_activity_id", LongType.INSTANCE).list();
-        
-        return result;
     }
 
     /**
@@ -212,11 +165,11 @@ public class ProjectList {
      * @param activityIds List with the ids (amp_activity_id) of the activities to include or exclude
      * @param activitiesWs 
      * @param viewable whether the list of activities is viewable or not
-     * @param editable whether the list of activities is editable or not
      * @return List <JsonBean> of the activities generated from including/excluding the List<Long> of activityIds
      */
-    public static List<JsonBean> getActivitiesByIds(final List<Long> activityIds, final Map<Long, Set<String>> activitiesWs, final TeamMember tm, final boolean include,
-            final boolean viewable) {
+    public static List<JsonBean> getActivitiesByIds(final List<Long> activityIds,
+                                                    final Map<Long, Set<Long>> activitiesWs, final TeamMember tm,
+                                                    final boolean include, final boolean viewable) {
         final List<JsonBean> activitiesList = new ArrayList<JsonBean>();
         
         String iatiIdAmpField = InterchangeUtils.getAmpIatiIdentifierFieldName();
@@ -241,8 +194,8 @@ public class ProjectList {
                     ResultSet rs = rsi.rs;
                     while (rs.next()) {
                         long actId = rs.getLong("amp_activity_id");
-                        Set<String> workspaces = activitiesWs.containsKey(actId) ? activitiesWs.get(actId) : null;
-                        boolean editable = workspaces != null ? workspaces.contains(tm.getTeamId().toString()) : false;
+                        Set<Long> workspaces = activitiesWs.containsKey(actId) ? activitiesWs.get(actId) : null;
+                        boolean editable = workspaces != null ? workspaces.contains(tm.getTeamId()) : false;
 
                         JsonBean bean = new JsonBean();
                         bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), rs.getLong("amp_activity_id"));
@@ -285,13 +238,11 @@ public class ProjectList {
     }
 
     private static String getIatiIdentifierValue(AmpActivityVersion a, String iatiIdAmpField) {
-        Field field = InterchangeUtils.getFieldByLongName(iatiIdAmpField);
-        try {
-            return (String) PropertyUtils.getProperty(a, field.getName());
-        } catch (Exception e) {
-            LOGGER.error("Couldn't fetch the field value", e);
-            throw new RuntimeException(e);
-        }
+        APIField apiField = AmpFieldsEnumerator.getPublicEnumerator().getActivityFields().stream()
+                .filter(f -> f.getFieldName().equals(iatiIdAmpField))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("No such field " + iatiIdAmpField));
+        return (String) apiField.getFieldValueReader().get(a);
     }
 
     /**

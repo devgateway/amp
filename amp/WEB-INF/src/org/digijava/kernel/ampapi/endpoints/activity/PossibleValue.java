@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  * Holds one possible value for a field. Immutable.
@@ -22,14 +22,14 @@ public class PossibleValue {
     private final String value;
 
     @JsonProperty("translated-value")
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private final Map<String, String> translatedValues;
 
     @JsonProperty("extra_info")
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private final Object extraInfo;
 
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private final List<PossibleValue> children;
 
     public PossibleValue(Long id, String value) {
@@ -46,6 +46,10 @@ public class PossibleValue {
 
     public PossibleValue(String id, String value, Map<String, String> translatedValues) {
         this(id, value, translatedValues, null, ImmutableList.of());
+    }
+
+    public PossibleValue(String id, String value, Map<String, String> translatedValues, Object extraInfo) {
+        this(id, value, translatedValues, extraInfo, ImmutableList.of());
     }
 
     public PossibleValue withChildren(List<PossibleValue> children) {
@@ -75,6 +79,14 @@ public class PossibleValue {
 
     public List<PossibleValue> getChildren() {
         return children;
+    }
+    
+    public Object getExtraInfo() {
+        return extraInfo;
+    }
+
+    public Map<String, String> getTranslatedValues() {
+        return translatedValues;
     }
 
     @Override

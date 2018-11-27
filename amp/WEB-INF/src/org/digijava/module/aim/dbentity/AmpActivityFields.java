@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,6 +19,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivityS
 import org.digijava.kernel.ampapi.endpoints.activity.values.ApprovalStatusPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -29,9 +31,11 @@ import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -41,7 +45,7 @@ import org.hibernate.Session;
 
 @TranslatableClass (displayName = "Activity Form Field")
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
-LoggerIdentifiable, Cloneable {
+LoggerIdentifiable, Cloneable, AuditableEntity {
 
     private static final long serialVersionUID = 1L;
     
@@ -2176,6 +2180,31 @@ LoggerIdentifiable, Cloneable {
             }
             this.costAmounts.add(costAmount);
         }
+    
+    @Override
+    public AuditableEntity getParent() {
+        return null;
+    }
+
+    @Override
+    public void touch() {
+    
+        Date updateDate = Calendar.getInstance().getTime();
+        
+        setUpdatedDate(updateDate);
+        setModifiedDate(updateDate);
+    
+        AmpTeamMember modifiedBy = AuditActivityInfo.getModifiedTeamMember();
+        if (modifiedBy == null) {
+            modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+        }
+        
+        if (modifiedBy == null) {
+            throw new RuntimeException("Modified team member cannot be null");
+        }
+        
+        setModifiedBy(modifiedBy);
+    }
 
 }
 

@@ -4,8 +4,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.ContextMatcher;
-import org.digijava.kernel.ampapi.endpoints.activity.DefaultContextMatcher;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Interchangeable {
@@ -52,30 +53,27 @@ public @interface Interchangeable {
     String required () default ActivityEPConstants.REQUIRED_NONE;
     
     /**
-     * Set to true if underlying field value can be obtained from the 
-     * Possible Values endpoint -- meaning it can be identified by an ID
-     * and picked from a list instead of being computed by AMP
-     * or input by the user
-     * Example: any AmpCategoryValue is picked by ID, not by its string value,
-     * since it's picked from a list and never customly edited
-     * Another example: Sector ID from AmpActivitySector. A sector is picked from
-     * a predefined list, not added in the AF. 
+     * Used during serialization to replace an object with id. The object must implement {@link Identifiable}.
+     * <p>Example:
+     * <pre>{@code
+     * class Example {
+     *    @literal @Interchangeable(fieldTitle = "transaction_type", pickIdOnly = true)
+     *     private AmpCategoryValue transactionType;
+     * }}</pre>
+     * Will result in the following json:
+     * <pre>
+     * {
+     *   "transaction_type": 123
+     * }
+     * </pre>
+     *
+     * <p>During deserialization, id from json will be converted back using
+     * {@link InterchangeUtils#getObjectById(java.lang.Class, java.lang.Long)}.
      */
     boolean pickIdOnly() default false;
-    
-    /*ATTENTION: A FIELD MIGHT BE BOTH AN ID AND A VALUE (UNDERLYING)*/
-    /**
-     * Whether this field is an ID for the db entity where it takes residence.
-     * The ID itself is picked from the getIdentifier() method of the entity, 
-     * which has to be marked as "implements <Identifiable>".
-     */
-    boolean id() default false;
-    
-    /**
-     * Whether this field is the value shown in Activity Form -- for instance, AmpSector.name for sectors.
-     */
-    boolean value() default false;
-    
+
+    Class<?> type() default DefaultType.class;
+
     /**
      * Specifies the dependencies used for later checking in DependencyValidator. 
      * Dependencies (path and value) are encoded via {@link InterchangeDependencyMapper} public static strings,
@@ -84,13 +82,30 @@ public @interface Interchangeable {
      */
     String[] dependencies() default {};
     
-    /** configured with option value, like "Primary Sector" */
+    /**
+     * <p>Filter objects by specified discriminator value.
+     * Must be specified in {@link InterchangeableDiscriminator#settings}.
+     * <p>When annotating {@link AmpCategoryValue}, this value must be specified to allow listing possible values for a
+     * category class. Can be used inside {@link InterchangeableDiscriminator#settings} or standalone.
+     * <p>Category in discriminated field example:
+     * <pre>
+     * &#64;InterchangeableDiscriminator(discriminatorField="categories",
+     *   settings = {
+     *     &#64;Interchangeable(fieldTitle = "Activity Status", discriminatorOption = "act_status", pickIdOnly=true),
+     *     &#64;Interchangeable(fieldTitle = "Type of Cooperation", discriminatorOption = "coop_type", pickIdOnly=true)
+     * })
+     * protected Set&#60;AmpCategoryValue&#62; categories;
+     * </pre>
+     * <p>Standalone category example:
+     * <pre>
+     * &#64;Interchangeable(fieldTitle = "Adjustment Type", discriminatorOption = "adj_type", pickIdOnly = true)
+     * private AmpCategoryValue adjustmentType;
+     * </pre>
+     */
     String discriminatorOption() default "";
     
     Validators validators() default @Validators;
 
-    Class<? extends ContextMatcher> context() default DefaultContextMatcher.class;
-    
     /** regex pattern used for validation (mail, phone, fax) */
     String regexPattern() default "";
     
@@ -100,6 +115,10 @@ public @interface Interchangeable {
 
     int sizeLimit() default 1;
 
-    RegexDiscriminator[] regexPatterns() default {};
+    /**
+     * If type property is set to this class then type will be determined via reflection.
+     */
+    final class DefaultType {
+    }
 
 }

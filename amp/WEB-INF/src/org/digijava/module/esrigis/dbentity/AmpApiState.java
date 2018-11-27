@@ -1,20 +1,57 @@
 package org.digijava.module.esrigis.dbentity;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
- * 
+ *
  * @author jdeanquin
  *
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AmpApiState {
+
+    public static class BriefView {
+    }
+
+    public static class DetailView extends BriefView {
+    }
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView(BriefView.class)
     private Long id;
+
+    @ApiModelProperty(example = "Dashboard")
+    @JsonView(BriefView.class)
     private String title;
+
+    @ApiModelProperty(example = "Saved dashboard")
+    @JsonView(BriefView.class)
     private String description;
+
+    @JsonIgnore
     private String type;
+
+    @ApiModelProperty(example = "{\"chart:/rest/dashboard/tops/do\":{\"limit\":5,\"adjtype\":\"Actual Commitments\","
+            + "\"view\":\"bar\",\"big\":false},\"chart:/rest/dashboard/tops/dg\":{\"limit\":5,"
+            + "\"adjtype\":\"Actual Commitments\",\"view\":\"bar\",\"big\":false}}")
+    @JsonView(DetailView.class)
     private String stateBlob;
+
+    @JsonView(BriefView.class)
+    @JsonProperty(value = "created", access = JsonProperty.Access.READ_ONLY)
+    @JsonSerialize(using = ApiStateDateTimeSerializer.class)
     private Date createdDate;
+
+    @JsonIgnore
     private Date updatedDate;
-    private Date lastAccesedDate;
+
     public AmpApiState(){
         
     }
@@ -55,12 +92,6 @@ public class AmpApiState {
         this.updatedDate = updatedDate;
     }
     
-    public Date getLastAccesedDate() {
-        return lastAccesedDate;
-    }
-    public void setLastAccesedDate(Date lastAccesedDate) {
-        this.lastAccesedDate = lastAccesedDate;
-    }
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -70,8 +101,6 @@ public class AmpApiState {
         result = prime * result
                 + ((description == null) ? 0 : description.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result
-                + ((lastAccesedDate == null) ? 0 : lastAccesedDate.hashCode());
         result = prime * result
                 + ((stateBlob == null) ? 0 : stateBlob.hashCode());
         result = prime * result + ((title == null) ? 0 : title.hashCode());
@@ -103,11 +132,6 @@ public class AmpApiState {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
-            return false;
-        if (lastAccesedDate == null) {
-            if (other.lastAccesedDate != null)
-                return false;
-        } else if (!lastAccesedDate.equals(other.lastAccesedDate))
             return false;
         if (stateBlob == null) {
             if (other.stateBlob != null)
@@ -143,8 +167,6 @@ public class AmpApiState {
         return "AmpApiState [id=" + id + ", title=" + title + ", description="
                 + description + ", type=" + type + ", stateBlob=" + stateBlob
                 + ", createdDate=" + createdDate + ", updatedDate="
-                + updatedDate + ", lastAccesedDate=" + lastAccesedDate + "]";
+                + updatedDate + "]";
     }
-    
-    
 }

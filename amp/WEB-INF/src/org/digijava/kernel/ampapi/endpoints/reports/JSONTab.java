@@ -3,13 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 
@@ -17,7 +12,6 @@ public class JSONTab {
     private long id;
     private String name;
     private Boolean visible;
-    private AmpARFilter filter;
     private List<JsonBean> translatedNames = new ArrayList <JsonBean> ();
     
     public JSONTab(Long ampReportId, boolean visible) {
@@ -53,14 +47,6 @@ public class JSONTab {
     
     public void setName(String name) {
         this.name = name;
-    }
-    
-    public AmpARFilter getFilter() {
-        return filter;
-    }
-    
-    public void setFilter(AmpARFilter filter) {
-        this.filter = filter;
     }
     
     public Boolean getVisible() {

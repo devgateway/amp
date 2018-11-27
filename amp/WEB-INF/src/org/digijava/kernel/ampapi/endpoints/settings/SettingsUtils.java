@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -24,7 +26,6 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -48,7 +49,6 @@ import org.digijava.module.aim.util.ResourceManagerSettingsUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.h2.util.StringUtils;
 
 /**
  * Utility class for amp settings handling
@@ -257,7 +257,7 @@ public class SettingsUtils {
                 SettingsConstants.MAX_FRACT_DIGITS_MAP));
 
         // is grouping used
-        formatFields.add(new SettingField(SettingsConstants.USE_GROUPING, null,
+        formatFields.add(SettingField.create(SettingsConstants.USE_GROUPING, null,
                 SettingsConstants.ID_NAME_MAP.get(SettingsConstants.USE_GROUPING), format.isGroupingUsed()));
 
         // grouping separator
@@ -266,7 +266,7 @@ public class SettingsUtils {
                 selectedGroupSeparator, SettingsConstants.GROUP_SEPARATOR_MAP));
 
         // group size
-        formatFields.add(new SettingField(SettingsConstants.GROUP_SIZE, SettingsConstants.USE_GROUPING,
+        formatFields.add(SettingField.create(SettingsConstants.GROUP_SIZE, SettingsConstants.USE_GROUPING,
                 SettingsConstants.ID_NAME_MAP.get(SettingsConstants.GROUP_SIZE), format.getGroupingSize()));
 
         // amount units
@@ -274,7 +274,7 @@ public class SettingsUtils {
         formatFields.add(getOptionValueSetting(SettingsConstants.AMOUNT_UNITS, SettingsConstants.USE_GROUPING,
                 selectedAmountUnits, SettingsConstants.AMOUNT_UNITS_MAP));
 
-        return new SettingField(SettingsConstants.AMOUNT_FORMAT_ID, null,
+        return SettingField.create(SettingsConstants.AMOUNT_FORMAT_ID, null,
                 SettingsConstants.ID_NAME_MAP.get(SettingsConstants.AMOUNT_FORMAT_ID), formatFields);
     }
 
@@ -303,7 +303,7 @@ public class SettingsUtils {
         }
 
         String settingName = SettingsConstants.ID_NAME_MAP.get(settingId);
-        return new SettingField(settingId, groupId, settingName, new SettingOptions(selectedId, options));
+        return SettingField.create(settingId, groupId, settingName, new SettingOptions(selectedId, options));
     }
 
     /**
@@ -346,7 +346,7 @@ public class SettingsUtils {
             range.setRangeTo(EndpointUtils.getRangeEndYear());
         }
 
-        return new SettingField(SettingsConstants.YEAR_RANGE_ID, null,
+        return SettingField.create(SettingsConstants.YEAR_RANGE_ID, null,
                 SettingsConstants.ID_NAME_MAP.get(SettingsConstants.YEAR_RANGE_ID), range);
     }
 
@@ -369,7 +369,7 @@ public class SettingsUtils {
 
     private static SettingField getSettingFieldForOptions(String id, SettingOptions options) {
         String name = SettingsConstants.ID_NAME_MAP.get(id);
-        return new SettingField(id, null, name, options);
+        return SettingField.create(id, null, name, options);
     }
 
     /**
@@ -510,11 +510,10 @@ public class SettingsUtils {
      * c) needs to have 'Bilateral SSC Commitments' and  'Triangular SSC Commitments' if any SSC setting is selected.
      *
      * @param spec
-     * @param config
+     * @param settings
      */
-    public static void configureMeasures(final ReportSpecificationImpl spec, final  JsonBean config) {
-        if (spec != null && config != null) {
-            Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
+    public static void configureMeasures(final ReportSpecificationImpl spec, final Map<String, Object> settings) {
+        if (spec != null) {
             String fundingType = (String) (settings == null ? null : settings.get(SettingsConstants.FUNDING_TYPE_ID));
             if (fundingType == null) {
                 fundingType = SettingsUtils.getDefaultFundingType();
@@ -539,17 +538,16 @@ public class SettingsUtils {
      *
      * @param spec
      *            report specification
-     * @param config
-     *            request configuration that stores the settings
+     * @param settings
+     *            the settings
      */
-    public static void applyExtendedSettings(ReportSpecificationImpl spec, JsonBean config) {
+    public static void applyExtendedSettings(ReportSpecificationImpl spec, Map<String, Object> settings) {
         // apply first common settings, i.e. calendar and currency
-        applySettings(spec, config, true);
+        applySettings(spec, settings, true);
 
         // now apply custom settings, i.e. selected measures
         List<String> measureOptions = new ArrayList<String>();
-        if (config.get(EPConstants.SETTINGS) != null) {
-            Map<Integer, Object> settings = (Map<Integer, Object>) config.get(EPConstants.SETTINGS);
+        if (settings != null) {
             Object fundingTypes = settings.get(SettingsConstants.FUNDING_TYPE_ID);
             if (fundingTypes != null) {
                 if (fundingTypes instanceof String)
@@ -592,16 +590,16 @@ public class SettingsUtils {
      * values "funding-type" : [“Actual Commitments”, “Actual Disbursements”],
      * "currency-code" : “USD”, "calendar-id" : “123” "year-range" : { from :
      * "all", to : "2014" } } }
-     * 
+     *
      * @param spec
      *            - report specification over which to apply the settings
-     * @param config
-     *            - JSON request that includes the settings
+     * @param settings
+     *            - the settings
      * @param setDefaults
      *            if true, then not specified settings will be configured with
      *            defaults
      */
-    public static void applySettings(ReportSpecificationImpl spec, JsonBean config, boolean setDefaults) {
+    public static void applySettings(ReportSpecificationImpl spec, Map<String, Object> settings, boolean setDefaults) {
         if (spec.getSettings() != null && !ReportSettingsImpl.class.isAssignableFrom(spec.getSettings().getClass())) {
             logger.error("Unsupported conversion for: " + spec.getSettings().getClass());
             return;
@@ -613,9 +611,6 @@ public class SettingsUtils {
             spec.setSettings(reportSettings);
         }
 
-        // these are the settings provided via json
-        Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
-
         configureCurrencyCode(reportSettings, settings, setDefaults);
         configureNumberFormat(reportSettings, settings, setDefaults);
         configureCalendar(reportSettings, settings, setDefaults);
@@ -623,7 +618,7 @@ public class SettingsUtils {
     }
 
     /**
-     * 
+     *
      * @param reportSettings
      * @param settings
      * @param setDefaults
@@ -680,7 +675,7 @@ public class SettingsUtils {
     private static void configureCalendar(ReportSettingsImpl reportSettings, Map<String, Object> settings,
             boolean setDefaults) {
         String calendarId = settings == null ? null : String.valueOf(settings.get(SettingsConstants.CALENDAR_TYPE_ID));
-        if (settings != null && StringUtils.isNumber(calendarId)) {
+        if (settings != null && NumberUtils.isNumber(calendarId)) {
             reportSettings.setOldCalendar(reportSettings.getCalendar());
             reportSettings.setCalendar(DbUtil.getAmpFiscalCalendar(Long.valueOf(calendarId)));
         }
@@ -763,19 +758,19 @@ public class SettingsUtils {
     private static SettingField getIntSetting(String id, int value) {
         String name = SettingsConstants.ID_NAME_MAP.get(id);
 
-        return new SettingField(id, null, name, value);
+        return SettingField.create(id, null, name, value);
     }
 
     private static SettingField getStringSetting(String id, String value) {
         String name = SettingsConstants.ID_NAME_MAP.get(id);
 
-        return new SettingField(id, null, name, value);
+        return SettingField.create(id, null, name, value);
     }
 
     private static SettingField getBooleanSetting(String id, boolean value) {
         String name = SettingsConstants.ID_NAME_MAP.get(id);
 
-        return new SettingField(id, null, name, value);
+        return SettingField.create(id, null, name, value);
     }
 
     static List<SettingField> getResourceManagerSettings() {

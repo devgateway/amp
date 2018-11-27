@@ -15,7 +15,7 @@ import org.digijava.module.aim.util.Output;
 
 public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Comparable<AmpAhsurvey>, AuditableEntity {
 
-    @Interchangeable(fieldTitle="ID", id = true)
+    @Interchangeable(fieldTitle = "ID")
     private Long ampAHSurveyId;
 
     //IATI-check: to be ignored

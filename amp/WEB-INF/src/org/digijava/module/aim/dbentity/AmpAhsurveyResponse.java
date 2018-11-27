@@ -9,7 +9,6 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
 public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable, AuditableEntity {

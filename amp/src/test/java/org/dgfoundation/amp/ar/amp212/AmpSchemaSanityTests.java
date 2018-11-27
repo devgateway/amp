@@ -605,7 +605,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
     
     @Test
     public void test_AMP_18499_should_fail_for_now() {
-        // for running manually: open http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=73 OR http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/73
+        // for running manually: open http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=73 OR http://localhost:8080/TEMPLATE/ampTemplate/saikuui_reports/index.html#report/open/73
         NiReportModel cor = new NiReportModel("AMP-18499")
             .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 2))",
@@ -628,7 +628,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
     
     @Test
     public void test_AMP_18504_should_fail_for_now() {
-        // for running manually: http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=24 or http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/24
+        // for running manually: http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=24 or http://localhost:8080/TEMPLATE/ampTemplate/saikuui_reports/index.html#report/open/24
         
         NiReportModel cor = new NiReportModel("AMP-18504")
                 .withHeaders(Arrays.asList(
@@ -666,7 +666,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 .withBody(      new ReportAreaForTests(null)
                         .withContents("Project Title", "", "Region", "", "AMP ID", "", "Funding-2009-Q1-Actual Commitments", "100,000", "Funding-2009-Q1-Actual Disbursements", "0", "Funding-2009-Q1-Actual Expenditures", "0", "Funding-2009-Total-Actual Commitments", "100,000", "Funding-2009-Total-Actual Disbursements", "0", "Funding-2009-Total-Actual Expenditures", "0", "Funding-2010-Q2-Actual Commitments", "0", "Funding-2010-Q2-Actual Disbursements", "60,000", "Funding-2010-Q2-Actual Expenditures", "0", "Funding-2010-Total-Actual Commitments", "0", "Funding-2010-Total-Actual Disbursements", "60,000", "Funding-2010-Total-Actual Expenditures", "0", "Funding-2012-Q3-Actual Commitments", "25,000", "Funding-2012-Q3-Actual Disbursements", "0", "Funding-2012-Q3-Actual Expenditures", "0", "Funding-2012-Q4-Actual Commitments", "0", "Funding-2012-Q4-Actual Disbursements", "12,000", "Funding-2012-Q4-Actual Expenditures", "0", "Funding-2012-Total-Actual Commitments", "25,000", "Funding-2012-Total-Actual Disbursements", "12,000", "Funding-2012-Total-Actual Expenditures", "0", "Funding-2013-Q4-Actual Commitments", "2,670,000", "Funding-2013-Q4-Actual Disbursements", "0", "Funding-2013-Q4-Actual Expenditures", "0", "Funding-2013-Total-Actual Commitments", "2,670,000", "Funding-2013-Total-Actual Disbursements", "0", "Funding-2013-Total-Actual Expenditures", "0", "Funding-2014-Q2-Actual Commitments", "4,400,000", "Funding-2014-Q2-Actual Disbursements", "450,000", "Funding-2014-Q2-Actual Expenditures", "0", "Funding-2014-Total-Actual Commitments", "4,400,000", "Funding-2014-Total-Actual Disbursements", "450,000", "Funding-2014-Total-Actual Expenditures", "0", "Totals-Actual Commitments", "7,195,000", "Totals-Actual Disbursements", "522,000", "Totals-Actual Expenditures", "0")
                         .withChildren(
-                                new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Region", "", "AMP ID", "872113null", "Funding-2009-Q1-Actual Commitments", "100,000", "Funding-2009-Total-Actual Commitments", "100,000", "Funding-2010-Q2-Actual Disbursements", "60,000", "Funding-2010-Total-Actual Disbursements", "60,000", "Funding-2012-Q3-Actual Commitments", "25,000", "Funding-2012-Q4-Actual Disbursements", "12,000", "Funding-2012-Total-Actual Commitments", "25,000", "Funding-2012-Total-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
+                                new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Region", "", "AMP ID", "87211314", "Funding-2009-Q1-Actual Commitments", "100,000", "Funding-2009-Total-Actual Commitments", "100,000", "Funding-2010-Q2-Actual Disbursements", "60,000", "Funding-2010-Total-Actual Disbursements", "60,000", "Funding-2012-Q3-Actual Commitments", "25,000", "Funding-2012-Q4-Actual Disbursements", "12,000", "Funding-2012-Total-Actual Commitments", "25,000", "Funding-2012-Total-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
                                 new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Region", "Cahul County", "AMP ID", "87211347", "Funding-2013-Q4-Actual Commitments", "2,670,000", "Funding-2013-Total-Actual Commitments", "2,670,000", "Funding-2014-Q2-Actual Commitments", "4,400,000", "Funding-2014-Q2-Actual Disbursements", "450,000", "Funding-2014-Total-Actual Commitments", "4,400,000", "Funding-2014-Total-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")      ));
         
         runNiTestCase(

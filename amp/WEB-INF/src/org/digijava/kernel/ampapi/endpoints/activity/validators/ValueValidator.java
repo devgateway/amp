@@ -54,45 +54,24 @@ public class ValueValidator extends InputValidator {
             Object value = newFieldParent.get(fieldDescription.getFieldName());
             
             if (value != null) {
-                boolean idOnly = Boolean.TRUE.equals(fieldDescription.isIdOnly());
                 // convert to string the ids to avoid long-integer comparison
                 String valueStr = value.toString();
-                if (idOnly) {
-                    if (findById(possibleValues, valueStr) != null) {
-                        return true;
-                    }
-                } else {
-                    if (findByValue(possibleValues, valueStr) != null) {
-                        return true;
-                    }
-                }
-                // wrong value configured if it is not found in allowed options
-                return false;
+                return findById(possibleValues, valueStr) != null;
             }
         }
         // nothing failed so far? then we are good to go
         return true;
     }
 
+    // TODO it would be nice if possible values could be extended to retrieve one single possible value by id.
+    // this will reduce this operation from O(n) to O(log N) or O(1)
+    // reason: fields can repeat and may have thousands of possible values
     private PossibleValue findById(List<PossibleValue> possibleValues, String id) {
         for (PossibleValue possibleValue : possibleValues) {
             if (id.equals(possibleValue.getId().toString())) {
                 return possibleValue;
             }
             PossibleValue childPossibleValue = findById(possibleValue.getChildren(), id);
-            if (childPossibleValue != null) {
-                return childPossibleValue;
-            }
-        }
-        return null;
-    }
-
-    private PossibleValue findByValue(List<PossibleValue> possibleValues, String value) {
-        for (PossibleValue possibleValue : possibleValues) {
-            if (value.equals(possibleValue.getValue())) {
-                return possibleValue;
-            }
-            PossibleValue childPossibleValue = findByValue(possibleValue.getChildren(), value);
             if (childPossibleValue != null) {
                 return childPossibleValue;
             }

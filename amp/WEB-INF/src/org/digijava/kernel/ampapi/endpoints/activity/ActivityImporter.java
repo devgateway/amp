@@ -20,9 +20,7 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ChangeType;
@@ -41,6 +39,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -48,13 +47,10 @@ import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
@@ -74,9 +70,6 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.OrganisationUtil;
-import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -113,13 +106,9 @@ public class ActivityImporter extends ObjectImporter {
     // latest activity id in case there was attempt to update older version of an activity
     private Long latestActivityId;
 
-    private Memoizer<Map<String, AmpRole>> rolesByCode = new Memoizer<>(this::loadOrgRoles);
-
-    private Memoizer<Map<String, AmpActivityProgramSettings>> programSettingsByName =
-            new Memoizer<>(this::loadProgramSettings);
-
     public ActivityImporter() {
-        super(AmpActivityFields.class, new InputValidatorProcessor(InputValidatorProcessor.getActivityValidators()));
+        super(new InputValidatorProcessor(InputValidatorProcessor.getActivityValidators()),
+                AmpFieldsEnumerator.getPrivateEnumerator().getActivityFields());
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {
@@ -148,7 +137,7 @@ public class ActivityImporter extends ObjectImporter {
         }
 
         // retrieve fields definition for internal use
-        List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getAllAvailableFields();
+        List<APIField> fieldsDef = getApiFields();
         // get existing activity if this is an update request
         Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
 
@@ -347,28 +336,6 @@ public class ActivityImporter extends ObjectImporter {
 
     protected boolean ignoreUnknownFields() {
         return AmpOfflineModeHolder.isAmpOfflineMode();
-    }
-
-    /**
-     * Identifies if an existing object has to be worked with
-     * @param fieldDefOfAnObject
-     * @param jsonValue
-     * @return
-     */
-    private Long getElementId(APIField fieldDefOfAnObject, Object jsonValue) {
-        List<APIField> children = fieldDefOfAnObject.getChildren();
-        if (children != null && jsonValue != null) {
-            for (APIField childDef : children) {
-                if (Boolean.TRUE.equals(childDef.isId())) {
-                    String idFieldName = childDef.getFieldName();
-                    String idStr = String.valueOf(((List<Map<String, Object>>) jsonValue).get(0).get(idFieldName));
-                    if (StringUtils.isNumeric(idStr))
-                        return Long.valueOf(idStr);
-                    break;
-                }
-            }
-        }
-        return null;
     }
 
     @Override
@@ -629,7 +596,7 @@ public class ActivityImporter extends ObjectImporter {
     }
     
     private void initStructure(AmpActivityVersion activity, AmpStructure structure) {
-        structure.setActivities(new HashSet<>(Arrays.asList(activity)));
+        structure.setActivity(activity);
         if (structure.getCoordinates() != null) {
             structure.getCoordinates().forEach(coord -> initStructureCoordinate(structure, coord));
         }
@@ -675,16 +642,8 @@ public class ActivityImporter extends ObjectImporter {
             newActivity.setSectors(new HashSet<AmpActivitySector>());
         } else if (newActivity.getSectors().size() > 0) {
             
-            Map<Long, AmpClassificationConfiguration> foundClassifications = new TreeMap<Long, AmpClassificationConfiguration>();
             for(AmpActivitySector acs : newActivity.getSectors()) {
                 acs.setActivityId(newActivity);
-                if (acs.getClassificationConfig() == null) {
-                    Long ampSecSchemeId = acs.getSectorId().getAmpSecSchemeId().getAmpSecSchemeId();
-                    if (!foundClassifications.containsKey(ampSecSchemeId)) {
-                        foundClassifications.put(ampSecSchemeId, SectorUtil.getClassificationConfigBySectorSchemeId(ampSecSchemeId));
-                    }
-                    acs.setClassificationConfig(foundClassifications.get(ampSecSchemeId));
-                }
             }
         }
     }
@@ -834,42 +793,6 @@ public class ActivityImporter extends ObjectImporter {
                 }
             }
         }
-    }
-
-    protected void configureCustom(Object obj, APIField fieldDef) {
-        if (obj instanceof AmpActivityContact) {
-            AmpActivityContact contact = (AmpActivityContact) obj;
-            contact.setContactType(fieldDef.getDiscriminator());
-        }
-        if (obj instanceof AmpOrgRole) {
-            AmpOrgRole role = (AmpOrgRole) obj;
-            role.setRole(rolesByCode.get().get(fieldDef.getDiscriminator()));
-        }
-        if (obj instanceof AmpActivityProgram) {
-            AmpActivityProgram program = (AmpActivityProgram) obj;
-            program.setProgramSetting(programSettingsByName.get().get(fieldDef.getDiscriminator()));
-        }
-        if (obj instanceof AmpFundingAmount) {
-            Integer index = Integer.valueOf(fieldDef.getDiscriminator());
-            AmpFundingAmount fundingAmount = (AmpFundingAmount) obj;
-            fundingAmount.setFunType(AmpFundingAmount.FundingType.values()[index]);
-        }
-    }
-
-    private Map<String, AmpActivityProgramSettings> loadProgramSettings() {
-        Map<String, AmpActivityProgramSettings> programSettings = new HashMap<>();
-        for (AmpActivityProgramSettings setting : ProgramUtil.getAmpActivityProgramSettingsList()) {
-            programSettings.put(setting.getName(), setting);
-        }
-        return programSettings;
-    }
-
-    private Map<String, AmpRole> loadOrgRoles() {
-        Map<String, AmpRole> roles = new HashMap<>();
-        for (AmpRole role : OrganisationUtil.getOrgRoles()) {
-            roles.put(role.getRoleCode(), role);
-        }
-        return roles;
     }
 
     protected void postProcess() {

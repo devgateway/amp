@@ -16,7 +16,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -253,7 +252,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                     return;
                 }
                     
-                AmpContactProperty fakeContact1 = new AmpContactProperty();
+                AmpContactProperty fakeContact1 = AmpContactProperty.instantiate(contactProperty);
                 fakeContact1.setContact(model.getObject());
                 fakeContact1.setName(contactProperty);
                 fakeContact1.setValue("");

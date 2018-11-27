@@ -23,6 +23,8 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.fm.FMService;
@@ -154,7 +156,8 @@ public class CommonEndpoint implements AmpEndpoint {
     }
 
     private List<PossibleValue> possibleValuesForCommonSettingsField(String fieldName) {
-        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, CommonSettings.class, null);
+        List<APIField> apiFields = AmpFieldsEnumerator.getPublicEnumerator().getCommonSettingsFields();
+        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, apiFields);
     }
 
 }

@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
@@ -51,7 +51,8 @@ public class ResourceImporter extends ObjectImporter {
     private AmpResource resource;
 
     public ResourceImporter() {
-        super(AmpResource.class, new InputValidatorProcessor(InputValidatorProcessor.getResourceValidators()));
+        super(new InputValidatorProcessor(InputValidatorProcessor.getResourceValidators()),
+                AmpFieldsEnumerator.getPrivateEnumerator().getResourceFields());
     }
 
     /**
@@ -78,7 +79,7 @@ public class ResourceImporter extends ObjectImporter {
     private List<ApiErrorMessage> importResource(JsonBean newJson, FormFile formFile) {
         this.newJson = newJson;
 
-        List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getResourceFields();
+        List<APIField> fieldsDef = getApiFields();
         
         String privateAttr = newJson.getString(ResourceEPConstants.PRIVATE);
         

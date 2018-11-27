@@ -77,7 +77,7 @@ public final class ApprovalStatusFilterListManager implements FilterListManager 
             node.setName(TranslatorWorker.translateText(key));
             statusItems.add(node);
         }
-        statusItems.add(UNDEFINED_OPTION);
+        statusItems.add(getUndefinedOption());
         
         items.put(ITEMS_NAME, statusItems);
 

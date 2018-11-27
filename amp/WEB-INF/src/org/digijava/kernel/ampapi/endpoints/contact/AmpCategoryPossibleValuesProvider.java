@@ -33,23 +33,4 @@ public abstract class AmpCategoryPossibleValuesProvider extends PossibleValuesPr
         return new PossibleValue(categoryValue.getId(), categoryValue.getValue(),
                 translatorService.translateLabel(categoryValue.getValue()));
     }
-
-    @Override
-    public Object toJsonOutput(Object value) {
-        return value;
-    }
-
-    @Override
-    public Long getIdOf(Object value) {
-        if (value != null && value instanceof AmpCategoryValue) {
-            return ((AmpCategoryValue) value).getId();
-        }
-        
-        return null;
-    }
-
-    @Override
-    public Object toAmpFormat(Object obj) {
-        return CategoryManagerUtil.getAmpCategoryValueFromDb(((Number) obj).longValue());
-    }
 }

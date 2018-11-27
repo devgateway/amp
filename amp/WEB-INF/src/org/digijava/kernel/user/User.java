@@ -39,7 +39,6 @@ import org.digijava.kernel.entity.OrganizationType;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.request.Site;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -54,7 +53,6 @@ public class User
     private Subject subject;
     private String firstNames;
     private String lastName;
-    @Interchangeable(fieldTitle = "Email")
     private String email;
     private boolean emailVerified;
     private boolean emailBouncing;

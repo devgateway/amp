@@ -12,29 +12,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.nireports.ImmutablePair;
-import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
-import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.annotations.interchange.RegexDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.util.ProgramUtil;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -50,12 +44,12 @@ public class FieldsEnumerator {
     /**
      * Fields that are importable & required by AMP Offline clients.
      */
-    public static final Set<String> OFFLINE_REQUIRED_FIELDS = new ImmutableSet.Builder<String>()
+    private static final Set<String> OFFLINE_REQUIRED_FIELDS = new ImmutableSet.Builder<String>()
             .add(ActivityFieldsConstants.IS_DRAFT)
             .add(ActivityFieldsConstants.APPROVAL_STATUS)
             .build();
 
-    private boolean internalUse = false;
+    private boolean internalUse;
 
     private FieldInfoProvider fieldInfoProvider;
 
@@ -63,31 +57,24 @@ public class FieldsEnumerator {
 
     private TranslatorService translatorService;
 
+    private InterchangeDependencyResolver interchangeDependencyResolver;
+
+    private Function<String, Boolean> allowMultiplePrograms;
+
     /**
      * Fields Enumerator
      * 
      * @param internalUse flags if additional information for internal use is needed 
      */
     public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-                            TranslatorService translatorService, boolean internalUse) {
+                            TranslatorService translatorService, boolean internalUse,
+            Function<String, Boolean> allowMultiplePrograms) {
         this.fieldInfoProvider = fieldInfoProvider;
         this.fmService = fmService;
         this.translatorService = translatorService;
         this.internalUse = internalUse;
-    }
-    
-    /**
-     * gets fields from the type of the field
-     * 
-     * @param field field to be described
-     * @param context current context
-     * @return field definitions
-     */
-    private List<APIField> getChildrenOfField(Field field, FEContext context) {
-        if (!InterchangeUtils.isCollection(field))
-            return getAllAvailableFields(field.getType(), context);
-        else
-            return getAllAvailableFields(InterchangeUtils.getGenericClass(field), context);
+        interchangeDependencyResolver = new InterchangeDependencyResolver(fmService);
+        this.allowMultiplePrograms = allowMultiplePrograms;
     }
 
     /**
@@ -105,10 +92,11 @@ public class FieldsEnumerator {
         APIField apiField = new APIField();
         apiField.setFieldName(fieldTitle);
 
-        if (interchangeable.id()) {
-            apiField.setId(interchangeable.id());
-        }
-        
+        // for discriminated case we can override the type here
+        apiField.setType(InterchangeUtils.getClassOfField(field));
+
+        apiField.setPossibleValuesProviderClass(InterchangeUtils.getPossibleValuesProvider(field));
+
         if (interchangeable.pickIdOnly()) {
             apiField.setFieldType(InterchangeableClassMapper.getCustomMapping(java.lang.Long.class));
         } else {
@@ -129,13 +117,14 @@ public class FieldsEnumerator {
         if (interchangeable.percentageConstraint()){
             apiField.setPercentage(true);
         }
-        List<String> actualDependencies = InterchangeDependencyResolver.getActualDependencies(interchangeable.dependencies());
+        List<String> actualDependencies =
+                interchangeDependencyResolver.getActualDependencies(interchangeable.dependencies());
         if (actualDependencies != null) {
             apiField.setDependencies(actualDependencies);
         }
-        
+
+        apiField.setFieldNameInternal(field.getName());
         if (internalUse) {
-            apiField.setFieldNameInternal(field.getName());
             if (InterchangeUtils.isAmpActivityVersion(field.getType())) {
                 apiField.setActivity(true);
             }
@@ -143,10 +132,8 @@ public class FieldsEnumerator {
         
         /* list type */
         
-        if (interchangeable.pickIdOnly()) {
-            apiField.setIdOnly(true);
-        }
-        
+        apiField.setIdOnly(hasPossibleValues(field, interchangeable));
+
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             if (InterchangeUtils.isCollection(field)) {
                 if (!hasMaxSizeValidatorEnabled(field, context)
@@ -173,10 +160,17 @@ public class FieldsEnumerator {
                     apiField.setUniqueConstraint(uniqueConstraint);
                 }
                 
+            } else if (!interchangeable.pickIdOnly()) {
+                apiField.setMultipleValues(false);
             }
-            
+
+            // FIXME remove condition that excludes activties
             if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {
-                List<APIField> children = getChildrenOfField(field, context);
+                Class type = getType(field, context);
+                List<APIField> children = getAllAvailableFields(type, context);
+                if (InterchangeUtils.isCollection(field)) {
+                    apiField.setElementType(type);
+                }
                 if (children != null && children.size() > 0) {
                     apiField.setChildren(children);
                 }
@@ -193,34 +187,32 @@ public class FieldsEnumerator {
         
         if (StringUtils.isNotBlank(interchangeable.regexPattern())) {
             apiField.setRegexPattern(interchangeable.regexPattern());
-        } else if (interchangeable.regexPatterns().length > 0) {
-            String parentTitle = getParentTitle(context);
-            for (RegexDiscriminator regexDiscr : interchangeable.regexPatterns()) {
-                String parent = regexDiscr.parent();
-                String regexPattern = regexDiscr.regexPattern();
-                if (parent.equals(parentTitle)) {
-                    apiField.setRegexPattern(regexPattern);
-                }
-            }
         }
 
-        apiField.setDiscriminator(interchangeable.discriminatorOption());
+        if (StringUtils.isNotEmpty(interchangeable.discriminatorOption())) {
+            apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
+        }
 
         return apiField;
     }
 
-    /**
-     * Get the title of the parent field from the context interchangeable stack
-     * 
-     * @param context
-     * @return
-     */
-    private String getParentTitle(FEContext context) {
-        Interchangeable current = context.getIntchStack().pop();
-        Interchangeable parent = context.getIntchStack().peek();
-        context.getIntchStack().push(current);
-        
-        return parent.fieldTitle();
+    private boolean hasPossibleValues(Field field, Interchangeable interchangeable) {
+        return interchangeable.pickIdOnly() || field.isAnnotationPresent(PossibleValues.class);
+    }
+
+    private Class<?> getType(Field field, FEContext context) {
+        if (!context.getIntchStack().isEmpty()) {
+            Interchangeable interchangeable = context.getIntchStack().peek();
+            Class<?> type = interchangeable.type();
+            if (type != Interchangeable.DefaultType.class) {
+                return type;
+            }
+        }
+        if (InterchangeUtils.isCollection(field)) {
+            return InterchangeUtils.getGenericClass(field);
+        } else {
+            return field.getType();
+        }
     }
 
     private String getLabelOf(Interchangeable interchangeable) {
@@ -231,22 +223,6 @@ public class FieldsEnumerator {
             label = interchangeable.label();
         }
         return label;
-    }
-
-    public List<APIField> getAllAvailableFields() {
-        return getAllAvailableFields(AmpActivityFields.class);
-    }
-
-    public List<APIField> getContactFields() {
-        return getAllAvailableFields(AmpContact.class);
-    }
-    
-    public List<APIField> getResourceFields() {
-        return getAllAvailableFields(AmpResource.class);
-    }
-    
-    public List<APIField> getCommonSettingsFields() {
-        return getAllAvailableFields(CommonSettings.class);
     }
 
     List<APIField> getAllAvailableFields(Class<?> clazz) {
@@ -263,37 +239,40 @@ public class FieldsEnumerator {
     private List<APIField> getAllAvailableFields(Class<?> clazz, FEContext context) {
         List<APIField> result = new ArrayList<>();
         //StopWatch.next("Descending into", false, clazz.getName());
-        Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class);
-        for (Field field : fields) {
-            Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+        for (Field field : InterchangeUtils.getFieldsAnnotatedWith(clazz,
+                Interchangeable.class, InterchangeableDiscriminator.class)) {
+
             if (!internalUse && InterchangeUtils.isAmpActivityVersion(field.getType())) {
                 continue;
             }
-            context.getIntchStack().push(interchangeable);
-            if (!InterchangeUtils.isCompositeField(field)) {
+            Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+            if (interchangeable != null) {
+                context.getIntchStack().push(interchangeable);
                 if (isFieldVisible(context)) {
                     APIField descr = describeField(field, context);
-                    if (descr != null) {
-                        result.add(descr);
-                    }
+                    descr.setFieldValueReader(new SimpleFieldValueReader(field.getName()));
+                    result.add(descr);
                 }
-            } else {
-                InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
+                context.getIntchStack().pop();
+            }
+            InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
+            if (discriminator != null) {
                 Interchangeable[] settings = discriminator.settings();
                 for (int i = 0; i < settings.length; i++) {
                     context.getDiscriminationInfoStack().push(getDiscriminationInfo(field, settings[i]));
                     context.getIntchStack().push(settings[i]);
                     if (isFieldVisible(context)) {
                         APIField descr = describeField(field, context);
-                        if (descr != null) {
-                            result.add(descr);
-                        }
+                        descr.setDiscriminatorField(discriminator.discriminatorField());
+                        descr.setDiscriminationConfigurer(discriminator.configurer());
+                        descr.setFieldValueReader(new DiscriminatedFieldValueReader(field.getName(),
+                                discriminator.discriminatorField(), settings[i].discriminatorOption()));
+                        result.add(descr);
                     }
                     context.getIntchStack().pop();
                     context.getDiscriminationInfoStack().pop();
                 }
             }
-            context.getIntchStack().pop();
         }
         return result;
     }
@@ -362,27 +341,9 @@ public class FieldsEnumerator {
         return null;
     }
     
-    public List<String> findActivityFieldPaths(Predicate<Field> fieldFilter) {
+    List<String> findFieldPaths(Predicate<Field> fieldFilter, Class<?> clazz) {
         FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
-        visit(AmpActivityFields.class, visitor, new VisitorContext());
-        return visitor.fields;
-    }
-
-    public List<String> findContactFieldPaths(Predicate<Field> fieldFilter) {
-        FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
-        visit(AmpContact.class, visitor, new VisitorContext());
-        return visitor.fields;
-    }
-    
-    public List<String> findResourceFieldPaths(Predicate<Field> fieldFilter) {
-        FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
-        visit(AmpResource.class, visitor, new VisitorContext());
-        return visitor.fields;
-    }
-    
-    public List<String> findCommonFieldPaths(Predicate<Field> fieldFilter) {
-        FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
-        visit(CommonSettings.class, visitor, new VisitorContext());
+        visit(clazz, visitor, new VisitorContext());
         return visitor.fields;
     }
 
@@ -417,27 +378,31 @@ public class FieldsEnumerator {
 
     // TODO how to reuse this logic?
     private void visit(Class<?> clazz, InterchangeVisitor visitor, VisitorContext context) {
-        for (Field field : FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class)) {
+        for (Field field : InterchangeUtils.getFieldsAnnotatedWith(clazz,
+                Interchangeable.class, InterchangeableDiscriminator.class)) {
+
             Interchangeable ant = field.getAnnotation(Interchangeable.class);
-            context.feContext.getIntchStack().push(ant);
-            if (!InterchangeUtils.isCompositeField(field)) {
+            if (ant != null) {
+                context.feContext.getIntchStack().push(ant);
                 if (isFieldVisible(context.feContext)) {
                     visit(field, InterchangeUtils.underscorify(ant.fieldTitle()), ant, visitor, context);
                 }
-            } else {
-                InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
+                context.feContext.getIntchStack().pop();
+            }
+
+            InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
+            if (antd != null) {
                 Interchangeable[] settings = antd.settings();
                 for (Interchangeable ants : settings) {
                     context.feContext.getDiscriminationInfoStack().push(getDiscriminationInfo(field, ants));
                     context.feContext.getIntchStack().push(ants);
                     if (isFieldVisible(context.feContext)) {
-                        visit(field, InterchangeUtils.underscorify(ants.fieldTitle()), ant, visitor, context);
+                        visit(field, InterchangeUtils.underscorify(ants.fieldTitle()), ants, visitor, context);
                     }
                     context.feContext.getIntchStack().pop();
                     context.feContext.getDiscriminationInfoStack().pop();
                 }
             }
-            context.feContext.getIntchStack().pop();
         }
     }
 
@@ -507,13 +472,9 @@ public class FieldsEnumerator {
      */
     private boolean hasMaxSizeValidatorEnabled(Field field, FEContext context) {
         if (AmpActivityProgram.class.equals(InterchangeUtils.getGenericClass(field))) {
-            try {
-                AmpActivityProgramSettings setting = ProgramUtil.getAmpActivityProgramSettings(
-                        context.getIntchStack().peek().discriminatorOption());
-                return setting != null && !setting.isAllowMultiple();
-            } catch (DgException e) {
-                throw new RuntimeException(e);
-            }
+            return allowMultiplePrograms.apply(context.getIntchStack().peek().discriminatorOption());
+
+
         } else {
             return hasValidatorEnabled(context, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
         }
@@ -571,16 +532,6 @@ public class FieldsEnumerator {
 
     private boolean isFieldVisible(FEContext context) {
         Interchangeable interchangeable = context.getIntchStack().peek();
-
-        try {
-            Class<? extends ContextMatcher> cmc = interchangeable.context();
-            ContextMatcher contextMatcher = cmc.newInstance();
-            if (!contextMatcher.inContext(context)) {
-                return false;
-            }
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Context matcher failure", e);
-        }
 
         return isVisible(interchangeable.fmPath(), context);
     }

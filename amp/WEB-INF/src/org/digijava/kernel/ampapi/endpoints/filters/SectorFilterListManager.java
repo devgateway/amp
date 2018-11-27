@@ -79,7 +79,7 @@ public class SectorFilterListManager implements FilterListManager {
             for (AmpSector as : sectors) {
                 sectorItems.add(getSectors(as));
             }
-            sectorItems.add(UNDEFINED_OPTION);
+            sectorItems.add(getUndefinedOption());
             
             items.put(sectorConfigName.toLowerCase(), sectorItems);
         }

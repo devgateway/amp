@@ -19,7 +19,8 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  * @author Alex Gartner
  *
  */
-public class AmpActivityDocument extends ObjectReferringDocument implements Serializable, Versionable, Cloneable {
+public class AmpActivityDocument extends ObjectReferringDocument implements Serializable, Versionable, Cloneable,
+        AuditableEntity {
 
     private Long id;
     
@@ -110,5 +111,10 @@ public class AmpActivityDocument extends ObjectReferringDocument implements Seri
     public Object clone() throws CloneNotSupportedException {
         // TODO Auto-generated method stub
         return super.clone();
+    }
+
+    @Override
+    public AuditableEntity getParent() {
+        return ampActivity;
     }
 }

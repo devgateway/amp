@@ -8,7 +8,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
 
-public class AmpActivityProgram implements Versionable, Serializable, Cloneable {
+public class AmpActivityProgram implements Versionable, Serializable, Cloneable, AuditableEntity {
 
 //      @Interchangeable(fieldTitle="Activity ID", importable=false, pickIdOnly=true)
         private Long ampActivityProgramId;
@@ -109,5 +109,10 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
     @Override
     protected Object clone() throws CloneNotSupportedException {
     return super.clone();
+    }
+
+    @Override
+    public AuditableEntity getParent() {
+        return activity;
     }
 }

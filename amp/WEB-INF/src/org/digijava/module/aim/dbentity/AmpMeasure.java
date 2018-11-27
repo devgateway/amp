@@ -9,8 +9,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
 @TranslatableClass (displayName = "Measure")
-public class AmpMeasure  implements Serializable, Cloneable
-{
+public class AmpMeasure  implements Serializable, Cloneable, AuditableEntity {
     //IATI-check: seems used only in issues -- commenting out (to be ignored).
 
     private Long ampMeasureId ;
@@ -68,5 +67,9 @@ public class AmpMeasure  implements Serializable, Cloneable
         // TODO Auto-generated method stub
         return super.clone();
     }
-    
+
+    @Override
+    public AuditableEntity getParent() {
+        return issue;
+    }
 }

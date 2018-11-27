@@ -22,7 +22,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  *
  */
 @TranslatableClass (displayName = "IPA Contract")
-public class IPAContract implements Serializable, Versionable, Cloneable {
+public class IPAContract implements Serializable, Versionable, Cloneable, AuditableEntity {
 
     /**
      * Multiple fields marked as "transient" in order to fool the
@@ -827,5 +827,10 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
     @Override
     public String toString() {
         return (contractName == null ? "" : contractName);
+    }
+
+    @Override
+    public AuditableEntity getParent() {
+       return activity;
     }
 }

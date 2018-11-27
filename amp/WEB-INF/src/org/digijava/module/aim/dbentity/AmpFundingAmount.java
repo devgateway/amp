@@ -19,7 +19,9 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 /**
  * Simple Funding Amount
  */
-public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializable, Versionable, Cloneable {
+public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializable, Versionable, Cloneable,
+        AuditableEntity {
+
     public enum FundingType {
         PROPOSED, //0
         REVISED; //1
@@ -198,5 +200,10 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
         } else {
             return -1;
         }
+    }
+
+    @Override
+    public AuditableEntity getParent() {
+        return activity;
     }
 }

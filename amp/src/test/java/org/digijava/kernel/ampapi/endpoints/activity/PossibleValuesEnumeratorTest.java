@@ -174,9 +174,12 @@ public class PossibleValuesEnumeratorTest {
     @Test
     public void testDiscriminatorClass() throws IOException {
         assertJsonEquals(possibleValuesFor("approval_status"),
-                "[{\"id\":\"1\",\"value\":\"approved\"},{\"id\":\"5\",\"value\":\"not_approved\"},"
-                        + "{\"id\":\"3\",\"value\":\"startedapproved\"},{\"id\":\"2\",\"value\":\"edited\"},"
-                        + "{\"id\":\"6\",\"value\":\"rejected\"},{\"id\":\"4\",\"value\":\"started\"}]");
+                "[{\"id\":\"approved\",\"value\":\"approved\"},"
+                        + "{\"id\":\"not_approved\",\"value\":\"not_approved\"},"
+                        + "{\"id\":\"startedapproved\",\"value\":\"startedapproved\"},"
+                        + "{\"id\":\"edited\",\"value\":\"edited\"},"
+                        + "{\"id\":\"rejected\",\"value\":\"rejected\"},"
+                        + "{\"id\":\"started\",\"value\":\"started\"}]");
     }
 
     private static class WithThrowingProvider {
@@ -198,8 +201,8 @@ public class PossibleValuesEnumeratorTest {
             possibleValuesFor(WithThrowingProvider.class, "field");
             fail();
         } catch (ApiRuntimeException e) {
-            assertJsonEquals(e.getError(), "{\"error\":{\"0013\":["
-                    + "\"(Error when accessing a method from the discriminator class) some reason\"]}}");
+            assertJsonEquals(e.getError(),
+                    "{\"error\":{\"0001\":[\"(Internal Error) Failed to obtain possible values.\"]}}");
         }
     }
 
@@ -227,22 +230,28 @@ public class PossibleValuesEnumeratorTest {
     public void testSpecialCaseAmpSector() throws IOException {
         when(possibleValuesDAO.getSectors(any()))
                 .thenReturn(Arrays.asList(
-                        values(1, "Sector 1"),
-                        values(2, "Sector 2")
+                        values(1, "Sector 1", null),
+                        values(2, "Sector 2", null),
+                        values(3, "Sector 2.1", 2L)
                 ));
         assertJsonEquals(possibleValuesFor("primary_sectors~sector"),
-                "[{\"id\":1,\"value\":\"Sector 1\"},{\"id\":2,\"value\":\"Sector 2\"}]");
+                "[{\"id\":1,\"value\":\"Sector 1\",\"extra_info\":{\"parentSectorId\":null}},"
+                        + "{\"id\":2,\"value\":\"Sector 2\",\"children\":["
+                        + "{\"id\":3,\"value\":\"Sector 2.1\",\"extra_info\":{\"parentSectorId\":2}}],"
+                        + "\"extra_info\":{\"parentSectorId\":null}}]");
     }
 
     @Test
     public void testSpecialCaseAmpTheme() throws IOException {
         when(possibleValuesDAO.getThemes(any()))
                 .thenReturn(Arrays.asList(
-                        values(1, "Theme 1"),
-                        values(2, "Theme 2")
+                        values(1, "Theme 1", null),
+                        values(2, "Theme 1.2", 1L)
                 ));
         assertJsonEquals(possibleValuesFor("primary_programs~program"),
-                "[{\"id\":1,\"value\":\"Theme 1\"},{\"id\":2,\"value\":\"Theme 2\"}]");
+                "[{\"id\":1,\"value\":\"Theme 1\","
+                        + "\"children\":[{\"id\":2,\"value\":\"Theme 1.2\",\"extra_info\":{\"parentProgramId\":1}}],"
+                        + "\"extra_info\":{\"parentProgramId\":null}}]");
     }
 
     @Test

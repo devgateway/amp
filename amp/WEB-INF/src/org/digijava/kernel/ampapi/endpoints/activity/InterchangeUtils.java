@@ -36,6 +36,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -493,7 +494,8 @@ public class InterchangeUtils {
      * @return latest project overview or an error if invalid configuration is received 
      */
     public static JsonBean importActivity(JsonBean newJson, boolean update, String endpointContextPath) {
-        ActivityImporter importer = new ActivityImporter();
+        List<APIField> activityFields = AmpFieldsEnumerator.getPrivateEnumerator().getActivityFields();
+        ActivityImporter importer = new ActivityImporter(activityFields);
         List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update, endpointContextPath);
         
         return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors);

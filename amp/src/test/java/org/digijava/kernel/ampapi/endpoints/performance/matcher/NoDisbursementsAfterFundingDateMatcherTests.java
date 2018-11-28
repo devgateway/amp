@@ -15,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -115,7 +116,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
-                                .withClassificationDate(new LocalDate(2017, 10, 12).toDate())
+                                .withClassificationDate(DateTime.now().minusMonths(3).toDate())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2018, 12, 12).toDate())

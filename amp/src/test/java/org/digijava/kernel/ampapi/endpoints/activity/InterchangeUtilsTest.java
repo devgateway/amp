@@ -155,8 +155,8 @@ public class InterchangeUtilsTest {
         assertFalse(InterchangeUtils.isAmpActivityVersion(Permissible.class));
         assertFalse(InterchangeUtils.isAmpActivityVersion(AmpActivityFields.class));
         assertTrue(InterchangeUtils.isAmpActivityVersion(AmpActivityVersion.class));
+        assertTrue(InterchangeUtils.isAmpActivityVersion(AmpActivity.class));
         assertFalse(InterchangeUtils.isAmpActivityVersion(String.class));
-        assertFalse(InterchangeUtils.isAmpActivityVersion(AmpActivity.class));
     }
 
     @Test

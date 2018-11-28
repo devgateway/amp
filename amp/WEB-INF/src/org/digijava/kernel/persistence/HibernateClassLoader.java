@@ -31,8 +31,6 @@ import org.digijava.kernel.config.moduleconfig.ModuleConfig;
 import org.digijava.kernel.services.AmpOfflineVersion;
 import org.digijava.kernel.services.AmpOfflineVersionType;
 import org.digijava.kernel.util.I18NHelper;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
-import org.digijava.module.aim.dbentity.ApprovalStatusType;
 import org.digijava.module.translation.hibernate.TranslatorInterceptor;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -156,7 +154,6 @@ public class HibernateClassLoader {
             cfg.addSqlFunction("avg", new ClassicAvgFunction());
             cfg.addSqlFunction("sum", new ClassicSumFunction());
             cfg.registerTypeOverride(new AmpOfflineVersionType(), new String[]{AmpOfflineVersion.class.getName()});
-            cfg.registerTypeOverride(new ApprovalStatusType(), new String[]{ApprovalStatus.class.getName()});
         }
 
         if (classes == null) {

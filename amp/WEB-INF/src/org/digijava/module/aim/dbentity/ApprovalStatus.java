@@ -45,15 +45,6 @@ public enum ApprovalStatus implements Identifiable {
         return dbName;
     }
 
-    public static ApprovalStatus fromDbName(String dbName) {
-        for (ApprovalStatus value : values()) {
-            if (value.dbName.equals(dbName)) {
-                return value;
-            }
-        }
-        throw new IllegalArgumentException("Unknown approval status: " + dbName);
-    }
-
     public static ApprovalStatus fromId(Integer id) {
         for (ApprovalStatus value : values()) {
             if (value.id.equals(id)) {

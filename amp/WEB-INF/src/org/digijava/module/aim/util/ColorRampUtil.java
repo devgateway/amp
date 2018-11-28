@@ -162,9 +162,8 @@ public class ColorRampUtil {
         return colors;
     }
 
-    public static long getColorId(String color) {
-        long colorId = 0;
-        String[][] colors = new String [colorRamps.length][8];
+    public static int getColorId(String color) {
+        int colorId = 0;
         for (int i = 0; i < colorRamps.length; i++) {
             if (color.equals(colorRamps[i][IndicatorEPConstants.COLOR_RAMP_INDEX][0])) {
                 colorId = i;

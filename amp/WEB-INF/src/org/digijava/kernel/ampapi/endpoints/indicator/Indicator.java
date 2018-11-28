@@ -7,6 +7,7 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.gis.LocalizedDateSerializer;
@@ -20,66 +21,119 @@ import org.digijava.module.aim.dbentity.AmpIndicatorColor;
  * 1. Remove gapAnalysis, it is used only when retrieving values with gap analysis enabled.
  * 2. Color ramp is read as an array of objects. However it is written as an id, ref to a predefined
  *    list of color ramps. Can we fix that?
- * 3. When building indicator object, see setColorRamp(), sometimes ramp is sorted while other it isn't.
- *    Also multiColor flag is not computed every time setColorRamp() is called.
- *    Also there is high probability that multiColor flag is computed incorrectly.
  *
  * @author Octavian Ciubotaru
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Indicator {
-
+    
+    public static class IndicatorView {
+    }
+    
+    public static class LayerView extends IndicatorView {
+    }
+    
+    public enum Option {
+        @JsonProperty("overwrite") OVERWRITE,
+        @JsonProperty("new") NEW
+    }
+    
+    @JsonView(IndicatorView.class)
     private Long id;
 
     @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.endpoints.gis.MultilingualLabelPH")
+    @JsonView(IndicatorView.class)
     private Map<String, String> name;
 
     @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.endpoints.gis.MultilingualLabelPH")
+    @JsonView(IndicatorView.class)
     private Map<String, String> description;
 
     @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.endpoints.gis.MultilingualLabelPH")
+    @JsonView(IndicatorView.class)
     private Map<String, String> unit;
 
     @ApiModelProperty(allowableValues = "[0-3]")
+    @JsonView(IndicatorView.class)
     private Long admLevelId;
-
+    
+    @JsonView(IndicatorView.class)
     private String admLevelName;
-
+    
+    @JsonView(IndicatorView.class)
     private AdmLevel adminLevel;
-
+    
+    @JsonView(IndicatorView.class)
     private Long numberOfClasses;
+    
+    @JsonView(IndicatorView.class)
     private Long accessTypeId;
+    
+    @JsonView(IndicatorView.class)
     private Long indicatorTypeId;
 
     @ApiModelProperty("Are indicator values reflecting gap analysis? Computed only when retrieving indicator.")
+    @JsonView(IndicatorView.class)
     private Boolean gapAnalysis;
 
     @ApiModelProperty("Does this indicator support gap analysis? Computed only when listing indicators.")
+    @JsonView(IndicatorView.class)
     private Boolean canDoGapAnalysis;
 
     @ApiModelProperty("During update this property will be updated only if not null.")
+    @JsonView(IndicatorView.class)
     private Boolean zeroCategoryEnabled;
 
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView(IndicatorView.class)
     private Date createdOn;
 
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView(IndicatorView.class)
     private Date updatedOn;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView(IndicatorView.class)
     private String createdBy;
 
     @JsonProperty(value = "isMultiColor", access = JsonProperty.Access.READ_ONLY)
+    @JsonView(IndicatorView.class)
     private Boolean multiColor;
-
+    
+    @JsonProperty(value = IndicatorEPConstants.IS_POPULATION, access = JsonProperty.Access.READ_ONLY)
+    @JsonView(IndicatorView.class)
+    private Boolean population;
+    
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView(IndicatorView.class)
     private List<AmpIndicatorColor> colorRamp;
 
     @ApiModelProperty("During update this property will be updated only if not null.")
+    @JsonView(IndicatorView.class)
     private List<IndicatorValue> values;
+    
+    @ApiModelProperty("Color ramp id to use. See `GET /indicator/amp-color`. "
+            + "During update this property will be updated only if not null.")
+    @JsonView(LayerView.class)
+    private Integer colorRampId;
+    
+    @ApiModelProperty("The workspaces this indicator is shared with. "
+            + "During update this property will be updated only if not null.")
+    @JsonView(LayerView.class)
+    private List<Long> sharedWorkspaces;
+    
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ApiModelProperty("Controls how indicator values are updated.")
+    @JsonView(LayerView.class)
+    private Indicator.Option option = Indicator.Option.OVERWRITE;
+    
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @ApiModelProperty("Number indicator values imported.")
+    @JsonView(LayerView.class)
+    private Integer numberOfImportedRecords;
 
     public Long getId() {
         return id;
@@ -231,5 +285,45 @@ public class Indicator {
 
     public void setGapAnalysis(Boolean gapAnalysis) {
         this.gapAnalysis = gapAnalysis;
+    }
+    
+    public Integer getColorRampId() {
+        return colorRampId;
+    }
+    
+    public void setColorRampId(Integer colorRampId) {
+        this.colorRampId = colorRampId;
+    }
+    
+    public List<Long> getSharedWorkspaces() {
+        return sharedWorkspaces;
+    }
+    
+    public void setSharedWorkspaces(List<Long> sharedWorkspaces) {
+        this.sharedWorkspaces = sharedWorkspaces;
+    }
+    
+    public Indicator.Option getOption() {
+        return option;
+    }
+    
+    public void setOption(Indicator.Option option) {
+        this.option = option;
+    }
+    
+    public Integer getNumberOfImportedRecords() {
+        return numberOfImportedRecords;
+    }
+    
+    public void setNumberOfImportedRecords(Integer numberOfImportedRecords) {
+        this.numberOfImportedRecords = numberOfImportedRecords;
+    }
+    
+    public Boolean getPopulation() {
+        return population;
+    }
+    
+    public void setPopulation(Boolean population) {
+        this.population = population;
     }
 }

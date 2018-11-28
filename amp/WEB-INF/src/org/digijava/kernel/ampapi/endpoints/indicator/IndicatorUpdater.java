@@ -26,14 +26,14 @@ import java.util.Set;
  */
 public class IndicatorUpdater {
     
-    private SaveIndicatorRequest indicator;
+    private Indicator indicator;
     
     private ApiEMGroup errors = new ApiEMGroup(); 
     private TranslationUtil contentTranslator = new TranslationUtil();
     private Long indicatorId;
     private boolean indicatorIdDetected;
     
-    public IndicatorUpdater(SaveIndicatorRequest indicator) {
+    public IndicatorUpdater(Indicator indicator) {
         this.indicator = indicator;
     }
     
@@ -109,8 +109,8 @@ public class IndicatorUpdater {
 
         if (indicator.getSharedWorkspaces() != null) {
             Set<AmpIndicatorWorkspace> teams = new HashSet<>();
-            for (String indicatorTeam : indicator.getSharedWorkspaces()) {
-                AmpTeam team = TeamUtil.getAmpTeam(new Long(String.valueOf(indicatorTeam)));
+            for (Long wsId : indicator.getSharedWorkspaces()) {
+                AmpTeam team = TeamUtil.getAmpTeam(wsId);
                 AmpIndicatorWorkspace indicatorWs = new AmpIndicatorWorkspace();
                 indicatorWs.setWorkspace(team);
                 indicatorWs.setIndicatorLayer(indicatorLayer);
@@ -127,7 +127,7 @@ public class IndicatorUpdater {
 
         if (indicator.getValues() != null) {
 
-            SaveIndicatorRequest.Option option = indicator.getOption();
+            Indicator.Option option = indicator.getOption();
 
             Set<AmpLocationIndicatorValue> locationIndicatorValues = new HashSet<>();
             for (IndicatorValue location : indicator.getValues()) {
@@ -144,7 +144,7 @@ public class IndicatorUpdater {
                         locationIndicatorValue = DynLocationManagerUtil.getLocationIndicatorValue(indicatorLayer.getId(), locId);
                     }
 
-                    if (locationIndicatorValue != null && option == SaveIndicatorRequest.Option.NEW) {
+                    if (locationIndicatorValue != null && option == Indicator.Option.NEW) {
                         continue;
                     } else {
                         if (locationIndicatorValue == null) {

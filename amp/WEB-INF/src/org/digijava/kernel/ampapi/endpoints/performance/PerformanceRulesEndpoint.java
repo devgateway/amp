@@ -16,12 +16,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
+import org.digijava.kernel.ampapi.endpoints.common.CategoryValue;
 import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherAttribute;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -100,32 +100,9 @@ public class PerformanceRulesEndpoint implements AmpEndpoint {
     @Path("/levels")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "getLevels", authTypes = { AuthRule.IN_ADMIN })
-    @ApiOperation(
-            value = "Retrieve and provide performance alert levels.",
-            notes = "<dl>\n"
-                    + "The access types JSON object holds information regarding:\n"
-                    + "<dt><b>id</b>\n"
-                    + "<dd>- the id of the performance level\n"
-                    + "<dt><b>orig-name</b>\n"
-                    + "<dd>- the performance alert level name, not translated\n"
-                    + "<dt><b>name</b>\n"
-                    + "<dd>- the performance alert level name, translated\n"
-                    + "</dl>\n"
-                    + "</br>\n"
-                    + "</br>\n"
-                    + "<h3>Sample Output:</h3>\n"
-                    + "<pre>\n"
-                    + " [\n"
-                    + "    {\n"
-                    + "     \"id\" : 123,\n"
-                    + "     \"orig-name\" : \"Minor\",\n"
-                    + "     \"name\" : \"Minor\"\n"
-                    + "    },\n"
-                    + "    ....\n"
-                    + " ]\n"
-                    + "</pre>")
-    public List<JsonBean> getAlertLevels() {
-        return CategoryValueService.getCategoryValues(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, true);
+    @ApiOperation("Retrieve and provide performance alert levels.")
+    public List<CategoryValue> getAlertLevels() {
+        return CategoryValueService.getCategoryValues(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY);
     }
     
     @GET

@@ -33,6 +33,8 @@ public class EPConstants {
     public static final String ID = "id";
     public static final String NAME = "name";
     public static final String ORIGINAL_NAME = "orig-name";
+    public static final String LABEL = "label";
+    public static final String VALUE = "value";
     public static final String TYPE = "type";
     public static final String REPORT_NAME = "name";
     public static final String IS_CUSTOM = "custom";

@@ -56,8 +56,7 @@ public class AmpProposedProjectCost extends AmpProjectCost {
         if (!FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")) {
             return super.getAmountField();
         } else {
-            AmpTextFieldPanel<Double> amount = new AmpTextFieldPanel<Double>("amount",
-                    new ProposedProjectCostModel(new PropertyModel<>(projectCost, "currency"),
+            AmpTextFieldPanel<Double> amount = new AmpTextFieldPanel<Double>("amount", new ProposedProjectCostModel(new PropertyModel<String>(projectCost, "currencyCode"),
                     new PropertyModel<Double>(projectCost, "funAmount"), new PropertyModel<Set<AmpAnnualProjectBudget>>(am,
                             "annualProjectBudgets")), "Amount", false) {
                 public IConverter getInternalConverter(java.lang.Class<?> type) {

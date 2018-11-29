@@ -71,6 +71,7 @@ define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','un
 		var sord = (app.TabsApp.currentTab.get('currentSorting') !== null ? app.TabsApp.currentTab.get('currentSorting').sord : null);
 		var data = JSON.stringify({
 			filters : app.TabsApp.serializedFilters ? app.TabsApp.serializedFilters.filters : {},
+		    'include-location-children': app.TabsApp.serializedFilters ? app.TabsApp.serializedFilters['include-location-children'] : true,
 			reportData : reportNames,
 			sidx: sidx,
 			sord: sord,

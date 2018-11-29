@@ -61,6 +61,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 			regenerate : true,
 			columns_with_ids : app.TabsApp.COLUMNS_WITH_IDS,
 			filters : jsonFilters,
+			'include-location-children': app.TabsApp.serializedFilters ? app.TabsApp.serializedFilters['include-location-children'] : true,
 			settings : settings
 		};
 		if (app.TabsApp.currentSorting !== undefined) {
@@ -123,7 +124,8 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 							page : 1,
 							regenerate : true,
 							columns_with_ids : app.TabsApp.COLUMNS_WITH_IDS,
-							filters : app.TabsApp.serializedFilters.filters
+							filters : app.TabsApp.serializedFilters.filters,
+							'include-location-children': app.TabsApp.serializedFilters ? app.TabsApp.serializedFilters['include-location-children'] : true
 						},
 						jsonReader : {
 							repeatitems : false,

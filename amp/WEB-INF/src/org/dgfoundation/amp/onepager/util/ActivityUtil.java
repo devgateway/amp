@@ -47,6 +47,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpAPIFiscalYear;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
@@ -157,7 +158,6 @@ public class ActivityUtil {
      * @param locale
      * @param rootRealPath
      * @param draft
-     * @param rejected
      */
     public static AmpActivityVersion saveActivity(AmpActivityVersion oldA, Collection<AmpContentTranslation> values, AmpTeamMember ampCurrentMember, Site site, Locale locale, String rootRealPath, boolean draft, SaveContext saveContext) {
         Session session;
@@ -168,13 +168,14 @@ public class ActivityUtil {
         }
 
         boolean newActivity = oldA.getAmpActivityId() == null;
-        AmpActivityVersion a=null;
-        try {
-            a = saveActivityNewVersion(oldA, values, ampCurrentMember, draft, session, saveContext);
-        } catch (Exception exception) {
-            logger.error("Error saving activity:", exception); // Log the exception
-            throw new RuntimeException("Can't save activity:", exception);
-        }
+        AmpActivityVersion a = AuditActivityInfo.doInTeamMemberContext(ampCurrentMember, () -> {
+            try {
+                return saveActivityNewVersion(oldA, values, ampCurrentMember, draft, session, saveContext);
+            } catch (Exception e) {
+                logger.error("Error saving activity:", e); // Log the exception
+                throw new RuntimeException("Can't save activity:", e);
+            }
+        });
         
         if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(a.getApprovalStatus())) {
             new ActivityValidationWorkflowTrigger(a);
@@ -229,7 +230,7 @@ public class ActivityUtil {
             try {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 
-                a = ActivityVersionUtil.cloneActivity(a, ampCurrentMember);
+                a = ActivityVersionUtil.cloneActivity(a);
                 //keeping session.clear() only for acitivity form as it was before
                 if (isActivityForm)
                     session.clear();
@@ -279,9 +280,6 @@ public class ActivityUtil {
         Date updatedDate = Calendar.getInstance().getTime();
         if (a.getCreatedDate() == null)
             a.setCreatedDate(updatedDate);
-        a.setUpdatedDate(updatedDate);
-        a.setModifiedDate(updatedDate);
-        a.setModifiedBy(ampCurrentMember);
 
         if (context.isUpdateActivityStatus()) {
             setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
@@ -1280,10 +1278,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
     private static void saveStructures(AmpActivityVersion a, Session session) throws Exception {
         if (a.getAmpActivityId() != null) {
             for (AmpStructure structure : a.getStructures()) {
-                if (structure.getActivities() == null) {
-                    structure.setActivities(new HashSet<AmpActivityVersion>());
-                    structure.getActivities().add(a);
-                }
+                structure.setActivity(a);
                 session.saveOrUpdate(structure);
             }
         }

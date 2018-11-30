@@ -38,9 +38,7 @@ public class DashboardConstants {
     public static final String Y_COLUMNS = "yColumns";
     public static final String COLUMNS = "columns";
     public static final String CHARTS = "charts";
-    
-    public static final String COLOR = "color";
-    public static final String AMOUNT_FROM = "amountFrom";
+
     public static final String AMOUNT_COLORS = "amountColors";
 
 }

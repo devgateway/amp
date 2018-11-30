@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -237,9 +238,9 @@ public class ObjectImporter {
         String fieldType = fieldDef.getFieldType();
         boolean idOnly = fieldDef.isIdOnly();
 
-        // this is an object reference
+        // this field has possible values
         if (!isCollection && idOnly) {
-            return getObjectReferencedById(field.getType(), ((Number) jsonValue).longValue());
+            return getObjectReferencedById(field.getType(), jsonValue);
         }
 
         // this is a collection
@@ -253,7 +254,7 @@ public class ObjectImporter {
                 if (idOnly && jsonValue != null) {
                     Class<?> objectType = AIHelper.getGenericsParameterClass(field);
                     try {
-                        Object res = getObjectReferencedById(objectType, Long.valueOf(jsonValue.toString()));
+                        Object res = getObjectReferencedById(objectType, jsonValue);
                         col.add(res);
                     } catch (IllegalArgumentException e) {
                         logger.error(e.getMessage());
@@ -312,14 +313,18 @@ public class ObjectImporter {
     /**
      * Gets the object identified by an ID, from the Possible Values EP
      * @param objectType
-     * @param objectId
+     * @param value
      * @return
      */
-    protected Object getObjectReferencedById(Class<?> objectType, Long objectId) {
+    protected Object getObjectReferencedById(Class<?> objectType, Object value) {
         if (Collection.class.isAssignableFrom(objectType)) {
             throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
         }
-        return InterchangeUtils.getObjectById(objectType, objectId);
+        if (InterchangeUtils.isSimpleType(objectType)) {
+            return ConvertUtils.convert(value, objectType);
+        } else {
+            return InterchangeUtils.getObjectById(objectType, Long.valueOf(value.toString()));
+        }
     }
 
     /**

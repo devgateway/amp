@@ -134,6 +134,16 @@ public class FiltersEndpoint implements AmpEndpoint {
         return ampTeam;
     }
 
+    /**
+     * Returns fi the approval status filter should be shown
+     *
+     * @return
+     */
+    public boolean hasToShowActivityapprovalStatusFilter() {
+        return (TLSUtils.getRequest().getSession().getAttribute(
+                org.digijava.module.aim.helper.Constants.CURRENT_MEMBER) != null);
+    }
+
     @GET
     @Path("/boundaries")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

@@ -4,10 +4,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
+import org.digijava.kernel.ampapi.endpoints.currency.dto.InflationDataSource;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 
@@ -20,7 +20,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Path("currency")
 @Api("currency")
@@ -36,57 +39,27 @@ public class Currencies implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "standard-currencies", authTypes = {AuthRule.IN_ADMIN}, ui = false)
     @ApiOperation(
-            value = "Provides standard currency.",
+            value = "Provides a list of standard currencies.",
             notes = "The list doesn't include constant currencies.\n\n"
-                    + "Returned JSON objects has key as currency code and value as currency name.\n\n"
+                    + "Returned objects has key as currency code and value as currency name.\n\n"
                     + "### Sample Output\n"
                     + "```\n"
                     + "{\n"
-                    + "  \"AUD\": \"Australian Dollar 2000\",\n"
                     + "  \"CAD\": \"Canadian Dollar\",\n"
                     + "  \"CHF\": \"Swiss Franc\"\n"
                     + "}\n"
                     + "```")
-    public JsonBean getStandardCurrencies() {
-        JsonBean standardCurrencies = new JsonBean();
-        for (AmpCurrency ampCurrencies : CurrencyUtil.getActiveAmpCurrencyByCode()) {
-            standardCurrencies.set(ampCurrencies.getCurrencyCode(), ampCurrencies.getCurrencyName());
-        }
-        return standardCurrencies;
+    public Map<String, String> getStandardCurrencies() {
+        return CurrencyUtil.getActiveAmpCurrencyByCode().stream()
+                .collect(Collectors.toMap(AmpCurrency::getCurrencyCode, AmpCurrency::getCurrencyName));
     }
     
     @GET
     @Path("/inflation-sources")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "inflation-sources", authTypes = {AuthRule.IN_ADMIN}, ui = false)
-    @ApiOperation(
-            value = "Provides inflation rates data sources.",
-            notes = "The JSON object holds information regarding:\n"
-                    + "\n"
-                    + "Field|Description\n"
-                    + "---|---\n"
-                    + "name|the name of the source\n"
-                    + "description|the description of the source\n"
-                    + "settings|settings info with the currency and frequency\n"
-                    + "\n"
-                    + "### Sample Output\n"
-                    + "```\n"
-                    + "[{\n"
-                    + "   id: 123,\n"
-                    + "   name: “FRED-GNPDEF”,\n"
-                    + "   description: “Gross National Product: Implicit Price Deflator (USD) provide by US. "
-                    + "Bureau of Economic Analysis”,\n"
-                    + "   settings: { // for any future need to display and/or change the settings, "
-                    + "not required for now\n"
-                    + "       currency: USD,\n"
-                    + "       frequency: Q,\n"
-                    + "       api-token : “...”\n"
-                    + "   },\n"
-                    + " },\n"
-                    + " ... // another source, e.g. CSV import\n"
-                    + "]\n"
-                    + "```")
-    public List<JsonBean> getCurrencyInflationDataSources() {
+    @ApiOperation(value = "Provides inflation rates data sources.")
+    public List<InflationDataSource> getCurrencyInflationDataSources() {
         return CurrencyService.getInflationDataSources();
     }
 
@@ -96,7 +69,7 @@ public class Currencies implements ErrorReportingEndpoint {
     @ApiMethod(id = "inflation-rates", authTypes = {AuthRule.IN_ADMIN}, ui = false)
     @ApiOperation(
             value = "Provides inflation rates already stored in AMP, sorted by date.",
-            notes = "The JSON object holds information regarding:\n\n"
+            notes = "The object holds information regarding:\n\n"
                     + "Field|Description\n"
                     + "---|---\n"
                     + "name|the currency code\n"
@@ -107,9 +80,8 @@ public class Currencies implements ErrorReportingEndpoint {
                     + "    \"USD\": {\"2008-01-01\" : 1.2, ...},        //sorted by date\n"
                     + "    \"ETB\": {\"2008-01-01\" : 12.7, ...},\n"
                     + "    ...\n"
-                    + "}\n"
-                    + "```")
-    public JsonBean getAmpInflationRates() {
+                    + "}\n")
+    public Map<String, Map<String, Double>> getAmpInflationRates() {
         return CurrencyService.getAmpInflationRates();
     }
 
@@ -119,7 +91,7 @@ public class Currencies implements ErrorReportingEndpoint {
     @ApiMethod(id = "store-inflation-rates", authTypes = {AuthRule.IN_ADMIN}, ui = false)
     @ApiOperation(
             value = "Update inflation rates",
-            notes = "The JSON object holds information regarding:\n"
+            notes = "The object holds information regarding:\n"
                     + "\n"
                     + "Field|Description\n"
                     + "---|---\n"
@@ -134,8 +106,8 @@ public class Currencies implements ErrorReportingEndpoint {
                     + "    ...\n"
                     + "}\n"
                     + "```\n")
-    public JsonBean saveInflationRates(JsonBean inflationRates) {
-        return CurrencyService.saveInflationRates(inflationRates);
+    public void saveInflationRates(Map<String, Map<String, Double>> inflationRates) {
+        CurrencyService.saveInflationRates(inflationRates);
     }
 
     @GET
@@ -144,20 +116,8 @@ public class Currencies implements ErrorReportingEndpoint {
     @ApiMethod(id = "inflation-rates-from-source", authTypes = {AuthRule.IN_ADMIN}, ui = false)
     @ApiOperation(
             value = "Retrieve and provide inflation rates from the selected datasource.",
-            notes = "The JSON object holds information regarding:\n\n"
-                    + "Field|Description\n"
-                    + "---|---\n"
-                    + "name|the currency code\n"
-                    + "value|a list of currency rates\n\n"
-                    + "### Sample Output\n"
-                    + "```\n"
-                    + "{\n"
-                    + "    \"USD\": {\"2008-01-01\" : 1.2, ...},        //sorted by date\n"
-                    + "    \"ETB\": {\"2008-01-01\" : 12.7, ...},\n"
-                    + "    ...\n"
-                    + "}\n"
-                    + "```")
-    public JsonBean getInflationRatesFromSource(
+            notes = "Check /inflation-rates method to see the example of result.")
+    public Map<String, Map<String, Double>> getInflationRatesFromSource(
             @ApiParam("source ID to query for inflation rates") @PathParam("source_id") Long sourceId) {
         return CurrencyService.getInflationRatesFromSource(sourceId);
     }
@@ -168,7 +128,7 @@ public class Currencies implements ErrorReportingEndpoint {
     @ApiMethod(id = "get-constant-currencies", authTypes = {AuthRule.IN_ADMIN}, ui = false)
     @ApiOperation(
             value = "Provides configured constant currencies per calendar.",
-            notes = "The JSON object holds information regarding:\n"
+            notes = "The object holds information regarding:\n"
                     + "\n"
                     + "Field|Description\n"
                     + "---|---\n"
@@ -186,7 +146,7 @@ public class Currencies implements ErrorReportingEndpoint {
                     + "   ...\n"
                     + "}\n"
                     + "```")
-    public JsonBean getConstantCurrencies() {
+    public  Map<String, Map<String, String>> getConstantCurrencies() {
         return CurrencyService.getConstantCurrencies();
     }
 
@@ -196,7 +156,7 @@ public class Currencies implements ErrorReportingEndpoint {
     @ApiMethod(id = "save-constant-currencies", authTypes = {AuthRule.IN_ADMIN}, ui = false)
     @ApiOperation(
             value = "Stores constant currencies per calendar.",
-            notes = "The JSON object holds information regarding:\n"
+            notes = "The object holds information regarding:\n"
                     + "\n"
                     + "Field|Description\n"
                     + "---|---\n"
@@ -214,9 +174,9 @@ public class Currencies implements ErrorReportingEndpoint {
                     + "   ...\n"
                     + "}\n"
                     + "```")
-    public JsonBean saveConstantCurrencies(
-            @ApiParam("a JSON object with the constant currencies information") JsonBean input) {
-        return CurrencyService.saveConstantCurrencies(input);
+    public void saveConstantCurrencies(@ApiParam("a JSON object with the constant currencies information")
+                                                       Map<String, Map<String, String>> input) {
+        CurrencyService.saveConstantCurrencies(input);
     }
 
     @GET

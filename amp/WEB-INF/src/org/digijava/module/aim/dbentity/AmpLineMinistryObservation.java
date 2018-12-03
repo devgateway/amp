@@ -8,13 +8,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
 
 @TranslatableClass (displayName = "Line Ministry Observation")
-public class AmpLineMinistryObservation implements Serializable, Versionable, Cloneable {
+public class AmpLineMinistryObservation implements Serializable, Versionable, Cloneable, AuditableEntity {
     private static final long serialVersionUID = 1L;
     //IATI-check: to be ignored
     
@@ -181,7 +180,13 @@ public class AmpLineMinistryObservation implements Serializable, Versionable, Cl
         // TODO Auto-generated method stub
         return super.clone();
     }
-    
+
+    @Override
+    public AuditableEntity getParent() {
+        return activity;
+    }
+
+
 
     public static class LineMinistryObservationComparator implements Comparator<AmpLineMinistryObservation>, Serializable {
 

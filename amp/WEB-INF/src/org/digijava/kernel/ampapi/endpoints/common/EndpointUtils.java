@@ -19,6 +19,7 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.api.NotFoundException;
 import org.apache.log4j.Logger;
@@ -31,6 +32,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
+import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -244,7 +246,7 @@ public class EndpointUtils {
         }
     }
     
-    public static MapIdWrapper saveApiState(AmpApiState map, String type) {
+    public static AmpApiState saveApiState(AmpApiState map, String type) {
         Date creationDate = new Date();
 
         map.setCreatedDate(creationDate);
@@ -254,7 +256,7 @@ public class EndpointUtils {
             Session s = PersistenceManager.getSession();
             s.save(map);
             s.flush();
-            return new MapIdWrapper(map.getId());
+            return map;
         } catch (Exception e) {
             logger.error("Cannot Save map", e);
             throw new WebApplicationException(e);
@@ -487,5 +489,9 @@ public class EndpointUtils {
         Map<String, Set<String>> filtersDef = (Map<String, Set<String>>) TLSUtils.getRequest().getAttribute(EPConstants.JSON_FILTERS);
         TLSUtils.getRequest().removeAttribute(EPConstants.JSON_FILTERS);
         return filtersDef;
+    }
+    
+    public static MediaType getMediaType(String type) {
+        return AMPReportExportConstants.MEDIA_TYPES.getOrDefault(type, MediaType.APPLICATION_OCTET_STREAM_TYPE);
     }
 }

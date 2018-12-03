@@ -31,7 +31,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 @TranslatableClass (displayName = "Contact")
 public class AmpContact implements Comparable, Serializable, Cloneable, Versionable, Identifiable {
     
-    @Interchangeable(fieldTitle = "ID", id = true)
+    @Interchangeable(fieldTitle = "ID")
     private Long id;
     
     @Interchangeable(fieldTitle = "Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
@@ -77,18 +77,19 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
             validators = @Validators(unique = FMVisibility.ALWAYS_VISIBLE_FM))
     private Set<AmpOrganisationContact> organizationContacts;
 
-    @Interchangeable(fieldTitle = "Properties")
     @InterchangeableDiscriminator(discriminatorField = "name", settings = {
             @Interchangeable(fieldTitle = ContactEPConstants.EMAIL, 
                     discriminatorOption = Constants.CONTACT_PROPERTY_NAME_EMAIL,
-                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true),
+                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true,
+                    type = AmpContactEmailProperty.class),
             @Interchangeable(fieldTitle = ContactEPConstants.PHONE, 
                     discriminatorOption = Constants.CONTACT_PROPERTY_NAME_PHONE,
-                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true),
+                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true,
+                    type = AmpContactPhoneProperty.class),
             @Interchangeable(fieldTitle = ContactEPConstants.FAX, 
                     discriminatorOption = Constants.CONTACT_PROPERTY_NAME_FAX,
-                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true)
-    })
+                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true,
+                    type = AmpContactFaxProperty.class)})
     private SortedSet<AmpContactProperty> properties;
 
     public AmpContact(){

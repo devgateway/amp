@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,10 +11,15 @@ import java.util.List;
 import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivityProgramDiscriminatorConfigurer;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpFundingAmountDiscriminationConfigurer;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpOrgRoleDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.ApprovalStatusPossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivitySectorDiscriminationConfigurer;
+import org.digijava.kernel.ampapi.endpoints.activity.values.ApprovalStatusPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -25,9 +31,11 @@ import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -37,7 +45,7 @@ import org.hibernate.Session;
 
 @TranslatableClass (displayName = "Activity Form Field")
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
-LoggerIdentifiable, Cloneable {
+LoggerIdentifiable, Cloneable, AuditableEntity {
 
     private static final long serialVersionUID = 1L;
     
@@ -98,7 +106,7 @@ LoggerIdentifiable, Cloneable {
 
     //protected String govAgreementNumber;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ACTIVITY_ID, importable = false, id = true)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ACTIVITY_ID, importable = false)
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
     @VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)
     protected Long ampActivityId ;
@@ -183,9 +191,10 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Disbursement Date")
     protected Date disbursmentsDate;
     
-    @Interchangeable(fieldTitle = "Sectors", importable = true, fmPath = "/Activity Form/Sectors")
     @VersionableCollection(fieldTitle = "Sectors")
-    @InterchangeableDiscriminator(discriminatorField = "classificationConfig.name", settings = {
+    @InterchangeableDiscriminator(discriminatorField = "classificationConfig.name",
+            configurer = AmpActivitySectorDiscriminationConfigurer.class,
+            settings = {
             @Interchangeable(fieldTitle = "Primary Sectors", discriminatorOption = "Primary", importable=true, fmPath = "/Activity Form/Sectors/Primary Sectors",
                     validators = @Validators(minSize = "/Activity Form/Sectors/Primary Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Primary Sectors/sectorPercentageTotal", 
                     unique = "/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator", treeCollection = "/Activity Form/Sectors/Primary Sectors/treeSectorsValidator")),
@@ -211,9 +220,9 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.LOCATIONS)
     protected Set<AmpActivityLocation> locations ;
     
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.ORG_ROLE, importable = true, fmPath = "/Activity Form/Organizations")
     @VersionableCollection(fieldTitle = "Org. Role")
-    @InterchangeableDiscriminator(discriminatorField = "orgRoleConfig.name", settings = {
+    @InterchangeableDiscriminator(discriminatorField = "role.roleCode",
+            configurer = AmpOrgRoleDiscriminationConfigurer.class, settings = {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.DONOR_ORGANIZATION, importable=true, discriminatorOption = Constants.FUNDING_AGENCY, fmPath = FMVisibility.ANY_FM + "/Activity Form/Organizations/Donor Organization|/Activity Form/Funding/Search Funding Organizations/Search Organizations",
                     validators = @Validators(maxSize = "/Activity Form/Organizations/Donor Organization/Max Size Validator", minSize = "/Activity Form/Organizations/Donor Organization/Required Validator", 
                     unique = "/Activity Form/Organizations/Donor Organization/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Donor Organization/relOrgPercentageTotal")),
@@ -292,14 +301,16 @@ LoggerIdentifiable, Cloneable {
     protected String contactName;
     //protected AmpTeamMember updatedBy; !!! Use modifiedBy
     
-    @Interchangeable(fieldTitle = "Project Costs", importable = true)
     @InterchangeableDiscriminator(discriminatorField = "funType",
-        settings = {
-            @Interchangeable(fieldTitle = "PPC Amount", importable = true, discriminatorOption = "0", multipleValues = false,
-                    fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost"),
-            @Interchangeable(fieldTitle = "RPC Amount", importable = true, discriminatorOption = "1", multipleValues = false,
-            fmPath = "/Activity Form/Funding/Overview Section/Revised Project Cost")
-    })
+            configurer = AmpFundingAmountDiscriminationConfigurer.class,
+            settings = {
+                    @Interchangeable(fieldTitle = "PPC Amount", importable = true, discriminatorOption = "PROPOSED",
+                            multipleValues = false,
+                            fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost"),
+                    @Interchangeable(fieldTitle = "RPC Amount", importable = true, discriminatorOption = "REVISED",
+                            multipleValues = false,
+                            fmPath = "/Activity Form/Funding/Overview Section/Revised Project Cost")
+            })
     @VersionableCollection(fieldTitle = "Project Costs")
     Set<AmpFundingAmount> costAmounts;
     
@@ -384,7 +395,6 @@ LoggerIdentifiable, Cloneable {
 //  @Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Fax")
     protected String secMiCntFaxNumber;
 
-    @Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = ActivityEPConstants.CONTACTS_PATH)
     @VersionableCollection(fieldTitle = "Activity Contacts")
     @InterchangeableDiscriminator(discriminatorField = "contactType", settings = {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.DONOR_CONTACT, importable = true, discriminatorOption = Constants.DONOR_CONTACT, 
@@ -525,8 +535,7 @@ LoggerIdentifiable, Cloneable {
     protected Set<AmpActivityDocument> activityDocuments = null;
     
     /* Categories */
-    @Interchangeable(fieldTitle = "Categories", importable = true)
-    @InterchangeableDiscriminator(discriminatorField="categories", 
+    @InterchangeableDiscriminator(discriminatorField = "ampCategoryClass.keyName",
     settings = {
         @Interchangeable(fieldTitle = "Activity Status", importable=true, multipleValues=false, required = ActivityEPConstants.REQUIRED_ALWAYS,
                 discriminatorOption = CategoryConstants.ACTIVITY_STATUS_KEY, fmPath="/Activity Form/Identification/Activity Status", pickIdOnly=true),
@@ -660,9 +669,9 @@ LoggerIdentifiable, Cloneable {
     protected Boolean humanitarianAid;
 
     //Can be Primary, Secondary,Tertiary or National Plan Objective
-    @Interchangeable(fieldTitle = "Act. Programs", importable = true, fmPath = "/Activity Form/Program")
     @VersionableCollection(fieldTitle = "Act. Programs")
-    @InterchangeableDiscriminator(discriminatorField = "programSetting.name", settings = {
+    @InterchangeableDiscriminator(discriminatorField = "programSetting.name",
+            configurer = AmpActivityProgramDiscriminatorConfigurer.class, settings = {
             @Interchangeable(fieldTitle = "National Plan Objective", discriminatorOption = "National Plan Objective", importable = true, fmPath = "/Activity Form/Program/National Plan Objective",
                     validators = @Validators(maxSize = "/Activity Form/Program/National Plan Objective/max Size Program Validator", minSize = "/Activity Form/Program/National Plan Objective/minSizeProgramValidator", 
                     unique = "/Activity Form/Program/National Plan Objective/uniqueProgramsValidator", percentage = "/Activity Form/Program/National Plan Objective/programPercentageTotal",
@@ -2171,6 +2180,31 @@ LoggerIdentifiable, Cloneable {
             }
             this.costAmounts.add(costAmount);
         }
+    
+    @Override
+    public AuditableEntity getParent() {
+        return null;
+    }
+
+    @Override
+    public void touch() {
+    
+        Date updateDate = Calendar.getInstance().getTime();
+        
+        setUpdatedDate(updateDate);
+        setModifiedDate(updateDate);
+    
+        AmpTeamMember modifiedBy = AuditActivityInfo.getModifiedTeamMember();
+        if (modifiedBy == null) {
+            modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+        }
+        
+        if (modifiedBy == null) {
+            throw new RuntimeException("Modified team member cannot be null");
+        }
+        
+        setModifiedBy(modifiedBy);
+    }
 
 }
 

@@ -3,7 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 /**
  * @author Octavian Ciubotaru
  */
-public interface ContextMatcher {
+public interface FieldValueReader {
 
-    boolean inContext(FEContext context);
+    Object get(Object targetObject);
 }

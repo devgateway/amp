@@ -341,6 +341,7 @@
 <field:display feature="Identification" name="Objective"></field:display> 
 <field:display feature="Identification" name="Organizations and Project ID"></field:display> 
 <field:display feature="Identification" name="Project Title"></field:display>
+<field:display feature="Identification" name="Project Management"></field:display>
 <field:display feature="Identification" name="Related Pledges"></field:display>
 <field:display feature="Identification" name="Only show projects related to pledges"></field:display>
 <field:display feature="Identification" name="Purpose"></field:display> 

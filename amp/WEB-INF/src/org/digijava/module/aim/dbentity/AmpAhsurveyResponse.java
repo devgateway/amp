@@ -9,10 +9,9 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable {
+public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable, AuditableEntity {
 
     //IATI-check: to be ignored
     /**
@@ -126,5 +125,10 @@ public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable
     public Object clone() throws CloneNotSupportedException {
         // TODO Auto-generated method stub
         return super.clone();
+    }
+
+    @Override
+    public AuditableEntity getParent() {
+        return ampAHSurveyId;
     }
 }

@@ -1,10 +1,6 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,16 +10,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -64,7 +59,9 @@ public class HeatMapConfigs {
                Arrays.asList(ColumnConstants.DONOR_GROUP)
                ));
     }};
-    
+
+    private static final int DEFAULT_SCALE = 6;
+
     private ApiEMGroup errors = new ApiEMGroup();
     
     private Set<String> visibleColumns;
@@ -142,64 +139,41 @@ public class HeatMapConfigs {
     /**
      * @return Heat Map Admin Settings
      */
-    public JsonBean getHeatMapAdminSettings() {
+    public AmpColorThresholdWrapper getHeatMapAdminSettings() {
         LOGGER.info("GET HeatMap Admin Settings");
-        JsonBean result = new JsonBean();
-        // for now only color thresholds 
-        addColorThresholds(result);
+        AmpColorThresholdWrapper result = new AmpColorThresholdWrapper();
+        result.setAmountColors(DbUtil.getColorThresholds());
         return result;
     }
-    
-    private void addColorThresholds(JsonBean result) {
-        // get ordered list of colors by threshold
-        List<AmpColorThreshold> thresholds = DbUtil.getColorThresholds();
-        List<JsonBean> amountColors = new ArrayList<>();
-        if (thresholds != null && !thresholds.isEmpty()) {
-            for (AmpColorThreshold threshold : thresholds) {
-                JsonBean colorThreshold = new JsonBean();
-                colorThreshold.set(EPConstants.ID, threshold.getAmpColorThresholdId());
-                colorThreshold.set(EPConstants.NAME, TranslatorWorker.translateText(threshold.getColorName()));
-                colorThreshold.set(DashboardConstants.COLOR, threshold.getColorHash());
-                colorThreshold.set(DashboardConstants.AMOUNT_FROM, threshold.getThresholdStart());
-                amountColors.add(colorThreshold);
-            }
-        }
-        result.set(DashboardConstants.AMOUNT_COLORS, amountColors);
-    }
-    
+
     /**
      * Updates HeatMapSettings with new configuration
-     * @param config new HeatMap configuration as JSON 
-     * @throws Exception 
+     * @param config new thresholds
      */
-    public JsonBean saveHeatMapAdminSettings(JsonBean config) throws Exception {
+    public void saveHeatMapAdminSettings(AmpColorThresholdWrapper config) {
         LOGGER.info("Save HeatMap Admin Settings");
-        JsonBean result = new JsonBean();
-        
-        List<AmpColorThreshold> thresholds = readNewColorThresholds(config);
+
+        updateColorThresholds(config);
         if (!errors.isEmpty()) {
-            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
-            return ApiError.toError(errors.getAllErrors());
+            throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, errors);
         }
-        
-        return result;
     }
     
-    private List<AmpColorThreshold> readNewColorThresholds(JsonBean config) {
-        List<AmpColorThreshold> colorThresholds = new ArrayList<AmpColorThreshold>();
-        List<Map<String, Object>> newThresholds = (List<Map<String, Object>>) config.get(DashboardConstants.AMOUNT_COLORS);
+    private void updateColorThresholds(AmpColorThresholdWrapper config) {
+        List<AmpColorThreshold> newThresholds = config.getAmountColors();
         Map<BigDecimal, AmpColorThreshold> testUnique = new TreeMap<>();
         
-        for (Map<String, Object> threshold : newThresholds) {
+        for (AmpColorThreshold threshold : newThresholds) {
             AmpColorThreshold ampColorThreshold = findAmpColorThreshold(threshold);
             BigDecimal amountFrom = getNewAmountFrom(threshold); 
             if (ampColorThreshold == null) {
                 // so far not saving new, so if not found, report an error
-                errors.addApiErrorMessage(DashboardErrors.INVALID_ID, String.valueOf(threshold.get(EPConstants.ID)));
+                errors.addApiErrorMessage(DashboardErrors.INVALID_ID,
+                        String.valueOf(threshold.getAmpColorThresholdId()));
             }
             if (amountFrom == null) {
                 errors.addApiErrorMessage(DashboardErrors.INVALID_THRESHOLD, 
-                        String.valueOf(threshold.get(DashboardConstants.AMOUNT_FROM)));
+                        String.valueOf(threshold.getThresholdStart()));
             } else if (testUnique.containsKey(amountFrom)) {
                 AmpColorThreshold existing = testUnique.get(amountFrom);
                 String msg = String.format("%s and %s colors are configured from the same threshold %s",
@@ -210,38 +184,27 @@ public class HeatMapConfigs {
             } else {
                 if (ampColorThreshold != null) {
                     ampColorThreshold.setThresholdStart(amountFrom);
-                    colorThresholds.add(ampColorThreshold);
                 }
                 testUnique.put(amountFrom, ampColorThreshold);
             }
         }
-        if (!errors.isEmpty())
-            colorThresholds = clear(colorThresholds);
-        return colorThresholds;
-    }
-    
-    private AmpColorThreshold findAmpColorThreshold(Map<String, Object> threshold) {
-        Object id = threshold.get(EPConstants.ID);
-        Long lId = id == null ? null : Long.parseLong(id.toString());
-        return id == null ? null : org.digijava.module.aim.util.DbUtil.getObjectOrNull(AmpColorThreshold.class, lId);
-    }
-    
-    private BigDecimal getNewAmountFrom(Map<String, Object> threshold) {
-        Object from = threshold.get(DashboardConstants.AMOUNT_FROM);
-        return from == null ? null : new BigDecimal(from.toString()).setScale(6, RoundingMode.HALF_EVEN);
-    }
-    
-    private List<AmpColorThreshold> clear(List<AmpColorThreshold> colorThresholds) {
-        // clear pending changes and do not store them anymore
-        if (colorThresholds != null) {
+        if (!errors.isEmpty()) {
             org.digijava.module.aim.util.DbUtil.clearPendingChanges();
-            colorThresholds = null;
         }
-        return colorThresholds;
     }
     
-    private static final List<String> getLocationsForHeatMap() {
-        List<String> locationColumns = new ArrayList<String>(LocationUtil.LOCATIONS_COLUMNS_NAMES);
+    private AmpColorThreshold findAmpColorThreshold(AmpColorThreshold threshold) {
+        Long id = threshold.getAmpColorThresholdId();
+        return id == null ? null : org.digijava.module.aim.util.DbUtil.getObjectOrNull(AmpColorThreshold.class, id);
+    }
+    
+    private BigDecimal getNewAmountFrom(AmpColorThreshold threshold) {
+        BigDecimal from = threshold.getThresholdStart();
+        return from == null ? null : from.setScale(DEFAULT_SCALE, RoundingMode.HALF_EVEN);
+    }
+
+    private static List<String> getLocationsForHeatMap() {
+        List<String> locationColumns = new ArrayList<>(LocationUtil.LOCATIONS_COLUMNS_NAMES);
         locationColumns.remove(ColumnConstants.COUNTRY);
         locationColumns.remove(ColumnConstants.LOCATION);
         return locationColumns;

@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.TYPE_VARCHAR;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -7,6 +8,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +19,8 @@ import org.apache.struts.mock.MockHttpSession;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
@@ -37,6 +41,8 @@ import org.mockito.junit.MockitoRule;
  */
 public class PossibleValuesEnumeratorTest {
 
+    private static final int MAX_STR_LEN = 10;
+
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
 
@@ -46,18 +52,45 @@ public class PossibleValuesEnumeratorTest {
     @Mock private PossibleValuesDAO possibleValuesDAO;
     @Mock private TranslatorService translatorService;
 
+    @Mock private FieldInfoProvider provider;
+    @Mock private FMService fmService;
+
     @Before
-    public void setup() {
+    public void setup() throws WorkerException {
         MockHttpServletRequest mockRequest = new MockHttpServletRequest(new MockHttpSession());
-        
+
         Site site = new Site("Test Site", "1");
         site.setDefaultLanguage(new Locale("en", "English"));
 
         SiteDomain siteDomain = new SiteDomain();
         siteDomain.setSite(site);
         siteDomain.setDefaultDomain(true);
-        
+
         TLSUtils.populate(mockRequest, siteDomain);
+
+        when(provider.getType(any())).thenAnswer(invocation -> {
+            Field f = (Field) invocation.getArguments()[0];
+            return String.class.isAssignableFrom(f.getType()) ? TYPE_VARCHAR : "unknown";
+        });
+        when(provider.getMaxLength(any())).thenAnswer(invocation -> {
+            Field f = (Field) invocation.getArguments()[0];
+            return String.class.isAssignableFrom(f.getType()) ? MAX_STR_LEN : null;
+        });
+        when(provider.isTranslatable(any())).thenReturn(false);
+
+        when(fmService.isVisible(any(), any())).thenReturn(true);
+
+        when(translatorService.getAllTranslationOfBody(any(), any())).thenAnswer(invocation -> {
+            String s = (String) invocation.getArguments()[0];
+            return Arrays.asList(msg("en", s + " en"), msg("fr", s + " fr"));
+        });
+    }
+
+    private Message msg(String locale, String text) {
+        Message msg = new Message();
+        msg.setLocale(locale);
+        msg.setMessage(text);
+        return msg;
     }
 
     @Test(expected = NullPointerException.class)
@@ -156,21 +189,6 @@ public class PossibleValuesEnumeratorTest {
         public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
             throw new RuntimeException("some reason");
         }
-
-        @Override
-        public Object toJsonOutput(Object value) {
-            return null;
-        }
-
-        @Override
-        public Long getIdOf(Object value) {
-            return null;
-        }
-
-        @Override
-        public Object toAmpFormat(Object obj) {
-            return null;
-        }
     }
 
     @Test
@@ -262,7 +280,11 @@ public class PossibleValuesEnumeratorTest {
     }
 
     private List<PossibleValue> possibleValuesFor(Class<?> theClass, String field) {
+        // TODO replace mock with a simple field info provider
+        // TODO same for translatorService
+        List<APIField> fields = new FieldsEnumerator(provider, fmService, translatorService, false, name -> true)
+                .getAllAvailableFields(theClass);
         return new PossibleValuesEnumerator(possibleValuesDAO, translatorService)
-                .getPossibleValuesForField(field, theClass, null);
+                .getPossibleValuesForField(field, fields);
     }
 }

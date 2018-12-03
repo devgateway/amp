@@ -18,19 +18,19 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.ComponentTransactionTypePossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.ComponentTransactionTypePossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-public class AmpComponentFunding implements Cloneable, Serializable {
+public class AmpComponentFunding implements Cloneable, Serializable, AuditableEntity {
     // IATI-check: to be ignored
 
     private Long ampComponentFundingId;
 
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_TYPE, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_TYPE, importable = true, required = REQUIRED_ALWAYS)
     @PossibleValues(ComponentTransactionTypePossibleValuesProvider.class)
     private Integer transactionType;
 
@@ -258,4 +258,8 @@ public class AmpComponentFunding implements Cloneable, Serializable {
         return super.clone();
     }
 
+    @Override
+    public AuditableEntity getParent() {
+        return component;
+    }
 }

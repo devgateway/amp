@@ -110,6 +110,9 @@
                 DROP TABLE IF EXISTS amp_etl_log;
 
                 DELETE FROM amp_quartz_job_class WHERE jc_class_fullname='org.dgfoundation.amp.mondrian.MondrianETLQuartzJob';
+
+                UPDATE amp_reports SET name='AMP-21336-pledge-details-contacts'
+                WHERE name='AMP-21336-pledge-details-contacts-in-mondrian';
             ]]></lang>
         </script>
     </apply>

@@ -111,8 +111,12 @@
 
                 DELETE FROM amp_quartz_job_class WHERE jc_class_fullname='org.dgfoundation.amp.mondrian.MondrianETLQuartzJob';
 
-                UPDATE amp_reports SET name='AMP-21336-pledge-details-contacts'
-                WHERE name='AMP-21336-pledge-details-contacts-in-mondrian';
+                UPDATE amp_reports SET name = 'AMP-21336-pledge-details-contacts'
+                WHERE name = 'AMP-21336-pledge-details-contacts-in-mondrian';
+
+                UPDATE amp_content_translation
+                SET translation = 'AMP-21336-pledge-details-contacts'
+                WHERE translation = 'AMP-21336-pledge-details-contacts-in-mondrian';
             ]]></lang>
         </script>
     </apply>

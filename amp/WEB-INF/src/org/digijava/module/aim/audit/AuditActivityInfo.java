@@ -1,8 +1,9 @@
 package org.digijava.module.aim.audit;
 
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.hibernate.Session;
 
 public final class AuditActivityInfo {
     
@@ -30,24 +31,15 @@ public final class AuditActivityInfo {
     /**
      * Execute a method in team member context
      * @param member takes as input the team member
-     */
-    public static void doInTeamMemberContext(AmpTeamMember member, Runnable fn) {
-        doInTeamMemberContext(member, () -> {
-            fn.run();
-            return Void.class;
-        });
-    }
-    
-    /**
-     * Execute a method in team member context
-     * @param member takes as input the team member
      * @param <R> return type
      * @return result of the supplier
      */
-    public static <R> R doInTeamMemberContext(AmpTeamMember member, Supplier<R> fn) {
+    public static <R> R doInTeamMemberContext(AmpTeamMember member, Session session, Function<Session, R> fn) {
         try {
             getThreadLocalInstance().modifiedBy = member;
-            return fn.get();
+            R result = fn.apply(session);
+            session.flush();
+            return result;
         } finally {
             getThreadLocalInstance().modifiedBy = null;
         }

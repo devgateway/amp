@@ -548,10 +548,8 @@ public class CompareActivityVersions extends DispatchAction {
     
         TeamMember currentTeamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
         AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(currentTeamMember.getMemberId());
-    
-        AuditActivityInfo.doInTeamMemberContext(member, () -> {
-            saveActivity(member, vForm, auxData, request);
-        });
+        
+        saveActivity(member, vForm, auxData, request);
         
         return mapping.findForward("index");
     }

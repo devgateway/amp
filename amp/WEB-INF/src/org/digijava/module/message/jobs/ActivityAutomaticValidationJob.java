@@ -45,18 +45,9 @@ public class ActivityAutomaticValidationJob extends ConnectionCleaningJob implem
         oldActivity.setApprovedBy(member);
         oldActivity.setApprovalDate(Calendar.getInstance().getTime());
 
-        AmpActivityVersion auxActivity = AuditActivityInfo.doInTeamMemberContext(member, () -> {
-            try {
-                return org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivity(oldActivity, null, member,
-                        SiteUtils.getDefaultSite(), new java.util.Locale("en"),
-                        AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, oldActivity.getDraft(), SaveContext.job());
-            } catch (Exception e) {
-                logger.error("Error saving activity:", e); // Log the exception
-                throw new RuntimeException("Can't save activity:", e);
-            }
-        });
-        
-        session.flush();
+        AmpActivityVersion auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivity(oldActivity, null,
+                member, SiteUtils.getDefaultSite(), new java.util.Locale("en"),
+                AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, oldActivity.getDraft(), SaveContext.job());
 
         return auxActivity;
     }

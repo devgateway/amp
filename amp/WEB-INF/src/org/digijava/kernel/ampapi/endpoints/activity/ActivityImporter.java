@@ -77,6 +77,7 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.Session;
 import org.hibernate.StaleStateException;
 
 /**
@@ -222,12 +223,13 @@ public class ActivityImporter extends ObjectImporter {
                 // save new activity
                 prepareToSave();
                 boolean updateApprovalStatus = !AmpOfflineModeHolder.isAmpOfflineMode();
-                
-                newActivity = AuditActivityInfo.doInTeamMemberContext(teamMember, () -> {
+    
+                Session session = PersistenceManager.getSession();
+                newActivity = AuditActivityInfo.doInTeamMemberContext(teamMember, session, s -> {
                     try {
                         return org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
                                 translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
-                                PersistenceManager.getSession(), SaveContext.api(updateApprovalStatus));
+                                s, SaveContext.api(updateApprovalStatus));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }

@@ -168,9 +168,9 @@ public class ActivityUtil {
         }
 
         boolean newActivity = oldA.getAmpActivityId() == null;
-        AmpActivityVersion a = AuditActivityInfo.doInTeamMemberContext(ampCurrentMember, () -> {
+        AmpActivityVersion a = AuditActivityInfo.doInTeamMemberContext(ampCurrentMember, session, s -> {
             try {
-                return saveActivityNewVersion(oldA, values, ampCurrentMember, draft, session, saveContext);
+                return saveActivityNewVersion(oldA, values, ampCurrentMember, draft, s, saveContext);
             } catch (Exception e) {
                 logger.error("Error saving activity:", e); // Log the exception
                 throw new RuntimeException("Can't save activity:", e);
@@ -181,11 +181,12 @@ public class ActivityUtil {
             new ActivityValidationWorkflowTrigger(a);
         }
         
-        LuceneUtil.addUpdateActivity(rootRealPath, !newActivity, site, locale, a, oldA, new ArrayList<>(values));
+        List<AmpContentTranslation> translations = values == null ? new ArrayList<>() : new ArrayList<>(values);
+        LuceneUtil.addUpdateActivity(rootRealPath, !newActivity, site, locale, a, oldA, translations);
         
         return a;
     }
-
+    
     /**
      * saves a new version of an activity
      * returns newActivity
@@ -1233,9 +1234,10 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         //to avoid saving the same contact twice on the same session, we keep track of the 
         //already saved ones.
         Map <Long,Boolean> savedContacts = new HashMap <Long,Boolean> ();
-        
-        TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
-        AmpTeamMember creator = teamMember != null ? TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId()) : null;
+    
+        AmpTeamMember teamMember = AuditActivityInfo.getModifiedTeamMember();
+        AmpTeamMember creator = teamMember == null
+                ? TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest()) : teamMember;
       
         //add or edit activity contact and amp contact
         if (activityContacts != null && activityContacts.size() > 0) {

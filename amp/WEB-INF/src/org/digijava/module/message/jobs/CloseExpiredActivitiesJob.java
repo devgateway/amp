@@ -56,17 +56,15 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
         oldActivity.getCategories().remove(CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, oldActivity.getCategories()));
         oldActivity.getCategories().add(CategoryManagerUtil.getAmpCategoryValueFromDb(closedProjectStatusCategoryValue));
         
-        AmpActivityVersion auxActivity = AuditActivityInfo.doInTeamMemberContext(member, () -> {
+        AmpActivityVersion auxActivity = AuditActivityInfo.doInTeamMemberContext(member, session, sess -> {
             try {
                 return org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(oldActivity, null,
-                        member, oldActivity.getDraft(), session, SaveContext.job());
+                        member, oldActivity.getDraft(), sess, SaveContext.job());
             } catch (Exception e) {
                 logger.error(e.getMessage());
                 throw new RuntimeException(e);
             }
         });
-        
-        session.flush();
         
         java.util.Locale javaLocale = new java.util.Locale("en");
         LuceneUtil.addUpdateActivity(AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, true, 

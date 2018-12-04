@@ -19,7 +19,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivityS
 import org.digijava.kernel.ampapi.endpoints.activity.values.ApprovalStatusPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -31,11 +30,9 @@ import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
-import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -2194,16 +2191,11 @@ LoggerIdentifiable, Cloneable, AuditableEntity {
         setUpdatedDate(updateDate);
         setModifiedDate(updateDate);
     
-        AmpTeamMember modifiedBy = AuditActivityInfo.getModifiedTeamMember();
-        if (modifiedBy == null) {
-            modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+        setModifiedBy(getModifier());
+    
+        if (getAmpActivityId() == null || getActivityCreator() == null) {
+            setActivityCreator(getModifier());
         }
-        
-        if (modifiedBy == null) {
-            throw new RuntimeException("Modified team member cannot be null");
-        }
-        
-        setModifiedBy(modifiedBy);
     }
 
 }

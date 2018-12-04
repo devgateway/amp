@@ -200,8 +200,6 @@ public class ActivityUtil {
         boolean newActivity = false;
 
         if (a.getAmpActivityId() == null){
-            a.setActivityCreator(ampCurrentMember);
-            a.setActivityCreator(ampCurrentMember);
             a.setTeam(ampCurrentMember.getAmpTeam());
             newActivity = true;
         }
@@ -1235,10 +1233,6 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         //already saved ones.
         Map <Long,Boolean> savedContacts = new HashMap <Long,Boolean> ();
     
-        AmpTeamMember teamMember = AuditActivityInfo.getModifiedTeamMember();
-        AmpTeamMember creator = teamMember == null
-                ? TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest()) : teamMember;
-      
         //add or edit activity contact and amp contact
         if (activityContacts != null && activityContacts.size() > 0) {
             for (AmpActivityContact activityContact : activityContacts) {
@@ -1251,9 +1245,6 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                 // save the contact first, if the contact is new or if it is not
                 // new but has not been saved already.
                 if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
-                    if (contactId == null) {
-                        activityContact.getContact().setCreator(creator);
-                    }
                     session.saveOrUpdate(activityContact.getContact());
                     savedContacts.put(activityContact.getContact().getId(), true);
                 }

@@ -1,5 +1,6 @@
 package org.digijava.module.aim.audit;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -31,6 +32,20 @@ public final class AuditActivityInfo {
     /**
      * Execute a method in team member context
      * @param member takes as input the team member
+     * @param session the current hibernate session
+     *
+     */
+    public static void doInTeamMemberContext(AmpTeamMember member, Session session, Consumer<Session> fn) {
+        doInTeamMemberContext(member, session, s -> {
+            fn.accept(s);
+            return Void.class;
+        });
+    }
+    
+    /**
+     * Execute a method in team member context
+     * @param member takes as input the team member
+     * @param session the current hibernate session
      * @param <R> return type
      * @return result of the supplier
      */

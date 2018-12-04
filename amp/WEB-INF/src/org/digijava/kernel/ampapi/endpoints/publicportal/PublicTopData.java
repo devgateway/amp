@@ -15,7 +15,7 @@ public class PublicTopData {
 
     private final Map<String, BigDecimal> totals;
 
-    private final List<Map<String, String>> topData;
+    private final List<Map<String, String>> data;
 
     private final Integer count;
 
@@ -26,10 +26,10 @@ public class PublicTopData {
     private final String currency;
 
     PublicTopData(Map<String, String> headers, Map<String, BigDecimal> totals,
-            List<Map<String, String>> topData, Integer count, String numberFormat, String currency) {
+            List<Map<String, String>> data, Integer count, String numberFormat, String currency) {
         this.headers = headers;
         this.totals = totals;
-        this.topData = topData;
+        this.data = data;
         this.count = count;
         this.numberFormat = numberFormat;
         this.currency = currency;
@@ -43,8 +43,8 @@ public class PublicTopData {
         return totals;
     }
 
-    public List<Map<String, String>> getTopData() {
-        return topData;
+    public List<Map<String, String>> getData() {
+        return data;
     }
 
     public Integer getCount() {

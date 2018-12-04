@@ -16,7 +16,7 @@ import org.junit.Test;
 public class PublicEndpointTest {
 
     @Test
-    public void testTopDonorFundingSerialization() throws JsonProcessingException {
+    public void testTopDataSerialization() throws JsonProcessingException {
         PublicTopData c = new PublicTopData(
                 ImmutableMap.of("donor-agency", "Donor Agency", "actual-disbursements", "Actual Disbursements"),
                 ImmutableMap.of("Total Actual Disbursements", new BigDecimal("533325163.92")),
@@ -28,45 +28,15 @@ public class PublicEndpointTest {
                 "###,###,###.##",
                 "USD"
         );
-        PublicTopDonorFundingData donorFundingData =
-                new PublicTopDonorFundingData(c);
 
-        String actualJson = new ObjectMapper().writeValueAsString(donorFundingData);
+        String actualJson = new ObjectMapper().writeValueAsString(c);
         assertEquals("{\"headers\":"
                 + "{\"donor-agency\":\"Donor Agency\",\"actual-disbursements\":\"Actual Disbursements\"},"
                 + "\"totals\":{\"Total Actual Disbursements\":533325163.92},"
-                + "\"count\":2,"
-                + "\"donorFunding\":["
+                + "\"data\":["
                 + "{\"donor-agency\":\"Donor 1\",\"actual-disbursements\":\"533 202 040,49\"},"
                 + "{\"donor-agency\":\"Donor 2\",\"actual-disbursements\":\"123 123,43\"}],"
-                + "\"numberformat\":\"###,###,###.##\","
-                + "\"Currency\":\"USD\"}", actualJson);
-    }
-
-    @Test
-    public void testTopProjectsSerialization() throws JsonProcessingException {
-        PublicTopData c = new PublicTopData(
-                ImmutableMap.of("project-title", "Project Title", "actual-disbursements", "Actual Disbursements"),
-                ImmutableMap.of(),
-                ImmutableList.of(
-                        ImmutableMap.of("project-title", "Prj 1", "actual-disbursements", "433 202 040,49"),
-                        ImmutableMap.of("project-title", "Prj 2", "actual-disbursements", "23 123,43")
-                ),
-                2,
-                "###,###,###.##",
-                "USD"
-        );
-        PublicTopProjectsData topProjectsData =
-                new PublicTopProjectsData(c);
-
-        String actualJson = new ObjectMapper().writeValueAsString(topProjectsData);
-        assertEquals("{\"headers\":"
-                + "{\"project-title\":\"Project Title\",\"actual-disbursements\":\"Actual Disbursements\"},"
-                + "\"totals\":{},"
                 + "\"count\":2,"
-                + "\"topprojects\":["
-                + "{\"project-title\":\"Prj 1\",\"actual-disbursements\":\"433 202 040,49\"},"
-                + "{\"project-title\":\"Prj 2\",\"actual-disbursements\":\"23 123,43\"}],"
                 + "\"numberformat\":\"###,###,###.##\","
                 + "\"Currency\":\"USD\"}", actualJson);
     }

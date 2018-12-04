@@ -31,7 +31,7 @@ public class PublicEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "topprojects")
     @ApiOperation("Retrieves top 'count' projects based on fixed requirements.")
-    public PublicTopProjectsData getTopProjects(PublicReportFormParameters config,
+    public PublicTopData getTopProjects(PublicReportFormParameters config,
             @DefaultValue(TOP_COUNT) @QueryParam("count") Integer count, 
             @QueryParam("months") Integer months) {
         return PublicPortalService.getTopProjects(config, count, months);
@@ -45,7 +45,7 @@ public class PublicEndpoint {
             value = "Retrieves Donor Disbursements/Commitments List for the last X days",
             notes = "Get donor funding for the specific funding type "
                     + "with possibility to filter by number of records or age")
-    public PublicTopDonorFundingData getDonorFunding(PublicReportFormParameters config,
+    public PublicTopData getDonorFunding(PublicReportFormParameters config,
              @QueryParam("count") Integer count, 
             @QueryParam("months") Integer months,
             @ApiParam(value = "1 for commitment, 2 for disbursement", allowableValues = "1,2")
@@ -58,7 +58,7 @@ public class PublicEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "activitiesPledges")
     @ApiOperation("Retrieves the count for activities that have been at least linked to one pledge")
-    public ActivitiesWithPledgesCountWrapper getActivitiesPledgesCount(PublicReportFormParameters config) {
+    public int getActivitiesPledgesCount(PublicReportFormParameters config) {
         return PublicPortalService.getActivitiesPledgesCount(config);
     }       
 }

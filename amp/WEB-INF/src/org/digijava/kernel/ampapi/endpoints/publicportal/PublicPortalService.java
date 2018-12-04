@@ -52,7 +52,7 @@ public class PublicPortalService {
      * @return JsonBean object with results
      * 
      */
-    public static PublicTopProjectsData getTopProjects(
+    public static PublicTopData getTopProjects(
             PublicReportFormParameters config, Integer count, Integer months) {
         JsonBean error = ReportsUtil.validateReportConfig(config);
         if (error != null) {
@@ -84,7 +84,7 @@ public class PublicPortalService {
             configureTopStandardProjects(spec);
         }
         
-        return new PublicTopProjectsData(getPublicReport(count, spec, false, null, columnsToIgnore));
+        return getPublicReport(count, spec, false, null, columnsToIgnore);
     }
     
     /**
@@ -142,7 +142,7 @@ public class PublicPortalService {
  * @param fundingType 1 for commitment 2 for disbursements
  * @return
  */
-    public static PublicTopDonorFundingData getDonorFunding(PublicReportFormParameters config, Integer count,
+    public static PublicTopData getDonorFunding(PublicReportFormParameters config, Integer count,
             Integer months,Integer fundingType) {
         String measureName=null;
 
@@ -166,7 +166,7 @@ public class PublicPortalService {
         applyFilterRules(config, spec, months);
 
         SettingsUtils.applySettings(spec, config.getSettings(), true);
-        return new PublicTopDonorFundingData(getPublicReport(count, spec, true, measureName, null));
+        return getPublicReport(count, spec, true, measureName, null);
     }
     
     /** 
@@ -238,7 +238,7 @@ public class PublicPortalService {
         return new PublicTopData(headers, totals, topData, count, numberFormat, currency);
     }
 
-    public static ActivitiesWithPledgesCountWrapper getActivitiesPledgesCount(PublicReportFormParameters config) {
+    public static int getActivitiesPledgesCount(PublicReportFormParameters config) {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_activitiesPledgesCount",
                 ArConstants.DONOR_TYPE);
         spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
@@ -268,7 +268,7 @@ public class PublicPortalService {
 
             }
         }
-        return new ActivitiesWithPledgesCountWrapper(count);
+        return count;
     }
 
     /**

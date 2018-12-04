@@ -34,8 +34,8 @@ SELECT <!-- proposed project cost per project column -->
 	FROM amp_activity_version aav 
 		LEFT JOIN amp_funding_amount ppc ON ppc.amp_activity_id = aav.amp_activity_id AND ppc.type = 0 
 		LEFT JOIN amp_funding_amount rpc ON rpc.amp_activity_id = aav.amp_activity_id AND rpc.type = 1
-		LEFT JOIN amp_currency ppc_currency ON ppc_currency.currency_code = ppc.curr_code
-		LEFT JOIN amp_currency rpc_currency ON rpc_currency.currency_code = rpc.curr_code
+		LEFT JOIN amp_currency ppc_currency ON ppc_currency.amp_currency_id = ppc.amp_currency_id
+		LEFT JOIN amp_currency rpc_currency ON rpc_currency.amp_currency_id = rpc.amp_currency_id
 ORDER BY amp_activity_id;
 			</lang>
 		</script>

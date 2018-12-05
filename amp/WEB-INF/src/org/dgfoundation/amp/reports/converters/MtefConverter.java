@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.reports.mondrian.converters;
+package org.dgfoundation.amp.reports.converters;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,9 +8,10 @@ import java.util.Set;
 import org.dgfoundation.amp.newreports.ReportElement;
 
 /**
- * singleton class used for injecting into a ReportSpecificationImpl the data needed for including the MTEF columns as measures in the Mondrian reports implementation
- * @author Dolghier Constantin
+ * singleton class used for injecting into a ReportSpecificationImpl the data needed for including the MTEF columns
+ * as measures in the Mondrian reports implementation
  *
+ * @author Dolghier Constantin
  */
 public class MtefConverter {
         

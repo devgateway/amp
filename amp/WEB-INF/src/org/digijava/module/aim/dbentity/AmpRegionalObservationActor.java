@@ -2,11 +2,10 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 @TranslatableClass (displayName = "Regional Observation Actor")
-public class AmpRegionalObservationActor implements Serializable, Cloneable {
+public class AmpRegionalObservationActor implements Serializable, Cloneable, AuditableEntity {
 
     //IATI-check: to be ignored
 //  @Interchangeable(fieldTitle="ID")
@@ -55,5 +54,10 @@ public class AmpRegionalObservationActor implements Serializable, Cloneable {
     protected Object clone() throws CloneNotSupportedException {
         // TODO Auto-generated method stub
         return super.clone();
+    }
+
+    @Override
+    public AuditableEntity getParent() {
+        return measure;
     }
 }

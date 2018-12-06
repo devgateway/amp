@@ -220,11 +220,10 @@ public class ActivityVersionUtil {
      * it and ready to save.
      * 
      * @param in
-     * @param member
      * @return
      * @throws CloneNotSupportedException
      */
-    public static AmpActivityVersion cloneActivity(AmpActivityVersion in, AmpTeamMember member) throws CloneNotSupportedException {
+    public static AmpActivityVersion cloneActivity(AmpActivityVersion in) throws CloneNotSupportedException {
         AmpActivityVersion out = (AmpActivityVersion) in.clone();
         
         Class clazz = AmpActivityFields.class;
@@ -239,7 +238,6 @@ public class ActivityVersionUtil {
         }
 
         out.setAmpActivityGroup(null);
-        out.setModifiedBy(member);
         return out;
     }
     

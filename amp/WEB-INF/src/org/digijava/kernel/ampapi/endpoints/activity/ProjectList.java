@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
@@ -20,6 +19,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -238,13 +238,11 @@ public class ProjectList {
     }
 
     private static String getIatiIdentifierValue(AmpActivityVersion a, String iatiIdAmpField) {
-        Field field = InterchangeUtils.getFieldByLongName(iatiIdAmpField);
-        try {
-            return (String) PropertyUtils.getProperty(a, field.getName());
-        } catch (Exception e) {
-            LOGGER.error("Couldn't fetch the field value", e);
-            throw new RuntimeException(e);
-        }
+        APIField apiField = AmpFieldsEnumerator.getPublicEnumerator().getActivityFields().stream()
+                .filter(f -> f.getFieldName().equals(iatiIdAmpField))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("No such field " + iatiIdAmpField));
+        return (String) apiField.getFieldValueReader().get(a);
     }
 
     /**

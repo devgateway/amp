@@ -9,8 +9,8 @@ import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.FundingePledgesValueProvider;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypePossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.FundingePledgesValueProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.TransactionTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -20,7 +20,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
-public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem {
+public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem, AuditableEntity {
 
     public static class FundingDetailComparatorByTransactionDateAsc implements Comparator<AmpFundingDetail>, Serializable {
 
@@ -139,7 +139,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
      * public static final int ARREAR = 10;
      */
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true, pickIdOnly = true,
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true,
             required = REQUIRED_ALWAYS)
     @PossibleValues(TransactionTypePossibleValuesProvider.class)
     private Integer transactionType;
@@ -658,5 +658,10 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 
     public void setCheckSum(Long checkSum) {
         this.checkSum = checkSum;
+    }
+
+    @Override
+    public AuditableEntity getParent() {
+        return ampFundingId;
     }
 }

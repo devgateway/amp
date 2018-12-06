@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class AmpGPISurveyResponse implements Versionable, Cloneable, Serializable {
+public class AmpGPISurveyResponse implements Versionable, Cloneable, Serializable, AuditableEntity {
 
     //IATI-check: to be ignored
     private static final long serialVersionUID = 1L;
@@ -59,6 +59,11 @@ public class AmpGPISurveyResponse implements Versionable, Cloneable, Serializabl
 
     public void setAmpGPISurveyId(AmpGPISurvey ampGPISurveyId) {
         this.ampGPISurveyId = ampGPISurveyId;
+    }
+
+    @Override
+    public AuditableEntity getParent() {
+        return ampGPISurveyId;
     }
 
     public static class AmpGPISurveyResponseComparator implements Comparator<AmpGPISurveyResponse>, Serializable {

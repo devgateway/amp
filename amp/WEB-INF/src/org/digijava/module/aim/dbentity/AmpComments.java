@@ -14,7 +14,7 @@ import java.util.List;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.Output;
 
-public class AmpComments implements Serializable, Cloneable, Versionable, AuditableEntity {
+public class AmpComments implements Serializable, Cloneable, Versionable {
     
     private Long ampCommentId;
     private AmpActivityVersion ampActivityId;
@@ -179,9 +179,5 @@ public class AmpComments implements Serializable, Cloneable, Versionable, Audita
         aux.ampCommentId = null;
         return aux;
     }
-
-    @Override
-    public AuditableEntity getParent() {
-        return ampActivityId;
-    }
+    
 }

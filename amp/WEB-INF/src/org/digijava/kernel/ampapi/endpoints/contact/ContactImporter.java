@@ -15,7 +15,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
@@ -91,12 +90,9 @@ public class ContactImporter extends ObjectImporter {
             if (contact == null) {
                 throw new ObjectConversionException();
             }
-    
-            AuditActivityInfo.doInTeamMemberContext(createdBy, PersistenceManager.getSession(), session -> {
-                setupBeforeSave(contact);
-                session.saveOrUpdate(contact);
-            });
-            
+
+            setupBeforeSave(contact, createdBy);
+            PersistenceManager.getSession().saveOrUpdate(contact);
 
             PersistenceManager.flushAndCommit(PersistenceManager.getSession());
         } catch (ObjectConversionException | RuntimeException e) {
@@ -118,7 +114,10 @@ public class ContactImporter extends ObjectImporter {
         }
     }
 
-    private void setupBeforeSave(AmpContact contact) {
+    private void setupBeforeSave(AmpContact contact, AmpTeamMember createdBy) {
+        if (contact.getId() == null) {
+            contact.setCreator(createdBy);
+        }
         contact.getProperties().forEach(p -> p.setContact(contact));
         contact.getOrganizationContacts().forEach(o -> o.setContact(contact));
     }

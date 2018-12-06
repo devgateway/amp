@@ -29,7 +29,7 @@ import org.digijava.module.aim.util.Output;
  * @author Priyajith
  */
 @TranslatableClass (displayName = "Component")
-public class AmpComponent implements Serializable, Comparable<AmpComponent>, Versionable, Cloneable, AuditableEntity {
+public class AmpComponent implements Serializable, Comparable<AmpComponent>, Versionable, Cloneable {
     
     //IATI-check: to be ignored
     
@@ -305,9 +305,5 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     public String toString() {
         return title;
     }
-
-    @Override
-    public AuditableEntity getParent() {
-        return activity;
-    }
+    
 }

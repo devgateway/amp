@@ -42,7 +42,7 @@ import org.hibernate.Session;
 
 @TranslatableClass (displayName = "Activity Form Field")
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
-LoggerIdentifiable, Cloneable, AuditableEntity {
+LoggerIdentifiable, Cloneable {
 
     private static final long serialVersionUID = 1L;
     
@@ -2177,26 +2177,6 @@ LoggerIdentifiable, Cloneable, AuditableEntity {
             }
             this.costAmounts.add(costAmount);
         }
-    
-    @Override
-    public AuditableEntity getParent() {
-        return null;
-    }
-
-    @Override
-    public void touch() {
-    
-        Date updateDate = Calendar.getInstance().getTime();
-        
-        setUpdatedDate(updateDate);
-        setModifiedDate(updateDate);
-    
-        setModifiedBy(getModifier());
-    
-        if (getAmpActivityId() == null || getActivityCreator() == null) {
-            setActivityCreator(getModifier());
-        }
-    }
 
 }
 

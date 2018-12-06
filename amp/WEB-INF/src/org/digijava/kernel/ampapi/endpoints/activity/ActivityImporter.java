@@ -43,7 +43,6 @@ import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
-import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -77,7 +76,6 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.Session;
 import org.hibernate.StaleStateException;
 
 /**
@@ -224,16 +222,9 @@ public class ActivityImporter extends ObjectImporter {
                 prepareToSave();
                 boolean updateApprovalStatus = !AmpOfflineModeHolder.isAmpOfflineMode();
     
-                Session session = PersistenceManager.getSession();
-                newActivity = AuditActivityInfo.doInTeamMemberContext(teamMember, session, s -> {
-                    try {
-                        return org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
+                newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
                                 translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
-                                s, SaveContext.api(updateApprovalStatus));
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+                                PersistenceManager.getSession(), SaveContext.api(updateApprovalStatus));
                 
                 postProcess();
             } else {

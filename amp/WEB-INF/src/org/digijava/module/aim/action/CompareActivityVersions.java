@@ -34,7 +34,6 @@ import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
-import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;

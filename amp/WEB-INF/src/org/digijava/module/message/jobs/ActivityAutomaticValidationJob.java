@@ -8,7 +8,6 @@ import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;

@@ -29,7 +29,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  *
  */
 @TranslatableClass (displayName = "Contact")
-public class AmpContact implements Comparable, Serializable, Cloneable, Versionable, Identifiable, AuditableEntity {
+public class AmpContact implements Comparable, Serializable, Cloneable, Versionable, Identifiable {
     
     @Interchangeable(fieldTitle = "ID")
     private Long id;
@@ -278,15 +278,4 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
         return id;
     }
     
-    @Override
-    public AuditableEntity getParent() {
-        return null;
-    }
-    
-    @Override
-    public void touch() {
-        if (getId() == null || getCreator() == null) {
-            setCreator(getModifier());
-        }
-    }
 }

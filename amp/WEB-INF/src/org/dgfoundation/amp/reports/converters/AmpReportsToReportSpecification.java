@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.reports.mondrian.converters;
+package org.dgfoundation.amp.reports.converters;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,7 +19,6 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
-import org.dgfoundation.amp.reports.converters.AmpARFilterConverter;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;

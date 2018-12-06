@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.PaginatedReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.PaginatedReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -48,7 +48,7 @@ public class PaginationTests extends ReportingTestCase {
 
     @BeforeClass
     public static void setUp() {
-        // this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
+        // this empty method is used as a shadow for org.dgfoundation.amp.newreports.ReportingTestCase.setUp()
     }
 
     final ReportSpecification theFlatSpec = ReportSpecificationImpl.buildFor("initReport",

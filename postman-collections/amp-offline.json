@@ -1,0 +1,368 @@
+{
+  "info": {
+    "_postman_id": "026b8b8c-8352-4101-bd52-55524354a10f",
+    "name": "AMP Offline",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "_postman_id": "5f23ea13-3848-4af5-8911-f694c5afdce0",
+      "name": "01. Auth API",
+      "description": "",
+      "item": [
+        {
+          "_postman_id": "d5b53541-c52a-468a-883b-6daf4bafd124",
+          "name": "Authenticate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "94b59f5a-f13f-4383-a0df-5fd56c6c84cb",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "postman.setEnvironmentVariable(\"userId\", jsonData['user-id']);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"username\": \"{{username}}\",\n\t\"password\": \"{{password}}\"\n}"
+            },
+            "url": "{{host}}/rest/security/user"
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "f0d16824-38c6-4de6-817b-393f95cd02aa",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "a99940fc-71e7-45b3-ad1e-b92da31499bf",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"response is ok\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "_postman_id": "0790ad22-b423-4e9e-b5fb-76f89e94c06b",
+      "name": "02. Sync API",
+      "description": "",
+      "item": [
+        {
+          "_postman_id": "d518a628-a9c1-4fbe-a193-33a0d8eb363c",
+          "name": "First Sync",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "670866c5-0be5-496f-ac19-1718ffff07c1",
+                "exec": [
+                  "function getData(fieldName, defaultValue) {",
+                  "    return data[fieldName] || JSON.parse(pm.environment.get(fieldName)) || defaultValue;",
+                  "}",
+                  "",
+                  "if (getData(\"isResponseOK\", false)) {",
+                  "    // TODO we can use schema validation",
+                  "",
+                  "    pm.test(\"Mandatory units to sync present\", function () {",
+                  "        pm.expect(pm.response.json()).to.include.keys([\"timestamp\", \"workspaces\", \"calendars\", \"users\", \"activities\", \"translations\", \"global-settings\", \"workspace-settings\", \"workspace-members\", \"activity-possible-values-fields\", \"common-possible-values-fields\", \"exchange-rates\", \"feature-manager\"]);",
+                  "    });",
+                  "    ",
+                  "    pm.test(\"Extra units to sync for current AMP country present\", function () {",
+                  "        var extraSyncUnits = getData(\"extraSyncUnits\", []);",
+                  "        pm.expect(pm.response.json()).to.include.keys(extraSyncUnits);",
+                  "    });",
+                  "    ",
+                  "    // if needed can be split individually",
+                  "    pm.test(\"Simply flagged units to sync are correct (true)\", function() {",
+                  "        pm.expect(pm.response.json().workspaces).to.eql(true);",
+                  "        pm.expect(pm.response.json().translations).to.eql(true);",
+                  "        // TODO other",
+                  "    });",
+                  "    ",
+                  "    pm.test(\"Contact possible values are correct\", function() {",
+                  "       var contactPVsPaths = getData(\"contactPVsPaths\");",
+                  "       pm.expect(pm.response.json()[\"contact-possible-values-fields\"]).to.be.an('array').to.deep.equal(contactPVsPaths);",
+                  "    });",
+                  "}",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"user-ids\": [{{userId}}]\n}"
+            },
+            "url": "{{host}}/rest/sync"
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "b8eff03a-afaa-44b2-baba-7d401499b86d",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "8cef3ad0-91c8-41bd-82d4-9c18ee1be8cd",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"response is ok\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "var isResponseOK = pm.response.code === 200;",
+              "pm.environment.set(\"isResponseOK\", isResponseOK);",
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "_postman_id": "f1d6d5d2-2d7c-4fe2-b29e-bd142e78e27a",
+      "name": "03. Activity API",
+      "description": "",
+      "item": [
+        {
+          "_postman_id": "b71f825e-4079-43b9-b26c-2f9727ed511a",
+          "name": "Get Activity by AMP ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "eb30a89f-3eb2-4b0f-88ac-4c70662848a0",
+                "exec": [
+                  "/*pm.environment.set(\"activityJson\", JSON.stringify(pm.response.json()));",
+                  "pm.environment.set(\"internalId\", pm.response.json().internal_id);*/"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{host}}/rest/activity/project?amp-id=87173620555",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "rest",
+                "activity",
+                "project"
+              ],
+              "query": [
+                {
+                  "key": "amp-id",
+                  "value": "87173620555",
+                  "equals": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "_postman_id": "0bdb146d-14a5-4ce9-bbb6-bb25cbf9032a",
+          "name": "Get Currency Possible Values",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "728c48b1-1c32-4cb6-85d4-8ba36a9f66b9",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "28989997-82f4-4c3b-9cef-a166b8b4b647",
+                "exec": [
+                  "function getData(fieldName, defaultValue) {",
+                  "    return data[fieldName] || JSON.parse(pm.environment.get(fieldName)) || defaultValue;",
+                  "}",
+                  "",
+                  "if (getData(\"isResponseOK\", false)) {",
+                  "    // TODO assuming general test for possible values data format will be done separately",
+                  "    pm.test(\"Check 'active' flag present\", function() {",
+                  "        pm.expect(pm.response.json()[\"fundings~funding_details~currency\"][0]).to.have.a.property(\"extra_info\").that.has.a.property(\"active\");",
+                  "        pm.expect(pm.response.json()[\"ppc_amount~currency\"][0]).to.have.a.property(\"extra_info\").that.has.a.property(\"active\");",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n\t\"fundings~funding_details~currency\",\n\t\"ppc_amount~currency\"\n]"
+            },
+            "url": "{{host}}/rest/activity/field/values"
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "8fcf8389-6d39-421b-96e2-86c9a5533be3",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "e3bb5f2a-d7bb-4430-bc5c-ee3b0f5acd8e",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"response is ok\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "",
+              "var isResponseOK = pm.response.code === 200;",
+              "pm.environment.set(\"isResponseOK\", isResponseOK);",
+              ""
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "13553938-2262-4310-9829-6557db3cfc2d",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "e3c89cc8-e0da-4daf-a753-ce10481f0ed6",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}

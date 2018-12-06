@@ -1,13 +1,9 @@
-package org.dgfoundation.amp.mondrian;
+package org.dgfoundation.amp.newreports;
 
 import java.util.List;
 import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
-import org.dgfoundation.amp.newreports.AreaOwner;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.pagination.PaginatedReportArea;
 
 public class ReportAreaDescriber {

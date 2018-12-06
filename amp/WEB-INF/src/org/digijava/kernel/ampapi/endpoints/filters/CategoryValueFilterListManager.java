@@ -112,7 +112,7 @@ public final class CategoryValueFilterListManager implements FilterListManager {
             node.setName(TranslatorWorker.translateText(ampCategoryValue.getValue()));
             nodes.add(node);
         }
-        nodes.add(UNDEFINED_OPTION);
+        nodes.add(getUndefinedOption());
         
         items.put(ITEMS_NAME, nodes);
 

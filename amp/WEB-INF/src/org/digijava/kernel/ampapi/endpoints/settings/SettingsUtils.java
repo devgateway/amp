@@ -24,12 +24,12 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.dgfoundation.amp.reports.ReportUtils;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
@@ -351,8 +351,9 @@ public class SettingsUtils {
     }
 
     private static String getReportYear(String year) {
-        if (year == null || MoConstants.FILTER_UNDEFINED_MAX.equals(year))
+        if (year == null || FiltersConstants.FILTER_UNDEFINED_MAX.equals(year)) {
             return SettingsConstants.YEAR_ALL;
+        }
         return year;
     }
 
@@ -389,7 +390,7 @@ public class SettingsUtils {
                 FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.MAX_LOCATIONS_ICONS));
 
         settings.set("number-format",
-                MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat().toPattern());
+                ReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat().toPattern());
 
         settings.set("number-group-separator",
                 FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR));

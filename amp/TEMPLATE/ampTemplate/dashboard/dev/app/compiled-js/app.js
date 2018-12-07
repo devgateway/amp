@@ -24418,7 +24418,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","bootstrap/dist/js/bootstrap":50,"underscore":"underscore"}],61:[function(require,module,exports){
 module.exports=require(50)
-},{"C:\\git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":50}],62:[function(require,module,exports){
+},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":50}],62:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -31761,7 +31761,6 @@ module.exports = Backbone.View.extend({
     if (this.draggable) {
       this.$el.draggable({cursor: 'move', containment: 'window' });
     }
-    this.firstRender = true;
 
     if (this.firstRender) {
       this.$el.html(this.template({}));
@@ -32573,15 +32572,15 @@ module.exports = BaseFilterView.extend({
 
 },{"../views/base-filter-view":81,"underscore":"underscore"}],87:[function(require,module,exports){
 module.exports=require(50)
-},{"C:\\git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":50}],88:[function(require,module,exports){
+},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":50}],88:[function(require,module,exports){
 module.exports=require(62)
-},{"C:\\git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":62,"jquery":"jquery"}],89:[function(require,module,exports){
+},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":62,"jquery":"jquery"}],89:[function(require,module,exports){
 module.exports=require(64)
-},{"./core":88,"./mouse":90,"./widget":91,"C:\\git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":64,"jquery":"jquery"}],90:[function(require,module,exports){
+},{"./core":88,"./mouse":90,"./widget":91,"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":64,"jquery":"jquery"}],90:[function(require,module,exports){
 module.exports=require(65)
-},{"./widget":91,"C:\\git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":65,"jquery":"jquery"}],91:[function(require,module,exports){
+},{"./widget":91,"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":65,"jquery":"jquery"}],91:[function(require,module,exports){
 module.exports=require(66)
-},{"C:\\git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":66,"jquery":"jquery"}],92:[function(require,module,exports){
+},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":66,"jquery":"jquery"}],92:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');

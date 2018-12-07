@@ -113,6 +113,15 @@ public class SyncService implements InitializingBean {
 
     private AmpOfflineChangelogRepository ampOfflineChangelogRepository = AmpOfflineChangelogRepository.INSTANCE;
 
+    /**
+     * Used as approximate time of AMP startup. Initialized only once.
+     * Used to detect changes newly implemented fields.
+     * Suppose a new field was added to activity. There will be no changelog entries for that field, thus new fields
+     * could be ignored. If a client synchronizes with AMP and uses a timestamp before startup time, then we'll report
+     * fields as being changed. AMP in production is rarely restarted.
+     */
+    private static final Date STARTUP_TIME = new Date(System.currentTimeMillis());
+
     @Autowired
     private SyncDAO syncDAO;
 
@@ -163,7 +172,7 @@ public class SyncService implements InitializingBean {
 
         systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
 
-        systemDiff.setFields(shouldSyncFieldsDefinitions(syncRequest.getLastSyncTime()));
+        systemDiff.setFields(shouldSyncFieldsDefinitions(lastSyncTime, systemDiff));
 
         updateDiffForFeatureManager(systemDiff, syncRequest);
 
@@ -174,12 +183,35 @@ public class SyncService implements InitializingBean {
         return systemDiff;
     }
 
-    private boolean shouldSyncFieldsDefinitions(Date lastSyncTime) {
-        if (lastSyncTime == null) {
+    private boolean shouldSyncFieldsDefinitions(Date lastSyncTime, SystemDiff systemDiff) {
+        return isFirstSync(lastSyncTime) ||
+                isFirstSyncSinceAMPStartup(lastSyncTime, systemDiff) ||
+                fieldDefinitionsChanged(lastSyncTime, systemDiff);
+    }
+
+    private boolean isFirstSync(Date lastSyncTime) {
+        return lastSyncTime == null;
+    }
+
+    private boolean isFirstSyncSinceAMPStartup(Date lastSyncTime, SystemDiff systemDiff) {
+        if (STARTUP_TIME.after(lastSyncTime)) {
+            systemDiff.updateTimestamp(STARTUP_TIME);
             return true;
         } else {
-            Timestamp dateModified = syncDAO.getLastModificationDateForFieldDefinitions();
-            return dateModified == null || dateModified.after(lastSyncTime);
+            return false;
+        }
+    }
+
+    /**
+     * Tells if fields definitions changed by looking at changelogs.
+     */
+    private boolean fieldDefinitionsChanged(Date lastSyncTime, SystemDiff systemDiff) {
+        Timestamp dateModified = syncDAO.getLastModificationDateForFieldDefinitions();
+        if (dateModified == null || dateModified.after(lastSyncTime)) {
+            systemDiff.updateTimestamp(dateModified);
+            return true;
+        } else {
+            return false;
         }
     }
 

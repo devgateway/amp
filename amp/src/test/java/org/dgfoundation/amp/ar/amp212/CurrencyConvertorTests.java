@@ -9,7 +9,7 @@ import java.util.TreeMap;
 
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
-import org.dgfoundation.amp.mondrian.AmpReportingTestCase;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;

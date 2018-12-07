@@ -8,7 +8,7 @@ package org.dgfoundation.amp.ar.amp212;
  *
  */
 public class OffDbNiReportSortingTests extends SortingSanityChecks {
-    
+
     public OffDbNiReportSortingTests() {
         nrRunReports = 0;
     }

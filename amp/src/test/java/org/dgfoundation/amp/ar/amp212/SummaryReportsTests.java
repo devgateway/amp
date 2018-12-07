@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -23,10 +23,10 @@ import org.junit.Test;
  *
  */
 public class SummaryReportsTests extends ReportingTestCase {
-    
+
     HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
     final static List<String> ACTS = Arrays.asList("TAC_activity_1", "Eth Water", "Unvalidated activity");
-    
+
     /**
      * builds a summary report spec with given hiers, AC / AD as measures
      * @param hiers

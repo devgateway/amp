@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.AmpReportingTestCase;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
@@ -35,7 +35,7 @@ public class FundingFlowsTests extends AmpReportingTestCase {
         "Activity with Zones",
         "TAC_activity_2"
     );
-    
+
     @Test
     public void testComplexHeaderWithSplitColumnsAndMeasures() {
         NiReportModel cor = new NiReportModel("AMP-15337-complex-header")

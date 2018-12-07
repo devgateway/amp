@@ -14,7 +14,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -31,7 +30,7 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.dgfoundation.amp.reports.ReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
@@ -40,7 +39,6 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
@@ -489,7 +487,7 @@ public class GPIReportUtils {
      * @param spec
      */
     public static void applySettings(GpiFormParameters formParams, ReportSpecificationImpl spec) {
-        spec.setSettings(MondrianReportUtils.getCurrentUserDefaultSettings());
+        spec.setSettings(ReportUtils.getCurrentUserDefaultSettings());
         spec.getSettings().getCurrencyFormat().setMinimumFractionDigits(0);
         spec.getSettings().getCurrencyFormat().setMinimumIntegerDigits(1);
         
@@ -534,7 +532,7 @@ public class GPIReportUtils {
             Map<String, Object> date = (Map<String, Object>) filters.get(FiltersConstants.DATE);
             if (date != null) {
                 String start = String.valueOf(date.get("start"));
-                SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
+                SimpleDateFormat sdf = new SimpleDateFormat(FiltersConstants.DATE_FORMAT);
                 try {
                     Date startDate = start == null ? null : sdf.parse(start);
                     pivotYear = FilterUtils.getYearFromDate(startDate);

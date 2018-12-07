@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.HashMap;
 
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.AmpReportingTestCase;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.amp.ForecastExecutionRateBehaviour;

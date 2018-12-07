@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.AmpReportingTestCase;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -34,7 +34,7 @@ public class NiComputedMeasuresTests extends AmpReportingTestCase {
             "Eth Water",
             "activity with directed MTEFs"
         );
-    
+
     final List<String> ppcActs = Arrays.asList(
             "Proposed Project Cost 1 - USD",
             "Proposed Project Cost 2 - EUR",

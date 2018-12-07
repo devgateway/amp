@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -19,11 +19,11 @@ import org.junit.Test;
  *
  */
 public class OffDbNiReportEngineTests extends BasicSanityChecks {
-    
+
     public OffDbNiReportEngineTests() {
         nrRunReports = 0;
     }
-    
+
     @Test
     public void testVarianceAndAverageFlat() {
         NiReportModel cor = new NiReportModel("testVarianceAndAverageMeasuresFlat")

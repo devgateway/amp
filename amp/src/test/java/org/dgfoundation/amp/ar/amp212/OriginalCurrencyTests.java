@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.AmpReportingTestCase;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -92,7 +92,7 @@ public class OriginalCurrencyTests extends AmpReportingTestCase {
             "Test MTEF directed",
             "activity with pipeline MTEFs and act. disb"
         );
-    
+
     @Test
     public void testOriginalCurrencyActualCommitments() {
         NiReportModel cor = new NiReportModel("Original currency actual commitments")

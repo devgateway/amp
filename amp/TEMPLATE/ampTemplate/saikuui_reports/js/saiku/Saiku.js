@@ -95,7 +95,7 @@ $(document).ready(function () {
 function loadPlugins(data) {
     // Save report's metadata for later usage in QueryRouter.js
     Saiku.originalReportMetadata = data;
-    console.log(data.reportMetadata.reportSpec.reportType);
+    Saiku.logger.log(data.reportMetadata.reportSpec.reportType);
     var plugins = new PluginCollection();
     plugins.fetch({
         success: function () {

@@ -1,0 +1,33 @@
+{
+	"id": "34dcc97b-b01e-454d-8bae-c4b937c798f8",
+	"values": [
+		{
+			"key": "userAgent",
+			"value": "AMPOffline/1.4.0-SNAPSHOT (debian; 64) Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
+			"description": "",
+			"enabled": true
+		},
+		{
+			"key": "username",
+			"value": "atl@amp.org",
+			"description": "",
+			"enabled": true
+		},
+		{
+			"key": "password",
+			"value": "a9993e364706816aba3e25717850c26c9cd0d89d",
+			"description": "",
+			"enabled": true
+		},
+		{
+			"key": "worspaceId",
+			"value": "",
+			"description": "",
+			"enabled": true
+		}
+	],
+	"name": "AMP API Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2018-12-06T18:02:52.590Z",
+	"_postman_exported_using": "Postman/6.5.3"
+}

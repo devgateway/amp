@@ -1,0 +1,4 @@
+[{
+  "extraSyncUnits": ["contacts", "resources", "map-tiles", "locators", "contact-possible-values-fields", "resource-possible-values-fields"],
+  "contactPVsPaths": ["title", "creator", "organisation_contacts~organisation", "phone~type"]
+}]

@@ -19,7 +19,7 @@ import org.digijava.module.aim.util.Output;
 /**
  * @author mihai
  */
-public class EUActivity implements Serializable, Identifiable, Versionable, Cloneable, AuditableEntity {
+public class EUActivity implements Serializable, Identifiable, Versionable, Cloneable {
     private static final long serialVersionUID = 7061222006441976421L;
 
 
@@ -260,9 +260,5 @@ public class EUActivity implements Serializable, Identifiable, Versionable, Clon
         // TODO Auto-generated method stub
         return super.clone();
     }
-
-    @Override
-    public AuditableEntity getParent() {
-        return activity;
-    }
+    
 }

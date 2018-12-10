@@ -885,7 +885,7 @@ public class IndicatorUtil {
                 session.saveOrUpdate(tmpGroup);
                 act.setAmpActivityGroup(tmpGroup);
 
-                org.dgfoundation.amp.onepager.util.ActivityUtil.saveContacts(act, session,false);
+                org.dgfoundation.amp.onepager.util.ActivityUtil.saveContacts(act, session, false, member);
                 Set<IndicatorActivity> indicators=act.getIndicators();
                 session.save(act);
                 Set<AmpIndicatorValue> newValues;

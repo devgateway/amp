@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.ComparatorUtils;
 
-public class AmpGPINiSurvey implements Serializable, Cloneable, Comparable<AmpGPINiSurvey>, AuditableEntity {
+public class AmpGPINiSurvey implements Serializable, Cloneable, Comparable<AmpGPINiSurvey> {
     
     private static final long serialVersionUID = -4889980304099658852L;
     
@@ -60,9 +60,5 @@ public class AmpGPINiSurvey implements Serializable, Cloneable, Comparable<AmpGP
         // TODO Auto-generated method stub
         return super.clone();
     }
-
-    @Override
-    public AuditableEntity getParent() {
-        return ampOrgRole;
-    }
+    
 }

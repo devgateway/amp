@@ -432,10 +432,6 @@ public class AddressBookActions extends DispatchAction {
                 }
             }
             clearContact(contact);
-        } else {
-            TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
-            AmpTeamMember creator = TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId());
-            contact.setCreator(creator);
         }
 
         contact.setName(myForm.getName().trim());

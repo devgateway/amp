@@ -177,7 +177,7 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
         // TODO Auto-generated method stub
         return super.clone();
     }
-    
+
     public static class RegionalObservationComparator implements Comparator<AmpRegionalObservation>, Serializable {
 
         /**

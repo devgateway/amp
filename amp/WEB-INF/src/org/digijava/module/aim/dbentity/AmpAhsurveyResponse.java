@@ -126,4 +126,5 @@ public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable
         // TODO Auto-generated method stub
         return super.clone();
     }
+    
 }

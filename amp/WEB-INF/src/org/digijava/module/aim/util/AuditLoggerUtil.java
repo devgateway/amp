@@ -44,7 +44,7 @@ import org.hibernate.type.StringType;
 public class AuditLoggerUtil {
 
     private static Logger logger = Logger.getLogger(AuditLoggerUtil.class);
-
+    
     /**
      * Call this method only in http request scope.
      */

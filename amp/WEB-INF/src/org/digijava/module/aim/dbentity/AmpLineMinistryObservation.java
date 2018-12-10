@@ -180,7 +180,9 @@ public class AmpLineMinistryObservation implements Serializable, Versionable, Cl
         // TODO Auto-generated method stub
         return super.clone();
     }
-    
+
+
+
 
     public static class LineMinistryObservationComparator implements Comparator<AmpLineMinistryObservation>, Serializable {
 

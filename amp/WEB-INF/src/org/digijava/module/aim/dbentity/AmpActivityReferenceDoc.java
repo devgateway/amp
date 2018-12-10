@@ -7,7 +7,7 @@ import java.util.Date;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpActivityReferenceDoc implements Serializable, Versionable, Cloneable, AuditableEntity {
+public class AmpActivityReferenceDoc implements Serializable, Versionable, Cloneable {
 
     private static final long serialVersionUID = 1L;
     private Long id;
@@ -106,9 +106,5 @@ public class AmpActivityReferenceDoc implements Serializable, Versionable, Clone
         // TODO Auto-generated method stub
         return super.clone();
     }
-
-    @Override
-    public AuditableEntity getParent() {
-        return activity;
-    }
+    
 }

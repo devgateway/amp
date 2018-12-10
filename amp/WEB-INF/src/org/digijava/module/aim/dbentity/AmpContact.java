@@ -277,5 +277,5 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     public Object getIdentifier() {
         return id;
     }
-
+    
 }

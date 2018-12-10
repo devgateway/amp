@@ -43,7 +43,6 @@ import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
-import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -222,16 +221,10 @@ public class ActivityImporter extends ObjectImporter {
                 // save new activity
                 prepareToSave();
                 boolean updateApprovalStatus = !AmpOfflineModeHolder.isAmpOfflineMode();
-                
-                newActivity = AuditActivityInfo.doInTeamMemberContext(teamMember, () -> {
-                    try {
-                        return org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
+    
+                newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
                                 translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
                                 PersistenceManager.getSession(), SaveContext.api(updateApprovalStatus));
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
                 
                 postProcess();
             } else {

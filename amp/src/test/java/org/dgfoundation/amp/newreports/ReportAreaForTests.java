@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.mondrian;
+package org.dgfoundation.amp.newreports;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -6,20 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.Stack;
-import java.util.TreeMap;
 import java.util.function.Function;
 
 import junit.framework.TestCase;
 
 import org.dgfoundation.amp.algo.AmpCollections;
-import org.dgfoundation.amp.newreports.AreaOwner;
-import org.dgfoundation.amp.newreports.NamedTypedEntity;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.TextCell;
 
 public class ReportAreaForTests extends ReportAreaImpl {
             

@@ -35,7 +35,7 @@ public final class Constants {
     public static final int ANNUAL_PROPOSED_PROJECT_COST = 15;
     
     /**
-     * only present in v_mondrian_raw_donor_transactions
+     * only present in zz_v_ni_donor_funding.xml
      */
     public static final int PROPOSED_PROJECT_AMOUNT_PER_PROJECT = 11;
     

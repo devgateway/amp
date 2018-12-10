@@ -1,8 +1,8 @@
 package org.dgfoundation.amp.ar;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -16,7 +16,6 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -27,49 +26,41 @@ import org.digijava.module.aim.util.TeamUtil;
  */
 public class WorkspaceFilter 
 {
-    private Long teamMemberId;
-    private Set<AmpTeam> ampTeams;
+    private AmpTeam team;
+    private Set<AmpTeam> relatedTeams;
     private boolean accessTypeManagement;
 
-    private TeamMember teamMember;
-    
     /**
-     * take care for special values of teamMemberId, like TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES !
-     * @param teamMemberId
-     * @param accessType
-     * @param draft
+     * @param teamId if null we're in public view, otherwise we're filtering activities from that team
      */
-    private WorkspaceFilter(Long teamMemberId, boolean accessTypeManagement) {
-        this.teamMemberId = Objects.requireNonNull(teamMemberId);
-        this.accessTypeManagement = accessTypeManagement;
+    private WorkspaceFilter(Long teamId) {
+        this.team = TeamUtil.getAmpTeam(teamId);
+        this.accessTypeManagement = inPublicView() || "Management".equals(team.getAccessType());
         prepareTeams();
     }
     
     private void prepareTeams() {
+        List<AmpTeam> leafTeams;
         if (inPublicView()) {
             // special case: simulate like "all management workspaces" has been selected
-            setAmpTeams(TeamUtil.getRelatedTeamsForTeams(TeamUtil.getAllManagementWorkspaces()));
+            leafTeams = TeamUtil.getAllManagementWorkspaces();
         } else {
-            teamMember = TeamMemberUtil.getTeamMember(teamMemberId);
-            if (teamMember.getMemberId() == null) {
-                throw new RuntimeException("No such team member with id: " + teamMemberId);
-            }
-            setAmpTeams(TeamUtil.getRelatedTeamsForMember(teamMember));
+            leafTeams = Collections.singletonList(team);
         }
+        relatedTeams = TeamUtil.getRelatedTeamsForTeams(leafTeams);
     }
 
     private boolean inPublicView() {
-        return teamMemberId.equals(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES);
+        return team == null;
     }
 
     /**
      * Return query for visible activities.
      */
-    public String getGeneratedQuery() {
+    private String getGeneratedQuery() {
         if (accessTypeManagement) {
             return getManagementWorkspaceQuery();
         } else {
-            AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
             if (AmpARFilter.isTrue(team.getComputation())) {
                 return getComputedWorkspaceQuery(team);
             } else {
@@ -84,7 +75,7 @@ public class WorkspaceFilter
     private String getManagementWorkspaceQuery() {
         String approvalStatus = Util.toCSString(AmpARFilter.validatedActivityStatus);
         String activityTable = inPublicView() ? "cached_amp_activity" : "amp_activity";
-        String teamIds = Util.toCSStringForIN(ampTeams);
+        String teamIds = Util.toCSStringForIN(relatedTeams);
         return String.format("SELECT amp_activity_id "
                 + "FROM %s "
                 + "WHERE approval_status IN (%s) "
@@ -163,27 +154,23 @@ public class WorkspaceFilter
     }
 
     /**
-     * take care for special values of teamMemberId, like TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES !
-     * @param teamMemberId
-     * @param accessType
-     * @param draft
-     * @return
+     * Returns SQL query for activities visible by specified team. If teamId is null then return public view.
      */
-    private static String generateWorkspaceFilterQuery(Long teamMemberId, String accessType) {
-        return new WorkspaceFilter(teamMemberId, "Management".equals(accessType)).getGeneratedQuery();
+    private static String generateWorkspaceFilterQueryForTeam(Long teamId) {
+        return new WorkspaceFilter(teamId).getGeneratedQuery();
     }
     
     /**
      * This method return a set with the teams needed for pledges related activities column filter.
-     * @param teamMemberId
-     * @param accessType
-     * @param approved
-     * @param hideDraft
-     * @param publicView
-     * @return
      */
-    public static Set getAmpTeamsSet(Long teamMemberId, String accessType) {
-        return new WorkspaceFilter(teamMemberId, "Management".equals(accessType)).getAmpTeams();
+    public static Set getAmpTeamsSet(Long teamMemberId) {
+        Long teamId;
+        if (teamMemberId.equals(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES)) {
+            teamId = null;
+        } else {
+            teamId = TeamMemberUtil.getAmpTeamMember(teamMemberId).getAmpTeam().getAmpTeamId();
+        }
+        return new WorkspaceFilter(teamId).relatedTeams;
     }
     
     /**
@@ -207,24 +194,17 @@ public class WorkspaceFilter
         java.util.List<?> res = PersistenceManager.getSession().createSQLQuery(query).list();
         return (Boolean) res.get(0);
     }
-    /**
-     * TeamMember <b>might have the special value TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES</b>
-     */
-    public static String generateWorkspaceFilterQuery(TeamMember tm) {
 
-        //Hotfix for timor budget integration report
-        if (tm == null || tm.getMemberName().equalsIgnoreCase("AMP Admin")) {
-            //public view
-            String accessType = Constants.ACCESS_TYPE_MNGMT;
-            return generateWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, accessType);
+    public static String generateWorkspaceFilterQuery(TeamMember tm) {
+        if (tm == null) {
+            return generateWorkspaceFilterQueryForTeam(null);
         } else {
-            String accessType = tm.getTeamAccessType();
-            return generateWorkspaceFilterQuery(tm.getMemberId(), accessType);
+            return generateWorkspaceFilterQueryForTeam(tm.getTeamId());
         }
     }
 
     public static String getViewableActivitiesIdByTeams(Collection<AmpTeamMember> teamMemberList) {
-        StringBuffer finalActivityQuery = new StringBuffer();
+        StringBuilder finalActivityQuery = new StringBuilder();
         for (AmpTeamMember teamMember : teamMemberList) {
             TeamMember aux = new TeamMember(teamMember);
             finalActivityQuery.append(WorkspaceFilter.generateWorkspaceFilterQuery(aux));
@@ -241,7 +221,7 @@ public class WorkspaceFilter
      */
     public static Set<AmpTeam> getComputedRelatedWorkspaces() {
         String wsQuery = getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
-        List<Number> res = PersistenceManager.getSession().createSQLQuery(wsQuery).list();
+        List res = PersistenceManager.getSession().createSQLQuery(wsQuery).list();
         if (res != null && !res.isEmpty()) {
             String activitiesQuery = "select amp_team_id from amp_activity_Version where amp_activity_id IN (" +
                     Joiner.on(',').join(res) + ")";
@@ -250,13 +230,5 @@ public class WorkspaceFilter
         }
         
         return null;
-    }
-
-    public Set<AmpTeam> getAmpTeams() {
-        return ampTeams;
-    }
-
-    public void setAmpTeams(Set<AmpTeam> ampTeams) {
-        this.ampTeams = ampTeams;
     }
 }

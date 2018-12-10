@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.dgfoundation.amp.StandaloneAMPInitializer;
+import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -113,13 +114,17 @@ import org.junit.Test;
  */
 public class WorkspaceFilterTest {
 
+    /**
+     * Redoing public view caches to be able to properly test the anonymous case. See {@link #testAnonymous()}.
+     */
     @BeforeClass
     public static void setUp() {
         StandaloneAMPInitializer.initialize();
+        PublicViewColumnsUtil.redoCaches();
     }
 
     @Test
-    public void testNormalWorkspace1() throws Exception {
+    public void testNormalWorkspace1() {
         TeamMember tm = teamMemberFor("Normal workspace 1");
         List<String> acts = findActivities(tm);
         assertThat(acts, containsInAnyOrder(
@@ -130,7 +135,7 @@ public class WorkspaceFilterTest {
     }
 
     @Test
-    public void testNormalWorkspace2() throws Exception {
+    public void testNormalWorkspace2() {
         TeamMember tm = teamMemberFor("Normal workspace 2");
         List<String> acts = findActivities(tm);
         assertThat(acts, containsInAnyOrder(
@@ -139,7 +144,7 @@ public class WorkspaceFilterTest {
     }
 
     @Test
-    public void testNormalWorkspace3() throws Exception {
+    public void testNormalWorkspace3() {
         TeamMember tm = teamMemberFor("Normal workspace 3");
         List<String> acts = findActivities(tm);
         assertThat(acts, containsInAnyOrder(
@@ -151,7 +156,7 @@ public class WorkspaceFilterTest {
     }
 
     @Test
-    public void testPrivateWorkspace() throws Exception {
+    public void testPrivateWorkspace() {
         TeamMember tm = teamMemberFor("Private workspace 4");
         List<String> acts = findActivities(tm);
         assertThat(acts, containsInAnyOrder(
@@ -162,7 +167,7 @@ public class WorkspaceFilterTest {
     }
 
     @Test
-    public void testComputedWs5NorwayAsDonor() throws Exception {
+    public void testComputedWs5NorwayAsDonor() {
         TeamMember tm = teamMemberFor("Computed ws 5 with DN Norway");
         List<String> acts = excludeUnknownActivities(findActivities(tm));
         assertThat(acts, containsInAnyOrder(
@@ -173,7 +178,7 @@ public class WorkspaceFilterTest {
     }
 
     @Test
-    public void testComputedWs6NorwayAsDonorNoDraft() throws Exception {
+    public void testComputedWs6NorwayAsDonorNoDraft() {
         TeamMember tm = teamMemberFor("Computed ws 6 with DN Norway, no draft");
         List<String> acts = excludeUnknownActivities(findActivities(tm));
         assertThat(acts, containsInAnyOrder(
@@ -182,7 +187,7 @@ public class WorkspaceFilterTest {
     }
 
     @Test
-    public void testComputedWs7NorwayAsOrg() throws Exception {
+    public void testComputedWs7NorwayAsOrg() {
         TeamMember tm = teamMemberFor("Computed ws 7 with org Norway");
         List<String> acts = excludeUnknownActivities(findActivities(tm));
         assertThat(acts, containsInAnyOrder(
@@ -195,7 +200,7 @@ public class WorkspaceFilterTest {
     }
 
     @Test
-    public void testComputedWs8NorwayAsOrgNoDraft() throws Exception {
+    public void testComputedWs8NorwayAsOrgNoDraft() {
         TeamMember tm = teamMemberFor("Computed ws 8 with org Norway, no draft");
         List<String> acts = excludeUnknownActivities(findActivities(tm));
         assertThat(acts, containsInAnyOrder(
@@ -205,7 +210,7 @@ public class WorkspaceFilterTest {
     }
 
     @Test
-    public void testManagementWs1() throws Exception {
+    public void testManagementWs1() {
         TeamMember tm = teamMemberFor("Management workspace 1");
         List<String> acts = findActivities(tm);
         assertThat(acts, containsInAnyOrder(
@@ -215,7 +220,7 @@ public class WorkspaceFilterTest {
     }
 
     @Test
-    public void testManagementWs2() throws Exception {
+    public void testManagementWs2() {
         TeamMember tm = teamMemberFor("Management workspace 2");
         List<String> acts = findActivities(tm);
         assertThat(acts, containsInAnyOrder(
@@ -224,7 +229,7 @@ public class WorkspaceFilterTest {
     }
 
     @Test
-    public void testManagementWs3() throws Exception {
+    public void testManagementWs3() {
         TeamMember tm = teamMemberFor("Management workspace 3");
         List<String> acts = findActivities(tm);
         assertThat(acts, containsInAnyOrder(
@@ -233,7 +238,7 @@ public class WorkspaceFilterTest {
     }
 
     @Test
-    public void testManagementWs4() throws Exception {
+    public void testManagementWs4() {
         TeamMember tm = teamMemberFor("Management workspace 4");
         List<String> acts = findActivities(tm);
         assertThat(acts, containsInAnyOrder(
@@ -241,7 +246,7 @@ public class WorkspaceFilterTest {
     }
 
     @Test
-    public void testManagementWs5() throws Exception {
+    public void testManagementWs5() {
         TeamMember tm = teamMemberFor("Management workspace 5");
         List<String> acts = findActivities(tm);
         assertThat(acts, containsInAnyOrder(
@@ -249,7 +254,8 @@ public class WorkspaceFilterTest {
     }
 
     @Test
-    public void testAnonymous() throws Exception {
+    public void testAnonymous() {
+        // maintain
         List<String> acts = findActivities(null);
         assertThat(acts, containsInAnyOrder(
                 "~wsf~ 1 Approved with DN Norway",

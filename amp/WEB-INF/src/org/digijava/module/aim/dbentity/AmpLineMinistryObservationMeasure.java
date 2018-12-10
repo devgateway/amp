@@ -8,7 +8,7 @@ import java.util.Set;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 @TranslatableClass (displayName = "Line Ministry Observation Measure")
-public class AmpLineMinistryObservationMeasure implements Serializable, Cloneable, AuditableEntity {
+public class AmpLineMinistryObservationMeasure implements Serializable, Cloneable {
     //IATI-check: to be ignored
 //  @Interchangeable(fieldTitle="ID")
     private Long ampLineMinistryObservationMeasureId;
@@ -74,9 +74,5 @@ public class AmpLineMinistryObservationMeasure implements Serializable, Cloneabl
         
         return aux;
     }
-
-    @Override
-    public AuditableEntity getParent() {
-        return lineMinistryObservation;
-    }
+    
 }

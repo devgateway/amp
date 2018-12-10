@@ -68,12 +68,9 @@ public class JsonBean {
             if (jb == null) {
                 return null;
             }
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-            return mapper.readValue(jb, JsonBean.class);
-        } catch (IOException e) {
-            logger.error("Cannot deserialize json bean", e);
+            return JSONUtils.readValueFromJson(jb, JsonBean.class);
+        } catch (RuntimeException e) {
+            logger.error("Failed to read json bean", e);
             return null;
         }
     }

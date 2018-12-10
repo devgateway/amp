@@ -38,6 +38,7 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 
@@ -71,7 +72,8 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             @PathParam("fieldName")
             @ApiParam(value = "fully qualified activity field", example = "locations~location")
             String fieldName) {
-        List<PossibleValue> possibleValues = InterchangeUtils.possibleValuesFor(fieldName);
+        List<APIField> apiFields = AmpFieldsEnumerator.getPublicEnumerator().getActivityFields();
+        List<PossibleValue> possibleValues = InterchangeUtils.possibleValuesFor(fieldName, apiFields);
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
             responseType = AmpMediaType.POSSIBLE_VALUES_V2_JSON_TYPE;
@@ -100,10 +102,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         if (fields == null) {
             response = Collections.emptyMap();
         } else {
+            List<APIField> apiFields = AmpFieldsEnumerator.getPublicEnumerator().getActivityFields();
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
-                    .collect(toMap(identity(), InterchangeUtils::possibleValuesFor));
+                    .collect(toMap(identity(), fieldName -> InterchangeUtils.possibleValuesFor(fieldName, apiFields)));
         }
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
@@ -122,7 +125,8 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             notes = "For fields like locations, sectors, programs the object contains the ancestor values.")
     public Map<String, List<FieldIdValue>> getFieldValuesById(
             @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
-        Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds);
+        List<APIField> apiFields = AmpFieldsEnumerator.getPublicEnumerator().getActivityFields();
+        Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds, apiFields);
 
         return response;
     }
@@ -135,7 +139,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             + "structure.\n\n"
             + "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
     public List<APIField> getAvailableFields() {
-        return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields();
+        return AmpFieldsEnumerator.getPublicEnumerator().getActivityFields();
     }
     
     // TODO remove it as part of AMP-25568

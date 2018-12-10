@@ -47,6 +47,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.contentrepository.helper.TeamMemberMail;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -83,6 +84,7 @@ public class TeamMemberUtil {
         {
             ampMember = getAmpTeamMember(id);
             if (id != null && ampMember != null) {
+                Hibernate.initialize(ampMember.getUser().getAssignedOrgs());
                 atmUsers.put(id, ampMember);
             }
             return ampMember;
@@ -376,7 +378,7 @@ public class TeamMemberUtil {
             List<AmpTeamMember> atms = qry.list();
             List<TeamMemberMail> members = new ArrayList<>();
             for (AmpTeamMember atm : atms) {
-                members.add(new TeamMemberMail(atm.getAmpTeamMemId(), 
+                members.add(new TeamMemberMail(atm.getAmpTeamMemId(),
                         atm.getAmpTeam().getAmpTeamId(), atm.getUser().getEmail()));
             }
 

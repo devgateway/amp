@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -178,7 +179,7 @@ public class DateTimeUtil {
     }
     
     public static Date fromJulianNumberToDate(String julianNumber) {
-        if (julianNumber != null && !"999999998".equals(julianNumber)) {
+        if (julianNumber != null && !FiltersConstants.FILTER_UNDEFINED_MAX.equals(julianNumber)) {
             try {
                 int day = Integer.parseInt(julianNumber) - 2440587; 
                 julianNumber = Integer.toString(day);

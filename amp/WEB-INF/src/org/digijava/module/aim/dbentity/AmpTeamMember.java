@@ -12,8 +12,8 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.TeamMemberValueProvider;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.Identifiable;
@@ -22,13 +22,11 @@ import org.digijava.module.message.dbentity.AmpMessageState;
 @InterchangeableValue(TeamMemberValueProvider.class)
 public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*/ {
 
-    @Interchangeable(fieldTitle="AmpTeamMember ID", id=true)
+    @PossibleValueId
     private Long ampTeamMemId;
 
-    @Interchangeable(fieldTitle = "User")
     private User user;
 
-    @Interchangeable(fieldTitle = "Workspace")
     private AmpTeam ampTeam;
     private AmpTeamMemberRoles ampMemberRole;
     private Set<AmpActivityVersion> activities;

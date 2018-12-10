@@ -25,7 +25,7 @@
 
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                prefix="localhost_access_log." suffix=".txt"
-               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+               pattern="%h %l %u %t &quot;%r&quot; %s %b %D" />
 
         <!-- Internal proxies regex matches the following ips: 10/8, 192.168/16, 169.254/16, 127/8 and 172.16/12 -->
         <Valve className="org.apache.catalina.valves.RemoteIpValve"

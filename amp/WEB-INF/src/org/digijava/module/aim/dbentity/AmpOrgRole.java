@@ -14,8 +14,7 @@ import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.SerializableComparator;
 
 
-public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable
-{
+public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable {
     //IATI-check: not to be ignored
     private Long ampOrgRoleId;
     @Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable = false)
@@ -277,4 +276,4 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
         this.gpiNiSurveys = gpiNiSurveys;
     }
     
-}   
+}

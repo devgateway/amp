@@ -1,5 +1,22 @@
 package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
+import static java.util.stream.Collectors.groupingBy;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.ws.rs.core.Response;
+
+import org.apache.commons.lang.StringUtils;
+import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
@@ -9,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -16,16 +34,6 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.common.util.DateTimeUtil;
-
-import javax.ws.rs.core.Response;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.groupingBy;
 
 /**
  * 
@@ -292,5 +300,133 @@ public final class PreviewActivityService {
             }
         }
     }
-
+    
+    public List<PreviewWorkspace> getWorkspaces(Long activityId) {
+        List<PreviewWorkspace> previewWorkspaces = new ArrayList<>();
+    
+        try {
+            AmpActivityVersion activity = ActivityUtil.loadActivity(activityId);
+            AmpTeam ownerTeam = activity.getTeam();
+    
+            PreviewWorkspace createdInWorkspace = new PreviewWorkspace();
+            createdInWorkspace.setName(ownerTeam.getName());
+            createdInWorkspace.setType(PreviewWorkspace.Type.ORIGIN);
+            previewWorkspaces.add(createdInWorkspace);
+    
+            AmpTeam parentTeam = ownerTeam.getParentTeamId();
+            String currentWsName = createdInWorkspace.getName();
+            
+            while (parentTeam != null) {
+                PreviewWorkspace ws = new PreviewWorkspace();
+                ws.setName(parentTeam.getName());
+                ws.setType(PreviewWorkspace.Type.MANAGEMENT);
+                currentWsName = String.format("%s -> %s", parentTeam.getName(), currentWsName);
+                ws.setExtraInfo(currentWsName);
+                previewWorkspaces.add(ws);
+                
+                parentTeam = parentTeam.getParentTeamId();
+            }
+    
+    
+//            List<AmpTeam> computedTeams = new ArrayList<>();
+//
+//            final StringBuffer wsQueries = new StringBuffer();
+//            for (AmpTeam team : computedTeams) {
+//
+//                String wsQuery = getComputedWorkspaceQuery(team);
+//
+//                if (wsQueries.length() > 0) {
+//                    wsQueries.append(" UNION ");
+//                }
+//
+//                wsQueries.append(addTeamIdToQuery(wsQuery, team.getAmpTeamId(), team.getName()));
+//            }
+//
+//            final Map<Long, List<Team>> activityTeams = new HashMap<Long, List<Team>>();
+//
+//            PersistenceManager.getSession().doWork(new Work() {
+//                public void execute(Connection conn) throws SQLException {
+//                    RsInfo teamsInActivityQuery = SQLUtils.rawRunQuery(conn, wsQueries.toString(), null);
+//                    while (teamsInActivityQuery.rs.next()) {
+//                        // activityTeams
+//                        Long ampActivityId = teamsInActivityQuery.rs.getLong(1);
+//                        if (activityTeams.get(ampActivityId) == null) {
+//                            activityTeams.put(ampActivityId, new ArrayList<Team>());
+//                        }
+//                        activityTeams.get(ampActivityId).add(
+//                                new Team(teamsInActivityQuery.rs.getLong(2), teamsInActivityQuery.rs.getString(3)));
+//                    }
+//                    teamsInActivityQuery.close();
+//                }
+//            });
+        } catch (DgException e) {
+            throw new RuntimeException(e);
+        }
+        
+        
+        return previewWorkspaces;
+    }
+    
+    /**
+     * Returns query for activities created in this computed workspace as well activities included by filters.
+     */
+    private String getComputedWorkspaceQuery(AmpTeam team) {
+        Set<Long> ids;
+        
+        if (AmpARFilter.isTrue(team.getUseFilter())) {
+            ids = getActivitiesByFilter(team);
+        } else {
+            ids = getActivitiesByOrgs(team.getOrganizations());
+        }
+        
+        // remove draft activities at end since filters don't not know of this condition
+        if (team.getHideDraftActivities()) {
+            String draftActsSql = "SELECT amp_activity_id FROM amp_activity WHERE draft = TRUE";
+            Set<Long> draftActivities = ActivityUtil.fetchLongs(draftActsSql);
+            ids.removeAll(draftActivities);
+        }
+        
+        // remove activities from isolated workspaces
+        if (!team.getIsolated()) {
+            String privateActsQuery = "SELECT a.amp_activity_id "
+                    + "FROM amp_activity a, amp_team t "
+                    + "WHERE a.amp_team_id = t.amp_team_id "
+                    + "AND t.isolated = TRUE";
+            Set<Long> privateActs = ActivityUtil.fetchLongs(privateActsQuery);
+            ids.removeAll(privateActs);
+        }
+        
+        return "amp_activity_id IN (" + Util.toCSStringForIN(ids) + ")";
+    }
+    
+    private static String addTeamIdToQuery(String wsQuery, Long teamId, String teamName) {
+        Integer indexToReplace = StringUtils.indexOf(wsQuery, "FROM amp_activity");
+        wsQuery = StringUtils.left(wsQuery, indexToReplace) + " , " + teamId + " as ampTeamId , '" + teamName
+                + "' as teamName " + StringUtils.mid(wsQuery, indexToReplace, wsQuery.length() - 1);
+        return wsQuery;
+    }
+    
+    private Set<Long> getActivitiesByFilter(FilterDataSetInterface filter) {
+        //AmpARFilter af = FilterUtil.buildFilterFromSource(filter);
+        return new HashSet<>();
+    }
+    
+    private Set<Long> getActivitiesByOrgs(Set orgs) {
+        String orgsClause = Util.toCSStringForIN(orgs);
+        
+        String query = " SELECT DISTINCT(aor.activity) "
+                + "FROM amp_org_role aor, amp_activity a "
+                + "WHERE aor.organisation IN (" + orgsClause + ") "
+                + "AND aor.activity = a.amp_activity_id "
+                + "AND a.amp_team_id IS NOT NULL "
+                + "UNION "
+                + "SELECT DISTINCT(af.amp_activity_id) "
+                + "FROM amp_funding af, amp_activity b "
+                + "WHERE af.amp_donor_org_id IN (" + orgsClause + ") "
+                + "AND af.amp_activity_id = b.amp_activity_id "
+                + "AND b.amp_team_id IS NOT NULL";
+        
+        return ActivityUtil.fetchLongs(query);
+    }
+    
 }

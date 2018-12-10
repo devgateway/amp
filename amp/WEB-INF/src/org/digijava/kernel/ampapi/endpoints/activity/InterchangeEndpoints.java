@@ -30,6 +30,7 @@ import io.swagger.annotations.ApiResponses;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityFunding;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityService;
+import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewWorkspace;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -299,6 +300,17 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             @ApiParam("the currency id in which the amount should be converted")
             @QueryParam(ActivityEPConstants.PREVIEW_CURRENCY_ID) Long currencyId) {
         return PreviewActivityService.getInstance().getPreviewActivityFunding(projectId, currencyId);
+    }
+    
+    @GET
+    @Path("/{project-id}/preview/workspaces")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getPreviewWorkspaces", ui = false)
+    @ApiOperation(value = "Retrieve workspaces where the activity is visible.")
+    public List<PreviewWorkspace> getPreviewWorkspaces(
+            @ApiParam("the id of the activity")
+            @PathParam("project-id") Long projectId) {
+        return PreviewActivityService.getInstance().getWorkspaces(projectId);
     }
 
     /**

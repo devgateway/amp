@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.dgfoundation.amp.reports.mondrian;
+package org.dgfoundation.amp.reports;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -15,9 +15,13 @@ import org.digijava.module.aim.util.DbUtil;
  * 
  * @author Nadejda Mandrescu
  */
-public class MondrianReportUtils {
-    protected static final Logger logger = Logger.getLogger(MondrianReportUtils.class);
-    
+public final class ReportUtils {
+
+    protected static final Logger logger = Logger.getLogger(ReportUtils.class);
+
+    private ReportUtils() {
+    }
+
     /**
      * @return default configuration for the current user settings
      */

@@ -1,15 +1,10 @@
 /**
  * 
  */
-package org.dgfoundation.amp.mondrian;
+package org.dgfoundation.amp.newreports;
 
-import java.util.Arrays;
 import java.util.Map;
 
-import org.dgfoundation.amp.newreports.AreaOwner;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.pagination.PaginatedReportArea;
 
 /**

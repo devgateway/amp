@@ -46,8 +46,8 @@ import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
 import org.dgfoundation.amp.reports.ReportCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
-import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
+import org.dgfoundation.amp.reports.converters.AmpReportsToReportSpecification;
+import org.dgfoundation.amp.reports.converters.MtefConverter;
 import org.dgfoundation.amp.utils.BoundedList;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
@@ -623,7 +623,7 @@ public class ReportsUtil {
         }
         
         // check if sorting config indeed changed
-        boolean sortingChanged = true; /*!MondrianReportUtils.equals(newSorters, spec.getSorters());*/
+        boolean sortingChanged = true;
         if (sortingChanged)
             spec.setSorters(newSorters);
         return sortingChanged;

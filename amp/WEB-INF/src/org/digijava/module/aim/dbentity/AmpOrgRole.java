@@ -14,7 +14,7 @@ import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.SerializableComparator;
 
 
-public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable, AuditableEntity {
+public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable {
     //IATI-check: not to be ignored
     private Long ampOrgRoleId;
     @Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable = false)
@@ -275,9 +275,5 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     public void setGpiNiSurveys(Set<AmpGPINiSurvey> gpiNiSurveys) {
         this.gpiNiSurveys = gpiNiSurveys;
     }
-
-    @Override
-    public AuditableEntity getParent() {
-        return activity;
-    }
+    
 }

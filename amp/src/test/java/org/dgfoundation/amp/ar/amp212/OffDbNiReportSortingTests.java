@@ -33,6 +33,6 @@ public class OffDbNiReportSortingTests extends SortingSanityChecks {
     
     @BeforeClass
     public static void setUp() {
-        // this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
+        // this empty method is used as a shadow for org.dgfoundation.amp.newreports.ReportingTestCase.setUp()
     }
 }

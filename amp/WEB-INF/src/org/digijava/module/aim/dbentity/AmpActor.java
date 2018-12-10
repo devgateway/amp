@@ -7,7 +7,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
 @TranslatableClass (displayName = "Actor")
-public class AmpActor  implements Serializable, Cloneable, AuditableEntity {
+public class AmpActor  implements Serializable, Cloneable {
     //IATI-check: not used in IATI
     private Long ampActorId ;
 
@@ -53,10 +53,5 @@ public class AmpActor  implements Serializable, Cloneable, AuditableEntity {
         // TODO Auto-generated method stub
         return super.clone();
     }
-
-
-    @Override
-    public AuditableEntity getParent() {
-        return measure;
-    }
+    
 }

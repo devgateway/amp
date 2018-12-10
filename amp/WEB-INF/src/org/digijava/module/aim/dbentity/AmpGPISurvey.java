@@ -6,7 +6,7 @@ import java.util.*;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Comparable<AmpGPISurvey>, AuditableEntity {
+public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Comparable<AmpGPISurvey> {
 
     //IATI-check: to be ignored
     private Long ampGPISurveyId;
@@ -148,9 +148,5 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
     public void setResponses(Set<AmpGPISurveyResponse> responses) {
         this.responses = responses;
     }
-
-    @Override
-    public AuditableEntity getParent() {
-        return ampActivityId;
-    }
+    
 }

@@ -79,7 +79,7 @@ public class GpiReport1Output1Visitor implements ReportVisitor {
             }
             
             if (e.getKey().originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)) {
-                gpiItem.setActCommitments(new BigDecimal(((AmountCell) e.getValue()).extractValue()));
+                gpiItem.setActCommitments(((AmountCell) e.getValue()).extractValue());
             }
 
             if (e.getKey().originalColumnName.equals(ColumnConstants.IMPLEMENTING_AGENCY)) {

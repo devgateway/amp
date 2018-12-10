@@ -12,7 +12,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
 @TranslatableClass (displayName = "Regional Observation")
-public class AmpRegionalObservation implements Serializable, Versionable, Cloneable, AuditableEntity {
+public class AmpRegionalObservation implements Serializable, Versionable, Cloneable {
 
     //IATI-check: to be ignored
 //  @Interchangeable(fieldTitle="ID")
@@ -176,11 +176,6 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
     public Object clone() throws CloneNotSupportedException {
         // TODO Auto-generated method stub
         return super.clone();
-    }
-
-    @Override
-    public AuditableEntity getParent() {
-        return activity;
     }
 
     public static class RegionalObservationComparator implements Comparator<AmpRegionalObservation>, Serializable {

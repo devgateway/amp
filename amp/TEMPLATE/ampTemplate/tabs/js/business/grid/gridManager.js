@@ -183,7 +183,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 							}
 							data.MD5 = generateMD5(data.filters, data.settings,  
 									{sidx: jQuery(grid).jqGrid('getGridParam','sortname'), sord: jQuery(grid).jqGrid('getGridParam','sortorder')}, 
-									id, app.TabsApp.generalSettings.get('language'), reportTimestamp);
+									data['include-location-children'], id, app.TabsApp.generalSettings.get('language'), reportTimestamp);
 							
 							return JSON.stringify(data);
 						},
@@ -648,7 +648,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 
 	return GridManager;
 	
-	function generateMD5(filters, settings, sorting, id, lang, timestamp) {
+	function generateMD5(filters, settings, sorting, includeLocationChildren, id, lang, timestamp) {
 		var model = {queryModel: {}};
 		if (filters !== null) {
 			model.queryModel.filters = filters;
@@ -659,6 +659,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		if (sorting !== null) {
 			model.queryModel.sorting = sorting;
 		}
+
+        if (includeLocationChildren !== null) {
+            model.queryModel['include-location-children'] = includeLocationChildren;
+        }
+
 		var md5 = CommonFilterUtils.calculateMD5FromParameters(model, id, lang, timestamp);
 		
 		return md5;

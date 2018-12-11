@@ -32,7 +32,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-
+import org.digijava.kernel.request.TLSUtils;
 public class ActivityVersionUtil {
 
     private static Logger logger = Logger.getLogger(ActivityVersionUtil.class);
@@ -70,13 +70,13 @@ public class ActivityVersionUtil {
         return ret;
     }
 
-    public static String generateFormattedOutput(HttpServletRequest request, Output out) throws WorkerException {
-        return generateFormattedOutput(request, out, null);
+    public static String generateFormattedOutput( Output out) throws WorkerException {
+        return generateFormattedOutput( out, null);
     }
 
-    public static String generateFormattedOutput(HttpServletRequest request, Output out, Output out1) throws WorkerException {
-        Site site = RequestUtils.getSite(request);
-        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+    public static String generateFormattedOutput( Output out, Output out1) throws WorkerException {
+        Site site = TLSUtils.getSite();
+        String langCode = TLSUtils.getEffectiveLangCode();
 
         StringBuilder ret = new StringBuilder();
         if (out.getOutputs() != null) {

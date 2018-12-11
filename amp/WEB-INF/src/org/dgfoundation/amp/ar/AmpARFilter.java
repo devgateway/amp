@@ -1243,7 +1243,7 @@ public class AmpARFilter extends PropertyListable {
         Set<Long> ids = ActivityFilter.getInstance().filter(this, reportEnvironment);
         generatedFilterQuery = String.format(
                 "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN (%s)",
-                Util.toCSString(ids));
+                Util.toCSStringForIN(ids));
     }
 
     @PropertyListableIgnore

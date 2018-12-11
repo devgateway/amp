@@ -170,14 +170,6 @@ public class UpdateTeamActivities extends Action {
                         //if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
                             activity.setApprovalStatus(ApprovalStatus.APPROVED_STATUS);
                         }
-                        activity.setActivityCreator(atm);
-                        
-                        if (activity.getActivityCreator() == null) {
-                            AmpTeamMember thisTeamMember    = TeamUtil.getAmpTeamMember(tm.getMemberId());
-                            if (thisTeamMember != null) {
-                                activity.setActivityCreator(thisTeamMember);
-                            }
-                        }
 
                         logger.info("updating " + activity.getName());
                         DbUtil.update(activity);

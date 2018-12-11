@@ -4,7 +4,7 @@ import org.digijava.module.aim.util.Identifiable;
 
 /**
  *
- * Change ids together with v_mondrian_activity_fixed_texts.xml, v_approval_status.xml, v_filtered_activity_status.xml.
+ * Change ids together with v_approval_status.xml, v_filtered_activity_status.xml.
  *
  * @author Octavian Ciubotaru
  */

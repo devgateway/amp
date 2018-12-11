@@ -197,7 +197,7 @@ public class ActivityImporter extends ObjectImporter {
                 
                 newActivity = oldActivity;
                 // REFACTOR: we may no longer need to use old activity
-                oldActivity = ActivityVersionUtil.cloneActivity(oldActivity, teamMember);
+                oldActivity = ActivityVersionUtil.cloneActivity(oldActivity);
                 oldActivity.setAmpId(newActivity.getAmpId());
                 oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
 
@@ -221,9 +221,11 @@ public class ActivityImporter extends ObjectImporter {
                 // save new activity
                 prepareToSave();
                 boolean updateApprovalStatus = !AmpOfflineModeHolder.isAmpOfflineMode();
+    
                 newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
-                        translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
-                        PersistenceManager.getSession(), SaveContext.api(updateApprovalStatus));
+                                translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
+                                PersistenceManager.getSession(), SaveContext.api(updateApprovalStatus));
+                
                 postProcess();
             } else {
                 // undo any pending changes

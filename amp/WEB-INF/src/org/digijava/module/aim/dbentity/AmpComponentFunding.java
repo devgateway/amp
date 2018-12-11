@@ -257,5 +257,5 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
+    
 }

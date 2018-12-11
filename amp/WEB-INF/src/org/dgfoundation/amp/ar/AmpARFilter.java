@@ -894,7 +894,7 @@ public class AmpARFilter extends PropertyListable {
             this.setNeedsTeamFilter(true);
             this.setAccessType("Management"); // should always be Management, as a report can be made public only from management workspace
 
-            //Check if the reportid is not nut for public mondrian reports
+            //Check if the reportid is not nut for public reports
             if (ampReport != null)
             {
                 if (ampReport != null && ampReport.getWorkspaceLinked() && ampReport.getOwnerId() != null)
@@ -1030,7 +1030,7 @@ public class AmpARFilter extends PropertyListable {
     private Long getAttachedAmpReportId(HttpServletRequest request)
     {
         String ampReportId = null ;
-        //Check if the reportid is not nut for public mondrian reports
+        //Check if the reportid is not nut for public reports
         if (request.getParameter("ampReportId") != null && request.getParameter("ampReportId").length() > 0)
             ampReportId = request.getParameter("ampReportId");
 

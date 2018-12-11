@@ -27,7 +27,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -55,7 +54,7 @@ import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
+import org.dgfoundation.amp.reports.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportExportType;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportHtmlRenderer;
@@ -503,8 +502,7 @@ public class Reports implements ErrorReportingEndpoint {
     @ApiOperation("Generate session report")
     public final SaikuPagedReportResult getSaikuReport(
             SaikuBasedQuery formParams,
-            @PathParam("report_token") String reportToken,
-            @DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
+            @PathParam("report_token") String reportToken) {
         //here we fetch the report by reportToken from session session
         formParams.setDinamic(true);
         return getSaikuReport(formParams, new Long(reportToken));
@@ -515,10 +513,13 @@ public class Reports implements ErrorReportingEndpoint {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({"application/vnd.ms-excel" })
     @ApiOperation("Generate XLS report")
-    public final Response exportXlsSaikuReport(@FormParam("query") SaikuBasedQuery query,
-            @PathParam("report_id") Long reportId,
-            @DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
-        return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XLSX, false);
+    public final Response exportXlsSaikuReport(
+            @ApiParam("Stringified body parameter as documented in POST /saikureport/{report_id}")
+            @DefaultValue("{\"queryModel\": {\"page\": 0,\"recordsPerPage\": 0}}")
+            @FormParam("query") SaikuBasedQuery query,
+            @DefaultValue("false") @FormParam("isPublic") Boolean isPublic,
+            @PathParam("report_id") Long reportId) {
+        return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XLSX, false, isPublic);
     }
 
     @POST
@@ -526,7 +527,10 @@ public class Reports implements ErrorReportingEndpoint {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({"application/vnd.ms-excel" })
     @ApiOperation("Generate XLS for a session report")
-    public final Response exportXlsSaikuReport(@FormParam("query") SaikuBasedQuery query,
+    public final Response exportXlsSaikuReport(
+            @ApiParam("Stringified body parameter as documented in POST /saikureport/{report_id}")
+            @DefaultValue("{\"queryModel\": {\"page\": 0,\"recordsPerPage\": 0}}")
+            @FormParam("query") SaikuBasedQuery query,
             @PathParam("report_token") Integer reportToken) {
         return exportInMemorySaikuReport(query,reportToken,AMPReportExportConstants.XLSX);
     }   
@@ -536,10 +540,12 @@ public class Reports implements ErrorReportingEndpoint {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({"text/csv"})
     @ApiOperation("Generate CSV report")
-    public final Response exportCsvSaikuReport(@FormParam("query") SaikuBasedQuery query,
-            @PathParam("report_id") Long reportId,
-            @DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
-        return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.CSV, false);
+    public final Response exportCsvSaikuReport(
+            @ApiParam("Stringified body parameter as documented in POST /saikureport/{report_id}")
+            @DefaultValue("{\"queryModel\": {\"page\": 0,\"recordsPerPage\": 0}}")
+            @FormParam("query") SaikuBasedQuery query,
+            @PathParam("report_id") Long reportId) {
+        return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.CSV, false, false);
     }
 
     @POST
@@ -547,9 +553,11 @@ public class Reports implements ErrorReportingEndpoint {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({"text/csv"})
     @ApiOperation("Generate CSV for a session report")
-    public final Response exportCsvSaikuReport(@FormParam("query") SaikuBasedQuery query,
-            @PathParam("report_token") Integer reportToken,
-            @DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
+    public final Response exportCsvSaikuReport(
+            @ApiParam("Stringified body parameter as documented in POST /saikureport/{report_id}")
+            @DefaultValue("{\"queryModel\": {\"page\": 0,\"recordsPerPage\": 0}}")
+            @FormParam("query") SaikuBasedQuery query,
+            @PathParam("report_token") Integer reportToken) {
         return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.CSV);
     }
     
@@ -559,10 +567,12 @@ public class Reports implements ErrorReportingEndpoint {
     @Produces({"application/xml"})
     @ApiOperation("Generate XML report")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "success", response = Report.class))
-    public final Response exportXmlSaikuReport(@FormParam("query") SaikuBasedQuery query,
-            @PathParam("report_id") Long reportId,
-            @DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
-        return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XML, false);
+    public final Response exportXmlSaikuReport(
+            @ApiParam("Stringified body parameter as documented in POST /saikureport/{report_id}")
+            @DefaultValue("{\"queryModel\": {\"page\": 0,\"recordsPerPage\": 0}}")
+            @FormParam("query") SaikuBasedQuery query,
+            @PathParam("report_id") Long reportId) {
+        return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XML, false, false);
     }
 
     @POST
@@ -571,9 +581,11 @@ public class Reports implements ErrorReportingEndpoint {
     @Produces({"application/xml"})
     @ApiOperation("Generate XML for a session report")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "success", response = Report.class))
-    public final Response exportXmlSaikuReport(@FormParam("query") SaikuBasedQuery query,
-            @PathParam("report_token") Integer reportToken,
-            @DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
+    public final Response exportXmlSaikuReport(
+            @ApiParam("Stringified body parameter as documented in POST /saikureport/{report_id}")
+            @DefaultValue("{\"queryModel\": {\"page\": 0,\"recordsPerPage\": 0}}")
+            @FormParam("query") SaikuBasedQuery query,
+            @PathParam("report_token") Integer reportToken) {
         return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.XML);
     }
 
@@ -582,10 +594,13 @@ public class Reports implements ErrorReportingEndpoint {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({"application/pdf"})
     @ApiOperation("Generate PDF report")
-    public final Response exportPdfSaikuReport(@FormParam("query") SaikuBasedQuery query,
-            @PathParam("report_id") Long reportId,
-            @DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
-        return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.PDF, false);
+    public final Response exportPdfSaikuReport(
+            @ApiParam("Stringified body parameter as documented in POST /saikureport/{report_id}")
+            @DefaultValue("{\"queryModel\": {\"page\": 0,\"recordsPerPage\": 0}}")
+            @FormParam("query") SaikuBasedQuery query,
+            @DefaultValue("false") @FormParam("isPublic") Boolean isPublic,
+            @PathParam("report_id") Long reportId) {
+        return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.PDF, false, isPublic);
     }
 
     @POST
@@ -593,36 +608,18 @@ public class Reports implements ErrorReportingEndpoint {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({"application/pdf"})
     @ApiOperation("Generate PDF for a session report")
-    public final Response exportPdfSaikuReport(@FormParam("query") SaikuBasedQuery query,
+    public final Response exportPdfSaikuReport(
+            @ApiParam("Stringified body parameter as documented in POST /saikureport/{report_id}")
+            @DefaultValue("{\"queryModel\": {\"page\": 0,\"recordsPerPage\": 0}}")
+            @FormParam("query") SaikuBasedQuery query,
             @PathParam("report_token") Integer reportToken) {
         return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.PDF);
     }
     
-    @POST
-    @Path("/saikupublicreport/export/pdf/{report_id}")
-    @Produces({"application/pdf"})
-    @ApiOperation("Generate PDF report")
-    public final Response exportPdfSaikuReport(@PathParam("report_id") Long reportId) {
-        return exportSaikuPublicReport(DbUtil.getAmpReport(reportId), AMPReportExportConstants.PDF);
-    }
-    
-    @POST
-    @Path("/saikupublicreport/export/xls/{report_id}")
-    @Produces({"application/vnd.ms-excel"})
-    @ApiOperation("Generate XLS report")
-    public final Response exportExcelSaikuReport(@PathParam("report_id") Long reportId) {
-        return exportSaikuPublicReport(DbUtil.getAmpReport(reportId), AMPReportExportConstants.XLSX);
-    }
-
     private Response exportInMemorySaikuReport(SaikuBasedQuery query, Integer reportToken, String reportType) {
         AmpReports ampReport=ReportsUtil.getAmpReportFromSession(reportToken);
         ampReport.setAmpReportId(reportToken.longValue());
-        return exportSaikuReport(query, ReportsUtil.getAmpReportFromSession(reportToken), reportType,true);
-    }
-
-    public final Response exportSaikuReport(SaikuBasedQuery query, AmpReports ampReport, String type,
-            Boolean isDinamic) {
-        return exportSaikuReport(query, type, ampReport, isDinamic);
+        return exportSaikuReport(query, ReportsUtil.getAmpReportFromSession(reportToken), reportType, true, false);
     }
 
     private GeneratedReport getDualCurrencyReport(SaikuBasedQuery queryObject, long reportId, String ampCurrencyCode) {
@@ -649,38 +646,32 @@ public class Reports implements ErrorReportingEndpoint {
         return newQueryObject;
     }
 
-    private Response exportSaikuReport(SaikuBasedQuery queryObject, String type, AmpReports ampReport,
-            Boolean isDinamic) {
-        logger.info("Starting export to " + type);
-        QueryModel queryModel = queryObject.getQueryModel();
+    private Response exportSaikuReport(SaikuBasedQuery queryObject, AmpReports ampReport, String type,
+                                       Boolean isDinamic, Boolean isPublic) {
         
-        queryModel.setPage(0);
-        queryModel.setRecordsPerPage(-1);
-        if (isDinamic) {
-            queryObject.setDinamic(true);
+        logger.info("Starting export to " + type);
+    
+        GeneratedReport generatedReport = null;
+        if (isPublic) {
+            queryObject = new SaikuBasedQuery();
+            generatedReport = EndpointUtils.runReport(AmpReportsToReportSpecification.convert(ampReport));
+        } else {
+            QueryModel queryModel = queryObject.getQueryModel();
+    
+            queryModel.setPage(0);
+            queryModel.setRecordsPerPage(-1);
+            if (isDinamic) {
+                queryObject.setDinamic(true);
+            }
+    
+            generatedReport = ReportsUtil.getGeneratedReport(ampReport.getAmpReportId(),
+                    ReportsUtil.convertSaikuParamsToReports(queryObject));
         }
 
-        logger.info("Generate specific export...");
-        GeneratedReport generatedReport = ReportsUtil.getGeneratedReport(ampReport.getAmpReportId(),
-                ReportsUtil.convertSaikuParamsToReports(queryObject));
         
         return getExportAsResponse(ampReport, type, generatedReport, queryObject);
     }
     
-    /** Method used for exporting a public NiReport. 
-     * @param ampReport
-     * @param type
-     * @return Response containing the report data
-     */
-    private Response exportSaikuPublicReport(AmpReports ampReport, String type) {
-        logger.info("Export specific public export...");
-        
-        GeneratedReport report = EndpointUtils.runReport(AmpReportsToReportSpecification.convert(ampReport));
-        
-        //TODO: refactoring should be made before 2.12 official release by merging with exportSaikuReport
-        return getExportAsResponse(ampReport, type, report, new SaikuBasedQuery());
-    }
-
     public Response getExportAsResponse(AmpReports ampReport, String type, GeneratedReport report,
             SaikuBasedQuery queryObject) {
         String fileName = getExportFileName(ampReport, type);
@@ -689,8 +680,10 @@ public class Reports implements ErrorReportingEndpoint {
             
             if (doc != null) {
                 logger.info("Send export data to browser...");
+    
+                MediaType mediaType = EndpointUtils.getMediaType(type);
 
-                return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
+                return Response.ok(doc, mediaType)
                         .header("content-disposition", "attachment; filename = " + fileName)
                         .header("content-length", doc.length).build();
             } else {
@@ -896,7 +889,8 @@ public class Reports implements ErrorReportingEndpoint {
     @ApiOperation("Save report configuration for current session")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "configuration id"))
     public String exportToMap(
-            @ApiParam("report configuration") JsonBean config, @PathParam("report_id") Long reportId) {
+            @ApiParam("report configuration") ReportConfig config,
+            @PathParam("report_id") Long reportId) {
         return ReportsUtil.exportToMap(config, reportId);
     }
     

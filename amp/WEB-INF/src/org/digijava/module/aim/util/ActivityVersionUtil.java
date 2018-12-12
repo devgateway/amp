@@ -1,6 +1,7 @@
 package org.digijava.module.aim.util;
 
 import java.lang.reflect.Field;
+import org.digijava.kernel.request.TLSUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -11,7 +12,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
+//import org.digijava.kernel.request.TLSUtils;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -70,14 +71,20 @@ public class ActivityVersionUtil {
         return ret;
     }
 
-    public static String generateFormattedOutput(HttpServletRequest request, Output out) throws WorkerException {
-        return generateFormattedOutput(request, out, null);
+    //public static String generateFormattedOutput(HttpServletRequest request, Output out) throws WorkerException {
+      //  return generateFormattedOutput(request, out, null);
+   // }
+    public static String generateFormattedOutput( Output out) throws WorkerException {
+        return generateFormattedOutput( out, null);
     }
 
-    public static String generateFormattedOutput(HttpServletRequest request, Output out, Output out1) throws WorkerException {
-        Site site = RequestUtils.getSite(request);
-        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 
+   /* public static String generateFormattedOutput(HttpServletRequest request, Output out, Output out1) throws WorkerException {
+        Site site = RequestUtils.getSite(request);
+        String langCode = RequestUtils.getNavigationLanguage(request).getCode();*/
+    public static String generateFormattedOutput( Output out, Output out1) throws WorkerException {
+        Site site = TLSUtils.getSite();
+        String langCode = TLSUtils.getEffectiveLangCode();
         StringBuilder ret = new StringBuilder();
         if (out.getOutputs() != null) {
             // First level.

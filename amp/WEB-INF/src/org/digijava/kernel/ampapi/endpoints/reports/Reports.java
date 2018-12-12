@@ -27,7 +27,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -889,7 +888,8 @@ public class Reports implements ErrorReportingEndpoint {
     @ApiOperation("Save report configuration for current session")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "configuration id"))
     public String exportToMap(
-            @ApiParam("report configuration") JsonBean config, @PathParam("report_id") Long reportId) {
+            @ApiParam("report configuration") ReportConfig config,
+            @PathParam("report_id") Long reportId) {
         return ReportsUtil.exportToMap(config, reportId);
     }
     

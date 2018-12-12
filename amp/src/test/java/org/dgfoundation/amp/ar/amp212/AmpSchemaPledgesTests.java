@@ -6,8 +6,8 @@ import java.util.List;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -286,7 +286,7 @@ public class AmpSchemaPledgesTests extends ReportingTestCase {
     
     @Test
     public void testActualPledgeDetailDatesAndContacts() {
-        NiReportModel cor = new NiReportModel("AMP-21336-pledge-details-contacts-in-mondrian")
+        NiReportModel cor = new NiReportModel("AMP-21336-pledge-details-contacts")
                 .withHeaders(Arrays.asList(
                         "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 16))",
                         "(Pledges Titles: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Pledges Detail Date Range: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Pledges Detail End Date: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Pledges Detail Start Date: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1));(Pledge Contact 1 - Address: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 4, colSpan: 1));(Pledge Contact 1 - Alternate Contact: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 5, colSpan: 1));(Pledge Contact 1 - Email: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 6, colSpan: 1));(Pledge Contact 1 - Ministry: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 7, colSpan: 1));(Pledge Contact 1 - Name: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 8, colSpan: 1));(Pledge Contact 1 - Telephone: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 9, colSpan: 1));(Pledge Contact 1 - Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 10, colSpan: 1));(Pledge Contact 2 - Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 11, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 12, colSpan: 3));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 15, colSpan: 1))",
@@ -301,7 +301,7 @@ public class AmpSchemaPledgesTests extends ReportingTestCase {
                         new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Pledges Detail Date Range", "2012-03-02 - 2015-03-03", "Pledges Detail End Date", "2015-03-03", "Pledges Detail Start Date", "2012-03-02", "Pledge Contact 1 - Address", "", "Pledge Contact 1 - Alternate Contact", "", "Pledge Contact 1 - Email", "", "Pledge Contact 1 - Ministry", "", "Pledge Contact 1 - Name", "", "Pledge Contact 1 - Telephone", "", "Pledge Contact 1 - Title", "", "Pledge Contact 2 - Title", "", "Funding-2012-Actual Pledge", "1 041 110,52", "Totals-Actual Pledge", "1 041 110,52"),
                         new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Pledges Detail Date Range", "2013-02-01 - 2014-04-29, 2014-04-08 - 2015-02-11", "Pledges Detail End Date", "2014-04-29, 2015-02-11", "Pledges Detail Start Date", "2013-02-01, 2014-04-08", "Pledge Contact 1 - Address", "", "Pledge Contact 1 - Alternate Contact", "", "Pledge Contact 1 - Email", "", "Pledge Contact 1 - Ministry", "", "Pledge Contact 1 - Name", "", "Pledge Contact 1 - Telephone", "", "Pledge Contact 1 - Title", "", "Pledge Contact 2 - Title", "", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2014-Actual Pledge", "8 200 000", "Totals-Actual Pledge", "10 000 000")      ));
         
-        runNiTestCase(spec("AMP-21336-pledge-details-contacts-in-mondrian"), "en", acts, cor);
+        runNiTestCase(spec("AMP-21336-pledge-details-contacts"), "en", acts, cor);
     }
     
     @Test

@@ -34,7 +34,6 @@ import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
-import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
@@ -548,10 +547,8 @@ public class CompareActivityVersions extends DispatchAction {
     
         TeamMember currentTeamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
         AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(currentTeamMember.getMemberId());
-    
-        AuditActivityInfo.doInTeamMemberContext(member, () -> {
-            saveActivity(member, vForm, auxData, request);
-        });
+        
+        saveActivity(member, vForm, auxData, request);
         
         return mapping.findForward("index");
     }

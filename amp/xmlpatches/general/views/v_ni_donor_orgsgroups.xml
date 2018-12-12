@@ -24,15 +24,33 @@
 		   -->
 			<lang delimiter=";" type="postgres"><![CDATA[
 				CREATE OR REPLACE VIEW v_ni_donor_orgsgroups AS
-				  SELECT d.amp_activity_id, orgs.org_grp_name AS org_grp_name, orgs.org_grp_id AS org_grp_id,
-					d.terms_assist_id,
-					d.financing_instrument_id,
-					d.donor_org_id,
-					d.mode_of_payment_id,
-					d.funding_status_id,
-					d.agreement_id,
-					d.funding_id
-				  FROM v_ni_donor_orgs d JOIN ni_all_orgs_dimension orgs ON orgs.org_id = d.org_id;
+					SELECT
+						aav.amp_activity_id,
+						v.org_grp_name,
+						COALESCE(v.org_grp_id, -999999999) AS org_grp_id,
+						v.terms_assist_id,
+						v.financing_instrument_id,
+						COALESCE(v.donor_org_id, -999999999) AS donor_org_id,
+						v.mode_of_payment_id,
+						v.funding_status_id,
+						v.agreement_id,
+						v.funding_id
+					FROM amp_activity_version aav
+					LEFT JOIN (
+						SELECT
+							d.amp_activity_id,
+							orgs.org_grp_name AS org_grp_name,
+							orgs.org_grp_id AS org_grp_id,
+							d.terms_assist_id,
+							d.financing_instrument_id,
+							d.donor_org_id,
+							d.mode_of_payment_id,
+							d.funding_status_id,
+							d.agreement_id,
+							d.funding_id
+						FROM v_ni_donor_orgs d JOIN ni_all_orgs_dimension orgs ON orgs.org_id = d.org_id
+					) v
+					ON aav.amp_activity_id = v.amp_activity_id;
 			]]></lang>
 		</script>
 	</apply>

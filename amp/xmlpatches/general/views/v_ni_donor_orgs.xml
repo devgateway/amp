@@ -24,23 +24,41 @@
 		   -->
 			<lang delimiter=";" type="postgres"><![CDATA[
 				CREATE OR REPLACE VIEW v_ni_donor_orgs AS
-				  SELECT r.activity as amp_activity_id, org.name AS org_name, r.organisation as org_id,
-					f.type_of_assistance_category_va as terms_assist_id,
-					f.financing_instr_category_value as financing_instrument_id,
-					r.organisation as donor_org_id,
-					f.mode_of_payment_category_va as mode_of_payment_id,
-					f.funding_status_category_va as funding_status_id,
-					f.agreement as agreement_id,
-					f.amp_funding_id as funding_id
-				  FROM amp_org_role r
-					JOIN amp_organisation org ON org.amp_org_id = r.organisation
-					LEFT JOIN amp_funding f ON f.amp_activity_id = r.activity and f.amp_donor_org_id = r.organisation and f.source_role_id=r.role
-				  WHERE
-					(r.role = (SELECT amp_role.amp_role_id FROM amp_role WHERE amp_role.role_code = 'DN'))
-					OR
-					(f.amp_funding_id IN (
-					  SELECT DISTINCT(amp_funding_id) FROM amp_funding_detail det	WHERE det.adjustment_type IN (SELECT id from amp_category_value
-					  WHERE amp_category_class_id=(SELECT id FROM amp_category_class WHERE keyname='SSC_adjustment_type'))));
+				 	SELECT
+                        aav.amp_activity_id,
+                        v.org_name,
+                        COALESCE(v.org_id, -999999999) AS org_id,
+                        v.terms_assist_id,
+                        v.financing_instrument_id,
+                        COALESCE(v.donor_org_id, -999999999) AS donor_org_id,
+                        v.mode_of_payment_id,
+                        v.funding_status_id,
+                        v.agreement_id,
+                        v.funding_id
+				  	FROM amp_activity_version aav
+					LEFT JOIN (
+						SELECT r.activity as amp_activity_id, org.name AS org_name, r.organisation as org_id,
+							f.type_of_assistance_category_va as terms_assist_id,
+							f.financing_instr_category_value as financing_instrument_id,
+							r.organisation as donor_org_id,
+							f.mode_of_payment_category_va as mode_of_payment_id,
+							f.funding_status_category_va as funding_status_id,
+							f.agreement as agreement_id,
+							f.amp_funding_id as funding_id
+						FROM amp_org_role r
+						JOIN amp_organisation org ON org.amp_org_id = r.organisation
+						LEFT JOIN amp_funding f ON f.amp_activity_id = r.activity and f.amp_donor_org_id = r.organisation and f.source_role_id=r.role
+							WHERE
+								(r.role = (SELECT amp_role.amp_role_id FROM amp_role WHERE amp_role.role_code = 'DN'))
+							OR
+								(f.amp_funding_id IN (
+								  SELECT DISTINCT(amp_funding_id)
+								  FROM amp_funding_detail det
+								  WHERE det.adjustment_type
+								  	IN (SELECT id FROM amp_category_value
+								 		WHERE amp_category_class_id=(SELECT id FROM amp_category_class WHERE keyname='SSC_adjustment_type'))))
+					) v
+					ON aav.amp_activity_id = v.amp_activity_id;
 			]]></lang>
 		</script>
 	</apply>

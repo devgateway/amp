@@ -1,0 +1,6 @@
+<!DOCTYPE html>
+<html>
+<body>
+<p> This is compare activity version code</p>
+</body>
+</html>

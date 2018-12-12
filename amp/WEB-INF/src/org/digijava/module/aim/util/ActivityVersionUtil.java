@@ -20,6 +20,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -70,14 +71,25 @@ public class ActivityVersionUtil {
         return ret;
     }
 
-    public static String generateFormattedOutput(HttpServletRequest request, Output out) throws WorkerException {
+   /* public static String generateFormattedOutput(HttpServletRequest request, Output out) throws WorkerException {
         return generateFormattedOutput(request, out, null);
-    }
+    }*/
+    
+  
+    public  static String generateFormattedOutput(Output out) throws WorkerException{
+		// TODO Auto-generated method stub
+		return generateFormattedOutput( out, null);
+	}
 
-    public static String generateFormattedOutput(HttpServletRequest request, Output out, Output out1) throws WorkerException {
-        Site site = RequestUtils.getSite(request);
-        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+	public static String generateFormattedOutput( Output out, Output out1) throws WorkerException {
+     /*   Site site = RequestUtils.getSite(request);
+        String langCode = RequestUtils.getNavigationLanguage(request).getCode();*/
 
+        
+            Site site = TLSUtils.getSite();
+            String langCode = TLSUtils.getEffectiveLangCode();
+        
+        
         StringBuilder ret = new StringBuilder();
         if (out.getOutputs() != null) {
             // First level.
@@ -214,6 +226,31 @@ public class ActivityVersionUtil {
             throw new CannotGetLastVersionForVersionException(e);
         }
     }
+    
+    
+    //yo
+    public static Long getPervValue(Long Activity) throws CannotGetLastVersionForVersionException {
+        try {
+            Session session = PersistenceManager.getSession();
+            String queryStr = "SELECT v.ampActivity.ampActivityId  FROM " +AmpActivityVersion.class.getName() +
+                    " v  WHERE v.ampActivityId=:Activity";
+            Query query     = session.createQuery(queryStr);
+            query.setLong("oldActivityId", Activity);
+            Long id     = (Long)query.uniqueResult();
+            return id;
+        } catch (Exception e) {
+            logger.error(e.getMessage() );
+            e.printStackTrace();
+            throw new CannotGetLastVersionForVersionException(e);
+        }
+    }
+
+    
+    
+    
+    
+    
+    
 
     /**
      * Create a copy of the {@link AmpActivityVersion} with all Collections linked with

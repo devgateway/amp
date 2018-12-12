@@ -1,5 +1,4 @@
 package org.digijava.module.aim.action;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -12,10 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionErrors;
@@ -52,6 +49,7 @@ import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.digijava.module.aim.annotations.activityversioning.ActivityVersioningService;
 import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -61,19 +59,28 @@ public class CompareActivityVersions extends DispatchAction {
 
     private static Logger logger = Logger.getLogger(EditActivity.class);
     
+    ActivityVersioningService avs = new ActivityVersioningService();
+    
     public ActionForward unspecified(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws java.lang.Exception {
+    	
         return compare(mapping, form, request, response);
+        
     }
     
     public ActionForward compare(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
         CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
+        	
         Session session = PersistenceManager.getRequestDBSession();
         
-        setAdvancemode(vForm, request);
+   
+        
+        setAdvancemode(vForm, request);// to check the user is part of management workspace
+     
+          
         
         if (request.getParameter("action") != null && request.getParameter("action").equals("setVersion")
                 && request.getParameter("activityCurrentVersion") != null) {
@@ -101,7 +108,7 @@ public class CompareActivityVersions extends DispatchAction {
 
         vForm.setOutputCollection(new ArrayList<CompareOutput>());
         // Load the activities.
-        vForm.setActivityOne((AmpActivityVersion) session.load(AmpActivityVersion.class, vForm.getActivityOneId()));
+       /* vForm.setActivityOne((AmpActivityVersion) session.load(AmpActivityVersion.class, vForm.getActivityOneId()));
         Hibernate.initialize(vForm.getActivityOne());
         ActivityVersionUtil.initializeActivity(vForm.getActivityOne());
         vForm.setActivityTwo((AmpActivityVersion) session.load(AmpActivityVersion.class, vForm.getActivityTwoId()));
@@ -110,11 +117,17 @@ public class CompareActivityVersions extends DispatchAction {
 
         vForm.setOldActivity(vForm.getActivityOne());
         
-        
+      
+       
         ActivityHistory auditHistory1 = getAuditHistory(vForm.getActivityOne());
         ActivityHistory auditHistory2 = getAuditHistory(vForm.getActivityTwo());
         
+     
+        
+     
+       
         // Retrieve annotated for versioning fields.
+     
         Field[] fields = AmpActivityFields.class.getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
             //logger.info(fields[i]);
@@ -129,6 +142,7 @@ public class CompareActivityVersions extends DispatchAction {
                 Object auxResult2 = auxMethod.invoke(vForm.getActivityTwo(), null);
                 
                 // Obtain annotation object.
+
                 VersionableFieldSimple auxAnnotation = (VersionableFieldSimple) fields[i]
                         .getAnnotation(VersionableFieldSimple.class);
 
@@ -449,6 +463,12 @@ public class CompareActivityVersions extends DispatchAction {
         modifyFundingOutputs (outputGroupped);
         vForm.setOutputCollectionGrouped(outputGroupped);
     
+    */    
+//        vForm.setOutputCollectionGrouped(ActivityVersioningService.compareActivities(vForm.getActivityOneId(),
+//                vForm.getActivityTwoId()));
+        
+        vForm.setOutputCollectionGrouped(ActivityVersioningService.compareActivities(vForm.getActivityOneId()
+                ));
         return mapping.findForward("forward");
     }
 
@@ -457,7 +477,7 @@ public class CompareActivityVersions extends DispatchAction {
 
     }
 
-    private Map<String, List<CompareOutput>> groupOutputCollection (List<CompareOutput> outputCollection) {
+    /*private Map<String, List<CompareOutput>> groupOutputCollection (List<CompareOutput> outputCollection) {
         Map<String, List<CompareOutput>> retVal = new HashMap<String, List<CompareOutput>>();
         int idx = 0;
         for (CompareOutput obj: outputCollection) {
@@ -476,7 +496,7 @@ public class CompareActivityVersions extends DispatchAction {
 
         return retVal;
     }
-
+*/
     public ActionForward enableMerge(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
@@ -713,7 +733,7 @@ public class CompareActivityVersions extends DispatchAction {
         vForm.setAdvancemode(!ispartofamanagetmentworkspace & iscurrentworkspacemanager);
     }
     
-    private String getStringOrEmpty(Object o) {
+   /* private String getStringOrEmpty(Object o) {
         if (o != null) {
             if (o instanceof Date || o instanceof java.sql.Date) {
                 return FormatHelper.formatDate((Date) o);
@@ -724,8 +744,8 @@ public class CompareActivityVersions extends DispatchAction {
         
         return "";
     }
-    
-    private ActivityHistory getAuditHistory(AmpActivityVersion activity) {
+    */
+    /*private ActivityHistory getAuditHistory(AmpActivityVersion activity) {
         ActivityHistory auditHistory = null;
         
         if (activity.getModifiedBy() == null || (activity.getUpdatedDate() == null && activity.getModifiedDate() == null)) {
@@ -733,5 +753,6 @@ public class CompareActivityVersions extends DispatchAction {
         }
         
         return auditHistory;
-    }
+    }*/
+
 }

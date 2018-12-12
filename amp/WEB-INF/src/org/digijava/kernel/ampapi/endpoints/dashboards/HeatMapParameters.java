@@ -14,7 +14,7 @@ public class HeatMapParameters extends SettingsAndFiltersParameters {
     @ApiModelProperty(value = "must be OrigName", example = "Primary Sector")
     private String columnXAxis;
 
-    @JsonProperty(DashboardConstants.X_COUNT)
+    @JsonProperty("xCount")
     @ApiModelProperty(
             value = "Default 25, set -1 to no limit. +1 (\"Others\") will be added if more than that available.",
             example = "25")
@@ -24,7 +24,7 @@ public class HeatMapParameters extends SettingsAndFiltersParameters {
     @ApiModelProperty(value = "must be OrigName", example = "Donor Group")
     private String columnYAxis;
 
-    @JsonProperty(DashboardConstants.Y_COUNT)
+    @JsonProperty("yCount")
     @ApiModelProperty(
             value = "Default 10, set -1 to no limit. +1 (\"Others\") will be added if more than that available.",
             example = "10")

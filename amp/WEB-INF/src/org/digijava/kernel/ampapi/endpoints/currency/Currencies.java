@@ -21,6 +21,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,7 +52,8 @@ public class Currencies implements ErrorReportingEndpoint {
                     + "```")
     public Map<String, String> getStandardCurrencies() {
         return CurrencyUtil.getActiveAmpCurrencyByCode().stream()
-                .collect(Collectors.toMap(AmpCurrency::getCurrencyCode, AmpCurrency::getCurrencyName));
+                .collect(Collectors.toMap(AmpCurrency::getCurrencyCode, AmpCurrency::getCurrencyName,
+                        (k, v) -> k, LinkedHashMap::new));
     }
     
     @GET

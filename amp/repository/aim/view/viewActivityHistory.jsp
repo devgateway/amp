@@ -78,7 +78,7 @@
 			<input type="hidden" name="activityId" id="activityId"
 				   value="${aimViewActivityHistoryForm.activityId}" />
 			<logic:notEmpty name="currentMember" scope="session">
-				<input type="button" id="SubmitButton" value="<digi:trn>Compare versions</digi:trn>" onclick="submitCompare()"/>
+				<input type="button" id="SubmitButton" value="<digi:trn>Compare With Previous Version</digi:trn>" onclick="submitCompare()"/>
 			</logic:notEmpty>
 		</digi:form>
 		</div>

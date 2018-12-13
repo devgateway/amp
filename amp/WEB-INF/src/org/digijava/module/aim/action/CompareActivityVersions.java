@@ -100,6 +100,14 @@ public class CompareActivityVersions extends DispatchAction {
         }
 
         vForm.setOutputCollection(new ArrayList<CompareOutput>());
+        
+       // Long activityId = Long.parseLong(request.getParameter("activityCurrentVersion"));
+        // Use this one id and get activity and bla... bla...
+//        AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, vForm.getActivityOneId());//Edited
+//        AmpActivityGroup group = activity.getAmpActivityGroup();
+//        
+//        AmpActivityVersion prevVer = group.getAmpActivityLastVersion();
+        
         // Load the activities.
 //        vForm.setActivityOne((AmpActivityVersion) session.load(AmpActivityVersion.class, vForm.getActivityOneId()));
 //        Hibernate.initialize(vForm.getActivityOne());
@@ -448,8 +456,7 @@ public class CompareActivityVersions extends DispatchAction {
 //        Map<String, List<CompareOutput>> outputGroupped = groupOutputCollection (vForm.getOutputCollection());
 //        modifyFundingOutputs (outputGroupped);
 //        vForm.setOutputCollectionGrouped(outputGroupped);
-        vForm.setOutputCollectionGrouped(CVRService.compareActivities(vForm.getActivityOneId(),
-                vForm.getActivityTwoId()));
+        vForm.setOutputCollectionGrouped(CVRService.compareActivities(vForm.getActivityOneId()));
         return mapping.findForward("forward");
     }
 

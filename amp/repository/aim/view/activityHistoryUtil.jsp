@@ -108,9 +108,9 @@
 		for(var i = 0; i < checkboxes.length; i++) {
 			if(checkboxes[i].checked) selectedVersions.push(checkboxes[i]);
 		}
-		if(selectedVersions.length = 2){
+		if(selectedVersions.length = 1){
 			document.getElementById("activityOneId").value = selectedVersions[0].value;
-			document.getElementById("activityTwoId").value = selectedVersions[1].value;
+			//document.getElementById("activityTwoId").value = selectedVersions[1].value;
 			document.getElementById('showMergeColumn').value = "false";
 			document.getElementById("ampActivityId").value = <%=request.getParameter("ampActivityId")%>;
 			document.aimCompareActivityVersionsForm.submit();
@@ -128,7 +128,7 @@
 		for(var i = 0; i < checkboxes.length; i++) {
 			if(checkboxes[i].checked) counter++;
 		}
-		if (counter != 2)
+		if (counter != 1)
 		{
 		    if (document.getElementById("SubmitButton")) {
 				document.getElementById("SubmitButton").disabled = true;

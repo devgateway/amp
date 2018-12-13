@@ -24,6 +24,10 @@ public class SyncRequest {
     @ApiModelProperty(value = "time of the last sync", example = "2016-06-01T01:00:00.999+0000")
     @JsonProperty("last-sync-time")
     private Date lastSyncTime;
+    
+    @ApiModelProperty(value = "possible values fields currently known to the client")
+    @JsonProperty(value = "activity-possible-values-fields")
+    private List<String> activityPossibleValuesFields;
 
     public List<Long> getUserIds() {
         return userIds;
@@ -47,5 +51,13 @@ public class SyncRequest {
 
     public void setLastSyncTime(Date lastSyncTime) {
         this.lastSyncTime = lastSyncTime;
+    }
+    
+    public List<String> getActivityPossibleValuesFields() {
+        return activityPossibleValuesFields;
+    }
+    
+    public void setActivityPossibleValuesFields(List<String> activityPossibleValuesFields) {
+        this.activityPossibleValuesFields = activityPossibleValuesFields;
     }
 }

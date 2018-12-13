@@ -157,7 +157,6 @@ public class ActivityUtil {
      * @param locale
      * @param rootRealPath
      * @param draft
-     * @param rejected
      */
     public static AmpActivityVersion saveActivity(AmpActivityVersion oldA, Collection<AmpContentTranslation> values, AmpTeamMember ampCurrentMember, Site site, Locale locale, String rootRealPath, boolean draft, SaveContext saveContext) {
         Session session;
@@ -168,7 +167,7 @@ public class ActivityUtil {
         }
 
         boolean newActivity = oldA.getAmpActivityId() == null;
-        AmpActivityVersion a=null;
+        AmpActivityVersion a = null;
         try {
             a = saveActivityNewVersion(oldA, values, ampCurrentMember, draft, session, saveContext);
         } catch (Exception exception) {
@@ -180,11 +179,12 @@ public class ActivityUtil {
             new ActivityValidationWorkflowTrigger(a);
         }
         
-        LuceneUtil.addUpdateActivity(rootRealPath, !newActivity, site, locale, a, oldA, new ArrayList<>(values));
+        List<AmpContentTranslation> translations = values == null ? new ArrayList<>() : new ArrayList<>(values);
+        LuceneUtil.addUpdateActivity(rootRealPath, !newActivity, site, locale, a, oldA, translations);
         
         return a;
     }
-
+    
     /**
      * saves a new version of an activity
      * returns newActivity
@@ -198,8 +198,6 @@ public class ActivityUtil {
         boolean newActivity = false;
 
         if (a.getAmpActivityId() == null){
-            a.setActivityCreator(ampCurrentMember);
-            a.setActivityCreator(ampCurrentMember);
             a.setTeam(ampCurrentMember.getAmpTeam());
             newActivity = true;
         }
@@ -229,7 +227,7 @@ public class ActivityUtil {
             try {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 
-                a = ActivityVersionUtil.cloneActivity(a, ampCurrentMember);
+                a = ActivityVersionUtil.cloneActivity(a);
                 //keeping session.clear() only for acitivity form as it was before
                 if (isActivityForm)
                     session.clear();
@@ -279,9 +277,6 @@ public class ActivityUtil {
         Date updatedDate = Calendar.getInstance().getTime();
         if (a.getCreatedDate() == null)
             a.setCreatedDate(updatedDate);
-        a.setUpdatedDate(updatedDate);
-        a.setModifiedDate(updatedDate);
-        a.setModifiedBy(ampCurrentMember);
 
         if (context.isUpdateActivityStatus()) {
             setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
@@ -298,13 +293,14 @@ public class ActivityUtil {
         }
 
         saveAgreements(a, session, isActivityForm);
-        saveContacts(a, session, (draft != draftChange));
+        saveContacts(a, session, (draft != draftChange), ampCurrentMember);
 
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
         saveStructures(a, session);
         updateFiscalYears(a);
+        updateModifyCreateInfo(a, ampCurrentMember);
 
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
@@ -325,6 +321,34 @@ public class ActivityUtil {
         logAudit(ampCurrentMember, a, newActivity);
 
         return a;
+    }
+    
+    /**
+     * To be used every time when the activity is saved/updated
+     *
+     * @param activity
+     * @param teamMember
+     */
+    public static void updateModifyCreateInfo(AmpActivityVersion activity, AmpTeamMember teamMember) {
+        Date updateDate = Calendar.getInstance().getTime();
+    
+        activity.setUpdatedDate(updateDate);
+        activity.setModifiedDate(updateDate);
+    
+        AmpTeamMember modifier = teamMember;
+        if (modifier == null) {
+            modifier = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+        }
+    
+        if (modifier == null) {
+            throw new RuntimeException("Modified team member cannot be null");
+        }
+    
+        activity.setModifiedBy(modifier);
+    
+        if (activity.getAmpActivityId() == null || activity.getActivityCreator() == null) {
+            activity.setActivityCreator(modifier);
+        }
     }
 
     private static void logAudit(AmpTeamMember teamMember, AmpActivityVersion activity, boolean newActivity) {
@@ -871,9 +895,8 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
 
                 tdd.setWebLink(temp.getWebLink());
 
-                ActionMessages messages = new ActionMessages();
                 try {
-                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
+                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest());
 
                     AmpActivityDocument aad = new AmpActivityDocument();
                     aad.setAmpActivity(a);
@@ -1118,9 +1141,8 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
 
                 tdd.setWebLink(temp.getWebLink());
 
-                ActionMessages messages = new ActionMessages();
                 try {
-                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
+                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest());
 
                     AmpGPINiSurveyResponseDocument responseDocument = new AmpGPINiSurveyResponseDocument();
 
@@ -1201,7 +1223,8 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         }
     }
 
-    public static void saveContacts(AmpActivityVersion a, Session session,boolean checkForContactsRemoval) throws Exception {
+    public static void saveContacts(AmpActivityVersion a, Session session, boolean checkForContactsRemoval,
+                                    AmpTeamMember teamMember) throws Exception {
         Set<AmpActivityContact> activityContacts=a.getActivityContacts();
         // if activity contains contact,which is not in contact list, we should remove it
         Long oldActivityId = a.getAmpActivityId();
@@ -1235,10 +1258,11 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         //to avoid saving the same contact twice on the same session, we keep track of the 
         //already saved ones.
         Map <Long,Boolean> savedContacts = new HashMap <Long,Boolean> ();
-        
-        TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
-        AmpTeamMember creator = teamMember != null ? TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId()) : null;
-      
+        AmpTeamMember creator = teamMember;
+        if (creator == null) {
+            creator = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+        }
+    
         //add or edit activity contact and amp contact
         if (activityContacts != null && activityContacts.size() > 0) {
             for (AmpActivityContact activityContact : activityContacts) {
@@ -1251,9 +1275,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                 // save the contact first, if the contact is new or if it is not
                 // new but has not been saved already.
                 if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
-                    if (contactId == null) {
-                        activityContact.getContact().setCreator(creator);
-                    }
+                    activityContact.getContact().setCreator(creator);
                     session.saveOrUpdate(activityContact.getContact());
                     savedContacts.put(activityContact.getContact().getId(), true);
                 }
@@ -1280,10 +1302,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
     private static void saveStructures(AmpActivityVersion a, Session session) throws Exception {
         if (a.getAmpActivityId() != null) {
             for (AmpStructure structure : a.getStructures()) {
-                if (structure.getActivities() == null) {
-                    structure.setActivities(new HashSet<AmpActivityVersion>());
-                    structure.getActivities().add(a);
-                }
+                structure.setActivity(a);
                 session.saveOrUpdate(structure);
             }
         }

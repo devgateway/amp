@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
@@ -51,7 +51,8 @@ public class ResourceImporter extends ObjectImporter {
     private AmpResource resource;
 
     public ResourceImporter() {
-        super(AmpResource.class, new InputValidatorProcessor(InputValidatorProcessor.getResourceValidators()));
+        super(new InputValidatorProcessor(InputValidatorProcessor.getResourceValidators()),
+                AmpFieldsEnumerator.getPrivateEnumerator().getResourceFields());
     }
 
     /**
@@ -78,7 +79,7 @@ public class ResourceImporter extends ObjectImporter {
     private List<ApiErrorMessage> importResource(JsonBean newJson, FormFile formFile) {
         this.newJson = newJson;
 
-        List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getResourceFields();
+        List<APIField> fieldsDef = getApiFields();
         
         String privateAttr = newJson.getString(ResourceEPConstants.PRIVATE);
         
@@ -148,14 +149,11 @@ public class ResourceImporter extends ObjectImporter {
             resource.setAddingDate(new Date());
             
             if (errors.isEmpty()) {
-                ActionMessages messages = new ActionMessages();
                 TemporaryDocumentData tdd = getTemporaryDocumentData(resource, formFile);
-                NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), teamMemberCreator, messages);
+                NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), teamMemberCreator);
     
                 if (node != null) {
                     resource.setUuid(node.getUuid());
-                } else {
-                    reportErrors(messages);
                 }
             }
         } catch (ObjectConversionException | RuntimeException e) {
@@ -165,20 +163,6 @@ public class ResourceImporter extends ObjectImporter {
         }
 
         return new ArrayList<>(errors.values());
-    }
-
-    /**
-     * Copies struts messages to API error messages. If struts messages are empty will report a single API error
-     * message 'Failed without specifying a reason.'.
-     * @param messages struts messages to copy to API error messages
-     */
-    private void reportErrors(ActionMessages messages) {
-        if (messages.isEmpty()) {
-            errors.put(0, new ApiErrorMessage(0, "Failed without specifying a reason."));
-        } else {
-            StreamUtils.asStream((Iterator<Object>) messages.get())
-                    .forEach(m -> errors.put(0, new ApiErrorMessage(0, m.toString())));
-        }
     }
 
     private TemporaryDocumentData getTemporaryDocumentData(AmpResource resource, FormFile formFile) {

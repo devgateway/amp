@@ -878,4 +878,5 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     public AmpCategoryValue getConcessionalityLevel() {
         return this.concessionalityLevel;
     }
+    
 }

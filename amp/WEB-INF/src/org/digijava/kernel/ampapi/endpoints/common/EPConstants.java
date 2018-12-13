@@ -48,7 +48,6 @@ public class EPConstants {
     public static final String FORCE_HEADERS = "forceHeaders";
     public static final String PROJECT_TYPE = "projectType";
     public static final String REPORT_TYPE = "reportType";
-    public static final String NI_REPORT = "nireport";
     public static final String INFO = "info";
     public static final String GENERATED_HEADERS = "generatedHeaders";
     public static final String STATS = "stats";
@@ -82,10 +81,6 @@ public class EPConstants {
     public static final String SETTINGS = "settings";
     
     // map import/export
-    public static final String API_STATE_TITLE = "title";
-    public static final String API_STATE_DESCRIPTION = "description";
-    public static final String API_STATE_BLOB = "stateBlob";
-    public static final String API_STATE_LAYERS_VIEW = "layers-view";
     public static final String API_STATE_REPORT_EXPORT_DESCRIPTION = "Export to Map";
     public static final String API_STATE_REPORT_EXPORT = "reportExportId=";
     

@@ -15,9 +15,11 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
@@ -32,7 +34,6 @@ public class ObjectImporter {
 
     private static final Logger logger = Logger.getLogger(ObjectImporter.class);
 
-    private final Class<?> targetClass;
     private final InputValidatorProcessor validator;
 
     protected Map<Integer, ApiErrorMessage> errors = new HashMap<>();
@@ -42,6 +43,8 @@ public class ObjectImporter {
 
     private Map<String, List<PossibleValue>> possibleValuesCached = new HashMap<>();
 
+    private List<APIField> apiFields;
+
     /**
      * This field is used for storing the current json values during field validation
      * E.g: validate the pledge field (present in funding_details)
@@ -50,10 +53,17 @@ public class ObjectImporter {
      */
     private Map<String, Object> branchJsonVisitor = new HashMap<>();
 
-    public ObjectImporter(Class<?> targetClass, InputValidatorProcessor validator) {
-        this.targetClass = targetClass;
+    private Map<Class<? extends DiscriminationConfigurer>, DiscriminationConfigurer> discriminatorConfigurerCache =
+            new HashMap<>();
+
+    public ObjectImporter(InputValidatorProcessor validator, List<APIField> apiFields) {
         this.validator = validator;
         this.trnSettings = TranslationSettings.getCurrent();
+        this.apiFields = apiFields;
+    }
+
+    public List<APIField> getApiFields() {
+        return apiFields;
     }
 
     /**
@@ -157,10 +167,6 @@ public class ObjectImporter {
 
     /**
      * Configures new value, no validation outside of this method scope, it must be verified before
-     * @param newParent
-     * @param field
-     * @param newJson
-     * @return
      */
     protected Object setNewField(Object newParent, APIField fieldDef, Map<String, Object> newJsonParent,
             String fieldPath) {
@@ -230,25 +236,15 @@ public class ObjectImporter {
 
         Object value = null;
         String fieldType = fieldDef.getFieldType();
-        List<PossibleValue> allowedValues = getPossibleValuesForFieldCached(fieldPath);
-        boolean idOnly = Boolean.TRUE.equals(fieldDef.isIdOnly());
+        boolean idOnly = fieldDef.isIdOnly();
 
-        // this is an object reference
+        // this field has possible values
         if (!isCollection && idOnly) {
-            Class<? extends PossibleValuesProvider> providerClass = InterchangeUtils.getPossibleValuesProvider(field);
-            if (providerClass != null) {
-                try {
-                    PossibleValuesProvider provider = providerClass.newInstance();
-                    return provider.toAmpFormat(jsonValue);
-                } catch (InstantiationException | IllegalAccessException e) {
-                    throw new RuntimeException("Could not convert value to AMP object.", e);
-                }
-            }
-            return getObjectReferencedById(field.getType(), ((Number) jsonValue).longValue());
+            return getObjectReferencedById(field.getType(), jsonValue);
         }
 
         // this is a collection
-        if (Collection.class.isAssignableFrom(field.getType())) {
+        if (isCollection) {
             try {
                 value = field.get(parentObj);
                 Collection col = (Collection) value;
@@ -258,7 +254,7 @@ public class ObjectImporter {
                 if (idOnly && jsonValue != null) {
                     Class<?> objectType = AIHelper.getGenericsParameterClass(field);
                     try {
-                        Object res = getObjectReferencedById(objectType, Long.valueOf(jsonValue.toString()));
+                        Object res = getObjectReferencedById(objectType, jsonValue);
                         col.add(res);
                     } catch (IllegalArgumentException e) {
                         logger.error(e.getMessage());
@@ -292,18 +288,6 @@ public class ObjectImporter {
                 logger.error(e.getMessage());
                 throw new RuntimeException(e);
             }
-        } else if (allowedValues != null && allowedValues.size() > 0) {
-            // => this is an object => it has children elements
-            if (fieldDef.getChildren() != null) {
-                for (APIField childDef : fieldDef.getChildren()) {
-                    if (Boolean.TRUE.equals(childDef.isId())) {
-                        Map<String, Object> jsonValueMap = (Map<String, Object>) jsonValue;
-                        Long id = ((Integer) jsonValueMap.get(childDef.getFieldName())).longValue();
-                        value = InterchangeUtils.getObjectById(field.getType(), id);
-                        break;
-                    }
-                }
-            }
         } else {
             try {
                 if (AmpAgreement.class.equals(field.getType())) {
@@ -321,7 +305,7 @@ public class ObjectImporter {
     public List<PossibleValue> getPossibleValuesForFieldCached(String fieldPath) {
         if (!possibleValuesCached.containsKey(fieldPath)) {
             possibleValuesCached.put(fieldPath, PossibleValuesEnumerator.INSTANCE
-                    .getPossibleValuesForField(fieldPath, targetClass, null));
+                    .getPossibleValuesForField(fieldPath, apiFields));
         }
         return possibleValuesCached.get(fieldPath);
     }
@@ -329,14 +313,18 @@ public class ObjectImporter {
     /**
      * Gets the object identified by an ID, from the Possible Values EP
      * @param objectType
-     * @param objectId
+     * @param value
      * @return
      */
-    protected Object getObjectReferencedById(Class<?> objectType, Long objectId) {
+    protected Object getObjectReferencedById(Class<?> objectType, Object value) {
         if (Collection.class.isAssignableFrom(objectType)) {
             throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
         }
-        return InterchangeUtils.getObjectById(objectType, objectId);
+        if (InterchangeUtils.isSimpleType(objectType)) {
+            return ConvertUtils.convert(value, objectType);
+        } else {
+            return InterchangeUtils.getObjectById(objectType, Long.valueOf(value.toString()));
+        }
     }
 
     /**
@@ -410,7 +398,7 @@ public class ObjectImporter {
          */
 
         // skip children validation immediately if only ID is expected
-        boolean idOnly = Boolean.TRUE.equals(fieldDef.isIdOnly());
+        boolean idOnly = fieldDef.isIdOnly();
         if (idOnly) {
             return newParent;
         }
@@ -431,7 +419,7 @@ public class ObjectImporter {
             Field oldField = ReflectionUtil.getField(oldParent, actualFieldName);
             Object newFieldValue = null;
             Object oldFieldValue = null;
-            Class<?> subElementClass = null;
+            Class<?> subElementClass = fieldDef.getElementType();
             boolean isCollection = false;
             try {
                 newFieldValue = newField == null ? null : newField.get(newParent);
@@ -443,7 +431,6 @@ public class ObjectImporter {
                 // (no parent obj ref)
                 if (newFieldValue != null && Collection.class.isAssignableFrom(newFieldValue.getClass())) {
                     isCollection = true;
-                    subElementClass = AIHelper.getGenericsParameterClass(newField);
                 }
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 logger.error(e.getMessage());
@@ -495,7 +482,7 @@ public class ObjectImporter {
                     // validation failed, reset parent to stop config
                     newParent = null;
                 } else if (newParent != null && isCollection) {
-                    configureCustom(res, fieldDef);
+                    configureDiscriminationField(res, fieldDef);
                     // actual links will be updated
                     ((Collection) newFieldValue).add(res);
                 }
@@ -560,11 +547,24 @@ public class ObjectImporter {
         }
         return null;
     }
-    
+
     /**
-     * Used to set value of the field used for discrimination. FIXME generalize this part
+     * Used to restore the value of the discrimination field.
      */
-    protected void configureCustom(Object obj, APIField fieldDef) {
+    private void configureDiscriminationField(Object obj, APIField fieldDef) {
+        if (fieldDef.getDiscriminationConfigurer() != null) {
+            DiscriminationConfigurer configurer = discriminatorConfigurerCache.computeIfAbsent(
+                    fieldDef.getDiscriminationConfigurer(), this::newConfigurer);
+            configurer.configure(obj, fieldDef.getDiscriminatorField(), fieldDef.getDiscriminatorValue());
+        }
+    }
+
+    private DiscriminationConfigurer newConfigurer(Class<? extends DiscriminationConfigurer> configurer) {
+        try {
+            return configurer.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException("Failed to instantiate discriminator configurer " + configurer, e);
+        }
     }
 
     /**

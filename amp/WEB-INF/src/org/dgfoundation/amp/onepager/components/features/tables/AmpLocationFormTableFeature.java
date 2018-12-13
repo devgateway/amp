@@ -289,8 +289,11 @@ public class AmpLocationFormTableFeature extends
                 // toggleHeading(target, setModel.getObject());
                 target.add(list.getParent());
                 regionalFundingFeature.getList().removeAll();
-                target.add(regionalFundingFeature);
-                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
+
+                if (regionalFundingFeature.isVisibleInHierarchy()) {
+                    target.add(regionalFundingFeature);
+                    target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
+                }
                 reloadValidationFields(target);
                 list.removeAll();
             }

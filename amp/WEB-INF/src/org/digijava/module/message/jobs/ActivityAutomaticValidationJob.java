@@ -39,23 +39,14 @@ public class ActivityAutomaticValidationJob extends ConnectionCleaningJob implem
      * @throws CloneNotSupportedException
      */
     protected AmpActivityVersion validateActivity(Session session, AmpTeamMember member, AmpActivityVersion oldActivity) throws CloneNotSupportedException {
-        AmpActivityVersion prevVersion = oldActivity.getAmpActivityGroup().getAmpActivityLastVersion();
-        oldActivity.setModifiedDate(Calendar.getInstance().getTime());
-        oldActivity.setModifiedBy(member);
 
         oldActivity.setApprovalStatus(Constants.APPROVED_STATUS);
         oldActivity.setApprovedBy(member);
         oldActivity.setApprovalDate(Calendar.getInstance().getTime());
 
-        AmpActivityVersion auxActivity = null;
-        try {
-            auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivity(oldActivity, null, member, SiteUtils.getDefaultSite(),
-                    new java.util.Locale("en"), AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, oldActivity.getDraft(), SaveContext.job());
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        session.flush();
+        AmpActivityVersion auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivity(oldActivity, null,
+                member, SiteUtils.getDefaultSite(), new java.util.Locale("en"),
+                AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, oldActivity.getDraft(), SaveContext.job());
 
         return auxActivity;
     }

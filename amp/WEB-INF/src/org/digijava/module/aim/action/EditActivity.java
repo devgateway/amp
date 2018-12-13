@@ -167,7 +167,7 @@ public class EditActivity extends Action {
     AmpTeam currentTeam = null;
     if(tm != null)
         currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
-    boolean isPreview = mapping.getPath().trim().endsWith("editingUserId");
+    boolean isPreview = mapping.getPath().trim().endsWith("viewActivityPreview");
 
     String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 
@@ -270,8 +270,6 @@ public class EditActivity extends Action {
                         String strDateUpdated = request.getParameter("simulateUpdateDate");
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                         Date dateUpdated = format.parse(strDateUpdated);
-                        activity.setUpdatedDate(dateUpdated);
-                        activity.setModifiedDate(dateUpdated);
                         if (tm != null && tm.getMemberId() != null) {
                             AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberCached(tm.getMemberId());
                             activity.setModifiedBy(teamMember);
@@ -1178,12 +1176,9 @@ public class EditActivity extends Action {
           eaForm.getDocuments().setReferenceDocs(null);
 
           eaForm=setSectorsToForm(eaForm, activity);
-            if (isPreview) {
-                //we load classificationConfigs for been displayed in preview and printer friendly for issue AMP-16421
-                List<AmpClassificationConfiguration> classificationConfigs = SectorUtil
-                        .getAllClassificationConfigsOrdered();
-                eaForm.getSectors().setClassificationConfigs(classificationConfigs);
-            }    
+          
+          List<AmpClassificationConfiguration> classificationConfigs = SectorUtil.getAllClassificationConfigsOrdered();
+          eaForm.getSectors().setClassificationConfigs(classificationConfigs);
           
           if (activity.getProgramDescription() != null)
               eaForm.getPrograms().setProgramDescription(activity
@@ -1634,6 +1629,9 @@ public class EditActivity extends Action {
                 }
         }
     }
+    
+    setRegionalObservationsToForm(activity, eaForm);
+    
     setLineMinistryObservationsToForm(activity, eaForm);
 
     //structures
@@ -1759,9 +1757,46 @@ public class EditActivity extends Action {
       }
       return activityId;
 }
+    
+    
+    private void setRegionalObservationsToForm(AmpActivityVersion activity, EditActivityForm eaForm) {
+        if (activity.getRegionalObservations() != null && activity.getRegionalObservations().size() > 0) {
+            ArrayList issueList = new ArrayList();
+            
+            for (AmpRegionalObservation aro : activity.getRegionalObservations()) {
+                Issues issue = new Issues();
+                issue.setId(aro.getAmpRegionalObservationId());
+                issue.setName(aro.getName());
+                issue.setIssueDate(FormatHelper.formatDate(aro.getObservationDate()));
+                ArrayList measureList = new ArrayList();
+                if (aro.getRegionalObservationMeasures() != null) {
+                    for (AmpRegionalObservationMeasure ampMeasure : aro.getRegionalObservationMeasures()) {
+                        Measures measure = new Measures();
+                        measure.setId(ampMeasure.getAmpRegionalObservationMeasureId());
+                        measure.setName(ampMeasure.getName());
+                        ArrayList actorList = new ArrayList();
+                        if (ampMeasure.getActors() != null) {
+                            for (AmpRegionalObservationActor actor : ampMeasure.getActors()) {
+                                AmpActor auxAmpActor = new AmpActor();
+                                auxAmpActor.setAmpActorId(actor.getAmpRegionalObservationActorId());
+                                auxAmpActor.setName(actor.getName());
+                                actorList.add(auxAmpActor);
+                            }
+                        }
+                        measure.setActors(actorList);
+                        measureList.add(measure);
+                    }
+                }
+                issue.setMeasures(measureList);
+                issueList.add(issue);
+            }
+            eaForm.getRegionalObservations().setIssues(issueList);
+        } else {
+            eaForm.getRegionalObservations().setIssues(null);
+        }
+    }
 
-
-private void setLineMinistryObservationsToForm(AmpActivityVersion activity, EditActivityForm eaForm){
+    private void setLineMinistryObservationsToForm(AmpActivityVersion activity, EditActivityForm eaForm) {
         if(activity.getLineMinistryObservations() != null && activity.getLineMinistryObservations().size()>0){
                 ArrayList issueList = new ArrayList();
 
@@ -1799,7 +1834,7 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
                 eaForm.getLineMinistryObservations().setIssues(null);
             }
 
-  }
+    }
 
   private EditActivityForm setSectorsToForm(EditActivityForm form, AmpActivityVersion activity) {
         Collection<AmpActivitySector> sectors = activity.getSectors();

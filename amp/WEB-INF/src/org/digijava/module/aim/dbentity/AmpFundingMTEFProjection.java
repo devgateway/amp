@@ -13,8 +13,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
-public class AmpFundingMTEFProjection
-        implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection>, FundingInformationItem {
+public class AmpFundingMTEFProjection implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection>,
+        FundingInformationItem {
 
     private static final long serialVersionUID = -1583797313318079006L;
 

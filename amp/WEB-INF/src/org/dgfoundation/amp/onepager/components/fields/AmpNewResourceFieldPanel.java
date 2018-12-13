@@ -206,7 +206,11 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
                 target.add(desc);
                 target.add(note);
                 target.add(type);
-                target.add(webLink);
+
+                if (webLink.isVisibleInHierarchy()) {
+                    target.add(webLink);
+                }
+
                 target.add(resourcesList);
                 target.add(webLinkFeedbackContainer);
                 if (updateVisibility(td.getObject(), resourceIsURL)){

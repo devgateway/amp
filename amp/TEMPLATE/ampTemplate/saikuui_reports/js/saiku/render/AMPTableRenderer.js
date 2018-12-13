@@ -550,15 +550,13 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
  * Return the number of rows (adding the total rows per category).
  */
 function getNumberOfRows(node) {
-	var c = 0;
+	var c = 1;
 	if (node.children !== null) {
 		for (var i = 0; i < node.children.length; i++) {
 			c += getNumberOfRows(node.children[i]);
 		}
 	}
-	if (node.children == null) {
-		c++;
-	}
+
 	return c;
 }
 

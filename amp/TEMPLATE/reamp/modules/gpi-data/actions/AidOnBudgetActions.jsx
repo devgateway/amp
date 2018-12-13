@@ -61,10 +61,14 @@ export function save(data){
             result.infoMessages = [];
             return dispatch(onSave(result));            
         } 
-        
+
+        let cid = data.cid;
         return aidOnBudgetApi.save(data).then(response => {
             const result = {errors: []};
             result.aidOnBudget = response.data || data;
+            if (cid) {
+                result.aidOnBudget.cid = cid;
+            }
             if (response.result === "SAVED") {                    
                 result.aidOnBudget.isEditing = false;
                 result.infoMessages = [{messageKey: 'amp.gpi-data-aid-on-budget:save-successful'}];
@@ -139,9 +143,9 @@ export function saveAllEdits(aidOnBudgetList) {
             result.errors = allErrors;
             result.infoMessages = [];
             return dispatch(onSaveAllEdits(result));            
-        } 
-        
-        
+        }
+
+        let cids = Utils.getCids(aidOnBudgetList);
         return aidOnBudgetApi.save(aidOnBudgetList).then(response => {
             const result = {errors:[], infoMessages: []};
             
@@ -160,7 +164,7 @@ export function saveAllEdits(aidOnBudgetList) {
                 }                    
             }               
             
-            result.aidOnBudgetList = list;
+            result.aidOnBudgetList = Utils.restoreCids(list, cids);
             result.errors = [...result.errors, ...allErrors];
             if (list.length > 0) {
                 var params = {};

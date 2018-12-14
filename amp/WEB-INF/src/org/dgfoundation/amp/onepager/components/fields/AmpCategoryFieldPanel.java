@@ -105,7 +105,7 @@ public abstract class AmpCategoryFieldPanel extends
                     List<AmpCategoryValue> collectionByKey = CategoryManagerUtil.getAllAcceptableValuesForACVClass(categoryKey, relatedChoicesModel == null ? null : relatedChoicesModel.getObject());
                     return collectionByKey;
                 } catch (Exception e) {
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                     e.printStackTrace();
                     throw new RuntimeException(e);
                 }

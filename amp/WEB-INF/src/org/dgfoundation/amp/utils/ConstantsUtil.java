@@ -88,7 +88,7 @@ public class ConstantsUtil {
                         else 
                             constants.put(field.getName(), value);
                     } catch (IllegalArgumentException | IllegalAccessException e) {
-                        logger.error(e);
+                        logger.error(e.getMessage(), e);
                     }
                 }
             }

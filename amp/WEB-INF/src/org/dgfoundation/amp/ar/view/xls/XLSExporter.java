@@ -370,13 +370,13 @@ public abstract class XLSExporter extends Exporter {
                 HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
         }
         try{
             sheet.addMergedRegion(r);
         } catch(Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
         }
 //      try{
@@ -416,7 +416,7 @@ public abstract class XLSExporter extends Exporter {
                 HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
         }
         sheet.addMergedRegion(r);   

@@ -171,15 +171,15 @@ public class StandaloneJndiAMPInitializer {
         } catch (SAXException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         } catch (ParserConfigurationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
 
         env.setProperty(REAL_JNDI, realJndiName);

@@ -68,7 +68,7 @@ public class CategoryValueTagClass extends TagSupport {
                     logger.info("No AmpCategoryValue found with id " + categoryValueId);
                 }
                 catch (Exception E) {
-                    logger.error(E);
+                    logger.error(E.getMessage(), E);
                     E.printStackTrace();
                 }
             }
@@ -81,7 +81,7 @@ public class CategoryValueTagClass extends TagSupport {
                     logger.info("No category value with index " + categoryIndex + " in category with key " + categoryKey);
                 }
                 catch (Exception E) {
-                    logger.error(E);
+                    logger.error(E.getMessage(), E);
                     E.printStackTrace();
                 }
             }
@@ -97,7 +97,7 @@ public class CategoryValueTagClass extends TagSupport {
                 out.print( translatedValue );
             }
             catch(Exception E){
-                logger.info(E);
+                logger.info(E.getMessage(), E);
                 E.printStackTrace();
             }
         }
@@ -107,7 +107,7 @@ public class CategoryValueTagClass extends TagSupport {
                 //out.print( "<font color='red'>No category value could be selected</font>" );
             }
             catch(Exception E){
-                logger.info(E);
+                logger.info(E.getMessage(), E);
                 E.printStackTrace();
             }
         }

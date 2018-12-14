@@ -107,7 +107,7 @@ public FeedControl() {
 
             } catch (Exception e) {
                 logger.info("Cannot initialize feed "+feedName+ " !!");
-                logger.info(e);
+                logger.info(e.getMessage(), e);
                 e.printStackTrace();
             }
         }
@@ -269,7 +269,7 @@ public FeedControl() {
             
             
         } catch (Exception e) {
-            logger.info(e);
+            logger.info(e.getMessage(), e);
             e.printStackTrace();
             
         }

@@ -2379,16 +2379,16 @@ public class AmpARFilter extends PropertyListable {
                     ret.append("; ");
             }
         } catch (IntrospectionException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
         }
         return ret.toString();

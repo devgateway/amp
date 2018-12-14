@@ -373,7 +373,7 @@ public class PIUseCase {
             // As explained above here we convert a list with duplicated surveys into a Set with no duplicates.
             commonDataUnique = new LinkedHashSet<AmpAhsurvey>(commonData);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
         }
         return commonDataUnique;
@@ -420,7 +420,7 @@ public class PIUseCase {
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return commonData;
     }
@@ -486,7 +486,7 @@ public class PIUseCase {
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return commonData;
     }

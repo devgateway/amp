@@ -158,7 +158,7 @@ public class AddEditData
                 try{
                     IndicatorUtil.updateThemeConnection(connection);
                 }catch(Exception ex){
-                    logger.error(ex);
+                    logger.error(ex.getMessage(), ex);
                     ex.printStackTrace();
                 }
             }

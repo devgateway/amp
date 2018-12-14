@@ -132,16 +132,16 @@ public class XmlPatcherService extends AbstractServiceImpl {
                 
                 XmlPatcherUtil.applyDeprecationTags(patch,log);
             } catch (NoSuchAlgorithmException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             } catch (IOException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             } catch (HibernateException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 e.printStackTrace();
             } catch (SQLException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 e.printStackTrace();
             }
 
@@ -185,10 +185,10 @@ public class XmlPatcherService extends AbstractServiceImpl {
                         XmlPatcherUtil.getXmlPatchAbsoluteFileName(ampPatch,
                                 serviceContext))));
             } catch (NoSuchAlgorithmException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             } catch (IOException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             }
             Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,
@@ -273,7 +273,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
             logger.error("Failed to apply patch.", e);
             patcherFailed = true;
         } catch(Throwable e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             PersistenceManager.rollbackCurrentSessionTx();
             throw new ServiceException(e);
         }

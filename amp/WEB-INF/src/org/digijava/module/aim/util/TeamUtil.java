@@ -730,7 +730,7 @@ public class TeamUtil {
             session.saveOrUpdate(team);
             //transaction.commit();
         } catch (HibernateException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
         }
     }

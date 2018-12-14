@@ -123,7 +123,7 @@ public class AutopatcherService extends AbstractServiceImpl {
 
                     catch (BatchUpdateException e) {
                         e.printStackTrace();
-                        logger.error(e);
+                        logger.error(e.getMessage(), e);
                         connection.rollback();
 
                     } finally {
@@ -131,7 +131,7 @@ public class AutopatcherService extends AbstractServiceImpl {
                     }
 
                 } catch (Exception e) {
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                     e.printStackTrace();
                 }
 

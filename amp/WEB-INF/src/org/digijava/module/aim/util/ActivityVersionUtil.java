@@ -189,7 +189,7 @@ public class ActivityVersionUtil {
             try {
                 aux = Integer.valueOf(gsValue).intValue();
             } catch (NumberFormatException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
             }
         }
         return aux;

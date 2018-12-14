@@ -79,13 +79,13 @@ public class GatePermScopeTag extends BodyTagSupport {
                 simpleProperty = PropertyUtils.getSimpleProperty(nameBean,
                         property);
             } catch (IllegalAccessException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 e.printStackTrace();
             }
 
@@ -107,7 +107,7 @@ public class GatePermScopeTag extends BodyTagSupport {
              try {
                 pageContext.getOut().print(bodyContent.getString());
             } catch (IOException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 e.printStackTrace();
             }
         }

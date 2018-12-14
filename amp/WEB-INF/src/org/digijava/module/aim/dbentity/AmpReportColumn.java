@@ -47,7 +47,7 @@ public class AmpReportColumn implements Serializable, Comparable<AmpReportColumn
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         
         

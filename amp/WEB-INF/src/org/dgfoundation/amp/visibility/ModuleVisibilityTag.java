@@ -181,7 +181,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-                logger.error(e);
+                logger.error(e.getMessage(), e);
             }
            }
        return EVAL_PAGE;

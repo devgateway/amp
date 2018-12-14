@@ -199,7 +199,7 @@ public class GPIReport6 extends GPIAbstractReport {
                     }
                 }
             } catch (Exception e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 e.printStackTrace();
             }
         }

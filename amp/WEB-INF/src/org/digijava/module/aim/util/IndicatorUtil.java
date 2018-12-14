@@ -525,7 +525,7 @@ public class IndicatorUtil {
             Query query = session.createQuery(oql);
             result = (List<E>)query.list();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new DgException("Cannot load indicator connection",e);
         }
         return result;
@@ -978,7 +978,7 @@ public class IndicatorUtil {
                 }
             }
         } catch (HibernateException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new DgException("Cannot load indicators for Activity with id "+activityId,e);
         }
         return result;

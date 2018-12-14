@@ -51,7 +51,7 @@ public abstract class MultiAction extends Action {
         try {
         return modePrepare(mapping, form, request, response);
         } catch(Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
             return mapping.findForward("error");
         }

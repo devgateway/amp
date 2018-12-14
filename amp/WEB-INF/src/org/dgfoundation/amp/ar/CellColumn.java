@@ -248,7 +248,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 //                  System.err.format("ListCell: adding cell %s to column %s\n", element, this.getName());
                 }
             } catch (IncompatibleCellException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 e.printStackTrace();
             }
 

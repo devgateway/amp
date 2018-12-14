@@ -137,7 +137,7 @@ public class ListCell extends Cell {
             try {
                 ret.addCell(element.filter(metaCell,ids));
             } catch (IncompatibleCellException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 e.printStackTrace();
             }
             
@@ -155,7 +155,7 @@ public class ListCell extends Cell {
             ret.addCells((Collection) this.getValue());
             ret.addCells((Collection) c.getValue());
         } catch (IncompatibleCellException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
         }
         return ret;
@@ -179,7 +179,7 @@ public class ListCell extends Cell {
             if(!this.equals(c2)) this.addCells((Collection) c2.getValue());
             
         } catch (IncompatibleCellException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
         }
     }

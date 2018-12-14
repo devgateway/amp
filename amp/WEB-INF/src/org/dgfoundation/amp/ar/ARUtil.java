@@ -142,7 +142,7 @@ public final class ARUtil {
             
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return col;
     }

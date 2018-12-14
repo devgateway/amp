@@ -182,7 +182,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
                         }
                     }
                     catch(Exception E){
-                        logger.error(E);
+                        logger.error(E.getMessage(), E);
                         E.printStackTrace();
                     }
                 }else {
@@ -205,7 +205,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
                         }
                     }
                     catch(Exception E){
-                        logger.error(E);
+                        logger.error(E.getMessage(), E);
                         E.printStackTrace();
                     }
                 }
@@ -224,7 +224,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
             }
         }
         catch(Exception E){
-            logger.info(E);
+            logger.info(E.getMessage(), E);
             E.printStackTrace();
         }
         

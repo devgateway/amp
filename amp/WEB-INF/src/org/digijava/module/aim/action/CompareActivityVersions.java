@@ -27,7 +27,6 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.annotations.activityversioning.ActivityVersioningService;
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -91,7 +90,7 @@ public class CompareActivityVersions extends DispatchAction {
 
         vForm.setOutputCollection(new ArrayList<CompareOutput>());
         // Load the activities.
-        vForm.setOutputCollectionGrouped(ActivityVersioningService.compareActivities(vForm.getActivityOneId(),
+        vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId(),
                 vForm.getActivityTwoId()));
         
         

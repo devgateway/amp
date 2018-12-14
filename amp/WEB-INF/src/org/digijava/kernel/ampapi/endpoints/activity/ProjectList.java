@@ -241,9 +241,13 @@ public class ProjectList {
     private static String getIatiIdentifierValue(AmpActivityVersion a, String iatiIdAmpField) {
         APIField apiField = AmpFieldsEnumerator.getPublicEnumerator().getActivityFields().stream()
                 .filter(f -> f.getFieldName().equals(iatiIdAmpField))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("No such field " + iatiIdAmpField));
-        return (String) apiField.getFieldValueReader().get(a);
+                .findAny().orElse(null);
+        
+        if (apiField != null) {
+            return (String) apiField.getFieldValueReader().get(a);
+        }
+        
+        return null;
     }
 
     /**

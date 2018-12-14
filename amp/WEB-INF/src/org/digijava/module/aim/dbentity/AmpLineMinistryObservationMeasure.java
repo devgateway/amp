@@ -74,4 +74,5 @@ public class AmpLineMinistryObservationMeasure implements Serializable, Cloneabl
         
         return aux;
     }
+    
 }

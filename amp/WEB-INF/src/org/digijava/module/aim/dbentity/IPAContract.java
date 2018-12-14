@@ -828,4 +828,5 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
     public String toString() {
         return (contractName == null ? "" : contractName);
     }
+    
 }

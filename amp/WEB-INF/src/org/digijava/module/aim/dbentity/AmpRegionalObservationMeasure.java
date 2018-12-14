@@ -73,4 +73,5 @@ public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
         
         return aux;
     }
+    
 }

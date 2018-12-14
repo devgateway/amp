@@ -167,7 +167,7 @@ public class ContactInfoUtil {
             }           
             contacts=query.list();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return contacts;
     }
@@ -207,7 +207,7 @@ public class ContactInfoUtil {
             }
             contacts = query.list();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw e;
         }
         return contacts;

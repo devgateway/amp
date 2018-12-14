@@ -138,7 +138,7 @@ public class AmpARFilter extends PropertyListable {
     }});
     
     
-    // change this together with v_mondrian_activity_fixed_texts.xml
+    // change this together with v_approval_status.xml
     public final static Map<String, Integer> activityStatusToNr = Collections.unmodifiableMap(new HashMap<String, Integer>(){{
         this.put(Constants.APPROVED_STATUS, 1);
         this.put(Constants.EDITED_STATUS, 2);
@@ -899,7 +899,7 @@ public class AmpARFilter extends PropertyListable {
             this.setNeedsTeamFilter(true);
             this.setAccessType("Management"); // should always be Management, as a report can be made public only from management workspace
 
-            //Check if the reportid is not nut for public mondrian reports
+            //Check if the reportid is not nut for public reports
             if (ampReport != null)
             {
                 if (ampReport != null && ampReport.getWorkspaceLinked() && ampReport.getOwnerId() != null)
@@ -1035,7 +1035,7 @@ public class AmpARFilter extends PropertyListable {
     private Long getAttachedAmpReportId(HttpServletRequest request)
     {
         String ampReportId = null ;
-        //Check if the reportid is not nut for public mondrian reports
+        //Check if the reportid is not nut for public reports
         if (request.getParameter("ampReportId") != null && request.getParameter("ampReportId").length() > 0)
             ampReportId = request.getParameter("ampReportId");
 
@@ -2379,17 +2379,13 @@ public class AmpARFilter extends PropertyListable {
                     ret.append("; ");
             }
         } catch (IntrospectionException e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         } catch (IllegalArgumentException e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         } catch (IllegalAccessException e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         } catch (InvocationTargetException e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         return ret.toString();
     }

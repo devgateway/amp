@@ -13,10 +13,11 @@ import javax.ws.rs.core.MediaType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.digijava.kernel.ampapi.endpoints.dto.SaveResult;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 
 @Path("data-freeze")
@@ -27,39 +28,8 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
     @Path("event")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "saveDataFreezeEvent", authTypes = { AuthRule.IN_ADMIN })
-    @ApiOperation(
-            value = "Saves a data freeze object to the database",
-            notes = "The returned JSON object holds information regarding:\n"
-                    + "\n"
-                    + "Field|Description\n"
-                    + "---|---\n"
-                    + "data|the saved data freeze eevent\n"
-                    + "result|result string that indicates if the save was successful or not "
-                    + "SAVE_SUCCESSFUL/SAVE_FAILED\n"
-                    + "errors|an array of error objects for all the errors that occurred while saving\n"
-                    + "\n"
-                    + "### Sample Output\n"
-                    + "```\n"
-                    + "{\n"
-                    + "      \"data\" : {\n"
-                    + "      \"id\" : 30,\n"
-                    + "      \"enabled\" : true,\n"
-                    + "      \"gracePeriod\" : 30,\n"
-                    + "      \"freezingDate\" : \"2017-09-01\",\n"
-                    + "      \"openPeriodStart\" : \"2017-10-01\",\n"
-                    + "      \"openPeriodEnd\" : \"2017-10-31\",\n"
-                    + "      \"freezeOption\" : \"ENTIRE_ACTIVITY\",\n"
-                    + "      \"filters\" : null,\n"
-                    + "      \"sendNotification\" : false,\n"
-                    + "      \"count\" : 88,\n"
-                    + "      \"notificationDays\" : null,\n"
-                    + "       \"cid\" : 1\n"
-                    + " },\n"
-                    + "    \"result\" : \"SAVE_SUCCESSFUL\",\n"
-                    + "    \"errors\" : []\n"
-                    + "}\n"
-                    + "```")
-    public JsonBean saveDataFreezeEvent(DataFreezeEvent dataFreezeEvent) {
+    @ApiOperation("Saves a data freeze object to the database")
+    public SaveResult<DataFreezeEvent> saveDataFreezeEvent(DataFreezeEvent dataFreezeEvent) {
         return DataFreezeService.saveDataFreezeEvent(dataFreezeEvent);
     }
 
@@ -90,7 +60,7 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "fetchDataFreezeEventList", authTypes = { AuthRule.IN_ADMIN })
     @ApiOperation("Retrieves a list of data freeze event objects")
-    public Page<DataFreezeEvent> fetchDataFreezeEventList(
+    public ResultPage<DataFreezeEvent> fetchDataFreezeEventList(
             @ApiParam("first element in list") @QueryParam("offset") Integer offset,
             @ApiParam("maximum number of records to return") @QueryParam("count") Integer count,
             @ApiParam("field that will be used for sorting") @QueryParam("orderby") String orderBy,
@@ -104,16 +74,9 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
     @ApiMethod(ui = false, id = "fetchFrozenActivities", authTypes = { AuthRule.IN_ADMIN })
     @ApiOperation(
             value = "Gets an object containing the freeze date of the latest freeze event and number of "
-                    + "activities affected the event.",
-            notes = "### Sample output\n"
-                    + "```\n"
-                    + "{\n"
-                    + "    \"freezingDate\" : 2017-08-30,\n"
-                    + "    \"freezingCount\" : 345\n"
-                    + "}\n"
-                    + "```")
-    public JsonBean fetchFrozenActivities() {
-        return DataFreezeService.getFronzeActivitiesInformation();
+                    + "activities affected the event.")
+    public DataFreezeInformation fetchFrozenActivities() {
+        return DataFreezeService.getFrozenActivitiesInformation();
     }
    
     @POST
@@ -121,7 +84,7 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "unfreezeAll", authTypes = { AuthRule.IN_ADMIN })
     @ApiOperation("Disables all freeze events")
-    public void unfreezeAll(JsonBean data) {
+    public void unfreezeAll() {
         DataFreezeService.unfreezeAll();
     }
 

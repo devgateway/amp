@@ -27,7 +27,6 @@ import org.digijava.kernel.ampapi.endpoints.common.FiltersEndpoint;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersProcessor;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.TeamMember;
@@ -203,7 +202,7 @@ public class FilterUtils {
             String end = denull(String.valueOf(date.get("end")));
             
             if (start != null || end != null) {
-                SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
+                SimpleDateFormat sdf = new SimpleDateFormat(FiltersConstants.DATE_FORMAT);
                 Date startDate = start == null ? null : sdf.parse(start);
                 Date endDate = end == null ? null : sdf.parse(end);
                 if (dateColumn != null) {
@@ -500,7 +499,7 @@ public class FilterUtils {
                 }
                 filterRules.addDateRangeFilterRule(cal.getTime(), currentCal.getTime());
             } catch (AmpApiException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
 
             }
         }

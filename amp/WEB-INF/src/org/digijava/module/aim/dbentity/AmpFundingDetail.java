@@ -659,4 +659,5 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     public void setCheckSum(Long checkSum) {
         this.checkSum = checkSum;
     }
+    
 }

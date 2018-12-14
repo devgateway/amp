@@ -52,7 +52,7 @@ public class TrnAccesTimeSaver implements Runnable {
                         save(message);
                 }
             } catch (Exception e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
             }
         }
     }

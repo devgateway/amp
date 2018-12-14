@@ -55,4 +55,5 @@ public class AmpLineMinistryObservationActor implements Serializable, Cloneable 
         // TODO Auto-generated method stub
         return super.clone();
     }
+
 }

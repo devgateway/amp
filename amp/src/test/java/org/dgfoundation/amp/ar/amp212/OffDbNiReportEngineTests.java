@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -102,6 +102,6 @@ public class OffDbNiReportEngineTests extends BasicSanityChecks {
     
     @BeforeClass
     public static void setUp() {
-        // this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
+        // this empty method is used as a shadow for org.dgfoundation.amp.newreports.ReportingTestCase.setUp()
     }
 }

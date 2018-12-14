@@ -165,7 +165,7 @@ public class ThemeManager extends Action {
                     errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.theme.cannotDeleteTheme"));
                     saveErrors(request, errors);
                 }catch (Exception e) {
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                 }
                 
                 return mapping.findForward("delete");

@@ -111,4 +111,5 @@ public class AmpActivityDocument extends ObjectReferringDocument implements Seri
         // TODO Auto-generated method stub
         return super.clone();
     }
+
 }

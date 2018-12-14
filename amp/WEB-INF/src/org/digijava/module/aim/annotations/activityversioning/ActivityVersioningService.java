@@ -45,10 +45,10 @@ public class ActivityVersioningService {
 	        ActivityVersionUtil.initializeActivity(ampActivityTwo);
 	        //This does not seem to be in use, check and remove
 	        //vForm.setOldActivity(vForm.getActivityOne());
-	         List<CompareOutput> outputCollection = new ArrayList<>();
+	        List<CompareOutput> outputCollection = new ArrayList<>();
 	        ActivityHistory auditHistory1 = ActivityVersioningService.getAuditHistory(ampActivityOne);
 	        ActivityHistory auditHistory2 = ActivityVersioningService.getAuditHistory(ampActivityTwo);
-	         // Retrieve annotated for versioning fields.
+	        // Retrieve annotated for versioning fields.
 	        Field[] fields = AmpActivityFields.class.getDeclaredFields();
 	        for (int i = 0; i < fields.length; i++) {
 	            //logger.info(fields[i]);

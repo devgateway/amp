@@ -129,7 +129,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
                         logger.debug(this.getClass() + " end date " + upperDateReport);
                     } catch (AmpApiException e1) {
 
-                        logger.error(e1);
+                        logger.error(e1.getMessage(), e1);
                     }
                     spec.setFilters(filterRules);
 

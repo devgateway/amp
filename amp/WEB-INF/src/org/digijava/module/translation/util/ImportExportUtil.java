@@ -209,7 +209,7 @@ public class ImportExportUtil {
                 saveIfNew(message, existingMessage, dbSession, affected);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
     
@@ -337,7 +337,7 @@ public class ImportExportUtil {
             Unmarshaller unmarshaller = getUnmarshaler();
             root = (Translations) unmarshaller.unmarshal(file);
         } catch (JAXBException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return root;
     }
@@ -462,7 +462,7 @@ public class ImportExportUtil {
             Collection<MessageGroup> groups = TrnUtil.groupByKey(messages);
             return new ArrayList<>(groups);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new AimException("Cannot load messages for expot.",e);
         }
     }
@@ -500,7 +500,7 @@ public class ImportExportUtil {
             messages = (List<Message>) query.list();
             
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new AimException("Cannot load messages for expot.",e);
         }
         return messages;
@@ -602,7 +602,7 @@ public class ImportExportUtil {
             throw new AimException("Cannot import messages",e);
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new AimException("Cannot import messages",e);
         }
         return errors;
@@ -645,7 +645,7 @@ public class ImportExportUtil {
             throw new AimException("Cannot import messages",e);
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new AimException("Cannot import messages",e);
         }
         return fsFileSystem;

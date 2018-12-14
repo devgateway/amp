@@ -139,7 +139,7 @@ public final class XmlPatcherUtil {
             con.close();
             return ret;
         } catch (SQLException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
@@ -156,7 +156,7 @@ public final class XmlPatcherUtil {
         try {
             return PersistenceManager.getJdbcConnection();
         } catch (SQLException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
@@ -332,7 +332,7 @@ public final class XmlPatcherUtil {
             sess.saveOrUpdate(lazyPatch);
             //tx.commit();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }

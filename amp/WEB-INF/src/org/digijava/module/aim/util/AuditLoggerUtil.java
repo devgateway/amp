@@ -161,7 +161,6 @@ public class AuditLoggerUtil {
             
             session.save(aal);
         }catch (Exception ex) {
-            ex.printStackTrace();
             logger.error("Cannot save audit logger :", ex);
         } 
     }

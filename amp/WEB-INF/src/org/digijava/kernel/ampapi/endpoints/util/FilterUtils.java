@@ -581,7 +581,7 @@ public class FilterUtils {
                 }
                 filterRules.addDateRangeFilterRule(cal.getTime(), currentCal.getTime());
             } catch (AmpApiException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
 
             }
         }

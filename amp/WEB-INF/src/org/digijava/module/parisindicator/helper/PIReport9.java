@@ -170,8 +170,7 @@ public class PIReport9 extends PIAbstractReport {
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         return list;
     }

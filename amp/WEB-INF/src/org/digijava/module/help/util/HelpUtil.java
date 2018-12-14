@@ -176,7 +176,7 @@ public class HelpUtil {
             helpTopic = (HelpTopic) session.load(HelpTopic.class, helpTopicId);
             
         } catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
             throw new AimException(ex);
         }
         return helpTopic;
@@ -193,7 +193,7 @@ public class HelpUtil {
             query=session.createQuery(queryString);
             helpTopic=(HelpTopic)query.uniqueResult();
         } catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
             throw new AimException(ex);
         }
         return helpTopic;
@@ -209,7 +209,7 @@ public class HelpUtil {
             query=session.createQuery(queryString);
             helpTopic=(HelpTopic)query.uniqueResult();
         } catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
             throw new AimException(ex);
         }
         return helpTopic;
@@ -230,7 +230,7 @@ public class HelpUtil {
                 query.setString("key", key);
                 helpTopic=(HelpTopic) query.uniqueResult();
             } catch (Exception e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new AimException(e);
             }
         } else {
@@ -254,7 +254,7 @@ public class HelpUtil {
                 query.setString("bodyEditKey", bodyEditKey);
                 helpTopic=(HelpTopic) query.uniqueResult();
             } catch (Exception e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new AimException(e);
             }
         } else {
@@ -275,7 +275,7 @@ public class HelpUtil {
                 query.setString("key", key);
                 helpTopic=(HelpTopic) query.uniqueResult();
             } catch (Exception e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new AimException(e);
             }
         } else {
@@ -303,7 +303,7 @@ public class HelpUtil {
             }
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new AimException(e);
         }
         return false;

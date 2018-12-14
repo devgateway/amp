@@ -2073,7 +2073,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                         return logActivityHistory;
                     }
                 } catch (DgException e) {
-                    logger.error(e);                
+                    logger.error(e.getMessage(), e);
                 }
             }
         }

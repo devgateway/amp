@@ -10,7 +10,6 @@ import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AuditableEntity;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.FieldTranslationPack;
 import org.digijava.module.translation.util.TranslationStore;
@@ -114,9 +113,6 @@ public class AmpEntityInterceptor extends EmptyInterceptor {
      */
     @Override
     public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
-        if (entity instanceof AuditableEntity) {
-            ((AuditableEntity) entity).touch();
-        }
 
         if (!ContentTranslationUtil.multilingualIsEnabled())
             return;
@@ -144,10 +140,6 @@ public class AmpEntityInterceptor extends EmptyInterceptor {
      */
     @Override
     public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
-
-        if (entity instanceof AuditableEntity) {
-            ((AuditableEntity) entity).touch();
-        }
 
         if (!ContentTranslationUtil.multilingualIsEnabled())
             return false;

@@ -1,12 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.gis;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletResponse;
@@ -55,11 +54,12 @@ import org.digijava.kernel.ampapi.endpoints.indicator.Indicator;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportConfig;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.JSONUtils;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
@@ -364,7 +364,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "processPublicLayer")
     @ApiOperation("Just returns the same data so the GIS code doesn't break with public layers.")
-    public JsonBean processPublicLayer(JsonBean input) {
+    public Map processPublicLayer(Map input) {
         // Due to problems on the frontend for now we receive the public layer data and if there is no gap analysis then we return it without changes.
         return input;
     }    
@@ -374,33 +374,33 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Produces("application/vnd.ms-excel")
     @ApiMethod(ui = false, id = "MapExport")
     @ApiOperation("Export map id from current filters")
-     public StreamingOutput getExportMap(
-             @Context HttpServletResponse webResponse,
+    public StreamingOutput getExportMap(
+            @Context HttpServletResponse webResponse,
             @QueryParam("mapId") Long mapId,
             @ApiParam(value = "1=locations, 2=structures", allowableValues = "1,2")
-            @DefaultValue("1") @QueryParam("exportType") Long exportType) throws AmpApiException
-    {
+            @DefaultValue("1") @QueryParam("exportType") Long exportType) {
         final HSSFWorkbook wb;
-        String name="";
-        JsonBean filter=null;
-        if(mapId!=null){
+        String name = "";
+
+        Map<String, Object> filters = null;
+        if (mapId != null) {
             AmpApiState map = EndpointUtils.getSavedMap(mapId);
-            filter = JsonBean.getJsonBeanFromString(map.getStateBlob());
+            ReportConfig reportConfig = JSONUtils.readValueFromJson(map.getStateBlob(),
+                    ReportConfig.class);
+            filters = reportConfig.getFilters().getFilters();
         }
-        //since it comes from a saved map and it has another structure we will use the linkedhash map thats inside
-        //the Json bean to filter
-        LinkedHashMap<String, Object> filters=(LinkedHashMap<String, Object>)filter.get("filters");
-        if(exportType==1){
-            name="map-export-project-sites.xls";
+
+        if (exportType == 1) {
+            name = "map-export-project-sites.xls";
             wb = new ActivityStructuresExporter(filters).export(name);
-        }else{
-            name="map-export-administrative-Locations.xls";
+        } else {
+            name = "map-export-administrative-Locations.xls";
             wb = new ActivityLocationExporter(filters).export(name);
         }
         webResponse.setHeader("Content-Disposition","attachment; filename=" + name);
 
-        StreamingOutput streamOutput = new StreamingOutput(){
-            public void write(OutputStream output) throws IOException, WebApplicationException {
+        StreamingOutput streamOutput = new StreamingOutput() {
+            public void write(OutputStream output) throws WebApplicationException {
                 try {
                     wb.write(output);
                 } catch (Exception e) {
@@ -409,8 +409,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
             }
         };
         return streamOutput;
-      }
-    
+    }
 
     @GET
     @Path("/clusters")
@@ -474,7 +473,8 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "reportExport")
     @ApiOperation("Load report configuration from current session")
-    public JsonBean getLastUpdated(@PathParam("report_config_id") String reportConfigId) {
+    @JsonView(AmpApiState.DetailView.class)
+    public AmpApiState getLastUpdated(@PathParam("report_config_id") String reportConfigId) {
         return ReportsUtil.getApiState(reportConfigId);
     }
     

@@ -81,10 +81,6 @@ public class EPConstants {
     public static final String SETTINGS = "settings";
     
     // map import/export
-    public static final String API_STATE_TITLE = "title";
-    public static final String API_STATE_DESCRIPTION = "description";
-    public static final String API_STATE_BLOB = "stateBlob";
-    public static final String API_STATE_LAYERS_VIEW = "layers-view";
     public static final String API_STATE_REPORT_EXPORT_DESCRIPTION = "Export to Map";
     public static final String API_STATE_REPORT_EXPORT = "reportExportId=";
     

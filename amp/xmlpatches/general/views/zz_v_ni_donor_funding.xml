@@ -60,7 +60,7 @@
      (SELECT acv.id from amp_category_value acv JOIN amp_category_class acc ON acv.amp_category_class_id = acc.id WHERE acc.keyname='adjustment_type' and acv.category_value='Actual') AS adjustment_type, 
      vpc.transaction_date AS transaction_date, 
      vpc.transaction_amount AS transaction_amount, NULL as related_pledge_id,
-     ac.amp_currency_id AS currency_id, 
+     vpc.currency_id,
      NULL AS terms_assist_id, NULL AS fixed_exchange_rate,
      NULL AS financing_instrument_id, NULL AS donor_org_id,
      NULL AS mode_of_payment_id, NULL AS funding_status_id,
@@ -71,8 +71,8 @@
      NULL as expenditure_class_id,
      NULL as concessionality_level_id
     FROM v_proposed_cost vpc
-    JOIN amp_currency ac ON ac.currency_code = vpc.currency_code
-    
+	WHERE vpc.currency_id IS NOT NULL
+
     UNION ALL
     
     SELECT f.amp_activity_id, f.amp_funding_id as funding_id, m.amp_fund_mtef_projection_id AS amp_fund_detail_id, 3 AS transaction_type, m.amp_projected_categoryvalue_id AS adjustment_type,

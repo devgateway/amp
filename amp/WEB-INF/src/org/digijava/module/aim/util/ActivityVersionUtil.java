@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-//import org.digijava.kernel.request.TLSUtils;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -71,9 +70,6 @@ public class ActivityVersionUtil {
         return ret;
     }
 
-    //public static String generateFormattedOutput(HttpServletRequest request, Output out) throws WorkerException {
-      //  return generateFormattedOutput(request, out, null);
-   // }
     public static String generateFormattedOutput( Output out) throws WorkerException {
         return generateFormattedOutput( out, null);
     }

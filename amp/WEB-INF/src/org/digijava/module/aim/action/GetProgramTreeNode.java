@@ -66,11 +66,11 @@ public class GetProgramTreeNode
 
     }
     catch (UnsupportedEncodingException ex) {
-      logger.error(ex);
+      logger.error(ex.getMessage(), ex);
       throw ex;
     }
     catch (IOException ex) {
-      logger.error(ex);
+      logger.error(ex.getMessage(), ex);
       throw ex;
     }
 

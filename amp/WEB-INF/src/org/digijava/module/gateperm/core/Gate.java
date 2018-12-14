@@ -109,7 +109,6 @@ public abstract class Gate extends PropertyListable {
             return b;
         } catch (Exception e) {
             logger.error("Gate "+this.getClass().getName()+" logic has thrown an exception: ", e);
-            e.printStackTrace();
         }
         return false;
     }

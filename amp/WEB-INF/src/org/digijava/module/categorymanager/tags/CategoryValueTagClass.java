@@ -69,7 +69,6 @@ public class CategoryValueTagClass extends TagSupport {
                 }
                 catch (Exception E) {
                     logger.error(E.getMessage(), E);
-                    E.printStackTrace();
                 }
             }
         }
@@ -82,7 +81,6 @@ public class CategoryValueTagClass extends TagSupport {
                 }
                 catch (Exception E) {
                     logger.error(E.getMessage(), E);
-                    E.printStackTrace();
                 }
             }
         }
@@ -98,7 +96,6 @@ public class CategoryValueTagClass extends TagSupport {
             }
             catch(Exception E){
                 logger.info(E.getMessage(), E);
-                E.printStackTrace();
             }
         }
         else {
@@ -108,7 +105,6 @@ public class CategoryValueTagClass extends TagSupport {
             }
             catch(Exception E){
                 logger.info(E.getMessage(), E);
-                E.printStackTrace();
             }
         }
         

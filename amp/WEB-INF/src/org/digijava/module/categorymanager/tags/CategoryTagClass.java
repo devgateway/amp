@@ -183,7 +183,6 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
                     }
                     catch(Exception E){
                         logger.error(E.getMessage(), E);
-                        E.printStackTrace();
                     }
                 }else {
                     /* Getting the id of the current value of the category */
@@ -206,7 +205,6 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
                     }
                     catch(Exception E){
                         logger.error(E.getMessage(), E);
-                        E.printStackTrace();
                     }
                 }
                 
@@ -225,7 +223,6 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
         }
         catch(Exception E){
             logger.info(E.getMessage(), E);
-            E.printStackTrace();
         }
         
         this.reset();

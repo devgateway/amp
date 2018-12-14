@@ -141,7 +141,6 @@ public final class ARUtil {
             col= qry.list();
             
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error(e.getMessage(), e);
         }
         return col;

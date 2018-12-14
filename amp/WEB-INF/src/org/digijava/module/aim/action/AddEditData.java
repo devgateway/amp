@@ -159,7 +159,6 @@ public class AddEditData
                     IndicatorUtil.updateThemeConnection(connection);
                 }catch(Exception ex){
                     logger.error(ex.getMessage(), ex);
-                    ex.printStackTrace();
                 }
             }
             //returning null because "delete" is called from already closed popup window.

@@ -122,7 +122,6 @@ public class PIReport6 extends PIAbstractReport {
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            e.printStackTrace();
         }
         return list;
     }

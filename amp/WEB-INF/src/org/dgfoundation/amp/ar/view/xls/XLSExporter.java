@@ -371,13 +371,11 @@ public abstract class XLSExporter extends Exporter {
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            e.printStackTrace();
         }
         try{
             sheet.addMergedRegion(r);
         } catch(Exception e) {
             logger.error(e.getMessage(), e);
-            e.printStackTrace();
         }
 //      try{
 //          sheet.autoSizeColumn(r.getColumnFrom());
@@ -417,7 +415,6 @@ public abstract class XLSExporter extends Exporter {
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            e.printStackTrace();
         }
         sheet.addMergedRegion(r);   
     }

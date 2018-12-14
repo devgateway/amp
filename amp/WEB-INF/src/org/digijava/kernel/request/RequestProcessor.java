@@ -914,7 +914,6 @@ public class RequestProcessor
             return super.processValidate(request, response, form, originalMapping);
         } catch (InvalidCancelException e) {
             logger.error(e.getMessage(), e);
-            e.printStackTrace();
             return false;
         }
     }

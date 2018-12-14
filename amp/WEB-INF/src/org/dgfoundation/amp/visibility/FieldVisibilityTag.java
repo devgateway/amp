@@ -196,7 +196,6 @@ public class FieldVisibilityTag extends BodyTagSupport {
        }
        catch (Exception e) {
            logger.error(e.getMessage(), e);
-           e.printStackTrace();
         throw new JspTagException(e.getMessage());
        }
        return EVAL_PAGE;//SKIP_BODY 

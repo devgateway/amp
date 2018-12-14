@@ -46,7 +46,6 @@ public class AmpReportColumn implements Serializable, Comparable<AmpReportColumn
                 defaultLevel=CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ACTIVITY_LEVEL_KEY, (long)0);
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
             logger.error(e.getMessage(), e);
         }
         

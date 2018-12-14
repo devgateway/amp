@@ -122,7 +122,6 @@ public abstract class GenericFeedBinder implements Cloneable {
                 dst.add(dobj);
             } catch (Exception e) {
                 logger.info(e.getMessage(), e);
-                e.printStackTrace();
             }
         }
         createFinalTree();

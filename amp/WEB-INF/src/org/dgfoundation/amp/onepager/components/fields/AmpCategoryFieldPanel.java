@@ -106,7 +106,6 @@ public abstract class AmpCategoryFieldPanel extends
                     return collectionByKey;
                 } catch (Exception e) {
                     logger.error(e.getMessage(), e);
-                    e.printStackTrace();
                     throw new RuntimeException(e);
                 }
             }

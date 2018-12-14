@@ -138,7 +138,6 @@ public class ListCell extends Cell {
                 ret.addCell(element.filter(metaCell,ids));
             } catch (IncompatibleCellException e) {
                 logger.error(e.getMessage(), e);
-                e.printStackTrace();
             }
             
         }
@@ -156,7 +155,6 @@ public class ListCell extends Cell {
             ret.addCells((Collection) c.getValue());
         } catch (IncompatibleCellException e) {
             logger.error(e.getMessage(), e);
-            e.printStackTrace();
         }
         return ret;
     }
@@ -180,7 +178,6 @@ public class ListCell extends Cell {
             
         } catch (IncompatibleCellException e) {
             logger.error(e.getMessage(), e);
-            e.printStackTrace();
         }
     }
     

@@ -374,7 +374,6 @@ public class PIUseCase {
             commonDataUnique = new LinkedHashSet<AmpAhsurvey>(commonData);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            e.printStackTrace();
         }
         return commonDataUnique;
     }

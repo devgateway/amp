@@ -731,7 +731,6 @@ public class TeamUtil {
             //transaction.commit();
         } catch (HibernateException e) {
             logger.error(e.getMessage(), e);
-            e.printStackTrace();
         }
     }
         

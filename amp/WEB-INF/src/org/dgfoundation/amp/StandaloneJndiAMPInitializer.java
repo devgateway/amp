@@ -170,15 +170,12 @@ public class StandaloneJndiAMPInitializer {
             realJndiName = parseJbossRealJndiName();
         } catch (SAXException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
             logger.error(e.getMessage(), e);
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
             logger.error(e.getMessage(), e);
         } catch (ParserConfigurationException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
             logger.error(e.getMessage(), e);
         }
 

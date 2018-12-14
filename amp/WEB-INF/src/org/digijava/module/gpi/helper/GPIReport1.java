@@ -151,7 +151,6 @@ public class GPIReport1 extends GPIAbstractReport {
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            e.printStackTrace();
         }
         logger.warn("generate report: " + ((Calendar.getInstance().getTimeInMillis() - time) / 1000) + "s");
         return list;

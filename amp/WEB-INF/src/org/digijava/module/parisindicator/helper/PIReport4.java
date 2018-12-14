@@ -180,7 +180,6 @@ public class PIReport4 extends PIAbstractReport {
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            e.printStackTrace();
         }
         return list;
     }

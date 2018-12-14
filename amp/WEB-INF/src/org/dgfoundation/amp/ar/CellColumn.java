@@ -249,7 +249,6 @@ public class CellColumn<K extends Cell> extends Column<K> {
                 }
             } catch (IncompatibleCellException e) {
                 logger.error(e.getMessage(), e);
-                e.printStackTrace();
             }
 
         }

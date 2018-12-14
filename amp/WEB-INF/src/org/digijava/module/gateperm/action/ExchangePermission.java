@@ -133,23 +133,18 @@ public class ExchangePermission extends MultiAction {
             }
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
             logger.error(e.getMessage(), e);
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
             logger.error(e.getMessage(), e);
         } catch (JAXBException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
             logger.error(e.getMessage(), e);
         } catch (HibernateException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
             logger.error(e.getMessage(), e);
         } catch (DgException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
             logger.error(e.getMessage(), e);
         } catch (SQLException e) {
             // TODO Auto-generated catch block

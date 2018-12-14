@@ -279,7 +279,6 @@ public class ActivityVersionUtil {
                 method = clazz.getMethod("set" + setName, Collection.class);
             method.invoke(out, returnSet);
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("Can't init set '"+ setName +"':", e);
         }
     }

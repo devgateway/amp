@@ -118,7 +118,6 @@ public class GetActivities extends Action {
             outputStream.close();
         } catch (Exception e) {
             logger.info(e.getMessage(), e);
-            e.printStackTrace();
             if (outputStream != null) {
                 try {
                     outputStream.write(stackTrace2XML(e));

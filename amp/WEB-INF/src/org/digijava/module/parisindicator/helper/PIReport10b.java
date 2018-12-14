@@ -280,7 +280,6 @@ public class PIReport10b extends PIAbstractReport {
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            e.printStackTrace();
         }
         return list;
     }

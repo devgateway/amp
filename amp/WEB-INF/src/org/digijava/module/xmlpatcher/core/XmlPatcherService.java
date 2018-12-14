@@ -139,10 +139,8 @@ public class XmlPatcherService extends AbstractServiceImpl {
                 throw new RuntimeException(e);
             } catch (HibernateException e) {
                 logger.error(e.getMessage(), e);
-                e.printStackTrace();
             } catch (SQLException e) {
                 logger.error(e.getMessage(), e);
-                e.printStackTrace();
             }
 
             //the error may be that the patch is referencing for deprecation patches that do not exist.

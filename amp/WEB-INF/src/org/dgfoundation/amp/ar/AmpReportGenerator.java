@@ -922,7 +922,6 @@ public class AmpReportGenerator extends ReportGenerator {
                 tmpColumnList.add((Column) funding.clone());
             } catch (CloneNotSupportedException e) {
                 logger.error(e.getMessage(), e);
-                e.printStackTrace();
             }
 
         }
@@ -1473,7 +1472,6 @@ public class AmpReportGenerator extends ReportGenerator {
                 report = report.horizSplitByCateg(c.getColumnName());
             } catch (UnidentifiedItemException | IncompatibleColumnException e) {
                 logger.error(e.getMessage(), e);
-                e.printStackTrace();
             }
         }
 

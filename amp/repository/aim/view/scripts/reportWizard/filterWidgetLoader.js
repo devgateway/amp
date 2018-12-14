@@ -15,6 +15,14 @@ $(document).ready(function () {
         // Save just applied filters in case the user hits "reset" button.
         var serializedFilters = widgetFilter.serialize() || {};
         // alert(JSON.stringify(serializedFilters));
+        $.ajax({
+            type: 'POST',
+            url: '/aim/reportsFilterPicker.do?apply=true&cacheBuster=' + new Date().getTime(),
+            data: serializedFilters,
+            success: function (data) {
+                // TODO: to be implemented.
+            }
+        });
         $(container).hide();
     });
 });

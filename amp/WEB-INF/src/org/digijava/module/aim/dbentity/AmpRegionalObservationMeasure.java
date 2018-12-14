@@ -8,7 +8,7 @@ import java.util.Set;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 @TranslatableClass (displayName = "Regional Observation Measure")
-public class AmpRegionalObservationMeasure implements Serializable, Cloneable, AuditableEntity {
+public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
     //IATI-check: to be ignored
 //  @Interchangeable(fieldTitle="ID")
     private Long ampRegionalObservationMeasureId;
@@ -73,9 +73,5 @@ public class AmpRegionalObservationMeasure implements Serializable, Cloneable, A
         
         return aux;
     }
-
-    @Override
-    public AuditableEntity getParent() {
-        return regionalObservation;
-    }
+    
 }

@@ -72,7 +72,7 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
                     ret = new Model(object);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         
         return ret;
@@ -100,7 +100,7 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
             Object result = method.invoke(object);
             _id = (Serializable)result;
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
     

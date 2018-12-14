@@ -23,6 +23,8 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
@@ -30,14 +32,15 @@ import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.currency.CurrencyInflationUtil;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.currency.inflation.ds.FredDataSource;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.CurrencyPair;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRate;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
+import org.digijava.kernel.ampapi.endpoints.currency.dto.InflationDataSource;
+import org.digijava.kernel.ampapi.endpoints.currency.dto.InflationDataSourceSettings;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -67,22 +70,23 @@ public class CurrencyService {
     /**
      * @see Currencies#getCurrencyInflationDataSources()
      */
-    public static List<JsonBean> getInflationDataSources(){
-        List<JsonBean> dataSources = new ArrayList<JsonBean>();
+    public static List<InflationDataSource> getInflationDataSources() {
+        List<InflationDataSource> dataSources = new ArrayList<>();
         List<AmpInflationSource> ampSources = CurrencyInflationUtil.getInflationDataSources();
         if (ampSources != null && ampSources.size() > 0) {
             for (AmpInflationSource ais : ampSources) {
-                JsonBean ds = new JsonBean();
-                ds.set(CurrencyEPConstants.ID, ais.getId());
-                ds.set(CurrencyEPConstants.NAME, TranslatorWorker.translateText(ais.getName()));
-                ds.set(CurrencyEPConstants.DESCRIPTION, TranslatorWorker.translateText(ais.getDescription()));
-                ds.set(CurrencyEPConstants.SELECTED, ais.getSelected());
+                InflationDataSource ds = new InflationDataSource();
+                ds.setId(ais.getId());
+                ds.setName(TranslatorWorker.translateText(ais.getName()));
+                ds.setDescription(TranslatorWorker.translateText(ais.getDescription()));
+                ds.setSelected(ais.getSelected());
+                
                 //DEFLATOR: temporary just for information, until full settings support based on Settings V2 API can be used
-                Map<String, Object> settings = new HashMap<String, Object>();
-                settings.put(CurrencyEPConstants.CURRENCY_CODE, ais.getCurrency().getCurrencyCode());
-                settings.put(CurrencyEPConstants.FREQUENCY, ais.getFrequency());
-                settings.put(CurrencyEPConstants.API_TOKEN, ais.getApiToken());
-                ds.set(EPConstants.SETTINGS, settings);
+                InflationDataSourceSettings settings = new InflationDataSourceSettings();
+                settings.setCurrencyCode(ais.getCurrency().getCurrencyCode());
+                settings.setFrequency(ais.getFrequency());
+                settings.setApiToken(ais.getApiToken());
+                ds.setSettings(settings);
                 
                 dataSources.add(ds);
             }
@@ -94,44 +98,41 @@ public class CurrencyService {
     /**
      * @see Currencies#getAmpInflationRates()
      */
-    public static JsonBean getAmpInflationRates(){
-        JsonBean result = new JsonBean();
+    public static Map<String, Map<String, Double>> getAmpInflationRates() {
+        Map<String, Map<String, Double>> inflationRates = new HashMap<>();
+        
         List<AmpInflationRate> rates = CurrencyInflationUtil.getInflationRates();
         if (rates != null && rates.size() > 0) {
             for (AmpInflationRate rate : rates) {
                 String currencyCode = rate.getCurrency().getCurrencyCode();
-                SortedMap<String, Double> currencyRates = (TreeMap<String, Double>) result.get(currencyCode);
-                if (currencyRates == null) {
-                    currencyRates = new TreeMap<String, Double>();
-                    result.set(currencyCode, currencyRates);
-                }
+                inflationRates.putIfAbsent(currencyCode, new TreeMap<>());
+                SortedMap<String, Double> currencyRates = (TreeMap<String, Double>) inflationRates.get(currencyCode);
                 currencyRates.put(DATE_FORMATTER.format(rate.getPeriodStart()), rate.getInflationRate());
             }
         }
         
-        return result;
+        return inflationRates;
     }
     
     /**
-     * @see Currencies#saveInflationRates(JsonBean)
+     * @see Currencies#saveInflationRates(Map<String, Map<String, Double>>)
      */
-    public static JsonBean saveInflationRates(JsonBean jsonRates){
-        JsonBean result = null;
+    public static void saveInflationRates(Map<String, Map<String, Double>> jsonRates) {
         ApiEMGroup errors = new ApiEMGroup();
         
         // prepare and validate data
-        Map<AmpCurrency, Map<Date, Double>> ratesPerCurrency = new HashMap<AmpCurrency, Map<Date, Double>>();
-        for(Entry<String, Object> entry : jsonRates.any().entrySet()) {
+        Map<AmpCurrency, Map<Date, Double>> ratesPerCurrency = new HashMap<>();
+        for (Entry<String, Map<String, Double>> entry : jsonRates.entrySet()) {
             String currCode = entry.getKey();
             AmpCurrency currency = CurrencyUtil.getCurrencyByCode(currCode);
-            Object series = entry.getValue();
+            Map<String, Double> series = entry.getValue();
             if (currency == null) {
                 errors.addApiErrorMessage(CurrencyErrors.INVALID_CURRENCY_CODE, currCode);
             }
             String sInfo = currCode + " : ... %s ..."; 
-            boolean invalidSeries = series == null || !(series instanceof Map);
+            boolean invalidSeries = series == null;
             if (!invalidSeries) {
-                Iterator<?> iter = ((Map) series).keySet().iterator();
+                Iterator<?> iter = series.keySet().iterator();
                 if (iter.hasNext())
                     invalidSeries = !(iter.next() instanceof String);
             }
@@ -143,7 +144,7 @@ public class CurrencyService {
                 // reset iterator and process the series
                 for (Iterator<?> iter = ((Map) series).keySet().iterator(); iter.hasNext(); ) {
                     String dateStr = (String) iter.next();
-                    Object value = ((Map) series).get(dateStr);
+                    Double value = series.get(dateStr);
                     Date date = null;
                     try {
                         date = DATE_FORMATTER.parse(dateStr);
@@ -152,12 +153,11 @@ public class CurrencyService {
                             date = null; // reset
                         }
                     } catch (ParseException e) {
-                        logger.error(e.getMessage());
+                        logger.error("Date Format parse exception: " + dateStr, e);
                         errors.addApiErrorMessage(CurrencyErrors.INVALID_DATE_FORMAT, String.format(sInfo, dateStr));
                     }
-                    if (!(value instanceof Number)) {
-                        errors.addApiErrorMessage(CurrencyErrors.INVALID_INFLATION_RATE_VALUE, String.format(sInfo, value));
-                    } else if (currency != null && date != null) {
+                    
+                    if (currency != null && date != null) {
                         // now if everything is valid, record it
                         Map<Date, Double> dateValues = ratesPerCurrency.get(currency);
                         if (dateValues == null) {
@@ -170,9 +170,7 @@ public class CurrencyService {
             }
         }
         
-        if (errors.size() > 0) {
-            result = ApiError.toError(errors.getAllErrors());
-        } else {
+        if (errors.size() == 0) {
             // if no errors, then cleanup existing rates and create new ones
             CurrencyInflationUtil.deleteAllInflationRates();
             Session session = PersistenceManager.getSession();
@@ -184,29 +182,30 @@ public class CurrencyService {
             }
             // regenerate exchange rates based on new inflation rates
             CCExchangeRate.regenerateConstantCurrenciesExchangeRates(false);
+        } else {
+            throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, ApiError.toError(errors));
         }
-        
-        return result;
     }
     
     /**
-     * @see Currencies#getAmpInflationRates(Long)
+     * @see Currencies#getInflationRatesFromSource(Long)
      */
-    public static JsonBean getInflationRatesFromSource(Long sourceId) {
+    public static Map<String, Map<String, Double>> getInflationRatesFromSource(Long sourceId) {
         AmpInflationSource ds = CurrencyInflationUtil.getInflationDataSource(sourceId);
         if (ds == null) {
-            return ApiError.toError(CurrencyErrors.INVALID_SOURCE_ID.withDetails(String.valueOf(sourceId)));
+            throw new AmpWebApplicationException(Response.Status.BAD_REQUEST,
+                    CurrencyErrors.INVALID_SOURCE_ID.withDetails(String.valueOf(sourceId)));
         }
-        JsonBean result = null;
-        switch (ds.getName()) {
-        case CurrencyEPConstants.FRED_GNPDEF:
+        
+        if (ds.getName().equals(CurrencyEPConstants.FRED_GNPDEF)) {
+            Map<String, Map<String, Double>> inflRates = new HashMap<>();
             FredDataSource fredDS = new FredDataSource(ds.getApiToken(), ds.getFrequency());
-            Map<String, SortedMap<String, Double>> inflRates = new HashMap<String, SortedMap<String, Double>>();
             inflRates.put(ds.getCurrency().getCurrencyCode(), fredDS.getGNPDEFObservationsAsIs());
-            result = toInflationRatesResult(inflRates);
-            break;
+            
+            return inflRates;
         }
-        return result;
+        
+        return null;
     }
     
     protected static Map<String, SortedMap<String, Double>> convert(Map<String, SortedMap<Date, Double>> inflRates) {
@@ -221,22 +220,13 @@ public class CurrencyService {
         return result;
     }
     
-    protected static JsonBean toInflationRatesOnDates(Map<String, SortedMap<Date, Double>> inflationRatesPerCurrency) {
-        return toInflationRatesResult(convert(inflationRatesPerCurrency));
-    }
-    
-    protected static JsonBean toInflationRatesResult(Map<String, SortedMap<String, Double>> inflationRatesPerCurrency) {
-        JsonBean result = new JsonBean();
-        result.any().putAll(inflationRatesPerCurrency);
-        return result;
-    }
-    
     /**
      * @see Currencies#getConstantCurrencies()
      */
-    public static JsonBean getConstantCurrencies() {
-        JsonBean result = new JsonBean();
-        Map<AmpFiscalCalendar, List<ConstantCurrency>> cCurrencies = 
+    public static Map<String, Map<String, String>> getConstantCurrencies() {
+        
+        Map<String, Map<String, String>> constantCurrencies = new HashMap<>();
+        Map<AmpFiscalCalendar, List<ConstantCurrency>> cCurrencies =
                 CurrencyInflationUtil.getConstantCurrenciesByCalendar();
         
         for (Entry<AmpFiscalCalendar, List<ConstantCurrency>> calEntry : cCurrencies.entrySet()) {
@@ -276,23 +266,21 @@ public class CurrencyService {
                     calCurrYears.put(cYears.getKey(), sb.toString());
                 }
             }
-            result.set(calEntry.getKey().getAmpFiscalCalId().toString(), calCurrYears);
+            constantCurrencies.put(calEntry.getKey().getAmpFiscalCalId().toString(), calCurrYears);
         }
         
-        return result;
+        return constantCurrencies;
     }
 
     /**
-     * @see Currencies#saveConstantCurrencies(JsonBean)
+     * @see Currencies#saveConstantCurrencies(Map<String, Map<String, String>>)
      */
-    public static JsonBean saveConstantCurrencies(JsonBean input) {
+    public static void saveConstantCurrencies(Map<String, Map<String, String>> input) {
         ApiEMGroup errors = new ApiEMGroup();
         Map<AmpFiscalCalendar, Map<AmpCurrency, SortedSet<Integer>>> constantsInput = getConstantsInput(input, errors);
         
-        if (errors.size() > 0) {
-            return ApiError.toError(errors.getAllErrors());
-        } else {
-            Set<AmpCurrency> newConstantCurrencies = new HashSet<AmpCurrency>();
+        if (errors.size() == 0) {
+            Set<AmpCurrency> newConstantCurrencies = new HashSet<>();
             Session session = PersistenceManager.getSession();
             for (Entry<AmpFiscalCalendar, Map<AmpCurrency, SortedSet<Integer>>> calEntry : constantsInput.entrySet()) {
                 for (Entry<AmpCurrency, SortedSet<Integer>> currEntry : calEntry.getValue().entrySet()) {
@@ -312,33 +300,31 @@ public class CurrencyService {
             }
             // generate exchange rates for the new constant currencies
             CCExchangeRate.regenerateConstantCurrenciesExchangeRates(false);
+        } else {
+            throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, ApiError.toError(errors));
         }
-        
-        return null;
     }
     
-    public static Map<AmpFiscalCalendar, Map<AmpCurrency, SortedSet<Integer>>> getConstantsInput(JsonBean input, 
-            ApiEMGroup errors) {
+    public static Map<AmpFiscalCalendar, Map<AmpCurrency, SortedSet<Integer>>> getConstantsInput(
+            Map<String, Map<String, String>> input, ApiEMGroup errors) {
+        
         Map<AmpFiscalCalendar, Map<AmpCurrency, SortedSet<Integer>>> constInput = new HashMap<AmpFiscalCalendar, 
                 Map<AmpCurrency, SortedSet<Integer>>>();
-        for (Entry<String, Object> calEntry : input.any().entrySet()) {
+        for (Entry<String, Map<String, String>> calEntry : input.entrySet()) {
             // validate calendar
             AmpFiscalCalendar calendar = !NumberUtils.isDigits(calEntry.getKey()) ? null :
                 DbUtil.getAmpFiscalCalendar(Long.valueOf(calEntry.getKey()));
             if (calendar == null) {
                 errors.addApiErrorMessage(CurrencyErrors.INVALID_CALENDAR_ID, calEntry.getKey());
-            } else if (!(calEntry.getValue() instanceof Map)) {
-                    errors.addApiErrorMessage(CurrencyErrors.INVALID_CONSTANT_CURRENCIES_SERIES, calEntry.getKey());
             } else {
                 // check if data was already provided for this calendar
-                Map<AmpCurrency, SortedSet<Integer>> currYears = constInput.get(calendar);
-                if (currYears != null) {
+                if (constInput.get(calendar) != null) {
                     errors.addApiErrorMessage(CurrencyErrors.DUPLICATE_CALENDAR, calEntry.getKey());
                 } else {
-                    currYears = new HashMap<AmpCurrency, SortedSet<Integer>>();
+                    Map<AmpCurrency, SortedSet<Integer>> currYears = new HashMap<>();
                     constInput.put(calendar, currYears);
-                    for (Entry<?, ?> sEntry : ((Map<?, ?>) calEntry.getValue()).entrySet()) {
-                        String currCode = sEntry.getKey().toString();
+                    for (Entry<String, String> sEntry : calEntry.getValue().entrySet()) {
+                        String currCode = sEntry.getKey();
                         AmpCurrency standardCurrency = CurrencyUtil.getCurrencyByCode(currCode);
                         // verify if valid and unique currency input
                         ApiErrorMessage err = standardCurrency == null ? CurrencyErrors.INVALID_CURRENCY_CODE :
@@ -346,7 +332,7 @@ public class CurrencyService {
                         if (err != null) {
                             errors.addApiErrorMessage(err, String.format("%s: {...%s...}", calEntry.getKey(), currCode));
                         } else {
-                            SortedSet<Integer> years = parseYears(sEntry.getValue().toString().split(","), errors);
+                            SortedSet<Integer> years = parseYears(sEntry.getValue().split(","), errors);
                             if (years.size() > 0) {
                                 currYears.put(standardCurrency, years);
                             }
@@ -355,6 +341,7 @@ public class CurrencyService {
                 }
             }
         }
+        
         return constInput;
     }
     

@@ -68,6 +68,7 @@ public class ActivityVersioningService {
 	                    }
 	                    if (auxResult2 != null && auxResult2.toString().trim().equals("")) {
 	                        auxResult2 = null;
+	                        a
 	                    }
 	                }
 	                 // AMP-25074 - retrieve information about who and when modified the activity

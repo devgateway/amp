@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-//import javax.servlet.http.HttpServletRequest;
-//a
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.string.Strings;
@@ -27,7 +25,6 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-//import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -56,6 +53,7 @@ public class ActivityVersionUtil {
 			for (int i = 0; i < auxClass.getDeclaredMethods().length; i++) {
 				if (auxClass.getDeclaredMethods()[i].toString().contains(methodName)) {
 					return auxClass.getDeclaredMethods()[i];
+					
 				}
 			}
 		}
@@ -80,16 +78,9 @@ public class ActivityVersionUtil {
 		return ret;
 	}
 
-//	public static String generateFormattedOutput(HttpServletRequest request, Output out) throws WorkerException {
-//		return generateFormattedOutput(request, out, null);
-//	}
 	 public static String generateFormattedOutput( Output out) throws WorkerException {
 	        return generateFormattedOutput(out, null);
 	 }
-//	public static String generateFormattedOutput(HttpServletRequest request, Output out, Output out1)
-//			throws WorkerException {
-//		Site site = RequestUtils.getSite(request);
-//		String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 public static String generateFormattedOutput( Output out, Output out1) throws WorkerException {
 	        Site site = TLSUtils.getSite();
 	        String langCode = TLSUtils.getEffectiveLangCode();

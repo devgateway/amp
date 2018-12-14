@@ -224,7 +224,7 @@ public class PersistenceManager {
                         logger.info("Hibernate Session Close succeeded");
                     } catch (Throwable t) {
                         logger.info("Error while forcing Hibernate session close:");
-                        logger.error(t);
+                        logger.error(t.getMessage(), t);
                     }
                     logger.error("----------------------------------");
                 }
@@ -598,7 +598,7 @@ public class PersistenceManager {
         }
         catch(Exception e)
         {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 

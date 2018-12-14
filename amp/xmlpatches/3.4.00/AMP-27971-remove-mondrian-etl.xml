@@ -30,7 +30,10 @@
                 DROP VIEW IF EXISTS v_mondrian_sectors;
 
                 -- dropping the trigger explicitly, otherwise quartz will attempt to load the removed class and fail
-                DELETE FROM qrtz_triggers WHERE job_name='Run Mondrian ETL';
+                DELETE FROM qrtz_cron_triggers
+                    WHERE trigger_name = (SELECT trigger_name FROM qrtz_triggers WHERE job_name = 'Run Mondrian ETL');
+                DELETE FROM qrtz_triggers
+                    WHERE job_name = 'Run Mondrian ETL';
             ]]></lang>
         </script>
 

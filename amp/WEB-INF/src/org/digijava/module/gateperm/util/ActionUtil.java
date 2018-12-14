@@ -34,10 +34,10 @@ public final class ActionUtil {
             try {
                 al.add((String) fields[i].get(null));
             } catch (IllegalArgumentException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new RuntimeException( "IllegalArgumentException Exception encountered", e);
             } catch (IllegalAccessException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new RuntimeException( "IllegalAccessException Exception encountered", e);
             }
         }

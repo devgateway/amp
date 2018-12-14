@@ -47,7 +47,7 @@ public class BudgetClassificationProxyModel extends Model {
             Object value = method.invoke(object);
             return value;
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return null;
     }

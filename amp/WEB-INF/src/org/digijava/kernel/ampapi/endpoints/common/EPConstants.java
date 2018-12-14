@@ -94,29 +94,6 @@ public class EPConstants {
     public static final String FM_ENABLED = "__enabled";
     public static final String FM_PATHS_FILTER = "fm-paths";
 
-    // menu constants
-    public static final String MENU_NAME = "name"; 
-    public static final String MENU_TOOLTIP = "tooltip";
-    public static final String MENU_URL = "url";
-    public static final String MENU_CHILDREN = "children";
-    public static final String MENU_OPEN_POPUP = "popup";
-    public static final String MENU_OPEN_TAB = "tab";
-    public static final String MENU_POST = "post";
-    public static final String MENU_LANUGAGE = "language";
-    
-    //footer constants
-    public static final String BUILD_DATE = "buildDate";
-    public static final String AMP_VERSION = "ampVersion";
-    public static final String SITE_ID = "siteId";
-    public static final String TRACKING_URL = "trackingUrl";
-    public static final String TRACKING_ENABLED = "trackingEnabled";
-    public static final String ADMIN_LINKS = "adminLinks";
-    public static final String ADMIN_LINK_NAME = "admin";
-    public static final String USERDEV_LINK_NAME = "User/Dev Mode";
-    public static final String FOOTER_TEXT = "footerText";
-    public static final String LINK_NAME = "name";
-    public static final String LINK_URL = "url";
-    
     //tab dependency of each filter
     /*
      * var filterInstancesNames = {donors: 'Funding Organizations', sectors : 'Sector', programs: 'Programs', 

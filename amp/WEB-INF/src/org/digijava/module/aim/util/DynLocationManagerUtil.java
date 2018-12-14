@@ -132,7 +132,7 @@ public class DynLocationManagerUtil {
             
         } catch (Exception e) {
             errors.add("title", new ActionMessage("error.aim.dynRegionManager.cannotSaveOrUpdate"));
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 

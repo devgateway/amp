@@ -166,10 +166,14 @@ public class TLSUtils {
     }
     
     public static void populate(HttpServletRequest request) {
-        SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain(request.getServerName(), null);
-        if (siteDomain != null) {
-            populate(request, siteDomain);
+        SiteDomain siteDomain = null;
+        if (request.getServerName() == null) {
+            // it is a mockup request. The site domain was populated on request previously
+            siteDomain = RequestUtils.getSiteDomain(request);
+        } else {
+            siteDomain = SiteCache.getInstance().getSiteDomain(request.getServerName(), null);
         }
+        populate(request, siteDomain);
     }
     
     public static void populate(HttpServletRequest request, SiteDomain siteDomain) {

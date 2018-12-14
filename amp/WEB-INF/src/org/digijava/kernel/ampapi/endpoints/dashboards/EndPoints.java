@@ -22,6 +22,8 @@ import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.AmpColorThresholdWrapper;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMap;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.ProjectAmounts;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.FundingTypeChartData;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.AidPredictabilityChartData;
@@ -30,13 +32,11 @@ import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopChartData;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopChartType;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 
 /**
@@ -203,31 +203,9 @@ public class EndPoints implements ErrorReportingEndpoint {
     @Path("/heat-map/configs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "heatMapConfigs")
-    @ApiOperation(
-            value = "Provides possible HeatMap Configurations.",
-            notes = "<dl>\n"
-                    + "This EP doesn't receive any parameters and return a list of the visibly columns, a "
-                    + "list of charts and the colors to use for every threshold.\n"
-                    + "</dl></br></br>\n"
-                    + "<h3>Sample Output:</h3><pre>\n"
-                    + "{\n"
-                    + "    “columns” : [{“name” : “Donor Group”, “origName”: “Donor Group”},\n"
-                    + "                 {“name” : “Primary Sector”, “origName”: “...”},\n"
-                    + "                 {“name” : “Primary Sector Sub-Sector”, ...},\n"
-                    + "                 …\n"
-                    + "                 {“name” : “Secondary Program Level 8”, ...}\n"
-                    + "                 ],\n"
-                    + "    “charts” : [{\n"
-                    + "                “type” : “S”, // other options: “P”, “L”\n"
-                    + "                “name” : “Fragmentation by Donor and Sector”, //name will be always in "
-                    + "English, not traslated\n"
-                    + "                “yColumns” : [0], xColumns : [1, 2, 3] // indexes ref of all used columns\n"
-                    + "                }, ....],\n"
-                    + "    “amountColors” :  [ {0 : “#d05151”}, {1 : #e68787}, ...] // i.e. for values >= 1, "
-                    + "use #e68787 color\n"
-                    + "}</pre>")
-    public JsonBean getHeatMapConfigs() {
-        return new HeatMapConfigs().getHeatMapConfigs();
+    @ApiOperation("Provides possible HeatMap Configurations.")
+    public HeatMapConfigs getHeatMapConfigs() {
+        return new HeatMapConfigService().getHeatMapConfigs();
     }
 
     @GET
@@ -238,7 +216,7 @@ public class EndPoints implements ErrorReportingEndpoint {
             value = "List HeatMap colors and thresholds",
             notes = "The user must be logged-in as admin to call this method.")
     public AmpColorThresholdWrapper getHeatMapSettings() {
-        return new HeatMapConfigs().getHeatMapAdminSettings();
+        return new HeatMapConfigService().getHeatMapAdminSettings();
     }
 
     @POST
@@ -250,7 +228,7 @@ public class EndPoints implements ErrorReportingEndpoint {
             notes = "Note: for now we have a fixed set of colors, but in future we may want to allow different "
                     + "number of colors and nuances. Only thresholds can be changed.")
     public void setHeatMapSettings(AmpColorThresholdWrapper config) {
-        new HeatMapConfigs().saveHeatMapAdminSettings(config);
+        new HeatMapConfigService().saveHeatMapAdminSettings(config);
     }
 
     /**

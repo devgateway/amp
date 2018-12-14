@@ -140,7 +140,7 @@ public class NodeWrapper{
             errorAppeared = true;
         } 
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             errorAppeared = true;
         }       
     }

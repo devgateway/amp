@@ -75,7 +75,7 @@ module.exports = Backbone.Model.extend({
   toJSON: function() {
     var json = _.clone(this.attributes);
     json.donorNames = this._getNames(Constants.DONOR_AGENCY);
-    json.executingNames = this._getNames();
+    json.executingNames = this._getNames(Constants.EXECUTING_AGENCY);
     json.sectorNames = this._getNames(Constants.PRIMARY_SECTOR);
     return json;
   },

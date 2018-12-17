@@ -38,9 +38,18 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
 
         String accept = httpRequest.getHeader(HttpHeaders.ACCEPT);
         String contentType = httpRequest.getHeader(HttpHeaders.CONTENT_TYPE);
+
+        String mediaType = null;
+        // accept can list many mime types, select first one we can respond with
+        if (accept != null) {
+            if (accept.contains(MediaType.APPLICATION_JSON)) {
+                mediaType = MediaType.APPLICATION_JSON;
+            } else if (accept.contains(MediaType.APPLICATION_XML)) {
+                mediaType = MediaType.APPLICATION_XML;
+            }
+        }
         
-        String mediaType = accept;
-        if (accept == null || accept.equals(MediaType.WILDCARD)) {
+        if (mediaType == null) {
             if (contentType != null && contentType.equals(MediaType.APPLICATION_XML)) {
                 mediaType = MediaType.APPLICATION_XML;
             } else {

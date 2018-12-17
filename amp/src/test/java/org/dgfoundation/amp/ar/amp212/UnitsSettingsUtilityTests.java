@@ -1,7 +1,7 @@
 package org.dgfoundation.amp.ar.amp212;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,6 +35,6 @@ public class UnitsSettingsUtilityTests extends ReportingTestCase {
 
     @BeforeClass
     public static void setUp() {
-        // this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
+        // this empty method is used as a shadow for org.dgfoundation.amp.newreports.ReportingTestCase.setUp()
     }
 }

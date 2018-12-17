@@ -88,8 +88,7 @@ public class GetProgramIndicators extends Action {
                 outputStream.close();
             
         } catch (Exception e) {
-            logger.info(e);
-            e.printStackTrace();
+            logger.info(e.getMessage(), e);
 
         }
 

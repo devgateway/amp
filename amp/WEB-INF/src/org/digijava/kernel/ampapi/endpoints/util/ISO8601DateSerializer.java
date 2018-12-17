@@ -14,6 +14,8 @@ import org.digijava.kernel.ampapi.swagger.converters.PropertyDescriber;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 
 /**
+ * Important: this deserializer uses JVM default timezone.
+ *
  * @author Octavian Ciubotaru
  */
 public class ISO8601DateSerializer extends JsonSerializer<Date> implements PropertyDescriber {
@@ -26,12 +28,16 @@ public class ISO8601DateSerializer extends JsonSerializer<Date> implements Prope
         if (value == null) {
             jgen.writeNull();
         } else {
-            jgen.writeString(dateFormat.format(value));
+            synchronized (dateFormat) {
+                jgen.writeString(dateFormat.format(value));
+            }
         }
     }
 
     @Override
     public Property describe() {
-        return new DateProperty();
+        DateProperty property = new DateProperty();
+        property.setFormat(EPConstants.ISO8601_DATE_FORMAT);
+        return property;
     }
 }

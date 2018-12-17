@@ -75,6 +75,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -513,14 +514,14 @@ public class DbUtil {
         return q.list();
     }
 
-    public static String getActivityApprovalStatus(Long actId) {
+    public static ApprovalStatus getActivityApprovalStatus(Long actId) {
         String qry = "select act.approvalStatus from " + AmpActivityVersion.class.getName()
                 + " act where act.ampActivityId=:actId";
         Query q = PersistenceManager.getSession().createQuery(qry);
         q.setParameter("actId", actId, LongType.INSTANCE);
-        List<String> res = q.list();
+        List res = q.list();
         if (!res.isEmpty())
-            return res.get(0);
+            return (ApprovalStatus) res.get(0);
         return null;
     }
 
@@ -1248,7 +1249,7 @@ public class DbUtil {
         if (publicView) {
             queryString.append(String.format(
                     " and orgRole.activity.approvalStatus in ('%s', '%s') and orgRole.activity.team.parentTeamId is not null ",
-                    Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
+                    ApprovalStatus.APPROVED.getDbName(), ApprovalStatus.STARTED_APPROVED.getDbName()));
         }
 
         Query query = PersistenceManager.getSession().createQuery(queryString.toString());

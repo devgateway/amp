@@ -14,15 +14,15 @@ public enum ApprovalStatus implements Identifiable {
      * In use. Not supported by reports. Should be removed in favor of started.
      */
     CREATED("created", 0),
-    APPROVED_STATUS("approved", 1),
-    EDITED_STATUS("edited", 2),
-    STARTED_APPROVED_STATUS("startedapproved", 3),
-    STARTED_STATUS("started", 4),
+    APPROVED("approved", 1),
+    EDITED("edited", 2),
+    STARTED_APPROVED("startedapproved", 3),
+    STARTED("started", 4),
     /**
      * Not in use. Synonym to rejected?
      */
     NOT_APPROVED("not_approved", 5),
-    REJECTED_STATUS("rejected", 6);
+    REJECTED("rejected", 6);
 
     private String dbName;
     private Integer id;

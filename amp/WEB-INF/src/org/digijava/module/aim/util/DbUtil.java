@@ -1249,7 +1249,7 @@ public class DbUtil {
         if (publicView) {
             queryString.append(String.format(
                     " and orgRole.activity.approvalStatus in ('%s', '%s') and orgRole.activity.team.parentTeamId is not null ",
-                    ApprovalStatus.APPROVED_STATUS.getDbName(), ApprovalStatus.STARTED_APPROVED_STATUS.getDbName()));
+                    ApprovalStatus.APPROVED.getDbName(), ApprovalStatus.STARTED_APPROVED.getDbName()));
         }
 
         Query query = PersistenceManager.getSession().createQuery(queryString.toString());

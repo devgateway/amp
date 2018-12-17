@@ -746,13 +746,13 @@ public class EditActivity extends Action {
               AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberCached(tm.getMemberId());
               eaForm.getIdentification().setApprovedBy(teamMember);
               eaForm.getIdentification().setApprovalDate(new Date());
-              //eaForm.getIdentification().setApprovalStatus(Constants.APPROVED_STATUS);
+              //eaForm.getIdentification().setApprovalStatus(ApprovalStatus.APPROVED);
               eaForm.getIdentification().setApprovalStatus(actApprovalStatus.getDbName());
               }
 
             else{
-              //eaForm.setApprovalStatus(Constants.STARTED_STATUS);//actApprovalStatus);
-                eaForm.getIdentification().setApprovalStatus(ApprovalStatus.EDITED_STATUS.getDbName());
+              //eaForm.setApprovalStatus(ApprovalStatus.STARTED);//actApprovalStatus);
+                eaForm.getIdentification().setApprovalStatus(ApprovalStatus.EDITED.getDbName());
             }
         }
         

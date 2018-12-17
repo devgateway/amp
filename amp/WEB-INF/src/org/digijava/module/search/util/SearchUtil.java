@@ -460,8 +460,8 @@ public class SearchUtil {
             if (tm.getTeamAccessType().equals("Management")) {
                 query.append(String.format(
                         " and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ",
-                        ApprovalStatus.STARTED_APPROVED_STATUS.getDbName(),
-                        ApprovalStatus.APPROVED_STATUS.getDbName()));
+                        ApprovalStatus.STARTED_APPROVED.getDbName(),
+                        ApprovalStatus.APPROVED.getDbName()));
             }
         }
 

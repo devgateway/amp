@@ -326,8 +326,8 @@ public class ActivityUtil {
                     whereTeamStatement.append(String.format(
                             " and (latestAct.draft=false or latestAct.draft is null) "
                                     + "and latestAct.approvalStatus IN ('%s', '%s') ",
-                            ApprovalStatus.APPROVED_STATUS.getDbName(),
-                            ApprovalStatus.STARTED_APPROVED_STATUS.getDbName()));
+                            ApprovalStatus.APPROVED.getDbName(),
+                            ApprovalStatus.STARTED_APPROVED.getDbName()));
                     List<AmpTeam> teams = new ArrayList<AmpTeam>();
                     TeamUtil.getTeams(team, teams);
                     String relatedOrgs = "", teamIds = "";
@@ -1974,8 +1974,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                         + " and act.ampActivityGroup.ampActivityGroupId = ? "
                         + " and act.ampActivityId <> ? "
                         + " ORDER BY act.ampActivityId DESC",
-                ApprovalStatus.APPROVED_STATUS.getDbName(),
-                ApprovalStatus.STARTED_APPROVED_STATUS.getDbName()))
+                ApprovalStatus.APPROVED.getDbName(),
+                ApprovalStatus.STARTED_APPROVED.getDbName()))
                 .setMaxResults(1);
         qry.setParameter(0, activity.getAmpActivityGroup().getAmpActivityGroupId());
         qry.setParameter(1, activityId);
@@ -2120,14 +2120,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             boolean teamLeadFlag = teamMember.getTeamHead() || teamMember.isApprover();
             if ("alledits".equalsIgnoreCase(validationOption)) {
                 if (teamLeadFlag && activity.getTeam() != null && crossteamcheck
-                        && (ApprovalStatus.STARTED_STATUS.equals(activity.getApprovalStatus())
-                        || ApprovalStatus.EDITED_STATUS.equals(activity.getApprovalStatus()))) {
+                        && (ApprovalStatus.STARTED.equals(activity.getApprovalStatus())
+                        || ApprovalStatus.EDITED.equals(activity.getApprovalStatus()))) {
                     canValidate = true;
                 }
             } else {
                 //it will display the validate label only if it is just started and was not approved not even once
                 if ("newonly".equalsIgnoreCase(validationOption) && crossteamcheck) {
-                    if (teamLeadFlag && ApprovalStatus.STARTED_STATUS.equals(activity.getApprovalStatus())) {
+                    if (teamLeadFlag && ApprovalStatus.STARTED.equals(activity.getApprovalStatus())) {
                         canValidate = true;
                     }
                 }

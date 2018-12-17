@@ -40,7 +40,7 @@ public class ActivityAutomaticValidationJob extends ConnectionCleaningJob implem
      */
     protected AmpActivityVersion validateActivity(Session session, AmpTeamMember member, AmpActivityVersion oldActivity) throws CloneNotSupportedException {
 
-        oldActivity.setApprovalStatus(ApprovalStatus.APPROVED_STATUS);
+        oldActivity.setApprovalStatus(ApprovalStatus.APPROVED);
         oldActivity.setApprovedBy(member);
         oldActivity.setApprovalDate(Calendar.getInstance().getTime());
 

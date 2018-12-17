@@ -137,21 +137,21 @@ public class AmpARFilter extends PropertyListable {
      * list of all legal values of AmpActivity::"approvalStatus". DO NOT CHANGE, make a different set with a subset of these if you need the subset only
      */
     public static final Set<ApprovalStatus> ACTIVITY_STATUS = ImmutableSet.of(
-            ApprovalStatus.APPROVED_STATUS,
-            ApprovalStatus.EDITED_STATUS,
-            ApprovalStatus.STARTED_APPROVED_STATUS,
-            ApprovalStatus.STARTED_STATUS,
+            ApprovalStatus.APPROVED,
+            ApprovalStatus.EDITED,
+            ApprovalStatus.STARTED_APPROVED,
+            ApprovalStatus.STARTED,
             ApprovalStatus.NOT_APPROVED,
-            ApprovalStatus.REJECTED_STATUS);
+            ApprovalStatus.REJECTED);
 
     public static final Set<ApprovalStatus> VALIDATED_ACTIVITY_STATUS = ImmutableSet.of(
-            ApprovalStatus.APPROVED_STATUS,
-            ApprovalStatus.STARTED_APPROVED_STATUS);
+            ApprovalStatus.APPROVED,
+            ApprovalStatus.STARTED_APPROVED);
 
     public static final Set<ApprovalStatus> UNVALIDATED_ACTIVITY_STATUS = ImmutableSet.of(
-            ApprovalStatus.STARTED_STATUS,
-            ApprovalStatus.EDITED_STATUS,
-            ApprovalStatus.REJECTED_STATUS);
+            ApprovalStatus.STARTED,
+            ApprovalStatus.EDITED,
+            ApprovalStatus.REJECTED);
 
 
     /**

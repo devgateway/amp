@@ -168,13 +168,13 @@ public class UpdateTeamActivities extends Action {
                         //activities are approved!
                         if(atm.getAmpMemberRole().isApprover()){
                         //if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
-                            activity.setApprovalStatus(ApprovalStatus.APPROVED_STATUS);
+                            activity.setApprovalStatus(ApprovalStatus.APPROVED);
                         }
 
                         logger.info("updating " + activity.getName());
                         DbUtil.update(activity);
                         new ActivitySaveTrigger(activity);
-                        if (!activity.getApprovalStatus().equals(ApprovalStatus.APPROVED_STATUS)) {
+                        if (!activity.getApprovalStatus().equals(ApprovalStatus.APPROVED)) {
                             new NotApprovedActivityTrigger(activity);
                         }
                         

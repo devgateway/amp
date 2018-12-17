@@ -122,12 +122,12 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
                 closeableActivities = session.createQuery(queryString).list();
             }
 
-            ApprovalStatus newStatus = ApprovalStatus.APPROVED_STATUS;
+            ApprovalStatus newStatus = ApprovalStatus.APPROVED;
             session.setFlushMode(FlushMode.MANUAL);
             for(AmpActivityVersion ver:closeableActivities) {
                 if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))) {
-                     newStatus = ver.getApprovalStatus().equals(ApprovalStatus.STARTED_APPROVED_STATUS)
-                             ? ApprovalStatus.STARTED_STATUS : ApprovalStatus.EDITED_STATUS;
+                     newStatus = ver.getApprovalStatus().equals(ApprovalStatus.STARTED_APPROVED)
+                             ? ApprovalStatus.STARTED : ApprovalStatus.EDITED;
                 }
                 
                 AmpCategoryValue oldActivityStatus = CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, ver.getCategories());

@@ -69,6 +69,7 @@ import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -104,8 +105,6 @@ import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 import org.joda.time.Period;
-
-import javax.servlet.http.HttpSession;
 
 public class ActivityUtil {
 
@@ -324,7 +323,11 @@ public class ActivityUtil {
           }
           else{
                 if (team.getAccessType().equals("Management")) {
-                    whereTeamStatement.append(String.format(" and (latestAct.draft=false or latestAct.draft is null) and latestAct.approvalStatus IN ('%s', '%s') ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
+                    whereTeamStatement.append(String.format(
+                            " and (latestAct.draft=false or latestAct.draft is null) "
+                                    + "and latestAct.approvalStatus IN ('%s', '%s') ",
+                            ApprovalStatus.APPROVED.getDbName(),
+                            ApprovalStatus.STARTED_APPROVED.getDbName()));
                     List<AmpTeam> teams = new ArrayList<AmpTeam>();
                     TeamUtil.getTeams(team, teams);
                     String relatedOrgs = "", teamIds = "";
@@ -1221,7 +1224,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     hasTeamLeadOrValidator = true;
                 }
             }
-            if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus())) {
+            if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS_SET.contains(activity.getApprovalStatus())) {
                 if (hasTeamLeadOrValidator) {
                     if (ActivityUtil.isAutomaticValidationEnabled()) {
                         return ValidationStatus.AUTOMATIC_VALIDATION;
@@ -1413,28 +1416,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
     /**
-     * combines countryId, current member id (for admin is 00) and last activityId+1 and makes ampId
-     * @param user,actId
-     * @return 
-     * @author dan
-     */
-    public static String numericAmpId(String user, Long actId){
-        String countryCode = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
-        String userId = user;
-        Country country = DbUtil.getDgCountry(countryCode);
-        String countryId = "0";
-        if (country != null){
-            countryId = country.getCountryId().toString();
-        }
-            
-        String lastId = null;
-        if (actId != null){
-            lastId = actId.toString();  
-        }       
-        return countryId + userId + lastId;
-    }
-    
-    /**
      * combines countryIso and last activityId+1 and makes ampId
      * @param actId
      * @return 
@@ -1485,9 +1466,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             try {
                     session=PersistenceManager.getRequestDBSession();
                     
-                Set<String> activityStatus = new HashSet<String>();
-                activityStatus.add(Constants.APPROVED_STATUS);
-                activityStatus.add(Constants.EDITED_STATUS);
                 Set relatedTeams=TeamUtil.getRelatedTeamsForMember(member);
                 Set teamAO = TeamUtil.getComputedOrgs(relatedTeams);
                 String activityNameString = AmpActivityVersion.hqlStringForName("a");
@@ -1540,25 +1518,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             try {
                     session=PersistenceManager.getRequestDBSession();
 
-                Set<String> activityStatus = new HashSet<String>();
-        activityStatus.add(Constants.APPROVED_STATUS);
-        activityStatus.add(Constants.EDITED_STATUS);
                 Set relatedTeams=TeamUtil.getRelatedTeamsForMember(member);
                     Set teamAO = TeamUtil.getComputedOrgs(relatedTeams);
-                    // computed workspace
-//                    if (teamAO != null && !teamAO.isEmpty()) {
-//                        queryString = "select a.name, a.ampActivityId from " + AmpActivityVersion.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
-//                                " where  a.team in  (" + Util.toCSString(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSString(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSString(teamAO) + ")) and lower(a.name) like lower(:searchStr) order by a.name";
-//
-//                    } else {
-//                        // none computed workspace
-//                        queryString = "select a.name, a.ampActivityId from " + AmpActivityVersion.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ") and lower(a.name) like lower(:searchStr)";
-//                        if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-//                            queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
-//                        }
-//                        queryString += " order by a.name ";
-//                    }
-                    
+
                     String activityName = AmpActivityVersion.hqlStringForName("gr.ampActivityLastVersion");
                     queryString ="select " + activityName + ", gr.ampActivityLastVersion.ampActivityId from "+ AmpActivityGroup.class.getName()+" gr ";                    
                     if (teamAO != null && !teamAO.isEmpty()) {
@@ -1569,10 +1531,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     } else {
                         // none computed workspace
                         queryString +=" where gr.ampActivityLastVersion.team in  (" + Util.toCSStringForIN(relatedTeams) + ") ";                        
-//                        if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-//                            queryString += "  and gr.ampActivityLastVersion.approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
-//                        }
-                        
                     }
                 queryString += "  and lower(" + activityName + ") like lower(:searchStr) group by gr.ampActivityLastVersion.ampActivityId," + activityName + " order by " + activityName;
                 query=session.createQuery(queryString);
@@ -1654,17 +1612,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             return retValue;
         }
       
-    public static String getApprovedActivityQueryString(String label) {
-//      String query = null;
-//      query = " AND " + label + ".draft = false AND " + label + ".approvalStatus LIKE 'approved' ";
-        String query = String.format(" AND (%s.draft IS NULL OR %s.draft = false) AND (%s.approvalStatus='%s' OR %s.approvalStatus='%s')",
-                label, label, 
-                label, Constants.APPROVED_STATUS,
-                label, Constants.STARTED_APPROVED_STATUS
-                );
-        return query;
-    }
-
     public static ArrayList<AmpActivityFake> getAllActivitiesAdmin(String searchTerm, Set<Long> frozenActivityIds, ActivityForm.DataFreezeFilter dataFreezeFilter) {
        try {
             Session session = PersistenceManager.getSession();
@@ -1841,55 +1788,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
     
-    public static boolean shouldThisUserBeAbleToEdit(TeamMember tm, Long activityId)
-    {
-        if (tm == null)
-            return false;
-        return WorkspaceFilter.isActivityWithinWorkspace(activityId);
-    }
-    
-    public static boolean shouldThisUserValidate (TeamMember tm, Long activityId) {
-        if (tm.getTeamHead() )
-        //synchronized(lock) // cheaper to synchronize than to get a new connection every time
-        {
-            try 
-            {                       
-                String query = "SELECT a.amp_activity_id, a.amp_team_id, a.draft, a.approval_status from amp_activity_version a where a.amp_activity_id = " + activityId;
-                
-                List<Object[]> sqlRes = PersistenceManager.getSession().createSQLQuery(query).list();               
-                
-                boolean returnValue = false;
-                
-                int count = sqlRes.size();
-                if (count != 1)
-                    return false;
-                
-                Object[] rs = sqlRes.get(0);
-
-                long actId = ((BigInteger) rs[0]).longValue();
-                long teamId = ((BigInteger) rs[1]).longValue();
-                Boolean draft = (Boolean) rs[2];
-                String status = (String) rs[3];
-                    
-                if (draft == null)
-                    draft = false;
-                    
-                if (true || tm.getTeamId().equals(teamId) ) {
-                    if ( !draft && (Constants.STARTED_STATUS.equals(status) || Constants.EDITED_STATUS.equals(status) || Constants.REJECTED_STATUS.equals(status)) )
-                    returnValue = true;
-                }
-                
-                return returnValue;
-                
-            }
-            catch (Exception e) 
-            {
-                e.printStackTrace();
-            }           
-        }       
-        return false;
-    }
-    
     public static ArrayList<org.digijava.module.aim.helper.Issues>  getIssues(Long actId) {
         ArrayList<org.digijava.module.aim.helper.Issues> col = new ArrayList<>();
         
@@ -1983,20 +1881,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         return null;
     }
     
-    public static Collection<Long> getNationalActivityList() {
-        Collection<Long> ret = new HashSet<Long>();
-        try {
-            Session session = PersistenceManager.getRequestDBSession();
-            Long id = CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.getIdInDatabase();
-            Query query = session.createSQLQuery("SELECT amp_activity_id FROM amp_activities_categoryvalues WHERE amp_categoryvalue_id = ?");
-            query.setLong(0, id);
-            ret = query.list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ret;
-    }
-
     /** Get the user first name and last name  who modified (created) the activity.
      * @param actitivity
      * @param auditHistory
@@ -2086,9 +1970,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         Session session = PersistenceManager.getRequestDBSession();
         AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
         Query qry = session.createQuery(String.format("SELECT act FROM " + AmpActivityVersion.class.getName()
-                + " act WHERE approval_status in ( '%s','%s' )  and act.ampActivityGroup.ampActivityGroupId = ? "
-                + " and act.ampActivityId <> ? "
-                + " ORDER BY act.ampActivityId DESC", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS))
+                        + " act WHERE approval_status in ( '%s','%s' ) "
+                        + " and act.ampActivityGroup.ampActivityGroupId = ? "
+                        + " and act.ampActivityId <> ? "
+                        + " ORDER BY act.ampActivityId DESC",
+                ApprovalStatus.APPROVED.getDbName(),
+                ApprovalStatus.STARTED_APPROVED.getDbName()))
                 .setMaxResults(1);
         qry.setParameter(0, activity.getAmpActivityGroup().getAmpActivityGroupId());
         qry.setParameter(1, activityId);
@@ -2150,7 +2037,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         return activityTransactions;
     }
 
-    public static List<Long> getActivityIdsByApprovalStatus(Set<String> statuses) {
+    public static List<Long> getActivityIdsByApprovalStatus(Set<ApprovalStatus> statuses) {
         Long closedCatValue = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);
 
         String filterQuery = "SELECT amp_activity_id FROM amp_activity "
@@ -2171,11 +2058,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
     public static List<Long> getValidatedActivityIds() {
-        return getActivityIdsByApprovalStatus(AmpARFilter.validatedActivityStatus);
-    }
-
-    public static List<Long> getUnvalidatedActivityIds() {
-        return getActivityIdsByApprovalStatus(AmpARFilter.unvalidatedActivityStatus);
+        return getActivityIdsByApprovalStatus(AmpARFilter.VALIDATED_ACTIVITY_STATUS);
     }
 
     /**
@@ -2237,14 +2120,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             boolean teamLeadFlag = teamMember.getTeamHead() || teamMember.isApprover();
             if ("alledits".equalsIgnoreCase(validationOption)) {
                 if (teamLeadFlag && activity.getTeam() != null && crossteamcheck
-                        && (Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())
-                        || Constants.EDITED_STATUS.equalsIgnoreCase(activity.getApprovalStatus()))) {
+                        && (ApprovalStatus.STARTED.equals(activity.getApprovalStatus())
+                        || ApprovalStatus.EDITED.equals(activity.getApprovalStatus()))) {
                     canValidate = true;
                 }
             } else {
                 //it will display the validate label only if it is just started and was not approved not even once
                 if ("newonly".equalsIgnoreCase(validationOption) && crossteamcheck) {
-                    if (teamLeadFlag && Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())) {
+                    if (teamLeadFlag && ApprovalStatus.STARTED.equals(activity.getApprovalStatus())) {
                         canValidate = true;
                     }
                 }

@@ -7,6 +7,18 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
+
+
+				UPDATE amp_columns SET aliasname = 'mtef' || (substring (columnname, '\d\d\d\d$')),
+				tokenexpression = columnname,
+				extractorview='v_mtef_funding',
+				celltype = 'org.dgfoundation.amp.ar.cell.ComputedAmountCell'
+				WHERE columnname ~'^MTEF \d\d\d\d$'
+				AND aliasname is null
+				AND tokenexpression is null
+				AND extractorview = 'v_empty_text_column'
+				AND celltype = 'org.dgfoundation.amp.ar.cell.TextCell';
+
             	DELETE FROM amp_columns 
             	WHERE columnname ~ '^(MTEF|Real MTEF|Projection MTEF Projections|Pipeline MTEF Projections) \d\d\d\d$' AND tokenexpression is null;
             	

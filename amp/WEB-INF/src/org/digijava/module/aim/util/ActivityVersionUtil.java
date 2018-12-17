@@ -189,7 +189,7 @@ public class ActivityVersionUtil {
             try {
                 aux = Integer.valueOf(gsValue).intValue();
             } catch (NumberFormatException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
             }
         }
         return aux;
@@ -279,7 +279,6 @@ public class ActivityVersionUtil {
                 method = clazz.getMethod("set" + setName, Collection.class);
             method.invoke(out, returnSet);
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("Can't init set '"+ setName +"':", e);
         }
     }

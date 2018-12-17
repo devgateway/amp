@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 @TranslatableClass (displayName = "Line Ministry Observation Actor")
-public class AmpLineMinistryObservationActor implements Serializable, Cloneable, AuditableEntity {
+public class AmpLineMinistryObservationActor implements Serializable, Cloneable {
 
     //IATI-check: to be ignored
     
@@ -56,8 +56,4 @@ public class AmpLineMinistryObservationActor implements Serializable, Cloneable,
         return super.clone();
     }
 
-    @Override
-    public AuditableEntity getParent() {
-        return measure;
-    }
 }

@@ -421,7 +421,7 @@ public class SimpleSQLPatcher {
             "LEFT JOIN amp_activity_version aav ON (aag.amp_activity_group_id = aav.amp_activity_group_id) " + 
             "AND (aav.deleted IS NULL OR aav.deleted = false) AND (aav.draft IS NULL or aav.draft = false) " + 
             "AND (aav.approval_status IN (%s)) " + 
-            "GROUP BY aag.amp_activity_group_id", Util.toCSString(AmpARFilter.validatedActivityStatus));
+            "GROUP BY aag.amp_activity_group_id", Util.toCSString(AmpARFilter.VALIDATED_ACTIVITY_STATUS));
         SQLUtils.executeQuery(conn, query);
         
         String query2 = "CREATE OR REPLACE VIEW v_activity_latest_and_validated AS " + 

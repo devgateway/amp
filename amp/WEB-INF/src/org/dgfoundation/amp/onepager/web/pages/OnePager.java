@@ -234,7 +234,7 @@ public class OnePager extends AmpHeaderFooter {
             AmpActivityFormFeature formFeature= new AmpActivityFormFeature("activityFormFeature", am, "Activity Form", newActivity.value, listModel);
             add(formFeature);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
 
@@ -290,7 +290,7 @@ public class OnePager extends AmpHeaderFooter {
                         } catch (Exception e) {
                             //this is a ajax triger and the connectionas has already been closed. so its good to
                             //ignore the exception
-                            logger.error(e);
+                            logger.error(e.getMessage(), e);
                         }
                     }
                 });

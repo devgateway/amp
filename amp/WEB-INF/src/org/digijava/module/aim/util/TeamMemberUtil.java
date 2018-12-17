@@ -26,9 +26,7 @@ import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -1453,17 +1451,6 @@ public class TeamMemberUtil {
             atm.setDeleted(false);
             atm.setAmpMemberRole(role);
             updateMember(atm);
-        }
-    }
-
-    public static void getActivitiesWsByTeamMemberComputed(Map<Long, Set<Long>> activitiesWs, AmpTeamMember atm) {
-        CompleteWorkspaceFilter completeWSFilter = (CompleteWorkspaceFilter)
-                TLSUtils.getRequest().getSession().getAttribute(Constants.COMPLETE_TEAM_FILTER);
-        if (completeWSFilter != null) {
-            TeamMember teamMember = new TeamMember(atm);
-            Set<Long> visibleActivitiesIds = completeWSFilter.computeIds();
-            processActivitiesId(activitiesWs, teamMember, Optional.ofNullable(visibleActivitiesIds).
-                    orElse(Collections.emptySet()).stream());
         }
     }
 

@@ -130,7 +130,7 @@ public final class SummaryChangesService {
             List<AmpTeamMember> ampTeamMembers = TeamUtil.getAmpTeamMembers(ampTeamMemberId.value);
             for (AmpTeamMember atm : ampTeamMembers) {
                 TeamUtil.setupFiltersForLoggedInUser(TLSUtils.getRequest(), atm);
-                TeamMemberUtil.getActivitiesWsByTeamMemberComputed(activitiesWs, atm);
+                TeamMemberUtil.getActivitiesWsByTeamMember(activitiesWs, atm);
             }
         }
         return activitiesWs;

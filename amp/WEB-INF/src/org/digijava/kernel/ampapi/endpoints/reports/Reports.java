@@ -704,7 +704,7 @@ public class Reports implements ErrorReportingEndpoint {
         try {
             filename = URLEncoder.encode(filename, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
 
         filename += "." + type;

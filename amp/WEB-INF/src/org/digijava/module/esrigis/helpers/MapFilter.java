@@ -12,7 +12,6 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -991,7 +990,7 @@ public class MapFilter {
         {
             String workSpaceQuery;
             if (this.getFromPublicView() != null && this.getFromPublicView() == true) {
-                workSpaceQuery = WorkspaceFilter.generateWorkspaceFilterQuery(TLSUtils.getRequest().getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES);               
+                workSpaceQuery = WorkspaceFilter.generateWorkspaceFilterQuery(null);
             } else if(!this.isModeexport()){
                 workSpaceQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
             }

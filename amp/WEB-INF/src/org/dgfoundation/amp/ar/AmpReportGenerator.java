@@ -1554,7 +1554,7 @@ public class AmpReportGenerator extends ReportGenerator {
         
         if (regenerateFilterQuery)
         {
-            filter.generateFilterQuery(TLSUtils.getRequest(), false);
+            filter.generateFilterQuery();
             debugMode = (TLSUtils.getRequest().getParameter("debugMode") != null);
         }
         else

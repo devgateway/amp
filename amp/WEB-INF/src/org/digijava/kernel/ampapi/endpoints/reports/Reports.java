@@ -83,6 +83,7 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -907,13 +908,13 @@ public class Reports implements ErrorReportingEndpoint {
         Map<String, Object> colorSettings = new HashMap<String, Object>();
         
         Set<Integer> validatedStatuses = new HashSet<Integer>();
-        for (String s : AmpARFilter.validatedActivityStatus) {
-            validatedStatuses.add(AmpARFilter.activityStatusToNr.get(s));
+        for (ApprovalStatus s : AmpARFilter.VALIDATED_ACTIVITY_STATUS) {
+            validatedStatuses.add(s.getId());
         }
         
         Set<Integer> unvalidatedStatuses = new HashSet<Integer>();
-        for (String s : AmpARFilter.unvalidatedActivityStatus) {
-            unvalidatedStatuses.add(AmpARFilter.activityStatusToNr.get(s));
+        for (ApprovalStatus s : AmpARFilter.UNVALIDATED_ACTIVITY_STATUS) {
+            unvalidatedStatuses.add(s.getId());
         }
         
         Map<String, Set<Integer>> activityStatusCodes = new HashMap<String, Set<Integer>>();

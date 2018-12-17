@@ -11,9 +11,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
-
+import org.digijava.kernel.request.TLSUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.string.Strings;
 import org.digijava.kernel.exception.DgException;
@@ -70,14 +69,14 @@ public class ActivityVersionUtil {
         return ret;
     }
 
-    public static String generateFormattedOutput(HttpServletRequest request, Output out) throws WorkerException {
-        return generateFormattedOutput(request, out, null);
+    public static String generateFormattedOutput( Output out) throws WorkerException {
+        return generateFormattedOutput( out, null);
     }
 
-    public static String generateFormattedOutput(HttpServletRequest request, Output out, Output out1) throws WorkerException {
-        Site site = RequestUtils.getSite(request);
-        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 
+    public static String generateFormattedOutput( Output out, Output out1) throws WorkerException {
+        Site site = TLSUtils.getSite();
+        String langCode = TLSUtils.getEffectiveLangCode();
         StringBuilder ret = new StringBuilder();
         if (out.getOutputs() != null) {
             // First level.

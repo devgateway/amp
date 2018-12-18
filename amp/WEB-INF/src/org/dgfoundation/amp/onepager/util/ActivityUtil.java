@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.util.lang.Bytes;
@@ -47,7 +46,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpAPIFiscalYear;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
@@ -74,6 +72,7 @@ import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
@@ -168,24 +167,24 @@ public class ActivityUtil {
         }
 
         boolean newActivity = oldA.getAmpActivityId() == null;
-        AmpActivityVersion a = AuditActivityInfo.doInTeamMemberContext(ampCurrentMember, () -> {
-            try {
-                return saveActivityNewVersion(oldA, values, ampCurrentMember, draft, session, saveContext);
-            } catch (Exception e) {
-                logger.error("Error saving activity:", e); // Log the exception
-                throw new RuntimeException("Can't save activity:", e);
-            }
-        });
+        AmpActivityVersion a = null;
+        try {
+            a = saveActivityNewVersion(oldA, values, ampCurrentMember, draft, session, saveContext);
+        } catch (Exception exception) {
+            logger.error("Error saving activity:", exception); // Log the exception
+            throw new RuntimeException("Can't save activity:", exception);
+        }
         
-        if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(a.getApprovalStatus())) {
+        if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS_SET.contains(a.getApprovalStatus())) {
             new ActivityValidationWorkflowTrigger(a);
         }
         
-        LuceneUtil.addUpdateActivity(rootRealPath, !newActivity, site, locale, a, oldA, new ArrayList<>(values));
+        List<AmpContentTranslation> translations = values == null ? new ArrayList<>() : new ArrayList<>(values);
+        LuceneUtil.addUpdateActivity(rootRealPath, !newActivity, site, locale, a, oldA, translations);
         
         return a;
     }
-
+    
     /**
      * saves a new version of an activity
      * returns newActivity
@@ -199,8 +198,6 @@ public class ActivityUtil {
         boolean newActivity = false;
 
         if (a.getAmpActivityId() == null){
-            a.setActivityCreator(ampCurrentMember);
-            a.setActivityCreator(ampCurrentMember);
             a.setTeam(ampCurrentMember.getAmpTeam());
             newActivity = true;
         }
@@ -296,13 +293,14 @@ public class ActivityUtil {
         }
 
         saveAgreements(a, session, isActivityForm);
-        saveContacts(a, session, (draft != draftChange));
+        saveContacts(a, session, (draft != draftChange), ampCurrentMember);
 
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
         saveStructures(a, session);
         updateFiscalYears(a);
+        updateModifyCreateInfo(a, ampCurrentMember);
 
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
@@ -323,6 +321,34 @@ public class ActivityUtil {
         logAudit(ampCurrentMember, a, newActivity);
 
         return a;
+    }
+    
+    /**
+     * To be used every time when the activity is saved/updated
+     *
+     * @param activity
+     * @param teamMember
+     */
+    public static void updateModifyCreateInfo(AmpActivityVersion activity, AmpTeamMember teamMember) {
+        Date updateDate = Calendar.getInstance().getTime();
+    
+        activity.setUpdatedDate(updateDate);
+        activity.setModifiedDate(updateDate);
+    
+        AmpTeamMember modifier = teamMember;
+        if (modifier == null) {
+            modifier = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+        }
+    
+        if (modifier == null) {
+            throw new RuntimeException("Modified team member cannot be null");
+        }
+    
+        activity.setModifiedBy(modifier);
+    
+        if (activity.getAmpActivityId() == null || activity.getActivityCreator() == null) {
+            activity.setActivityCreator(modifier);
+        }
     }
 
     private static void logAudit(AmpTeamMember teamMember, AmpActivityVersion activity, boolean newActivity) {
@@ -358,10 +384,10 @@ public class ActivityUtil {
         return additionalDetails;
     }
 
-    private static boolean isApproved(AmpActivityVersion activity) {
-        String approvalStatus = activity.getApprovalStatus();
-        return Constants.APPROVED_STATUS.equals(approvalStatus)
-                || Constants.STARTED_APPROVED_STATUS.equals(approvalStatus);
+    public static boolean isApproved(AmpActivityVersion activity) {
+        ApprovalStatus approvalStatus = activity.getApprovalStatus();
+        return ApprovalStatus.APPROVED.equals(approvalStatus)
+                || ApprovalStatus.STARTED_APPROVED.equals(approvalStatus);
     }
 
 private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityVersion a) {
@@ -476,23 +502,23 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
             if (teamLeadFlag) {
                 if (draft) {
                     if (rejected) {
-                        a.setApprovalStatus(Constants.REJECTED_STATUS);
+                        a.setApprovalStatus(ApprovalStatus.REJECTED);
                     } else {
                         if (newActivity) {
-                            a.setApprovalStatus(Constants.STARTED_STATUS);
+                            a.setApprovalStatus(ApprovalStatus.STARTED);
                         } else {
                             if (oldA.getApprovalStatus() != null
-                                    && Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus()) == 0)
-                                a.setApprovalStatus(Constants.STARTED_STATUS);
+                                    && ApprovalStatus.STARTED.equals(oldA.getApprovalStatus()))
+                                a.setApprovalStatus(ApprovalStatus.STARTED);
                             else
-                                a.setApprovalStatus(Constants.EDITED_STATUS);
+                                a.setApprovalStatus(ApprovalStatus.EDITED);
                         }
                     }
                 } else {
                     // If activity belongs to the same workspace where TL/AP is
                     // logged set it validated
                     if (isSameWorkspace) {
-                        a.setApprovalStatus(Constants.APPROVED_STATUS);
+                        a.setApprovalStatus(ApprovalStatus.APPROVED);
                         a.setApprovedBy(ampCurrentMember);
                         a.setApprovalDate(Calendar.getInstance().getTime());
                     } else {
@@ -502,14 +528,14 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                          * set it validated
                          */
                         if (crossTeamValidation) {
-                            a.setApprovalStatus(Constants.APPROVED_STATUS);
+                            a.setApprovalStatus(ApprovalStatus.APPROVED);
                             a.setApprovedBy(ampCurrentMember);
                             a.setApprovalDate(Calendar.getInstance().getTime());
                         } else {
-                            if (StringUtils.equals(oldA.getApprovalStatus(), Constants.STARTED_STATUS)) {
-                                a.setApprovalStatus(Constants.STARTED_STATUS);
+                            if (ApprovalStatus.STARTED.equals(oldA.getApprovalStatus())) {
+                                a.setApprovalStatus(ApprovalStatus.STARTED);
                             } else {
-                                a.setApprovalStatus(Constants.EDITED_STATUS);
+                                a.setApprovalStatus(ApprovalStatus.EDITED);
                             }
                         }
                     }
@@ -518,28 +544,28 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                 if ("newOnly".equals(validation)) {
                     if (newActivity) {
                         // all the new activities will have the started status
-                        a.setApprovalStatus(Constants.STARTED_STATUS);
+                        a.setApprovalStatus(ApprovalStatus.STARTED);
                     } else {
                         // if we edit an existing not validated status it will
                         // keep the old status - started
                         if (oldA.getApprovalStatus() != null
-                                && Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus()) == 0)
-                            a.setApprovalStatus(Constants.STARTED_STATUS);
+                                && ApprovalStatus.STARTED.equals(oldA.getApprovalStatus()))
+                            a.setApprovalStatus(ApprovalStatus.STARTED);
                         // if we edit an existing activity that is validated or
                         // startedvalidated or edited
                         else
-                            a.setApprovalStatus(Constants.APPROVED_STATUS);
+                            a.setApprovalStatus(ApprovalStatus.APPROVED);
                     }
                 } else {
                     if ("allEdits".equals(validation)) {
                         if (newActivity) {
-                            a.setApprovalStatus(Constants.STARTED_STATUS);
+                            a.setApprovalStatus(ApprovalStatus.STARTED);
                         } else {
                             if (oldA.getApprovalStatus() != null
-                                    && Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus()) == 0)
-                                a.setApprovalStatus(Constants.STARTED_STATUS);
+                                    && ApprovalStatus.STARTED.equals(oldA.getApprovalStatus()))
+                                a.setApprovalStatus(ApprovalStatus.STARTED);
                             else
-                                a.setApprovalStatus(Constants.EDITED_STATUS);
+                                a.setApprovalStatus(ApprovalStatus.EDITED);
                         }
                     }
                 }
@@ -549,9 +575,9 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         } else {
             // Validation is OF in GS activity approved
             if (newActivity) {
-                a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
+                a.setApprovalStatus(ApprovalStatus.STARTED_APPROVED);
             } else {
-                a.setApprovalStatus(Constants.APPROVED_STATUS);
+                a.setApprovalStatus(ApprovalStatus.APPROVED);
             }
             a.setApprovedBy(ampCurrentMember);
             a.setApprovalDate(Calendar.getInstance().getTime());
@@ -869,9 +895,8 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
 
                 tdd.setWebLink(temp.getWebLink());
 
-                ActionMessages messages = new ActionMessages();
                 try {
-                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
+                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest());
 
                     AmpActivityDocument aad = new AmpActivityDocument();
                     aad.setAmpActivity(a);
@@ -1116,9 +1141,8 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
 
                 tdd.setWebLink(temp.getWebLink());
 
-                ActionMessages messages = new ActionMessages();
                 try {
-                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
+                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest());
 
                     AmpGPINiSurveyResponseDocument responseDocument = new AmpGPINiSurveyResponseDocument();
 
@@ -1199,7 +1223,8 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         }
     }
 
-    public static void saveContacts(AmpActivityVersion a, Session session,boolean checkForContactsRemoval) throws Exception {
+    public static void saveContacts(AmpActivityVersion a, Session session, boolean checkForContactsRemoval,
+                                    AmpTeamMember teamMember) throws Exception {
         Set<AmpActivityContact> activityContacts=a.getActivityContacts();
         // if activity contains contact,which is not in contact list, we should remove it
         Long oldActivityId = a.getAmpActivityId();
@@ -1233,10 +1258,11 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         //to avoid saving the same contact twice on the same session, we keep track of the 
         //already saved ones.
         Map <Long,Boolean> savedContacts = new HashMap <Long,Boolean> ();
-        
-        TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
-        AmpTeamMember creator = teamMember != null ? TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId()) : null;
-      
+        AmpTeamMember creator = teamMember;
+        if (creator == null) {
+            creator = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+        }
+    
         //add or edit activity contact and amp contact
         if (activityContacts != null && activityContacts.size() > 0) {
             for (AmpActivityContact activityContact : activityContacts) {
@@ -1249,9 +1275,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                 // save the contact first, if the contact is new or if it is not
                 // new but has not been saved already.
                 if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
-                    if (contactId == null) {
-                        activityContact.getContact().setCreator(creator);
-                    }
+                    activityContact.getContact().setCreator(creator);
                     session.saveOrUpdate(activityContact.getContact());
                     savedContacts.put(activityContact.getContact().getId(), true);
                 }

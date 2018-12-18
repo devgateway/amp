@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import org.digijava.module.aim.util.Output;
 
-public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable, AuditableEntity {
+public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable {
 
     //IATI-check: to be ignored
     /**
@@ -126,9 +126,5 @@ public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable
         // TODO Auto-generated method stub
         return super.clone();
     }
-
-    @Override
-    public AuditableEntity getParent() {
-        return ampAHSurveyId;
-    }
+    
 }

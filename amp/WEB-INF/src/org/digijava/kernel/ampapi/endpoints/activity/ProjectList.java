@@ -232,6 +232,7 @@ public class ProjectList {
         bean.set(iatiIdAmpField, getIatiIdentifierValue(a, iatiIdAmpField));
         bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(a.getUpdatedDate()));
         bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), a.getAmpId());
+        bean.set(ActivityFieldsConstants.ACTIVITY_GROUP, a.getAmpActivityGroup());
         bean.set(ActivityEPConstants.EDIT, true);
         bean.set(ActivityEPConstants.VIEW, true);
         return bean;
@@ -240,9 +241,13 @@ public class ProjectList {
     private static String getIatiIdentifierValue(AmpActivityVersion a, String iatiIdAmpField) {
         APIField apiField = AmpFieldsEnumerator.getPublicEnumerator().getActivityFields().stream()
                 .filter(f -> f.getFieldName().equals(iatiIdAmpField))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("No such field " + iatiIdAmpField));
-        return (String) apiField.getFieldValueReader().get(a);
+                .findAny().orElse(null);
+        
+        if (apiField != null) {
+            return (String) apiField.getFieldValueReader().get(a);
+        }
+        
+        return null;
     }
 
     /**

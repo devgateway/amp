@@ -24,7 +24,6 @@ import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -79,39 +78,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     private Boolean crossteamvalidation;
     private AmpSummaryNotificationSettings sumaryNotificationSettings;
 
-
-
-    //Global function to initialize the team filters inside the session
-    public static AmpARFilter initializeTeamFiltersSession(AmpTeamMember member, HttpServletRequest request, HttpSession session){
-        //Initialize Team Filter
-        AmpTeam ampTeam = member.getAmpTeam();
-        AmpARFilter af = new AmpARFilter();
-        
-        /**
-         *  AmpARFilter.FILTER_SECTION_ALL, null - parameters were added on merge, might not be right
-         */
-        //af.readRequestData(request, AmpARFilter.FILTER_SECTION_ALL, null);
-        af.fillWithDefaultsSettings();
-        af.fillWithDefaultsFilter(null);
-        
-        if (ampTeam.getFilterDataSet()!=null && ampTeam.getFilterDataSet().size()>0 ){
-            af = FilterUtil.buildFilter(ampTeam, null);
-        }
-
-        /* The prepare function needs to have the filter (af) already populated */
-        /**
-         * on merge - prepare is gone :)
-        try {
-            FilterUtil.prepare(request, af, false,new Long(ArConstants.DONOR_TYPE));
-        } catch (Exception e) {
-            logger.error("Error while preparing filter:", e);
-        }
-        */
-        af.generateFilterQuery(request, true);
-        session.setAttribute(ArConstants.TEAM_FILTER, af);
-        return af;
-    }
-    
     @Override
     public AmpFilterData newAmpFilterData(FilterDataSetInterface filterRelObj,
             String propertyName, String propertyClassName,
@@ -368,7 +334,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     public void setCrossteamvalidation(Boolean crossteamvalidation) {
         this.crossteamvalidation = crossteamvalidation;
     }
-    
+
     public Boolean getIsolated() {
         return isolated;
     }

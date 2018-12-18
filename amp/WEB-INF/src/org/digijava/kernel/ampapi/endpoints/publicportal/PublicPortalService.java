@@ -64,9 +64,6 @@ public class PublicPortalService {
         
         SettingsUtils.applySettings(spec, config.getSettings(), true);
 
-        /*TODO: tbd if we need to filter out null dates from results
-        MondrianReportUtils.filterOutNullDates(spec);
-        */
         applyFilterRules(config, spec, months);
         // configure project types
         ReportsUtil.configureProjectTypes(spec, config.getProjectType());

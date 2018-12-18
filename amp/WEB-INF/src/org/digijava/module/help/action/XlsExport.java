@@ -95,7 +95,6 @@ public class XlsExport extends Action {
             out.close();
         } catch (Exception ex) {
             logger.error("error", ex);
-            ex.printStackTrace();
         }
         //
         return null;        

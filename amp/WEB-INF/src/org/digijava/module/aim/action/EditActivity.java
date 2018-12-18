@@ -14,11 +14,9 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ARUtil;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.LocalizableLabel;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
@@ -32,7 +30,6 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
@@ -60,10 +57,10 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpContactsWorker;
 import org.digijava.module.aim.helper.BudgetStructure;
@@ -97,7 +94,6 @@ import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -108,9 +104,7 @@ import org.digijava.module.budget.helper.BudgetDbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.helper.DocumentData;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
@@ -119,7 +113,6 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
-import javax.jcr.Node;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -741,7 +734,7 @@ public class EditActivity extends Action {
         /* END - Clearing session information about comments */
 
         // load the activity details
-        String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
+        ApprovalStatus actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
         
         //eaForm.setApprovalStatus(actApprovalStatus);
         if (tm != null && tm.getTeamId()!=null && activity.getTeam() != null && activity.getTeam().getAmpTeamId() != null) {
@@ -753,13 +746,13 @@ public class EditActivity extends Action {
               AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberCached(tm.getMemberId());
               eaForm.getIdentification().setApprovedBy(teamMember);
               eaForm.getIdentification().setApprovalDate(new Date());
-              //eaForm.getIdentification().setApprovalStatus(Constants.APPROVED_STATUS);
-              eaForm.getIdentification().setApprovalStatus(actApprovalStatus);
+              //eaForm.getIdentification().setApprovalStatus(ApprovalStatus.APPROVED);
+              eaForm.getIdentification().setApprovalStatus(actApprovalStatus.getDbName());
               }
 
             else{
-              //eaForm.setApprovalStatus(Constants.STARTED_STATUS);//actApprovalStatus);
-                eaForm.getIdentification().setApprovalStatus(Constants.EDITED_STATUS);
+              //eaForm.setApprovalStatus(ApprovalStatus.STARTED);//actApprovalStatus);
+                eaForm.getIdentification().setApprovalStatus(ApprovalStatus.EDITED.getDbName());
             }
         }
         

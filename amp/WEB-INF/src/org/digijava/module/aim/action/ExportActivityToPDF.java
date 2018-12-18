@@ -264,7 +264,7 @@ public class ExportActivityToPDF extends Action {
             siteId = site.getId();
             locale = navigationLanguage.getCode();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
 
         //building  table

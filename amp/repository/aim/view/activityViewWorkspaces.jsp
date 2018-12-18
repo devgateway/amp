@@ -7,14 +7,29 @@
         <table id="viewWorkspacesTable" width="100%">
             <tr height="20">
                 <td bgcolor="#999999"></td>
-                <td bgcolor="#999999">
-                    <b>Workspace Name</b>
+                <td bgcolor="#999999" nowrap>
+                    <b><digi:trn>Workspace where activity is displayed</digi:trn></b>
+                </td>
+                <td bgcolor="#999999" nowrap>
+                    <div class="ws-tooltip">
+                        <b><digi:trn>Workspace Type</digi:trn></b>
+                        <span class="ws-tooltiptext">
+                            <div class="ws-tooltip-item">
+                                <b>TEAM</b> - <digi:trn>Members can create new activities for the workspace but can also pull
+                                activities from other workpaces (computed).</digi:trn>
+                            </div>
+                            <div class="ws-tooltip-item">
+                                <b>MANAGEMENT</b> - <digi:trn>Members can view all of the Activities of the Team Workspaces
+                                that have been assigned as Child Workspaces.</digi:trn>
+                            </div>
+                            <div><b>COMPUTED</b> - <digi:trn>Members can view all activities assigned to a particular organisation
+                                denoted in the Funding or Related Organisations portion of the Activity Form.</digi:trn>
+                            </div>
+                        </span>
+                    </div>
                 </td>
                 <td bgcolor="#999999">
-                    <b>Workspace Type</b>
-                </td>
-                <td bgcolor="#999999">
-                    <b>Reason</b>
+                    <b><digi:trn>How the activity is linked to the workspace</digi:trn></b>
                 </td>
             </tr>
         </table>
@@ -75,7 +90,7 @@
         $(function () {
             $.each(response, function (i, item) {
                 var $tr = $('<tr>').append(
-                    $('<td>').css("padding-right","10px"),
+                    $('<td>'),
                     $('<td>').text(item.name),
                     $('<td>').text(item.type),
                     $('<td>').text(item.extraInfo),
@@ -120,6 +135,35 @@
 
 <style type="text/css">
     #viewWorkspacesTable td {
-        height: 20px
+        height: 20px;
+        padding-right: 10px;
+    }
+
+    .ws-tooltip {
+        position: relative;
+        white-space: normal;
+    }
+
+    .ws-tooltip .ws-tooltiptext {
+        display : none;
+        position: absolute;
+        z-index: 100;
+        background-color: white;
+        border-style: solid;
+        border-width: 1px;
+        border-color: #777777;
+        padding: 3px;
+        width: 300px;
+        top: 20px;
+        left: 20px;
+    }
+
+    .ws-tooltip:hover .ws-tooltiptext {
+        display: block;
+        opacity: 1;
+    }
+
+    .ws-tooltip-item {
+        margin-bottom: 10px;
     }
 </style>

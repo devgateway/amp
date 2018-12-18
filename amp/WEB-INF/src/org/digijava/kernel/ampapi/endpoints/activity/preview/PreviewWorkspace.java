@@ -4,9 +4,19 @@ public class PreviewWorkspace {
     
     private String name;
     
+    private Type type;
+    
     private String extraInfo;
     
-    private Type type;
+    public PreviewWorkspace(String name, Type type) {
+        this.name = name;
+        this.type = type;
+    }
+    
+    public PreviewWorkspace(String name, Type type, String extraInfo) {
+        this(name, type);
+        this.extraInfo = extraInfo;
+    }
     
     public String getName() {
         return name;
@@ -33,6 +43,6 @@ public class PreviewWorkspace {
     }
     
     public enum Type {
-        ORIGIN, COMPUTED, MANAGEMENT
+        TEAM, COMPUTED, MANAGEMENT
     };
 }

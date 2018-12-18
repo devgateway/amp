@@ -232,6 +232,7 @@ public class ProjectList {
         bean.set(iatiIdAmpField, getIatiIdentifierValue(a, iatiIdAmpField));
         bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(a.getUpdatedDate()));
         bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), a.getAmpId());
+        bean.set(ActivityFieldsConstants.ACTIVITY_GROUP, a.getAmpActivityGroup());
         bean.set(ActivityEPConstants.EDIT, true);
         bean.set(ActivityEPConstants.VIEW, true);
         return bean;

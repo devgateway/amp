@@ -482,10 +482,10 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = "Regional Fundings")
     protected Set <AmpRegionalFunding> regionalFundings;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS, pickIdOnly = true)
     @PossibleValues(ApprovalStatusPossibleValuesProvider.class)
     @VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
-    protected String approvalStatus;
+    private ApprovalStatus approvalStatus;
 
     // Aid Harmonization Survey Set
     // @Interchangeable(fieldTitle = "Surveys",fmPath="/Activity Form/Paris Indicators")
@@ -1335,14 +1335,14 @@ LoggerIdentifiable, Cloneable {
         /**
          * @return Returns the approvalStatus.
          */
-        public String getApprovalStatus() {
+        public ApprovalStatus getApprovalStatus() {
             return approvalStatus;
         }
         /**
          * @param approval_status
          *            The approval_status to set.
          */
-        public void setApprovalStatus(String approvalStatus) {
+        public void setApprovalStatus(ApprovalStatus approvalStatus) {
             this.approvalStatus = approvalStatus;
         }
 

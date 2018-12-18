@@ -49,14 +49,14 @@ def updateGitHubCommitStatus(context, message, state) {
 }
 
 def askCountry() {
-    // Find list of countries which have database dumps compatible with ${codeVersion}
+    // Find list of countries which have database dumps compatible with $codeVersion
     def countries
     node {
         countries = sh(returnStdout: true,
-                script: "ssh sulfur 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                script: "ssh sulfur 'cd /opt/amp_dbs && amp-db ls $codeVersion | sort'")
                 .trim()
         if (countries == "") {
-            println "There are no database backups compatible with ${codeVersion}"
+            println "There are no database backups compatible with $codeVersion"
             currentBuild.result = 'FAILURE'
         }
     }
@@ -81,7 +81,7 @@ stage('Checkstyle') {
 
                 // Find AMP version
                 codeVersion = readMavenPom(file: 'amp/pom.xml').version
-                println "AMP Version: ${codeVersion}"
+                println "AMP Version: $codeVersion"
 
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
 
@@ -184,8 +184,8 @@ def deployed = false
 stage('Deploy') {
     node {
         try {
-            // Find latest database version compatible with ${codeVersion}
-            dbVersion = sh(returnStdout: true, script: "ssh sulfur 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
+            // Find latest database version compatible with $codeVersion
+            dbVersion = sh(returnStdout: true, script: "ssh sulfur 'cd /opt/amp_dbs && amp-db find $codeVersion ${country}'").trim()
 
             // Deploy AMP
             sh "ssh sulfur 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"

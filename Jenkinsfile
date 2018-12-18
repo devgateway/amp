@@ -64,6 +64,33 @@ stage('Checkstyle') {
     }
 }
 
+def legacyMvnOptions = "-Djdbc.user=amp " +
+        "-Djdbc.password=amp122006 " +
+        "-Djdbc.db=amp " +
+        "-Djdbc.host=db " +
+        "-Djdbc.port=5432 " +
+        "-DdbName=postgresql " +
+        "-Djdbc.driverClassName=org.postgresql.Driver"
+
+// Run fail fast tests
+stage('Quick Test') {
+    node {
+        try {
+            checkout scm
+
+            updateGitHubCommitStatus('jenkins/failfasttests', 'Testing in progress', 'PENDING')
+
+            withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+                sh "cd amp && mvn test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
+            }
+
+            updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: success', 'SUCCESS')
+        } catch(e) {
+            updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: error', 'ERROR')
+        }
+    }
+}
+
 stage('Build') {
     timeout(15) {
         input "Proceed with build?"
@@ -88,12 +115,17 @@ stage('Build') {
                     sh returnStatus: true, script: 'tar -xf ../amp-node-cache.tar'
 
                     // Build AMP
-                    sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -DbuildSource=${tag} -e"
+                    sh "cd amp && mvn -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
 
                     // Build Docker images & push it
                     sh "docker build -q -t phosphorus:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
                     sh "docker push phosphorus:5000/amp-webapp:${tag} > /dev/null"
                 } finally {
+                    if (branch != null) {
+                        // Archive unit test report
+                        junit 'amp/target/surefire-reports/TEST-*.xml'
+                    }
+
                     // Cleanup after Docker & Maven
                     sh returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag}"
                     sh returnStatus: true, script: "cd amp && mvn clean -Djdbc.db=dummy"

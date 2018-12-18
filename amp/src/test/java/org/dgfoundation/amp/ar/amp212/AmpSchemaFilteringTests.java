@@ -3,6 +3,8 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.List;
 
+import org.dgfoundation.amp.test.categories.DatabaseTests;
+import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AreaOwner;
@@ -10,7 +12,9 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 /**
  * 
@@ -19,6 +23,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
+@Category(DatabaseTests.class)
 public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 
     final List<String> flowsActs = Arrays.asList(
@@ -48,6 +53,11 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
         return getDbExecutor(activityNames);
+    }
+
+    @BeforeClass
+    public static void setUp() {
+        StandaloneAMPInitializer.initialize();
     }
     
     @Test

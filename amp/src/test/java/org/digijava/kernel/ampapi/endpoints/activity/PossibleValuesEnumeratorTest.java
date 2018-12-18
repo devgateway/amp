@@ -174,12 +174,12 @@ public class PossibleValuesEnumeratorTest {
     @Test
     public void testDiscriminatorClass() throws IOException {
         assertJsonEquals(possibleValuesFor("approval_status"),
-                "[{\"id\":\"approved\",\"value\":\"approved\"},"
-                        + "{\"id\":\"not_approved\",\"value\":\"not_approved\"},"
-                        + "{\"id\":\"startedapproved\",\"value\":\"startedapproved\"},"
-                        + "{\"id\":\"edited\",\"value\":\"edited\"},"
-                        + "{\"id\":\"rejected\",\"value\":\"rejected\"},"
-                        + "{\"id\":\"started\",\"value\":\"started\"}]");
+                "[{\"id\":1,\"value\":\"approved\"},"
+                        + "{\"id\":2,\"value\":\"edited\"},"
+                        + "{\"id\":3,\"value\":\"startedapproved\"},"
+                        + "{\"id\":4,\"value\":\"started\"},"
+                        + "{\"id\":5,\"value\":\"not_approved\"},"
+                        + "{\"id\":6,\"value\":\"rejected\"}]");
     }
 
     private static class WithThrowingProvider {

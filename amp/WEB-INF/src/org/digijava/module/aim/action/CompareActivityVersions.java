@@ -49,7 +49,6 @@ import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.digijava.module.aim.annotations.activityversioning.ActivityVersioningService;
 import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -59,7 +58,7 @@ public class CompareActivityVersions extends DispatchAction {
 
     private static Logger logger = Logger.getLogger(EditActivity.class);
     
-    ActivityVersioningService avs = new ActivityVersioningService();
+    ActivityVersionUtil avs = new ActivityVersionUtil();
     
     public ActionForward unspecified(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
@@ -75,9 +74,7 @@ public class CompareActivityVersions extends DispatchAction {
         CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
         	
         Session session = PersistenceManager.getRequestDBSession();
-        
-   
-        
+            
         setAdvancemode(vForm, request);// to check the user is part of management workspace
      
           
@@ -108,11 +105,10 @@ public class CompareActivityVersions extends DispatchAction {
 
         vForm.setOutputCollection(new ArrayList<CompareOutput>());
       
-      vForm.setOutputCollectionGrouped(ActivityVersioningService.compareActivities(vForm.getActivityOneId(),
-              vForm.getActivityTwoId()));
-        
-     //   vForm.setOutputCollectionGrouped(ActivityVersioningService.compareActivities(vForm.getActivityOneId()
-       //         ));
+        vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId(),
+          vForm.getActivityTwoId()));
+       
+    vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId() ));
         return mapping.findForward("forward");
     }
 

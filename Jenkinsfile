@@ -26,6 +26,8 @@ def dbVersion
 def country
 def ampUrl
 
+def launchedByUser = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause').size() > 0
+
 def updateGitHubCommitStatus(context, message, state) {
     repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
     lastAuthor = sh(returnStdout: true, script: "git log --pretty=%an -n 1").trim()
@@ -44,6 +46,30 @@ def updateGitHubCommitStatus(context, message, state) {
             results: [[$class: "AnyBuildResult", message: message, state: state]]
         ]
     ])
+}
+
+def askCountry() {
+    // Find list of countries which have database dumps compatible with ${codeVersion}
+    def countries
+    node {
+        countries = sh(returnStdout: true,
+                script: "ssh sulfur 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                .trim()
+        if (countries == "") {
+            println "There are no database backups compatible with ${codeVersion}"
+            currentBuild.result = 'FAILURE'
+        }
+    }
+
+    timeout(15) {
+        milestone()
+        country = input(
+                message: "Proceed with build and deploy?",
+                parameters: [choice(choices: countries, name: 'country')])
+        milestone()
+    }
+
+    ampUrl = "http://amp-${country}-${tag}-tc9.ampsite.net/"
 }
 
 // Run checkstyle only for PR builds
@@ -81,6 +107,10 @@ def legacyMvnOptions = "-Djdbc.user=amp " +
 
 // Run fail fast tests
 stage('Quick Test') {
+    if (launchedByUser) {
+        askCountry()
+    }
+
     node {
         try {
             checkout scm
@@ -102,27 +132,9 @@ stage('Quick Test') {
 }
 
 stage('Build') {
-    // Find list of countries which have database dumps compatible with ${codeVersion}
-    def countries
-    node {
-        countries = sh(returnStdout: true,
-                       script: "ssh sulfur 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
-                .trim()
-        if (countries == "") {
-            println "There are no database backups compatible with ${codeVersion}"
-            currentBuild.result = 'FAILURE'
-        }
+    if (!launchedByUser) {
+        askCountry()
     }
-
-    timeout(15) {
-        milestone()
-        country = input(
-                message: "Proceed with build and deploy?",
-                parameters: [choice(choices: countries, name: 'country')])
-        milestone()
-    }
-
-    ampUrl = "http://amp-${country}-${tag}-tc9.ampsite.net/"
 
     node {
         checkout scm

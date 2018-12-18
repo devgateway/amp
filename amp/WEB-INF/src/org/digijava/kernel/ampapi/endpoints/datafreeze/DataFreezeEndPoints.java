@@ -13,7 +13,9 @@ import javax.ws.rs.core.MediaType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.digijava.kernel.ampapi.endpoints.dto.SaveResult;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
@@ -27,7 +29,7 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "saveDataFreezeEvent", authTypes = { AuthRule.IN_ADMIN })
     @ApiOperation("Saves a data freeze object to the database")
-    public DataFreezeEventResult saveDataFreezeEvent(DataFreezeEvent dataFreezeEvent) {
+    public SaveResult<DataFreezeEvent> saveDataFreezeEvent(DataFreezeEvent dataFreezeEvent) {
         return DataFreezeService.saveDataFreezeEvent(dataFreezeEvent);
     }
 
@@ -58,7 +60,7 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "fetchDataFreezeEventList", authTypes = { AuthRule.IN_ADMIN })
     @ApiOperation("Retrieves a list of data freeze event objects")
-    public Page<DataFreezeEvent> fetchDataFreezeEventList(
+    public ResultPage<DataFreezeEvent> fetchDataFreezeEventList(
             @ApiParam("first element in list") @QueryParam("offset") Integer offset,
             @ApiParam("maximum number of records to return") @QueryParam("count") Integer count,
             @ApiParam("field that will be used for sorting") @QueryParam("orderby") String orderBy,

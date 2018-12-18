@@ -115,7 +115,7 @@ public class ProgramUtil {
                 return result;
 
             } catch (Exception e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new AimException("Cannot get programs for activity.",e);
             }
 
@@ -1210,7 +1210,7 @@ public class ProgramUtil {
                     tempTheme.setDeleted(true);
                     sess.saveOrUpdate(tempTheme);
                 } catch (HibernateException e) {
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                     throw new AimException("Cannot delete theme with id "+themeId,e);
                 }
             }

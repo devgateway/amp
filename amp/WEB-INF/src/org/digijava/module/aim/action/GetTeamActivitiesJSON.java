@@ -169,7 +169,7 @@ public class GetTeamActivitiesJSON
                 return null;
             }
         } catch(Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return null;
     }

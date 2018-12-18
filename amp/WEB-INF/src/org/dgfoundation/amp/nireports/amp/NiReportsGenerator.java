@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
@@ -34,10 +33,6 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
     public final OutputSettings outputSettings;
     
     public NiReportsGenerator(NiReportsSchema schema) {
-        this(schema, ReportAreaImpl.class);
-    }
-
-    public NiReportsGenerator(NiReportsSchema schema, Class<? extends ReportAreaImpl> reportAreaClazz) {
         this(schema, true, null);
     }
 

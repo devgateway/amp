@@ -22,6 +22,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -167,21 +168,13 @@ public class UpdateTeamActivities extends Action {
                         //activities are approved!
                         if(atm.getAmpMemberRole().isApprover()){
                         //if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
-                            activity.setApprovalStatus(Constants.APPROVED_STATUS);
-                        }
-                        activity.setActivityCreator(atm);
-                        
-                        if (activity.getActivityCreator() == null) {
-                            AmpTeamMember thisTeamMember    = TeamUtil.getAmpTeamMember(tm.getMemberId());
-                            if (thisTeamMember != null) {
-                                activity.setActivityCreator(thisTeamMember);
-                            }
+                            activity.setApprovalStatus(ApprovalStatus.APPROVED);
                         }
 
                         logger.info("updating " + activity.getName());
                         DbUtil.update(activity);
                         new ActivitySaveTrigger(activity);
-                        if(!activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
+                        if (!activity.getApprovalStatus().equals(ApprovalStatus.APPROVED)) {
                             new NotApprovedActivityTrigger(activity);
                         }
                         

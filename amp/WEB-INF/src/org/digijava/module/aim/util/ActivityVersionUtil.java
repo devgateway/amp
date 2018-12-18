@@ -25,7 +25,6 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.annotations.activityversioning.ActivityVersioningService;
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -658,6 +657,17 @@ public class ActivityVersionUtil {
 
  	        return groupOutputCollection(outputCollection);
  	    }
+ 	    
+ 	   public static void compareToPrevious(Long activityOneId) throws Exception {
+ 	    	
+ 	    	Session session = PersistenceManager.getCurrentSession(); 
+ 	    	AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
+
+ 	        
+ 	        AmpActivityVersion activityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
+ 	        Long activityTwoid = activityTwo.getAmpActivityId();
+ 	        compareActivities(activityOneId,activityTwoid);
+ 	     }
 
  	    private static void addAsDifferentIfNnoPresent(List<CompareOutput> outputCollection, Field[] fields, int i, VersionableCollection auxAnnotation, Collection auxCollection2, Iterator iter1) {
  	        while (iter1.hasNext()) {

@@ -1,7 +1,6 @@
 package org.digijava.module.aim.action;
 
 import java.lang.reflect.Field;
-import org.digijava.module.aim.annotations.activityversioning.ActivityVersioningService;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -449,7 +448,7 @@ public class CompareActivityVersions extends DispatchAction {
 //        Map<String, List<CompareOutput>> outputGroupped = groupOutputCollection (vForm.getOutputCollection());
 //        modifyFundingOutputs (outputGroupped);
 //        vForm.setOutputCollectionGrouped(outputGroupped);
-        vForm.setOutputCollectionGrouped(ActivityVersioningService.compareActivities(vForm.getActivityOneId(),
+        vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId(),
                 vForm.getActivityTwoId()));
     
         return mapping.findForward("forward");

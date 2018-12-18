@@ -132,17 +132,13 @@ public abstract class PropertyListable implements Cloneable {
             ret.put(propertyDescriptors[i].getName(), selProps);
         }
     } catch (IntrospectionException e) {
-        logger.error(e);
-        e.printStackTrace();
+        logger.error(e.getMessage(), e);
     } catch (IllegalArgumentException e) {
-        logger.error(e);
-        e.printStackTrace();
+        logger.error(e.getMessage(), e);
     } catch (IllegalAccessException e) {
-        logger.error(e);
-        e.printStackTrace();
+        logger.error(e.getMessage(), e);
     } catch (InvocationTargetException e) {
-        logger.error(e);
-        e.printStackTrace();
+        logger.error(e.getMessage(), e);
     }
     return ret;
 

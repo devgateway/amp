@@ -27,7 +27,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -55,7 +54,7 @@ import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
+import org.dgfoundation.amp.reports.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportExportType;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportHtmlRenderer;
@@ -84,6 +83,7 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -704,7 +704,7 @@ public class Reports implements ErrorReportingEndpoint {
         try {
             filename = URLEncoder.encode(filename, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
 
         filename += "." + type;
@@ -889,7 +889,8 @@ public class Reports implements ErrorReportingEndpoint {
     @ApiOperation("Save report configuration for current session")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "configuration id"))
     public String exportToMap(
-            @ApiParam("report configuration") JsonBean config, @PathParam("report_id") Long reportId) {
+            @ApiParam("report configuration") ReportConfig config,
+            @PathParam("report_id") Long reportId) {
         return ReportsUtil.exportToMap(config, reportId);
     }
     
@@ -907,13 +908,13 @@ public class Reports implements ErrorReportingEndpoint {
         Map<String, Object> colorSettings = new HashMap<String, Object>();
         
         Set<Integer> validatedStatuses = new HashSet<Integer>();
-        for (String s : AmpARFilter.validatedActivityStatus) {
-            validatedStatuses.add(AmpARFilter.activityStatusToNr.get(s));
+        for (ApprovalStatus s : AmpARFilter.VALIDATED_ACTIVITY_STATUS) {
+            validatedStatuses.add(s.getId());
         }
         
         Set<Integer> unvalidatedStatuses = new HashSet<Integer>();
-        for (String s : AmpARFilter.unvalidatedActivityStatus) {
-            unvalidatedStatuses.add(AmpARFilter.activityStatusToNr.get(s));
+        for (ApprovalStatus s : AmpARFilter.UNVALIDATED_ACTIVITY_STATUS) {
+            unvalidatedStatuses.add(s.getId());
         }
         
         Map<String, Set<Integer>> activityStatusCodes = new HashMap<String, Set<Integer>>();

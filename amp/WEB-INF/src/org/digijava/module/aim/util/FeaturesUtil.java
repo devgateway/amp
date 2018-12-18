@@ -137,7 +137,7 @@ public class FeaturesUtil {
             col = qry.list();
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return col;
     }
@@ -161,7 +161,7 @@ public class FeaturesUtil {
             col = qry.list();
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return col;
     }
@@ -217,7 +217,7 @@ public class FeaturesUtil {
                 return true;
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return true;
     }
@@ -240,7 +240,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         if (!col.isEmpty()) {
             Iterator it = col.iterator();
@@ -268,7 +268,7 @@ public class FeaturesUtil {
             //tx.commit();
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return true;
     }
@@ -284,7 +284,7 @@ public class FeaturesUtil {
             ft = (FeatureTemplates) session.load(FeatureTemplates.class, id);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return ft.getFeatures();
     }
@@ -300,7 +300,7 @@ public class FeaturesUtil {
             ft = (FeatureTemplates) session.load(FeatureTemplates.class, id);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return ft.getFeatureTemplateName();
     }
@@ -327,7 +327,7 @@ public class FeaturesUtil {
             session.save(ampTemplate);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
 
         return;
@@ -358,7 +358,7 @@ public class FeaturesUtil {
             session.saveOrUpdate(ampTemplate);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return;
     }
@@ -388,7 +388,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return col;
     }
@@ -413,7 +413,7 @@ public class FeaturesUtil {
             }
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return countryName;
     }
@@ -430,7 +430,7 @@ public class FeaturesUtil {
             session = PersistenceManager.getSession();
             session.delete(thumbnail);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
     
@@ -450,7 +450,7 @@ public class FeaturesUtil {
             if(c.size()!=0)
                 thumbnail=(AmpHomeThumbnail) c.iterator().next();
         } catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         } 
         return thumbnail;
     }
@@ -508,7 +508,7 @@ public class FeaturesUtil {
             }
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
 
         return col;
@@ -523,7 +523,7 @@ public class FeaturesUtil {
             flag = (AmpSiteFlag) session.get(AmpSiteFlag.class, id);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
 
         return flag;
@@ -542,7 +542,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
 
         return flag;
@@ -570,7 +570,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
 
         return flag;
@@ -598,7 +598,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
 
         return exist;
@@ -665,7 +665,7 @@ public class FeaturesUtil {
             session.save(ampGlobalSettings);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return;
     }
@@ -760,7 +760,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return col;
     }
@@ -782,7 +782,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return col;
     }
@@ -805,7 +805,7 @@ public class FeaturesUtil {
             col = qry.list();
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }    
         return col;
     }
@@ -830,7 +830,7 @@ public class FeaturesUtil {
             col = qry.list();
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return col;
     }
@@ -849,7 +849,7 @@ public class FeaturesUtil {
             col = qry.list();
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
 
         }
         return col;
@@ -878,7 +878,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }    
         return col;
     }
@@ -904,7 +904,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }    
         return col;
     }
@@ -930,7 +930,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }    
         return col;
     }
@@ -1056,7 +1056,7 @@ public class FeaturesUtil {
                 return true;
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
 
         return true;
@@ -1083,7 +1083,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }    
         return col;
     }
@@ -1115,7 +1115,7 @@ public class FeaturesUtil {
             //tx.commit();
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }    
         return;
     }
@@ -1134,7 +1134,7 @@ public class FeaturesUtil {
                     id);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }    
         return ft.getItems();
     }
@@ -1151,7 +1151,7 @@ public class FeaturesUtil {
                     id);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }    
         return ft.getName();
     }
@@ -1169,7 +1169,7 @@ public class FeaturesUtil {
                     id);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return ft;
     }
@@ -1207,7 +1207,7 @@ public class FeaturesUtil {
             session.saveOrUpdate(ampTemplate);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
 
         try {
@@ -1256,7 +1256,7 @@ public class FeaturesUtil {
             
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return true;
     }
@@ -1281,7 +1281,7 @@ public class FeaturesUtil {
         }
         catch (HibernateException e) {
             // TODO check that the error is correctly handled
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return true;
     }
@@ -1362,7 +1362,7 @@ public class FeaturesUtil {
             }
             session.delete(module);
         }  catch (HibernateException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return true;
     }
@@ -1418,7 +1418,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return id;
     }
@@ -1446,7 +1446,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return id;
     }
@@ -1465,7 +1465,7 @@ public class FeaturesUtil {
             ft = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return ft.getItems();
     }
@@ -1484,7 +1484,7 @@ public class FeaturesUtil {
                 ret = ft.getName();
         }
         catch (Exception ex) {
-            logger.error( ex);
+            logger.error(ex.getMessage(), ex);
         }
         return ret;
     }
@@ -1500,7 +1500,7 @@ public class FeaturesUtil {
             ft = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
         }
         catch (Exception ex) {
-            logger.error( ex);
+            logger.error(ex.getMessage(), ex);
         }
         return ft.getItems();
     }
@@ -1535,7 +1535,7 @@ public class FeaturesUtil {
             session.saveOrUpdate(ampModule);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return;
     }
@@ -1561,7 +1561,7 @@ public class FeaturesUtil {
             ampTemplate.getFeatures().addAll(features);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return;
     }
@@ -1690,7 +1690,7 @@ public class FeaturesUtil {
             }
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
             throw new DgException(ex);
         }
         return;
@@ -1726,7 +1726,7 @@ public class FeaturesUtil {
             }
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
             throw new RuntimeException(ex);
         }
         return;
@@ -1754,7 +1754,7 @@ public class FeaturesUtil {
             }
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return;
     }
@@ -1788,7 +1788,7 @@ public class FeaturesUtil {
             }
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return;
     }
@@ -1808,7 +1808,7 @@ public class FeaturesUtil {
             session.save(module);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return;
     }
@@ -1886,7 +1886,7 @@ public class FeaturesUtil {
             ft.setAllItems(mySet);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         
         return ft;
@@ -1908,7 +1908,7 @@ public class FeaturesUtil {
                 result.add(f.getId());
             }
         } catch (HibernateException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             // TODO Check correct exception handling
 
         }
@@ -1933,7 +1933,7 @@ public class FeaturesUtil {
             }
         } catch (HibernateException e) {
             // TODO Check for correct error handling
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return result;
     }
@@ -1955,7 +1955,7 @@ public class FeaturesUtil {
             }
         } catch (HibernateException e) {
             // TODO Check for correct error handling
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return result;
     }
@@ -1983,7 +1983,7 @@ public class FeaturesUtil {
             }
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
     }
 
@@ -2012,7 +2012,7 @@ public class FeaturesUtil {
             }
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
     }
 
@@ -2030,7 +2030,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
     }
 
@@ -2059,7 +2059,7 @@ public class FeaturesUtil {
             session.delete(feature);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
     }
 
@@ -2083,7 +2083,7 @@ public class FeaturesUtil {
             session.delete(field);
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
     }
 
@@ -2108,7 +2108,7 @@ public class FeaturesUtil {
             airr = (AmpIndicatorRiskRatings) col.iterator().next();
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return airr;
     }
@@ -2134,7 +2134,7 @@ public class FeaturesUtil {
 
         }
         catch (Exception ex) {
-            logger.error(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return col;
     }
@@ -2234,7 +2234,7 @@ public class FeaturesUtil {
 
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
 
         return feature;
@@ -2276,7 +2276,7 @@ public class FeaturesUtil {
                 module = (AmpModulesVisibility) qry.uniqueResult();
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
 
         return module;

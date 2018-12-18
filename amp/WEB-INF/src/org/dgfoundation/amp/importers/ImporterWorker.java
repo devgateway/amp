@@ -99,26 +99,19 @@ public class ImporterWorker {
                 AmpImporter ai = (AmpImporter) constructor.newInstance(properties.getProperty("importFileName"),columns.toArray(new String[0]),properties);
                 ai.performImport();
             } catch (ClassNotFoundException e) {
-                logger.error(e);
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             } catch (SecurityException e) {
-                logger.error(e);
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             } catch (NoSuchMethodException e) {
-                logger.error(e);
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             } catch (IllegalArgumentException e) {
-                logger.error(e);    
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             } catch (InstantiationException e) {
-                logger.error(e);
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             } catch (IllegalAccessException e) {
-                logger.error(e);
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             } catch (InvocationTargetException e) {
-                logger.error(e);
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }       
     }

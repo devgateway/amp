@@ -10,7 +10,7 @@ import java.util.Set;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpIssues implements Serializable, Versionable, Cloneable, AuditableEntity {
+public class AmpIssues implements Serializable, Versionable, Cloneable {
 
     //IATI-check: to be ignored
     private Long ampIssueId ;
@@ -192,9 +192,5 @@ public class AmpIssues implements Serializable, Versionable, Cloneable, Auditabl
         // TODO Auto-generated method stub
         return super.clone();
     }
-
-    @Override
-    public AuditableEntity getParent() {
-        return activity;
-    }
+    
 }

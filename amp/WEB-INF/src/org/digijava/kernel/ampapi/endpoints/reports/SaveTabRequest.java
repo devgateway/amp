@@ -28,6 +28,10 @@ public class SaveTabRequest {
 
     @ApiModelProperty("JQGrid style sort param.")
     private String sord;
+    
+    
+    @JsonProperty(EPConstants.INCLUDE_LOCATION_CHILDREN)
+    private Boolean includeLocationChildren;
 
     public Map<String, Object> getFilters() {
         return filters;
@@ -67,5 +71,13 @@ public class SaveTabRequest {
 
     public void setReportData(List<Map<String, String>> reportData) {
         this.reportData = reportData;
+    }
+
+    public Boolean getIncludeLocationChildren() {
+        return includeLocationChildren;
+    }
+
+    public void setIncludeLocationChildren(Boolean includeLocationChildren) {
+        this.includeLocationChildren = includeLocationChildren;
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -32,6 +33,7 @@ public class QueryModel implements Cloneable {
     private String secondCurrency;
     
     @ApiModelProperty("Should location option in filters include children or not.")
+    @JsonProperty("include-location-children")
     private Boolean includeLocationChildren;
 
     public Integer getPage() {

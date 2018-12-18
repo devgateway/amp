@@ -338,7 +338,7 @@ public class ReportsUtil {
             if (ampReport != null)
                 return AmpReportsToReportSpecification.convert(ampReport);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return null;
     }

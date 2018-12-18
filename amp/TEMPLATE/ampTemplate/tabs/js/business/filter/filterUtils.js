@@ -53,7 +53,7 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 		}
 		
 		app.TabsApp.filters.models = [];
-		
+				
 		if (filtersFromWidgetWithNames.filters !== undefined) {
 			for ( var propertyName in filtersFromWidgetWithNames.filters) {
 				var auxProperty = filtersFromWidgetWithNames.filters[propertyName];	
@@ -62,22 +62,29 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 					if(dateFilter){
 						app.TabsApp.filters.add(dateFilter);
 					}
-				}else{
-					_.each(auxProperty.serializedToModels, function(item, i) {
-						var content = [];
-						if (item.length > 0) {
-							_.each(item, function(item2) {
-								content.push({id: 0, name: item2.name, trnName: TranslationManager.getTranslated(item2.name)});
-							});
-							var name = TranslationManager.getTranslated(item[0].levelName.replace(/-/g, " ")) || item[0].levelName.replace(/-/g, " ");									
+				} else {					
+					_.each(auxProperty, function(item, i) {						
+						var foundFilters = app.TabsApp.filters.filter(function(filter1) {
+							return filter1.get('name') === item.get('filterId');
+						});
+						
+						var filter = foundFilters[0];						
+						if (filter == null) {
+							var name = TranslationManager.getTranslated(item.get('filterId').replace(/-/g, " ")) || item.get('filterId').replace(/-/g, " ");
 							var filter = new Filter({
 								trnName : name,
-								name: item[0].levelName,
-								values : content
+								name: item.get('filterId'),
+								values : []
 							});
+						}				
+						 
+						filter.get('values').push({id: 0, name: item.get('name'), trnName: TranslationManager.getTranslated(item.get('name'))});					
+						if (foundFilters.length === 0) {
 							app.TabsApp.filters.add(filter);
 						}
-					});	
+						
+					});		
+					
 				}				
 
 			}

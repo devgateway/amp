@@ -5,7 +5,7 @@ var CommonFilterUtils = {};
  * Also will make some cleanup and reordering to get the same MD5 for the "same" parameters.
  */
 CommonFilterUtils.calculateMD5FromParameters = function (model, id, lang, timestamp) {	
-	var parameters = {filters: {}, settings: {}, id: null, lang : null, timestamp : null};
+	var parameters = {filters: {}, settings: {}, id: null, lang : null, timestamp : null, 'include-location-children' : true};
 	
 	parameters.id = id;
 	parameters.lang = lang;
@@ -60,6 +60,11 @@ CommonFilterUtils.calculateMD5FromParameters = function (model, id, lang, timest
 		// No need to rearrange sorting parameters.
 		parameters.sorting = model.queryModel.sorting; 
 	}
+
+    if (model.queryModel['include-location-children'] != true) {
+        // No need to rearrange sorting parameters.
+        parameters['include-location-children'] = model.queryModel['include-location-children'];
+    }
 	
 	var md5 = objectHash.MD5(JSON.stringify(parameters));	
 	return md5;

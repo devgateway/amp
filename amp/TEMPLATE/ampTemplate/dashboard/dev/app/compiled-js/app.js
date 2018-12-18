@@ -28599,6 +28599,7 @@ module.exports = Backbone.Collection.extend({
                 deferred.resolve();
             });
         });
+<<<<<<< HEAD
 
         return deferred;
     },
@@ -28634,6 +28635,58 @@ module.exports = Backbone.Collection.extend({
 
                 })
             }
+=======
+	    
+	    return deferred;
+	  },
+
+	  _createTree: function(data, definition) {
+		  var self = this;
+		  var dataCopy = jQuery.extend(true, {}, data);
+		  var tree = [];	  
+		  
+		  _.each(dataCopy, function(level1) {
+			  var level1 = $.extend({}, level1);
+			  if (definition.filterIds) {
+				  level1.filterId = definition.filterIds[0];
+				  level1.level = Constants.LEVEL_ONE;
+				  
+				  if (level1.children && level1.children.length > 0) {
+					    level1.children = self._updateLevelData(level1, definition, Constants.LEVEL_TWO, definition.filterIds[1]);
+					    
+					  _.each(level1.children, function(level2) {
+						  if (level2.children && level2.children.length > 0) {
+							  level2.children = self._updateLevelData(level2, definition, Constants.LEVEL_THREE, definition.filterIds[2]);	
+							  
+							  _.each(level2.children, function(level3) {
+								  if (level3.children && level3.children.length > 0) {								  
+									   level3.children = self._updateLevelData(level3, definition, Constants.LEVEL_FOUR, definition.filterIds[3]);
+									   _.each(level3.children, function(level4) {
+										   if (level4.children && level4.children.length > 0) {
+											   level4.children = self._updateLevelData(level4, definition, Constants.LEVEL_FIVE, definition.filterIds[4]);
+											   level4.children.map(function(item) {
+											   		item.children = []; //ignore 5th level.
+											   });
+										   }
+									   });
+								  }
+							  });
+						  }		
+					  });
+				  }  
+			  }			 
+			  
+			  tree.push(level1);			  
+		   });          
+		  
+		  return tree;
+	  },
+	  
+	  _updateLevelData: function(node, definition, level, filterId) {				  
+		  return node.children.filter(function(item) {
+			  if (item.listDefinitionIds) {
+				  return item.listDefinitionIds.includes(definition.id);
+>>>>>>> 169c48a37029bbc3520f9ccaeda239cbb05ed698
 			  }
 
             tree.push(level1);
@@ -31547,6 +31600,7 @@ var constants = {
     LEVEL_TWO: 2,
     LEVEL_THREE: 3,
     LEVEL_FOUR: 4,
+    LEVEL_FIVE: 5,
     ALL_FILTERS_URL: '/rest/nifilters',
     ACTIVITY_BUDGET_LIST: 'ActivityBudgetList',
     TYPE_OF_ASSISTANCE: 'type-of-assistance',
@@ -31922,7 +31976,7 @@ module.exports = Backbone.View.extend({
   
   serializeToModels: function(filter) {
 	  var _self = this;
-	  _self.values = {0: [], 1: [], 2: [], 3: []}; //TODO: Implement calculateFilterDept() function.
+	  _self.values = {0: [], 1: [], 2: [], 3: [], 4: []}; //TODO: Implement calculateFilterDept() function.
 	  if (filter.get('tree')) {
 		  var entryPoint = filter.get('tree').get('children');
 		  var currentLevel = 0;

@@ -2,8 +2,10 @@ package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.dto.SaveResult;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityFrozen;
@@ -37,8 +39,7 @@ public final class DataFreezeService {
     private DataFreezeService() {
     }
 
-    public static DataFreezeEventResult saveDataFreezeEvent(DataFreezeEvent dataFreezeEvent) {
-        DataFreezeEventResult result = new DataFreezeEventResult();
+    public static SaveResult<DataFreezeEvent> saveDataFreezeEvent(DataFreezeEvent dataFreezeEvent) {
         List<JsonBean> validationErrors = validate(dataFreezeEvent);
         if (validationErrors.size() == 0) {
             AmpDataFreezeSettings dataFreezeSettings = getOrCreate(dataFreezeEvent);
@@ -47,16 +48,11 @@ public final class DataFreezeService {
     
             dataFreezeEvent.setId(dataFreezeSettings.getAmpDataFreezeSettingsId());
             dataFreezeEvent.setCount(getCountOfFrozenActivities(dataFreezeSettings));
-            
-            result.setData(dataFreezeEvent);
-            result.setResult(DataFreezeConstants.SAVE_SUCCESSFUL);
-        } else {
-            result.setData(dataFreezeEvent);
-            result.setResult(DataFreezeConstants.SAVE_FAILED);
-            result.setErrors(validationErrors);
-        }
 
-        return result;
+            return new SaveResult(dataFreezeEvent);
+        } else {
+            return new SaveResult(dataFreezeEvent, validationErrors);
+        }
     }
 
     private static List<JsonBean> validate(DataFreezeEvent dataFreezeEvent) {
@@ -111,9 +107,8 @@ public final class DataFreezeService {
         DataFreezeUtil.deleteDataFreezeEvent(id);
     }
 
-    public static Page<DataFreezeEvent> fetchDataFreezeEventList(Integer offset, Integer count, String orderBy,
+    public static ResultPage<DataFreezeEvent> fetchDataFreezeEventList(Integer offset, Integer count, String orderBy,
             String sort) {
-        Page<DataFreezeEvent> page = new Page<>();
         Integer total = DataFreezeUtil.getFreezeEventsTotalCount();
         List<AmpDataFreezeSettings> fetchedData = DataFreezeUtil.getDataFreeEventsList(offset, count, orderBy, sort,
                 total);
@@ -136,10 +131,7 @@ public final class DataFreezeService {
             freezeEvents.add(dataFreezeEvent);
         });
 
-        page.setData(freezeEvents);
-        page.setTotalRecords(total);
-
-        return page;
+        return new ResultPage<>(freezeEvents, total);
     }
 
     private static Integer getCountOfFrozenActivities(AmpDataFreezeSettings event) {

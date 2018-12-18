@@ -82,8 +82,8 @@ def legacyMvnOptions = "-Djdbc.user=amp " +
 def launchedByUser = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause').size() > 0
 
 // Run fail fast tests
-stage('Quick Test') {
-    if (!launchedByUser) {
+if (!launchedByUser) {
+    stage('Quick Test') {
         node {
             try {
                 checkout scm

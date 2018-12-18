@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.exception.EditorException;
 
@@ -87,7 +88,9 @@ public abstract class ObjectExporter<T> {
      */
     private Object readFieldWithPossibleValues(APIField field, Object value) {
         Object singleValue = getSingleValue(value);
-        if (Identifiable.class.isAssignableFrom(field.getType())) {
+        if (ApprovalStatus.class.isAssignableFrom(field.getType())) {
+            return ((ApprovalStatus) value).getId();
+        } else if (Identifiable.class.isAssignableFrom(field.getType())) {
             return singleValue == null ? null : ((Identifiable) singleValue).getIdentifier();
         } else if (InterchangeUtils.isSimpleType(field.getType())) {
             return singleValue;

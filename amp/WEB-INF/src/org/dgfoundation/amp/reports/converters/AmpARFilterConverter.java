@@ -33,10 +33,15 @@ import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * Translates report filters from ARFilters to a configuration that is applicable for Reports API.
- * Old AmpARFilter structure stores multiple information like the actual report filters, report settings, sorting info...  
+ * Old AmpARFilter structure stores multiple information like the actual report filters, report settings,
+ * sorting info...
+ *
+ * TODO AMP-26970 activity columns are converted to pledge columns here and in AmpFiltersConverter as well.
+ *
  * @author Nadejda Mandrescu
  */
 public class AmpARFilterConverter {
@@ -135,7 +140,7 @@ public class AmpARFilterConverter {
     private void addFundingDatesFilters() {
         try {
             if (arFilter.getYearFrom() != null || arFilter.getYearTo() != null) {
-                if (arFilter.getYearFrom() == arFilter.getYearTo()) {
+                if (arFilter.getYearFrom().equals(arFilter.getYearTo())) {
                     filterRules.addSingleYearFilterRule(arFilter.getYearFrom(), true);
                 } else {
                     filterRules.addYearsRangeFilterRule(arFilter.getYearFrom(), arFilter.getYearTo());
@@ -158,6 +163,7 @@ public class AmpARFilterConverter {
     }
     
     private void addActivityDatesFilters() {
+        addActualAppYear();
         addActivityDateFilter(arFilter.buildFromAndToActivityStartDateAsDate(), ColumnConstants.ACTUAL_START_DATE);
         addActivityDateFilter(arFilter.buildFromAndToProposedApprovalDateAsDate(), ColumnConstants.PROPOSED_APPROVAL_DATE);
         addActivityDateFilter(arFilter.buildFromAndToProposedStartDateAsDate(), ColumnConstants.PROPOSED_START_DATE);
@@ -167,7 +173,23 @@ public class AmpARFilterConverter {
         addActivityDateFilter(arFilter.buildFromAndToFundingClosingDateAsDate(), ColumnConstants.FUNDING_CLOSING_DATE);
         addActivityDateFilter(arFilter.buildFromAndToIssueDateAsDate(), ColumnConstants.ISSUE_DATE);
     }
-    
+
+    /**
+     * old filter widget uses year for actual approval
+     * new filter widget uses date for actual approval
+     */
+    private void addActualAppYear() {
+        try {
+            if (arFilter.getActualAppYear() != null) {
+                Date from = DateTimeUtil.firstDayOfYear(arFilter.getActualAppYear());
+                Date to = DateTimeUtil.lastDayOfYear(arFilter.getActualAppYear());
+                filterRules.addDateRangeFilterRule(new ReportColumn(ColumnConstants.ACTUAL_APPROVAL_DATE), from, to);
+            }
+        } catch (AmpApiException ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+    }
+
     private void addActivityDateFilter(Date[] fromTo, String columnName) {
         if (fromTo == null || fromTo.length != 2 || (fromTo[0] == null && fromTo[1] == null)) return;
         try {
@@ -293,7 +315,7 @@ public class AmpARFilterConverter {
     }
     
     private void addLocationFilters() {
-        Collection<AmpCategoryValueLocations> filterLocations = arFilter.isPledgeFilter() ? arFilter.getPledgesLocations() : arFilter.getLocationSelected();
+        Collection<AmpCategoryValueLocations> filterLocations = arFilter.getLocationSelected();
         if (filterLocations == null || filterLocations.isEmpty())
             return;
         

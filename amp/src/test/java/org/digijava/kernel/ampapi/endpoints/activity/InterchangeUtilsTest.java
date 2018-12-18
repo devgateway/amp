@@ -155,8 +155,8 @@ public class InterchangeUtilsTest {
         assertFalse(InterchangeUtils.isAmpActivityVersion(Permissible.class));
         assertFalse(InterchangeUtils.isAmpActivityVersion(AmpActivityFields.class));
         assertTrue(InterchangeUtils.isAmpActivityVersion(AmpActivityVersion.class));
+        assertTrue(InterchangeUtils.isAmpActivityVersion(AmpActivity.class));
         assertFalse(InterchangeUtils.isAmpActivityVersion(String.class));
-        assertFalse(InterchangeUtils.isAmpActivityVersion(AmpActivity.class));
     }
 
     @Test
@@ -190,7 +190,7 @@ public class InterchangeUtilsTest {
 
     @Test
     public void testFormatDate() throws Exception {
-        assertEquals("1973-11-26T03:52:03.123+0300", InterchangeUtils.formatISO8601Date(new Date(123123123123L)));
+        assertEquals("1973-11-26T00:52:03.123+0000", InterchangeUtils.formatISO8601Date(new Date(123123123123L)));
     }
 
     @Test

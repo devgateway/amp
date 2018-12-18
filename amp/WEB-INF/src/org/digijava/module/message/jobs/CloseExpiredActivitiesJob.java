@@ -13,7 +13,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.startup.AmpBackgroundActivitiesUtil;
@@ -46,7 +46,8 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
      * @return
      * @throws CloneNotSupportedException
      */
-    protected AmpActivityVersion cloneActivity(Session session, AmpTeamMember member, AmpActivityVersion oldActivity, String newStatus, Long closedProjectStatusCategoryValue) throws CloneNotSupportedException
+    protected AmpActivityVersion cloneActivity(Session session, AmpTeamMember member, AmpActivityVersion oldActivity,
+            ApprovalStatus newStatus, Long closedProjectStatusCategoryValue) throws CloneNotSupportedException
     {       
         AmpActivityVersion prevVersion = oldActivity.getAmpActivityGroup().getAmpActivityLastVersion();
         oldActivity.getAmpActivityGroup().setAutoClosedOnExpiration(true);
@@ -91,10 +92,23 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
         
             Long closedCategoryValue = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);
             
-            String filterQuery = "SELECT amp_activity_last_version_id FROM amp_activity_group aag WHERE aag.autoclosedonexpiration = false AND " + 
-                " aag.amp_activity_last_version_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft IS NULL or draft=false) AND (amp_team_id IS NOT NULL) AND (deleted IS NULL OR deleted = false) AND approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") AND actual_completion_date < now())" +
-                " AND aag.amp_activity_last_version_id IN (select amp_activity_id FROM v_status WHERE amp_status_id != " + closedCategoryValue + ")" +
-                "";
+            String filterQuery = "SELECT amp_activity_last_version_id "
+                    + "FROM amp_activity_group aag "
+                    + "WHERE aag.autoclosedonexpiration = false "
+                    + "AND aag.amp_activity_last_version_id IN ("
+                    + "  SELECT amp_activity_id "
+                    + "  FROM amp_activity "
+                    + "  WHERE (draft IS NULL or draft=false) "
+                    + "  AND (amp_team_id IS NOT NULL) "
+                    + "  AND (deleted IS NULL OR deleted = false) "
+                    + "  AND approval_status IN (" + Util.toCSString(AmpARFilter.VALIDATED_ACTIVITY_STATUS) + ") "
+                    + "  AND actual_completion_date < now()"
+                    + ") "
+                    + "AND aag.amp_activity_last_version_id IN ("
+                    + "  select amp_activity_id "
+                    + "  FROM v_status "
+                    + "  WHERE amp_status_id != " + closedCategoryValue
+                    + ")";
         
             List<Long> eligibleIds = DbHelper.getInActivities(filterQuery);
             //java.util.Map<Long, Long> statusIdsByActivityIds = getStatuses(session, eligibleIds);                     
@@ -107,12 +121,13 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
                       " aav " + "where aav.ampActivityId IN (" + Util.toCSString(eligibleIds) + ")";
                 closeableActivities = session.createQuery(queryString).list();
             }
-            
-            String newStatus = Constants.APPROVED_STATUS;
+
+            ApprovalStatus newStatus = ApprovalStatus.APPROVED;
             session.setFlushMode(FlushMode.MANUAL);
             for(AmpActivityVersion ver:closeableActivities) {
                 if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))) {
-                     newStatus = ver.getApprovalStatus().equals(Constants.STARTED_APPROVED_STATUS) ? Constants.STARTED_STATUS : Constants.EDITED_STATUS;
+                     newStatus = ver.getApprovalStatus().equals(ApprovalStatus.STARTED_APPROVED)
+                             ? ApprovalStatus.STARTED : ApprovalStatus.EDITED;
                 }
                 
                 AmpCategoryValue oldActivityStatus = CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, ver.getCategories());

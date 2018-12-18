@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import org.dgfoundation.amp.test.categories.SlowTests;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.ExceptionRunnable;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -25,6 +26,7 @@ import org.dgfoundation.amp.nireports.TrailCellsDigest;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 /**
  * basic sanity checks common between both the offdb schema and the AmpReportsSchema-using one.
@@ -441,6 +443,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     
     
     @Test
+    @Category(SlowTests.class)
     public void testTripleHierarchiesDoNotChangeTotals() {
         if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
             return; // these are too slow if backed by DB
@@ -532,6 +535,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     
     
     @Test
+    @Category(SlowTests.class)
     public void testTripleHierarchiesWithEmptyRowsDoNotChangeTotals() {
         if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
             return; // these are too slow if backed by DB

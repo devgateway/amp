@@ -45,8 +45,8 @@ var AMPFilters = Backbone.View.extend({
 					$('#filter-popup').hide();
 				});
 				Saiku.events.listenTo(window.currentFilter, 'apply', function(data) {
-					var filterObject = window.currentFilter.serialize();					
-					self.workspace.query.run_query(filterObject, null);
+					var filterObject = window.currentFilter.serialize();
+					self.workspace.query.run_query(filterObject.filters || {}, null);
 					self.filters_button.removeClass('on');
 					$('#filter-popup').hide();
 				});

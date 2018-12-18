@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +27,6 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.annotations.activityversioning.ActivityVersioningService;
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -87,18 +87,39 @@ public class CompareActivityVersions extends DispatchAction {
             
             return new ActionForward(mapping.findForward("reload").getPath() + "?ampActivityId=" + activityId,true);
         }
-      //check if this collection is used
+
         vForm.setOutputCollection(new ArrayList<CompareOutput>());
-      
-        vForm.setOutputCollectionGrouped(ActivityVersioningService.compareActivities(vForm.getActivityOneId(),
+        // Load the activities.
+        vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId(),
                 vForm.getActivityTwoId()));
-    
+        
+        
         return mapping.findForward("forward");
     }
 
     private void modifyFundingOutputs (Map<String, List<CompareOutput>> outputGroupped) {
 
 
+    }
+
+    private Map<String, List<CompareOutput>> groupOutputCollection (List<CompareOutput> outputCollection) {
+        Map<String, List<CompareOutput>> retVal = new HashMap<String, List<CompareOutput>>();
+        int idx = 0;
+        for (CompareOutput obj: outputCollection) {
+            if (!obj.getBlockSingleChangeOutput()) {
+                obj.setIndex(idx);
+                idx ++;
+            } else {
+                obj.setIndex(-1); // skip from merge process
+            }
+            if (!retVal.containsKey(obj.getDescriptionOutput())) {
+                retVal.put(obj.getDescriptionOutput(), new ArrayList<CompareOutput>());
+            }
+            retVal.get(obj.getDescriptionOutput()).add(obj);
+
+        }
+
+        return retVal;
     }
 
     public ActionForward enableMerge(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -336,5 +357,6 @@ public class CompareActivityVersions extends DispatchAction {
         //If the current user is part of the management workspace or is not the workspace manager of a workspace that's not management then hide.
         vForm.setAdvancemode(!ispartofamanagetmentworkspace & iscurrentworkspacemanager);
     }
+        
     
 }

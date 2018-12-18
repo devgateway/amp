@@ -79,24 +79,28 @@ def legacyMvnOptions = "-Djdbc.user=amp " +
         "-DdbName=postgresql " +
         "-Djdbc.driverClassName=org.postgresql.Driver"
 
+def launchedByUser = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause').size() > 0
+
 // Run fail fast tests
 stage('Quick Test') {
-    node {
-        try {
-            checkout scm
+    if (!launchedByUser) {
+        node {
+            try {
+                checkout scm
 
-            updateGitHubCommitStatus('jenkins/failfasttests', 'Testing in progress', 'PENDING')
+                updateGitHubCommitStatus('jenkins/failfasttests', 'Testing in progress', 'PENDING')
 
-            withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
-                sh "cd amp && mvn test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
+                withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+                    sh "cd amp && mvn test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
 
-                // Archive unit test report
-                junit 'amp/target/surefire-reports/TEST-*.xml'
+                    // Archive unit test report
+                    junit 'amp/target/surefire-reports/TEST-*.xml'
+                }
+
+                updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: success', 'SUCCESS')
+            } catch (e) {
+                updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: error', 'ERROR')
             }
-
-            updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: success', 'SUCCESS')
-        } catch(e) {
-            updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: error', 'ERROR')
         }
     }
 }

@@ -184,9 +184,9 @@ public class SyncService implements InitializingBean {
     }
 
     private boolean shouldSyncFieldsDefinitions(Date lastSyncTime, SystemDiff systemDiff) {
-        return isFirstSync(lastSyncTime) ||
-                isFirstSyncSinceAMPStartup(lastSyncTime, systemDiff) ||
-                fieldDefinitionsChanged(lastSyncTime, systemDiff);
+        return isFirstSync(lastSyncTime)
+                || isFirstSyncSinceAMPStartup(lastSyncTime, systemDiff)
+                || fieldDefinitionsChanged(lastSyncTime, systemDiff);
     }
 
     private boolean isFirstSync(Date lastSyncTime) {

@@ -836,9 +836,10 @@ deleted 6 fields, do not reinsert
 <field:display name="Recievers" feature="Create Message Form"></field:display>
 <field:display name="Country" feature="Location"></field:display>  
 <field:display name="Region" feature="Location"></field:display>
-<field:display name="District" feature="Location"></field:display>
 <field:display name="Zone" feature="Location"></field:display>
-<field:display name="Regional Funding Tab" feature="Regional Funding"></field:display> 
+<field:display name="District" feature="Location"></field:display>
+<field:display name="Communal Section" feature="Location"></field:display>
+<field:display name="Regional Funding Tab" feature="Regional Funding"></field:display>
 <field:display name="Regional Group" feature="Regional Group"></field:display>
 <field:display name="Regional Percentage" feature="Location"></field:display> 
 <field:display name="Related Activity Dropdown" feature="Create Message Form"></field:display> 
@@ -1014,6 +1015,7 @@ deleted 6 fields, do not reinsert
 <field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Zones"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Districts"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Communal Section"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Programs"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Secondary Programs"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Tertiary Programs"></field:display>

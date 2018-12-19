@@ -408,7 +408,7 @@ public class InterchangeUtils {
         if (fieldValue instanceof String) {
             boolean toTranslate = clazz.equals(AmpCategoryValue.class) && field.getName().equals("value");
             
-            // now we check if is only a CategoryValue field and the field name is value
+            // now we check if is only a CategoryValueLabel field and the field name is value
             String translatedText = toTranslate ? translatorService.translateText((String) fieldValue)
                     : (String) fieldValue;
             return getJsonStringValue(translatedText);

@@ -19,10 +19,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.StreamingOutput;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.sun.jersey.multipart.FormDataParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.digijava.kernel.ampapi.endpoints.common.CategoryValue;
+import org.digijava.kernel.ampapi.endpoints.common.CategoryValueLabel;
 import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
@@ -34,8 +35,6 @@ import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-
-import com.sun.jersey.multipart.FormDataParam;
 
 @Path("indicator")
 @Api("indicator")
@@ -172,15 +171,14 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     @Path("/adm-level")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Retrieve and provide administrative levels.")
-    @JsonView(CategoryValue.LabelValueView.class)
-    public List<CategoryValue> getLevels() {
+    public List<CategoryValueLabel> getLevels() {
         Collection<AmpCategoryValue> admLevels = CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
                 "implementation_location", false);
         Map<String, Boundary> boundariesMap = BoundariesService.getBoundariesAsList();
-        List<CategoryValue> indicatorLayerList = new ArrayList<>();
-        for (AmpCategoryValue admLevel: admLevels){         
-            if (boundariesMap.containsKey(IndicatorEPConstants.ADM_PREFIX + admLevel.getIndex())) {
-                indicatorLayerList.add(new CategoryValue(admLevel.getId(), admLevel.getValue(), admLevel.getLabel()));
+        List<CategoryValueLabel> indicatorLayerList = new ArrayList<>();
+        for (AmpCategoryValue level: admLevels) {
+            if (boundariesMap.containsKey(IndicatorEPConstants.ADM_PREFIX + level.getIndex())) {
+                indicatorLayerList.add(new CategoryValueLabel(level.getId(), level.getValue(), level.getLabel()));
             }            
         }
         
@@ -191,11 +189,10 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     @Path("/access-type")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Retrieve and provide access types.")
-    @JsonView(CategoryValue.LabelValueView.class)
-    public List<CategoryValue> getAccessTypes() {
-        List<CategoryValue> accessTypeList = new ArrayList<>();
+    public List<CategoryValueLabel> getAccessTypes() {
+        List<CategoryValueLabel> accessTypeList = new ArrayList<>();
         for (IndicatorAccessType access: IndicatorAccessType.values()){
-            accessTypeList.add(new CategoryValue(access.getValue(), access.name(),
+            accessTypeList.add(new CategoryValueLabel(access.getValue(), access.name(),
                     TranslatorWorker.translateText(access.name())));
         }
 
@@ -206,8 +203,7 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     @Path("/indicator-types")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Retrieve and provide indicator layer types.")
-    @JsonView(CategoryValue.NameOriginalView.class)
-    public List<CategoryValue> getIndicatorLayerTypes() {
+    public List<CategoryValueLabel> getIndicatorLayerTypes() {
         return CategoryValueService.getCategoryValues(CategoryConstants.INDICATOR_LAYER_TYPE_KEY);
     }
 

@@ -16,7 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
-import org.digijava.kernel.ampapi.endpoints.common.CategoryValue;
+import org.digijava.kernel.ampapi.endpoints.common.CategoryValueLabel;
 import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
 import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherAttribute;
@@ -102,7 +102,7 @@ public class PerformanceRulesEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "getLevels", authTypes = { AuthRule.IN_ADMIN })
     @ApiOperation("Retrieve and provide performance alert levels.")
-    public List<CategoryValue> getAlertLevels() {
+    public List<CategoryValueLabel> getAlertLevels() {
         return CategoryValueService.getCategoryValues(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY);
     }
     

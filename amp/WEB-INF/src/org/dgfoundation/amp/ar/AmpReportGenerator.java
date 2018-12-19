@@ -921,8 +921,7 @@ public class AmpReportGenerator extends ReportGenerator {
             try {
                 tmpColumnList.add((Column) funding.clone());
             } catch (CloneNotSupportedException e) {
-                logger.error(e);
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
 
         }
@@ -1472,8 +1471,7 @@ public class AmpReportGenerator extends ReportGenerator {
             try {
                 report = report.horizSplitByCateg(c.getColumnName());
             } catch (UnidentifiedItemException | IncompatibleColumnException e) {
-                logger.error(e);
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }
 
@@ -1556,7 +1554,7 @@ public class AmpReportGenerator extends ReportGenerator {
         
         if (regenerateFilterQuery)
         {
-            filter.generateFilterQuery(TLSUtils.getRequest(), false);
+            filter.generateFilterQuery();
             debugMode = (TLSUtils.getRequest().getParameter("debugMode") != null);
         }
         else

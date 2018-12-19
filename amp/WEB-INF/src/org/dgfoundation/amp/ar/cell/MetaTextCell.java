@@ -6,17 +6,11 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.util.Set;
-import java.util.TreeSet;
-
-import org.apache.ecs.vxml.Return;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.AmpReportGenerator;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.MetaInfoSet;
 import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
-import org.digijava.module.aim.helper.Constants;
 
 /**
  * @author mihai
@@ -56,11 +50,13 @@ public class MetaTextCell extends TextCell {
             return "RED";
             
         // not a draft
-        if (AmpARFilter.validatedActivityStatus.contains(statusFlag)) 
+        if (AmpARFilter.VALIDATED_ACTIVITY_STATUS.contains(statusFlag)) {
             return "#05528B";
+        }
             
-        if (AmpARFilter.unvalidatedActivityStatus.contains(statusFlag))
+        if (AmpARFilter.UNVALIDATED_ACTIVITY_STATUS.contains(statusFlag)) {
             return "GREEN";
+        }
         
         return "";      
     }

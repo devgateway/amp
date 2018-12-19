@@ -233,7 +233,7 @@ public final class PermissionUtil {
                 Class c=Class.forName(gateDefPackage+"."+className);
                 if(Gate.class.isAssignableFrom(c)) gateFiles.add(c);                
             } catch (ClassNotFoundException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new RuntimeException("ClassNotFundingException occured "+e);
             }
         }
@@ -257,7 +257,7 @@ public final class PermissionUtil {
             Query query = session.createQuery(" from " + Permission.class.getName());
             return query.list();
         } catch (HibernateException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException("HibernateException Exception encountered", e);
         }
 
@@ -275,7 +275,7 @@ public final class PermissionUtil {
             if(list.size()>0) return (Permission) list.get(0);
             return null;
         } catch (HibernateException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException("HibernateException Exception encountered", e);
         }
         }
@@ -290,7 +290,7 @@ public final class PermissionUtil {
         List list = query.list();
         return list;
     } catch (HibernateException e) {
-        logger.error(e);
+        logger.error(e.getMessage(), e);
         throw new RuntimeException("HibernateException Exception encountered", e);
     }
     }
@@ -306,7 +306,7 @@ public final class PermissionUtil {
 
             return list;
         } catch (HibernateException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException("HibernateException Exception encountered", e);
         }
         }
@@ -331,7 +331,7 @@ public final class PermissionUtil {
         }
         return ret;
     } catch (HibernateException e) {
-        logger.error(e);
+        logger.error(e.getMessage(), e);
         throw new RuntimeException("HibernateException Exception encountered", e);
     }
     }
@@ -353,7 +353,7 @@ public final class PermissionUtil {
         }
         return ret;
     } catch (HibernateException e) {
-        logger.error(e);
+        logger.error(e.getMessage(), e);
         throw new RuntimeException("HibernateException Exception encountered", e);
     }
     }
@@ -369,7 +369,7 @@ public final class PermissionUtil {
         query.executeUpdate();
         
       } catch (HibernateException e) {
-        logger.error(e);
+        logger.error(e.getMessage(), e);
         throw new RuntimeException( "HibernateException Exception encountered", e);
     }
     }
@@ -388,7 +388,7 @@ public final class PermissionUtil {
         PermissionMap pm= (PermissionMap) col.get(0);     
         return pm.getId();
     } catch (HibernateException e) {
-        logger.error(e);
+        logger.error(e.getMessage(), e);
         throw new RuntimeException( "HibernateException Exception encountered", e);
     }
     }
@@ -408,7 +408,7 @@ public final class PermissionUtil {
             PermissionMap pm= (PermissionMap) col.get(0);     
             return pm;
         } catch (HibernateException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException( "HibernateException Exception encountered", e);
         }
         }
@@ -426,7 +426,7 @@ public final class PermissionUtil {
         PermissionMap pm= (PermissionMap) col.get(0);    
         return pm.getPermission();
     } catch (HibernateException e) {
-        logger.error(e);
+        logger.error(e.getMessage(), e);
         throw new RuntimeException( "HibernateException Exception encountered", e);
     }     
     }
@@ -455,7 +455,7 @@ public final class PermissionUtil {
         return (PermissionMap) col.get(0);
     
     } catch (HibernateException e) {
-        logger.error(e);
+        logger.error(e.getMessage(), e);
         throw new RuntimeException("HibernateException Exception encountered", e);
     }
     }
@@ -495,7 +495,7 @@ public final class PermissionUtil {
         return null;
 
     } catch (HibernateException e) {
-        logger.error(e);
+        logger.error(e.getMessage(), e);
         throw new RuntimeException("HibernateException Exception encountered", e);
     } 
     }
@@ -530,7 +530,7 @@ public final class PermissionUtil {
         return null;
 
     } catch (HibernateException e) {
-        logger.error(e);
+        logger.error(e.getMessage(), e);
         throw new RuntimeException("HibernateException Exception encountered", e);
     }
     }
@@ -572,7 +572,7 @@ public final class PermissionUtil {
             return  (Identifiable) col.get(0);
 
         } catch (HibernateException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException("HibernateException Exception encountered", e);
         }
         }

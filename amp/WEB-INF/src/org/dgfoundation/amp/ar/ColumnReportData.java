@@ -667,7 +667,7 @@ public class ColumnReportData extends ReportData<Column> {
         
                 return sortedIds;
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             return sortActivitiesByAge(allIds);
         }
         

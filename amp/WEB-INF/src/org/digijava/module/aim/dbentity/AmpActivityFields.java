@@ -19,7 +19,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivityS
 import org.digijava.kernel.ampapi.endpoints.activity.values.ApprovalStatusPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -31,11 +30,9 @@ import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
-import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -45,7 +42,7 @@ import org.hibernate.Session;
 
 @TranslatableClass (displayName = "Activity Form Field")
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
-LoggerIdentifiable, Cloneable, AuditableEntity {
+LoggerIdentifiable, Cloneable {
 
     private static final long serialVersionUID = 1L;
     
@@ -485,10 +482,10 @@ LoggerIdentifiable, Cloneable, AuditableEntity {
     @VersionableCollection(fieldTitle = "Regional Fundings")
     protected Set <AmpRegionalFunding> regionalFundings;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS, pickIdOnly = true)
     @PossibleValues(ApprovalStatusPossibleValuesProvider.class)
     @VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
-    protected String approvalStatus;
+    private ApprovalStatus approvalStatus;
 
     // Aid Harmonization Survey Set
     // @Interchangeable(fieldTitle = "Surveys",fmPath="/Activity Form/Paris Indicators")
@@ -1338,14 +1335,14 @@ LoggerIdentifiable, Cloneable, AuditableEntity {
         /**
          * @return Returns the approvalStatus.
          */
-        public String getApprovalStatus() {
+        public ApprovalStatus getApprovalStatus() {
             return approvalStatus;
         }
         /**
          * @param approval_status
          *            The approval_status to set.
          */
-        public void setApprovalStatus(String approvalStatus) {
+        public void setApprovalStatus(ApprovalStatus approvalStatus) {
             this.approvalStatus = approvalStatus;
         }
 
@@ -2180,31 +2177,6 @@ LoggerIdentifiable, Cloneable, AuditableEntity {
             }
             this.costAmounts.add(costAmount);
         }
-    
-    @Override
-    public AuditableEntity getParent() {
-        return null;
-    }
-
-    @Override
-    public void touch() {
-    
-        Date updateDate = Calendar.getInstance().getTime();
-        
-        setUpdatedDate(updateDate);
-        setModifiedDate(updateDate);
-    
-        AmpTeamMember modifiedBy = AuditActivityInfo.getModifiedTeamMember();
-        if (modifiedBy == null) {
-            modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
-        }
-        
-        if (modifiedBy == null) {
-            throw new RuntimeException("Modified team member cannot be null");
-        }
-        
-        setModifiedBy(modifiedBy);
-    }
 
 }
 

@@ -281,7 +281,7 @@ public class AmpUserUtil {
             qry.setBoolean("banned", false);            
             retVal=qry.list();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new AimException("Cannot get users", e);
         }
         return retVal;

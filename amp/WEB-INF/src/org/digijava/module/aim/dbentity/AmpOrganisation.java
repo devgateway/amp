@@ -254,7 +254,6 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     }
 
     /**
-     * @deprecated
      * @param long1
      */
     public void setAmpOrgId(Long long1) {

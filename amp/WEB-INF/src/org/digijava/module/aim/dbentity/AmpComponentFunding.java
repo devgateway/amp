@@ -25,7 +25,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-public class AmpComponentFunding implements Cloneable, Serializable, AuditableEntity {
+public class AmpComponentFunding implements Cloneable, Serializable {
     // IATI-check: to be ignored
 
     private Long ampComponentFundingId;
@@ -257,9 +257,5 @@ public class AmpComponentFunding implements Cloneable, Serializable, AuditableEn
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
-    @Override
-    public AuditableEntity getParent() {
-        return component;
-    }
+    
 }

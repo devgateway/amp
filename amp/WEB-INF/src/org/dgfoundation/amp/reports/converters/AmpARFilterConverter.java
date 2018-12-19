@@ -319,29 +319,32 @@ public class AmpARFilterConverter {
         if (filterLocations == null || filterLocations.isEmpty())
             return;
         
-        Set<AmpCategoryValueLocations> countries = new HashSet<AmpCategoryValueLocations>();
-        Set<AmpCategoryValueLocations> regions = new HashSet<AmpCategoryValueLocations>();
-        Set<AmpCategoryValueLocations> zones = new HashSet<AmpCategoryValueLocations>();
-        Set<AmpCategoryValueLocations> districts = new HashSet<AmpCategoryValueLocations>();
-//      Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
-//                              
+        Set<AmpCategoryValueLocations> countries = new HashSet<>();
+        Set<AmpCategoryValueLocations> regions = new HashSet<>();
+        Set<AmpCategoryValueLocations> zones = new HashSet<>();
+        Set<AmpCategoryValueLocations> districts = new HashSet<>();
+        Set<AmpCategoryValueLocations> communalSections = new HashSet<>();
+
         for(AmpCategoryValueLocations loc : filterLocations) {
-            if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getParentCategoryValue()))
+            AmpCategoryValue parentCatVal = loc.getParentCategoryValue();
+            if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(parentCatVal)) {
                 countries.add(loc);
-            else if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(loc.getParentCategoryValue()))
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(parentCatVal)) {
                 regions.add(loc);
-            else if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.equalsCategoryValue(loc.getParentCategoryValue()))
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.equalsCategoryValue(parentCatVal)) {
                 zones.add(loc);
-            else if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.equalsCategoryValue(loc.getParentCategoryValue()))
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.equalsCategoryValue(parentCatVal)) {
                 districts.add(loc);
-//          else
-//              locations.add(loc);
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_COMMUNAL_SECTION.equalsCategoryValue(parentCatVal)) {
+                communalSections.add(loc);
+            }
         }
 
         addFilter(countries, ColumnConstants.COUNTRY);
         addFilter(regions, ColumnConstants.REGION);
         addFilter(zones, ColumnConstants.ZONE);
         addFilter(districts, ColumnConstants.DISTRICT);
+        addFilter(communalSections, ColumnConstants.COMMUNAL_SECTION);
     }
     
     /**

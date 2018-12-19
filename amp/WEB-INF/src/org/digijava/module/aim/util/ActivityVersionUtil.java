@@ -658,15 +658,16 @@ public class ActivityVersionUtil {
  	        return groupOutputCollection(outputCollection);
  	    }
  	    
- 	   public static void compareToPrevious(Long activityOneId) throws Exception {
- 	    	
+ 	   public static Map<String, List<CompareOutput>> compareToPrevious(Long activityOneId) throws Exception {
+ 		    
  	    	Session session = PersistenceManager.getCurrentSession(); 
  	    	AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
 
  	        
  	        AmpActivityVersion activityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
  	        Long activityTwoid = activityTwo.getAmpActivityId();
- 	        compareActivities(activityOneId,activityTwoid);
+ 	       Map<String, List<CompareOutput>> groupOutputCollection = compareActivities(activityOneId,activityTwoid);
+ 	       return groupOutputCollection;
  	     }
 
  	    private static void addAsDifferentIfNnoPresent(List<CompareOutput> outputCollection, Field[] fields, int i, VersionableCollection auxAnnotation, Collection auxCollection2, Iterator iter1) {

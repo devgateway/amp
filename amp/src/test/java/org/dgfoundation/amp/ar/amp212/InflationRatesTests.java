@@ -11,7 +11,7 @@ import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.currency.CurrencyInflationUtil;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.currency.inflation.InflationRateGenerator;
-import org.dgfoundation.amp.newreports.ReportingTestCase;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
@@ -27,7 +27,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class InflationRatesTests extends ReportingTestCase {
+public class InflationRatesTests extends AmpReportingTestCase {
     
     private final static String DP = "yyyy-MM-dd";
 

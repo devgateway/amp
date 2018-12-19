@@ -61,6 +61,11 @@ public class DbUtil {
 
     private static Logger logger = Logger.getLogger(DbUtil.class);
     
+    public static String filter(String text) {
+        return filter(text, false);
+
+    }
+    
      /**
      * Get editor item by key from database
      *
@@ -198,6 +203,26 @@ public class DbUtil {
         }
 
         return items;
+    }
+    
+    public static String filter(String text, boolean acute) {
+
+        String result = null;
+
+        if (text != null) {
+            result = text.replaceAll("&", "&amp;");
+            result = result.replaceAll(">", "&gt;");
+            result = result.replaceAll("<", "&lt;");
+            if (acute) {
+                result = result.replaceAll("'", "&acute;");// "&acute;");
+            } else {
+                result = result.replaceAll("'", "\'");// "&acute;");
+            }
+            result = result.replaceAll("\"", "&quot;");
+
+        }
+        return result;
+
     }
 
     public static List<Editor> getSiteEditorList(Site site, String lang,String groupName) throws EditorException {

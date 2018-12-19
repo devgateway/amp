@@ -43,10 +43,10 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-public class ActivityVersionUtil {
+public final class ActivityVersionUtil {
 
     private static Logger logger = Logger.getLogger(ActivityVersionUtil.class);
-
+    private static final Integer DEFAULT_QUEUE_SIZE = 999999;
 
     public static Method getMethodFromFieldName(String fieldName, Class auxClass, String prefix) throws Exception {
         String methodName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
@@ -60,8 +60,7 @@ public class ActivityVersionUtil {
         }
         try {
             return auxClass.getMethod(methodName, null);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             if (prefix.equals("get")) {
                 // boolean fields might have "is" as a prefix
                 return getMethodFromFieldName(fieldName, auxClass, "is");
@@ -82,6 +81,9 @@ public class ActivityVersionUtil {
 
     public static String generateFormattedOutput(Output out) throws WorkerException {
         return generateFormattedOutput(out, null);
+    }
+    private ActivityVersionUtil() {
+        
     }
 
     public static String generateFormattedOutput(Output out, Output out1) throws WorkerException {
@@ -104,25 +106,35 @@ public class ActivityVersionUtil {
                         existsInOtherVersion = out1.getOutputByTitle(title) != null;
                     }
                     if (!title.trim().isEmpty()) {
-                        if (!existsInOtherVersion) ret.append("<font color='red'>");
-                        ret.append("<br/><b>").append(TranslatorWorker.translateText(auxOutput.getTitle()[i], langCode, site.getId())).
-                                append(":</b>&nbsp;");
-                        if (!existsInOtherVersion) ret.append("</font>");
+                        if (!existsInOtherVersion) {
+                            ret.append("<font color='red'>");
+                        ret.append("<br/><b>")
+                                .append(TranslatorWorker.translateText(auxOutput.getTitle()[i], langCode, site.getId()))
+                                .append(":</b>&nbsp;");
+                        if (!existsInOtherVersion) {
+                            ret.append("</font>");
+                    }
+                    }
                     }
                 }
                 for (int i = 0; i < auxOutput.getValue().length; i++) {
                     /*
-                     * if (auxOutput.getValue()[i] instanceof Date) { String
-                     * date = DateConversion.ConvertDateToString((Date)
-                     * auxOutput.getValue()[i]); ret += date; } else {
+                     * if (auxOutput.getValue()[i] instanceof Date) { String date =
+                     * DateConversion.ConvertDateToString((Date) auxOutput.getValue()[i]); ret +=
+                     * date; } else {
                      */
-                    if (auxOutput.getValue()[i]!=null){
+                    if (auxOutput.getValue()[i] != null) {
                         String text = auxOutput.getValue()[i].toString();
-                        if (auxOutput.getTranslateValue())
+                        if (auxOutput.getTranslateValue()) {
                             text = TranslatorWorker.translateText(text, langCode, site.getId());
-                        if (!existsInOtherVersion) ret.append("<font color='red'>");
+                        if (!existsInOtherVersion) {
+                            ret.append("<font color='red'>");
                         ret.append(DbUtil.filter(text));
-                        if (!existsInOtherVersion) ret.append("</font>");
+                        }
+                        if (!existsInOtherVersion) {
+                            ret.append("</font>");
+                        }
+                        }
                     }
                     // }
                 }
@@ -132,7 +144,6 @@ public class ActivityVersionUtil {
                     if (out1 != null) {
                         output2 = out1.getOutputByTitle(auxOutput.getTitle()[0]);
                     }
-
 
                     // Second level.
                     String tabs = "<br/> &nbsp; &nbsp; &nbsp;";
@@ -147,9 +158,9 @@ public class ActivityVersionUtil {
 
                         ret.append(tabs);
                         for (int i = 0; i < auxOutput2.getTitle().length; i++) {
-                            ret.append("<b>").
-                                    append(TranslatorWorker.translateText(auxOutput2.getTitle()[i], langCode, site.getId())).
-                                    append("</b>");
+                            ret.append("<b>").append(
+                                    TranslatorWorker.translateText(auxOutput2.getTitle()[i], langCode, site.getId()))
+                                    .append("</b>");
                         }
                         for (int i = 0; i < auxOutput2.getValue().length; i++) {
                             boolean markAsDifferent = false;
@@ -157,24 +168,27 @@ public class ActivityVersionUtil {
                                 markAsDifferent = true;
                                 ret.append("<font color='red'>");
                             }
-                            
+
                             if (auxOutput2.getValue()[i] instanceof Timestamp) {
-                                String date = DateConversion.convertDateToString(new Date(((Timestamp) auxOutput2.getValue()[i]).getTime()));
+                                String date = DateConversion.convertDateToString(
+                                        new Date(((Timestamp) auxOutput2.getValue()[i]).getTime()));
                                 ret.append(date);
-                            } else if (auxOutput2.getValue()[i] instanceof BigDecimal 
-                                    || auxOutput2.getValue()[i] instanceof Double 
+                            } else if (auxOutput2.getValue()[i] instanceof BigDecimal
+                                    || auxOutput2.getValue()[i] instanceof Double
                                     || auxOutput2.getValue()[i] instanceof Float) {
                                 NumberFormat formatter = FormatHelper.getDecimalFormat();
                                 formatter.setMaximumFractionDigits(0);
                                 ret.append(formatter.format(auxOutput2.getValue()[i]));
                             } else {
                                 String text = auxOutput2.getValue()[i].toString();
-                                if (auxOutput2.getTranslateValue())
-                                    text = TranslatorWorker.translateText(text, langCode, site.getId());                                                                 
-                                ret.append(DbUtil.filter(text));                                                               
+                                if (auxOutput2.getTranslateValue()) {
+                                    text = TranslatorWorker.translateText(text, langCode, site.getId());
+                                ret.append(DbUtil.filter(text));
+                                }
                             }
-                            if (markAsDifferent)
+                            if (markAsDifferent) {
                                 ret.append("</font>");
+                            }
                         }
                     }
                 }
@@ -193,33 +207,33 @@ public class ActivityVersionUtil {
     public static int numberOfVersions() {
         //AMP-17263: no good reason to have this feature, so effectively disabling it.
         //per issue AMP-18412 i've reverted the changes of AMP-17263.
-        int aux = 999999; //if the queue size doesn't exists we show all.
+        int defaultquesize = DEFAULT_QUEUE_SIZE; // if the queue size doesn't exists we show all.
         String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.VERSION_QUEUE_SIZE);
         if (gsValue != null) {
             try {
-                aux = Integer.valueOf(gsValue).intValue();
+                defaultquesize = Integer.valueOf(gsValue).intValue();
             } catch (NumberFormatException e) {
                 logger.error(e);
             }
         }
-        return aux;
+        return defaultquesize;
     }
     
-    public static boolean isVersioningEnabled(){
+    public static boolean isVersioningEnabled() {
         return (numberOfVersions() > 0);
     }
     
     public static Long getLastVersionForVersion(Long oldActivity) throws CannotGetLastVersionForVersionException {
         try {
             Session session = PersistenceManager.getSession();
-            String queryStr = "SELECT v.ampActivityGroup.ampActivityLastVersion.ampActivityId  FROM " +AmpActivityVersion.class.getName() +
-                    " v  WHERE v.ampActivityId=:oldActivityId";
+            String queryStr = "SELECT v.ampActivityGroup.ampActivityLastVersion.ampActivityId  FROM "
+                    + AmpActivityVersion.class.getName() + " v  WHERE v.ampActivityId=:oldActivityId";
             Query query     = session.createQuery(queryStr);
             query.setLong("oldActivityId", oldActivity);
-            Long id     = (Long)query.uniqueResult();
+            Long id = (Long) query.uniqueResult();
             return id;
         } catch (Exception e) {
-            logger.error(e.getMessage() );
+            logger.error(e.getMessage());
             e.printStackTrace();
             throw new CannotGetLastVersionForVersionException(e);
         }
@@ -234,15 +248,16 @@ public class ActivityVersionUtil {
      * @return
      * @throws CloneNotSupportedException
      */
-    public static AmpActivityVersion cloneActivity(AmpActivityVersion in, AmpTeamMember member) throws CloneNotSupportedException {
+    public static AmpActivityVersion cloneActivity(AmpActivityVersion in, AmpTeamMember member)
+            throws CloneNotSupportedException {
         AmpActivityVersion out = (AmpActivityVersion) in.clone();
         
         Class clazz = AmpActivityFields.class;
-        
-        Field[] fields = clazz.getDeclaredFields();//clazz.getFields();
+
+        Field[] fields = clazz.getDeclaredFields(); // clazz.getFields();
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
-            if (Collection.class.isAssignableFrom(field.getType())){
+            if (Collection.class.isAssignableFrom(field.getType())) {
                 logger.debug("Init set: " + field.getName());
                 initSet(out, field);
             }
@@ -260,10 +275,11 @@ public class ActivityVersionUtil {
      * @return
      */
     private static Object prepareMerge(Object obj, AmpActivityVersion newActivity) throws Exception {
-        if (obj instanceof Versionable)
+        if (obj instanceof Versionable) {
             return ((Versionable) obj).prepareMerge(newActivity);
-        else
+        } else {
             return obj;
+        }
     }
     
     /**
@@ -273,26 +289,28 @@ public class ActivityVersionUtil {
      * @param out
      * @param field
      */
-    private static void initSet(AmpActivityVersion out, Field field){
+    private static void initSet(AmpActivityVersion out, Field field) {
         String setName = Strings.capitalize(field.getName());
         Class<?> clazz = out.getClass();
         try {
             Method method = clazz.getMethod("get" + setName);
             Set<Object> returnSet = null;
             Set<?> set = (Set<?>) method.invoke(out);
-            if (set != null){
+            if (set != null) {
                 returnSet = new HashSet<>();
-                for(Object obj:set)
+                for (Object obj : set) {
                     returnSet.add(prepareMerge(obj, out));
+                }
                 }           
-            if (Set.class.isAssignableFrom(field.getType()))
+            if (Set.class.isAssignableFrom(field.getType())) {
                 method = clazz.getMethod("set" + setName, Set.class);
-            else
+            } else {
                 method = clazz.getMethod("set" + setName, Collection.class);
-            method.invoke(out, returnSet);
+                method.invoke(out, returnSet);
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("Can't init set '"+ setName +"':", e);
+            logger.error("Can't init set '" + setName + "':", e);
         }
     }
 
@@ -307,12 +325,14 @@ public class ActivityVersionUtil {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static AmpActivityVersion initializeActivity(AmpActivityVersion act) throws DgException, IllegalArgumentException,
+    public static AmpActivityVersion initializeActivity(AmpActivityVersion act)
+            throws DgException, IllegalArgumentException,
             IllegalAccessException, InvocationTargetException {
         Session session = PersistenceManager.getRequestDBSession();
         Method[] methods = AmpActivityVersion.class.getDeclaredMethods();
         for (int i = 0; i < methods.length; i++) {
-            if (methods[i].getName().contains("get") && methods[i].getReturnType().getName().contains("java.util.Set")) {
+            if (methods[i].getName().contains("get")
+                    && methods[i].getReturnType().getName().contains("java.util.Set")) {
                 Object methodValue = methods[i].invoke(act, null);
                 Collection auxColl = (Collection) methodValue;
                 if (auxColl != null) {
@@ -339,395 +359,315 @@ public class ActivityVersionUtil {
     }
     
 
- 	    public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId, Long activityTwoId) throws Exception {
+    public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId, Long activityTwoId)
+            throws Exception {
+        Session session = PersistenceManager.getCurrentSession();
+        AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
+        Hibernate.initialize(ampActivityOne);
+        initializeActivity(ampActivityOne);
+        AmpActivityVersion ampActivityTwo = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityTwoId);
+        Hibernate.initialize(ampActivityTwo);
+        initializeActivity(ampActivityTwo);
+        List<CompareOutput> outputCollection = new ArrayList<>();
+        ActivityHistory auditHistory1 = getAuditHistory(ampActivityOne);
+        ActivityHistory auditHistory2 = getAuditHistory(ampActivityTwo);
+        Field[] fields = AmpActivityFields.class.getDeclaredFields();
+        for (int i = 0; i < fields.length; i++) {
+             CompareOutput output = new CompareOutput();
+            if (fields[i].isAnnotationPresent(VersionableFieldSimple.class)) {
+                Method auxMethod = getMethodFromFieldName(fields[i].getName(), AmpActivityVersion.class, "get");
+                Object auxResult1 = auxMethod.invoke(ampActivityOne, null);
+                Object auxResult2 = auxMethod.invoke(ampActivityTwo, null);
+                VersionableFieldSimple auxAnnotation = fields[i].getAnnotation(VersionableFieldSimple.class);
+                if (auxMethod.getReturnType().getName().equals("java.lang.String")) {
+                    if (auxResult1 != null && auxResult1.toString().trim().equals("")) {
+                        auxResult1 = null;
+                    }
+                    if (auxResult2 != null && auxResult2.toString().trim().equals("")) {
+                        auxResult2 = null;
+                    }
+                }
+                if (StringUtils.equals(fields[i].getName(), "modifiedBy")) {
+                    auxResult1 = ActivityUtil.getModifiedByUserName(ampActivityOne, auditHistory1);
+                    auxResult2 = ActivityUtil.getModifiedByUserName(ampActivityTwo, auditHistory2);
+                } else if (StringUtils.equals(fields[i].getName(), "updatedDate")) {
+                    auxResult1 = ActivityUtil.getModifiedByDate(ampActivityOne, auditHistory1);
+                    auxResult2 = ActivityUtil.getModifiedByDate(ampActivityTwo, auditHistory2);
+                }
+                 if (!(auxResult1 == null && auxResult2 == null)) {
+                    if ((auxResult1 != null && auxResult2 == null) || (auxResult1 == null && auxResult2 != null)
+                            || (!auxResult1.equals(auxResult2))) {
+                        logger.warn(fields[i].getName() + ": " + auxResult1 + "-" + auxResult2);
+                        output.setDescriptionOutput(auxAnnotation.fieldTitle());
+                        output.setFieldOutput(fields[i]);
+                        output.setBlockSingleChangeOutput(auxAnnotation.blockSingleChange());
+                        output.setMandatoryForSingleChangeOutput(auxAnnotation.mandatoryForSingleChange());
+                        Class auxReturnType = auxMethod.getReturnType();
+                        if (auxReturnType.getName().equals("java.util.Date")
+                                || auxReturnType.getName().equals("java.sql.Date")
+                                || auxReturnType.getName().equals("java.lang.String")
+                                || auxReturnType.getName().equals("java.lang.Double")
+                                || auxReturnType.getName().equals("java.lang.Integer")
+                                || auxReturnType.getName().equals("java.lang.Long")
+                                || auxReturnType.getName().equals("java.lang.Short")
+                                || auxReturnType.getName().equals("java.lang.Float")
+                                || auxReturnType.getName().equals("java.lang.Boolean")
+                                || auxReturnType.getName().equals("java.math.BigDecimal")) {
+                            String aux1String = getStringOrEmpty(auxResult1);
+                            String aux2String = getStringOrEmpty(auxResult2);
+                            output.setStringOutput(new String[] { aux1String, aux2String });
+                            output.setOriginalValueOutput(new Object[] { auxResult1, auxResult2 });
+                        } else if (implementsVersionable(auxReturnType.getInterfaces())) {
+                            Versionable auxVersionable1 = Versionable.class
+                                    .cast(auxMethod.invoke(ampActivityOne, null));
+                            Versionable auxVersionable2 = Versionable.class
+                                    .cast(auxMethod.invoke(ampActivityTwo, null));
+                            String output1 = (auxVersionable1 != null)
+                                    ? generateFormattedOutput(auxVersionable1.getOutput())
+                                    : null;
+                            String output2 = (auxVersionable2 != null)
+                                    ? generateFormattedOutput(auxVersionable2.getOutput())
+                                    : null;
+                            output.setStringOutput(new String[] { output1, output2 });
+                            output.setOriginalValueOutput(new Object[] { auxResult1, auxResult2 });
+                        } else {
+                            if ("modifiedBy".equals(fields[i].getName())) {
+                                // this field cannot be used in merging
+                                output.setBlockSingleChangeOutput(true);
+                            }
+                            output.setStringOutput(
+                                    new String[] { getStringOrEmpty(auxResult1), getStringOrEmpty(auxResult2) });
+                            output.setOriginalValueOutput(new Object[] { auxResult1, auxResult2 });
+                        }
+                        outputCollection.add(output);
+                    }
+                }
+            }
+            if (fields[i].isAnnotationPresent(VersionableFieldTextEditor.class)) {
+                Method auxMethod = getMethodFromFieldName(fields[i].getName(), AmpActivityVersion.class, "get");
+                String auxResult1 = (String) auxMethod.invoke(ampActivityOne, null);
+                String auxResult2 = (String) auxMethod.invoke(ampActivityTwo, null);
+                VersionableFieldTextEditor auxAnnotation = fields[i].getAnnotation(VersionableFieldTextEditor.class);
+                if (!(auxResult1 == null && auxResult2 == null)) {
+                    if ((auxResult1 != null && auxResult2 == null) || (auxResult1 == null && auxResult2 != null)
+                            || (!auxResult1.equals(auxResult2))) {
+                        output.setFieldOutput(fields[i]);
+                        output.setBlockSingleChangeOutput(false);
+                        output.setMandatoryForSingleChangeOutput(false);
+                        output.setDescriptionOutput(auxAnnotation.fieldTitle());
+                        Site site = TLSUtils.getSite();
+                        String lang = TLSUtils.getEffectiveLangCode();
+                        String auxBody1 = DbUtil.getEditorBody(site, auxResult1, lang);
+                        String auxBody2 = DbUtil.getEditorBody(site, auxResult2, lang);
+                        auxBody1 = auxBody1 != null ? auxBody1 : "";
+                        auxBody2 = auxBody2 != null ? auxBody2 : "";
+                        if (!auxBody1.trim().equals(auxBody2.trim())) {
+                            output.setStringOutput(new String[] { auxBody1, auxBody2 });
+                            output.setOriginalValueOutput(new String[] { auxResult1, auxResult2 });
+                            outputCollection.add(output);
+                        }
+                    }
+                }
+            }
+            if (fields[i].isAnnotationPresent(VersionableCollection.class)) {
+                 Method auxMethod = getMethodFromFieldName(fields[i].getName(), AmpActivityVersion.class, "get");
+                 session = PersistenceManager.getRequestDBSession();
+                Object auxResult1 = auxMethod.invoke(ampActivityOne, null);
+                Hibernate.initialize(auxResult1);
+                Object auxResult2 = auxMethod.invoke(ampActivityTwo, null);
+                Hibernate.initialize(auxResult2);
+                VersionableCollection auxAnnotation = fields[i].getAnnotation(VersionableCollection.class);
+                List<CompareOutput> differences = new ArrayList<CompareOutput>();
+                Collection auxCollection1 = (Collection) auxResult1;
+                Collection auxCollection2 = (Collection) auxResult2;
+                if ((auxCollection1 == null && auxCollection2 == null)
+                        || (auxCollection1 == null && auxCollection2.size() == 0)
+                        || (auxCollection1.size() == 0 && auxCollection2 == null)
+                        || (auxCollection1.size() == 0 && auxCollection2.size() == 0)) {
+                     continue;
+                }
+                Class auxReturnType = null;
+                if (auxCollection1 != null && auxCollection1.size() != 0) {
+                    auxReturnType = auxCollection1.toArray()[0].getClass();
+                } else {
+                    auxReturnType = auxCollection2.toArray()[0].getClass();
+                }
+                if (auxReturnType.getName().equals("java.util.Date") || auxReturnType.getName().equals("java.sql.Date")
+                        || auxReturnType.getName().equals("java.lang.String")
+                        || auxReturnType.getName().equals("java.lang.Double")
+                        || auxReturnType.getName().equals("java.lang.Integer")
+                        || auxReturnType.getName().equals("java.lang.Long")
+                        || auxReturnType.getName().equals("java.lang.Short")
+                        || auxReturnType.getName().equals("java.lang.Float")
+                        || auxReturnType.getName().equals("java.lang.Boolean")
+                        || auxReturnType.getName().equals("java.math.BigDecimal")) {
+                    addAsDifferentIfNnoPresent(outputCollection, fields, i, auxAnnotation, auxCollection2,
+                            auxCollection1.iterator());
+                    addAsDifferentIfNnoPresent(outputCollection, fields, i, auxAnnotation, auxCollection2,
+                            auxCollection2.iterator());
+                } else if (implementsVersionable(auxReturnType.getInterfaces())) {
+                    List<Versionable> auxList = new ArrayList<>();
+                    Iterator iter1 = auxCollection1.iterator();
+                    while (iter1.hasNext()) {
+                        int coincidence = 0;
+                        Object auxObject1 = iter1.next();
+                        Versionable auxVersionable1 = (Versionable) auxObject1;
+                        Iterator iter2 = auxCollection2.iterator();
+                        while (iter2.hasNext()) {
+                            Object auxObject2 = iter2.next();
+                            Versionable auxVersionable2 = (Versionable) auxObject2;
+                            if (auxVersionable1.equalsForVersioning(auxVersionable2)) {
+                                coincidence++;
+                                Object auxValue1 = auxVersionable1.getValue() != null ? auxVersionable1.getValue() : "";
+                                Object auxValue2 = auxVersionable2.getValue() != null ? auxVersionable2.getValue() : "";
+                                if (!auxValue1.equals(auxValue2)) {
+                                    CompareOutput auxOutput = null;
+                                    if (auxVersionable1.getClass().getName()
+                                            .equals("org.digijava.module.aim.dbentity.AmpFunding")
+                                            && auxVersionable2.getClass().getName()
+                                                    .equals("org.digijava.module.aim.dbentity.AmpFunding")) {
+                                        auxOutput = new CompareOutput(auxAnnotation.fieldTitle(),
+                                                new String[] {
+                                                        generateFormattedOutput(auxVersionable1.getOutput(),
+                                                                auxVersionable2.getOutput()),
+                                                        generateFormattedOutput(auxVersionable2.getOutput(),
+                                                                auxVersionable1.getOutput()) },
+                                                fields[i], new Object[] { auxObject1, auxObject2 }, false, false);
+                                    } else {
+                                        auxOutput = new CompareOutput(auxAnnotation.fieldTitle(),
+                                                new String[] { generateFormattedOutput(auxVersionable1.getOutput()),
+                                                        generateFormattedOutput(auxVersionable2.getOutput()) },
+                                                fields[i], new Object[] { auxObject1, auxObject2 }, false, false);
+                                    }
+                                    outputCollection.add(auxOutput);
+                                    auxList.add(auxVersionable1);
+                                    auxList.add(auxVersionable2);
+                                }
+                            }
+                        }
+                        if (coincidence == 0) {
+                            CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(),
+                                    new String[] { generateFormattedOutput(auxVersionable1.getOutput()), "" },
+                                    fields[i], new Object[] { auxObject1, null }, false, false);
+                            outputCollection.add(auxOutput);
+                            auxList.add(auxVersionable1);
+                        }
+                    }
+                    iter1 = auxCollection2.iterator();
+                    while (iter1.hasNext()) {
+                        int coincidence = 0;
+                        Object auxObject2 = iter1.next();
+                        Versionable auxVersionable2 = (Versionable) auxObject2;
+                        Iterator iter2 = auxCollection1.iterator();
+                        while (iter2.hasNext()) {
+                            Object auxObject1 = iter2.next();
+                            Versionable auxVersionable1 = (Versionable) auxObject1;
+                            if (auxVersionable2.equalsForVersioning(auxVersionable1)) {
+                                coincidence++;
+                                Object auxValue1 = auxVersionable1.getValue() != null ? auxVersionable1.getValue() : "";
+                                Object auxValue2 = auxVersionable2.getValue() != null ? auxVersionable2.getValue() : "";
+                                if (!auxValue2.equals(auxValue1)) {
+                                     if (!auxList.contains(auxVersionable2)) {
+                                        CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(),
+                                                new String[] { generateFormattedOutput(auxVersionable1.getOutput()),
+                                                        generateFormattedOutput(auxVersionable2.getOutput()) },
+                                                fields[i], new Object[] { auxObject1, auxObject2 }, false, false);
+                                        outputCollection.add(auxOutput);
+                                    }
+                                }
+                            }
+                        }
+                        if (coincidence == 0) {
+                             if (!auxList.contains(auxVersionable2)) {
+                                CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(),
+                                        new String[] { "", generateFormattedOutput(auxVersionable2.getOutput()) },
+                                        fields[i], new Object[] { null, auxObject2 }, false, false);
+                                outputCollection.add(auxOutput);
+                            }
+                        }
+                    }
+                } else {
+                    output.setStringOutput(new String[] { auxResult1 != null ? auxResult1.toString() : "",
+                            auxResult2 != null ? auxResult2.toString() : "" });
+                    output.setDescriptionOutput(auxAnnotation.fieldTitle());
+                    outputCollection.add(output);
+                }
+            }
+        }
+        return groupOutputCollection(outputCollection);
+    }
 
- 	        Session session = PersistenceManager.getCurrentSession();
- 	        AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
- 	        Hibernate.initialize(ampActivityOne);
- 	        initializeActivity(ampActivityOne);
+    public static Map<String, List<CompareOutput>> compareToPrevious(Long activityOneId) throws Exception {
 
- 	        AmpActivityVersion ampActivityTwo = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityTwoId);
- 	        Hibernate.initialize(ampActivityTwo);
- 	        initializeActivity(ampActivityTwo);
- 	        //This does not seem to be in use, check and remove
- 	        //vForm.setOldActivity(vForm.getActivityOne());
+        Session session = PersistenceManager.getCurrentSession();
+        AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
 
- 	        List<CompareOutput> outputCollection = new ArrayList<>();
- 	        ActivityHistory auditHistory1 = getAuditHistory(ampActivityOne);
- 	        ActivityHistory auditHistory2 = getAuditHistory(ampActivityTwo);
+        AmpActivityVersion activityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
+        Long activityTwoid = activityTwo.getAmpActivityId();
+        Map<String, List<CompareOutput>> groupOutputCollection = compareActivities(activityOneId, activityTwoid);
+        return groupOutputCollection;
+    }
 
- 	        // Retrieve annotated for versioning fields.
- 	        Field[] fields = AmpActivityFields.class.getDeclaredFields();
- 	        for (int i = 0; i < fields.length; i++) {
- 	            //logger.info(fields[i]);
- 	            CompareOutput output = new CompareOutput();
+    private static void addAsDifferentIfNnoPresent(List<CompareOutput> outputCollection, Field[] fields, int i,
+            VersionableCollection auxAnnotation, Collection auxCollection2, Iterator iter1) {
+        while (iter1.hasNext()) {
+            int coincidence = 0;
+            Object auxObject1 = iter1.next();
+            String auxValue1 = auxObject1.toString();
+            Iterator iter2 = auxCollection2.iterator();
+            while (iter2.hasNext()) {
+                if (auxValue1.equals((String) iter2.next())) {
+                    coincidence++;
+                }
+            }
+            if (coincidence == 0) {
+                CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(), new String[] { auxValue1, "" },
+                        fields[i], new Object[] { auxObject1, null }, false, false);
+                outputCollection.add(auxOutput);
+            }
+        }
+    }
 
- 	            if (fields[i].isAnnotationPresent(VersionableFieldSimple.class)) {
- 	                // Obtain "get" method from field.
- 	                Method auxMethod = getMethodFromFieldName(fields[i].getName(), AmpActivityVersion.class, "get");
+    private static ActivityHistory getAuditHistory(AmpActivityVersion activity) {
+        ActivityHistory auditHistory = null;
 
- 	                // Compare values from 2 versions.
- 	                Object auxResult1 = auxMethod.invoke(ampActivityOne, null);
- 	                Object auxResult2 = auxMethod.invoke(ampActivityTwo, null);
+        if (activity.getModifiedBy() == null
+                || (activity.getUpdatedDate() == null && activity.getModifiedDate() == null)) {
+            auditHistory = ActivityUtil.getModifiedByInfoFromAuditLogger(activity.getAmpActivityId());
+        }
 
- 	                // Obtain annotation object.
- 	                VersionableFieldSimple auxAnnotation = fields[i].getAnnotation(VersionableFieldSimple.class);
+        return auditHistory;
+    }
 
- 	                // Sanitize String values.
- 	                if (auxMethod.getReturnType().getName().equals("java.lang.String")) {
- 	                    if (auxResult1 != null && auxResult1.toString().trim().equals("")) {
- 	                        auxResult1 = null;
- 	                    }
- 	                    if (auxResult2 != null && auxResult2.toString().trim().equals("")) {
- 	                        auxResult2 = null;
- 	                    }
- 	                }
+    private static String getStringOrEmpty(Object o) {
+        if (o != null) {
+            if (o instanceof Date || o instanceof java.sql.Date) {
+                return FormatHelper.formatDate((Date) o);
+            }
 
- 	                // AMP-25074 - retrieve information about who and when modified the activity
- 	                // from amp_audit_logger (if it is empty in the activity object)
- 	                if (StringUtils.equals(fields[i].getName(), "modifiedBy")) {
- 	                    auxResult1 = ActivityUtil.getModifiedByUserName(ampActivityOne, auditHistory1);
- 	                    auxResult2 = ActivityUtil.getModifiedByUserName(ampActivityTwo, auditHistory2);
- 	                } else if (StringUtils.equals(fields[i].getName(), "updatedDate")) {
- 	                    auxResult1 = ActivityUtil.getModifiedByDate(ampActivityOne, auditHistory1);
- 	                    auxResult2 = ActivityUtil.getModifiedByDate(ampActivityTwo, auditHistory2);
- 	                }
+            return o.toString();
+        }
 
- 	                // Compare values, if both are null then they are considered equal.
- 	                if (!(auxResult1 == null && auxResult2 == null)) {
- 	                    if ((auxResult1 != null && auxResult2 == null)
- 	                            || (auxResult1 == null && auxResult2 != null)
- 	                            || (!auxResult1.equals(auxResult2))) {
+        return "";
+    }
 
- 	                        logger.warn(fields[i].getName() + ": " + auxResult1 + "-" + auxResult2);
- 	                        output.setDescriptionOutput(auxAnnotation.fieldTitle());
- 	                        output.setFieldOutput(fields[i]);
+    private static Map<String, List<CompareOutput>> groupOutputCollection(List<CompareOutput> outputCollection) {
+        Map<String, List<CompareOutput>> retVal = new HashMap<String, List<CompareOutput>>();
+        int idx = 0;
+        for (CompareOutput obj : outputCollection) {
+            if (!obj.getBlockSingleChangeOutput()) {
+                obj.setIndex(idx);
+                idx++;
+            } else {
+                obj.setIndex(-1); // skip from merge process
+            }
+            if (!retVal.containsKey(obj.getDescriptionOutput())) {
+                retVal.put(obj.getDescriptionOutput(), new ArrayList<>());
+            }
+            retVal.get(obj.getDescriptionOutput()).add(obj);
 
- 	                        // Identity "read-value" and "mandatory" fields.
- 	                        // TODO: If needed do the same for
- 	                        // @VersionableFieldTextEditor and
- 	                        // @VersionableCollection.
- 	                        output.setBlockSingleChangeOutput(auxAnnotation.blockSingleChange());
- 	                        output.setMandatoryForSingleChangeOutput(auxAnnotation.mandatoryForSingleChange());
+        }
 
- 	                        // Differentiate Wrappers from Classes that implements Versionable.
- 	                        Class auxReturnType = auxMethod.getReturnType();
-
- 	                        if (auxReturnType.getName().equals("java.util.Date")
- 	                                || auxReturnType.getName().equals("java.sql.Date")
- 	                                || auxReturnType.getName().equals("java.lang.String")
- 	                                || auxReturnType.getName().equals("java.lang.Double")
- 	                                || auxReturnType.getName().equals("java.lang.Integer")
- 	                                || auxReturnType.getName().equals("java.lang.Long")
- 	                                || auxReturnType.getName().equals("java.lang.Short")
- 	                                || auxReturnType.getName().equals("java.lang.Float")
- 	                                || auxReturnType.getName().equals("java.lang.Boolean")
- 	                                || auxReturnType.getName().equals("java.math.BigDecimal")) {
-
-
- 	                            String aux1String = getStringOrEmpty(auxResult1);
- 	                            String aux2String = getStringOrEmpty(auxResult2);
-
- 	                            output.setStringOutput(new String[]{aux1String, aux2String});
- 	                            output.setOriginalValueOutput(new Object[]{auxResult1, auxResult2});
- 	                        } else if (implementsVersionable(auxReturnType.getInterfaces())) {
- 	                            Versionable auxVersionable1 = Versionable.class.cast(auxMethod.invoke(ampActivityOne,
- 	                                    null));
- 	                            Versionable auxVersionable2 = Versionable.class.cast(auxMethod.invoke(ampActivityTwo,
- 	                                    null));
-
- 	                            String output1 = (auxVersionable1 != null) ? generateFormattedOutput( 
- 	                                    auxVersionable1.getOutput()) : null;
- 	                            String output2 = (auxVersionable2 != null) ?
- 	                                    generateFormattedOutput(auxVersionable2.getOutput()) : null;
- 	                            output.setStringOutput(new String[]{output1, output2});
- 	                            output.setOriginalValueOutput(new Object[]{auxResult1, auxResult2});
- 	                        } else {
- 	                            if ("modifiedBy".equals(fields[i].getName())) {
- 	                                // this field cannot be used in merging
- 	                                output.setBlockSingleChangeOutput(true);
- 	                            }
-
- 	                            output.setStringOutput(new String[]{getStringOrEmpty(auxResult1), getStringOrEmpty(auxResult2)});
- 	                            output.setOriginalValueOutput(new Object[]{auxResult1, auxResult2});
- 	                        }
-
- 	                        outputCollection.add(output);
- 	                    }
- 	                }
- 	            }
- 	            if (fields[i].isAnnotationPresent(VersionableFieldTextEditor.class)) {
- 	                // Obtain "get" method from field.
- 	                Method auxMethod = getMethodFromFieldName(fields[i].getName(), AmpActivityVersion.class,
- 	                        "get");
-
- 	                // Compare values from 2 versions.
- 	                String auxResult1 = (String) auxMethod.invoke(ampActivityOne, null);
- 	                String auxResult2 = (String) auxMethod.invoke(ampActivityTwo, null);
-
- 	                // Obtain annotation object.
- 	                VersionableFieldTextEditor auxAnnotation = fields[i].getAnnotation(VersionableFieldTextEditor.class);
-
- 	                // Compare values, if both are null then they are considered
- 	                // equal.
- 	                if (!(auxResult1 == null && auxResult2 == null)) {
- 	                    if ((auxResult1 != null && auxResult2 == null) || (auxResult1 == null && auxResult2 != null)
- 	                            || (!auxResult1.equals(auxResult2))) {
- 	                        output.setFieldOutput(fields[i]);
- 	                        output.setBlockSingleChangeOutput(false);
- 	                        output.setMandatoryForSingleChangeOutput(false);
-
- 	                        output.setDescriptionOutput(auxAnnotation.fieldTitle());
-
- 	                        Site site = TLSUtils.getSite();
- 	                        String lang = TLSUtils.getEffectiveLangCode();	                        
- 							
- 	                        String auxBody1 = DbUtil.getEditorBody(site, auxResult1, lang);
- 	                        String auxBody2 = DbUtil.getEditorBody(site, auxResult2, lang);
- 	                        auxBody1 = auxBody1 != null ? auxBody1 : "";
- 	                        auxBody2 = auxBody2 != null ? auxBody2 : "";
- 	                        if (!auxBody1.trim().equals(auxBody2.trim())) {
- 	                            output.setStringOutput(new String[]{auxBody1, auxBody2});
- 	                            output.setOriginalValueOutput(new String[]{auxResult1, auxResult2});
- 	                            outputCollection.add(output);
- 	                        }
- 	                    }
- 	                }
- 	            }
- 	            if (fields[i].isAnnotationPresent(VersionableCollection.class)) {
- 	                // Obtain "get" method from field.
- 	                Method auxMethod = getMethodFromFieldName(fields[i].getName(), AmpActivityVersion.class,
- 	                        "get");
- 	                // Get values from 2 versions.
- 	                // Sometimes I have a problem with lazy collections and
- 	                // apparently closed session.
- 	                // Delete these lines if there are problems when saving: two
- 	                // sessions problem.
- 	                session = PersistenceManager.getRequestDBSession();
- 	                Object auxResult1 = auxMethod.invoke(ampActivityOne, null);
- 	                Hibernate.initialize(auxResult1);
- 	                Object auxResult2 = auxMethod.invoke(ampActivityTwo, null);
- 	                Hibernate.initialize(auxResult2);
- 	                // Obtain annotation object.
- 	                VersionableCollection auxAnnotation = fields[i].getAnnotation(VersionableCollection.class);
- 	                // Create list of differences.
- 	                List<CompareOutput> differences = new ArrayList<CompareOutput>();
- 	                Collection auxCollection1 = (Collection) auxResult1;
- 	                Collection auxCollection2 = (Collection) auxResult2;
-
- 	                // Evaluate the type of objects stored in the collection.
- 	                // TODO: Assuming everything is a Collection, later to implement
- 	                // other types.
- 	                if ((auxCollection1 == null && auxCollection2 == null)
- 	                        || (auxCollection1 == null && auxCollection2.size() == 0)
- 	                        || (auxCollection1.size() == 0 && auxCollection2 == null)
- 	                        || (auxCollection1.size() == 0 && auxCollection2.size() == 0)) {
- 	                    // Collections are equal.
- 	                    continue;
- 	                }
- 	                Class auxReturnType = null;
- 	                if (auxCollection1 != null && auxCollection1.size() != 0) {
- 	                    auxReturnType = auxCollection1.toArray()[0].getClass();
- 	                } else {
- 	                    auxReturnType = auxCollection2.toArray()[0].getClass();
- 	                }
- 	                if (auxReturnType.getName().equals("java.util.Date") || auxReturnType.getName().equals("java.sql.Date")
- 	                        || auxReturnType.getName().equals("java.lang.String")
- 	                        || auxReturnType.getName().equals("java.lang.Double")
- 	                        || auxReturnType.getName().equals("java.lang.Integer")
- 	                        || auxReturnType.getName().equals("java.lang.Long")
- 	                        || auxReturnType.getName().equals("java.lang.Short")
- 	                        || auxReturnType.getName().equals("java.lang.Float")
- 	                        || auxReturnType.getName().equals("java.lang.Boolean")
- 	                        || auxReturnType.getName().equals("java.math.BigDecimal")) {
-
- 	                    // Wrappers don't have IDs then we can't detect "updates".
- 	                    // Iterate each collection and show as different the values
- 	                    // not present in the other.
- 	                    addAsDifferentIfNnoPresent(outputCollection, fields, i, auxAnnotation, auxCollection2,
- 	                            auxCollection1.iterator());
- 	                    addAsDifferentIfNnoPresent(outputCollection, fields, i, auxAnnotation, auxCollection2,
- 	                            auxCollection2.iterator());
- 	                } else if (implementsVersionable(auxReturnType.getInterfaces())) {
- 	                    List<Versionable> auxList = new ArrayList<>();
- 	                    Iterator iter1 = auxCollection1.iterator();
- 	                    while (iter1.hasNext()) {
- 	                        int coincidence = 0;
- 	                        Object auxObject1 = iter1.next();
- 	                        Versionable auxVersionable1 = (Versionable) auxObject1;
- 	                        Iterator iter2 = auxCollection2.iterator();
- 	                        while (iter2.hasNext()) {
- 	                            Object auxObject2 = iter2.next();
- 	                            Versionable auxVersionable2 = (Versionable) auxObject2;
- 	                            if (auxVersionable1.equalsForVersioning(auxVersionable2)) {
- 	                                coincidence++;
- 	                                Object auxValue1 = auxVersionable1.getValue() != null ? auxVersionable1.getValue() : "";
- 	                                Object auxValue2 = auxVersionable2.getValue() != null ? auxVersionable2.getValue() : "";
- 	                                if (!auxValue1.equals(auxValue2)) {
- 	                                    CompareOutput auxOutput = null;
-
- 	                                    if (auxVersionable1.getClass().getName().
- 	                                            equals("org.digijava.module.aim.dbentity.AmpFunding") &&
- 	                                            auxVersionable2.getClass().getName().
- 	                                                    equals("org.digijava.module.aim.dbentity.AmpFunding")
- 	                                    ) {
- 	                                        auxOutput = new CompareOutput(auxAnnotation.fieldTitle(),
- 	                                                new String[]{
- 	                                                        generateFormattedOutput(
- 	                                                                auxVersionable1.getOutput(),
- 	                                                                auxVersionable2.getOutput()),
- 	                                                        generateFormattedOutput(
- 	                                                                auxVersionable2.getOutput(),
- 	                                                                auxVersionable1.getOutput())}, fields[i], new Object[]{
- 	                                                auxObject1, auxObject2}, false, false);
-
- 	                                    } else {
- 	                                        auxOutput = new CompareOutput(auxAnnotation.fieldTitle(),
- 	                                                new String[]{
- 	                                                        generateFormattedOutput(
- 	                                                                auxVersionable1.getOutput()),
- 	                                                        generateFormattedOutput(
- 	                                                                auxVersionable2.getOutput())}, fields[i], new Object[]{
- 	                                                auxObject1, auxObject2}, false, false);
- 	                                    }
- 	                                    outputCollection.add(auxOutput);
- 	                                    auxList.add(auxVersionable1);
- 	                                    auxList.add(auxVersionable2);
- 	                                }
- 	                            }
- 	                        }
- 	                        if (coincidence == 0) {
- 	                            CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(), new String[]{
- 	                                    generateFormattedOutput(auxVersionable1.getOutput()),
- 	                                    ""}, fields[i], new Object[]{auxObject1, null}, false, false);
- 	                            outputCollection.add(auxOutput);
- 	                            auxList.add(auxVersionable1);
- 	                        }
- 	                    }
- 	                    iter1 = auxCollection2.iterator();
- 	                    while (iter1.hasNext()) {
- 	                        int coincidence = 0;
- 	                        Object auxObject2 = iter1.next();
- 	                        Versionable auxVersionable2 = (Versionable) auxObject2;
- 	                        Iterator iter2 = auxCollection1.iterator();
- 	                        while (iter2.hasNext()) {
- 	                            Object auxObject1 = iter2.next();
- 	                            Versionable auxVersionable1 = (Versionable) auxObject1;
- 	                            if (auxVersionable2.equalsForVersioning(auxVersionable1)) {
- 	                                coincidence++;
- 	                                Object auxValue1 = auxVersionable1.getValue() != null ? auxVersionable1.getValue() : "";
- 	                                Object auxValue2 = auxVersionable2.getValue() != null ? auxVersionable2.getValue() : "";
- 	                                if (!auxValue2.equals(auxValue1)) {
- 	                                    // Check if the object was added in the
- 	                                    // previous iteration.
- 	                                    if (!auxList.contains(auxVersionable2)) {
- 	                                        CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(),
- 	                                                new String[]{
- 	                                                        generateFormattedOutput(
- 	                                                                auxVersionable1.getOutput()),
- 	                                                        generateFormattedOutput(
- 	                                                                auxVersionable2.getOutput())}, fields[i],
- 	                                                new Object[]{auxObject1, auxObject2}, false, false);
- 	                                        outputCollection.add(auxOutput);
- 	                                    }
- 	                                }
- 	                            }
- 	                        }
- 	                        if (coincidence == 0) {
- 	                            // Check if the object was added in the
- 	                            // previous iteration.
- 	                            if (!auxList.contains(auxVersionable2)) {
- 	                                CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(), new String[]{
- 	                                        "",
- 	                                        generateFormattedOutput(auxVersionable2
- 	                                                .getOutput())}, fields[i], new Object[]{null, auxObject2}, false,
- 	                                        false);
- 	                                outputCollection.add(auxOutput);
- 	                            }
- 	                        }
- 	                    }
- 	                } else {
- 	                    output.setStringOutput(new String[]{auxResult1 != null ? auxResult1.toString() : "",
- 	                            auxResult2 != null ? auxResult2.toString() : ""});
- 	                    output.setDescriptionOutput(auxAnnotation.fieldTitle());
- 	                    outputCollection.add(output);
- 	                }
- 	            }
- 	        }
-
- 	        return groupOutputCollection(outputCollection);
- 	    }
- 	    
- 	   public static Map<String, List<CompareOutput>> compareToPrevious(Long activityOneId) throws Exception {
- 		    
- 	    	Session session = PersistenceManager.getCurrentSession(); 
- 	    	AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
-
- 	        
- 	        AmpActivityVersion activityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
- 	        Long activityTwoid = activityTwo.getAmpActivityId();
- 	       Map<String, List<CompareOutput>> groupOutputCollection = compareActivities(activityOneId,activityTwoid);
- 	       return groupOutputCollection;
- 	     }
-
- 	    private static void addAsDifferentIfNnoPresent(List<CompareOutput> outputCollection, Field[] fields, int i, VersionableCollection auxAnnotation, Collection auxCollection2, Iterator iter1) {
- 	        while (iter1.hasNext()) {
- 	            int coincidence = 0;
- 	            Object auxObject1 = iter1.next();
- 	            String auxValue1 = auxObject1.toString();
- 	            Iterator iter2 = auxCollection2.iterator();
- 	            while (iter2.hasNext()) {
- 	                if (auxValue1.equals((String) iter2.next())) {
- 	                    coincidence++;
- 	                }
- 	            }
- 	            if (coincidence == 0) {
- 	                CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(), new String[]{
- 	                        auxValue1, ""}, fields[i], new Object[]{auxObject1, null}, false, false);
- 	                outputCollection.add(auxOutput);
- 	            }
- 	        }
- 	    }
-
- 	    private static ActivityHistory getAuditHistory(AmpActivityVersion activity) {
- 	        ActivityHistory auditHistory = null;
-
- 	        if (activity.getModifiedBy() == null || (activity.getUpdatedDate() == null && activity.getModifiedDate() == null)) {
- 	            auditHistory = ActivityUtil.getModifiedByInfoFromAuditLogger(activity.getAmpActivityId());
- 	        }
-
- 	        return auditHistory;
- 	    }
-
- 	    private static String getStringOrEmpty(Object o) {
- 	        if (o != null) {
- 	            if (o instanceof Date || o instanceof java.sql.Date) {
- 	                return FormatHelper.formatDate((Date) o);
- 	            }
-
- 	            return o.toString();
- 	        }
-
- 	        return "";
- 	    }
-
- 	    private static Map<String, List<CompareOutput>> groupOutputCollection(List<CompareOutput> outputCollection) {
- 	        Map<String, List<CompareOutput>> retVal = new HashMap<String, List<CompareOutput>>();
- 	        int idx = 0;
- 	        for (CompareOutput obj : outputCollection) {
- 	            if (!obj.getBlockSingleChangeOutput()) {
- 	                obj.setIndex(idx);
- 	                idx++;
- 	            } else {
- 	                obj.setIndex(-1); // skip from merge process
- 	            }
- 	            if (!retVal.containsKey(obj.getDescriptionOutput())) {
- 	                retVal.put(obj.getDescriptionOutput(), new ArrayList<>());
- 	            }
- 	            retVal.get(obj.getDescriptionOutput()).add(obj);
-
- 	        }
-
- 	        return retVal;
- 	    }	
- }
+        return retVal;
+    }
+}

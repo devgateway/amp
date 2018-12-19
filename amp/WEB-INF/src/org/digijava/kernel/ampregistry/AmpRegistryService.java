@@ -39,6 +39,15 @@ public class AmpRegistryService {
                     .findFirst()
                     .orElse(null);
 
+            // older AMPs registered installations without specifying the serverId property
+            // if serverId is not specified the match by country code
+            if (existingInstallation == null) {
+                existingInstallation = installations.stream()
+                        .filter(i -> i.getServerId() == null && Objects.equals(i.getIso2(), installation.getIso2()))
+                        .findFirst()
+                        .orElse(null);
+            }
+
             if (existingInstallation == null) {
                 client.createAmpInstallation(installation, secretToken);
             } else if (!existingInstallation.equals(installation)) {

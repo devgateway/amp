@@ -4,17 +4,7 @@
 package org.digijava.module.aim.action;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +21,10 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.InvalidReportContextException;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
+import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -253,6 +246,26 @@ public class ReportsFilterPicker extends Action {
                 AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
                 return decideNextForward(mapping, filterForm, request, arf);
             }
+
+            if (request.getParameter("applyWithNewWidget") != null) {
+                // Tomar filtros nuevos y convertirlos en AmpARFilter.
+                // TODO: transformar los parametros filter** del request.getParameterValues() a el Map filters.
+                LinkedHashMap<String, Object> filters = new LinkedHashMap<>();
+                Map<String, String[]> parameters = request.getParameterMap();
+                parameters.keySet().stream().filter(x -> x.startsWith("filter")).forEach((s -> {
+                    String key = s.toString().substring(s.indexOf("[") + 1, s.indexOf("]"));
+                    System.out.println(s);
+                    System.out.println(key);
+                    filters.put(key, Arrays.asList(parameters.get(s)));
+                }));
+                // AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
+                filterForm.setSourceIsReportWizard(true);
+                AmpReportFilters filterRules = FilterUtils.getFilters(filters, new AmpReportFilters());
+                AmpReportFiltersConverter converter = new AmpReportFiltersConverter(filterRules);
+                AmpARFilter ampARFilter2 = converter.buildFilters();
+                return decideNextForward(mapping, filterForm, request, ampARFilter2);
+            }
+
                 AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
                 FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
                 modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL, reportFilter);

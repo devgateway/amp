@@ -69,7 +69,7 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "Settings")
     @ApiOperation("General settings")
-    public JsonBean getSettings() {
+    public AmpGeneralSettings getSettings() {
         return SettingsUtils.getGeneralSettings();
     }
 

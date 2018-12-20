@@ -113,7 +113,7 @@ public class FieldsEnumerator {
             apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
             apiField.setImportable(true);
         }
-        
+
         if (interchangeable.percentageConstraint()){
             apiField.setPercentage(true);
         }
@@ -165,7 +165,7 @@ public class FieldsEnumerator {
             }
 
             // FIXME remove condition that excludes activties
-            if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {
+            if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getType())) {
                 Class type = getType(field, context);
                 List<APIField> children = getAllAvailableFields(type, context);
                 if (InterchangeUtils.isCollection(field)) {
@@ -208,11 +208,8 @@ public class FieldsEnumerator {
                 return type;
             }
         }
-        if (InterchangeUtils.isCollection(field)) {
-            return InterchangeUtils.getGenericClass(field);
-        } else {
-            return field.getType();
-        }
+    
+        return InterchangeUtils.getClassOfField(field);
     }
 
     private String getLabelOf(Interchangeable interchangeable) {
@@ -411,8 +408,7 @@ public class FieldsEnumerator {
         context.pathStack.push(InterchangeUtils.underscorify(fieldName));
 
         visitor.visit(field, fieldName, context);
-
-        Class<?> classOfField = InterchangeUtils.getClassOfField(field);
+        Class<?> classOfField = getType(field, context.feContext);
         if (!InterchangeUtils.isSimpleType(classOfField) && !ant.pickIdOnly()) {
             visit(classOfField, visitor, context);
         }

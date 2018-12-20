@@ -24,12 +24,12 @@ import org.digijava.kernel.ampapi.endpoints.dto.FilterValue;
 import org.digijava.kernel.ampapi.endpoints.dto.Language;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.TranslationManager;
 
@@ -39,7 +39,8 @@ public class TranslationsEndPoints {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public List<AvailableMethod> getAvailableFilters() {
+    @ApiOperation("Get the list of available methods in translations endpoint.")
+    public List<AvailableMethod> getAvailableMethods() {
         return EndpointUtils.getAvailableMethods(TranslationsEndPoints.class.getName());
     }
 
@@ -47,8 +48,10 @@ public class TranslationsEndPoints {
     @Path("/label-translations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Translate a list of labels in default session language.")
+    @ApiResponses(@ApiResponse(code = SC_OK, message = "Map of translated labels."))
     @ApiMethod(ui = false, id = "Translations")
-    public JsonBean getLangPack(final JsonBean param){
+    public Map<String, String> getLangPack(final Map<String, String> param) {
         return getLangPack(null, param);
     }
 
@@ -56,15 +59,19 @@ public class TranslationsEndPoints {
     @Path("/translate-labels/{langCode}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Translate a list of labels in selected language specified by code.")
+    @ApiResponses(@ApiResponse(code = SC_OK, message = "Map of translated labels."))
     @ApiMethod(ui = false, id = "CustomLanguageTranslations")
-    public JsonBean getLangPack(@PathParam("langCode") String langCode, final JsonBean param){
+    public Map<String, String> getLangPack(@PathParam("langCode") String langCode, final Map<String, String> param) {
+        
         String language = langCode == null ? TLSUtils.getEffectiveLangCode() : langCode;
-        for (String key:param.any().keySet()) {
-            String translating = param.get(key).toString();
-            String newValue= TranslatorWorker.translateText(translating, language, 3l);
-            //LOGGER.error("translating <" + translating + "> to <" + newValue + ">");
-            param.set(key, newValue);
+        
+        for (String key : param.keySet()) {
+            String translating = param.get(key);
+            String newValue = TranslatorWorker.translateText(translating, language, SiteUtils.DEFAULT_SITE_ID);
+            param.put(key, newValue);
         }
+        
         return param;
         
     }
@@ -73,6 +80,7 @@ public class TranslationsEndPoints {
     @Path("/languages/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Get the list of languages used in AMP.")
     @ApiMethod(ui = false, id = "languages")
     public List<Language> getLanguages() {
         return TranslationManager.getAmpLanguages();
@@ -80,6 +88,7 @@ public class TranslationsEndPoints {
     
     @GET
     @Path("/languages/{langCode}")
+    @ApiOperation("Change the language used in session.")
     @ApiMethod(ui = false, id = "LanguageSwitch")
     public void switchLanguage(@PathParam("langCode") String langCode,@Context HttpServletResponse response){
         Locale locale = new Locale();

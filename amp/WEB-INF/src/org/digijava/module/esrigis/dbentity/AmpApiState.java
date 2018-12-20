@@ -1,5 +1,6 @@
 package org.digijava.module.esrigis.dbentity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,7 +16,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AmpApiState {
+public class AmpApiState implements Serializable {
 
     public static class BriefView {
     }

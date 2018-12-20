@@ -132,12 +132,14 @@ public class DateTimeTests {
     }
     
     @Test
-    public void testDefaultFormatter() {
+    public void testFormatterWithAmpFormats() {
         for (LocalDate ld : DATES) {
-            AmpDateFormatter formatter = AmpDateFormatterFactory.getDefaultFormatter();
-            String fm = formatter.format(ld);
-            LocalDate defm = formatter.parseDate(fm);
-            assertEquals(ld, defm);
+            for (String pattern : PATTERNS) {
+                AmpDateFormatter formatter = AmpDateFormatterFactory.getDefaultFormatter(pattern);
+                String fm = formatter.format(ld);
+                LocalDate defm = formatter.parseDate(fm);
+                assertEquals(ld, defm);
+            }
         }
     }
 

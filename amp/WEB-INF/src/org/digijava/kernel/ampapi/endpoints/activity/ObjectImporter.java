@@ -26,6 +26,7 @@ import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpAgreement;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 
 /**
  * @author Octavian Ciubotaru
@@ -320,7 +321,9 @@ public class ObjectImporter {
         if (Collection.class.isAssignableFrom(objectType)) {
             throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
         }
-        if (InterchangeUtils.isSimpleType(objectType)) {
+        if (ApprovalStatus.class.isAssignableFrom(objectType)) {
+            return ApprovalStatus.fromId((Integer) value);
+        } else if (InterchangeUtils.isSimpleType(objectType)) {
             return ConvertUtils.convert(value, objectType);
         } else {
             return InterchangeUtils.getObjectById(objectType, Long.valueOf(value.toString()));

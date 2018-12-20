@@ -61,7 +61,7 @@ public class TemporaryDocumentData extends DocumentData {
                 try {
                     this.setName( new String(formFile.getFileName().getBytes("UTF8"), "UTF8"));
                 } catch (UnsupportedEncodingException e) {
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                 }
                 this.setTrueUploadedFileSize( formFile.getFileSize() );
                 this.setFileSize( DocumentManagerUtil.bytesToMega(trueUploadedFileSize) );
@@ -111,16 +111,16 @@ public class TemporaryDocumentData extends DocumentData {
         this.setUuid(CrConstants.TEMPORARY_UUID + (list.size() - 1));
     }
     
-    public NodeWrapper saveToRepository(HttpServletRequest request, ActionMessages errors) {
+    public NodeWrapper saveToRepository(HttpServletRequest request) {
         TeamMember teamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
 
-        return saveToRepository(request, teamMember, errors);
+        return saveToRepository(request, teamMember);
     }
     
-    public NodeWrapper saveToRepository(HttpServletRequest request, TeamMember teamMember, ActionMessages errors) {
+    public NodeWrapper saveToRepository(HttpServletRequest request, TeamMember teamMember) {
         Session jcrWriteSession = DocumentManagerUtil.getWriteSession(request);
-        Node homeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
-        NodeWrapper nodeWrapper = new NodeWrapper(this, request, teamMember, homeNode, false, errors);
+        Node homeNode = DocumentManagerUtil.getOrCreateUserPrivateNode(jcrWriteSession, teamMember);
+        NodeWrapper nodeWrapper = new NodeWrapper(this, request, teamMember, homeNode, false);
 
         if (!nodeWrapper.isErrorAppeared()) {
             if (nodeWrapper.saveNode(jcrWriteSession)) {

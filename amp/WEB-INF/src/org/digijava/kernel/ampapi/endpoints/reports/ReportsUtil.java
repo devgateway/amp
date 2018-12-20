@@ -18,7 +18,8 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -45,8 +46,8 @@ import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
 import org.dgfoundation.amp.reports.ReportCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
-import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
+import org.dgfoundation.amp.reports.converters.AmpReportsToReportSpecification;
+import org.dgfoundation.amp.reports.converters.MtefConverter;
 import org.dgfoundation.amp.utils.BoundedList;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
@@ -75,6 +76,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.esrigis.dbentity.AmpApiState;
 
 /**
  * Reports API utility classes
@@ -332,7 +334,7 @@ public class ReportsUtil {
             if (ampReport != null)
                 return AmpReportsToReportSpecification.convert(ampReport);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -621,7 +623,7 @@ public class ReportsUtil {
         }
         
         // check if sorting config indeed changed
-        boolean sortingChanged = true; /*!MondrianReportUtils.equals(newSorters, spec.getSorters());*/
+        boolean sortingChanged = true;
         if (sortingChanged)
             spec.setSorters(newSorters);
         return sortingChanged;
@@ -756,7 +758,7 @@ public class ReportsUtil {
         }
         
     }
-    
+
     /**
      * Exports current report configuration to the map
      * 
@@ -764,7 +766,7 @@ public class ReportsUtil {
      * @param reportId
      * @return
      */
-    public static String exportToMap(final JsonBean config, final Long reportId) {
+    public static String exportToMap(final ReportConfig config, final Long reportId) {
         ReportSpecificationImpl spec = getReport(reportId);
         if (spec == null)
             return null;
@@ -791,15 +793,15 @@ public class ReportsUtil {
                 }
             }
         }
-        config.set(EPConstants.API_STATE_LAYERS_VIEW, layersView);
+        config.setLayersView(layersView);
         
         // update the settings based on Measures
-        Map<String, String> settings = (Map<String, String>) config.get(EPConstants.SETTINGS);
+        Map<String, Object> settings = config.getSettings();
         // must be not null! but just in case something gets broken
         if (settings == null) {
             logger.error("No settings are provided - please fix!");
-            settings = new HashMap<String, String>();
-            config.set(EPConstants.SETTINGS, settings);
+            settings = new HashMap<>();
+            config.setSettings(settings);
         }
         
         // set default funding type
@@ -824,14 +826,18 @@ public class ReportsUtil {
         settings.put(SettingsConstants.FUNDING_TYPE_ID, fundingType);
         
         // we need to stringify the final config
-        JSONObject jObject = new JSONObject();
-        jObject.accumulateAll(config.any());
-        
-        // configure api state json 
-        JsonBean apiState = new JsonBean();
-        apiState.set(EPConstants.API_STATE_TITLE, spec.getReportName());
-        apiState.set(EPConstants.API_STATE_DESCRIPTION, EPConstants.API_STATE_REPORT_EXPORT_DESCRIPTION);
-        apiState.set(EPConstants.API_STATE_BLOB, jObject.toString());
+        String configJson;
+        try {
+            configJson = new ObjectMapper().writeValueAsString(config);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert object to json representation.", e);
+        }
+
+        // configure api state json
+        AmpApiState apiState = new AmpApiState();
+        apiState.setTitle(spec.getReportName());
+        apiState.setDescription(EPConstants.API_STATE_REPORT_EXPORT_DESCRIPTION);
+        apiState.setStateBlob(configJson);
         
         // Saving the export to the user session.
         // Will there be any need to keep multiple states for the same report export?
@@ -846,9 +852,9 @@ public class ReportsUtil {
      * @param reportConfigId
      * @return JsonBean with saved Api state
      */
-    public static JsonBean getApiState(String reportConfigId) {
+    public static AmpApiState getApiState(String reportConfigId) {
         // TODO: can we safely remove it from session afterwards? 
-        return (JsonBean) TLSUtils.getRequest().getSession()
+        return (AmpApiState) TLSUtils.getRequest().getSession()
                 .getAttribute(EPConstants.API_STATE_REPORT_EXPORT + reportConfigId);
     }
     

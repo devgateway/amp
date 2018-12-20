@@ -8,10 +8,9 @@ import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.audit.AuditActivityInfo;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.startup.AmpBackgroundActivitiesUtil;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -41,22 +40,13 @@ public class ActivityAutomaticValidationJob extends ConnectionCleaningJob implem
      */
     protected AmpActivityVersion validateActivity(Session session, AmpTeamMember member, AmpActivityVersion oldActivity) throws CloneNotSupportedException {
 
-        oldActivity.setApprovalStatus(Constants.APPROVED_STATUS);
+        oldActivity.setApprovalStatus(ApprovalStatus.APPROVED);
         oldActivity.setApprovedBy(member);
         oldActivity.setApprovalDate(Calendar.getInstance().getTime());
 
-        AmpActivityVersion auxActivity = AuditActivityInfo.doInTeamMemberContext(member, () -> {
-            try {
-                return org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivity(oldActivity, null, member,
-                        SiteUtils.getDefaultSite(), new java.util.Locale("en"),
-                        AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, oldActivity.getDraft(), SaveContext.job());
-            } catch (Exception e) {
-                logger.error("Error saving activity:", e); // Log the exception
-                throw new RuntimeException("Can't save activity:", e);
-            }
-        });
-        
-        session.flush();
+        AmpActivityVersion auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivity(oldActivity, null,
+                member, SiteUtils.getDefaultSite(), new java.util.Locale("en"),
+                AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, oldActivity.getDraft(), SaveContext.job());
 
         return auxActivity;
     }

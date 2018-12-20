@@ -126,7 +126,7 @@ public class ActivityVersioningService {
 	                            Versionable auxVersionable2 = Versionable.class.cast(auxMethod.invoke(ampActivityTwo,
 	                                    null));
 
-	                            String output1 = (auxVersionable1 != null) ? ActivityVersionUtil.generateFormattedOutput(
+	                            String output1 = (auxVersionable1 != null) ? ActivityVersionUtil.generateFormattedOutput( 
 	                                    auxVersionable1.getOutput()) : null;
 	                            String output2 = (auxVersionable2 != null) ?
 	                                    ActivityVersionUtil.generateFormattedOutput(auxVersionable2.getOutput()) : null;

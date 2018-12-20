@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.test.categories.DatabaseTests;
+import org.dgfoundation.amp.testutils.InTransactionRule;
 import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -19,6 +20,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -116,6 +118,9 @@ import org.junit.experimental.categories.Category;
  */
 @Category(DatabaseTests.class)
 public class WorkspaceFilterTest {
+
+    @Rule
+    public InTransactionRule inTransactionRule = new InTransactionRule();
 
     /**
      * Redoing public view caches to be able to properly test the anonymous case. See {@link #testAnonymous()}.

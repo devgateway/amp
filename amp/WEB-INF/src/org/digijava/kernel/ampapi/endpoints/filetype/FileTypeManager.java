@@ -142,7 +142,7 @@ public class FileTypeManager {
      * @param updatedFileTypes
      */
     public void updateFileTypesConfig(Set<String> updatedFileTypes) {
-        Session session = PersistenceManager.getCurrentSession();
+        Session session = PersistenceManager.getSession();
         
         List<AmpFileType> fileTypesToBeDeleted = getFileTypesToBeDeleted(updatedFileTypes);
         fileTypesToBeDeleted.forEach(ft -> session.delete(ft));

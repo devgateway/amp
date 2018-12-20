@@ -154,6 +154,8 @@ public class PersistenceManager {
     }
 
     /**
+     * TODO indeed, unmanaged session
+     *
      * Opens a new Hibernate session. Use this with caution.
      * For servlets you will not require to use this, use {@link #getSession()} instead!
      * This method returns you an unmanaged Hibernate session, that you need to close yourself!
@@ -162,14 +164,6 @@ public class PersistenceManager {
     public static Session openNewSession() {
         org.hibernate.Session openSession = sf.openSession();
         return openSession;
-    }
-
-    /**
-     * Gets the current thread session
-     * @return
-     */
-    public static Session getCurrentSession() {
-        return sf.getCurrentSession();
     }
 
     /**
@@ -526,11 +520,44 @@ public class PersistenceManager {
     }
 
     /**
+     * A flag set to true when current session is managed. I.e. there are guarantees that the session will be closed
+     * after some arbitrary work is done.
+     */
+    private static final ThreadLocal<Boolean> CURRENT_SESSION_IS_MANAGED = ThreadLocal.withInitial(() -> false);
+
+    /**
+     * Execute a block of code in a hibernate transaction. At the end the code will commit and close the session.
+     * In case of exception, it will rollback the transaction.
+     * This is done in order ensure that thread bound sessions are closed.
+     *
+     * @param runnable the runnable to execute with open session in view context
+     */
+    public static void inTransaction(Runnable runnable) {
+        if (CURRENT_SESSION_IS_MANAGED.get()) {
+            throw new IllegalStateException("Recursive transaction semantics not defined!");
+        }
+        try {
+            CURRENT_SESSION_IS_MANAGED.set(true);
+            runnable.run();
+        } catch (Throwable e) {
+            PersistenceManager.rollbackCurrentSessionTx();
+            throw e;
+        } finally {
+            PersistenceManager.endSessionLifecycle();
+            CURRENT_SESSION_IS_MANAGED.set(false);
+        }
+    }
+
+    /**
      * returns the current Session. If there is none, creates one and returns it
      * upon creating a new session, a transaction is created
      * @return
      */
     public static Session getSession() {
+        boolean currentSessionIsManaged = CURRENT_SESSION_IS_MANAGED.get();
+        if (!currentSessionIsManaged) {
+            throw new IllegalStateException("Called outside of managed session context.");
+        }
         Session sess = PersistenceManager.sf.getCurrentSession();
         Transaction transaction = sess.getTransaction();
         if (transaction == null || !transaction.isActive()) {

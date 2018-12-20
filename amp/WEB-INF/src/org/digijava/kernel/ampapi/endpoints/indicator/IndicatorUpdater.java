@@ -88,7 +88,7 @@ public class IndicatorUpdater {
 
         if (indicator.getColorRampId() != null) {
             Set<AmpIndicatorColor> colorRamp = new HashSet<>();
-            String[] colorRampColors = ColorRampUtil.getColorRamp(indicator.getColorRampId(),
+            String[] colorRampColors = ColorRampUtil.getColorRamp(indicator.getColorRampId().intValue(),
                     indicatorLayer.getNumberOfClasses());
             for (int i = 0; i < colorRampColors.length; i++) {
                 AmpIndicatorColor color = new AmpIndicatorColor();

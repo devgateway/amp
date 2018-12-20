@@ -101,6 +101,7 @@ public class IndicatorUtils {
             if (color.getPayload() == IndicatorEPConstants.PAYLOAD_INDEX) {
                 long colorId = ColorRampUtil.getColorId(color.getColor());
                 apiIndicator.setMultiColor(IndicatorEPConstants.MULTI_COLOR_PALETTES.contains(colorId));
+                apiIndicator.setColorRampId(colorId);
             }
         }
         apiIndicator.setColorRamp(colorList);

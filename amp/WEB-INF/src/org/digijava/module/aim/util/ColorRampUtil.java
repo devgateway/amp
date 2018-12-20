@@ -145,7 +145,7 @@ public class ColorRampUtil {
         return colorRamps[index];
     }
 
-    public static String[] getColorRamp(Integer index, Long classes) {
+    public static String[] getColorRamp(int index, Long classes) {
         if (index >= colorRamps.length || (classes - 1) > colorRamps[index].length) {
             return DEFAULT_RAMP;
         }

@@ -13,9 +13,7 @@ import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -31,11 +29,6 @@ public class FormattingTests extends ReportingTestCase {
             "Activity with Zones", "Activity With Zones and Percentages",
             "crazy funding 1", "date-filters-activity", "Eth Water",
             "TAC_activity_1", "TAC_activity_2");
-
-    @Override
-    protected NiReportExecutor getNiExecutor(List<String> activityNames) {
-        return getOfflineExecutor(activityNames);
-    }
 
     @Test
     public void testAmountUnits() {
@@ -152,10 +145,5 @@ public class FormattingTests extends ReportingTestCase {
         spec.getOrCreateSettings().setCurrencyFormat(currencyFormat);
 
         runNiTestCase(cor, spec, acts);
-    }
-
-    @BeforeClass
-    public static void setUp() {
-        // this empty method is used as a shadow for org.dgfoundation.amp.newreports.ReportingTestCase.setUp()
     }
 }

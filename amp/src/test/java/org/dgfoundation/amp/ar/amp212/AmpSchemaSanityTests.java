@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.dgfoundation.amp.test.categories.DatabaseTests;
+import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.ReportAreaForTests;
@@ -21,7 +23,9 @@ import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.dgfoundation.amp.nireports.testcases.ReportModelGenerator;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedActivities;
 import org.digijava.module.aim.util.DbUtil;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 /**
  * 
@@ -30,6 +34,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
+@Category(DatabaseTests.class)
 public class AmpSchemaSanityTests extends BasicSanityChecks {
 
     final List<String> mtefActs = Arrays.asList(
@@ -75,7 +80,12 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
         return getDbExecutor(activityNames);
     }
-    
+
+    @BeforeClass
+    public static void setUp() {
+        StandaloneAMPInitializer.initialize();
+    }
+
     @Test
     public void testHierarchiesWithEverything() {       
         List<String> columns = Arrays.asList(ColumnConstants.AC_CHAPTER, ColumnConstants.IMPLEMENTATION_LEVEL, ColumnConstants.IMPLEMENTATION_LOCATION, 

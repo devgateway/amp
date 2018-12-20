@@ -1,16 +1,15 @@
 package org.dgfoundation.amp.ar.amp212;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.newreports.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.junit.BeforeClass;
+import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
 
 /**
  * Tests report settings
  * @author Nadejda Mandrescu
  */
-public class UnitsSettingsUtilityTests extends ReportingTestCase {
+public class UnitsSettingsUtilityTests extends AmpTestCase {
     
     @Test
     public void testAmountUnitsValues() {
@@ -31,10 +30,5 @@ public class UnitsSettingsUtilityTests extends ReportingTestCase {
     public void testCrashes() {
         shouldFail(() -> AmountsUnits.getForValue(15));
         shouldFail(() -> AmountsUnits.getAmountDivider(12));
-    }
-
-    @BeforeClass
-    public static void setUp() {
-        // this empty method is used as a shadow for org.dgfoundation.amp.newreports.ReportingTestCase.setUp()
     }
 }

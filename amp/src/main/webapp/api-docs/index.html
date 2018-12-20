@@ -36,9 +36,9 @@
 
     <script src="./swagger-ui-bundle.js"> </script>
     <script src="./swagger-ui-standalone-preset.js"> </script>
+    <script src="./swagger-ui-custom-plugin.js"> </script>
     <script>
     window.onload = function() {
-
       // Build a system
       const ui = SwaggerUIBundle({
         url: "../rest/swagger.json",
@@ -49,12 +49,14 @@
           SwaggerUIStandalonePreset
         ],
         plugins: [
-          SwaggerUIBundle.plugins.DownloadUrl
+          SwaggerUIBundle.plugins.DownloadUrl,
+          CaseInsensitiveFilterPlugin
         ],
         layout: "StandaloneLayout",
         filter: true,
         defaultModelsExpandDepth: 0,
         docExpansion: "none",
+        tagsSorter: "alpha",
         operationsSorter: "alpha"
       });
 

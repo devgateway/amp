@@ -39,10 +39,15 @@ $.ajax({
 	  context: document.body,
 	  dataType: "text",
 }).done(function(data) {
-		var result = JSON.parse(data);
-		$('#countOrgs').text(result.organizations);
-		$('#countUsers').text(result.users);
-		$('#countProjects').text(result.projects);
+	var result = JSON.parse(data);
+	$('#countOrgs').text(result.organizations);
+	$('#countUsers').text(result.users);
+	$('#countProjects').text(result.projects);
+}).fail(function (jqXHR, textStatus) {
+	var errorText = "<digi:trn jsFriendly='true'>Application error</digi:trn>";
+	$('#countOrgs').text(errorText);
+    $('#countUsers').text(errorText);
+    $('#countProjects').text(errorText);
 });
 	
 </script>

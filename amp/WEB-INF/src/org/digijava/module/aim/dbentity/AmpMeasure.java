@@ -16,7 +16,7 @@ public class AmpMeasure  implements Serializable, Cloneable
     private Long ampMeasureId ;
 
     @TranslatableField
-    @Interchangeable(fieldTitle = "Name", importable = true)
+    @Interchangeable(fieldTitle = "Name", label = "Measure", importable = true)
     private String name ;
 
     private AmpIssues issue;

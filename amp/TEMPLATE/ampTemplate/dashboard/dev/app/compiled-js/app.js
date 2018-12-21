@@ -28462,140 +28462,180 @@ var Constants = require('../utils/constants');
 //TODO: move most code from filters-view here.
 module.exports = Backbone.Collection.extend({
   url: Constants.ALL_FILTERS_URL,
-  _loaded: null,
-  _allDeferreds: [],
-  componentCaller: null,
-  translator: null,
-  initialize: function(models,options) {
-    this.on('add', this._cleanUpAfterAdd);
-    this.load();
-    this.translator = options.translator;
-    if (options.caller) {
-    	componentCaller = options.caller;
-    }
-  },
+    _loaded: null,
+    _allDeferreds: [],
+    componentCaller: null,
+    translator: null,
+    initialize: function(models,options) {
+        this.on('add', this._cleanUpAfterAdd);
+        this.load(options.reportType);
+        this.translator = options.translator;
+        if (options.caller) {
+            componentCaller = options.caller;
+        }
+    },
 
-  load: function() {
-    var self = this;
-    if(!this._loaded){
-      this._loaded = new $.Deferred();
-      this.fetch({remove: false}).then(function() {
-        // when all child calls are done resolve.
-        $.when.apply($, self._allDeferreds)
-          .done(self._loaded.resolve)
-          .fail(self._loaded.reject);
-      }).fail(self._loaded.reject);
-    }
+    load: function(reportType) {
+        var self = this;
+        if(!this._loaded){
+            this._loaded = new $.Deferred();
+            if (reportType === 'P') {
+                this.url = Constants.ALL_FILTERS_URL+ '?report-type=P';
+            }
+            this.fetch({remove: false}).then(function() {
+                // when all child calls are done resolve.
+                $.when.apply($, self._allDeferreds)
+                    .done(self._loaded.resolve)
+                    .fail(self._loaded.reject);
+            }).fail(self._loaded.reject);
+        }
 
-    return this._loaded;
-  },
+        return this._loaded;
+    },
 
-  _cleanUpAfterAdd: function(model) {
-		  
-    var self = this;
-    // remove if ui false also catches empty dummy filters we add in 'model' function below.
-    if (!model.get('ui')) {
-      self.remove(model);
-    }
-    //remove if the endpoint returns the filter type (dashboard,tabs,reports and/or GIS) for which
-    //the model should be visible and the caller is not of the same tpe
-    
+    _cleanUpAfterAdd: function(model) {
+
+        var self = this;
+        // remove if ui false also catches empty dummy filters we add in 'model' function below.
+        if (!model.get('ui')) {
+            self.remove(model);
+        }
+        //remove if the endpoint returns the filter type (dashboard,tabs,reports and/or GIS) for which
+        //the model should be visible and the caller is not of the same tpe
+
     if (model.get('componentType')) {
     	var isOfRequiredType = _.some( model.get('componentType'), function( type ) {
     	    return type === componentCaller || type === Constants.COMPONENT_TYPE_ALL;
-    	});
-    	
-    	if (!isOfRequiredType) {
-    		self.remove (model);
-    	}
-    }
-    // Expose this field for later usage.
-    this.componentCaller = componentCaller;
-  },
+            });
+
+            if (!isOfRequiredType) {
+                self.remove (model);
+            }
+        }
+        // Expose this field for later usage.
+        this.componentCaller = componentCaller;
+    },
 
 
-  parse: function(data) {
-    //only keep filters with ui == true;
-    data = _.filter(data, function(obj) {
-      return obj.ui;
-    });
+    parse: function(data) {
+        //only keep filters with ui == true;
+        data = _.filter(data, function(obj) {
+            return obj.ui;
+        });
 
-    return data;
-  },
-  
-  model: function(attrs, options) {
-    var tmpModel = null;
-    var self = options.collection;
-    attrs.translator = self.translator;
-    // switch for model polymorphism.
-    
+        return data;
+    },
+
+    model: function(attrs, options) {
+        var tmpModel = null;
+        var self = options.collection;
+        attrs.translator = self.translator;
+        // switch for model polymorphism.
+
     if (attrs.fieldType === Constants.FIELD_DATA_TYPE_TREE && attrs.dataType === Constants.FIELD_DATA_TYPE_TEXT) {
-    	 self._allDeferreds.push(self._buildTreeImplementation(self, attrs));
-         tmpModel = new Backbone.Model({ui:false});
+                self._allDeferreds.push(self._buildTreeImplementation(self, attrs));
+                tmpModel = new Backbone.Model({ui:false});
     } else {
-    	if (attrs.id == Constants.FILTER_ID_DATE|| (attrs.id.indexOf('-date') != -1 ) || (attrs.id.indexOf('date-') != -1 )) {
-  		  tmpModel = new YearsFilterModel(attrs);  // hacky but less hacky than enumerating them. Long term solution -> the endpoint should return a field telling the type of a field
-  	  } else if (attrs.id == Constants.FILTER_ID_COMPUTED_YEAR) {
-  		  tmpModel = new YearsOnlyFilterModel(attrs);
-  	  } else {    		  
-  		  tmpModel = new GenericFilterModel(attrs);
-  		  self._allDeferreds.push(tmpModel.getTree());
-  	 }
-    }
-    
-    
+                if (attrs.id == Constants.FILTER_ID_DATE|| (attrs.id.indexOf('-date') != -1 ) || (attrs.id.indexOf('date-') != -1 )) {
+                    tmpModel = new YearsFilterModel(attrs);  // hacky but less hacky than enumerating them. Long term solution -> the endpoint should return a field telling the type of a field
+                } else if (attrs.id == Constants.FILTER_ID_COMPUTED_YEAR) {
+                    tmpModel = new YearsOnlyFilterModel(attrs);
+                } else {
+                    tmpModel = new GenericFilterModel(attrs);
+                    self._allDeferreds.push(tmpModel.getTree());
+                }
+        }
 
-    return tmpModel;
-  },
-  
- _getGroup: function(definition, attrs) {
-	  var group = definition.name;
+
+
+        return tmpModel;
+    },
+
+    _getGroup: function(definition, attrs) {
+        var group = definition.name;
 	  if (attrs.id === Constants.FILTER_ID_ORGS && definition.name !== Constants.FILTER_NAME_DONOR) {
 		  group = Constants.ROLE;
-	  }
-	  
-	  if (attrs.id === Constants.FILTER_ID_SECTOR) {
+        }
+
+        if (attrs.id === Constants.FILTER_ID_SECTOR) {
 		  group = Constants.SECTORS;
-	  }
-	  
-	  if (attrs.id === Constants.FILTER_ID_PROGRAM) {
+        }
+
+        if (attrs.id === Constants.FILTER_ID_PROGRAM) {
 		  group = Constants.PROGRAMS;
-	  }	 
-	  
-	  return group;
-   },
-  _buildTreeImplementation: function(self, attrs) {
-	    var url = attrs.endpoint;
-	    var deferred = $.Deferred();
-	    var tmpDeferreds = [];
-	    var self = this; 	   
-	    
-	    $.get(url, function( data ) {  
-	       if (data && !_.isEmpty(data)) {
-	    	   var listDefinitions = data.listDefinitions;                    
-	           _.each(listDefinitions, function(def) {          	  
-	         	  var items = data.items[def.items];         	   
-	         	  var tree = self._createTree(items, def);    
-	         	  var tmpModel = new GenericFilterModel({
-	         	       id: def.name || def.id,        	    
-	                   data: tree,
-	                   name: def.name,
-	                   tab: def.tab,
-	                   ui: true,
-	                   group: self._getGroup(def, attrs),
-	                   empty: false
-	                 });
-	         	  
-	         	  	 self.add(tmpModel);       
-	 	         	 tmpDeferreds.push(tmpModel.getTree());	         	    
-	                                    
-	           });  
-	      }            
-          
-          $.when.apply($, tmpDeferreds).then(function() {
-              deferred.resolve();
+        }
+
+        return group;
+    },
+    _buildTreeImplementation: function(self, attrs) {
+        var url = attrs.endpoint;
+        var deferred = $.Deferred();
+        var tmpDeferreds = [];
+        var self = this;
+
+        $.get(url, function( data ) {
+            if (data && !_.isEmpty(data)) {
+                var listDefinitions = data.listDefinitions;
+                _.each(listDefinitions, function(def) {
+                    var items = data.items[def.items];
+                    var tree = self._createTree(items, def);
+                    var tmpModel = new GenericFilterModel({
+	         	       id: def.name || def.id,
+                        data: tree,
+                        name: def.name,
+                        tab: def.tab,
+                        ui: true,
+                        group: self._getGroup(def, attrs),
+                        empty: false
+                    });
+
+                    self.add(tmpModel);
+                    tmpDeferreds.push(tmpModel.getTree());
+
+                });
+            }
+
+            $.when.apply($, tmpDeferreds).then(function() {
+                deferred.resolve();
             });
         });
+<<<<<<< HEAD
+
+        return deferred;
+    },
+
+    _createTree: function(data, definition) {
+        var self = this;
+        var dataCopy = jQuery.extend(true, {}, data);
+        var tree = [];
+
+        _.each(dataCopy, function(level1) {
+            var level1 = $.extend({}, level1);
+			  if (definition.filterIds) {
+            level1.filterId = definition.filterIds[0];
+            level1.level = Constants.LEVEL_ONE;
+
+            if (level1.children && level1.children.length > 0) {
+                level1.children = self._updateLevelData(level1, definition, Constants.LEVEL_TWO, definition.filterIds[1]);
+
+                _.each(level1.children, function(level2) {
+                    if (level2.children && level2.children.length > 0) {
+                        level2.children = self._updateLevelData(level2, definition, Constants.LEVEL_THREE, definition.filterIds[2]);
+
+                        _.each(level2.children, function(level3) {
+                            if (level3.children && level3.children.length > 0) {
+                                level3.children = self._updateLevelData(level3, definition, Constants.LEVEL_FOUR, definition.filterIds[3]);
+                                level3.children.map(function(item) {
+                                    item.children = [];  //ignore 4th level, filtering supports 3 levels
+                                });
+                            }
+
+                        })
+                    }
+
+                })
+            }
+=======
 	    
 	    return deferred;
 	  },
@@ -28646,15 +28686,28 @@ module.exports = Backbone.Collection.extend({
 		  return node.children.filter(function(item) {
 			  if (item.listDefinitionIds) {
 				  return item.listDefinitionIds.includes(definition.id);
+>>>>>>> 169c48a37029bbc3520f9ccaeda239cbb05ed698
 			  }
-			  return true;							  
-		  }).map(function(item) {
-			  item.filterId = filterId;
-			  item.level = level;
-			  return item;
-		  });	  
-  
-}
+
+            tree.push(level1);
+        });
+
+        return tree;
+    },
+
+    _updateLevelData: function(node, definition, level, filterId) {
+        return node.children.filter(function(item) {
+            if (item.listDefinitionIds) {
+                return item.listDefinitionIds.includes(definition.id);
+            }
+            return true;
+        }).map(function(item) {
+            item.filterId = filterId;
+            item.level = level;
+            return item;
+        });
+
+    }
 });
 
 },{"../models/generic-filter-model":73,"../models/org-role-filter-model":74,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"../utils/constants":79,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],68:[function(require,module,exports){
@@ -31535,17 +31588,15 @@ var TreeNodeView = Backbone.View.extend({
 module.exports = TreeNodeView;
 
 },{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],79:[function(require,module,exports){
-
-   
-var  constants = {
-	FILTER_ID_ORGS: 'organizations',
-	FILTER_NAME_DONOR: 'Donor',
-	FILTER_ID_SECTOR: 'sectors',
-	FILTER_ID_PROGRAM: 'programs',
-	FILTER_ID_LOCATION: 'locations',
-	FILTER_ID_DATE: 'date',
-	FILTER_ID_COMPUTED_YEAR: 'computed-year',
-	LEVEL_ONE: 1,
+var constants = {
+    FILTER_ID_ORGS: 'organizations',
+    FILTER_NAME_DONOR: 'Donor',
+    FILTER_ID_SECTOR: 'sectors',
+    FILTER_ID_PROGRAM: 'programs',
+    FILTER_ID_LOCATION: 'locations',
+    FILTER_ID_DATE: 'date',
+    FILTER_ID_COMPUTED_YEAR: 'computed-year',
+    LEVEL_ONE: 1,
     LEVEL_TWO: 2,
     LEVEL_THREE: 3,
     LEVEL_FOUR: 4,
@@ -31560,22 +31611,28 @@ var  constants = {
     EFFECTIVE_FUNDING_DATE: 'effective-funding-date',
     FUNDING_CLOSING_DATE: 'funding-closing-date',
     CONCESSIONALITY_LEVEL: 'concessionality-level',
-    STATUS:'Status',
+    ON_OFF_TREASURY_BUDGET: 'On/Off/Treasury Budget',
+    STATUS: 'Status',
     PERFORMANCE_ALERT_LEVEL: 'performance-alert-level',
-    PERFORMANCE_ALERT_TYPE:'performance-alert-type',
+    PERFORMANCE_ALERT_TYPE: 'performance-alert-type',
     APPROVAL_STATUS: 'approval-status',
     PROGRAMS: 'Programs',
     SECTORS: 'Sectors',
     DONOR: 'Donor',
     ROLE: 'Role',
     LOCATIONS: 'Locations',
+    PLEDGES_SECTORS: 'Pledges Sectors',
+    PLEDGES_SECONDARY_SECTORS: 'Pledges Secondary Sectors',
+    PLEDGES_PROGRAMS: 'Pledges Programs',
+    PLEDGES_LOCATIONS: 'Pledges Locations',
+    PLEDGES_DONORS: 'Pledges Donors',
     COMPONENT_TYPE_ALL: 'ALL',
     FIELD_DATA_TYPE_TREE: 'TREE',
     FIELD_DATA_TYPE_TEXT: 'TEXT',
     DATE_RANGE_VALUES: 'DATE-RANGE-VALUES',
     YEAR_SINGLE_VALUE: 'YEAR-SINGLE-VALUE',
     CONTEXT_DASHBOARD: 'DASHBOARD',
-    CONTEXT_GIS: 'GIS'    
+    CONTEXT_GIS: 'GIS'
 };
 
 module.exports = constants;
@@ -31667,9 +31724,20 @@ var GeneralSettings = require('../models/general-settings');
 var DateUtils = require('../utils/date-utils');
 var Constants = require('../utils/constants');
 
-var filterInstancesNames = {donors: 'Funding Organizations', sectors : 'Sectors', programs: 'Programs', 
-	  activity: 'Activity', allAgencies: 'All Agencies', financials: 'Financial',
-		  locations: 'Locations', others: 'Other'};
+var filterInstancesNames = {
+    donors: 'Funding Organizations',
+    /*pledgesDonors: 'Pledges Donors',*/
+    sectors: 'Sectors',
+    pledgesSectors: 'Pledges Sectors',
+    programs: 'Programs',
+    pledgesPrograms: 'Pledges Programs',
+    activity: 'Activity',
+    allAgencies: 'All Agencies',
+    financials: 'Financial',
+    locations: 'Locations',
+    pledgesLocations: 'Pledges Locations',
+    others: 'Other'
+};
 
 
 module.exports = Backbone.View.extend({
@@ -31722,7 +31790,7 @@ module.exports = Backbone.View.extend({
     			}
     		}      		
       	  } else {
-      		self._createFilterViews(model);  
+      		self._createFilterViews(model);
       	  }
       	  
       });        
@@ -31732,7 +31800,7 @@ module.exports = Backbone.View.extend({
 
   },
 
-  _createTopLevelFilterViews: function() {    
+  _createTopLevelFilterViews: function() {
     		for (key in filterInstancesNames) {
     			if (filterInstancesNames.hasOwnProperty(key)) {    				
     				this.filterViewsInstances[key] = new TopLevelFilterView({name:filterInstancesNames[key], translator: this.translator, translate: this.translate, filterView: this});
@@ -31864,7 +31932,7 @@ module.exports = Backbone.View.extend({
       case Constants.EFFECTIVE_FUNDING_DATE:
       case Constants.FUNDING_CLOSING_DATE:
       case Constants.CONCESSIONALITY_LEVEL:
-      case 'on-off-treasury-budget':
+      case Constants.ON_OFF_TREASURY_BUDGET:
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;
       case Constants.STATUS:
@@ -31880,6 +31948,7 @@ module.exports = Backbone.View.extend({
         this.filterViewsInstances.sectors.filterCollection.add(tmpModel);
         break;
       case Constants.DONOR:
+      case Constants.PLEDGES_DONORS:
     	this.filterViewsInstances.donors.filterCollection.add(tmpModel);
         break;
       case Constants.ROLE:
@@ -31888,7 +31957,18 @@ module.exports = Backbone.View.extend({
       case Constants.LOCATIONS:
         this.filterViewsInstances.locations.filterCollection.add(tmpModel);
         break;
+      case Constants.PLEDGES_SECTORS:
+      case Constants.PLEDGES_SECONDARY_SECTORS:
+        this.filterViewsInstances.pledgesSectors.filterCollection.add(tmpModel);
+        break;
+      case Constants.PLEDGES_PROGRAMS:
+          this.filterViewsInstances.pledgesPrograms.filterCollection.add(tmpModel);
+          break;
+      case Constants.PLEDGES_LOCATIONS:
+        this.filterViewsInstances.pledgesLocations.filterCollection.add(tmpModel);
+        break;
       default:
+        console.warn(tmpModel.get('group'));
         this.filterViewsInstances.others.filterCollection.add(tmpModel);
     }
 	

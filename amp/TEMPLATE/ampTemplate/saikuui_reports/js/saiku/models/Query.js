@@ -133,9 +133,9 @@ var Query = Backbone.Model.extend({
     	Saiku.logger.log('END!!!');
     	Saiku.logger.log(new Date().getTime() - window.saiku_time + "ms");
     	
-        var filters; 
+        var filters;
         if (filtersObject) {
-        	filters = filtersObject.filters || {};
+        	filters = filtersObject;
         }
         	
         var self = this;

@@ -13,6 +13,7 @@
                 <td bgcolor="#999999" nowrap>
                     <div class="ws-tooltip">
                         <b><digi:trn>Workspace Type</digi:trn></b>
+                        <img src="/TEMPLATE/ampTemplate/images/tooltip-help.png" >
                         <span class="ws-tooltiptext">
                             <div class="ws-tooltip-item">
                                 <b>TEAM</b> - <digi:trn>Members can create new activities for the workspace but can also pull

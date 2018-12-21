@@ -82,6 +82,9 @@ stage('Quick Test') {
 
             withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
                 sh "cd amp && mvn test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
+
+                // Archive unit test report
+                junit 'amp/target/surefire-reports/TEST-*.xml'
             }
 
             updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: success', 'SUCCESS')
@@ -121,10 +124,6 @@ stage('Build') {
                     sh "docker build -q -t phosphorus:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
                     sh "docker push phosphorus:5000/amp-webapp:${tag} > /dev/null"
                 } finally {
-                    if (branch != null) {
-                        // Archive unit test report
-                        junit 'amp/target/surefire-reports/TEST-*.xml'
-                    }
 
                     // Cleanup after Docker & Maven
                     sh returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag}"

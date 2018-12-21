@@ -36,14 +36,14 @@ var SessionWorkspace = Backbone.Model.extend({
 	// IMPORTANT: Care with this file, some changes can cause stop loading Saiku.
     initialize: function(args, options) {
     	Saiku.logger.log("SessionWorkspace.initialize");
-    	Backbone.history.start();
+        this.process_datasources(this, this.defaults);
+        Backbone.history.start();
     	
         // Attach a custom event bus to this model
         _.extend(this, Backbone.Events);
         _.bindAll(this, "process_datasources");
         this.initialized = false;
         this.first = true;
-        this.process_datasources(this, this.defaults);
     },
 
     refresh: function() {

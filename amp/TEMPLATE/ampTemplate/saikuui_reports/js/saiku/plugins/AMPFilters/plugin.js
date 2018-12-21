@@ -1,4 +1,14 @@
-window.currentFilter = new ampFilter({el:$('#filter-popup'), draggable:true, caller: 'REPORTS'});
+var reportType = Saiku.originalReportMetadata.reportMetadata.reportSpec.reportType;
+var reportTypeCode = 'D';
+if (reportType === 5) {
+    reportTypeCode = 'P';
+}
+window.currentFilter = new ampFilter({
+    el: $('#filter-popup'),
+    draggable: true,
+    caller: 'REPORTS',
+    reportType: reportTypeCode
+});
 
 var AMPFilters = Backbone.View.extend({
 			events : {
@@ -35,8 +45,8 @@ var AMPFilters = Backbone.View.extend({
 					$('#filter-popup').hide();
 				});
 				Saiku.events.listenTo(window.currentFilter, 'apply', function(data) {
-					var filterObject = window.currentFilter.serialize();					
-					self.workspace.query.run_query(filterObject, null);
+					var filterObject = window.currentFilter.serialize();
+					self.workspace.query.run_query(filterObject.filters || {}, null);
 					self.filters_button.removeClass('on');
 					$('#filter-popup').hide();
 				});

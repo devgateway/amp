@@ -325,6 +325,25 @@ public class ActivityVersionUtil {
         return ActivityVersionUtil.groupOutputCollection(outputCollection);
     }
 
+    public static Map<String, List<CompareOutput>> compareWithPrevious(Long activityOneId) throws Exception {
+        // Obtain previous activity id if(index<0) { //there is no previous version // }
+        AmpActivityVersion ampActivityOne = (AmpActivityVersion) PersistenceManager.getCurrentSession()
+                .load(AmpActivityVersion.class, activityOneId);
+
+        AmpActivityGroup group = ampActivityOne.getAmpActivityGroup();
+        Set<AmpActivityVersion> activities = group.getActivities();
+        ArrayList<Long> activitiesIds = new ArrayList<>();
+
+        for (AmpActivityVersion activity : activities) {
+            activitiesIds.add(activity.getAmpActivityId());
+        }
+        Collections.sort(activitiesIds);
+        Long prevActivityId = Long
+                .parseLong(activitiesIds.get(activitiesIds.indexOf(ampActivityOne.getAmpActivityId()) - 1).toString());
+        return compareActivities(activityOneId, prevActivityId);
+    }
+
+
     private static void addAsDifferentIfNnoPresent(List<CompareOutput> outputCollection, Field[] fields, int i,
                                                    VersionableCollection auxAnnotation, Collection auxCollection2, Iterator iter1) {
         while (iter1.hasNext()) {

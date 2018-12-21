@@ -65,7 +65,7 @@ public class CompareActivityVersions extends DispatchAction {
         }
 
         vForm.setOutputCollection(new ArrayList<CompareOutput>());
-        vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId(), vForm.getActivityTwoId()));
+        vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareWithPrevious(vForm.getActivityOneId()));
 
         return mapping.findForward("forward");
     }
@@ -74,7 +74,6 @@ public class CompareActivityVersions extends DispatchAction {
                                 HttpServletResponse response) throws Exception {
         return mapping.findForward("reload");
     }
-
 
     private void setAdvancemode(CompareActivityVersionsForm vForm, HttpServletRequest request) {
         boolean ispartofamanagetmentworkspace = false;

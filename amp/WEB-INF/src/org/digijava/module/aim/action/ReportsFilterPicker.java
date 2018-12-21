@@ -248,8 +248,6 @@ public class ReportsFilterPicker extends Action {
             }
 
             if (request.getParameter("applyWithNewWidget") != null) {
-                // Tomar filtros nuevos y convertirlos en AmpARFilter.
-                // TODO: transformar los parametros filter** del request.getParameterValues() a el Map filters.
                 LinkedHashMap<String, Object> filters = new LinkedHashMap<>();
                 Map<String, String[]> parameters = request.getParameterMap();
                 parameters.keySet().stream().filter(x -> x.startsWith("filter")).forEach((s -> {
@@ -263,6 +261,7 @@ public class ReportsFilterPicker extends Action {
                 AmpReportFilters filterRules = FilterUtils.getFilters(filters, new AmpReportFilters());
                 AmpReportFiltersConverter converter = new AmpReportFiltersConverter(filterRules);
                 AmpARFilter ampARFilter2 = converter.buildFilters();
+                fillFilterFormFromFilter(ampARFilter2, filterForm);
                 return decideNextForward(mapping, filterForm, request, ampARFilter2);
             }
 
@@ -1378,6 +1377,23 @@ public class ReportsFilterPicker extends Action {
         return null;
     }
 
+    public static void fillFilterFormFromFilter(AmpARFilter arf, ReportsFilterPickerForm filterForm) throws DgException {
+        if (arf.getSelectedSectors() != null) {
+            filterForm.setSelectedSectors(arf.getSelectedSectors().stream().map(AmpSector::getAmpSectorId).toArray());
+        }
+        if (arf.getSelectedSecondarySectors() != null) {
+            filterForm.setSelectedSecondarySectors(arf.getSelectedSecondarySectors().stream()
+                    .map(AmpSector::getAmpSectorId).toArray());
+        }
+        if (arf.getSelectedPrimaryPrograms() != null) {
+            filterForm.setSelectedPrimaryPrograms(arf.getSelectedPrimaryPrograms().stream()
+                    .map(AmpTheme::getAmpThemeId).toArray());
+        }
+        if (arf.getLocationSelected() != null) {
+            filterForm.setRegionSelected(arf.getLocationSelected().stream()
+                    .map(AmpCategoryValueLocations::getId).toArray());
+        }
+    }
 
     /**
      * fills an AmpARFilter instance with Filters data from a ReportsFilterPickerForm

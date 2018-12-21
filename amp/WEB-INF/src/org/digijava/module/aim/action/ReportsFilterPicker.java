@@ -216,7 +216,7 @@ public class ReportsFilterPicker extends Action {
                 parameters.keySet().stream().filter(x -> x.startsWith("filter")).forEach((s -> {
                     String key = s.toString().substring(s.indexOf("[") + 1, s.indexOf("]"));
                     String subKey = s.replace("filters[" + key + "]", "");
-                    if (!subKey.contains("[")) {
+                    if (subKey.contains("[]")) {
                         filters.put(key, Arrays.asList(parameters.get(s)));
                     } else {
                         String subKey2 = subKey.substring(subKey.indexOf("[") + 1, subKey.indexOf("]"));

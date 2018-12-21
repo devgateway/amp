@@ -35,7 +35,6 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
-import org.junit.BeforeClass;
 
 public abstract class ReportingTestCase extends AmpTestCase {
     
@@ -276,10 +275,5 @@ public abstract class ReportingTestCase extends AmpTestCase {
 //      NiReportExecutor executor = getExecutor(activityNames);
 //      return executor.executeReport(spec, outputBuilder);
 //  }
-
-    @BeforeClass
-    public static void setUp() {
-        StandaloneAMPInitializer.initialize();
-    }
 }
 

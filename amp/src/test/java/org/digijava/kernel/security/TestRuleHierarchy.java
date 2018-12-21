@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.digijava.kernel.security.RuleHierarchy;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -69,6 +69,11 @@ public class SystemDiff {
     @JsonProperty("feature-manager")
     private boolean featureManager;
 
+    /**
+     * Set when field definitions any entity changed.
+     */
+    private boolean fields;
+
     public void updateTimestamp(Date timestamp) {
         if (this.timestamp == null || (timestamp != null && this.timestamp.before(timestamp))) {
             this.timestamp = timestamp;
@@ -154,5 +159,12 @@ public class SystemDiff {
     public void setCalendars(ListDiff<Long> calendars) {
         this.calendars = calendars;
     }
-    
+
+    public boolean isFields() {
+        return fields;
+    }
+
+    public void setFields(boolean fields) {
+        this.fields = fields;
+    }
 }

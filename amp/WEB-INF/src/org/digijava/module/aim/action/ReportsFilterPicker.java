@@ -3,24 +3,13 @@
  */
 package org.digijava.module.aim.action;
 
-import java.text.DecimalFormat;
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.InvalidReportContextException;
-import org.dgfoundation.amp.ar.ReportContextData;
-import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.ar.*;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
@@ -31,45 +20,14 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.ar.util.ReportsUtil;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.OrgTypeSkeleton;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.DynamicDateFilter;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.AmpMath;
-import org.digijava.module.aim.util.AmpThemeSkeleton;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.HierarchyListableUtil;
-import org.digijava.module.aim.util.LocationSkeleton;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
-import org.digijava.module.aim.util.OrgGroupSkeleton;
-import org.digijava.module.aim.util.OrganizationSkeleton;
-import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.SectorSkeleton;
-import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.aim.util.filters.DateListableImplementation;
 import org.digijava.module.aim.util.filters.GroupingElement;
@@ -81,6 +39,11 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Session;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.DecimalFormat;
+import java.util.*;
 
 /**
  * @author mihai
@@ -248,18 +211,29 @@ public class ReportsFilterPicker extends Action {
             }
 
             if (request.getParameter("applyWithNewWidget") != null) {
-                LinkedHashMap<String, Object> filters = new LinkedHashMap<>();
+                LinkedHashMap<String, Object> filters = new LinkedHashMap<String, Object>();
                 Map<String, String[]> parameters = request.getParameterMap();
                 parameters.keySet().stream().filter(x -> x.startsWith("filter")).forEach((s -> {
                     String key = s.toString().substring(s.indexOf("[") + 1, s.indexOf("]"));
-                    System.out.println(s);
-                    System.out.println(key);
-                    filters.put(key, Arrays.asList(parameters.get(s)));
+                    String subKey = s.replace("filters[" + key + "]", "");
+                    if (!subKey.contains("[")) {
+                        filters.put(key, Arrays.asList(parameters.get(s)));
+                    } else {
+                        String subKey2 = subKey.substring(subKey.indexOf("[") + 1, subKey.indexOf("]"));
+                        LinkedHashMap<String, Object> sub = new LinkedHashMap<String, Object>();
+                        sub.put(subKey2, parameters.get(s)[0]);
+                        if (!filters.containsKey(key)) {
+                            filters.put(key, sub);
+                        } else {
+                            ((LinkedHashMap<String, Object>) filters.get(key)).put(subKey2, parameters.get(s)[0]);
+                        }
+                    }
                 }));
                 // AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
                 AmpReportFilters filterRules = FilterUtils.getFilters(filters, new AmpReportFilters());
                 AmpReportFiltersConverter converter = new AmpReportFiltersConverter(filterRules);
                 AmpARFilter ampARFilter = converter.buildFilters();
+                ampARFilter.fillWithDefaultsSettings();
                 FilterUtil.populateForm(filterForm, ampARFilter, longAmpReportId);
                 AmpARFilter ampARFilter2 = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
                 return decideNextForward(mapping, filterForm, request, ampARFilter2);

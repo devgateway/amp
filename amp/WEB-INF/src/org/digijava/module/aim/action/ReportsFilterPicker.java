@@ -257,11 +257,11 @@ public class ReportsFilterPicker extends Action {
                     filters.put(key, Arrays.asList(parameters.get(s)));
                 }));
                 // AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
-                filterForm.setSourceIsReportWizard(true);
                 AmpReportFilters filterRules = FilterUtils.getFilters(filters, new AmpReportFilters());
                 AmpReportFiltersConverter converter = new AmpReportFiltersConverter(filterRules);
-                AmpARFilter ampARFilter2 = converter.buildFilters();
-                fillFilterFormFromFilter(ampARFilter2, filterForm);
+                AmpARFilter ampARFilter = converter.buildFilters();
+                FilterUtil.populateForm(filterForm, ampARFilter, longAmpReportId);
+                AmpARFilter ampARFilter2 = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
                 return decideNextForward(mapping, filterForm, request, ampARFilter2);
             }
 
@@ -1375,24 +1375,6 @@ public class ReportsFilterPicker extends Action {
         }
 
         return null;
-    }
-
-    public static void fillFilterFormFromFilter(AmpARFilter arf, ReportsFilterPickerForm filterForm) throws DgException {
-        if (arf.getSelectedSectors() != null) {
-            filterForm.setSelectedSectors(arf.getSelectedSectors().stream().map(AmpSector::getAmpSectorId).toArray());
-        }
-        if (arf.getSelectedSecondarySectors() != null) {
-            filterForm.setSelectedSecondarySectors(arf.getSelectedSecondarySectors().stream()
-                    .map(AmpSector::getAmpSectorId).toArray());
-        }
-        if (arf.getSelectedPrimaryPrograms() != null) {
-            filterForm.setSelectedPrimaryPrograms(arf.getSelectedPrimaryPrograms().stream()
-                    .map(AmpTheme::getAmpThemeId).toArray());
-        }
-        if (arf.getLocationSelected() != null) {
-            filterForm.setRegionSelected(arf.getLocationSelected().stream()
-                    .map(AmpCategoryValueLocations::getId).toArray());
-        }
     }
 
     /**

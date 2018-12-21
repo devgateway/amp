@@ -18,7 +18,7 @@ $(document).ready(function () {
         // TODO: un-hardcode the param reportContextId.
         $.ajax({
             type: 'POST',
-            url: '/aim/reportsFilterPicker.do?applyWithNewWidget=true&cacheBuster=' + new Date().getTime() + '&reportContextId=report_wizard',
+            url: '/aim/reportsFilterPicker.do?applyWithNewWidget=true&cacheBuster=' + new Date().getTime() + '&reportContextId=report_wizard&sourceIsReportWizard=true',
             data: serializedFilters,
             success: function (data) {
                 $('#listFiltersDiv').html(data);

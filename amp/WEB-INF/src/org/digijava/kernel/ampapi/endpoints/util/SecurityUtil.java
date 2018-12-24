@@ -23,7 +23,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.joda.time.DateTime;
 
 /**
  * Utility class to handle API security related issues
@@ -38,9 +37,6 @@ public class SecurityUtil {
     //TOKEN store at application level
     public static String TOKENS = "org.digijava.kernel.ampapi.endpoints.security.tokens";
     public static String REMOVE_SESSION = "org.digijava.kernel.ampapi.endpoints.security.remove-session";
-    //Amount of time in minutes until the token expires
-    //TODO for testing
-    public static Integer TOKEN_EXPIRATION=30;
 
 
     @SuppressWarnings("unchecked")
@@ -70,7 +66,7 @@ public class SecurityUtil {
         TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         User user = (User) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_USER);
 
-        AmpApiToken apiToken = new AmpApiToken(token, user, teamMember, new DateTime().plusMinutes(TOKEN_EXPIRATION));
+        AmpApiToken apiToken = new AmpApiToken(token, user, teamMember);
 
         TLSUtils.getRequest().getSession().setAttribute(USER_TOKEN, apiToken);
 
@@ -167,6 +163,7 @@ public class SecurityUtil {
                         error = validateToken(sessionAapiToken);
 
                         if (error == null) {
+                            sessionAapiToken.touch();
                             return;// no session needs to be restored since the user
                             // has a token in session and its valid
                         }
@@ -189,6 +186,7 @@ public class SecurityUtil {
                         // the toke has expired
                         error = SecurityErrors.TOKEN_EXPIRED;
                     } else {
+                        apiToken.touch();
                         // we restore the session
                         session.setAttribute(Constants.CURRENT_USER, apiToken.getUser());
                         session.setAttribute(Constants.CURRENT_MEMBER, apiToken.getTeamMember());

@@ -46,7 +46,9 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
         final PropertyModel<Set<Object>> levelChildren = new PropertyModel<Set<Object>>(objModel, levelChildrenName);
     
         final TextArea name =new TextArea<String>("name", new PropertyModel<String>(objModel,"name"));
-        addFormComponent(name);
+        name.setRequired(true);
+        name.add(visualErrorBehavior());
+        add(name);
         Label label = new TrnLabel("label", labelName.get(levelClass));
         add(label);
         

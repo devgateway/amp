@@ -23,7 +23,6 @@ import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
-import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -202,8 +201,7 @@ public class AmpARFilterConverter {
     private void addOrganizationsFilters() {
         //Donor Agencies
         addFilter(arFilter.getDonorTypes(), ColumnConstants.DONOR_TYPE);
-        addFilter(arFilter.getDonorGroups(), 
-                (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_DONOR_GROUP : ColumnConstants.DONOR_GROUP));
+        addFilter(arFilter.getDonorGroups(), ColumnConstants.DONOR_GROUP);
         addFilter(arFilter.getDonnorgAgency(), ColumnConstants.DONOR_AGENCY);
         
         //Related Agencies
@@ -260,9 +258,6 @@ public class AmpARFilterConverter {
         } else {
             levelColumn = columnName + " " + StringUtils.repeat("Sub-", depth) + "Sector";
         }
-        if (arFilter.isPledgeFilter()) {
-            levelColumn = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(levelColumn, levelColumn);
-        }
         return levelColumn;
     }
 
@@ -280,7 +275,8 @@ public class AmpARFilterConverter {
         }           
         return res;
     }
-    
+
+    // TODO, talk with Viorel on this issue?
     /** adds programs and national objectives filters */
     private void addProgramAndNationalObjectivesFilters() {
         addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PRIMARY_PROGRAM);
@@ -288,8 +284,7 @@ public class AmpARFilterConverter {
         addMultiLevelFilter(arFilter.getSelectedSecondaryPrograms(), ColumnConstants.SECONDARY_PROGRAM);
 
         //TODO: how to detect tertiary programs
-        //addFilter(arFilter.get(), 
-        //      (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_PROGRAMS : ColumnConstants.TERTIARY_PROGRAM), entityType);
+        //addFilter(arFilter.get(), ColumnConstants.TERTIARY_PROGRAM, entityType);
 
         addMultiLevelFilter(arFilter.getSelectedNatPlanObj(), ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
         
@@ -313,14 +308,7 @@ public class AmpARFilterConverter {
             current = current.getParentThemeId();
             depth++;
         }
-        String levelColumnName = columnName + " Level " + depth;
-
-        if (arFilter.isPledgeFilter()) {
-            levelColumnName =
-                    AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(levelColumnName, levelColumnName);
-        }
-        
-        return levelColumnName;
+        return columnName + " Level " + depth;
     }
     
     private void addLocationFilters() {

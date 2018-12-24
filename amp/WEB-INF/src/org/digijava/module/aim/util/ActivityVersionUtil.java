@@ -233,31 +233,7 @@ public class ActivityVersionUtil {
     }
     
     
-    //yo
-    public static Long getPervValue(Long Activity) throws CannotGetLastVersionForVersionException {
-        try {
-            Session session = PersistenceManager.getSession();
-            String queryStr = "SELECT v.ampActivity.ampActivityId  FROM " +AmpActivityVersion.class.getName() +
-                    " v  WHERE v.ampActivityId=:Activity";
-            Query query     = session.createQuery(queryStr);
-            query.setLong("oldActivityId", Activity);
-            Long id     = (Long)query.uniqueResult();
-            return id;
-        } catch (Exception e) {
-            logger.error(e.getMessage() );
-            e.printStackTrace();
-            throw new CannotGetLastVersionForVersionException(e);
-        }
-    }
-
-    
-    
-    
-    
-    
-    
-
-    /**
+        /**
      * Create a copy of the {@link AmpActivityVersion} with all Collections linked with
      * it and ready to save.
      * 
@@ -369,6 +345,20 @@ public class ActivityVersionUtil {
         }
         return act;
     }
+    
+    
+    public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId) throws Exception {
+   	 
+   	
+   	 Session session = PersistenceManager.getCurrentSession();
+      AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
+      
+      AmpActivityVersion ampActivityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
+      
+      Long activityTwoId= ampActivityTwo.getAmpActivityId();
+      return compareActivities( activityOneId,activityTwoId);
+   }
+     
     
     
 
@@ -668,37 +658,7 @@ AmpActivityVersion  ampActivityTwo = (AmpActivityVersion) session.load(AmpActivi
 }
  
     
-    public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId) throws Exception {
-	 Map<String, List<CompareOutput>> outputCollection;
-	 Long activityTwoId=0l;
-	 Session session = PersistenceManager.getCurrentSession();
-   AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
-   
-   Query qry = session.createQuery("SELECT act FROM " + AmpActivityVersion.class.getName() 
-           + " act WHERE act.ampActivityGroup.ampActivityGroupId = ? ORDER BY act.ampActivityId DESC");
-   qry.setParameter(0, ampActivityOne.getAmpActivityGroup().getAmpActivityGroupId());
-   List<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>(qry.list());
-   
-    	
-   Iterator <AmpActivityVersion>   itr = activities.iterator();
-   
-       while(itr.hasNext())
-       {
-       	AmpActivityVersion prevActivity = itr.next();
-       	
-       	Long activityTwo = prevActivity.getAmpActivityId();
-       	if(activityTwo<activityOneId)
-       	{
-       		activityTwoId=activityTwo;
-       		break;
-       	}
-       }
-    
-   
-   outputCollection=compareActivities( activityOneId,activityTwoId);
-   return outputCollection ;
-}
-    
+     
     private static void addAsDifferentIfNnoPresent(List<CompareOutput> outputCollection, Field[] fields, int i, VersionableCollection auxAnnotation, Collection auxCollection2, Iterator iter1) {
     while (iter1.hasNext()) {
         int coincidence = 0;

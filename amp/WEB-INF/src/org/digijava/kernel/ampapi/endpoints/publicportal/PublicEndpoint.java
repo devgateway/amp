@@ -12,8 +12,8 @@ import javax.ws.rs.core.MediaType;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Publicly available endpoints
@@ -31,7 +31,7 @@ public class PublicEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "topprojects")
     @ApiOperation("Retrieves top 'count' projects based on fixed requirements.")
-    public JsonBean getTopProjects(PublicReportFormParameters config,
+    public PublicTopData getTopProjects(PublicReportFormParameters config,
             @DefaultValue(TOP_COUNT) @QueryParam("count") Integer count, 
             @QueryParam("months") Integer months) {
         return PublicPortalService.getTopProjects(config, count, months);
@@ -43,11 +43,13 @@ public class PublicEndpoint {
     @ApiMethod(ui = false, id = "donorFunding")
     @ApiOperation(
             value = "Retrieves Donor Disbursements/Commitments List for the last X days",
-            notes = "Get donor funding for the specific funding type 1 for commitment 2 for disbursement default 1 "
-                    + "count max amount of records, default is all months the last x months default")
-    public JsonBean getDonorFunding(PublicReportFormParameters config,
+            notes = "Get donor funding for the specific funding type "
+                    + "with possibility to filter by number of records or age")
+    public PublicTopData getDonorFunding(PublicReportFormParameters config,
              @QueryParam("count") Integer count, 
-            @QueryParam("months") Integer months, @DefaultValue("1") @QueryParam("fundingType") Integer fundingType) {
+            @QueryParam("months") Integer months,
+            @ApiParam(value = "1 for commitment, 2 for disbursement", allowableValues = "1,2")
+            @DefaultValue("1") @QueryParam("fundingType") Integer fundingType) {
         return PublicPortalService.getDonorFunding(config, count, months,fundingType);
     }   
     
@@ -56,7 +58,7 @@ public class PublicEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "activitiesPledges")
     @ApiOperation("Retrieves the count for activities that have been at least linked to one pledge")
-    public JsonBean getActivitiesPledgesCount(PublicReportFormParameters config) {
+    public int getActivitiesPledgesCount(PublicReportFormParameters config) {
         return PublicPortalService.getActivitiesPledgesCount(config);
     }       
 }

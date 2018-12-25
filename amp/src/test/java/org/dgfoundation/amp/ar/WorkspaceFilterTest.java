@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.dgfoundation.amp.StandaloneAMPInitializer;
+import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -19,6 +20,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 /**
  * Activity name format: ~wsf~ {$workspace_nr} {description}
@@ -112,6 +114,7 @@ import org.junit.Test;
  *
  * @author Octavian Ciubotaru
  */
+@Category(DatabaseTests.class)
 public class WorkspaceFilterTest {
 
     /**

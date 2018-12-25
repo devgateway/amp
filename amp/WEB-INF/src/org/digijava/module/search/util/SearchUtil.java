@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.LoggerIdentifiable;
@@ -46,7 +46,6 @@ import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.contentrepository.util.DocumentsNodesAttributeManager;
-import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.search.helper.Resource;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -461,7 +460,8 @@ public class SearchUtil {
             if (tm.getTeamAccessType().equals("Management")) {
                 query.append(String.format(
                         " and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ",
-                        Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
+                        ApprovalStatus.STARTED_APPROVED.getDbName(),
+                        ApprovalStatus.APPROVED.getDbName()));
             }
         }
 

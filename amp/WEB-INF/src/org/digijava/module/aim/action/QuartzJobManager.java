@@ -113,7 +113,7 @@ public class QuartzJobManager extends Action {
             }
 
         } else if ("addJob".equals(qmform.getAction())) {
-            qmform.reset();
+            qmform.resetJobForm();
             return mapping.findForward("addJob");
 
         } else if ("editJob".equals(qmform.getAction())) {
@@ -122,21 +122,23 @@ public class QuartzJobManager extends Action {
             for (QuartzJobForm exJob : qmform.getJobs()) {
                 if (exJob.getName().equals(qmform.getName())) {
                     if (exJob.getEndDateTime() != null) {
-
                         Date endDate = fullDateFormat.parse(exJob.getEndDateTime());
                         qmform.setEndDateTime(dateFormatOnly.format(endDate));
                         qmform.setEndH(formatHM.format(endDate.getHours()));
                         qmform.setEndM(formatHM.format(endDate.getMinutes()));
+                    } else {
+                        qmform.setEndDateTime("");
                     }
-
+                    
                     if (exJob.getStartDateTime() != null) {
-
                         Date startDate = fullDateFormat.parse(exJob.getStartDateTime());
                         qmform.setStartDateTime(dateFormatOnly.format(startDate));
                         qmform.setStartH(formatHM.format(startDate.getHours()));
                         qmform.setStartM(formatHM.format(startDate.getMinutes()));
-
+                    } else {
+                        qmform.setStartDateTime("");
                     }
+                    
                     qmform.setName(exJob.getName());
                     qmform.setClassFullname(exJob.getClassFullname());
                     qmform.setJob(exJob);

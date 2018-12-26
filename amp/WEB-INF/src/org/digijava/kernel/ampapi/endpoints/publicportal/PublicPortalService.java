@@ -26,6 +26,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.ActivityType;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -41,7 +42,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public class PublicPortalService {
     protected static final Logger logger = Logger.getLogger(PublicPortalService.class);
-    
+
     /**
      * Retrieves top 'count' projects based on fixed requirements. <br>
      * NOTE: the requirement is fixed at the moment, however we may need to provide some flexibility
@@ -51,17 +52,12 @@ public class PublicPortalService {
      * @return JsonBean object with results
      * 
      */
-    public static JsonBean getTopProjects(PublicReportFormParameters config, Integer count, Integer months) {
-        JsonBean result = ReportsUtil.validateReportConfig(config);
-        if (result != null) {
-            return result;
-        } else {
-            result = new JsonBean();
+    public static PublicTopData getTopProjects(
+            PublicReportFormParameters config, Integer count, Integer months) {
+        JsonBean error = ReportsUtil.validateReportConfig(config);
+        if (error != null) {
+            throw new ApiRuntimeException(error);
         }
-        
-        List<JsonBean> content = new ArrayList<JsonBean>();
-        
-        result.set("topprojects", content);
         
         ReportSpecificationImpl spec = EndpointUtils.getReportSpecification(config.getReportType(),
                 "PublicPortal_GetTopProjects");
@@ -76,7 +72,7 @@ public class PublicPortalService {
         spec.setDisplayEmptyFundingRows(true);
         List<String> projectTypeOptions = config.getProjectType();
         boolean isSSCActivitiesTop = projectTypeOptions != null && projectTypeOptions.contains(ActivityType.SSC_ACTIVITY.toString());
-        Set<String> columnsToIgnore = new HashSet<String>();
+        Set<String> columnsToIgnore = new HashSet<>();
         
         if (isSSCActivitiesTop) {
             configureTopSSCProjects(spec);
@@ -85,9 +81,7 @@ public class PublicPortalService {
             configureTopStandardProjects(spec);
         }
         
-        getPublicReport(count, result, content, spec, false, null, columnsToIgnore);
-        
-        return result;
+        return getPublicReport(count, spec, false, null, columnsToIgnore);
     }
     
     /**
@@ -145,13 +139,9 @@ public class PublicPortalService {
  * @param fundingType 1 for commitment 2 for disbursements
  * @return
  */
-    public static JsonBean getDonorFunding(PublicReportFormParameters config, Integer count,
+    public static PublicTopData getDonorFunding(PublicReportFormParameters config, Integer count,
             Integer months,Integer fundingType) {
-        // TODO Auto-generated method stub
-        JsonBean result = new JsonBean();
         String measureName=null;
-        List<JsonBean> content = new ArrayList<JsonBean>();
-        result.set("donorFunding", content);
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetDonorFunding", ArConstants.DONOR_TYPE);
         spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
@@ -173,34 +163,33 @@ public class PublicPortalService {
         applyFilterRules(config, spec, months);
 
         SettingsUtils.applySettings(spec, config.getSettings(), true);
-        getPublicReport(count, result, content, spec, true, measureName, null);
-        return result;
-
+        return getPublicReport(count, spec, true, measureName, null);
     }
     
     /** 
      * Generates the report and retrieves 'count' results
      * @param count the number of records to show
-     * @param result the JsonBean that will store 
-     * @param content 
      * @param spec report specification
      * @param calculateSubTotal if we should calculate the subtotal for the measure
      * @param measureName Measure to use for subTotal -  we may need to receive an array of measures
      * @param columnsToIgnore a list of columns to not include into the output
      */
-    private static void getPublicReport(Integer count, JsonBean result, List<JsonBean> content, 
+    private static PublicTopData getPublicReport(Integer count,
             ReportSpecificationImpl spec, boolean calculateSubTotal, String measureName,
             Set<String> columnsToIgnore) {
         GeneratedReport report = EndpointUtils.runReport(spec); 
         
-        result.set("numberformat", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT));
-        result.set("Currency", spec.getSettings().getCurrencyCode());
-        
+        String numberFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
+        String currency = spec.getSettings().getCurrencyCode();
+
+        Map<String, String> headers = new LinkedHashMap<>();
+        Map<String, BigDecimal> totals = new LinkedHashMap<>();
+        List<Map<String, String>> topData = new ArrayList<>();
+
         if (report != null 
             && report.reportContents != null && report.reportContents.getChildren() != null) {
             // provide header titles by order Id
-            Map<String, String> headersToId = new HashMap<String, String>(report.leafHeaders.size());
-            Map<String, String> headers = new LinkedHashMap<String, String>(report.leafHeaders.size());
+            Map<String, String> headersToId = new HashMap<>(report.leafHeaders.size());
             Iterator<ReportColumn> colIter = spec.getColumns().iterator();
             for (ReportOutputColumn leafHeader : report.leafHeaders) {
                 final String columnName = colIter.hasNext() ? 
@@ -211,7 +200,6 @@ public class PublicPortalService {
                 headers.put(id, leafHeader.columnName);
                 headersToId.put(leafHeader.columnName, id);
             }
-            result.set("headers", headers);
             // provide the top projects data
             if (count != null) {
                 count = Math.min(count, report.reportContents.getChildren().size());
@@ -224,11 +212,11 @@ public class PublicPortalService {
             int countCounter = count;
             while (countCounter > 0) {
                 ReportArea data = iter.next();
-                JsonBean jsonData = new JsonBean();
+                Map<String, String> rowData = new LinkedHashMap<>();
                 if (data.getContents().size() > 1) {
                     for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
                         if (columnsToIgnore == null || !columnsToIgnore.contains(cell.getKey().columnName)) {
-                            jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().displayedValue);
+                            rowData.put(headersToId.get(cell.getKey().columnName), cell.getValue().displayedValue);
                             if (calculateSubTotal) {
                                 if (cell.getKey().columnName.equals(measureName)) {
                                     total = total.add((BigDecimal) cell.getValue().value);
@@ -237,16 +225,17 @@ public class PublicPortalService {
                         }
                     }
                 }
-                content.add(jsonData);
+                topData.add(rowData);
                 countCounter--;
             }
-            result.set("Total " + measureName, total);
+            totals.put("Total " + measureName, total);
         }
-        result.set("count", count == null ? 0 : count);
+        count = count == null ? 0 : count;
+
+        return new PublicTopData(headers, totals, topData, count, numberFormat, currency);
     }
 
-    public static JsonBean getActivitiesPledgesCount(PublicReportFormParameters config) {
-        JsonBean activitiesPledgesCount = new JsonBean();
+    public static int getActivitiesPledgesCount(PublicReportFormParameters config) {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_activitiesPledgesCount",
                 ArConstants.DONOR_TYPE);
         spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
@@ -266,9 +255,9 @@ public class PublicPortalService {
                 Set<ReportOutputColumn> col = row.keySet();
 
                 for (ReportOutputColumn reportOutputColumn : col) {
-                    String columnValue = row.get(reportOutputColumn).displayedValue.toString();
+                    String columnValue = row.get(reportOutputColumn).displayedValue;
                     if (ColumnConstants.RELATED_PLEDGES.equals(reportOutputColumn.originalColumnName)) {
-                        if(columnValue!=null && !columnValue.equals("")){
+                        if (!columnValue.equals("")) {
                             count++;
                         }
                     }
@@ -276,8 +265,7 @@ public class PublicPortalService {
 
             }
         }
-        activitiesPledgesCount.set("ActivitiesWithPledgesCount", count);
-        return activitiesPledgesCount;
+        return count;
     }
 
     /**

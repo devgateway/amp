@@ -82,12 +82,12 @@ public class ActivityVersionUtil {
 
  
   
-    public  static String generateFormattedOutput(Output out) throws WorkerException{
-		// TODO Auto-generated method stub
-		return generateFormattedOutput( out, null);
-	}
+    public static String generateFormattedOutput(Output out) throws WorkerException {
+        // TODO Auto-generated method stub
+        return generateFormattedOutput(out, null);
+    }
 
-	public static String generateFormattedOutput( Output out, Output out1) throws WorkerException {
+    public static String generateFormattedOutput(Output out, Output out1) throws WorkerException {
     
 
         
@@ -177,8 +177,8 @@ public class ActivityVersionUtil {
                             } else {
                                 String text = auxOutput2.getValue()[i].toString();
                                 if (auxOutput2.getTranslateValue())
-                                    text = TranslatorWorker.translateText(text, langCode, site.getId());                                                                 
-                                ret.append(org.digijava.module.aim.util.DbUtil.filter(text));                                                               
+                                    text = TranslatorWorker.translateText(text, langCode, site.getId());
+                                ret.append(org.digijava.module.aim.util.DbUtil.filter(text));
                             }
                             if (markAsDifferent)
                                 ret.append("</font>");
@@ -233,31 +233,7 @@ public class ActivityVersionUtil {
     }
     
     
-    //yo
-    public static Long getPervValue(Long Activity) throws CannotGetLastVersionForVersionException {
-        try {
-            Session session = PersistenceManager.getSession();
-            String queryStr = "SELECT v.ampActivity.ampActivityId  FROM " +AmpActivityVersion.class.getName() +
-                    " v  WHERE v.ampActivityId=:Activity";
-            Query query     = session.createQuery(queryStr);
-            query.setLong("oldActivityId", Activity);
-            Long id     = (Long)query.uniqueResult();
-            return id;
-        } catch (Exception e) {
-            logger.error(e.getMessage() );
-            e.printStackTrace();
-            throw new CannotGetLastVersionForVersionException(e);
-        }
-    }
-
-    
-    
-    
-    
-    
-    
-
-    /**
+        /**
      * Create a copy of the {@link AmpActivityVersion} with all Collections linked with
      * it and ready to save.
      * 
@@ -371,10 +347,24 @@ public class ActivityVersionUtil {
     }
     
     
+    public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId) throws Exception {
+
+        Session session = PersistenceManager.getCurrentSession();
+        AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
+
+        AmpActivityVersion ampActivityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
+
+        Long activityTwoId = ampActivityTwo.getAmpActivityId();
+        return compareActivities(activityOneId, activityTwoId);
+    }
+     
+    
+    
 
     
-    public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId,Long activityTwoId ) throws Exception{ 
-	 Session session = PersistenceManager.getCurrentSession();
+    public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId, Long activityTwoId)
+            throws Exception {
+        Session session = PersistenceManager.getCurrentSession();
   AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
   
   Hibernate.initialize(ampActivityOne);
@@ -399,7 +389,8 @@ AmpActivityVersion  ampActivityTwo = (AmpActivityVersion) session.load(AmpActivi
       CompareOutput output = new CompareOutput();
        if (fields[i].isAnnotationPresent(VersionableFieldSimple.class)) {
           // Obtain "get" method from field.
-          Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(), AmpActivityVersion.class, "get");
+                Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(),
+                        AmpActivityVersion.class, "get");
            // Compare values from 2 versions.
           Object auxResult1 = auxMethod.invoke(ampActivityOne, null);
           Object auxResult2 = auxMethod.invoke(ampActivityTwo, null);
@@ -460,7 +451,8 @@ AmpActivityVersion  ampActivityTwo = (AmpActivityVersion) session.load(AmpActivi
                               null));
                        String output1 = (auxVersionable1 != null) ? ActivityVersionUtil.generateFormattedOutput(
                               auxVersionable1.getOutput()) : null;
-                      String output2 = (auxVersionable2 != null) ?
+                            String output2 = (auxVersionable2 != null)
+                                    ?
                               ActivityVersionUtil.generateFormattedOutput(auxVersionable2.getOutput()) : null;
                       output.setStringOutput(new String[]{output1, output2});
                       output.setOriginalValueOutput(new Object[]{auxResult1, auxResult2});
@@ -578,7 +570,8 @@ AmpActivityVersion  ampActivityTwo = (AmpActivityVersion) session.load(AmpActivi
                           if (!auxValue1.equals(auxValue2)) {
                               CompareOutput auxOutput = null;
                                if (auxVersionable1.getClass().getName().
-                                      equals("org.digijava.module.aim.dbentity.AmpFunding") &&
+                                            equals("org.digijava.module.aim.dbentity.AmpFunding")
+                                            &&
                                       auxVersionable2.getClass().getName().
                                               equals("org.digijava.module.aim.dbentity.AmpFunding")
                               ) {
@@ -668,38 +661,9 @@ AmpActivityVersion  ampActivityTwo = (AmpActivityVersion) session.load(AmpActivi
 }
  
     
-    public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId) throws Exception {
-	 Map<String, List<CompareOutput>> outputCollection;
-	 Long activityTwoId=0l;
-	 Session session = PersistenceManager.getCurrentSession();
-   AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
-   
-   Query qry = session.createQuery("SELECT act FROM " + AmpActivityVersion.class.getName() 
-           + " act WHERE act.ampActivityGroup.ampActivityGroupId = ? ORDER BY act.ampActivityId DESC");
-   qry.setParameter(0, ampActivityOne.getAmpActivityGroup().getAmpActivityGroupId());
-   List<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>(qry.list());
-   
-    	
-   Iterator <AmpActivityVersion>   itr = activities.iterator();
-   
-       while(itr.hasNext())
-       {
-       	AmpActivityVersion prevActivity = itr.next();
-       	
-       	Long activityTwo = prevActivity.getAmpActivityId();
-       	if(activityTwo<activityOneId)
-       	{
-       		activityTwoId=activityTwo;
-       		break;
-       	}
-       }
-    
-   
-   outputCollection=compareActivities( activityOneId,activityTwoId);
-   return outputCollection ;
-}
-    
-    private static void addAsDifferentIfNnoPresent(List<CompareOutput> outputCollection, Field[] fields, int i, VersionableCollection auxAnnotation, Collection auxCollection2, Iterator iter1) {
+     
+    private static void addAsDifferentIfNnoPresent(List<CompareOutput> outputCollection, Field[] fields, int i,
+            VersionableCollection auxAnnotation, Collection auxCollection2, Iterator iter1) {
     while (iter1.hasNext()) {
         int coincidence = 0;
         Object auxObject1 = iter1.next();
@@ -720,7 +684,8 @@ AmpActivityVersion  ampActivityTwo = (AmpActivityVersion) session.load(AmpActivi
     
     private static ActivityHistory getAuditHistory(AmpActivityVersion activity) {
         ActivityHistory auditHistory = null;
-         if (activity.getModifiedBy() == null || (activity.getUpdatedDate() == null && activity.getModifiedDate() == null)) {
+        if (activity.getModifiedBy() == null
+                || (activity.getUpdatedDate() == null && activity.getModifiedDate() == null)) {
             auditHistory = ActivityUtil.getModifiedByInfoFromAuditLogger(activity.getAmpActivityId());
         }
          return auditHistory;

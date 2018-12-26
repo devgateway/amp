@@ -58,13 +58,12 @@ public class CompareActivityVersions extends DispatchAction {
 
     private static Logger logger = Logger.getLogger(EditActivity.class);
     
-    ActivityVersionUtil avs = new ActivityVersionUtil();
-    
+       
     public ActionForward unspecified(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws java.lang.Exception {
     	
-        return compare(mapping, form, request, response);
+		return compare(mapping, form, request, response);
         
     }
     
@@ -75,7 +74,7 @@ public class CompareActivityVersions extends DispatchAction {
         	
         Session session = PersistenceManager.getRequestDBSession();
             
-        setAdvancemode(vForm, request);// to check the user is part of management workspace
+        setAdvancemode(vForm, request); 
      
           
         
@@ -105,10 +104,10 @@ public class CompareActivityVersions extends DispatchAction {
 
         vForm.setOutputCollection(new ArrayList<CompareOutput>());
       
-        vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId(),
+       vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId(),
           vForm.getActivityTwoId()));
        
-    vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId() ));
+    
         return mapping.findForward("forward");
     }
 

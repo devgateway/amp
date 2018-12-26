@@ -112,7 +112,7 @@ public class LuceneWorker {
                 try {
                     recreateIndext(module, context);
                 } catch (DgException e) {
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                 }
                 //Instead we can put modules in queue and create indexes later or in seperate thread.
             }else{

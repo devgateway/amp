@@ -192,7 +192,7 @@ public class DbUtil {
             programs = query.list();
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         AmpActivityProgramSettings sett = null;
         switch (programSetting) {

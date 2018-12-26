@@ -30,7 +30,7 @@ import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
+import org.digijava.kernel.ampapi.endpoints.dto.FilterValue;
 import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -146,10 +146,10 @@ public class ActivityService {
                     IdentifiedReportCell idReportCell = (IdentifiedReportCell) row.get(reportOutputColumn);
                     Set<Long> ids = idReportCell.entitiesIdsValues == null ? null : idReportCell.entitiesIdsValues.keySet();
                     if (reportOutputColumn.originalColumnName.equals(ColumnConstants.PRIMARY_SECTOR)) {
-                        List<SimpleJsonBean> sectors = new ArrayList<>();
+                        List<FilterValue> sectors = new ArrayList<>();
                         for (Long id : ids) {
                             AmpSector ampSector = SectorUtil.getAmpSector(id);
-                            SimpleJsonBean sector = new SimpleJsonBean();
+                            FilterValue sector = new FilterValue();
                             sector.setId(ampSector.getAmpSectorId());
                             sector.setCode(ampSector.getSectorCodeOfficial());
                             sector.setName(ampSector.getName());                        

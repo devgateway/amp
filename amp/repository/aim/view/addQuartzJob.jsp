@@ -299,7 +299,7 @@ function typeChanged(value){
                 
                   <html:text name="quartzJobManagerForm" readonly="true" property="startDateTime" styleId="txtStartDateTime" style="width:100px" styleClass="inp-text"/>
                	  
-                  <a id="clear1" href='javascript:clearDate(document.getElementById("txtStartDateTime"), "clear1")'>
+                  <a id="clear1" href='javascript:clearDate("txtStartDateTime")'>
 		<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 	</a>
 	<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("txtStartDateTime"),"clear1")'>
@@ -350,10 +350,10 @@ function typeChanged(value){
                  
      
 <html:text name="quartzJobManagerForm" readonly="true" property="endDateTime" styleId="txtEndDateTime" style="width:100px"  styleClass="inp-text"/>
-                   <a id="clear1" href='javascript:clearDate(document.getElementById("txtEndDateTime"), "clear1")'>
+                   <a id="clear2" href='javascript:clearDate("txtEndDateTime")'>
 		<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 	</a>
-	<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("txtEndDateTime"),"clear1")'>
+	<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("txtEndDateTime"),"clear2")'>
 		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">	</a>    
                                             </td>
                 </tr>

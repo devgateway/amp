@@ -145,6 +145,11 @@ Filters.prototype.showFilters	= function(reportContextId) {
 	this.fixZIndex("#new_mask", 3);
 };
 
+Filters.prototype.showNewFilters = function (reportContextId) {
+	widgetFilter.showFilters();
+	$('#filter-popup').show();
+};
+
 Filters.prototype.showSettings	= function(reportContextId) {
 	initFormatPopup();
 	this.saveFilters	= new SaveFilters(this, true);

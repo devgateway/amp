@@ -3,7 +3,9 @@ package org.digijava.kernel.services.sync;
 import static java.util.Collections.singletonMap;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.ACTIVITY_PROGRAM_SETTINGS;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.FEATURE_MANAGER;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.GLOBAL_SETTINGS;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.TRANSLATION;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACES;
 
 import java.sql.Timestamp;
 
@@ -37,7 +39,8 @@ public class SyncDAO implements InitializingBean {
                 "SELECT max(operation_time) "
                         + "FROM amp_offline_changelog "
                         + "WHERE entity_name in (:entities)",
-                singletonMap("entities", ImmutableList.of(FEATURE_MANAGER, TRANSLATION, ACTIVITY_PROGRAM_SETTINGS)),
+                singletonMap("entities", ImmutableList.of(FEATURE_MANAGER, TRANSLATION, ACTIVITY_PROGRAM_SETTINGS,
+                        GLOBAL_SETTINGS, WORKSPACES)),
                 Timestamp.class);
     }
 }

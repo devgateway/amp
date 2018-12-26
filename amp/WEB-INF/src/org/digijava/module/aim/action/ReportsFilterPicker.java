@@ -9,7 +9,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.*;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.InvalidReportContextException;
+import org.dgfoundation.amp.ar.ReportContextData;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
@@ -20,14 +25,45 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.ar.util.ReportsUtil;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.OrgTypeSkeleton;
 import org.digijava.module.aim.form.DynamicDateFilter;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.AmpMath;
+import org.digijava.module.aim.util.AmpThemeSkeleton;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.HierarchyListableUtil;
+import org.digijava.module.aim.util.LocationSkeleton;
+import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.util.OrgGroupSkeleton;
+import org.digijava.module.aim.util.OrganizationSkeleton;
+import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorSkeleton;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.aim.util.filters.DateListableImplementation;
 import org.digijava.module.aim.util.filters.GroupingElement;
@@ -43,7 +79,19 @@ import org.springframework.beans.BeanWrapperImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author mihai
@@ -163,8 +211,7 @@ public class ReportsFilterPicker extends Action {
             }
             
             // init form
-            if (request.getParameter("init") != null)
-            {
+            if (request.getParameter("init") != null) {
                 AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
                 FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
                 modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS, reportFilter);
@@ -172,24 +219,22 @@ public class ReportsFilterPicker extends Action {
             }
     
             String applyFormatValue = request.getParameter("applyFormat");
-            if (applyFormatValue != null)
-            {
-                if (applyFormatValue.equals("Reset"))
-                {
-                    // TODO-CONSTANTIN: reset is now done client-side. If done server-side, should handle non-english translations of "Reset" here!
+            if (applyFormatValue != null) {
+                if (applyFormatValue.equals("Reset")) {
+                    // TODO-CONSTANTIN: reset is now done client-side. If done server-side, should handle non-english
+                    // translations of "Reset" here!
                     // reset tab/report settings
                     AmpARFilter arf = createOrResetFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
                     return decideNextForward(mapping, filterForm, request, arf);
                     //return modeReset(mapping, form, request, response);
-                } else if (applyFormatValue.equals("true"))
-                {
+                } else if (applyFormatValue.equals("true")) {
                     AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
-                    return decideNextForward(mapping, filterForm, request, arf); // an AMP-y-hacky way of saying "please redraw the report without changing anything"
-                }
-                else
-                {
-                    if (!applyFormatValue.equals("Apply Format"))
+                    // an AMP-y-hacky way of saying "please redraw the report without changing anything"
+                    return decideNextForward(mapping, filterForm, request, arf);
+                } else {
+                    if (!applyFormatValue.equals("Apply Format")) {
                         logger.warn("unknown applyformat setting, assuming it is 'Apply Format': " + applyFormatValue);
+                    }
                     // apply tab/report settings
                     AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
                     return decideNextForward(mapping, filterForm, request, arf);

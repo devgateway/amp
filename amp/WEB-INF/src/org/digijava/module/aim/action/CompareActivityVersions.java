@@ -1,5 +1,4 @@
-package org.digijava.module.aim.action;
-import java.lang.reflect.Field;
+package org.digijava.module.aim.action;import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.digijava.module.aim.annotations.activityversioning.ActivityVersioningService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionErrors;
@@ -99,18 +97,16 @@ public class CompareActivityVersions extends DispatchAction {
         }
         vForm.setOutputCollection(new ArrayList<CompareOutput>()); 
         // Load the activities.
-        vForm.setOutputCollectionGrouped(ActivityVersioningService.compareActivities(vForm.getActivityOneId(),
-                vForm.getActivityTwoId()));
+       // vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId(),
+               // vForm.getActivityTwoId()));
     
         return mapping.findForward("forward");
     }
 
     private void modifyFundingOutputs (Map<String, List<CompareOutput>> outputGroupped) {
 
-
     }
 
-   
     public ActionForward enableMerge(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
@@ -347,5 +343,3 @@ public class CompareActivityVersions extends DispatchAction {
         vForm.setAdvancemode(!ispartofamanagetmentworkspace & iscurrentworkspacemanager);
     }
 }
-    
-    

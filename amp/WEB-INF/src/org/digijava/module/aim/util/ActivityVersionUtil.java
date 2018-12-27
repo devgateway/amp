@@ -86,6 +86,16 @@ import org.apache.commons.lang3.StringUtils;
 public class ActivityVersionUtil {
 
     private static Logger logger = Logger.getLogger(ActivityVersionUtil.class);
+    public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId) throws Exception {
+        Session session = PersistenceManager.getCurrentSession();
+       AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
+       AmpActivityVersion  ampActivityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
+       Long activityTwoId = ampActivityTwo.getAmpActivityId();
+       
+       
+       return compareActivities(activityOneId, activityTwoId);
+
+    }
     public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId, Long activityTwoId) throws Exception {
         Session session = PersistenceManager.getCurrentSession();
        AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);

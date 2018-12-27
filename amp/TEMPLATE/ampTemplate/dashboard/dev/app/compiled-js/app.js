@@ -28552,7 +28552,7 @@ module.exports = Backbone.Collection.extend({
     },
 
     _getGroup: function(definition, attrs) {
-        var group = definition.name;
+      var group = definition.name;
 	  if (attrs.id === Constants.FILTER_ID_ORGS && definition.name !== Constants.FILTER_NAME_DONOR) {
 		  group = Constants.ROLE;
         }
@@ -28583,7 +28583,7 @@ module.exports = Backbone.Collection.extend({
 	         	       id: def.name || def.id,
                         data: tree,
                         name: def.name,
-                        tab: def.tab,
+                        tab: attrs.tab,
                         ui: true,
                         group: self._getGroup(def, attrs),
                         empty: false
@@ -28599,43 +28599,6 @@ module.exports = Backbone.Collection.extend({
                 deferred.resolve();
             });
         });
-<<<<<<< HEAD
-
-        return deferred;
-    },
-
-    _createTree: function(data, definition) {
-        var self = this;
-        var dataCopy = jQuery.extend(true, {}, data);
-        var tree = [];
-
-        _.each(dataCopy, function(level1) {
-            var level1 = $.extend({}, level1);
-			  if (definition.filterIds) {
-            level1.filterId = definition.filterIds[0];
-            level1.level = Constants.LEVEL_ONE;
-
-            if (level1.children && level1.children.length > 0) {
-                level1.children = self._updateLevelData(level1, definition, Constants.LEVEL_TWO, definition.filterIds[1]);
-
-                _.each(level1.children, function(level2) {
-                    if (level2.children && level2.children.length > 0) {
-                        level2.children = self._updateLevelData(level2, definition, Constants.LEVEL_THREE, definition.filterIds[2]);
-
-                        _.each(level2.children, function(level3) {
-                            if (level3.children && level3.children.length > 0) {
-                                level3.children = self._updateLevelData(level3, definition, Constants.LEVEL_FOUR, definition.filterIds[3]);
-                                level3.children.map(function(item) {
-                                    item.children = [];  //ignore 4th level, filtering supports 3 levels
-                                });
-                            }
-
-                        })
-                    }
-
-                })
-            }
-=======
 	    
 	    return deferred;
 	  },
@@ -28686,28 +28649,15 @@ module.exports = Backbone.Collection.extend({
 		  return node.children.filter(function(item) {
 			  if (item.listDefinitionIds) {
 				  return item.listDefinitionIds.includes(definition.id);
->>>>>>> 169c48a37029bbc3520f9ccaeda239cbb05ed698
 			  }
-
-            tree.push(level1);
-        });
-
-        return tree;
-    },
-
-    _updateLevelData: function(node, definition, level, filterId) {
-        return node.children.filter(function(item) {
-            if (item.listDefinitionIds) {
-                return item.listDefinitionIds.includes(definition.id);
-            }
-            return true;
-        }).map(function(item) {
-            item.filterId = filterId;
-            item.level = level;
-            return item;
-        });
-
-    }
+			  return true;							  
+		  }).map(function(item) {
+			  item.filterId = filterId;
+			  item.level = level;
+			  return item;
+		  });	  
+  
+}
 });
 
 },{"../models/generic-filter-model":73,"../models/org-role-filter-model":74,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"../utils/constants":79,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],68:[function(require,module,exports){
@@ -30761,7 +30711,11 @@ module.exports = BaseFilterModel.extend({
     if (options.data) {
     	this.set('data', options.data);
     	this.getTree();
-    }        
+    }  
+   
+    if (options.group === Constants.LOCATIONS) {
+    	this.set('include-location-children', true);
+    }
   },
 
   // load tree if needed, else return what we already have..
@@ -31161,6 +31115,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var TreeNodeModel; // declare here to help with ref loop of collection and model
 var TreeNodeCollection = Backbone.Collection.extend({  model:TreeNodeModel });
+var Constants = require('../utils/constants');
 
 //TODO: propagation bug if mid level node is half filled and you 'deselect all' it won't propogate to children.
 
@@ -31220,10 +31175,22 @@ serialize: function(options) {
     	}
     	this._serializeChildren(tmpSerialized, children, options);
      } else {
-    	if (children.length > 0) {
-            //Until we refactor filters in 3.x we will serialize even if the whole tree is selected
-            this._serializeChildren(tmpSerialized, children, options);
-      } else {
+       // AMP-28683: Before checking if it has children, check if the "parent" is selected too.
+       if (this.get('selected')) {
+         if (this.get('filterId') && !this._isInIgnoreList(this.get('filterId')) ) {
+           tmpSerialized[this.get('filterId')] = (options.wholeModel? [this]:[this.id]);
+         } else {
+           tmpSerialized.unassigned = (options.wholeModel? [this]:[this.id]);
+         }
+       }
+    if (children.length > 0) {  
+    	  //if location filters and all children selected, serialize parent instead of serializing each child
+    	  if (Constants.LOCATIONS === options.group  && this.get('numSelected') === this.get('numPossible')) {       		  
+       		  tmpSerialized[this.get('filterId')] = (options.wholeModel? [this]:[this.id]);     	  
+       	  } else {
+       		  this._serializeChildren(tmpSerialized, children, options);  
+       	  }            
+     } else {
     	  //no children so just return self.    	  
     	  if (this.get('selected')) {
     		  if (this.get('filterId') && !this._isInIgnoreList(this.get('filterId')) ) {
@@ -31234,6 +31201,7 @@ serialize: function(options) {
     	  }
       }
    }
+     
    this._mergeUnassigned(tmpSerialized);
    return tmpSerialized;
 },
@@ -31400,7 +31368,7 @@ _serializeChildren: function(tmpSerialized, children, options){
 
 module.exports = TreeNodeModel;
 
-},{"backbone":"backbone","underscore":"underscore"}],78:[function(require,module,exports){
+},{"../utils/constants":79,"backbone":"backbone","underscore":"underscore"}],78:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -31604,9 +31572,11 @@ var constants = {
     ALL_FILTERS_URL: '/rest/nifilters',
     ACTIVITY_BUDGET_LIST: 'ActivityBudgetList',
     TYPE_OF_ASSISTANCE: 'type-of-assistance',
+    TYPE_OF_ASSISTANCE_NAME: 'Type Of Assistance',
     MODE_OF_PAYMENT: 'mode-of-payment',
     EXPENDITURE_CLASS: 'expenditure-class',
     FINANCING_INSTRUMENT: 'financing-instrument',
+    FINANCING_INSTRUMENT_NAME:'Financing Instrument',
     FUNDING_STATUS: 'funding-status',
     EFFECTIVE_FUNDING_DATE: 'effective-funding-date',
     FUNDING_CLOSING_DATE: 'funding-closing-date',
@@ -31616,6 +31586,7 @@ var constants = {
     PERFORMANCE_ALERT_LEVEL: 'performance-alert-level',
     PERFORMANCE_ALERT_TYPE: 'performance-alert-type',
     APPROVAL_STATUS: 'approval-status',
+    ACTIVITY_STATUS: 'Activity Status',
     PROGRAMS: 'Programs',
     SECTORS: 'Sectors',
     DONOR: 'Donor',
@@ -31632,7 +31603,14 @@ var constants = {
     DATE_RANGE_VALUES: 'DATE-RANGE-VALUES',
     YEAR_SINGLE_VALUE: 'YEAR-SINGLE-VALUE',
     CONTEXT_DASHBOARD: 'DASHBOARD',
-    CONTEXT_GIS: 'GIS'
+    CONTEXT_GIS: 'GIS',
+    FUNDING_ORGANIZATIONS: 'Funding Organizations',
+    ACTIVITY: 'Activity',
+    ALL_AGENCIES: 'All Agencies',
+    FINANCIALS: 'Financial',        
+    OTHERS: 'Other',
+    LOCATION: 'Location',
+    SECTOR: 'Sector'
 };
 
 module.exports = constants;
@@ -31855,7 +31833,7 @@ module.exports = Backbone.View.extend({
 
   createTranslator: function(force) {
     var self = this;
-    var filterTranslateKeys = JSON.parse("{\n  \"amp.gis:title-Country\": \"Country\",\n  \"amp.gis:title-Region\": \"Region\",\n  \"amp.gis:title-Zone\": \"Zone\",\n  \"amp.gis:title-District\": \"District\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:pane-filters-search\": \"Go\",\n  \"amp.gis:pane-filters-select\": \"select all\",\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\n  \"amp.gis:pane-filters-Sectors\": \"Sectors\",\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\n  \"amp.gis:pane-filters-Location\": \"Location\",\n  \"amp.gis:pane-filters-Other\": \"Other\",\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\n  \"amp.gis:pane-subfilters-ComponentFundingOrganization\": \"Component Funding Organization\",\n  \"amp.gis:pane-subfilters-ComponentSecondResponsibleOrganization\": \"Component Second Responsible Organization\",\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\n  \"amp.gis:pane-subfilters-RegionalGroup\": \"Regional Group\",\n  \"amp.gis:pane-subfilters-SectorGroup\": \"Sector Group\",\n  \"amp.gis:pane-subfilters-TertiarySectors\": \"Tertiary Sectors\",\n  \"amp.gis:pane-subfilters-FinancingInstruments\": \"Financing Instruments\",\n  \"amp.gis:pane-filters-all\": \"all\",\n  \"amp.gis:button-reset\": \"Reset\",\n  \"amp.gis:button-cancel\": \"Cancel\",\n  \"amp.gis:button-apply\": \"Apply\",\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\",\n  \"amp.gis:date-from\": \"From\",\n  \"amp.gis:date-until\": \"Until\",\n  \"amp.gis:error-loading-data\": \"An error occcured while loading filters data\"\n}\n");
+    var filterTranslateKeys = JSON.parse("{\n  \"amp.gis:title-Country\": \"Country\",\n  \"amp.gis:title-Region\": \"Region\",\n  \"amp.gis:title-Zone\": \"Zone\",\n  \"amp.gis:title-District\": \"District\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:pane-filters-search\": \"Go\",\n  \"amp.gis:pane-filters-select\": \"select all\",\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\n  \"amp.gis:pane-filters-Sectors\": \"Sectors\",\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\n  \"amp.gis:pane-filters-Location\": \"Location\",\n  \"amp.gis:pane-filters-Other\": \"Other\",\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\n  \"amp.gis:pane-subfilters-ComponentFundingOrganization\": \"Component Funding Organization\",\n  \"amp.gis:pane-subfilters-ComponentSecondResponsibleOrganization\": \"Component Second Responsible Organization\",\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\n  \"amp.gis:pane-subfilters-RegionalGroup\": \"Regional Group\",\n  \"amp.gis:pane-subfilters-SectorGroup\": \"Sector Group\",\n  \"amp.gis:pane-subfilters-TertiarySectors\": \"Tertiary Sectors\",\n  \"amp.gis:pane-subfilters-FinancingInstruments\": \"Financing Instruments\",\n  \"amp.gis:pane-filters-all\": \"all\",\n  \"amp.gis:button-reset\": \"Reset\",\n  \"amp.gis:button-cancel\": \"Cancel\",\n  \"amp.gis:button-apply\": \"Apply\",\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\",\n  \"amp.gis:date-from\": \"From\",\n  \"amp.gis:date-until\": \"Until\",\n  \"amp.gis:error-loading-data\": \"An error occcured while loading filters data\",\n  \"amp.gis:include-location-children\": \"Include locations with children\"\n}\n");
     // setup any popovers as needed...
     self.popovers = self.$('[data-toggle="popover"]');
     self.popovers.popover();
@@ -31916,45 +31894,36 @@ module.exports = Backbone.View.extend({
     this.$('.filter-titles a:first').tab('show');
   },
 
-
   _getFilterList: function() {
     return this.allFilters.load();
   },
 
   _createFilterViews: function(tmpModel) {
-     switch (tmpModel.get('group')) {
-      case Constants.ACTIVITY_BUDGET_LIST:
-      case Constants.TYPE_OF_ASSISTANCE:
-      case Constants.MODE_OF_PAYMENT:
-      case Constants.EXPENDITURE_CLASS:
-      case Constants.FINANCING_INSTRUMENT:
-      case Constants.FUNDING_STATUS:
-      case Constants.EFFECTIVE_FUNDING_DATE:
-      case Constants.FUNDING_CLOSING_DATE:
-      case Constants.CONCESSIONALITY_LEVEL:
-      case Constants.ON_OFF_TREASURY_BUDGET:
+	 switch (tmpModel.get('tab')) {
+      case Constants.FINANCIALS:
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;
-      case Constants.STATUS:
-      case Constants.PERFORMANCE_ALERT_LEVEL:
-      case Constants.PERFORMANCE_ALERT_TYPE:
-      case Constants.APPROVAL_STATUS:
+      case Constants.ACTIVITY:
         this.filterViewsInstances.activity.filterCollection.add(tmpModel);
         break;
       case Constants.PROGRAMS:
         this.filterViewsInstances.programs.filterCollection.add(tmpModel);
         break;
-      case Constants.SECTORS:
+      case Constants.SECTOR:
         this.filterViewsInstances.sectors.filterCollection.add(tmpModel);
         break;
-      case Constants.DONOR:
+      case Constants.FUNDING_ORGANIZATIONS:
       case Constants.PLEDGES_DONORS:
-    	this.filterViewsInstances.donors.filterCollection.add(tmpModel);
+    	  if (tmpModel.get('group') === Constants.ROLE) {
+    		  this.filterViewsInstances.allAgencies.filterCollection.add(tmpModel);  
+    	  } else {
+    		  this.filterViewsInstances.donors.filterCollection.add(tmpModel);
+    	  }    	
         break;
-      case Constants.ROLE:
+      case Constants.ALL_AGENCIES:
         this.filterViewsInstances.allAgencies.filterCollection.add(tmpModel);
         break;
-      case Constants.LOCATIONS:
+      case Constants.LOCATION:
         this.filterViewsInstances.locations.filterCollection.add(tmpModel);
         break;
       case Constants.PLEDGES_SECTORS:
@@ -31968,7 +31937,6 @@ module.exports = Backbone.View.extend({
         this.filterViewsInstances.pledgesLocations.filterCollection.add(tmpModel);
         break;
       default:
-        console.warn(tmpModel.get('group'));
         this.filterViewsInstances.others.filterCollection.add(tmpModel);
     }
 	
@@ -32021,9 +31989,9 @@ module.exports = Backbone.View.extend({
     var self = this;
     var serializedFilters = {filters:{}};
 
+   
     this.allFilters.each(function(filter) {
-      // TODO: build a util for bettermerge that concat's array if
-      // duplicate keys in objects...
+      options.group = filter.get('group');     
       if (filter.get('id') || filter.url) {   
         if (filter.get('modelType') === Constants.DATE_RANGE_VALUES || filter.get('modelType') === Constants.YEAR_SINGLE_VALUE) {
           _.extend(serializedFilters.filters, filter.serialize(options));
@@ -32039,6 +32007,7 @@ module.exports = Backbone.View.extend({
           }
           _.extend(serializedFilters.filters, serialized);
         }
+       
       }
     });
 
@@ -32048,6 +32017,8 @@ module.exports = Backbone.View.extend({
         delete serializedFilters.filters[k];
       }
     });
+    
+    serializedFilters['include-location-children'] = this.getIncludeLocationChildren();
 
     return serializedFilters;
   },
@@ -32068,6 +32039,10 @@ module.exports = Backbone.View.extend({
             filter.deserialize(blob);
           }
         }
+        
+        if (filter.get('group')  === Constants.LOCATIONS && !_.isUndefined(filtersObject['include-location-children']) ) {
+        	filter.set('include-location-children', filtersObject['include-location-children']);
+        }      
       });
     } else {
       console.warn('could not deserialize blob:', blob);
@@ -32116,7 +32091,7 @@ module.exports = Backbone.View.extend({
 	  var dateFormatSetting = this.settings.get('default-date-format');
 	  if(dateFormatSetting){			
 			var foundMapping =_.findWhere(this.dateFormatMappings, {ampformat: dateFormatSetting});
-			if(foundMapping){
+			if (foundMapping) {
 				this.dFormat = foundMapping.datepickerformat;
 			}
 	  }	  
@@ -32143,10 +32118,20 @@ module.exports = Backbone.View.extend({
       this.deserialize(this.filterStash, {silent: true});
     }
     this.trigger('cancel', this.filterStash);
+  },
+  getIncludeLocationChildren: function() {
+	  var includeChildren = false;
+	  var locationFilter = this.allFilters.filter(function(filter) {
+		  return filter.get('group') === Constants.LOCATIONS; 
+	  })[0];
+	  
+	  if (locationFilter) {
+		includeChildren = locationFilter.get('include-location-children');
+	  }
+	  
+	  return includeChildren;      
   }
 });
-
-
 },{"../../../../../reamp/tools/log":102,"../collections/all-filters-collection":67,"../models/general-settings":72,"../utils/constants":79,"../utils/date-utils":80,"../views/top-level-filter-view":84,"amp-translate":100,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],83:[function(require,module,exports){
 
 var _ = require('underscore');
@@ -32154,8 +32139,8 @@ var _ = require('underscore');
 // var GenericFilterModel = require('../models/generic-filter-model');
 var TreeNodeView = require('../tree/tree-node-view');
 var BaseFilterView = require('../views/base-filter-view');
-var Template = "<% if (!empty) { %>\n\t<div class=\"search-form\">\n\t  <div class=\"input-group form-group\">\n\t    <input type=\"text\" data-i18n=\"[placeholder]amp.gis:pane-filters-search-placeholder\" class=\"form-control search-text\" placeholder=\"Search...\">\n\t    <span class=\"input-group-btn\">\n\t      <button data-i18n=\"amp.gis:pane-filters-search\" class=\"btn btn-success\">Go</button>\n\t    </span>\n\t  </div><!-- /input-group -->\n\t</div>\n\t<div class=\"toggle-all\">\n\t  <em>\n\t    <div class=\"toggle-all-div\"><a href=\"#\" data-i18n=\"amp.gis:pane-filters-select\" class=\"select-all\" >select\n\t\t\tall</a></div> /\n\t\t<div class=\"toggle-all-div\"><a href=\"#\"  data-i18n=\"amp.gis:pane-filters-deselect\" class=\"select-none\" >deselect all</a></div>\n\t  </em>\n\t</div>\n\t\n\t<div class=\"tree tree-container\" style=\"\"></div><!--display:none;-->\n<% } else { %>\n\t<span data-i18n='amp.gis:pane-subfilters-empty'></span>\n<% } %>\n";
-
+var Template = "<% if (!empty) { %>\n\t<div class=\"search-form\">\n\t  <div class=\"input-group form-group\">\n\t    <input type=\"text\" data-i18n=\"[placeholder]amp.gis:pane-filters-search-placeholder\" class=\"form-control search-text\" placeholder=\"Search...\">\n\t    <span class=\"input-group-btn\">\n\t      <button data-i18n=\"amp.gis:pane-filters-search\" class=\"btn btn-success\">Go</button>\n\t    </span>\n\t  </div><!-- /input-group -->\n\t</div>\t\n\t<div class=\"toggle-all\">\n\t<% if (isLocationFilter) {%>\n\t  <div class=\"toggle-nav\">\t   \n\t \t <input checked=<%= obj['include-location-children'] ? \"checked\" : \"\" %> type=\"checkbox\" class=\"include-children-toggle\"><label data-i18n=\"amp.gis:include-location-children\">Include locations with children</label>\n\t  </div>\n\t<% } %>\n\t  <em>\n\t    <div class=\"toggle-all-div\"><a href=\"#\" data-i18n=\"amp.gis:pane-filters-select\" class=\"select-all\" >select\n\t\t\tall</a></div> /\n\t\t<div class=\"toggle-all-div\"><a href=\"#\"  data-i18n=\"amp.gis:pane-filters-deselect\" class=\"select-none\" >deselect all</a></div>\n\t  </em>\n\t</div>\n\t\n\t<div class=\"tree tree-container <%= isLocationFilter ? \"location-tree-container\" : \"\" %>\" style=\"\"></div><!--display:none;-->\n<% } else { %>\n\t<span data-i18n='amp.gis:pane-subfilters-empty'></span>\n<% } %>\n";
+var Constants = require('../utils/constants');
 
 // This is a generic model for filters. It assumes a tree structure.
 // If you don't want a tree structure just extend base-filter
@@ -32166,6 +32151,7 @@ module.exports = BaseFilterView.extend({
   _loaded: null,
 
   events:{
+	  'change .include-children-toggle' : 'onIncludeLocationChildrenChange'
   },
 
   initialize:function(options) {
@@ -32189,6 +32175,10 @@ module.exports = BaseFilterView.extend({
         console.warn('no tree for: ', self.model);
       }
     });
+  },
+  
+  onIncludeLocationChildrenChange: function(event) {
+	  this.model.set('include-location-children', event.target.checked);
   },
 
   searchKeyUp: function(event) {
@@ -32227,9 +32217,10 @@ module.exports = BaseFilterView.extend({
     var self = this;
     BaseFilterView.prototype.renderFilters.apply(this);
 
-    this.model.getTree().then(function(treeModel) {
-      self.$el.html(self.template(self.model.toJSON()));
-
+    this.model.getTree().then(function(treeModel) {     
+      var json = self.model.toJSON();
+      json.isLocationFilter = json.group === Constants.LOCATIONS ? true : false; 
+      self.$el.html(self.template(json));
       // add event listeners
       self.$('.select-none').on('click', function() {self._selectNone(); return false;}); //return false to stop page refresh.
       self.$('.select-all').on('click', function() {self._selectAll(); return false;}); //return false to stop page refresh.
@@ -32268,7 +32259,7 @@ module.exports = BaseFilterView.extend({
 });
 
 
-},{"../tree/tree-node-view":78,"../views/base-filter-view":81,"underscore":"underscore"}],84:[function(require,module,exports){
+},{"../tree/tree-node-view":78,"../utils/constants":79,"../views/base-filter-view":81,"underscore":"underscore"}],84:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');

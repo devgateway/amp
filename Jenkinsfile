@@ -21,7 +21,6 @@ println "Branch: ${branch}"
 println "Pull request: ${pr}"
 println "Tag: ${tag}"
 
-def codeVersion
 def dbVersion
 def country
 def ampUrl
@@ -48,14 +47,10 @@ def updateGitHubCommitStatus(context, message, state) {
 
 // Run checkstyle only for PR builds
 stage('Checkstyle') {
-    if (branch == null) {
+    when (branch == null) {
         node {
             try {
                 checkout scm
-
-                // Find AMP version
-                codeVersion = readMavenPom(file: 'amp/pom.xml').version
-                println "AMP Version: ${codeVersion}"
 
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
 
@@ -105,10 +100,18 @@ stage('Quick Test') {
     }
 }
 
+def codeVersion
+
 stage('Build') {
     // Find list of countries which have database dumps compatible with ${codeVersion}
     def countries
     node {
+        checkout scm
+
+        // Find AMP version
+        codeVersion = readMavenPom(file: 'amp/pom.xml').version
+        println "AMP Version: ${codeVersion}"
+
         countries = sh(returnStdout: true,
                        script: "ssh sulfur 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
                 .trim()

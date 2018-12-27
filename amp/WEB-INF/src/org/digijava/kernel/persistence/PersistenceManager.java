@@ -42,6 +42,7 @@ import org.digijava.kernel.config.HibernateClass;
 import org.digijava.kernel.config.HibernateClasses;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.startup.HibernateSessionRequestFilter;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -154,8 +155,6 @@ public class PersistenceManager {
     }
 
     /**
-     * TODO indeed, unmanaged session
-     *
      * Opens a new Hibernate session. Use this with caution.
      * For servlets you will not require to use this, use {@link #getSession()} instead!
      * This method returns you an unmanaged Hibernate session, that you need to close yourself!
@@ -526,16 +525,23 @@ public class PersistenceManager {
     private static final ThreadLocal<Boolean> CURRENT_SESSION_IS_MANAGED = ThreadLocal.withInitial(() -> false);
 
     /**
-     * Execute a block of code in a hibernate transaction. At the end the code will commit and close the session.
-     * In case of exception, it will rollback the transaction.
-     * This is done in order ensure that thread bound sessions are closed.
+     * Execute runnable and ensures that if an active hibernate transaction exists it is committed or rolled back.
+     * Will always close the current session before returning.
+     *
+     * <p>If the runnable throws an exception, then transaction is rolled back and same exception is thrown again.</p>
+     *
+     * <p>Transaction is not created before calling the runnable. For actual semantics when the transaction is created
+     * please check {@link #getSession()}.</p>
+     *
+     * <p>Neither active session nor transaction are nested. Calling this method recursively will ensure that active
+     * transaction and session are closed upon exiting the method. This is not very useful nor a good way to reason
+     * about nested transaction semantics but this is how it worked before. Known to be used by
+     * {@link HibernateSessionRequestFilter} which is itself invoked recursively during error processing.</p>
      *
      * @param runnable the runnable to execute with open session in view context
      */
     public static void inTransaction(Runnable runnable) {
-        if (CURRENT_SESSION_IS_MANAGED.get()) {
-            throw new IllegalStateException("Recursive transaction semantics not defined!");
-        }
+        boolean prevManagedFlag = CURRENT_SESSION_IS_MANAGED.get();
         try {
             CURRENT_SESSION_IS_MANAGED.set(true);
             runnable.run();
@@ -544,14 +550,13 @@ public class PersistenceManager {
             throw e;
         } finally {
             PersistenceManager.endSessionLifecycle();
-            CURRENT_SESSION_IS_MANAGED.set(false);
+            CURRENT_SESSION_IS_MANAGED.set(prevManagedFlag);
         }
     }
 
     /**
-     * returns the current Session. If there is none, creates one and returns it
-     * upon creating a new session, a transaction is created
-     * @return
+     * Returns the current Session. If there is none, creates one and returns it
+     * upon creating a new session, a transaction is created.
      */
     public static Session getSession() {
         boolean currentSessionIsManaged = CURRENT_SESSION_IS_MANAGED.get();

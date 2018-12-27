@@ -1,5 +1,6 @@
 package org.digijava.kernel.persistence;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
@@ -39,9 +40,12 @@ public class PersistenceManagerTest {
 
     @Test
     public void testSuccessfulTransaction() {
-        PersistenceManager.inTransaction(this::saveTestReport);
-        PersistenceManager.inTransaction(() -> assertTrue(testReportExists()));
-        PersistenceManager.inTransaction(this::deleteTestReport);
+        try {
+            PersistenceManager.inTransaction(this::saveTestReport);
+            PersistenceManager.inTransaction(() -> assertTrue(testReportExists()));
+        } finally {
+            PersistenceManager.inTransaction(this::deleteTestReport);
+        }
     }
 
     @Test
@@ -54,7 +58,7 @@ public class PersistenceManagerTest {
 
             fail("Exception was swallowed!");
         } catch (RuntimeException e) {
-            // ignore
+            assertEquals("trigger rollback", e.getMessage());
         }
 
         PersistenceManager.inTransaction(() -> assertFalse(testReportExists()));
@@ -65,31 +69,45 @@ public class PersistenceManagerTest {
         PersistenceManager.getSession();
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testRecursiveInTransactionSemanticsAsNotYetDefined() {
-        PersistenceManager.inTransaction(() -> PersistenceManager.inTransaction(() -> {}));
+    @Test
+    public void testRecursiveTransactions() {
+        try {
+            PersistenceManager.inTransaction(() -> {
+                saveTestReport();
+                PersistenceManager.inTransaction(() -> {
+                    assertTrue(testReportExists());
+                });
+                assertTrue(testReportExists());
+            });
+
+            PersistenceManager.inTransaction(() -> assertTrue(testReportExists()));
+        } finally {
+            PersistenceManager.inTransaction(this::deleteTestReport);
+        }
     }
 
     @Test
     public void testSessionIsClosedAndDisconnected() {
-        AtomicReference<Session> sessionRef = new AtomicReference<>();
+        try {
+            AtomicReference<Session> sessionRef = new AtomicReference<>();
 
-        PersistenceManager.inTransaction(() -> {
-            saveTestReport();
+            PersistenceManager.inTransaction(() -> {
+                saveTestReport();
 
-            Session session = PersistenceManager.getSession();
-            sessionRef.set(session);
+                Session session = PersistenceManager.getSession();
+                sessionRef.set(session);
 
-            assertTrue(session.isOpen());
-            assertTrue(session.isConnected());
-            assertTrue(session.isDirty());
-        });
+                assertTrue(session.isOpen());
+                assertTrue(session.isConnected());
+                assertTrue(session.isDirty());
+            });
 
-        Session session = sessionRef.get();
-        assertFalse(session.isOpen());
-        assertFalse(session.isConnected());
-
-        PersistenceManager.inTransaction(this::deleteTestReport);
+            Session session = sessionRef.get();
+            assertFalse(session.isOpen());
+            assertFalse(session.isConnected());
+        } finally {
+            PersistenceManager.inTransaction(this::deleteTestReport);
+        }
     }
 
     @Test

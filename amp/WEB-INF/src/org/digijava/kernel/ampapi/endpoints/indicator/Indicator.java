@@ -118,7 +118,7 @@ public class Indicator {
     @ApiModelProperty("Color ramp id to use. See `GET /indicator/amp-color`. "
             + "During update this property will be updated only if not null.")
     @JsonView(LayerView.class)
-    private Integer colorRampId;
+    private Long colorRampId;
     
     @ApiModelProperty("The workspaces this indicator is shared with. "
             + "During update this property will be updated only if not null.")
@@ -287,11 +287,11 @@ public class Indicator {
         this.gapAnalysis = gapAnalysis;
     }
     
-    public Integer getColorRampId() {
+    public Long getColorRampId() {
         return colorRampId;
     }
     
-    public void setColorRampId(Integer colorRampId) {
+    public void setColorRampId(Long colorRampId) {
         this.colorRampId = colorRampId;
     }
     

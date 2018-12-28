@@ -19,7 +19,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
-import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.MetaTextCell;
@@ -27,7 +26,6 @@ import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
-import org.digijava.module.aim.action.GetAllFlags;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -465,8 +463,9 @@ public class ColumnReportData extends ReportData<Column> {
                 //logger.info("Removed previously added column "+name+" for filtering purposes");
             }
         }
-        
-        boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
+
+        String removeEmptyRows = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.REPORTS_REMOVE_EMPTY_ROWS);
+        boolean dateFilterHidesProjects = "true".equalsIgnoreCase(removeEmptyRows);
         boolean dateFilterUsed = (getReportMetadata() != null) && (getReportMetadata().getReportGenerator() != null) && (getReportMetadata().getReportGenerator().getFilter() != null) && (getReportMetadata().getReportGenerator().getFilter().hasDateFilter());
         
         if (dateFilterHidesProjects && dateFilterUsed)
@@ -668,7 +667,7 @@ public class ColumnReportData extends ReportData<Column> {
         
                 return sortedIds;
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             return sortActivitiesByAge(allIds);
         }
         

@@ -44,22 +44,36 @@ public class HibernateSessionRequestFilter implements Filter {
             executeInHibernateWrapper(request, response, chain);
         } finally {
             if (request instanceof HttpServletRequest) {
-                DocumentManagerUtil.closeJCRSessions((HttpServletRequest) request);
+                DocumentManagerUtil.logoutJcrSessions((HttpServletRequest) request);
             }
         }
     }
 
     private void executeInHibernateWrapper(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+
         try {
-            chain.doFilter(request, response);
-        } catch (Throwable ex) {
-            // log exception because this/finally block may throw another exception
-            logger.error("Error occurred during request processing.", ex);
-            PersistenceManager.rollbackCurrentSessionTx();
-            throw ex;
-        } finally {
-            PersistenceManager.endSessionLifecycle();
+            PersistenceManager.inTransaction(() -> {
+                try {
+                    chain.doFilter(request, response);
+                } catch (IOException | ServletException e) {
+                    throw new WrappedEx(e);
+                }
+            });
+        } catch (WrappedEx e) {
+            if (e.getCause() instanceof IOException) {
+                throw (IOException) e.getCause();
+            } else if (e.getCause() instanceof ServletException) {
+                throw (ServletException) e.getCause();
+            } else {
+                throw e;
+            }
+        }
+    }
+
+    private static class WrappedEx extends RuntimeException {
+        WrappedEx(Throwable throwable) {
+            super(throwable);
         }
     }
 

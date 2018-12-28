@@ -123,4 +123,5 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
 }

@@ -10,6 +10,7 @@ import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportEnvBuilder;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
@@ -24,7 +25,7 @@ public class NiReportsEngineForTesting extends NiReportsEngine {
     final ExceptionConsumer<NiReportsEngine> runnable;
 
     public NiReportsEngineForTesting(NiReportsSchema schema, Function<ReportSpecificationImpl, ReportSpecification> reportSpecSupplier, ExceptionConsumer<NiReportsEngine> runnable) {
-        super(schema, reportSpecSupplier.apply(EMPTY_REPORT_SPEC_SUPPLIER.get()));
+        super(schema, reportSpecSupplier.apply(EMPTY_REPORT_SPEC_SUPPLIER.get()), ReportEnvBuilder.dummy());
         this.runnable = runnable;
     }
 

@@ -62,8 +62,7 @@ public class InputValidatorProcessor {
                 new ValidFieldValidator(),
                 new InputTypeValidator(),
                 new RequiredValidator(),
-                new ValueValidator(),
-                new WebLinkValidator());
+                new ValueValidator());
     }
 
     private final List<InputValidator> validators;

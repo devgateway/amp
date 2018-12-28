@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
-import clover.org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionMessage;
@@ -234,7 +234,7 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
                     String errorMsg = eliminatedPrefix + translatedBody + eliminatedSuffix;
                     newErrors.add((property == null) ? Globals.MESSAGE_KEY : property, new ActionMessage(errorMsg, false));
                 } catch (Exception e) {
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                 }
             }
 

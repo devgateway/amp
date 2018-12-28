@@ -42,6 +42,7 @@ import org.digijava.kernel.config.HibernateClass;
 import org.digijava.kernel.config.HibernateClasses;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.startup.HibernateSessionRequestFilter;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -162,14 +163,6 @@ public class PersistenceManager {
     public static Session openNewSession() {
         org.hibernate.Session openSession = sf.openSession();
         return openSession;
-    }
-
-    /**
-     * Gets the current thread session
-     * @return
-     */
-    public static Session getCurrentSession() {
-        return sf.getCurrentSession();
     }
 
     /**
@@ -526,11 +519,50 @@ public class PersistenceManager {
     }
 
     /**
-     * returns the current Session. If there is none, creates one and returns it
-     * upon creating a new session, a transaction is created
-     * @return
+     * A flag set to true when current session is managed. I.e. there are guarantees that the session will be closed
+     * after some arbitrary work is done.
+     */
+    private static final ThreadLocal<Boolean> CURRENT_SESSION_IS_MANAGED = ThreadLocal.withInitial(() -> false);
+
+    /**
+     * Execute runnable and ensures that if an active hibernate transaction exists it is committed or rolled back.
+     * Will always close the current session before returning.
+     *
+     * <p>If the runnable throws an exception, then transaction is rolled back and same exception is thrown again.</p>
+     *
+     * <p>Transaction is not created before calling the runnable. For actual semantics when the transaction is created
+     * please check {@link #getSession()}.</p>
+     *
+     * <p>Neither active session nor transaction are nested. Calling this method recursively will ensure that active
+     * transaction and session are closed upon exiting the method. This is not very useful nor a good way to reason
+     * about nested transaction semantics but this is how it worked before. Known to be used by
+     * {@link HibernateSessionRequestFilter} which is itself invoked recursively during error processing.</p>
+     *
+     * @param runnable the runnable to execute with open session in view context
+     */
+    public static void inTransaction(Runnable runnable) {
+        boolean prevManagedFlag = CURRENT_SESSION_IS_MANAGED.get();
+        try {
+            CURRENT_SESSION_IS_MANAGED.set(true);
+            runnable.run();
+        } catch (Throwable e) {
+            PersistenceManager.rollbackCurrentSessionTx();
+            throw e;
+        } finally {
+            PersistenceManager.endSessionLifecycle();
+            CURRENT_SESSION_IS_MANAGED.set(prevManagedFlag);
+        }
+    }
+
+    /**
+     * Returns the current Session. If there is none, creates one and returns it
+     * upon creating a new session, a transaction is created.
      */
     public static Session getSession() {
+        boolean currentSessionIsManaged = CURRENT_SESSION_IS_MANAGED.get();
+        if (!currentSessionIsManaged) {
+            throw new IllegalStateException("Called outside of managed session context.");
+        }
         Session sess = PersistenceManager.sf.getCurrentSession();
         Transaction transaction = sess.getTransaction();
         if (transaction == null || !transaction.isActive()) {

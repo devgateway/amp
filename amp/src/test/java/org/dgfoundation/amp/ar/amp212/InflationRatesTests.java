@@ -20,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.hibernate.Session;
 import org.junit.Test;
 
 /**
@@ -55,9 +56,9 @@ public class InflationRatesTests extends AmpReportingTestCase {
     }
 
     private void saveInflation(final AmpInflationRate inflationRate) {
-        PersistenceManager.getSession().save(inflationRate);
-        PersistenceManager.getSession().flush();
-        PersistenceManager.endSessionLifecycle();
+        Session session = PersistenceManager.getSession();
+        session.save(inflationRate);
+        session.flush();
     }
     
     @Test

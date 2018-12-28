@@ -12,6 +12,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.ActivityUtil;
 
 import java.sql.Connection;
@@ -129,7 +130,7 @@ public final class SummaryChangesService {
             List<AmpTeamMember> ampTeamMembers = TeamUtil.getAmpTeamMembers(ampTeamMemberId.value);
             for (AmpTeamMember atm : ampTeamMembers) {
                 TeamUtil.setupFiltersForLoggedInUser(TLSUtils.getRequest(), atm);
-                TeamMemberUtil.getActivitiesWsByTeamMemberComputed(activitiesWs, atm);
+                TeamMemberUtil.getActivitiesWsByTeamMember(activitiesWs, atm);
             }
         }
         return activitiesWs;
@@ -204,7 +205,8 @@ public final class SummaryChangesService {
                                 + "     WHERE isolated = FALSE "
                                 + "       OR isolated IS NULL ) ",
                         Constants.ACTIVITY_NEEDS_APPROVAL_STATUS,
-                        Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS);
+                        ApprovalStatus.APPROVED.getDbName(),
+                        ApprovalStatus.STARTED_APPROVED.getDbName());
 
                 ArrayList<FilterParam> params = new ArrayList<FilterParam>();
                 params.add(new FilterParam(DateUtils.addDays(fromDate, -1), Types.TIMESTAMP));

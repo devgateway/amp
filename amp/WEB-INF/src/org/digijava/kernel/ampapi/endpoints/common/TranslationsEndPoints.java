@@ -20,8 +20,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.digijava.kernel.ampapi.endpoints.dto.FilterValue;
 import org.digijava.kernel.ampapi.endpoints.dto.Language;
-import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.entity.Locale;
@@ -106,14 +106,14 @@ public class TranslationsEndPoints {
             value = "Gets the list of available languages for a site when multilingual is enabled.",
             notes = "When multilingual is disabled it returns the effective language (e.g. either the currently-set "
                     + "one OR the default one (\"en\")). ")
-    public List<SimpleJsonBean> getMultilingualLanguages() {
-        List<SimpleJsonBean> languages = new ArrayList<SimpleJsonBean>();
+    public List<FilterValue> getMultilingualLanguages() {
+        List<FilterValue> languages = new ArrayList<FilterValue>();
         List<String[]> locales = TranslationManager.getLocale(PersistenceManager.getSession());
         boolean onlyCurrentLanguage = !ContentTranslationUtil.multilingualIsEnabled();
         for(String[] localeRecord:locales) {
             boolean entryRelevant = onlyCurrentLanguage ? localeRecord[0].equals(TLSUtils.getEffectiveLangCode()) : true;
             if (entryRelevant) {
-                languages.add(new SimpleJsonBean(localeRecord[0], localeRecord[1]));
+                languages.add(new FilterValue(localeRecord[0], localeRecord[1]));
             }
         }
         return languages;

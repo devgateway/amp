@@ -32,30 +32,32 @@ public class StandaloneAMPInitializer {
     private static boolean SETUP = false;
     
     public static synchronized void initialize() {
-        try {
-            if (SETUP) {
-                return;
+        PersistenceManager.inTransaction(() -> {
+            try {
+                if (SETUP) {
+                    return;
+                }
+
+                configureLog4j();
+                HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
+
+                ResourceStreamHandlerFactory.installIfNeeded();
+
+                DigiConfigManager.initialize("./repository");
+                PersistenceManager.initialize(false, null);
+                ContentRepositoryManager.initialize();
+
+                TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
+                InternationalizedViewsRepository.i18Models.size(); // force init outside of testcases
+
+                populateMockRequest();
+                configureMockTranslationRequest();
+
+                SETUP = true;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-
-            configureLog4j();
-            HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-
-            ResourceStreamHandlerFactory.installIfNeeded();
-
-            DigiConfigManager.initialize("./repository");
-            PersistenceManager.initialize(false, null);
-            ContentRepositoryManager.initialize();
-            
-            TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
-            InternationalizedViewsRepository.i18Models.size(); // force init outside of testcases
-
-            populateMockRequest();
-            configureMockTranslationRequest();
-
-            SETUP = true;
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+        });
     }
 
     public static MockHttpServletRequest populateMockRequest() {

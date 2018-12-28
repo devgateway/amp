@@ -113,7 +113,7 @@ public class FieldsEnumerator {
             apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
             apiField.setImportable(true);
         }
-        
+
         if (interchangeable.percentageConstraint()){
             apiField.setPercentage(true);
         }
@@ -165,7 +165,7 @@ public class FieldsEnumerator {
             }
 
             // FIXME remove condition that excludes activties
-            if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {
+            if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getType())) {
                 Class type = getType(field, context);
                 List<APIField> children = getAllAvailableFields(type, context);
                 if (InterchangeUtils.isCollection(field)) {

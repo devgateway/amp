@@ -1214,7 +1214,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         String validation = DbUtil.getValidationFromTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
         
         if (activity.getDraft() != null&& !activity.getDraft()&&!("validationOff".equals(validation))) {
-            if (isApproved(newActivity)) {
+            if (ActivityUtil.isApproved(newActivity)) {
                 if (modifiedBy != null) {
                     AmpTeamMemberRoles role = modifiedBy.getAmpMemberRole();
                     if(!role.isApprover()){
@@ -1255,12 +1255,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             target.appendJavaScript("window.onbeforeunload = null; window.location.replace('/aim/');");
             target.add(feedbackPanel);
         }
-    }
-
-    private boolean isApproved(AmpActivityVersion activity) {
-        String approvalStatus = activity.getApprovalStatus();
-        return Constants.APPROVED_STATUS.equals(approvalStatus)
-                || Constants.STARTED_APPROVED_STATUS.equals(approvalStatus);
     }
 
     private void quickMenu(IModel<AmpActivityVersion> am, AbstractReadOnlyModel<List<AmpComponentPanel>> listModel) {

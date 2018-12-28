@@ -134,37 +134,8 @@ public class ConfigLoaderListener
             
             checkOtherVMParameters();
 
-            emulateOpenSessionInView(SiteCache::getInstance);
-            DigiPolicy policy = new DigiPolicy();
-            policy.install();
-
-            if (DigiConfigManager.getConfig().getSmtp().isEnable()) {
-                MailSpoolManager.initialize();
-            }
-
-            // Initialize modules
-            Map listeners = getModuleContextInitializers();
-            Iterator iter = listeners.values().iterator();
-            while (iter.hasNext()) {
-                ServletContextListener item = (ServletContextListener) iter.next();
-                item.contextInitialized(sce);
-            }
-            sce.getServletContext().setAttribute(MODULE_LISTENERS, listeners);
-            
-
-            // Initialize services
-            ServiceManager.getInstance().init(serviceContext, 1);
-
-            ViewConfigFactory.initialize(sce.getServletContext());
-            
-            // patches translations to hash code keys if this is not already done. 
-            tats = new TrnAccesTimeSaver();
-            exec = Executors.newSingleThreadExecutor();
-            exec.execute(tats);
-          
-            PersistenceManager.getSession().getTransaction().commit();
-        }
-        catch (Exception ex) {
+            PersistenceManager.inTransaction(() -> continueInitialization(sce, serviceContext));
+        } catch (Exception ex) {
             logger.debug("Unable to initialize", ex);
             try {
                 BuildVersionVerifier.getInstance(path).writeVersionToStartupLog(STARTUP_LOGGER, STARTUP_FAILED_MESSAGE + ex.getMessage(), path);
@@ -182,20 +153,37 @@ public class ConfigLoaderListener
         }
     }
 
-    /**
-     * We're emulating open session in view as if the code was executed from an http request.
-     * This is done in order to avoid deadlocks.
-     * @param runnable the runnable to execute with open session in view context
-     */
-    private void emulateOpenSessionInView(Runnable runnable) {
+    private void continueInitialization(ServletContextEvent sce, ServiceContext serviceContext) {
         try {
-            runnable.run();
-        } catch (RuntimeException e) {
-            logger.error("Exception while emulating open session in view.", e);
-            PersistenceManager.rollbackCurrentSessionTx();
-            throw e;
-        } finally {
-            PersistenceManager.endSessionLifecycle();
+            SiteCache.getInstance();
+            DigiPolicy policy = new DigiPolicy();
+            policy.install();
+
+            if (DigiConfigManager.getConfig().getSmtp().isEnable()) {
+                MailSpoolManager.initialize();
+            }
+
+            // Initialize modules
+            Map listeners = getModuleContextInitializers();
+            Iterator iter = listeners.values().iterator();
+            while (iter.hasNext()) {
+                ServletContextListener item = (ServletContextListener) iter.next();
+                item.contextInitialized(sce);
+            }
+            sce.getServletContext().setAttribute(MODULE_LISTENERS, listeners);
+
+
+            // Initialize services
+            ServiceManager.getInstance().init(serviceContext, 1);
+
+            ViewConfigFactory.initialize(sce.getServletContext());
+
+            // patches translations to hash code keys if this is not already done.
+            tats = new TrnAccesTimeSaver();
+            exec = Executors.newSingleThreadExecutor();
+            exec.execute(tats);
+        } catch (Exception e) {
+            throw new RuntimeException("Init failed", e);
         }
     }
 

@@ -250,39 +250,28 @@ public class IndicatorUtils {
         return ail;
     }
     
-    /**
-     * 
-     * @param indicatorId
-     * @param input
-     * @param isGapAnalysis
-     * @return
-     */
-    public static Indicator getIndicatorsAndLocationValues(Long indicatorId, PerformanceFilterParameters input,
-            boolean isGapAnalysis) {
-        AmpIndicatorLayer indicator = (AmpIndicatorLayer) DbUtil.getObjectOrNull(AmpIndicatorLayer.class, indicatorId);
+    public static Indicator getIndicatorsAndLocationValues(Long indicatorId) {
+        AmpIndicatorLayer indicator = getAmpIndicatorLayer(indicatorId);
+        return getIndicatorsAndLocationValues(indicator);
+    }
+
+    public static Indicator doGapAnalysis(Long indicatorId, PerformanceFilterParameters input) {
+        AmpIndicatorLayer indicator = getAmpIndicatorLayer(indicatorId);
+        return doGapAnalysis(indicator, input);
+    }
+
+    private static AmpIndicatorLayer getAmpIndicatorLayer(Long indicatorId) {
+        AmpIndicatorLayer indicator = DbUtil.getObjectOrNull(AmpIndicatorLayer.class, indicatorId);
         if (indicator == null) {
             JsonBean error = ApiError.toError(IndicatorErrors.INVALID_ID.withDetails(String.valueOf(indicatorId)));
             throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, error);
         }
-        return getIndicatorsAndLocationValues(indicator, input, isGapAnalysis);
+        return indicator;
     }
-    
-    public static Indicator getIndicatorsAndLocationValues(AmpIndicatorLayer indicator,
-            PerformanceFilterParameters input, boolean isGapAnalysis) {
-     
-        GapAnalysis gapAnalysis = isGapAnalysis ? new GapAnalysis(indicator, input) : null;
-        boolean doingGapAnalysis = gapAnalysis != null && gapAnalysis.isReadyForGapAnalysis();
-        if (doingGapAnalysis) {
-            logger.info("Generating Gap Analysis");
-        } else if (isGapAnalysis) {
-            logger.error("Requested gap analysis, but it cannot be done => providing non-gap analysis data");
-        }
-        
-        String unit = indicator.getUnit(); 
-        if (doingGapAnalysis) {
-            unit = String.format("%s / %s", gapAnalysis.getCurrencyCode(), unit); 
-        }
-        
+
+    private static Indicator getIndicatorsAndLocationValues(AmpIndicatorLayer indicator) {
+        String unit = indicator.getUnit();
+
         // build general indicator info
         Indicator response = new Indicator();
         response.setName(TranslationUtil.getTranslatableFieldValue(
@@ -295,7 +284,7 @@ public class IndicatorUtils {
                 IndicatorEPConstants.DESCRIPTION, indicator.getDescription(), indicator.getId()));
         response.setAdmLevelId(indicator.getAdmLevel().getId());
         response.setAdmLevelName(indicator.getAdmLevel().getLabel());
-        response.setGapAnalysis(doingGapAnalysis);
+        response.setGapAnalysis(false);
         response.setIndicatorTypeId(indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
         response.setZeroCategoryEnabled(indicator.getZeroCategoryEnabled());
 
@@ -304,9 +293,6 @@ public class IndicatorUtils {
         for (AmpLocationIndicatorValue locIndValue : indicator.getIndicatorValues()) {
             String geoCode = locIndValue.getLocation().getGeoCode();
             BigDecimal value = BigDecimal.valueOf(locIndValue.getValue());
-            if (doingGapAnalysis) {
-                value = gapAnalysis.getGapAnalysisAmount(value, geoCode);
-            }
 
             values.add(new IndicatorValue(
                     locIndValue.getLocation().getId(),
@@ -315,6 +301,32 @@ public class IndicatorUtils {
                     locIndValue.getLocation().getName()));
         }
         response.setValues(values);
+        return response;
+    }
+
+    public static Indicator doGapAnalysis(AmpIndicatorLayer indicator, PerformanceFilterParameters input) {
+
+        GapAnalysis gapAnalysis = new GapAnalysis(indicator, input);
+        boolean doingGapAnalysis = gapAnalysis.isReadyForGapAnalysis();
+
+        Indicator response = getIndicatorsAndLocationValues(indicator);
+
+        if (doingGapAnalysis) {
+            logger.info("Generating Gap Analysis");
+
+            String unit = String.format("%s / %s", gapAnalysis.getCurrencyCode(), response.getUnit());
+            response.setUnit(
+                    TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.UNIT, unit, response.getId()));
+
+            response.setGapAnalysis(true);
+
+            for (IndicatorValue value : response.getValues()) {
+                value.setValue(gapAnalysis.getGapAnalysisAmount(value.getValue(), value.getGeoId()));
+            }
+        } else {
+            logger.error("Requested gap analysis, but it cannot be done => providing non-gap analysis data");
+        }
+
         return response;
     }
     

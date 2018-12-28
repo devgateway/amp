@@ -60,7 +60,7 @@
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Regional Observations" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Line Ministries" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Line Ministry Observations" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display> 
 <module:display name="MONITORING AND EVALUATING"></module:display> 
 <module:display name="Measures" parentModule="REPORTING"></module:display> 
@@ -218,7 +218,7 @@
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Issues" module="Issues"></feature:display>
 <feature:display name="Regional Observations" module="Regional Observations"></feature:display>
-<feature:display name="Line Ministries" module="Line Ministries"></feature:display>
+<feature:display name="Line Ministry Observations" module="Line Ministry Observations"></feature:display>
 <feature:display name="Logframe" module="Previews"></feature:display> 
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
 <feature:display name="Message tab" module="Messages"></feature:display>
@@ -303,7 +303,10 @@
 <field:display name="Regional Observations Actors" feature="Regional Observations"></field:display>
 <field:display name="Regional Observations Date" feature="Regional Observations"></field:display>
 
-<field:display name="Line Ministries Observations" feature="Line Ministries"></field:display>
+<field:display name="Line Ministry Observations" feature="Line Ministry Observations"></field:display>
+<field:display name="Line Ministry Observations Actors" feature="Line Ministry Observations"></field:display>
+<field:display name="Line Ministry Observations Date" feature="Line Ministry Observations"></field:display>
+<field:display name="Line Ministry Observations Measures" feature="Line Ministry Observations"></field:display>
 
 <field:display feature="Activity Pledges" name="Activity Pledges Title"></field:display>
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
@@ -339,6 +342,7 @@
 <field:display feature="Identification" name="Objective"></field:display> 
 <field:display feature="Identification" name="Organizations and Project ID"></field:display> 
 <field:display feature="Identification" name="Project Title"></field:display>
+<field:display feature="Identification" name="Project Management"></field:display>
 <field:display feature="Identification" name="Related Pledges"></field:display>
 <field:display feature="Identification" name="Only show projects related to pledges"></field:display>
 <field:display feature="Identification" name="Purpose"></field:display> 

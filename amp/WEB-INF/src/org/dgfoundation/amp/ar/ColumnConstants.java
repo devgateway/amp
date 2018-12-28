@@ -142,6 +142,10 @@ public class ColumnConstants {
     public static final String ISSUE_DATE = "Issue Date";
     public static final String ISSUES___MEASURES___ACTORS = "Issues / Measures / Actors";
     public static final String JOINT_CRITERIA = "Joint Criteria";
+    public static final String LINE_MINISTRY_OBSERVATIONS = "Line Ministry Observations";
+    public static final String LINE_MINISTRY_OBSERVATIONS_ACTORS = "Line Ministry Observations Actors";
+    public static final String LINE_MINISTRY_OBSERVATIONS_DATE = "Line Ministry Observations Date";
+    public static final String LINE_MINISTRY_OBSERVATIONS_MEASURES = "Line Ministry Observations Measures";
     public static final String MATURITY = "Loan Maturity Date";
     public static final String MEASURES_TAKEN = "Measures Taken";
     public static final String MINISTRY_CODE = "Ministry Code";
@@ -275,6 +279,7 @@ public class ColumnConstants {
     public static final String PROJECT_DESCRIPTION = "Project Description";
     public static final String PROJECT_IMPACT = "Project Impact";
     public static final String PROJECT_IMPLEMENTING_UNIT = "Project Implementing Unit";
+    public static final String PROJECT_MANAGEMENT = "Project Management";
     public static final String PROJECT_PERIOD = "Project Period";
     public static final String PROJECT_TITLE = "Project Title";
     public static final String PROPOSED_APPROVAL_DATE = "Proposed Approval Date";
@@ -291,6 +296,9 @@ public class ColumnConstants {
     public static final String REGIONAL_GROUP_GROUP = "Regional Group Group";   
     public static final String REGIONAL_GROUP_DEPARTMENT_DIVISION = "Regional Group Department/Division";
     public static final String REGIONAL_OBSERVATIONS = "Regional Observations";
+    public static final String REGIONAL_OBSERVATIONS_ACTORS = "Regional Observations Actors";
+    public static final String REGIONAL_OBSERVATIONS_DATE = "Regional Observations Date";
+    public static final String REGIONAL_OBSERVATIONS_MEASURES = "Regional Observations Measures Taken";
     public static final String RELATED_PLEDGES = "Related Pledges";
     public static final String REPORTING_SYSTEM = "Reporting System";
     public static final String RESPONSIBLE_ORGANIZATION = "Responsible Organization";

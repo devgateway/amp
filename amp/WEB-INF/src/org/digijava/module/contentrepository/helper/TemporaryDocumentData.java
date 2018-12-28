@@ -61,7 +61,7 @@ public class TemporaryDocumentData extends DocumentData {
                 try {
                     this.setName( new String(formFile.getFileName().getBytes("UTF8"), "UTF8"));
                 } catch (UnsupportedEncodingException e) {
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                 }
                 this.setTrueUploadedFileSize( formFile.getFileSize() );
                 this.setFileSize( DocumentManagerUtil.bytesToMega(trueUploadedFileSize) );

@@ -16,23 +16,26 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  *
  */
 public interface RunNode {
+
+    int DEFAULT_INDENT = 3;
+
     public String getName();
     public Set<? extends RunNode> getSubNodes();
     public long getTotalTime();
-    
+
     /** value is either java class (String / Integer / Long / blabla) OR java collection (List, Set, Map) */
     public Map<String, Object> getMeta();
-    
-    /** 
+
+    /**
      * @param key if a value with the given key already exists, will throw exception. Also, "name", "subNodes" and "totalTime" are disallowed keys
      * @param value if it is null, then this call does nothing
      */
     public void putMeta(String key, Object value);
-    
+
     public default JsonBean getDetails() {
         return asJsonBean();
     }
-        
+
     /**
      * renders the node as Json-ready bean
      * @return
@@ -44,7 +47,7 @@ public interface RunNode {
         for (Map.Entry<String, Object> entry : this.getMeta().entrySet()) {
             result.set(entry.getKey(), entry.getValue());
         }
-        
+
         List<JsonBean> subNodes = new ArrayList<JsonBean>();
         if (getSubNodes() != null)
             for (RunNode subNode : getSubNodes()) {
@@ -55,7 +58,7 @@ public interface RunNode {
 
         return result;
     }
-    
+
     public default String asString(IntFunction<String> prefixBuilder, LongFunction<String> numberFormatter, int depth) {
         StringBuilder subnodesString = getSubNodes() == null || getSubNodes().isEmpty() ? null : new StringBuilder(", subNodes: [");
         if (subnodesString != null) {
@@ -79,7 +82,7 @@ public interface RunNode {
         bld.append("}");
         return bld.toString();
     }
-    
+
     /**
      * returns a description of the state in pseudo-json format
      * @param numberFormatter
@@ -88,11 +91,11 @@ public interface RunNode {
     public default String asFastString(LongFunction<String> numberFormatter) {
         return asString(z -> "", numberFormatter, 0);
     }
-    
+
     public default String asUserString(final int blanksPerLevel) {
         return asUserString(blanksPerLevel, duration -> String.format("%d ms", duration));
     }
-    
+
     public default String asUserString(final int blanksPerLevel, LongFunction<String> numberFormatter) {
         return asString(depth -> depth == 0 ? "" : ("\n" + StringUtils.repeat(" ", blanksPerLevel * (depth + 1))), numberFormatter, 0);
     }

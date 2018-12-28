@@ -113,7 +113,7 @@ public class FMSettingsMediator {
                     fmGroup = clazz.newInstance();
                     templateGroup.put(fmGroupName, fmGroup);
                 } catch (Exception e) {
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                 }
             } else {
                 // fallback to the generic settings

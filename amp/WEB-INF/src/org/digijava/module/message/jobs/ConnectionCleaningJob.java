@@ -9,10 +9,19 @@ public abstract class ConnectionCleaningJob implements Job {
     
     @Override public final void execute(JobExecutionContext context) throws JobExecutionException {
         try {
-            executeInternal(context);
-        }
-        finally {
-            PersistenceManager.endSessionLifecycle();
+            PersistenceManager.inTransaction(() -> {
+                try {
+                    executeInternal(context);
+                } catch (JobExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        } catch (RuntimeException e) {
+            if (e.getCause() instanceof JobExecutionException) {
+                throw (JobExecutionException) e.getCause();
+            } else {
+                throw e;
+            }
         }
     }
     

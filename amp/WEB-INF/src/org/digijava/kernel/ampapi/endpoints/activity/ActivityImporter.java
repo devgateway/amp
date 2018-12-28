@@ -5,7 +5,6 @@ import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,7 +38,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -105,9 +103,8 @@ public class ActivityImporter extends ObjectImporter {
     // latest activity id in case there was attempt to update older version of an activity
     private Long latestActivityId;
 
-    public ActivityImporter() {
-        super(new InputValidatorProcessor(InputValidatorProcessor.getActivityValidators()),
-                AmpFieldsEnumerator.getPrivateEnumerator().getActivityFields());
+    public ActivityImporter(List<APIField> apiFields) {
+        super(new InputValidatorProcessor(InputValidatorProcessor.getActivityValidators()), apiFields);
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {

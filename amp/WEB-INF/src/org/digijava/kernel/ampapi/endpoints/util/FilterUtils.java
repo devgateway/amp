@@ -23,7 +23,6 @@ import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.digijava.kernel.ampapi.endpoints.common.FiltersEndpoint;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersProcessor;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -264,12 +263,7 @@ public class FilterUtils {
         List<String> s = new ArrayList<String>();
         for (Object obj : theArray) {
             if (obj != null) {
-                if(FiltersEndpoint.ANY_BOOLEAN.equals(obj.toString())) {
-                    s.add(FilterRule.FALSE_VALUE);
-                    s.add(FilterRule.TRUE_VALUE);
-                } else {
-                    s.add(obj.toString());
-                }
+                s.add(obj.toString());
             }
         }
         return s;
@@ -385,8 +379,7 @@ public class FilterUtils {
     }
     
     public static String getSettingbyName(Map<String, Object> settings, String value) {
-        String retval = settings == null ? null : (String) settings.get(value);
-        return retval;
+        return settings == null ? null : (String) settings.get(value);
     }
 
     /**
@@ -407,7 +400,7 @@ public class FilterUtils {
                 ? spec.getSettings().getCalendar() : AmpARFilter.getDefaultCalendar();
 
         boolean shouldFilterDatesToBeConverted = false;
-        if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
+        if (calendarConverter instanceof AmpFiscalCalendar) {
             AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
             shouldFilterDatesToBeConverted = !calendar.getBaseCal().equals(BaseCalendar.BASE_GREGORIAN.getValue())
                     || calendar.getStartMonthNum() != 1 || calendar.getStartDayNum() != 1;
@@ -460,8 +453,6 @@ public class FilterUtils {
      * @return
      */
     private static FilterRule convertDateFilterRule(AmpFiscalCalendar sourceCalendar, FilterRule gregFilterRule) {
-        FilterRule ethFilterRule = null;
-
         Date gregStart = gregFilterRule.min == null ? null : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.min);
         Date gregEnd = gregFilterRule.max == null ? null : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.max);
 
@@ -469,14 +460,12 @@ public class FilterUtils {
         Date end = FiscalCalendarUtil.toGregorianDate(gregEnd, sourceCalendar);
 
         try {
-            ethFilterRule = DateFilterUtils.getDatesRangeFilterRule(ElementType.DATE,
+            return DateFilterUtils.getDatesRangeFilterRule(ElementType.DATE,
                     DateTimeUtil.toJulianDayNumber(start), DateTimeUtil.toJulianDayNumber(end),
                     DateTimeUtil.formatDateOrNull(start), DateTimeUtil.formatDateOrNull(end), false);
         } catch (AmpApiException e) {
             throw new RuntimeException(e);
         }
-
-        return ethFilterRule;
     }
 
     /**
@@ -499,7 +488,7 @@ public class FilterUtils {
                 }
                 filterRules.addDateRangeFilterRule(cal.getTime(), currentCal.getTime());
             } catch (AmpApiException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
 
             }
         }

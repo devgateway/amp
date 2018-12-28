@@ -19,9 +19,7 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiReportsEngineForTesting;
 import org.dgfoundation.amp.nireports.TestcasesReportsSchema;
-import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
-import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
@@ -30,20 +28,23 @@ import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSche
 import org.dgfoundation.amp.reports.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.testutils.ActivityIdsFetcher;
 import org.dgfoundation.amp.testutils.AmpTestCase;
+import org.dgfoundation.amp.testutils.InTransactionRule;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
-import org.junit.BeforeClass;
+import org.junit.Rule;
 
 public abstract class ReportingTestCase extends AmpTestCase {
     
     static protected int nrRunReports = 0;
-    
+
+    @Rule
+    public InTransactionRule inTransactionRule = new InTransactionRule();
+
     public static<K extends Cell> List<K> nicelySorted(Collection<K> in) {
         return AmpCollections.sorted(in, (a, b) -> {
             int delta = Long.compare(a.activityId, b.activityId);
@@ -71,24 +72,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
     public ReportSpecificationImpl buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
         return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria);
     }
-        
-    protected GeneratedReport runReportOnNiReports(ReportSpecification spec, String locale, List<String> entities,
-            Class<? extends ReportAreaImpl> areaType) {
-        try {
-            org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
-            if (TLSUtils.getRequest() == null)
-                TLSUtils.getThreadLocalInstance().request = mockRequest;
-            
-            TLSUtils.getRequest().setAttribute(ReportEnvironment.OVERRIDDEN_WORKSPACE_FILTER, new ActivityIdsFetcher(entities));
-            ReportExecutor generator = new NiReportsGenerator(AmpReportsSchema.getInstance(), false, null);
-            GeneratedReport res = generator.executeReport(spec);
-            return res;
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-            
+
     protected ReportSpecificationImpl buildActivityListingReportSpec(String name) {
         ReportSpecificationImpl spec = buildSpecification(name, 
                 Arrays.asList(ColumnConstants.PROJECT_TITLE), 
@@ -296,10 +280,5 @@ public abstract class ReportingTestCase extends AmpTestCase {
 //      NiReportExecutor executor = getExecutor(activityNames);
 //      return executor.executeReport(spec, outputBuilder);
 //  }
-
-    @BeforeClass
-    public static void setUp() {
-        StandaloneAMPInitializer.initialize();
-    }
 }
 

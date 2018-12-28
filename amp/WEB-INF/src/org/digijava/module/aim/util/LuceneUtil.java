@@ -99,6 +99,7 @@ public class LuceneUtil implements Serializable {
      */
     private static final long serialVersionUID = 15L;
 
+
     private static Logger logger = Logger.getLogger(LuceneUtil.class);
     /**
      * StandardAnalyzer used to analyse text 
@@ -145,8 +146,8 @@ public class LuceneUtil implements Serializable {
 
     public final static Integer SEARCH_MODE_AND = 1;
 
-    private static final boolean SEACH_TYPE_FUZZY = true;
-    private static final float MINIMUM_SIMILARITY = 0.5f;
+    private static final String FUZZY_SEARCH_FM_ENTRY = "Fuzzy Search";
+    private static final float DEFAULT_MINIMUM_SIMILARITY = 0.5f;
     private static final float MINIMUM_SIMILARITY_TO_NUMBERS = 0.99f;
 
     public static AmpLuceneIndexStamp getIdxStamp(String name) throws Exception{
@@ -1266,7 +1267,7 @@ public class LuceneUtil implements Serializable {
     }
 
     private static boolean isFuzzy() {
-        return SEACH_TYPE_FUZZY;
+        return FeaturesUtil.isVisibleField(FUZZY_SEARCH_FM_ENTRY);
     }
 
     private static float getMinimumSimilarity(String word, boolean isAmpId) {
@@ -1274,7 +1275,9 @@ public class LuceneUtil implements Serializable {
         if (isNumeric || isAmpId) {
             return MINIMUM_SIMILARITY_TO_NUMBERS;
         }
-        return MINIMUM_SIMILARITY;
+        float minimumSimilarity =
+                FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.FUZZY_SEARCH_DISTANCE).floatValue();
+        return minimumSimilarity != -1f ? minimumSimilarity : DEFAULT_MINIMUM_SIMILARITY;
     }
 
     public static Document[] search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry, String searchMode) {

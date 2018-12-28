@@ -16,7 +16,7 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
     //IATI-check: to be ignored
     private Long ampIssueId ;
 
-    @Interchangeable(fieldTitle = "Name", importable = true)
+    @Interchangeable(fieldTitle = "Name", label = "Issue", importable = true)
     private String name ;
 
     private AmpActivityVersion activity;

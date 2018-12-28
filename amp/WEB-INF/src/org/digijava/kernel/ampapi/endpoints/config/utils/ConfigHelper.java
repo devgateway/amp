@@ -182,7 +182,7 @@ public class ConfigHelper {
                 isValid = isValidNumber(Double.class, value);
                 if (isValid) {
                     Double number = Double.parseDouble(value);
-                    isValid =  number > 0D && number <= 1;
+                    isValid =  number >= 0D && number < 1;
                 }
                 break;
             case NULL_VALUE:

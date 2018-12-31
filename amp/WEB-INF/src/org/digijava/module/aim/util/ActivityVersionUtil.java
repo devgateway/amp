@@ -90,9 +90,8 @@ public class ActivityVersionUtil {
         Session session = PersistenceManager.getCurrentSession();
        AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
        AmpActivityVersion  ampActivityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
-       Long activityTwoId = ampActivityTwo.getAmpActivityId();
-       
-       
+       Long activityTwoId = ampActivityTwo.getAmpActivityId();       
+       //this returns
        return compareActivities(activityOneId, activityTwoId);
 
     }

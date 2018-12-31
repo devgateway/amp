@@ -262,6 +262,7 @@ public class ColumnConstants {
     public static final String RELATED_PLEDGES = "Related Pledges";
     
     public static final String RELATED_PROJECTS = "Related Projects";
+    public static final String PRIMARY_PROGRAM = "Primary Program";
     public static final String PRIMARY_PROGRAM_LEVEL_1 = "Primary Program Level 1";
     public static final String PRIMARY_PROGRAM_LEVEL_2 = "Primary Program Level 2";
     public static final String PRIMARY_PROGRAM_LEVEL_3 = "Primary Program Level 3";
@@ -316,6 +317,7 @@ public class ColumnConstants {
     public static final String RESPONSIBLE_ORGANIZATION_GROUPS = "Responsible Organization Groups";
     public static final String RESULTS = "Results";
     public static final String REVISED_PROJECT_AMOUNT = "Revised Project Amount";
+    public static final String SECONDARY_PROGRAM = "Secondary Program";
     public static final String SECONDARY_PROGRAM_LEVEL_1 = "Secondary Program Level 1";
     public static final String SECONDARY_PROGRAM_LEVEL_2 = "Secondary Program Level 2";
     public static final String SECONDARY_PROGRAM_LEVEL_3 = "Secondary Program Level 3";

@@ -10,7 +10,7 @@ import org.junit.Test;
  * @author Nadejda Mandrescu
  */
 public class UnitsSettingsUtilityTests extends AmpTestCase {
-    
+
     @Test
     public void testAmountUnitsValues() {
         assertEquals(AmpARFilter.AMOUNT_OPTION_IN_UNITS, AmountsUnits.AMOUNTS_OPTION_UNITS.code);

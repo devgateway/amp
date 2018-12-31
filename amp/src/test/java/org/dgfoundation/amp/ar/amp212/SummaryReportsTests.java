@@ -27,6 +27,10 @@ public class SummaryReportsTests extends ReportingTestCase {
     HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
     final static List<String> ACTS = Arrays.asList("TAC_activity_1", "Eth Water", "Unvalidated activity");
 
+    public SummaryReportsTests() {
+        inTransactionRule = null;
+    }
+
     /**
      * builds a summary report spec with given hiers, AC / AD as measures
      * @param hiers

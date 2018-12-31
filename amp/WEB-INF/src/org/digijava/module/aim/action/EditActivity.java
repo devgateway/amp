@@ -14,11 +14,9 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ARUtil;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.LocalizableLabel;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
@@ -32,7 +30,6 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
@@ -63,7 +60,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpContactsWorker;
 import org.digijava.module.aim.helper.BudgetStructure;
@@ -97,7 +93,6 @@ import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -108,9 +103,7 @@ import org.digijava.module.budget.helper.BudgetDbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.helper.DocumentData;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
@@ -119,7 +112,6 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
-import javax.jcr.Node;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -1623,7 +1615,7 @@ public class EditActivity extends Action {
                 } else {
                     //global validation is on
                     //only the team leader of the team that owns the activity has rights to validate it if cross team validation is off
-                    if (ActivityUtil.canValidateAcitivty(activity, teamMember)) {
+                    if (ActivityUtil.canValidateActivity(activity, teamMember)) {
                         eaForm.setButtonText("validate");
                     }
                 }

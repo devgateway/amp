@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.core.Response;
 
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -24,14 +23,12 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -375,41 +372,9 @@ public final class PreviewActivityService {
         return previewWorkspaces;
     }
     
-    public boolean isViewWorskpacesButtonVisible(Long ampActivityId) {
-        
-        TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
-        
-        if (teamMember.getTeamHead()) {
-            return true;
-        }
-        
-        try {
-            AmpActivityVersion activity = ActivityUtil.loadActivity(ampActivityId);
-            AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
-            
-            boolean crossTeamValidation = (appSettings != null && appSettings.getTeam() != null)
-                    ? appSettings.getTeam().getCrossteamvalidation() : false;
-    
-            //Check if cross team validation is enable
-            boolean crossTeamCheck = false;
-    
-            if (activity.getTeam() != null) {
-                if (crossTeamValidation) {
-                    crossTeamCheck = true;
-                } else {
-                    //check if the activity belongs to the team where the user is logged.
-                    if (teamMember.getTeamId() != null && activity.getTeam().getAmpTeamId() != null) {
-                        crossTeamCheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
-                    }
-                }
-    
-                return teamMember.isApprover() && crossTeamCheck;
-            }
-        } catch (DgException e) {
-            throw new RuntimeException(e);
-        }
-        
-        return false;
+    public boolean isViewWorkspacesButtonVisible(Long ampActivityId) throws DgException {
+        AmpActivityVersion activity = ActivityUtil.loadActivity(ampActivityId);
+        return ActivityUtil.isTeamMemberValidator(TeamMemberUtil.getLoggedInTeamMember(), activity);
     }
     
 }

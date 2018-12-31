@@ -305,7 +305,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @GET
     @Path("/{project-id}/preview/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "getPreviewWorkspaces", ui = false)
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getPreviewWorkspaces", ui = false)
     @ApiOperation(value = "Retrieve workspaces where the activity is visible.")
     public List<PreviewWorkspace> getPreviewWorkspaces(
             @ApiParam("the id of the activity")

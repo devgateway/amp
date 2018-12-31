@@ -36,7 +36,7 @@
 			<%}%>
 
 			<c:if test="${(sessionScope.currentMember != null)}">
-				<%if (PreviewActivityService.getInstance().isViewWorskpacesButtonVisible((Long)request.getAttribute("actId"))) { %>
+				<%if (PreviewActivityService.getInstance().isViewWorkspacesButtonVisible((Long)request.getAttribute("actId"))) { %>
 					<c:set var="trn"><digi:trn>View Workspaces</digi:trn></c:set>
 					<input type="button" class="buttonx_sm" onclick="javascript:viewWorkspaces(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/>
 				<%}%>

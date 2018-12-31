@@ -3092,9 +3092,17 @@ module.exports = ChartModel.extend({
 		
 		// Process params from heat-map/configs, in that EP we have defined each heatmap.
 		var configs = this.get('heatmap_config').models[0];
-		var thisChart = _.find(configs.get('charts'), function(item) {return item.name === self.get('name')});
-		var xColumn = self.get('xAxisColumn') !== '' ? self.get('xAxisColumn') : configs.get('columns')[thisChart.xColumns[0]].origName; // First column is default.
-		var yColumn = configs.get('columns')[thisChart.yColumns[0]].origName; // First column is default.
+		var thisChart = _.find(configs.get('charts'), function (item) {
+			return item.name === self.get('name');
+		});
+		var xColumn = self.get('xAxisColumn') !== '' ?
+			self.get('xAxisColumn') :
+			_.find(configs.get('columns'), function (item, i) {
+				return item.origName === thisChart.xColumns[0];
+			}).origName; // First column is default.
+		var yColumn = _.find(configs.get('columns'), function (item, i) {
+			return item.origName === thisChart.yColumns[0];
+		}).origName; // First column is default.
 		
 		// Check if we need to switch axis.
 		if (self.get('swapAxes') === true) {
@@ -3347,10 +3355,6 @@ module.exports = HeatmapsConfigCollection;
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
-
-var API_ID_KEY = 'mapId';
-
-
 module.exports = BackboneDash.Model.extend({
 
   defaults: {
@@ -3359,27 +3363,9 @@ module.exports = BackboneDash.Model.extend({
     stateBlob: undefined
   },
 
-  // parse and toJSON map the id field to mapId for the API.
-  parse: function(obj) {
-    if (_(obj).has(API_ID_KEY)) {
-      obj.id = obj[API_ID_KEY];
-      delete obj[API_ID_KEY];
-    }
-    return obj;
-  },
-
   initialize: function(attrs, options) {
     this.app = options.app;
     this.url = options.url;
-  },
-
-  toJSON: function() {
-    var copy = BackboneDash.Model.prototype.toJSON.apply(this, arguments);
-    if (_(copy).has('id')) {
-      copy[API_ID_KEY] = copy.id;
-      delete copy.id;
-    }
-    return copy;
   }
 
 }, {
@@ -3617,10 +3603,16 @@ module.exports = BackboneDash.View.extend({
             // Process params from heat-map/configs, in that EP we have defined each heatmap.
             var configs = self.model.get('heatmap_config').models[0];
             var thisChart = _.find(configs.get('charts'), function (item) {
-                return item.name === self.model.get('name')
+                return item.name === self.model.get('name');
             });
-            var xColumn = self.model.get('xAxisColumn') !== '' ? self.model.get('xAxisColumn') : configs.get('columns')[thisChart.xColumns[0]].origName; // First column is default.
-            var yColumn = configs.get('columns')[thisChart.yColumns[0]].origName; // First column is default.
+            var xColumn = self.model.get('xAxisColumn') !== '' ?
+                self.model.get('xAxisColumn') :
+                _.find(configs.get('columns'), function (item, i) {
+                    return item.origName === thisChart.xColumns[0];
+                }).origName; // First column is default.
+            var yColumn = _.find(configs.get('columns'), function (item, i) {
+                return item.origName === thisChart.yColumns[0];
+            }).origName; // First column is default.
 
             // Check if we need to switch axis.
             if (self.model.get('swapAxes') === true) {
@@ -4034,20 +4026,24 @@ module.exports = BackboneDash.View.extend({
 	    }
 	    
 	    // For heatmaps add some extra combos.
-	    if (self.model.get('chartType') === 'fragmentation') {
-	    	var heatMapConfigs = self.model.get('heatmap_config').models[0];
-	    	var thisHeatMapChart = _.find(heatMapConfigs.get('charts'), function(item) {return item.name === self.model.get('name')});
-	    	self.$('.xaxis-options').html(
-	    		_(thisHeatMapChart.xColumns).map(function(colId) {
-	    			var item = _.find(heatMapConfigs.get('columns'), function(item, i) { return i === colId});
-	    			var opt = {id: item.origName, name: item.name, selected: false, value: item.origName};
-	    			return adjOptTemplate({
-	    				opt: opt,
-	    	            current: (opt.id === self.model.get('xAxisColumn'))
-	    	        });
-	    	    }, self)
-	    	);
-	    }
+        if (self.model.get('chartType') === 'fragmentation') {
+            var heatMapConfigs = self.model.get('heatmap_config').models[0];
+            var thisHeatMapChart = _.find(heatMapConfigs.get('charts'), function (item) {
+                return item.name === self.model.get('name');
+            });
+            self.$('.xaxis-options').html(
+                _(thisHeatMapChart.xColumns).map(function (colId) {
+                    var item = _.find(heatMapConfigs.get('columns'), function (item, i) {
+                        return item.origName === colId;
+                    });
+                    var opt = {id: item.origName, name: item.name, selected: false, value: item.origName};
+                    return adjOptTemplate({
+                        opt: opt,
+                        current: (opt.id === self.model.get('xAxisColumn'))
+                    });
+                }, self)
+            );
+        }
 	
 	    if (self._stateWait.state() !== 'pending') {
 	    	self.updateData();
@@ -5094,12 +5090,13 @@ module.exports = BackboneDash.View.extend({
   getAppliedDateObject: function(filterObject, filterKey){
 	  var filterField = filterObject.filters[filterKey];
 	  var dateRangeText = '';
+	  var filterName = filterField.filterName ? filterField.filterName : filterKey;
 	  if(filterKey === 'date') {
 		  dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
 	  } else if(filterKey === 'computed-year') {
 		  dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
 	  } else {
-		  dateRangeText = app.translator.translateSync("amp.dashboard:" + filterKey.replace(/[^\w]/g, '-'), filterKey);
+		  dateRangeText = app.translator.translateSync("amp.dashboard:" + filterName.replace(/[^\w]/g, '-'), filterName);
 	  }
 	  var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
 	  return {
@@ -32078,20 +32075,21 @@ module.exports = Backbone.View.extend({
       // TODO: build a util for bettermerge that concat's array if
       // duplicate keys in objects...
       if (filter.get('id') || filter.url) {
-        if (filter.get('modelType') === 'DATE-RANGE-VALUES' || filter.get('modelType') === 'YEAR-SINGLE-VALUE') {
-          _.extend(serializedFilters.filters, filter.serialize(options));
-        } else {
-          var serialized = filter.serialize(options);
-          if (options.wholeModel === true) {
-            var keys = [];
-            for(var k in serialized) keys.push(k);
+        var serialized = filter.serialize(options);
+        var keys = [];
+        if (options.wholeModel === true && serialized) {
+            for (var k in serialized) keys.push(k);
             if (keys[0] !== undefined && serialized[keys[0]] !== undefined) {
-              serialized[keys[0]].filterName = (filter.get('displayName') || filter.get('name'));
-              serialized[keys[0]].serializedToModels = self.serializeToModels(filter);
+                serialized[keys[0]].filterName = (filter.get('displayName') || filter.get('name'));
             }
-          }
-          _.extend(serializedFilters.filters, serialized);
         }
+
+        if (keys[0] !== undefined && serialized[keys[0]] !== undefined
+            && filter.get('modelType') !== 'DATE-RANGE-VALUES' && filter.get('modelrmType') !== 'YEAR-SINGLE-VALUE') {
+          serialized[keys[0]].serializedToModels = self.serializeToModels(filter);
+        }
+
+        _.extend(serializedFilters.filters, serialized);
       }
     });
 

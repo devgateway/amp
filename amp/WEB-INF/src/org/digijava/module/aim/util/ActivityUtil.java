@@ -1517,7 +1517,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                         
                     } else {
                         // none computed workspace
-                        queryString +=" where gr.ampActivityLastVersion.team in  (" + Util.toCSStringForIN(relatedTeams) + ") ";
+                        queryString += " where gr.ampActivityLastVersion.team in  ("
+                                + Util.toCSStringForIN(relatedTeams) + ") ";
                     }
                 queryString += "  and lower(" + activityName + ") like lower(:searchStr) group by gr.ampActivityLastVersion.ampActivityId," + activityName + " order by " + activityName;
                 query=session.createQuery(queryString);

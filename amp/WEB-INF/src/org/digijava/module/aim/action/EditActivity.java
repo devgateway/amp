@@ -57,6 +57,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.form.ProposedProjCost;
@@ -733,7 +734,7 @@ public class EditActivity extends Action {
         /* END - Clearing session information about comments */
 
         // load the activity details
-        String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
+        ApprovalStatus actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
         
         //eaForm.setApprovalStatus(actApprovalStatus);
         if (tm != null && tm.getTeamId()!=null && activity.getTeam() != null && activity.getTeam().getAmpTeamId() != null) {
@@ -745,13 +746,13 @@ public class EditActivity extends Action {
               AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberCached(tm.getMemberId());
               eaForm.getIdentification().setApprovedBy(teamMember);
               eaForm.getIdentification().setApprovalDate(new Date());
-              //eaForm.getIdentification().setApprovalStatus(Constants.APPROVED_STATUS);
-              eaForm.getIdentification().setApprovalStatus(actApprovalStatus);
+              //eaForm.getIdentification().setApprovalStatus(ApprovalStatus.APPROVED);
+              eaForm.getIdentification().setApprovalStatus(actApprovalStatus.getDbName());
               }
 
             else{
-              //eaForm.setApprovalStatus(Constants.STARTED_STATUS);//actApprovalStatus);
-                eaForm.getIdentification().setApprovalStatus(Constants.EDITED_STATUS);
+              //eaForm.setApprovalStatus(ApprovalStatus.STARTED);//actApprovalStatus);
+                eaForm.getIdentification().setApprovalStatus(ApprovalStatus.EDITED.getDbName());
             }
         }
         

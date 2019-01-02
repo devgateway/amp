@@ -24,8 +24,8 @@ import org.digijava.module.aim.util.TeamUtil;
 /**
  * Returns activities visible to any team member or anonymous user.
  */
-public class WorkspaceFilter 
-{
+public final class WorkspaceFilter {
+
     private AmpTeam team;
     private Set<AmpTeam> relatedTeams;
     private boolean accessTypeManagement;
@@ -73,7 +73,7 @@ public class WorkspaceFilter
      * Returns query for activities in one or more management workspaces.
      */
     private String getManagementWorkspaceQuery() {
-        String approvalStatus = Util.toCSString(AmpARFilter.validatedActivityStatus);
+        String approvalStatus = Util.toCSString(AmpARFilter.VALIDATED_ACTIVITY_STATUS);
         String activityTable = inPublicView() ? "cached_amp_activity" : "amp_activity";
         String teamIds = Util.toCSStringForIN(relatedTeams);
         return String.format("SELECT amp_activity_id "
@@ -213,7 +213,7 @@ public class WorkspaceFilter
         int index = finalActivityQuery.lastIndexOf("UNION");
         return  finalActivityQuery.substring(0, index);
     }   
-    
+
     /**
      * For current workspace (if it's computed WS) first gets list of related activities,
      * Then returns list of related workspaces where all there activities belong to

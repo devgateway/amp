@@ -1,7 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.scorecard;
 
-import static javax.servlet.http.HttpServletResponse.SC_OK;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -23,18 +21,24 @@ import java.util.Set;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.digijava.kernel.ampapi.endpoints.common.model.Org;
+import org.digijava.kernel.ampapi.endpoints.common.model.OrgGroup;
+import org.digijava.kernel.ampapi.endpoints.common.model.OrgType;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.scorecard.model.Donor;
+import org.digijava.kernel.ampapi.endpoints.scorecard.model.DonorTreeNode;
+import org.digijava.kernel.ampapi.endpoints.scorecard.model.DonorTreeRoot;
+import org.digijava.kernel.ampapi.endpoints.scorecard.model.DonorsNoUpdatesWrapper;
+import org.digijava.kernel.ampapi.endpoints.scorecard.model.FilteredDonors;
+import org.digijava.kernel.ampapi.endpoints.scorecard.model.DonorIdsWrapper;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
+import org.digijava.kernel.ampapi.endpoints.scorecard.model.QuarterStats;
+import org.digijava.kernel.ampapi.endpoints.scorecard.model.SettingsBean;
 import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardExcelExporter;
 import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardNoUpdateDonor;
 import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardService;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.module.aim.dbentity.AmpScorecardOrganisation;
 import org.digijava.module.aim.dbentity.AmpScorecardSettings;
@@ -42,9 +46,6 @@ import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * This class should have all endpoints related to the Donor Scorecard -
@@ -61,7 +62,6 @@ public class DonorScorecard {
     @GET
     @Path("/export")
     @Produces("application/vnd.ms-excel")
-    @ApiMethod(ui = false, id = "DonorScorecar")
     @ApiOperation(
             value = "Retrieve an excel file with all the quarters, desired period, donors and the updated projects.",
             notes = "Creates an excel workbook having the headers with all the Quarters spanning the desired period, "
@@ -71,7 +71,7 @@ public class DonorScorecard {
 
         webResponse.setHeader("Content-Disposition", "attachment; filename=donorScorecard.xls");
 
-        StreamingOutput streamOutput = new StreamingOutput() {
+        return new StreamingOutput() {
             public void write(OutputStream output) throws IOException, WebApplicationException {
                 try {
                     ScorecardService service = new ScorecardService ();
@@ -85,81 +85,50 @@ public class DonorScorecard {
                 }
             }
         };
-        return streamOutput;
-
     }
     
     @GET
     @Path("/quickStats")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(
-            value = "Retrieve a quick view of the audit logger.",
-            notes = "<dl>\n"
-                    + "The JSON object holds information regarding:\n"
-                    + "<dt><b>oranizations</b><dd> - the count of active organisations for the past quarter\n"
-                    + "<dt><b>projects</b><dd> - the count of projects with action in the past quarter\n"
-                    + "<dt><b>users</b><dd> - the count of users logged into the System in the past quarter\n"
-                    + "</dl></br></br>\n"
-                    + "</br>\n"
-                    + "<h3>Sample Output:</h3><pre>\n"
-                    + "{\n"
-                    + "  \"organizations\": 52,\n"
-                    + "  \"projects\": 181,\n"
-                    + "  \"users\": 23\n"
-                    + "}</pre>")
-    public JsonBean getPastQuarterOrganizationsCount() {
+    @ApiOperation("Retrieve a quick view of the audit logger.")
+    public QuarterStats getPastQuarterOrganizationsCount() {
         ScorecardService scorecardService = new ScorecardService();
-        
-        JsonBean jsonBean = new JsonBean();
-        jsonBean.set("organizations", scorecardService.getPastQuarterOrganizationsCount());
-        jsonBean.set("projects", scorecardService.getPastQuarterProjectsCount());
-        jsonBean.set("users", scorecardService.getPastQuarterUsersCount());
-        
-        return jsonBean;
+
+        return new QuarterStats(
+                scorecardService.getPastQuarterOrganizationsCount(),
+                scorecardService.getPastQuarterProjectsCount(),
+                scorecardService.getPastQuarterUsersCount());
     }
     
     @POST
     @Path("/manager/settings")
     @Consumes(MediaType.APPLICATION_JSON)
-    @ApiOperation(
-            value = "Save the donor scorecard settings.",
-            notes = "<h3>Sample Input:</h3><pre>\n"
-                    + "{\n"
-                    + "   \"validationPeriod\": true,\n"
-                    + "   \"percentageThreshold\": 10,\n"
-                    + "   \"validationTime\": 5,\n"
-                    + "   \"categoryValues\": [{\n"
-                    + "      \"id\": 1\n"
-                    + "   }]\n"
-                    + "}</pre>")
-    @ApiResponses(@ApiResponse(code = SC_OK, message = "empty or a string with the error"))
-    public String saveScorecardSettings(final JSONObject settingsBean) {
-        String message = null;
+    @ApiOperation("Save the donor scorecard settings.")
+    public void saveScorecardSettings(SettingsBean settingsBean) {
         List<AmpScorecardSettings> scorecardSettingsList = (List<AmpScorecardSettings>) DbUtil.getAll(AmpScorecardSettings.class);
         List<AmpCategoryValue> allCategoryValues = (List<AmpCategoryValue>) CategoryManagerUtil.
                 getAmpCategoryValueCollectionByKey("activity_status");
         
         AmpScorecardSettings settings = scorecardSettingsList.isEmpty() ? new AmpScorecardSettings() : scorecardSettingsList.get(0);
-        String validationTime = settingsBean.getString("validationTime");
-        
-        settings.setValidationPeriod(Boolean.parseBoolean(settingsBean.getString("validationPeriod")));
-        settings.setPercentageThreshold(Double.parseDouble(settingsBean.getString("percentageThreshold")));
-        if (StringUtils.isNotBlank(validationTime) && !"0".equalsIgnoreCase(validationTime)) {
-            settings.setValidationTime(Integer.parseInt(validationTime));
+
+        settings.setValidationPeriod(settingsBean.getValidationPeriod());
+        settings.setPercentageThreshold(settingsBean.getPercentageThreshold());
+        if (settingsBean.getValidationTime() != null && settingsBean.getValidationTime() > 0) {
+            settings.setValidationTime(settingsBean.getValidationTime());
         }
         
-        JSONArray categoryValues = settingsBean.getJSONArray("categoryValues");
+        List<SettingsBean.CategoryValue> categoryValues = settingsBean.getCategoryValues();
         
         Set <AmpScorecardSettingsCategoryValue> closedStatuses = new HashSet<AmpScorecardSettingsCategoryValue>();
         
         if (categoryValues != null) {
-            Set<String> selectedValesSet = new HashSet<String>();
+            Set<Long> selectedValesSet = new HashSet<>();
             for (int i=0; i < categoryValues.size(); i++) {
-                selectedValesSet.add(categoryValues.getJSONObject(i).getString("id"));
+                selectedValesSet.add(categoryValues.get(i).getId());
             }
             
             for (AmpCategoryValue categoryValue : allCategoryValues) {
-                if (selectedValesSet.contains(Long.toString(categoryValue.getId()))) {
+                if (selectedValesSet.contains(categoryValue.getId())) {
                     AmpScorecardSettingsCategoryValue scSettingsCategoryValue = new AmpScorecardSettingsCategoryValue();
                     scSettingsCategoryValue.setAmpCategoryValueStatus(categoryValue);
                     scSettingsCategoryValue.setAmpScorecardSettings(settings);
@@ -178,8 +147,6 @@ public class DonorScorecard {
             throw new ApiRuntimeException(
                     ApiError.toError("Exception while saving settings object: " + e.getMessage()));
         }
-        
-        return message;
     }
     
     @POST
@@ -187,43 +154,23 @@ public class DonorScorecard {
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(
             value = "Save the noUpdate donors.",
-            notes = "<dl>\n"
-                    + "Used in Scorecard Manager (admin section), receive a list of donors that are not to be "
-                    + "excluded in the scorecard.\n"
-                    + "</dl></br></br>\n"
-                    + "</br>\n"
-                    + "<h3>Sample Input:</h3><pre>\n"
-                    + "{\n"
-                    + "  \"donorsNoUpdates\": [26]\n"
-                    + "}</pre>")
-    @ApiResponses(@ApiResponse(code = SC_OK, message = "empty or a string with the error"))
-    public String getDonorsNoUpdates(@ApiParam("list of donors") final JSONObject donorsBean) {
-        String message = null;
-        
-        JSONArray donorsArray = donorsBean.getJSONArray("donorsNoUpdates");
-        String[] selectedDonorsValues = new String[donorsArray.size()];
-        for (int i=0; i < donorsArray.size(); i++) {
-            selectedDonorsValues[i] = donorsArray.get(i).toString();
-        }
-        
+            notes = "Used in Scorecard Manager (admin section), receive a list of donors that are not to be "
+                    + "excluded in the scorecard.")
+    public void getDonorsNoUpdates(@ApiParam("list of donors") DonorsNoUpdatesWrapper donorsBean) {
         DbUtil.deleteAllNoUpdateOrgs(false);
         
-        if (selectedDonorsValues.length > 0) {
-            for (int i=0; i<selectedDonorsValues.length; i++) {
-                AmpScorecardOrganisation org = new AmpScorecardOrganisation();
-                org.setAmpDonorId(Long.parseLong(selectedDonorsValues[i]));
-                org.setModifyDate(new Date());
-                org.setToExclude(false);
-                try {
-                    DbUtil.saveOrUpdateObject(org);
-                } catch (Exception e) {
-                    throw new ApiRuntimeException(
-                            ApiError.toError("Exception while saving settings object: " + e.getMessage()));
-                }
+        for (Long donorId : donorsBean.getDonorsNoUpdates()) {
+            AmpScorecardOrganisation org = new AmpScorecardOrganisation();
+            org.setAmpDonorId(donorId);
+            org.setModifyDate(new Date());
+            org.setToExclude(false);
+            try {
+                DbUtil.saveOrUpdateObject(org);
+            } catch (Exception e) {
+                throw new ApiRuntimeException(
+                        ApiError.toError("Exception while saving settings object: " + e.getMessage()));
             }
         }
-        
-        return message;
     }
 
     @POST
@@ -232,50 +179,16 @@ public class DonorScorecard {
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(
             value = "Retrieve and provide a list of the filtered donors.",
-            notes = "<dl>\n"
-                    + "Used in Scorecard Manager (admin section), receive the list of selected donors in the "
-                    + "scorecard manager that are to be excluded in the scorecard.\n"
-                    + "The JSON object holds information regarding:\n"
-                    + "<dt><b>allFilteredDonors</b><dd> - the list of the filtered donors\n"
-                    + "<dt><b>noUpdatesFilteredDonors</b><dd> - the list of noupdate donors\n"
-                    + "</dl></br></br>\n"
-                    + "</br>\n"
-                    + "<h3>Sample Input:</h3><pre>\n"
-                    + "{\n"
-                    + "   \"donorIds\": [671]\n"
-                    + "}</pre>\n"
-                    + "</br>\n"
-                    + "<h3>Sample Output:</h3><pre>\n"
-                    + "{\n"
-                    + "  \"allFilteredDonors\": [\n"
-                    + "    {\n"
-                    + "      \"id\": 22,\n"
-                    + "      \"name\": \"Irish Aid\"\n"
-                    + "    },\n"
-                    + "    {\n"
-                    + "      \"id\": 1640,\n"
-                    + "      \"name\": \"Anti-Crime Capacity Building Program\"\n"
-                    + "    },\n"
-                    + " ...\n"
-                    + "  ],\n"
-                    + "  \"noUpdatesFilteredDonors\": [\n"
-                    + "    {\n"
-                    + "      \"id\": 26,\n"
-                    + "      \"name\": \"Irish Aid\"\n"
-                    + "    }\n"
-                    + "  ]\n"
-                    + "}</pre>")
-    public JsonBean getFilteredDonors(@ApiParam("list of donors") final JSONObject donorsBean) {
+            notes = "Used in Scorecard Manager (admin section), receive the list of selected donors in the "
+                    + "scorecard manager that are to be excluded in the scorecard.")
+    public FilteredDonors getFilteredDonors(@ApiParam("list of donors") DonorIdsWrapper donorsBean) {
         ScorecardService scorecardService = new ScorecardService();
-        String message = null;
-        
+
         // delete all excluded organizations from the amp_scorecard_organisation table having to_exclude = true
         DbUtil.deleteAllNoUpdateOrgs(true);
         
-        JSONArray donorsArray = (JSONArray) donorsBean.get("donorIds");
-        Set<Long> donorIds = new HashSet<Long>();
-        for (int i=0; i < donorsArray.size(); i++) {
-            Long donorId = Long.parseLong(donorsArray.getString(i));
+        Set<Long> donorIds = new HashSet<>(donorsBean.getDonorIds());
+        for (Long donorId : donorIds) {
             AmpScorecardOrganisation org = new AmpScorecardOrganisation();
             org.setAmpDonorId(donorId);
             org.setModifyDate(new Date());
@@ -287,39 +200,27 @@ public class DonorScorecard {
                 throw new ApiRuntimeException(
                         ApiError.toError("Exception while saving scorecard organization object: " + e.getMessage()));
             }
-            
-            donorIds.add(donorId);
         }
         
         List<ScorecardNoUpdateDonor> allDonors = scorecardService.getScorecardDonors(true);
-        List<JsonBean> allFilteredDonors = new ArrayList<JsonBean>();
+        List<Donor> allFilteredDonors = new ArrayList<>();
         
         for (ScorecardNoUpdateDonor donor : allDonors) {
             if (!donorIds.contains(donor.getAmpDonorId())) {
-                JsonBean jsonDonor = new JsonBean();
-                jsonDonor.set("id", donor.getAmpDonorId());
-                jsonDonor.set("name",  donor.getName());
-                allFilteredDonors.add(jsonDonor);
+                allFilteredDonors.add(new Donor(donor.getAmpDonorId(), donor.getName()));
             }
         }
         
-        List<JsonBean> noUpdatesFilteredDonors = new ArrayList<JsonBean>();
+        List<Donor> noUpdatesFilteredDonors = new ArrayList<>();
         List<ScorecardNoUpdateDonor> noUpdatedDonors = scorecardService.getScorecardDonors(false);
         
         for (ScorecardNoUpdateDonor noUpdateDonor: noUpdatedDonors) {
             if (!donorIds.contains(noUpdateDonor.getAmpDonorId())) {
-                JsonBean jsonDonor = new JsonBean();
-                jsonDonor.set("id", noUpdateDonor.getAmpDonorId());
-                jsonDonor.set("name",  noUpdateDonor.getName());
-                noUpdatesFilteredDonors.add(jsonDonor);
+                noUpdatesFilteredDonors.add(new Donor(noUpdateDonor.getAmpDonorId(), noUpdateDonor.getName()));
             }
         }
-        
-        JsonBean jsonBean = new JsonBean();
-        jsonBean.set("allFilteredDonors", allFilteredDonors);
-        jsonBean.set("noUpdatesFilteredDonors", noUpdatesFilteredDonors);
-        
-        return jsonBean;
+
+        return new FilteredDonors(allFilteredDonors, noUpdatesFilteredDonors);
     }
 
     @GET
@@ -327,88 +228,31 @@ public class DonorScorecard {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(
             value = "Retrieve and provide a list of all the donors.",
-            notes = "<dl>\n"
-                    + "Used for filter tree in Donor Scorecard Manager.\n"
-                    + "The JSON object holds information regarding:\n"
-                    + "<dt><b>key</b><dd> - the key of the donor\n"
-                    + "<dt><b>title</b><dd> - the title of the donors\n"
-                    + "<dt><b>folder</b><dd> - true|false\n"
-                    + "<dt><b>children</b><dd> - array or childres with the same structure than the donors JSON\n"
-                    + "</dl></br></br>\n"
-                    + "</br>\n"
-                    + "<h3>Sample Output:</h3><pre>\n"
-                    + "{\n"
-                    + "  \"title\": \"Donors\",\n"
-                    + "  \"children\": [\n"
-                    + "    {\n"
-                    + "      \"key\": 1,\n"
-                    + "      \"title\": \"Government of Timor-Leste\",\n"
-                    + "      \"folder\": true,\n"
-                    + "      \"children\": [\n"
-                    + "        {\n"
-                    + "          \"key\": 70,\n"
-                    + "          \"title\": \"RDTL Line Ministry\",\n"
-                    + "          \"folder\": true,\n"
-                    + "          \"children\": [\n"
-                    + "            {\n"
-                    + "              \"key\": 153,\n"
-                    + "              \"title\": \"Ministry of Health\",\n"
-                    + "              \"folder\": false,\n"
-                    + "              \"selected\": true\n"
-                    + "            }\n"
-                    + "          ]\n"
-                    + "        },\n"
-                    + " ......\n"
-                    + "    }\n"
-                    + "   ]\n"
-                    + " }</pre>")
-    public JsonBean getAllDonors() {
+            notes = "Used for filter tree in Donor Scorecard Manager.")
+    public DonorTreeRoot getAllDonors() {
+        List<Org> orgs = QueryUtil.getDonors(false);
+        List<OrgType> orgTypes = QueryUtil.getOrgTypes();
+        List<OrgGroup> orgGroups = QueryUtil.getOrgGroups();
         
-        List<JsonBean> orgs = QueryUtil.getDonors(false);
-        List<JsonBean> orgTypes = QueryUtil.getOrgTypes();
-        List<JsonBean> orgGroups = QueryUtil.getOrgGroups();
-        
-        List<JsonBean> donorsTree = new ArrayList<JsonBean>();
-        for (JsonBean orgType : orgTypes) {
-            JsonBean currentType = new JsonBean();
-            currentType.set("key", orgType.get("id"));
-            currentType.set("title", orgType.get("name"));
-            currentType.set("folder", true);
-            
-            Set<Long> orgGrpIds = new HashSet<Long>((ArrayList<Long>) orgType.get("groupIds"));
-            List<JsonBean> typeChildren = new ArrayList<JsonBean>();
-            for (JsonBean orgGroup : orgGroups) {
-                JsonBean currentGroup = new JsonBean();
-                if (orgGrpIds.contains((Long) orgGroup.get("id"))) {
-                    currentGroup.set("key", orgGroup.get("id"));
-                    currentGroup.set("title",  orgGroup.get("name"));
-                    currentGroup.set("folder", true);
-                    
-                    List<JsonBean> groupChildren = new ArrayList<JsonBean>();
-                    Set<Long> orgIds = new HashSet<Long>((ArrayList<Long>) orgGroup.get("orgIds"));
-                    for (JsonBean org : orgs) {
-                        JsonBean currentOrg = new JsonBean();
-                        if (orgIds.contains((Long) org.get("id"))) {
-                            currentOrg.set("key", org.get("id"));
-                            currentOrg.set("title",  org.get("name"));
-                            currentOrg.set("folder", false);
-                            currentOrg.set("selected", true);
-                            groupChildren.add(currentOrg);
+        List<DonorTreeNode> donorsTree = new ArrayList<>();
+        for (OrgType orgType : orgTypes) {
+            Set<Long> orgGrpIds = orgType.getGroupIds();
+            List<DonorTreeNode> typeChildren = new ArrayList<>();
+            for (OrgGroup orgGroup : orgGroups) {
+                if (orgGrpIds.contains(orgGroup.getId())) {
+                    List<DonorTreeNode> groupChildren = new ArrayList<>();
+                    Set<Long> orgIds = orgGroup.getOrgIds();
+                    for (Org org : orgs) {
+                        if (orgIds.contains(org.getId())) {
+                            groupChildren.add(new DonorTreeNode(org.getId(), org.getName(), false, true));
                         }
                     }
-                    currentGroup.set("children", groupChildren);
-                    typeChildren.add(currentGroup);
+                    typeChildren.add(new DonorTreeNode(orgGroup.getId(), orgGroup.getName(), true, groupChildren));
                 }
             }
-            
-            currentType.set("children", typeChildren);
-            donorsTree.add(currentType);
+            donorsTree.add(new DonorTreeNode(orgType.getId(), orgType.getName(), true, typeChildren));
         }
-        
-        JsonBean jsonBean = new JsonBean();
-        jsonBean.set("title", "Donors");
-        jsonBean.set("children", donorsTree);
-        
-        return jsonBean;
+
+        return new DonorTreeRoot(donorsTree);
     }
 }

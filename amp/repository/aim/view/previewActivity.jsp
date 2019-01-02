@@ -2597,7 +2597,6 @@ function collapseAll() {
 </module:display>
 
 <jsp:include page="previewActivityRegionalObservations.jsp"></jsp:include>
-
 <jsp:include page="previewActivityLineMinistryObservations.jsp"></jsp:include>
 
 <!-- RELATED ORGANIZATIONS SECTION -->

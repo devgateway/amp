@@ -3,21 +3,28 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Identifiable;
 
 public class AmpActivityGroup implements Serializable, Identifiable, Cloneable {
     private static final long serialVersionUID = 1L;
-
+    
+    @JsonIgnore
     private Long ampActivityGroupId;
 
     @Interchangeable(fieldTitle = "Version", importable = true)
+    @JsonProperty(value = "version", access = JsonProperty.Access.READ_ONLY)
     private Long version;
 
+    @JsonIgnore
     private AmpActivityVersion ampActivityLastVersion;
-
+    
+    @JsonIgnore
     private boolean autoClosedOnExpiration = false;
     
+    @JsonIgnore
     private Set<AmpActivityVersion> activities;
 
     public Long getAmpActivityGroupId() {
@@ -62,7 +69,9 @@ public class AmpActivityGroup implements Serializable, Identifiable, Cloneable {
         return autoClosedOnExpiration;
     }
     
-    @Override public Object getIdentifier() {
+    @Override
+    @JsonIgnore
+    public Object getIdentifier() {
         return this.getAmpActivityGroupId();
     }
 

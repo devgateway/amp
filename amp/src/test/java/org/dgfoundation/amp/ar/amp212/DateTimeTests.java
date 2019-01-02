@@ -11,12 +11,22 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.StringJoiner;
 
+import org.dgfoundation.amp.StandaloneAMPInitializer;
+import org.dgfoundation.amp.test.categories.DatabaseTests;
+import org.dgfoundation.amp.testutils.InTransactionRule;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
+import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+@Category(DatabaseTests.class)
 public class DateTimeTests {
-    
+
+    @Rule
+    public InTransactionRule inTransactionRule = new InTransactionRule();
+
     private final static Set<String> PATTERNS = AmpDateFormatter.generateSupportedPatterns();
     
     private final static List<String> LIMITED_PATTERNS = Arrays.asList("dd/MMM/yyyy", "MMM/dd/yyyy", "yyyy/MMM/dd");
@@ -41,6 +51,11 @@ public class DateTimeTests {
             res.add(LocalDate.of(2018, i, 11));
         }
         return res;
+    }
+
+    @BeforeClass
+    public static void staticSetUp() {
+        StandaloneAMPInitializer.initialize();
     }
 
     @Test
@@ -132,12 +147,14 @@ public class DateTimeTests {
     }
     
     @Test
-    public void testDefaultFormatter() {
+    public void testFormatterWithAmpFormats() {
         for (LocalDate ld : DATES) {
-            AmpDateFormatter formatter = AmpDateFormatterFactory.getDefaultFormatter();
-            String fm = formatter.format(ld);
-            LocalDate defm = formatter.parseDate(fm);
-            assertEquals(ld, defm);
+            for (String pattern : PATTERNS) {
+                AmpDateFormatter formatter = AmpDateFormatterFactory.getDefaultFormatter(pattern);
+                String fm = formatter.format(ld);
+                LocalDate defm = formatter.parseDate(fm);
+                assertEquals(ld, defm);
+            }
         }
     }
 

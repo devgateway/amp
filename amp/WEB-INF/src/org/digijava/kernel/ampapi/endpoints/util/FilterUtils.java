@@ -104,8 +104,8 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PERFORMANCE_ALERT_TYPE, ColumnConstants.PERFORMANCE_ALERT_TYPE);
         mapSimpleColumn(FiltersConstants.PLEDGES_AID_MODALITY, ColumnConstants.PLEDGES_AID_MODALITY);
         mapSimpleColumn(FiltersConstants.PLEDGES_COUNTRIES, ColumnConstants.PLEDGES_COUNTRIES);
-        mapSimpleColumn(FiltersConstants.PLEDGES_DETAIL_START_DATE, ColumnConstants.PLEDGES_DETAIL_START_DATE);
-        mapSimpleColumn(FiltersConstants.PLEDGES_DETAIL_END_DATE, ColumnConstants.PLEDGES_DETAIL_END_DATE);
+        mapDateColumn(FiltersConstants.PLEDGES_DETAIL_START_DATE, ColumnConstants.PLEDGES_DETAIL_START_DATE);
+        mapDateColumn(FiltersConstants.PLEDGES_DETAIL_END_DATE, ColumnConstants.PLEDGES_DETAIL_END_DATE);
         mapSimpleColumn(FiltersConstants.PLEDGES_DISTRICTS, ColumnConstants.PLEDGES_DISTRICTS);
         mapSimpleColumn(FiltersConstants.PLEDGES_DONOR_GROUP, ColumnConstants.PLEDGES_DONOR_GROUP);
         mapSimpleColumn(FiltersConstants.PLEDGES_DONOR_TYPE, ColumnConstants.PLEDGES_DONOR_TYPE);

@@ -13,10 +13,11 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 
 /**
- * 
+ * Deprecated. Please use an actual class instead.
+ *
  * @author jdeanquin
- * 
  */
+@Deprecated
 public class JsonBean {
     private static final Logger logger = Logger.getLogger(JsonBean.class);
 

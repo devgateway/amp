@@ -21,6 +21,7 @@ import org.junit.Test;
 public class OffDbNiReportEngineTests extends BasicSanityChecks {
 
     public OffDbNiReportEngineTests() {
+        inTransactionRule = null;
         nrRunReports = 0;
     }
 

@@ -10,6 +10,7 @@ package org.dgfoundation.amp.ar.amp212;
 public class OffDbNiReportFilteringTests extends FilteringSanityChecks {
 
     public OffDbNiReportFilteringTests() {
+        inTransactionRule = null;
         nrRunReports = 0;
     }
 }

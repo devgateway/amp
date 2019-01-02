@@ -30,6 +30,10 @@ public class FormattingTests extends ReportingTestCase {
             "crazy funding 1", "date-filters-activity", "Eth Water",
             "TAC_activity_1", "TAC_activity_2");
 
+    public FormattingTests() {
+        inTransactionRule = null;
+    }
+
     @Test
     public void testAmountUnits() {
         NiReportModel cor = new NiReportModel("amountUnits")

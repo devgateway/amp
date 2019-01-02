@@ -146,6 +146,8 @@ Filters.prototype.showFilters	= function(reportContextId) {
 };
 
 Filters.prototype.showNewFilters = function (reportContextId) {
+	// alert(reportContextId);
+	this.reportContextId = reportContextId;
 	widgetFilter.showFilters();
 	$('#filter-popup').show();
 };

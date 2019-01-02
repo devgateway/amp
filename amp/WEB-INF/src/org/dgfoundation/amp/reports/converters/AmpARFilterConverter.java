@@ -276,7 +276,6 @@ public class AmpARFilterConverter {
         return res;
     }
 
-    // TODO, talk with Viorel on this issue?
     /** adds programs and national objectives filters */
     private void addProgramAndNationalObjectivesFilters() {
         addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PRIMARY_PROGRAM);

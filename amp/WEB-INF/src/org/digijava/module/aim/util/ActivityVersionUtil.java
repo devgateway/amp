@@ -346,6 +346,16 @@ public class ActivityVersionUtil {
         return act;
     }
     
+    public static Map<Long, Map<String, List<CompareOutput>>> compareActivities(Long[] ActivitiesId) throws Exception {
+        
+        Session session = PersistenceManager.getCurrentSession();
+        Map<Long, Map<String, List<CompareOutput>>> activitiesCollection = new HashMap<Long, Map<String, List<CompareOutput>>>();
+        for (int i=0; i < ActivitiesId.length; i++) {
+            Map<String, List<CompareOutput>> ActivityList = compareActivities(ActivitiesId[i]);
+            activitiesCollection.put(ActivitiesId[i], ActivityList);
+        }
+        return activitiesCollection;
+    }
     
     public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId) throws Exception {
 

@@ -11,9 +11,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
-import clover.org.apache.commons.lang.math.NumberUtils;
-
-
 /**
  * Helper methods for Activity Import
  * 

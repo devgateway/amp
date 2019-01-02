@@ -142,6 +142,10 @@ public class ColumnConstants {
     public static final String ISSUE_DATE = "Issue Date";
     public static final String ISSUES___MEASURES___ACTORS = "Issues / Measures / Actors";
     public static final String JOINT_CRITERIA = "Joint Criteria";
+    public static final String LINE_MINISTRY_OBSERVATIONS = "Line Ministry Observations";
+    public static final String LINE_MINISTRY_OBSERVATIONS_ACTORS = "Line Ministry Observations Actors";
+    public static final String LINE_MINISTRY_OBSERVATIONS_DATE = "Line Ministry Observations Date";
+    public static final String LINE_MINISTRY_OBSERVATIONS_MEASURES = "Line Ministry Observations Measures";
     public static final String MATURITY = "Loan Maturity Date";
     public static final String MEASURES_TAKEN = "Measures Taken";
     public static final String MINISTRY_CODE = "Ministry Code";
@@ -154,6 +158,7 @@ public class ColumnConstants {
     public static final String MINORITIES = "Minorities";
     public static final String MODE_OF_PAYMENT = "Mode of Payment";
     public static final String MULTI_DONOR = "Multi Donor";
+    public static final String NATIONAL_PLANNING_OBJECTIVES = "National Planning Objectives";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_1 = "National Planning Objectives Level 1";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_2 = "National Planning Objectives Level 2";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_3 = "National Planning Objectives Level 3";
@@ -246,6 +251,7 @@ public class ColumnConstants {
     public static final String PLEDGES_TITLES = "Pledges Titles";
     public static final String PLEDGES_TYPE_OF_ASSISTANCE = "Pledges Type Of Assistance";
     public static final String RELATED_PROJECTS = "Related Projects";
+    public static final String PRIMARY_PROGRAM = "Primary Program";
     public static final String PRIMARY_PROGRAM_LEVEL_1 = "Primary Program Level 1";
     public static final String PRIMARY_PROGRAM_LEVEL_2 = "Primary Program Level 2";
     public static final String PRIMARY_PROGRAM_LEVEL_3 = "Primary Program Level 3";
@@ -273,6 +279,7 @@ public class ColumnConstants {
     public static final String PROJECT_DESCRIPTION = "Project Description";
     public static final String PROJECT_IMPACT = "Project Impact";
     public static final String PROJECT_IMPLEMENTING_UNIT = "Project Implementing Unit";
+    public static final String PROJECT_MANAGEMENT = "Project Management";
     public static final String PROJECT_PERIOD = "Project Period";
     public static final String PROJECT_TITLE = "Project Title";
     public static final String PROPOSED_APPROVAL_DATE = "Proposed Approval Date";
@@ -289,6 +296,9 @@ public class ColumnConstants {
     public static final String REGIONAL_GROUP_GROUP = "Regional Group Group";   
     public static final String REGIONAL_GROUP_DEPARTMENT_DIVISION = "Regional Group Department/Division";
     public static final String REGIONAL_OBSERVATIONS = "Regional Observations";
+    public static final String REGIONAL_OBSERVATIONS_ACTORS = "Regional Observations Actors";
+    public static final String REGIONAL_OBSERVATIONS_DATE = "Regional Observations Date";
+    public static final String REGIONAL_OBSERVATIONS_MEASURES = "Regional Observations Measures Taken";
     public static final String RELATED_PLEDGES = "Related Pledges";
     public static final String REPORTING_SYSTEM = "Reporting System";
     public static final String RESPONSIBLE_ORGANIZATION = "Responsible Organization";
@@ -296,6 +306,7 @@ public class ColumnConstants {
     public static final String RESPONSIBLE_ORGANIZATION_GROUPS = "Responsible Organization Groups";
     public static final String RESULTS = "Results";
     public static final String REVISED_PROJECT_AMOUNT = "Revised Project Amount";
+    public static final String SECONDARY_PROGRAM = "Secondary Program";
     public static final String SECONDARY_PROGRAM_LEVEL_1 = "Secondary Program Level 1";
     public static final String SECONDARY_PROGRAM_LEVEL_2 = "Secondary Program Level 2";
     public static final String SECONDARY_PROGRAM_LEVEL_3 = "Secondary Program Level 3";

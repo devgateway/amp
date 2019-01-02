@@ -28,12 +28,16 @@ public class LocalizableLabel {
     }
 
     public String toString() {
-        try {
-            return MessageFormat.format(TranslatorWorker.translateText(label), arguments);
-        } catch (IllegalArgumentException e) {
-            logger.error(String.format("Failed to format a label with pattern %s and arguments %s",
-                    label, Arrays.asList(arguments)));
-            return label;
+        String translatedLabel = TranslatorWorker.translateText(label);
+        if (arguments.length > 0) {
+            try {
+                return MessageFormat.format(translatedLabel, arguments);
+            } catch (IllegalArgumentException e) {
+                logger.error(String.format("Failed to format a label with pattern %s and arguments %s",
+                        label, Arrays.asList(arguments)));
+            }
         }
+        
+        return translatedLabel;
     }
 }

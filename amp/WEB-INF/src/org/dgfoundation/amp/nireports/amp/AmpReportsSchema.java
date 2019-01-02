@@ -55,7 +55,6 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
 import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
@@ -122,10 +121,14 @@ import com.google.common.collect.ImmutableMap;
  */
 public class AmpReportsSchema extends AbstractReportsSchema {
 
-    public static final Logger logger = Logger.getLogger(AmpReportsSchema.class);
-    
     /**
-     * put this to false if you are debugging the caching fetching layers of the schema (e.g. {@link AmpDifferentialColumn}, {@link AmpCachedColumn}, {@link AmpFundingColumn})
+     * the number to add to pledge ids in tables joined with activity tables
+     */
+    public static final Long PLEDGE_ID_ADDER = 800000000L;
+
+    /**
+     * put this to false if you are debugging the caching fetching layers of the schema
+     * (e.g. {@link AmpDifferentialColumn}, {@link AmpFundingColumn})
      */
     public boolean ENABLE_CACHING = true;
 
@@ -381,7 +384,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_dimension(ColumnConstants.ACTIVITY_PLEDGES_TITLE, "v_activity_pledges_title");
         no_dimension(ColumnConstants.ACTIVITY_UPDATED_BY, "v_activity_modified_by");
         no_dimension(ColumnConstants.ACTORS, "v_actors");
-        
+
+        no_dimension(ColumnConstants.ARCHIVED, "v_archived");
+
         single_dimension(ColumnConstants.AGREEMENT_CODE, "v_agreement_code", AGR_LEVEL_COLUMN);
         single_dimension(ColumnConstants.AGREEMENT_TITLE_CODE, "v_agreement_title_code", AGR_LEVEL_COLUMN);
         date_column(ColumnConstants.AGREEMENT_CLOSE_DATE, "v_agreement_close_date", AGR_LEVEL_COLUMN);
@@ -420,6 +425,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         degenerate_dimension(ColumnConstants.PERFORMANCE_ALERT_LEVEL, "v_performance_alert_level", catsDimension);
         degenerate_dimension(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget", boolDimension);
         degenerate_dimension(ColumnConstants.INSTITUTIONS, "v_institutions", catsDimension, true);
+        no_dimension(ColumnConstants.LINE_MINISTRY_OBSERVATIONS, "v_line_ministry_observations");
+        no_dimension(ColumnConstants.LINE_MINISTRY_OBSERVATIONS_ACTORS, "v_line_ministry_observations_actors");
+        date_column(ColumnConstants.LINE_MINISTRY_OBSERVATIONS_DATE, "v_line_ministry_observations_date");
+        no_dimension(ColumnConstants.LINE_MINISTRY_OBSERVATIONS_MEASURES, "v_line_ministry_observations_measures");
         no_dimension(ColumnConstants.MEASURES_TAKEN, "v_measures_taken");
         no_entity(ColumnConstants.MINORITIES, "v_minorities", DG_EDITOR_POSTPROCESSOR);
         degenerate_dimension(ColumnConstants.MODALITIES, "v_modalities", catsDimension, true);
@@ -439,7 +448,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         addIndicatorColumns();
 
         degenerate_dimension(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit", catsDimension);
+        no_entity(ColumnConstants.PROJECT_MANAGEMENT, "v_project_management", DG_EDITOR_POSTPROCESSOR);
         no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS, "v_regional_observations");
+        no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS_ACTORS, "v_regional_observations_actors");
+        date_column(ColumnConstants.REGIONAL_OBSERVATIONS_DATE, "v_regional_observations_date");
+        no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS_MEASURES, "v_regional_observations_measures");
         
         single_dimension(ColumnConstants.RELATED_PLEDGES, "v_related_pledges", PLEDGES_LEVEL_COLUMN);
         
@@ -635,7 +648,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         with_percentage(ColumnConstants.DISTRICT, "v_districts", LOC_DIM_USG, LEVEL_DISTRICT);
         with_percentage(ColumnConstants.LOCATION, "v_raw_locations", LOC_DIM_USG, LEVEL_RAW);
         with_percentage(ColumnConstants.GEOCODE, "v_geocodes", LOC_DIM_USG, LEVEL_RAW);
-
+        
         single_dimension(ColumnConstants.REGIONAL_REGION, "v_regions", LOC_DIM_USG.getLevelColumn(LEVEL_REGION));
 
         single_dimension(ColumnConstants.GRACE_PERIOD, "v_grace_period", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
@@ -1112,7 +1125,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     }
 
     private AmpReportsSchema addTrivialMeasures() {
-        addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false, cac -> cac.activityId > MondrianETL.PLEDGE_ID_ADDER));
+        addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_COMMITMENTS, Constants.COMMITMENT,
+                "Actual", false, cac -> cac.activityId > PLEDGE_ID_ADDER));
         
         addDividingMeasure(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, MeasureConstants.ACTUAL_COMMITMENTS, false);
 
@@ -1321,7 +1335,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      * adds a date field ties to a degenerate dimension
      * @param columnName
      * @param viewName
-     * @param dim
+     * @param levelColumn
      * @return
      */
     private AmpReportsSchema date_column(String columnName, String viewName, LevelColumn levelColumn) {
@@ -1379,7 +1393,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     public Set<Long> getWorkspaceActivities(NiReportsEngine engine) {
         AmpReportsScratchpad pad = AmpReportsScratchpad.get(engine);
         if (engine.spec.isAlsoShowPledges())
-            return AmpCollections.union(_getWorkspaceActivities(engine), getWorkspacePledges(engine).stream().map(z -> z + MondrianETL.PLEDGE_ID_ADDER).collect(Collectors.toSet()));
+            return AmpCollections.union(_getWorkspaceActivities(engine), getWorkspacePledges(engine).stream()
+                    .map(z -> z + PLEDGE_ID_ADDER).collect(Collectors.toSet()));
         else if (engine.spec.getReportType() == ArConstants.COMPONENT_TYPE) {
             Set<Long> wf = new HashSet<>(_getWorkspaceActivities(engine));
             wf.retainAll(SQLUtils.fetchLongs(pad.connection, "SELECT DISTINCT amp_activity_id FROM amp_components"));
@@ -1395,7 +1410,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      * @return
      */
     protected Set<Long> _getWorkspaceActivities(NiReportsEngine engine) {
-        return AmpReportsScratchpad.get(engine).environment.workspaceFilter.getIds();
+        return AmpReportsScratchpad.get(engine).getEnvironment().getIds();
     }
         
     @Override
@@ -1432,7 +1447,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
             null,
             GroupingCriteria.GROUPING_YEARLY));
-        
+
         // test dimensions: make a snapshot of each
         for(NiDimension dimension:Arrays.asList(orgsDimension, locsDimension, secsDimension, progsDimension)) {
             dimension.getDimensionData().toString();
@@ -1525,7 +1540,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         
     @SuppressWarnings("unchecked")
     protected<K extends Cell> K pledgeCellToDonorCell(K pledgeCell) {
-        return (K) pledgeCell.changeOwnerId(pledgeCell.activityId + MondrianETL.PLEDGE_ID_ADDER);
+        return (K) pledgeCell.changeOwnerId(pledgeCell.activityId + PLEDGE_ID_ADDER);
     }
     
     /**

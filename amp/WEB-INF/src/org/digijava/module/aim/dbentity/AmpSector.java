@@ -6,7 +6,8 @@ import java.util.*;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.SectorDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
+import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
@@ -22,26 +23,28 @@ import org.digijava.module.aim.util.SoftDeletable;
 public class AmpSector implements Serializable, Comparable<AmpSector>, Identifiable,
         ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable,
         SoftDeletable, Cloneable, OrgProfileValue, NameableOrIdentifiable {
-    @Interchangeable(fieldTitle="Sector ID", id=true)
+
+    @PossibleValueId
     private Long ampSectorId;
-    @Interchangeable(fieldTitle="Parent Sector ID", pickIdOnly=true)
+
     private AmpSector parentSectorId;
-    @Interchangeable(fieldTitle="Sector Code")
+
     private String sectorCode;
-    @Interchangeable(fieldTitle="Name", value=true)
+
+    @PossibleValueValue
     @TranslatableField
     private String name;
-    @Interchangeable(fieldTitle="Type")
+
     private String type;
     private AmpOrganisation ampOrgId;
-    @Interchangeable(fieldTitle="AMP Sector Scheme ID")
+
     private AmpSectorScheme ampSecSchemeId;
     @TranslatableField
-    @Interchangeable(fieldTitle="Description")
+
     private String description;
-    @Interchangeable(fieldTitle="Language")
+
     private String language;
-    @Interchangeable(fieldTitle="Version")
+
     private String version;
     
     //unused anywhere
@@ -49,19 +52,16 @@ public class AmpSector implements Serializable, Comparable<AmpSector>, Identifia
     private Set aidlist;
     
     
-    @Interchangeable(fieldTitle="Indicators")
     private Set<AmpIndicator> indicators;
-//  @Interchangeable(fieldTitle="Sectors", pickIdOnly=true)
+
     private Set<AmpSector> sectors;
-    @Interchangeable(fieldTitle="Deleted")
+
     private Boolean deleted;
 
     private boolean translateable = true;
 
-    @Interchangeable(fieldTitle="Sector Code Official")
     private String sectorCodeOfficial;
 
-    @Interchangeable(fieldTitle="Segment Code")
     private String segmentCode;
     
     private transient Collection<AmpSector> transientChildren;

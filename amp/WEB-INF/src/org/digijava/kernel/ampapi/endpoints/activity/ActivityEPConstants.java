@@ -105,6 +105,11 @@ public class ActivityEPConstants {
     public static final String COMMITMENTS_DISASTER_RESPONSE_FM_PATH = COMMITMENTS_TABLE_FM_PATH + "/Disaster Response";
     public static final String DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH = DISB_TABLE_FM_PATH + "/Disaster Response";
     
+    public static final String COMMITMENTS_DISASTER_RESPONSE_REQUIRED_FM_PATH = COMMITMENTS_TABLE_FM_PATH
+            + "/Required Validator for Disaster Response";
+    public static final String DISBURSEMENTS_DISASTER_RESPONSE_REQUIRED_PATH = DISB_TABLE_FM_PATH
+            + "/Required Validator for Disaster Response";
+    
     public static final String DISB_RECIPIENT_ROLE_FM_PATH = DISB_TABLE_FM_PATH 
             + "/Funding Flows OrgRole Selector/Recipient Org Role";
     public static final String COMMITMENTS_RECIPIENT_ROLE_FM_PATH = COMMITMENTS_TABLE_FM_PATH 

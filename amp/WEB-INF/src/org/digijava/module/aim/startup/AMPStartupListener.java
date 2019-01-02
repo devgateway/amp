@@ -4,7 +4,6 @@
 package org.digijava.module.aim.startup;
 
 import java.lang.management.ManagementFactory;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -25,10 +24,9 @@ import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.importers.GazeteerCSVImporter;
-import org.dgfoundation.amp.mondrian.MondrianETL;
-import org.dgfoundation.amp.mondrian.MondrianUtils;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.ampapi.swagger.SwaggerConfigurer;
 import org.digijava.kernel.content.ContentRepositoryManager;
 import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
 import org.digijava.kernel.lucene.LuceneModules;
@@ -80,17 +78,15 @@ public class AMPStartupListener extends HttpServlet implements
         logger.info("The AMP ServletContext has been terminated.");
     }
 
-    protected void doMondrianETL() throws SQLException {
-        logger.info("running Mondrian ETL");
-        double elapsedSecs = MondrianETL.runETL(false).duration;
-        logger.info(String.format("ETL took %.2f seconds", elapsedSecs));
-    }
-    
     protected void initNiReports() throws AMPException {
         AmpReportsSchema.init();
     }
-    
+
     public void contextInitialized(ServletContextEvent sce) {
+        PersistenceManager.inTransaction(() -> contextInitializedInternal(sce));
+    }
+    
+    public void contextInitializedInternal(ServletContextEvent sce) {
         logger.debug("I am running with a new code!!!!");
         
         
@@ -114,7 +110,7 @@ public class AMPStartupListener extends HttpServlet implements
                 ampContext.setAttribute(Constants.DEF_FLAG_EXIST, new Boolean(true));
 
             AmpReportsSchema.getInstance().maintainDescriptions();
-            
+
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             // get the default amp template
             AmpTemplatesVisibility currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
@@ -183,16 +179,14 @@ public class AMPStartupListener extends HttpServlet implements
             runCacheRefreshingQuery("update_sector_level_caches_internal", "sector");
             runCacheRefreshingQuery("update_organisation_caches_internal", "organisation");
             
-            PersistenceManager.getSession().getTransaction().commit();
-            
             ContentRepositoryManager.initialize();
             
             checkDatabaseSanity();
-            checkMondrianETLSanity();
-            //doMonetETL();
             initNiReports();
             importGazeteer();
             registerEhCacheMBeans();
+
+            new SwaggerConfigurer().configure();
         } catch (Throwable e) {
             logger.error("Exception while initialising AMP :" + e.getMessage(), e);
             throw new Error(e);
@@ -249,18 +243,6 @@ public class AMPStartupListener extends HttpServlet implements
             CurrencyUtil.checkDatabaseSanity(session);
         }catch(Exception e){
             throw new Error("database does not conform to minimum sanity requirements, shutting down AMP", e);
-        }finally {
-            PersistenceManager.cleanupSession(session);
-        }
-    }
-    
-    protected void checkMondrianETLSanity() {
-        Session session = null; 
-        try {
-            session = PersistenceManager.getSession();
-            MondrianUtils.checkMondrianViewsSanity(session);
-        }catch(Exception e){
-            throw new Error("database does not conform to minimum Mondrian ETL sanity requirements, shutting down AMP", e);
         }finally {
             PersistenceManager.cleanupSession(session);
         }

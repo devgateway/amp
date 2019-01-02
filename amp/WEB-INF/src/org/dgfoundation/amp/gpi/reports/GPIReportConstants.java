@@ -58,9 +58,6 @@ public class GPIReportConstants {
 
     public static final String GPI_REMARK_ENDPOINT = "/rest/gpi/report/remarks";
 
-    public static final String PDF = "pdf";
-    public static final String XLSX = "xlsx";
-    
     public static final String INDICATOR1_EXPORT_APPROVAL_DATE_FORMAT = "MM/yyyy";
     public static final int ETHIOPIAN_FORMATTED_DATE_DAYS_OFFSET = 3;
 

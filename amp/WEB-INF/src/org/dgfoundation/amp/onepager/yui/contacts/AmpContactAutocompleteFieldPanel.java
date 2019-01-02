@@ -6,6 +6,7 @@ import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactPhoneProperty;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.helper.Constants;
@@ -126,9 +127,9 @@ public abstract class AmpContactAutocompleteFieldPanel extends
                     emails += property.getValue() + "<br/>";
                 } else if (property.getName().equals(
                         Constants.CONTACT_PROPERTY_NAME_PHONE)
-                        && property.getValueAsFormatedPhoneNum().length() > 0) {
+                        && ((AmpContactPhoneProperty) property).getValueAsFormatedPhoneNum().length() > 0) {
 
-                    phones += property.getValueAsFormatedPhoneNum() + "<br/>";
+                    phones += ((AmpContactPhoneProperty) property).getValueAsFormatedPhoneNum() + "<br/>";
                 } else if (property.getName().equals(
                         Constants.CONTACT_PROPERTY_NAME_FAX)
                         && property.getValue().length() > 0) {

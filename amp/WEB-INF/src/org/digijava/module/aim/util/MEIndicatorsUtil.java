@@ -343,20 +343,20 @@ public class MEIndicatorsUtil
                     try {
                     DbUtil.delete(ampMECurrVal);
                     } catch (JDBCException e) {
-                        logger.error(e);
+                        logger.error(e.getMessage(), e);
                 }
             }
             }
             try {
             DbUtil.delete(ampMEIndVal);
             } catch (JDBCException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
         }
         }
         try {
         DbUtil.delete(ampMEInd);
         } catch (JDBCException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
     }
   }
 }

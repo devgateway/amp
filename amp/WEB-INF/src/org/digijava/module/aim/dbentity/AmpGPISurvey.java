@@ -148,4 +148,5 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
     public void setResponses(Set<AmpGPISurveyResponse> responses) {
         this.responses = responses;
     }
+    
 }

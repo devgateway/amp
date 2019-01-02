@@ -31,7 +31,7 @@ import org.digijava.kernel.config.moduleconfig.ModuleConfig;
 import org.digijava.kernel.services.AmpOfflineVersion;
 import org.digijava.kernel.services.AmpOfflineVersionType;
 import org.digijava.kernel.util.I18NHelper;
-import org.digijava.module.translation.hibernate.TranslatorInterceptor;
+import org.digijava.kernel.persistence.interceptors.AmpEntityInterceptor;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -43,7 +43,6 @@ import org.springframework.context.annotation.ClassPathScanningCandidateComponen
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -211,11 +210,11 @@ public class HibernateClassLoader {
                 .getResourceAsStream(HIBERNATE_CFG_XML);
         try {
             if (inp == null) {
-                cfg.setInterceptor(new TranslatorInterceptor());
+                cfg.setInterceptor(new AmpEntityInterceptor());
                 sessionFactory = cfg.buildSessionFactory();
             } else {
                 Configuration newConfig = cfg.configure(HIBERNATE_CFG_XML);
-                newConfig.setInterceptor(new TranslatorInterceptor());
+                newConfig.setInterceptor(new AmpEntityInterceptor());
                 if (HIBERNATE_CFG_OVERRIDE_DATABASE != null)
                     newConfig.setProperty("hibernate.connection.url",
                             HIBERNATE_CFG_OVERRIDE_DATABASE);

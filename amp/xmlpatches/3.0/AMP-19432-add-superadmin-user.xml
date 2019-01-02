@@ -39,7 +39,9 @@
 					WHERE mg.group_id IN (SELECT id FROM dg_group WHERE group_key = 'ADM') AND g.group_key = 'SADM';
 
 				INSERT INTO dg_principal_permission (principal_permission_id, principal_type, target_id, permission_class) 
-				    SELECT nextval('dg_principal_permission_seq'), 1, id, 'org.digijava.kernel.security.SitePermission' 
+				    SELECT (setval('"dg_principal_permission_seq"'::regclass, (select
+				coalesce(max(principal_permission_id),0)+1 FROM "dg_principal_permission"))) , 1, id,
+				'org.digijava.kernel.security.SitePermission'
 				    FROM dg_group 
 				    WHERE group_key = 'SADM';
 				

@@ -22,13 +22,15 @@ import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
-import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
+import org.digijava.kernel.ampapi.endpoints.common.model.Location;
+import org.digijava.kernel.ampapi.endpoints.common.model.Org;
+import org.digijava.kernel.ampapi.endpoints.common.model.OrgGroup;
+import org.digijava.kernel.ampapi.endpoints.common.model.OrgType;
+import org.digijava.kernel.ampapi.endpoints.dto.FilterValue;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevel;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -54,6 +56,19 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
@@ -165,8 +180,21 @@ public class QueryUtil {
         
     }
 
-    public static List<JsonBean> getOrgTypes(){
-        final List<JsonBean> orgTypes=new ArrayList<JsonBean>();
+    /**
+     * Filter organization skeleton by orgGrpId
+     * 
+     * @param orgGrpId
+     * @return
+     */
+    public static List<OrganizationSkeleton> getOrganizations(
+            List<Long> orgGrpId) {
+        final List<String> roleCodes = OrganisationUtil.getVisibleRoleCodes();
+        return OrganizationSkeleton
+                .populateOrganisationSkeletonListByOrgGrpIp(orgGrpId, roleCodes);
+    }
+
+    public static List<OrgType> getOrgTypes() {
+        final List<OrgType> orgTypes = new ArrayList<>();
         PersistenceManager.getSession().doWork(new Work(){
                 public void execute(Connection conn) throws SQLException {
                     
@@ -180,20 +208,20 @@ public class QueryUtil {
                     try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
                         ResultSet rs = rsi.rs;
                         Long lastOrgTypeId = 0L;
-                        List<Long> orgsGrpId = null;
+                        Set<Long> orgsGrpId = null;
                         while (rs.next()) {
                             if (!lastOrgTypeId.equals(rs.getLong("orgTypeId"))) {
                                 lastOrgTypeId = rs.getLong("orgTypeId");
-                                JsonBean orgType = new JsonBean();
-                                orgsGrpId = new ArrayList<Long>();
-                                orgType.set("id", rs.getLong("orgTypeId"));
+                                OrgType orgType = new OrgType();
+                                orgsGrpId = new HashSet<>();
+                                orgType.setId(rs.getLong("orgTypeId"));
                                 if (orgTypesName != null){
-                                    orgType.set("name", orgTypesName.get(lastOrgTypeId));
+                                    orgType.setName(orgTypesName.get(lastOrgTypeId));
                                 } else {
-                                    orgType.set("name", rs.getString("orgTypeName"));
+                                    orgType.setName(rs.getString("orgTypeName"));
                                 }
-                                orgType.set("groupIds", orgsGrpId);
-                                orgType.set("filterId", rs.getString("orgTypeName"));
+                                orgType.setGroupIds(orgsGrpId);
+                                orgType.setFilterId(rs.getString("orgTypeName"));
                                 orgTypes.add(orgType);
                             }
                             orgsGrpId.add(rs.getLong("orgGrpId"));
@@ -204,8 +232,8 @@ public class QueryUtil {
         return orgTypes;
     }
 
-    public static List<JsonBean> getOrgGroups() {
-        final List<JsonBean> orgGroups=new ArrayList<JsonBean>();
+    public static List<OrgGroup> getOrgGroups() {
+        final List<OrgGroup> orgGroups = new ArrayList<OrgGroup>();
         PersistenceManager.getSession().doWork(new Work(){
                 public void execute(Connection conn) throws SQLException {
                     Map<Long,String>orgGroupsNames=QueryUtil.getTranslatedName(conn, "amp_org_group", "amp_org_grp_id", "org_grp_name");
@@ -220,20 +248,20 @@ public class QueryUtil {
                     try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
                         ResultSet rs = rsi.rs;
                         Long lastOrgGrpId=0L;
-                        List <Long>orgsId=null;
+                        Set<Long> orgsId = null;
                         while (rs.next()){
                             if (!lastOrgGrpId.equals(rs.getLong("orgGrpId"))) {
                                 lastOrgGrpId = rs.getLong("orgGrpId");
-                                JsonBean orgGrp = new JsonBean();
-                                orgsId = new ArrayList<Long>();
-                                orgGrp.set("id", rs.getLong("orgGrpId"));
+                                OrgGroup orgGrp = new OrgGroup();
+                                orgsId = new LinkedHashSet<>();
+                                orgGrp.setId(rs.getLong("orgGrpId"));
                                 if  (orgGroupsNames != null) {
-                                    orgGrp.set("name", orgGroupsNames.get(lastOrgGrpId));   
+                                    orgGrp.setName(orgGroupsNames.get(lastOrgGrpId));
                                 } else{
-                                    orgGrp.set("name", rs.getString("grpName"));
+                                    orgGrp.setName(rs.getString("grpName"));
                                 }
-                                orgGrp.set("typeId", rs.getLong("orgType"));
-                                orgGrp.set("orgIds", orgsId);
+                                orgGrp.setTypeId(rs.getLong("orgType"));
+                                orgGrp.setOrgIds(orgsId);
                                 orgGroups.add(orgGrp);
                             }
                             if (rs.getLong("orgId") != 0){
@@ -249,13 +277,13 @@ public class QueryUtil {
     /**
      * Get all organizations
      * 
-     * @return List<JsonBean> organizations, each JSON contains information about organization:
+     * @return List<Org> organizations, each JSON contains information about organization:
      * {id : long}, {acronym : String}, {name : String}, {groupId : long}, {rolesIds : list}
      * 
      */
-    public static List<JsonBean> getOrgs() {
+    public static List<Org> getOrgs() {
         final List<String> roleCodes = OrganisationUtil.getVisibleRoleCodes();
-        final SortedMap<Long, JsonBean> orgs = new TreeMap<Long, JsonBean>();
+        final SortedMap<Long, Org> orgs = new TreeMap<>();
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
                 //go and fetch translated version of organisation name if multilingual is enabled
@@ -298,27 +326,26 @@ public class QueryUtil {
                 try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
                     ResultSet rs = rsi.rs;
                     Long lastOrgId = 0L;
-                    JsonBean org = null;
                     Set<Long> roles = null;
                     while (rs.next()) {
                         long currentOrgId = rs.getLong("orgId");
                         if (lastOrgId.equals(currentOrgId)) {
                             roles.add(rs.getLong("roleId"));
-                            orgs.get(currentOrgId).set("rolesIds", roles);
+                            orgs.get(currentOrgId).setRolesIds(roles);
                         } else {
-                            org = new JsonBean();
+                            Org org = new Org();
                             roles = new HashSet<Long>();
                             roles.add(rs.getLong("roleId"));
                             
-                            org.set("id", currentOrgId);
-                            org.set("acronym", rs.getString("acronym"));
-                            org.set("groupId", rs.getLong("grpId"));    
-                            org.set("rolesIds", roles);
+                            org.setId(currentOrgId);
+                            org.setAcronym(rs.getString("acronym"));
+                            org.setGroupId(rs.getLong("grpId"));
+                            org.setRolesIds(roles);
                             
                             if (ContentTranslationUtil.multilingualIsEnabled()) {
-                                org.set("name", organisationsNames.get(currentOrgId));
+                                org.setName(organisationsNames.get(currentOrgId));
                             } else {
-                                org.set("name", rs.getString("name"));
+                                org.setName(rs.getString("name"));
                             }
                             
                             orgs.put(currentOrgId, org);
@@ -329,7 +356,7 @@ public class QueryUtil {
             }
         });
         
-        ArrayList<JsonBean> orgBeans = new ArrayList<JsonBean>();
+        ArrayList<Org> orgBeans = new ArrayList<>();
         orgBeans.addAll(orgs.values());
         
         return orgBeans;
@@ -352,10 +379,10 @@ public class QueryUtil {
         return names;
     }
 
-    public static List<SimpleJsonBean> getOrgRoles() {
+    public static List<FilterValue> getOrgRoles() {
         // //yet not translatable but its ready when it is
         final List<String> visibleRoles = OrganisationUtil.getVisibleRoleCodes();
-        final List<SimpleJsonBean> orgRoles = new ArrayList<SimpleJsonBean>();
+        final List<FilterValue> orgRoles = new ArrayList<FilterValue>();
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
 
@@ -368,7 +395,7 @@ public class QueryUtil {
                             String orgRoleName = rs.getString("name");
                             String displayName = TranslatorWorker.translateText(rs.getString("name"));
                             
-                            SimpleJsonBean orgRole = new SimpleJsonBean(orgRoleId, orgRoleName, null, displayName);
+                            FilterValue orgRole = new FilterValue(orgRoleId, orgRoleName, null, displayName);
                             orgRole.setFilterId(FiltersConstants.ORG_ROLE_CODE_TO_FILTER_ID.get(orgRoleCode));
                             
                             orgRoles.add(orgRole);
@@ -445,7 +472,7 @@ public class QueryUtil {
         return list;
     }
 
-    public static JsonBean getLocationsForFilter() {
+    public static Location getLocationsForFilter() {
     
         Map<Long, LocationSkeleton> locations = LocationSkeleton.populateSkeletonLocationsList();
         long parentLocationId = PersistenceManager.getLong(PersistenceManager.getSession()
@@ -454,28 +481,27 @@ public class QueryUtil {
                         .list().get(0));
         
         LocationSkeleton rootLocation = locations.get(parentLocationId);
-        final JsonBean location = buildLocationsJsonBean(rootLocation, 1);
-        return location;
+        return buildLocationsJsonBean(rootLocation, 1);
     }
     
     private final static String[] LEVEL_TO_NAME = {"na", FiltersConstants.COUNTRY, FiltersConstants.REGION, FiltersConstants.ZONE, FiltersConstants.DISTRICT, "na2", "na3", "na4"};
     
-    private static JsonBean buildLocationsJsonBean(LocationSkeleton loc, int level) {
-        JsonBean res = new JsonBean();
-        res.set("id", loc.getId());
-        res.set("name", loc.getName());
-        res.set("level", level);
-        res.set("filterId", LEVEL_TO_NAME[level]);
-        ArrayList<JsonBean> children = new ArrayList<JsonBean>();
+    private static Location buildLocationsJsonBean(LocationSkeleton loc, int level) {
+        Location res = new Location();
+        res.setId(loc.getId());
+        res.setName(loc.getName());
+        res.setLevel(level);
+        res.setFilterId(LEVEL_TO_NAME[level]);
+        ArrayList<Location> children = new ArrayList<>();
         for(LocationSkeleton child:loc.getChildLocations())
             children.add(buildLocationsJsonBean(child, level + 1));
-        res.set("children", children);
+        res.setChildren(children);
         return res;
     }
     
     
-    public static List<JsonBean> getDonors(final boolean toExcludeFilter) {
-        final List<JsonBean> donors = new ArrayList<JsonBean>();
+    public static List<Org> getDonors(final boolean toExcludeFilter) {
+        final List<Org> donors = new ArrayList<>();
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
                 Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn,"amp_organisation","amp_org_id","name");
@@ -502,14 +528,14 @@ public class QueryUtil {
                     while (rs.next()) {
                         if (!lastOrgId .equals(rs.getLong("orgId"))) {
                             lastOrgId  = rs.getLong("orgId");
-                            JsonBean org = new JsonBean();
-                            org.set("id", lastOrgId);
+                            Org org = new Org();
+                            org.setId(lastOrgId);
                             if (ContentTranslationUtil.multilingualIsEnabled()) {
-                                org.set("name", organisationsNames.get(lastOrgId));
+                                org.setName(organisationsNames.get(lastOrgId));
                             } else {
-                                org.set("name", rs.getString("name"));
+                                org.setName(rs.getString("name"));
                             }
-                            org.set("acronym", rs.getString("acronym"));
+                            org.setAcronym(rs.getString("acronym"));
                             donors.add(org);
                         }
                     }

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -28,8 +29,14 @@ import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
-import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.filters.FilterList;
+import org.digijava.kernel.ampapi.endpoints.common.model.FilterDescriptor;
+import org.digijava.kernel.ampapi.endpoints.common.model.Location;
+import org.digijava.kernel.ampapi.endpoints.common.model.Org;
+import org.digijava.kernel.ampapi.endpoints.common.model.OrgGroup;
+import org.digijava.kernel.ampapi.endpoints.common.model.OrgType;
+import org.digijava.kernel.ampapi.endpoints.common.model.YearRange;
+import org.digijava.kernel.ampapi.endpoints.dto.FilterValue;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersBuilder;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersManager;
@@ -37,9 +44,7 @@ import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.FilterType;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
@@ -49,7 +54,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -77,13 +81,13 @@ public class FiltersEndpoint implements AmpEndpoint {
     private static final String SECTORS_SUFFIX = " Sectors";
     private static final Logger logger = Logger.getLogger(FiltersEndpoint.class);
     
-    public static final String ANY_VALUE = "999888777";
-
     // todo
     // probably not the best place to keep, but definitely better than in the method
     private static final String PRIVATE_WS_CONDITION = "WHERE (isolated is false) OR (isolated is null)";
     private static final String PARENT_WS_CONDITION = "WHERE parent_team_id = ";
 
+    private static final int START_YEAR = 1985;
+    private static final int END_YEAR = 2025;
 
 
     //AmpARFilter filters;
@@ -105,24 +109,21 @@ public class FiltersEndpoint implements AmpEndpoint {
     @ApiMethod(ui = true, id = FiltersConstants.APPROVAL_STATUS, columns = ColumnConstants.APPROVAL_STATUS,
                 name = "Approval Status", visibilityCheck = "hasToShowActivityapprovalStatusFilter", tab=EPConstants.TAB_ACTIVITY)
     @ApiOperation("Return activity status options")
-    public JsonBean getActivityApprovalStatus() {
-        JsonBean as=new JsonBean();
-        AmpTeam ampTeam = getAmpTeam();
-        //Hide in public view
-        if (ampTeam!=null){
-            List<SimpleJsonBean> activityStatus = new ArrayList<SimpleJsonBean>();
-            for (String key : AmpARFilter.activityApprovalStatus.keySet()) {
-                SimpleJsonBean sjb = new SimpleJsonBean();
-                sjb.setId(AmpARFilter.activityApprovalStatus.get(key));
-                sjb.setName(TranslatorWorker.translateText(key));
-                activityStatus.add(sjb);
-            }
-            activityStatus = orderByProperty (activityStatus,NAME_PROPERTY);
-            as.set("filterId", FiltersConstants.APPROVAL_STATUS);
-            as.set("name", TranslatorWorker.translateText(ColumnConstants.APPROVAL_STATUS));
-            as.set("values",activityStatus);
+    public FilterDescriptor getActivityApprovalStatus() {
+        FilterDescriptor as = new FilterDescriptor();
+
+        List<FilterValue> activityStatus = new ArrayList<FilterValue>();
+        for (String key : AmpARFilter.activityApprovalStatus.keySet()) {
+            FilterValue sjb = new FilterValue();
+            sjb.setId(AmpARFilter.activityApprovalStatus.get(key));
+            sjb.setName(TranslatorWorker.translateText(key));
+            activityStatus.add(sjb);
         }
-        
+        activityStatus = orderByProperty(activityStatus, NAME_PROPERTY);
+        as.setFilterId(FiltersConstants.APPROVAL_STATUS);
+        as.setName(TranslatorWorker.translateText(ColumnConstants.APPROVAL_STATUS));
+        as.setValues(activityStatus);
+
         return as;
     }
 
@@ -138,16 +139,12 @@ public class FiltersEndpoint implements AmpEndpoint {
 
     /**
      * Returns fi the approval status filter should be shown
+     *
      * @return
      */
     public boolean hasToShowActivityapprovalStatusFilter() {
-        if(TLSUtils.getRequest().getSession().getAttribute(
-                org.digijava.module.aim.helper.Constants.CURRENT_MEMBER)==null){
-            return false;
-        }else{
-            return true;
-        }
-
+        return (TLSUtils.getRequest().getSession().getAttribute(
+                org.digijava.module.aim.helper.Constants.CURRENT_MEMBER) != null);
     }
 
     @GET
@@ -164,8 +161,8 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = "Sectors", id = "Sectors", tab = EPConstants.TAB_SECTORS)
     @ApiOperation("Returns the sector schema lists")
-    public List<SimpleJsonBean> getSectorsSchemas() throws AmpApiException{
-        List<SimpleJsonBean> sectorList = new ArrayList<SimpleJsonBean>();
+    public List<FilterValue> getSectorsSchemas() throws AmpApiException {
+        List<FilterValue> sectorList = new ArrayList<FilterValue>();
         List<AmpClassificationConfiguration> schems = SectorUtil.getAllClassificationConfigs();
         Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
         for (AmpClassificationConfiguration ampClassificationConfiguration : schems) {
@@ -175,7 +172,7 @@ public class FiltersEndpoint implements AmpEndpoint {
                 Long sectorConfigId = ampClassificationConfiguration.getId();
                 String sectorDisplayName = TranslatorWorker.translateText(ampClassificationConfiguration.getName() + SECTORS_SUFFIX);
                 
-                SimpleJsonBean sectorBean = new SimpleJsonBean(sectorConfigId, sectorDisplayName);
+                FilterValue sectorBean = new FilterValue(sectorConfigId, sectorDisplayName);
                 sectorBean.setFilterId(FilterUtils.INSTANCE.idFromColumnName(columnName));
                 
                 sectorList.add(sectorBean);
@@ -190,16 +187,16 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "SectorsById", tab = EPConstants.TAB_SECTORS)
     @ApiOperation("Return the sector filtered by the given sectorName")
-    public SimpleJsonBean getSectors(@PathParam("sectorId") Long sectorId) {
+    public FilterValue getSectors(@PathParam("sectorId") Long sectorId) {
 
-        SimpleJsonBean sector = new SimpleJsonBean();
+        FilterValue sector = new FilterValue();
 
         try {
             AmpClassificationConfiguration c = SectorUtil
                     .getClassificationConfigById(sectorId);
 
             String sectorConfigName = c.getName();
-            List<SimpleJsonBean> ampSectorsList = new ArrayList<SimpleJsonBean>();
+            List<FilterValue> ampSectorsList = new ArrayList<FilterValue>();
             sector.setId(sectorId);
             sector.setName(TranslatorWorker.translateText(sectorConfigName + SECTORS_SUFFIX));
             List<AmpSector> s = SectorUtil
@@ -220,11 +217,11 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = "Date", id = "date", tab = EPConstants.TAB_OTHER)
     @ApiOperation("Return the year range configure for GIS")
-    public JsonBean getDates(){
-        JsonBean date = new JsonBean();
-        date.set("startYear", 1985);
-        date.set("endYear", 2025);
-        return date;
+    public YearRange getDates() {
+        YearRange range = new YearRange();
+        range.setStartYear(START_YEAR);
+        range.setEndYear(END_YEAR);
+        return range;
         //return getDefaultDate(); // tabs/saiku should have this empty by default; gis/dashboards fill it client side
         // the API does not offer server-side the possibility of knowing the kind of filter widget being filtered, so instead
         // the settings API ships them all client side and they are sorted out there
@@ -236,8 +233,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_START_DATE, columns = ColumnConstants.PROPOSED_START_DATE,
             id = FiltersConstants.PROPOSED_START_DATE, tab = EPConstants.TAB_OTHER)
-    public JsonBean getProposedStartDate(){
-        return new JsonBean();
+    public void getProposedStartDate() {
     }
     
     @GET
@@ -245,8 +241,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_START_DATE, columns = ColumnConstants.ACTUAL_START_DATE,
             id = FiltersConstants.ACTUAL_START_DATE, tab = EPConstants.TAB_OTHER)
-    public JsonBean getActualStartDate(){
-        return new JsonBean();
+    public void getActualStartDate() {
     }
     
     @GET
@@ -254,8 +249,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_COMPLETION_DATE, columns = ColumnConstants.PROPOSED_COMPLETION_DATE,
             id = FiltersConstants.PROPOSED_COMPLETION_DATE, tab = EPConstants.TAB_OTHER)
-    public JsonBean getProposedCompletionDate(){
-        return new JsonBean();
+    public void getProposedCompletionDate() {
     }
     
     @GET
@@ -263,8 +257,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_COMPLETION_DATE, columns = ColumnConstants.ACTUAL_COMPLETION_DATE,
             id = FiltersConstants.ACTUAL_COMPLETION_DATE, tab = EPConstants.TAB_OTHER)
-    public JsonBean getActualCompletionDate(){
-        return new JsonBean();
+    public void getActualCompletionDate() {
     }
 
     @GET
@@ -272,8 +265,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING,
             id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, tab = EPConstants.TAB_OTHER)
-    public JsonBean getDateForContracting() {
-        return new JsonBean();
+    public void getDateForContracting() {
     }
 
     @GET
@@ -281,8 +273,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.ISSUE_DATE, columns = ColumnConstants.ISSUE_DATE,
             id = FiltersConstants.ISSUE_DATE, tab = EPConstants.TAB_OTHER)
-    public JsonBean getIssueDate() {
-        return new JsonBean();
+    public void getIssueDate() {
     }
     
     @GET
@@ -290,26 +281,24 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_APPROVAL_DATE, columns = ColumnConstants.PROPOSED_APPROVAL_DATE,
             id = FiltersConstants.PROPOSED_APPROVAL_DATE, tab = EPConstants.TAB_OTHER)
-    public JsonBean getProposedApprovalDate() {
-        return new JsonBean();
-    }   
+    public void getProposedApprovalDate() {
+    }
 
     @GET
     @Path("/actualApprovalDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_APPROVAL_DATE, columns = ColumnConstants.ACTUAL_APPROVAL_DATE,
             id = FiltersConstants.ACTUAL_APPROVAL_DATE, tab = EPConstants.TAB_OTHER)
-    public JsonBean getActualApprovalDate() {
-        return new JsonBean();
-    }   
+    public void getActualApprovalDate() {
+    }
 
     @GET
     @Path("/programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = "Programs", id = "Programs", tab = EPConstants.TAB_PROGRAMS)
     @ApiOperation("Return the programs filtered by the given sectorName")
-    public List<SimpleJsonBean> getPrograms() {
-        List<SimpleJsonBean> programs = new ArrayList<SimpleJsonBean>();
+    public List<FilterValue> getPrograms() {
+        List<FilterValue> programs = new ArrayList<FilterValue>();
         try {
             Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
 
@@ -319,7 +308,9 @@ public class FiltersEndpoint implements AmpEndpoint {
                 final String columnName = ProgramUtil.NAME_TO_COLUMN_MAP.get(String.valueOf(program[1]));
                 // only add if its enabled
                 if (visibleColumns.contains(columnName)) {
-                    SimpleJsonBean bean = new SimpleJsonBean(PersistenceManager.getLong(program[0]), TranslatorWorker.translateText(programName));
+                    Long programSettingId = PersistenceManager.getLong(program[0]);
+                    String translatedProgramName = TranslatorWorker.translateText(programName);
+                    FilterValue bean = new FilterValue(programSettingId, translatedProgramName);
                     bean.setFilterId(FilterUtils.INSTANCE.idFromColumnName(columnName));
                     programs.add(bean);
                 }
@@ -335,9 +326,10 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = "Types of Organizations", id = "organizationTypesList")
     @ApiOperation("Return org types with its orgs groups")
-    public List<JsonBean> getOrgTypes() {
-        List <JsonBean> orgTypes = QueryUtil.getOrgTypes();
-        return orderByName(orgTypes);
+    public List<OrgType> getOrgTypes() {
+        List<OrgType> orgTypes = QueryUtil.getOrgTypes();
+        orderByName(orgTypes, OrgType::getName);
+        return orgTypes;
     }
 
     @GET
@@ -345,33 +337,21 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = "Organization Groups", id = "orgGroupsList")
     @ApiOperation("Return org groups with its orgs ids")
-    public List<JsonBean> getOrgGroups() {
-        List <JsonBean> orgGroups = orderByName(QueryUtil.getOrgGroups());
+    public List<OrgGroup> getOrgGroups() {
+        List<OrgGroup> orgGroups = QueryUtil.getOrgGroups();
+        orderByName(orgGroups, OrgGroup::getName);
         return orgGroups;
-        
-    }   
+    }
 
     @GET
     @Path("/orgs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = "Organizations", name = "orgsList", tab=EPConstants.TAB_ORGANIZATIONS)
     @ApiOperation("List all available orgs")
-    public List<JsonBean> getOrgs() { 
-        List <JsonBean> orgs = QueryUtil.getOrgs();
-        return orderByName(orgs);
-    }
-    
-    /**
-     * List the organization filter types and the organization tree
-     * 
-     * @return tree definitions (filter types) and the tree structure of the organizations
-     */
-    @GET
-    @Path("/organizations")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = "Orgs", name = "Orgs", tab = EPConstants.TAB_ORGANIZATIONS)
-    public FilterList getOrganizations() {
-        return FiltersManager.getInstance().getOrganizationFilterList();
+    public List<Org> getOrgs() {
+        List<Org> orgs = QueryUtil.getOrgs();
+        orderByName(orgs, Org::getName);
+        return orgs;
     }
 
 
@@ -381,8 +361,8 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = "Organization Roles", id = "orgRolesList", tab=EPConstants.TAB_ALL_AGENCIES)
     @ApiOperation("List all available orgs roles")
-    public List<SimpleJsonBean> getorgRoles() {
-        List <SimpleJsonBean> orgRoles = QueryUtil.getOrgRoles();
+    public List<FilterValue> getorgRoles() {
+        List<FilterValue> orgRoles = QueryUtil.getOrgRoles();
         return orderByProperty(orgRoles,DISPLAY_NAME_PROPERTY);
     }
 
@@ -391,7 +371,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "ProgramsByProgramName", tab = EPConstants.TAB_PROGRAMS)
     @ApiOperation("Return the programs filtered by the given programSettingsId")
-    public SimpleJsonBean getPrograms(@PathParam("programId") Long programId) {
+    public FilterValue getPrograms(@PathParam("programId") Long programId) {
         try {
             Object[] idname = (Object[]) PersistenceManager.getSession().createSQLQuery("select default_hierarchy, name from amp_program_settings where amp_program_settings_id = " + programId).uniqueResult();
             Long rootAmpThemeId = idname == null ? null : PersistenceManager.getLong(idname[0]);
@@ -400,15 +380,15 @@ public class FiltersEndpoint implements AmpEndpoint {
                 Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesTree(rootAmpThemeId);
                 String programName = schemeName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)
                         ? ProgramUtil.NATIONAL_PLANNING_OBJECTIVES : schemeName;
-                SimpleJsonBean bean = buildProgramsJsonBean(themes.get(rootAmpThemeId), programName, 0);
+                FilterValue bean = buildProgramsJsonBean(themes.get(rootAmpThemeId), programName, 0);
                 bean.setFilterId(FilterUtils.INSTANCE.idFromColumnName(programName + " Level 1"));
                 return bean;
             } else {
-                return new SimpleJsonBean();
+                return new FilterValue();
             }
 
         } catch (ObjectNotFoundException e) {
-            return new SimpleJsonBean();
+            return new FilterValue();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -420,8 +400,8 @@ public class FiltersEndpoint implements AmpEndpoint {
     @ApiMethod(ui = true, id = FiltersConstants.TYPE_OF_ASSISTANCE, columns = ColumnConstants.TYPE_OF_ASSISTANCE,
             name="Type of Assistance", tab=EPConstants.TAB_FINANCIALS)
     @ApiOperation("Return type of assistance")
-    public JsonBean getTypeOfAssistance() {
-        return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY,ColumnConstants.TYPE_OF_ASSISTANCE);
+    public FilterDescriptor getTypeOfAssistance() {
+        return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY, ColumnConstants.TYPE_OF_ASSISTANCE);
     }
 
     @GET
@@ -430,8 +410,8 @@ public class FiltersEndpoint implements AmpEndpoint {
     @ApiMethod(ui = true, id = FiltersConstants.MODE_OF_PAYMENT, columns = ColumnConstants.MODE_OF_PAYMENT,
             name="Mode of Payment", tab=EPConstants.TAB_FINANCIALS)
     @ApiOperation("Return mode of payment")
-    public JsonBean getModeOfPayment() {
-        return getCategoryValue(CategoryConstants.MODE_OF_PAYMENT_KEY,ColumnConstants.MODE_OF_PAYMENT);
+    public FilterDescriptor getModeOfPayment() {
+        return getCategoryValue(CategoryConstants.MODE_OF_PAYMENT_KEY, ColumnConstants.MODE_OF_PAYMENT);
     }
 
     @GET
@@ -440,9 +420,8 @@ public class FiltersEndpoint implements AmpEndpoint {
     @ApiMethod(ui = true, id = FiltersConstants.STATUS, columns = ColumnConstants.STATUS,name="Activity Status",
             tab=EPConstants.TAB_ACTIVITY)
     @ApiOperation("Return Activitystatus")
-    public JsonBean getActivityStatus() {
-        return getCategoryValue(CategoryConstants.ACTIVITY_STATUS_KEY,
-                ColumnConstants.STATUS);
+    public FilterDescriptor getActivityStatus() {
+        return getCategoryValue(CategoryConstants.ACTIVITY_STATUS_KEY, ColumnConstants.STATUS);
     }
 
     @GET
@@ -451,7 +430,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @ApiMethod(ui = true, id = FiltersConstants.ON_OFF_TREASURY_BUDGET, columns = ColumnConstants.ON_OFF_TREASURY_BUDGET,
             name="Activity Budget", tab=EPConstants.TAB_FINANCIALS)
     @ApiOperation("Return Activity Budget")
-    public JsonBean getActivityBudget() {
+    public FilterDescriptor getActivityBudget() {
         return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.ON_OFF_TREASURY_BUDGET);
     }   
 
@@ -461,8 +440,8 @@ public class FiltersEndpoint implements AmpEndpoint {
     @ApiMethod(ui = true, id = FiltersConstants.FUNDING_STATUS, columns = ColumnConstants.FUNDING_STATUS,
             name="Funding Status",tab=EPConstants.TAB_FINANCIALS)
     @ApiOperation("Funding status filter information")
-    public JsonBean getFundingStatus() {
-        return getCategoryValue(CategoryConstants.FUNDING_STATUS_KEY,ColumnConstants.FUNDING_STATUS);
+    public FilterDescriptor getFundingStatus() {
+        return getCategoryValue(CategoryConstants.FUNDING_STATUS_KEY, ColumnConstants.FUNDING_STATUS);
     }
 
     @GET
@@ -471,7 +450,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @ApiMethod(ui = true, id = FiltersConstants.EXPENDITURE_CLASS, columns = ColumnConstants.EXPENDITURE_CLASS,
             name="Expenditure Class", tab=EPConstants.TAB_FINANCIALS)
     @ApiOperation("Funding status filter information")
-    public JsonBean getExpenditureClass() {
+    public FilterDescriptor getExpenditureClass() {
         return getCategoryValue(CategoryConstants.EXPENDITURE_CLASS_KEY, ColumnConstants.EXPENDITURE_CLASS);
     }
 
@@ -481,7 +460,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @ApiMethod(ui = true, id = FiltersConstants.CONCESSIONALITY_LEVEL, columns = ColumnConstants.CONCESSIONALITY_LEVEL,
             name="Concessionality Level", tab=EPConstants.TAB_FINANCIALS)
     @ApiOperation("Funding concessionality level information")
-    public JsonBean getConcessionalityLevel() {
+    public FilterDescriptor getConcessionalityLevel() {
         return getCategoryValue(CategoryConstants.CONCESSIONALITY_LEVEL_KEY, ColumnConstants.CONCESSIONALITY_LEVEL);
     }
 
@@ -492,7 +471,7 @@ public class FiltersEndpoint implements AmpEndpoint {
             columns = ColumnConstants.PERFORMANCE_ALERT_LEVEL, name = ColumnConstants.PERFORMANCE_ALERT_LEVEL,
             tab = EPConstants.TAB_ACTIVITY)
     @ApiOperation("Performance Alert Level filter")
-    public JsonBean getPerformanceAlertLevel() {
+    public FilterDescriptor getPerformanceAlertLevel() {
         return getCategoryValue(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, ColumnConstants.PERFORMANCE_ALERT_LEVEL);
     }
 
@@ -503,13 +482,13 @@ public class FiltersEndpoint implements AmpEndpoint {
             columns = ColumnConstants.PERFORMANCE_ALERT_TYPE, name = ColumnConstants.PERFORMANCE_ALERT_TYPE,
             tab = EPConstants.TAB_ACTIVITY)
     @ApiOperation("Performance Alert Type filter")
-    public JsonBean getPerformanceAlertType() {
-        JsonBean pt = new JsonBean();
+    public FilterDescriptor getPerformanceAlertType() {
+        FilterDescriptor pt = new FilterDescriptor();
 
-        List<SimpleJsonBean> performanceAlertTypes = new ArrayList<SimpleJsonBean>();
+        List<FilterValue> performanceAlertTypes = new ArrayList<FilterValue>();
 
         for (Entry<String, Long> entry : PerformanceRuleManager.PERF_ALERT_TYPE_TO_ID.entrySet()) {
-            SimpleJsonBean sjb = new SimpleJsonBean();
+            FilterValue sjb = new FilterValue();
             sjb.setId(entry.getValue());
             sjb.setName(TranslatorWorker.translateText(
                     PerformanceRuleManager.PERF_ALERT_TYPE_TO_DESCRIPTION.get(entry.getKey())));
@@ -517,9 +496,9 @@ public class FiltersEndpoint implements AmpEndpoint {
         }
 
         performanceAlertTypes = orderByProperty(performanceAlertTypes, NAME_PROPERTY);
-        pt.set("filterId", FiltersConstants.PERFORMANCE_ALERT_TYPE);
-        pt.set("name", TranslatorWorker.translateText(ColumnConstants.PERFORMANCE_ALERT_TYPE));
-        pt.set("values", performanceAlertTypes);
+        pt.setFilterId(FiltersConstants.PERFORMANCE_ALERT_TYPE);
+        pt.setName(TranslatorWorker.translateText(ColumnConstants.PERFORMANCE_ALERT_TYPE));
+        pt.setValues(performanceAlertTypes);
 
         return pt;
     }
@@ -530,24 +509,24 @@ public class FiltersEndpoint implements AmpEndpoint {
     @ApiMethod(ui = true, id = FiltersConstants.FINANCING_INSTRUMENT, columns = ColumnConstants.FINANCING_INSTRUMENT,
             name="Financing Instruments", tab=EPConstants.TAB_FINANCIALS)
     @ApiOperation("Return financing instruments")
-    public JsonBean getFinancingInstruments() {
+    public FilterDescriptor getFinancingInstruments() {
         return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY, ColumnConstants.FINANCING_INSTRUMENT);
     }
 
-    private List<SimpleJsonBean> getCategoryValue(String categoryKey) {
-        List<SimpleJsonBean> fi = new ArrayList<SimpleJsonBean>();
+    private List<FilterValue> getCategoryValue(String categoryKey) {
+        List<FilterValue> fi = new ArrayList<FilterValue>();
 
         Collection<AmpCategoryValue> col = CategoryManagerUtil
                 .getAmpCategoryValueCollectionByKey(categoryKey,true);
         for (AmpCategoryValue ampCategoryValue : col) {
             if (!Boolean.TRUE.equals(ampCategoryValue.getDeleted())) {
                 String translatedValue = CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue);
-                fi.add(new SimpleJsonBean(ampCategoryValue.getIdentifier(), translatedValue));
+                fi.add(new FilterValue(ampCategoryValue.getIdentifier(), translatedValue));
             }
         }
         //reorder because after we get the translated name we lose ordering
         fi = orderByProperty (fi,NAME_PROPERTY);
-        fi.add(new SimpleJsonBean(ColumnReportData.UNALLOCATED_ID, FiltersConstants.UNDEFINED_NAME));
+        fi.add(new FilterValue(ColumnReportData.UNALLOCATED_ID, FiltersConstants.UNDEFINED_NAME));
         return fi;
         
     }
@@ -558,13 +537,13 @@ public class FiltersEndpoint implements AmpEndpoint {
     @ApiMethod(ui = true, id = FiltersConstants.LOCATION, columns = ColumnConstants.LOCATION, name="Locations",
             tab=EPConstants.TAB_LOCATIONS)
     @ApiOperation("Return locations")
-    public JsonBean getLocations() {
+    public Location getLocations() {
         return QueryUtil.getLocationsForFilter();
     }
     
     /**
      * List the locations tree
-     * 
+     *
      * @return tree definitions (filter types) and the tree structure of the locations
      */
     @GET
@@ -580,7 +559,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.HUMANITARIAN_AID, columns = ColumnConstants.HUMANITARIAN_AID,
             name=ColumnConstants.HUMANITARIAN_AID, tab=EPConstants.TAB_FINANCIALS)
-    public JsonBean getHumanitarianAid() {
+    public FilterDescriptor getHumanitarianAid() {
         return buildYesNoJsonBean(ColumnConstants.HUMANITARIAN_AID);
     }
     
@@ -589,92 +568,49 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.DISASTER_RESPONSE_MARKER, columns = ColumnConstants.DISASTER_RESPONSE_MARKER,
             name=ColumnConstants.DISASTER_RESPONSE_MARKER, tab=EPConstants.TAB_FINANCIALS)
-    public JsonBean getDisasterResponse() {
+    public FilterDescriptor getDisasterResponse() {
         return buildYesNoJsonBean(ColumnConstants.DISASTER_RESPONSE_MARKER);
     }
     
-    protected JsonBean buildYesNoJsonBean(String columnName) {
-        JsonBean res = new JsonBean();
-        res.set("filterId", FilterUtils.INSTANCE.idFromColumnName(columnName));
-        res.set("name", columnName);
-        res.set("translatedName", columnName);
-        res.set("id", ANY_VALUE);
-        res.set("values", 
+    protected FilterDescriptor buildYesNoJsonBean(String columnName) {
+        FilterDescriptor res = new FilterDescriptor();
+        res.setFilterId(FilterUtils.INSTANCE.idFromColumnName(columnName));
+        res.setName(columnName);
+        res.setValues(
                 Arrays.asList(
-                    new SimpleJsonBean(1, "Yes", null, TranslatorWorker.translateText("Yes")),
-                    new SimpleJsonBean(2, "No", null, TranslatorWorker.translateText("No")),
-                    new SimpleJsonBean(ColumnReportData.UNALLOCATED_ID, FiltersConstants.UNDEFINED_NAME, null, 
-                            TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME))
+                    new FilterValue(1, "Yes", null, TranslatorWorker.translateText("Yes")),
+                    new FilterValue(2, "No", null, TranslatorWorker.translateText("No"))
                 ));
         return res;
     }
-    
-/**
- * used to return AmpCategoryClass values wrapped to be provided to the filter widget
- * @param categoryKey
- * @param filterId
- * @return
- */
-    private JsonBean getCategoryValue(String categoryKey, String columnName) {
-        JsonBean js=new JsonBean();
-        js.set("filterId", FilterUtils.INSTANCE.idFromColumnName(columnName));
-        js.set("name", TranslatorWorker.translateText(columnName));
-        js.set("values",getCategoryValue(categoryKey));
+
+    /**
+     * used to return AmpCategoryClass values wrapped to be provided to the filter widget
+     *
+     * @param categoryKey
+     * @param filterId
+     * @return
+     */
+    private FilterDescriptor getCategoryValue(String categoryKey, String columnName) {
+        FilterDescriptor js = new FilterDescriptor();
+        js.setFilterId(FilterUtils.INSTANCE.idFromColumnName(columnName));
+        js.setName(TranslatorWorker.translateText(columnName));
+        js.setValues(getCategoryValue(categoryKey));
         return js;
-        
     }
     
-    public static SimpleJsonBean buildProgramsJsonBean(AmpThemeSkeleton loc, String programName, int level) {
-        SimpleJsonBean res = new SimpleJsonBean();
+    public static FilterValue buildProgramsJsonBean(AmpThemeSkeleton loc, String programName, int level) {
+        FilterValue res = new FilterValue();
         res.setId(loc.getId());
         res.setName(loc.getName());     
         res.setFilterId(FilterUtils.INSTANCE.idFromColumnName(programName + " Level " + level));
-        ArrayList<SimpleJsonBean> children = new ArrayList<SimpleJsonBean>();
+        ArrayList<FilterValue> children = new ArrayList<FilterValue>();
         for(AmpThemeSkeleton child:loc.getChildLocations())
             children.add(buildProgramsJsonBean(child, programName, level + 1));
         res.setChildren(children);
         return res;
     }
     
-    /**
-     * Get JsonEnable object for programs
-     * 
-     * @param t
-     *            AmpThem to get the programFrom
-     * @return
-     */
-    private SimpleJsonBean getPrograms(AmpTheme t,String programName,Integer level) {
-        SimpleJsonBean p = new SimpleJsonBean();
-        p.setId(t.getAmpThemeId());
-        p.setName(t.getName());
-        p.setChildren(new ArrayList<SimpleJsonBean>());
-        String columnName=null;
-        if (level > 0) {
-            if (programName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
-                columnName = ProgramUtil.NATIONAL_PLANNING_OBJECTIVES + " Level " + level;
-            } else {
-                if (programName.equals(ProgramUtil.PRIMARY_PROGRAM)) {
-                    columnName = ProgramUtil.PRIMARY_PROGRAM + " Level " + level;
-                } else {
-                    if (programName.equals(ProgramUtil.SECONDARY_PROGRAM)) {
-                        columnName = ProgramUtil.SECONDARY_PROGRAM + " Level " + level;
-                    } else {
-                        if (programName.equals(ProgramUtil.TERTIARY_PROGRAM)) {
-                            columnName = ProgramUtil.TERTIARY_PROGRAM + " Level " + level;
-                        }
-                    }
-                }
-            }
-            p.setFilterId(columnName);
-        }
-        level++;
-        for (AmpTheme tt : t.getSiblings()) {
-            p.getChildren().add(getPrograms(tt,programName,level));
-        }
-        orderByProperty(p.getChildren(),NAME_PROPERTY);
-        return p;
-    }
-
     /**
      * Get Sectors from AmpSector
      * 
@@ -683,8 +619,8 @@ public class FiltersEndpoint implements AmpEndpoint {
      * @return
      */
 
-    private SimpleJsonBean getSectors(AmpSector as, String sectorConfigName, Integer level) {
-        SimpleJsonBean s = new SimpleJsonBean();
+    private FilterValue getSectors(AmpSector as, String sectorConfigName, Integer level) {
+        FilterValue s = new FilterValue();
         s.setId(as.getAmpSectorId());
         s.setCode(as.getSectorCodeOfficial());
         s.setName(as.getName());
@@ -706,8 +642,8 @@ public class FiltersEndpoint implements AmpEndpoint {
     @ApiMethod(ui = true, name = "Workspaces", id = FiltersConstants.TEAM, columns = ColumnConstants.TEAM,
                 visibilityCheck = "hasToShowWorkspaceFilter", tab = EPConstants.TAB_OTHER)
     @ApiOperation("Return all workspaces to be used for filtering")
-    public JsonBean getWorkspaces() {
-        List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
+    public FilterDescriptor getWorkspaces() {
+        List<FilterValue> teamsListJson = new ArrayList<FilterValue>();
         if (hasToShowWorkspaceFilter()) {
 
             AmpTeam ws = getAmpTeam();
@@ -735,7 +671,7 @@ public class FiltersEndpoint implements AmpEndpoint {
 
             if (teamNames != null) {
                 for (long ampTeamId : teamNames.keySet()) {
-                    SimpleJsonBean ampTeamJson = new SimpleJsonBean();
+                    FilterValue ampTeamJson = new FilterValue();
                     ampTeamJson.setId(ampTeamId);
                     ampTeamJson.setName(teamNames.get(ampTeamId));
                     teamsListJson.add(ampTeamJson);
@@ -744,10 +680,10 @@ public class FiltersEndpoint implements AmpEndpoint {
 
             teamsListJson = orderByProperty(teamsListJson, NAME_PROPERTY);
         }
-        JsonBean js = new JsonBean();
-        js.set("filterId", FiltersConstants.TEAM);
-        js.set("name", TranslatorWorker.translateText("Workspaces"));
-        js.set("values", teamsListJson);
+        FilterDescriptor js = new FilterDescriptor();
+        js.setFilterId(FiltersConstants.TEAM);
+        js.setName(TranslatorWorker.translateText("Workspaces"));
+        js.setValues(teamsListJson);
         
         return js;
     }
@@ -784,41 +720,35 @@ public class FiltersEndpoint implements AmpEndpoint {
     }
 
     /**
-     * Orders a List <JsonBean> by name
-     * 
-     * @param fi, List <JsonBean> to be ordered
-     * @return ordered List 
+     * Orders a List<T> by name.
+     *
+     * @param list, List<T> to be ordered
+     * @param nameFn function to retrieve the name of an item
      */
-    private static List <JsonBean> orderByName(List <JsonBean> fi) {
-        Collections.sort(fi, new Comparator<JsonBean>() {
+    private static <T> void orderByName(List<T> list, Function<T, String> nameFn) {
+        Collections.sort(list, new Comparator<T>() {
             @Override
-            public int compare(JsonBean a, JsonBean b) {
-                    String prop1 = (String) a.get("name");
-                    String prop2 = (String) b.get("name");
-                    prop1 = prop1.trim();
-                    prop2 = prop2.trim();
-                    return prop1.compareToIgnoreCase(prop2);
-                }
+            public int compare(T a, T b) {
+                return nameFn.apply(a).trim().compareToIgnoreCase(nameFn.apply(b).trim());
+            }
         });
-        return fi;
-
     }
 
     /**
-     * Orders a List <SimpleJsonBean> based on the property desired.
-     * It can order using any attributes of SimpleJsonBean like: id, code, name, displayName
+     * Orders a List <FilterValue> based on the property desired.
+     * It can order using any attributes of FilterValue like: id, code, name, displayName
      * 
      * @param list the list to be ordered
      * @param property, String with the attribute to be ordered
-     * @return ordered List <SimpleJsonBean>
+     * @return ordered List <FilterValue>
      */
-    private static List<SimpleJsonBean> orderByProperty(List<SimpleJsonBean> list, final String property) {
-        Collections.sort(list, new Comparator<SimpleJsonBean>() {
+    private static List<FilterValue> orderByProperty(List<FilterValue> list, final String property) {
+        Collections.sort(list, new Comparator<FilterValue>() {
             @Override
-            public int compare(SimpleJsonBean a, SimpleJsonBean b) {
+            public int compare(FilterValue a, FilterValue b) {
                 try {
-                    String property1 = (String) SimpleJsonBean.class.getMethod("get" + property).invoke(a);
-                    String property2 = (String) SimpleJsonBean.class.getMethod("get" + property).invoke(b);
+                    String property1 = (String) FilterValue.class.getMethod("get" + property).invoke(a);
+                    String property2 = (String) FilterValue.class.getMethod("get" + property).invoke(b);
                     property1 = property1.trim();
                     property2 = property2.trim();
                     return property1.compareToIgnoreCase(property2);
@@ -849,8 +779,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.EFFECTIVE_FUNDING_DATE, columns = ColumnConstants.EFFECTIVE_FUNDING_DATE,
             id = FiltersConstants.EFFECTIVE_FUNDING_DATE, tab = EPConstants.TAB_FINANCIALS)
-    public JsonBean getEffectiveFundingDate(){
-        return new JsonBean();
+    public void getEffectiveFundingDate() {
     }
 
     @GET
@@ -858,7 +787,6 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.FUNDING_CLOSING_DATE, columns = ColumnConstants.FUNDING_CLOSING_DATE,
             id = FiltersConstants.FUNDING_CLOSING_DATE, tab = EPConstants.TAB_FINANCIALS)
-    public JsonBean getFundingClosingDate(){
-        return new JsonBean();
+    public void getFundingClosingDate() {
     }
 }

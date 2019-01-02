@@ -81,8 +81,12 @@ public class AMPStartupListener extends HttpServlet implements
     protected void initNiReports() throws AMPException {
         AmpReportsSchema.init();
     }
-    
+
     public void contextInitialized(ServletContextEvent sce) {
+        PersistenceManager.inTransaction(() -> contextInitializedInternal(sce));
+    }
+    
+    public void contextInitializedInternal(ServletContextEvent sce) {
         logger.debug("I am running with a new code!!!!");
         
         
@@ -106,7 +110,7 @@ public class AMPStartupListener extends HttpServlet implements
                 ampContext.setAttribute(Constants.DEF_FLAG_EXIST, new Boolean(true));
 
             AmpReportsSchema.getInstance().maintainDescriptions();
-            
+
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             // get the default amp template
             AmpTemplatesVisibility currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
@@ -174,8 +178,6 @@ public class AMPStartupListener extends HttpServlet implements
             runCacheRefreshingQuery("update_program_level_caches_internal", "program");
             runCacheRefreshingQuery("update_sector_level_caches_internal", "sector");
             runCacheRefreshingQuery("update_organisation_caches_internal", "organisation");
-            
-            PersistenceManager.getSession().getTransaction().commit();
             
             ContentRepositoryManager.initialize();
             

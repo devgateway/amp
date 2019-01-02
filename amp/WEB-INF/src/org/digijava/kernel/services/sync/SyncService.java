@@ -395,7 +395,7 @@ public class SyncService implements InitializingBean {
         String wsFilter = getWorkspaceActivitiesSql(teamMembers);
         String sql = String.format("select amp_id ampId, modified_date modifiedDate, deleted "
                 + "from amp_activity "
-                + "where amp_activity_id in (%s)", wsFilter);
+                + "where amp_activity_id in (%s) and amp_id is not null", wsFilter);
         return jdbcTemplate.query(sql, emptyMap(), ACTIVITY_CHANGE_ROW_MAPPER);
     }
 

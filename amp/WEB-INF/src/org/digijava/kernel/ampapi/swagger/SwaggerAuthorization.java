@@ -27,8 +27,9 @@ public class SwaggerAuthorization extends AbstractSwaggerExtension {
         ApiMethod apiMethod = method.getAnnotation(ApiMethod.class);
         if (apiMethod != null && apiMethod.authTypes() != null) {
             for (AuthRule authRule : apiMethod.authTypes()) {
-                if (!IGNORE_RULES.contains(authRule))
-                operation.addSecurity(authRule.name(), null);
+                if (!IGNORE_RULES.contains(authRule)) {
+                    operation.addSecurity(authRule.name(), null);
+                }
             }
         }
         super.decorateOperation(operation, method, chain);

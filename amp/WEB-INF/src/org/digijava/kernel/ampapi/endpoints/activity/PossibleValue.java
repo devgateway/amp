@@ -18,7 +18,7 @@ import com.google.common.collect.ImmutableMap;
  */
 public class PossibleValue {
 
-    private final Object id;
+    private final Long id;
     private final String value;
 
     @JsonProperty("translated-value")
@@ -44,14 +44,6 @@ public class PossibleValue {
         this(id, value, translatedValues, extraInfo, ImmutableList.of());
     }
 
-    public PossibleValue(String id, String value, Map<String, String> translatedValues) {
-        this(id, value, translatedValues, null, ImmutableList.of());
-    }
-
-    public PossibleValue(String id, String value, Map<String, String> translatedValues, Object extraInfo) {
-        this(id, value, translatedValues, extraInfo, ImmutableList.of());
-    }
-
     public PossibleValue withChildren(List<PossibleValue> children) {
         return new PossibleValue(id, value, translatedValues, extraInfo, children);
     }
@@ -60,7 +52,7 @@ public class PossibleValue {
         return new PossibleValue(id, value, translatedValues, extraInfo, ImmutableList.of());
     }
 
-    private PossibleValue(Object id, String value, Map<String, String> translatedValues, Object extraInfo,
+    private PossibleValue(Long id, String value, Map<String, String> translatedValues, Object extraInfo,
             List<PossibleValue> children) {
         this.id = id;
         this.value = value;

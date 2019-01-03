@@ -24,6 +24,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
@@ -323,6 +324,8 @@ public class ObjectImporter {
         }
         if (ApprovalStatus.class.isAssignableFrom(objectType)) {
             return ApprovalStatus.fromId((Integer) value);
+        } else if (ResourceType.class.isAssignableFrom(objectType)) {
+            return ResourceType.fromId((Integer) value);
         } else if (InterchangeUtils.isSimpleType(objectType)) {
             return ConvertUtils.convert(value, objectType);
         } else {

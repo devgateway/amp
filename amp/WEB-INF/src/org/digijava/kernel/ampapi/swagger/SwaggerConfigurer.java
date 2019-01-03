@@ -30,7 +30,7 @@ public class SwaggerConfigurer {
         ModelConverters.getInstance().read(FiltersPH.class);
 
         ModelConverters.getInstance().read(SettingsPH.class);
-        
+
         SwaggerExtensions.getExtensions().add(new SwaggerAuthorization());
 
         BeanConfig beanConfig = new BeanConfig();

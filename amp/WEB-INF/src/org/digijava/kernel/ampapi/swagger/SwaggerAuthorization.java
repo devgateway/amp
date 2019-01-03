@@ -15,15 +15,15 @@ import io.swagger.models.Operation;
  *
  */
 public class SwaggerAuthorization extends AbstractSwaggerExtension {
-	
+
     @Override
-	public void decorateOperation(Operation operation, Method method, Iterator<SwaggerExtension> chain) {
-		ApiMethod apiMethod = method.getAnnotation(ApiMethod.class);
-		if (apiMethod != null && apiMethod.authTypes() != null) {
-			for (AuthRule authRule: apiMethod.authTypes()) {
-				operation.addSecurity(authRule.name(), null);
-			}
-		}
-		super.decorateOperation(operation, method, chain);
-	}
+    public void decorateOperation(Operation operation, Method method, Iterator<SwaggerExtension> chain) {
+        ApiMethod apiMethod = method.getAnnotation(ApiMethod.class);
+        if (apiMethod != null && apiMethod.authTypes() != null) {
+            for (AuthRule authRule : apiMethod.authTypes()) {
+                operation.addSecurity(authRule.name(), null);
+            }
+        }
+        super.decorateOperation(operation, method, chain);
+    }
 }

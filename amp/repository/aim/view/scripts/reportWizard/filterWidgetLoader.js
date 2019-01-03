@@ -11,19 +11,21 @@ $(document).ready(function () {
     events.listenTo(widgetFilter, 'close', function () {
         $(container).hide();
     });
-    events.listenTo(widgetFilter, 'apply', function (data) {
+    events.listenTo(widgetFilter, 'apply', function () {
         // Save just applied filters in case the user hits "reset" button.
         var serializedFilters = widgetFilter.serialize() || {};
-        console.log(serializedFilters);
-        // TODO: un-hardcode the param reportContextId.
         $.ajax({
             type: 'POST',
-            url: '/aim/reportsFilterPicker.do?applyWithNewWidget=true&cacheBuster=' + new Date().getTime() + '&reportContextId=' + widgetFilter.reportContextId + '&sourceIsReportWizard=true',
+            url: '/aim/reportsFilterPicker.do?applyWithNewWidget=true&cacheBuster=' +
+                new Date().getTime() +
+                '&reportContextId=' + widgetFilter.reportContextId +
+                '&sourceIsReportWizard=true',
             data: serializedFilters,
             success: function (data) {
                 $('#listFiltersDiv').html(data);
             }
         });
         $(container).hide();
+        $('#useFiltersCheckbox').attr('checked', 'checked');
     });
 });

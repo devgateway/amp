@@ -147,10 +147,10 @@ Filters.prototype.showFilters	= function(reportContextId) {
 
 Filters.prototype.showNewFilters = function (reportContextId) {
 	widgetFilter.reportContextId = reportContextId;
-	if (widgetFilter.gotSavedFilters === true) {
+	if (widgetFilter.reportContextId === 'report_wizard') {
 		widgetFilter.showFilters();
 		$('#filter-popup').show();
-	} else {
+	} else if (widgetFilter.gotSavedFilters !== true) {
 		$.ajax({
 			type: 'GET',
 			url: '/rest/data/report/' + widgetFilter.reportContextId,
@@ -162,6 +162,9 @@ Filters.prototype.showNewFilters = function (reportContextId) {
 			}
 		});
 		widgetFilter.gotSavedFilters = true;
+	} else {
+		widgetFilter.showFilters();
+		$('#filter-popup').show();
 	}
 };
 

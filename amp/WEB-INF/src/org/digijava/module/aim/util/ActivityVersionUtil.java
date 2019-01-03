@@ -357,11 +357,8 @@ public class ActivityVersionUtil {
         Long activityTwoId = ampActivityTwo.getAmpActivityId();
         return compareActivities(activityOneId, activityTwoId);
     }
-     
-    
-    
-
-    
+        
+       
     public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId, Long activityTwoId)
             throws Exception {
         Session session = PersistenceManager.getCurrentSession();
@@ -660,7 +657,30 @@ AmpActivityVersion  ampActivityTwo = (AmpActivityVersion) session.load(AmpActivi
    return ActivityVersionUtil.groupOutputCollection(outputCollection);
 }
  
-    
+    public static Map<Long, Map<String, List<CompareOutput>>> compareActivities(List<Long> activityId) throws Exception {
+        Map<Long,Map<String,List<CompareOutput>>>  listOfActivities = new HashMap<Long,Map<String,List<CompareOutput>>>();
+         ArrayList<Long> activityList =  new ArrayList(activityId);
+         Iterator <Long>iter = activityList.iterator();
+         while(iter.hasNext())
+         {
+             Long  currentActivity = iter.next();
+             Session session = PersistenceManager.getCurrentSession();
+             
+             AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, currentActivity);
+
+             AmpActivityVersion ampActivityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
+           
+             
+             if(ampActivityTwo==null) 
+                          continue;
+                               
+             Long activityTwoId = ampActivityTwo.getAmpActivityId();
+              listOfActivities.put(currentActivity,compareActivities(currentActivity, activityTwoId));
+         }
+           
+           
+         return   listOfActivities;
+     }
      
     private static void addAsDifferentIfNnoPresent(List<CompareOutput> outputCollection, Field[] fields, int i,
             VersionableCollection auxAnnotation, Collection auxCollection2, Iterator iter1) {

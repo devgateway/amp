@@ -4,6 +4,7 @@ var $ = require('jquery');
 var Backbone = require('backbone');
 var LegendItem = require('./legend-item-view');
 var Template = fs.readFileSync(__dirname + '/legend-template.html', 'utf8');
+require('jquery-ui/resizable');
 
 module.exports = Backbone.View.extend({
 
@@ -44,6 +45,7 @@ module.exports = Backbone.View.extend({
     }    
    
     $('.legend').draggable();
+    this.$('.legend-content').resizable();
     
     return this;
   },

@@ -122,7 +122,7 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
                         "var ua = window.navigator.userAgent;"+
                         "var msie = ua.indexOf('MSIE');"+
                         "if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\\:11\\./)  || window.ActiveXObject) {  "+
-                            "$('#"+textAreaContainer.getMarkupId()+"').parent().parent().append(\"<div id='loadingEditorDiv'><img src='/repository/aim/view/scripts/ajaxtabs/loading.gif' style='margin-right:7px;'/>" + TranslatorUtil.getTranslatedText("Loading please wait...") + "</div>\");"+
+                            "$('#"+textAreaContainer.getMarkupId()+"').parent().parent().append(\"<div id='loadingEditorDiv'><img src='/repository/aim/view/scripts/ajaxtabs/loading.gif' style='margin-right:7px;'/>" + TranslatorUtil.getTranslatedText("Loading...") + "</div>\");"+
                             "$('#"+ closeLink.getMarkupId() +"').click();"+
                             "setTimeout(function(){showRichEditor();"+
                             "$('#loadingEditorDiv').remove();"+

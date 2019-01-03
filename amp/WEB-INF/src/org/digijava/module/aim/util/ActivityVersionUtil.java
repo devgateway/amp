@@ -346,13 +346,19 @@ public class ActivityVersionUtil {
         return act;
     }
     
-    public static Map<Long, Map<String, List<CompareOutput>>> compareActivities(Long[] ActivitiesId) throws Exception {
+    public static Map<Long, Map<String, List<CompareOutput>>> compareActivities(ArrayList<Long> ActivitiesId) throws Exception {
         
-        Session session = PersistenceManager.getCurrentSession();
         Map<Long, Map<String, List<CompareOutput>>> activitiesCollection = new HashMap<Long, Map<String, List<CompareOutput>>>();
-        for (int i=0; i < ActivitiesId.length; i++) {
-            Map<String, List<CompareOutput>> ActivityList = compareActivities(ActivitiesId[i]);
-            activitiesCollection.put(ActivitiesId[i], ActivityList);
+        for (int i=0; i < ActivitiesId.size(); i++) {
+            Session session = PersistenceManager.getCurrentSession();
+            Long activityOneid=ActivitiesId.get(i);
+            AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneid);
+            
+            Long activityTwoid = ActivityUtil.getPreviousVersion(ampActivityOne).getAmpActivityId();
+            if (activityTwoid != null) {
+            Map<String, List<CompareOutput>> ActivityList = compareActivities(activityOneid,activityTwoid);
+            activitiesCollection.put(activityOneid, ActivityList);
+            }
         }
         return activitiesCollection;
     }

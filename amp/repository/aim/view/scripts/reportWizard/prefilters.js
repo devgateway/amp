@@ -146,9 +146,23 @@ Filters.prototype.showFilters	= function(reportContextId) {
 };
 
 Filters.prototype.showNewFilters = function (reportContextId) {
-	widgetFilter.showFilters(reportContextId);
 	widgetFilter.reportContextId = reportContextId;
-	$('#filter-popup').show();
+	if (widgetFilter.gotSavedFilters === true) {
+		widgetFilter.showFilters();
+		$('#filter-popup').show();
+	} else {
+		$.ajax({
+			type: 'GET',
+			url: '/rest/data/report/' + widgetFilter.reportContextId,
+			success: function (data) {
+				filters = data.reportMetadata.reportSpec.filters;
+				widgetFilter.deserialize({filters: filters}, {silent: true});
+				widgetFilter.showFilters();
+				$('#filter-popup').show();
+			}
+		});
+		widgetFilter.gotSavedFilters = true;
+	}
 };
 
 Filters.prototype.showSettings	= function(reportContextId) {

@@ -264,13 +264,17 @@ public class ReportsFilterPicker extends Action {
                     if (subKey.contains("[]")) {
                         filters.put(key, Arrays.asList(parameters.get(s)));
                     } else {
-                        String subKey2 = subKey.substring(subKey.indexOf("[") + 1, subKey.indexOf("]"));
-                        LinkedHashMap<String, Object> sub = new LinkedHashMap<String, Object>();
-                        sub.put(subKey2, parameters.get(s)[0]);
-                        if (!filters.containsKey(key)) {
-                            filters.put(key, sub);
+                        if (!subKey.equals("")) {
+                            String subKey2 = subKey.substring(subKey.indexOf("[") + 1, subKey.indexOf("]"));
+                            LinkedHashMap<String, Object> sub = new LinkedHashMap<String, Object>();
+                            sub.put(subKey2, parameters.get(s)[0]);
+                            if (!filters.containsKey(key)) {
+                                filters.put(key, sub);
+                            } else {
+                                ((LinkedHashMap<String, Object>) filters.get(key)).put(subKey2, parameters.get(s)[0]);
+                            }
                         } else {
-                            ((LinkedHashMap<String, Object>) filters.get(key)).put(subKey2, parameters.get(s)[0]);
+                            filters.put(key, parameters.get(s)[0]);
                         }
                     }
                 }));

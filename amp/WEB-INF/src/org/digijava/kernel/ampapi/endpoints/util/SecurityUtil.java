@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -247,21 +246,6 @@ public class SecurityUtil {
         return !user.getPassword().equals(ampApiToken.getUser().getPassword());
     }
 
-    /** Remove token from application level
-     * @param sc ServletContext
-     * @param token token to remove
-     */
-    public static void removeTokenFromContext(ServletContext sc,String token) {
-        HashMap<String, AmpApiToken> tokens;
-
-        tokens = (HashMap<String, AmpApiToken>) sc.getAttribute(SecurityUtil.TOKENS);
-
-        if (tokens != null) {
-            tokens.remove(token);
-            sc.setAttribute(SecurityUtil.TOKENS,tokens);
-        }
-    }
-    
     public static JsonBean getTeamJsonBean(AmpTeam ws) {
         JsonBean teamJson = new JsonBean();
         teamJson.set("id", ws.getAmpTeamId());

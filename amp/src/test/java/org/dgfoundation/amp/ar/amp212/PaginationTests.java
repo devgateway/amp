@@ -39,6 +39,10 @@ public class PaginationTests extends ReportingTestCase {
             "SubNational no percentages", "TAC_activity_1", "TAC_activity_2", "Test MTEF directed",
             "third activity with agreements", "Unvalidated activity", "with weird currencies");
 
+    public PaginationTests() {
+        inTransactionRule = null;
+    }
+
     final ReportSpecification theFlatSpec = ReportSpecificationImpl.buildFor("initReport",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), null,

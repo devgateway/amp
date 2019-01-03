@@ -28,6 +28,7 @@ import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSche
 import org.dgfoundation.amp.reports.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.testutils.ActivityIdsFetcher;
 import org.dgfoundation.amp.testutils.AmpTestCase;
+import org.dgfoundation.amp.testutils.InTransactionRule;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -35,11 +36,15 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
+import org.junit.Rule;
 
 public abstract class ReportingTestCase extends AmpTestCase {
     
     static protected int nrRunReports = 0;
-    
+
+    @Rule
+    public InTransactionRule inTransactionRule = new InTransactionRule();
+
     public static<K extends Cell> List<K> nicelySorted(Collection<K> in) {
         return AmpCollections.sorted(in, (a, b) -> {
             int delta = Long.compare(a.activityId, b.activityId);

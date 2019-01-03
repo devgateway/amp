@@ -77,7 +77,7 @@ public class LabelDAO {
         }
         if ( rootLabel == null && !writeable ) {
             this.createRootNode();
-            rootLabel   = DocumentManagerUtil.getNodeByPath(session, null, CrConstants.LABEL_ROOT_NODE_NAME);
+            rootLabel   = DocumentManagerUtil.getNodeByPath(session, CrConstants.LABEL_ROOT_NODE_NAME);
         }
         return new RootLabel(rootLabel);
     }

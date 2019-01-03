@@ -7,17 +7,17 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
-import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -27,19 +27,14 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class NiComputedMeasuresTests extends ReportingTestCase {
+public class NiComputedMeasuresTests extends AmpReportingTestCase {
     
     final List<String> acts = Arrays.asList(
             "expenditure class", 
             "Eth Water",
             "activity with directed MTEFs"
         );
-    
-    @Override
-    protected NiReportExecutor getNiExecutor(List<String> activityNames) {
-        AmpReportsScratchpad.forcedNowDate = LocalDate.of(2016, 5, 3);
-        return getDbExecutor(activityNames);
-    }
+
     final List<String> ppcActs = Arrays.asList(
             "Proposed Project Cost 1 - USD",
             "Proposed Project Cost 2 - EUR",
@@ -83,37 +78,37 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
     @Test
     public void testNonTimeboundWithHiers() {
         NiReportModel   cor = new NiReportModel("Non-timebound computed measures with hiers")
-                .withHeaders(Arrays.asList(
-                        "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 9))",
-                        "(Primary Program: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Proposed Project Amount: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 6))",
-                        "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Cumulative Commitment: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Cumulative Disbursement: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Uncommitted Cumulative Balance: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Undisbursed Cumulative Balance: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1))"))
-                    .withWarnings(Arrays.asList())
-                    .withBody(      new ReportAreaForTests(null)
-                      .withContents("Primary Program", "", "Project Title", "", "Proposed Project Amount", "4,630,902,72", "Totals-Actual Commitments", "752,245", "Totals-Actual Disbursements", "321,765", "Totals-Cumulative Commitment", "752,245", "Totals-Cumulative Disbursement", "321,765", "Totals-Uncommitted Cumulative Balance", "3,878,657,72", "Totals-Undisbursed Cumulative Balance", "430,480")
-                      .withChildren(
-                        new ReportAreaForTests(new AreaOwner("Primary Program", "Subprogram p1", 2))
-                        .withContents("Project Title", "", "Proposed Project Amount", "33,196,12", "Totals-Actual Commitments", "148,456", "Totals-Actual Disbursements", "0", "Totals-Cumulative Commitment", "148,456", "Totals-Cumulative Disbursement", "0", "Totals-Uncommitted Cumulative Balance", "-115,259,88", "Totals-Undisbursed Cumulative Balance", "148,456", "Primary Program", "Subprogram p1")
-                        .withChildren(
-                          new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Proposed Project Amount", "33,196,12", "Totals-Actual Commitments", "25,000", "Totals-Cumulative Commitment", "25,000", "Totals-Uncommitted Cumulative Balance", "8,196,12", "Totals-Undisbursed Cumulative Balance", "25,000"),
-                          new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Totals-Actual Commitments", "123,456", "Totals-Cumulative Commitment", "123,456", "Totals-Uncommitted Cumulative Balance", "-123,456", "Totals-Undisbursed Cumulative Balance", "123,456")        ),
-                        new ReportAreaForTests(new AreaOwner("Primary Program", "Subprogram p1.b", 3)).withContents("Project Title", "", "Proposed Project Amount", "33,196,12", "Totals-Actual Commitments", "25,000", "Totals-Actual Disbursements", "0", "Totals-Cumulative Commitment", "25,000", "Totals-Cumulative Disbursement", "0", "Totals-Uncommitted Cumulative Balance", "8,196,12", "Totals-Undisbursed Cumulative Balance", "25,000", "Primary Program", "Subprogram p1.b")
-                        .withChildren(
-                          new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Proposed Project Amount", "33,196,12", "Totals-Actual Commitments", "25,000", "Totals-Cumulative Commitment", "25,000", "Totals-Uncommitted Cumulative Balance", "8,196,12", "Totals-Undisbursed Cumulative Balance", "25,000")        ),
-                        new ReportAreaForTests(new AreaOwner("Primary Program", "Primary Program: Undefined", -1))
-                        .withContents("Project Title", "", "Proposed Project Amount", "4,564,510,47", "Totals-Actual Commitments", "578,789", "Totals-Actual Disbursements", "321,765", "Totals-Cumulative Commitment", "578,789", "Totals-Cumulative Disbursement", "321,765", "Totals-Uncommitted Cumulative Balance", "3,985,721,47", "Totals-Undisbursed Cumulative Balance", "257,024", "Primary Program", "Primary Program: Undefined")
-                        .withChildren(
-                          new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount", "1,000,000", "Totals-Uncommitted Cumulative Balance", "1,000,000"),
-                          new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount", "3,399,510,47", "Totals-Uncommitted Cumulative Balance", "3,399,510,47"),
-                          new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Proposed Project Amount", "60,000", "Totals-Actual Commitments", "75,000", "Totals-Cumulative Commitment", "75,000", "Totals-Uncommitted Cumulative Balance", "-15,000", "Totals-Undisbursed Cumulative Balance", "75,000"),
-                          new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Proposed Project Amount", "35,000", "Totals-Actual Commitments", "32,000", "Totals-Cumulative Commitment", "32,000", "Totals-Uncommitted Cumulative Balance", "3,000", "Totals-Undisbursed Cumulative Balance", "32,000"),
-                          new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Proposed Project Amount", "70,000", "Totals-Actual Commitments", "15,000", "Totals-Cumulative Commitment", "15,000", "Totals-Uncommitted Cumulative Balance", "55,000", "Totals-Undisbursed Cumulative Balance", "15,000"),
-                          new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Totals-Actual Commitments", "456,789", "Totals-Actual Disbursements", "321,765", "Totals-Cumulative Commitment", "456,789", "Totals-Cumulative Disbursement", "321,765", "Totals-Uncommitted Cumulative Balance", "-456,789", "Totals-Undisbursed Cumulative Balance", "135,024")        )      ));
+            .withHeaders(Arrays.asList(
+                    "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 9))",
+                    "(Primary Program Level 1: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Proposed Project Amount: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 6))",
+                    "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Cumulative Commitment: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Cumulative Disbursement: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Uncommitted Cumulative Balance: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Undisbursed Cumulative Balance: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1))"))
+                .withWarnings(Arrays.asList())
+                .withBody(      new ReportAreaForTests(null)
+                  .withContents("Primary Program Level 1", "", "Project Title", "", "Proposed Project Amount", "4,630,902,72", "Totals-Actual Commitments", "752,245", "Totals-Actual Disbursements", "321,765", "Totals-Cumulative Commitment", "752,245", "Totals-Cumulative Disbursement", "321,765", "Totals-Uncommitted Cumulative Balance", "3,878,657,72", "Totals-Undisbursed Cumulative Balance", "430,480")
+                  .withChildren(
+                    new ReportAreaForTests(new AreaOwner("Primary Program Level 1", "Subprogram p1", 2))
+                    .withContents("Project Title", "", "Proposed Project Amount", "33,196,12", "Totals-Actual Commitments", "148,456", "Totals-Actual Disbursements", "0", "Totals-Cumulative Commitment", "148,456", "Totals-Cumulative Disbursement", "0", "Totals-Uncommitted Cumulative Balance", "-115,259,88", "Totals-Undisbursed Cumulative Balance", "148,456", "Primary Program Level 1", "Subprogram p1")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Proposed Project Amount", "33,196,12", "Totals-Actual Commitments", "25,000", "Totals-Cumulative Commitment", "25,000", "Totals-Uncommitted Cumulative Balance", "8,196,12", "Totals-Undisbursed Cumulative Balance", "25,000"),
+                      new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Totals-Actual Commitments", "123,456", "Totals-Cumulative Commitment", "123,456", "Totals-Uncommitted Cumulative Balance", "-123,456", "Totals-Undisbursed Cumulative Balance", "123,456")        ),
+                    new ReportAreaForTests(new AreaOwner("Primary Program Level 1", "Subprogram p1.b", 3)).withContents("Project Title", "", "Proposed Project Amount", "33,196,12", "Totals-Actual Commitments", "25,000", "Totals-Actual Disbursements", "0", "Totals-Cumulative Commitment", "25,000", "Totals-Cumulative Disbursement", "0", "Totals-Uncommitted Cumulative Balance", "8,196,12", "Totals-Undisbursed Cumulative Balance", "25,000", "Primary Program Level 1", "Subprogram p1.b")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Proposed Project Amount", "33,196,12", "Totals-Actual Commitments", "25,000", "Totals-Cumulative Commitment", "25,000", "Totals-Uncommitted Cumulative Balance", "8,196,12", "Totals-Undisbursed Cumulative Balance", "25,000")        ),
+                    new ReportAreaForTests(new AreaOwner("Primary Program Level 1", "Primary Program Level 1: Undefined", -1))
+                    .withContents("Project Title", "", "Proposed Project Amount", "4,564,510,47", "Totals-Actual Commitments", "578,789", "Totals-Actual Disbursements", "321,765", "Totals-Cumulative Commitment", "578,789", "Totals-Cumulative Disbursement", "321,765", "Totals-Uncommitted Cumulative Balance", "3,985,721,47", "Totals-Undisbursed Cumulative Balance", "257,024", "Primary Program Level 1", "Primary Program Level 1: Undefined")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount", "1,000,000", "Totals-Uncommitted Cumulative Balance", "1,000,000"),
+                      new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount", "3,399,510,47", "Totals-Uncommitted Cumulative Balance", "3,399,510,47"),
+                      new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Proposed Project Amount", "60,000", "Totals-Actual Commitments", "75,000", "Totals-Cumulative Commitment", "75,000", "Totals-Uncommitted Cumulative Balance", "-15,000", "Totals-Undisbursed Cumulative Balance", "75,000"),
+                      new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Proposed Project Amount", "35,000", "Totals-Actual Commitments", "32,000", "Totals-Cumulative Commitment", "32,000", "Totals-Uncommitted Cumulative Balance", "3,000", "Totals-Undisbursed Cumulative Balance", "32,000"),
+                      new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Proposed Project Amount", "70,000", "Totals-Actual Commitments", "15,000", "Totals-Cumulative Commitment", "15,000", "Totals-Uncommitted Cumulative Balance", "55,000", "Totals-Undisbursed Cumulative Balance", "15,000"),
+                      new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Totals-Actual Commitments", "456,789", "Totals-Actual Disbursements", "321,765", "Totals-Cumulative Commitment", "456,789", "Totals-Cumulative Disbursement", "321,765", "Totals-Uncommitted Cumulative Balance", "-456,789", "Totals-Undisbursed Cumulative Balance", "135,024")        )      ));
         
         ReportSpecificationImpl spec = buildSpecification("Non-timebound computed measures with hiers", 
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.PRIMARY_PROGRAM),
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.CUMULATIVE_COMMITMENT, 
                         MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE, MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE), 
-                Arrays.asList(ColumnConstants.PRIMARY_PROGRAM),
+                Arrays.asList(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1),
                 GroupingCriteria.GROUPING_TOTALS_ONLY);
 
             
@@ -295,7 +290,11 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
         runNiTestCase(spec, "en", Arrays.asList("expenditure class"), cor);
         
     }
-    
+
+    @Before
+    public void setup() {
+        AmpReportsScratchpad.forcedNowDate = LocalDate.of(2016, 5, 3);
+    }
     
     @After
     public void tearDown() {

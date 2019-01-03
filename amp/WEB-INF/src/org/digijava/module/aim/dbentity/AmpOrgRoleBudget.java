@@ -60,6 +60,5 @@ public class AmpOrgRoleBudget implements Serializable, Comparable<AmpOrgRoleBudg
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
-
+    
 }

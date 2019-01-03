@@ -12,7 +12,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
 /**
  * @author Octavian Ciubotaru
@@ -50,7 +49,7 @@ public class ComponentFundingOrgsValidator extends InputValidator {
     private Set<Long> getOrgIds(JsonBean activity) {
         Set<Long> orgIds = new HashSet<>();
 
-        List<String> orgRoleFields = InterchangeUtils.discriminatedFieldsByFieldTitle.get(ActivityFieldsConstants.ORG_ROLE);
+        List<String> orgRoleFields = InterchangeUtils.getDiscriminatedFieldTitlesByFieldName().get("orgrole");
 
         for (String field : orgRoleFields) {
             Object orgRolesObj = InterchangeUtils.getFieldValuesFromJsonActivity(activity, field);

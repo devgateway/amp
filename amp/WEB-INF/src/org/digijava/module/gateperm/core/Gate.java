@@ -53,19 +53,19 @@ public abstract class Gate extends PropertyListable {
             Object object = constructor.newInstance(new Object[] {});
             return (Gate) object;
         } catch (SecurityException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         } catch (NoSuchMethodException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         } catch (IllegalArgumentException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         } catch (InstantiationException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         } catch (IllegalAccessException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         } catch (InvocationTargetException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         } catch (ClassNotFoundException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -109,7 +109,6 @@ public abstract class Gate extends PropertyListable {
             return b;
         } catch (Exception e) {
             logger.error("Gate "+this.getClass().getName()+" logic has thrown an exception: ", e);
-            e.printStackTrace();
         }
         return false;
     }

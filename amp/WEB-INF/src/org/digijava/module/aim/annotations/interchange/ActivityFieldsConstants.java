@@ -41,6 +41,7 @@ public class ActivityFieldsConstants {
     public static final String PRIMARY_CONTACT = "Mark as primary";
     public static final String TRANSACTION_TYPE = "Transaction Type";
     public static final String FUNDING_DETAILS = "Funding Details";
+    public static final String MTEF_PROJECTIONS = "MTEF Projections";
     public static final String LOCATIONS = "Locations";
     public static final String ORG_ROLE = "Org. Role";
     public static final String COMPONENTS = "Components";
@@ -64,6 +65,7 @@ public class ActivityFieldsConstants {
     public static final String CONTRACTING_AGENCY = "Contracting Agency";
     public static final String REGIONAL_GROUP = "Regional Group";
     public static final String SECTOR_GROUP = "Sector Group";
+    public static final String ACTIVITY_GROUP = "activity_group";
 
     public static final Map<String, String> ORG_ROLE_CODES = new ImmutableMap.Builder<String, String>()
             .put(InterchangeUtils.underscorify(DONOR_ORGANIZATION), Constants.FUNDING_AGENCY)

@@ -71,10 +71,9 @@ public class AmpUserUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select u from " + User.class.getName() + " u"
-                    + " where u.emailVerified=:emailVerified and u.banned=:banned and u.active=:active order by u.email";
+                    + " where u.emailVerified=:emailVerified and u.banned=:banned order by u.email";
             qry = session.createQuery(queryString);
             qry.setBoolean("emailVerified", false);
-            qry.setBoolean("active", false);
             qry.setBoolean("banned", true);
             users = qry.list();
         } catch (Exception e) {
@@ -282,7 +281,7 @@ public class AmpUserUtil {
             qry.setBoolean("banned", false);            
             retVal=qry.list();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new AimException("Cannot get users", e);
         }
         return retVal;

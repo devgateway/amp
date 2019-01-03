@@ -26,13 +26,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.Constants;
-import org.digijava.kernel.user.User;
-import org.digijava.module.um.form.UserUnSubscribeForm;
-import org.digijava.module.um.util.DbUtil;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionMessage;
-import org.digijava.kernel.util.RequestUtils;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -52,21 +45,6 @@ public class UnSubscribePermanently
                                  javax.servlet.http.HttpServletResponse
                                  response) throws
         java.lang.Exception {
-
-        UserUnSubscribeForm unsubscribeForm = (UserUnSubscribeForm) form;
-
-        User user = RequestUtils.getUser(request);
-
-
-        if (user!=null) {
-             user.setActive(true);
-             DbUtil.updateUser(user);
-        } else {
-            ActionMessages errors = new ActionMessages();
-            errors.add(ActionMessages.GLOBAL_MESSAGE,
-                       new ActionMessage("error.logon.invalid"));
-
-        }
 
         return mapping.findForward("unsubscribedPerm");
 

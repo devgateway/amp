@@ -347,6 +347,35 @@ public class ActivityVersionUtil {
     }
     
     
+    public static Map<Long ,Map<String, List<CompareOutput>> >compareActivities(List<Long> ActivityListId) throws Exception {
+    	
+    	 
+    	Map<Long ,Map<String, List<CompareOutput>>>  ActivityListstore = new HashMap <Long ,Map<String, List<CompareOutput>>>();
+    	
+     
+        ArrayList<Long> currentActivity = new ArrayList(ActivityListId);
+        
+        Iterator<Long> itr = currentActivity.iterator();
+        
+        while(itr.hasNext())
+        {
+        	
+        	Long curId = itr.next();
+        	 Session session = PersistenceManager.getCurrentSession();
+        	AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, curId);
+        	
+        	  AmpActivityVersion ampActivityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
+        	 
+        	 if(ampActivityTwo==null)
+        		 continue;
+        	 Long perId= ampActivityTwo.getAmpActivityId();
+        	 ActivityListstore.put(curId,compareActivities(curId, perId));
+        	
+        }
+        return ActivityListstore;
+    }
+    
+    
     public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId) throws Exception {
 
         Session session = PersistenceManager.getCurrentSession();
@@ -359,7 +388,7 @@ public class ActivityVersionUtil {
     }
      
     
-    
+   
 
     
     public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId, Long activityTwoId)

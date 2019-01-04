@@ -3,6 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.dto;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 
@@ -11,13 +13,33 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FilterValue {
+    public static class BasicView {
+    }
+    
+    public static class FullView extends BasicView {
+    }
+    
+    @JsonView(BasicView.class)
+    @ApiModelProperty(example = "en")
     private Object id;
+    
+    @JsonView(FullView.class)
     private String code;
+    
+    @JsonView(BasicView.class)
+    @ApiModelProperty(example = "English")
     private String name;
+    
+    @JsonView(FullView.class)
     private String displayName;
-
+    
+    @JsonView(FullView.class)
     private String filterId;
+    
+    @JsonView(FullView.class)
     private String type;
+    
+    @JsonView(FullView.class)
     private List<FilterValue> children;
 
     public FilterValue() {

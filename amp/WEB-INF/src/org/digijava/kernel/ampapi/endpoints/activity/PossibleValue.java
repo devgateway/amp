@@ -61,7 +61,7 @@ public class PossibleValue {
         this.extraInfo = extraInfo;
     }
 
-    public Object getId() {
+    public Long getId() {
         return id;
     }
 

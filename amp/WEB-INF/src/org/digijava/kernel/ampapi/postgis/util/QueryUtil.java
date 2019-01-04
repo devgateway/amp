@@ -475,7 +475,8 @@ public class QueryUtil {
         return buildLocationsJsonBean(rootLocation, 1);
     }
     
-    private final static String[] LEVEL_TO_NAME = {"na", FiltersConstants.COUNTRY, FiltersConstants.REGION, FiltersConstants.ZONE, FiltersConstants.DISTRICT, "na2", "na3", "na4"};
+    private static final String[] LEVEL_TO_NAME = {"na", FiltersConstants.COUNTRY, FiltersConstants.REGION,
+            FiltersConstants.ZONE, FiltersConstants.DISTRICT, FiltersConstants.COMMUNAL_SECTION, "na3", "na4"};
     
     private static Location buildLocationsJsonBean(LocationSkeleton loc, int level) {
         Location res = new Location();

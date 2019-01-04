@@ -74,6 +74,7 @@ public class ColumnConstants {
     public static final String CURRENT_COMPLETION_DATE_COMMENTS = "Current Completion Date Comments";
     public static final String DESCRIPTION_OF_COMPONENT_FUNDING = "Description of Component Funding";
     public static final String DISTRICT = "District";
+    public static final String COMMUNAL_SECTION = "Communal Section";
     public static final String LOCATION = "Location";
     public static final String RAW_LOCATION = "Raw Location";
     public static final String GEOCODE = "GeoId";
@@ -211,6 +212,7 @@ public class ColumnConstants {
     public static final String PLEDGES_REGIONS = "Pledges Regions";
     public static final String PLEDGES_ZONES = "Pledges Zones";
     public static final String PLEDGES_DISTRICTS = "Pledges Districts";
+    public static final String PLEDGES_COMMUNAL_SECTION = "Pledges Communal Section";
     
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES = "Pledges National Plan Objectives";
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0 = "Pledges National Plan Objectives Level 0";
@@ -223,7 +225,7 @@ public class ColumnConstants {
     public static final String PLEDGES_PROGRAMS_LEVEL_1 = "Pledges Programs Level 1";
     public static final String PLEDGES_PROGRAMS_LEVEL_2 = "Pledges Programs Level 2";
     public static final String PLEDGES_PROGRAMS_LEVEL_3 = "Pledges Programs Level 3";
-    
+
     public static final String PLEDGES_SECONDARY_PROGRAMS = "Pledges Secondary Programs";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_0 = "Pledges Secondary Programs Level 0";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_1 = "Pledges Secondary Programs Level 1";

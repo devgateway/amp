@@ -42,6 +42,7 @@ public class FiltersConstants {
     public static final String ARCHIVED = "archived";
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";
     public static final String BENEFICIARY_AGENCY_GROUP = "beneficiary-agency-group";
+    public static final String COMMUNAL_SECTION = "communal-section";
     public static final String COMPONENT_FUNDING_ORGANIZATION = "component-funding-organization";
     public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "component-second-responsible-organization";
     public static final String COMPUTED_YEAR = "computed-year";
@@ -118,7 +119,7 @@ public class FiltersConstants {
     public static final String PLEDGES_TERTIARY_SECTORS_SUB_SUB_SECTORS = "pledges-tertiary-sectors-sub-sub-sectors";
     public static final String PLEDGES_QUATERNARY_SECTORS = "pledges-quaternary-sectors";
     public static final String PLEDGES_QUATERNARY_SECTORS_SUB_SECTORS = "pledges-quaternary-sectors-sub-sectors";
-    public static final String PLEDGES_QUATERNARY_SECTORS_SUB_SUB_SECTORS = 
+    public static final String PLEDGES_QUATERNARY_SECTORS_SUB_SUB_SECTORS =
             "pledges-quaternary-sectors-sub-sub-sectors";
     public static final String PLEDGES_QUINARY_SECTORS = "pledges-quinary-sectors";
     public static final String PLEDGES_QUINARY_SECTORS_SUB_SECTORS = "pledges-quinary-sectors-sub-sectors";
@@ -207,18 +208,18 @@ public class FiltersConstants {
         put(Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
     }});
     
-    public static final Map<String, List<String>> ORG_ROLE_CODE_TO_FILTER_LIST_IDS = 
+    public static final Map<String, List<String>> ORG_ROLE_CODE_TO_FILTER_LIST_IDS =
             Collections.unmodifiableMap(new HashMap<String, List<String>>() {{
         put(Constants.FUNDING_AGENCY, Arrays.asList(DONOR_TYPE, DONOR_GROUP, DONOR_AGENCY));
-        put(Constants.IMPLEMENTING_AGENCY, Arrays.asList(IMPLEMENTING_AGENCY_TYPE, IMPLEMENTING_AGENCY_GROUP, 
+        put(Constants.IMPLEMENTING_AGENCY, Arrays.asList(IMPLEMENTING_AGENCY_TYPE, IMPLEMENTING_AGENCY_GROUP,
                 IMPLEMENTING_AGENCY));
         put(Constants.EXECUTING_AGENCY, Arrays.asList(EXECUTING_AGENCY_TYPE, EXECUTING_AGENCY_GROUP, EXECUTING_AGENCY));
         put(Constants.BENEFICIARY_AGENCY, Arrays.asList("", BENEFICIARY_AGENCY_GROUP, BENEFICIARY_AGENCY));
         put(Constants.CONTRACTING_AGENCY, Arrays.asList("", CONTRACTING_AGENCY_GROUP, CONTRACTING_AGENCY));
-        put(Constants.RESPONSIBLE_ORGANISATION, Arrays.asList("", RESPONSIBLE_ORGANIZATION_GROUP, 
+        put(Constants.RESPONSIBLE_ORGANISATION, Arrays.asList("", RESPONSIBLE_ORGANIZATION_GROUP,
                 RESPONSIBLE_ORGANIZATION));
         put(Constants.COMPONENT_FUNDING_ORGANIZATION, Arrays.asList("", "", COMPONENT_FUNDING_ORGANIZATION));
-        put(Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, 
+        put(Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
                 Arrays.asList("", "", COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION));
     }});
 }

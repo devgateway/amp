@@ -350,13 +350,9 @@ public class ActivityVersionUtil {
         
         Map<Long, Map<String, List<CompareOutput>>> activitiesCollection = new HashMap<Long, Map<String, List<CompareOutput>>>();
         for (int i=0; i < ActivitiesId.size(); i++) {
-            Session session = PersistenceManager.getCurrentSession();
             Long activityOneid=ActivitiesId.get(i);
-            AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneid);
-            
-            Long activityTwoid = ActivityUtil.getPreviousVersion(ampActivityOne).getAmpActivityId();
-            if (activityTwoid != null) {
-            Map<String, List<CompareOutput>> ActivityList = compareActivities(activityOneid,activityTwoid);
+            if (compareActivities(activityOneid) != null) {                
+            Map<String, List<CompareOutput>> ActivityList = compareActivities(activityOneid);
             activitiesCollection.put(activityOneid, ActivityList);
             }
         }

@@ -19,21 +19,7 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 	this.resetString				= "&doreset=true";
 	if ( !doReset )
 		this.resetString	= "";
-	
-	this.filterPanel = new YAHOO.widget.Panel("new", {
-			width:"870px",
-		    fixedcenter: true,
-		    constraintoviewport: true,
-		    underlay:"none",
-		    close:true,
-		    visible:false,
-		    modal:true,
-		    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
-		    draggable:true} );
-	this.filterPanel.setHeader(filterPanelName);
-	this.filterPanel.setBody("");
-	this.filterPanel.render(document.body);
-	
+
 	this.settingsPanel	= new YAHOO.widget.Panel("new2", {
 		width:"450px",
 	    fixedcenter: true,
@@ -59,7 +45,7 @@ function failureReportFunction(o) {
 	var getUserInformation = {
 		success : function(o) {
 			var response = [];
-			var currentPanel = o.argument.filter instanceof Filters ?  o.argument.filter.filterPanel : o.argument.filter.panel;			
+			var currentPanel = o.argument.filter instanceof Filters ?  o.argument.filter.filterPanel : o.argument.filter.panel;
 			if (o.responseText !== undefined) {
 				try {
 	                // parse the json data
@@ -105,44 +91,11 @@ function failureReportFunction(o) {
 };
 
 Filters.prototype.success	= function (o) {
-	if (o.responseText.length > 2) {
-		this.filterPanel.setBody( o.responseText );
-		this.filterTabs	= new YAHOO.widget.TabView('tabview_container');
-		
-		YAHOO.amptab.afterFiltersLoad();
-		this.filterPanel.cfg.setProperty("height", "482px" );
-		
-		this.filterPanel.show();
-		
-		this.saveFilters	= new SaveFilters(this, false);
-		
-		//initCalendar();
-		document.getElementById("filterPickerSubmitButton").onclick	= function() { return false;};
-		YAHOO.util.Event.removeListener("filterPickerSubmitButton", "click");
-		YAHOO.util.Event.addListener( "filterPickerSubmitButton", "click", this.saveFilters.saveFilters, this.saveFilters, this.saveFilters ) ;
-		
-	} else {
-		this.filterPanel.setBody("<font color='red'>" + this.filterProblemsMessage + "</font>");
-	}
 };
 
 Filters.prototype.failure = failureReportFunction;
 
 Filters.prototype.showFilters	= function(reportContextId) {
-	var avoidIECacheParam 	=	"&time=" + new Date().getTime(); 
-	this.filterPanel.setBody( "<div style='text-align: center'>" + this.loadingDataMessage + 
-			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>" );
-
-	this.filterPanel.cfg.setProperty("height", "482px" );
-	this.filterPanel.cfg.setProperty("width", "870px" );
-        this.settingsPanel.setHeader(this.filterPanelName);
-	this.filterPanel.center();
-	this.filterPanel.show();
-	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true&reportContextId=" + reportContextId + avoidIECacheParam +this.resetString+this.additionalParameter, this);
-	this.resetString		= "";
-	
-	// Fix z-index problem on Public Report Generator without changing css loading order.
-	this.fixZIndex("#new_mask", 3);
 };
 
 Filters.prototype.showNewFilters = function (reportContextId) {

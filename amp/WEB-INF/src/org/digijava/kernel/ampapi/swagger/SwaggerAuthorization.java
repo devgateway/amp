@@ -17,7 +17,7 @@ import io.swagger.models.Operation;
  *
  */
 public class SwaggerAuthorization extends AbstractSwaggerExtension {
-    private static Set<AuthRule> IGNORE_RULES = new TreeSet<>(Arrays.asList(
+    private static final Set<AuthRule> IGNORE_RULES = new TreeSet<>(Arrays.asList(
             AuthRule.AMP_OFFLINE,
             AuthRule.AMP_OFFLINE_OPTIONAL,
             AuthRule.PUBLIC_VIEW_ACTIVITY));

@@ -24,7 +24,7 @@ public class DimensionsFetchingTests extends AmpReportingTestCase {
         DimensionSnapshot snapshot = schema.orgsDimension.getDimensionData();
         assertEquals("level 0, info: [(id: -999999999, parent: 0, children: [-999999999]), (id: 38, parent: 0, children: [17, 18, 19, 20, 21])]", snapshot.data.get(0).toString());
         assertEquals("level 1, info: [(id: -999999999, parent: -999999999, children: [-999999999]), (id: 17, parent: 38, children: [21378, 21698]), (id: 18, parent: 38, children: [21694]), (id: 19, parent: 38, children: [21696, 21701, 21702]), (id: 20, parent: 38, children: [21695, 21697]), (id: 21, parent: 38, children: [21699, 21700])]", snapshot.data.get(1).toString());
-        assertEquals("level 2, info: [(id: -999999999, parent: -999999999, children: []), (id: 21378, parent: 17, children: []), (id: 21694, parent: 18, children: []), (id: 21695, parent: 20, children: []), (id: 21696, parent: 19, children: []), (id: 21697, parent: 20, children: []), (id: 21698, parent: 17, children: []), (id: 21699, parent: 21, children: []), (id: 21700, parent: 21, children: []), (id: 21701, parent: 19, children: []), (id: 21702, parent: 19, children: [])]", 
+        assertEquals("level 2, info: [(id: -999999999, parent: -999999999, children: []), (id: 21378, parent: 17, children: []), (id: 21694, parent: 18, children: []), (id: 21695, parent: 20, children: []), (id: 21696, parent: 19, children: []), (id: 21697, parent: 20, children: []), (id: 21698, parent: 17, children: []), (id: 21699, parent: 21, children: []), (id: 21700, parent: 21, children: []), (id: 21701, parent: 19, children: []), (id: 21702, parent: 19, children: [])]",
                 snapshot.data.get(2).toString());
     }
     
@@ -36,7 +36,7 @@ public class DimensionsFetchingTests extends AmpReportingTestCase {
         assertEquals(23, snapshot.data.get(1).parents.keySet().stream().filter(z -> z > 0).count());
         assertEquals(-2014077274, snapshot.data.get(2).toString().hashCode());
         assertEquals("[9108, 9109, 9110, 9111, 9112, 9113, 9114, 9115, 9116, 9120]", sortedString(snapshot.data.get(2).parents.keySet().stream().filter(z -> z > 0).collect(Collectors.toList())));
-        assertEquals(846942195, snapshot.data.get(3).toString().hashCode());
+        assertEquals(1961910925, snapshot.data.get(3).toString().hashCode());
         assertEquals("[9117, 9118, 9121]", snapshot.data.get(3).parents.keySet().stream().filter(z -> z > 0).collect(Collectors.toList()).toString());
     }
     

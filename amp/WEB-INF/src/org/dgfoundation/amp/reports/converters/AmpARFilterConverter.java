@@ -201,7 +201,7 @@ public class AmpARFilterConverter {
     
     private void addOrganizationsFilters() {
         //Donor Agencies
-        addFilter(arFilter.getDonorTypes(), 
+        addFilter(arFilter.getDonorTypes(),
                 (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_DONOR_TYPE : ColumnConstants.DONOR_TYPE));
         addFilter(arFilter.getDonorGroups(), 
                 (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_DONOR_GROUP : ColumnConstants.DONOR_GROUP));
@@ -328,7 +328,7 @@ public class AmpARFilterConverter {
         Collection<AmpCategoryValueLocations> filterLocations = arFilter.getLocationSelected();
         
         // the pledge locations are null if they are loaded in JUnitTests so the location selected should be used
-        if (arFilter.isPledgeFilter() && arFilter.getPledgesLocations() != null 
+        if (arFilter.isPledgeFilter() && arFilter.getPledgesLocations() != null
                 && !arFilter.getPledgesLocations().isEmpty()) {
             filterLocations = arFilter.getPledgesLocations();
         }
@@ -336,31 +336,32 @@ public class AmpARFilterConverter {
         if (filterLocations == null || filterLocations.isEmpty())
             return;
         
-        Set<AmpCategoryValueLocations> countries = new HashSet<AmpCategoryValueLocations>();
-        Set<AmpCategoryValueLocations> regions = new HashSet<AmpCategoryValueLocations>();
-        Set<AmpCategoryValueLocations> zones = new HashSet<AmpCategoryValueLocations>();
-        Set<AmpCategoryValueLocations> districts = new HashSet<AmpCategoryValueLocations>();
-        
+        Set<AmpCategoryValueLocations> countries = new HashSet<>();
+        Set<AmpCategoryValueLocations> regions = new HashSet<>();
+        Set<AmpCategoryValueLocations> zones = new HashSet<>();
+        Set<AmpCategoryValueLocations> districts = new HashSet<>();
+        Set<AmpCategoryValueLocations> communalSections = new HashSet<>();
+
         for(AmpCategoryValueLocations loc : filterLocations) {
-            if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getParentCategoryValue()))
+            AmpCategoryValue parentCatVal = loc.getParentCategoryValue();
+            if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(parentCatVal)) {
                 countries.add(loc);
-            else if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(loc.getParentCategoryValue()))
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(parentCatVal)) {
                 regions.add(loc);
-            else if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.equalsCategoryValue(loc.getParentCategoryValue()))
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.equalsCategoryValue(parentCatVal)) {
                 zones.add(loc);
-            else if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.equalsCategoryValue(loc.getParentCategoryValue()))
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.equalsCategoryValue(parentCatVal)) {
                 districts.add(loc);
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_COMMUNAL_SECTION.equalsCategoryValue(parentCatVal)) {
+                communalSections.add(loc);
+            }
         }
-        
-        String countryColumn = arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_COUNTRIES : ColumnConstants.COUNTRY;
-        String regionColumn = arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_REGIONS : ColumnConstants.REGION;
-        String zoneColumn = arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_ZONES : ColumnConstants.ZONE;
-        String distrColumn = arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_DISTRICTS : ColumnConstants.DISTRICT;
-        
-        addFilter(countries, countryColumn);
-        addFilter(regions, regionColumn);
-        addFilter(zones, zoneColumn);
-        addFilter(districts, distrColumn);
+
+        addFilter(countries, ColumnConstants.COUNTRY);
+        addFilter(regions, ColumnConstants.REGION);
+        addFilter(zones, ColumnConstants.ZONE);
+        addFilter(districts, ColumnConstants.DISTRICT);
+        addFilter(communalSections, ColumnConstants.COMMUNAL_SECTION);
     }
     
     /**

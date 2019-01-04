@@ -73,6 +73,7 @@ import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
+import org.digijava.module.esrigis.dbentity.ApiStateType;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
 
@@ -167,8 +168,8 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "SaveMap")
     @ApiOperation("Save map state")
-    public AmpApiState savedMaps(final @JsonView(AmpApiState.DetailView.class) AmpApiState pMap) {
-        return EndpointUtils.saveApiState(pMap,"G");
+    public AmpApiState saveMap(final @JsonView(AmpApiState.DetailView.class) AmpApiState pMap) {
+        return EndpointUtils.saveApiState(pMap, ApiStateType.G);
     }
 
     @GET
@@ -177,8 +178,8 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @ApiMethod(ui = false, id = "MapById")
     @JsonView(AmpApiState.DetailView.class)
     @ApiOperation("Get map state")
-    public AmpApiState savedMaps(@PathParam("mapId") Long mapId) {
-        return EndpointUtils.getApiState(mapId);
+    public AmpApiState getSavedMap(@PathParam("mapId") Long mapId) {
+        return EndpointUtils.getApiState(mapId, ApiStateType.G);
     }
 
     @GET
@@ -187,9 +188,8 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @ApiMethod(ui = false, id = "MapList")
     @JsonView(AmpApiState.BriefView.class)
     @ApiOperation("List map states")
-    public List<AmpApiState> savedMaps() {
-        String type="G";
-        return EndpointUtils.getApiStateList(type);
+    public List<AmpApiState> getSavedMaps() {
+        return EndpointUtils.getApiStateList(ApiStateType.G);
     }
 
     @GET
@@ -374,7 +374,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
 
         Map<String, Object> filters = null;
         if (mapId != null) {
-            AmpApiState map = EndpointUtils.getSavedMap(mapId);
+            AmpApiState map = EndpointUtils.getApiState(mapId, ApiStateType.G);
             ReportConfig reportConfig = JSONUtils.readValueFromJson(map.getStateBlob(),
                     ReportConfig.class);
             filters = reportConfig.getFilters().getFilters();

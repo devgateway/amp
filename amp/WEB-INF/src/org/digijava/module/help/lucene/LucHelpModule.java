@@ -9,8 +9,9 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Hit;
+import org.apache.lucene.util.Version;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.lucene.AmpLuceneDoc;
 import org.digijava.kernel.lucene.LangSupport;
 import org.digijava.kernel.lucene.LucModule;
 import org.digijava.kernel.request.Site;
@@ -132,23 +133,25 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
         
         //create lucene fields
         //All fields are stored but not tokenized. One combined field is tokenized and not stored.
-        Field id        = new Field(ID_FIELD_TERM,      item.getId().toString(),    Field.Store.YES, Field.Index.UN_TOKENIZED);
-        Field title_key = new Field(FIELD_TITLE_KEY,    titleTrnKey,                Field.Store.YES, Field.Index.UN_TOKENIZED);
-        Field title     = new Field(FIELD_TITLE,        titleText,                  Field.Store.YES, Field.Index.UN_TOKENIZED);
-        Field body_key  = new Field(FIELD_BODY_KEY,     item.getBodyKey(),          Field.Store.YES, Field.Index.UN_TOKENIZED);
-        Field body      = new Field(FIELD_BODY,         bodyText,                   Field.Store.YES, Field.Index.UN_TOKENIZED);
-        Field lang_iso  = new Field(FIELD_LANG_ISO,     item.getLangIso(),          Field.Store.YES, Field.Index.UN_TOKENIZED);
-        Field instance  = new Field(FIELD_INSTANCE_NAME,item.getModuleInstance(),   Field.Store.YES, Field.Index.UN_TOKENIZED);
-        Field indexed   = new Field(FIELD_INDEXED_TEXT, textToIndex,                Field.Store.NO,  Field.Index.TOKENIZED);
+        Field id = new Field(ID_FIELD_TERM, item.getId().toString(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+        Field titleKey = new Field(FIELD_TITLE_KEY, titleTrnKey, Field.Store.YES, Field.Index.NOT_ANALYZED);
+        Field title = new Field(FIELD_TITLE, titleText, Field.Store.YES, Field.Index.NOT_ANALYZED);
+        Field bodyKey = new Field(FIELD_BODY_KEY, item.getBodyKey(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+        Field body = new Field(FIELD_BODY, bodyText, Field.Store.YES, Field.Index.NOT_ANALYZED);
+        Field langIso = new Field(FIELD_LANG_ISO, item.getLangIso(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+        Field instance = new Field(FIELD_INSTANCE_NAME, item.getModuleInstance(), Field.Store.YES,
+                Field.Index.NOT_ANALYZED);
+        Field indexed = new Field(FIELD_INDEXED_TEXT, textToIndex, Field.Store.NO, Field.Index.ANALYZED);
+        
         //add fields to document
         Document doc    = new Document();
         doc.add(indexed);
         doc.add(id);
         doc.add(title);
         doc.add(body);
-        doc.add(title_key);
-        doc.add(body_key);
-        doc.add(lang_iso);
+        doc.add(titleKey);
+        doc.add(bodyKey);
+        doc.add(langIso);
         doc.add(instance);
         
         return doc;
@@ -156,7 +159,7 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 
     @Override
     public Analyzer getAnalyzer() {
-        return LANG.getAnalyzer();
+        return LANG.getAnalyzer(Version.LUCENE_36);
     }
 
     @Override
@@ -221,9 +224,9 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
     }
 
     @Override
-    public HelpTopicHelper hitToItem(Hit hit) throws IOException {
-        Document doc = hit.getDocument();
+    public HelpTopicHelper luceneDocToItem(AmpLuceneDoc luceneDocument) throws IOException {
         HelpTopicHelper topic = new HelpTopicHelper();
+        Document doc = luceneDocument.getDocument();
         topic.setTitle(doc.get(FIELD_TITLE));
         topic.setBody(doc.get(FIELD_BODY));
         topic.setId(Long.valueOf(doc.get(ID_FIELD_TERM)));
@@ -231,7 +234,7 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
         topic.setBodyKey(doc.get(FIELD_BODY_KEY));
         topic.setLangIso(doc.get(FIELD_LANG_ISO));
         topic.setModuleInstance(doc.get(FIELD_INSTANCE_NAME));
-        topic.setSortIndex(new Float(hit.getScore()));
+        topic.setSortIndex(new Float(luceneDocument.getScore()));
         return topic;
     }
 

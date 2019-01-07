@@ -3,7 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.performance.matcher.definition;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 
@@ -14,13 +15,17 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRule;
  */
 public abstract class PerformanceRuleMatcherDefinition {
 
+    @ApiModelProperty(example = "noUpdatedStatusAfterFundingDate")
     protected String name;
 
+    @ApiModelProperty(example = "No updated status after selected funding date")
     protected String description;
-    
+
+    @ApiModelProperty(example = "{timeAmount} {timeUnit} went by after the '{fundingDate}' and the project status was "
+            + "not modified to '{activityStatus}'")
     protected String message;
     
-    @JsonIgnore 
+    @JsonIgnore
     protected List<PerformanceRuleMatcherAttribute> attributes = new ArrayList<>();
     
     public PerformanceRuleMatcherDefinition(String name, String description, String message) {

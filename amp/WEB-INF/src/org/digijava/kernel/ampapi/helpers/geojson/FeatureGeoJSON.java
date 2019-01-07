@@ -3,12 +3,9 @@ package org.digijava.kernel.ampapi.helpers.geojson;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonPropertyOrder;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JsonNode;
 
 
 /**
@@ -28,7 +25,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  * included as a member of the feature object with the name "id".
  */
 @JsonPropertyOrder({"type","geometry","properties"})
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FeatureGeoJSON extends GeoJSON
 {
     public GeoJSON geometry;

@@ -180,8 +180,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
                 pageContext.getOut().print(bodyText);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
-                logger.error(e);
+                logger.error(e.getMessage(), e);
             }
            }
        return EVAL_PAGE;

@@ -100,4 +100,5 @@ public class AmpActivityInternalId implements Serializable, Versionable, Cloneab
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
 }

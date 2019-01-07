@@ -308,12 +308,10 @@ public class RequestProcessor
     }
 
     @Override
-    public boolean processPreprocess(HttpServletRequest request, HttpServletResponse response)
-    {
-        TLSUtils.populate(request);
-        DocumentManagerUtil.initJCRSessions(request);
+    public boolean processPreprocess(HttpServletRequest request, HttpServletResponse response) {
         TranslatorUtil.insertAvailableLanguages(request);
         request.setAttribute("currentLocale", TLSUtils.getEffectiveLangCode());
+        
         return true;
     }
         
@@ -915,8 +913,7 @@ public class RequestProcessor
         try {
             return super.processValidate(request, response, form, originalMapping);
         } catch (InvalidCancelException e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             return false;
         }
     }

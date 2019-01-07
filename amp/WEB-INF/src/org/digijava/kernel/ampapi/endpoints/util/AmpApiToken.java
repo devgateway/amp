@@ -7,20 +7,21 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.helper.TeamMember;
 import org.joda.time.DateTime;
 
-public class AmpApiToken implements Serializable{
+public class AmpApiToken implements Serializable {
 
-    private static final long serialVersionUID = 8372878787005618060L;
+    // Amount of time in minutes until the token expires
+    private static final int TIMEOUT = 30;
 
     private User user;
     private TeamMember teamMember;
     private DateTime expirationTime;
     private String token;
 
-    public AmpApiToken(String token, User user, TeamMember teamMember, DateTime expirationTime) {
+    public AmpApiToken(String token, User user, TeamMember teamMember) {
         this.token = Objects.requireNonNull(token);
         this.user = Objects.requireNonNull(user);
         this.teamMember = teamMember;
-        this.expirationTime = Objects.requireNonNull(expirationTime);
+        touch();
     }
 
     public User getUser() {
@@ -41,5 +42,9 @@ public class AmpApiToken implements Serializable{
 
     public boolean isExpired() {
         return expirationTime.isBeforeNow();
+    }
+
+    public void touch() {
+        expirationTime = new DateTime().plusMinutes(TIMEOUT);
     }
 }

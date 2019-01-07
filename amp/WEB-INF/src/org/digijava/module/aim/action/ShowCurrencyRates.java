@@ -111,7 +111,7 @@ public class ShowCurrencyRates extends Action {
             cal.setTime(toDate);
             int timePeriod=crForm.getTimePeriod();
             if(timePeriod==ShowCurrencyRates.ABSOLUTELY_ALL_ACTIVE_RATES){
-                crForm.setAllRates(CurrencyUtil.getAllActiveRates());               
+                crForm.setAllRates(CurrencyUtil.getAllCurrencyRates());
             }
             else{
                switch (timePeriod) {
@@ -123,7 +123,7 @@ public class ShowCurrencyRates extends Action {
                default:break;
                }
                Date fromDate=cal.getTime();
-               crForm.setAllRates(CurrencyUtil.getActiveRates(fromDate, toDate));
+               crForm.setAllRates(CurrencyUtil.getActiveCurrencyRates(fromDate, toDate));
             }
 
         ArrayList tempList = new ArrayList();

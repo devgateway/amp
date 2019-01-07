@@ -134,40 +134,40 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 
                     if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT)) {
                         if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + MTEF_COLUMN_1)))) {
-                            if (((AmountCell) rc).extractValue() > 0) {
+                            if (((AmountCell) rc).extractValue().compareTo(BigDecimal.ZERO) > 0) {
                                 gpiItem.setYear1(true);
                             }
                         }
     
                         if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + MTEF_COLUMN_2)))) {
-                            if (((AmountCell) rc).extractValue() > 0) {
+                            if (((AmountCell) rc).extractValue().compareTo(BigDecimal.ZERO) > 0) {
                                 gpiItem.setYear2(true);
                             }
                         }
     
                         if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + MTEF_COLUMN_3)))) {
-                            if (((AmountCell) rc).extractValue() > 0) {
+                            if (((AmountCell) rc).extractValue().compareTo(BigDecimal.ZERO) > 0) {
                                 gpiItem.setYear3(true);
                             }
                         }
                     } else if (roc.originalColumnName.equals(MeasureConstants.MTEF)) {
                         if (roc.parentColumn.originalColumnName.equals(String.format("%s", calendarPrefix + (year
                                 + MTEF_COLUMN_1)))) {
-                            if (((AmountCell) rc).extractValue() > 0) {
+                            if (((AmountCell) rc).extractValue().compareTo(BigDecimal.ZERO) > 0) {
                                 gpiItem.setYear1(true);
                             }
                         }
 
                         if (roc.parentColumn.originalColumnName.equals(String.format("%s", calendarPrefix + (year
                                 + MTEF_COLUMN_2)))) {
-                            if (((AmountCell) rc).extractValue() > 0) {
+                            if (((AmountCell) rc).extractValue().compareTo(BigDecimal.ZERO) > 0) {
                                 gpiItem.setYear2(true);
                             }
                         }
                         
                         if (roc.parentColumn.originalColumnName.equals(String.format("%s", calendarPrefix + (year
                                 + MTEF_COLUMN_3)))) {
-                            if (((AmountCell) rc).extractValue() > 0) {
+                            if (((AmountCell) rc).extractValue().compareTo(BigDecimal.ZERO) > 0) {
                                 gpiItem.setYear3(true);
                             }
                         }
@@ -203,7 +203,7 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
         if (generatedReport.reportContents.getChildren() != null) {
             for (ReportArea reportArea : generatedReport.reportContents.getChildren()) {
                 String donor = "";
-                double actDisb = 0;
+                BigDecimal actDisb = BigDecimal.ZERO;
                 for (ReportOutputColumn roc : generatedReport.leafHeaders) {
                     ReportCell rc = reportArea.getContents().get(roc);
                     rc = rc != null ? rc : TextCell.EMPTY;
@@ -218,7 +218,7 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
                     }
                 }
 
-                donorDisbursements.put(donor, new BigDecimal(actDisb));
+                donorDisbursements.put(donor, actDisb);
             }
         }
 

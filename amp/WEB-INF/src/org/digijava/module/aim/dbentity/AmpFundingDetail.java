@@ -9,8 +9,8 @@ import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.FundingePledgesValueProvider;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypePossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.FundingePledgesValueProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.TransactionTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -124,13 +124,9 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
             return arg0.hashCode() - arg1.hashCode();
         }
     }
-    
     @Interchangeable(fieldTitle = "Transaction ID")
     private Long ampFundDetailId;
-    
-    @Interchangeable(fieldTitle = "Fiscal Year", importable = true)
     private Integer fiscalYear;
-    @Interchangeable(fieldTitle = "Fiscal Quarter", importable = true)
     private Integer fiscalQuarter;
     
     /**
@@ -143,7 +139,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
      * public static final int ARREAR = 10;
      */
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true, pickIdOnly = true,
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true,
             required = REQUIRED_ALWAYS)
     @PossibleValues(TransactionTypePossibleValuesProvider.class)
     private Integer transactionType;
@@ -167,7 +163,6 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 
     @Interchangeable(fieldTitle = "Transaction Date", importable = true, required = REQUIRED_ALWAYS)
     private Date transactionDate;
-    @Interchangeable(fieldTitle = "Transaction Date 2", importable = true)
     private Date transactionDate2;
     @Interchangeable(fieldTitle = "Reporting Date", importable = true)
     private Date reportingDate;
@@ -176,24 +171,16 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 
     @Interchangeable(fieldTitle = "Transaction Amount", importable = true, required = REQUIRED_ALWAYS)
     private Double transactionAmount;
-    @Interchangeable(fieldTitle = "Thousands Transaction Amount", importable = true)
-    private Double thousandsTransactionAmount;
-    @Interchangeable(fieldTitle = "Language", importable = true)
     private String language;
-    @Interchangeable(fieldTitle = "Version", importable = true)
     private String version;
-    @Interchangeable(fieldTitle = "Calendar Type", importable = true) //why isn't this an ACV?
     private String calType;
     private String orgRoleCode; // defunct
     @Interchangeable(fieldTitle = "Currency", importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
     private AmpCurrency ampCurrencyId;
-    @Interchangeable(fieldTitle = "Reporting Organization", importable = true, pickIdOnly = true)
     private AmpOrganisation reportingOrgId;
-    //  @Interchangeable(fieldTitle="Funding", pickIdOnly=true, importable=true)
     private AmpFunding ampFundingId;
     @Interchangeable(fieldTitle = "Fixed Exchange Rate", importable = true)
     private Double fixedExchangeRate;
-    @Interchangeable(fieldTitle = "Fixed Base Currency", importable = true, pickIdOnly = true)
     private AmpCurrency fixedRateBaseCurrency;
     @Interchangeable(fieldTitle = "Disbursement Order Rejected", importable = true)
     private Boolean disbursementOrderRejected;
@@ -209,10 +196,19 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     
     @Interchangeable(fieldTitle = "Capital Spending Percentage", importable = true)
     private Float capitalSpendingPercentage;
-    @Interchangeable(fieldTitle = "Recipient Organization", importable = true, pickIdOnly = true)
+    
+    @Interchangeable(fieldTitle = "Recipient Organization", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_RECIPIENT_ORG_FM_PATH
+                    + "|" + ActivityEPConstants.DISB_RECIPIENT_ORG_FM_PATH,
+            dependencies = {InterchangeDependencyResolver.COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY})
     private AmpOrganisation recipientOrg;
-    @Interchangeable(fieldTitle = "Recipient Role", importable = true, pickIdOnly = true)
+    
+    @Interchangeable(fieldTitle = "Recipient Role", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_RECIPIENT_ROLE_FM_PATH 
+                    + "|" + ActivityEPConstants.DISB_RECIPIENT_ROLE_FM_PATH,
+            dependencies = {InterchangeDependencyResolver.COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY})
     private AmpRole recipientRole;
+    
     @Interchangeable(fieldTitle = "Expenditure Category", importable = true)
     private String expCategory;
     @Interchangeable(fieldTitle = "Disbursement Order ID", importable = true)
@@ -222,7 +218,8 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     private Long checkSum;
     
     @Interchangeable(fieldTitle = "Disaster Response", importable = true, required = REQUIRED_ALWAYS,
-            fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH + "|" + ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH,
+            fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH
+                    + "|" + ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH,
             dependencies = {
             InterchangeDependencyResolver.COMMITMENTS_PRESENT_KEY,
             InterchangeDependencyResolver.DISBURSEMENTS_PRESENT_KEY,
@@ -410,11 +407,6 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     }
 
     @java.lang.SuppressWarnings("all")
-    public Double getThousandsTransactionAmount() {
-        return this.thousandsTransactionAmount;
-    }
-    
-    @java.lang.SuppressWarnings("all")
     public String getLanguage() {
         return this.language;
     }
@@ -568,11 +560,6 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     }
     
     @java.lang.SuppressWarnings("all")
-    public void setThousandsTransactionAmount(final Double thousandsTransactionAmount) {
-        this.thousandsTransactionAmount = thousandsTransactionAmount;
-    }
-    
-    @java.lang.SuppressWarnings("all")
     public void setLanguage(final String language) {
         this.language = language;
     }
@@ -672,4 +659,5 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     public void setCheckSum(Long checkSum) {
         this.checkSum = checkSum;
     }
+    
 }

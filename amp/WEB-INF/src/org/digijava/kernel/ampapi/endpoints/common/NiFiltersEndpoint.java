@@ -282,7 +282,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/activityStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.STATUS, name = "Activity Status")
+    @ApiMethod(id = FiltersConstants.STATUS, name = FiltersConstants.ACTIVITY_STATUS_NAME)
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.STATUS)
     public FilterList getActivityStatus() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.STATUS);
@@ -296,7 +296,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/activityBudget/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.ON_OFF_TREASURY_BUDGET, name = "Activity Budget")
+    @ApiMethod(id = FiltersConstants.ON_OFF_TREASURY_BUDGET, name = FiltersConstants.ACTIVITY_BUDGET_NAME)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.ON_OFF_TREASURY_BUDGET)
     public FilterList getActivityBudget() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.ON_OFF_TREASURY_BUDGET);

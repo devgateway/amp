@@ -16,8 +16,10 @@ public class LayoutInformation {
     
     private Boolean trackingEnabled;
     
+    @ApiModelProperty("AMP site id")
     private String siteId;
     
+    @ApiModelProperty(example = "https://stats.ampsite.net/")
     private String trackingUrl;
     
     private String footerText;

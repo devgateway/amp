@@ -6,11 +6,11 @@ import io.swagger.annotations.ApiModelProperty;
 public class AuthenticationRequest {
     
     @JsonProperty("username")
-    @ApiModelProperty(example = "atltest@amp.org")
+    @ApiModelProperty(required = true, example = "atltest@amp.org")
     private String userName;
     
     @JsonProperty("password")
-    @ApiModelProperty(example = "a7848b4c1b75cb7bb7449069fe0e114b730c0423")
+    @ApiModelProperty(required = true, example = "a7848b4c1b75cb7bb7449069fe0e114b730c0423")
     private String password;
     
     @JsonProperty("workspaceId")

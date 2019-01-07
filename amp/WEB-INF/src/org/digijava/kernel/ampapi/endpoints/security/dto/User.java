@@ -1,15 +1,15 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.security.dto;
-
-import java.util.Set;
-import java.util.SortedSet;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModelProperty;
+import java.util.Date;
+import java.util.Set;
+import java.util.SortedSet;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityConstants;
+import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateTimeSerializer;
 
 /**
  * Basic user information
@@ -22,16 +22,21 @@ public class User {
     private Long id;
     
     @JsonProperty(SecurityConstants.FIRST_NAME)
+    @ApiModelProperty(example = "ATL")
     private String firstName;
     
     @JsonProperty(SecurityConstants.LAST_NAME)
+    @ApiModelProperty(example = "ATL")
     private String lastName;
     
     @JsonProperty(SecurityConstants.EMAIL)
+    @ApiModelProperty(example = "atltest@amp.org")
     private String email;
     
     @JsonProperty(SecurityConstants.PASSWORD_CHANGED_AT)
-    private String passwordChangedAt;
+    @JsonSerialize(using = ISO8601DateTimeSerializer.class)
+    @ApiModelProperty(example = "2018-06-19T09:50:59.582+0300")
+    private Date passwordChangedAt;
     
     @JsonProperty(SecurityConstants.IS_BANNED)
     private boolean isBanned;
@@ -43,9 +48,11 @@ public class User {
     private boolean isAdmin;
     
     @JsonProperty(SecurityConstants.LANG_ISO2)
+    @ApiModelProperty(example = "en")
     private String langIso2;
     
     @JsonProperty(SecurityConstants.COUNTRY_ISO2)
+    @ApiModelProperty(example = "ht")
     private String countryIso2;
     
     @JsonProperty(SecurityConstants.ORG_TYPE_ID)
@@ -59,6 +66,7 @@ public class User {
     private SortedSet<Long> assignedOrgIds;
     
     @JsonProperty(SecurityConstants.GROUP_KEYS)
+    @ApiModelProperty("Sorted list of user group keys, e.g. [EDT, MEM]")
     private SortedSet<String> groupKeys;
     
     /**
@@ -120,14 +128,14 @@ public class User {
     /**
      * @return the passwordChangedAt
      */
-    public String getPasswordChangedAt() {
+    public Date getPasswordChangedAt() {
         return passwordChangedAt;
     }
 
     /**
      * @param passwordChangedAt the passwordChangedAt to set
      */
-    public void setPasswordChangedAt(String passwordChangedAt) {
+    public void setPasswordChangedAt(Date passwordChangedAt) {
         this.passwordChangedAt = passwordChangedAt;
     }
 

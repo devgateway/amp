@@ -3,22 +3,6 @@
  */
 package org.digijava.module.aim.action;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -31,7 +15,10 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.InvalidReportContextException;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
+import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -88,6 +75,23 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Session;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author mihai
@@ -207,8 +211,7 @@ public class ReportsFilterPicker extends Action {
             }
             
             // init form
-            if (request.getParameter("init") != null)
-            {
+            if (request.getParameter("init") != null) {
                 AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
                 FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
                 modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS, reportFilter);
@@ -216,24 +219,22 @@ public class ReportsFilterPicker extends Action {
             }
     
             String applyFormatValue = request.getParameter("applyFormat");
-            if (applyFormatValue != null)
-            {
-                if (applyFormatValue.equals("Reset"))
-                {
-                    // TODO-CONSTANTIN: reset is now done client-side. If done server-side, should handle non-english translations of "Reset" here!
+            if (applyFormatValue != null) {
+                if (applyFormatValue.equals("Reset")) {
+                    // TODO-CONSTANTIN: reset is now done client-side. If done server-side, should handle non-english
+                    // translations of "Reset" here!
                     // reset tab/report settings
                     AmpARFilter arf = createOrResetFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
                     return decideNextForward(mapping, filterForm, request, arf);
                     //return modeReset(mapping, form, request, response);
-                } else if (applyFormatValue.equals("true"))
-                {
+                } else if (applyFormatValue.equals("true")) {
                     AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
-                    return decideNextForward(mapping, filterForm, request, arf); // an AMP-y-hacky way of saying "please redraw the report without changing anything"
-                }
-                else
-                {
-                    if (!applyFormatValue.equals("Apply Format"))
+                    // an AMP-y-hacky way of saying "please redraw the report without changing anything"
+                    return decideNextForward(mapping, filterForm, request, arf);
+                } else {
+                    if (!applyFormatValue.equals("Apply Format")) {
                         logger.warn("unknown applyformat setting, assuming it is 'Apply Format': " + applyFormatValue);
+                    }
                     // apply tab/report settings
                     AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
                     return decideNextForward(mapping, filterForm, request, arf);
@@ -253,6 +254,40 @@ public class ReportsFilterPicker extends Action {
                 AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
                 return decideNextForward(mapping, filterForm, request, arf);
             }
+
+            if (request.getParameter("applyWithNewWidget") != null) {
+                LinkedHashMap<String, Object> filters = new LinkedHashMap<String, Object>();
+                Map<String, String[]> parameters = request.getParameterMap();
+                parameters.keySet().stream().filter(x -> x.startsWith("filter")).forEach((s -> {
+                    String key = s.toString().substring(s.indexOf("[") + 1, s.indexOf("]"));
+                    String subKey = s.replace("filters[" + key + "]", "");
+                    if (subKey.contains("[]")) {
+                        filters.put(key, Arrays.asList(parameters.get(s)));
+                    } else {
+                        if (!subKey.equals("")) {
+                            String subKey2 = subKey.substring(subKey.indexOf("[") + 1, subKey.indexOf("]"));
+                            LinkedHashMap<String, Object> sub = new LinkedHashMap<String, Object>();
+                            sub.put(subKey2, parameters.get(s)[0]);
+                            if (!filters.containsKey(key)) {
+                                filters.put(key, sub);
+                            } else {
+                                ((LinkedHashMap<String, Object>) filters.get(key)).put(subKey2, parameters.get(s)[0]);
+                            }
+                        } else {
+                            filters.put(key, parameters.get(s)[0]);
+                        }
+                    }
+                }));
+                // AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
+                AmpReportFilters filterRules = FilterUtils.getFilters(filters, new AmpReportFilters());
+                AmpReportFiltersConverter converter = new AmpReportFiltersConverter(filterRules);
+                AmpARFilter ampARFilter = converter.buildFilters();
+                ampARFilter.fillWithDefaultsSettings();
+                FilterUtil.populateForm(filterForm, ampARFilter, longAmpReportId);
+                AmpARFilter ampARFilter2 = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
+                return decideNextForward(mapping, filterForm, request, ampARFilter2);
+            }
+
                 AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
                 FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
                 modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL, reportFilter);
@@ -1364,7 +1399,6 @@ public class ReportsFilterPicker extends Action {
 
         return null;
     }
-
 
     /**
      * fills an AmpARFilter instance with Filters data from a ReportsFilterPickerForm

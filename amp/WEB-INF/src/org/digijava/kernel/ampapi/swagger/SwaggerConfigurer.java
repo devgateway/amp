@@ -2,10 +2,11 @@ package org.digijava.kernel.ampapi.swagger;
 
 import io.swagger.converter.ModelConverters;
 import io.swagger.jaxrs.config.BeanConfig;
+import io.swagger.jaxrs.ext.SwaggerExtensions;
 import org.digijava.kernel.ampapi.swagger.converters.AmpOfflineVersionResolver;
 import org.digijava.kernel.ampapi.swagger.converters.GeneratedReportResolver;
-import org.digijava.kernel.ampapi.swagger.converters.JsonSerializeUsingResolver;
 import org.digijava.kernel.ampapi.swagger.converters.JAXBElementUnwrapper;
+import org.digijava.kernel.ampapi.swagger.converters.JsonSerializeUsingResolver;
 import org.digijava.kernel.ampapi.swagger.converters.ReportTypesResolver;
 import org.digijava.kernel.ampapi.swagger.types.FiltersPH;
 import org.digijava.kernel.ampapi.swagger.types.SettingsPH;
@@ -29,6 +30,8 @@ public class SwaggerConfigurer {
         ModelConverters.getInstance().read(FiltersPH.class);
 
         ModelConverters.getInstance().read(SettingsPH.class);
+
+        SwaggerExtensions.getExtensions().add(new SwaggerAuthorization());
 
         BeanConfig beanConfig = new BeanConfig();
         beanConfig.setVersion("1.0");

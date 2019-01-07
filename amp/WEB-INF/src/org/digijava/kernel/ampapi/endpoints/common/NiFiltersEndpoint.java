@@ -241,7 +241,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.APPROVAL_STATUS, name = ColumnConstants.APPROVAL_STATUS)
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.APPROVAL_STATUS, 
-                        visibilityCheck = "hasToShowActivityapprovalStatusFilter")
+                        visibilityCheck = "hasToShowActivityApprovalStatusFilter")
     public FilterList getActivityApprovalStatus() {
         return FiltersManager.getInstance().getApprovalStatusFilter();
     }
@@ -368,7 +368,7 @@ public class NiFiltersEndpoint {
     @Path("/financingInstruments/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.FINANCING_INSTRUMENT, name = ColumnConstants.FINANCING_INSTRUMENT)
-    @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.FINANCING_INSTRUMENT)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.FINANCING_INSTRUMENT)
     public FilterList getFinancingInstruments() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.FINANCING_INSTRUMENT);
     }

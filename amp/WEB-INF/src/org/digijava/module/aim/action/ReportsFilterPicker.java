@@ -303,62 +303,6 @@ public class ReportsFilterPicker extends Action {
     }
     
     /**
-     * 
-     * @param fmField the FM field that should be checked in order to see if this element should be shown in the page.
-     * If null, no check will be done.
-     * @param baseFormProperty the string that will be used to construct the HTML form properties
-     * @param label the name that will appear next to this field
-     * @param dynamicDateFilterObj the object from the ActionForm that defines this dynamic date filter 
-     * @param htmlDivId
-     * @param otherCriteriaElements
-     */
-    private static void addDateFilter(String fmField, String baseFormProperty, String label,
-                                      DynamicDateFilter dynamicDateFilterObj, String htmlDivId,
-                                      Collection<GroupingElement<HierarchyListableImplementation>> otherCriteriaElements) {
-            if (fmField == null || FeaturesUtil.isVisibleField(fmField) ) {
-            
-                Collection<DateListableImplementation> children = new ArrayList<DateListableImplementation>();
-                DateListableImplementation fromDate = new DateListableImplementation("From", "from" + baseFormProperty + "Date");
-                fromDate.setActionFormProperty("from" + baseFormProperty + "Date");
-                fromDate.setTranslateable(true);
-                children.add(fromDate);
-                
-                DateListableImplementation toDate = new DateListableImplementation("To", "to" + baseFormProperty + "Date");
-                toDate.setActionFormProperty("to" + baseFormProperty + "Date");
-                toDate.setTranslateable(true);
-                children.add(toDate);
-                
-                DateListableImplementation groupFromTo = new DateListableImplementation("", "0");
-                groupFromTo.setTranslateable(false);
-                groupFromTo.setChildren(children);
-                
-                children = new ArrayList<DateListableImplementation>();
-                children.add(groupFromTo);
-                
-                // little ugly hack
-                String dynamicFilterBaseFormProperty    = "".equals(baseFormProperty) ? "Date" : baseFormProperty;
-                DateListableImplementation dynamicFilter = new DateListableImplementation("Dynamic Date Filter", "dynamic" + dynamicFilterBaseFormProperty + "Filter");
-                dynamicFilter.setActionFormProperty("dynamic" + dynamicFilterBaseFormProperty + "Filter");
-                dynamicFilter.setTranslateable(true);
-                children.add(dynamicFilter);
-                
-                if (dynamicDateFilterObj.getCurrentPeriod() != null) {
-                    dynamicFilter.setSelected(true);
-                } else {
-                    groupFromTo.setSelected(true);
-                }
-                
-                DateListableImplementation rootDate = new DateListableImplementation(label, "root" + baseFormProperty);
-                rootDate.setTranslateable(true);
-                rootDate.setChildren(children);
-                GroupingElement<HierarchyListableImplementation> filterByDate   = 
-                        new GroupingElement<HierarchyListableImplementation>(label, htmlDivId, rootDate, "", GroupingElement.GROUPING_ELEMENT_FIELD_TYPE_DATE);
-
-                otherCriteriaElements.add(filterByDate);
-            }
-    }
-    
-    /**
      * add to the Filter Form an element regarding filtering by a certain type of agencies, if feature is enabled. 
      * @param filterForm - the form where to add the filtering elem
      * @param featureName - the feature's basic name, like "Executing" or "Contracting". <b>Should not</b> contain the word "Agency" (it is added automatically) and should be Capitalized
@@ -385,7 +329,6 @@ public class ReportsFilterPicker extends Action {
      * @param selectId - the id of the generated select
      * @param includeParent -includes the parent ids of the objects
      */
-    
     private static void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId, boolean includeParent)
     {       
         if (FeaturesUtil.isVisibleModule("/Activity Form/Organizations/" + featureName) ) {
@@ -402,20 +345,6 @@ public class ReportsFilterPicker extends Action {
         }   
     }
 
-    private static void addComponentOrganisations(ReportsFilterPickerForm filterForm, String name, String
-            roleCode, String filterDivId, String selectId) {
-        if (FeaturesUtil.isVisibleField(name)) {
-            Collection<AmpOrganisation> relevantAgencies = (ReportsUtil.getComponentFundingOrgs(roleCode));
-            HierarchyListableUtil.changeTranslateable(relevantAgencies, false);
-            HierarchyListableImplementation rootRelevantAgencies = new HierarchyListableImplementation("All " + name,
-                    "0", relevantAgencies);
-            GroupingElement<HierarchyListableImplementation> relevantAgenciesElement = new
-                    GroupingElement<HierarchyListableImplementation>(name, filterDivId, rootRelevantAgencies,
-                    selectId);
-            filterForm.getRelatedAgenciesElements().add(relevantAgenciesElement);
-        }
-    }
-    
     private static void addAgencyFilterFaster(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId, boolean includeParent)
     {       
         
@@ -583,23 +512,6 @@ public class ReportsFilterPicker extends Action {
 
     
     /**
-     * selects all locations of a given type from entrySet
-     * 
-     * @param entrySet
-     * @param typeCategoryValue an AmpCategoryValue object, defining the location type
-     * @return
-     */
-    private static List<LocationSkeleton> filterLocationsByType(Collection<LocationSkeleton> entrySet, AmpCategoryValue typeCategoryValue) {
-        List<LocationSkeleton> filteredLocations = new ArrayList<>();
-        for (LocationSkeleton loc : entrySet) {
-            if (loc.getCvId() == typeCategoryValue.getId()){
-                filteredLocations.add(loc);
-            }
-        }
-        return filteredLocations;
-    }
-    
-    /**
      * gets default country based on settings
      * 
      * @param locations a map of LocationSkeleton, the location ID is the key
@@ -641,14 +553,7 @@ public class ReportsFilterPicker extends Action {
                 logger.error("No Country value found in category Implementation Location. Please correct this.");
             } else {
                 //Set<LocationSkeleton> countries = DynLocationManagerUtil.getLocationsByLayer(layer);
-                List<LocationSkeleton> countries = filterLocationsByType(allLocations.values(), layer);
                 //layer filtering already done above
-                for (LocationSkeleton loc : countries) {
-                    if (loc.getChildLocations() != null && !loc.getChildLocations().isEmpty()) {
-                        //adding countries, so that our structure is hierarchic
-                        filterCountries.add(loc);
-                    }
-                }
             }
         } else {
             
@@ -659,7 +564,6 @@ public class ReportsFilterPicker extends Action {
         return filterCountries;
     }
 
-    
     
     /**
      * populate all the non-setting fields in a form, like drop-down lists, checkbox lists etc etc etc
@@ -814,13 +718,6 @@ public class ReportsFilterPicker extends Action {
             addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY, false);
         }
 
-        addComponentOrganisations(filterForm, ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, Constants
-                        .COMPONENT_FUNDING_ORGANIZATION,
-                "filter_component_funding_div", "selectedComponentFundingOrg");
-        addComponentOrganisations(filterForm, ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, Constants
-                        .COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, "filter_component_second_responsible_div",
-                "selectedComponentSecondResponsibleOrg");
-
         // Contracting Agency Groups, based off Donor Groups
         // stimate domnule GARTNER, ce face filterDonorGroups in afara de a exclude grupurile cu "guv" si "gouv" in nume din lista? E nevoie de ei aici? 
         if(FeaturesUtil.isVisibleField("Contracting Agency Groups")){
@@ -869,10 +766,6 @@ public class ReportsFilterPicker extends Action {
         
         addFinancingLocationElement(filterForm, "Activity Pledges Title", "All pledges", CategoryConstants.PLEDGES_NAMES_KEY, "Pledges titles", "filter_activity_peldges_title_div", "selectedActivityPledgesTitle");
 
-        addDateFilter("Effective Funding Date", "EffectiveFunding",
-                "Effective Funding Date", filterForm.getDynamicEffectiveFundingFilter(), "filter_efd_div", filterForm.getFinancingLocationElements());
-        addDateFilter("Funding Closing Date", "FundingClosing",
-                "Funding Closing Date", filterForm.getDynamicFundingClosingFilter(), "filter_fcd_div", filterForm.getFinancingLocationElements());
         filterForm.setOtherCriteriaElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
         if (true) { //Here needs to be a check to see if the field/feature is enabled
             Collection<AmpCategoryValue> activityStatusValues   = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true);  
@@ -1040,15 +933,6 @@ public class ReportsFilterPicker extends Action {
             filterForm.getOtherCriteriaElements().add(lineMinRankElement);
         }
         
-        if (FeaturesUtil.isVisibleFeature("Archived") && teamMember != null)
-            addBooleanElementToFilter(filterForm, "Archived", "filter_archived_div", "selectedArchivedStatus", "Non-archived Activities", "Archived Activities");
-        
-        if (FeaturesUtil.isVisibleField("Humanitarian Aid") && !filterForm.isPledgeReport())
-            addBooleanElementToFilter(filterForm, "Humanitarian Aid", "filter_humanitarian_aid_div", "selectedHumanitarianAid", "Yes", "No");
-        
-        if (FeaturesUtil.isVisibleField("Disaster Response Marker") && !filterForm.isPledgeReport())
-            addBooleanElementToFilter(filterForm, "Disaster Response Marker", "filter_disaster_response_div", "selectedDisasterResponse", "Yes", "No");
-        
         if ( FeaturesUtil.isVisibleFeature("Multi Donor")) {
             Collection<HierarchyListableImplementation> children    = 
                 new ArrayList<HierarchyListableImplementation>();
@@ -1061,26 +945,6 @@ public class ReportsFilterPicker extends Action {
             filterForm.getOtherCriteriaElements().add(lineMinRankElement);
         }
         
-        addDateFilter("Actual Start Date", "ActivityStart", "Actual Start Date",
-                filterForm.getDynamicActivityStartFilter(), "filter_activity_start_date_div", filterForm.getOtherCriteriaElements());
-
-        addDateFilter("Issue Date", "Issue", "Issue Date",
-                filterForm.getDynamicIssueFilter(), "filter_issue_date_div", filterForm
-                        .getOtherCriteriaElements());
-
-        addDateFilter("Actual Completion Date", "ActivityActualCompletion",
-                "Actual Completion Date", filterForm.getDynamicActivityActualCompletionFilter(),
-                "filter_activity_actual_completion_date_div", filterForm.getOtherCriteriaElements());
-        
-        addDateFilter("Final Date for Contracting", "ActivityFinalContracting",
-                "Final Date for Contracting", filterForm.getDynamicActivityFinalContractingFilter(), "filter_activity_final_contracting_date_div", filterForm.getOtherCriteriaElements());
-        
-        addDateFilter("Proposed Approval Date", "ProposedApproval",
-                "Proposed Approval Date", filterForm.getDynamicProposedApprovalFilter(), "filter_proposed_approval_date_div", filterForm.getOtherCriteriaElements());
-        
-        //Finance date filter
-        addDateFilter(null, "", "Date Filter", filterForm.getDynamicDateFilter(), "filter_date_div", filterForm.getOtherCriteriaElements());
-
         if (FeaturesUtil.isVisibleField(ColumnConstants.PERFORMANCE_ALERT_LEVEL)) {
             Collection<AmpCategoryValue> categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
                     CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, true);
@@ -1182,16 +1046,6 @@ public class ReportsFilterPicker extends Action {
         StopWatch.next("Filters", true, "end refreshDropDowns");
     }
 
-    protected static void addBooleanElementToFilter(ReportsFilterPickerForm filterForm, String name, String divId, String propertyName, String positiveLabel, String negativeLabel) {
-        Collection<HierarchyListableImplementation> children = new ArrayList<HierarchyListableImplementation>();
-        HierarchyListableImplementation rootArchivedStatus  = new HierarchyListableImplementation("All", "0", children);
-        children.add(new HierarchyListableImplementation(TranslatorWorker.translateText(positiveLabel), "1"));
-        children.add(new HierarchyListableImplementation(TranslatorWorker.translateText(negativeLabel), "2"));
-
-        GroupingElement<HierarchyListableImplementation> archivedElement = new GroupingElement<HierarchyListableImplementation>(name, divId, rootArchivedStatus, propertyName);
-        filterForm.getOtherCriteriaElements().add(archivedElement);
-    }
-    
     /**
      * generate a session based AmpARFilter object based on the form selections and forward to different actions (depending on the request source)
      * 
@@ -1359,47 +1213,6 @@ public class ReportsFilterPicker extends Action {
         arf.buildCustomFormat();
     }
     
-
-    
-    public static <T extends Object> HashSet<T> nullOrCopy(Set<T> in)
-    {
-        if (in == null)
-            return null;
-        
-        if (in.isEmpty())
-            return null;
-        
-        return new HashSet<T>(in);
-    }
-    
-    public static Set<AmpCategoryValue> pumpCategoryValueSetFromForm(Object[] ids)
-    {
-        if (ids == null || ids.length == 0)
-            return null;
-        
-        Set<AmpCategoryValue> result = new HashSet<AmpCategoryValue>();
-        for (int i = 0; i < ids.length; i++) {
-            Long id = (ids[i] instanceof Long) ? (Long) ids[i] : Long.parseLong(ids[i].toString());
-            AmpCategoryValue value = CategoryManagerUtil.getAmpCategoryValueFromDb(id);
-            if (value != null)
-                result.add(value);              
-        }
-        return result;
-    }
-    
-    public static Set<String> pumpPerformanceAlertTypeSetFromForm(Object[] ids) {
-        if (ids != null) {
-            Set<String> alertTypes = new HashSet<String>();
-            for (int i = 0; i < ids.length; i++) {
-                String id = ids[i].toString();
-                alertTypes.add(id);
-            }
-            return alertTypes;
-        }
-
-        return null;
-    }
-
     /**
      * fills an AmpARFilter instance with Filters data from a ReportsFilterPickerForm
      * @param arf
@@ -1422,22 +1235,10 @@ public class ReportsFilterPicker extends Action {
                 Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedQuinarySectors());
         Set<AmpSector> selectedTagSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTagSectors() );
 
-        arf.setSelectedSectors(nullOrCopy(selectedSectors));
-        arf.setSelectedSecondarySectors(nullOrCopy(selectedSecondarySectors));
-        arf.setSelectedTertiarySectors(nullOrCopy(selectedTertiarySectors));
-        arf.setSelectedQuaternarySectors(nullOrCopy(selectedQuaternarySectors));
-        arf.setSelectedQuinarySectors(nullOrCopy(selectedQuinarySectors));
-        arf.setSelectedTagSectors(nullOrCopy(selectedTagSectors));
-        
-
         Set<AmpTheme> selectedNatPlanObj = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedNatPlanObj());
         Set<AmpTheme> selectedPrimaryPrograms = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedPrimaryPrograms());
         Set<AmpTheme> selectedSecondaryPrograms = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedSecondaryPrograms());
 
-        arf.setSelectedNatPlanObj(nullOrCopy(selectedNatPlanObj));
-        arf.setSelectedPrimaryPrograms(nullOrCopy(selectedPrimaryPrograms));
-        arf.setSelectedSecondaryPrograms(nullOrCopy(selectedSecondaryPrograms));
-        
 //      AmpApplicationSettings tempSettings = ReportFilterFormUtil.getAppSetting();
 
         if (filterForm.getText() != null) {
@@ -1579,14 +1380,6 @@ public class ReportsFilterPicker extends Action {
         else 
             arf.setApprovalStatusSelected(null);
         
-        arf.setStatuses(pumpCategoryValueSetFromForm(filterForm.getSelectedStatuses()));
-        
-        arf.setExpenditureClass(pumpCategoryValueSetFromForm(filterForm.getSelectedExpenditureClasses()));
-
-        arf.setPerformanceAlertLevel(pumpCategoryValueSetFromForm(filterForm.getSelectedPerformanceAlertLevels()));
-
-        arf.setPerformanceAlertType(pumpPerformanceAlertTypeSetFromForm(filterForm.getSelectedPerformanceAlertTypes()));
-
         if (filterForm.getSelectedWorkspaces() != null && filterForm.getSelectedWorkspaces().length > 0)
             arf.setWorkspaces(new HashSet<AmpTeam>());
         else
@@ -1598,15 +1391,6 @@ public class ReportsFilterPicker extends Action {
             arf.getWorkspaces().add(value);
         }
 
-        arf.setProjectCategory(pumpCategoryValueSetFromForm(filterForm.getSelectedProjectCategory()));
-        arf.setFinancingInstruments(pumpCategoryValueSetFromForm(filterForm.getSelectedFinancingInstruments()));
-        arf.setFundingStatus(pumpCategoryValueSetFromForm(filterForm.getSelectedFundingStatus()));
-        arf.setAidModalities(pumpCategoryValueSetFromForm(filterForm.getSelectedAidModalities()));
-        arf.setTypeOfAssistance(pumpCategoryValueSetFromForm(filterForm.getSelectedTypeOfAssistance()));
-        arf.setModeOfPayment(pumpCategoryValueSetFromForm(filterForm.getSelectedModeOfPayment()));
-        arf.setProjectImplementingUnits(pumpCategoryValueSetFromForm(filterForm.getSelectedProjectImplUnit()));
-        arf.setActivityPledgesTitle( pumpCategoryValueSetFromForm(filterForm.getSelectedActivityPledgesTitle()) );
-        
         if (filterForm.getPageSize() != null) {
             arf.setPageSize(filterForm.getPageSize()); // set page size in the ARF filter
         }
@@ -1668,8 +1452,6 @@ public class ReportsFilterPicker extends Action {
         } else
             arf.setContractingAgencyGroups(null);
 
-        arf.setBudget(pumpCategoryValueSetFromForm(filterForm.getSelectedBudgets()));
-        
         if ( filterForm.getSelectedMultiDonor() != null && filterForm.getSelectedMultiDonor().length == 1 ) {
             arf.setMultiDonor( (String) filterForm.getSelectedMultiDonor()[0] );
         }
@@ -1711,20 +1493,6 @@ public class ReportsFilterPicker extends Action {
                 arf.setShowArchived(true);
         }
         
-        arf.setHumanitarianAid(buildBooleanField(filterForm.getSelectedHumanitarianAid()));
-        arf.setDisasterResponse(buildBooleanField(filterForm.getSelectedDisasterResponse()));
         arf.postprocess();
-    }
-
-    protected static Set<Integer> buildBooleanField(Object[] values) {
-        if (values == null)
-            return null;
-        
-        Set<Integer> res = new HashSet<>();
-        for(Object obj:values) {
-            if (obj != null && Integer.parseInt(obj.toString()) > 0)
-                res.add(Integer.parseInt(obj.toString()));
-            }
-        return res;
     }
 }

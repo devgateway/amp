@@ -884,6 +884,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Search Feature - Executing Agency" feature="Search Feature"></field:display>
 <field:display name="Search Feature - Implementing Agency" feature="Search Feature"></field:display>
 <field:display name="Search Feature - Responsible Organization" feature="Search Feature"></field:display>
+<field:display name="Fuzzy Search" feature="Search Feature"></field:display>
 <field:display name="Sector Group" feature="Sector Group"></field:display>
 <field:display name="Sector Ministry Contact Email" feature="Sector Ministry Contact Information"></field:display> 
 <field:display name="Sector Ministry Contact Fax Number" feature="Sector Ministry Contact Information"></field:display> 

@@ -39,8 +39,8 @@ public class TestEndPoints {
     @ApiOperation(
             value = "Test HTTP GET for \"application/json\" media type",
             notes = "Return a sample text as a application/json response")
-    public final testObj simplejson() {
-        testObj jsonobj = new testObj(
+    public final TestObj simplejson() {
+        TestObj jsonobj = new TestObj(
                 "AMP API Test End Point - Test JSON Format");
         return jsonobj;
     }
@@ -52,8 +52,8 @@ public class TestEndPoints {
     @ApiOperation(
             value = "Test HTTP GET that requires user to be authenticated",
             notes = "Return a sample text as a application/json response on success or unauthorized error code")
-    public final testObj simpleJsonAuth() {
-        testObj jsonobj = new testObj("AMP API Test End Point Authenticated - Test JSON Format");
+    public final TestObj simpleJsonAuth() {
+        TestObj jsonobj = new TestObj("AMP API Test End Point Authenticated - Test JSON Format");
         return jsonobj;
     }
     
@@ -81,11 +81,11 @@ public class TestEndPoints {
      * 
      */
 
-    private class testObj {
+    private class TestObj {
         private Integer Id;
         private String Message;
 
-        public testObj(String message) {
+        TestObj(String message) {
             super();
             this.setMessage(message);
             this.Id = this.getId();

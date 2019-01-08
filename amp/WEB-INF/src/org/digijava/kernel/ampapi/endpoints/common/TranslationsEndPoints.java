@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.common;
 
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -10,9 +9,9 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Example;
 import io.swagger.annotations.ExampleProperty;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -22,12 +21,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import org.digijava.kernel.ampapi.endpoints.dto.FilterValue;
 import org.digijava.kernel.ampapi.endpoints.dto.Language;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
@@ -156,7 +153,6 @@ public class TranslationsEndPoints {
         DgUtil.switchLanguage(locale, TLSUtils.getRequest(), response);
     }
     
-    @SuppressWarnings("rawtypes")
     @GET
     @Path("/multilingual-languages/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -166,16 +162,11 @@ public class TranslationsEndPoints {
             value = "Gets the list of available languages for a site when multilingual is enabled.",
             notes = "When multilingual is disabled it returns the effective language (e.g. either the currently-set "
                     + "one OR the default one (\"en\")). ")
-    @JsonView(FilterValue.BasicView.class)
-    public List<FilterValue> getMultilingualLanguages() {
-        List<FilterValue> languages = new ArrayList<FilterValue>();
-        List<String[]> locales = TranslationManager.getLocale(PersistenceManager.getSession());
-        boolean onlyCurrentLanguage = !ContentTranslationUtil.multilingualIsEnabled();
-        for(String[] localeRecord:locales) {
-            boolean entryRelevant = onlyCurrentLanguage ? localeRecord[0].equals(TLSUtils.getEffectiveLangCode()) : true;
-            if (entryRelevant) {
-                languages.add(new FilterValue(localeRecord[0], localeRecord[1]));
-            }
+    public List<Language> getMultilingualLanguages() {
+        List<Language> languages = TranslationManager.getAmpLanguages();
+        if (!ContentTranslationUtil.multilingualIsEnabled()) {
+            String code = TLSUtils.getEffectiveLangCode();
+            languages = languages.stream().filter(l -> code.equalsIgnoreCase(l.getId())).collect(Collectors.toList());
         }
         return languages;
     }

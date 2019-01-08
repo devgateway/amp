@@ -206,6 +206,8 @@ public class GlobalSettingsConstants {
     public static final String AMP_OFFLINE_ENABLED = "AMP Offline Enabled";
     
     public static final String AMP_SERVER_ID = "AMP Server ID";
+
+    public static final String FUZZY_SEARCH_DISTANCE = "Fuzzy search distance";
     
     // TODO will be removed once the new activity preview is finished
     public static final String USE_NEW_ACTIVITY_PREVIEW = "Use new activity preview";

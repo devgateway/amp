@@ -1,4 +1,4 @@
-package org.digijava.kernel.services.sync.model;
+package org.digijava.kernel.ampapi.endpoints.serializers;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;

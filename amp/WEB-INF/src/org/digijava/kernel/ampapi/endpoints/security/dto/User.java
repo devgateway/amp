@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityConstants;
-import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateTimeSerializer;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601TimeStampSerializer;
 
 /**
  * Basic user information
@@ -34,7 +34,7 @@ public class User {
     private String email;
     
     @JsonProperty(SecurityConstants.PASSWORD_CHANGED_AT)
-    @JsonSerialize(using = ISO8601DateTimeSerializer.class)
+    @JsonSerialize(using = ISO8601TimeStampSerializer.class)
     @ApiModelProperty(example = "2018-06-19T09:50:59.582+0300")
     private Date passwordChangedAt;
     

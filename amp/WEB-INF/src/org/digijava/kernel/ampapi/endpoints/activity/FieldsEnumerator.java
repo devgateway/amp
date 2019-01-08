@@ -100,10 +100,13 @@ public class FieldsEnumerator {
         if (interchangeable.pickIdOnly()) {
             apiField.setFieldType(InterchangeableClassMapper.getCustomMapping(java.lang.Long.class));
         } else {
-
             Class<?> fieldType = field.getType();
-            apiField.setFieldType(InterchangeableClassMapper.containsSimpleClass(fieldType)
-                    ? InterchangeableClassMapper.getCustomMapping(fieldType) : ActivityEPConstants.FIELD_TYPE_LIST);
+            if (InterchangeableClassMapper.containsSimpleClass(fieldType)) {
+                apiField.setFieldType(InterchangeableClassMapper.getCustomMapping(fieldType));
+            } else { 
+                apiField.setFieldType(ActivityEPConstants.FIELD_TYPE_LIST);
+                apiField.setItemType(ActivityEPConstants.FIELD_TYPE_OBJECT);
+            }
         }
         String label = getLabelOf(interchangeable);
         apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
@@ -170,6 +173,9 @@ public class FieldsEnumerator {
                 List<APIField> children = getAllAvailableFields(type, context);
                 if (InterchangeUtils.isCollection(field)) {
                     apiField.setElementType(type);
+                    String itemType = InterchangeableClassMapper.containsSimpleClass(type) ?
+                            InterchangeableClassMapper.getCustomMapping(type) : ActivityEPConstants.FIELD_TYPE_OBJECT;
+                    apiField.setItemType(itemType);
                 }
                 if (children != null && children.size() > 0) {
                     apiField.setChildren(children);

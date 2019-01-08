@@ -24,6 +24,9 @@ public class APIField {
 
     @JsonProperty(ActivityEPConstants.FIELD_TYPE)
     private String fieldType;
+    
+    @JsonProperty(ActivityEPConstants.ITEM_TYPE)
+    private String itemType;
 
     /**
      * Meaningful only when fieldType is list.
@@ -156,6 +159,14 @@ public class APIField {
 
     public void setFieldType(String fieldType) {
         this.fieldType = fieldType;
+    }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
     }
 
     public String getRequired() {
@@ -310,10 +321,16 @@ public class APIField {
     public void setElementType(Class<?> elementType) {
         this.elementType = elementType;
     }
+    
+    @JsonIgnore
+    public boolean isSimpleItemType() {
+        return this.itemType != null && this.itemType != ActivityEPConstants.FIELD_TYPE_OBJECT;
+    }
 
     @Override
     public String toString() {
         return "APIField{" + "fieldName='" + fieldName + '\'' + ", fieldType='" + fieldType + '\''
+                + ", itemType=" + itemType
                 + ", fieldLabel=" + fieldLabel + ", fieldNameInternal='" + fieldNameInternal + '\'' + ", required='"
                 + required + '\'' + ", idOnly=" + idOnly + ", importable=" + importable + ", translatable="
                 + translatable + ", multipleValues=" + multipleValues + ", activity=" + activity

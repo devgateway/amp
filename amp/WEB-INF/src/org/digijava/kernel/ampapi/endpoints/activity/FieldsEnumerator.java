@@ -173,8 +173,8 @@ public class FieldsEnumerator {
                 List<APIField> children = getAllAvailableFields(type, context);
                 if (InterchangeUtils.isCollection(field)) {
                     apiField.setElementType(type);
-                    String itemType = InterchangeableClassMapper.containsSimpleClass(type) ?
-                            InterchangeableClassMapper.getCustomMapping(type) : ActivityEPConstants.FIELD_TYPE_OBJECT;
+                    String itemType = InterchangeableClassMapper.containsSimpleClass(type)
+                            ? InterchangeableClassMapper.getCustomMapping(type) : ActivityEPConstants.FIELD_TYPE_OBJECT;
                     apiField.setItemType(itemType);
                 }
                 if (children != null && children.size() > 0) {

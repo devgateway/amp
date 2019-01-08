@@ -138,14 +138,20 @@ public abstract class ObjectExporter<T> {
     /**
      * Convert list of objects to a json array.
      */
-    private List<JsonBean> readCollection(APIField field, String fieldPath, Collection value) {
-        List<JsonBean> collectionJson = new ArrayList<>();
+    private List<?> readCollection(APIField field, String fieldPath, Collection value) {
+        List<Object> collectionOutput = new ArrayList<>();
         if (value != null) {
-            for (Object item : value) {
-                collectionJson.add(getObjectJson(item, field.getChildren(), fieldPath));
+            if (field.isSimpleItemType()) {
+                for (Object item : value) {
+                    collectionOutput.add(item);
+                }
+            } else {
+                for (Object item : value) {
+                    collectionOutput.add(getObjectJson(item, field.getChildren(), fieldPath));
+                }
             }
         }
-        return collectionJson;
+        return collectionOutput;
     }
 
     protected boolean isFiltered(String fieldPath) {

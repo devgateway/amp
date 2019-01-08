@@ -309,7 +309,7 @@ module.exports = Backbone.View
     /* TODO(thadk) switch individual feature to this standard parsed model input*/
     /*var parsedProjectSitesList = this.app.data.structures.model.prototype.parse(feature);*/
 
-    if (feature.properties) {
+    if (feature.properties) {     
       var activityJSON = feature.properties.activity.toJSON();
       shape.bindPopup(self.structureTemplate({
         activityJSON: activityJSON,

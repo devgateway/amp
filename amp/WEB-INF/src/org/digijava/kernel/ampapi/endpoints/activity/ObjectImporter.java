@@ -153,14 +153,15 @@ public class ObjectImporter {
         String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
         Object oldJsonValue = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
         Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
-        // validate and import sub-elements first (if any)
-        newParent = validateSubElements(fieldDef, newParent, oldParent, newJsonValue, oldJsonValue, currentFieldPath);
-        // then validate current field itself
+        
         boolean valid = validator.isValid(this, newJsonParent, oldJsonParent, fieldDef, currentFieldPath, errors);
-        // and set new field only if all sub-elements are valid
-        if (valid && newParent != null) {
-            newParent = setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
-        } else if (!valid) {
+        if (valid) {
+            newParent = validateSubElements(fieldDef, newParent, oldParent, newJsonValue, oldJsonValue,
+                    currentFieldPath);
+            if (newParent != null) {
+                newParent = setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
+            }
+        } else {
             newParent = null;
         }
         return newParent;
@@ -413,7 +414,7 @@ public class ObjectImporter {
         List<APIField> childrenFields = fieldDef.getChildren();
         List<Map<String, Object>> childrenNewValues = getChildrenValues(newJsonValue, isList);
         List<Map<String, Object>> childrenOldValues = getChildrenValues(oldJsonValue, isList);
-
+        
         // validate children, even if it is not a list -> to notify wrong entries
         if ((isList || childrenFields != null && childrenFields.size() > 0) && childrenNewValues != null) {
             String actualFieldName = fieldDef.getFieldNameInternal();
@@ -440,57 +441,62 @@ public class ObjectImporter {
                 throw new RuntimeException(e);
             }
 
-            if (newFieldValue != null && AmpAgreement.class.isAssignableFrom(newFieldValue.getClass())
-                    && childrenNewValues.size() == 1) {
-                Map<String, Object> agreementMap = childrenNewValues.get(0);
-                childrenNewValues.clear();
-                for (String key : agreementMap.keySet()) {
-                    HashMap<String, Object> kv = new HashMap<String, Object>();
-                    Object val = agreementMap.get(key);
-
-                    if (val instanceof String) {
-                        val = StringUtils.trim((String) val);
+            if (isCollection && fieldDef.isSimpleItemType()) {
+                ((Collection) newFieldValue).addAll(childrenNewValues);
+            } else {
+                if (newFieldValue != null && AmpAgreement.class.isAssignableFrom(newFieldValue.getClass())
+                        && childrenNewValues.size() == 1) {
+                    Map<String, Object> agreementMap = childrenNewValues.get(0);
+                    childrenNewValues.clear();
+                    for (String key : agreementMap.keySet()) {
+                        HashMap<String, Object> kv = new HashMap<String, Object>();
+                        Object val = agreementMap.get(key);
+    
+                        if (val instanceof String) {
+                            val = StringUtils.trim((String) val);
+                        }
+    
+                        kv.put(key, val);
+                        childrenNewValues.add(kv);
                     }
-
-                    kv.put(key, val);
-                    childrenNewValues.add(kv);
                 }
-            }
-
-            // process children
-            Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
-            while (iterNew.hasNext()) {
-                Map<String, Object> newChild = iterNew.next();
-                branchJsonVisitor.put(fieldPath, newChild);
-                APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
-                Map<String, Object> oldChild = getMatchedOldValue(childFieldDef, childrenOldValues);
-
-                if (oldChild != null) {
-                    childrenOldValues.remove(oldChild);
-                }
-                Object res = null;
-                if (isCollection) {
-                    try {
-                        Object newSubElement = subElementClass.newInstance();
-                        res = validateAndImport(newSubElement, null, childrenFields, newChild, oldChild, fieldPath);
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        logger.error(e.getMessage());
-                        throw new RuntimeException(e);
+    
+                // process children
+                Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
+                while (iterNew.hasNext()) {
+                    Map<String, Object> newChild = iterNew.next();
+                    branchJsonVisitor.put(fieldPath, newChild);
+                    APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
+                    Map<String, Object> oldChild = getMatchedOldValue(childFieldDef, childrenOldValues);
+    
+                    if (oldChild != null) {
+                        childrenOldValues.remove(oldChild);
                     }
-                } else {
-                    res = validateAndImport(newFieldValue, oldFieldValue, childFieldDef, newChild, oldChild, fieldPath);
+                    Object res = null;
+                    if (isCollection) {
+                        try {
+                            Object newSubElement = subElementClass.newInstance();
+                            res = validateAndImport(newSubElement, null, childrenFields, newChild, oldChild, fieldPath);
+                        } catch (InstantiationException | IllegalAccessException e) {
+                            logger.error(e.getMessage());
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        res = validateAndImport(newFieldValue, oldFieldValue, childFieldDef, newChild, oldChild,
+                                fieldPath);
+                    }
+    
+                    if (res == null) {
+                        // validation failed, reset parent to stop config
+                        newParent = null;
+                    } else if (newParent != null && isCollection) {
+                        configureDiscriminationField(res, fieldDef);
+                        // actual links will be updated
+                        ((Collection) newFieldValue).add(res);
+                    }
                 }
-
-                if (res == null) {
-                    // validation failed, reset parent to stop config
-                    newParent = null;
-                } else if (newParent != null && isCollection) {
-                    configureDiscriminationField(res, fieldDef);
-                    // actual links will be updated
-                    ((Collection) newFieldValue).add(res);
-                }
+                // TODO: we also need to validate other children, some can be mandatory
             }
-            // TODO: we also need to validate other children, some can be mandatory
         }
         return newParent;
     }

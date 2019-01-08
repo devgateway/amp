@@ -63,16 +63,20 @@ public class InputTypeValidator extends InputValidator {
             return true;
         }
         
+        return isValidByType(importer, fieldDescription, fieldType, item);
+    }
+
+    private boolean isValidByType(ObjectImporter importer, APIField fieldDescription, String fieldType, Object item) {
         switch (fieldType) {
-        case ActivityEPConstants.FIELD_TYPE_STRING :
-            return isStringValid(item, Boolean.TRUE.equals(fieldDescription.isTranslatable()),
-                    importer.getTrnSettings().getAllowedLangCodes());
-        case ActivityEPConstants.FIELD_TYPE_DATE: return isValidDate(item);
-        case ActivityEPConstants.FIELD_TYPE_FLOAT: return isValidFloat(item);
-        case ActivityEPConstants.FIELD_TYPE_BOOLEAN : return isValidBoolean(item);
-        case ActivityEPConstants.FIELD_TYPE_LIST: return checkListFieldValidity(item, fieldDescription);
-        case ActivityEPConstants.FIELD_TYPE_LONG: return isValidLong(item);
-        default: return false; 
+            case ActivityEPConstants.FIELD_TYPE_STRING :
+                return isStringValid(item, Boolean.TRUE.equals(fieldDescription.isTranslatable()),
+                        importer.getTrnSettings().getAllowedLangCodes());
+            case ActivityEPConstants.FIELD_TYPE_DATE: return isValidDate(item);
+            case ActivityEPConstants.FIELD_TYPE_FLOAT: return isValidFloat(item);
+            case ActivityEPConstants.FIELD_TYPE_BOOLEAN: return isValidBoolean(item);
+            case ActivityEPConstants.FIELD_TYPE_LIST: return checkListFieldValidity(importer, item, fieldDescription);
+            case ActivityEPConstants.FIELD_TYPE_LONG: return isValidLong(item);
+            default: return false; 
         }
     }
 
@@ -105,11 +109,17 @@ public class InputTypeValidator extends InputValidator {
                 && InterchangeUtils.parseISO8601Date((String) value) != null;
     }
 
-    private boolean checkListFieldValidity(Object item, APIField fieldDescription) {
+    private boolean checkListFieldValidity(ObjectImporter importer, Object item, APIField fieldDescription) {
         // for simple lists OR objects with sub-fields
-        if (List.class.isAssignableFrom(item.getClass()) || Map.class.isAssignableFrom(item.getClass())) 
+        if (List.class.isAssignableFrom(item.getClass())) {
+            if (fieldDescription.isSimpleItemType()) {
+                List<?> items = (List<?>) item;
+                return items.stream().allMatch(elem ->
+                    this.isValidByType(importer, fieldDescription, fieldDescription.getItemType(), elem));
+            }
             return true;
-        return false;
+        }
+        return Map.class.isAssignableFrom(item.getClass());
     }
 
 }

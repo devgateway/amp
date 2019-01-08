@@ -1,7 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -609,7 +608,7 @@ LoggerIdentifiable, Cloneable {
             required = "/Activity Form/Identification/Budget Extras/Required Validator for fy",
             dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY}, 
             validators = @Validators (unique = "/Activity Form/Identification/Budget Extras/FY"))
-    protected Set<AmpAPIFiscalYear> fiscalYears;
+    protected Set<Long> fiscalYears;
     
     @Interchangeable(fieldTitle = "Vote", importable = true, 
             fmPath = "/Activity Form/Identification/Budget Extras/Vote",
@@ -2130,11 +2129,11 @@ LoggerIdentifiable, Cloneable {
             this.deleted = deleted;
         }
         
-        public Set<AmpAPIFiscalYear> getFiscalYears() {
+        public Set<Long> getFiscalYears() {
             return fiscalYears;
         }
 
-        public void setFiscalYears(Set<AmpAPIFiscalYear> fiscalYears) {
+        public void setFiscalYears(Set<Long> fiscalYears) {
             this.fiscalYears = fiscalYears;
         }
 

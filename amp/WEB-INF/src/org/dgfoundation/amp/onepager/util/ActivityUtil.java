@@ -46,7 +46,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpAPIFiscalYear;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -404,13 +403,12 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
     }
     
     private static void updateFiscalYears(AmpActivityVersion a) {
-        Set<AmpAPIFiscalYear> actFiscalYears = a.getFiscalYears();
+        Set<Long> actFiscalYears = a.getFiscalYears();
         
         if (!CollectionUtils.isEmpty(actFiscalYears)) {
-            List<AmpAPIFiscalYear> fiscalYears = new ArrayList<>(actFiscalYears);
-            fiscalYears.sort(Comparator.comparing(AmpAPIFiscalYear::getYear));
-            List<String> years = fiscalYears.stream().map(fy -> fy.getYear().toString()).collect(Collectors.toList());
-            a.setFY(StringUtils.join(years, ","));
+            List<Long> fiscalYears = new ArrayList<>(actFiscalYears);
+            fiscalYears.sort(Comparator.naturalOrder());
+            a.setFY(StringUtils.join(fiscalYears, ","));
         }
     }
 

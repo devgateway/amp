@@ -42,7 +42,6 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.ar.util.FilterUtil;
-import org.digijava.module.aim.dbentity.AmpAPIFiscalYear;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -489,12 +488,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
      */
     private static void initializeFiscalYears(AmpActivityVersion activity) {
         if (activity.getFiscalYears() == null) {
-            List<AmpAPIFiscalYear> fiscalYears = new ArrayList<>();
+            List<Long> fiscalYears = new ArrayList<>();
             if (StringUtils.isNotBlank(activity.getFY())) {
                 try {
                     List<String> years = Arrays.asList(activity.getFY().split(","));
                     for (String year : years) {
-                        fiscalYears.add(new AmpAPIFiscalYear(Long.parseLong(year)));
+                        fiscalYears.add(Long.parseLong(year));
                     }
                     activity.setFiscalYears(new HashSet<>(fiscalYears));
                 } catch (NumberFormatException e) {

@@ -5,6 +5,7 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NOT_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LIST;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LONG;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_OBJECT;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_STRING;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -219,7 +220,7 @@ public class FieldsEnumeratorTest {
     private static class MultipleValuesClass {
 
         @Interchangeable(fieldTitle = "field", multipleValues = false)
-        private List<String> field;
+        private List<Object> field;
     }
 
     @Test
@@ -228,6 +229,22 @@ public class FieldsEnumeratorTest {
 
         APIField expected = newListField();
         expected.setMultipleValues(false);
+
+        assertEqualsSingle(expected, actual);
+    }
+
+    private static class SimpleTypeListClass {
+
+        @Interchangeable(fieldTitle = "field")
+        private List<Long> field;
+    }
+
+    @Test
+    public void testSimpleTypeList() {
+        List<APIField> actual = fieldsFor(SimpleTypeListClass.class);
+
+        APIField expected = newListOfLongField();
+        expected.setMultipleValues(true);
 
         assertEqualsSingle(expected, actual);
     }
@@ -467,6 +484,15 @@ public class FieldsEnumeratorTest {
     private APIField newListField() {
         APIField field = newAPIField();
         field.setFieldType(FIELD_TYPE_LIST);
+        field.setItemType(FIELD_TYPE_OBJECT);
+        return field;
+    }
+
+    private APIField newListOfLongField() {
+        APIField field = newAPIField();
+        field.setFieldType(FIELD_TYPE_LIST);
+        field.setItemType(FIELD_TYPE_LONG);
+        field.setElementType(Long.class);
         return field;
     }
 

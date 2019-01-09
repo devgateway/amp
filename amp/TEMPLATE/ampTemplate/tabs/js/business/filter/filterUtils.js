@@ -62,23 +62,31 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 					if(dateFilter){
 						app.TabsApp.filters.add(dateFilter);
 					}
-				} else {					
-					_.each(auxProperty, function(item, i) {						
+				} else {
+					var names = [];
+					_.each(auxProperty, function(item) {
+						names.push(item.get('name'));
+					});
+					var translatedNames = TranslationManager.getTranslated(names);
+					_.each(auxProperty, function(item, i) {
 						var foundFilters = app.TabsApp.filters.filter(function(filter1) {
 							return filter1.get('name') === item.get('filterId');
 						});
 						
 						var filter = foundFilters[0];						
-						if (filter == null) {
-							var name = TranslationManager.getTranslated(item.get('filterId').replace(/-/g, " ")) || item.get('filterId').replace(/-/g, " ");
-							var filter = new Filter({
+						if (filter === null || filter === undefined) {
+							// Group item.
+							var name = TranslationManager.getTranslated(item.get('filterId').replace(/-/g, " ")) ||
+								item.get('filterId').replace(/-/g, " ");
+							filter = new Filter({
 								trnName : name,
 								name: item.get('filterId'),
 								values : []
 							});
 						}				
-						 
-						filter.get('values').push({id: 0, name: item.get('name'), trnName: TranslationManager.getTranslated(item.get('name'))});					
+
+						// Item.
+						filter.get('values').push({id: 0, name: item.get('name'), trnName: translatedNames[i]});
 						if (foundFilters.length === 0) {
 							app.TabsApp.filters.add(filter);
 						}

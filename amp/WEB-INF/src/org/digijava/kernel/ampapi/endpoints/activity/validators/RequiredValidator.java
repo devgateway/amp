@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -75,10 +76,14 @@ public class RequiredValidator extends InputValidator {
     }
 
     private boolean isEmpty(Object fieldValue) {
-        return fieldValue == null || isEmptyString(fieldValue);
+        return fieldValue == null || isEmptyString(fieldValue) || isEmptyCollection(fieldValue);
     }
     
     private boolean isEmptyString(Object fieldValue) {
         return fieldValue instanceof String && StringUtils.isBlank((String) fieldValue);
+    }
+
+    private boolean isEmptyCollection(Object fieldValue) {
+        return Collection.class.isAssignableFrom(fieldValue.getClass()) && ((Collection<?>) fieldValue).size() == 0;
     }
 }

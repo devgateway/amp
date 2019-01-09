@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
+import java.util.stream.Collectors;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
@@ -403,11 +403,10 @@ public class ObjectImporter {
 
         // skip children validation immediately if only ID is expected
         boolean idOnly = fieldDef.isIdOnly();
-        if (idOnly) {
-            return newParent;
-        }
-
         boolean isList = ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType);
+        if (idOnly && !(isList && fieldDef.isSimpleItemType())) {
+            return newParent;
+        }        
 
         // first validate all sub-elements
         @SuppressWarnings("unchecked")
@@ -442,7 +441,9 @@ public class ObjectImporter {
             }
 
             if (isCollection && fieldDef.isSimpleItemType()) {
-                ((Collection) newFieldValue).addAll(childrenNewValues);
+                Collection nvs = ((Collection<?>) childrenNewValues).stream()
+                        .map(v -> toSimpleTypeValue(v, subElementClass)).collect(Collectors.toList());
+                ((Collection) newFieldValue).addAll(nvs);
             } else {
                 if (newFieldValue != null && AmpAgreement.class.isAssignableFrom(newFieldValue.getClass())
                         && childrenNewValues.size() == 1) {
@@ -499,6 +500,20 @@ public class ObjectImporter {
             }
         }
         return newParent;
+    }
+    
+    private Object toSimpleTypeValue(Object value, Class<?> type) {
+        if (value == null || type.isAssignableFrom(value.getClass())) {
+            return value;
+        }
+        try {
+            Method valueOf = type.getMethod("valueOf", String.class);
+            return valueOf.invoke(type, value.toString());
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException e) {
+            logger.error("Could not automatically convert the value. The deserializer configuration may be missing.");
+            throw new RuntimeException(e);
+        }
     }
 
     /**

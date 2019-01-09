@@ -7,14 +7,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
@@ -24,7 +22,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.Transla
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.endpoints.util.StreamUtils;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -132,7 +129,7 @@ public class ResourceImporter extends ObjectImporter {
         
         try {
             resource = new AmpResource();
-            resource = (AmpResource) validateAndImport(resource, null, fieldsDef, newJson.any(), null);
+            resource = (AmpResource) validateAndImport(resource, fieldsDef, newJson.any(), null);
             
             if (resource == null) {
                 throw new ObjectConversionException();

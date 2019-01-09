@@ -208,8 +208,7 @@ public class ActivityImporter extends ObjectImporter {
             
             Map<String, Object> newJsonParent = newJson.any();
             
-            newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, newJsonParent, 
-                    null);
+            newActivity = (AmpActivityVersion) validateAndImport(newActivity, fieldsDef, newJsonParent, null);
             if (newActivity != null && errors.isEmpty()) {
                 // save new activity
                 prepareToSave();

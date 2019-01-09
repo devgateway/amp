@@ -60,7 +60,7 @@ public class ActivityImporterTest {
 
         AmpActivityVersion activity = new AmpActivityVersion();
         ActivityImporter importer = new ActivityImporter(activityFields);
-        importer.validateAndImport(activity, null, apiFields, json.any(), null);
+        importer.validateAndImport(activity, apiFields, json.any(), null);
         return importer.getErrors();
     }
 

@@ -17,7 +17,7 @@ public class PrimaryOrganisationContactValidator extends InputValidator {
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-            Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
 
         boolean found = false;
         if (fieldPath.equals(ContactEPConstants.ORGANISATION_CONTACTS)) {

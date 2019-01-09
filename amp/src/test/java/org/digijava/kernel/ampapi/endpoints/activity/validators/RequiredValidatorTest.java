@@ -165,7 +165,7 @@ public class RequiredValidatorTest {
 
         RequiredValidator validator = new RequiredValidator();
 
-        boolean valid = validator.isValid(importer, bean, null, fieldDescription, SAMPLE_FIELD);
+        boolean valid = validator.isValid(importer, bean, fieldDescription, SAMPLE_FIELD);
 
         assertEquals(expectedErrorMessage == null, valid);
         if (expectedErrorMessage != null) {

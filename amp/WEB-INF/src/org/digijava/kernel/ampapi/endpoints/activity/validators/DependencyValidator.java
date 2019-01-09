@@ -18,7 +18,7 @@ public class DependencyValidator extends InputValidator {
     @Override
     public boolean isValid(ObjectImporter importer,
             Map<String, Object> newFieldParent,
-            Map<String, Object> oldFieldParent, APIField fieldDescription,
+            APIField fieldDescription,
             String fieldPath) {
         Object value = newFieldParent.get(fieldDescription.getFieldName());
         List<String> deps = fieldDescription.getDependencies();

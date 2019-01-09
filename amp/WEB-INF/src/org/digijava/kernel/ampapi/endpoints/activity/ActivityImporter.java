@@ -90,7 +90,6 @@ public class ActivityImporter extends ObjectImporter {
 
     private AmpActivityVersion newActivity = null;
     private AmpActivityVersion oldActivity = null;
-    private JsonBean oldJson = null;
     private boolean update  = false;
     private SaveMode requestedSaveMode;
     private boolean downgradedToDraftSave = false;
@@ -163,7 +162,6 @@ public class ActivityImporter extends ObjectImporter {
         if (ampActivityId != null) {
             try {
                 oldActivity  = ActivityUtil.loadActivity(ampActivityId);
-                oldJson = InterchangeUtils.getActivity(oldActivity, null);
             } catch (DgException e) {
                 logger.error(e.getMessage());
                 errors.put(ActivityErrors.ACTIVITY_NOT_LOADED.id, ActivityErrors.ACTIVITY_NOT_LOADED);
@@ -208,12 +206,10 @@ public class ActivityImporter extends ObjectImporter {
                 newActivity = new AmpActivityVersion();
             }
             
-            // REFACTOR: we may no longer need to use oldJson
-            Map<String, Object> oldJsonParent = null;
             Map<String, Object> newJsonParent = newJson.any();
             
             newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, newJsonParent, 
-                    oldJsonParent, null);
+                    null);
             if (newActivity != null && errors.isEmpty()) {
                 // save new activity
                 prepareToSave();
@@ -804,13 +800,6 @@ public class ActivityImporter extends ObjectImporter {
      */
     public AmpActivityVersion getOldActivity() {
         return oldActivity;
-    }
-
-    /**
-     * @return the oldJson
-     */
-    public JsonBean getOldJson() {
-        return oldJson;
     }
 
     /**

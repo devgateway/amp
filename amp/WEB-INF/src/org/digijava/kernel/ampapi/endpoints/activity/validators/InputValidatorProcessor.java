@@ -75,18 +75,17 @@ public class InputValidatorProcessor {
      * Executes validation chain for the new field values
      *
      * @param importer         Activity Importer instance that holds other import information
-     * @param newFieldValue    new field JSON structure
-     * @param oldFieldValue    old field JSON structure
-     * @param fieldDescription field description
+     * @param newParent        new field JSON structure
+     * @param fieldDef         field description
      * @param errors           map to store errors
      * @return true if the current field passes the full validation chain
      */
-    public boolean isValid(ObjectImporter importer, Map<String, Object> newParent, Map<String, Object> oldParent,
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newParent,
                            APIField fieldDef, String fieldPath, Map<Integer, ApiErrorMessage> errors) {
         boolean valid = true;
         String fieldName = fieldPath.substring(fieldPath.lastIndexOf("~") + 1);
         for (InputValidator current : validators) {
-            boolean currentValid = current.isValid(importer, newParent, oldParent, fieldDef, fieldPath);
+            boolean currentValid = current.isValid(importer, newParent, fieldDef, fieldPath);
             valid = currentValid && valid;
 
             if (!currentValid) {

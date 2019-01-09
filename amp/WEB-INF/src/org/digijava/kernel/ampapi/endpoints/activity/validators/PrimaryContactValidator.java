@@ -40,7 +40,7 @@ public class PrimaryContactValidator extends InputValidator {
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         
         boolean isValid = true;
         String fieldName = fieldDescription.getFieldName();

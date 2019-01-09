@@ -64,10 +64,11 @@ public abstract class ObjectExporter<T> {
     private void readFieldValue(APIField field, Object object, JsonBean jsonObject, String fieldPath) {
         Object jsonValue;
         Object fieldValue = field.getFieldValueReader().get(object);
+        boolean isList = field.getFieldType().equals(ActivityEPConstants.FIELD_TYPE_LIST);
 
-        if (field.isIdOnly()) {
+        if (field.isIdOnly() && !(isList && field.isSimpleItemType())) {
             jsonValue = readFieldWithPossibleValues(field, fieldValue);
-        } else if (field.getFieldType().equals(ActivityEPConstants.FIELD_TYPE_LIST)) {
+        } else if (isList) {
             if (field.getFieldName().equals("activity_group")) { // FIXME hack because APIField.type cannot be object
                 jsonValue = getObjectJson(fieldValue, field.getChildren(), fieldPath);
             } else {

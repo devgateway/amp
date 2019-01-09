@@ -3092,9 +3092,17 @@ module.exports = ChartModel.extend({
 		
 		// Process params from heat-map/configs, in that EP we have defined each heatmap.
 		var configs = this.get('heatmap_config').models[0];
-		var thisChart = _.find(configs.get('charts'), function(item) {return item.name === self.get('name')});
-		var xColumn = self.get('xAxisColumn') !== '' ? self.get('xAxisColumn') : configs.get('columns')[thisChart.xColumns[0]].origName; // First column is default.
-		var yColumn = configs.get('columns')[thisChart.yColumns[0]].origName; // First column is default.
+		var thisChart = _.find(configs.get('charts'), function (item) {
+			return item.name === self.get('name');
+		});
+		var xColumn = self.get('xAxisColumn') !== '' ?
+			self.get('xAxisColumn') :
+			_.find(configs.get('columns'), function (item, i) {
+				return item.origName === thisChart.xColumns[0];
+			}).origName; // First column is default.
+		var yColumn = _.find(configs.get('columns'), function (item, i) {
+			return item.origName === thisChart.yColumns[0];
+		}).origName; // First column is default.
 		
 		// Check if we need to switch axis.
 		if (self.get('swapAxes') === true) {
@@ -3595,10 +3603,16 @@ module.exports = BackboneDash.View.extend({
             // Process params from heat-map/configs, in that EP we have defined each heatmap.
             var configs = self.model.get('heatmap_config').models[0];
             var thisChart = _.find(configs.get('charts'), function (item) {
-                return item.name === self.model.get('name')
+                return item.name === self.model.get('name');
             });
-            var xColumn = self.model.get('xAxisColumn') !== '' ? self.model.get('xAxisColumn') : configs.get('columns')[thisChart.xColumns[0]].origName; // First column is default.
-            var yColumn = configs.get('columns')[thisChart.yColumns[0]].origName; // First column is default.
+            var xColumn = self.model.get('xAxisColumn') !== '' ?
+                self.model.get('xAxisColumn') :
+                _.find(configs.get('columns'), function (item, i) {
+                    return item.origName === thisChart.xColumns[0];
+                }).origName; // First column is default.
+            var yColumn = _.find(configs.get('columns'), function (item, i) {
+                return item.origName === thisChart.yColumns[0];
+            }).origName; // First column is default.
 
             // Check if we need to switch axis.
             if (self.model.get('swapAxes') === true) {
@@ -4012,20 +4026,24 @@ module.exports = BackboneDash.View.extend({
 	    }
 	    
 	    // For heatmaps add some extra combos.
-	    if (self.model.get('chartType') === 'fragmentation') {
-	    	var heatMapConfigs = self.model.get('heatmap_config').models[0];
-	    	var thisHeatMapChart = _.find(heatMapConfigs.get('charts'), function(item) {return item.name === self.model.get('name')});
-	    	self.$('.xaxis-options').html(
-	    		_(thisHeatMapChart.xColumns).map(function(colId) {
-	    			var item = _.find(heatMapConfigs.get('columns'), function(item, i) { return i === colId});
-	    			var opt = {id: item.origName, name: item.name, selected: false, value: item.origName};
-	    			return adjOptTemplate({
-	    				opt: opt,
-	    	            current: (opt.id === self.model.get('xAxisColumn'))
-	    	        });
-	    	    }, self)
-	    	);
-	    }
+        if (self.model.get('chartType') === 'fragmentation') {
+            var heatMapConfigs = self.model.get('heatmap_config').models[0];
+            var thisHeatMapChart = _.find(heatMapConfigs.get('charts'), function (item) {
+                return item.name === self.model.get('name');
+            });
+            self.$('.xaxis-options').html(
+                _(thisHeatMapChart.xColumns).map(function (colId) {
+                    var item = _.find(heatMapConfigs.get('columns'), function (item, i) {
+                        return item.origName === colId;
+                    });
+                    var opt = {id: item.origName, name: item.name, selected: false, value: item.origName};
+                    return adjOptTemplate({
+                        opt: opt,
+                        current: (opt.id === self.model.get('xAxisColumn'))
+                    });
+                }, self)
+            );
+        }
 	
 	    if (self._stateWait.state() !== 'pending') {
 	    	self.updateData();

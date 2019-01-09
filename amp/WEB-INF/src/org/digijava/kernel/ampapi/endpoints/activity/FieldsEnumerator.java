@@ -138,6 +138,21 @@ public class FieldsEnumerator {
         apiField.setIdOnly(hasPossibleValues(field, interchangeable));
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
+            // FIXME remove condition that excludes activities
+            if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getType())) {
+                Class type = getType(field, context);
+                List<APIField> children = getAllAvailableFields(type, context);
+                if (InterchangeUtils.isCollection(field)) {
+                    apiField.setElementType(type);
+                    String itemType = InterchangeableClassMapper.containsSimpleClass(type)
+                            ? InterchangeableClassMapper.getCustomMapping(type) : ActivityEPConstants.FIELD_TYPE_OBJECT;
+                    apiField.setItemType(itemType);
+                }
+                if (children != null && children.size() > 0) {
+                    apiField.setChildren(children);
+                }
+            }
+            
             if (InterchangeUtils.isCollection(field)) {
                 if (!hasMaxSizeValidatorEnabled(field, context)
                         && interchangeable.multipleValues()) {
@@ -155,7 +170,7 @@ public class FieldsEnumerator {
                     apiField.setPercentageConstraint(getPercentageConstraint(field, context));
                 }
                 
-                String uniqueConstraint = getUniqueConstraint(field, context);
+                String uniqueConstraint = getUniqueConstraint(apiField, field, context);
                 if (hasTreeCollectionValidatorEnabled(context)) {
                     apiField.setTreeCollectionConstraint(true);
                     apiField.setUniqueConstraint(uniqueConstraint);
@@ -165,21 +180,6 @@ public class FieldsEnumerator {
                 
             } else if (!interchangeable.pickIdOnly()) {
                 apiField.setMultipleValues(false);
-            }
-
-            // FIXME remove condition that excludes activties
-            if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getType())) {
-                Class type = getType(field, context);
-                List<APIField> children = getAllAvailableFields(type, context);
-                if (InterchangeUtils.isCollection(field)) {
-                    apiField.setElementType(type);
-                    String itemType = InterchangeableClassMapper.containsSimpleClass(type)
-                            ? InterchangeableClassMapper.getCustomMapping(type) : ActivityEPConstants.FIELD_TYPE_OBJECT;
-                    apiField.setItemType(itemType);
-                }
-                if (children != null && children.size() > 0) {
-                    apiField.setChildren(children);
-                }
             }
         }
         
@@ -331,7 +331,11 @@ public class FieldsEnumerator {
     /**
      * Describes each @Interchangeable field of a class
      */
-    private String getUniqueConstraint(Field field, FEContext context) {
+    private String getUniqueConstraint(APIField apiField, Field field, FEContext context) {
+        if (apiField.isSimpleItemType()) {
+            Interchangeable interchangeable = context.getIntchStack().peek();
+            return interchangeable.uniqueConstraint() ? apiField.getFieldName() : null;
+        }
         Class<?> genericClass = InterchangeUtils.getGenericClass(field);
         Field[] fields = FieldUtils.getFieldsWithAnnotation(genericClass, Interchangeable.class);
         for (Field f : fields) {

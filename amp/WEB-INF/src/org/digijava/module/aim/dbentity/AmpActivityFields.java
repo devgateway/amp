@@ -16,6 +16,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpOrgRoleDi
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivitySectorDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.values.ApprovalStatusPossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.FiscalYearPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
@@ -606,8 +607,9 @@ LoggerIdentifiable, Cloneable {
      */
     @Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", 
             required = "/Activity Form/Identification/Budget Extras/Required Validator for fy",
-            dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY}, 
+            dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY}, uniqueConstraint = true,
             validators = @Validators (unique = "/Activity Form/Identification/Budget Extras/FY"))
+    @PossibleValues(FiscalYearPossibleValuesProvider.class)
     protected Set<Long> fiscalYears;
     
     @Interchangeable(fieldTitle = "Vote", importable = true, 

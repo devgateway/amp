@@ -10,7 +10,7 @@
                 <td bgcolor="#999999" nowrap>
                     <b><digi:trn>Workspace where activity is displayed</digi:trn></b>
                 </td>
-                <td bgcolor="#999999" nowrap>
+                <td bgcolor="#999999" nowrap width="120px">
                     <div class="ws-tooltip">
                         <b><digi:trn>Workspace Type</digi:trn></b>
                         <img src="/TEMPLATE/ampTemplate/images/tooltip-help.png" >
@@ -106,7 +106,15 @@
 
 
     var responseFailureViewWorkspaces = function (o) {
-        alert("Connection Failure!");
+        var content = document.getElementById("viewWorkspacesContent");
+        var errorTitle = '\n<digi:trn jsFriendly="true">Error</digi:trn>: ';
+        var errorText = JSON.stringify(JSON.parse(o.responseText).error);
+        content.innerHTML = '<p class="ws-error">' + errorTitle + errorText + '</p>';
+
+        if (o.status === 401) {
+            alert(errorText);
+            location.reload();
+        }
     }
 
     var viewWorkspacesCallback =
@@ -166,5 +174,9 @@
 
     .ws-tooltip-item {
         margin-bottom: 10px;
+    }
+
+    .ws-error {
+        color: red;
     }
 </style>

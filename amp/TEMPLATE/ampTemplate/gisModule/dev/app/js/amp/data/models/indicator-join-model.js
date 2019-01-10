@@ -130,10 +130,10 @@ loadAll: function(options) {
 				  params.data = {indicator: layer, settings: settings, isGapAnalysis: true};
 				  params.data = JSON.stringify(_.extend(params.data, filter));
 			  } else {
-				  // If gap analysis is NOT selected then we send the data from localStorage anyway, the EP will return it without changes.
-				  // This is needed because after the gap analysis is selected we cant render again the original public layer.	
-				  
-				  this.url = '/rest/gis/process-public-layer';
+				  /* If gap analysis is NOT selected then we use the data from localStorage instead of going to an EP,
+				  so we set the url to an empty .json file and then the parse function
+				  will use the data we already have. */
+				  this.url = 'fake.json';
 				  layer.unit = StringUtil.getMultilangString(layer,'unit', app.data.generalSettings); // Needed preprocess for popups.
 				  layer.description = StringUtil.getMultilangString(layer,'description', app.data.generalSettings);				  
 				  params.data = JSON.stringify(layer);
@@ -158,7 +158,11 @@ loadAll: function(options) {
 	    return this.lastFetchXhr;
 	  }	  
   },
-  parse: function(response, options){	  
+  parse: function(response, options){
+  	/* This is a special case where we dont need to go to the backend but use data we already have. */
+  	if (options && options.url === 'empty.json') {
+		response = JSON.parse(options.data);
+	}
 	  //if from /rest/gis/indicators/ add prefix to id prevent collision
 	  if(!_.isFunction(this.url) && !_.isUndefined(this.url) && this.url.indexOf('/rest/gis/indicators/') !== -1){	
 		  response.id = app.constants.JOIN_BOUNDARIES_PREFIX +  response.id;

@@ -55,7 +55,7 @@ public class InputTypeValidator extends InputValidator {
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
                            Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
-        String fieldType = fieldDescription.getFieldType();
+        String fieldType = fieldDescription.getApiType().getFieldType();
         String fieldName = fieldDescription.getFieldName();
         Object item = newFieldParent.get(fieldName);
         
@@ -112,10 +112,10 @@ public class InputTypeValidator extends InputValidator {
     private boolean checkListFieldValidity(ObjectImporter importer, Object item, APIField fieldDescription) {
         // for simple lists OR objects with sub-fields
         if (List.class.isAssignableFrom(item.getClass())) {
-            if (fieldDescription.isSimpleItemType()) {
+            if (fieldDescription.getApiType().isSimpleItemType()) {
                 List<?> items = (List<?>) item;
                 return items.stream().allMatch(elem ->
-                    this.isValidByType(importer, fieldDescription, fieldDescription.getItemType(), elem));
+                    this.isValidByType(importer, fieldDescription, fieldDescription.getApiType().getItemType(), elem));
             }
             return true;
         }

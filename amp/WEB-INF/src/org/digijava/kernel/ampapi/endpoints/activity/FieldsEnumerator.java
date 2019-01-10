@@ -93,19 +93,19 @@ public class FieldsEnumerator {
         apiField.setFieldName(fieldTitle);
 
         // for discriminated case we can override the type here
-        apiField.setType(InterchangeUtils.getClassOfField(field));
+        apiField.getApiType().setType(InterchangeUtils.getClassOfField(field));
 
         apiField.setPossibleValuesProviderClass(InterchangeUtils.getPossibleValuesProvider(field));
 
         if (interchangeable.pickIdOnly()) {
-            apiField.setFieldType(InterchangeableClassMapper.getCustomMapping(java.lang.Long.class));
+            apiField.getApiType().setFieldType(InterchangeableClassMapper.getCustomMapping(java.lang.Long.class));
         } else {
             Class<?> fieldType = field.getType();
             if (InterchangeableClassMapper.containsSimpleClass(fieldType)) {
-                apiField.setFieldType(InterchangeableClassMapper.getCustomMapping(fieldType));
+                apiField.getApiType().setFieldType(InterchangeableClassMapper.getCustomMapping(fieldType));
             } else { 
-                apiField.setFieldType(ActivityEPConstants.FIELD_TYPE_LIST);
-                apiField.setItemType(ActivityEPConstants.FIELD_TYPE_OBJECT);
+                apiField.getApiType().setFieldType(ActivityEPConstants.FIELD_TYPE_LIST);
+                apiField.getApiType().setItemType(ActivityEPConstants.FIELD_TYPE_OBJECT);
             }
         }
         String label = getLabelOf(interchangeable);
@@ -143,10 +143,10 @@ public class FieldsEnumerator {
                 Class type = getType(field, context);
                 List<APIField> children = getAllAvailableFields(type, context);
                 if (InterchangeUtils.isCollection(field)) {
-                    apiField.setElementType(type);
+                    apiField.getApiType().setElementType(type);
                     String itemType = InterchangeableClassMapper.containsSimpleClass(type)
                             ? InterchangeableClassMapper.getCustomMapping(type) : ActivityEPConstants.FIELD_TYPE_OBJECT;
-                    apiField.setItemType(itemType);
+                    apiField.getApiType().setItemType(itemType);
                 }
                 if (children != null && children.size() > 0) {
                     apiField.setChildren(children);
@@ -332,7 +332,7 @@ public class FieldsEnumerator {
      * Describes each @Interchangeable field of a class
      */
     private String getUniqueConstraint(APIField apiField, Field field, FEContext context) {
-        if (apiField.isSimpleItemType()) {
+        if (apiField.getApiType().isSimpleItemType()) {
             Interchangeable interchangeable = context.getIntchStack().peek();
             return interchangeable.uniqueConstraint() ? apiField.getFieldName() : null;
         }

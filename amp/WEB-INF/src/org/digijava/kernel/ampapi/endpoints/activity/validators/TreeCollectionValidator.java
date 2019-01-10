@@ -63,7 +63,7 @@ public class TreeCollectionValidator extends InputValidator {
                 
                 idValues = getUniqueValues(fieldValue, uniqueField);
                 
-                return isTreeCollectionValid(fieldDescription.getElementType(), idValues);
+                return isTreeCollectionValid(fieldDescription.getApiType().getElementType(), idValues);
             }
         }
 

@@ -65,9 +65,9 @@ public class ValueValidatorTest {
         fyFieldDescription.setFieldName(FY_FIELD);
         fyFieldDescription.setImportable(true);
         fyFieldDescription.setIdOnly(true);
-        fyFieldDescription.setElementType(Long.class);
-        fyFieldDescription.setFieldType(FIELD_TYPE_LIST);
-        fyFieldDescription.setItemType(FIELD_TYPE_LONG);
+        fyFieldDescription.getApiType().setElementType(Long.class);
+        fyFieldDescription.getApiType().setFieldType(FIELD_TYPE_LIST);
+        fyFieldDescription.getApiType().setItemType(FIELD_TYPE_LONG);
     }
 
     @Test

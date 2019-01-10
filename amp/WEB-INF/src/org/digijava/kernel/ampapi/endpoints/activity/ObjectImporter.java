@@ -178,7 +178,6 @@ public class ObjectImporter {
 
         String fieldName = fieldDef.getFieldName();
         String actualFieldName = fieldDef.getFieldNameInternal();
-        String fieldType = fieldDef.getFieldType();
         Object fieldValue = newJsonParent.get(fieldName);
         Field objField = ReflectionUtil.getField(newParent, actualFieldName);
         if (objField == null) {
@@ -237,7 +236,7 @@ public class ObjectImporter {
         }
 
         Object value = null;
-        String fieldType = fieldDef.getFieldType();
+        String fieldType = fieldDef.getApiType().getFieldType();
         boolean idOnly = fieldDef.isIdOnly();
 
         // this field has possible values
@@ -394,7 +393,7 @@ public class ObjectImporter {
             Object oldJsonValue, String fieldPath) {
         // simulate temporarily fieldDef
         fieldDef = fieldDef == null ? new APIField() : fieldDef;
-        String fieldType = fieldDef.getFieldType();
+        String fieldType = fieldDef.getApiType().getFieldType();
         /*
          * Sub-elements by default are valid when not provided.
          * Current field will be verified below and reported as invalid if sub-elements are mandatory and are
@@ -404,7 +403,7 @@ public class ObjectImporter {
         // skip children validation immediately if only ID is expected
         boolean idOnly = fieldDef.isIdOnly();
         boolean isList = ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType);
-        if (idOnly && !(isList && fieldDef.isSimpleItemType())) {
+        if (idOnly && !(isList && fieldDef.getApiType().isSimpleItemType())) {
             return newParent;
         }        
 
@@ -422,7 +421,7 @@ public class ObjectImporter {
             Field oldField = ReflectionUtil.getField(oldParent, actualFieldName);
             Object newFieldValue = null;
             Object oldFieldValue = null;
-            Class<?> subElementClass = fieldDef.getElementType();
+            Class<?> subElementClass = fieldDef.getApiType().getElementType();
             boolean isCollection = false;
             try {
                 newFieldValue = newField == null ? null : newField.get(newParent);
@@ -440,7 +439,7 @@ public class ObjectImporter {
                 throw new RuntimeException(e);
             }
 
-            if (isCollection && fieldDef.isSimpleItemType()) {
+            if (isCollection && fieldDef.getApiType().isSimpleItemType()) {
                 Collection nvs = ((Collection<?>) childrenNewValues).stream()
                         .map(v -> toSimpleTypeValue(v, subElementClass)).collect(Collectors.toList());
                 ((Collection) newFieldValue).addAll(nvs);

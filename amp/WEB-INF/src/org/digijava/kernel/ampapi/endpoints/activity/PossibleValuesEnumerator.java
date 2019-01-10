@@ -288,7 +288,7 @@ public class PossibleValuesEnumerator {
     private List<PossibleValue> getPossibleValuesForComplexField(APIField apiField, String configValue) {
         /*AmpActivitySector || AmpComponentFunding || AmpActivityProgram*/
         List<Object[]> items;
-        Class<?> clazz = apiField.getType();
+        Class<?> clazz = apiField.getApiType().getType();
         if (clazz.equals(AmpSector.class)) {
             return getPossibleSectors(configValue);
         } else if (clazz.equals(AmpTheme.class)) {
@@ -309,7 +309,7 @@ public class PossibleValuesEnumerator {
      * @return
      */
     private List<PossibleValue> getPossibleValuesForField(APIField apiField) {
-        Class<?> clazz = apiField.getType();
+        Class<?> clazz = apiField.getApiType().getType();
         if (clazz.isAssignableFrom(AmpCategoryValue.class))
             return getPossibleCategoryValues(apiField);
         if (clazz.isAssignableFrom(AmpLocation.class))
@@ -326,7 +326,7 @@ public class PossibleValuesEnumerator {
             return getPossibleCurrencies();
         }
 
-        if (InterchangeUtils.isEnumerable(apiField.getType())) {
+        if (InterchangeUtils.isEnumerable(apiField.getApiType().getType())) {
             return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
         } else {
             return new ArrayList<>();

@@ -32,7 +32,7 @@ public class UniqueValidator extends InputValidator {
         if (StringUtils.isNotBlank(uniqueField)) {
             Collection<?> newValues = (Collection<?>) newFieldParent.get(fieldName);
             Set<Object> uniqueValues = new HashSet<>();
-            if (fieldDescription.isSimpleItemType()) {
+            if (fieldDescription.getApiType().isSimpleItemType()) {
                 uniqueValues.addAll(newValues);
             } else {
                 uniqueValues.addAll(((Collection<Map<String, Object>>) newValues).stream()

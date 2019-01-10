@@ -193,9 +193,9 @@ public class RequiredValidatorTest {
 
     private APIField fdList(String required) {
         APIField fd = fd(FIELD_ALWAYS_REQUIRED);
-        fd.setElementType(String.class);
-        fd.setFieldType(FIELD_TYPE_LIST);
-        fd.setItemType(FIELD_TYPE_STRING);
+        fd.getApiType().setElementType(String.class);
+        fd.getApiType().setFieldType(FIELD_TYPE_LIST);
+        fd.getApiType().setItemType(FIELD_TYPE_STRING);
         return fd;
     }
 

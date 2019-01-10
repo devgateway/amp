@@ -260,7 +260,7 @@ public class FieldsEnumeratorTest {
         List<APIField> actual = fieldsFor(LongFieldClass.class);
 
         APIField expected = newAPIField();
-        expected.setFieldType(FIELD_TYPE_LONG);
+        expected.getApiType().setFieldType(FIELD_TYPE_LONG);
 
         assertEqualsSingle(expected, actual);
     }
@@ -483,28 +483,28 @@ public class FieldsEnumeratorTest {
 
     private APIField newListField() {
         APIField field = newAPIField();
-        field.setFieldType(FIELD_TYPE_LIST);
-        field.setItemType(FIELD_TYPE_OBJECT);
+        field.getApiType().setFieldType(FIELD_TYPE_LIST);
+        field.getApiType().setItemType(FIELD_TYPE_OBJECT);
         return field;
     }
 
     private APIField newListOfLongField() {
         APIField field = newAPIField();
-        field.setFieldType(FIELD_TYPE_LIST);
-        field.setItemType(FIELD_TYPE_LONG);
-        field.setElementType(Long.class);
+        field.getApiType().setFieldType(FIELD_TYPE_LIST);
+        field.getApiType().setItemType(FIELD_TYPE_LONG);
+        field.getApiType().setElementType(Long.class);
         return field;
     }
 
     private APIField newLongField() {
         APIField field = newAPIField();
-        field.setFieldType(FIELD_TYPE_LONG);
+        field.getApiType().setFieldType(FIELD_TYPE_LONG);
         return field;
     }
 
     private APIField newStringField() {
         APIField field = newAPIField();
-        field.setFieldType(FIELD_TYPE_STRING);
+        field.getApiType().setFieldType(FIELD_TYPE_STRING);
         field.setFieldLength(TestFieldInfoProvider.MAX_STR_LEN);
         field.setTranslatable(false);
         return field;

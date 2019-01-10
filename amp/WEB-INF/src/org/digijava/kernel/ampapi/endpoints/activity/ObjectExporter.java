@@ -64,9 +64,9 @@ public abstract class ObjectExporter<T> {
     private void readFieldValue(APIField field, Object object, JsonBean jsonObject, String fieldPath) {
         Object jsonValue;
         Object fieldValue = field.getFieldValueReader().get(object);
-        boolean isList = field.getFieldType().equals(ActivityEPConstants.FIELD_TYPE_LIST);
+        boolean isList = field.getApiType().getFieldType().equals(ActivityEPConstants.FIELD_TYPE_LIST);
 
-        if (field.isIdOnly() && !(isList && field.isSimpleItemType())) {
+        if (field.isIdOnly() && !(isList && field.getApiType().isSimpleItemType())) {
             jsonValue = readFieldWithPossibleValues(field, fieldValue);
         } else if (isList) {
             if (field.getFieldName().equals("activity_group")) { // FIXME hack because APIField.type cannot be object
@@ -89,11 +89,11 @@ public abstract class ObjectExporter<T> {
      */
     private Object readFieldWithPossibleValues(APIField field, Object value) {
         Object singleValue = getSingleValue(value);
-        if (ApprovalStatus.class.isAssignableFrom(field.getType())) {
+        if (ApprovalStatus.class.isAssignableFrom(field.getApiType().getType())) {
             return ((ApprovalStatus) value).getId();
-        } else if (Identifiable.class.isAssignableFrom(field.getType())) {
+        } else if (Identifiable.class.isAssignableFrom(field.getApiType().getType())) {
             return singleValue == null ? null : ((Identifiable) singleValue).getIdentifier();
-        } else if (InterchangeUtils.isSimpleType(field.getType())) {
+        } else if (InterchangeUtils.isSimpleType(field.getApiType().getType())) {
             return singleValue;
         } else {
             throw new RuntimeException("Invalid field mapping. Must be either of simple type or identifiable. "
@@ -142,7 +142,7 @@ public abstract class ObjectExporter<T> {
     private List<?> readCollection(APIField field, String fieldPath, Collection value) {
         List<Object> collectionOutput = new ArrayList<>();
         if (value != null) {
-            if (field.isSimpleItemType()) {
+            if (field.getApiType().isSimpleItemType()) {
                 for (Object item : value) {
                     collectionOutput.add(item);
                 }

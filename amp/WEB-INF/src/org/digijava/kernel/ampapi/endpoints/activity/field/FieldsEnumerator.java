@@ -101,21 +101,22 @@ public class FieldsEnumerator {
         apiField.setFieldName(fieldTitle);
 
         // for discriminated case we can override the type here
-        apiField.getApiType().setType(InterchangeUtils.getClassOfField(field));
+        Class<?> type = InterchangeUtils.getClassOfField(field);
+        FieldType fieldType = null;
+        Class<?> elementType = null;
+        if (interchangeable.pickIdOnly() || InterchangeUtils.isAmpActivityVersion(field.getType())) {
+            fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
+        } else if (!InterchangeUtils.isSimpleType(field.getType())) {
+            elementType = getType(field, context);
+            if (InterchangeUtils.isCollection(field) && InterchangeUtils.isSimpleType(elementType)) {
+                type = field.getClass();
+            }
+        }
+        APIType apiType = new APIType(type, fieldType, elementType);
+        apiField.setApiType(apiType);
 
         apiField.setPossibleValuesProviderClass(InterchangeUtils.getPossibleValuesProvider(field));
 
-        if (interchangeable.pickIdOnly()) {
-            apiField.getApiType().setFieldType(InterchangeableClassMapper.getCustomMapping(java.lang.Long.class));
-        } else {
-            Class<?> fieldType = field.getType();
-            if (InterchangeableClassMapper.containsSimpleClass(fieldType)) {
-                apiField.getApiType().setFieldType(InterchangeableClassMapper.getCustomMapping(fieldType));
-            } else { 
-                apiField.getApiType().setFieldType(FieldType.LIST);
-                apiField.getApiType().setItemType(FieldType.OBJECT);
-            }
-        }
         String label = getLabelOf(interchangeable);
         apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
         apiField.setRequired(getRequiredValue(context, fieldTitle));
@@ -148,14 +149,7 @@ public class FieldsEnumerator {
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             // FIXME remove condition that excludes activities
             if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getType())) {
-                Class type = getType(field, context);
-                List<APIField> children = getAllAvailableFields(type, context);
-                if (InterchangeUtils.isCollection(field)) {
-                    apiField.getApiType().setElementType(type);
-                    FieldType itemType = InterchangeableClassMapper.containsSimpleClass(type)
-                            ? InterchangeableClassMapper.getCustomMapping(type) : FieldType.OBJECT;
-                    apiField.getApiType().setItemType(itemType);
-                }
+                List<APIField> children = getAllAvailableFields(elementType, context);
                 if (children != null && children.size() > 0) {
                     apiField.setChildren(children);
                 }

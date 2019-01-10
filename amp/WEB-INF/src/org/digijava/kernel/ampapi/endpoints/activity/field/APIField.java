@@ -96,10 +96,6 @@ public class APIField {
     @JsonIgnore
     private FieldValueReader fieldValueReader;
 
-    public APIField() {
-        this.apiType = new APIType();
-    }
-
     public void setFieldValueReader(FieldValueReader fieldValueReader) {
         this.fieldValueReader = fieldValueReader;
     }

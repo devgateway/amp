@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -57,15 +58,13 @@ public class ValueValidatorTest {
         sectorFieldDescription.setFieldName(SECTOR_FIELD);
         sectorFieldDescription.setImportable(true);
         sectorFieldDescription.setIdOnly(true);
-        sectorFieldDescription.getApiType().setFieldType(FieldType.STRING);
+        sectorFieldDescription.setApiType(new APIType(String.class));
 
         fyFieldDescription = new APIField();
         fyFieldDescription.setFieldName(FY_FIELD);
         fyFieldDescription.setImportable(true);
         fyFieldDescription.setIdOnly(true);
-        fyFieldDescription.getApiType().setElementType(Long.class);
-        fyFieldDescription.getApiType().setFieldType(FieldType.LIST);
-        fyFieldDescription.getApiType().setItemType(FieldType.LONG);
+        fyFieldDescription.setApiType(new APIType(Collection.class, Long.class));
     }
 
     @Test

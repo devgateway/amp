@@ -12,50 +12,67 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 public class APIType {
 
     @JsonProperty(ActivityEPConstants.FIELD_TYPE)
-    private FieldType fieldType;
+    private final FieldType fieldType;
 
     @JsonIgnore
-    private Class<?> type;
+    private final Class<?> type;
 
     @JsonProperty(ActivityEPConstants.ITEM_TYPE)
-    private FieldType itemType;
+    private final FieldType itemType;
 
     /**
      * Meaningful only when fieldType is list.
      */
     @JsonIgnore
-    private Class<?> elementType;
+    private final Class<?> elementType;
+
+    public APIType(Class<?> type) {
+        this(type, null, null);
+    }
+
+    public APIType(Class<?> type, Class<?> elementType) {
+        this(type, null, elementType);
+    }
+
+    public APIType(Class<?> type, FieldType fieldType, Class<?> elementType) {
+        this.type = type;
+        if (fieldType == null) {
+            if (InterchangeableClassMapper.containsSimpleClass(type)) {
+                fieldType = InterchangeableClassMapper.getCustomMapping(type);
+            } else {
+                fieldType = FieldType.LIST;
+            }
+        }
+        if (fieldType.isList()) {
+            if (elementType == null) {
+                throw new RuntimeException("A list type must clarify the elementType"); 
+            }
+            this.itemType = InterchangeableClassMapper.containsSimpleClass(elementType)
+                    ? InterchangeableClassMapper.getCustomMapping(elementType) : FieldType.OBJECT;
+             
+        } else if (elementType != null) {
+            throw new RuntimeException("Only a list type can specify an elementType");
+        } else {
+            this.itemType = null;
+        }
+        this.fieldType = fieldType;
+        this.elementType = elementType;
+    }
 
     public FieldType getFieldType() {
         return fieldType;
-    }
-
-    public void setFieldType(FieldType fieldType) {
-        this.fieldType = fieldType;
     }
 
     public Class<?> getType() {
         return type;
     }
 
-    public void setType(Class<?> type) {
-        this.type = type;
-    }
-
     public FieldType getItemType() {
         return itemType;
     }
 
-    public void setItemType(FieldType itemType) {
-        this.itemType = itemType;
-    }
-
     public Class<?> getElementType() {
         return elementType;
-    }
-
-    public void setElementType(Class<?> elementType) {
-        this.elementType = elementType;
     }
 
     @JsonIgnore

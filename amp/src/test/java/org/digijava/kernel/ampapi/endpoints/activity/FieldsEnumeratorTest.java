@@ -6,16 +6,13 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LIST;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LONG;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_STRING;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.TYPE_VARCHAR;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,10 +21,10 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
+import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
@@ -46,47 +43,26 @@ import org.mockito.junit.MockitoRule;
  */
 public class FieldsEnumeratorTest {
 
-    private static final int MAX_STR_LEN = 10;
     private static final int SIZE_LIMIT = 3;
+
+    private TranslatorService translatorService;
+    private FMService fmService;
+    private FieldInfoProvider provider;
 
     @Rule public MockitoRule rule = MockitoJUnit.rule();
 
-    @Mock private FieldInfoProvider provider;
-    @Mock private FMService fmService;
-    @Mock private TranslatorService translatorService;
     @Mock private TranslatorService throwingTranslatorService;
     @Mock private TranslatorService emptyTranslatorService;
 
     @Before
     public void setUp() throws Exception {
-        when(fmService.isVisible(any(), any())).thenReturn(true);
-        when(fmService.isVisible(eq("fm hidden"), any())).thenReturn(false);
-
-        when(translatorService.getAllTranslationOfBody(any(), any())).thenAnswer(invocation -> {
-            String s = (String) invocation.getArguments()[0];
-            return Arrays.asList(msg("en", s + " en"), msg("fr", s + " fr"));
-        });
+        translatorService = new TestTranslatorService();
+        fmService = new TestFMService();
+        provider = new TestFieldInfoProvider();
 
         when(throwingTranslatorService.getAllTranslationOfBody(any(), any())).thenThrow(new WorkerException());
 
         when(emptyTranslatorService.getAllTranslationOfBody(any(), any())).thenReturn(Collections.emptyList());
-
-        when(provider.getType(any())).thenAnswer(invocation -> {
-            Field f = (Field) invocation.getArguments()[0];
-            return String.class.isAssignableFrom(f.getType()) ? TYPE_VARCHAR : "unknown";
-        });
-        when(provider.getMaxLength(any())).thenAnswer(invocation -> {
-            Field f = (Field) invocation.getArguments()[0];
-            return String.class.isAssignableFrom(f.getType()) && !f.getName().equals("noMaxLen") ? MAX_STR_LEN : null;
-        });
-        when(provider.isTranslatable(any())).thenReturn(false);
-    }
-
-    private Message msg(String locale, String text) {
-        Message msg = new Message();
-        msg.setLocale(locale);
-        msg.setMessage(text);
-        return msg;
     }
 
     @Test
@@ -291,7 +267,6 @@ public class FieldsEnumeratorTest {
 
     private static class DiscriminatedClass {
 
-        @Interchangeable(fieldTitle = "field")
         @InterchangeableDiscriminator(discriminatorField = "type", settings = {
                 @Interchangeable(fieldTitle = "type_a", discriminatorOption = "a", fmPath = "fm hidden"),
                 @Interchangeable(fieldTitle = "type_b", discriminatorOption = "b")
@@ -504,7 +479,7 @@ public class FieldsEnumeratorTest {
     private APIField newStringField() {
         APIField field = newAPIField();
         field.setFieldType(FIELD_TYPE_STRING);
-        field.setFieldLength(MAX_STR_LEN);
+        field.setFieldLength(TestFieldInfoProvider.MAX_STR_LEN);
         field.setTranslatable(false);
         return field;
     }

@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_COMMUNAL_SECTION;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_COUNTRY;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_DISTRICT;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_RAW;
@@ -127,7 +128,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     public static final Long PLEDGE_ID_ADDER = 800000000L;
 
     /**
-     * put this to false if you are debugging the caching fetching layers of the schema (e.g. {@link AmpDifferentialColumn}, {@link AmpCachedColumn}, {@link AmpFundingColumn})
+     * put this to false if you are debugging the caching fetching layers of the schema
+     * (e.g. {@link AmpDifferentialColumn}, {@link AmpFundingColumn})
      */
     public boolean ENABLE_CACHING = true;
 
@@ -383,7 +385,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_dimension(ColumnConstants.ACTIVITY_PLEDGES_TITLE, "v_activity_pledges_title");
         no_dimension(ColumnConstants.ACTIVITY_UPDATED_BY, "v_activity_modified_by");
         no_dimension(ColumnConstants.ACTORS, "v_actors");
-        
+
+        no_dimension(ColumnConstants.ARCHIVED, "v_archived");
+
         single_dimension(ColumnConstants.AGREEMENT_CODE, "v_agreement_code", AGR_LEVEL_COLUMN);
         single_dimension(ColumnConstants.AGREEMENT_TITLE_CODE, "v_agreement_title_code", AGR_LEVEL_COLUMN);
         date_column(ColumnConstants.AGREEMENT_CLOSE_DATE, "v_agreement_close_date", AGR_LEVEL_COLUMN);
@@ -643,9 +647,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         with_percentage(ColumnConstants.REGION, "v_regions", LOC_DIM_USG, LEVEL_REGION);
         with_percentage(ColumnConstants.ZONE, "v_zones", LOC_DIM_USG, LEVEL_ZONE);
         with_percentage(ColumnConstants.DISTRICT, "v_districts", LOC_DIM_USG, LEVEL_DISTRICT);
+        with_percentage(ColumnConstants.COMMUNAL_SECTION, "v_communal_section", LOC_DIM_USG, LEVEL_COMMUNAL_SECTION);
         with_percentage(ColumnConstants.LOCATION, "v_raw_locations", LOC_DIM_USG, LEVEL_RAW);
         with_percentage(ColumnConstants.GEOCODE, "v_geocodes", LOC_DIM_USG, LEVEL_RAW);
-
+        
         single_dimension(ColumnConstants.REGIONAL_REGION, "v_regions", LOC_DIM_USG.getLevelColumn(LEVEL_REGION));
 
         single_dimension(ColumnConstants.GRACE_PERIOD, "v_grace_period", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
@@ -811,7 +816,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         with_percentage(ColumnConstants.PLEDGES_REGIONS, "v_pledges_regions", LOC_DIM_USG, LEVEL_REGION);
         with_percentage(ColumnConstants.PLEDGES_ZONES, "v_pledges_zones", LOC_DIM_USG, LEVEL_ZONE);
         with_percentage(ColumnConstants.PLEDGES_DISTRICTS, "v_pledges_districts", LOC_DIM_USG, LEVEL_DISTRICT);
-        
+        with_percentage(ColumnConstants.PLEDGES_COMMUNAL_SECTION, "v_pledges_communal_sections", LOC_DIM_USG,
+                LEVEL_COMMUNAL_SECTION);
+
         degenerate_dimension(ColumnConstants.PLEDGES_AID_MODALITY, "v_pledges_aid_modality", catsDimension);
         degenerate_dimension(ColumnConstants.PLEDGE_STATUS, "v_pledges_status", catsDimension);
         single_dimension(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, "v_pledges_type_of_assistance", catsDimension.getLevelColumn(ColumnConstants.TYPE_OF_ASSISTANCE, 1));
@@ -1332,7 +1339,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      * adds a date field ties to a degenerate dimension
      * @param columnName
      * @param viewName
-     * @param dim
+     * @param levelColumn
      * @return
      */
     private AmpReportsSchema date_column(String columnName, String viewName, LevelColumn levelColumn) {
@@ -1407,7 +1414,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      * @return
      */
     protected Set<Long> _getWorkspaceActivities(NiReportsEngine engine) {
-        return AmpReportsScratchpad.get(engine).environment.workspaceFilter.getIds();
+        return AmpReportsScratchpad.get(engine).getEnvironment().getIds();
     }
         
     @Override
@@ -1444,7 +1451,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
             null,
             GroupingCriteria.GROUPING_YEARLY));
-        
+
         // test dimensions: make a snapshot of each
         for(NiDimension dimension:Arrays.asList(orgsDimension, locsDimension, secsDimension, progsDimension)) {
             dimension.getDimensionData().toString();

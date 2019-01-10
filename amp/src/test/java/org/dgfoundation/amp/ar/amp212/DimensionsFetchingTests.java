@@ -3,7 +3,7 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import org.dgfoundation.amp.newreports.ReportingTestCase;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class DimensionsFetchingTests extends ReportingTestCase {
+public class DimensionsFetchingTests extends AmpReportingTestCase {
     
     protected final AmpReportsSchema schema = AmpReportsSchema.getInstance();
     
@@ -36,7 +36,7 @@ public class DimensionsFetchingTests extends ReportingTestCase {
         assertEquals(23, snapshot.data.get(1).parents.keySet().stream().filter(z -> z > 0).count());
         assertEquals(-701710115, snapshot.data.get(2).toString().hashCode());
         assertEquals("[9108, 9109, 9110, 9111, 9112, 9113, 9114, 9115, 9116, 9120]", sortedString(snapshot.data.get(2).parents.keySet().stream().filter(z -> z > 0).collect(Collectors.toList())));
-        assertEquals(1186115440, snapshot.data.get(3).toString().hashCode());
+        assertEquals(-1096815164, snapshot.data.get(3).toString().hashCode());
         assertEquals("[9117, 9118, 9121]", snapshot.data.get(3).parents.keySet().stream().filter(z -> z > 0).collect(Collectors.toList()).toString());
     }
     

@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.ws.rs.core.PathSegment;
 
@@ -35,7 +36,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.util.SiteUtils;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -384,7 +385,7 @@ public class InterchangeUtils {
                 for (String translation : translationSettings.getTrnLocaleCodes()) {
                     // AMP-20884: no html tags cleanup so far
                     //String translatedText = DgUtil.cleanHtmlTags(DbUtil.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(), fieldText, translation));
-                    String translatedText = translatorService.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(),
+                    String translatedText = translatorService.getEditorBodyEmptyInclude(TLSUtils.getSite(),
                             fieldText, translation);
                     fieldTrnValues.put(translation, getJsonStringValue(translatedText));
                 }
@@ -400,7 +401,7 @@ public class InterchangeUtils {
         // for reach text editors
         if (isEditor) {
             // AMP-20884: no html tags cleanup so far
-            return translatorService.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(), (String) fieldValue,
+            return translatorService.getEditorBodyEmptyInclude(TLSUtils.getSite(), (String) fieldValue,
                     translationSettings.getDefaultLangCode());
         }
         
@@ -493,7 +494,8 @@ public class InterchangeUtils {
      * @return latest project overview or an error if invalid configuration is received 
      */
     public static JsonBean importActivity(JsonBean newJson, boolean update, String endpointContextPath) {
-        ActivityImporter importer = new ActivityImporter();
+        List<APIField> activityFields = AmpFieldsEnumerator.getPrivateEnumerator().getActivityFields();
+        ActivityImporter importer = new ActivityImporter(activityFields);
         List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update, endpointContextPath);
         
         return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors);
@@ -658,7 +660,9 @@ public class InterchangeUtils {
     
     protected static SimpleDateFormat getDateFormatter() {
         if (DATE_FORMATTER.get() == null) {
-            DATE_FORMATTER.set(new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT));
+            SimpleDateFormat format = new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT);
+            format.setTimeZone(TimeZone.getTimeZone("UTC"));
+            DATE_FORMATTER.set(format);
         }
         return DATE_FORMATTER.get();
     }

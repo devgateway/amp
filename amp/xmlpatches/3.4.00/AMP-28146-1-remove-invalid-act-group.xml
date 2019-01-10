@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-28146</jira>
+    <author>Octavian Ciubotaru</author>
+    <description>
+        Remove invalid amp_activity_group entry. Looks like happens only for DRC (iso2=cd).
+    </description>
+    <trigger>
+        <condition>
+            <script returnVar="country">
+                <lang type="sql">select settingsvalue from amp_global_settings where settingsname='Default Country'</lang>
+            </script>
+            <test>country.equals("cd")</test>
+        </condition>
+        <condition>
+            <script returnVar="activity_count">
+                <lang type="sql">select count(*) from amp_activity_version where amp_activity_group_id=6710</lang>
+            </script>
+            <test>activity_count.intValue()==0</test>
+        </condition>
+    </trigger>
+    <apply>
+        <script>
+            <lang type="sql"><![CDATA[
+                delete from amp_activity_group where amp_activity_group_id=6710;
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -2,10 +2,10 @@ package org.digijava.kernel.ampapi.endpoints.gis;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
@@ -18,7 +18,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
@@ -212,27 +211,18 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @POST
     @Path("/activities")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "ActivitiesNewLists")
-    @ApiOperation("List activities")
-    public ActivityList getActivitiesNew(PerformanceFilterParameters config,
+    @ApiMethod(ui = false, id = "ActivitiesById")
+    @ApiOperation(value = "List activities", notes = "Returns activities that match both the filters and activity ids.")
+    public ActivityList getActivities(
+            @ApiParam(name = "Filters") PerformanceFilterParameters config,
+            @ApiParam("Activity Ids") @QueryParam("id") List<Long> activityIds,
             @QueryParam("start") Integer page,
             @QueryParam("size") Integer pageSize) {
         logger.error(String.format("Requesting %s pagesize from %s page", pageSize, page));
         Integer reqNumber = (pageSize == null) || (page == null) ? null : pageSize * page;
-        return ActivityService.getActivities(config, null, reqNumber, pageSize);
-    }
-
-    @POST
-    @Path("/activities/{activityId}") //once its done remove the New
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "ActivitiesById")
-    @ApiOperation(value = "List activities", notes = "activityId is a comma separated list of activity ids")
-    public ActivityList getActivities(
-            @ApiParam("config") PerformanceFilterParameters config,
-            @PathParam("activityId") PathSegment activityIds) {
         return ActivityService.getActivities(config,
-                Arrays.asList(activityIds.getPath().split("\\s*,\\s*")),
-                null, null);
+                activityIds.stream().map(Object::toString).collect(Collectors.toList()),
+                reqNumber, pageSize);
     }
 
     @POST

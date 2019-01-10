@@ -14,9 +14,9 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  * @author Octavian Ciubotaru
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "field_name", "id", "field_type", "field_label", "required", "importable", "dependencies",
-        "id_only", "multiple_values", "percentage_constraint", "unique_constraint", "tree_collection", "translatable",
-        "regex_pattern", "regex_constraint", "field_length", "size_limit" })
+@JsonPropertyOrder({ "field_name", "id", "field_type", ActivityEPConstants.ITEM_TYPE, "field_label", "required",
+        "importable", "dependencies", "id_only", "multiple_values", "percentage_constraint", "unique_constraint",
+        "tree_collection", "translatable", "regex_pattern", "regex_constraint", "field_length", "size_limit" })
 public class APIField {
 
     @JsonProperty(ActivityEPConstants.FIELD_NAME)
@@ -324,7 +324,7 @@ public class APIField {
     
     @JsonIgnore
     public boolean isSimpleItemType() {
-        return this.itemType != null && this.itemType != ActivityEPConstants.FIELD_TYPE_OBJECT;
+        return this.itemType != null && !this.itemType.equals(ActivityEPConstants.FIELD_TYPE_OBJECT);
     }
 
     @Override

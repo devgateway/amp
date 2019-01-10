@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
@@ -237,7 +238,7 @@ public class ObjectImporter {
         }
 
         Object value = null;
-        String fieldType = fieldDef.getApiType().getFieldType();
+        FieldType fieldType = fieldDef.getApiType().getFieldType();
         boolean idOnly = fieldDef.isIdOnly();
 
         // this field has possible values
@@ -269,7 +270,7 @@ public class ObjectImporter {
                 throw new RuntimeException(e);
             }
             // this is a simple type
-        } else if (InterchangeableClassMapper.SIMPLE_TYPES.contains(fieldType)) {
+        } else if (fieldType.isSimpleType()) {
             if (jsonValue == null) {
                 return null;
             }
@@ -394,7 +395,7 @@ public class ObjectImporter {
             Object oldJsonValue, String fieldPath) {
         // simulate temporarily fieldDef
         fieldDef = fieldDef == null ? new APIField() : fieldDef;
-        String fieldType = fieldDef.getApiType().getFieldType();
+        FieldType fieldType = fieldDef.getApiType().getFieldType();
         /*
          * Sub-elements by default are valid when not provided.
          * Current field will be verified below and reported as invalid if sub-elements are mandatory and are
@@ -403,7 +404,7 @@ public class ObjectImporter {
 
         // skip children validation immediately if only ID is expected
         boolean idOnly = fieldDef.isIdOnly();
-        boolean isList = ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType);
+        boolean isList = fieldType.isList();
         if (idOnly && !(isList && fieldDef.getApiType().isSimpleItemType())) {
             return newParent;
         }        

@@ -65,7 +65,7 @@ public abstract class ObjectExporter<T> {
     private void readFieldValue(APIField field, Object object, JsonBean jsonObject, String fieldPath) {
         Object jsonValue;
         Object fieldValue = field.getFieldValueReader().get(object);
-        boolean isList = field.getApiType().getFieldType().equals(ActivityEPConstants.FIELD_TYPE_LIST);
+        boolean isList = field.getApiType().getFieldType().isList();
 
         if (field.isIdOnly() && !(isList && field.getApiType().isSimpleItemType())) {
             jsonValue = readFieldWithPossibleValues(field, fieldValue);

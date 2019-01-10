@@ -50,7 +50,7 @@ public class ValueValidator extends InputValidator {
         Object value = newFieldParent.get(fieldDescription.getFieldName());
         
         if (possibleValues.size() != 0 && value != null) {
-            if (fieldDescription.getApiType().getFieldType() == ActivityEPConstants.FIELD_TYPE_LIST) {
+            if (fieldDescription.getApiType().getFieldType().isList()) {
                 if (fieldDescription.getApiType().isSimpleItemType()) {
                     return ((List<?>) value).stream().allMatch(v -> isAllowedValue(possibleValues, v));
                 }

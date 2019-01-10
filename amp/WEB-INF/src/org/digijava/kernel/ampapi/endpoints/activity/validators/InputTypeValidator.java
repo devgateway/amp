@@ -11,6 +11,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 
@@ -52,7 +53,7 @@ public class InputTypeValidator extends InputValidator {
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
                            Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
-        String fieldType = fieldDescription.getApiType().getFieldType();
+        FieldType fieldType = fieldDescription.getApiType().getFieldType();
         String fieldName = fieldDescription.getFieldName();
         Object item = newFieldParent.get(fieldName);
         
@@ -63,16 +64,16 @@ public class InputTypeValidator extends InputValidator {
         return isValidByType(importer, fieldDescription, fieldType, item);
     }
 
-    private boolean isValidByType(ObjectImporter importer, APIField fieldDescription, String fieldType, Object item) {
+    private boolean isValidByType(ObjectImporter importer, APIField fieldDesc, FieldType fieldType, Object item) {
         switch (fieldType) {
-            case ActivityEPConstants.FIELD_TYPE_STRING :
-                return isStringValid(item, Boolean.TRUE.equals(fieldDescription.isTranslatable()),
+            case STRING:
+                return isStringValid(item, Boolean.TRUE.equals(fieldDesc.isTranslatable()),
                         importer.getTrnSettings().getAllowedLangCodes());
-            case ActivityEPConstants.FIELD_TYPE_DATE: return isValidDate(item);
-            case ActivityEPConstants.FIELD_TYPE_FLOAT: return isValidFloat(item);
-            case ActivityEPConstants.FIELD_TYPE_BOOLEAN: return isValidBoolean(item);
-            case ActivityEPConstants.FIELD_TYPE_LIST: return checkListFieldValidity(importer, item, fieldDescription);
-            case ActivityEPConstants.FIELD_TYPE_LONG: return isValidLong(item);
+            case DATE: return isValidDate(item);
+            case FLOAT: return isValidFloat(item);
+            case BOOLEAN: return isValidBoolean(item);
+            case LIST: return checkListFieldValidity(importer, item, fieldDesc);
+            case LONG: return isValidLong(item);
             default: return false; 
         }
     }

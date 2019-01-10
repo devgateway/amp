@@ -1,8 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LIST;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LONG;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -17,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -59,14 +57,15 @@ public class ValueValidatorTest {
         sectorFieldDescription.setFieldName(SECTOR_FIELD);
         sectorFieldDescription.setImportable(true);
         sectorFieldDescription.setIdOnly(true);
+        sectorFieldDescription.getApiType().setFieldType(FieldType.STRING);
 
         fyFieldDescription = new APIField();
         fyFieldDescription.setFieldName(FY_FIELD);
         fyFieldDescription.setImportable(true);
         fyFieldDescription.setIdOnly(true);
         fyFieldDescription.getApiType().setElementType(Long.class);
-        fyFieldDescription.getApiType().setFieldType(FIELD_TYPE_LIST);
-        fyFieldDescription.getApiType().setItemType(FIELD_TYPE_LONG);
+        fyFieldDescription.getApiType().setFieldType(FieldType.LIST);
+        fyFieldDescription.getApiType().setItemType(FieldType.LONG);
     }
 
     @Test

@@ -3,10 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NOT_REQUIRED;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LIST;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LONG;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_OBJECT;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_STRING;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -23,6 +19,7 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
@@ -263,7 +260,7 @@ public class FieldsEnumeratorTest {
         List<APIField> actual = fieldsFor(LongFieldClass.class);
 
         APIField expected = newAPIField();
-        expected.getApiType().setFieldType(FIELD_TYPE_LONG);
+        expected.getApiType().setFieldType(FieldType.LONG);
 
         assertEqualsSingle(expected, actual);
     }
@@ -486,28 +483,28 @@ public class FieldsEnumeratorTest {
 
     private APIField newListField() {
         APIField field = newAPIField();
-        field.getApiType().setFieldType(FIELD_TYPE_LIST);
-        field.getApiType().setItemType(FIELD_TYPE_OBJECT);
+        field.getApiType().setFieldType(FieldType.LIST);
+        field.getApiType().setItemType(FieldType.OBJECT);
         return field;
     }
 
     private APIField newListOfLongField() {
         APIField field = newAPIField();
-        field.getApiType().setFieldType(FIELD_TYPE_LIST);
-        field.getApiType().setItemType(FIELD_TYPE_LONG);
+        field.getApiType().setFieldType(FieldType.LIST);
+        field.getApiType().setItemType(FieldType.LONG);
         field.getApiType().setElementType(Long.class);
         return field;
     }
 
     private APIField newLongField() {
         APIField field = newAPIField();
-        field.getApiType().setFieldType(FIELD_TYPE_LONG);
+        field.getApiType().setFieldType(FieldType.LONG);
         return field;
     }
 
     private APIField newStringField() {
         APIField field = newAPIField();
-        field.getApiType().setFieldType(FIELD_TYPE_STRING);
+        field.getApiType().setFieldType(FieldType.STRING);
         field.setFieldLength(TestFieldInfoProvider.MAX_STR_LEN);
         field.setTranslatable(false);
         return field;

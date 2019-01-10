@@ -3,8 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NOT_REQUIRED;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LIST;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_STRING;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
 import static org.junit.Assert.assertEquals;
@@ -21,6 +19,7 @@ import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.junit.Before;
 import org.junit.Rule;
@@ -194,8 +193,8 @@ public class RequiredValidatorTest {
     private APIField fdList(String required) {
         APIField fd = fd(FIELD_ALWAYS_REQUIRED);
         fd.getApiType().setElementType(String.class);
-        fd.getApiType().setFieldType(FIELD_TYPE_LIST);
-        fd.getApiType().setItemType(FIELD_TYPE_STRING);
+        fd.getApiType().setFieldType(FieldType.LIST);
+        fd.getApiType().setItemType(FieldType.LONG);
         return fd;
     }
 

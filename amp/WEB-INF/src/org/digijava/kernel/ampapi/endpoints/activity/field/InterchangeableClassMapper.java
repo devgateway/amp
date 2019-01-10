@@ -1,32 +1,27 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 
 /**
  * Stores different mapping between internal constants, classes, types and their JSON representation, etc
  */
-public class InterchangeableClassMapper {
-    protected static final Map<Class<?>, String> classToCustomType = new HashMap<Class<?>, String>() {{
-        put(java.lang.String.class, ActivityEPConstants.FIELD_TYPE_STRING);
-        put(java.lang.Integer.class, ActivityEPConstants.FIELD_TYPE_LONG);
-        put(java.util.Date.class, ActivityEPConstants.FIELD_TYPE_DATE);
-        put(java.lang.Double.class, ActivityEPConstants.FIELD_TYPE_FLOAT);
-        put(java.lang.Boolean.class, ActivityEPConstants.FIELD_TYPE_BOOLEAN);
-        put(java.lang.Long.class, ActivityEPConstants.FIELD_TYPE_LONG);
-        put(java.lang.Float.class, ActivityEPConstants.FIELD_TYPE_FLOAT);
-        put(java.lang.Enum.class, ActivityEPConstants.FIELD_TYPE_STRING);
-    }};
-    
-    public static final Set<String> SIMPLE_TYPES = new HashSet<String>() {{
-        addAll(classToCustomType.values());
-    }};
+public final class InterchangeableClassMapper {
+    protected static final Map<Class<?>, FieldType> CLASS_TO_TYPE = new ImmutableMap.Builder<Class<?>, FieldType>()
+        .put(java.lang.String.class, FieldType.STRING)
+        .put(java.lang.Integer.class, FieldType.LONG)
+        .put(java.util.Date.class, FieldType.DATE)
+        .put(java.lang.Double.class, FieldType.FLOAT)
+        .put(java.lang.Boolean.class, FieldType.BOOLEAN)
+        .put(java.lang.Long.class, FieldType.LONG)
+        .put(java.lang.Float.class, FieldType.FLOAT)
+        .put(java.lang.Enum.class, FieldType.STRING)
+        .build();
 
-    private static Set<Class<?>> JSON_SUPPORTED_CLASSES = new HashSet<Class<?>>() {{
+    private static final Set<Class<?>> JSON_SUPPORTED_CLASSES = new HashSet<Class<?>>() {{
         add(Boolean.class);
         add(Character.class);
         add(Byte.class);
@@ -39,12 +34,15 @@ public class InterchangeableClassMapper {
         add(Date.class);
     }};
     
-    public static String getCustomMapping(Class<?> clazz) {
-        return classToCustomType.get(adjust(clazz));
+    private InterchangeableClassMapper() {
+    }
+    
+    public static FieldType getCustomMapping(Class<?> clazz) {
+        return CLASS_TO_TYPE.get(adjust(clazz));
     }
     
     public static boolean containsSimpleClass(Class<?> clazz) {
-        return classToCustomType.containsKey(adjust(clazz));
+        return CLASS_TO_TYPE.containsKey(adjust(clazz));
     }
     
     public static boolean containsSupportedClass(Class<?> clazz) {
@@ -52,8 +50,9 @@ public class InterchangeableClassMapper {
     }
     
     private static Class<?> adjust(Class<?> clazz) {
-        if (Enum.class.isAssignableFrom(clazz))
+        if (Enum.class.isAssignableFrom(clazz)) {
             clazz = Enum.class;
+        }
         return clazz;
     }
 

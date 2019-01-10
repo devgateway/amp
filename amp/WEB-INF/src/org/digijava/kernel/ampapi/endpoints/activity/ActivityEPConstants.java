@@ -71,15 +71,6 @@ public class ActivityEPConstants {
     public static final String MODIFIED_DATE = "modified-date";
     public static final String UPDATE_CURRENT_VERSION = "update-current-version";
 
-    // field types
-    public static final String FIELD_TYPE_LIST = "list";
-    public static final String FIELD_TYPE_STRING = "string";
-    public static final String FIELD_TYPE_BOOLEAN = "boolean";
-    public static final String FIELD_TYPE_LONG = "long";
-    public static final String FIELD_TYPE_FLOAT = "float";
-    public static final String FIELD_TYPE_DATE = "date";
-    public static final String FIELD_TYPE_OBJECT = "object";
-    
     // max length constants
     public static final String TYPE_VARCHAR = "character varying";
     

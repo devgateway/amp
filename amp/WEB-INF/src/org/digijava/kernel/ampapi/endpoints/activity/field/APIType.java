@@ -12,13 +12,13 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 public class APIType {
 
     @JsonProperty(ActivityEPConstants.FIELD_TYPE)
-    private String fieldType;
+    private FieldType fieldType;
 
     @JsonIgnore
     private Class<?> type;
 
     @JsonProperty(ActivityEPConstants.ITEM_TYPE)
-    private String itemType;
+    private FieldType itemType;
 
     /**
      * Meaningful only when fieldType is list.
@@ -26,11 +26,11 @@ public class APIType {
     @JsonIgnore
     private Class<?> elementType;
 
-    public String getFieldType() {
+    public FieldType getFieldType() {
         return fieldType;
     }
 
-    public void setFieldType(String fieldType) {
+    public void setFieldType(FieldType fieldType) {
         this.fieldType = fieldType;
     }
 
@@ -42,11 +42,11 @@ public class APIType {
         this.type = type;
     }
 
-    public String getItemType() {
+    public FieldType getItemType() {
         return itemType;
     }
 
-    public void setItemType(String itemType) {
+    public void setItemType(FieldType itemType) {
         this.itemType = itemType;
     }
 
@@ -60,7 +60,7 @@ public class APIType {
 
     @JsonIgnore
     public boolean isSimpleItemType() {
-        return this.itemType != null && !this.itemType.equals(ActivityEPConstants.FIELD_TYPE_OBJECT);
+        return this.itemType != null && !this.itemType.isObject();
     }
 
 }

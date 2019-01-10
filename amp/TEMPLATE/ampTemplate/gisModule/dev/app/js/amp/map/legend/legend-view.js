@@ -44,9 +44,7 @@ module.exports = Backbone.View.extend({
       this.$('.legend-content').html(content);
     }    
    
-    $('.legend').draggable();
-    this.$('.legend-content').resizable();
-    
+    $('.legend').draggable();    
     return this;
   },
 

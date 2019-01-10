@@ -92,6 +92,8 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.LOCATION, ColumnConstants.LOCATION);
         mapSimpleColumn(FiltersConstants.RAW_LOCATION, ColumnConstants.RAW_LOCATION);
         mapSimpleColumn(FiltersConstants.MODE_OF_PAYMENT, ColumnConstants.MODE_OF_PAYMENT);
+        mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0,
+                ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
@@ -182,7 +184,8 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
         mapSimpleColumn(FiltersConstants.PLEDGES_ZONES, ColumnConstants.PLEDGES_ZONES);
         mapSimpleColumn(FiltersConstants.PLEDGES_TITLES, ColumnConstants.PLEDGES_TITLES);
-      
+    
+        mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_0, ColumnConstants.PRIMARY_PROGRAM_LEVEL_0);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_1, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_2, ColumnConstants.PRIMARY_PROGRAM_LEVEL_2);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_3, ColumnConstants.PRIMARY_PROGRAM_LEVEL_3);
@@ -200,6 +203,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
         mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION_GROUP,
                 ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
+        mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_0, ColumnConstants.SECONDARY_PROGRAM_LEVEL_0);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_1, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_2, ColumnConstants.SECONDARY_PROGRAM_LEVEL_2);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_3, ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
@@ -214,6 +218,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.SECTOR_TAG, ColumnConstants.SECTOR_TAG);
         mapSimpleColumn(FiltersConstants.STATUS, ColumnConstants.STATUS);
         mapSimpleColumn(FiltersConstants.TEAM, ColumnConstants.TEAM);
+        mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_0, ColumnConstants.TERTIARY_PROGRAM_LEVEL_0);
         mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_1, ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_2, ColumnConstants.TERTIARY_PROGRAM_LEVEL_2);
         mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_3, ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);

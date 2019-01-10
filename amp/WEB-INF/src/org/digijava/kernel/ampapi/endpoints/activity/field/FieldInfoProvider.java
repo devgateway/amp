@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activity;
+package org.digijava.kernel.ampapi.endpoints.activity.field;
 
 import java.lang.reflect.Field;
 

@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activity;
+package org.digijava.kernel.ampapi.endpoints.activity.field;
 
 import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
 
@@ -19,6 +19,14 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.nireports.ImmutablePair;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.DiscriminatedFieldValueReader;
+import org.digijava.kernel.ampapi.endpoints.activity.FEContext;
+import org.digijava.kernel.ampapi.endpoints.activity.FMService;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldValueReader;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
@@ -228,7 +236,7 @@ public class FieldsEnumerator {
         return label;
     }
 
-    List<APIField> getAllAvailableFields(Class<?> clazz) {
+    public List<APIField> getAllAvailableFields(Class<?> clazz) {
         return getAllAvailableFields(clazz, new FEContext());
     }
 

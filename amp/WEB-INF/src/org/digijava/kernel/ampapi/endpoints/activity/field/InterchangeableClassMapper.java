@@ -1,10 +1,11 @@
-package org.digijava.kernel.ampapi.endpoints.activity;
+package org.digijava.kernel.ampapi.endpoints.activity.field;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 
 /**
  * Stores different mapping between internal constants, classes, types and their JSON representation, etc

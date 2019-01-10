@@ -133,7 +133,7 @@ loadAll: function(options) {
 				  /* If gap analysis is NOT selected then we use the data from localStorage instead of going to an EP,
 				  so we set the url to an empty .json file and then the parse function
 				  will use the data we already have. */
-				  this.url = 'fake.json';
+				  this.url = 'empty.json';
 				  layer.unit = StringUtil.getMultilangString(layer,'unit', app.data.generalSettings); // Needed preprocess for popups.
 				  layer.description = StringUtil.getMultilangString(layer,'description', app.data.generalSettings);				  
 				  params.data = JSON.stringify(layer);

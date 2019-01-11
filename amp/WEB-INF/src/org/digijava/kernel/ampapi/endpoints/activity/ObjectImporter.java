@@ -67,7 +67,8 @@ public class ObjectImporter {
         this(validator, TranslationSettings.getCurrent(), apiFields);
     }
 
-    public ObjectImporter(InputValidatorProcessor validator, TranslationSettings trnSettings, List<APIField> apiFields) {
+    public ObjectImporter(InputValidatorProcessor validator, TranslationSettings trnSettings,
+            List<APIField> apiFields) {
         this.validator = validator;
         this.trnSettings = trnSettings;
         this.apiFields = apiFields;

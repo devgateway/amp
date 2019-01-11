@@ -526,7 +526,6 @@ public class ActivityImporter extends ObjectImporter {
         initContacts();
         updatePPCAmount();
         updateRoleFundings();
-        updateOrgRoles();
     }
 
     protected void initSectors() {
@@ -656,32 +655,6 @@ public class ActivityImporter extends ObjectImporter {
         }
     }
     
-    /**
-     * Updates activity org roles (missing org roles from fundings)
-     */
-    protected void updateOrgRoles() {
-        for (AmpFunding f : newActivity.getFunding()) {
-            if (f.getSourceRole() != null && f.getAmpDonorOrgId() != null) {
-                boolean found = false;
-                for (AmpOrgRole role : newActivity.getOrgrole()) {
-                        if (role.getRole().getRoleCode().equals(f.getSourceRole().getRoleCode()) 
-                                && role.getOrganisation().getAmpOrgId().equals(f.getAmpDonorOrgId().getAmpOrgId())) {
-                            found = true;
-                            break;
-                        }
-                }
-            
-                if (!found) {
-                    AmpOrgRole role = new AmpOrgRole();
-                    role.setOrganisation(f.getAmpDonorOrgId());
-                    role.setActivity(newActivity);
-                    role.setRole(f.getSourceRole());
-                    newActivity.getOrgrole().add(role);
-                }
-            }
-        }
-    }
-
     protected void postProcess() {
         String rootPath = TLSUtils.getRequest().getServletContext().getRealPath("/");
         Site site = TLSUtils.getSite();

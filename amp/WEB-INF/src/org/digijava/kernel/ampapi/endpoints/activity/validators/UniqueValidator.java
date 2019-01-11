@@ -10,6 +10,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Validates that unique values are provided when within a list required to have
@@ -31,15 +32,17 @@ public class UniqueValidator extends InputValidator {
         String uniqueField = fieldDescription.getUniqueConstraint();
         if (StringUtils.isNotBlank(uniqueField)) {
             Collection<?> newValues = (Collection<?>) newFieldParent.get(fieldName);
-            Set<Object> uniqueValues = new HashSet<>();
-            if (fieldDescription.getApiType().isSimpleItemType()) {
-                uniqueValues.addAll(newValues);
-            } else {
-                uniqueValues.addAll(((Collection<Map<String, Object>>) newValues).stream()
-                        .map(e -> e.get(uniqueField)).collect(Collectors.toList()));
+            if (newValues != null) {
+                Set<Object> uniqueValues = new HashSet<>();
+                if (fieldDescription.getApiType().isSimpleItemType()) {
+                    uniqueValues.addAll(newValues);
+                } else {
+                    uniqueValues.addAll(((Collection<Map<String, Object>>) newValues).stream()
+                            .map(e -> e.get(uniqueField)).collect(Collectors.toList()));
+                }
+                uniqueValues.remove(null);
+                return uniqueValues.size() == newValues.size();
             }
-            uniqueValues.remove(null);
-            return uniqueValues.size() == newValues.size();
         }
         return true;
     }

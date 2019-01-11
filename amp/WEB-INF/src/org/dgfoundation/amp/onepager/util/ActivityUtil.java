@@ -405,7 +405,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
     private static void updateFiscalYears(AmpActivityVersion a) {
         Set<Long> actFiscalYears = a.getFiscalYears();
         
-        if (!CollectionUtils.isEmpty(actFiscalYears)) {
+        if (actFiscalYears != null) {
             List<Long> fiscalYears = new ArrayList<>(actFiscalYears);
             fiscalYears.sort(Comparator.naturalOrder());
             a.setFY(StringUtils.join(fiscalYears, ","));

@@ -5,9 +5,11 @@ import static java.util.stream.Collectors.groupingBy;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.core.Response;
@@ -318,11 +320,13 @@ public final class PreviewActivityService {
             AmpTeam parentTeam = ownerTeam.getParentTeamId();
             String path = ownerTeam.getName();
             
-            while (parentTeam != null) {
+            Set<Long> idStack = new HashSet<>();
+            while (parentTeam != null && !idStack.contains(parentTeam.getAmpTeamId())) {
                 path = String.format("%s -> %s", path, parentTeam.getName());
                 previewWorkspaces.add(new PreviewWorkspace(parentTeam.getName(),
                         PreviewWorkspace.Type.MANAGEMENT, path));
-                
+    
+                idStack.add(parentTeam.getAmpTeamId());
                 parentTeam = parentTeam.getParentTeamId();
             }
     

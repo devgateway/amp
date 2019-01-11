@@ -47,7 +47,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
             value = "Provides full set of available fields and their settings/rules in a hierarchical structure.",
             notes = "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration).")
     public List<APIField> getAvailableFields() {
-        return AmpFieldsEnumerator.getPublicContactEnumerator().getContactFields();
+        return AmpFieldsEnumerator.getContactEnumerator().getContactFields();
     }
 
     @POST
@@ -69,7 +69,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
         if (fields == null) {
             response = emptyMap();
         } else {
-            List<APIField> apiFields = AmpFieldsEnumerator.getPublicContactEnumerator().getContactFields();
+            List<APIField> apiFields = AmpFieldsEnumerator.getContactEnumerator().getContactFields();
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()

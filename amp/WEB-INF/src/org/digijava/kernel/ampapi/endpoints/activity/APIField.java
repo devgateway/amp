@@ -53,9 +53,6 @@ public class APIField {
     @JsonProperty(ActivityEPConstants.MULTIPLE_VALUES)
     private Boolean multipleValues;
 
-    @JsonIgnore
-    private Boolean activity;
-
     @JsonProperty(ActivityEPConstants.UNIQUE_CONSTRAINT)
     private String uniqueConstraint;
 
@@ -198,14 +195,6 @@ public class APIField {
         this.multipleValues = multipleValues;
     }
 
-    public Boolean isActivity() {
-        return activity;
-    }
-
-    public void setActivity(Boolean activity) {
-        this.activity = activity;
-    }
-
     public String getUniqueConstraint() {
         return uniqueConstraint;
     }
@@ -316,7 +305,7 @@ public class APIField {
         return "APIField{" + "fieldName='" + fieldName + '\'' + ", fieldType='" + fieldType + '\''
                 + ", fieldLabel=" + fieldLabel + ", fieldNameInternal='" + fieldNameInternal + '\'' + ", required='"
                 + required + '\'' + ", idOnly=" + idOnly + ", importable=" + importable + ", translatable="
-                + translatable + ", multipleValues=" + multipleValues + ", activity=" + activity
+                + translatable + ", multipleValues=" + multipleValues
                 + ", uniqueConstraint='" + uniqueConstraint + '\'' + ", percentageConstraint='" + percentageConstraint
                 + '\'' + ", treeCollectionConstraint=" + treeCollectionConstraint + ", fieldLength=" + fieldLength
                 + ", children=" + children + ", dependencies=" + dependencies + ", percentage=" + percentage 

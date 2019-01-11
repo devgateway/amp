@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.util.Output;
 
 public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 
     private Long ampActivitySectorId;
-    
-    @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true)
+
+    @InterchangeableBackReference
     private AmpActivityVersion activityId;
     
     @Interchangeable(fieldTitle="Sector", importable = true , pickIdOnly = true, uniqueConstraint = true, required = ActivityEPConstants.REQUIRED_ALWAYS)

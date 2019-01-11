@@ -239,7 +239,7 @@ public class ProjectList {
     }
 
     private static String getIatiIdentifierValue(AmpActivityVersion a, String iatiIdAmpField) {
-        APIField apiField = AmpFieldsEnumerator.getPublicEnumerator().getActivityFields().stream()
+        APIField apiField = AmpFieldsEnumerator.getEnumerator().getActivityFields().stream()
                 .filter(f -> f.getFieldName().equals(iatiIdAmpField))
                 .findAny().orElse(null);
         

@@ -6,6 +6,7 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.util.Output;
 
 public class AmpAnnualProjectBudget implements Serializable, Versionable, Cloneable, Comparable {
@@ -20,8 +21,8 @@ public class AmpAnnualProjectBudget implements Serializable, Versionable, Clonea
     
     @Interchangeable(fieldTitle="Year", importable = true)
     private Date year;
-    
-    @Interchangeable(fieldTitle="AMP Activity", pickIdOnly = true)
+
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
     
     @Interchangeable(fieldTitle="Currency", importable = true, pickIdOnly = true)

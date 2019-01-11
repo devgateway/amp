@@ -494,7 +494,7 @@ public class InterchangeUtils {
      * @return latest project overview or an error if invalid configuration is received 
      */
     public static JsonBean importActivity(JsonBean newJson, boolean update, String endpointContextPath) {
-        List<APIField> activityFields = AmpFieldsEnumerator.getPrivateEnumerator().getActivityFields();
+        List<APIField> activityFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
         ActivityImporter importer = new ActivityImporter(activityFields);
         List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update, endpointContextPath);
         
@@ -689,13 +689,6 @@ public class InterchangeUtils {
         } 
         
         return calculatedAmount.doubleValue();
-    }
-
-    /**
-     * Determine if this is an AmpActivityVersion field reference
-     */
-    public static boolean isAmpActivityVersion(Class<?> clazz) {
-        return AmpActivityVersion.class.isAssignableFrom(clazz);
     }
 
     /**

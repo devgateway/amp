@@ -29,7 +29,7 @@ public class ContactImporter extends ObjectImporter {
 
     public ContactImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getContactValidators()),
-                AmpFieldsEnumerator.getPrivateContactEnumerator().getContactFields());
+                AmpFieldsEnumerator.getContactEnumerator().getContactFields());
     }
 
     public List<ApiErrorMessage> createContact(JsonBean newJson) {

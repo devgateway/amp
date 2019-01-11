@@ -59,7 +59,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
             notes = "Return JSON with fields information. See "
                     + "[Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
     public List<APIField> getAvailableFields() {
-        return AmpFieldsEnumerator.getPublicEnumerator().getResourceFields();
+        return AmpFieldsEnumerator.getEnumerator().getResourceFields();
     }
     
     @POST
@@ -76,7 +76,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
         if (fields == null) {
             response = emptyMap();
         } else {
-            List<APIField> apiFields = AmpFieldsEnumerator.getPublicEnumerator().getResourceFields();
+            List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getResourceFields();
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()

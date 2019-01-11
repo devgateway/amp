@@ -49,8 +49,6 @@ public class FieldsEnumerator {
             .add(ActivityFieldsConstants.APPROVAL_STATUS)
             .build();
 
-    private boolean internalUse;
-
     private FieldInfoProvider fieldInfoProvider;
 
     private FMService fmService;
@@ -63,16 +61,13 @@ public class FieldsEnumerator {
 
     /**
      * Fields Enumerator
-     * 
-     * @param internalUse flags if additional information for internal use is needed 
      */
     public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-                            TranslatorService translatorService, boolean internalUse,
+            TranslatorService translatorService,
             Function<String, Boolean> allowMultiplePrograms) {
         this.fieldInfoProvider = fieldInfoProvider;
         this.fmService = fmService;
         this.translatorService = translatorService;
-        this.internalUse = internalUse;
         interchangeDependencyResolver = new InterchangeDependencyResolver(fmService);
         this.allowMultiplePrograms = allowMultiplePrograms;
     }
@@ -124,12 +119,7 @@ public class FieldsEnumerator {
         }
 
         apiField.setFieldNameInternal(field.getName());
-        if (internalUse) {
-            if (InterchangeUtils.isAmpActivityVersion(field.getType())) {
-                apiField.setActivity(true);
-            }
-        }
-        
+
         /* list type */
         
         apiField.setIdOnly(hasPossibleValues(field, interchangeable));
@@ -164,8 +154,7 @@ public class FieldsEnumerator {
                 apiField.setMultipleValues(false);
             }
 
-            // FIXME remove condition that excludes activties
-            if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getType())) {
+            if (!interchangeable.pickIdOnly()) {
                 Class type = getType(field, context);
                 List<APIField> children = getAllAvailableFields(type, context);
                 if (InterchangeUtils.isCollection(field)) {
@@ -238,10 +227,6 @@ public class FieldsEnumerator {
         //StopWatch.next("Descending into", false, clazz.getName());
         for (Field field : InterchangeUtils.getFieldsAnnotatedWith(clazz,
                 Interchangeable.class, InterchangeableDiscriminator.class)) {
-
-            if (!internalUse && InterchangeUtils.isAmpActivityVersion(field.getType())) {
-                continue;
-            }
             Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
             if (interchangeable != null) {
                 context.getIntchStack().push(interchangeable);

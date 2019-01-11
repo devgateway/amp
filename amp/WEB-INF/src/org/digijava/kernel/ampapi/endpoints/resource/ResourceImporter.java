@@ -49,7 +49,7 @@ public class ResourceImporter extends ObjectImporter {
 
     public ResourceImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getResourceValidators()),
-                AmpFieldsEnumerator.getPrivateEnumerator().getResourceFields());
+                AmpFieldsEnumerator.getEnumerator().getResourceFields());
     }
 
     /**

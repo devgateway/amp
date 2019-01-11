@@ -68,7 +68,7 @@ public class ActivityImporterTest {
         TestFieldInfoProvider fieldInfoProvider = new TestFieldInfoProvider();
         TestFMService fmService = new TestFMService();
         TestTranslatorService translatorService = new TestTranslatorService();
-        return new FieldsEnumerator(fieldInfoProvider, fmService, translatorService, true, name -> true);
+        return new FieldsEnumerator(fieldInfoProvider, fmService, translatorService, name -> true);
     }
 
     private Map<Integer, ApiErrorMessage> errors(ApiErrorMessage... messages) {

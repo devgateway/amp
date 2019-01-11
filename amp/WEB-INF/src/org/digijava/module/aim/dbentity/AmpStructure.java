@@ -3,13 +3,13 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
@@ -53,7 +53,8 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     @Interchangeable(fieldTitle = "Type", pickIdOnly = true, importable = true, 
             fmPath = "/Activity Form/Structures/Structure Type")
     private AmpStructureType type;
-    
+
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
     
     private Set<AmpStructureImg> images;

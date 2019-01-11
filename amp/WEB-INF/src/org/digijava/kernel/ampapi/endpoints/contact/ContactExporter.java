@@ -10,6 +10,6 @@ import org.digijava.module.aim.dbentity.AmpContact;
 public class ContactExporter extends ObjectExporter<AmpContact> {
 
     public ContactExporter() {
-        super(AmpFieldsEnumerator.getPublicContactEnumerator().getContactFields());
+        super(AmpFieldsEnumerator.getContactEnumerator().getContactFields());
     }
 }

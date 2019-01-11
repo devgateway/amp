@@ -3,9 +3,11 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,6 +20,7 @@ import java.util.TreeSet;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
@@ -25,6 +28,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 
@@ -57,9 +61,15 @@ public class ObjectImporter {
     private Map<Class<? extends DiscriminationConfigurer>, DiscriminationConfigurer> discriminatorConfigurerCache =
             new HashMap<>();
 
+    private Deque<Object> backReferenceStack = new ArrayDeque<>();
+
     public ObjectImporter(InputValidatorProcessor validator, List<APIField> apiFields) {
+        this(validator, TranslationSettings.getCurrent(), apiFields);
+    }
+
+    public ObjectImporter(InputValidatorProcessor validator, TranslationSettings trnSettings, List<APIField> apiFields) {
         this.validator = validator;
-        this.trnSettings = TranslationSettings.getCurrent();
+        this.trnSettings = trnSettings;
         this.apiFields = apiFields;
     }
 
@@ -97,6 +107,17 @@ public class ObjectImporter {
     }
 
     /**
+     * Entrypoint for converting and validation of json structure to internal object model.
+     *
+     * @param root
+     * @param json
+     * @return
+     */
+    public Object validateAndImport(Object root, Map<String, Object> json) {
+        return validateAndImport(root, apiFields, json, null);
+    }
+
+    /**
      * Recursive method (through ->validateAndImport->validateSubElements->[this method]
      * that attempts to validate the incoming JSON and import its data.
      * If there are any errors -> append them to the validator to propagate upwards
@@ -109,26 +130,45 @@ public class ObjectImporter {
      */
     protected Object validateAndImport(Object newParent, List<APIField> fieldsDef,
             Map<String, Object> newJsonParent, String fieldPath) {
-        Set<String> fields = new HashSet<String>(newJsonParent.keySet());
-        // process all valid definitions
-        for (APIField fieldDef : fieldsDef) {
-            newParent = validateAndImport(newParent, fieldDef, newJsonParent, fieldPath);
-            fields.remove(fieldDef.getFieldName());
-        }
+        restoreBackReferences(newParent);
+        try {
+            backReferenceStack.push(newParent);
 
-        // and error anything remained
-        // note: due to AMP-20766, we won't be able to fully detect invalid children
-        String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
-        if (fields.size() > 0 && !ignoreUnknownFields()) {
-            newParent = null;
-            for (String invalidField : fields) {
-                // no need to go through deep-first validation flow
-                validator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
-                        ActivityErrors.FIELD_INVALID, errors);
+            Set<String> fields = new HashSet<String>(newJsonParent.keySet());
+            // process all valid definitions
+            for (APIField fieldDef : fieldsDef) {
+                newParent = validateAndImport(newParent, fieldDef, newJsonParent, fieldPath);
+                fields.remove(fieldDef.getFieldName());
             }
-        }
 
-        return newParent;
+            // and error anything remained
+            // note: due to AMP-20766, we won't be able to fully detect invalid children
+            String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
+            if (fields.size() > 0 && !ignoreUnknownFields()) {
+                newParent = null;
+                for (String invalidField : fields) {
+                    // no need to go through deep-first validation flow
+                    validator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
+                            ActivityErrors.FIELD_INVALID, errors);
+                }
+            }
+
+            return newParent;
+        } finally {
+            backReferenceStack.pop();
+        }
+    }
+
+    private void restoreBackReferences(Object newParent) {
+        try {
+            Class<?> type = newParent.getClass();
+            Field[] backRefFields = FieldUtils.getFieldsWithAnnotation(type, InterchangeableBackReference.class);
+            for (Field backRefField : backRefFields) {
+                FieldUtils.writeField(backRefField, newParent, backReferenceStack.peek(), true);
+            }
+        } catch (IllegalAccessException | IllegalArgumentException e) {
+            throw new RuntimeException("Failed to restore back reference.", e);
+        }
     }
 
     protected boolean ignoreUnknownFields() {
@@ -181,7 +221,6 @@ public class ObjectImporter {
         }
 
         if (!importable) {
-            setupNotImportableField(newParent, objField);
             // skip reconfiguration at this level if the field is not importable
             return newParent;
         }
@@ -200,15 +239,6 @@ public class ObjectImporter {
             }
         }
         return newParent;
-    }
-
-    /**
-     * This method is used by activity importer to create backwards references to activity from activity owned objects.
-     * This solution however is incomplete and should be revisited. It does not cover cases with more deep structure
-     * like AmpFunding -> AmpFundingDetail or AmpComponent -> AmpComponentFunding.
-     * FIXME find a proper solution for all cases
-     */
-    protected void setupNotImportableField(Object object, Field field) {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

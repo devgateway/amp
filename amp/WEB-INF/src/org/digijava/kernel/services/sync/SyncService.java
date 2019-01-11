@@ -104,7 +104,7 @@ public class SyncService implements InitializingBean {
             new BeanPropertyRowMapper<>(ActivityChange.class);
 
     private PossibleValuesEnumerator possibleValuesEnumerator = PossibleValuesEnumerator.INSTANCE;
-    private CachingFieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.getPrivateEnumerator();
+    private CachingFieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.getEnumerator();
     private CurrencyService currencyService = CurrencyService.INSTANCE;
 
     private AmpOfflineChangelogRepository ampOfflineChangelogRepository = AmpOfflineChangelogRepository.INSTANCE;

@@ -254,7 +254,7 @@ public class ObjectImporter {
                 if (col == null) {
                     col = (Collection) getNewInstance(parentObj, field);
                 }
-                if (idOnly && jsonValue != null) {
+                if (idOnly && jsonValue != null && !fieldDef.getApiType().isSimpleItemType()) {
                     Class<?> objectType = AIHelper.getGenericsParameterClass(field);
                     try {
                         Object res = getObjectReferencedById(objectType, jsonValue);

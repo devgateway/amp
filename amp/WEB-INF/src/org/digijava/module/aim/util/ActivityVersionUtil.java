@@ -346,14 +346,19 @@ public class ActivityVersionUtil {
         return act;
     }
     
-    public static Map<Long, Map<String, List<CompareOutput>>> compareActivities(ArrayList<Long> ActivitiesId) throws Exception {
+    public static Map<Long, Map<String, List<CompareOutput>>> compareActivities(ArrayList<Long> activitiesId)
+            throws Exception {
         
-        Map<Long, Map<String, List<CompareOutput>>> activitiesCollection = new HashMap<Long, Map<String, List<CompareOutput>>>();
-        for (int i=0; i < ActivitiesId.size(); i++) {
-            Long activityOneid=ActivitiesId.get(i);
-            if (compareActivities(activityOneid) != null) {                
-            Map<String, List<CompareOutput>> ActivityList = compareActivities(activityOneid);
-            activitiesCollection.put(activityOneid, ActivityList);
+        Map<Long, Map<String, List<CompareOutput>>> activitiesCollection = new 
+                HashMap<Long, Map<String, List<CompareOutput>>>();
+        for (int i = 0; i < activitiesId.size(); i++) {
+            Long activityOneid = activitiesId.get(i);                
+            Map<String, List<CompareOutput>> activityList = compareActivities(activityOneid);
+            if (activityList == null) {
+                continue;
+            }
+            else {
+            activitiesCollection.put(activityOneid, activityList);
             }
         }
         return activitiesCollection;
@@ -367,7 +372,12 @@ public class ActivityVersionUtil {
         AmpActivityVersion ampActivityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
 
         Long activityTwoId = ampActivityTwo.getAmpActivityId();
+        if (activityTwoId == null) {
+            return null;
+        }
+        else {
         return compareActivities(activityOneId, activityTwoId);
+        }
     }
      
     

@@ -649,21 +649,16 @@ public class ActivityVersionUtil {
         return ActivityVersionUtil.groupOutputCollection(outputCollection);
     }
  
-    public static Map<Long, Map<String, List<CompareOutput>>> compareActivities(List<Long> activityId)
+    public static Map<Long, Map<String, List<CompareOutput>>> compareActivities(List<Long> activitiesId)
             throws Exception {
 
         Map<Long, Map<String, List<CompareOutput>>> listOfActivities = new HashMap<Long, Map<String, List<CompareOutput>>>();
 
-        ArrayList<Long> activityList = new ArrayList(activityId);
-        Iterator<Long> iter = activityList.iterator();
-        while (iter.hasNext()) {
-            Long currentActivity = iter.next();
-            Map<String, List<CompareOutput>> chkPrevous = compareActivities(currentActivity);
-            if (chkPrevous == null) {
-                continue;
+        for (Long activityId : activitiesId) {
+            Map<String, List<CompareOutput>> activityComparedToPreviousVersion = compareActivities(activityId);
+            if (activityComparedToPreviousVersion != null) {
+                listOfActivities.put(activityId, activityComparedToPreviousVersion);
             }
-
-            listOfActivities.put(currentActivity, chkPrevous);
         }
 
         return listOfActivities;

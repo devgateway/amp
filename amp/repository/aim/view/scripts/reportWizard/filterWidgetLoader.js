@@ -19,7 +19,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: '/aim/reportsFilterPicker.do?applyWithNewWidget=true&cacheBuster=' + new Date().getTime() + '&reportContextId=report_wizard&sourceIsReportWizard=true',
-            data: serializedFilters,
+            data: "widgetFilters=" + JSON.stringify(serializedFilters),
             success: function (data) {
                 $('#listFiltersDiv').html(data);
             }

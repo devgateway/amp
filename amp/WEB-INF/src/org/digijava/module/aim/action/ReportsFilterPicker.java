@@ -258,8 +258,8 @@ public class ReportsFilterPicker extends Action {
             if (request.getParameter("applyWithNewWidget") != null) {
                 LinkedHashMap<String, Object> filters = new LinkedHashMap<String, Object>();
                 Map<String, String[]> parameters = request.getParameterMap();
-                String nada = parameters.get("widgetFilters")[0];
-                JSONObject jsonObjParams = new JSONObject(nada);
+                String widgetFilters = parameters.get("widgetFilters")[0];
+                JSONObject jsonObjParams = new JSONObject(widgetFilters);
                 JSONObject jsonFilters = jsonObjParams.getJSONObject("filters");
                 jsonFilters.keySet().stream().forEach((key -> {
                     String type = jsonFilters.get(key).getClass().getName();

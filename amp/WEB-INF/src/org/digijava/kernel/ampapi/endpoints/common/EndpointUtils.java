@@ -53,6 +53,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
+import org.digijava.module.esrigis.dbentity.ApiStateType;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 
@@ -207,46 +208,29 @@ public class EndpointUtils {
         return report;
     }
     
-    /**
-     * Retrieves the value associated to the specified key if available 
-     * or returns the default
-     * 
-     * @param formParams
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public static <T> T getSingleValue(JsonBean formParams, String key, T defaultValue) {
-        if (formParams.get(key) != null)
-            return (T) formParams.get(key);
-        return defaultValue;
-    }
-
     public static <T> T getSingleValue(T value, T defaultValue) {
         return value != null ? value : defaultValue;
     }
 
     
-    public static List<AmpApiState> getApiStateList(String type) {
-        return QueryUtil.getMapList(type);
+    public static List<AmpApiState> getApiStateList(ApiStateType type) {
+        return QueryUtil.getApiStatesByType(type);
     }
 
-    public static AmpApiState getSavedMap(Long mapId) {
-        Session s = PersistenceManager.getSession();
-        AmpApiState map = (AmpApiState) s.load(AmpApiState.class, mapId);
-        s.merge(map);
-        return map;
-    }
-
-    public static AmpApiState getApiState(Long mapId) {
+    public static AmpApiState getApiState(Long id, ApiStateType type) {
         try {
-            return getSavedMap(mapId);
+            Session s = PersistenceManager.getSession();
+            AmpApiState apiState = (AmpApiState) s.load(AmpApiState.class, id);
+            if (!apiState.getType().equals(type)) {
+                throw new NotFoundException();
+            }
+            return apiState;
         } catch (ObjectNotFoundException e) {
             throw new NotFoundException();
         }
     }
     
-    public static AmpApiState saveApiState(AmpApiState map, String type) {
+        public static AmpApiState saveApiState(AmpApiState map, ApiStateType type) {
         Date creationDate = new Date();
 
         map.setCreatedDate(creationDate);
@@ -258,7 +242,7 @@ public class EndpointUtils {
             s.flush();
             return map;
         } catch (Exception e) {
-            logger.error("Cannot Save map", e);
+            logger.error("Cannot Save Api State", e);
             throw new WebApplicationException(e);
         }
     }

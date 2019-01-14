@@ -145,27 +145,30 @@ Filters.prototype.showFilters	= function(reportContextId) {
 	this.fixZIndex("#new_mask", 3);
 };
 
-Filters.prototype.showNewFilters = function (reportContextId) {
+Filters.prototype.showFilters = function (reportContextId) {
 	widgetFilter.reportContextId = reportContextId;
 	if (widgetFilter.reportContextId === 'report_wizard') {
-		widgetFilter.showFilters();
-		$('#filter-popup').show();
+		this.showFilterWidget();
 	} else if (widgetFilter.gotSavedFilters !== true) {
+		var self = this;
 		$.ajax({
 			type: 'GET',
 			url: '/rest/data/report/' + widgetFilter.reportContextId,
 			success: function (data) {
 				filters = data.reportMetadata.reportSpec.filters;
 				widgetFilter.deserialize({filters: filters}, {silent: true});
-				widgetFilter.showFilters();
-				$('#filter-popup').show();
+				self.showFilterWidget();
 			}
 		});
 		widgetFilter.gotSavedFilters = true;
 	} else {
-		widgetFilter.showFilters();
-		$('#filter-popup').show();
+		this.showFilterWidget();
 	}
+};
+
+Filters.prototype.showFilterWidget = function () {
+	widgetFilter.showFilters();
+	$('#filter-popup').show();
 };
 
 Filters.prototype.showSettings	= function(reportContextId) {

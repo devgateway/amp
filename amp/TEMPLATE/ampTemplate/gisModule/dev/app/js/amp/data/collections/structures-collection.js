@@ -112,8 +112,12 @@ module.exports = Backbone.Collection
           var match = self.activities.find(function(model) {
             return model.id === structure.get('activityZero');
           });
-          match.joinFilters();
-          structure.set('activity', match);
+          
+          if (match) {
+        	  match.joinFilters();
+              structure.set('activity', match);
+          } 
+          
         } else if (activity.attributes) {
         	activity.joinFilters();
         }
@@ -142,7 +146,11 @@ module.exports = Backbone.Collection
   },
 
   toGeoJSON: function() {	
-    var featureList = this.map(function(model) {    	
+    var featureList = this.chain()
+	 .filter(function(model) {
+	     return model.get('activity') !== null && !_.isArray(model.get('activity'));
+	  })
+	  .map(function(model) {    	
       return {
         type: 'Feature',
         geometry: {
@@ -151,8 +159,9 @@ module.exports = Backbone.Collection
         },
         properties: model.attributes  // not toJSON() for performance
       };
-      /*TODO(thadk): move to model and use return feature.toGeoJSON();*/
-    });
+      
+    }).value();
+    
     return {
       type: 'FeatureCollection',
       features: featureList
@@ -169,8 +178,12 @@ module.exports = Backbone.Collection
     this.getStructuresWithActivities().done(function() {
       // TODO: this is running twice on structures load?!?
       var orgSites = self.chain()
+      .filter(function(structure) {
+    	     return structure.get('activity') !== null && !_.isArray(structure.get('activity'));
+    	 })
         .groupBy(function(site) {
-          var activity = site.get('activity');
+        	
+          var activity = site.get('activity');          
           var filterVerticalText = (filterVertical === 'Primary Sector' ? 'Sectors' : 'Donors');
 
           // TODO: Choosing a vertical will need to be configurable from drop down..

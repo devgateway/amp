@@ -17,6 +17,7 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,7 +62,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
                                 .getFunding())
                 .addFunding(
                         new FundingBuilder()
-                                .withClassificationDate(new LocalDate(2019, 5, 12).toDate())
+                                .withClassificationDate(new DateTime().plusMonths(4).toDate())
                                 .withDonor(new OrganisationBuilder()
                                         .withOrganisationName("Donor2")
                                         .getOrganisation())

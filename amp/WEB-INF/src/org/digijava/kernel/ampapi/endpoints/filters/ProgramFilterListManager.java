@@ -138,7 +138,7 @@ public class ProgramFilterListManager implements FilterListManager {
     }
     
     /**
-     * @param definitionName
+     * @param programConfigurationName
      * @return
      */
     protected String getFilterDefinitionName(String programConfigurationName) {

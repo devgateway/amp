@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -22,6 +23,8 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,9 +52,9 @@ public class IndicatorImporter {
      * @return returns
      * @throws org.digijava.module.aim.exception.AimException
      */
-    public Collection<JsonBean> processExcelFile(InputStream inputStream, long admLevelId) {
+    public List<LocationIndicatorValueResult> processExcelFile(InputStream inputStream, long admLevelId) {
         POIFSFileSystem fsFileSystem = null;
-        Collection<JsonBean> locationIndicatorValueList = new ArrayList<JsonBean>();
+        List<LocationIndicatorValueResult> locationIndicatorValueList = new ArrayList<>();
         Set<String> geoIdsWithProblems = new HashSet<String>();
         try {
             fsFileSystem = new POIFSFileSystem(inputStream);
@@ -129,12 +132,12 @@ public class IndicatorImporter {
                         continue;
                     }
 
-                    JsonBean result = new JsonBean();
-                    result.set(IndicatorEPConstants.VALUE, Double.valueOf(value));
-                    result.set(IndicatorEPConstants.ID, locationObject.getId());
-                    result.set(IndicatorEPConstants.GEO_CODE_ID, locationObject.getGeoCode());
-                    result.set(IndicatorEPConstants.NAME, locationObject.getName());
-                    locationIndicatorValueList.add(result);
+                    LocationIndicatorValueResult locationIndicatorValue = new LocationIndicatorValueResult();
+                    locationIndicatorValue.setValue(Double.valueOf(value));
+                    locationIndicatorValue.setId(locationObject.getId());
+                    locationIndicatorValue.setGeoCodeId(locationObject.getGeoCode());
+                    locationIndicatorValue.setName(locationObject.getName());
+                    locationIndicatorValueList.add(locationIndicatorValue);
                 }
             }
 
@@ -153,6 +156,7 @@ public class IndicatorImporter {
         if(locationIndicatorValueList.isEmpty()) {
             errors.addApiErrorMessage(IndicatorErrors.INVALID_IMPORT_NO_VALUE, null);
         }
+        
         return locationIndicatorValueList;
     }
 
@@ -171,9 +175,9 @@ public class IndicatorImporter {
         return value;
     }
 
-    public static JsonBean importIndicator(InputStream uploadedInputStream, long admLevelId) {
-        JsonBean result = new JsonBean();
-        byte[] fileData = new byte[0];
+    public static IndicatorImporterResult importIndicator(InputStream uploadedInputStream, long admLevelId) {
+        
+        byte[] fileData;
         try {
             fileData = org.apache.commons.io.IOUtils.toByteArray(uploadedInputStream);
         } catch (IOException e) {
@@ -183,15 +187,14 @@ public class IndicatorImporter {
         InputStream inputStream = new ByteArrayInputStream(fileData);
 
         IndicatorImporter importer = new IndicatorImporter();
-        Collection<JsonBean> locationIndicatorValueList = importer.processExcelFile(inputStream, admLevelId);
+        List<LocationIndicatorValueResult> locationIndValueList = importer.processExcelFile(inputStream, admLevelId);
 
         if (!importer.getApiErrors().isEmpty()) {
-            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
-            return ApiError.toError(importer.getApiErrors().getAllErrors());
+            throw new AmpWebApplicationException(Response.Status.BAD_REQUEST,
+                    ApiError.toError(importer.getApiErrors().getAllErrors()));
         }
 
-        result.set(IndicatorEPConstants.VALUES, locationIndicatorValueList);
-        return result;
+        return new IndicatorImporterResult(locationIndValueList);
     }
 
 }

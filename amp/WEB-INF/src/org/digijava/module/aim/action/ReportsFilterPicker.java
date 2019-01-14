@@ -106,9 +106,9 @@ public class ReportsFilterPicker extends Action {
 
     public final static String PLEDGE_REPORT_REQUEST_ATTRIBUTE = "is_pledge_report";
 
-    public final static String FILTERS_WIDGET = "filtersWidget";
-    public final static String FILTERS = "filters";
-    public final static int FIRST_ELEMENT = 0;
+    public static final String FILTERS_WIDGET = "filtersWidget";
+    public static final String FILTERS = "filters";
+    public static final int FIRST_ELEMENT = 0;
 
     
     public final static Long tryParseLong(String input)

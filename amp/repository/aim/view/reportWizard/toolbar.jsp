@@ -23,15 +23,10 @@
 		</c:if>
 	</div>
 	<div class="wizard-toolbar-buttons" id="toolbarDivStep${stepNum}">
-		<%--<feature:display  name="Filter Button" module="Report and Tab Options">
-			<button type="button" value="Filetrs" class="buttonx" id="step${stepNum}_add_filters_button" style="margin-right:2px;" onclick="repFilters.showFilters('<%=ReportContextData.getCurrentReportContextId(request, true)%>')"/>
-				<digi:trn key="btn:repFilters">Filters</digi:trn>
-			</button>
-		</feature:display>--%>
 		<feature:display  name="Filter Button" module="Report and Tab Options">
 			<button type="button" value="newFilters" class="buttonx" id="step${stepNum}_add_new_filters_button"
 					style="margin-right:2px;"
-					onclick="repFilters.showNewFilters('<%=ReportContextData.getCurrentReportContextId(request, true)%>')"/>
+					onclick="repFilters.showFilters('<%=ReportContextData.getCurrentReportContextId(request, true)%>')"/>
 			<digi:trn key="btn:repNewFilters">New Filters</digi:trn>
 			</button>
 		</feature:display>

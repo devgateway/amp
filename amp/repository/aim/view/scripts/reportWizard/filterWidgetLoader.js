@@ -20,7 +20,7 @@ $(document).ready(function () {
                 new Date().getTime() +
                 '&reportContextId=' + widgetFilter.reportContextId +
                 '&sourceIsReportWizard=true',
-            data: serializedFilters,
+            data: "filtersWidget=" + JSON.stringify(serializedFilters),
             success: function (data) {
                 $('#listFiltersDiv').html(data);
             }

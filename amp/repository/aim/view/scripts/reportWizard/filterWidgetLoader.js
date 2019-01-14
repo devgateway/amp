@@ -14,12 +14,11 @@ $(document).ready(function () {
     events.listenTo(widgetFilter, 'apply', function (data) {
         // Save just applied filters in case the user hits "reset" button.
         var serializedFilters = widgetFilter.serialize() || {};
-        console.log(serializedFilters);
         // TODO: un-hardcode the param reportContextId.
         $.ajax({
             type: 'POST',
             url: '/aim/reportsFilterPicker.do?applyWithNewWidget=true&cacheBuster=' + new Date().getTime() + '&reportContextId=report_wizard&sourceIsReportWizard=true',
-            data: "widgetFilters=" + JSON.stringify(serializedFilters),
+            data: "filtersWidget=" + JSON.stringify(serializedFilters),
             success: function (data) {
                 $('#listFiltersDiv').html(data);
             }

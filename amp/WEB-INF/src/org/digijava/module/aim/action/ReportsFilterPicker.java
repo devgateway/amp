@@ -106,6 +106,9 @@ public class ReportsFilterPicker extends Action {
 
     public final static String PLEDGE_REPORT_REQUEST_ATTRIBUTE = "is_pledge_report";
 
+    public final static String FILTERS_WIDGET = "filtersWidget";
+    public final static String FILTERS = "filters";
+
     
     public final static Long tryParseLong(String input)
     {
@@ -258,18 +261,18 @@ public class ReportsFilterPicker extends Action {
             if (request.getParameter("applyWithNewWidget") != null) {
                 LinkedHashMap<String, Object> filters = new LinkedHashMap<String, Object>();
                 Map<String, String[]> parameters = request.getParameterMap();
-                String widgetFilters = parameters.get("widgetFilters")[0];
+                String widgetFilters = parameters.get(FILTERS_WIDGET)[0];
                 JSONObject jsonObjParams = new JSONObject(widgetFilters);
-                JSONObject jsonFilters = jsonObjParams.getJSONObject("filters");
+                JSONObject jsonFilters = jsonObjParams.getJSONObject(FILTERS);
                 jsonFilters.keySet().stream().forEach((key -> {
                     String type = jsonFilters.get(key).getClass().getName();
-                    if (type.equals("org.json.JSONArray")) {
+                    if (type.equals(org.json.JSONArray.class.getCanonicalName())) {
                         List<Integer> aux = new ArrayList<Integer>();
                         jsonFilters.getJSONArray(key).iterator().forEachRemaining(s -> {
                             aux.add(new Integer(s.toString()));
                         });
                         filters.put(key, aux);
-                    } else if (type.equals("org.json.JSONObject")) {
+                    } else if (type.equals(org.json.JSONObject.class.getCanonicalName())) {
                         LinkedHashMap<String, Object> dates = new LinkedHashMap<String, Object>();
                         jsonFilters.getJSONObject(key).keySet().stream().forEach(d -> {
                             dates.put(d, jsonFilters.getJSONObject(key).get(d).toString());

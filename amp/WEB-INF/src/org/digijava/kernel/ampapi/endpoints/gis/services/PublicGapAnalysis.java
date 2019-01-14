@@ -7,7 +7,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
 import org.digijava.kernel.ampapi.endpoints.gis.RuntimeIndicatorGapAnalysisParameters;
 import org.digijava.kernel.ampapi.endpoints.indicator.Indicator;
-import org.digijava.kernel.ampapi.endpoints.indicator.SaveIndicatorRequest;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorService;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
@@ -48,7 +47,7 @@ public class PublicGapAnalysis {
      * @return indicator values or error
      */
     public Indicator doPublicGapAnalysis(RuntimeIndicatorGapAnalysisParameters input) {
-        SaveIndicatorRequest indicator = input.getIndicator();
+        Indicator indicator = input.getIndicator();
         if (errors.isEmpty()) {
             Long id = indicator.getId();
             indicator.setId(null);
@@ -59,6 +58,7 @@ public class PublicGapAnalysis {
                 return processedIndicator;
             }
         }
+        
         throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, ApiError.toError(errors));
     }
 }

@@ -381,7 +381,8 @@ public class ActivityVersionUtil {
             // logger.info(fields[i]);
             CompareOutput output = new CompareOutput();
             if (fields[i].isAnnotationPresent(VersionableFieldSimple.class)) {
-                processVersionableSimple(ampActivityOne, ampActivityTwo, outputCollection, auditHistory1, auditHistory2, fields[i], output);
+                processVersionableSimple(ampActivityOne, ampActivityTwo, outputCollection,
+                        auditHistory1, auditHistory2, fields[i], output);
             }
             if (fields[i].isAnnotationPresent(VersionableFieldTextEditor.class)) {
                 processVersionableTextEditor(ampActivityOne, ampActivityTwo, outputCollection, fields[i], output);
@@ -393,8 +394,10 @@ public class ActivityVersionUtil {
         return ActivityVersionUtil.groupOutputCollection(outputCollection);
     }
 
-    private static void processVersionableCollection(AmpActivityVersion ampActivityOne, AmpActivityVersion ampActivityTwo, List<CompareOutput> outputCollection, Field[] fields, int i, CompareOutput output) throws Exception {
-        Session session;// Obtain "get" method from field.
+    private static void processVersionableCollection(AmpActivityVersion ampActivityOne,
+                                                     AmpActivityVersion ampActivityTwo,
+                                                     List<CompareOutput> outputCollection, Field[] fields,
+                                                     int i, CompareOutput output) throws Exception {
         Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(fields[i].getName(),
                 AmpActivityVersion.class, "get");
         // Get values from 2 versions.
@@ -402,7 +405,6 @@ public class ActivityVersionUtil {
         // apparently closed session.
         // Delete these lines if there are problems when saving: two
         // sessions problem.
-        session = PersistenceManager.getRequestDBSession();
         Object auxResult1 = auxMethod.invoke(ampActivityOne, null);
         Hibernate.initialize(auxResult1);
         Object auxResult2 = auxMethod.invoke(ampActivityTwo, null);
@@ -429,15 +431,7 @@ public class ActivityVersionUtil {
         } else {
             auxReturnType = auxCollection2.toArray()[0].getClass();
         }
-        if (auxReturnType.getName().equals("java.util.Date") || auxReturnType.getName().equals("java.sql.Date")
-                || auxReturnType.getName().equals("java.lang.String")
-                || auxReturnType.getName().equals("java.lang.Double")
-                || auxReturnType.getName().equals("java.lang.Integer")
-                || auxReturnType.getName().equals("java.lang.Long")
-                || auxReturnType.getName().equals("java.lang.Short")
-                || auxReturnType.getName().equals("java.lang.Float")
-                || auxReturnType.getName().equals("java.lang.Boolean")
-                || auxReturnType.getName().equals("java.math.BigDecimal")) {
+        if (isOfSimpleType(auxReturnType)) {
             // Wrappers don't have IDs then we can't detect "updates".
             // Iterate each collection and show as different the values
             // not present in the other.
@@ -545,7 +539,22 @@ public class ActivityVersionUtil {
         }
     }
 
-    private static void processVersionableTextEditor(AmpActivityVersion ampActivityOne, AmpActivityVersion ampActivityTwo, List<CompareOutput> outputCollection, Field field, CompareOutput output) throws Exception {
+    private static boolean isOfSimpleType(Class auxReturnType) {
+        return auxReturnType.getName().equals("java.util.Date") || auxReturnType.getName().equals("java.sql.Date")
+                || auxReturnType.getName().equals("java.lang.String")
+                || auxReturnType.getName().equals("java.lang.Double")
+                || auxReturnType.getName().equals("java.lang.Integer")
+                || auxReturnType.getName().equals("java.lang.Long")
+                || auxReturnType.getName().equals("java.lang.Short")
+                || auxReturnType.getName().equals("java.lang.Float")
+                || auxReturnType.getName().equals("java.lang.Boolean")
+                || auxReturnType.getName().equals("java.math.BigDecimal");
+    }
+
+    private static void processVersionableTextEditor(AmpActivityVersion ampActivityOne,
+                                                     AmpActivityVersion ampActivityTwo,
+                                                     List<CompareOutput> outputCollection, Field field,
+                                                     CompareOutput output) throws Exception {
         // Obtain "get" method from field.
         Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(field.getName(),
                 AmpActivityVersion.class, "get");
@@ -578,7 +587,11 @@ public class ActivityVersionUtil {
         }
     }
 
-    private static void processVersionableSimple(AmpActivityVersion ampActivityOne, AmpActivityVersion ampActivityTwo, List<CompareOutput> outputCollection, ActivityHistory auditHistory1, ActivityHistory auditHistory2, Field field, CompareOutput output) throws Exception {
+    private static void processVersionableSimple(AmpActivityVersion ampActivityOne,
+                                                 AmpActivityVersion ampActivityTwo,
+                                                 List<CompareOutput> outputCollection, ActivityHistory auditHistory1,
+                                                 ActivityHistory auditHistory2, Field field, CompareOutput output)
+            throws Exception {
         // Obtain "get" method from field.
         Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(field.getName(),
                 AmpActivityVersion.class, "get");
@@ -620,16 +633,7 @@ public class ActivityVersionUtil {
                 output.setMandatoryForSingleChangeOutput(auxAnnotation.mandatoryForSingleChange());
                 // Differentiate Wrappers from Classes that implements Versionable.
                 Class auxReturnType = auxMethod.getReturnType();
-                if (auxReturnType.getName().equals("java.util.Date")
-                        || auxReturnType.getName().equals("java.sql.Date")
-                        || auxReturnType.getName().equals("java.lang.String")
-                        || auxReturnType.getName().equals("java.lang.Double")
-                        || auxReturnType.getName().equals("java.lang.Integer")
-                        || auxReturnType.getName().equals("java.lang.Long")
-                        || auxReturnType.getName().equals("java.lang.Short")
-                        || auxReturnType.getName().equals("java.lang.Float")
-                        || auxReturnType.getName().equals("java.lang.Boolean")
-                        || auxReturnType.getName().equals("java.math.BigDecimal")) {
+                if (isOfSimpleType(auxReturnType)) {
                     String aux1String = ActivityVersionUtil.getStringOrEmpty(auxResult1);
                     String aux2String = ActivityVersionUtil.getStringOrEmpty(auxResult2);
                     output.setStringOutput(new String[] { aux1String, aux2String });

@@ -16,11 +16,11 @@ $(document).ready(function () {
         var serializedFilters = widgetFilter.serialize() || {};
         $.ajax({
             type: 'POST',
-            url: '/aim/reportsFilterPicker.do?applyWithNewWidget=true&cacheBuster=' +
+            url: '/aim/reportsFilterPicker.do?apply=true&cacheBuster=' +
                 new Date().getTime() +
                 '&reportContextId=' + widgetFilter.reportContextId +
                 '&sourceIsReportWizard=true',
-            data: serializedFilters,
+            data: "filtersWidget=" + JSON.stringify(serializedFilters),
             success: function (data) {
                 $('#listFiltersDiv').html(data);
             }

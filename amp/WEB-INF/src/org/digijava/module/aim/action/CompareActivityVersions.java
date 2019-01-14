@@ -69,9 +69,7 @@ public class CompareActivityVersions extends DispatchAction {
             HttpServletResponse response) throws Exception {
 
         CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
-        	
         Session session = PersistenceManager.getRequestDBSession();
-            
         setAdvancemode(vForm, request); 
      
           

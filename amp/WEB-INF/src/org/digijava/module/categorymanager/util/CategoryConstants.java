@@ -188,6 +188,8 @@ public class CategoryConstants {
         new CategoryConstants.HardCodedCategoryValue("implementation_location", "Zone", true);
     public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_DISTRICT = 
         new CategoryConstants.HardCodedCategoryValue("implementation_location", "District", true);
+    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_COMMUNAL_SECTION =
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Communal section", true);
     public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ALL  =
             new CategoryConstants.HardCodedCategoryValue("implementation_location", "All", true);
     

@@ -73,6 +73,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Session;
+import org.json.JSONObject;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -80,7 +81,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -105,6 +105,10 @@ public class ReportsFilterPicker extends Action {
     public final static String ONLY_GOV_PROCEDURES  = "1";
 
     public final static String PLEDGE_REPORT_REQUEST_ATTRIBUTE = "is_pledge_report";
+
+    public static final String FILTERS_WIDGET = "filtersWidget";
+    public static final String FILTERS = "filters";
+    public static final int FIRST_ELEMENT = 0;
 
     
     public final static Long tryParseLong(String input)
@@ -256,36 +260,37 @@ public class ReportsFilterPicker extends Action {
             }
 
             if (request.getParameter("applyWithNewWidget") != null) {
-                LinkedHashMap<String, Object> filters = new LinkedHashMap<String, Object>();
+                LinkedHashMap<String, Object> filters = new LinkedHashMap<>();
                 Map<String, String[]> parameters = request.getParameterMap();
-                parameters.keySet().stream().filter(x -> x.startsWith("filter")).forEach((s -> {
-                    String key = s.toString().substring(s.indexOf("[") + 1, s.indexOf("]"));
-                    String subKey = s.replace("filters[" + key + "]", "");
-                    if (subKey.contains("[]")) {
-                        filters.put(key, Arrays.asList(parameters.get(s)));
+                String widgetFilters = parameters.get(FILTERS_WIDGET)[FIRST_ELEMENT];
+                JSONObject jsonObjParams = new JSONObject(widgetFilters);
+                JSONObject jsonFilters = jsonObjParams.getJSONObject(FILTERS);
+                jsonFilters.keySet().forEach((key -> {
+                    String type = jsonFilters.get(key).getClass().getName();
+                    if (org.json.JSONArray.class.getCanonicalName().equals(type)) {
+                        List<Integer> aux = new ArrayList<>();
+                        jsonFilters.getJSONArray(key).iterator().forEachRemaining(s -> {
+                            aux.add(new Integer(s.toString()));
+                        });
+                        filters.put(key, aux);
+                    } else if (org.json.JSONObject.class.getCanonicalName().equals(type)) {
+                        LinkedHashMap<String, Object> dates = new LinkedHashMap<>();
+                        jsonFilters.getJSONObject(key).keySet().forEach(d -> {
+                            dates.put(d, jsonFilters.getJSONObject(key).get(d).toString());
+                        });
+                        filters.put(key, dates);
                     } else {
-                        if (!subKey.equals("")) {
-                            String subKey2 = subKey.substring(subKey.indexOf("[") + 1, subKey.indexOf("]"));
-                            LinkedHashMap<String, Object> sub = new LinkedHashMap<String, Object>();
-                            sub.put(subKey2, parameters.get(s)[0]);
-                            if (!filters.containsKey(key)) {
-                                filters.put(key, sub);
-                            } else {
-                                ((LinkedHashMap<String, Object>) filters.get(key)).put(subKey2, parameters.get(s)[0]);
-                            }
-                        } else {
-                            filters.put(key, parameters.get(s)[0]);
-                        }
+                        throw new RuntimeException("Unsupported type.");
                     }
                 }));
-                // AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
                 AmpReportFilters filterRules = FilterUtils.getFilters(filters, new AmpReportFilters());
                 AmpReportFiltersConverter converter = new AmpReportFiltersConverter(filterRules);
                 AmpARFilter ampARFilter = converter.buildFilters();
                 ampARFilter.fillWithDefaultsSettings();
                 FilterUtil.populateForm(filterForm, ampARFilter, longAmpReportId);
-                AmpARFilter ampARFilter2 = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
-                return decideNextForward(mapping, filterForm, request, ampARFilter2);
+                // We need to "recreate" the arfilter or it wont be shown.
+                ampARFilter = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
+                return decideNextForward(mapping, filterForm, request, ampARFilter);
             }
 
                 AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);

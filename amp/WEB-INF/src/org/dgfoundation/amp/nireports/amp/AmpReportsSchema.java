@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_COMMUNAL_SECTION;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_COUNTRY;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_DISTRICT;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_RAW;
@@ -649,6 +650,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         with_percentage(ColumnConstants.REGION, "v_regions", LOC_DIM_USG, LEVEL_REGION);
         with_percentage(ColumnConstants.ZONE, "v_zones", LOC_DIM_USG, LEVEL_ZONE);
         with_percentage(ColumnConstants.DISTRICT, "v_districts", LOC_DIM_USG, LEVEL_DISTRICT);
+        with_percentage(ColumnConstants.COMMUNAL_SECTION, "v_communal_section", LOC_DIM_USG, LEVEL_COMMUNAL_SECTION);
         with_percentage(ColumnConstants.LOCATION, "v_raw_locations", LOC_DIM_USG, LEVEL_RAW);
         with_percentage(ColumnConstants.GEOCODE, "v_geocodes", LOC_DIM_USG, LEVEL_RAW);
         degenerate_dimension(ColumnConstants.RAW_LOCATION, "v_raw_locations", RAW_LOCS_DIMENSION);
@@ -834,7 +836,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         with_percentage(ColumnConstants.PLEDGES_REGIONS, "v_pledges_regions", LOC_DIM_USG, LEVEL_REGION);
         with_percentage(ColumnConstants.PLEDGES_ZONES, "v_pledges_zones", LOC_DIM_USG, LEVEL_ZONE);
         with_percentage(ColumnConstants.PLEDGES_DISTRICTS, "v_pledges_districts", LOC_DIM_USG, LEVEL_DISTRICT);
-        
+        with_percentage(ColumnConstants.PLEDGES_COMMUNAL_SECTION, "v_pledges_communal_sections", LOC_DIM_USG,
+                LEVEL_COMMUNAL_SECTION);
+
         degenerate_dimension(ColumnConstants.PLEDGES_AID_MODALITY, "v_pledges_aid_modality", catsDimension);
         degenerate_dimension(ColumnConstants.PLEDGE_STATUS, "v_pledges_status", catsDimension);
         single_dimension(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, "v_pledges_type_of_assistance", catsDimension.getLevelColumn(ColumnConstants.TYPE_OF_ASSISTANCE, 1));

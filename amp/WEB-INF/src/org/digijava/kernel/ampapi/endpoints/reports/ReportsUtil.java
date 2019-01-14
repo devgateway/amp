@@ -507,9 +507,12 @@ public class ReportsUtil {
         
         AmpReportFilters result = newFilters == null ? new AmpReportFilters() : newFilters;
         
-        boolean somethingAdded = oldFilters.getComputedYear() != null;
-        result.setComputedYear(oldFilters.getComputedYear());
-        
+        boolean somethingAdded = false;
+        if (result.getComputedYear() == null && oldFilters.getComputedYear() != null) {
+            result.setComputedYear(oldFilters.getComputedYear());
+            somethingAdded = true;
+        }
+
         // set filters even if they are empty, that means filters are cleared up
         // copy MTEF-hacky entries from old widget to new widget, since these are supposed to be sticky (not present in the filter form)
         for(Entry<ReportElement, FilterRule> elem: oldFilters.getFilterRules().entrySet()) {

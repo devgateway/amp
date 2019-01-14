@@ -3,22 +3,6 @@
  */
 package org.digijava.module.aim.action;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -31,7 +15,10 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.InvalidReportContextException;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
+import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -86,8 +73,25 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Session;
+import org.json.JSONObject;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author mihai
@@ -101,6 +105,10 @@ public class ReportsFilterPicker extends Action {
     public final static String ONLY_GOV_PROCEDURES  = "1";
 
     public final static String PLEDGE_REPORT_REQUEST_ATTRIBUTE = "is_pledge_report";
+
+    public static final String FILTERS_WIDGET = "filtersWidget";
+    public static final String FILTERS = "filters";
+    public static final int FIRST_ELEMENT = 0;
 
     
     public final static Long tryParseLong(String input)
@@ -207,8 +215,7 @@ public class ReportsFilterPicker extends Action {
             }
             
             // init form
-            if (request.getParameter("init") != null)
-            {
+            if (request.getParameter("init") != null) {
                 AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
                 FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
                 modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS, reportFilter);
@@ -216,24 +223,22 @@ public class ReportsFilterPicker extends Action {
             }
     
             String applyFormatValue = request.getParameter("applyFormat");
-            if (applyFormatValue != null)
-            {
-                if (applyFormatValue.equals("Reset"))
-                {
-                    // TODO-CONSTANTIN: reset is now done client-side. If done server-side, should handle non-english translations of "Reset" here!
+            if (applyFormatValue != null) {
+                if (applyFormatValue.equals("Reset")) {
+                    // TODO-CONSTANTIN: reset is now done client-side. If done server-side, should handle non-english
+                    // translations of "Reset" here!
                     // reset tab/report settings
                     AmpARFilter arf = createOrResetFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
                     return decideNextForward(mapping, filterForm, request, arf);
                     //return modeReset(mapping, form, request, response);
-                } else if (applyFormatValue.equals("true"))
-                {
+                } else if (applyFormatValue.equals("true")) {
                     AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
-                    return decideNextForward(mapping, filterForm, request, arf); // an AMP-y-hacky way of saying "please redraw the report without changing anything"
-                }
-                else
-                {
-                    if (!applyFormatValue.equals("Apply Format"))
+                    // an AMP-y-hacky way of saying "please redraw the report without changing anything"
+                    return decideNextForward(mapping, filterForm, request, arf);
+                } else {
+                    if (!applyFormatValue.equals("Apply Format")) {
                         logger.warn("unknown applyformat setting, assuming it is 'Apply Format': " + applyFormatValue);
+                    }
                     // apply tab/report settings
                     AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
                     return decideNextForward(mapping, filterForm, request, arf);
@@ -253,6 +258,41 @@ public class ReportsFilterPicker extends Action {
                 AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
                 return decideNextForward(mapping, filterForm, request, arf);
             }
+
+            if (request.getParameter("applyWithNewWidget") != null) {
+                LinkedHashMap<String, Object> filters = new LinkedHashMap<>();
+                Map<String, String[]> parameters = request.getParameterMap();
+                String widgetFilters = parameters.get(FILTERS_WIDGET)[FIRST_ELEMENT];
+                JSONObject jsonObjParams = new JSONObject(widgetFilters);
+                JSONObject jsonFilters = jsonObjParams.getJSONObject(FILTERS);
+                jsonFilters.keySet().forEach((key -> {
+                    String type = jsonFilters.get(key).getClass().getName();
+                    if (org.json.JSONArray.class.getCanonicalName().equals(type)) {
+                        List<Integer> aux = new ArrayList<>();
+                        jsonFilters.getJSONArray(key).iterator().forEachRemaining(s -> {
+                            aux.add(new Integer(s.toString()));
+                        });
+                        filters.put(key, aux);
+                    } else if (org.json.JSONObject.class.getCanonicalName().equals(type)) {
+                        LinkedHashMap<String, Object> dates = new LinkedHashMap<>();
+                        jsonFilters.getJSONObject(key).keySet().forEach(d -> {
+                            dates.put(d, jsonFilters.getJSONObject(key).get(d).toString());
+                        });
+                        filters.put(key, dates);
+                    } else {
+                        throw new RuntimeException("Unsupported type.");
+                    }
+                }));
+                AmpReportFilters filterRules = FilterUtils.getFilters(filters, new AmpReportFilters());
+                AmpReportFiltersConverter converter = new AmpReportFiltersConverter(filterRules);
+                AmpARFilter ampARFilter = converter.buildFilters();
+                ampARFilter.fillWithDefaultsSettings();
+                FilterUtil.populateForm(filterForm, ampARFilter, longAmpReportId);
+                // We need to "recreate" the arfilter or it wont be shown.
+                ampARFilter = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
+                return decideNextForward(mapping, filterForm, request, ampARFilter);
+            }
+
                 AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
                 FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
                 modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL, reportFilter);
@@ -1364,7 +1404,6 @@ public class ReportsFilterPicker extends Action {
 
         return null;
     }
-
 
     /**
      * fills an AmpARFilter instance with Filters data from a ReportsFilterPickerForm

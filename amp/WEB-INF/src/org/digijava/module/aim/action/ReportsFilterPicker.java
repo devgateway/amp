@@ -58,9 +58,6 @@ public class ReportsFilterPicker extends Action {
     public static final String FILTERS = "filters";
     public static final int FIRST_ELEMENT = 0;
 
-    
-    public final static Long tryParseLong(String input)
-
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;

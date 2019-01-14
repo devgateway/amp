@@ -74,7 +74,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
-                                .withClassificationDate(new LocalDate(2018, 12, 12).toDate())
+                                .withClassificationDate(DateTime.now().minusDays(3).toDate())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())

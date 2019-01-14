@@ -108,6 +108,7 @@ public class ReportsFilterPicker extends Action {
 
     public final static String FILTERS_WIDGET = "filtersWidget";
     public final static String FILTERS = "filters";
+    public final static int FIRST_ELEMENT = 0;
 
     
     public final static Long tryParseLong(String input)
@@ -259,25 +260,27 @@ public class ReportsFilterPicker extends Action {
             }
 
             if (request.getParameter("applyWithNewWidget") != null) {
-                LinkedHashMap<String, Object> filters = new LinkedHashMap<String, Object>();
+                LinkedHashMap<String, Object> filters = new LinkedHashMap<>();
                 Map<String, String[]> parameters = request.getParameterMap();
-                String widgetFilters = parameters.get(FILTERS_WIDGET)[0];
+                String widgetFilters = parameters.get(FILTERS_WIDGET)[FIRST_ELEMENT];
                 JSONObject jsonObjParams = new JSONObject(widgetFilters);
                 JSONObject jsonFilters = jsonObjParams.getJSONObject(FILTERS);
-                jsonFilters.keySet().stream().forEach((key -> {
+                jsonFilters.keySet().forEach((key -> {
                     String type = jsonFilters.get(key).getClass().getName();
-                    if (type.equals(org.json.JSONArray.class.getCanonicalName())) {
-                        List<Integer> aux = new ArrayList<Integer>();
+                    if (org.json.JSONArray.class.getCanonicalName().equals(type)) {
+                        List<Integer> aux = new ArrayList<>();
                         jsonFilters.getJSONArray(key).iterator().forEachRemaining(s -> {
                             aux.add(new Integer(s.toString()));
                         });
                         filters.put(key, aux);
-                    } else if (type.equals(org.json.JSONObject.class.getCanonicalName())) {
-                        LinkedHashMap<String, Object> dates = new LinkedHashMap<String, Object>();
-                        jsonFilters.getJSONObject(key).keySet().stream().forEach(d -> {
+                    } else if (org.json.JSONObject.class.getCanonicalName().equals(type)) {
+                        LinkedHashMap<String, Object> dates = new LinkedHashMap<>();
+                        jsonFilters.getJSONObject(key).keySet().forEach(d -> {
                             dates.put(d, jsonFilters.getJSONObject(key).get(d).toString());
                         });
                         filters.put(key, dates);
+                    } else {
+                        throw new RuntimeException("Unsupported type.");
                     }
                 }));
                 AmpReportFilters filterRules = FilterUtils.getFilters(filters, new AmpReportFilters());

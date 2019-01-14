@@ -45,13 +45,35 @@ module.exports = Backbone.View.extend({
     }    
    
     $('.legend').draggable();
-    this.$('.legend-content').resizable();
+    this.$('.legend-content').resizable({
+    	alsoResize: ".legend",
+       handles: 's',
+       stop: function(event, ui) {
+            $(this).css("width", '');
+       }
+    });
+    
+    $('.legend').resizable({
+    	alsoResize: ".legend-content",
+       handles: 's',
+       stop: function(event, ui) {
+            $(this).css("width", '');
+       }
+    });
+    
+   
     
     return this;
   },
 
   toggleLegend: function() {
     this.$el.toggleClass('expanded');
+    
+    if (this.$el.hasClass('expanded')) {    	
+    	this.$el.removeClass('legend-collapsed');
+    } else {
+    	this.$el.addClass('legend-collapsed')
+    }
     return false; // stops it updating the url.
   }
 

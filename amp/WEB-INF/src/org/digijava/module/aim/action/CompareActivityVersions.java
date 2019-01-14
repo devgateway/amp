@@ -62,9 +62,7 @@ public class CompareActivityVersions extends DispatchAction {
     public ActionForward unspecified(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws java.lang.Exception {
-    	
-		return compare(mapping, form, request, response);
-        
+        return compare(mapping, form, request, response);
     }
     
     public ActionForward compare(ActionMapping mapping, ActionForm form, HttpServletRequest request,

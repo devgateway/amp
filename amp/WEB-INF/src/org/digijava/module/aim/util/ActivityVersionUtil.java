@@ -80,8 +80,6 @@ public class ActivityVersionUtil {
         return ret;
     }
 
- 
-  
     public static String generateFormattedOutput(Output out) throws WorkerException {
         // TODO Auto-generated method stub
         return generateFormattedOutput(out, null);
@@ -668,7 +666,7 @@ public class ActivityVersionUtil {
     public static Map<Long, Map<String, List<CompareOutput>>> compareActivities(List<Long> activitiesId)
             throws Exception {
 
-        Map<Long, Map<String, List<CompareOutput>>> listOfActivities = new HashMap<Long, Map<String, List<CompareOutput>>>();
+        Map<Long, Map<String, List<CompareOutput>>> listOfActivities = new HashMap<>();
 
         for (Long activityId : activitiesId) {
             Map<String, List<CompareOutput>> activityComparedToPreviousVersion = compareActivities(activityId);

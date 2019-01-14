@@ -86,15 +86,21 @@ stage('Quick Test') {
                 updateGitHubCommitStatus('jenkins/failfasttests', 'Testing in progress', 'PENDING')
 
                 withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
-                    sh "cd amp && mvn test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
+                    def testStatus = sh returnStatus: true, script: "cd amp && mvn test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
 
                     // Archive unit test report
                     junit 'amp/target/surefire-reports/TEST-*.xml'
+
+                    if (testStatus != 0) {
+                        error "Tests command returned an error code!"
+                    }
                 }
 
                 updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: success', 'SUCCESS')
             } catch (e) {
                 updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: error', 'ERROR')
+
+                throw e
             }
         }
     }

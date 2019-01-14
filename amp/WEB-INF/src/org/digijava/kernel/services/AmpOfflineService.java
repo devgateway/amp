@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public class AmpOfflineService {
 
         try (InputStream inputStream = inputStreamSupplier.get()) {
             Files.createDirectories(file.getParentFile().toPath());
-            Files.copy(inputStream, file.toPath());
+            Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException | RuntimeException e) {
             FileUtils.deleteQuietly(file);
             throw e;

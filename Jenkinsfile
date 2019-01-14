@@ -92,7 +92,7 @@ stage('Quick Test') {
                     junit 'amp/target/surefire-reports/TEST-*.xml'
 
                     if (testStatus != 0) {
-                        throw new RuntimeException("Tests command returned an error code!")
+                        error "Tests command returned an error code!"
                     }
                 }
 

@@ -128,7 +128,7 @@ Filters.prototype.success	= function (o) {
 
 Filters.prototype.failure = failureReportFunction;
 
-Filters.prototype.showFilters	= function(reportContextId) {
+Filters.prototype.showFiltersOld	= function(reportContextId) {
 	var avoidIECacheParam 	=	"&time=" + new Date().getTime(); 
 	this.filterPanel.setBody( "<div style='text-align: center'>" + this.loadingDataMessage + 
 			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>" );

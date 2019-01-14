@@ -1027,7 +1027,7 @@ function cancel()
 																	<div id="listFiltersDiv" style="height:85px; width: 713px; overflow-y:auto; overflow-x:auto; margin-bottom: 5px; white-space: normal;" class="inputx">
 																		<jsp:include page="reportWizard/showSelectedFilters.jsp" />				
 																	</div>
-																	<button type="button" value="Filters" class="buttonx_sm btn_save" id="add_filters_button" style="margin-right:2px;" onclick="repFilters.showFilters('<%=ReportContextData.getCurrentReportContextId(request, true)%>')"/>
+																	<button type="button" value="Filters" class="buttonx_sm btn_save" id="add_filters_button" style="margin-right:2px;" onclick="repFilters.showFiltersOld('<%=ReportContextData.getCurrentReportContextId(request, true)%>')"/>
 																		<digi:trn key="btn:repFilters">Filters</digi:trn>
 																	</button>
 																</fieldset>

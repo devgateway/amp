@@ -12,14 +12,15 @@ module.exports = Backbone.View.extend({
 
   template: _.template(Template),
 
+
   events: {
     'click a[href="#toggle-legend-collapse"]': 'toggleLegend'
   },
-
+ 
   initialize: function(options) {
     var self = this;
     this.app = options.app;
-
+    
     //attach legend listeners after filter and app state loaded.
     $.when(this.app.data.filter.loaded, this.app.data._stateWait).then(function() {
       self.listenTo(self.app.data, 'show hide refresh sync valuesChanged', self.render);
@@ -43,17 +44,22 @@ module.exports = Backbone.View.extend({
       this.$el.addClass('expanded');  // always expand when new layers are added
       this.$('.legend-content').html(content);
     }    
-   
-     
-    $('.legend').draggable({containment : "parent"});
+        
+    $('.legend').draggable({
+    	  containment : "parent",
+    	  stop: function( event, ui ) {
+    		  if (event.originalEvent.target.id === 'legend-title'){
+    			this.$el.toggleClass('expanded'); //hack to prevent legend from collapsing when dragging stops.  
+    		  }    		 
+    	  }.bind(this)
+     });
     this.$('.legend-content').resizable({
     	alsoResize: ".legend",
-       handles: 's, e, se'       
+        handles: 's, e, se'       
     });    
    
     return this;
-  },
-
+  },  
   toggleLegend: function() {
     this.$el.toggleClass('expanded');
     

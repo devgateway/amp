@@ -45,7 +45,13 @@ module.exports = Backbone.View.extend({
       this.$('.legend-content').html(content);
     }    
         
-    $('.legend').draggable({
+    this.makeLegendDraggable();
+    this.makeLegendResizable();
+    
+    return this;
+  },  
+  makeLegendDraggable: function() {
+	  $('.legend').draggable({
     	  containment : "parent",
     	  stop: function( event, ui ) {
     		  if (event.originalEvent.target.id === 'legend-title'){
@@ -53,13 +59,13 @@ module.exports = Backbone.View.extend({
     		  }    		 
     	  }.bind(this)
      });
-    this.$('.legend-content').resizable({
-    	alsoResize: ".legend",
-        handles: 's, e, se'       
-    });    
-   
-    return this;
-  },  
+  },
+  makeLegendResizable: function() {
+	  this.$('.legend-content').resizable({
+	    	alsoResize: ".legend",
+	        handles: 's, e, se'       
+	    });      
+  },
   toggleLegend: function() {
     this.$el.toggleClass('expanded');
     

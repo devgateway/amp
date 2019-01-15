@@ -44,25 +44,13 @@ module.exports = Backbone.View.extend({
       this.$('.legend-content').html(content);
     }    
    
-    $('.legend').draggable();
+     
+    $('.legend').draggable({containment : "parent"});
     this.$('.legend-content').resizable({
     	alsoResize: ".legend",
-       handles: 's',
-       stop: function(event, ui) {
-            $(this).css("width", '');
-       }
-    });
-    
-    $('.legend').resizable({
-    	alsoResize: ".legend-content",
-       handles: 's',
-       stop: function(event, ui) {
-            $(this).css("width", '');
-       }
-    });
-    
+       handles: 's, e, se'       
+    });    
    
-    
     return this;
   },
 

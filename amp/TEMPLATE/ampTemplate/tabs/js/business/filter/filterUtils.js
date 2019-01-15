@@ -80,17 +80,13 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 								item[0].levelName.replace(/-/g, " ");
 							var filter = new Filter({
 								trnName : name,
-								name: item.get('filterId'),
-								values : []
+								name: item.filterId,
+								values : content
 							});
-						}				
-
-						// Item.
-						filter.get('values').push({id: 0, name: item.get('name'), trnName: translatedNames[i]});
-						if (foundFilters.length === 0) {
+							// Item.
+							filter.get('values').push({id: 0, name: item.name, trnName: translatedNames[i]});
 							app.TabsApp.filters.add(filter);
 						}
-						
 					});		
 					
 				}				

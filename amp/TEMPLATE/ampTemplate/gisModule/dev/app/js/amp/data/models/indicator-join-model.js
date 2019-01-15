@@ -17,6 +17,7 @@ const readyStateRequestReceived = 2;
 const readyStateProcessingRequest = 3;
 const readyStateResponseReady = 4;
 const JOIN_BOUNDARIES_PREFIX = 'J';
+const EMPTY_JSON_FILE = 'empty.json';
 
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
@@ -133,7 +134,7 @@ loadAll: function(options) {
 				  /* If gap analysis is NOT selected then we use the data from localStorage instead of going to an EP,
 				  so we set the url to an empty .json file and then the parse function
 				  will use the data we already have. */
-				  this.url = 'empty.json';
+				  this.url = EMPTY_JSON_FILE;
 				  layer.unit = StringUtil.getMultilangString(layer,'unit', app.data.generalSettings); // Needed preprocess for popups.
 				  layer.description = StringUtil.getMultilangString(layer,'description', app.data.generalSettings);				  
 				  params.data = JSON.stringify(layer);
@@ -159,13 +160,13 @@ loadAll: function(options) {
 	  }	  
   },
   parse: function(response, options){
-  	/* This is a special case where we dont need to go to the backend but use data we already have. */
-  	if (options && options.url === 'empty.json') {
-		response = JSON.parse(options.data);
-	}
-	  //if from /rest/gis/indicators/ add prefix to id prevent collision
-	  if(!_.isFunction(this.url) && !_.isUndefined(this.url) && this.url.indexOf('/rest/gis/indicators/') !== -1){	
-		  response.id = app.constants.JOIN_BOUNDARIES_PREFIX +  response.id;
+	  /* This is a special case where we dont need to go to the backend but use data we already have. */
+	  if (options && options.url === EMPTY_JSON_FILE) {
+		  response = JSON.parse(options.data);
+	  } else if (!_.isFunction(this.url) &&
+		  !_.isUndefined(this.url) && this.url.indexOf('/rest/gis/indicators/') !== -1) {
+		  //if from /rest/gis/indicators/ add prefix to id prevent collision
+		  response.id = app.constants.JOIN_BOUNDARIES_PREFIX + response.id;
 	  }
 	  if (typeof response.title !== "string") {
           response.title = StringUtil.getMultilangString(response, 'name', app.data.generalSettings);

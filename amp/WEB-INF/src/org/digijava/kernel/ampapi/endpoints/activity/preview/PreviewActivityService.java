@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -378,7 +379,9 @@ public final class PreviewActivityService {
     
     public boolean isViewWorkspacesButtonVisible(Long ampActivityId) throws DgException {
         AmpActivityVersion activity = ActivityUtil.loadActivity(ampActivityId);
-        return ActivityUtil.isTeamMemberValidator(TeamMemberUtil.getLoggedInTeamMember(), activity);
+        TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
+        
+        return teamMember.isApprover() || ActivityUtil.isTeamMemberValidator(teamMember, activity);
     }
     
 }

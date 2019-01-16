@@ -60,20 +60,16 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
     
     private static final long serialVersionUID = 1L;
 
-    final String EXPRESSION = "^((https?|ftp|file|)://)?[a-zA-Z0-9\\-\\./=?,&#_-]+$";
-    
     protected WebMarkupContainer webLinkFeedbackContainer;
     protected Label webLinkFeedbackLabel;
     boolean resourceIsURL = false;
     protected boolean pathSelected;
     protected boolean urlSelected;
-    protected boolean urlFormatValid;
     protected boolean contentValid;
     
     final protected String DEFAULT_MESSAGE = "*" + TranslatorUtil.getTranslatedText("Please enter title");
     final protected String URL_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("URL not selected");
     final protected String FILE_PATH_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("File not submited or upload has not finished");
-    final protected String WRONG_URL_FORMAT = "*" + TranslatorUtil.getTranslatedText("Wrong url format. Please enter valid url");
     final protected String CONTENT_TYPE_NOT_ALLOWED = "*" + TranslatorUtil.getTranslatedText("Content type not allowed:");
     final protected String CONTENT_TYPE_EXTENSION_MISMATCH = "*" + TranslatorUtil.getTranslatedText("File extension does not match the actual file format:");
     final protected String CONTENT_TYPE_INTERNAL_ERROR = "*" + TranslatorUtil.getTranslatedText("Internal error during the content validation");
@@ -114,18 +110,17 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
         final Model<FileItem> fileItemModel = new Model<FileItem>();
         FileUploadPanel fileUpload = new FileUploadPanel("file",activityId, fileItemModel);
 
-        final AmpTextFieldPanel<String> webLink = new AmpTextFieldPanel<String>("webLink", new PropertyModel<String>(td, "webLink"), "Web Link", true, false);
+        final AmpTextFieldPanel<String> webLink = new AmpTextFieldPanel<String>("webLink", 
+                new PropertyModel<String>(td, "webLink"), "Web Link", true, true);
         webLink.setTextContainerDefaultMaxSize();
         webLink.setVisibilityAllowed(false);
         webLink.setOutputMarkupId(true);
-        
         
         String resourceLabelModel = "File";
         if (newResourceIsWebLink) {
             resourceLabelModel = "Web Link";
             resourceIsURL = true;
         }
-            
             
         TrnLabel resourceLabel = new TrnLabel("resourceLabel", resourceLabelModel);
 
@@ -283,18 +278,7 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
                 urlSelected = false;
             } else {
                 urlSelected =true;
-                
-                Pattern pattern = Pattern.compile(EXPRESSION,Pattern.MULTILINE);
-                Matcher matcher = pattern.matcher(resource.getWebLink());
-                if (!matcher.find()){
-                    urlFormatValid = false;
-                } else {
-                    if (!resource.getWebLink().contains("://")) {
-                        resource.setWebLink("http://" + resource.getWebLink());
-                    }
-                    urlFormatValid = true;
-                }
-            }           
+            }
         } else {
             pathSelected = resource.getFile() != null;
             contentValid = true;
@@ -330,7 +314,7 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
         }
 
         if (titleSelected && ((pathSelected && contentValid && !newResourceIsWebLink)
-                || (newResourceIsWebLink && urlSelected && urlFormatValid))) {
+                || (newResourceIsWebLink && urlSelected))) {
             webLinkFeedbackContainer.setVisible(false);
         } else {
             webLinkFeedbackContainer.setVisible(true);
@@ -343,8 +327,6 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
                 webLinkFeedbackLabel.setDefaultModelObject(conentValidationMessage);
             } else if (!urlSelected && newResourceIsWebLink) {
                 webLinkFeedbackLabel.setDefaultModelObject(URL_NOT_SELECTED);
-            } else if (!urlFormatValid && newResourceIsWebLink) {
-                webLinkFeedbackLabel.setDefaultModelObject(WRONG_URL_FORMAT);
             }
         }
         

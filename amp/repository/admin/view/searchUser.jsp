@@ -33,9 +33,6 @@
      <TD align="right" colspan=2><html:submit value="Search"/></TD>
    </TR>
    <tr>
-   	 <td colspan="3"><html:checkbox property="hideNonAlertable" /><digi:trn key="admin:hideNonAlertable">Hide non-alertable users</digi:trn></td>
-   </tr>
-   <tr>
    	 <td colspan="3"><html:checkbox property="hideBanned" /><digi:trn key="admin:hideBanned">Hide banned users</digi:trn></td>
    </tr>
   </TABLE>

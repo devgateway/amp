@@ -74,6 +74,7 @@ public class ColumnConstants {
     public static final String CURRENT_COMPLETION_DATE_COMMENTS = "Current Completion Date Comments";
     public static final String DESCRIPTION_OF_COMPONENT_FUNDING = "Description of Component Funding";
     public static final String DISTRICT = "District";
+    public static final String COMMUNAL_SECTION = "Communal Section";
     public static final String LOCATION = "Location";
     public static final String GEOCODE = "GeoId";
     public static final String DONOR_ACRONYM = "Organization Acronym";
@@ -218,7 +219,8 @@ public class ColumnConstants {
     public static final String PLEDGES_REGIONS = "Pledges Regions";
     public static final String PLEDGES_ZONES = "Pledges Zones";
     public static final String PLEDGES_DISTRICTS = "Pledges Districts";
-    
+    public static final String PLEDGES_COMMUNAL_SECTION = "Pledges Communal Section";
+
     public static final String PLEDGES_SECONDARY_PROGRAMS = "Pledges Secondary Programs";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_2 = "Pledges Secondary Programs Level 2";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_3 = "Pledges Secondary Programs Level 3";
@@ -336,7 +338,6 @@ public class ColumnConstants {
     public static final String SUB_PROGRAM = "Sub-Program";
     public static final String SUB_VOTE = "Sub-Vote";
     public static final String TEAM = "Team";
-    public static final String TERTIARY_PROGRAM = "Tertiary Program";
     public static final String TERTIARY_PROGRAM_LEVEL_1 = "Tertiary Program Level 1";
     public static final String TERTIARY_PROGRAM_LEVEL_2 = "Tertiary Program Level 2";
     public static final String TERTIARY_PROGRAM_LEVEL_3 = "Tertiary Program Level 3";

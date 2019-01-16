@@ -409,16 +409,16 @@ public class CurrencyService {
     }
 
     /**
-     * Returns exchange rates for all active currency pairs.
+     * Returns exchange rates for all currency pairs.
      * @return list of rates grouped by currency pairs
      */
     public List<ExchangeRatesForPair> getExchangeRatesForPairs() {
-        Collection<CurrencyRates> rates = CurrencyUtil.getAllActiveRates();
+        Collection<CurrencyRates> rates = CurrencyUtil.getAllCurrencyRates();
         return groupRatesByCurrencyPairs(rates);
     }
 
     public List<ExchangeRatesForPair> getExchangeRatesForPairs(List<Date> days) {
-        Collection<CurrencyRates> rates = CurrencyUtil.getActiveRates(days);
+        Collection<CurrencyRates> rates = CurrencyUtil.getCurrencyRates(days, false);
         return groupRatesByCurrencyPairs(rates);
     }
 

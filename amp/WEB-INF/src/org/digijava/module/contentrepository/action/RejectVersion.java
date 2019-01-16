@@ -21,7 +21,7 @@ public class RejectVersion extends Action {
         String baseNodeUUID     = request.getParameter("baseNodeUUID");
         
         Node node= DocumentManagerUtil.getWriteNode(baseNodeUUID, request);
-        String baseVersionUuid  = node.getBaseVersion().getUUID();
+        String baseVersionUuid  = node.getBaseVersion().getIdentifier();
         VersionHistory vh       = node.getVersionHistory();
         VersionIterator vit     = vh.getAllVersions();  
         
@@ -32,9 +32,9 @@ public class RejectVersion extends Action {
             NodeIterator nIter  = v.getNodes();
             if ( nIter.hasNext() ) {
                 Node n              = nIter.nextNode();
-                if ( n.getUUID().equals(versionId) ){
-                    if ( baseVersionUuid.equals(v.getUUID()) && prevVersion != null ) {
-                        node.restore( prevVersion, false);
+                if (n.getIdentifier().equals(versionId)) {
+                    if (baseVersionUuid.equals(v.getIdentifier()) && prevVersion != null) {
+                        node.restore(prevVersion, false);
                     }
                     vh.removeVersion(v.getName());
                     DocumentManagerUtil.deleteTeamNodePendingVersion(baseNodeUUID, versionId);

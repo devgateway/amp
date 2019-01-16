@@ -27,9 +27,6 @@
                 FROM amp_category_value_location acvl LEFT JOIN amp_location l ON l.location_id = acvl.id
                 ORDER BY acvl.id@@@
 
-                -- this table is no longer in use, was used by old reports
-                DROP TABLE IF EXISTS amp_location_cache@@@
-
                 CREATE VIEW v_ni_all_locations_with_levels AS
 					SELECT amp_location_id, acvl_id, acvl_name, parent_location, getlocationdepth(acvl_id) AS location_depth,
 						COALESCE(country_id, - acvl_id) AS country_id, COALESCE(country_name, 'Undefined') AS country_name,
@@ -39,7 +36,6 @@
 						COALESCE(communal_section_id, - acvl_id) AS communal_section_id, COALESCE(communal_section_name, 'Undefined') AS communal_section_name
 					FROM v_amp_location_cache@@@
 
-                -- cascade to what??
 				DROP TABLE IF EXISTS ni_all_locations_with_levels CASCADE@@@
 				CREATE TABLE ni_all_locations_with_levels AS
 					SELECT * FROM v_ni_all_locations_with_levels@@@
@@ -78,35 +74,7 @@
                 DROP TABLE DUMMY_TABLE @@@
 
                 UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart' @@@
-
-
-
             ]]></lang>
         </script>
-        <!--CREATE TABLE amp_location_cache-->
-        <!--(	amp_location_id bigint,-->
-        <!--acvl_id bigint NOT NULL PRIMARY KEY,-->
-        <!--acvl_name character varying,-->
-        <!--parent_location bigint,-->
-        <!--region_id bigint,-->
-        <!--region_name character varying,-->
-        <!--zone_id bigint,-->
-        <!--zone_name character varying,-->
-        <!--district_id bigint,-->
-        <!--district_name character varying,-->
-        <!--communal_section_id bigint,-->
-        <!--communal_section_name character varying,-->
-        <!--country_id bigint,-->
-        <!--country_name character varying)@@@-->
-
-        <!--CREATE INDEX amp_location_cache_loc_id_idx ON amp_location_cache(amp_location_id)@@@-->
-        <!--CREATE INDEX amp_location_cache_acvl_id_idx ON amp_location_cache(acvl_id)@@@-->
-        <!--CREATE INDEX amp_location_cache_reg_id_idx ON amp_location_cache(region_id)@@@-->
-        <!--CREATE INDEX amp_location_cache_zone_id_idx ON amp_location_cache(zone_id)@@@-->
-        <!--CREATE INDEX amp_location_cache_district_id_idx ON amp_location_cache(district_id)@@@-->
-        <!--CREATE INDEX amp_location_cache_communal_section_id_idx ON amp_location_cache(communal_section_id)@@@-->
-        <!--CREATE INDEX amp_location_cache_country_id_idx ON amp_location_cache(country_id)@@@-->
-
-
     </apply>
 </tns:patch>

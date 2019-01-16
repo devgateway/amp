@@ -44,18 +44,9 @@ public class AmpEstimatedDonorDisbursementsSubsectionFeature extends
     
     @Override
     protected void onConfigure() {
-        AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-            FundingOrganization fo = new FundingOrganization();
-            fo.setAmpOrgId(fundingOrgModel.getObject().getAmpOrgId());
-            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG, fo);
-            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
-        }
+        // If we need to put something in scope for a permission gate we have to put it before the configure and remove
+        // it after its configure so every nested element uses the same scope
         super.onConfigure();
-        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
-            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
-        }
     }
 
 

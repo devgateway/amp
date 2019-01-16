@@ -213,7 +213,7 @@ public class DocumentManagerRights {
     
     private static Boolean isNodeAVersion(HttpServletRequest request, Node node){
         try {
-            List<Version> vList = DocumentManagerUtil.getVersions(node.getUUID(), request, false);
+            List<Version> vList = DocumentManagerUtil.getVersions(node.getIdentifier(), request, false);
             return (vList==null)?true:false;
         }
         catch (Exception e) {

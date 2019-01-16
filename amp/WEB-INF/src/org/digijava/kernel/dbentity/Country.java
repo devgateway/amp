@@ -28,7 +28,6 @@ import java.util.function.Function;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 /**
  * The value object class for the Countries. Maps to the table PL_COUNTRIES
@@ -38,25 +37,23 @@ public class Country
     implements Serializable {
 
     /** identifier field */
-    @Interchangeable(fieldTitle="ISO")
     private String iso;
 
     /** persistent fields */
-    @Interchangeable(fieldTitle="Country ID")
     private Long countryId;
-    @Interchangeable(fieldTitle="Country Name")
+
     private String countryName;
-    @Interchangeable(fieldTitle="ISO3")
+
     private String iso3;
-    @Interchangeable(fieldTitle="Stat")
+
     private String stat;
-    @Interchangeable(fieldTitle="Show Country")
+
     private String showCtry;
-    @Interchangeable(fieldTitle="Dec Contry Flag")
+
     private String decCtryFlag;
-    @Interchangeable(fieldTitle="Message Language Key")
+
     private String messageLangKey;
-    @Interchangeable(fieldTitle="Available")
+
     private boolean available;
 
     /** full constructor */

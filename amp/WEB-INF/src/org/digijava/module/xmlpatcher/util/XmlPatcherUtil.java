@@ -5,6 +5,7 @@
  */
 package org.digijava.module.xmlpatcher.util;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -76,6 +77,9 @@ public final class XmlPatcherUtil {
                     recordNewPatchesInDir(appPath,f,patchNames, patchesMap);
                 continue;
             }
+            if (!FilenameUtils.getExtension(f.getName()).equalsIgnoreCase("xml")) {
+                continue;
+            }
             if (patchNames.contains(f.getName())) {
                 
                 AmpXmlPatch patch = patchesMap.get(f.getName());                
@@ -135,7 +139,7 @@ public final class XmlPatcherUtil {
             con.close();
             return ret;
         } catch (SQLException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
@@ -152,7 +156,7 @@ public final class XmlPatcherUtil {
         try {
             return PersistenceManager.getJdbcConnection();
         } catch (SQLException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
@@ -328,7 +332,7 @@ public final class XmlPatcherUtil {
             sess.saveOrUpdate(lazyPatch);
             //tx.commit();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
@@ -392,7 +396,10 @@ public final class XmlPatcherUtil {
         Query query = session
                 .createQuery("from " + AmpXmlPatch.class.getName()
                         + " p WHERE p.state NOT IN ("
-                        + XmlPatcherConstants.PatchStates.CLOSED+","+XmlPatcherConstants.PatchStates.DEPRECATED+","+XmlPatcherConstants.PatchStates.DELETED+")");
+                        + XmlPatcherConstants.PatchStates.CLOSED + ","
+                        + XmlPatcherConstants.PatchStates.DEPRECATED + ","
+                        + XmlPatcherConstants.PatchStates.DELETED + ") "
+                        + "and p.patchId not like '%.class'");
         List<AmpXmlPatch> list = query.list();
         return list;
     }

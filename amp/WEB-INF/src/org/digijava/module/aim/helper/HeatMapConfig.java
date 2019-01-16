@@ -8,17 +8,20 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
- * Helper class for HeatMapConfigs
+ * Helper class for HeatMapConfigService
  * Note: to be moved to DB when will be managed through Admin UI
  * 
  * @author Nadejda Mandrescu
  */
 public class HeatMapConfig {
+
     public enum Type {
-        SECTOR("S"),
-        PROGRAM("P"),
-        LOCATION("L");
+        @JsonProperty("S") SECTOR("S"),
+        @JsonProperty("P") PROGRAM("P"),
+        @JsonProperty("L") LOCATION("L");
         
         private String name;
         

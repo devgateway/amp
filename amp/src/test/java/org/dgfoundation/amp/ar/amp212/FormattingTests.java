@@ -7,15 +7,13 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -32,9 +30,8 @@ public class FormattingTests extends ReportingTestCase {
             "crazy funding 1", "date-filters-activity", "Eth Water",
             "TAC_activity_1", "TAC_activity_2");
 
-    @Override
-    protected NiReportExecutor getNiExecutor(List<String> activityNames) {
-        return getOfflineExecutor(activityNames);
+    public FormattingTests() {
+        inTransactionRule = null;
     }
 
     @Test
@@ -152,10 +149,5 @@ public class FormattingTests extends ReportingTestCase {
         spec.getOrCreateSettings().setCurrencyFormat(currencyFormat);
 
         runNiTestCase(cor, spec, acts);
-    }
-
-    @BeforeClass
-    public static void setUp() {
-        // this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
     }
 }

@@ -115,20 +115,24 @@ module.exports = BackboneDash.View.extend({
 	    }
 	    
 	    // For heatmaps add some extra combos.
-	    if (self.model.get('chartType') === 'fragmentation') {
-	    	var heatMapConfigs = self.model.get('heatmap_config').models[0];
-	    	var thisHeatMapChart = _.find(heatMapConfigs.get('charts'), function(item) {return item.name === self.model.get('name')});
-	    	self.$('.xaxis-options').html(
-	    		_(thisHeatMapChart.xColumns).map(function(colId) {
-	    			var item = _.find(heatMapConfigs.get('columns'), function(item, i) { return i === colId});
-	    			var opt = {id: item.origName, name: item.name, selected: false, value: item.origName};
-	    			return adjOptTemplate({
-	    				opt: opt,
-	    	            current: (opt.id === self.model.get('xAxisColumn'))
-	    	        });
-	    	    }, self)
-	    	);
-	    }
+        if (self.model.get('chartType') === 'fragmentation') {
+            var heatMapConfigs = self.model.get('heatmap_config').models[0];
+            var thisHeatMapChart = _.find(heatMapConfigs.get('charts'), function (item) {
+                return item.name === self.model.get('name');
+            });
+            self.$('.xaxis-options').html(
+                _(thisHeatMapChart.xColumns).map(function (colId) {
+                    var item = _.find(heatMapConfigs.get('columns'), function (item, i) {
+                        return item.origName === colId;
+                    });
+                    var opt = {id: item.origName, name: item.name, selected: false, value: item.origName};
+                    return adjOptTemplate({
+                        opt: opt,
+                        current: (opt.id === self.model.get('xAxisColumn'))
+                    });
+                }, self)
+            );
+        }
 	
 	    if (self._stateWait.state() !== 'pending') {
 	    	self.updateData();

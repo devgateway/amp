@@ -25,11 +25,8 @@ public class TransientDocumentShim extends DocumentShim{
      * @return
      */
     public FundingPledgesDocument serializeAndGetPledgeEntry(FundingPledges pledge){
-        ActionMessages errors = new ActionMessages();
         tdd.setTitle(this.getTitle()); // completed on-request by Struts
-        NodeWrapper wrapper = tdd.saveToRepository(TLSUtils.getRequest(), errors);
-        if (!errors.isEmpty())
-            throw new RuntimeException("error saving document: " + errors.toString());
+        NodeWrapper wrapper = tdd.saveToRepository(TLSUtils.getRequest());
         this.uuid = wrapper.getUuid();
         return this.buildPledgeEntry(pledge);
     }

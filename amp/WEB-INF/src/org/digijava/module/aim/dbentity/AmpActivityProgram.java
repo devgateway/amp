@@ -110,4 +110,5 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
     protected Object clone() throws CloneNotSupportedException {
     return super.clone();
     }
+    
 }

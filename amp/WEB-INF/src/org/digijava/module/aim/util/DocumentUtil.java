@@ -200,7 +200,7 @@ public class DocumentUtil {
         if(nameProperty != null) {
             contentItem.setFileName(nameProperty.getString());
         } else {
-            contentItem.setFileName("Item #" + childItem.getUUID());
+            contentItem.setFileName("Item #" + childItem.getIdentifier());
         }
 
         contentItem.setId(contentItem.getFileName());

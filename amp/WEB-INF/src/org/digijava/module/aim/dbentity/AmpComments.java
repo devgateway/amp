@@ -179,4 +179,5 @@ public class AmpComments implements Serializable, Cloneable, Versionable {
         aux.ampCommentId = null;
         return aux;
     }
+    
 }

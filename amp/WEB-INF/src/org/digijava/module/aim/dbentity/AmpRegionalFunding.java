@@ -246,4 +246,5 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
         // TODO Auto-generated method stub
         return super.clone();
     }
+    
 }

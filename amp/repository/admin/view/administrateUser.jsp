@@ -34,10 +34,6 @@
     </tr>
   </table>
   <br> 
-  <table border="0" width="30%">
-      <tr><td><html:checkbox name="administrateUserForm" property="alertable"><digi:trn key="admin:makeUserNonAlertable">Make user non-alertable</digi:trn></html:checkbox></td></tr>
-  </table>
-  <br>
 <HR>
   <table border="0" class="border" width="30%">
     <tr>

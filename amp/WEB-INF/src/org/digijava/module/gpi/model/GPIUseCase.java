@@ -372,7 +372,6 @@ public class GPIUseCase {
             commonData = query.list();
         } catch (Exception e) {
             logger.error(e, e);
-            e.printStackTrace();
         }
 //      logger.warn("commonData: " + ((Calendar.getInstance().getTimeInMillis() - time) / 1000) + "s");
         // pass 2: translate orgGrpNames and adjustmentType names

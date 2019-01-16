@@ -70,8 +70,7 @@ public class ReportMenuAction extends DispatchAction {
                         // It's Draft Activity
                     } else {
                         // It's not draft activity
-                        if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS
-                                .contains(activity.getApprovalStatus())) {
+                        if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS_SET.contains(activity.getApprovalStatus())) {
                             // Needs Approval
                             needsApproval = true;
                         }

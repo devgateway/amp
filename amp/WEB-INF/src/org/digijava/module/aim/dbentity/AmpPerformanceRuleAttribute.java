@@ -1,16 +1,9 @@
 package org.digijava.module.aim.dbentity;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonManagedReference;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 
@@ -25,10 +18,13 @@ public class AmpPerformanceRuleAttribute {
     @JsonBackReference
     private AmpPerformanceRule rule;
 
+    @ApiModelProperty(example = "timeAmount")
     private String name;
-    
+
+    @ApiModelProperty(example = "20")
     private String value;
 
+    @ApiModelProperty(example = "AMOUNT")
     private PerformanceRuleAttributeType type;
 
     public Long getId() {
@@ -72,26 +68,11 @@ public class AmpPerformanceRuleAttribute {
     }
 
     public enum PerformanceRuleAttributeType {
-        AMOUNT("AMOUNT"),
-        TIME_UNIT("TIME_UNIT"),
-        ACTIVITY_STATUS("ACTIVITY_STATUS"),
-        ACTIVITY_DATE("ACTIVITY_DATE"),
-        FUNDING_DATE("FUNDING_DATE");
-
-        private static final Map<String, PerformanceRuleAttributeType> FORMAT_MAP = Stream
-                .of(PerformanceRuleAttributeType.values())
-                .collect(Collectors.toMap(s -> s.formatted, Function.identity()));
-
-        private final String formatted;
-
-        PerformanceRuleAttributeType(String formatted) {
-            this.formatted = formatted;
-        }
-
-        @JsonCreator
-        public static PerformanceRuleAttributeType fromString(String string) {
-            return Optional.ofNullable(FORMAT_MAP.get(string)).orElseThrow(() -> new IllegalArgumentException(string));
-        }
+        AMOUNT,
+        TIME_UNIT,
+        ACTIVITY_STATUS,
+        ACTIVITY_DATE,
+        FUNDING_DATE
     }
 
 }

@@ -55,7 +55,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				// Variable to save the current serialized filters from widget.
 				app.TabsApp.serializedFilters = null;
 				// Save default sorters if any.
-				app.TabsApp.currentSorting = FilterUtils.extractSorters(firstContent.get('reportMetadata').get('reportSpec').get('sorters'), 
+				app.TabsApp.currentSorting = FilterUtils.extractSorters(firstContent.get('reportMetadata').get('reportSpec').get('sorters'),
 						firstContent.get('reportMetadata').get('reportSpec').get('columns'),
 						firstContent.get('reportMetadata').get('reportSpec').get('measures'),
 						firstContent.get('reportMetadata').get('reportSpec').get('hierarchies'));
@@ -127,7 +127,14 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				
 				
 				var currencyCode = firstContent.get('reportMetadata').get('settings').get(app.TabsApp.settingsWidget.Constants.CURRENCY_ID) || app.TabsApp.settingsWidget.definitions.getDefaultCurrencyId();
-				var currencyValue = app.TabsApp.settingsWidget.definitions.findCurrencyById(currencyCode).value;
+				var currency  = app.TabsApp.settingsWidget.definitions.findCurrencyById(currencyCode);
+                var currencyValue = currencyCode;
+                //TODO this is a work around in case we disable a currency that we have active in a tab.
+				//TODO nevertheless we have in value the same as in code, it does not use the currency label.
+				//TODO we will provide the proper fix in AMP-28464
+                if(currency){
+					currencyValue = currency.value;
+				}
 				
 				var legend = new Legend({
 					currencyCode : currencyCode,

@@ -76,7 +76,7 @@ public class GlobalSettingsConstants {
     
     public static final String REPORT_GENERATOR_ONE_PAGER = "Report Generator - One Pager";
 
-    public static final String DATE_FILTER_HIDES_PROJECTS = "Filter by date hides projects";
+    public static final String REPORTS_REMOVE_EMPTY_ROWS = "Remove empty rows from Reports";
     
     public static final String COMPUTED_TEAMS_DEFAULT_OFF_BUDGET = "Computed Teams Add Activity Default Off Budget";
     
@@ -177,7 +177,8 @@ public class GlobalSettingsConstants {
     
     public static final String REPORT_WIZARD_VISIBILITY_SOURCE = "Report wizard visibility source";
     
-    public static final String DAYS_NOTIFY_ACTIVITY_SUBMITED_VALIDATION = "Days to notify activity submited for validation";
+    public static final String DAYS_NOTIFY_ACTIVITY_SUBMITTED_VALIDATION =
+            "Days to notify activity submitted for validation";
     
     public static final String FUNDING_GAP_NOTIFICATION_THRESHOLD ="Funding gap notification threshold";
     
@@ -206,6 +207,8 @@ public class GlobalSettingsConstants {
     public static final String AMP_OFFLINE_ENABLED = "AMP Offline Enabled";
     
     public static final String AMP_SERVER_ID = "AMP Server ID";
+
+    public static final String FUZZY_SEARCH_DISTANCE = "Fuzzy search distance";
     
     // TODO will be removed once the new activity preview is finished
     public static final String USE_NEW_ACTIVITY_PREVIEW = "Use new activity preview";

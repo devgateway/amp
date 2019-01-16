@@ -3,9 +3,7 @@ package org.dgfoundation.amp.reports.converters;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -27,8 +25,6 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
@@ -95,7 +91,6 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, AmpSector.class, "selectedTertiarySectors", false);
 
         // Programs and national objectives section.
-        addFilter(ColumnConstants.PRIMARY_PROGRAM, AmpTheme.class, "selectedPrimaryPrograms", true);
         addFilter(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, AmpTheme.class, "selectedPrimaryPrograms", false);
         addFilter(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2, AmpTheme.class, "selectedPrimaryPrograms", false);
         addFilter(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3, AmpTheme.class, "selectedPrimaryPrograms", false);
@@ -105,7 +100,6 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.PRIMARY_PROGRAM_LEVEL_7, AmpTheme.class, "selectedPrimaryPrograms", false);
         addFilter(ColumnConstants.PRIMARY_PROGRAM_LEVEL_8, AmpTheme.class, "selectedPrimaryPrograms", false);
         
-        addFilter(ColumnConstants.SECONDARY_PROGRAM, AmpTheme.class, "selectedSecondaryPrograms", true);
         addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, AmpTheme.class, "selectedSecondaryPrograms", false);
         addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2, AmpTheme.class, "selectedSecondaryPrograms", false);
         addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3, AmpTheme.class, "selectedSecondaryPrograms", false);
@@ -115,7 +109,6 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_7, AmpTheme.class, "selectedSecondaryPrograms", false);
         addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_8, AmpTheme.class, "selectedSecondaryPrograms", false);
         
-        addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, AmpTheme.class, "selectedNatPlanObj", true);
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, AmpTheme.class, "selectedNatPlanObj", false);       
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, AmpTheme.class, "selectedNatPlanObj", false);
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, AmpTheme.class, "selectedNatPlanObj", false);
@@ -163,9 +156,9 @@ public class AmpReportFiltersConverter {
     }
 
     /**
-     * Convert one of the Mondrian Filters to one of the fields in AmpARFilters and add it to the new filter.
+     * Convert one of the filters to one of the fields in AmpARFilters and add it to the new filter.
      * 
-     * @param mondrianFilterColumnName
+     * @param filterColumnName
      *          is the constant name in the new filters.
      * @param ampARFilterFieldClass
      *          is the Class of the field in AmpARFilters.
@@ -174,7 +167,8 @@ public class AmpReportFiltersConverter {
      * @param cleanup
      *          if true then old values will be replaced.
      */
-    private void addFilter(String mondrianFilterColumnName, Class ampARFilterFieldClass, String ampARFilterFieldName, boolean cleanup) {
+    private void addFilter(String filterColumnName, Class ampARFilterFieldClass, String ampARFilterFieldName,
+            boolean cleanup) {
         try {
             Session session = PersistenceManager.getSession();
             // Use reflection to dynamically call the setter method on AmpARFilter class, that includes generating the setter
@@ -186,7 +180,8 @@ public class AmpReportFiltersConverter {
             Method setterMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(ampARFilterFieldName), param);
 
             // Get values from Reports API filters.
-            FilterRule filterRule = this.filters.getAllFilterRules().get(new ReportElement(new ReportColumn(mondrianFilterColumnName)));
+            FilterRule filterRule = this.filters.getAllFilterRules().get(
+                    new ReportElement(new ReportColumn(filterColumnName)));
 
             if (filterRule != null) {
                 if (paramClass.getName().equals("java.util.Set") || paramClass.getName().equals("java.util.Collection")) {
@@ -217,21 +212,21 @@ public class AmpReportFiltersConverter {
                     }
                     // Use reflection to call the setter.
                     setterMethod.invoke(this.ampARFilter, values);
-                    logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + values.toString());
+                    logger.info("Found filter: " + filterColumnName + " with values: " + values.toString());
                 } else if (paramClass.getName().equals("java.lang.String")) {
                     setterMethod.invoke(this.ampARFilter, filterRule.toString());
-                    logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + filterRule.toString());
+                    logger.info("Found filter: " + filterColumnName + " with values: " + filterRule.toString());
                 } else if (paramClass.getName().equals("java.lang.Integer")) {
                     setterMethod.invoke(this.ampARFilter, Integer.valueOf(filterRule.toString()));
-                    logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + filterRule.toString());
+                    logger.info("Found filter: " + filterColumnName + " with values: " + filterRule.toString());
                 } else if (paramClass.getName().equals("java.lang.Double")) {
                     setterMethod.invoke(this.ampARFilter, Double.valueOf(filterRule.toString()));
-                    logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + filterRule.toString());
+                    logger.info("Found filter: " + filterColumnName + " with values: " + filterRule.toString());
                 } else {
                     throw new RuntimeException(paramClass.getName());
                 }
             } else {
-                logger.info("Not found filter: " + mondrianFilterColumnName);
+                logger.info("Not found filter: " + filterColumnName);
             }
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException e) {
@@ -239,15 +234,15 @@ public class AmpReportFiltersConverter {
         }
     }
 
-    private void addDateRangeFilter(String mondrianFilterColumnName, String fromMethod, String toMethod) {
+    private void addDateRangeFilter(String filterColumnName, String fromMethod, String toMethod) {
         try {
             Method setterFromMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(fromMethod), java.lang.String.class);
             Method setterToMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(toMethod), java.lang.String.class);           
             ReportElement filterElement = null;
-            if (mondrianFilterColumnName.equalsIgnoreCase(TRANSACTION_DATE)) {
+            if (filterColumnName.equalsIgnoreCase(TRANSACTION_DATE)) {
                 filterElement = new ReportElement(ElementType.DATE);
             } else {
-                filterElement = new ReportElement(new ReportColumn(mondrianFilterColumnName));
+                filterElement = new ReportElement(new ReportColumn(filterColumnName));
             }
             FilterRule filterRule = this.filters.getAllFilterRules().get(filterElement);
             if (filterRule != null) {
@@ -257,7 +252,7 @@ public class AmpReportFiltersConverter {
                 // Use reflection to call the setter.
                 setterFromMethod.invoke(this.ampARFilter, fromDate);
                 setterToMethod.invoke(this.ampARFilter, toDate);
-                logger.info("Found filter: " + mondrianFilterColumnName + " with values: " + fromDate + " / " + toDate);
+                logger.info("Found filter: " + filterColumnName + " with values: " + fromDate + " / " + toDate);
             }
         } catch (Exception e) {
             logger.error("Failed to add date range filter.", e);

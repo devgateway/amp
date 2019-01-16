@@ -42,6 +42,8 @@ public class ConfigHelper {
     public static final String T_YEAR_DEFAULT_END = "t_year_default_end";
     public static final String T_STATIC_RANGE = "t_static_range";
     public static final String T_DOUBLE = "t_Double";
+    public static final String T_DOUBLE_0_1 = "t_Double_0_1";
+
     public static final String T_STATIC_YEAR = "t_static_year";
     public static final String T_YEAR = "t_year";
     public static final String T_AUDIT_TRIAL_CLENAUP = "t_audit_trial_clenaup";
@@ -78,49 +80,6 @@ public class ConfigHelper {
         return list;
     }
 
-    /**
-     * Retrieves AmpGlobalSettings from request
-     * @param object
-     * @return AmpGlobalSettings
-     */
-    public static AmpGlobalSettings getGlobalSetting(AmpGlobalSettings set,LinkedHashMap<String, Object> object) {
-        set.setGlobalSettingsName(String.valueOf(object.get(SETTINGS_NAME)));
-        set.setGlobalSettingsPossibleValues(String.valueOf(object.get(POSSIBLE_VALUES)));
-        set.setGlobalSettingsValue(String.valueOf(object.get(SETTINGS_VALUE)));
-        if ("null".equalsIgnoreCase(set.getGlobalSettingsPossibleValues())) {
-            set.setGlobalSettingsPossibleValues("");
-        }
-        set.setGlobalSettingsDescription(String.valueOf(object.get(DESCRIPTION)));
-        set.setSection(String.valueOf(object.get(SECTION)));
-        set.setValueTranslatable(Boolean.valueOf(String.valueOf(object.get(VALUE_TRANSLATABLE))));
-        return set;
-    }
-    
-    /**
-     * Retrieves JsonBean from AmpGlobalSettings
-     * @param ampGlobalSetting
-     * @return JsonBean
-     */
-    public static JsonBean getGlobalSettingJson(AmpGlobalSettings ampGlobalSetting) {
-        JsonBean globalSetting = new JsonBean();
-        List<KeyValue> possiblesValues = ConfigHelper.getPossibleValues(ampGlobalSetting.getGlobalSettingsPossibleValues());
-        JsonBean pValues = new JsonBean();
-        if (possiblesValues!=null) {
-            for (KeyValue value : possiblesValues) {
-                pValues.set(value.getValue(), value.getKey());
-            }
-        }
-        globalSetting.set("settingName", ampGlobalSetting.getGlobalSettingsName());
-        globalSetting.set("settingValue", ampGlobalSetting.getGlobalSettingsValue());
-        globalSetting.set("possibleValues", ampGlobalSetting.getGlobalSettingsPossibleValues()); 
-        globalSetting.set("description", ampGlobalSetting.getGlobalSettingsDescription()); 
-        globalSetting.set("section", ampGlobalSetting.getSection()); 
-        globalSetting.set("valueTranslatable", ampGlobalSetting.getValueTranslatable());
-        globalSetting.set("possibleValuesIds", pValues);
-        
-        return globalSetting;
-    }
-    
     /**
      * Validate settingValue
      * @param ampGlobalSetting
@@ -175,6 +134,13 @@ public class ConfigHelper {
                 break;
             case T_DOUBLE:
                 isValid = isValidNumber(Double.class, value);
+                break;
+            case T_DOUBLE_0_1:
+                isValid = isValidNumber(Double.class, value);
+                if (isValid) {
+                    Double number = Double.parseDouble(value);
+                    isValid =  number >= 0D && number < 1;
+                }
                 break;
             case NULL_VALUE:
             case "":

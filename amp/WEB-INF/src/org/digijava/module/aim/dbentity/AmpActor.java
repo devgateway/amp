@@ -7,12 +7,11 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
 @TranslatableClass (displayName = "Actor")
-public class AmpActor  implements Serializable, Cloneable
-{
+public class AmpActor  implements Serializable, Cloneable {
     //IATI-check: not used in IATI
     private Long ampActorId ;
 
-    @Interchangeable(fieldTitle = "Name", importable = true)
+    @Interchangeable(fieldTitle = "Name", label = "Actor", importable = true)
     @TranslatableField
     private String name;
 
@@ -55,5 +54,4 @@ public class AmpActor  implements Serializable, Cloneable
         return super.clone();
     }
     
-
 }

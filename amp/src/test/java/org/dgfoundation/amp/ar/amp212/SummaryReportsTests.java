@@ -4,18 +4,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -26,17 +23,14 @@ import org.junit.Test;
  *
  */
 public class SummaryReportsTests extends ReportingTestCase {
-    
-    static Logger log = Logger.getLogger(SummaryReportsTests.class);
-    
+
     HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
     final static List<String> ACTS = Arrays.asList("TAC_activity_1", "Eth Water", "Unvalidated activity");
-    
-    @Override
-    protected NiReportExecutor getNiExecutor(List<String> activityNames) {
-        return getOfflineExecutor(activityNames);
+
+    public SummaryReportsTests() {
+        inTransactionRule = null;
     }
-    
+
     /**
      * builds a summary report spec with given hiers, AC / AD as measures
      * @param hiers
@@ -153,10 +147,5 @@ public class SummaryReportsTests extends ReportingTestCase {
                   new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION"), "Totals-Actual Commitments", "45,000", "Totals-Actual Disbursements", "0", "Primary Sector", "110 - EDUCATION"))));
 
         runNiTestCase(corTotalsOnly, summarySpec("by-region-sector-totals-only", Arrays.asList(ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR), GroupingCriteria.GROUPING_TOTALS_ONLY), ACTS);
-    }
-
-    @BeforeClass
-    public static void setUp() {
-        // this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
     }
 }

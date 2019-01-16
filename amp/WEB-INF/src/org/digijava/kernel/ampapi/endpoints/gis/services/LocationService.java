@@ -13,11 +13,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 
+import com.google.common.collect.ImmutableSet;
+import com.fasterxml.jackson.databind.node.POJONode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.node.POJONode;
-import org.codehaus.jackson.node.TextNode;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -38,13 +39,12 @@ import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.GeoJSON;
@@ -52,10 +52,8 @@ import org.digijava.kernel.ampapi.helpers.geojson.LineStringGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpStructure;
@@ -90,19 +88,17 @@ public class LocationService {
      * @param config json configuration
      * @return
      */
-    public JsonBean getTotals(String admlevel, JsonBean config, AmountsUnits amountUnits) {
-        JsonBean retlist = new JsonBean();
+    public AdmLevelTotals getTotals(String admlevel, PerformanceFilterParameters config, AmountsUnits amountUnits) {
         HardCodedCategoryValue admLevelCV = GisConstants.ADM_TO_IMPL_CATEGORY_VALUE.getOrDefault(admlevel,
                 CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
         admlevel = admLevelCV.getValueKey();
         
-        String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
         ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals", ArConstants.DONOR_TYPE);
         this.spec = spec;
         spec.addColumn(new ReportColumn(admlevel));
         spec.getHierarchies().addAll(spec.getColumns());
         // also configures the measure(s) from funding type settings request
-        SettingsUtils.applyExtendedSettings(spec, config);
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
         ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
         // THIS IS OLD, just allowing now to not reset the units when used by other services 
         if (amountUnits != null)
@@ -111,7 +107,7 @@ public class LocationService {
         AmpReportFilters filterRules = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
         
         if(config != null){
-            Map<String, Object> filters = (Map<String, Object>) config.get(EPConstants.FILTERS);
+            Map<String, Object> filters = config.getFilters();
             if (filters != null) {
                 filterRules = FilterUtils.getFilterRules(filters, null, filterRules);
             }
@@ -147,32 +143,29 @@ public class LocationService {
         admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
         spec.setFilters(filterRules);
         
-        String currcode = FilterUtils.getSettingbyName(config, SettingsConstants.CURRENCY_ID);
-        retlist.set("currency", currcode);
-        retlist.set("numberformat", numberformat);
+        String currcode = FilterUtils.getSettingbyName(config.getSettings(), SettingsConstants.CURRENCY_ID);
+
+        String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
+
         GeneratedReport report = EndpointUtils.runReport(spec);
-        List<JsonBean> values = new ArrayList<JsonBean>();
+        List<AdmLevelTotal> values = new ArrayList<>();
         
         if (report != null && report.reportContents != null && report.reportContents.getChildren() != null) {
             // find the admID (geocode) for each implementation location name
             
             for (ReportArea reportArea : report.reportContents.getChildren()) {
-                JsonBean item = new JsonBean();
                 Iterator<ReportCell> iter = reportArea.getContents().values().iterator();
-                BigDecimal value=(BigDecimal) iter.next().value;                
-                ReportCell reportcell = (ReportCell) iter.next();
+                BigDecimal value = (BigDecimal) iter.next().value;
+                ReportCell reportcell = iter.next();
                 //we fetch the entity id so we can Univocally search the GeoId
                 Long entityId=((IdentifiedReportCell)reportcell).entityId;
                 String admid = admLevelToGeoCode.get(entityId);
-                item.set("admID", admid);
-                item.set("amount", value);
-                if (admid!=null){
-                    values.add(item);
+                if (admid != null) {
+                    values.add(new AdmLevelTotal(admid, value));
                 }
             }
         }
-        retlist.set("values", values);
-        return retlist;
+        return new AdmLevelTotals(currcode, numberformat, values);
     }
     
     /**
@@ -192,12 +185,12 @@ public class LocationService {
         return levelToGeoCodeMap;
     }
     
-    public static List<ClusteredPoints> getClusteredPoints(JsonBean config) throws AmpApiException {
+    public static List<ClusteredPoints> getClusteredPoints(PerformanceFilterParameters config) throws AmpApiException {
         String adminLevel = "";
         final List<ClusteredPoints> l = new ArrayList<ClusteredPoints>();
 
         if (config != null) {
-            Map filters = (Map) config.get(EPConstants.FILTERS);
+            Map filters = config.getFilters();
             if (filters != null && filters.get("adminLevel") != null) {
                 adminLevel = filters.get("adminLevel").toString();
             }
@@ -287,7 +280,7 @@ public class LocationService {
     
         return l;
     }
-    private static Set<Long> getActivitiesForFiltering(JsonBean config, String adminLevel)
+    private static Set<Long> getActivitiesForFiltering(PerformanceFilterParameters config, String adminLevel)
             throws AmpApiException {
         Set<Long> activitiesId = new HashSet<Long>();
          
@@ -301,22 +294,22 @@ public class LocationService {
             add(ColumnConstants.AMP_ID);
         }});
         
-        SettingsUtils.configureMeasures(spec, config);
+        SettingsUtils.configureMeasures(spec, config.getSettings());
 
         ReportColumn implementationLevelColumn = null;
         if (adminLevel != null) {
             switch (adminLevel) {
                 case ColumnConstants.COUNTRY:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_COUNTRIES);
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.COUNTRY);
                     break;
                 case ColumnConstants.REGION:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_REGIONS);
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.REGION);
                     break;
                 case ColumnConstants.ZONE:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_ZONES);
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.ZONE);
                     break;
                 case ColumnConstants.DISTRICT:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_DISTRICTS);
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.DISTRICT);
                     break;
             }
         }
@@ -329,12 +322,12 @@ public class LocationService {
         }
         spec.setDisplayEmptyFundingRows(true);
         
-        SettingsUtils.applyExtendedSettings(spec, config);
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
         ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
         mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 
         if (config != null) {
-            Map<String, Object> filterMap = (Map<String, Object>) config.get(EPConstants.FILTERS);
+            Map<String, Object> filterMap = config.getFilters();
             AmpReportFilters filterRules = FilterUtils.getFilters(filterMap, new AmpReportFilters(mrs.getCalendar()));
 
             GisUtils.configurePerformanceFilter(config, filterRules);
@@ -379,11 +372,12 @@ public class LocationService {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<AmpStructure> getStructures(JsonBean config) throws AmpApiException{
+    public static List<AmpStructure> getStructures(PerformanceFilterParameters config) throws AmpApiException {
         List<AmpStructure> al = null;
-        Set<Long> activitiesId = getActivitiesForFiltering( config,null);
-        String queryString = "select s from " + AmpStructure.class.getName() + " s inner join s.activities a where"
-                    + " a.ampActivityId in (" + Util.toCSStringForIN(activitiesId) + " )";
+        Set<Long> activitiesId = getActivitiesForFiltering(config, null);
+        String queryString = "select s from " + AmpStructure.class.getName() + " s where"
+                    + " s.activity in (" + Util.toCSStringForIN(activitiesId) + " )";
+
         Query q = PersistenceManager.getSession().createQuery(queryString);
         al = q.list();
         return al;
@@ -401,22 +395,15 @@ public class LocationService {
                 fgj.properties.put("description", new TextNode(
                         StringEscapeUtils.escapeHtml(structure.getDescription())));
             }
-            
-            if (structure.getStructureColor() != null) { 
+
+            if (structure.getStructureColor() != null) {
                 AmpCategoryValue cValue = structure.getStructureColor();
                 if (isValidColor(cValue.getValue())) {
                     fgj.properties.put("color", new TextNode(TranslatorWorker.translateText(cValue.getValue())));  
                 }                
             }            
             
-            Set<AmpActivityVersion> av = structure.getActivities();
-            List<Long> actIds = new ArrayList<Long>();
-
-            for (AmpActivityVersion ampActivity : av) {
-                actIds.add(ampActivity.getAmpActivityId());
-            }
-
-            fgj.properties.put("activity", new POJONode(actIds));
+            fgj.properties.put("activity", new POJONode(ImmutableSet.of(structure.getActivity().getAmpActivityId())));
         } catch (NumberFormatException e) {
             logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
                     + structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "
@@ -438,7 +425,7 @@ public class LocationService {
         Matcher matcher = GisConstants.HEX_PATTERN.matcher(hex);
         return matcher.matches();
     }
-    
+
     private static GeoJSON getGeometry(AmpStructure structure) {
         String shape = StringUtils.isEmpty(structure.getShape()) ? GisConstants.GIS_STRUCTURE_POINT
                 : structure.getShape();

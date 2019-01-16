@@ -1,8 +1,7 @@
 package org.dgfoundation.amp.newreports;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.dgfoundation.amp.algo.AmpCollections;
 
 /**
@@ -10,7 +9,7 @@ import org.dgfoundation.amp.algo.AmpCollections;
  * 
  * @author Dolghier Constantin
  */
-@JsonSerialize(include=Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(value = "value")
 public abstract class ReportCell implements Comparable<ReportCell> {
     

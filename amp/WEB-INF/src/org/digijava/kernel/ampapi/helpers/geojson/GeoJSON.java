@@ -3,19 +3,17 @@ package org.digijava.kernel.ampapi.helpers.geojson;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.annotate.JsonAnyGetter;
-import org.codehaus.jackson.annotate.JsonAnySetter;
-import org.codehaus.jackson.annotate.JsonSubTypes;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeInfo.As;
-import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * A Bean representation of a GeoJSON base object.
  */
-@JsonTypeInfo(use=Id.NAME,include=As.PROPERTY,property="type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
     @JsonSubTypes.Type(value=PointGeoJSON.class,                name="Point"),
     @JsonSubTypes.Type(value=MultiPointGeoJSON.class,           name="MultiPoint"),
@@ -33,7 +31,7 @@ public abstract class GeoJSON implements Validation
     public CRSGeoJSON crs;
     @JsonIgnore
     public List<Double> bbox;
-    protected Map<String,JsonNode> properties;
+    protected Map<String, JsonNode> properties;
 
     @JsonAnySetter
     public void add(String key, JsonNode value)

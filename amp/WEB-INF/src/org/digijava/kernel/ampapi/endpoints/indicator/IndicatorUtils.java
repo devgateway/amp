@@ -1,44 +1,37 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONSerializer;
+import javax.ws.rs.core.Response;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
+import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevel;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
+import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
-import org.digijava.module.aim.dbentity.AmpIndicatorWorkspace;
 import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
@@ -71,102 +64,123 @@ public class IndicatorUtils {
             return result;
 
     }
-
-    public static JsonBean buildIndicatorLayerJson(AmpIndicatorLayer indicator) {
-        JsonBean indicatorJson = new JsonBean();
-
-        indicatorJson.set(IndicatorEPConstants.ID, indicator.getId());
-        indicatorJson.set(IndicatorEPConstants.NAME, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.NAME, indicator.getName(), indicator.getId()));
-        indicatorJson.set(IndicatorEPConstants.DESCRIPTION, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.DESCRIPTION, indicator.getDescription(), indicator.getId()));
-        indicatorJson.set(IndicatorEPConstants.UNIT, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.UNIT, indicator.getUnit(), indicator.getId()));
-        indicatorJson.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
-        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
-        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
-        indicatorJson.set(IndicatorEPConstants.ADMIN_LEVEL, IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex());
-        indicatorJson.set(IndicatorEPConstants.IS_POPULATION, indicator.isPopulation());
-        indicatorJson.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : 
-            indicator.getIndicatorType().getId());
-        indicatorJson.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
-        indicatorJson.set(IndicatorEPConstants.FIELD_ZERO_CATEGORY_ENABLED, indicator.getZeroCategoryEnabled());
-        indicatorJson.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
-        indicatorJson.set(IndicatorEPConstants.UPDATED_ON, FormatHelper.formatDate(indicator.getUpdatedOn()));
-
-        if (indicator.getCreatedBy() != null) {
-            indicatorJson.set(IndicatorEPConstants.CREATE_BY, indicator.getCreatedBy().getUser().getEmail());
+    
+    public static Indicator buildJsonIndicatorFromIndicatorLayer(AmpIndicatorLayer indLayer, boolean includeAdmLevel) {
+        Indicator apiIndicator = new Indicator();
+    
+        apiIndicator.setId(indLayer.getId());
+        apiIndicator.setName(TranslationUtil.getTranslatableFieldValue(
+                IndicatorEPConstants.NAME, indLayer.getName(), indLayer.getId()));
+        apiIndicator.setDescription(TranslationUtil.getTranslatableFieldValue(
+                IndicatorEPConstants.DESCRIPTION, indLayer.getDescription(), indLayer.getId()));
+        apiIndicator.setUnit(TranslationUtil.getTranslatableFieldValue(
+                IndicatorEPConstants.UNIT, indLayer.getUnit(), indLayer.getId()));
+        apiIndicator.setNumberOfClasses(indLayer.getNumberOfClasses());
+        
+        if (includeAdmLevel) {
+            apiIndicator.setAdmLevelId(indLayer.getAdmLevel().getId());
+            apiIndicator.setAdmLevelName(indLayer.getAdmLevel().getLabel());
+            String admLevelLabel = IndicatorEPConstants.ADM_PREFIX + indLayer.getAdmLevel().getIndex();
+            apiIndicator.setAdminLevel(AdmLevel.fromString(admLevelLabel));
         }
-
-        if (indicator.getColorRamp() != null) {
-            String[] colors = new String[indicator.getColorRamp().size()];
-            int i=0;
-            for (AmpIndicatorColor indicatorColor: indicator.getColorRamp()){
-                if (indicatorColor.getPayload() == IndicatorEPConstants.PAYLOAD_INDEX) {
-                    long colorId = ColorRampUtil.getColorId(indicatorColor.getColor());
-                    indicatorJson.set(IndicatorEPConstants.COLOR_RAMP_ID, colorId);
-                }
-                colors[i++] = indicatorColor.getColor();
+        
+        apiIndicator.setIndicatorTypeId(indLayer.getIndicatorType() == null ? null
+                : indLayer.getIndicatorType().getId());
+        apiIndicator.setAccessTypeId(indLayer.getAccessType().getValue());
+        apiIndicator.setZeroCategoryEnabled(indLayer.getZeroCategoryEnabled());
+        apiIndicator.setCreatedOn(indLayer.getCreatedOn());
+        apiIndicator.setUpdatedOn(indLayer.getUpdatedOn());
+    
+        if (indLayer.getCreatedBy() != null) {
+            apiIndicator.setCreatedBy(indLayer.getCreatedBy().getUser().getEmail());
+        }
+    
+        List<AmpIndicatorColor> colorList = new ArrayList<>(indLayer.getColorRamp());
+        colorList.sort(Comparator.comparing(AmpIndicatorColor::getPayload));
+        for (AmpIndicatorColor color : colorList) {
+            if (color.getPayload() == IndicatorEPConstants.PAYLOAD_INDEX) {
+                long colorId = ColorRampUtil.getColorId(color.getColor());
+                apiIndicator.setMultiColor(IndicatorEPConstants.MULTI_COLOR_PALETTES.contains(colorId));
+                apiIndicator.setColorRampId(colorId);
             }
-            indicatorJson.set(IndicatorEPConstants.COLOR_RAMP, colors);
+        }
+        apiIndicator.setColorRamp(colorList);
+        
+        return apiIndicator;
+    }
+
+    public static Indicator buildIndicatorLayerJson(AmpIndicatorLayer indLayer) {
+        Indicator apiIndicator = buildJsonIndicatorFromIndicatorLayer(indLayer, true);
+        apiIndicator.setPopulation(indLayer.isPopulation());
+
+        if (indLayer.getSharedWorkspaces() != null) {
+            List<Long> sharedWorkspaces = indLayer.getSharedWorkspaces().stream()
+                    .map(ind -> ind.getWorkspace().getAmpTeamId())
+                    .collect(Collectors.toList());
+            
+            apiIndicator.setSharedWorkspaces(sharedWorkspaces);
         }
 
-        if (indicator.getSharedWorkspaces() != null) {
-            Collection<JsonBean> sharedWorkspaces = new ArrayList<JsonBean>();
-            for (AmpIndicatorWorkspace indicatorWS: indicator.getSharedWorkspaces()){
-                sharedWorkspaces.add(SecurityUtil.getTeamJsonBean(indicatorWS.getWorkspace()));
-            }
-            indicatorJson.set(IndicatorEPConstants.SHARED_WORKSPACES, sharedWorkspaces);
+        int importedRecords = (indLayer.getIndicatorValues() != null ? indLayer.getIndicatorValues().size() : 0);
+        apiIndicator.setNumberOfImportedRecords(importedRecords);
+
+        return apiIndicator;
+    }
+    
+    public static List<Indicator> getApiIndicatorsForGis(List<AmpIndicatorLayer> indicators,
+                                                                   boolean includeAdmLevel) {
+        List<Indicator> apiIndicators = new ArrayList<>();
+        GapAnalysis gapAnalysis = new GapAnalysis();
+        
+        for (AmpIndicatorLayer indicator : indicators) {
+            Indicator apiIndicator = buildJsonIndicatorFromIndicatorLayer(indicator, includeAdmLevel);
+            
+            apiIndicator.setCanDoGapAnalysis(gapAnalysis.canDoGapAnalysis(indicator));
+            
+            apiIndicators.add(apiIndicator);
         }
-
-        indicatorJson.set(IndicatorEPConstants.NUMBER_OF_IMPORTED_RECORDS, (indicator.getIndicatorValues()!=null ? indicator.getIndicatorValues().size() : 0));
-
-        return indicatorJson;
+        
+        return apiIndicators;
     }
 
 
-    public static JsonBean buildSerializedIndicatorLayerJson(AmpIndicatorLayer indicator, JsonBean indicatorJson) {
+    public static Indicator buildSerializedIndicatorLayerJson(AmpIndicatorLayer indicator, Indicator indicatorJson) {
 
-        indicatorJson.set(IndicatorEPConstants.ID, (long) System.identityHashCode(indicator));
-        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
-        indicatorJson.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getValue());
-        indicatorJson.set(IndicatorEPConstants.ADMIN_LEVEL, IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex());
-        indicatorJson.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
+        indicatorJson.setId((long) System.identityHashCode(indicator));
+        indicatorJson.setAdmLevelId(indicator.getAdmLevel().getId());
+        indicatorJson.setAdmLevelName(indicator.getAdmLevel().getValue());
+        String admLevelLabel = IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex();
+        indicatorJson.setAdminLevel(AdmLevel.fromString(admLevelLabel));
+        indicatorJson.setCreatedOn(indicator.getCreatedOn());
 
         if (indicator.getColorRamp() != null) {
-            int i=0;
-            Collection<JsonBean> colorRampList = new ArrayList<JsonBean>();
-            for (AmpIndicatorColor indicatorColor: indicator.getColorRamp()){
-                JsonBean colorRamp = new JsonBean();
-                colorRamp.set("color",indicatorColor.getColor());
-                colorRamp.set("order",indicatorColor.getPayload());
-                colorRampList.add(colorRamp);
-            }
-            indicatorJson.set(IndicatorEPConstants.COLOR_RAMP, colorRampList);
+            indicatorJson.setColorRamp(new ArrayList<>(indicator.getColorRamp()));
         }
 
         if (indicator.getIndicatorValues() != null) {
-            Collection<JsonBean> indicatorValues = new ArrayList<JsonBean>();
+            List<IndicatorValue> indicatorValues = new ArrayList<>();
             for (AmpLocationIndicatorValue indicatorValue: indicator.getIndicatorValues()){
                 indicatorValues.add(getLocationIndicatorValueBean(indicatorValue));
             }
-            indicatorJson.set(IndicatorEPConstants.VALUES, indicatorValues);
+            indicatorJson.setValues(indicatorValues);
         }
 
-        indicatorJson.set(IndicatorEPConstants.NUMBER_OF_IMPORTED_RECORDS, (indicator.getIndicatorValues()!=null ? indicator.getIndicatorValues().size() : 0));
+        indicatorJson.setNumberOfImportedRecords(
+                indicator.getIndicatorValues() != null ? indicator.getIndicatorValues().size() : 0);
 
         return indicatorJson;
-    }
-
-    public static JsonBean getLocationIndicatorValueBean(AmpLocationIndicatorValue indicatorValue) {
-        JsonBean indicatorValueJson = new JsonBean();
-        indicatorValueJson.set(IndicatorEPConstants.VALUE, indicatorValue.getValue());
-        indicatorValueJson.set(IndicatorEPConstants.GEO_CODE_ID, indicatorValue.getLocation().getGeoCode());
-        indicatorValueJson.set(IndicatorEPConstants.NAME, indicatorValue.getLocation().getName());
-        indicatorValueJson.set(IndicatorEPConstants.ID, indicatorValue.getLocation().getId());
-
-        return indicatorValueJson;
     }
 
     public static boolean isAdmin() {
         return "yes".equals(TLSUtils.getRequest().getSession().getAttribute("ampAdmin"));
+    }
+    
+    private static IndicatorValue getLocationIndicatorValueBean(AmpLocationIndicatorValue indicatorValue) {
+        return new IndicatorValue(
+                indicatorValue.getLocation().getId(),
+                new BigDecimal(indicatorValue.getValue()),
+                indicatorValue.getLocation().getGeoCode(),
+                indicatorValue.getLocation().getName());
     }
 
     public static boolean hasRights(long indicatorId) {
@@ -187,32 +201,28 @@ public class IndicatorUtils {
         return false;
     }
 
-    public static JsonBean getList(Collection<AmpIndicatorLayer> indicatorLayers, Integer offset, Integer count) {
+    public static IndicatorPageDataResult getList(Collection<AmpIndicatorLayer> indicatorLayers,
+                                                  Integer offset, Integer count) {
 
         offset = Math.min(indicatorLayers.size(), (offset == null || offset >= indicatorLayers.size()) ? 0 : offset);
         count = (count == null ? IndicatorEPConstants.DEFAULT_COUNT : count);
         int totalPageCount = (indicatorLayers.size() % count == 0 ? (indicatorLayers.size() / count) : (indicatorLayers.size() / count) + 1);
 
-        JsonBean result = new JsonBean();
-        JsonBean page = new JsonBean();
+        Collection<AmpIndicatorLayer> col = new ArrayList<>(indicatorLayers)
+                .subList(offset, offset + Math.min(indicatorLayers.size() - offset, count));
 
-        Collection<JsonBean> indicatorLayerList = new ArrayList<JsonBean>();
-        Collection<AmpIndicatorLayer> col = new ArrayList<>(indicatorLayers).subList(offset, offset + Math.min(indicatorLayers.size() - offset, count));
-
-        for (AmpIndicatorLayer indicator: col){
-            JsonBean indicatorJson = IndicatorUtils.buildIndicatorLayerJson(indicator);
-            indicatorLayerList.add(indicatorJson);
-        }
-
-        page.set(IndicatorEPConstants.RECORDS_PER_PAGE,count);
-        page.set(IndicatorEPConstants.CURRENT_PAGE_NUMBER, (offset / count) + 1);
-        page.set(IndicatorEPConstants.TOTAL_PAGE_COUNT,totalPageCount);
-        page.set(IndicatorEPConstants.TOTAL_RECORDS,indicatorLayers.size());
-
-        result.set(IndicatorEPConstants.PAGE,page);
-        result.set(IndicatorEPConstants.DATA,indicatorLayerList);
-
-        return result;
+        
+        List<Indicator> indicators = col.stream()
+                .map(ind -> IndicatorUtils.buildIndicatorLayerJson(ind))
+                .collect(Collectors.toList());
+    
+        PageInformation page = new PageInformation();
+        page.setRecordsPerPage(count);
+        page.setCurrentPageNumber((offset / count) + 1);
+        page.setTotalPageCount(totalPageCount);
+        page.setTotalRecords(indicatorLayers.size());
+    
+        return new IndicatorPageDataResult(page, indicators);
     }
 
     public static final void validateOrderBy(String orderBy, String sort, ApiEMGroup errors) {
@@ -243,7 +253,7 @@ public class IndicatorUtils {
     
     /**
      * Get unique Population Layer designated for the given implementation location
-     * @param implLoc the implementation location (Region, etc)
+     * @param implementationLocation the implementation location (Region, etc)
      * @return the population layer or null if no unique layer found
      */
     public static AmpIndicatorLayer getPopulationLayer(AmpCategoryValue implementationLocation) {
@@ -270,16 +280,18 @@ public class IndicatorUtils {
      * @param isGapAnalysis
      * @return
      */
-    public static JsonBean getIndicatorsAndLocationValues(Long indicatorId, JsonBean input, boolean isGapAnalysis) {
-        AmpIndicatorLayer indicator = (AmpIndicatorLayer) DbUtil.getObjectOrNull(AmpIndicatorLayer.class, indicatorId);
+    public static Indicator getIndicatorsAndLocationValues(Long indicatorId, PerformanceFilterParameters input,
+            boolean isGapAnalysis) {
+        AmpIndicatorLayer indicator = DbUtil.getObjectOrNull(AmpIndicatorLayer.class, indicatorId);
         if (indicator == null) {
-            return ApiError.toError(IndicatorErrors.INVALID_ID.withDetails(String.valueOf(indicatorId)));
+            JsonBean error = ApiError.toError(IndicatorErrors.INVALID_ID.withDetails(String.valueOf(indicatorId)));
+            throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, error);
         }
         return getIndicatorsAndLocationValues(indicator, input, isGapAnalysis);
     }
     
-    public static JsonBean getIndicatorsAndLocationValues(AmpIndicatorLayer indicator, JsonBean input, 
-            boolean isGapAnalysis) {
+    public static Indicator getIndicatorsAndLocationValues(AmpIndicatorLayer indicator,
+            PerformanceFilterParameters input, boolean isGapAnalysis) {
      
         GapAnalysis gapAnalysis = isGapAnalysis ? new GapAnalysis(indicator, input) : null;
         boolean doingGapAnalysis = gapAnalysis != null && gapAnalysis.isReadyForGapAnalysis();
@@ -295,37 +307,27 @@ public class IndicatorUtils {
         }
         
         // build general indicator info
-        JsonBean response = new JsonBean();
-        response.set(EPConstants.NAME, indicator.getName());
-        // TODO: unify Indicator Layers and GIS API, use FIELD_NUMBER_OF_CLASSES
-        response.set("classes", indicator.getNumberOfClasses());
-        response.set(IndicatorEPConstants.ID, indicator.getId());
-        response.set(IndicatorEPConstants.UNIT, unit);
-        response.set(IndicatorEPConstants.DESCRIPTION, indicator.getDescription());
-        response.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
-        response.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
-        response.set(IndicatorEPConstants.DO_GAP_ANALYSIS, doingGapAnalysis);
-        response.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
-        response.set(IndicatorEPConstants.FIELD_ZERO_CATEGORY_ENABLED, indicator.getZeroCategoryEnabled());
-        
+        Indicator apiIndicator = buildJsonIndicatorFromIndicatorLayer(indicator, false);
+        apiIndicator.setGapAnalysis(doingGapAnalysis);
+    
         // build locations values
-        List<JsonBean> values = new ArrayList<>();
+        List<IndicatorValue> values = new ArrayList<>();
         for (AmpLocationIndicatorValue locIndValue : indicator.getIndicatorValues()) {
-            JsonBean object = new JsonBean();
             String geoCode = locIndValue.getLocation().getGeoCode();
             BigDecimal value = BigDecimal.valueOf(locIndValue.getValue());
             if (doingGapAnalysis) {
                 value = gapAnalysis.getGapAnalysisAmount(value, geoCode);
             }
-            object.set(IndicatorEPConstants.ID, locIndValue.getLocation().getId());
-            object.set(IndicatorEPConstants.VALUE, value);
-            object.set(IndicatorEPConstants.GEO_CODE_ID, geoCode);
-            object.set(IndicatorEPConstants.NAME, locIndValue.getLocation().getName());
-            
-            values.add(object);
+
+            values.add(new IndicatorValue(
+                    locIndValue.getLocation().getId(),
+                    value,
+                    geoCode,
+                    locIndValue.getLocation().getName()));
         }
-        response.set(IndicatorEPConstants.VALUES, values);
-        return response;
+        apiIndicator.setValues(values);
+        
+        return apiIndicator;
     }
     
     /**

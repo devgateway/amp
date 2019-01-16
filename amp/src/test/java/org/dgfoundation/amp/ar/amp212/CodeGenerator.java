@@ -165,8 +165,6 @@ DROP TABLE temp_orgs_to_delete;
 -----------------------------------------
 to export a database in a good-enough-for-benchmarks-use state, run the following SQL (warning: it will corrupt the history)
 
-TRUNCATE mondrian_fact_table;
-TRUNCATE mondrian_raw_donor_transactions;
 TRUNCATE dg_editor;
 TRUNCATE cached_v_pledges_funding_st;
 TRUNCATE cached_v_donor_funding;

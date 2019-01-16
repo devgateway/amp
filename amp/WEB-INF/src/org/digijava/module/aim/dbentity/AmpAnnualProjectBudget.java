@@ -130,4 +130,5 @@ public class AmpAnnualProjectBudget implements Serializable, Versionable, Clonea
     public void setAmpCurrencyId(AmpCurrency ampCurrencyId) {
         this.ampCurrencyId = ampCurrencyId;
     }
+    
 }

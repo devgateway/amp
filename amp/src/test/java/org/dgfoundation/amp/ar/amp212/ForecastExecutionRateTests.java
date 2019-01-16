@@ -7,12 +7,11 @@ import java.util.Map;
 import java.util.HashMap;
 
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.amp.ForecastExecutionRateBehaviour;
-import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.junit.Test;
@@ -22,7 +21,7 @@ import org.junit.Test;
  * @author Dolghier Constantin
  *
  */
-public class ForecastExecutionRateTests extends ReportingTestCase {
+public class ForecastExecutionRateTests extends AmpReportingTestCase {
         
     ForecastExecutionRateBehaviour ferbeh = ForecastExecutionRateBehaviour.instance;
     
@@ -297,10 +296,5 @@ public class ForecastExecutionRateTests extends ReportingTestCase {
         checkCalculatedValue(140.0, "pipe2010", 2, "pipe2011", 5, "proj2012", 3, MeasureConstants.ACTUAL_DISBURSEMENTS, 14);
         
         checkCalculatedValue(140.0, "pipe2010", 2, "pipe2011", 5, "proj2012", 3, "proj2011", 500, MeasureConstants.ACTUAL_DISBURSEMENTS, 14);
-    }
-    
-    @Override
-    protected NiReportExecutor getNiExecutor(List<String> activityNames) {
-        return getDbExecutor(activityNames);
     }
 }

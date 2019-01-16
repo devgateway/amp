@@ -9,10 +9,19 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.ArrayProperty;
+import io.swagger.models.properties.BooleanProperty;
+import io.swagger.models.properties.LongProperty;
+import io.swagger.models.properties.MapProperty;
+import io.swagger.models.properties.StringProperty;
+import io.swagger.models.properties.UntypedProperty;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
+import org.digijava.kernel.ampapi.swagger.converters.ModelDescriber;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -25,7 +34,7 @@ import org.digijava.module.aim.util.Identifiable;
  * 
  * @author Nadejda Mandrescu
  */
-public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
+public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> implements ModelDescriber {
     private ObjectMapper mapper = new ObjectMapper();
     private final ThreadLocal<SimpleDateFormat> sdfIn = new ThreadLocal<>();
     private final ThreadLocal<SimpleDateFormat> sdfApiOut = new ThreadLocal<>();
@@ -48,7 +57,6 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
         writeField("workspace-group", ampTeam.getWorkspaceGroup() == null ? null : ampTeam.getWorkspaceGroup().getValue());
         
         writeField("workspace-lead-id", ampTeam.getTeamLead() == null ? null : ampTeam.getTeamLead().getAmpTeamMemId());
-        writeField("child-workspaces", ampTeam.getChildrenWorkspaces());
         writeField("add-activity", ampTeam.getAddActivity());
         writeField("is-computed", ampTeam.getComputation());
         writeField("hide-draft", ampTeam.getHideDraftActivities());
@@ -108,5 +116,31 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
             throw new IOException(e);
         }
     }
-    
+
+    @Override
+    public Model describe() {
+        ModelImpl model = new ModelImpl();
+        model.name("AmpTeam");
+
+        model.addProperty("id", new LongProperty());
+        model.addProperty("name", new UntypedProperty());
+        model.addProperty("description", new UntypedProperty());
+        model.addProperty("workspace-group", new StringProperty());
+        model.addProperty("workspace-lead-id", new LongProperty());
+        model.addProperty("add-activity", new BooleanProperty());
+        model.addProperty("is-computed", new BooleanProperty());
+        model.addProperty("hide-draft", new BooleanProperty());
+        model.addProperty("is-cross-team-validation", new BooleanProperty());
+        model.addProperty("use-filter", new BooleanProperty());
+        model.addProperty("parent-workspace-id", new LongProperty());
+        model.addProperty("access-type", new StringProperty());
+        model.addProperty("is-private", new BooleanProperty());
+        model.addProperty("permission-strategy", new StringProperty());
+        model.addProperty("fm-template-id", new LongProperty());
+        model.addProperty("workspace-prefix", new StringProperty());
+        model.addProperty("organizations", new ArrayProperty(new LongProperty()));
+        model.addProperty("workspace-filters", new MapProperty());
+
+        return model;
+    }
 }

@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.security.services;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +9,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.dto.User;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
@@ -69,10 +66,7 @@ public class UserService {
         user.setFirstName(ampUser.getFirstNames());
         user.setLastName(ampUser.getLastName());
         user.setEmail(ampUser.getEmail());
-        if (ampUser.getPasswordChangedAt() != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT);
-            user.setPasswordChangedAt(sdf.format(ampUser.getPasswordChangedAt()));
-        }
+        user.setPasswordChangedAt(ampUser.getPasswordChangedAt());
         user.setBanned(ampUser.isBanned());
         if (ampUser.getPledger() != null) {
             user.setPledger(ampUser.getPledger());

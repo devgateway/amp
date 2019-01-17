@@ -4,4 +4,5 @@
 <suppressions>
     <suppress files="src/test/java/.*\.java" checks=".*"/>
     <suppress files="AmpReportsSchema\.java" checks="MethodName"/>
+    <suppress files="ReportTypesResolver\.java" checks="MagicNumber"/>
 </suppressions>

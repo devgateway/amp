@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.util;
+package org.digijava.kernel.ampapi.endpoints.serializers;
 
 import java.io.IOException;
 import java.text.DateFormat;

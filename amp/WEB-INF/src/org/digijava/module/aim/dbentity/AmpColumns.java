@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.digijava.module.aim.annotations.reports.Identificator;
 
 public class AmpColumns implements Serializable, Comparable<AmpColumns>

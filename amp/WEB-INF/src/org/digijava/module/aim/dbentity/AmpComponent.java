@@ -29,7 +29,7 @@ import org.digijava.module.aim.util.Output;
  * @author Priyajith
  */
 @TranslatableClass (displayName = "Component")
-public class AmpComponent implements Serializable,Comparable<AmpComponent>, Versionable, Cloneable {
+public class AmpComponent implements Serializable, Comparable<AmpComponent>, Versionable, Cloneable {
     
     //IATI-check: to be ignored
     
@@ -53,7 +53,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING, importable = true)
     private Set<AmpComponentFunding> fundings;
-    
+
     public static class AmpComponentComparator implements Comparator<AmpComponent>{
         @Override
         public int compare(AmpComponent o1, AmpComponent o2) {
@@ -305,4 +305,5 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
     public String toString() {
         return title;
     }
+    
 }

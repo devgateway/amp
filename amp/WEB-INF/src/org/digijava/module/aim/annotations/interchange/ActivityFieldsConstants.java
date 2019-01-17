@@ -65,6 +65,7 @@ public class ActivityFieldsConstants {
     public static final String CONTRACTING_AGENCY = "Contracting Agency";
     public static final String REGIONAL_GROUP = "Regional Group";
     public static final String SECTOR_GROUP = "Sector Group";
+    public static final String ACTIVITY_GROUP = "activity_group";
 
     public static final Map<String, String> ORG_ROLE_CODES = new ImmutableMap.Builder<String, String>()
             .put(InterchangeUtils.underscorify(DONOR_ORGANIZATION), Constants.FUNDING_AGENCY)

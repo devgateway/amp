@@ -1,19 +1,14 @@
 package org.dgfoundation.amp.ar.amp212;
 
 import java.util.Arrays;
-import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -23,22 +18,13 @@ import org.junit.Test;
  * @author Alexandru Cartaleanu
  *
  */
-//@RunWith(ConcurrentTestRunner.class)
 public class OffDbNiReportEngineTests extends BasicSanityChecks {
-    
-    static Logger log = Logger.getLogger(OffDbNiReportEngineTests.class);
-    
-    HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
+
     public OffDbNiReportEngineTests() {
+        inTransactionRule = null;
         nrRunReports = 0;
     }
-    
-//  @Override
-//  public<K> K buildNiReportDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {
-//      NiReportExecutor executor = getExecutor(activityNames);
-//      return executor.executeReport(spec, outputBuilder);
-//  }   
-    
+
     @Test
     public void testVarianceAndAverageFlat() {
         NiReportModel cor = new NiReportModel("testVarianceAndAverageMeasuresFlat")
@@ -92,16 +78,5 @@ public class OffDbNiReportEngineTests extends BasicSanityChecks {
             GroupingCriteria.GROUPING_YEARLY);
         
         runNiTestCase(spec, "en", Arrays.asList("custom_1", "TAC_activity_1"), cor);
-    }
-
-    
-    @Override
-    protected NiReportExecutor getNiExecutor(List<String> activityNames) {
-        return getOfflineExecutor(activityNames);
-    }
-    
-    @BeforeClass
-    public static void setUp() {
-        // this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
     }
 }

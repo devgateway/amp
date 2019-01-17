@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpContactPhoneProperty;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -44,10 +45,10 @@ public class AmpContactsWorker {
         Set<AmpContactProperty> retVal=null;
         if(helperProperties!=null && helperProperties.length>0){
             for (ContactPropertyHelper helperProperty : helperProperties) {
-                AmpContactProperty property=new AmpContactProperty();
+                AmpContactProperty property = AmpContactProperty.instantiate(helperProperty.getName());
                 property.setName(helperProperty.getName());
                 if(helperProperty.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-                    property.setType(
+                    ((AmpContactPhoneProperty) property).setType(
                             CategoryManagerUtil.getAmpCategoryValueFromDb(helperProperty.getPhoneTypeId(), false));
                     property.setValue(helperProperty.getValue());
                 }else{
@@ -73,8 +74,9 @@ public class AmpContactsWorker {
             for (AmpContactProperty property : properties) {
                 ContactPropertyHelper contactProperty=new ContactPropertyHelper();
                 contactProperty.setName(property.getName());
-                if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getType() != null) {
-                    contactProperty.setPhoneTypeId(property.getType().getId());
+                if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)
+                        && ((AmpContactPhoneProperty) property).getType() != null) {
+                    contactProperty.setPhoneTypeId(((AmpContactPhoneProperty) property).getType().getId());
                 }
                 contactProperty.setValue(property.getValue());
 

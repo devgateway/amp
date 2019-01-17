@@ -11,7 +11,7 @@ import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.currency.CurrencyInflationUtil;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.currency.inflation.InflationRateGenerator;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
@@ -20,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.hibernate.Session;
 import org.junit.Test;
 
 /**
@@ -27,7 +28,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class InflationRatesTests extends ReportingTestCase {
+public class InflationRatesTests extends AmpReportingTestCase {
     
     private final static String DP = "yyyy-MM-dd";
 
@@ -55,9 +56,9 @@ public class InflationRatesTests extends ReportingTestCase {
     }
 
     private void saveInflation(final AmpInflationRate inflationRate) {
-        PersistenceManager.getSession().save(inflationRate);
-        PersistenceManager.getSession().flush();
-        PersistenceManager.endSessionLifecycle();
+        Session session = PersistenceManager.getSession();
+        session.save(inflationRate);
+        session.flush();
     }
     
     @Test

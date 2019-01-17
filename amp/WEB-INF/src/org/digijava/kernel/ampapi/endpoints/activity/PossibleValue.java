@@ -48,6 +48,10 @@ public class PossibleValue {
         this(id, value, translatedValues, null, ImmutableList.of());
     }
 
+    public PossibleValue(String id, String value, Map<String, String> translatedValues, Object extraInfo) {
+        this(id, value, translatedValues, extraInfo, ImmutableList.of());
+    }
+
     public PossibleValue withChildren(List<PossibleValue> children) {
         return new PossibleValue(id, value, translatedValues, extraInfo, children);
     }

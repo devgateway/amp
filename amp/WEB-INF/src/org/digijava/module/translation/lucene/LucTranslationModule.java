@@ -2,7 +2,6 @@ package org.digijava.module.translation.lucene;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -10,9 +9,10 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Hit;
+import org.apache.lucene.util.Version;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.lucene.AmpLuceneDoc;
 import org.digijava.kernel.lucene.LucModule;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -42,7 +42,7 @@ public class LucTranslationModule implements LucModule<Message> {
 
     @Override
     public Analyzer getAnalyzer() {
-        return new StandardAnalyzer();
+        return new StandardAnalyzer(Version.LUCENE_36);
     }
 
     @Override
@@ -68,15 +68,13 @@ public class LucTranslationModule implements LucModule<Message> {
     @Override
     public Document convertToDocument(Message item) {
         Document doc = new Document();
-//      Field id=new Field(ID_FIELD, item.getKey()+"_", Field.Store.YES, Field.Index.UN_TOKENIZED);
-        Field key=new Field(FIELD_KEY, item.getKey(), Field.Store.YES, Field.Index.UN_TOKENIZED);
-        Field lang=new Field(FIELD_LANG, item.getLocale(), Field.Store.YES, Field.Index.UN_TOKENIZED);
-        Field message=new Field(FIELD_MESSAGE, item.getMessage(), Field.Store.YES, Field.Index.TOKENIZED);
-//      Field original=new Field("trnOriginal", item.getOriginalMessage(), Field.Store.YES, Field.Index.TOKENIZED);
+        Field key = new Field(FIELD_KEY, item.getKey(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+        Field lang = new Field(FIELD_LANG, item.getLocale(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+        Field message = new Field(FIELD_MESSAGE, item.getMessage(), Field.Store.YES, Field.Index.ANALYZED);
         doc.add(key);
         doc.add(lang);
         doc.add(message);
-//      doc.add(original);
+        
         return doc;
     }
 
@@ -93,12 +91,13 @@ public class LucTranslationModule implements LucModule<Message> {
     }
 
     @Override
-    public Message hitToItem(Hit hit) throws IOException {
+    public Message luceneDocToItem(AmpLuceneDoc luceneDocument) throws IOException {
         Message msg = new Message();
-        Document doc = hit.getDocument();
+        Document doc = luceneDocument.getDocument();
         msg.setKey(doc.get(FIELD_KEY));
         msg.setLocale(doc.get(FIELD_LANG));
         msg.setMessage(doc.get(FIELD_MESSAGE));
+        
         return msg;
     }
 

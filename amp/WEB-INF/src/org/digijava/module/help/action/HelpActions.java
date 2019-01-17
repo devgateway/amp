@@ -1,6 +1,5 @@
 package org.digijava.module.help.action;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -10,7 +9,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,7 +34,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.search.Hits;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -47,6 +44,7 @@ import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.lucene.AmpLuceneTopDocs;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -249,9 +247,10 @@ public class HelpActions extends DispatchAction {
         //for lucene these two is called suffix of index, it does not know about module instances. 
         String suffix = moduleInstance + "_" + locale;
         //perform search
-        Hits hits = LuceneWorker.search(HelpTopicHelper.class, key, request.getSession().getServletContext(), suffix);
+        AmpLuceneTopDocs luceneTopDocs = LuceneWorker.search(HelpTopicHelper.class, key, 
+                request.getSession().getServletContext(), suffix);
         //converts hits to list of helper beans
-        List<HelpTopicHelper> topics = LuceneWorker.hitsToSortedList(hits,HelpTopicHelper.class, suffix);
+        List<HelpTopicHelper> topics = LuceneWorker.topDocsToSortedList(luceneTopDocs, HelpTopicHelper.class, suffix);
         if (topics!=null){
             Collections.sort(topics, new HelpUtil.HelpTopicHelperScoreComparator());
         }
@@ -366,13 +365,14 @@ public class HelpActions extends DispatchAction {
                 if(key.length() != 0){
                      Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
                      //System.out.println("Key:"+key);
-                     Hits hits =  LuceneUtil.helpSearch("title", key, request.getSession().getServletContext());
+                     AmpLuceneTopDocs luceneTopDocs =  LuceneUtil.helpSearch("title", key, 
+                             request.getSession().getServletContext());
             
                      String artikleTitle;
                      
                      HelpForm help = (HelpForm) form;   
                      //System.out.println("hits.length():"+hits.length());
-                      int hitCount = hits.length();   
+                      int hitCount = luceneTopDocs.size();
                        
                       if(hitCount == 0){
                         
@@ -385,7 +385,7 @@ public class HelpActions extends DispatchAction {
                           for(int i=0; (i < hitCount && i < 10); i++){
                         
             
-                          Document doc = hits.doc(i);
+                          Document doc = luceneTopDocs.getDocument(i).getDocument();
                             if(doc.get("lang").equals(locale)){  
                               
                            String title = doc.get("title");

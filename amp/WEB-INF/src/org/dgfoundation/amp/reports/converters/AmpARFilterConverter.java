@@ -292,9 +292,12 @@ public class AmpARFilterConverter {
             depth++;
         }
         String levelColumnName = columnName + " Level " + depth;
+
         if (arFilter.isPledgeFilter()) {
-            levelColumnName = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(levelColumnName, levelColumnName);
+            levelColumnName =
+                    AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(levelColumnName, levelColumnName);
         }
+        
         return levelColumnName;
     }
     

@@ -32,8 +32,7 @@ function setAction(action){
 
 function isEditable() {
   var hdnId=document.getElementById("hdnId");
-  debugger;
-  return hdnId != null && hdnId.value !== ''
+  return hdnId != null && hdnId.value !== '' && hdnId.value !== '0';
 }
 
 function saveJc(){

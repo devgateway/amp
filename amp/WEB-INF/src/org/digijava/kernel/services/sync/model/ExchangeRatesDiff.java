@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
-import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateSerializer;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
 
 /**
  * @author Octavian Ciubotaru

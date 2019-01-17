@@ -1,11 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.currency.dto;
 
 import java.util.Date;
-
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateSerializer;
 
 /**
  * @author Octavian Ciubotaru

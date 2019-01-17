@@ -6,12 +6,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableMap;
-import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateSerializer;
 
 /**
  * @author Octavian Ciubotaru

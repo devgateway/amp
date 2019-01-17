@@ -417,7 +417,7 @@ public class EndpointUtils {
                             } catch (NoSuchMethodException | SecurityException | IllegalAccessException
                                     | IllegalArgumentException | InvocationTargetException e) {
                             } catch (InstantiationException e) {
-                                logger.error(e);
+                                logger.error(e.getMessage(), e);
                             }
                         }
                         if (shouldCheck) {

@@ -192,6 +192,10 @@ public class FiltersConstants {
     
     // groups
     public static final String OTHER = "Other";
+
+    // filter names
+    public static final String ACTIVITY_BUDGET_NAME = "Activity Budget";
+    public static final String ACTIVITY_STATUS_NAME = "Activity Status";
     
     /** filters IDs to main Group (Tab) mapping */
     public static final Map<String, String> ID_GROUP_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{

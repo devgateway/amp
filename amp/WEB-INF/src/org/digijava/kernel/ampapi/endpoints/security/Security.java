@@ -66,7 +66,7 @@ public class Security implements ErrorReportingEndpoint {
                     + "Workspace parameter is optional. If specified all with calls issued with the provided token "
                     + "will be handled for respective workspace.\n")
 
-    public UserSessionInformation authenticate(AuthenticationRequest authRequest) {
+    public UserSessionInformation authenticate(@ApiParam(required = true) AuthenticationRequest authRequest) {
         return securityService.authenticate(authRequest);
     }
 

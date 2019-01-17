@@ -241,7 +241,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.APPROVAL_STATUS, name = ColumnConstants.APPROVAL_STATUS)
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.APPROVAL_STATUS, 
-                        visibilityCheck = "hasToShowActivityapprovalStatusFilter")
+                        visibilityCheck = "hasToShowActivityApprovalStatusFilter")
     public FilterList getActivityApprovalStatus() {
         return FiltersManager.getInstance().getApprovalStatusFilter();
     }
@@ -282,7 +282,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/activityStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.STATUS, name = "Activity Status")
+    @ApiMethod(id = FiltersConstants.STATUS, name = FiltersConstants.ACTIVITY_STATUS_NAME)
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.STATUS)
     public FilterList getActivityStatus() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.STATUS);
@@ -296,7 +296,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/activityBudget/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.ON_OFF_TREASURY_BUDGET, name = "Activity Budget")
+    @ApiMethod(id = FiltersConstants.ON_OFF_TREASURY_BUDGET, name = FiltersConstants.ACTIVITY_BUDGET_NAME)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.ON_OFF_TREASURY_BUDGET)
     public FilterList getActivityBudget() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.ON_OFF_TREASURY_BUDGET);
@@ -368,7 +368,7 @@ public class NiFiltersEndpoint {
     @Path("/financingInstruments/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.FINANCING_INSTRUMENT, name = ColumnConstants.FINANCING_INSTRUMENT)
-    @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.FINANCING_INSTRUMENT)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.FINANCING_INSTRUMENT)
     public FilterList getFinancingInstruments() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.FINANCING_INSTRUMENT);
     }

@@ -5,7 +5,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
-import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateSerializer;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings.FreezeOptions;
 
 public class DataFreezeEvent {

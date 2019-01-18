@@ -257,7 +257,7 @@ public class FilterUtils {
     }
     
     public String simpleColumnNameFromFilterId(String filterId) {
-        return columnNameToId.get(filterId);
+        return idToSimpleColumn.get(filterId);
     }
 
     private static AmpReportFilters getApiDateFilters(Map<String, Object> filter, AmpReportFilters filterRules) {
@@ -477,7 +477,6 @@ public class FilterUtils {
      * filter in Gregorian CAL 2009: "01/01/2009 to 31/12/2009" in ETH Calendar
      * equals to "11/09/2016 to 10/09/2017" in GREG
      *
-     * @param formParams
      * @param spec
      */
     public static void updateAllDateFilters(ReportSpecificationImpl spec) {

@@ -397,7 +397,7 @@ public class NiFiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.DISASTER_RESPONSE_MARKER, 
                     name = ColumnConstants.DISASTER_RESPONSE_MARKER)
-    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.DISASTER_RESPONSE_MARKER)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.DISASTER_RESPONSE_MARKER)
     public FilterList getDisasterResponse() {
         return FiltersManager.getInstance().getBooleanFilter(FiltersConstants.DISASTER_RESPONSE_MARKER);
     }

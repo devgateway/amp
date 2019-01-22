@@ -32,9 +32,9 @@ public final class CategoryValueFilterListManager implements FilterListManager {
             .put(FiltersConstants.MODE_OF_PAYMENT, 
                 new CategoryBean(ColumnConstants.MODE_OF_PAYMENT, CategoryConstants.MODE_OF_PAYMENT_KEY))
             .put(FiltersConstants.STATUS, 
-                new CategoryBean(ColumnConstants.STATUS, CategoryConstants.ACTIVITY_STATUS_KEY))
+                new CategoryBean(FiltersConstants.ACTIVITY_STATUS_NAME, CategoryConstants.ACTIVITY_STATUS_KEY))
             .put(FiltersConstants.ON_OFF_TREASURY_BUDGET, 
-                new CategoryBean(ColumnConstants.ON_OFF_TREASURY_BUDGET, CategoryConstants.ACTIVITY_BUDGET_KEY))
+                new CategoryBean(FiltersConstants.ACTIVITY_BUDGET_NAME, CategoryConstants.ACTIVITY_BUDGET_KEY))
             .put(FiltersConstants.FUNDING_STATUS, 
                 new CategoryBean(ColumnConstants.FUNDING_STATUS, CategoryConstants.FUNDING_STATUS_KEY))
             .put(FiltersConstants.EXPENDITURE_CLASS, 

@@ -6,21 +6,23 @@ public class AvailableMethod {
     public AvailableMethod() {
         this.ui = false;
     }
-
+    
+    @ApiModelProperty(value = "Name to display", example = "Translations")
     private String name;
 
-    @ApiModelProperty("Should be visible in UI?")
+    @ApiModelProperty(value = "Should be visible in UI?", example = "false")
     private Boolean ui;
 
-    @ApiModelProperty("Path to operation")
+    @ApiModelProperty(value = "Path to operation", example = "/rest/translations/label-translations")
     private String endpoint;
 
-    @ApiModelProperty("Http method")
+    @ApiModelProperty(value = "Http method", example = "POST")
     private String method;
 
+    @ApiModelProperty(value = "Method id", example = "Translations")
     private String id;
 
-    @ApiModelProperty("Used to group filters under different tabs")
+    @ApiModelProperty(value = "Used to group filters under different tabs", example = "Unassigned")
     private String tab;
 
     @ApiModelProperty("Columns linked to this filter")

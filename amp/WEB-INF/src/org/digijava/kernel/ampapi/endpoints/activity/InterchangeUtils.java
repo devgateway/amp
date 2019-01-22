@@ -721,7 +721,7 @@ public class InterchangeUtils {
         if (tm != null) {
             activityInformation.setEdit(isEditableActivity(tm, projectId));
             if (activityInformation.isEdit()) {
-                activityInformation.setValidate(ActivityUtil.canValidateAcitivty(project, tm));
+                activityInformation.setValidate(ActivityUtil.canValidateActivity(project, tm));
             }
             activityInformation.setValidationStatus(ActivityUtil.getValidationStatus(project, tm));
             if (activityInformation.getValidationStatus() == ValidationStatus.AUTOMATIC_VALIDATION) {

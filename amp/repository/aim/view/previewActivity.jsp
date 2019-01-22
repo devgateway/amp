@@ -20,6 +20,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs"%> 
 
 <jsp:include page="activityHistoryUtil.jsp" flush="true" />
+<jsp:include page="activityViewWorkspaces.jsp" flush="true" />
 <%@page import="java.math.BigDecimal"%>
 <%@ page import="org.digijava.module.aim.util.TeamUtil" %>
 <style type="text/css">
@@ -2596,7 +2597,6 @@ function collapseAll() {
 </module:display>
 
 <jsp:include page="previewActivityRegionalObservations.jsp"></jsp:include>
-
 <jsp:include page="previewActivityLineMinistryObservations.jsp"></jsp:include>
 
 <!-- RELATED ORGANIZATIONS SECTION -->

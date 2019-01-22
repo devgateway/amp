@@ -1517,7 +1517,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                         
                     } else {
                         // none computed workspace
-                        queryString +=" where gr.ampActivityLastVersion.team in  (" + Util.toCSStringForIN(relatedTeams) + ") ";                        
+                        queryString += " where gr.ampActivityLastVersion.team in  ("
+                                + Util.toCSStringForIN(relatedTeams) + ") ";
                     }
                 queryString += "  and lower(" + activityName + ") like lower(:searchStr) group by gr.ampActivityLastVersion.ampActivityId," + activityName + " order by " + activityName;
                 query=session.createQuery(queryString);
@@ -2042,47 +2043,63 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         return result;
     }
 
-    public static boolean canValidateAcitivty(AmpActivityVersion activity,  TeamMember teamMember) {
-
+    public static boolean canValidateActivity(AmpActivityVersion activity, TeamMember teamMember) {
         boolean canValidate = false;
+        
         if (!activity.getDraft()) {
             AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
             String validationOption = appSettings != null ? appSettings.getValidation() : null;
-
-
-            Boolean crossteamvalidation =
-                    (appSettings != null && appSettings.getTeam() != null)
-                            ? appSettings.getTeam().getCrossteamvalidation()
-                            : false;
-
-            //Check if cross team validation is enable
-            Boolean crossteamcheck = false;
-            if (crossteamvalidation) {
-                crossteamcheck = true;
-            } else {
-                //check if the activity belongs to the team where the user is logged.
-                if (teamMember != null && teamMember.getTeamId() != null && activity.getTeam() != null
-                        && activity.getTeam().getAmpTeamId() != null) {
-                    crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
-                }
-            }
-            boolean teamLeadFlag = teamMember.getTeamHead() || teamMember.isApprover();
-            if ("alledits".equalsIgnoreCase(validationOption)) {
-                if (teamLeadFlag && activity.getTeam() != null && crossteamcheck
-                        && (ApprovalStatus.STARTED.equals(activity.getApprovalStatus())
-                        || ApprovalStatus.EDITED.equals(activity.getApprovalStatus()))) {
-                    canValidate = true;
-                }
-            } else {
-                //it will display the validate label only if it is just started and was not approved not even once
-                if ("newonly".equalsIgnoreCase(validationOption) && crossteamcheck) {
-                    if (teamLeadFlag && ApprovalStatus.STARTED.equals(activity.getApprovalStatus())) {
+            
+            boolean isTeamMemberValidator = isTeamMemberValidator(teamMember, activity);
+            
+            if (isTeamMemberValidator) {
+                if ("alledits".equalsIgnoreCase(validationOption)) {
+                    if (activity.getTeam() != null
+                            && (ApprovalStatus.STARTED.equals(activity.getApprovalStatus())
+                            || ApprovalStatus.EDITED.equals(activity.getApprovalStatus()))) {
                         canValidate = true;
                     }
-                }
+                } else {
+                    //it will display the validate label only if it is just started and was not approved not even once
+                    if ("newonly".equalsIgnoreCase(validationOption)
+                            && ApprovalStatus.STARTED.equals(activity.getApprovalStatus())) {
+                            canValidate = true;
+                        }
+                    }
             }
         }
+        
         return canValidate;
+    }
+    
+    public static boolean isTeamMemberValidator(TeamMember teamMember, AmpActivityVersion activity) {
+        
+        if (teamMember.getTeamHead()) {
+            return true;
+        }
+    
+        AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
+    
+        boolean crossTeamValidation = (appSettings != null && appSettings.getTeam() != null)
+                ? appSettings.getTeam().getCrossteamvalidation() : false;
+    
+        //Check if cross team validation is enable
+        boolean crossTeamCheck = false;
+    
+        if (activity.getTeam() != null) {
+            if (crossTeamValidation) {
+                crossTeamCheck = true;
+            } else {
+                //check if the activity belongs to the team where the user is logged.
+                if (teamMember.getTeamId() != null && activity.getTeam().getAmpTeamId() != null) {
+                    crossTeamCheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
+                }
+            }
+        
+            return teamMember.isApprover() && crossTeamCheck;
+        }
+        
+        return false;
     }
 
     private static int daysBetween(Date d1, Date d2) {

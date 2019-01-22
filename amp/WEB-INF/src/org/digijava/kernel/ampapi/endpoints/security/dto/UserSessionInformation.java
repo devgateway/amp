@@ -10,14 +10,15 @@ public class UserSessionInformation {
     private String token;
     
     @JsonProperty("token-expiration")
+    @ApiModelProperty(value = "The expiration time in ms", example = "1546859700327")
     private Long tokenExpiration;
     
     @JsonProperty("url")
-    @ApiModelProperty(example = "http://localhost:8080/showLayout.do?layout=login")
+    @ApiModelProperty(value = "The login URL", example = "http://localhost:8080/showLayout.do?layout=login")
     private String url;
     
     @JsonProperty("team")
-    @ApiModelProperty(example = "Espace de Travail Cellule Technique du COMOREX")
+    @ApiModelProperty(value = "Selected workspace name", example = "Espace de Travail Cellule Technique du COMOREX")
     private String teamName;
     
     @JsonProperty("user-id")
@@ -37,6 +38,7 @@ public class UserSessionInformation {
     private Boolean viewActivity;
     
     @JsonProperty("national-coordinator")
+    @ApiModelProperty("Clarifies if user is part of the national coordinator group")
     private Boolean nationalCoordinator;
     
     public String getToken() {

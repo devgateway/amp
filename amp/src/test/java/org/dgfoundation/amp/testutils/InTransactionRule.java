@@ -31,12 +31,15 @@ public class InTransactionRule implements TestRule {
                         } catch (Throwable e) {
                             throw new WrappedException(e);
                         }
-                        throw new RollbackException();
+                        PersistenceManager.getSession().flush();
+                        throw new RollbackException("gn2389uackm2q10");
                     });
                 } catch (WrappedException e) {
                     throw e.getCause();
                 } catch (RollbackException e) {
-                    // all good, ignore
+                    if (!"gn2389uackm2q10".equals(e.getMessage())) {
+                        throw e;
+                    }
                 }
             }
         };

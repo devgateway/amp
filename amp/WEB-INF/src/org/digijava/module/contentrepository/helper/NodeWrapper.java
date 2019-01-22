@@ -638,7 +638,22 @@ public class NodeWrapper{
         }
         return null;
     }
-    
+
+    /**
+     * Return file size for a document or null if file size is unknown.
+     */
+    public Long getFileSize() {
+        Property fileSize = DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_FILE_SIZE);
+        if (fileSize != null) {
+            try {
+                return fileSize.getLong();
+            } catch (RepositoryException e) {
+                logger.error("Failed to get file size.", e);
+                return null;
+            }
+        }
+        return null;
+    }
     
     public double getFileSizeInMegabytes() {
         Property fileSize   =  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_FILE_SIZE);

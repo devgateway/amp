@@ -9,7 +9,6 @@ import javax.jcr.RepositoryException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.sync.model.SyncConstants;
@@ -58,11 +57,16 @@ public final class MapTilesService {
         
         try {
             InputStream fileBinary = mapTilesNodeWrapper.getNode().getProperty(CrConstants.PROPERTY_DATA).getStream();
-            Double fileSize = FileUtils.ONE_MB * mapTilesNodeWrapper.getFileSizeInMegabytes();
-            
-            return Response.ok(fileBinary, MediaType.APPLICATION_OCTET_STREAM)
-                    .header("content-disposition", "attachment; filename = " + FILE_NAME)
-                    .header("content-length", fileSize).build();
+
+            Response.ResponseBuilder responseBuilder = Response.ok(fileBinary, MediaType.APPLICATION_OCTET_STREAM)
+                    .header("content-disposition", "attachment; filename = " + FILE_NAME);
+
+            Long fileSize = mapTilesNodeWrapper.getFileSize();
+            if (fileSize != null) {
+                responseBuilder.header("content-length", fileSize);
+            }
+
+            return responseBuilder.build();
         } catch (RepositoryException e) {
             logger.error(e.getMessage(), e);
             return Response.serverError().build();

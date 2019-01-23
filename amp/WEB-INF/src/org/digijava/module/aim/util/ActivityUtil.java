@@ -2197,7 +2197,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
      */
     public static List<Long> getEditableActivityIdsNoSession(TeamMember tm) {
         AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-        AmpARFilter ampARFilter = FilterUtil.buildFilterFromSource(ampTeamMember.getAmpTeam());
+        AmpARFilter ampARFilter = FilterUtil.buildFilterFromSource(ampTeamMember.getAmpTeam(), tm);
         AmpARFilterParams params = AmpARFilterParams.getParamsForWorkspaceFilter(ampTeamMember.toTeamMember(), null);
         ampARFilter.generateFilterQuery(params);
         String query = ampARFilter.getGeneratedFilterQuery();

@@ -43,10 +43,7 @@ public class RequiredValidator extends InputValidator {
             boolean dependencyFulfilled = InterchangeDependencyResolver
                     .checkRequiredDependencyFulfilled(fieldValue, importer, fieldDescription, newFieldParent);
             
-            boolean shouldCheckForRequired = InterchangeDependencyResolver
-                    .shouldCheckForRequired(fieldValue, importer, fieldDescription, newFieldParent);
-            
-            if (dependencyFulfilled && shouldCheckForRequired) {
+            if (dependencyFulfilled) {
                 if (ActivityEPConstants.FIELD_ALWAYS_REQUIRED.equals(requiredStatus)) {
                     // field is always required -> can't save it even as a draft
                     return false;

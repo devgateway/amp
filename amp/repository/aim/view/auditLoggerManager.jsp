@@ -155,6 +155,11 @@ function exportScorecard () {
 	window.location =  "/rest/scorecard/export";
 }
 
+function viewDifferences(activityOneId) {
+    document.getElementById("method").value = "viewDifferences";
+    document.getElementById("activityOneId").value = activityOneId;
+    document.aimCompareActivityVersionsForm.submit();
+}
 </script>
 
 <h1 class="admintitle"><digi:trn key="aim:AuditLoggerManager">Audit Logger Manager</digi:trn></h1> 
@@ -375,6 +380,11 @@ function exportScorecard () {
                                                                     </c:otherwise>
                                                                 </c:choose>				
                                         </td>
+								<c:if test="${aimAuditLoggerManagerForm.withLogin==false }">
+									<td width="129" align="center" valign="center"bgcolor="#C7D4DB"style="color: #376091;">
+										<b><digi:trn key="aim:viewDiff">View Differences</digi:trn></b>
+									</td>
+								</c:if>
 							</tr>
 							<logic:iterate name="aimAuditLoggerManagerForm" property="logs"
 								id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
@@ -442,6 +452,12 @@ function exportScorecard () {
 										<digi:trn>No Data</digi:trn>
 									</c:if>
 								</td>
+									<td>
+										<c:if test="${not empty log.objectId && log.objectType=='org.digijava.module.aim.dbentity.AmpActivityVersion'}">
+											<input type="button" title="Click to compare with previous version" onclick="javascript:viewDifferences(${log.objectId})"
+												   class="dr-menu" value="&nbsp;&nbsp;<digi:trn>Compare</digi:trn>&nbsp;&nbsp;">
+										</c:if>
+									</td>
 							</tr>
                           </logic:iterate>
 						</table>
@@ -553,4 +569,8 @@ function exportScorecard () {
 	setStripsTable("dataTable", "tableEven", "tableOdd");
 	setHoveredTable("dataTable", false);
 </script>
+</digi:form>
+<digi:form action="/compareActivityVersions.do" method="post" type="aimCompareActivityVersionsForm">
+	<input type="hidden" name="activityOneId" id="activityOneId" />
+	<input type="hidden" name="method" id="method" />
 </digi:form>

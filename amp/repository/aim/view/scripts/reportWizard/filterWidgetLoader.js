@@ -2,7 +2,12 @@ var widgetFilter = null;
 $(document).ready(function () {
     // Load the filter after we rendered the DOM for perceived speed.
     var container = $('#filter-popup');
-    widgetFilter = new ampFilter({el: container, draggable: true, caller: 'REPORTS'});
+    var reportTypeCode = 'D';
+    // TODO: replace the magic number with "P" in case of Pledges/D for Donors.
+    if (new URL(window.location).searchParams.get('type') === '5') {
+        reportTypeCode = 'P';
+    }
+    widgetFilter = new ampFilter({el: container, draggable: true, caller: 'REPORTS', reportType: reportTypeCode});
     var events = _.extend({}, Backbone.Events);
     // Register apply and cancel buttons.
     events.listenTo(widgetFilter, 'cancel', function () {

@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -34,10 +35,10 @@ import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 public class AmpIssueTreePanel extends AmpFieldPanel{
 
     private static final long serialVersionUID = 0L;
-    
+
     public AmpIssueTreePanel(String id, final List<Class> tree, final Map<Class, String> setName,
-                             final Map<Class, String> labelName, final IModel objModel, final IModel parentSet,
-                             final Class parentClass, final int level, final String fmName) throws Exception{
+            final Map<Class, String> labelName, final IModel objModel,
+            final int level, final String fmName, AmpRequiredComponentContainer rcc) {
         super(id,labelName.get(tree.get(level)), true);
         this.fmType = AmpFMTypes.MODULE;
         
@@ -46,7 +47,10 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
         final PropertyModel<Set<Object>> levelChildren = new PropertyModel<Set<Object>>(objModel, levelChildrenName);
     
         final TextArea name =new TextArea<String>("name", new PropertyModel<String>(objModel,"name"));
-        addFormComponent(name);
+        name.setRequired(true);
+        name.add(visualErrorBehavior());
+        add(name);
+        rcc.getRequiredFormComponents().add(name);
         Label label = new TrnLabel("label", labelName.get(levelClass));
         add(label);
         
@@ -81,7 +85,8 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
                 protected void onPopulateItem(
                         org.dgfoundation.amp.onepager.components.ListItem item) {
                     try {
-                        AmpIssueTreePanel aitp = new AmpIssueTreePanel("item", tree, setName, labelName, item.getModel(), levelChildren, levelClass, level + 1, fmName);
+                        AmpIssueTreePanel aitp = new AmpIssueTreePanel("item", tree, setName, labelName,
+                                item.getModel(), level + 1, fmName, rcc);
                         aitp.setOutputMarkupId(true);
                         item.add(aitp);
                     } catch (Exception e) {

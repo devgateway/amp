@@ -18,6 +18,9 @@ import io.swagger.util.Json;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.digijava.kernel.ampapi.endpoints.gis.MultilingualLabelPH;
 import org.digijava.kernel.ampapi.swagger.types.FiltersPH;
+import org.digijava.kernel.ampapi.swagger.types.PublicHeadersPH;
+import org.digijava.kernel.ampapi.swagger.types.PublicTopDataPH;
+import org.digijava.kernel.ampapi.swagger.types.PublicTopTotalsPH;
 import org.digijava.kernel.ampapi.swagger.types.SettingsPH;
 
 /**
@@ -85,7 +88,44 @@ public class ReportTypesResolver extends AbstractModelConverter {
             model.example(example);
             return model;
         }
+        
+        if (javaType.getRawClass().isAssignableFrom(PublicHeadersPH.class)) {
+            ModelImpl model = new ModelImpl();
+            model.name("HeadersPH");
+            model.description("Headers of { key: displayValue } pairs.");
+            model.additionalProperties(new ObjectProperty());
+            HashMap<Object, Object> example = new HashMap<>();
+            example.put("donor-agency", "Donor Agency");
+            example.put("actual-commitments", "Actual Commitments");
+            model.example(example);
+            return model;
+        }
+        
+        if (javaType.getRawClass().isAssignableFrom(PublicTopTotalsPH.class)) {
+            ModelImpl model = new ModelImpl();
+            model.name("PublicTopTotalsPH");
+            model.description("Totals relevant for the current top results.");
+            model.additionalProperties(new ObjectProperty());
+            HashMap<Object, Object> example = new HashMap<>();
+            double magicNumberWarnWorkaround = 12717179650.207333;
+            example.put("Total Actual Commitments", magicNumberWarnWorkaround);
+            model.example(example);
+            return model;
+        }
+        
+        if (javaType.getRawClass().isAssignableFrom(PublicTopDataPH.class)) {
+            ModelImpl model = new ModelImpl();
+            model.name("PublicTopDataPH");
+            model.description("Top result data.");
+            model.additionalProperties(new ObjectProperty());
+            HashMap<Object, Object> example = new HashMap<>();
+            example.put("actual-commitments", "2 176 576 698");
+            example.put("donor-agency", "Agence des États-Unis pour le développement international");
+            model.example(Arrays.asList(example));
+            return model;
+        }
 
         return super.resolve(type, context, chain);
     }
+    
 }

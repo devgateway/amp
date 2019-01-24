@@ -409,7 +409,7 @@ public class InterchangeUtils {
         if (fieldValue instanceof String) {
             boolean toTranslate = clazz.equals(AmpCategoryValue.class) && field.getName().equals("value");
             
-            // now we check if is only a CategoryValue field and the field name is value
+            // now we check if is only a CategoryValueLabel field and the field name is value
             String translatedText = toTranslate ? translatorService.translateText((String) fieldValue)
                     : (String) fieldValue;
             return getJsonStringValue(translatedText);
@@ -721,7 +721,7 @@ public class InterchangeUtils {
         if (tm != null) {
             activityInformation.setEdit(isEditableActivity(tm, projectId));
             if (activityInformation.isEdit()) {
-                activityInformation.setValidate(ActivityUtil.canValidateAcitivty(project, tm));
+                activityInformation.setValidate(ActivityUtil.canValidateActivity(project, tm));
             }
             activityInformation.setValidationStatus(ActivityUtil.getValidationStatus(project, tm));
             if (activityInformation.getValidationStatus() == ValidationStatus.AUTOMATIC_VALIDATION) {

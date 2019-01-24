@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.core.Response;
 
@@ -63,58 +64,52 @@ public class HeatMapConfigService {
     private ApiEMGroup errors = new ApiEMGroup();
     
     private Set<String> visibleColumns;
-    private List<String> possibleColumns = new ArrayList<String>();
+    private List<String> possibleColumns = new ArrayList<>();
     private Map<String, Column> jsonColumns = new LinkedHashMap<>();
     
     public HeatMapConfigService() {
-    }
-
-    public HeatMapConfigs getHeatMapConfigs() {
-        LOGGER.info("GET HeatMap Configs");
-        this.visibleColumns = ColumnsVisibility.getVisibleColumns();
-        List<HeatMapConfigIndexed> jsonConfigs = new ArrayList<>();
-        for (HeatMapConfig hmConfig : CONFIGS) {
-            HeatMapConfigIndexed hmJson = convert(hmConfig);
-            if (hmJson != null) {
-                jsonConfigs.add(hmJson);
-            }
+        visibleColumns = ColumnsVisibility.getVisibleColumns();
+    
+        for (HeatMapConfig heatMapConfig : CONFIGS) {
+            processHeatMapConfigColumns(heatMapConfig.xColumns);
+            processHeatMapConfigColumns(heatMapConfig.yColumns);
         }
-        return new HeatMapConfigs(new ArrayList<>(jsonColumns.values()), jsonConfigs, getColorThreshold());
     }
     
-    /**
-     * Materializes a HeatMap configuration for display
-     * @param hmConfig
-     * @return null if no column set in configuration is enabled in FM
-     */
-    private HeatMapConfigIndexed convert(HeatMapConfig hmConfig) {
-        List<Integer> xColumnsIndexes = getColumnIndexes(hmConfig.xColumns);
-        if (xColumnsIndexes.size() == 0) {
-            return null;
-        }
-
-        List<Integer> yColumnsIndexes = getColumnIndexes(hmConfig.yColumns);
-        if (yColumnsIndexes.size() == 0) {
-            return null;
-        }
-
-        return new HeatMapConfigIndexed(hmConfig.name, hmConfig.type, xColumnsIndexes, yColumnsIndexes);
-    }
-    
-    private List<Integer> getColumnIndexes(List<String> columns) {
-        List<Integer> indexes = new ArrayList<Integer>();
+    private void processHeatMapConfigColumns(List<String> columns) {
         for (String column : columns) {
             if (visibleColumns.contains(column)) {
                 int index = possibleColumns.indexOf(column);
                 if (index == -1) {
-                    index = possibleColumns.size();
                     possibleColumns.add(column);
                     jsonColumns.put(column, new Column(column, TranslatorWorker.translateText(column)));
                 }
-                indexes.add(index);
             }
         }
-        return indexes;
+    }
+    
+    public HeatMapConfigs getHeatMapConfigs() {
+        LOGGER.info("GET HeatMap Configs");
+        List<HeatMapConfig> charts = CONFIGS.stream()
+                .map(config -> getChartFromConfig(config))
+                .filter(config -> config != null)
+                .collect(Collectors.toList());
+        
+        return new HeatMapConfigs(new ArrayList<>(jsonColumns.values()), charts, getColorThreshold());
+    }
+    
+    private HeatMapConfig getChartFromConfig(HeatMapConfig config) {
+        List<String> xColumns = new ArrayList<>(possibleColumns);
+        xColumns.retainAll(config.xColumns);
+        
+        List<String> yColumns = new ArrayList<>(possibleColumns);
+        yColumns.retainAll(config.yColumns);
+        
+        if (xColumns.isEmpty() || yColumns.isEmpty()) {
+            return null;
+        }
+        
+        return new HeatMapConfig(config.name, config.type, xColumns, yColumns);
     }
     
     private Map<BigDecimal, String> getColorThreshold() {

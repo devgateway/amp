@@ -1495,7 +1495,7 @@ public class AmpMessageWorker {
         }
     }
 
-    private static String addTeamIdToQuery(String wsQuery, Long teamId, String teamName) {
+    public static String addTeamIdToQuery(String wsQuery, Long teamId, String teamName) {
         Integer indexToReplace = StringUtils.indexOf(wsQuery, "FROM amp_activity");
         wsQuery = StringUtils.left(wsQuery, indexToReplace) + " , " + teamId + " as ampTeamId , '" + teamName
                 + "' as teamName " + StringUtils.mid(wsQuery, indexToReplace, wsQuery.length() - 1);

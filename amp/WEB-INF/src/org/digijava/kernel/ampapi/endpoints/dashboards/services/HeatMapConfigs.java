@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.digijava.module.aim.helper.HeatMapConfig;
 
 /**
  * @author Octavian Ciubotaru
@@ -13,14 +14,13 @@ public class HeatMapConfigs {
 
     private List<Column> columns;
 
-    private List<HeatMapConfigIndexed> charts;
+    private List<HeatMapConfig> charts;
 
     @ApiModelProperty("the colors to use for every threshold, "
             + "for values greater or equal than <key>, use <value> color")
     private Map<BigDecimal, String> amountColors;
 
-    public HeatMapConfigs(List<Column> columns, List<HeatMapConfigIndexed> charts,
-            Map<BigDecimal, String> amountColors) {
+    public HeatMapConfigs(List<Column> columns, List<HeatMapConfig> charts, Map<BigDecimal, String> amountColors) {
         this.columns = columns;
         this.charts = charts;
         this.amountColors = amountColors;
@@ -30,7 +30,7 @@ public class HeatMapConfigs {
         return columns;
     }
 
-    public List<HeatMapConfigIndexed> getCharts() {
+    public List<HeatMapConfig> getCharts() {
         return charts;
     }
 

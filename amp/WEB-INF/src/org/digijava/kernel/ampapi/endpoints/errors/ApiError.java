@@ -123,6 +123,14 @@ public class ApiError {
         return getResultErrorBean(errors);
     };
     
+    public static JsonBean toError(ApiErrorMessage apiErrorMessage, Throwable e) {
+        Map<String, Collection<Object>> error = new HashMap<>();
+        error.put(getErrorId(getErrorComponentIdFromException(e), apiErrorMessage.id),
+                Arrays.asList(getErrorText(apiErrorMessage)));
+
+        return getResultErrorBean(error);
+    };
+    
     /**
      * Returns a JSON object with a single error message. Generic 0 error code with one error in the list.
      * @param apiErrorMessage ApiErrorMessage object
@@ -132,14 +140,6 @@ public class ApiError {
         Map<String, Collection<Object>> error = new HashMap<>();
         error.put(getErrorId(getErrorComponentId(), apiErrorMessage.id), Arrays.asList(getErrorText(apiErrorMessage)));
         
-        return getResultErrorBean(error);
-    };
-
-    public static JsonBean toError(ApiErrorMessage apiErrorMessage, Throwable e) {
-        Map<String, Collection<Object>> error = new HashMap<>();
-        error.put(getErrorId(getErrorComponentIdFromException(e), apiErrorMessage.id),
-                Arrays.asList(getErrorText(apiErrorMessage)));
-
         return getResultErrorBean(error);
     };
 

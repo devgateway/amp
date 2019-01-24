@@ -75,12 +75,12 @@
                 return false;
             }
         } else {
-            if (! checkDecimal(document.aimNewAddLocationForm.gsLat.value)) {
+            if (document.aimNewAddLocationForm.gsLat.value && !checkDecimal(document.aimNewAddLocationForm.gsLat.value)) {
                 alert('Please enter only numerical values into Latitude Field.');
                 document.aimNewAddLocationForm.gsLat.focus();
                 return false;
             }
-            if (! checkDecimal(document.aimNewAddLocationForm.gsLong.value)) {
+            if (document.aimNewAddLocationForm.gsLong.value && !checkDecimal(document.aimNewAddLocationForm.gsLong.value)) {
                 alert('Please enter only numerical values into Longitude Field.');
                 document.aimNewAddLocationForm.gsLong.focus();
                 return false;

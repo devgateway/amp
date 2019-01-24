@@ -3,6 +3,7 @@ require('../libs/local/lib-load-hacks');
 
 var $ = require('jquery');
 
+require('@babel/polyfill');
 var GISData = require('./data/gis-data');
 var App = require('./gis/views/gis-main');
 

@@ -2,12 +2,16 @@ package org.digijava.kernel.ampapi.swagger;
 
 import io.swagger.converter.ModelConverters;
 import io.swagger.jaxrs.config.BeanConfig;
+import io.swagger.jaxrs.ext.SwaggerExtensions;
 import org.digijava.kernel.ampapi.swagger.converters.AmpOfflineVersionResolver;
 import org.digijava.kernel.ampapi.swagger.converters.GeneratedReportResolver;
-import org.digijava.kernel.ampapi.swagger.converters.JsonSerializeUsingResolver;
 import org.digijava.kernel.ampapi.swagger.converters.JAXBElementUnwrapper;
+import org.digijava.kernel.ampapi.swagger.converters.JsonSerializeUsingResolver;
 import org.digijava.kernel.ampapi.swagger.converters.ReportTypesResolver;
 import org.digijava.kernel.ampapi.swagger.types.FiltersPH;
+import org.digijava.kernel.ampapi.swagger.types.PublicHeadersPH;
+import org.digijava.kernel.ampapi.swagger.types.PublicTopDataPH;
+import org.digijava.kernel.ampapi.swagger.types.PublicTopTotalsPH;
 import org.digijava.kernel.ampapi.swagger.types.SettingsPH;
 
 /**
@@ -27,8 +31,12 @@ public class SwaggerConfigurer {
         ModelConverters.getInstance().addConverter(new ReportTypesResolver());
 
         ModelConverters.getInstance().read(FiltersPH.class);
-
         ModelConverters.getInstance().read(SettingsPH.class);
+        ModelConverters.getInstance().read(PublicHeadersPH.class);
+        ModelConverters.getInstance().read(PublicTopTotalsPH.class);
+        ModelConverters.getInstance().read(PublicTopDataPH.class);
+
+        SwaggerExtensions.getExtensions().add(new SwaggerAuthorization());
 
         BeanConfig beanConfig = new BeanConfig();
         beanConfig.setVersion("1.0");

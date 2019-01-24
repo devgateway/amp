@@ -72,7 +72,10 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFe
 import org.dgfoundation.amp.onepager.components.features.sections.AmpAidEffectivenessFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpLineMinistryObservationsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalObservationsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFundingInfoSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -212,44 +215,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         toggleFormRichTextComponent(enabled,target, ifs,visit); 
                     }
                     });
-        
-        form.visitChildren(AmpDonorFundingFormSectionFeature.class,
-                new IVisitor<AmpDonorFundingFormSectionFeature, Void>() {
-                    @Override
-                    public void component(
-                            AmpDonorFundingFormSectionFeature ifs,
-                            IVisit<Void> visit) {
-                        toggleFormComponent (enabled,target,ifs,visit);                 }
-                });
-        visitChildren(AmpActivityBudgetExtrasPanel.class,
-                new IVisitor<AmpActivityBudgetExtrasPanel, Void>() {
-                    @Override
-                    public void component(
-                            AmpActivityBudgetExtrasPanel ifs,
-                            IVisit<Void> visit) {
-                        toggleFormComponent (enabled,target,ifs,visit);
-                    }
-                });
-        visitChildren(AmpAidEffectivenessFormSectionFeature.class,
-                new IVisitor<AmpAidEffectivenessFormSectionFeature, Void>() {
-                    @Override
-                    public void component(
-                            AmpAidEffectivenessFormSectionFeature ifs,
-                            IVisit<Void> visit) {
-                        toggleFormComponent (enabled,target,ifs,visit);
-                    }
-                });
 
-        visitChildren(AmpPlanningFormSectionFeature.class,
-                new IVisitor<AmpPlanningFormSectionFeature, Void>() {
-                    @Override
-                    public void component(
-                            AmpPlanningFormSectionFeature ifs,
-                            IVisit<Void> visit) {
-                        toggleFormComponent (enabled,target,ifs,visit);
-                    }
-                });     
-        
+        toggleFormComponent(form, AmpIssuesFormSectionFeature.class, enabled, target);
+        toggleFormComponent(form, AmpLineMinistryObservationsFormSectionFeature.class, enabled, target);
+        toggleFormComponent(form, AmpRegionalObservationsFormSectionFeature.class, enabled, target);
+        toggleFormComponent(form, AmpDonorFundingFormSectionFeature.class, enabled, target);
+        toggleFormComponent(form, AmpActivityBudgetExtrasPanel.class, enabled, target);
+        toggleFormComponent(form, AmpAidEffectivenessFormSectionFeature.class, enabled, target);
+        toggleFormComponent(form, AmpPlanningFormSectionFeature.class, enabled, target);
+
         visitChildren(AmpProjectCost.class,
                 new IVisitor<AmpProjectCost, Void>() {
                     @Override
@@ -259,16 +233,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         toggleFormComponent (enabled, target, ifs, visit, false);
                     }
                 });
-        visitChildren(AmpDonorFundingInfoSubsectionFeature.class,
-                new IVisitor<AmpDonorFundingInfoSubsectionFeature, Void>() {
-                    @Override
-                    public void component(
-                            AmpDonorFundingInfoSubsectionFeature ifs,
-                            IVisit<Void> visit) {
-                        toggleFormComponent (enabled,target,ifs,visit);
-                    }
-                });     
-        
+
+        toggleFormComponent(form, AmpDonorFundingInfoSubsectionFeature.class, enabled, target);
+
         visitChildren(AmpProjectCost.class,
                 new IVisitor<Component, Object>() {
                     @Override
@@ -301,6 +268,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
           
         
     }
+
+    private <T extends Component & AmpRequiredComponentContainer> void toggleFormComponent(
+            Form form, Class<T> componentClass, boolean enabled, AjaxRequestTarget target) {
+        form.visitChildren(componentClass,
+                (IVisitor<T, Void>) (ifs, visit) -> toggleFormComponent(enabled, target, ifs, visit));
+    }
+
        private void toggleFormRichTextComponent (boolean enabled, final AjaxRequestTarget target,
                 AmpIdentificationFormSectionFeature ifs, IVisit<Void> visit) {
             List <FormComponent<?>> requiredComponents = ifs.getRequiredRichTextFormComponents();

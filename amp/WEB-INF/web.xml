@@ -12,6 +12,21 @@
 	<!-- ******************************************* -->
 
 	<filter>
+		<filter-name>javamelody</filter-name>
+		<filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter-mapping>
+		<filter-name>javamelody</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>ASYNC</dispatcher>
+	</filter-mapping>
+	<listener>
+		<listener-class>net.bull.javamelody.SessionListener</listener-class>
+	</listener>
+
+	<filter>
 		<filter-name>gzipRequestFilter</filter-name>
 		<filter-class>org.digijava.kernel.web.gzip.GzipRequestFilter</filter-class>
 	</filter>
@@ -400,7 +415,26 @@
 			<role-name>DigiAdmin</role-name>
 		</auth-constraint>
 	</security-constraint>
-	
+
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>AMP Monitoring</realm-name>
+	</login-config>
+
+	<security-role>
+		<role-name>monitoring</role-name>
+	</security-role>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Monitoring</web-resource-name>
+			<url-pattern>/monitoring</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>monitoring</role-name>
+		</auth-constraint>
+	</security-constraint>
+
 	<resource-ref>
 		<description>Main DB Connection</description>
 		<res-ref-name>ampDS</res-ref-name>

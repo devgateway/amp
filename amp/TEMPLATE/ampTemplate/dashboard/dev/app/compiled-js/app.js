@@ -31630,10 +31630,6 @@ var constants = {
     DONOR: 'Donor',
     ROLE: 'Role',
     LOCATIONS: 'Locations',
-    PLEDGES_SECTORS: 'Pledges Sectors',
-    PLEDGES_SECONDARY_SECTORS: 'Pledges Secondary Sectors',
-    PLEDGES_PROGRAMS: 'Pledges Programs',
-    PLEDGES_LOCATIONS: 'Pledges Locations',
     PLEDGES_DONORS: 'Pledges Donors',
     COMPONENT_TYPE_ALL: 'ALL',
     FIELD_DATA_TYPE_TREE: 'TREE',
@@ -31743,16 +31739,12 @@ var Constants = require('../utils/constants');
 
 var filterInstancesNames = {
     donors: 'Funding Organizations',
-    /*pledgesDonors: 'Pledges Donors',*/
-    sectors: 'Sectors',
-    pledgesSectors: 'Pledges Sectors',
+    sectors: 'Sector',
     programs: 'Programs',
-    pledgesPrograms: 'Pledges Programs',
     activity: 'Activity',
     allAgencies: 'All Agencies',
     financials: 'Financial',
-    locations: 'Locations',
-    pledgesLocations: 'Pledges Locations',
+    locations: 'Location',
     others: 'Other'
 };
 
@@ -31954,26 +31946,16 @@ module.exports = Backbone.View.extend({
       case Constants.FUNDING_ORGANIZATIONS:
       case Constants.PLEDGES_DONORS:
     	  if (tmpModel.get('group') === Constants.ROLE) {
-    		  this.filterViewsInstances.allAgencies.filterCollection.add(tmpModel);  
+    		  this.filterViewsInstances.allAgencies.filterCollection.add(tmpModel);
     	  } else {
     		  this.filterViewsInstances.donors.filterCollection.add(tmpModel);
-    	  }    	
+    	  }
         break;
       case Constants.ALL_AGENCIES:
         this.filterViewsInstances.allAgencies.filterCollection.add(tmpModel);
         break;
       case Constants.LOCATION:
         this.filterViewsInstances.locations.filterCollection.add(tmpModel);
-        break;
-      case Constants.PLEDGES_SECTORS:
-      case Constants.PLEDGES_SECONDARY_SECTORS:
-        this.filterViewsInstances.pledgesSectors.filterCollection.add(tmpModel);
-        break;
-      case Constants.PLEDGES_PROGRAMS:
-          this.filterViewsInstances.pledgesPrograms.filterCollection.add(tmpModel);
-          break;
-      case Constants.PLEDGES_LOCATIONS:
-        this.filterViewsInstances.pledgesLocations.filterCollection.add(tmpModel);
         break;
       default:
         this.filterViewsInstances.others.filterCollection.add(tmpModel);
@@ -32103,8 +32085,15 @@ module.exports = Backbone.View.extend({
   },
 
   resetFilters: function() {
+	var self = this;
+	 var blob = !_.isUndefined(this.initialFilters) ? JSON.parse(JSON.stringify(this.initialFilters)) : {};//clone initial filters
     this.allFilters.each(function(filter) {
-        filter.reset();
+    if (filter.get('modelType') === Constants.DATE_RANGE_VALUES) {
+    	 self.setDefaultDates(blob);          	 
+    	 filter.deserialize(blob);
+     }else{
+    	 filter.reset();
+     }      
     });
   },
 
@@ -32298,7 +32287,7 @@ var $ = require('jquery');
 
 var Backbone = require('backbone');
 var TitleTemplate = "<%\r\n// renders the title of a tab \r\n%>\r\n<li class=\"\"><a data-i18n=\"amp.gis:pane-filters-<%= name.replace(/ /g,'') %>\" href=\"#filter-pane-<%= name.replace(/ /g,'') %>\" role=\"tab\" data-toggle=\"tab\"><%= name %></a></li>\r\n";
-var ContentTemplate = "<%\r\n // renders the contents of a filter's tab (e.g. for example the \"Contracting / Implementing / Executing / Primary Beneficiary / Secondary Beneficiary Agency\" list of the \"All Agencies\" tab)\r\n // <h6>mde  %- Math.random() </h6>\r\n%>\r\n<ul class=\"sub-filters-titles nav nav-pills nav-stacked\">\r\n</ul>\r\n<div class=\"sub-filters-content\">\r\n  <img src=\"img_2/loading-icon.gif\" />\r\n</div>\r\n";
+var ContentTemplate = "<%\r\n // renders the contents of a filter's tab (e.g. for example the \"Contracting / Implementing / Executing / Primary Beneficiary / Secondary Beneficiary Agency\" list of the \"All Agencies\" tab)\r\n // <h6>mde  %- Math.random() </h6>\r\n%>\r\n<ul class=\"sub-filters-titles nav nav-pills nav-stacked\">\r\n</ul>\r\n<div class=\"sub-filters-content\">\r\n  <img src=\"/TEMPLATE/ampTemplate/img_2/loading-icon.gif\" />\r\n</div>\r\n";
 
 var GenericFilterView = require('../views/generic-filter-view');
 var YearsFilterView = require('../views/years-filter-view');

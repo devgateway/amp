@@ -128,23 +128,6 @@ Filters.prototype.success	= function (o) {
 
 Filters.prototype.failure = failureReportFunction;
 
-Filters.prototype.showFilters	= function(reportContextId) {
-	var avoidIECacheParam 	=	"&time=" + new Date().getTime(); 
-	this.filterPanel.setBody( "<div style='text-align: center'>" + this.loadingDataMessage + 
-			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>" );
-
-	this.filterPanel.cfg.setProperty("height", "482px" );
-	this.filterPanel.cfg.setProperty("width", "870px" );
-        this.settingsPanel.setHeader(this.filterPanelName);
-	this.filterPanel.center();
-	this.filterPanel.show();
-	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true&reportContextId=" + reportContextId + avoidIECacheParam +this.resetString+this.additionalParameter, this);
-	this.resetString		= "";
-	
-	// Fix z-index problem on Public Report Generator without changing css loading order.
-	this.fixZIndex("#new_mask", 3);
-};
-
 Filters.prototype.showFilters = function (reportContextId) {
 	widgetFilter.reportContextId = reportContextId;
 	if (widgetFilter.reportContextId === 'report_wizard' || widgetFilter.reportContextId === 'workspace_editor') {

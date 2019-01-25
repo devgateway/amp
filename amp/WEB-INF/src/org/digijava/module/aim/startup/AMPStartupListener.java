@@ -37,6 +37,7 @@ import org.digijava.kernel.ampapi.endpoints.security.SecurityService;
 import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
 import org.digijava.kernel.lucene.LuceneModules;
 import org.digijava.kernel.lucene.LuceneWorker;
+import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
@@ -341,6 +342,8 @@ public class AMPStartupListener extends HttpServlet implements
             //doMonetETL();
             initNiReports();
             importGazeteer();
+
+            DgEmailManager.triggerStaticInitializers();
         } catch (Throwable e) {
             logger.error("Exception while initialising AMP :" + e.getMessage(), e);
             throw new Error(e);

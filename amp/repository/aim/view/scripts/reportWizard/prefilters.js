@@ -147,7 +147,7 @@ Filters.prototype.showFilters	= function(reportContextId) {
 
 Filters.prototype.showFilters = function (reportContextId) {
 	widgetFilter.reportContextId = reportContextId;
-	if (widgetFilter.reportContextId === 'report_wizard' || widgetFilter.reportContextId === 'workspace_editor') {
+	if (widgetFilter.reportContextId === 'report_wizard') {
 		this.showFilterWidget();
 	} else if (widgetFilter.gotSavedFilters !== true) {
 		var self = this;

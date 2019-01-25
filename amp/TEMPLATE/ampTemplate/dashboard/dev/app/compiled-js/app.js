@@ -32085,15 +32085,8 @@ module.exports = Backbone.View.extend({
   },
 
   resetFilters: function() {
-	var self = this;
-	 var blob = !_.isUndefined(this.initialFilters) ? JSON.parse(JSON.stringify(this.initialFilters)) : {};//clone initial filters
     this.allFilters.each(function(filter) {
-    if (filter.get('modelType') === Constants.DATE_RANGE_VALUES) {
-    	 self.setDefaultDates(blob);          	 
-    	 filter.deserialize(blob);
-     }else{
-    	 filter.reset();
-     }      
+        filter.reset();
     });
   },
 
@@ -32618,7 +32611,7 @@ module.exports = BaseFilterView.extend({
 		selector.append($("<option>").attr('value', '').text(''));
 		_.each(this.model.get('items').values, function(item, i) {
 			var option = $("<option>").attr('value', item.value).text(item.value);
-			if (item.value === self.model.get('selectedYear').toString()) {
+			if (self.model.get('selectedYear') && item.value === self.model.get('selectedYear').toString()) {
 				$(option).attr('selected', 'selected');
 			}
 			selector.append(option);

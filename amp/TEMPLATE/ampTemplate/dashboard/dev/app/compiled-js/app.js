@@ -28601,7 +28601,7 @@ module.exports = Backbone.Collection.extend({
 	         	       id: def.name || def.id,
                         data: tree,
                         name: def.name,
-                        tab: attrs.tab,
+                        tab: (def.tab && def.tab !== Constants.UNASSIGNED) ? def.tab : attrs.tab,
                         ui: true,
                         group: self._getGroup(def, attrs),
                         empty: false
@@ -31645,7 +31645,8 @@ var constants = {
     OTHERS: 'Other',
     LOCATION: 'Location',
     SECTOR: 'Sector',
-    GROUP: "group"
+    GROUP: "group",
+    UNASSIGNED: 'Unassigned'
 };
 
 module.exports = constants;

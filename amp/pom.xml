@@ -1479,8 +1479,21 @@
 <!--                         </configuration> -->
 <!--                     </execution> -->
 
-
                     <!-- Installing node and npm  for Dashboard-->
+                    <execution>
+                        <id>npm install for Dashboards</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <!-- optional: The default argument is actually  "install", so unless you need to run some other npm command,
+                            you can remove this whole <configuration> section.-->
+                            <arguments>install</arguments>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>gulp build for Dashboards</id>
                         <goals>

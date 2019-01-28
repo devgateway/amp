@@ -1,5 +1,5 @@
 node/
 node_modules/
 bower_components/*
-compiled-js/
-compiled-css/
+app/compiled-js/
+app/compiled-css/

@@ -181,7 +181,7 @@
 				--%>
 			</table>
 			<br/>
-		  	<input type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="javascript:back()" />
+			<input id="backButton" type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="javascript:back()" />
 		  	<logic:equal name="aimCompareActivityVersionsForm" property="advancemode" value="true">
 				<input id="mergeButton" type="button" value="<digi:trn>Enable Merge Process</digi:trn>" onclick="javascript:enableMerge();" />
 			</logic:equal>
@@ -192,8 +192,12 @@
 
 <script language="Javascript">
 function back() {
-	document.getElementById("method").value = "cancel";
-	document.getElementById('compareForm').submit();
+    if (document.aimCompareActivityVersionsForm.method.value === "viewDifferences"){
+        window.history.back();
+    }else {
+        document.getElementById("method").value = "cancel";
+        document.getElementById('compareForm').submit();
+    }
 }
 
 function enableMerge() {
@@ -275,14 +279,17 @@ setHoveredTable("dataTable", true);
 setHoveredRow("rowHighlight");
 
 if(document.getElementById('method').value == "enableMerge") {
-	document.getElementById('mergeButton').disabled = "disabled";
-	document.getElementById('mergeButton').style.display = 'none';
-	document.getElementById('saveButton').disabled = "";
-	document.getElementById('saveButton').style.display = 'block';
-} else {
-	document.getElementById('saveButton').disabled = "disabled";
-	document.getElementById('saveButton').style.display = 'none';
+    document.getElementById('mergeButton').disabled = "disabled";
+    document.getElementById('mergeButton').style.display = 'none';
+    document.getElementById('saveButton').disabled = "";
+    document.getElementById('saveButton').style.display = 'block';
+} else if (document.aimCompareActivityVersionsForm.method.value === "viewDifferences"){
+    document.getElementById('saveButton').disabled = "disabled";
+    document.getElementById('saveButton').style.display = 'none';
+    $('#backButton').prop('value', '<digi:trn>Back to Audit Logger</digi:trn>');
+}else {
+    document.getElementById('saveButton').disabled = "disabled";
+    document.getElementById('saveButton').style.display = 'none';
 }
-
 </script>
 		

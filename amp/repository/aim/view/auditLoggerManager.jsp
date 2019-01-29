@@ -156,8 +156,8 @@ function exportScorecard () {
 }
 
 function viewDifferences(activityOneId) {
-    document.getElementById("method").value = "viewDifferences";
-    document.getElementById("activityOneId").value = activityOneId;
+    document.aimCompareActivityVersionsForm.method.value = "viewDifferences";
+    document.aimCompareActivityVersionsForm.activityOneId.value = activityOneId;
     document.aimCompareActivityVersionsForm.submit();
 }
 </script>
@@ -454,7 +454,7 @@ function viewDifferences(activityOneId) {
 								</td>
 									<td>
 										<c:if test="${not empty log.objectId && log.objectType=='org.digijava.module.aim.dbentity.AmpActivityVersion'}">
-											<input type="button" title="Click to compare with previous version" onclick="javascript:viewDifferences(${log.objectId})"
+											<input type="button" title="<digi:trn>Click here to compare with previous version</digi:trn>" onclick="javascript:viewDifferences(${log.objectId})"
 												   class="dr-menu" value="&nbsp;&nbsp;<digi:trn>Compare</digi:trn>&nbsp;&nbsp;">
 										</c:if>
 									</td>

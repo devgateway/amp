@@ -69,8 +69,10 @@ import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.QueryModel;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.SaikuBasedQuery;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.SortParam;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -1001,6 +1003,7 @@ public class Reports implements ErrorReportingEndpoint {
     @Path("/ampTeam/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Get AmpTeam specification")
+    @ApiMethod(ui=false, id = "ampTeam", authTypes = AuthRule.IN_ADMIN)
     public final AmpTeam getWorkspace(@PathParam("id") Long id) {
         return TeamUtil.getAmpTeam(id);
     }

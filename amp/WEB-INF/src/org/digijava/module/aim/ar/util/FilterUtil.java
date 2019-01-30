@@ -331,6 +331,8 @@ public class FilterUtil {
         }
         form.setSelectedHumanitarianAid(collectValues(filter.getHumanitarianAid()));
         form.setSelectedDisasterResponse(collectValues(filter.getDisasterResponse()));
+
+        form.setComputedYear(filter.getComputedYear() != null ? filter.getComputedYear() : -1);
         
         return filter;
     }

@@ -28,7 +28,11 @@
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css" />
 <digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 
-<!-- Individual YUI JS files --> 
+<!-- Individual YUI JS files -->
+
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.css">
+<link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
+
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
@@ -43,8 +47,7 @@
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/ScrollEvent.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportPreviewEngine.js'/>" ></script>
 <script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>?version=fantastic_15" ></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>	
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/reportWizard/searchColumn.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" ></script>
 
@@ -55,6 +58,14 @@
 <!-- MORE CSS -->
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
 <link re="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/amp_extra_sam.css" />
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/underscore.js"></script>
+<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/backbone.js" type="text/javascript"></script>
+<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
+<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery-ui.min.js" type="text/javascript"></script>
+<script type="text/javascript"
+		src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js"/>"></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
 
 <!-- DEFINITIONS AND VARIABLES -->
 <digi:instance property="aimReportWizardForm" />
@@ -313,5 +324,7 @@ body {
 <div id="customFormat" class="content-direction" style="display:none; height: 372px;width: auto;">
 	<jsp:include page="/repository/aim/view/ar/customFormatPicker.jsp" />
 </div>
+
+<div id="filter-popup" style="font-size: 14px !important;"></div>
 
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>

@@ -4,6 +4,10 @@
 // load the TranslationManager object
 $.getScript("/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
 
+var REPORT_URL = '/rest/data/report/';
+var TEAM_URL = '/rest/security/ampTeam/';
+var FILTER_OBJECT = 'workspace-filters-widget-format';
+
 function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessage, loadingDataMessage, 
 				savingDataMessage, cannotSaveFiltersMessage, doReset,settingsPanelName, validationMsgs) {
 	this.connectionFailureMessage	= connectionFailureMessage;
@@ -130,23 +134,35 @@ Filters.prototype.failure = failureReportFunction;
 
 Filters.prototype.showFilters = function (reportContextId) {
 	widgetFilter.reportContextId = reportContextId;
-	if (widgetFilter.reportContextId === 'report_wizard' || widgetFilter.reportContextId === 'workspace_editor') {
+	if (widgetFilter.reportContextId === 'report_wizard') {
 		this.showFilterWidget();
+	} else if (widgetFilter.reportContextId === 'workspace_editor') {
+		var id = new URL(window.location).searchParams.get('tId');
+		if (id) {
+			this.loadSavedFilterData(id, false);
+		} else {
+			this.showFilterWidget();
+		}
 	} else if (widgetFilter.gotSavedFilters !== true) {
-		var self = this;
-		$.ajax({
-			type: 'GET',
-			url: '/rest/data/report/' + widgetFilter.reportContextId,
-			success: function (data) {
-				filters = data.reportMetadata.reportSpec.filters;
-				widgetFilter.deserialize({filters: filters}, {silent: true});
-				self.showFilterWidget();
-			}
-		});
-		widgetFilter.gotSavedFilters = true;
+		this.loadSavedFilterData(widgetFilter.reportContextId, true);
 	} else {
 		this.showFilterWidget();
 	}
+};
+
+Filters.prototype.loadSavedFilterData = function (id, isReport) {
+	var self = this;
+	var url = isReport ? REPORT_URL : TEAM_URL;
+	$.ajax({
+		type: 'GET',
+		url: url + id,
+		success: function (data) {
+			filters = isReport ? data.reportMetadata.reportSpec.filters : data[FILTER_OBJECT];
+			widgetFilter.deserialize({filters: filters}, {silent: true});
+			self.showFilterWidget();
+		}
+	});
+	widgetFilter.gotSavedFilters = true;
 };
 
 Filters.prototype.showFilterWidget = function () {

@@ -369,7 +369,7 @@ function update1(action, tid){
 		//document.aimUpdateWorkspaceForm.action = "<%=update%>~dest=admin&event="+action;
 		//document.aimUpdateWorkspaceForm.target = "_self";
 		//document.aimUpdateWorkspaceForm.submit();
-		window.location="<%=update%>~dest=admin~event=edit~tId="+tid;
+		window.location="<%=update%>?dest=admin&event=edit&tId="+tid;
 	}
 	return true;
 }

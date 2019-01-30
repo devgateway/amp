@@ -21,6 +21,7 @@ import io.swagger.models.properties.UntypedProperty;
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
+import org.dgfoundation.amp.reports.converters.AmpARFilterConverter;
 import org.digijava.kernel.ampapi.swagger.converters.ModelDescriber;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.module.aim.ar.util.FilterUtil;
@@ -87,6 +88,9 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> implements Mod
                 }
             }
             writeField("workspace-filters", filters);
+
+            AmpARFilterConverter arFilterTranslator = new AmpARFilterConverter(arFilter);
+            writeField("workspace-filters-widget-format", arFilterTranslator.buildFilters());
         }
     }
     
@@ -140,6 +144,7 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> implements Mod
         model.addProperty("workspace-prefix", new StringProperty());
         model.addProperty("organizations", new ArrayProperty(new LongProperty()));
         model.addProperty("workspace-filters", new MapProperty());
+        model.addProperty("workspace-filters-widget-format", new MapProperty());
 
         return model;
     }

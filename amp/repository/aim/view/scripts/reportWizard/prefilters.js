@@ -4,6 +4,10 @@
 // load the TranslationManager object
 $.getScript("/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
 
+var REPORT_URL = '/rest/data/report/';
+var TEAM_URL = '/rest/security/ampTeam/';
+var FILTER_OBJECT = 'workspace-filters-widget-format';
+
 function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessage, loadingDataMessage, 
 				savingDataMessage, cannotSaveFiltersMessage, doReset,settingsPanelName, validationMsgs) {
 	this.connectionFailureMessage	= connectionFailureMessage;
@@ -148,12 +152,12 @@ Filters.prototype.showFilters = function (reportContextId) {
 
 Filters.prototype.loadSavedFilterData = function (id, isReport) {
 	var self = this;
-	var url = isReport ? '/rest/data/report/' : '/rest/data/ampTeam/';
+	var url = isReport ? REPORT_URL : TEAM_URL;
 	$.ajax({
 		type: 'GET',
 		url: url + id,
 		success: function (data) {
-			filters = isReport ? data.reportMetadata.reportSpec.filters : data['workspace-filters-widget-format'];
+			filters = isReport ? data.reportMetadata.reportSpec.filters : data[FILTER_OBJECT];
 			widgetFilter.deserialize({filters: filters}, {silent: true});
 			self.showFilterWidget();
 		}

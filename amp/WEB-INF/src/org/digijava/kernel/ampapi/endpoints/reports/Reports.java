@@ -69,10 +69,8 @@ import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.QueryModel;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.SaikuBasedQuery;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.SortParam;
-import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -84,7 +82,6 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.Constants;
@@ -997,14 +994,5 @@ public class Reports implements ErrorReportingEndpoint {
     @Override
     public Class getErrorsClass() {
         return ReportErrors.class;
-    }
-
-    @GET
-    @Path("/ampTeam/{id}")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiOperation("Get AmpTeam specification")
-    @ApiMethod(ui=false, id = "ampTeam", authTypes = AuthRule.IN_ADMIN)
-    public final AmpTeam getWorkspace(@PathParam("id") Long id) {
-        return TeamUtil.getAmpTeam(id);
     }
 }

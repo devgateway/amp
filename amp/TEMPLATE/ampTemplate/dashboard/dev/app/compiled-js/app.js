@@ -28601,7 +28601,7 @@ module.exports = Backbone.Collection.extend({
 	         	       id: def.name || def.id,
                         data: tree,
                         name: def.name,
-                        tab: attrs.tab,
+                        tab: (def.tab && def.tab !== Constants.UNASSIGNED) ? def.tab : attrs.tab,
                         ui: true,
                         group: self._getGroup(def, attrs),
                         empty: false
@@ -31645,7 +31645,8 @@ var constants = {
     OTHERS: 'Other',
     LOCATION: 'Location',
     SECTOR: 'Sector',
-    GROUP: "group"
+    GROUP: "group",
+    UNASSIGNED: 'Unassigned'
 };
 
 module.exports = constants;
@@ -32611,7 +32612,7 @@ module.exports = BaseFilterView.extend({
 		selector.append($("<option>").attr('value', '').text(''));
 		_.each(this.model.get('items').values, function(item, i) {
 			var option = $("<option>").attr('value', item.value).text(item.value);
-			if (item.value === self.model.get('selectedYear').toString()) {
+			if (self.model.get('selectedYear') && item.value === self.model.get('selectedYear').toString()) {
 				$(option).attr('selected', 'selected');
 			}
 			selector.append(option);

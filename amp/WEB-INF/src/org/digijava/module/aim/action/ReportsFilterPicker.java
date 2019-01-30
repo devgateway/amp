@@ -281,6 +281,8 @@ public class ReportsFilterPicker extends Action {
                         filters.put(key, dates);
                     } else if (java.lang.Integer.class.getCanonicalName().equals(type)) {
                         filters.put(key, jsonFilters.get(key).toString());
+                    } else if (java.lang.String.class.getCanonicalName().equals(type)) {
+                        filters.put(key, jsonFilters.get(key).toString());
                     } else {
                         throw new RuntimeException("Unsupported type.");
                     }

@@ -82,6 +82,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.Constants;
@@ -994,5 +995,13 @@ public class Reports implements ErrorReportingEndpoint {
     @Override
     public Class getErrorsClass() {
         return ReportErrors.class;
+    }
+
+    @GET
+    @Path("/ampTeam/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Get AmpTeam specification")
+    public final AmpTeam getWorkspace(@PathParam("id") Long id) {
+        return TeamUtil.getAmpTeam(id);
     }
 }

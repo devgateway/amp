@@ -16,8 +16,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.gpi.ApplyThousandsForEntryConverter;
 import org.digijava.kernel.ampapi.endpoints.gpi.ApplyThousandsForVisibilityConverter;
-import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateDeserializer;
-import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateSerializer;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateDeserializer;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AmpGPINiAidOnBudget implements Serializable {

@@ -38,6 +38,7 @@ import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
+import org.digijava.module.esrigis.dbentity.ApiStateType;
 
 /**
  * 
@@ -132,8 +133,8 @@ public class EndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "SaveChart")
     @ApiOperation("Save the state of a chart")
-    public AmpApiState savedMaps(@JsonView(AmpApiState.DetailView.class) AmpApiState pChart) {
-        return EndpointUtils.saveApiState(pChart,"C");
+    public AmpApiState saveChart(@JsonView(AmpApiState.DetailView.class) AmpApiState chart) {
+        return EndpointUtils.saveApiState(chart, ApiStateType.C);
     }
 
     @GET
@@ -142,8 +143,8 @@ public class EndPoints implements ErrorReportingEndpoint {
     @ApiMethod(ui = false, id = "ChartById")
     @JsonView(AmpApiState.DetailView.class)
     @ApiOperation("Get the state of a chart")
-    public AmpApiState savedCharts(@PathParam("chartId") Long chartId) {
-        return EndpointUtils.getApiState(chartId);
+    public AmpApiState getSavedChart(@PathParam("chartId") Long chartId) {
+        return EndpointUtils.getApiState(chartId, ApiStateType.C);
     }
 
     @GET
@@ -152,9 +153,8 @@ public class EndPoints implements ErrorReportingEndpoint {
     @ApiMethod(ui = false, id = "ChartList")
     @ApiOperation("Retrieve a list of saved charts.")
     @JsonView(AmpApiState.BriefView.class)
-    public List<AmpApiState> savedCharts() {
-        String type="C";
-        return EndpointUtils.getApiStateList(type);
+    public List<AmpApiState> getSavedCharts() {
+        return EndpointUtils.getApiStateList(ApiStateType.C);
     }
 
     @POST

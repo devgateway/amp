@@ -14,8 +14,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
-import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateDeserializer;
-import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateSerializer;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateDeserializer;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AmpGPINiDonorNotes implements Serializable {

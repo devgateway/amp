@@ -14,10 +14,13 @@
 		<property name="stateBlob" column="stateBlob" type="text" />
 		<property name="createdDate" column="date_created" type="java.util.Date" />
 		<property name="updatedDate" column="date_updated" type="java.util.Date" />
-		<property name="type" column="type" type="java.lang.String" />
-		
 
-		
-		
+		<property name="type" column="type">
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">org.digijava.module.esrigis.dbentity.ApiStateType</param>
+				<param name="useNamed">true</param>
+			</type>
+		</property>
+
 	</class>
 </hibernate-mapping>

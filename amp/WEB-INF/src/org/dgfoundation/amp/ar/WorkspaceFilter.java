@@ -156,7 +156,7 @@ public final class WorkspaceFilter {
     /**
      * Returns SQL query for activities visible by specified team. If teamId is null then return public view.
      */
-    private static String generateWorkspaceFilterQueryForTeam(Long teamId) {
+    public static String generateWorkspaceFilterQueryForTeam(Long teamId) {
         return new WorkspaceFilter(teamId).getGeneratedQuery();
     }
     

@@ -12,12 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FilterValue {
     private Object id;
+    
     private String code;
+    
     private String name;
+    
     private String displayName;
-
+    
     private String filterId;
+    
     private String type;
+    
     private List<FilterValue> children;
 
     public FilterValue() {

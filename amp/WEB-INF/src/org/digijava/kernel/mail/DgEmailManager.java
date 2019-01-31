@@ -48,6 +48,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.google.common.base.Strings;
 import org.apache.commons.validator.EmailValidator;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.config.ForwardEmails;
@@ -73,9 +74,24 @@ public class DgEmailManager {
     private static String SCHEMA_DELIMITER = "://";
 
     private static Logger logger = Logger.getLogger(DgEmailManager.class);
+    private static Logger emailLogger = Logger.getLogger("amp-email");
     private static Pattern CarReturnPattern = null;
 
+    /**
+     * Email mode can be either 'smtp' or 'log'. If not specified defaults to 'log'. Any value different from 'smtp'
+     * will fall back to 'log' option.
+     */
+    private static final boolean EMAIL_SENDING_ENABLED = "smtp".equalsIgnoreCase(System.getProperty("email.mode"));
+
+    private static final int CONSOLE_LINE_LENGTH = 80;
+
     static {
+        if (!EMAIL_SENDING_ENABLED) {
+            logger.warn(Strings.repeat("-", CONSOLE_LINE_LENGTH));
+            logger.warn("Emails will be written to log instead of being sent to smtp!");
+            logger.warn("In production environment configure java with '-Demail.mode=smtp'");
+            logger.warn(Strings.repeat("-", CONSOLE_LINE_LENGTH));
+        }
 
         CarReturnPattern = Pattern.compile("(\r|\n|\r\n|\n\r)");
 
@@ -126,6 +142,9 @@ public class DgEmailManager {
          locale2encoding.put("ro", "ISO-8859-2");
          locale2encoding.put("zh", "EUC-CN");
          */
+    }
+
+    public static void triggerStaticInitializers() {
     }
 
     /**
@@ -445,9 +464,14 @@ public class DgEmailManager {
 
     public static void sendMail(Address[] to, String from, Address[] cc, Address[] bcc, String subject, String text, String charset, boolean asHtml,
                                 boolean log, boolean rtl) throws java.lang.Exception {
-        logger.debug("Sending mail from " + from + " to " + (to != null ? to.length : 0) + " recipient(s). Subject: " +
-                     subject + ". Encoding: " + charset + ". asHtml: " + asHtml);
-        logger.debug("Mail text:\n" + text);
+        emailLogger.debug("Sending mail from " + from + " to " + (to != null ? to.length : 0)
+                + " recipient(s). Subject: "
+                + subject + ". Encoding: " + charset + ". asHtml: " + asHtml);
+        emailLogger.debug("Mail text:\n" + text);
+
+        if (!EMAIL_SENDING_ENABLED) {
+            return;
+        }
 
         // see digi.xml for more details
         logger.info("Start Getting Config");

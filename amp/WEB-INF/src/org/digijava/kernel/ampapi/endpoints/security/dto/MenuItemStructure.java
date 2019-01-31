@@ -3,24 +3,32 @@ package org.digijava.kernel.ampapi.endpoints.security.dto;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModelProperty;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MenuItemStructure {
     
+    @ApiModelProperty("Translated menu entry title")
     private String name;
     
+    @ApiModelProperty("Translated menu entry tooltip")
     private String tooltip;
     
+    @ApiModelProperty("Menu entry action URL")
     private String url;
     
+    @ApiModelProperty("Open action URL within a popup")
     private Boolean popup;
     
+    @ApiModelProperty("Open action URL in a new browser tab")
     private Boolean tab;
     
+    @ApiModelProperty("Use POST instead of GET for the action URL")
     private Boolean post;
     
     private List<MenuItemStructure> children;
     
+    @ApiModelProperty("Flags if this is a language switch menu entry for any custom handling")
     private Boolean language;
     
     public String getName() {

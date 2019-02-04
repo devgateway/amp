@@ -510,6 +510,15 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 .setParameter("ampId", ampId)
                 .uniqueResult();
     }
+
+    public static List<AmpActivityVersion> getActivitiesByAmpIds(List<String> ampIds) {
+        String queryString = "select a from "
+                + AmpActivity.class.getName()
+                + " a where a.ampId in (:ampIds) ";
+        return PersistenceManager.getSession().createQuery(queryString)
+                .setParameterList("ampIds", ampIds)
+                .list();
+    }
   
   public static AmpActivityVersion loadAmpActivity(Long id){
      return (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, id); 

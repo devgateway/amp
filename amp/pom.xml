@@ -1023,6 +1023,7 @@
                             </includes>
                             <excludes>
                                 <exclude>WEB-INF/src/**</exclude>
+                                <exclude>.idea/**</exclude>
                                 <exclude>.settings/**</exclude>
                                 <exclude>.externalToolBuilders/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/site-config.xml</exclude>
@@ -1038,6 +1039,10 @@
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-translate/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-translate/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-state/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-state/node_modules/**</exclude>
                                 <exclude>TEMPLATE/reamp/node/**</exclude>
                                 <exclude>TEMPLATE/reamp/node_modules/**</exclude>
                                 <exclude>src/**</exclude>

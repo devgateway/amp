@@ -26,6 +26,7 @@
 <style type="text/css">
 	#filter-popup {
 		position: static !important;
+		margin-left: 5% !important;
 	}
 
 	.panel-heading {
@@ -194,10 +195,6 @@ function validateSubmitQuery () {
 </script>		
 <br />
 <div id="filter-popup" style="font-size: 14px !important; position: unset !important; margin: 0%;"></div>
-<button type="button" value="newFilters" class="buttonx" id="step${stepNum}_add_new_filters_button" style="margin-right:2px;"
-		onclick="repFilters.showFilters('<%=ReportContextData.getCurrentReportContextId(request, true)%>')">
-<digi:trn key="btn:repNewFilters">Filters</digi:trn>
-</button>
 
 <div class="content-dir">
 	<fieldset class="main_side_cont" style="width: 900px; margin-left: auto; margin-right: auto;">

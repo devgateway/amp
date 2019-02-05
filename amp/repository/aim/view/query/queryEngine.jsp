@@ -11,13 +11,31 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
-  
-<!-- Individual YUI CSS files --> 
+
+<!-- Individual YUI CSS files -->
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
 <link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
 
-<digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.css">
+<link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
+
+<digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" />
+
+<%-- TODO: These styles could be inside the filter so we can reuse "embedded". --%>
+<style type="text/css">
+	#filter-popup {
+		position: static !important;
+	}
+
+	.panel-heading {
+		display: none;
+	}
+
+	.panel-footer {
+		padding: 20px 15px;
+	}
+</style>
 
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
@@ -38,7 +56,17 @@
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 		
-		<script type="text/javascript" src="<digi:file src='module/aim/scripts/query/QueryManager.js'/>" ></script>	
+		<script type="text/javascript" src="<digi:file src='module/aim/scripts/query/QueryManager.js'/>" ></script>
+
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/underscore.js"></script>
+<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/backbone.js" type="text/javascript"></script>
+<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
+<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery-ui.min.js" type="text/javascript"></script>
+<script type="text/javascript"
+		src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js"/>"></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 <jsp:include page="/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
@@ -164,11 +192,13 @@ function validateSubmitQuery () {
 
 	YAHOO.util.Event.addListener(window, "load", initializeFilters) ;
 </script>		
-	<br />
-	<div id="myFilter" style="height: 480px; overflow: hidden; width: 900px; margin-left: auto; margin-right: auto; border: 1px solid lightgray;" >
-		<jsp:include page="/aim/reportsFilterPicker.do" />
-	</div>
-	<br />
+<br />
+<div id="filter-popup" style="font-size: 14px !important; position: unset !important; margin: 0%;"></div>
+<button type="button" value="newFilters" class="buttonx" id="step${stepNum}_add_new_filters_button" style="margin-right:2px;"
+		onclick="repFilters.showFilters('<%=ReportContextData.getCurrentReportContextId(request, true)%>')">
+<digi:trn key="btn:repNewFilters">Filters</digi:trn>
+</button>
+
 <div class="content-dir">
 	<fieldset class="main_side_cont" style="width: 900px; margin-left: auto; margin-right: auto;">
 		<legend><digi:trn>Selected Filters</digi:trn></legend>
@@ -183,3 +213,11 @@ function validateSubmitQuery () {
 
 	</div>
 </div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+	    // TODO: Use a different constructor.
+		repFilters = new Filters('', '', '', '', '', '', '', '', '', true);
+		repFilters.showFilters('report_wizard');
+	});
+</script>

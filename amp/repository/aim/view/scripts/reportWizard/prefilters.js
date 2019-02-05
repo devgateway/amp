@@ -4,6 +4,10 @@
 // load the TranslationManager object
 $.getScript("/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
 
+var REPORT_URL = '/rest/data/report/';
+var TEAM_URL = '/rest/security/ampTeam/';
+var FILTER_OBJECT = 'workspace-filters-widget-format';
+
 function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessage, loadingDataMessage, 
 				savingDataMessage, cannotSaveFiltersMessage, doReset,settingsPanelName, validationMsgs) {
 	this.connectionFailureMessage	= connectionFailureMessage;
@@ -128,42 +132,37 @@ Filters.prototype.success	= function (o) {
 
 Filters.prototype.failure = failureReportFunction;
 
-Filters.prototype.showFilters	= function(reportContextId) {
-	var avoidIECacheParam 	=	"&time=" + new Date().getTime(); 
-	this.filterPanel.setBody( "<div style='text-align: center'>" + this.loadingDataMessage + 
-			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>" );
-
-	this.filterPanel.cfg.setProperty("height", "482px" );
-	this.filterPanel.cfg.setProperty("width", "870px" );
-        this.settingsPanel.setHeader(this.filterPanelName);
-	this.filterPanel.center();
-	this.filterPanel.show();
-	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true&reportContextId=" + reportContextId + avoidIECacheParam +this.resetString+this.additionalParameter, this);
-	this.resetString		= "";
-	
-	// Fix z-index problem on Public Report Generator without changing css loading order.
-	this.fixZIndex("#new_mask", 3);
-};
-
 Filters.prototype.showFilters = function (reportContextId) {
 	widgetFilter.reportContextId = reportContextId;
 	if (widgetFilter.reportContextId === 'report_wizard') {
 		this.showFilterWidget();
+	} else if (widgetFilter.reportContextId === 'workspace_editor') {
+		var id = new URL(window.location).searchParams.get('tId');
+		if (id) {
+			this.loadSavedFilterData(id, false);
+		} else {
+			this.showFilterWidget();
+		}
 	} else if (widgetFilter.gotSavedFilters !== true) {
-		var self = this;
-		$.ajax({
-			type: 'GET',
-			url: '/rest/data/report/' + widgetFilter.reportContextId,
-			success: function (data) {
-				filters = data.reportMetadata.reportSpec.filters;
-				widgetFilter.deserialize({filters: filters}, {silent: true});
-				self.showFilterWidget();
-			}
-		});
-		widgetFilter.gotSavedFilters = true;
+		this.loadSavedFilterData(widgetFilter.reportContextId, true);
 	} else {
 		this.showFilterWidget();
 	}
+};
+
+Filters.prototype.loadSavedFilterData = function (id, isReport) {
+	var self = this;
+	var url = isReport ? REPORT_URL : TEAM_URL;
+	$.ajax({
+		type: 'GET',
+		url: url + id,
+		success: function (data) {
+			filters = isReport ? data.reportMetadata.reportSpec.filters : data[FILTER_OBJECT];
+			widgetFilter.deserialize({filters: filters}, {silent: true});
+			self.showFilterWidget();
+		}
+	});
+	widgetFilter.gotSavedFilters = true;
 };
 
 Filters.prototype.showFilterWidget = function () {

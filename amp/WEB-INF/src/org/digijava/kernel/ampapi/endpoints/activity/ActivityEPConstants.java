@@ -21,6 +21,7 @@ public class ActivityEPConstants {
     public static final String FIELD_NAME = "field_name";
     public static final String FIELD_NAME_INTERNAL = "actual_field_name";
     public static final String FIELD_TYPE = "field_type";
+    public static final String ITEM_TYPE = "item-type";
     public static final String FIELD_LENGTH = "field_length";
     public static final String FIELD_LABEL = "field_label";
     public static final String IMPORTABLE = "importable";
@@ -70,14 +71,6 @@ public class ActivityEPConstants {
     public static final String MODIFIED_DATE = "modified-date";
     public static final String UPDATE_CURRENT_VERSION = "update-current-version";
 
-    // field types
-    public static final String FIELD_TYPE_LIST = "list";
-    public static final String FIELD_TYPE_STRING = "string";
-    public static final String FIELD_TYPE_BOOLEAN = "boolean";
-    public static final String FIELD_TYPE_LONG = "long";
-    public static final String FIELD_TYPE_FLOAT = "float";
-    public static final String FIELD_TYPE_DATE = "date";
-    
     // max length constants
     public static final String TYPE_VARCHAR = "character varying";
     

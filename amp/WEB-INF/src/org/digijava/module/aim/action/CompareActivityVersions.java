@@ -348,7 +348,14 @@ public class CompareActivityVersions extends DispatchAction {
         //If the current user is part of the management workspace or is not the workspace manager of a workspace that's not management then hide.
         vForm.setAdvancemode(!ispartofamanagetmentworkspace & iscurrentworkspacemanager);
     }
-    
-   
+
+    public ActionForward viewDifferences(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
+        vForm.setOutputCollection(new ArrayList<CompareOutput>());
+        vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId()));
+
+        return mapping.findForward("forward");
+    }
 
 }

@@ -11,7 +11,14 @@ $(document).ready(function () {
     if (new URL(window.location).searchParams.get('type') === PLEDGE_ID) {
         reportTypeCode = PLEDGE_TYPE;
     }
-    widgetFilter = new ampFilter({el: container, draggable: true, caller: 'REPORTS', reportType: reportTypeCode});
+    var embedded = (document.URL.indexOf('queryEngine.do') > -1);
+    widgetFilter = new ampFilter({
+        el: container,
+        draggable: true,
+        caller: 'REPORTS',
+        reportType: reportTypeCode,
+        embedded: embedded
+    });
     var events = _.extend({}, Backbone.Events);
     // Register apply and cancel buttons.
     events.listenTo(widgetFilter, 'cancel', function () {

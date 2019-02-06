@@ -42,7 +42,9 @@ $(document).ready(function () {
                 $('#hasFilters').val(true);
             }
         });
-        $(container).hide();
-        $('#useFiltersCheckbox').attr('checked', 'checked');
+        if (!embedded) {
+            $(container).hide();
+            $('#useFiltersCheckbox').attr('checked', 'checked');
+        }
     });
 });

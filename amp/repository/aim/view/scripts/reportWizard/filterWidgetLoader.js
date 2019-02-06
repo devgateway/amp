@@ -39,6 +39,7 @@ $(document).ready(function () {
             data: "filtersWidget=" + JSON.stringify(serializedFilters),
             success: function (data) {
                 $('#listFiltersDiv').html(data);
+                $('#hasFilters').val(true);
             }
         });
         $(container).hide();

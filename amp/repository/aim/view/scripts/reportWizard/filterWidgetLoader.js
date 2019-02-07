@@ -33,8 +33,7 @@ $(document).ready(function () {
         var serializedFilters = widgetFilter.serialize() || {};
         var url = '/aim/reportsFilterPicker.do?applyWithNewWidget=true&cacheBuster=';
         if (advancedFilters) {
-            url += new Date().getTime() + '&reportContextId=-7' +
-                '&doreset=true&queryEngine=true';
+            url += new Date().getTime() + '&reportContextId=' + widgetFilter.auxId + '&doreset=true&queryEngine=true';
         } else {
             url += new Date().getTime() + '&reportContextId=' + widgetFilter.reportContextId +
                 '&sourceIsReportWizard=true';

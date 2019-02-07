@@ -1,9 +1,13 @@
-package org.digijava.kernel.ampapi.endpoints.activity;
+package org.digijava.kernel.ampapi.endpoints.activity.field;
 
 import java.lang.reflect.Field;
 import java.util.function.Function;
 
 import org.apache.commons.lang.StringUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.FEContext;
+import org.digijava.kernel.ampapi.endpoints.activity.FMService;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;

@@ -8,7 +8,6 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
-<%@ page import="org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityService"%>
 
 <%
 	if (org.dgfoundation.amp.ar.WorkspaceFilter.isActivityWithinWorkspace((Long) request.getAttribute("actId")))
@@ -36,10 +35,8 @@
 			<%}%>
 
 			<c:if test="${(sessionScope.currentMember != null)}">
-				<%if (PreviewActivityService.getInstance().isViewWorkspacesButtonVisible((Long)request.getAttribute("actId"))) { %>
 					<c:set var="trn"><digi:trn>View Workspaces</digi:trn></c:set>
 					<input type="button" class="buttonx_sm" onclick="javascript:viewWorkspaces(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/>
-				<%}%>
 			</c:if>
 			
 			<c:if test="${(sessionScope.currentMember != null) || (not hideVersionHistoryForPublicUsers)}">

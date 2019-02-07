@@ -35,6 +35,12 @@
 	.panel-footer {
 		padding: 20px 15px;
 	}
+
+	.tab_opt_box_cont {
+		font-size: 11px;
+		color: #444;
+		background-color: #FFF;
+	}
 </style>
 
 <!-- Individual YUI JS files --> 

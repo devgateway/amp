@@ -28,6 +28,11 @@ $(document).ready(function () {
     events.listenTo(widgetFilter, 'close', function () {
         $(container).hide();
     });
+    events.listenTo(widgetFilter, 'reset', function () {
+        if (embedded) {
+            $('#queryLabelsDiv').html('<div id="queryLabelsDiv"><digi:trn>No filters selected so far</digi:trn></div>');
+        }
+    });
     events.listenTo(widgetFilter, 'apply', function () {
         // Save just applied filters in case the user hits "reset" button.
         var serializedFilters = widgetFilter.serialize() || {};

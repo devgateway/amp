@@ -112,11 +112,22 @@ public final class CategoryValueFilterListManager implements FilterListManager {
             node.setName(TranslatorWorker.translateText(ampCategoryValue.getValue()));
             nodes.add(node);
         }
-        nodes.add(getUndefinedOption());
+        
+        if (shouldIncludeUndefinedOption(filterName)) {
+            nodes.add(getUndefinedOption());
+        }
         
         items.put(ITEMS_NAME, nodes);
 
         return items;
+    }
+    
+    private boolean shouldIncludeUndefinedOption(String filterName) {
+        if (filterName.equals(FiltersConstants.STATUS)) {
+            return false;
+        }
+        
+        return true;
     }
     
     private static class CategoryBean {

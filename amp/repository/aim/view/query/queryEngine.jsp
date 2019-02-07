@@ -41,6 +41,11 @@
 		color: #444;
 		background-color: #FFF;
 	}
+
+	.main_side_cont {
+		border-radius: 4px;
+		border: 1px solid #428bca;
+	}
 </style>
 
 <!-- Individual YUI JS files --> 

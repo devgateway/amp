@@ -377,11 +377,4 @@ public final class PreviewActivityService {
         return previewWorkspaces;
     }
     
-    public boolean isViewWorkspacesButtonVisible(Long ampActivityId) throws DgException {
-        AmpActivityVersion activity = ActivityUtil.loadActivity(ampActivityId);
-        TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
-        
-        return teamMember.isApprover() || ActivityUtil.isTeamMemberValidator(teamMember, activity);
-    }
-    
 }

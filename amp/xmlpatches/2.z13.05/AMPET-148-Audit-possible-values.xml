@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMPET-148</jira>
+	<keyword>Audit-Cleanup-Global</keyword>
+	<author>Mistre Wgiorgis</author>
+	<description>Add Audit possible values view in Global settings</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">	
+			UPDATE amp_global_settings set possiblevalues = 'v_audit_trial_cleanup' where settingsname ='Automatic Audit Logger Cleanup';
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

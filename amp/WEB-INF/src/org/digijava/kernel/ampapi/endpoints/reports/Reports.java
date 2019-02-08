@@ -859,6 +859,7 @@ public class Reports implements ErrorReportingEndpoint {
                 message = TranslatorWorker.translateText("Please enter a report name in current language");
             }
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             message = e.getLocalizedMessage();
         }
         return message;

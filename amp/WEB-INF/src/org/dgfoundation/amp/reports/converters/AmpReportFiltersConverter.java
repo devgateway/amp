@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.reports.converters;
 
+import static org.dgfoundation.amp.nireports.runtime.ColumnReportData.UNALLOCATED_ID;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -200,8 +202,11 @@ public class AmpReportFiltersConverter {
                             } else if (ampARFilterFieldClass.toString().equals("class java.lang.Double")) {
                                 values.add(Double.valueOf(auxValue));
                             } else {
-                                Object auxEntity = session.load(ampARFilterFieldClass, new Long(auxValue));
-                                values.add(auxEntity);
+                                Long objId = new Long(auxValue);
+                                if (!objId.equals(UNALLOCATED_ID)) {
+                                    Object auxEntity = session.load(ampARFilterFieldClass, objId);
+                                    values.add(auxEntity);
+                                }
                             }
                         }
                     }

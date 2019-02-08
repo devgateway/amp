@@ -387,7 +387,7 @@ public class AuditLoggerUtil {
     public static void deleteLogsByPeriod(String interval) {
         try {
             String qryStr = "delete from " + AmpAuditLogger.class.getName()
-                    + " where action<>'login' and (loggedDate <= :dateParam or loggedDate=null)";
+                    + " where loggedDate <= :dateParam";
 
             int rowCount = PersistenceManager.getSession().createQuery(qryStr)
                     .setParameter("dateParam", getDateRange(Integer.parseInt(interval)), DateType.INSTANCE).executeUpdate();

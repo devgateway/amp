@@ -17,6 +17,7 @@ var paths = {
     entry: './app/js/app.js',
     compiled: './app/compiled-js/',
     sources: [
+      './app/index.html',
       './app/js/**/*.js',
       '!./app/js/tests/run/**',  // skip compiled test stuff
       '!./app/js/ugly/lib-src/**',  // skip hard-copied external sources

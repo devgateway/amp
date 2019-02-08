@@ -17,7 +17,7 @@ const readyStateRequestReceived = 2;
 const readyStateProcessingRequest = 3;
 const readyStateResponseReady = 4;
 const JOIN_BOUNDARIES_PREFIX = 'J';
-const EMPTY_JSON_FILE = '/TEMPLATE/ampTemplate/gisModule/dev/app/empty.json';
+const EMPTY_JSON_FILE = 'empty.json';
 const GAP_ANALYSIS_URL = '/rest/gis/do-gap-analysis';
 const INDICATOR_LAYER_URL = '/rest/gis/indicators/';
 

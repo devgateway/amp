@@ -3,23 +3,23 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NOT_REQUIRED;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LIST;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LONG;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_STRING;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
@@ -219,7 +219,7 @@ public class FieldsEnumeratorTest {
     private static class MultipleValuesClass {
 
         @Interchangeable(fieldTitle = "field", multipleValues = false)
-        private List<String> field;
+        private List<Object> field;
     }
 
     @Test
@@ -228,6 +228,22 @@ public class FieldsEnumeratorTest {
 
         APIField expected = newListField();
         expected.setMultipleValues(false);
+
+        assertEqualsSingle(expected, actual);
+    }
+
+    private static class SimpleTypeListClass {
+
+        @Interchangeable(fieldTitle = "field")
+        private List<Long> field;
+    }
+
+    @Test
+    public void testSimpleTypeList() {
+        List<APIField> actual = fieldsFor(SimpleTypeListClass.class);
+
+        APIField expected = newListOfLongField();
+        expected.setMultipleValues(true);
 
         assertEqualsSingle(expected, actual);
     }
@@ -243,7 +259,7 @@ public class FieldsEnumeratorTest {
         List<APIField> actual = fieldsFor(LongFieldClass.class);
 
         APIField expected = newAPIField();
-        expected.setFieldType(FIELD_TYPE_LONG);
+        expected.setApiType(new APIType(Long.class));
 
         assertEqualsSingle(expected, actual);
     }
@@ -401,6 +417,7 @@ public class FieldsEnumeratorTest {
         expected1.setFieldLabel(fieldLabelFor("field1"));
         expected1.setFieldNameInternal("activity2");
         expected1.setIdOnly(true);
+        expected1.setApiType(new APIType(Long.class));
 
         assertEqualsDigest(Arrays.asList(expected1), fields);
     }
@@ -465,19 +482,25 @@ public class FieldsEnumeratorTest {
 
     private APIField newListField() {
         APIField field = newAPIField();
-        field.setFieldType(FIELD_TYPE_LIST);
+        field.setApiType(new APIType(Collection.class, Object.class));
+        return field;
+    }
+
+    private APIField newListOfLongField() {
+        APIField field = newAPIField();
+        field.setApiType(new APIType(Collection.class, Long.class));
         return field;
     }
 
     private APIField newLongField() {
         APIField field = newAPIField();
-        field.setFieldType(FIELD_TYPE_LONG);
+        field.setApiType(new APIType(Long.class));
         return field;
     }
 
     private APIField newStringField() {
         APIField field = newAPIField();
-        field.setFieldType(FIELD_TYPE_STRING);
+        field.setApiType(new APIType(String.class));
         field.setFieldLength(TestFieldInfoProvider.MAX_STR_LEN);
         field.setTranslatable(false);
         return field;

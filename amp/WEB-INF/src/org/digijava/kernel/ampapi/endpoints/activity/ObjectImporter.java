@@ -16,13 +16,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
+import java.util.stream.Collectors;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
@@ -189,14 +191,14 @@ public class ObjectImporter {
         String fieldName = getFieldName(fieldDef, newJsonParent);
         String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
         Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
-        // validate and import sub-elements first (if any)
-        newParent = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
-        // then validate current field itself
+
         boolean valid = validator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
-        // and set new field only if all sub-elements are valid
-        if (valid && newParent != null) {
-            newParent = setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
-        } else if (!valid) {
+        if (valid) {
+            newParent = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
+            if (newParent != null) {
+                newParent = setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
+            }
+        } else {
             newParent = null;
         }
         return newParent;
@@ -250,7 +252,7 @@ public class ObjectImporter {
         }
 
         Object value = null;
-        String fieldType = fieldDef.getFieldType();
+        FieldType fieldType = fieldDef.getApiType().getFieldType();
         boolean idOnly = fieldDef.isIdOnly();
 
         // this field has possible values
@@ -266,7 +268,7 @@ public class ObjectImporter {
                 if (col == null) {
                     col = (Collection) getNewInstance(parentObj, field);
                 }
-                if (idOnly && jsonValue != null) {
+                if (idOnly && jsonValue != null && !fieldDef.getApiType().isSimpleItemType()) {
                     Class<?> objectType = AIHelper.getGenericsParameterClass(field);
                     try {
                         Object res = getObjectReferencedById(objectType, jsonValue);
@@ -282,7 +284,7 @@ public class ObjectImporter {
                 throw new RuntimeException(e);
             }
             // this is a simple type
-        } else if (InterchangeableClassMapper.SIMPLE_TYPES.contains(fieldType)) {
+        } else if (fieldType.isSimpleType()) {
             try {
                 if (Date.class.equals(field.getType())) {
                     value = InterchangeUtils.parseISO8601Date((String) jsonValue);
@@ -402,7 +404,7 @@ public class ObjectImporter {
             String fieldPath) {
         // simulate temporarily fieldDef
         fieldDef = fieldDef == null ? new APIField() : fieldDef;
-        String fieldType = fieldDef.getFieldType();
+        FieldType fieldType = fieldDef.getApiType().getFieldType();
         /*
          * Sub-elements by default are valid when not provided.
          * Current field will be verified below and reported as invalid if sub-elements are mandatory and are
@@ -411,11 +413,10 @@ public class ObjectImporter {
 
         // skip children validation immediately if only ID is expected
         boolean idOnly = fieldDef.isIdOnly();
-        if (idOnly) {
+        boolean isList = fieldType.isList();
+        if (idOnly && !(isList && fieldDef.getApiType().isSimpleItemType())) {
             return newParent;
         }
-
-        boolean isList = ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType);
 
         // first validate all sub-elements
         List<APIField> childrenFields = fieldDef.getChildren();
@@ -426,7 +427,7 @@ public class ObjectImporter {
             String actualFieldName = fieldDef.getFieldNameInternal();
             Field newField = ReflectionUtil.getField(newParent, actualFieldName);
             Object newFieldValue;
-            Class<?> subElementClass = fieldDef.getElementType();
+            Class<?> subElementClass = fieldDef.getApiType().getElementType();
             boolean isCollection = false;
             try {
                 newFieldValue = newField == null ? null : newField.get(newParent);
@@ -443,55 +444,75 @@ public class ObjectImporter {
                 throw new RuntimeException(e);
             }
 
-            if (newFieldValue != null && AmpAgreement.class.isAssignableFrom(newFieldValue.getClass())
-                    && childrenNewValues.size() == 1) {
-                Map<String, Object> agreementMap = childrenNewValues.get(0);
-                childrenNewValues.clear();
-                for (String key : agreementMap.keySet()) {
-                    HashMap<String, Object> kv = new HashMap<String, Object>();
-                    Object val = agreementMap.get(key);
+            if (isCollection && fieldDef.getApiType().isSimpleItemType()) {
+                Collection nvs = ((Collection<?>) childrenNewValues).stream()
+                        .map(v -> toSimpleTypeValue(v, subElementClass)).collect(Collectors.toList());
+                ((Collection) newFieldValue).addAll(nvs);
+            } else {
+                if (newFieldValue != null && AmpAgreement.class.isAssignableFrom(newFieldValue.getClass())
+                        && childrenNewValues.size() == 1) {
+                    Map<String, Object> agreementMap = childrenNewValues.get(0);
+                    childrenNewValues.clear();
+                    for (String key : agreementMap.keySet()) {
+                        HashMap<String, Object> kv = new HashMap<String, Object>();
+                        Object val = agreementMap.get(key);
 
-                    if (val instanceof String) {
-                        val = StringUtils.trim((String) val);
+                        if (val instanceof String) {
+                            val = StringUtils.trim((String) val);
+                        }
+
+                        kv.put(key, val);
+                        childrenNewValues.add(kv);
+                    }
+                }
+
+                // process children
+                Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
+                while (iterNew.hasNext()) {
+                    Map<String, Object> newChild = iterNew.next();
+                    branchJsonVisitor.put(fieldPath, newChild);
+                    APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
+
+                    Object res;
+                    if (isCollection) {
+                        try {
+                            Object newSubElement = subElementClass.newInstance();
+                            res = validateAndImport(newSubElement, childrenFields, newChild, fieldPath);
+                        } catch (InstantiationException | IllegalAccessException e) {
+                            logger.error(e.getMessage());
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        res = validateAndImport(newFieldValue, childFieldDef, newChild, fieldPath);
                     }
 
-                    kv.put(key, val);
-                    childrenNewValues.add(kv);
-                }
-            }
-
-            // process children
-            Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
-            while (iterNew.hasNext()) {
-                Map<String, Object> newChild = iterNew.next();
-                branchJsonVisitor.put(fieldPath, newChild);
-                APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
-
-                Object res;
-                if (isCollection) {
-                    try {
-                        Object newSubElement = subElementClass.newInstance();
-                        res = validateAndImport(newSubElement, childrenFields, newChild, fieldPath);
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        logger.error(e.getMessage());
-                        throw new RuntimeException(e);
+                    if (res == null) {
+                        // validation failed, reset parent to stop config
+                        newParent = null;
+                    } else if (newParent != null && isCollection) {
+                        configureDiscriminationField(res, fieldDef);
+                        // actual links will be updated
+                        ((Collection) newFieldValue).add(res);
                     }
-                } else {
-                    res = validateAndImport(newFieldValue, childFieldDef, newChild, fieldPath);
                 }
-
-                if (res == null) {
-                    // validation failed, reset parent to stop config
-                    newParent = null;
-                } else if (newParent != null && isCollection) {
-                    configureDiscriminationField(res, fieldDef);
-                    // actual links will be updated
-                    ((Collection) newFieldValue).add(res);
-                }
+                // TODO: we also need to validate other children, some can be mandatory
             }
-            // TODO: we also need to validate other children, some can be mandatory
         }
         return newParent;
+    }
+
+    private Object toSimpleTypeValue(Object value, Class<?> type) {
+        if (value == null || type.isAssignableFrom(value.getClass())) {
+            return value;
+        }
+        try {
+            Method valueOf = type.getMethod("valueOf", String.class);
+            return valueOf.invoke(type, value.toString());
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException e) {
+            logger.error("Could not automatically convert the value. The deserializer configuration may be missing.");
+            throw new RuntimeException(e);
+        }
     }
 
     /**

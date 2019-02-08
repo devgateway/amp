@@ -219,7 +219,8 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     private boolean iatiAdded = false; //nonpersistant
     private Long checkSum;
     
-    @Interchangeable(fieldTitle = "Disaster Response", importable = true, required = REQUIRED_ALWAYS,
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.DISASTER_RESPONSE, importable = true,
+            required = REQUIRED_ALWAYS,
             fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH
                     + "|" + ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH,
             dependencies = {

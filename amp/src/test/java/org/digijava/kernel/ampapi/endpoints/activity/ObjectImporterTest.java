@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;

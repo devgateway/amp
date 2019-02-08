@@ -3,11 +3,11 @@ package org.digijava.kernel.services;
 import java.util.function.Function;
 
 import org.digijava.kernel.ampapi.endpoints.activity.AMPFMService;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.AllowMultipleProgramsPredicate;
-import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldInfoProvider;
-import org.digijava.kernel.ampapi.endpoints.activity.CachingFieldsEnumerator;
-import org.digijava.kernel.ampapi.endpoints.activity.FieldsEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.field.ActivityFieldsEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.field.AmpFieldInfoProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.services.sync.SyncDAO;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;

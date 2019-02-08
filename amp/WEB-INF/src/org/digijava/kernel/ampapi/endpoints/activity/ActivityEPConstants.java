@@ -21,6 +21,7 @@ public class ActivityEPConstants {
     public static final String FIELD_NAME = "field_name";
     public static final String FIELD_NAME_INTERNAL = "actual_field_name";
     public static final String FIELD_TYPE = "field_type";
+    public static final String ITEM_TYPE = "item-type";
     public static final String FIELD_LENGTH = "field_length";
     public static final String FIELD_LABEL = "field_label";
     public static final String IMPORTABLE = "importable";
@@ -70,14 +71,6 @@ public class ActivityEPConstants {
     public static final String MODIFIED_DATE = "modified-date";
     public static final String UPDATE_CURRENT_VERSION = "update-current-version";
 
-    // field types
-    public static final String FIELD_TYPE_LIST = "list";
-    public static final String FIELD_TYPE_STRING = "string";
-    public static final String FIELD_TYPE_BOOLEAN = "boolean";
-    public static final String FIELD_TYPE_LONG = "long";
-    public static final String FIELD_TYPE_FLOAT = "float";
-    public static final String FIELD_TYPE_DATE = "date";
-    
     // max length constants
     public static final String TYPE_VARCHAR = "character varying";
     
@@ -90,6 +83,14 @@ public class ActivityEPConstants {
     
     // floating comparison constant
     public static final Double EPSILON = 0.0001;
+
+    /* 
+     * Based on local stats, 7 is the minimum DB query batch size with best outcome. 6-5 is pretty close, but going 
+     * lower makes the difference more noticeable. Growing the value up won't make a significant difference for some
+     * time. At about 16 and especially higher like 32 the performance impact is seen.
+     * Keeping it at the smallest optimal will allow a better performance for multiple users sync up (e.g. training). 
+     */
+    public static final Integer BATCH_DB_QUERY_SIZE = 7;
 
     public static final String FIELD_TITLE = "_FIELD_TITLE_";
     private static final String FUNDING_ITEM_FM_PATH = "/Activity Form/Funding/Funding Group/Funding Item";

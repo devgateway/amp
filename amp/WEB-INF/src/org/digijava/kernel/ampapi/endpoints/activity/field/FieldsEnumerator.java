@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activity;
+package org.digijava.kernel.ampapi.endpoints.activity.field;
 
 import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
 
@@ -19,6 +19,14 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.nireports.ImmutablePair;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.DiscriminatedFieldValueReader;
+import org.digijava.kernel.ampapi.endpoints.activity.FEContext;
+import org.digijava.kernel.ampapi.endpoints.activity.FMService;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldValueReader;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
@@ -88,18 +96,22 @@ public class FieldsEnumerator {
         apiField.setFieldName(fieldTitle);
 
         // for discriminated case we can override the type here
-        apiField.setType(InterchangeUtils.getClassOfField(field));
+        Class<?> type = InterchangeUtils.getClassOfField(field);
+        FieldType fieldType = null;
+        Class<?> elementType = null;
+        if (interchangeable.pickIdOnly()) {
+            fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
+        } else if (!InterchangeUtils.isSimpleType(field.getType())) {
+            elementType = getType(field, context);
+            if (InterchangeUtils.isCollection(field) && InterchangeUtils.isSimpleType(elementType)) {
+                type = field.getClass();
+            }
+        }
+        APIType apiType = new APIType(type, fieldType, elementType);
+        apiField.setApiType(apiType);
 
         apiField.setPossibleValuesProviderClass(InterchangeUtils.getPossibleValuesProvider(field));
 
-        if (interchangeable.pickIdOnly()) {
-            apiField.setFieldType(InterchangeableClassMapper.getCustomMapping(java.lang.Long.class));
-        } else {
-
-            Class<?> fieldType = field.getType();
-            apiField.setFieldType(InterchangeableClassMapper.containsSimpleClass(fieldType)
-                    ? InterchangeableClassMapper.getCustomMapping(fieldType) : ActivityEPConstants.FIELD_TYPE_LIST);
-        }
         String label = getLabelOf(interchangeable);
         apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
         apiField.setRequired(getRequiredValue(context, fieldTitle));
@@ -125,6 +137,13 @@ public class FieldsEnumerator {
         apiField.setIdOnly(hasPossibleValues(field, interchangeable));
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
+            if (!interchangeable.pickIdOnly()) {
+                List<APIField> children = getAllAvailableFields(elementType, context);
+                if (children != null && children.size() > 0) {
+                    apiField.setChildren(children);
+                }
+            }
+
             if (InterchangeUtils.isCollection(field)) {
                 if (!hasMaxSizeValidatorEnabled(field, context)
                         && interchangeable.multipleValues()) {
@@ -142,7 +161,7 @@ public class FieldsEnumerator {
                     apiField.setPercentageConstraint(getPercentageConstraint(field, context));
                 }
                 
-                String uniqueConstraint = getUniqueConstraint(field, context);
+                String uniqueConstraint = getUniqueConstraint(apiField, field, context);
                 if (hasTreeCollectionValidatorEnabled(context)) {
                     apiField.setTreeCollectionConstraint(true);
                     apiField.setUniqueConstraint(uniqueConstraint);
@@ -152,17 +171,6 @@ public class FieldsEnumerator {
                 
             } else if (!interchangeable.pickIdOnly()) {
                 apiField.setMultipleValues(false);
-            }
-
-            if (!interchangeable.pickIdOnly()) {
-                Class type = getType(field, context);
-                List<APIField> children = getAllAvailableFields(type, context);
-                if (InterchangeUtils.isCollection(field)) {
-                    apiField.setElementType(type);
-                }
-                if (children != null && children.size() > 0) {
-                    apiField.setChildren(children);
-                }
             }
         }
         
@@ -211,7 +219,7 @@ public class FieldsEnumerator {
         return label;
     }
 
-    List<APIField> getAllAvailableFields(Class<?> clazz) {
+    public List<APIField> getAllAvailableFields(Class<?> clazz) {
         return getAllAvailableFields(clazz, new FEContext());
     }
 
@@ -310,7 +318,11 @@ public class FieldsEnumerator {
     /**
      * Describes each @Interchangeable field of a class
      */
-    private String getUniqueConstraint(Field field, FEContext context) {
+    private String getUniqueConstraint(APIField apiField, Field field, FEContext context) {
+        if (apiField.getApiType().isSimpleItemType()) {
+            Interchangeable interchangeable = context.getIntchStack().peek();
+            return interchangeable.uniqueConstraint() ? apiField.getFieldName() : null;
+        }
         Class<?> genericClass = InterchangeUtils.getGenericClass(field);
         Field[] fields = FieldUtils.getFieldsWithAnnotation(genericClass, Interchangeable.class);
         for (Field f : fields) {

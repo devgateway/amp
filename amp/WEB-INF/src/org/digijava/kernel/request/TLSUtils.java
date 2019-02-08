@@ -157,8 +157,7 @@ public class TLSUtils {
     public static TLSUtils getThreadLocalInstance()
     {
         TLSUtils res = threadLocalInstance.get();
-        if (res == null)
-        {
+        if (res == null) {
             res = new TLSUtils();
             threadLocalInstance.set(res);
         }

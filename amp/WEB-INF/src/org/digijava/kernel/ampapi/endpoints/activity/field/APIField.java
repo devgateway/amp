@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activity;
+package org.digijava.kernel.ampapi.endpoints.activity.field;
 
 import java.util.List;
 
@@ -6,30 +6,28 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.FieldValueReader;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * @author Octavian Ciubotaru
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "field_name", "id", "field_type", "field_label", "required", "importable", "dependencies",
-        "id_only", "multiple_values", "percentage_constraint", "unique_constraint", "tree_collection", "translatable",
-        "regex_pattern", "regex_constraint", "field_length", "size_limit" })
+@JsonPropertyOrder({ "field_name", "apiType", "field_label", "required", "importable", "dependencies", "id_only",
+    "multiple_values", "percentage_constraint", "unique_constraint", "tree_collection", "translatable", "regex_pattern",
+    "regex_constraint", "field_length", "size_limit" })
 public class APIField {
 
     @JsonProperty(ActivityEPConstants.FIELD_NAME)
     private String fieldName;
-
-    @JsonProperty(ActivityEPConstants.FIELD_TYPE)
-    private String fieldType;
-
-    /**
-     * Meaningful only when fieldType is list.
-     */
-    @JsonIgnore
-    private Class<?> elementType;
+    
+    @JsonUnwrapped
+    private APIType apiType;
 
     @JsonProperty(ActivityEPConstants.FIELD_LABEL)
     private JsonBean fieldLabel;
@@ -90,9 +88,6 @@ public class APIField {
     private Class<? extends DiscriminationConfigurer> discriminationConfigurer;
 
     @JsonIgnore
-    private Class<?> type;
-
-    @JsonIgnore
     private Class<? extends PossibleValuesProvider> possibleValuesProviderClass;
 
     @JsonIgnore
@@ -113,14 +108,6 @@ public class APIField {
     public void setPossibleValuesProviderClass(
             Class<? extends PossibleValuesProvider> possibleValuesProviderClass) {
         this.possibleValuesProviderClass = possibleValuesProviderClass;
-    }
-
-    public Class<?> getType() {
-        return type;
-    }
-
-    public void setType(Class<?> type) {
-        this.type = type;
     }
 
     public String getFieldName() {
@@ -147,12 +134,13 @@ public class APIField {
         this.fieldNameInternal = fieldNameInternal;
     }
 
-    public String getFieldType() {
-        return fieldType;
+    @JsonProperty("apiType")
+    public APIType getApiType() {
+        return apiType;
     }
 
-    public void setFieldType(String fieldType) {
-        this.fieldType = fieldType;
+    public void setApiType(APIType apiType) {
+        this.apiType = apiType;
     }
 
     public String getRequired() {
@@ -292,17 +280,10 @@ public class APIField {
         this.discriminationConfigurer = discriminationConfigurer;
     }
 
-    public Class<?> getElementType() {
-        return elementType;
-    }
-
-    public void setElementType(Class<?> elementType) {
-        this.elementType = elementType;
-    }
-
     @Override
     public String toString() {
-        return "APIField{" + "fieldName='" + fieldName + '\'' + ", fieldType='" + fieldType + '\''
+        return "APIField{" + "fieldName='" + fieldName + '\'' + ", fieldType='" + this.apiType.getFieldType() + '\''
+                + ", itemType=" + this.apiType.getItemType()
                 + ", fieldLabel=" + fieldLabel + ", fieldNameInternal='" + fieldNameInternal + '\'' + ", required='"
                 + required + '\'' + ", idOnly=" + idOnly + ", importable=" + importable + ", translatable="
                 + translatable + ", multipleValues=" + multipleValues

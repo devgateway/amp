@@ -2,7 +2,7 @@ package org.digijava.kernel.services.sync.model;
 
 import java.util.Date;
 import java.util.List;
-
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601TimeStampSerializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

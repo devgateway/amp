@@ -29,7 +29,7 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
     private String name;
     private AmpCategoryValue parentCategoryValue;
     private AmpCategoryValueLocations parentLocation;
-    private Set<AmpCategoryValueLocations> childLocations;
+    private Set<AmpCategoryValueLocations> childLocations = new HashSet<>();
     private String description;
     private String gsLat;
     private String gsLong;

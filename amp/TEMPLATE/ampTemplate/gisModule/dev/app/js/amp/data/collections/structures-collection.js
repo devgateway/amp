@@ -227,7 +227,8 @@ module.exports = Backbone.Collection
                         sites[0].get('activity').get('matchesFilters')[filterVertical].length > 1) {
               code = '0';
             } else {
-              if (sites[0].get('activity').get('matchesFilters')[filterVertical][0] instanceof Object) {
+              if ((sites[0].get('activity').get('matchesFilters')[filterVertical][0] instanceof Object) && 
+            		  sites[0].get('activity').get('matchesFilters')[filterVertical][0].get) {
                 code = sites[0].get('activity').get('matchesFilters')[filterVertical][0].get('code');
               } else {
                 code = sites[0].get('activity').get('matchesFilters')[filterVertical][0];

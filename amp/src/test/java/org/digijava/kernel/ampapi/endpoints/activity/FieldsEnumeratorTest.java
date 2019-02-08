@@ -3,11 +3,19 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NOT_REQUIRED;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.NONE;
+
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -142,20 +150,24 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "field_not_required_implicit")
         private String fieldNotRequiredImplicit;
 
-        @Interchangeable(fieldTitle = "field_not_required_explicit", required = ActivityEPConstants.REQUIRED_NONE)
+        @Interchangeable(fieldTitle = "field_not_required_explicit", required = NONE)
         private String fieldNotRequiredExplicit;
 
-        @Interchangeable(fieldTitle = "field_required_always", required = ActivityEPConstants.REQUIRED_ALWAYS)
+        @Interchangeable(fieldTitle = "field_required_always", required = ALWAYS)
         private String fieldRequiredAlways;
 
-        @Interchangeable(fieldTitle = "field_required_non_draft", required = ActivityEPConstants.REQUIRED_ND)
+        @Interchangeable(fieldTitle = "field_required_non_draft", required = SUBMIT)
         private String fieldRequiredNonDraft;
 
-        @Interchangeable(fieldTitle = "field_required_fm_visible", required = "fm visible")
+        @Interchangeable(fieldTitle = "field_required_fm_visible", requiredFmPath = "fm visible")
         private String fieldRequiredFmEntryVisible;
 
-        @Interchangeable(fieldTitle = "field_required_fm_hidden", required = "fm hidden")
+        @Interchangeable(fieldTitle = "field_required_fm_hidden", requiredFmPath = "fm hidden")
         private String fieldRequiredFmEntryHidden;
+    
+        @Interchangeable(fieldTitle = "disaster_response", fmPath = "fm visible",
+                requiredFmPath = "fm visible", required = ALWAYS)
+        private String fieldRequiredParentFmEntryVisible;
 
         @Interchangeable(fieldTitle = "field_required_min_size_on", validators = @Validators(minSize = "fm visible"))
         private String fieldRequiredMinSizeOn;
@@ -163,11 +175,11 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "field_required_min_size_off", validators = @Validators(minSize = "fm hidden"))
         private String fieldRequiredMinSizeOff;
 
-        @Interchangeable(fieldTitle = "field_required_and_min_size_on", required = "fm hidden",
+        @Interchangeable(fieldTitle = "field_required_and_min_size_on", requiredFmPath = "fm hidden",
                 validators = @Validators(minSize = "fm visible"))
         private String fieldRequiredFmEntryAndMinSizeValidatorOn;
 
-        @Interchangeable(fieldTitle = "field_required_and_min_size_off", required = "fm hidden",
+        @Interchangeable(fieldTitle = "field_required_and_min_size_off", requiredFmPath = "fm hidden",
                 validators = @Validators(minSize = "fm hidden"))
         private String fieldRequiredFmEntryAndMinSizeValidatorOff;
     }
@@ -183,6 +195,7 @@ public class FieldsEnumeratorTest {
                 newRequiredField("field_required_non_draft", FIELD_NON_DRAFT_REQUIRED),
                 newRequiredField("field_required_fm_visible", FIELD_NON_DRAFT_REQUIRED),
                 newRequiredField("field_required_fm_hidden", FIELD_NOT_REQUIRED),
+                newRequiredField("disaster_response", FIELD_ALWAYS_REQUIRED),
                 newRequiredField("field_required_min_size_on", FIELD_NON_DRAFT_REQUIRED),
                 newRequiredField("field_required_min_size_off", FIELD_NOT_REQUIRED),
                 newRequiredField("field_required_and_min_size_on", FIELD_NON_DRAFT_REQUIRED),

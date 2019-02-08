@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -15,11 +17,12 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
     @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true)
     private AmpActivityVersion activityId;
     
-    @Interchangeable(fieldTitle="Sector", importable = true , pickIdOnly = true, uniqueConstraint = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Sector", importable = true, pickIdOnly = true, uniqueConstraint = true,
+            required = ALWAYS)
     private AmpSector sectorId;
     
     @Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true, 
-            fmPath = FMVisibility.PARENT_FM + "/sectorPercentage", required = ActivityEPConstants.REQUIRED_ALWAYS)
+            fmPath = FMVisibility.PARENT_FM + "/sectorPercentage", required = ALWAYS)
     private Float sectorPercentage;
 
     private AmpClassificationConfiguration classificationConfig;

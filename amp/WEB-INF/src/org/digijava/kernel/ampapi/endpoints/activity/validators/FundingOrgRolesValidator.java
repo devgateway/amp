@@ -6,8 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
@@ -32,15 +34,15 @@ public class FundingOrgRolesValidator extends InputValidator {
     private static final String SRC_ORG = "donor_organization_id";
     private static final String SRC_ROLE = "source_role";
 
-    private final static String FUNDING_DETAILS = "funding_details";
     private static final String DST_ORG = "recipient_organization";
     private static final String DST_ROLE = "recipient_role";
 
-    private final static String FUNDING_PATH = FUNDING;
-    private final static String FUNDING_DETAILS_PATH = FUNDING_PATH + "~" + FUNDING_DETAILS;
-
     private Set<Pair<Long, Long>> orgRoleDefinitions;
-
+    
+    private static final Set<String> TRANSACTION_PATHS = ActivityEPConstants.TRANSACTION_FIELD_NAMES.stream()
+            .map(transactionName -> FUNDING + "~" + InterchangeUtils.underscorify(transactionName))
+            .collect(Collectors.toSet());
+    
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
                            Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
@@ -48,9 +50,9 @@ public class FundingOrgRolesValidator extends InputValidator {
         if (fieldPath.equals(FUNDING)) {
             return areOrgRolesValid(importer, newFieldParent, FUNDING, SRC_ORG, SRC_ROLE);
         }
-
-        if (fieldPath.equals(FUNDING_DETAILS_PATH)) {
-            return areOrgRolesValid(importer, newFieldParent, FUNDING_DETAILS, DST_ORG, DST_ROLE);
+        
+        if (TRANSACTION_PATHS.contains(fieldPath)) {
+            return areOrgRolesValid(importer, newFieldParent, fieldPath, DST_ORG, DST_ROLE);
         }
 
         return true;

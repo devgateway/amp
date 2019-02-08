@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.io.Serializable;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
@@ -10,7 +12,7 @@ public class AmpOrgRoleBudget implements Serializable, Comparable<AmpOrgRoleBudg
     
     private Long ampOrgRoleBudgetId;
     
-    @Interchangeable(fieldTitle = "Budget Code", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Budget Code", importable = true, required = ALWAYS)
     private String budgetCode;
     
     private AmpOrgRole ampOrgRole;

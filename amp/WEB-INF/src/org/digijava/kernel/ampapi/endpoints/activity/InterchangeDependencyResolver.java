@@ -14,7 +14,6 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.FlushMode;
@@ -48,11 +47,6 @@ public class InterchangeDependencyResolver {
     public final static String IMPLEMENTATION_LOCATION_PRESENT_KEY = "implementation_location_present";
     public final static String IMPLEMENTATION_LEVEL_VALID_KEY = "implementation_level_valid";
     public final static String IMPLEMENTATION_LOCATION_VALID_KEY = "implementation_location_valid";
-    public final static String COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY = "funding_type_commitment_or_disbursement_present";
-    public final static String COMMITMENTS_PRESENT_KEY = "funding_type_commitment_present";
-    public final static String DISBURSEMENTS_PRESENT_KEY = "funding_type_disbursements_present";
-    public final static String COMMITMENTS_DISASTER_RESPONSE_REQUIRED = "commitments_disaster_response_required";
-    public final static String DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED = "disbursements_disaster_response_required";
     public final static String AGREEMENT_CODE_PRESENT_KEY = "agreement_code_required";
     public final static String AGREEMENT_TITLE_PRESENT_KEY = "agreement_title_required";
     public static final String TRANSACTION_PRESENT_KEY = "transaction_present";
@@ -141,12 +135,11 @@ public class InterchangeDependencyResolver {
     /**
      * checks whether the specified dependency code is fulfilled in regards to the activity
      * @param value
-     * @param incomingActivity
+     * @param importer
      * @param code
      * @return
      */
-    public static DependencyCheckResult checkDependency(Object value, ObjectImporter importer, String code, 
-            Map<String, Object> fieldParent) {
+    public static DependencyCheckResult checkDependency(Object value, ObjectImporter importer, String code) {
         
         JsonBean incomingActivity = importer.getNewJson();
         
@@ -157,23 +150,7 @@ public class InterchangeDependencyResolver {
         case AGREEMENT_TITLE_PRESENT_KEY : return checkFieldValuePresent(value, AGREEMENT_TITLE_PATH);
         case IMPLEMENTATION_LEVEL_VALID_KEY: return checkImplementationLevel(value, incomingActivity);
         case IMPLEMENTATION_LOCATION_VALID_KEY: return checkImplementationLocation(value, incomingActivity);
-        case COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY: {
-            boolean isCommitment = checkTransactionType(value, incomingActivity, fieldParent, Constants.COMMITMENT);
-            boolean isDisbursement = checkTransactionType(value, incomingActivity, fieldParent, Constants.DISBURSEMENT);
-            return DependencyCheckResult.convertToUnavailable(value == null || isCommitment || isDisbursement);
-        } case COMMITMENTS_PRESENT_KEY: {
-            boolean isCommitment = checkTransactionType(value, incomingActivity, fieldParent, Constants.COMMITMENT);
-            return DependencyCheckResult.convertToUnavailable(value == null || isCommitment);
-        } case DISBURSEMENTS_PRESENT_KEY: {
-            boolean isDisbursement = checkTransactionType(value, incomingActivity, fieldParent, Constants.DISBURSEMENT);
-            return DependencyCheckResult.convertToUnavailable(value == null || isDisbursement);
-        } case COMMITMENTS_DISASTER_RESPONSE_REQUIRED: {
-            boolean isCommitment = checkTransactionType(value, incomingActivity, fieldParent, Constants.COMMITMENT);
-            return DependencyCheckResult.convertToUnavailable(value == null && isCommitment);
-        } case DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED: {
-            boolean isDisbursement = checkTransactionType(value, incomingActivity, fieldParent, Constants.DISBURSEMENT);
-            return DependencyCheckResult.convertToUnavailable(value == null && isDisbursement);
-        } case ORGANIZATION_PRESENT_KEY: 
+        case ORGANIZATION_PRESENT_KEY:
             return checkComponentFundingOrg(value, incomingActivity);
         case FUNDING_ORGANIZATION_VALID_PRESENT_KEY: 
             return checkFundingPledgesOrgGroup(importer, value);
@@ -190,30 +167,20 @@ public class InterchangeDependencyResolver {
      * 
      * @param value
      * @param importer
-     * @param code
      * @param fieldDescription
+     * @param fieldParent
      * @return
      */
     public static boolean checkRequiredDependencyFulfilled(Object value, ObjectImporter importer, 
             APIField fieldDescription, Map<String, Object> fieldParent) {
         
         List<String> deps = fieldDescription.getDependencies();
-        boolean doNotCheckRequired = InterchangeUtils.underscorify(ActivityFieldsConstants.DISASTER_RESPONSE)
-                .equals(fieldDescription.getFieldName());
-        boolean result = !doNotCheckRequired;
+        boolean result = true;
         if (deps != null) {
             for (String dep : deps) {
                 switch (dep) {
                     case ON_BUDGET_KEY:
                         result = result && isOnBudget(value, importer, fieldDescription);
-                        break;
-                    case COMMITMENTS_DISASTER_RESPONSE_REQUIRED:
-                        result = result || isPartOfCorrectTransaction(value, importer, fieldParent, 
-                                Constants.COMMITMENT);
-                        break;
-                    case DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED:
-                        result = result || isPartOfCorrectTransaction(value, importer, fieldParent, 
-                                Constants.DISBURSEMENT);
                         break;
                     case TRANSACTION_PRESENT_KEY:
                         result = result && hasTransactions(fieldParent);
@@ -254,22 +221,7 @@ public class InterchangeDependencyResolver {
         return referenceOnBudgetValue.equals(onOffBudgetValue);
     }
     
-    /**
-     * check if the value is present in a transaction of type provided by transaction type
-     * 
-     * @param value
-     * @param importer
-     * @param fieldParent
-     * @param transactionType
-     * @return
-     */
-    private static boolean isPartOfCorrectTransaction(Object value, ObjectImporter importer, 
-            Map<String, Object> fieldParent, int transactionType) {
-        
-        return checkTransactionType(value, importer.getNewJson(), fieldParent, transactionType);
-    }
-    
-    private static boolean isResourceTypeValid(Object value, ObjectImporter importer, 
+    private static boolean isResourceTypeValid(Object value, ObjectImporter importer,
             Map<String, Object> fieldParent, String resourceType) {
         
         Object resType = fieldParent.get(InterchangeUtils.underscorify(ResourceEPConstants.RESOURCE_TYPE));
@@ -285,7 +237,9 @@ public class InterchangeDependencyResolver {
      */
     private static boolean hasTransactions(Map<String, Object> fieldParent) {
         
-        int transactionsCount = getCollectionSize(fieldParent, ActivityFieldsConstants.FUNDING_DETAILS);
+        int transactionsCount = ActivityEPConstants.TRANSACTION_FIELD_NAMES.stream()
+                .mapToInt(transactionName -> getCollectionSize(fieldParent, transactionName))
+                .sum();
         
         return transactionsCount > 0;
     }
@@ -335,69 +289,12 @@ public class InterchangeDependencyResolver {
         return CategoryConstants.ACTIVITY_BUDGET_ON.getAmpCategoryValueFromDB().getIdentifier();
     }
     
-    private static DependencyCheckResult checkCommitmentDisbursement(Object e, JsonBean incomingActivity, Map<String, Object> fieldParent) {
-        Object trnType = getTransactionType(e, incomingActivity, fieldParent);
-        if (trnType != null && (trnType.equals(Constants.COMMITMENT) || trnType.equals(Constants.DISBURSEMENT)))
-            return DependencyCheckResult.INVALID_NOT_CONFIGURABLE;
-        return DependencyCheckResult.VALID;
-    }
-    private static boolean checkTransactionType(Object e, JsonBean incomingActivity, Map<String, Object> fieldParent, int trnCode) {
-        Object trnType = getTransactionType(e, incomingActivity, fieldParent);
-        return trnType != null && trnType.equals(trnCode);
-    }
-    
-    private static Object getTransactionType(Object e, JsonBean incomingActivity, Map<String, Object> fieldParent) {
-        return fieldParent.get(InterchangeUtils.underscorify(ActivityFieldsConstants.TRANSACTION_TYPE));
-    }
-    
     private static int getCollectionSize(Map<String, Object> fieldParent, String fieldName) {
         Object collection = fieldParent.get(InterchangeUtils.underscorify(fieldName));
         if (collection != null && Collection.class.isAssignableFrom(collection.getClass())) {
             return ((Collection<?>) collection).size();
         }
         return 0;
-    }
-    
-    /**
-     * Does any other custom checks for dependency key to be displayed or not
-     * @param dependencyKey
-     * @return this or any other dependency key or null if no dependency key should be actually considered
-     */
-    private String getActualDependency(String dependencyKey) {
-        // verify any custom keys processing
-        switch (dependencyKey) {
-        case COMMITMENTS_PRESENT_KEY:
-            if (!fmService.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
-                return null;
-            } else if (fmService.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
-                return COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY;
-            }
-            break;
-        case DISBURSEMENTS_PRESENT_KEY:
-            if (!fmService.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
-                return null;
-            } else if (fmService.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
-                // since it will be or was provided as part of COMMITMENTS_PRESENT_KEY
-                return null;
-            }
-            break;
-        case COMMITMENTS_DISASTER_RESPONSE_REQUIRED:
-            // do not mention commitments dependency key required setting if not enabled
-            if (!fmService.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)
-                    || !fmService.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_REQUIRED_FM_PATH, null)) {
-                return null;
-            }
-            break;
-        case DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED:
-            // do not mention disbursements dependency key required setting if not enabled
-            if (!fmService.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)
-                    || !fmService.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_REQUIRED_PATH, null)) {
-                return null;
-            }
-            break;
-        }
-        // provide back the dependency key if no changes detected so far 
-        return dependencyKey;
     }
     
     /**
@@ -447,7 +344,6 @@ public class InterchangeDependencyResolver {
             return null;
         List<String> actualDependecies = new ArrayList<String>();
         for(String dependency : dependecies) {
-            dependency = getActualDependency(dependency);
             if (StringUtils.isNotBlank(dependency)) {
                 actualDependecies.add(dependency);
             }

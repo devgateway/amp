@@ -43,7 +43,7 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
     
     @Interchangeable(fieldTitle = "Amount", importable = true,
             fmPath = FMVisibility.PARENT_FM + "/" + CategoryConstants.PROJECT_AMOUNT_NAME,
-            required = FMVisibility.PARENT_FM + "/Required Validator for Cost Amount")
+            requiredFmPath = FMVisibility.PARENT_FM + "/Required Validator for Cost Amount")
     @VersionableFieldSimple(fieldTitle = "Fun Amount")
     protected Double funAmount;
     

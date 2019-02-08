@@ -69,6 +69,7 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.ValidationStatus;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
+import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 
@@ -317,6 +318,7 @@ public class InterchangeUtils {
         Set<String> uniqueAmpIds = new HashSet(ampIds);
         uniqueAmpIds.remove("");
         ampIds = new ArrayList<>(uniqueAmpIds);
+        PersistenceManager.getSession().setCacheMode(CacheMode.REFRESH);
         
         for (int fromIndex = 0; fromIndex < ampIds.size(); fromIndex += ActivityEPConstants.BATCH_DB_QUERY_SIZE) {
             int end = Math.min(ampIds.size(), fromIndex + ActivityEPConstants.BATCH_DB_QUERY_SIZE);

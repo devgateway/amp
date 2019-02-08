@@ -1,12 +1,8 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Map;
-
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**

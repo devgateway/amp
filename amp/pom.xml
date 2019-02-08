@@ -966,6 +966,11 @@
             <version>${swagger.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.bull.javamelody</groupId>
+            <artifactId>javamelody-core</artifactId>
+            <version>1.75.0</version>
+        </dependency>
     </dependencies>
 
     <build>

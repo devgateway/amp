@@ -27,6 +27,7 @@ public class AuditCleanerJob extends ConnectionCleaningJob {
         if (deletetime.equals("-1"))
             logger.info("Delete Audit Logs Option Disabled :: Please select another option");
         else {
+            logger.info("Starting to delete audit logs older than " + deletetime + " days.............................");
             AuditLoggerUtil.deleteLogsByPeriod(deletetime);
             logger.info("Delete Audit logs finished...................................................");
         }

@@ -469,9 +469,20 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 
 																			</logic:iterate>
 			                                    </html:select>
+												  <%
+													  if (!globalSett.getGlobalSettingsValue().equalsIgnoreCase("-1") && globalSett.getGlobalSettingsName()
+															  .equals(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP)) {
+														  String sdate = org.digijava.module.common.util.DateTimeUtil
+																  .formatDate(AuditCleaner.getInstance().getNextcleanup());
+												  %>
+												  <br>
+												  <digi:trn key="aim:globalSettings:NextCleanUp">Next Audit Cleanup:</digi:trn><%=" " + sdate%>
+												  <%
+													  }
+												  %>
 			                                    <%
 			                                    	}
-			                                    %>										
+			                                    %>
 			                                    </logic:notEmpty>
 			                                    <logic:empty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
 			                                    	<c:set var="type" value="<%=gsType %>" />
@@ -713,7 +724,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 					                                    		%>
 				                                    		</select>
 				                                    	</c:when>
-				                                    	
+
 														<c:when test='${type == "t_components_sort"}'>
 															<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
 																<html:option value="default"><digi:trn key="aim:globalSettings:default">Default</digi:trn></html:option>
@@ -748,7 +759,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                      		<html:text property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>' />
 				                                      	</c:otherwise>
 			                                      	</c:choose>
-			                                    </logic:empty>                                
+			                                    </logic:empty>
 			                                   </td>
 											</digi:form>
 			                            </tr>

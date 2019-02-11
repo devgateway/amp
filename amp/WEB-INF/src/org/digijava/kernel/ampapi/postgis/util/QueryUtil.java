@@ -39,6 +39,7 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
+import org.digijava.module.esrigis.dbentity.ApiStateType;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -76,12 +77,12 @@ public class QueryUtil {
     }
     
     /**
-     * return a list of saved maps.
+     * return a list of saved api states.
      * 
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static List<AmpApiState> getMapList(String type) {
+    public static List<AmpApiState> getApiStatesByType(ApiStateType type) {
         Criteria mapsCriteria = PersistenceManager.getRequestDBSession().createCriteria(AmpApiState.class);
         mapsCriteria.add(Restrictions.eq("type", type));
         return mapsCriteria.list();
@@ -475,7 +476,8 @@ public class QueryUtil {
         return buildLocationsJsonBean(rootLocation, 1);
     }
     
-    private final static String[] LEVEL_TO_NAME = {"na", FiltersConstants.COUNTRY, FiltersConstants.REGION, FiltersConstants.ZONE, FiltersConstants.DISTRICT, "na2", "na3", "na4"};
+    private static final String[] LEVEL_TO_NAME = {"na", FiltersConstants.COUNTRY, FiltersConstants.REGION,
+            FiltersConstants.ZONE, FiltersConstants.DISTRICT, FiltersConstants.COMMUNAL_SECTION, "na3", "na4"};
     
     private static Location buildLocationsJsonBean(LocationSkeleton loc, int level) {
         Location res = new Location();

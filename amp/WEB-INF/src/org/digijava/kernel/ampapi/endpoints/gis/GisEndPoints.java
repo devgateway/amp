@@ -2,11 +2,10 @@ package org.digijava.kernel.ampapi.endpoints.gis;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
@@ -19,7 +18,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
@@ -33,7 +31,6 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityList;
@@ -44,14 +41,12 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevel;
 import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevelTotals;
 import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.Boundary;
-import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GisUtils;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.gis.services.RecentlyUpdatedActivities;
 import org.digijava.kernel.ampapi.endpoints.indicator.Indicator;
-import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportConfig;
@@ -67,13 +62,12 @@ import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
-import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
+import org.digijava.module.esrigis.dbentity.ApiStateType;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
 
@@ -168,8 +162,8 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "SaveMap")
     @ApiOperation("Save map state")
-    public AmpApiState savedMaps(final @JsonView(AmpApiState.DetailView.class) AmpApiState pMap) {
-        return EndpointUtils.saveApiState(pMap,"G");
+    public AmpApiState saveMap(final @JsonView(AmpApiState.DetailView.class) AmpApiState pMap) {
+        return EndpointUtils.saveApiState(pMap, ApiStateType.G);
     }
 
     @GET
@@ -178,8 +172,8 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @ApiMethod(ui = false, id = "MapById")
     @JsonView(AmpApiState.DetailView.class)
     @ApiOperation("Get map state")
-    public AmpApiState savedMaps(@PathParam("mapId") Long mapId) {
-        return EndpointUtils.getApiState(mapId);
+    public AmpApiState getSavedMap(@PathParam("mapId") Long mapId) {
+        return EndpointUtils.getApiState(mapId, ApiStateType.G);
     }
 
     @GET
@@ -188,9 +182,8 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @ApiMethod(ui = false, id = "MapList")
     @JsonView(AmpApiState.BriefView.class)
     @ApiOperation("List map states")
-    public List<AmpApiState> savedMaps() {
-        String type="G";
-        return EndpointUtils.getApiStateList(type);
+    public List<AmpApiState> getSavedMaps() {
+        return EndpointUtils.getApiStateList(ApiStateType.G);
     }
 
     @GET
@@ -218,27 +211,18 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @POST
     @Path("/activities")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "ActivitiesNewLists")
-    @ApiOperation("List activities")
-    public ActivityList getActivitiesNew(PerformanceFilterParameters config,
+    @ApiMethod(ui = false, id = "ActivitiesById")
+    @ApiOperation(value = "List activities", notes = "Returns activities that match both the filters and activity ids.")
+    public ActivityList getActivities(
+            @ApiParam(name = "Filters") PerformanceFilterParameters config,
+            @ApiParam("Activity Ids") @QueryParam("id") List<Long> activityIds,
             @QueryParam("start") Integer page,
             @QueryParam("size") Integer pageSize) {
         logger.error(String.format("Requesting %s pagesize from %s page", pageSize, page));
         Integer reqNumber = (pageSize == null) || (page == null) ? null : pageSize * page;
-        return ActivityService.getActivities(config, null, reqNumber, pageSize);
-    }
-
-    @POST
-    @Path("/activities/{activityId}") //once its done remove the New
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "ActivitiesById")
-    @ApiOperation(value = "List activities", notes = "activityId is a comma separated list of activity ids")
-    public ActivityList getActivities(
-            @ApiParam("config") PerformanceFilterParameters config,
-            @PathParam("activityId") PathSegment activityIds) {
         return ActivityService.getActivities(config,
-                Arrays.asList(activityIds.getPath().split("\\s*,\\s*")),
-                null, null);
+                activityIds.stream().map(Object::toString).collect(Collectors.toList()),
+                reqNumber, pageSize);
     }
 
     @POST
@@ -260,82 +244,39 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "IndicatorsList")
     @ApiOperation("List indicators")
+    @JsonView(Indicator.IndicatorView.class)
     public List<Indicator> getIndicators(@QueryParam("admLevel") AdmLevel admLevel) {
         List<AmpIndicatorLayer> indicators;
         if (admLevel !=null) {
             indicators = QueryUtil.getIndicatorByCategoryValue(admLevel);
-            return generateIndicatorJson(indicators, false);
+            return IndicatorUtils.getApiIndicatorsForGis(indicators, false);
         }
         else {
             indicators = QueryUtil.getIndicatorLayers();
-            return generateIndicatorJson(indicators, true);
+            return IndicatorUtils.getApiIndicatorsForGis(indicators, true);
         }
     }
 
-    /**
-     * FIXME simplify
-     * this operation is used to:
-     * 1. retrieve plain values (which should be GET /gis/indicators/{indicatorId}/values)
-     * 2. do gap analysis (which should be POST /gis/indicators/{indicatorId}/do-gap-analysis)
-     */
-    @POST
+    @GET
     @Path("/indicators/{indicatorId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "IndicatorById")
-    @ApiOperation("Get indicator")
-    public Indicator getIndicatorsById(
-            SavedIndicatorGapAnalysisParameters input,
+    @ApiOperation("Get indicator & values")
+    @JsonView(Indicator.IndicatorView.class)
+    public Indicator getIndicatorsById(@PathParam ("indicatorId") Long indicatorId) {
+        return IndicatorUtils.getIndicatorsAndLocationValues(indicatorId);
+    }
+
+    @POST
+    @Path("/do-gap-analysis/{indicatorId}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Compute gap analysis for an indicator")
+    @JsonView(Indicator.IndicatorView.class)
+    public Indicator doGapAnalysisForIndicator(
+            PerformanceFilterParameters input,
             @PathParam ("indicatorId") Long indicatorId) {
-        boolean isGapAnalysis = EndpointUtils.getSingleValue(input.getGapAnalysis(), Boolean.FALSE);
-        return IndicatorUtils.getIndicatorsAndLocationValues(indicatorId, input, isGapAnalysis);
+        return IndicatorUtils.doGapAnalysis(indicatorId, input);
     }
 
-    private List<Indicator> generateIndicatorJson(List<AmpIndicatorLayer> indicators, boolean includeAdmLevel) {
-        List<Indicator> apiIndicators = new ArrayList<>();
-        GapAnalysis gapAnalysis = new GapAnalysis();
-
-        for (AmpIndicatorLayer indicator : indicators) {
-            Indicator apiIndicator = new Indicator();
-            apiIndicator.setId(indicator.getId());
-            apiIndicator.setName(TranslationUtil.getTranslatableFieldValue(
-                    IndicatorEPConstants.NAME, indicator.getName(), indicator.getId()));
-            apiIndicator.setDescription(TranslationUtil.getTranslatableFieldValue(
-                    IndicatorEPConstants.DESCRIPTION, indicator.getDescription(), indicator.getId()));
-            apiIndicator.setUnit(TranslationUtil.getTranslatableFieldValue(
-                    IndicatorEPConstants.UNIT, indicator.getUnit(), indicator.getId()));
-            if (includeAdmLevel) {
-                apiIndicator.setAdmLevelId(indicator.getAdmLevel().getId());
-                apiIndicator.setAdmLevelName(indicator.getAdmLevel().getLabel());
-                String admLevelLabel = IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex();
-                apiIndicator.setAdminLevel(AdmLevel.fromString(admLevelLabel));
-            }
-            apiIndicator.setNumberOfClasses(indicator.getNumberOfClasses());
-            apiIndicator.setAccessTypeId(indicator.getAccessType().getValue());
-            apiIndicator.setIndicatorTypeId(
-                    indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
-            apiIndicator.setCanDoGapAnalysis(gapAnalysis.canDoGapAnalysis(indicator));
-            apiIndicator.setZeroCategoryEnabled(indicator.getZeroCategoryEnabled());
-            
-            apiIndicator.setCreatedOn(indicator.getCreatedOn());
-            apiIndicator.setUpdatedOn(indicator.getUpdatedOn());
-
-            if (indicator.getCreatedBy() != null) {
-                apiIndicator.setCreatedBy(indicator.getCreatedBy().getUser().getEmail());
-            }
-            List<AmpIndicatorColor> colorList = new ArrayList<>(indicator.getColorRamp());
-            colorList.sort(Comparator.comparing(AmpIndicatorColor::getPayload));
-            for (AmpIndicatorColor color : colorList) {
-                if (color.getPayload() == IndicatorEPConstants.PAYLOAD_INDEX) {
-                    long colorId = ColorRampUtil.getColorId(color.getColor());
-                    apiIndicator.setMultiColor(IndicatorEPConstants.MULTI_COLOR_PALETTES.contains(colorId));
-                }
-            }
-            apiIndicator.setColorRamp(colorList);
-            apiIndicators.add(apiIndicator);
-        }
-        return apiIndicators;
-    }
-    
     @GET
     @Path("/can-do-gap-analysis")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -355,6 +296,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @ApiOperation(
             value = "Runs Gap Analysis directly over external indicator data, not from DB.",
             notes = "For saved indicators Gap Analysis see `POST /gis/indicators/{indicatorId}`.")
+    @JsonView(Indicator.IndicatorView.class)
     public Indicator doGapAnalysis(RuntimeIndicatorGapAnalysisParameters input) {
         return new PublicGapAnalysis().doPublicGapAnalysis(input);
     }
@@ -384,7 +326,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
 
         Map<String, Object> filters = null;
         if (mapId != null) {
-            AmpApiState map = EndpointUtils.getSavedMap(mapId);
+            AmpApiState map = EndpointUtils.getApiState(mapId, ApiStateType.G);
             ReportConfig reportConfig = JSONUtils.readValueFromJson(map.getStateBlob(),
                     ReportConfig.class);
             filters = reportConfig.getFilters().getFilters();

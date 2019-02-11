@@ -121,9 +121,8 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
                         "$('#"+ closeLink.getMarkupId() +"').show();"+
                         "var ua = window.navigator.userAgent;"+
                         "var msie = ua.indexOf('MSIE');"+
-                        "if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\\:11\\./)  "
-                            + "|| window.ActiveXObject) {  "
-                            + "$('#" + textAreaContainer.getMarkupId() + "').parent().parent()"
+                        "if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\\:11\\./)  || window.ActiveXObject) {  "+
+                            "$('#" + textAreaContainer.getMarkupId() + "').parent().parent()"
                             + ".append(\"<div id='loadingEditorDiv'>"
                             + "<img src='/repository/aim/view/scripts/ajaxtabs/loading.gif' style='margin-right:7px;'/>"
                             + TranslatorUtil.getTranslatedText("Loading...") + "</div>\");"
@@ -132,7 +131,7 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
                             + "$('#loadingEditorDiv').remove();"
                             + "},3500);}"
                          + "else {"
-                         +   "showRichEditor();}"
+                            + "showRichEditor();}"
                      + "};"
                      ));
         }

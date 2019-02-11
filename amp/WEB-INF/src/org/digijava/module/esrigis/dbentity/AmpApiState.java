@@ -37,7 +37,7 @@ public class AmpApiState implements Serializable {
     private String description;
 
     @JsonIgnore
-    private String type;
+    private ApiStateType type;
 
     @ApiModelProperty(example = "{\"chart:/rest/dashboard/tops/do\":{\"limit\":5,\"adjtype\":\"Actual Commitments\","
             + "\"view\":\"bar\",\"big\":false},\"chart:/rest/dashboard/tops/dg\":{\"limit\":5,"
@@ -157,12 +157,14 @@ public class AmpApiState implements Serializable {
         return true;
     }
 
-    public String getType() {
+    public ApiStateType getType() {
         return type;
     }
-    public void setType(String type) {
+    
+    public void setType(ApiStateType type) {
         this.type = type;
     }
+    
     @Override
     public String toString() {
         return "AmpApiState [id=" + id + ", title=" + title + ", description="
@@ -170,4 +172,5 @@ public class AmpApiState implements Serializable {
                 + ", createdDate=" + createdDate + ", updatedDate="
                 + updatedDate + "]";
     }
+    
 }

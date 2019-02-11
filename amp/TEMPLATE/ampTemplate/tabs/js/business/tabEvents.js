@@ -55,7 +55,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				// Variable to save the current serialized filters from widget.
 				app.TabsApp.serializedFilters = null;
 				// Save default sorters if any.
-				app.TabsApp.currentSorting = FilterUtils.extractSorters(firstContent.get('reportMetadata').get('reportSpec').get('sorters'), 
+				app.TabsApp.currentSorting = FilterUtils.extractSorters(firstContent.get('reportMetadata').get('reportSpec').get('sorters'),
 						firstContent.get('reportMetadata').get('reportSpec').get('columns'),
 						firstContent.get('reportMetadata').get('reportSpec').get('measures'),
 						firstContent.get('reportMetadata').get('reportSpec').get('hierarchies'));

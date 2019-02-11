@@ -42,7 +42,8 @@ public class ImportIntoDynLocationManagerXSL extends Action {
                 case NAME_NOT_MATCH: 
                     errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.regionImportImpsNameMisMatch")); 
                     break;
-                case CORRECT_CONTENT: return mapping.findForward("success"); 
+                case CORRECT_CONTENT: 
+                    return mapping.findForward("success");
             }
             
             saveErrors(request, errors);

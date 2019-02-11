@@ -638,20 +638,29 @@ public class NodeWrapper{
         }
         return null;
     }
-    
-    
-    public double getFileSizeInMegabytes() {
-        Property fileSize   =  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_FILE_SIZE);
-        if ( fileSize != null ) {
+
+    /**
+     * Return file size for a document or null if file size is unknown.
+     */
+    public Long getFileSize() {
+        Property fileSize = DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_FILE_SIZE);
+        if (fileSize != null) {
             try {
-                double size     = DocumentManagerUtil.bytesToMega( fileSize.getLong() );
-                return size;
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } 
+                return fileSize.getLong();
+            } catch (RepositoryException e) {
+                logger.error("Failed to get file size.", e);
+                return null;
+            }
         }
-        return 0;
+        return null;
+    }
+
+    /**
+     * Return file size for a document in megabytes or 0 if file size is unknown.
+     */
+    public double getFileSizeInMegabytes() {
+        Long fileSize = getFileSize();
+        return fileSize != null ? DocumentManagerUtil.bytesToMega(fileSize) : 0;
     }
     
     public String getContentType() {

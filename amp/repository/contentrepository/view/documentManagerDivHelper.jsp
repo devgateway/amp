@@ -1,7 +1,7 @@
 
 <div id="viewVersions" style="display:none">
 	<div align="center">
-		<digi:trn>Please wait a moment... </digi:trn><br />
+		<digi:trn>Loading... </digi:trn><br />
 		<digi:img skipBody="true" src="module/contentrepository/images/ajax-loader-darkblue.gif" border="0" align="absmiddle" />
 	</div>
 </div>

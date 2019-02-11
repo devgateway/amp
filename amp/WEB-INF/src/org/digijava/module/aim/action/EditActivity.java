@@ -1616,7 +1616,7 @@ public class EditActivity extends Action {
                 } else {
                     //global validation is on
                     //only the team leader of the team that owns the activity has rights to validate it if cross team validation is off
-                    if (ActivityUtil.canValidateAcitivty(activity, teamMember)) {
+                    if (ActivityUtil.canValidateActivity(activity, teamMember)) {
                         eaForm.setButtonText("validate");
                     }
                 }

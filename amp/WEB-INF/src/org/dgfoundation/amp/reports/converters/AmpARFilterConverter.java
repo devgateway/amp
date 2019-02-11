@@ -23,7 +23,6 @@ import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
-import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -202,8 +201,7 @@ public class AmpARFilterConverter {
     private void addOrganizationsFilters() {
         //Donor Agencies
         addFilter(arFilter.getDonorTypes(), ColumnConstants.DONOR_TYPE);
-        addFilter(arFilter.getDonorGroups(), 
-                (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_DONOR_GROUP : ColumnConstants.DONOR_GROUP));
+        addFilter(arFilter.getDonorGroups(), ColumnConstants.DONOR_GROUP);
         addFilter(arFilter.getDonnorgAgency(), ColumnConstants.DONOR_AGENCY);
         
         //Related Agencies
@@ -260,9 +258,6 @@ public class AmpARFilterConverter {
         } else {
             levelColumn = columnName + " " + StringUtils.repeat("Sub-", depth) + "Sector";
         }
-        if (arFilter.isPledgeFilter()) {
-            levelColumn = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(levelColumn, levelColumn);
-        }
         return levelColumn;
     }
 
@@ -280,18 +275,17 @@ public class AmpARFilterConverter {
         }           
         return res;
     }
-    
+
     /** adds programs and national objectives filters */
     private void addProgramAndNationalObjectivesFilters() {
-        addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
+        addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PRIMARY_PROGRAM);
 
-        addMultiLevelFilter(arFilter.getSelectedSecondaryPrograms(), ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+        addMultiLevelFilter(arFilter.getSelectedSecondaryPrograms(), ColumnConstants.SECONDARY_PROGRAM);
 
         //TODO: how to detect tertiary programs
-        //addFilter(arFilter.get(), 
-        //      (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_PROGRAMS : ColumnConstants.TERTIARY_PROGRAM), entityType);
+        //addFilter(arFilter.get(), ColumnConstants.TERTIARY_PROGRAM, entityType);
 
-        addMultiLevelFilter(arFilter.getSelectedNatPlanObj(), ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+        addMultiLevelFilter(arFilter.getSelectedNatPlanObj(), ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
         
         if (!arFilter.isPledgeFilter()) {
             //TBD national plan objectives levels 1-8?
@@ -307,11 +301,13 @@ public class AmpARFilterConverter {
     }
 
     private String findLevelColumnName(String columnName, AmpTheme ampTheme) {
-        if (arFilter.isPledgeFilter()) {
-            return AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
+        AmpTheme current = ampTheme;
+        int depth = 0;
+        while (current.getParentThemeId() != null) {
+            current = current.getParentThemeId();
+            depth++;
         }
-        
-        return columnName;
+        return columnName + " Level " + depth;
     }
     
     private void addLocationFilters() {
@@ -319,29 +315,32 @@ public class AmpARFilterConverter {
         if (filterLocations == null || filterLocations.isEmpty())
             return;
         
-        Set<AmpCategoryValueLocations> countries = new HashSet<AmpCategoryValueLocations>();
-        Set<AmpCategoryValueLocations> regions = new HashSet<AmpCategoryValueLocations>();
-        Set<AmpCategoryValueLocations> zones = new HashSet<AmpCategoryValueLocations>();
-        Set<AmpCategoryValueLocations> districts = new HashSet<AmpCategoryValueLocations>();
-//      Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
-//                              
+        Set<AmpCategoryValueLocations> countries = new HashSet<>();
+        Set<AmpCategoryValueLocations> regions = new HashSet<>();
+        Set<AmpCategoryValueLocations> zones = new HashSet<>();
+        Set<AmpCategoryValueLocations> districts = new HashSet<>();
+        Set<AmpCategoryValueLocations> communalSections = new HashSet<>();
+
         for(AmpCategoryValueLocations loc : filterLocations) {
-            if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getParentCategoryValue()))
+            AmpCategoryValue parentCatVal = loc.getParentCategoryValue();
+            if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(parentCatVal)) {
                 countries.add(loc);
-            else if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(loc.getParentCategoryValue()))
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(parentCatVal)) {
                 regions.add(loc);
-            else if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.equalsCategoryValue(loc.getParentCategoryValue()))
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.equalsCategoryValue(parentCatVal)) {
                 zones.add(loc);
-            else if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.equalsCategoryValue(loc.getParentCategoryValue()))
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.equalsCategoryValue(parentCatVal)) {
                 districts.add(loc);
-//          else
-//              locations.add(loc);
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_COMMUNAL_SECTION.equalsCategoryValue(parentCatVal)) {
+                communalSections.add(loc);
+            }
         }
 
         addFilter(countries, ColumnConstants.COUNTRY);
         addFilter(regions, ColumnConstants.REGION);
         addFilter(zones, ColumnConstants.ZONE);
         addFilter(districts, ColumnConstants.DISTRICT);
+        addFilter(communalSections, ColumnConstants.COMMUNAL_SECTION);
     }
     
     /**

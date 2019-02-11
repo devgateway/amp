@@ -24,12 +24,12 @@ public class AuditCleanerJob extends ConnectionCleaningJob {
     @Override
     public void executeInternal(JobExecutionContext contex) throws JobExecutionException {
         String deletetime = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP);
-        if (deletetime.equals("-1"))
+        if (deletetime.equals("-1")) {
             logger.info("Delete Audit Logs Option Disabled :: Please select another option");
-        else {
-            logger.info("Starting to delete audit logs older than " + deletetime + " days.............................");
+        } else {
+            logger.info("Starting to delete audit logs older than " + deletetime + " days...........................");
             AuditLoggerUtil.deleteLogsByPeriod(deletetime);
-            logger.info("Delete Audit logs finished...................................................");
+            logger.info("Delete Audit logs finished.................................................");
         }
     }
 

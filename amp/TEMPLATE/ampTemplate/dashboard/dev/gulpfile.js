@@ -219,9 +219,5 @@ gulp.task('dev', ['watch', 'serve', 'reload']);
 
 
 gulp.task('build', function(cb) {
-  runSequence(
-      'clean',
-      ['build-js', 'build-css', 'build-static', 'build-html'],
-    cb
-  );
+  runSequence('clean', 'build-js', 'build-css', 'build-static', 'build-html', cb);
 });

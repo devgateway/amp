@@ -74,12 +74,12 @@ public final class ResourceUtil {
             if (resource.getType() != null) {
                 result.set(ResourceEPConstants.TYPE, resource.getType().getId());
             }
-            if (ResourceEPConstants.LINK.equals(resource.getResourceType())) {
+            if (ResourceType.LINK.equals(resource.getResourceType())) {
                 result.set(ResourceEPConstants.WEB_LINK, resource.getWebLink());
             } else {
                 result.set(ResourceEPConstants.FILE_NAME, resource.getFileName());
             }
-            result.set(ResourceEPConstants.RESOURCE_TYPE, resource.getResourceType());
+            result.set(ResourceEPConstants.RESOURCE_TYPE, resource.getResourceType().getId());
             result.set(ResourceEPConstants.ADDING_DATE, 
                     DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(resource.getAddingDate()));
             result.set(ResourceEPConstants.TEAM, resource.getTeam());
@@ -111,11 +111,11 @@ public final class ResourceUtil {
         
         if (StringUtils.isNotBlank(nodeWrapper.getWebLink())) {
             resource.setWebLink(nodeWrapper.getWebLink());
-            resource.setResourceType(ResourceEPConstants.LINK);
+            resource.setResourceType(ResourceType.LINK);
         } else {
             resource.setFileName(nodeWrapper.getName());
             resource.setFileSize(nodeWrapper.getFileSizeInMegabytes());
-            resource.setResourceType(ResourceEPConstants.FILE);
+            resource.setResourceType(ResourceType.FILE);
         }
         
         if (ContentTranslationUtil.multilingualIsEnabled()) {
@@ -150,7 +150,6 @@ public final class ResourceUtil {
     /**
      * Get all resources from AMP
      * 
-     * @param request
      * @return
      */
     public static List<JsonBean> getAllResources() {

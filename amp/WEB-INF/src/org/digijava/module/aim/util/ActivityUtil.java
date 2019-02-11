@@ -479,12 +479,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         }
         return result;
     }
-  
-  
-  	public static void initializeForApi(AmpActivityVersion activity) {
-  		// initialize the fiscal year list field. Used in Activity API only
+
+
+    public static void initializeForApi(AmpActivityVersion activity) {
+        // initialize the fiscal year list field. Used in Activity API only
         initializeFiscalYears(activity);
-  	}
+    }
 
     /**
      * Initialize Fiscal Years list object in activity. Used in Activity API only.

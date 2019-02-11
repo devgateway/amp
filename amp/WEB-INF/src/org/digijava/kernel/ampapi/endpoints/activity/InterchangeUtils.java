@@ -329,7 +329,7 @@ public class InterchangeUtils {
                 String ampId = activity.getAmpId();
                 JsonBean result;
                 try {
-                	ActivityUtil.initializeForApi(activity);
+                    ActivityUtil.initializeForApi(activity);
                     result = exporter.export(activity);
                 } catch (Exception e) {
                     result = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage()));

@@ -713,7 +713,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 					                                    		%>
 				                                    		</select>
 				                                    	</c:when>
-				                                    	
+
 														<c:when test='${type == "t_components_sort"}'>
 															<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
 																<html:option value="default"><digi:trn key="aim:globalSettings:default">Default</digi:trn></html:option>
@@ -747,7 +747,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 														<c:otherwise>
 				                                      		<html:text property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>' />
 				                                      	</c:otherwise>
-			                                      	</c:choose>
+			                                      	</c:choose>	
 			                                      	<%
 													  if (globalSett.getGlobalSettingsName()
 															  .equals(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP)) {
@@ -762,7 +762,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 												  %>
 												  <%
 													  }
-												  %>							
+												  %>						
 			                                    </logic:empty>                                
 			                                   </td>
 											</digi:form>

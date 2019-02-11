@@ -318,6 +318,7 @@ public class InterchangeUtils {
         Set<String> uniqueAmpIds = new HashSet(ampIds);
         uniqueAmpIds.remove("");
         ampIds = new ArrayList<>(uniqueAmpIds);
+        // temporary until the root cause for stale cache is fixed
         PersistenceManager.getSession().setCacheMode(CacheMode.REFRESH);
         
         for (int fromIndex = 0; fromIndex < ampIds.size(); fromIndex += ActivityEPConstants.BATCH_DB_QUERY_SIZE) {
@@ -328,6 +329,7 @@ public class InterchangeUtils {
                 String ampId = activity.getAmpId();
                 JsonBean result;
                 try {
+                	ActivityUtil.initializeForApi(activity);
                     result = exporter.export(activity);
                 } catch (Exception e) {
                     result = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage()));

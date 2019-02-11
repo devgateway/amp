@@ -205,7 +205,7 @@ LoggerIdentifiable, Cloneable {
                     validators = @Validators(minSize = "/Activity Form/Sectors/Tag Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Tag Sectors/sectorPercentageTotal",
                     unique = "/Activity Form/Sectors/Tag Sectors/uniqueSectorsValidator", treeCollection = "/Activity Form/Sectors/Tag Sectors/treeSectorsValidator"))
     })
-    protected Set<AmpActivitySector> sectors;
+    protected Set<AmpActivitySector> sectors = new HashSet<>();
     
 //  @Interchangeable(fieldTitle = "Contracts", importable = true, fmPath="/Activity Form/Contracts")
     @VersionableCollection(fieldTitle = "Contracts")
@@ -245,7 +245,7 @@ LoggerIdentifiable, Cloneable {
                     validators = @Validators(maxSize = "/Activity Form/Organizations/Sector Group/Max Size Validator", minSize = "/Activity Form/Organizations/Sector Group/Required Validator", 
                     unique = "/Activity Form/Organizations/Sector Group/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Sector Group/relOrgPercentageTotal"))
     })
-    protected Set<AmpOrgRole> orgrole;
+    protected Set<AmpOrgRole> orgrole = new HashSet<>();
     
     @Interchangeable(fieldTitle = "Activity Internal IDs", importable = true, fmPath = "/Activity Form/Activity Internal IDs")
     @VersionableCollection(fieldTitle = "Activity Internal IDs")
@@ -309,7 +309,7 @@ LoggerIdentifiable, Cloneable {
                             fmPath = "/Activity Form/Funding/Overview Section/Revised Project Cost")
             })
     @VersionableCollection(fieldTitle = "Project Costs")
-    Set<AmpFundingAmount> costAmounts;
+    private Set<AmpFundingAmount> costAmounts = new HashSet<>();
     
     /**
      * 
@@ -411,7 +411,7 @@ LoggerIdentifiable, Cloneable {
                             fmPath = "/Activity Form/Contacts/Implementing Executing Agency Contact Information",
                             validators = @Validators(unique = "/Activity Form/Contacts/Implementing Executing Agency Contact Information"))
     })
-    protected Set<AmpActivityContact> activityContacts;
+    protected Set<AmpActivityContact> activityContacts = new HashSet<>();
 
     @Interchangeable(fieldTitle = "Status Reason", importable = true, fmPath = "/Activity Form/Identification/Status Reason")
     @VersionableFieldTextEditor(fieldTitle = "Status Reason")
@@ -581,7 +581,7 @@ LoggerIdentifiable, Cloneable {
                 discriminatorOption = CategoryConstants.FINANCIAL_INSTRUMENT_KEY, fmPath="/Activity Form/Identification/Financial Instrument", pickIdOnly=true)
     })
     @VersionableCollection(fieldTitle = "Categories")
-    protected Set<AmpCategoryValue> categories;
+    protected Set<AmpCategoryValue> categories = new HashSet<>();
 
     @VersionableFieldTextEditor(fieldTitle = "Status Other Info")
     protected String statusOtherInfo;
@@ -686,7 +686,7 @@ LoggerIdentifiable, Cloneable {
                     validators = @Validators(maxSize = "/Activity Form/Program/Tertiary Programs/max Size Program Validator", minSize = "/Activity Form/Program/Tertiary Programs/minSizeProgramValidator", 
                     unique = "/Activity Form/Program/Tertiary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Tertiary Programs/programPercentageTotal",
                     treeCollection = "/Activity Form/Program/Tertiary Programs/Tree Validator"))})
-    protected Set<AmpActivityProgram> actPrograms;
+    protected Set<AmpActivityProgram> actPrograms = new HashSet<>();
     
     
 //  @Interchangeable(fieldTitle = "Act. Budget Structure",fmPath="/Activity Form/Budget Structure")
@@ -2171,13 +2171,5 @@ LoggerIdentifiable, Cloneable {
         public void setCostAmounts(Set<AmpFundingAmount> costAmounts) {
             this.costAmounts = costAmounts;
         }
-        
-        public void addCostAmount(AmpFundingAmount costAmount) {
-            if (this.costAmounts == null) {
-                this.costAmounts = new HashSet<AmpFundingAmount>();
-            }
-            this.costAmounts.add(costAmount);
-        }
-
 }
 

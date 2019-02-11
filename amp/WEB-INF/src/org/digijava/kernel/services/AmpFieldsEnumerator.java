@@ -1,10 +1,12 @@
 package org.digijava.kernel.services;
 
+import java.lang.reflect.Field;
 import java.util.function.Function;
 
 import org.digijava.kernel.ampapi.endpoints.activity.AMPFMService;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.AllowMultipleProgramsPredicate;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.ActivityFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.AmpFieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
@@ -41,7 +43,7 @@ public final class AmpFieldsEnumerator implements InitializingBean {
      * Private enumerator main scope is to restore back references to the activity.
      *
      * It adds new extra fields that point to parent activity and then through
-     * {@link ActivityImporter#setupNotImportableField(Object, java.lang.reflect.Field)}
+     * {@link ObjectImporter#setupNotImportableField(Object, Field)}
      * restores the reference.
      *
      * TODO rethink & make it work for other back references too!
@@ -64,13 +66,15 @@ public final class AmpFieldsEnumerator implements InitializingBean {
 
         Function<String, Boolean> allowMultiplePrograms = new AllowMultipleProgramsPredicate();
 
+        String iatiIdentifierFieldName = InterchangeUtils.getAmpIatiIdentifierFieldName();
+
         AMPFMService fmService = new AMPFMService();
         publicEnumerator = new CachingFieldsEnumerator(syncDAO,
                 new ActivityFieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE,
-                        false, allowMultiplePrograms));
+                        false, allowMultiplePrograms, iatiIdentifierFieldName));
         privateEnumerator = new CachingFieldsEnumerator(syncDAO,
                 new ActivityFieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE,
-                        true, allowMultiplePrograms));
+                        true, allowMultiplePrograms, iatiIdentifierFieldName));
 
         AmpFieldInfoProvider contactFieldInfoProvider = new AmpFieldInfoProvider(AmpContact.class);
         publicContactEnumerator = new CachingFieldsEnumerator(syncDAO,

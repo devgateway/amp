@@ -466,8 +466,6 @@ public class InterchangeUtils {
             String translatedText = toTranslate ? translatorService.translateText((String) fieldValue)
                     : (String) fieldValue;
             return getJsonStringValue(translatedText);
-        } else if (fieldValue instanceof Date) {
-            return InterchangeUtils.formatISO8601Date((Date) fieldValue);
         }
         
         return fieldValue;

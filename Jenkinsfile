@@ -97,6 +97,7 @@ stage('Quick Test') {
         }
     }
 
+    // Allow user to specify country before tests are run
     if (launchedByUser) {
         timeout(15) {
             milestone()

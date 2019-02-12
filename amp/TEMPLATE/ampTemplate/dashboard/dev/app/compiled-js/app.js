@@ -28552,16 +28552,18 @@ module.exports = Backbone.Collection.extend({
         attrs.translator = self.translator;
         // switch for model polymorphism.
 
-    if (attrs.fieldType === Constants.FIELD_DATA_TYPE_TREE && attrs.dataType === Constants.FIELD_DATA_TYPE_TEXT) {
+       if (attrs.fieldType === Constants.FIELD_DATA_TYPE_TREE && attrs.dataType === Constants.FIELD_DATA_TYPE_TEXT) {
                 self._allDeferreds.push(self._buildTreeImplementation(self, attrs));
                 tmpModel = new Backbone.Model({ui:false});
-    } else {
+       } else {
                 if (attrs.id == Constants.FILTER_ID_DATE|| (attrs.id.indexOf('-date') != -1 ) || (attrs.id.indexOf('date-') != -1 )) {
+                	attrs.displayName = attrs.name;
                     tmpModel = new YearsFilterModel(attrs);  // hacky but less hacky than enumerating them. Long term solution -> the endpoint should return a field telling the type of a field
-                } else if (attrs.id == Constants.FILTER_ID_COMPUTED_YEAR) {
+                } else if (attrs.id == Constants.FILTER_ID_COMPUTED_YEAR) {  
+                	attrs.displayName = attrs.name;
                     tmpModel = new YearsOnlyFilterModel(attrs);
                 } else {
-                    tmpModel = new GenericFilterModel(attrs);
+                	tmpModel = new GenericFilterModel(attrs);
                     self._allDeferreds.push(tmpModel.getTree());
                 }
         }
@@ -28592,7 +28594,6 @@ module.exports = Backbone.Collection.extend({
         var deferred = $.Deferred();
         var tmpDeferreds = [];
         var self = this;
-
         $.get(url, function( data ) {
             if (data && !_.isEmpty(data)) {
                 var listDefinitions = data.listDefinitions;
@@ -28603,6 +28604,7 @@ module.exports = Backbone.Collection.extend({
 	         	       id: def.name || def.id,
                         data: tree,
                         name: def.name,
+                        displayName: def.displayName,
                         tab: (def.tab && def.tab !== Constants.UNASSIGNED) ? def.tab : attrs.tab,
                         ui: true,
                         group: self._getGroup(def, attrs),
@@ -30927,7 +30929,7 @@ module.exports = GenericFilterModel.extend({
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
-
+var Constants = require('../utils/constants');
 
 module.exports = BaseFilterModel.extend({
 
@@ -30935,10 +30937,9 @@ module.exports = BaseFilterModel.extend({
   defaults: {
     selectedStart: null,
     selectedEnd: null,
-    // range is provided by api, but will fallback to this if not provided, or set to -1
     startYear: '',
     endYear: '',
-    modelType: 'DATE-RANGE-VALUES'
+    modelType: Constants.DATE_RANGE_VALUES
   },
   
   sync: function () {
@@ -30960,21 +30961,20 @@ module.exports = BaseFilterModel.extend({
     this.set('_loaded', $.Deferred());
   },
 
-  parse: function(data) {
-	  console.log('years-filter-model.parse: data = ' + JSON.stringify(data));
+  parse: function(data) {	 
     if (!data.startYear || data.startYear === -1) {
       data.startYear = this.defaults.startYear;
     } else {
-      data.startYear = data.startYear + '-01-01';
+      data.startYear = Constants.START_DATE_TEMPLATE.replace(Constants.YEAR_PLACEHOLDER, data.startYear);    	  
     }
+    
     if (!data.endYear || data.endYear === -1) {
       data.endYear = this.defaults.endYear;
     } else {
-      data.endYear = data.endYear + '-12-31';
+      data.endYear = Constants.END_DATE_TEMPLATE.replace(Constants.YEAR_PLACEHOLDER, data.endYear);    	 
     }
 
     if (!data.selectedStart) {
-    	// good ole' partial copy-paste off postprocess()
     	data.selectedStart = data.startYear;
     	data.selectedEnd = data.endYear;
     }
@@ -30983,22 +30983,15 @@ module.exports = BaseFilterModel.extend({
   },
 
   serialize: function(options) {
-	// AMP-21041: Enabled filtering by start OR end date.
-    if (this.get('selectedStart') || this.get('selectedEnd')) {
-    	  var key = this.get('id');    	   	  
+	if (this.get('selectedStart') || this.get('selectedEnd')) {    	    	   	  
     	  var obj = {};
+    	  var key = this.get('id');
+    	  obj[key] = {start: this.get('selectedStart'), end: this.get('selectedEnd')}; 
+    	  
     	  if(options.wholeModel === true){
-    		  obj[key] = {			
-    				  modelType : this.get('modelType'),    		  
-    				  start: this.get('selectedStart'),
-    				  end: this.get('selectedEnd')			  
-    			 };
-    	  } else {
-    		  obj[key] = {				  
-    				  start: this.get('selectedStart'),
-    				  end: this.get('selectedEnd')			  
-    			 }; 
-    	  }
+    		  obj[key].modelType = this.get('modelType');
+    	  } 
+    	  
     	  return obj;
     } else {
       return null;
@@ -31013,7 +31006,7 @@ module.exports = BaseFilterModel.extend({
 	  if (!this.get('selectedStart')) {
 	  	  this.set('selectedStart', this.get('startYear'));
 	  }
-	  // AMP-21041: Enabled filtering by start OR end date.
+	  
       if (!this.get('selectedEnd')) {                  
           this.set('selectedEnd', this.get('endYear'));
       }
@@ -31025,7 +31018,7 @@ module.exports = BaseFilterModel.extend({
 	  this.set('selectedStart', this._dateConvert(obj[key].start));
 	  this.set('selectedEnd', this._dateConvert(obj[key].end));
       this.postprocess();
-	}else{
+	} else {
 		this.set('selectedStart', this.get('startYear'));
 	    this.set('selectedEnd', this.get('endYear'));
 	}
@@ -31035,12 +31028,11 @@ module.exports = BaseFilterModel.extend({
     this.set('selectedStart', this.get('startYear'));
     this.set('selectedEnd', this.get('endYear'));
   },
-
-   // converts: 03/01/1961 ==> 1961-01-01 IF NEEDED.
+  
   _dateConvert: function(input){	
     var output = null;
     if (input) {
-      if (input.indexOf('/')>-1){
+      if (input.indexOf('/') > -1){
         input = input.split('/');
         output = input[2] + '-' + input[1] + '-' + input[0];
       } else {
@@ -31052,17 +31044,18 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":70,"jquery":"jquery","underscore":"underscore"}],75:[function(require,module,exports){
+},{"../models/base-filter-model":70,"../utils/constants":78,"jquery":"jquery","underscore":"underscore"}],75:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
+var Constants = require('../utils/constants');
 
 module.exports = BaseFilterModel.extend({
 
 	defaults : {
 		selectedYear : undefined,
 		defaultYear : undefined,
-		modelType : 'YEAR-SINGLE-VALUE'
+		modelType : Constants.YEAR_SINGLE_VALUE
 	},
 
 	initialize : function(options) {
@@ -31072,12 +31065,16 @@ module.exports = BaseFilterModel.extend({
 	},
 
 	parse : function(data) {
-		if (data && data.value && data.value.options) {
-			data.defaultYear = _.find(data.value.options, function(item) {
-				return item.id === data.value.defaultId;
-			}).value;
+		if (data && data.items && data.items.values) {
+			var foundItem = _.find(data.items.values, function(item) {
+				return item.name === Constants.DEFAULT_COMPUTED_YEAR_NAME;
+			});
+			
+			if (foundItem) {
+				data.defaultYear = foundItem.value;
+			}			
 		}
-		// console.log(data);
+		
 		this.get('_loaded').resolve();
 		return data;
 	},
@@ -31117,7 +31114,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":70,"jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
+},{"../models/base-filter-model":70,"../utils/constants":78,"jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 var TreeNodeModel; // declare here to help with ref loop of collection and model
@@ -31615,6 +31612,10 @@ var constants = {
     LOCATION: 'Location',
     SECTOR: 'Sector',
     GROUP: "group",
+    DEFAULT_COMPUTED_YEAR_NAME: 'Current',
+    START_DATE_TEMPLATE: '{year}-01-01',
+    END_DATE_TEMPLATE: '{year}-12-31',
+    YEAR_PLACEHOLDER: '{year}',
     UNASSIGNED: 'Unassigned'
 };
 
@@ -31651,7 +31652,7 @@ var _ = require('underscore');
 var $ = require('jquery');
 
 var Backbone = require('backbone');
-var TitleTemplate = "<li>\n\t<a href=\"#\">\n\t\t<span data-i18n=\"amp.gis:pane-subfilters-<%= name.replace(/ /g,'') %>\">\n\t\t\t<%= name %>\n\t\t</span>   \n\t\t<span class='filter-count small pull-right'></span>\n\t</a>\n</li>";
+var TitleTemplate = "<li>\n\t<a href=\"#\">\n\t\t<span data-i18n=\"amp.gis:pane-subfilters-<%= name.replace(/ /g,'') %>\">\n\t\t\t<%= displayName %>\n\t\t</span>   \n\t\t<span class='filter-count small pull-right'></span>\n\t</a>\n</li>";
 var ContentTemplate = "<%\n  // this renders the \"big\" filter list (the tabs)\n%>\n<div class=\"panel-heading\">\n  <a type=\"button\" class=\"close cancel\"  aria-hidden=\"true\">&times;</a>\n  <h3 data-i18n=\"amp.gis:title-filters\" class=\"panel-title\">Filters</h3>\n</div>\n<div class=\"panel-body filter-body\">\n\n  <ul class=\"nav nav-tabs filter-titles\" role=\"tablist\">\n  </ul>\n\n  <div class=\"tab-content filter-options\">\n    <img src=\"img_2/loading-icon.gif\" />\n  </div>\n</div>\n<div class=\"panel-footer\">\n  &nbsp;\n  <div class=\"pull-right\" style=\"display: inline-block; margin-bottom: 5px;\">\n    <button type=\"button\" class=\"btn btn-sm btn-danger reset\"  data-i18n=\"amp.gis:button-reset\"  title=\"Turn off all filters.\">Reset</button>\n    <button type=\"button\" class=\"btn btn-sm btn-warning cancel\"  data-i18n=\"amp.gis:button-cancel\"  title=\"Revert filters to state when opened.\">Cancel</button>\n    <button type=\"button\" class=\"btn btn-sm btn-success apply\"  data-i18n=\"amp.gis:button-apply\" >Apply</button>\n  </div>\n</div>\n";
 
 // Parent base view for filters.
@@ -31772,7 +31773,7 @@ module.exports = Backbone.View.extend({
       		self._createFilterViews(model);
       	  }
       	  
-      });        
+      }); 
    
       return this;
     });
@@ -31899,7 +31900,7 @@ module.exports = Backbone.View.extend({
     return this.allFilters.load();
   },
 
-  _createFilterViews: function(tmpModel) {
+  _createFilterViews: function(tmpModel) {	 
 	 switch (tmpModel.get('tab')) {
       case Constants.FINANCIALS:
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
@@ -32277,19 +32278,23 @@ module.exports = Backbone.View.extend({
     this.translator = options.translator;
     this.translate = options.translate;
     this.filterView = options.filterView; 
-    this.filterCollection = new Backbone.Collection();    
+    this.filterCollection = new Backbone.Collection();  
+    
+    this.filterCollection.comparator = function(model) {
+    	if (model.get('displayName')) {
+    		return model.get('displayName').toLowerCase(); 
+    	} else {
+    		return model.get('name').toLowerCase(); 
+    	}
+    	      
+    }
+
     this.filterCollection.on('change:numSelected', function(){
       self._refreshTitle();
     });
   },
 
-  cleanupUnusedTabs: function() {
-	  console.log(this);
-//	debugger(self);
-  },
-  
-  
-  /**
+ /**
    * renders the items in a tab
    * the first element of the tab's contents will be rendered IFF options.renderFirstElement has been specified
    */
@@ -32382,9 +32387,16 @@ require('jquery-ui/datepicker');
 var Template = "<div class=\"datepicker-container\">\n     <span data-i18n=\"amp.gis:pane-subfilters-startdate\" class=\"date-label\">Start Date:</span>&nbsp <span class=\"selected-start-date\"> </span>\n      <span class=\"clear-date clear-start hide\" data-field=\"selectedStart\">X</span>        \n     <div type=\"text\" id=\"start-date\" class=\"date-picker left-date-container\"></div>\n</div>\n<div class=\"datepicker-container\">\n   <span data-i18n=\"amp.gis:pane-subfilters-enddate\" class=\"date-label\">End Date:</span>&nbsp<span class=\"selected-end-date\"> </span>\n   <span class=\"clear-date clear-end hide\" data-field=\"selectedEnd\">X</span>\n   <div type=\"text\" id=\"end-date\" class=\"date-picker\"></div>\n</div>\n";
 var START_DATE_FIELD = 'selectedStart';
 var END_DATE_FIELD = 'selectedEnd';
+var CUSTOM_REGION_OPTIONS = {
+		fr: {
+			dayNamesMin: ["Di","Lu","Ma","Me","Je","Ve","Sa"]
+		},
+		es: {
+			dayNamesMin: ["Do","Lu","Ma","Mi","Ju","Vi","Sá"]
+		}
+};
 
 module.exports = BaseFilterView.extend({
-
   className: BaseFilterView.prototype.className + ' filter-years',
   template: _.template(Template),
    _loaded: null, 
@@ -32396,9 +32408,7 @@ module.exports = BaseFilterView.extend({
     this.translator = options.translator;
     this.translate = options.translate;    
     this._loaded = this.model.fetch().then(function() { });
-    this.listenTo(this.model, 'change', this._updateUI);
-    
-    
+    this.listenTo(this.model, 'change', this._updateUI);    
   },
   renderFilters:function() {
     var self = this;
@@ -32415,43 +32425,52 @@ module.exports = BaseFilterView.extend({
   },
 
   _renderDatePickers: function() {
-	var self = this;		
-	this.createDatePicker('start-date', 'selectedStart', true);
-	this.createDatePicker('end-date', 'selectedEnd', false);  
-	this.configureLanguage();
+	var self = this;	
+	this._createDatePicker('start-date', 'selectedStart', true);
+	this._createDatePicker('end-date', 'selectedEnd', false); 
   },
   
-  configureLanguage: function() {
-	  // Set the language for datepickers here (instead of doing it in filters-view.js) to prevent race conditions that would set the wrong language.
-	  var lang = this.filterView.settings.get('language');
-	  if (lang) {
-		  //English is default so we dont set it.
-		  lang = (lang === 'en') ?  '' : lang; 		
-		  $.datepicker.setDefaults($.datepicker.regional[lang]);
-	  }     
-  },
-  createDatePicker: function(elementName, modelField, isStartDate) {
+  _createDatePicker: function(elementName, modelField, isStartDate) {
 	  var self = this;
-	  return   this.$('#' + elementName).datepicker({
-	      defaultDate: this.model.get(modelField),
-	      dateFormat: this.filterView.getDateFormat(),
-	      changeMonth: true,
-	      changeYear: true,
-	      numberOfMonths: 1,
-	      showOtherMonths: true,
-	      selectOtherMonths: true,
-	      yearRange: 'c-60:c+60',
-	      isRTL: self.getDirection(),
-	     onSelect: function(selectedDate) {
-	    	  if (isStartDate) {
-	    		 self.$('#end-date').datepicker('option', 'minDate', selectedDate);  
-	    	  } else {
-	    		  self.$('#start-date').datepicker('option', 'maxDate', selectedDate);  
-	    	  }
-	                
-	          self.model.set(modelField, $.datepicker.formatDate(self.filterView.PARAMS_DATE_FORMAT, $.datepicker.parseDate(self.filterView.getDateFormat(), selectedDate)));        
-	      }	     
-	    }); 
+	  var options = {
+		      defaultDate: this.model.get(modelField),
+		      dateFormat: this.filterView.getDateFormat(),
+		      changeMonth: true,
+		      changeYear: true,
+		      numberOfMonths: 1,
+		      showOtherMonths: true,
+		      selectOtherMonths: true,
+		      yearRange: 'c-60:c+60',
+		      isRTL: self.getDirection(),
+		     onSelect: function(selectedDate) {
+		    	  if (isStartDate) {
+		    		 self.$('#end-date').datepicker('option', 'minDate', selectedDate);  
+		    	  } else {
+		    		  self.$('#start-date').datepicker('option', 'maxDate', selectedDate);  
+		    	  }
+		            
+		    	  
+		          self.model.set(modelField, $.datepicker.formatDate(self.filterView.PARAMS_DATE_FORMAT, $.datepicker.parseDate(self.filterView.getDateFormat(), selectedDate)));        
+		      },
+		      beforeShowDay: function( date ) {
+		    	 var formatted = $.datepicker.formatDate(self.filterView.PARAMS_DATE_FORMAT, date);		    	  
+		    	  if (self.model.get(modelField) && formatted === self.model.get(modelField)) {
+		              return [true, "selected-date",""];
+		           }
+		             
+		           return [true, "",""];
+		        }
+		    };
+	  	  
+	  var lang = this.filterView.settings.get('language');
+	  lang = (lang === 'en' || lang == null) ?  '' : lang;	  
+	  
+	  var region = $.datepicker.regional[lang];
+	  if (CUSTOM_REGION_OPTIONS[lang]) {
+		  region.dayNamesMin = CUSTOM_REGION_OPTIONS[lang].dayNamesMin;
+	  }
+	  		  
+	  return this.$('#' + elementName).datepicker($.extend(options, region));  
   },
   
   renderTitle:function() {
@@ -32522,8 +32541,7 @@ module.exports = BaseFilterView.extend({
 	  if (END_DATE_FIELD === field) {
 		  this.$('#start-date').datepicker('option', 'maxDate', '');  
 	  }  	  
-  },
-  
+  }  
 });
 
 },{"../views/base-filter-view":80,"jquery-ui/datepicker":63,"underscore":"underscore"}],85:[function(require,module,exports){

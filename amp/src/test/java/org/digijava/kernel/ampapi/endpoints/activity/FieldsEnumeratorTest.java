@@ -165,9 +165,27 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "field_required_fm_hidden", requiredFmPath = "fm hidden")
         private String fieldRequiredFmEntryHidden;
     
-        @Interchangeable(fieldTitle = "disaster_response", fmPath = "fm visible",
-                requiredFmPath = "fm visible", required = ALWAYS)
-        private String fieldRequiredParentFmEntryVisible;
+        @Interchangeable(fieldTitle = "field_required_implicit_fm_path_visible", requiredFmPath = "fm visible")
+        private String fieldRequiredFmPathVisibleImplicit;
+    
+        @Interchangeable(fieldTitle = "field_required_implicit_fm_path_hidden", requiredFmPath = "fm hidden")
+        private String fieldRequiredFmPathHiddenImplicit;
+    
+        @Interchangeable(fieldTitle = "field_required_submit_fm_path_visible", requiredFmPath = "fm visible",
+                required = SUBMIT)
+        private String fieldRequiredSubmitFmPathVisible;
+    
+        @Interchangeable(fieldTitle = "field_required_submit_fm_path_hidden", requiredFmPath = "fm hidden",
+                required = SUBMIT)
+        private String fieldRequiredSubmitFmPathHidden;
+    
+        @Interchangeable(fieldTitle = "field_required_always_fm_path_visible", requiredFmPath = "fm visible",
+                required = ALWAYS)
+        private String fieldRequiredAlwaysFmPathVisible;
+    
+        @Interchangeable(fieldTitle = "field_required_always_fm_path_hidden", requiredFmPath = "fm hidden",
+                required = ALWAYS)
+        private String fieldRequiredAlwaysFmPathHidden;
 
         @Interchangeable(fieldTitle = "field_required_min_size_on", validators = @Validators(minSize = "fm visible"))
         private String fieldRequiredMinSizeOn;
@@ -195,7 +213,12 @@ public class FieldsEnumeratorTest {
                 newRequiredField("field_required_non_draft", FIELD_NON_DRAFT_REQUIRED),
                 newRequiredField("field_required_fm_visible", FIELD_NON_DRAFT_REQUIRED),
                 newRequiredField("field_required_fm_hidden", FIELD_NOT_REQUIRED),
-                newRequiredField("disaster_response", FIELD_ALWAYS_REQUIRED),
+                newRequiredField("field_required_implicit_fm_path_visible", FIELD_NON_DRAFT_REQUIRED),
+                newRequiredField("field_required_implicit_fm_path_hidden", FIELD_NOT_REQUIRED),
+                newRequiredField("field_required_submit_fm_path_visible", FIELD_NON_DRAFT_REQUIRED),
+                newRequiredField("field_required_submit_fm_path_hidden", FIELD_NOT_REQUIRED),
+                newRequiredField("field_required_always_fm_path_visible", FIELD_ALWAYS_REQUIRED),
+                newRequiredField("field_required_always_fm_path_hidden", FIELD_NOT_REQUIRED),
                 newRequiredField("field_required_min_size_on", FIELD_NON_DRAFT_REQUIRED),
                 newRequiredField("field_required_min_size_off", FIELD_NOT_REQUIRED),
                 newRequiredField("field_required_and_min_size_on", FIELD_NON_DRAFT_REQUIRED),

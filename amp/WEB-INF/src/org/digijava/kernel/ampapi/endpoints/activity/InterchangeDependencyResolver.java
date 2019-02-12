@@ -187,10 +187,10 @@ public class InterchangeDependencyResolver {
                         result = result && hasTransactions(fieldParent);
                         break;
                     case RESOURCE_TYPE_FILE_VALID_KEY:
-                        result = result && isResourceTypeValid(value, importer, fieldParent, ResourceType.FILE);
+                        result = result && isResourceTypeValid(fieldParent, ResourceType.FILE);
                         break;
                     case RESOURCE_TYPE_LINK_VALID_KEY:
-                        result = result && isResourceTypeValid(value, importer, fieldParent, ResourceType.LINK);
+                        result = result && isResourceTypeValid(fieldParent, ResourceType.LINK);
                         break;
                     default: 
                         break;
@@ -222,8 +222,7 @@ public class InterchangeDependencyResolver {
         return referenceOnBudgetValue.equals(onOffBudgetValue);
     }
     
-    private static boolean isResourceTypeValid(Object value, ObjectImporter importer,
-            Map<String, Object> fieldParent, String resourceType) {
+    private static boolean isResourceTypeValid(Map<String, Object> fieldParent, ResourceType resourceType) {
         
         Object resType = fieldParent.get(InterchangeUtils.underscorify(ResourceEPConstants.RESOURCE_TYPE));
         return resType != null && resType.equals(resourceType.getId());

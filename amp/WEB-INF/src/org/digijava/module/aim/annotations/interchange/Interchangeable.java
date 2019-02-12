@@ -52,6 +52,9 @@ public @interface Interchangeable {
      */
     ActivityEPConstants.RequiredValidation required() default ActivityEPConstants.RequiredValidation.NONE;
     
+    /**
+     * The field is required or not based on fm path. By default, if requiredFmPath is visible, the required is SUBMIT
+     */
     String requiredFmPath() default "";
     
     /**

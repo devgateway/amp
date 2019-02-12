@@ -33,8 +33,6 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     //IATI-check: not ignored!
     private static final long serialVersionUID = 1L;
     
-    private static final String COMM = String.valueOf(Constants.COMMITMENT);
-    
     @Interchangeable(fieldTitle = "Funding ID")
     private Long ampFundingId;
     @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true, required = ALWAYS)

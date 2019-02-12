@@ -112,7 +112,7 @@ public class ActivityEPConstants {
     public static final String RELEASE_FUNDS_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH 
             + "/Release of Funds/Release of Funds Table";
     public static final String EXPENDITURES_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH
-            + "Expenditures/Expenditures Table";
+            + "/Expenditures/Expenditures Table";
     
     public static final String RECIPIENT_ROLE_FM_PATH = "/Funding Flows OrgRole Selector/Recipient Org Role";
     public static final String RECIPIENT_ORG_FM_PATH = "/Funding Flows OrgRole Selector/Recipient Organization";

@@ -2,13 +2,12 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.List;
 import java.util.Map;
-
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -41,7 +40,6 @@ public class ValueValidator extends InputValidator {
         if (!importable)
             return true;
         
-        //temporary debug
         if (!isValidLength(newFieldParent, fieldDescription))
             return false;
         if (!isValidPercentage(newFieldParent, fieldDescription)) 
@@ -49,18 +47,25 @@ public class ValueValidator extends InputValidator {
 
         // FIXME possible values are not always available for all fields, must check only for select fields (not all)
         List<PossibleValue> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath);
+        Object value = newFieldParent.get(fieldDescription.getFieldName());
         
-        if (possibleValues.size() != 0) {
-            Object value = newFieldParent.get(fieldDescription.getFieldName());
-            
-            if (value != null) {
-                // convert to string the ids to avoid long-integer comparison
-                String valueStr = value.toString();
-                return findById(possibleValues, valueStr) != null;
+        if (possibleValues.size() != 0 && value != null) {
+            if (fieldDescription.getApiType().getFieldType().isList()) {
+                if (fieldDescription.getApiType().isSimpleItemType()) {
+                    return ((List<?>) value).stream().allMatch(v -> isAllowedValue(possibleValues, v));
+                }
+                // possible values definition allowed at simple type list level only
+                return false;
+            } else {
+                return isAllowedValue(possibleValues, value);
             }
         }
-        // nothing failed so far? then we are good to go
         return true;
+    }
+    
+    private boolean isAllowedValue(List<PossibleValue> possibleValues, Object value) {
+        // convert to string the ids to avoid long-integer comparison
+        return findById(possibleValues, String.valueOf(value)) != null;
     }
 
     // TODO it would be nice if possible values could be extended to retrieve one single possible value by id.

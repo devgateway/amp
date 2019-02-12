@@ -64,10 +64,10 @@ public class IndicatorUtils {
             return result;
 
     }
-    
+
     public static Indicator buildJsonIndicatorFromIndicatorLayer(AmpIndicatorLayer indLayer, boolean includeAdmLevel) {
         Indicator apiIndicator = new Indicator();
-    
+
         apiIndicator.setId(indLayer.getId());
         apiIndicator.setName(TranslationUtil.getTranslatableFieldValue(
                 IndicatorEPConstants.NAME, indLayer.getName(), indLayer.getId()));
@@ -76,25 +76,25 @@ public class IndicatorUtils {
         apiIndicator.setUnit(TranslationUtil.getTranslatableFieldValue(
                 IndicatorEPConstants.UNIT, indLayer.getUnit(), indLayer.getId()));
         apiIndicator.setNumberOfClasses(indLayer.getNumberOfClasses());
-        
+
         if (includeAdmLevel) {
             apiIndicator.setAdmLevelId(indLayer.getAdmLevel().getId());
             apiIndicator.setAdmLevelName(indLayer.getAdmLevel().getLabel());
             String admLevelLabel = IndicatorEPConstants.ADM_PREFIX + indLayer.getAdmLevel().getIndex();
             apiIndicator.setAdminLevel(AdmLevel.fromString(admLevelLabel));
         }
-        
+
         apiIndicator.setIndicatorTypeId(indLayer.getIndicatorType() == null ? null
                 : indLayer.getIndicatorType().getId());
         apiIndicator.setAccessTypeId(indLayer.getAccessType().getValue());
         apiIndicator.setZeroCategoryEnabled(indLayer.getZeroCategoryEnabled());
         apiIndicator.setCreatedOn(indLayer.getCreatedOn());
         apiIndicator.setUpdatedOn(indLayer.getUpdatedOn());
-    
+
         if (indLayer.getCreatedBy() != null) {
             apiIndicator.setCreatedBy(indLayer.getCreatedBy().getUser().getEmail());
         }
-    
+
         List<AmpIndicatorColor> colorList = new ArrayList<>(indLayer.getColorRamp());
         colorList.sort(Comparator.comparing(AmpIndicatorColor::getPayload));
         for (AmpIndicatorColor color : colorList) {
@@ -105,7 +105,7 @@ public class IndicatorUtils {
             }
         }
         apiIndicator.setColorRamp(colorList);
-        
+
         return apiIndicator;
     }
 
@@ -117,7 +117,7 @@ public class IndicatorUtils {
             List<Long> sharedWorkspaces = indLayer.getSharedWorkspaces().stream()
                     .map(ind -> ind.getWorkspace().getAmpTeamId())
                     .collect(Collectors.toList());
-            
+
             apiIndicator.setSharedWorkspaces(sharedWorkspaces);
         }
 
@@ -126,20 +126,20 @@ public class IndicatorUtils {
 
         return apiIndicator;
     }
-    
+
     public static List<Indicator> getApiIndicatorsForGis(List<AmpIndicatorLayer> indicators,
                                                                    boolean includeAdmLevel) {
         List<Indicator> apiIndicators = new ArrayList<>();
         GapAnalysis gapAnalysis = new GapAnalysis();
-        
+
         for (AmpIndicatorLayer indicator : indicators) {
             Indicator apiIndicator = buildJsonIndicatorFromIndicatorLayer(indicator, includeAdmLevel);
-            
+
             apiIndicator.setCanDoGapAnalysis(gapAnalysis.canDoGapAnalysis(indicator));
-            
+
             apiIndicators.add(apiIndicator);
         }
-        
+
         return apiIndicators;
     }
 
@@ -174,7 +174,7 @@ public class IndicatorUtils {
     public static boolean isAdmin() {
         return "yes".equals(TLSUtils.getRequest().getSession().getAttribute("ampAdmin"));
     }
-    
+
     private static IndicatorValue getLocationIndicatorValueBean(AmpLocationIndicatorValue indicatorValue) {
         return new IndicatorValue(
                 indicatorValue.getLocation().getId(),
@@ -211,17 +211,17 @@ public class IndicatorUtils {
         Collection<AmpIndicatorLayer> col = new ArrayList<>(indicatorLayers)
                 .subList(offset, offset + Math.min(indicatorLayers.size() - offset, count));
 
-        
+
         List<Indicator> indicators = col.stream()
                 .map(ind -> IndicatorUtils.buildIndicatorLayerJson(ind))
                 .collect(Collectors.toList());
-    
+
         PageInformation page = new PageInformation();
         page.setRecordsPerPage(count);
         page.setCurrentPageNumber((offset / count) + 1);
         page.setTotalPageCount(totalPageCount);
         page.setTotalRecords(indicatorLayers.size());
-    
+
         return new IndicatorPageDataResult(page, indicators);
     }
 
@@ -273,51 +273,35 @@ public class IndicatorUtils {
         return ail;
     }
     
-    /**
-     * 
-     * @param indicatorId
-     * @param input
-     * @param isGapAnalysis
-     * @return
-     */
-    public static Indicator getIndicatorsAndLocationValues(Long indicatorId, PerformanceFilterParameters input,
-            boolean isGapAnalysis) {
+    public static Indicator getIndicatorsAndLocationValues(Long indicatorId) {
+        AmpIndicatorLayer indicator = getAmpIndicatorLayer(indicatorId);
+        return getIndicatorsAndLocationValues(indicator);
+    }
+
+    public static Indicator doGapAnalysis(Long indicatorId, PerformanceFilterParameters input) {
+        AmpIndicatorLayer indicator = getAmpIndicatorLayer(indicatorId);
+        return doGapAnalysis(indicator, input);
+    }
+
+    private static AmpIndicatorLayer getAmpIndicatorLayer(Long indicatorId) {
         AmpIndicatorLayer indicator = DbUtil.getObjectOrNull(AmpIndicatorLayer.class, indicatorId);
         if (indicator == null) {
             JsonBean error = ApiError.toError(IndicatorErrors.INVALID_ID.withDetails(String.valueOf(indicatorId)));
             throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, error);
         }
-        return getIndicatorsAndLocationValues(indicator, input, isGapAnalysis);
+        return indicator;
     }
-    
-    public static Indicator getIndicatorsAndLocationValues(AmpIndicatorLayer indicator,
-            PerformanceFilterParameters input, boolean isGapAnalysis) {
-     
-        GapAnalysis gapAnalysis = isGapAnalysis ? new GapAnalysis(indicator, input) : null;
-        boolean doingGapAnalysis = gapAnalysis != null && gapAnalysis.isReadyForGapAnalysis();
-        if (doingGapAnalysis) {
-            logger.info("Generating Gap Analysis");
-        } else if (isGapAnalysis) {
-            logger.error("Requested gap analysis, but it cannot be done => providing non-gap analysis data");
-        }
-        
-        String unit = indicator.getUnit(); 
-        if (doingGapAnalysis) {
-            unit = String.format("%s / %s", gapAnalysis.getCurrencyCode(), unit); 
-        }
-        
+
+    private static Indicator getIndicatorsAndLocationValues(AmpIndicatorLayer indicator) {
         // build general indicator info
         Indicator apiIndicator = buildJsonIndicatorFromIndicatorLayer(indicator, false);
-        apiIndicator.setGapAnalysis(doingGapAnalysis);
-    
+        apiIndicator.setGapAnalysis(false);
+
         // build locations values
         List<IndicatorValue> values = new ArrayList<>();
         for (AmpLocationIndicatorValue locIndValue : indicator.getIndicatorValues()) {
             String geoCode = locIndValue.getLocation().getGeoCode();
             BigDecimal value = BigDecimal.valueOf(locIndValue.getValue());
-            if (doingGapAnalysis) {
-                value = gapAnalysis.getGapAnalysisAmount(value, geoCode);
-            }
 
             values.add(new IndicatorValue(
                     locIndValue.getLocation().getId(),
@@ -326,10 +310,36 @@ public class IndicatorUtils {
                     locIndValue.getLocation().getName()));
         }
         apiIndicator.setValues(values);
-        
+
         return apiIndicator;
     }
-    
+
+    public static Indicator doGapAnalysis(AmpIndicatorLayer indicator, PerformanceFilterParameters input) {
+
+        GapAnalysis gapAnalysis = new GapAnalysis(indicator, input);
+        boolean doingGapAnalysis = gapAnalysis.isReadyForGapAnalysis();
+
+        Indicator response = getIndicatorsAndLocationValues(indicator);
+
+        if (doingGapAnalysis) {
+            logger.info("Generating Gap Analysis");
+
+            String unit = String.format("%s / %s", gapAnalysis.getCurrencyCode(), response.getUnit());
+            response.setUnit(
+                    TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.UNIT, unit, response.getId()));
+
+            response.setGapAnalysis(true);
+
+            for (IndicatorValue value : response.getValues()) {
+                value.setValue(gapAnalysis.getGapAnalysisAmount(value.getValue(), value.getGeoId()));
+            }
+        } else {
+            logger.error("Requested gap analysis, but it cannot be done => providing non-gap analysis data");
+        }
+
+        return response;
+    }
+
     /**
      * Find the corresponding adm-0, adm-1, etc for the selected implementation location
      * @param indicator the indicator

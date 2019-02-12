@@ -1,7 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,6 +16,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpOrgRoleDi
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivitySectorDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.values.ApprovalStatusPossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.FiscalYearPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
@@ -607,9 +607,10 @@ LoggerIdentifiable, Cloneable {
      */
     @Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", 
             required = "/Activity Form/Identification/Budget Extras/Required Validator for fy",
-            dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY}, 
+            dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY}, uniqueConstraint = true,
             validators = @Validators (unique = "/Activity Form/Identification/Budget Extras/FY"))
-    protected Set<AmpAPIFiscalYear> fiscalYears;
+    @PossibleValues(FiscalYearPossibleValuesProvider.class)
+    protected Set<Long> fiscalYears;
     
     @Interchangeable(fieldTitle = "Vote", importable = true, 
             fmPath = "/Activity Form/Identification/Budget Extras/Vote",
@@ -2130,11 +2131,11 @@ LoggerIdentifiable, Cloneable {
             this.deleted = deleted;
         }
         
-        public Set<AmpAPIFiscalYear> getFiscalYears() {
+        public Set<Long> getFiscalYears() {
             return fiscalYears;
         }
 
-        public void setFiscalYears(Set<AmpAPIFiscalYear> fiscalYears) {
+        public void setFiscalYears(Set<Long> fiscalYears) {
             this.fiscalYears = fiscalYears;
         }
 

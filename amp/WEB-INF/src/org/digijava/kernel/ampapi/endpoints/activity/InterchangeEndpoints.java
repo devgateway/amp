@@ -27,7 +27,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Example;
+import io.swagger.annotations.ExampleProperty;
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityFunding;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityService;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewWorkspace;
@@ -229,6 +232,29 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             message = "project with full set of configured fields and their values"))
     public JsonBean getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
         return InterchangeUtils.getActivityByAmpId(ampId);
+    }
+
+    @POST
+    @Path("/projects")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectsByAmpIds", ui = false)
+    @ApiOperation("Retrieve full projects data by AMP Ids.")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
+        message = "A list of projects with full set of configured fields and their values. For each amp_id that is "
+            + "invalid or its export failed, the entry will provide only the 'amp_id' and the 'error'",
+        examples =
+            @Example(value = {
+                @ExampleProperty(
+                        mediaType = "application/json;charset=utf-8",
+                        value = "[\n  {\n    \"internal_id\": 912,\n    \"amp_id\": \"872329912\",\n    ...\n  },\n  "
+                                + "{\n    \"amp_id\": \"invalid\",\n    \"error\": {\n      \"0132\": "
+                                + "[{ \"Activity not found\": null }]\n    }\n  }\n]\n"
+                    )
+                })
+            ))
+    public Collection<JsonBean> getProjectsByAmpIds(@ApiParam(value = "List of amp-id", required = true)
+        List<String> ampIds) {
+        return InterchangeUtils.getActivitiesByAmpIds(ampIds);
     }
 
     @POST

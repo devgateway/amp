@@ -16,11 +16,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -107,16 +107,15 @@ public class ResourceImporter extends ObjectImporter {
             teamMemberCreator = TeamMemberUtil.getLoggedInTeamMember();
         }
 
-        if (formFile == null && ResourceEPConstants.FILE.equals(
-                String.valueOf(newJson.get(ResourceEPConstants.RESOURCE_TYPE)))) {
+        if (formFile == null && ResourceType.FILE.getId().equals(newJson.get(ResourceEPConstants.RESOURCE_TYPE))) {
             return singletonList(ResourceErrors.FILE_NOT_FOUND);
         }
         
         if (formFile != null) {
-            if (ResourceEPConstants.LINK.equals(String.valueOf(newJson.get(ResourceEPConstants.RESOURCE_TYPE)))) {
-                String details = String.format("%s '%s'. %s '%s'", TranslatorWorker.translateText("Resource type is"), 
-                        ResourceEPConstants.LINK, TranslatorWorker.translateText("Resource type should be"), 
-                        ResourceEPConstants.FILE);
+            if (ResourceType.LINK.getId().equals(newJson.get(ResourceEPConstants.RESOURCE_TYPE))) {
+                String details = String.format("%s '%s'. %s '%s'", TranslatorWorker.translateText("Resource type is"),
+                        ResourceType.LINK.getId(), TranslatorWorker.translateText("Resource type should be"),
+                        ResourceType.FILE.getId());
                 return singletonList(ResourceErrors.RESOURCE_TYPE_INVALID.withDetails(details));
             }
             
@@ -138,7 +137,7 @@ public class ResourceImporter extends ObjectImporter {
                 throw new ObjectConversionException();
             }
             
-            if (ResourceEPConstants.LINK.equals(resource.getResourceType())) {
+            if (ResourceType.LINK.equals(resource.getResourceType())) {
                 resource.setFileName(null);
             } else {
                 resource.setWebLink(null);
@@ -185,7 +184,7 @@ public class ResourceImporter extends ObjectImporter {
         tdd.setDate(calendar.getTime());
         tdd.setYearofPublication(String.valueOf(calendar.get(Calendar.YEAR)));
         
-        if (ResourceEPConstants.LINK.equals(resource.getResourceType())) {
+        if (ResourceType.LINK.equals(resource.getResourceType())) {
             tdd.setWebLink(resource.getWebLink());
         } else {
             tdd.setWebLink(null);

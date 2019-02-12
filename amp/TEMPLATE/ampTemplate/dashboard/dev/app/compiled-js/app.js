@@ -211,7 +211,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
 module.exports = App;
 
-},{"./backbone-dash":3,"./check-support":15,"./models/amp-user.js":16,"./models/saved-dashes-collection.js":26,"./views/fail":36,"./views/main":38,"amp-filter/src/main":70,"amp-settings/src/index":95,"amp-state/index":99,"amp-translate":100,"amp-url/index":101,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
+},{"./backbone-dash":3,"./check-support":15,"./models/amp-user.js":16,"./models/saved-dashes-collection.js":26,"./views/fail":36,"./views/main":38,"amp-filter/src/main":69,"amp-settings/src/index":94,"amp-state/index":98,"amp-translate":99,"amp-url/index":100,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -391,7 +391,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":102,"../../ugly/util":45,"./customized/customizedLegend":11,"d3":"d3"}],5:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":101,"../../ugly/util":45,"./customized/customizedLegend":11,"d3":"d3"}],5:[function(require,module,exports){
 /*
  * Drawing a bar chart in AMP? Please use ./chart.js instead.
  */
@@ -441,7 +441,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":102,"../../ugly/util":45,"./customized/heatMapChart":12,"d3":"d3","underscore":"underscore"}],6:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":101,"../../ugly/util":45,"./customized/heatMapChart":12,"d3":"d3","underscore":"underscore"}],6:[function(require,module,exports){
 /*
  * Drawing a multibar chart in AMP? Please use ./chart.js instead.
  */
@@ -506,7 +506,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":102,"./customized/multiBarChart.js":13}],7:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":101,"./customized/multiBarChart.js":13}],7:[function(require,module,exports){
 /*
  * Drawing a pie chart in AMP? Please use ./chart.js instead.
  */
@@ -5066,8 +5066,9 @@ module.exports = BackboneDash.View.extend({
       if(filterField.modelType === 'YEAR-SINGLE-VALUE' || filterField.modelType === 'DATE-RANGE-VALUES'){
     	  return self.getAppliedDateObject(filterObject,key);
       } else {
+    	  var name = filter.filterName || key;   	   
     	  return {
-    	        name: filter.filterName || key,
+    	        name: TranslationManager.getTranslated(name.replace(/-/g, " ")),
     	        id: key.replace(/[^\w]/g, ''), // remove anything non-alphanum
     	        detail: _(filter).map(function(value) {
     	          if (value.attributes !== undefined) {
@@ -5092,13 +5093,14 @@ module.exports = BackboneDash.View.extend({
 	  var dateRangeText = '';
 	  var filterName = filterField.filterName ? filterField.filterName : filterKey;
 	  if(filterKey === 'date') {
-		  dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
+		  dateRangeText = TranslationManager.getTranslated("Date Range");
 	  } else if(filterKey === 'computed-year') {
-		  dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
-	  } else {
-		  dateRangeText = app.translator.translateSync("amp.dashboard:" + filterName.replace(/[^\w]/g, '-'), filterName);
+		  dateRangeText = TranslationManager.getTranslated("Computed Year");
+	  } else {		  
+		  dateRangeText = TranslationManager.getTranslated(filterName.replace(/-/g, " "));			  		
 	  }
 	  var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
+		
 	  return {
 		  id: filterKey.replace(/[^\w]/g, '-'),
 		  name: dateRangeText,
@@ -5110,7 +5112,7 @@ module.exports = BackboneDash.View.extend({
   }
 });
 
-},{"../../../../../../../reamp/tools/log":102,"../backbone-dash":3,"underscore":"underscore"}],38:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":101,"../backbone-dash":3,"underscore":"underscore"}],38:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -5328,7 +5330,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":17,"../models/chart-funding-type":18,"../models/chart-heatmaps":19,"../models/chart-tops":21,"../models/charts-collection":22,"../models/enabled-charts-collection":23,"../models/heatmaps-config-collection":24,"./charts":33,"./controls":34,"amp-boilerplate":49,"amp-state/index":99,"underscore":"underscore"}],39:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":17,"../models/chart-funding-type":18,"../models/chart-heatmaps":19,"../models/chart-tops":21,"../models/charts-collection":22,"../models/enabled-charts-collection":23,"../models/heatmaps-config-collection":24,"./charts":33,"./controls":34,"amp-boilerplate":49,"amp-state/index":98,"underscore":"underscore"}],39:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -21744,7 +21746,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 		 _.bindAll(this, 'createTranslator', 'createViews','bubbleViewEvents','onMenuRendered');
 	},
 	createTranslator : function() {
-		var defaultKeys = JSON.parse("{\r\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DG\",\r\n\"amp.common:title\": \"AMP Toolbar\",\r\n\"amp.common:title-help\": \"Help\",\r\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\r\n\"amp.common:subtitle-glossary\": \"Glossary\",\r\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\r\n\"amp.common:title-logout\": \"Log Out\",\r\n\"amp.common:platform\": \"Aid Management Platform (AMP)\",\r\n\"[title]amp.common:platform\": \"Aid Management Platform\",\r\n\"amp.common:platform-short\": \"AMP\",\r\n\"amp.common:title-login\": \"Login\",\r\n\"amp.dashboard:close\": \"Close\",\r\n\"amp.about:modal.title\": \"About AMP\",\r\n\"amp.about:credits\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and Development Gateway Foundation.\",\r\n\"amp.about:trademark\": \"The Development Gateway and the The Development Gateway logo are trademarks for The Development Gateway Foundation\",\r\n\"amp.about:rights\": \"All Rights Reserved\",\r\n\"amp.about:version\": \"Version\"\r\n}\r\n\r\n");
+		var defaultKeys = JSON.parse("{\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DG\",\n\"amp.common:title\": \"AMP Toolbar\",\n\"amp.common:title-help\": \"Help\",\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\n\"amp.common:subtitle-glossary\": \"Glossary\",\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\n\"amp.common:title-logout\": \"Log Out\",\n\"amp.common:platform\": \"Aid Management Platform (AMP)\",\n\"[title]amp.common:platform\": \"Aid Management Platform\",\n\"amp.common:platform-short\": \"AMP\",\n\"amp.common:title-login\": \"Login\",\n\"amp.dashboard:close\": \"Close\",\n\"amp.about:modal.title\": \"About AMP\",\n\"amp.about:credits\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and Development Gateway Foundation.\",\n\"amp.about:trademark\": \"The Development Gateway and the The Development Gateway logo are trademarks for The Development Gateway Foundation\",\n\"amp.about:rights\": \"All Rights Reserved\",\n\"amp.about:version\": \"Version\"\n}\n\n");
 		this.translator = new Translator({
 			defaultKeys : defaultKeys
 		});
@@ -21791,7 +21793,7 @@ module.exports = {
 };
 window.boilerplate = Widget;
 
-},{"./src/models/amp-layout-model.js":53,"./src/views/footer-view.js":57,"./src/views/header-view.js":58,"amp-translate":100,"backbone":"backbone","bootstrap/dist/js/bootstrap":50,"jquery":"jquery","underscore":"underscore"}],50:[function(require,module,exports){
+},{"./src/models/amp-layout-model.js":53,"./src/views/footer-view.js":57,"./src/views/header-view.js":58,"amp-translate":99,"backbone":"backbone","bootstrap/dist/js/bootstrap":50,"jquery":"jquery","underscore":"underscore"}],50:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -24209,7 +24211,7 @@ module.exports = Backbone.View.extend({
 var Backbone = require('backbone');
 require('bootstrap/dist/js/bootstrap');
 var _ = require('underscore');
-var Template = "<link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/css/main.css\">\r\n<% if(currentLanguage.get(\"ltr-direction\") === false) { %>\r\n  <link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/css_2/amp-rtl.css\">\r\n  <link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/css/boilerplate-rtl.css\">\r\n<% } %>\r\n<script type=\"text/javascript\">\r\n  function switchTranslation (url) {\r\n    $('#backUrl').val(document.location.href);\r\n    document.modeSwitchForm.action = url;\r\n    document.modeSwitchForm.submit();\r\n  }\r\n</script>\r\n<form name=\"modeSwitchForm\" method=\"post\" action=\"/translation/switchMode.do\" style=\"display:none;\">\r\n  <input type=\"hidden\" name=\"backUrl\" id=\"backUrl\" value=\"\">\r\n</form>\r\n<%\r\n/***\r\n * Single Row Header Design (used when optionally requested: on GIS)\r\n * Useful for fixed height apps.\r\n *\r\n * Container-fluid structure:\r\n * row\r\n *  column navbar-brand (logo)\r\n *  column navbar-collapse\r\n *    nested row:\r\n *      columns AmpMenus (public or internal menus shown as provided by API)\r\n *      nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\r\n *        3 columns\r\n *  login_here (ignores bootstrap container structure; shown when logged out)\r\n *  div#logincontainer: inserted by jQuery + rendered by JSP\r\n ***/\r\n\r\n  if (useSingleRowHeader) {\r\n %>\r\n<nav class=\"navbar navbar-default single-row\" role=\"navigation\">\r\n  <div id = \"amp-header-menu\" class=\"container-fluid <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\r\n    <div class=\"row no-gutters\">\r\n      <!-- .ampUserLoggedIn hides public version-->\r\n\r\n      <!-- Brand and toggle get grouped for better mobile display -->\r\n      <span>\r\n      <div class=\"navbar-header col-sm-1 col-sm-1-gis\">\r\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\r\n          <span class=\"sr-only\">Toggle navigation</span>\r\n          <span class=\"icon-bar\"></span>\r\n          <span class=\"icon-bar\"></span>\r\n          <span class=\"icon-bar\"></span>\r\n        </button>\r\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\r\n          <span>\r\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\r\n          </span>\r\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\r\n      </div>\r\n    </span>\r\n    <span>\r\n      <div class=\"col-sm-11 col-sm-11-gis\">\r\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\r\n          <div class=\"col-md-8 col-sm-10 col-sm-10-gis\">\r\n            <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\r\n\r\n              <!-- File -->\r\n\r\n            </ul>\r\n            <div class=\"clearfix\"></div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </span>\r\n    <span class=\"header-login-gis\">\r\n         <div class=\"col-md-4 col-sm-2 col-sm-2-gis\">\r\n              <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\r\n                <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\r\n                <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\r\n                  <a class=\"user-url\">\r\n                    <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\r\n                  </a>\r\n                </li>\r\n                <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\r\n              </ul>\r\n              <% if(showLogin) { %>\r\n                <% if(loginDropdown){ %>\r\n                  <div class=\"login_here\" id=\"show_login_pop\">\r\n                    <div class=\"login_here_cont\">\r\n                      <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\r\n                    </div>\r\n                  </div>\r\n                <% } else { %>\r\n                  <ul class=\"nav navbar-nav ampPublic navbar-right\">\r\n                    <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\r\n                  </ul>\r\n                <% } %>\r\n              <% } %>\r\n              <!-- div#logincontainer with anchors gets appended here -->\r\n          </div>\r\n    </span>\r\n    </div>\r\n    <!-- Collect the nav links, forms, and other content for toggling -->\r\n  </div><!-- /.container-fluid -->\r\n</nav>\r\n <% } else { %>\r\n\r\n<% /***\r\n * Double Row Header Design (used by default)\r\n *\r\n * Container-Fluid structure:\r\n * row\r\n *  column navbar-brand (logo)\r\n *  column navbar-collapse\r\n *    nested row:\r\n *        nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\r\n            3 columns\r\n * row\r\n *    columns AmpMenus (public or internal menus shown as provided by API)\r\n *  login_here (ignores bootstrap container structure, shown when logged out)\r\n *  div#logincontainer: inserted by jQuery + rendered by JSP\r\n ***/ %>\r\n<nav class=\"navbar navbar-default double-row\" role=\"navigation\">\r\n  <div class=\"container-fluid no-gutters <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\r\n    <div class=\"row no-gutters\">\r\n      <!-- .ampUserLoggedIn hides public version-->\r\n\r\n      <!-- Brand and toggle get grouped for better mobile display -->\r\n      <div class=\"navbar-header col-sm-1 col-sm-offset-1\">\r\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\r\n          <span class=\"sr-only\">Toggle navigation</span>\r\n          <span class=\"icon-bar\"></span>\r\n          <span class=\"icon-bar\"></span>\r\n          <span class=\"icon-bar\"></span>\r\n        </button>\r\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\r\n          <span>\r\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\r\n          </span>\r\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\r\n      </div>\r\n\r\n      <div class=\"col-sm-9\">\r\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\r\n          <!-- To change workspace/user truncation length, edit the offset and grid number below:-->\r\n          <div class=\"col-sm-offset-5 col-sm-7\">\r\n            <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\r\n              <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\r\n              <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\r\n                <a class=\"user-url\">\r\n                  <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\r\n                </a>\r\n              </li>\r\n              <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\r\n            </ul>\r\n            <% if(showLogin) { %>\r\n              <% if(loginDropdown){ %>\r\n                <div class=\"login_here\" id=\"show_login_pop\">\r\n                  <div class=\"login_here_cont\">\r\n                    <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\r\n                  </div>\r\n                </div>\r\n              <% } else { %>\r\n                <ul class=\"nav navbar-nav ampPublic navbar-right\">\r\n                  <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\r\n                </ul>\r\n              <% } %>\r\n            <% } %>\r\n            <!-- div#logincontainer with anchors gets appended here -->\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n    </div>\r\n\r\n    <div class=\"row no-gutters\">\r\n      <div class=\"col-sm-11 col-sm-offset-1\">\r\n        <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\r\n\r\n          <!-- File -->\r\n\r\n        </ul>\r\n        <div class=\"clearfix\"></div>\r\n      </div>\r\n    </div>\r\n    <!-- Collect the nav links, forms, and other content for toggling -->\r\n  </div><!-- /.container-fluid -->\r\n</nav>\r\n\r\n<%\r\n  } %>\r\n";
+var Template = "<link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/css/main.css\">\n<% if(currentLanguage.get(\"ltr-direction\") === false) { %>\n  <link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/css_2/amp-rtl.css\">\n  <link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/css/boilerplate-rtl.css\">\n<% } %>\n<script type=\"text/javascript\">\n  function switchTranslation (url) {\n    $('#backUrl').val(document.location.href);\n    document.modeSwitchForm.action = url;\n    document.modeSwitchForm.submit();\n  }\n</script>\n<form name=\"modeSwitchForm\" method=\"post\" action=\"/translation/switchMode.do\" style=\"display:none;\">\n  <input type=\"hidden\" name=\"backUrl\" id=\"backUrl\" value=\"\">\n</form>\n<%\n/***\n * Single Row Header Design (used when optionally requested: on GIS)\n * Useful for fixed height apps.\n *\n * Container-fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *      columns AmpMenus (public or internal menus shown as provided by API)\n *      nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n *        3 columns\n *  login_here (ignores bootstrap container structure; shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/\n\n  if (useSingleRowHeader) {\n %>\n<nav class=\"navbar navbar-default single-row\" role=\"navigation\">\n  <div id = \"amp-header-menu\" class=\"container-fluid <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <span>\n      <div class=\"navbar-header col-sm-1 col-sm-1-gis\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n    </span>\n    <span>\n      <div class=\"col-sm-11 col-sm-11-gis\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <div class=\"col-md-8 col-sm-10 col-sm-10-gis\">\n            <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n              <!-- File -->\n\n            </ul>\n            <div class=\"clearfix\"></div>\n          </div>\n        </div>\n      </div>\n    </span>\n    <span class=\"header-login-gis\">\n         <div class=\"col-md-4 col-sm-2 col-sm-2-gis\">\n              <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n                <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\n                <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                  <a class=\"user-url\">\n                    <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\n                  </a>\n                </li>\n                <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n              </ul>\n              <% if(showLogin) { %>\n                <% if(loginDropdown){ %>\n                  <div class=\"login_here\" id=\"show_login_pop\">\n                    <div class=\"login_here_cont\">\n                      <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                    </div>\n                  </div>\n                <% } else { %>\n                  <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                    <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                  </ul>\n                <% } %>\n              <% } %>\n              <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n    </span>\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n <% } else { %>\n\n<% /***\n * Double Row Header Design (used by default)\n *\n * Container-Fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *        nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n            3 columns\n * row\n *    columns AmpMenus (public or internal menus shown as provided by API)\n *  login_here (ignores bootstrap container structure, shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/ %>\n<nav class=\"navbar navbar-default double-row\" role=\"navigation\">\n  <div class=\"container-fluid no-gutters <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1 col-sm-offset-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-9\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <!-- To change workspace/user truncation length, edit the offset and grid number below:-->\n          <div class=\"col-sm-offset-5 col-sm-7\">\n            <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n              <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\n              <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                <a class=\"user-url\">\n                  <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\n                </a>\n              </li>\n              <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n            </ul>\n            <% if(showLogin) { %>\n              <% if(loginDropdown){ %>\n                <div class=\"login_here\" id=\"show_login_pop\">\n                  <div class=\"login_here_cont\">\n                    <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                  </div>\n                </div>\n              <% } else { %>\n                <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                  <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                </ul>\n              <% } %>\n            <% } %>\n            <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n\n    <div class=\"row no-gutters\">\n      <div class=\"col-sm-11 col-sm-offset-1\">\n        <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n          <!-- File -->\n\n        </ul>\n        <div class=\"clearfix\"></div>\n      </div>\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n\n<%\n  } %>\n";
 var MenuCollection = require('../collections/amp-menus-collection.js');
 var MenuModel = require('../models/amp-menus-model.js');
 var SubmenuView = require('./submenu-compositeview.js');
@@ -24329,7 +24331,7 @@ module.exports = Backbone.View.extend({
 
 var Backbone = require('backbone');
 var _ = require('underscore');
-var Template = "<%\r\n  /* Prepare the A tag at top level menus */\r\n  \tif (!obj.url) {\r\n  \t  obj.url = '#';\r\n  \t  if (!obj.children || obj.children.length === 0) {\r\n      \tobj.className = 'hidden';\r\n      \tobj.dataToggle = 'data-toggle=\"\"';\r\n      } else {\r\n      \tobj.className = 'dropdown-toggle';\r\n      \tobj.dataToggle = 'data-toggle=\"dropdown\"';\r\n      }\r\n    } else {\r\n      obj.className = '';\r\n      obj.dataToggle = '';\r\n    }\r\n\r\n    if (obj.tab) {\r\n      obj.tabTarget = 'target=\"_blank\"';\r\n    }\r\n    else {\r\n      obj.tabTarget = '';\r\n    }\r\n    %>\r\n<%\r\n/* TODO escape the code in HTML */\r\n%>\r\n<a href=\"<%= url %>\" class=\"<%= className %>\" <%= dataToggle %> <%= obj.tabTarget %> >\r\n  <span class=\"dropdown-text\" title=\"<%= obj.name.trim() %>\"><%= obj.name.trim() %>&nbsp;</span><% if (obj.children && obj.children.length > 0) { %><span class=\"caret\"></span><% } %>\r\n</a>\r\n<% if (obj.children && obj.children.length !== 0) { %>\r\n  <ul class=\"children dropdown-menu\" role=\"menu\">\r\n  <% _.each(obj.children, function(model) { %>\r\n\r\n    <%\r\n      /* Prepare the A tag at second level menus */\r\n      if (model.children && model.children.length !== 0) {\r\n        model.dropdownSubmenu = 'dropdown-submenu';\r\n       };\r\n\r\n       if (!model.tooltip) {\r\n         model.tooltip = '';\r\n       };\r\n       var elementClass = '2nd-level-item';\r\n       if (model.language) {\r\n\t\t\t elementClass = elementClass+ ' language';\r\n\t   }\r\n       if (model.popup) {\r\n       \t elementClass = elementClass + ' popup';\r\n       }\r\n       if (model.tab) {\r\n         model.tabTarget = 'target=\"_blank\"';\r\n       } else {\r\n         model.tabTarget = '';\r\n       }\r\n       var elementUrl = model.url;\r\n       if (model.post === true) {\r\n         elementUrl = 'javascript:switchTranslation (\"'+elementUrl+'\")';\r\n\r\n       }\r\n       if (!model.url) {\r\n        elementUrl = 'javascript:;';\r\n       }\r\n       /* if it doesn't have children, nor url. then it is the About */\r\n       if (!model.url && !model.children) {\r\n       elementClass = elementClass + ' about-amp';\r\n       }\r\n    %>\r\n\r\n    <li class='dropdown <%= model.dropdownSubmenu %>' >\r\n    <a href='<%=  elementUrl %>' title=\"<%= model.tooltip %>\" onclick=\"return canExit()\" class=\"<%= elementClass %>\" <%= model.tabTarget %> ><%= model.name %></a>\r\n\r\n    <%\r\n      if (model.children && model.children.length !== 0) {\r\n     %>\r\n\r\n      <ul class=\"children dropdown-menu scrollable-menu\" role=\"menu\">\r\n      <% _.each(model.children, function(submodel) { %>\r\n\r\n        <%\r\n          /* Prepare the A tag at third level menus */\r\n          if (!submodel.url) {\r\n            submodel.url = '#';\r\n          };\r\n\t\t  var itemClass = '3rd-level-item';\r\n\t\t  if (submodel.language) {\r\n\t\t\t itemClass = itemClass+ ' language';\r\n\t\t   }\r\n\t\t  if (!submodel.tooltip) {\r\n            submodel.tooltip = '';\r\n          };\r\n\r\n          if (submodel.tab) {\r\n            submodel.tabTarget='target=\"_blank\"';\r\n          } else {\r\n            submodel.tabTarget = '';\r\n          };\r\n        %>\r\n\r\n        <li class=\"menu-item\"><a href=\"<%= submodel.url %>\" onclick=\"return canExit()\" class=\"<%= itemClass %>\" <%= submodel.tabTarget %> title=\"<%= submodel.tooltip %>\"><%= submodel.name %></a></li>\r\n\r\n      <% }) %>\r\n      </ul>\r\n    <% } %>\r\n\r\n    </li>\r\n\r\n  <% }); %>\r\n  </ul>\r\n<% }%>\r\n<!--\r\n<li class=\"menu-item dropdown dropdown-submenu\"><a class=\"dropdown-toggle\" data-toggle=\"dropdown\">\r\n<ul class=\"children dropdown-menu scrollable-menu\" role=\"menu\">\r\n      <li class=\"menu-item first-of-type\" id=\"yui-gen4\" groupindex=\"0\" index=\"0\">\r\n  <a class=\"yuiampmenuitemlabel yuimenuitemlabel\" href=\"/selectTeam.do?id=680\" onclick=\"return canExit()\">\r\n    Academy of Sciences\r\n  </a>\r\n</li>--!>\r\n";
+var Template = "<%\n  /* Prepare the A tag at top level menus */\n  \tif (!obj.url) {\n  \t  obj.url = '#';\n  \t  if (!obj.children || obj.children.length === 0) {\n      \tobj.className = 'hidden';\n      \tobj.dataToggle = 'data-toggle=\"\"';\n      } else {\n      \tobj.className = 'dropdown-toggle';\n      \tobj.dataToggle = 'data-toggle=\"dropdown\"';\n      }\n    } else {\n      obj.className = '';\n      obj.dataToggle = '';\n    }\n\n    if (obj.tab) {\n      obj.tabTarget = 'target=\"_blank\"';\n    }\n    else {\n      obj.tabTarget = '';\n    }\n    %>\n<%\n/* TODO escape the code in HTML */\n%>\n<a href=\"<%= url %>\" class=\"<%= className %>\" <%= dataToggle %> <%= obj.tabTarget %> >\n  <span class=\"dropdown-text\" title=\"<%= obj.name.trim() %>\"><%= obj.name.trim() %>&nbsp;</span><% if (obj.children && obj.children.length > 0) { %><span class=\"caret\"></span><% } %>\n</a>\n<% if (obj.children && obj.children.length !== 0) { %>\n  <ul class=\"children dropdown-menu\" role=\"menu\">\n  <% _.each(obj.children, function(model) { %>\n\n    <%\n      /* Prepare the A tag at second level menus */\n      if (model.children && model.children.length !== 0) {\n        model.dropdownSubmenu = 'dropdown-submenu';\n       };\n\n       if (!model.tooltip) {\n         model.tooltip = '';\n       };\n       var elementClass = '2nd-level-item';\n       if (model.language) {\n\t\t\t elementClass = elementClass+ ' language';\n\t   }\n       if (model.popup) {\n       \t elementClass = elementClass + ' popup';\n       }\n       if (model.tab) {\n         model.tabTarget = 'target=\"_blank\"';\n       } else {\n         model.tabTarget = '';\n       }\n       var elementUrl = model.url;\n       if (model.post === true) {\n         elementUrl = 'javascript:switchTranslation (\"'+elementUrl+'\")';\n\n       }\n       if (!model.url) {\n        elementUrl = 'javascript:;';\n       }\n       /* if it doesn't have children, nor url. then it is the About */\n       if (!model.url && !model.children) {\n       elementClass = elementClass + ' about-amp';\n       }\n    %>\n\n    <li class='dropdown <%= model.dropdownSubmenu %>' >\n    <a href='<%=  elementUrl %>' title=\"<%= model.tooltip %>\" onclick=\"return canExit()\" class=\"<%= elementClass %>\" <%= model.tabTarget %> ><%= model.name %></a>\n\n    <%\n      if (model.children && model.children.length !== 0) {\n     %>\n\n      <ul class=\"children dropdown-menu scrollable-menu\" role=\"menu\">\n      <% _.each(model.children, function(submodel) { %>\n\n        <%\n          /* Prepare the A tag at third level menus */\n          if (!submodel.url) {\n            submodel.url = '#';\n          };\n\t\t  var itemClass = '3rd-level-item';\n\t\t  if (submodel.language) {\n\t\t\t itemClass = itemClass+ ' language';\n\t\t   }\n\t\t  if (!submodel.tooltip) {\n            submodel.tooltip = '';\n          };\n\n          if (submodel.tab) {\n            submodel.tabTarget='target=\"_blank\"';\n          } else {\n            submodel.tabTarget = '';\n          };\n        %>\n\n        <li class=\"menu-item\"><a href=\"<%= submodel.url %>\" onclick=\"return canExit()\" class=\"<%= itemClass %>\" <%= submodel.tabTarget %> title=\"<%= submodel.tooltip %>\"><%= submodel.name %></a></li>\n\n      <% }) %>\n      </ul>\n    <% } %>\n\n    </li>\n\n  <% }); %>\n  </ul>\n<% }%>\n<!--\n<li class=\"menu-item dropdown dropdown-submenu\"><a class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n<ul class=\"children dropdown-menu scrollable-menu\" role=\"menu\">\n      <li class=\"menu-item first-of-type\" id=\"yui-gen4\" groupindex=\"0\" index=\"0\">\n  <a class=\"yuiampmenuitemlabel yuimenuitemlabel\" href=\"/selectTeam.do?id=680\" onclick=\"return canExit()\">\n    Academy of Sciences\n  </a>\n</li>--!>\n";
 
 
 module.exports = Backbone.View.extend({
@@ -24436,7 +24438,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","bootstrap/dist/js/bootstrap":50,"underscore":"underscore"}],61:[function(require,module,exports){
 module.exports=require(50)
-},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":50}],62:[function(require,module,exports){
+},{"C:\\Users\\Karanja\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":50}],62:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -28698,7 +28700,7 @@ _hasValidChildren: function(node, definition, filterId) {
 }
 });
 
-},{"../models/generic-filter-model":73,"../models/org-role-filter-model":74,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"../utils/constants":79,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],68:[function(require,module,exports){
+},{"../models/generic-filter-model":72,"../models/org-role-filter-model":73,"../models/years-filter-model":74,"../models/years-only-filter-model":75,"../utils/constants":78,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],68:[function(require,module,exports){
 /*! jQuery UI - v1.10.4 - 2014-01-17
 * http://jqueryui.com
 * Includes: jquery.ui.datepicker-af.js, jquery.ui.datepicker-ar-DZ.js, jquery.ui.datepicker-ar.js, jquery.ui.datepicker-az.js, jquery.ui.datepicker-be.js, jquery.ui.datepicker-bg.js, jquery.ui.datepicker-bs.js, jquery.ui.datepicker-ca.js, jquery.ui.datepicker-cs.js, jquery.ui.datepicker-cy-GB.js, jquery.ui.datepicker-da.js, jquery.ui.datepicker-de.js, jquery.ui.datepicker-el.js, jquery.ui.datepicker-en-AU.js, jquery.ui.datepicker-en-GB.js, jquery.ui.datepicker-en-NZ.js, jquery.ui.datepicker-eo.js, jquery.ui.datepicker-es.js, jquery.ui.datepicker-et.js, jquery.ui.datepicker-eu.js, jquery.ui.datepicker-fa.js, jquery.ui.datepicker-fi.js, jquery.ui.datepicker-fo.js, jquery.ui.datepicker-fr-CA.js, jquery.ui.datepicker-fr-CH.js, jquery.ui.datepicker-fr.js, jquery.ui.datepicker-gl.js, jquery.ui.datepicker-he.js, jquery.ui.datepicker-hi.js, jquery.ui.datepicker-hr.js, jquery.ui.datepicker-hu.js, jquery.ui.datepicker-hy.js, jquery.ui.datepicker-id.js, jquery.ui.datepicker-is.js, jquery.ui.datepicker-it.js, jquery.ui.datepicker-ja.js, jquery.ui.datepicker-ka.js, jquery.ui.datepicker-kk.js, jquery.ui.datepicker-km.js, jquery.ui.datepicker-ko.js, jquery.ui.datepicker-ky.js, jquery.ui.datepicker-lb.js, jquery.ui.datepicker-lt.js, jquery.ui.datepicker-lv.js, jquery.ui.datepicker-mk.js, jquery.ui.datepicker-ml.js, jquery.ui.datepicker-ms.js, jquery.ui.datepicker-nb.js, jquery.ui.datepicker-nl-BE.js, jquery.ui.datepicker-nl.js, jquery.ui.datepicker-nn.js, jquery.ui.datepicker-no.js, jquery.ui.datepicker-pl.js, jquery.ui.datepicker-pt-BR.js, jquery.ui.datepicker-pt.js, jquery.ui.datepicker-rm.js, jquery.ui.datepicker-ro.js, jquery.ui.datepicker-ru.js, jquery.ui.datepicker-sk.js, jquery.ui.datepicker-sl.js, jquery.ui.datepicker-sq.js, jquery.ui.datepicker-sr-SR.js, jquery.ui.datepicker-sr.js, jquery.ui.datepicker-sv.js, jquery.ui.datepicker-ta.js, jquery.ui.datepicker-th.js, jquery.ui.datepicker-tj.js, jquery.ui.datepicker-tr.js, jquery.ui.datepicker-uk.js, jquery.ui.datepicker-vi.js, jquery.ui.datepicker-zh-CN.js, jquery.ui.datepicker-zh-HK.js, jquery.ui.datepicker-zh-TW.js
@@ -30543,39 +30545,6 @@ jQuery(function($){
 	$.datepicker.setDefaults($.datepicker.regional['en-GB']);
 });
 },{}],69:[function(require,module,exports){
-/*
-
-$.Link (part of noUiSlider) - WTFPL */
-(function(c){function m(a,c,d){if((a[c]||a[d])&&a[c]===a[d])throw Error("(Link) '"+c+"' can't match '"+d+"'.'");}function r(a){void 0===a&&(a={});if("object"!==typeof a)throw Error("(Format) 'format' option must be an object.");var h={};c(u).each(function(c,n){if(void 0===a[n])h[n]=A[c];else if(typeof a[n]===typeof A[c]){if("decimals"===n&&(0>a[n]||7<a[n]))throw Error("(Format) 'format.decimals' option must be between 0 and 7.");h[n]=a[n]}else throw Error("(Format) 'format."+n+"' must be a "+typeof A[c]+
-".");});m(h,"mark","thousand");m(h,"prefix","negative");m(h,"prefix","negativeBefore");this.r=h}function k(a,h){"object"!==typeof a&&c.error("(Link) Initialize with an object.");return new k.prototype.p(a.target||function(){},a.method,a.format||{},h)}var u="decimals mark thousand prefix postfix encoder decoder negative negativeBefore to from".split(" "),A=[2,".","","","",function(a){return a},function(a){return a},"-","",function(a){return a},function(a){return a}];r.prototype.a=function(a){return this.r[a]};
-r.prototype.L=function(a){function c(a){return a.split("").reverse().join("")}a=this.a("encoder")(a);var d=this.a("decimals"),n="",k="",m="",r="";0===parseFloat(a.toFixed(d))&&(a="0");0>a&&(n=this.a("negative"),k=this.a("negativeBefore"));a=Math.abs(a).toFixed(d).toString();a=a.split(".");this.a("thousand")?(m=c(a[0]).match(/.{1,3}/g),m=c(m.join(c(this.a("thousand"))))):m=a[0];this.a("mark")&&1<a.length&&(r=this.a("mark")+a[1]);return this.a("to")(k+this.a("prefix")+n+m+r+this.a("postfix"))};r.prototype.w=
-function(a){function c(a){return a.replace(/[\-\/\\\^$*+?.()|\[\]{}]/g,"\\$&")}var d;if(null===a||void 0===a)return!1;a=this.a("from")(a);a=a.toString();d=a.replace(RegExp("^"+c(this.a("negativeBefore"))),"");a!==d?(a=d,d="-"):d="";a=a.replace(RegExp("^"+c(this.a("prefix"))),"");this.a("negative")&&(d="",a=a.replace(RegExp("^"+c(this.a("negative"))),"-"));a=a.replace(RegExp(c(this.a("postfix"))+"$"),"").replace(RegExp(c(this.a("thousand")),"g"),"").replace(this.a("mark"),".");a=this.a("decoder")(parseFloat(d+
-a));return isNaN(a)?!1:a};k.prototype.K=function(a,h){this.method=h||"html";this.j=c(a.replace("-tooltip-","")||"<div/>")[0]};k.prototype.H=function(a){this.method="val";this.j=document.createElement("input");this.j.name=a;this.j.type="hidden"};k.prototype.G=function(a){function h(a,c){return[c?null:a,c?a:null]}var d=this;this.method="val";this.target=a.on("change",function(a){d.B.val(h(c(a.target).val(),d.t),{link:d,set:!0})})};k.prototype.p=function(a,h,d,k){this.g=d;this.update=!k;if("string"===
-typeof a&&0===a.indexOf("-tooltip-"))this.K(a,h);else if("string"===typeof a&&0!==a.indexOf("-"))this.H(a);else if("function"===typeof a)this.target=!1,this.method=a;else{if(a instanceof c||c.zepto&&c.zepto.isZ(a)){if(!h){if(a.is("input, select, textarea")){this.G(a);return}h="html"}if("function"===typeof h||"string"===typeof h&&a[h]){this.method=h;this.target=a;return}}throw new RangeError("(Link) Invalid Link.");}};k.prototype.write=function(a,c,d,k){if(!this.update||!1!==k)if(this.u=a,this.F=a=
-this.format(a),"function"===typeof this.method)this.method.call(this.target[0]||d[0],a,c,d);else this.target[this.method](a,c,d)};k.prototype.q=function(a){this.g=new r(c.extend({},a,this.g instanceof r?this.g.r:this.g))};k.prototype.J=function(a){this.B=a};k.prototype.I=function(a){this.t=a};k.prototype.format=function(a){return this.g.L(a)};k.prototype.A=function(a){return this.g.w(a)};k.prototype.p.prototype=k.prototype;c.Link=k})(window.jQuery||window.Zepto);/*
-
-$.fn.noUiSlider - WTFPL - refreshless.com/nouislider/ */
-(function(c){function m(e){return"number"===typeof e&&!isNaN(e)&&isFinite(e)}function r(e){return c.isArray(e)?e:[e]}function k(e,b){e.addClass(b);setTimeout(function(){e.removeClass(b)},300)}function u(e,b){return 100*b/(e[1]-e[0])}function A(e,b){if(b>=e.d.slice(-1)[0])return 100;for(var a=1,c,f,d;b>=e.d[a];)a++;c=e.d[a-1];f=e.d[a];d=e.c[a-1];c=[c,f];return d+u(c,0>c[0]?b+Math.abs(c[0]):b-c[0])/(100/(e.c[a]-d))}function a(e,b){if(100<=b)return e.d.slice(-1)[0];for(var a=1,c,f,d;b>=e.c[a];)a++;c=
-e.d[a-1];f=e.d[a];d=e.c[a-1];c=[c,f];return 100/(e.c[a]-d)*(b-d)*(c[1]-c[0])/100+c[0]}function h(a,b){for(var c=1,g;(a.dir?100-b:b)>=a.c[c];)c++;if(a.m)return g=a.c[c-1],c=a.c[c],b-g>(c-g)/2?c:g;a.h[c-1]?(g=a.h[c-1],c=a.c[c-1]+Math.round((b-a.c[c-1])/g)*g):c=b;return c}function d(a,b){if(!m(b))throw Error("noUiSlider: 'step' is not numeric.");a.h[0]=b}function n(a,b){if("object"!==typeof b||c.isArray(b))throw Error("noUiSlider: 'range' is not an object.");if(void 0===b.min||void 0===b.max)throw Error("noUiSlider: Missing 'min' or 'max' in 'range'.");
-c.each(b,function(b,g){var d;"number"===typeof g&&(g=[g]);if(!c.isArray(g))throw Error("noUiSlider: 'range' contains invalid value.");d="min"===b?0:"max"===b?100:parseFloat(b);if(!m(d)||!m(g[0]))throw Error("noUiSlider: 'range' value isn't numeric.");a.c.push(d);a.d.push(g[0]);d?a.h.push(isNaN(g[1])?!1:g[1]):isNaN(g[1])||(a.h[0]=g[1])});c.each(a.h,function(b,c){if(!c)return!0;a.h[b]=u([a.d[b],a.d[b+1]],c)/(100/(a.c[b+1]-a.c[b]))})}function E(a,b){"number"===typeof b&&(b=[b]);if(!c.isArray(b)||!b.length||
-2<b.length)throw Error("noUiSlider: 'start' option is incorrect.");a.b=b.length;a.start=b}function I(a,b){a.m=b;if("boolean"!==typeof b)throw Error("noUiSlider: 'snap' option must be a boolean.");}function J(a,b){if("lower"===b&&1===a.b)a.i=1;else if("upper"===b&&1===a.b)a.i=2;else if(!0===b&&2===a.b)a.i=3;else if(!1===b)a.i=0;else throw Error("noUiSlider: 'connect' option doesn't match handle count.");}function D(a,b){switch(b){case "horizontal":a.k=0;break;case "vertical":a.k=1;break;default:throw Error("noUiSlider: 'orientation' option is invalid.");
-}}function K(a,b){if(2<a.c.length)throw Error("noUiSlider: 'margin' option is only supported on linear sliders.");a.margin=u(a.d,b);if(!m(b))throw Error("noUiSlider: 'margin' option must be numeric.");}function L(a,b){switch(b){case "ltr":a.dir=0;break;case "rtl":a.dir=1;a.i=[0,2,1,3][a.i];break;default:throw Error("noUiSlider: 'direction' option was not recognized.");}}function M(a,b){if("string"!==typeof b)throw Error("noUiSlider: 'behaviour' must be a string containing options.");var c=0<=b.indexOf("snap");
-a.n={s:0<=b.indexOf("tap")||c,extend:0<=b.indexOf("extend"),v:0<=b.indexOf("drag"),fixed:0<=b.indexOf("fixed"),m:c}}function N(a,b,d){a.o=[b.lower,b.upper];a.g=b.format;c.each(a.o,function(a,e){if(!c.isArray(e))throw Error("noUiSlider: 'serialization."+(a?"upper":"lower")+"' must be an array.");c.each(e,function(){if(!(this instanceof c.Link))throw Error("noUiSlider: 'serialization."+(a?"upper":"lower")+"' can only contain Link instances.");this.I(a);this.J(d);this.q(b.format)})});a.dir&&1<a.b&&a.o.reverse()}
-function O(a,b){var f={c:[],d:[],h:[!1],margin:0},g;g={step:{e:!1,f:d},start:{e:!0,f:E},connect:{e:!0,f:J},direction:{e:!0,f:L},range:{e:!0,f:n},snap:{e:!1,f:I},orientation:{e:!1,f:D},margin:{e:!1,f:K},behaviour:{e:!0,f:M},serialization:{e:!0,f:N}};a=c.extend({connect:!1,direction:"ltr",behaviour:"tap",orientation:"horizontal"},a);a.serialization=c.extend({lower:[],upper:[],format:{}},a.serialization);c.each(g,function(c,d){if(void 0===a[c]){if(d.e)throw Error("noUiSlider: '"+c+"' is required.");
-return!0}d.f(f,a[c],b)});f.style=f.k?"top":"left";return f}function P(a,b){var d=c("<div><div/></div>").addClass(f[2]),g=["-lower","-upper"];a.dir&&g.reverse();d.children().addClass(f[3]+" "+f[3]+g[b]);return d}function Q(a,b){b.j&&(b=new c.Link({target:c(b.j).clone().appendTo(a),method:b.method,format:b.g},!0));return b}function R(a,b){var d,f=[];for(d=0;d<a.b;d++){var k=f,h=d,m=a.o[d],n=b[d].children(),r=a.g,s=void 0,v=[],s=new c.Link({},!0);s.q(r);v.push(s);for(s=0;s<m.length;s++)v.push(Q(n,m[s]));
-k[h]=v}return f}function S(a,b,c){switch(a){case 1:b.addClass(f[7]);c[0].addClass(f[6]);break;case 3:c[1].addClass(f[6]);case 2:c[0].addClass(f[7]);case 0:b.addClass(f[6])}}function T(a,b){var c,d=[];for(c=0;c<a.b;c++)d.push(P(a,c).appendTo(b));return d}function U(a,b){b.addClass([f[0],f[8+a.dir],f[4+a.k]].join(" "));return c("<div/>").appendTo(b).addClass(f[1])}function V(d,b,m){function g(){return t[["width","height"][b.k]]()}function n(a){var b,c=[q.val()];for(b=0;b<a.length;b++)q.trigger(a[b],
-c)}function u(d,p,e){var g=d[0]!==l[0][0]?1:0,H=x[0]+b.margin,k=x[1]-b.margin;e&&1<l.length&&(p=g?Math.max(p,H):Math.min(p,k));100>p&&(p=h(b,p));p=Math.max(Math.min(parseFloat(p.toFixed(7)),100),0);if(p===x[g])return 1===l.length?!1:p===H||p===k?0:!1;d.css(b.style,p+"%");d.is(":first-child")&&d.toggleClass(f[17],50<p);x[g]=p;b.dir&&(p=100-p);c(y[g]).each(function(){this.write(a(b,p),d.children(),q)});return!0}function B(a,b,c){c||k(q,f[14]);u(a,b,!1);n(["slide","set","change"])}function w(a,c,d,e){a=
-a.replace(/\s/g,".nui ")+".nui";c.on(a,function(a){var c=q.attr("disabled");if(q.hasClass(f[14])||void 0!==c&&null!==c)return!1;a.preventDefault();var c=0===a.type.indexOf("touch"),p=0===a.type.indexOf("mouse"),F=0===a.type.indexOf("pointer"),g,k,l=a;0===a.type.indexOf("MSPointer")&&(F=!0);a.originalEvent&&(a=a.originalEvent);c&&(g=a.changedTouches[0].pageX,k=a.changedTouches[0].pageY);if(p||F)F||void 0!==window.pageXOffset||(window.pageXOffset=document.documentElement.scrollLeft,window.pageYOffset=
-document.documentElement.scrollTop),g=a.clientX+window.pageXOffset,k=a.clientY+window.pageYOffset;l.C=[g,k];l.cursor=p;a=l;a.l=a.C[b.k];d(a,e)})}function C(a,c){var b=c.b||l,d,e=!1,e=100*(a.l-c.start)/g(),f=b[0][0]!==l[0][0]?1:0;var k=c.D;d=e+k[0];e+=k[1];1<b.length?(0>d&&(e+=Math.abs(d)),100<e&&(d-=e-100),d=[Math.max(Math.min(d,100),0),Math.max(Math.min(e,100),0)]):d=[d,e];e=u(b[0],d[f],1===b.length);1<b.length&&(e=u(b[1],d[f?0:1],!1)||e);e&&n(["slide"])}function s(a){c("."+f[15]).removeClass(f[15]);
-a.cursor&&c("body").css("cursor","").off(".nui");G.off(".nui");q.removeClass(f[12]);n(["set","change"])}function v(a,b){1===b.b.length&&b.b[0].children().addClass(f[15]);a.stopPropagation();w(z.move,G,C,{start:a.l,b:b.b,D:[x[0],x[l.length-1]]});w(z.end,G,s,null);a.cursor&&(c("body").css("cursor",c(a.target).css("cursor")),1<l.length&&q.addClass(f[12]),c("body").on("selectstart.nui",!1))}function D(a){var d=a.l,e=0;a.stopPropagation();c.each(l,function(){e+=this.offset()[b.style]});e=d<e/2||1===l.length?
-0:1;d-=t.offset()[b.style];d=100*d/g();B(l[e],d,b.n.m);b.n.m&&v(a,{b:[l[e]]})}function E(a){var c=(a=a.l<t.offset()[b.style])?0:100;a=a?0:l.length-1;B(l[a],c,!1)}var q=c(d),x=[-1,-1],t,y,l;if(q.hasClass(f[0]))throw Error("Slider was already initialized.");t=U(b,q);l=T(b,t);y=R(b,l);S(b.i,q,l);(function(a){var b;if(!a.fixed)for(b=0;b<l.length;b++)w(z.start,l[b].children(),v,{b:[l[b]]});a.s&&w(z.start,t,D,{b:l});a.extend&&(q.addClass(f[16]),a.s&&w(z.start,q,E,{b:l}));a.v&&(b=t.find("."+f[7]).addClass(f[10]),
-a.fixed&&(b=b.add(t.children().not(b).children())),w(z.start,b,v,{b:l}))})(b.n);d.vSet=function(){var a=Array.prototype.slice.call(arguments,0),d,e,g,h,m,s,t=r(a[0]);"object"===typeof a[1]?(d=a[1].set,e=a[1].link,g=a[1].update,h=a[1].animate):!0===a[1]&&(d=!0);b.dir&&1<b.b&&t.reverse();h&&k(q,f[14]);a=1<l.length?3:1;1===t.length&&(a=1);for(m=0;m<a;m++)h=e||y[m%2][0],h=h.A(t[m%2]),!1!==h&&(h=A(b,h),b.dir&&(h=100-h),!0!==u(l[m%2],h,!0)&&c(y[m%2]).each(function(a){if(!a)return s=this.u,!0;this.write(s,
-l[m%2].children(),q,g)}));!0===d&&n(["set"]);return this};d.vGet=function(){var a,c=[];for(a=0;a<b.b;a++)c[a]=y[a][0].F;return 1===c.length?c[0]:b.dir?c.reverse():c};d.destroy=function(){c.each(y,function(){c.each(this,function(){this.target&&this.target.off(".nui")})});c(this).off(".nui").removeClass(f.join(" ")).empty();return m};q.val(b.start)}function W(a){if(!this.length)throw Error("noUiSlider: Can't initialize slider on empty selection.");var b=O(a,this);return this.each(function(){V(this,
-b,a)})}function X(a){return this.each(function(){var b=c(this).val(),d=this.destroy(),f=c.extend({},d,a);c(this).noUiSlider(f);d.start===f.start&&c(this).val(b)})}function B(){return this[0][arguments.length?"vSet":"vGet"].apply(this[0],arguments)}var G=c(document),C=c.fn.val,z=window.navigator.pointerEnabled?{start:"pointerdown",move:"pointermove",end:"pointerup"}:window.navigator.msPointerEnabled?{start:"MSPointerDown",move:"MSPointerMove",end:"MSPointerUp"}:{start:"mousedown touchstart",move:"mousemove touchmove",
-end:"mouseup touchend"},f="noUi-target noUi-base noUi-origin noUi-handle noUi-horizontal noUi-vertical noUi-background noUi-connect noUi-ltr noUi-rtl noUi-dragable  noUi-state-drag  noUi-state-tap noUi-active noUi-extended noUi-stacking".split(" ");c.fn.val=function(){var a=arguments,b=c(this[0]);return arguments.length?this.each(function(){(c(this).hasClass(f[0])?B:C).apply(c(this),a)}):(b.hasClass(f[0])?B:C).call(b)};c.noUiSlider={Link:c.Link};c.fn.noUiSlider=function(a,b){return(b?X:W).call(this,
-a)}})(window.jQuery||window.Zepto);
-
-},{}],70:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -30702,7 +30671,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 });
 
 module.exports = Widget;
-},{"./lib/jquery-ui-i18n":68,"./views/filters-view":82,"backbone":"backbone","bootstrap/dist/js/bootstrap":61,"jquery":"jquery","jquery-ui/draggable":64,"underscore":"underscore"}],71:[function(require,module,exports){
+},{"./lib/jquery-ui-i18n":68,"./views/filters-view":81,"backbone":"backbone","bootstrap/dist/js/bootstrap":61,"jquery":"jquery","jquery-ui/draggable":64,"underscore":"underscore"}],70:[function(require,module,exports){
 var Backbone = require('backbone');
 
   // Parent model for filters.
@@ -30727,13 +30696,13 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],72:[function(require,module,exports){
+},{"backbone":"backbone"}],71:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 module.exports = Backbone.Model.extend({
 	url: '/rest/amp/settings'
 });
-},{"backbone":"backbone","underscore":"underscore"}],73:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],72:[function(require,module,exports){
 var _ = require('underscore');
 
 var BaseFilterModel = require('../models/base-filter-model');
@@ -30899,7 +30868,7 @@ module.exports = BaseFilterModel.extend({
 });
 
 
-},{"../models/base-filter-model":71,"../tree/tree-node-model":77,"../utils/constants":79,"underscore":"underscore"}],74:[function(require,module,exports){
+},{"../models/base-filter-model":70,"../tree/tree-node-model":76,"../utils/constants":78,"underscore":"underscore"}],73:[function(require,module,exports){
 var $ = require('jquery');
 
 var GenericFilterModel = require('../models/generic-filter-model');
@@ -30954,7 +30923,7 @@ module.exports = GenericFilterModel.extend({
 });
 
 
-},{"../models/generic-filter-model":73,"../tree/tree-node-model":77,"jquery":"jquery"}],75:[function(require,module,exports){
+},{"../models/generic-filter-model":72,"../tree/tree-node-model":76,"jquery":"jquery"}],74:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
@@ -31083,7 +31052,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":71,"jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
+},{"../models/base-filter-model":70,"jquery":"jquery","underscore":"underscore"}],75:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
@@ -31148,7 +31117,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":71,"jquery":"jquery","underscore":"underscore"}],77:[function(require,module,exports){
+},{"../models/base-filter-model":70,"jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 var TreeNodeModel; // declare here to help with ref loop of collection and model
@@ -31406,13 +31375,13 @@ _serializeChildren: function(tmpSerialized, children, options){
 
 module.exports = TreeNodeModel;
 
-},{"../utils/constants":79,"backbone":"backbone","underscore":"underscore"}],78:[function(require,module,exports){
+},{"../utils/constants":78,"backbone":"backbone","underscore":"underscore"}],77:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
 var $ = require('jquery');
 
-var Template = "<div class=\"node small\">\r\n  <div class=\"selectable\"></div>\r\n  <div class=\"toggle-nav\">\r\n    <% if(name.length > 63){ %>\r\n      <span title=\"<%= name %>\"><%= name.substring(0,60) %>...</span>\r\n    <% } else { %>\r\n      <%= name %>\r\n    <% } %>\r\n\r\n\r\n    <span class=\"count\">(<%= numSelected %> / <%= numPossible %>)</span>\r\n    <span class=\"expanded\">+</span>\r\n  </div>\r\n\r\n  <% /*TODO: fix hardcode of 'unkown' */\r\n  if (obj.name && obj.name.indexOf(\"unkown\")>-1) { %>\r\n    &nbsp;<a href=\"#\"\r\n      data-toggle=\"popover\"\r\n      data-container=\"body\"\r\n      data-placement=\"right\"\r\n      data-trigger=\"click\"\r\n      data-content=\"projects that aren't tagged to a specific child.\">\r\n      <span class=\"glyphicon glyphicon-info-sign\"></span>\r\n    </a>\r\n  <%}%>\r\n</div>\r\n";
+var Template = "<div class=\"node small\">\n  <div class=\"selectable\"></div>\n  <div class=\"toggle-nav\">\n    <% if(name.length > 63){ %>\n      <span title=\"<%= name %>\"><%= name.substring(0,60) %>...</span>\n    <% } else { %>\n      <%= name %>\n    <% } %>\n\n\n    <span class=\"count\">(<%= numSelected %> / <%= numPossible %>)</span>\n    <span class=\"expanded\">+</span>\n  </div>\n\n  <% /*TODO: fix hardcode of 'unkown' */\n  if (obj.name && obj.name.indexOf(\"unkown\")>-1) { %>\n    &nbsp;<a href=\"#\"\n      data-toggle=\"popover\"\n      data-container=\"body\"\n      data-placement=\"right\"\n      data-trigger=\"click\"\n      data-content=\"projects that aren't tagged to a specific child.\">\n      <span class=\"glyphicon glyphicon-info-sign\"></span>\n    </a>\n  <%}%>\n</div>\n";
 
 
 var TreeNodeView = Backbone.View.extend({
@@ -31593,7 +31562,7 @@ var TreeNodeView = Backbone.View.extend({
 
 module.exports = TreeNodeView;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],79:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],78:[function(require,module,exports){
 var constants = {
     FILTER_ID_ORGS: 'organizations',
     FILTER_NAME_DONOR: 'Donor',
@@ -31650,7 +31619,7 @@ var constants = {
 };
 
 module.exports = constants;
-},{}],80:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 var _ = require('underscore');
 
 var extractDates = function(settings, filtersOut, minName, maxName) {
@@ -31676,14 +31645,14 @@ module.exports = {
 		extractDates: extractDates
 }
 
-},{"underscore":"underscore"}],81:[function(require,module,exports){
+},{"underscore":"underscore"}],80:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
 
 var Backbone = require('backbone');
-var TitleTemplate = "<li>\r\n\t<a href=\"#\">\r\n\t\t<span data-i18n=\"amp.gis:pane-subfilters-<%= name.replace(/ /g,'') %>\">\r\n\t\t\t<%= name %>\r\n\t\t</span>   \r\n\t\t<span class='filter-count small pull-right'></span>\r\n\t</a>\r\n</li>";
-var ContentTemplate = "<%\r\n  // this renders the \"big\" filter list (the tabs)\r\n%>\r\n<div class=\"panel-heading\">\r\n  <a type=\"button\" class=\"close cancel\"  aria-hidden=\"true\">&times;</a>\r\n  <h3 data-i18n=\"amp.gis:title-filters\" class=\"panel-title\">Filters</h3>\r\n</div>\r\n<div class=\"panel-body filter-body\">\r\n\r\n  <ul class=\"nav nav-tabs filter-titles\" role=\"tablist\">\r\n  </ul>\r\n\r\n  <div class=\"tab-content filter-options\">\r\n    <img src=\"img_2/loading-icon.gif\" />\r\n  </div>\r\n</div>\r\n<div class=\"panel-footer\">\r\n  &nbsp;\r\n  <div class=\"pull-right\" style=\"display: inline-block; margin-bottom: 5px;\">\r\n    <button type=\"button\" class=\"btn btn-sm btn-danger reset\"  data-i18n=\"amp.gis:button-reset\"  title=\"Turn off all filters.\">Reset</button>\r\n    <button type=\"button\" class=\"btn btn-sm btn-warning cancel\"  data-i18n=\"amp.gis:button-cancel\"  title=\"Revert filters to state when opened.\">Cancel</button>\r\n    <button type=\"button\" class=\"btn btn-sm btn-success apply\"  data-i18n=\"amp.gis:button-apply\" >Apply</button>\r\n  </div>\r\n</div>\r\n";
+var TitleTemplate = "<li>\n\t<a href=\"#\">\n\t\t<span data-i18n=\"amp.gis:pane-subfilters-<%= name.replace(/ /g,'') %>\">\n\t\t\t<%= name %>\n\t\t</span>   \n\t\t<span class='filter-count small pull-right'></span>\n\t</a>\n</li>";
+var ContentTemplate = "<%\n  // this renders the \"big\" filter list (the tabs)\n%>\n<div class=\"panel-heading\">\n  <a type=\"button\" class=\"close cancel\"  aria-hidden=\"true\">&times;</a>\n  <h3 data-i18n=\"amp.gis:title-filters\" class=\"panel-title\">Filters</h3>\n</div>\n<div class=\"panel-body filter-body\">\n\n  <ul class=\"nav nav-tabs filter-titles\" role=\"tablist\">\n  </ul>\n\n  <div class=\"tab-content filter-options\">\n    <img src=\"img_2/loading-icon.gif\" />\n  </div>\n</div>\n<div class=\"panel-footer\">\n  &nbsp;\n  <div class=\"pull-right\" style=\"display: inline-block; margin-bottom: 5px;\">\n    <button type=\"button\" class=\"btn btn-sm btn-danger reset\"  data-i18n=\"amp.gis:button-reset\"  title=\"Turn off all filters.\">Reset</button>\n    <button type=\"button\" class=\"btn btn-sm btn-warning cancel\"  data-i18n=\"amp.gis:button-cancel\"  title=\"Revert filters to state when opened.\">Cancel</button>\n    <button type=\"button\" class=\"btn btn-sm btn-success apply\"  data-i18n=\"amp.gis:button-apply\" >Apply</button>\n  </div>\n</div>\n";
 
 // Parent base view for filters.
 module.exports = Backbone.View.extend({
@@ -31720,7 +31689,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],82:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],81:[function(require,module,exports){
 /**
  * this is the view which renders the big Filter contents (the tabs)
  */
@@ -31731,8 +31700,8 @@ var Backbone = require('backbone');
 var Translator = require('amp-translate');
 var TopLevelFilterView = require('../views/top-level-filter-view');
 var AllFilterCollection = require('../collections/all-filters-collection');
-var Template = "<%\r\n  // this renders the \"big\" filter list (the tabs)\r\n%>\r\n<div class=\"panel-heading\">\r\n  <a type=\"button\" class=\"close cancel\"  aria-hidden=\"true\">&times;</a>\r\n  <h3 data-i18n=\"amp.gis:title-filters\" class=\"panel-title\">Filters</h3>\r\n</div>\r\n<div class=\"panel-body filter-body\">\r\n\r\n  <ul class=\"nav nav-tabs filter-titles\" role=\"tablist\">\r\n  </ul>\r\n\r\n  <div class=\"tab-content filter-options\">\r\n    <img src=\"img_2/loading-icon.gif\" />\r\n  </div>\r\n</div>\r\n<div class=\"panel-footer\">\r\n  &nbsp;\r\n  <div class=\"pull-right\" style=\"display: inline-block; margin-bottom: 5px;\">\r\n    <button type=\"button\" class=\"btn btn-sm btn-danger reset\"  data-i18n=\"amp.gis:button-reset\"  title=\"Turn off all filters.\">Reset</button>\r\n    <button type=\"button\" class=\"btn btn-sm btn-warning cancel\"  data-i18n=\"amp.gis:button-cancel\"  title=\"Revert filters to state when opened.\">Cancel</button>\r\n    <button type=\"button\" class=\"btn btn-sm btn-success apply\"  data-i18n=\"amp.gis:button-apply\" >Apply</button>\r\n  </div>\r\n</div>\r\n";
-var TitleTemplate = "<%\r\n// renders the title of a tab \r\n%>\r\n<li class=\"\"><a data-i18n=\"amp.gis:pane-filters-<%= name.replace(/ /g,'') %>\" href=\"#filter-pane-<%= name.replace(/ /g,'') %>\" role=\"tab\" data-toggle=\"tab\"><%= name %></a></li>\r\n";
+var Template = "<%\n  // this renders the \"big\" filter list (the tabs)\n%>\n<div class=\"panel-heading\">\n  <a type=\"button\" class=\"close cancel\"  aria-hidden=\"true\">&times;</a>\n  <h3 data-i18n=\"amp.gis:title-filters\" class=\"panel-title\">Filters</h3>\n</div>\n<div class=\"panel-body filter-body\">\n\n  <ul class=\"nav nav-tabs filter-titles\" role=\"tablist\">\n  </ul>\n\n  <div class=\"tab-content filter-options\">\n    <img src=\"img_2/loading-icon.gif\" />\n  </div>\n</div>\n<div class=\"panel-footer\">\n  &nbsp;\n  <div class=\"pull-right\" style=\"display: inline-block; margin-bottom: 5px;\">\n    <button type=\"button\" class=\"btn btn-sm btn-danger reset\"  data-i18n=\"amp.gis:button-reset\"  title=\"Turn off all filters.\">Reset</button>\n    <button type=\"button\" class=\"btn btn-sm btn-warning cancel\"  data-i18n=\"amp.gis:button-cancel\"  title=\"Revert filters to state when opened.\">Cancel</button>\n    <button type=\"button\" class=\"btn btn-sm btn-success apply\"  data-i18n=\"amp.gis:button-apply\" >Apply</button>\n  </div>\n</div>\n";
+var TitleTemplate = "<%\n// renders the title of a tab \n%>\n<li class=\"\"><a data-i18n=\"amp.gis:pane-filters-<%= name.replace(/ /g,'') %>\" href=\"#filter-pane-<%= name.replace(/ /g,'') %>\" role=\"tab\" data-toggle=\"tab\"><%= name %></a></li>\n";
 var filtersViewLog = require("../../../../../reamp/tools/log")('amp:filters:top-level:view');
 var GeneralSettings = require('../models/general-settings');
 var DateUtils = require('../utils/date-utils');
@@ -31865,7 +31834,7 @@ module.exports = Backbone.View.extend({
 
   createTranslator: function(force) {
     var self = this;
-    var filterTranslateKeys = JSON.parse("{\r\n  \"amp.gis:title-Country\": \"Country\",\r\n  \"amp.gis:title-Region\": \"Region\",\r\n  \"amp.gis:title-Zone\": \"Zone\",\r\n  \"amp.gis:title-District\": \"District\",\r\n  \"amp.gis:title-filters\": \"Filter\",\r\n  \"amp.gis:pane-filters-search\": \"Go\",\r\n  \"amp.gis:pane-filters-select\": \"select all\",\r\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\r\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\r\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\r\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\r\n  \"amp.gis:pane-filters-Sectors\": \"Sectors\",\r\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\r\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\r\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\r\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\r\n  \"amp.gis:pane-filters-Location\": \"Location\",\r\n  \"amp.gis:pane-filters-Other\": \"Other\",\r\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\r\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\r\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\r\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\r\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\r\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\r\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\r\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\r\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\r\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\r\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\r\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\r\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\r\n  \"amp.gis:pane-subfilters-ComponentFundingOrganization\": \"Component Funding Organization\",\r\n  \"amp.gis:pane-subfilters-ComponentSecondResponsibleOrganization\": \"Component Second Responsible Organization\",\r\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\r\n  \"amp.gis:pane-subfilters-RegionalGroup\": \"Regional Group\",\r\n  \"amp.gis:pane-subfilters-SectorGroup\": \"Sector Group\",\r\n  \"amp.gis:pane-subfilters-TertiarySectors\": \"Tertiary Sectors\",\r\n  \"amp.gis:pane-subfilters-FinancingInstruments\": \"Financing Instruments\",\r\n  \"amp.gis:pane-filters-all\": \"all\",\r\n  \"amp.gis:button-reset\": \"Reset\",\r\n  \"amp.gis:button-cancel\": \"Cancel\",\r\n  \"amp.gis:button-apply\": \"Apply\",\r\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\r\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\r\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\",\r\n  \"amp.gis:date-from\": \"From\",\r\n  \"amp.gis:date-until\": \"Until\",\r\n  \"amp.gis:error-loading-data\": \"An error occcured while loading filters data\",\r\n  \"amp.gis:include-location-children\": \"Include locations with children\"\r\n}\r\n");
+    var filterTranslateKeys = JSON.parse("{\n  \"amp.gis:title-Country\": \"Country\",\n  \"amp.gis:title-Region\": \"Region\",\n  \"amp.gis:title-Zone\": \"Zone\",\n  \"amp.gis:title-District\": \"District\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:pane-filters-search\": \"Go\",\n  \"amp.gis:pane-filters-select\": \"select all\",\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\n  \"amp.gis:pane-filters-Sectors\": \"Sectors\",\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\n  \"amp.gis:pane-filters-Location\": \"Location\",\n  \"amp.gis:pane-filters-Other\": \"Other\",\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\n  \"amp.gis:pane-subfilters-ComponentFundingOrganization\": \"Component Funding Organization\",\n  \"amp.gis:pane-subfilters-ComponentSecondResponsibleOrganization\": \"Component Second Responsible Organization\",\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\n  \"amp.gis:pane-subfilters-RegionalGroup\": \"Regional Group\",\n  \"amp.gis:pane-subfilters-SectorGroup\": \"Sector Group\",\n  \"amp.gis:pane-subfilters-TertiarySectors\": \"Tertiary Sectors\",\n  \"amp.gis:pane-subfilters-FinancingInstruments\": \"Financing Instruments\",\n  \"amp.gis:pane-filters-all\": \"all\",\n  \"amp.gis:button-reset\": \"Reset\",\n  \"amp.gis:button-cancel\": \"Cancel\",\n  \"amp.gis:button-apply\": \"Apply\",\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\",\n  \"amp.gis:date-from\": \"From\",\n  \"amp.gis:date-until\": \"Until\",\n  \"amp.gis:error-loading-data\": \"An error occcured while loading filters data\",\n  \"amp.gis:include-location-children\": \"Include locations with children\",\n  \"amp.gis:not-set\": \"NOT SET\"\n}\n");
     // setup any popovers as needed...
     self.popovers = self.$('[data-toggle="popover"]');
     self.popovers.popover();
@@ -32147,14 +32116,14 @@ module.exports = Backbone.View.extend({
 	  return includeChildren;      
   }
 });
-},{"../../../../../reamp/tools/log":102,"../collections/all-filters-collection":67,"../models/general-settings":72,"../utils/constants":79,"../utils/date-utils":80,"../views/top-level-filter-view":84,"amp-translate":100,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],83:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":101,"../collections/all-filters-collection":67,"../models/general-settings":71,"../utils/constants":78,"../utils/date-utils":79,"../views/top-level-filter-view":83,"amp-translate":99,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],82:[function(require,module,exports){
 
 var _ = require('underscore');
 
 // var GenericFilterModel = require('../models/generic-filter-model');
 var TreeNodeView = require('../tree/tree-node-view');
 var BaseFilterView = require('../views/base-filter-view');
-var Template = "<% if (!empty) { %>\r\n\t<div class=\"search-form\">\r\n\t  <div class=\"input-group form-group\">\r\n\t    <input type=\"text\" data-i18n=\"[placeholder]amp.gis:pane-filters-search-placeholder\" class=\"form-control search-text\" placeholder=\"Search...\">\r\n\t    <span class=\"input-group-btn\">\r\n\t      <button data-i18n=\"amp.gis:pane-filters-search\" class=\"btn btn-success\">Go</button>\r\n\t    </span>\r\n\t  </div><!-- /input-group -->\r\n\t</div>\t\r\n\t<div class=\"toggle-all\">\r\n\t<% if (isLocationFilter) {%>\r\n\t  <div class=\"toggle-nav\">\t   \r\n\t \t <input checked=<%= obj['include-location-children'] ? \"checked\" : \"\" %> type=\"checkbox\" class=\"include-children-toggle\"><label data-i18n=\"amp.gis:include-location-children\">Include locations with children</label>\r\n\t  </div>\r\n\t<% } %>\r\n\t  <em>\r\n\t    <div class=\"toggle-all-div\"><a href=\"#\" data-i18n=\"amp.gis:pane-filters-select\" class=\"select-all\" >select\r\n\t\t\tall</a></div> /\r\n\t\t<div class=\"toggle-all-div\"><a href=\"#\"  data-i18n=\"amp.gis:pane-filters-deselect\" class=\"select-none\" >deselect all</a></div>\r\n\t  </em>\r\n\t</div>\r\n\t\r\n\t<div class=\"tree tree-container <%= isLocationFilter ? \"location-tree-container\" : \"\" %>\" style=\"\"></div><!--display:none;-->\r\n<% } else { %>\r\n\t<span data-i18n='amp.gis:pane-subfilters-empty'></span>\r\n<% } %>\r\n";
+var Template = "<% if (!empty) { %>\n\t<div class=\"search-form\">\n\t  <div class=\"input-group form-group\">\n\t    <input type=\"text\" data-i18n=\"[placeholder]amp.gis:pane-filters-search-placeholder\" class=\"form-control search-text\" placeholder=\"Search...\">\n\t    <span class=\"input-group-btn\">\n\t      <button data-i18n=\"amp.gis:pane-filters-search\" class=\"btn btn-success\">Go</button>\n\t    </span>\n\t  </div><!-- /input-group -->\n\t</div>\t\n\t<div class=\"toggle-all\">\n\t<% if (isLocationFilter) {%>\n\t  <div class=\"toggle-nav\">\t   \n\t \t <input checked=<%= obj['include-location-children'] ? \"checked\" : \"\" %> type=\"checkbox\" class=\"include-children-toggle\"><label data-i18n=\"amp.gis:include-location-children\">Include locations with children</label>\n\t  </div>\n\t<% } %>\n\t  <em>\n\t    <div class=\"toggle-all-div\"><a href=\"#\" data-i18n=\"amp.gis:pane-filters-select\" class=\"select-all\" >select\n\t\t\tall</a></div> /\n\t\t<div class=\"toggle-all-div\"><a href=\"#\"  data-i18n=\"amp.gis:pane-filters-deselect\" class=\"select-none\" >deselect all</a></div>\n\t  </em>\n\t</div>\n\t\n\t<div class=\"tree tree-container <%= isLocationFilter ? \"location-tree-container\" : \"\" %>\" style=\"\"></div><!--display:none;-->\n<% } else { %>\n\t<span data-i18n='amp.gis:pane-subfilters-empty'></span>\n<% } %>\n";
 var Constants = require('../utils/constants');
 
 // This is a generic model for filters. It assumes a tree structure.
@@ -32274,14 +32243,14 @@ module.exports = BaseFilterView.extend({
 });
 
 
-},{"../tree/tree-node-view":78,"../utils/constants":79,"../views/base-filter-view":81,"underscore":"underscore"}],84:[function(require,module,exports){
+},{"../tree/tree-node-view":77,"../utils/constants":78,"../views/base-filter-view":80,"underscore":"underscore"}],83:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
 
 var Backbone = require('backbone');
-var TitleTemplate = "<%\r\n// renders the title of a tab \r\n%>\r\n<li class=\"\"><a data-i18n=\"amp.gis:pane-filters-<%= name.replace(/ /g,'') %>\" href=\"#filter-pane-<%= name.replace(/ /g,'') %>\" role=\"tab\" data-toggle=\"tab\"><%= name %></a></li>\r\n";
-var ContentTemplate = "<%\r\n // renders the contents of a filter's tab (e.g. for example the \"Contracting / Implementing / Executing / Primary Beneficiary / Secondary Beneficiary Agency\" list of the \"All Agencies\" tab)\r\n // <h6>mde  %- Math.random() </h6>\r\n%>\r\n<ul class=\"sub-filters-titles nav nav-pills nav-stacked\">\r\n</ul>\r\n<div class=\"sub-filters-content\">\r\n  <img src=\"/TEMPLATE/ampTemplate/img_2/loading-icon.gif\" />\r\n</div>\r\n";
+var TitleTemplate = "<%\n// renders the title of a tab \n%>\n<li class=\"\"><a data-i18n=\"amp.gis:pane-filters-<%= name.replace(/ /g,'') %>\" href=\"#filter-pane-<%= name.replace(/ /g,'') %>\" role=\"tab\" data-toggle=\"tab\"><%= name %></a></li>\n";
+var ContentTemplate = "<%\n // renders the contents of a filter's tab (e.g. for example the \"Contracting / Implementing / Executing / Primary Beneficiary / Secondary Beneficiary Agency\" list of the \"All Agencies\" tab)\n // <h6>mde  %- Math.random() </h6>\n%>\n<ul class=\"sub-filters-titles nav nav-pills nav-stacked\">\n</ul>\n<div class=\"sub-filters-content\">\n  <img src=\"/TEMPLATE/ampTemplate/img_2/loading-icon.gif\" />\n</div>\n";
 
 var GenericFilterView = require('../views/generic-filter-view');
 var YearsFilterView = require('../views/years-filter-view');
@@ -32404,102 +32373,90 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../../../../../reamp/tools/log":102,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"../views/generic-filter-view":83,"../views/years-filter-view":85,"../views/years-only-filter-view":86,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],85:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":101,"../models/years-filter-model":74,"../models/years-only-filter-model":75,"../views/generic-filter-view":82,"../views/years-filter-view":84,"../views/years-only-filter-view":85,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],84:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
-
-require('../lib/jquery.nouislider.min.js');
 require('jquery-ui/datepicker');
 
-var Template = "\r\n  <h3 class=\"title text-center\"><span class=\"dates\"></span></h3>\r\n   <div class=\"year-slider\"></div>\r\n\r\n   <span data-i18n=\"amp.gis:pane-subfilters-startdate\">Start Date:</span>&nbsp<p><input type=\"text\" id=\"start-date\" class=\"date-picker\"></p>\r\n   <span data-i18n=\"amp.gis:pane-subfilters-enddate\">End Date:</span>&nbsp<p><input type=\"text\" id=\"end-date\" class=\"date-picker\"></p>\r\n";
+var Template = "<div class=\"datepicker-container\">\n     <span data-i18n=\"amp.gis:pane-subfilters-startdate\" class=\"date-label\">Start Date:</span>&nbsp <span class=\"selected-start-date\"> </span>\n      <span class=\"clear-date clear-start hide\" data-field=\"selectedStart\">X</span>        \n     <div type=\"text\" id=\"start-date\" class=\"date-picker left-date-container\"></div>\n</div>\n<div class=\"datepicker-container\">\n   <span data-i18n=\"amp.gis:pane-subfilters-enddate\" class=\"date-label\">End Date:</span>&nbsp<span class=\"selected-end-date\"> </span>\n   <span class=\"clear-date clear-end hide\" data-field=\"selectedEnd\">X</span>\n   <div type=\"text\" id=\"end-date\" class=\"date-picker\"></div>\n</div>\n";
+var START_DATE_FIELD = 'selectedStart';
+var END_DATE_FIELD = 'selectedEnd';
 
 module.exports = BaseFilterView.extend({
 
   className: BaseFilterView.prototype.className + ' filter-years',
   template: _.template(Template),
-  _loaded: null, 
+   _loaded: null, 
   initialize:function(options) {
-    var self = this;
-    
+    var self = this;    
     this.filterView = options.filterView;    
     BaseFilterView.prototype.initialize.apply(this, [options]);
     this.model = options.model;
     this.translator = options.translator;
     this.translate = options.translate;    
-
     this._loaded = this.model.fetch().then(function() { });
-
-    this.listenTo(this.model, 'change', this._updateTitle);
+    this.listenTo(this.model, 'change', this._updateUI);
+    
+    
   },
-
-
   renderFilters:function() {
     var self = this;
     BaseFilterView.prototype.renderFilters.apply(this);
-
     this.$el.html(this.template(this.model.toJSON()));
-
     this._loaded.then(function() {
       self._renderDatePickers();
-      self._updateTitle();      
-      // We need to re-translate some strings from the right panel.
-      self.translate(self);
+      self._updateUI();      
+      self.translate(self);      
+      self.$('.clear-date').on('click', self._clearDate.bind(self));
     });
 
     return this;
   },
 
-  _renderDatePickers: function() {		
-	
-	
-
-    var self = this;
-
-    // TODO: format based on admin setting....maybe get from year api..
-    // TODO: abstract common properties from object inits below...
-    // var commonObj = {};
-
-    this.$('#start-date').datepicker({
-      defaultDate: this.model.get('selectedStart'),
-      dateFormat: this.filterView.getDateFormat(),
-      changeMonth: true,
-      changeYear: true,
-      numberOfMonths: 1,
-      yearRange: 'c-60:c+60',
-      isRTL: self.getDirection(),
-      onClose: function(selectedDate) {
-        self.$('#end-date').datepicker('option', 'minDate', selectedDate);        
-        self.model.set('selectedStart', $.datepicker.formatDate(self.filterView.PARAMS_DATE_FORMAT, $.datepicker.parseDate(self.filterView.getDateFormat(), selectedDate)));        
-      }
-    });    
-
-    this.$('#end-date').datepicker({
-      defaultDate: this.model.get('selectedEnd'),
-      dateFormat: this.filterView.getDateFormat(),
-      changeMonth: true,
-      changeYear: true,
-      numberOfMonths: 1,
-      yearRange: 'c-60:c+60',
-      isRTL: self.getDirection(),
-      onClose: function(selectedDate) {
-        self.$('#start-date').datepicker('option', 'maxDate', selectedDate);        
-        self.model.set('selectedEnd', $.datepicker.formatDate(self.filterView.PARAMS_DATE_FORMAT, $.datepicker.parseDate(self.filterView.getDateFormat(), selectedDate)));        
-      }
-    });
-
-    // Set the language for datepickers here (instead of doing it in filters-view.js) to prevent race conditions that would set the wrong language.
-    var lang = this.filterView.settings.get('language');
-	if (lang) {
-		//English is default so we dont set it.
-        lang = (lang === 'en') ?  '' : lang; 		
-		$.datepicker.setDefaults($.datepicker.regional[lang]);
-	}
+  _renderDatePickers: function() {
+	var self = this;		
+	this.createDatePicker('start-date', 'selectedStart', true);
+	this.createDatePicker('end-date', 'selectedEnd', false);  
+	this.configureLanguage();
   },
-
+  
+  configureLanguage: function() {
+	  // Set the language for datepickers here (instead of doing it in filters-view.js) to prevent race conditions that would set the wrong language.
+	  var lang = this.filterView.settings.get('language');
+	  if (lang) {
+		  //English is default so we dont set it.
+		  lang = (lang === 'en') ?  '' : lang; 		
+		  $.datepicker.setDefaults($.datepicker.regional[lang]);
+	  }     
+  },
+  createDatePicker: function(elementName, modelField, isStartDate) {
+	  var self = this;
+	  return   this.$('#' + elementName).datepicker({
+	      defaultDate: this.model.get(modelField),
+	      dateFormat: this.filterView.getDateFormat(),
+	      changeMonth: true,
+	      changeYear: true,
+	      numberOfMonths: 1,
+	      showOtherMonths: true,
+	      selectOtherMonths: true,
+	      yearRange: 'c-60:c+60',
+	      isRTL: self.getDirection(),
+	     onSelect: function(selectedDate) {
+	    	  if (isStartDate) {
+	    		 self.$('#end-date').datepicker('option', 'minDate', selectedDate);  
+	    	  } else {
+	    		  self.$('#start-date').datepicker('option', 'maxDate', selectedDate);  
+	    	  }
+	                
+	          self.model.set(modelField, $.datepicker.formatDate(self.filterView.PARAMS_DATE_FORMAT, $.datepicker.parseDate(self.filterView.getDateFormat(), selectedDate)));        
+	      }	     
+	    }); 
+  },
+  
   renderTitle:function() {
 	BaseFilterView.prototype.renderTitle.apply(this);
-    this._updateTitle();
+    this._updateUI();
 
     return this;
   },
@@ -32511,67 +32468,65 @@ module.exports = BaseFilterView.extend({
     }
     return isRtl;
   },
-
-  //TODO: do more in template.
-  _updateTitle:function() {	  
+  
+  _updateUI:function() {	  
 	var selectedStart = this.model.get('selectedStart') ? $.datepicker.formatDate(this.filterView.getDateFormat(), ($.datepicker.parseDate(this.filterView.PARAMS_DATE_FORMAT, this.model.get('selectedStart')))) : "";
 	var selectedEnd = this.model.get('selectedEnd') ? $.datepicker.formatDate(this.filterView.getDateFormat(), ($.datepicker.parseDate(this.filterView.PARAMS_DATE_FORMAT, this.model.get('selectedEnd'))))	: "";
 	$('#datePicker').datepicker({ dateFormat: this.filterView.getDateFormat() });
 	this.$('#start-date').datepicker("setDate", selectedStart);
 	this.$('#end-date').datepicker("setDate", selectedEnd);	
-	var dates = "";
-	if(selectedStart.length > 0 && selectedEnd.length > 0){
-		dates = selectedStart + ' - ' +  selectedEnd;		
-	}else if(selectedStart.length > 0 && selectedEnd.length == 0){
-		dates = '<div class="filter-count-div">' + this.translator.translateSync('amp.gis:date-from', 'From') + '</div> ' + selectedStart;
-	}else if(selectedStart.length == 0 && selectedEnd.length > 0){
-		dates = '<div class="filter-count-div">' + this.translator.translateSync('amp.gis:date-until', 'Until') + '</div> ' + selectedEnd;
-	}
-	this.$titleEl.find('.filter-count').html(dates);
-	this.$('.dates').html(dates);
+	this._updateTabTitle(selectedStart, selectedEnd);
+	this._updateSelectedDatesSection(selectedStart, selectedEnd);
+   },
+   
+   _updateSelectedDatesSection: function(selectedStart, selectedEnd) {
+	    if (selectedStart) {
+			this.$el.find('.selected-start-date').html(selectedStart);
+			this.$el.find('.clear-start').removeClass('hide');
+		} else {
+			this.$el.find('.selected-start-date').html(this.translator.translateSync('amp.gis:not-set', 'NOT SET'));
+			this.$el.find('.clear-start').addClass('hide');
+		}
+		
+		if (selectedEnd) {
+			this.$el.find('.selected-end-date').html(selectedEnd);
+			this.$el.find('.clear-end').removeClass('hide');
+		} else {
+			this.$el.find('.selected-end-date').html(this.translator.translateSync('amp.gis:not-set', 'NOT SET'));
+			this.$el.find('.clear-end').addClass('hide');
+		}
+   },
+   
+   _updateTabTitle: function(selectedStart, selectedEnd) {
+		//update title
+		var dates = "";
+		if (selectedStart.length > 0 && selectedEnd.length > 0) {
+			dates = selectedStart + ' - ' +  selectedEnd;		
+		} else if (selectedStart.length > 0 && selectedEnd.length == 0){
+			dates = '<div class="filter-count-div">' + this.translator.translateSync('amp.gis:date-from', 'From') + '</div> ' + selectedStart;
+		} else if (selectedStart.length == 0 && selectedEnd.length > 0){
+			dates = '<div class="filter-count-div">' + this.translator.translateSync('amp.gis:date-until', 'Until') + '</div> ' + selectedEnd;
+		}
+		
+		this.$titleEl.find('.filter-count').html(dates); 
   },
-
-  _renderSlider: function() {
-    var self = this;
-
-    // uses window.jQuery because that was the only way I had luck with browserify shim...
-    // uses https://github.com/leongersen/noUiSlider
-    this.slider = window.jQuery(this.$('.year-slider')).noUiSlider({
-      start: [self.model.get('selectedStart'), self.model.get('selectedEnd')],
-      step: 1,
-      connect: true,
-      range: {min: self.model.get('startYear'), max:self.model.get('endYear')},
-      serialization: {
-        lower: [
-          window.jQuery.Link({
-            target: window.jQuery('.start-year')
-          })
-        ],
-        upper: [
-          window.jQuery.Link({
-            target: window.jQuery('.end-year')
-          })
-        ],
-        format: {
-          decimals: 0
-        }
-      }
-    });
-
-    //ugly, too much data in the dom...but it's how the example goes.
-    this.slider.on('change', function() {
-      self.model.set('selectedStart', parseInt(self.$('.start-year').text(), 10));
-    });
-
-    //ugly, too much data in the dom...but it's how the example goes.
-    this.slider.on('change', function() {
-      self.model.set('selectedEnd',  parseInt(self.$('.end-year').text(), 10));
-    });
-  }
-
+  
+  _clearDate: function(event) {	  
+	  var field = $(event.target).attr("data-field");	   
+	  this.model.set(field, null);
+	  	  
+	  if (START_DATE_FIELD === field) {
+		  this.$('#end-date').datepicker('option', 'minDate', '');  
+	  }
+	  
+	  if (END_DATE_FIELD === field) {
+		  this.$('#start-date').datepicker('option', 'maxDate', '');  
+	  }  	  
+  },
+  
 });
 
-},{"../lib/jquery.nouislider.min.js":69,"../views/base-filter-view":81,"jquery-ui/datepicker":63,"underscore":"underscore"}],86:[function(require,module,exports){
+},{"../views/base-filter-view":80,"jquery-ui/datepicker":63,"underscore":"underscore"}],85:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -32630,17 +32585,17 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../views/base-filter-view":81,"underscore":"underscore"}],87:[function(require,module,exports){
+},{"../views/base-filter-view":80,"underscore":"underscore"}],86:[function(require,module,exports){
 module.exports=require(50)
-},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":50}],88:[function(require,module,exports){
+},{"C:\\Users\\Karanja\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":50}],87:[function(require,module,exports){
 module.exports=require(62)
-},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":62,"jquery":"jquery"}],89:[function(require,module,exports){
+},{"C:\\Users\\Karanja\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":62,"jquery":"jquery"}],88:[function(require,module,exports){
 module.exports=require(64)
-},{"./core":88,"./mouse":90,"./widget":91,"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":64,"jquery":"jquery"}],90:[function(require,module,exports){
+},{"./core":87,"./mouse":89,"./widget":90,"C:\\Users\\Karanja\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":64,"jquery":"jquery"}],89:[function(require,module,exports){
 module.exports=require(65)
-},{"./widget":91,"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":65,"jquery":"jquery"}],91:[function(require,module,exports){
+},{"./widget":90,"C:\\Users\\Karanja\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":65,"jquery":"jquery"}],90:[function(require,module,exports){
 module.exports=require(66)
-},{"C:\\Git\\amp-ij\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":66,"jquery":"jquery"}],92:[function(require,module,exports){
+},{"C:\\Users\\Karanja\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":66,"jquery":"jquery"}],91:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -32727,12 +32682,12 @@ module.exports  = Backbone.Collection.extend({
 });
 
 
-},{"../common/config":93,"../common/constants":94,"../models/settings-definitions":97,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],93:[function(require,module,exports){
+},{"../common/config":92,"../common/constants":93,"../models/settings-definitions":96,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],92:[function(require,module,exports){
 module.exports = {
 	IS_POPUP : true
 };
 
-},{}],94:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 module.exports = {
 	YEAR_RANGE_ID : 'year-range',
 	CALENDAR_ID : 'calendar-id',
@@ -32752,7 +32707,7 @@ module.exports = {
 		TABS : 'TABS'
 	}
 }
-},{}],95:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 
 var jQuery = require('jquery');
 var _ = require('underscore');
@@ -32818,7 +32773,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 });
 module.exports = {SettingsWidget: Widget, GeneralSettings: GeneralSettings}
 window.AMPSettings = {SettingsWidget: Widget, GeneralSettings: GeneralSettings};
-},{"./collections/settings-definitions-collection":92,"./common/config":93,"./common/constants":94,"./models/general-settings":96,"./views/settings-view":98,"backbone":"backbone","bootstrap/dist/js/bootstrap":87,"jquery":"jquery","jquery-ui/draggable":89,"underscore":"underscore"}],96:[function(require,module,exports){
+},{"./collections/settings-definitions-collection":91,"./common/config":92,"./common/constants":93,"./models/general-settings":95,"./views/settings-view":97,"backbone":"backbone","bootstrap/dist/js/bootstrap":86,"jquery":"jquery","jquery-ui/draggable":88,"underscore":"underscore"}],95:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -32847,20 +32802,20 @@ module.exports = Backbone.Model.extend({
 		return this.loaded.promise();
 	}
 });
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],97:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],96:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 module.exports = Backbone.Model.extend({	
 });
-},{"backbone":"backbone","underscore":"underscore"}],98:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],97:[function(require,module,exports){
 
 var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var Translator = require('amp-translate');
 var Template = "<% if(obj.isPopup) {%>\r\n<div class=\"panel-heading\">\r\n\t\t\t<button type=\"button\" class=\"close cancel\" aria-hidden=\"true\">x</button>\r\n\t\t\t<h3 class=\"panel-title\" data-i18n=\"amp.settings:title\">Settings</h3>\r\n</div>\r\n<%}%>\r\n<div class=\"panel-body\">\t\t\r\n<div class=\"container-fluid\">\r\n  <div class=\"settings\">\r\n    Loading...\r\n  </div>\r\n  <% if(!obj.isPopup) {%>\r\n  <div class=\"form-group\">\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n  </div>\r\n  <%}%>\r\n</div>\r\n</div>\r\n<% if(obj.isPopup) {%>\r\n<div class=\"panel-footer setting-dialog-footer\">\r\n    <button type=\"button\" class=\"btn btn-warning cancel-btn cancel\" data-i18n=\"amp.settings:cancel-button\">Cancel</button>\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n </div>\r\n <%}%>\r\n \r\n \r\n";
-var SelectTemplate = "<div class=\"form-group\">\r\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n  <% _.each(obj.setting.value.options, function(option){ %>\r\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings[obj.setting.id];%>\r\n    <option value=\"<%= option.id %>\"  <% if(selected == option.id){ %> selected <% } %> >\r\n      <%= option.name %>\r\n    </option>\r\n  <%}); %>\r\n  </select>\r\n</div>\r\n";
-var SelectAmountUnitTemplate = "<div class=\"form-group\">\r\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n  <% _.each(obj.setting.value.options, function(option){ %>\r\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings['amount-format'][obj.setting.id];%>\r\n    <option value=\"<%= option.value %>\"  <% if(selected == option.value){ %> selected <% } %> >\r\n      <%= option.name %>\r\n    </option>\r\n  <%}); %>\r\n  </select>\r\n</div>\r\n";
+var SelectTemplate = "<div class=\"form-group\">\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\n  <% _.each(obj.setting.value.options, function(option){ %>\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings[obj.setting.id];%>\n    <option value=\"<%= option.id %>\"  <% if(selected == option.id){ %> selected <% } %> >\n      <%= option.name %>\n    </option>\n  <%}); %>\n  </select>\n</div>\n";
+var SelectAmountUnitTemplate = "<div class=\"form-group\">\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\n  <% _.each(obj.setting.value.options, function(option){ %>\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings['amount-format'][obj.setting.id];%>\n    <option value=\"<%= option.value %>\"  <% if(selected == option.value){ %> selected <% } %> >\n      <%= option.name %>\n    </option>\n  <%}); %>\n  </select>\n</div>\n";
 var YearRangeTemplate = "<div class=\"form-group\"> \r\n<label data-i18n=\"amp.settings:label-<%= obj.id %>\"><%= obj.name %></label> \r\n <div class=\"row year-range \"> \r\n \r\n </div>  \r\n</div>";
 var YearSelectTemplate = "<div class=\"col-xs-2\">\r\n   <label data-i18n=\"amp.settings:label-<%= obj.setting.id %>\" ><%= obj.setting.name %></label>\r\n </div>\r\n  <div class=\"col-xs-4\">\r\n  <select class=\"form-control form-control-year\" id=\"<%= obj.setting.id %>\">\r\n    <%\r\n      var applied = obj.appliedSettings['year-range'] ? obj.appliedSettings['year-range'][obj.setting.id] : null;\r\n      var selected = obj.settingsSelections[obj.setting.id];\r\n    %>\r\n    <option data-i18n=\"amp.settings:all\" value=\"-1\"<% if((selected || applied) == -1){ %> selected <% } %>>All</option>\r\n    <% for (i = obj.setting.rangeFrom; i <= obj.setting.rangeTo; i++) { %>\r\n      <option value=\"<%= i %>\"<% if((selected || applied) == i){ %> selected <% } %>>\r\n      <%= i %>\r\n      </option>\r\n    <% } %>\r\n  </select>\r\n  </div>";
 var Constants = require('../common/constants');
@@ -33106,7 +33061,7 @@ module.exports = Backbone.View.extend({
 	}
 
 });
-},{"../common/constants":94,"amp-translate":100,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],99:[function(require,module,exports){
+},{"../common/constants":93,"amp-translate":99,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],98:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -33316,7 +33271,7 @@ _.extend(State.prototype, Backbone.Events, {
 State.StateLoadError = StateLoadError;
 module.exports = State;
 
-},{"backbone":"backbone","underscore":"underscore"}],100:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],99:[function(require,module,exports){
 // TODO: move this up a dir, and instantiate and attach to the app
 
 
@@ -33532,7 +33487,7 @@ function Translator(options) {
 
 module.exports = Translator;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],101:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],100:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -33583,7 +33538,7 @@ _.extend(URL.prototype, Backbone.Events, {
 
 module.exports = URL;
 
-},{"backbone":"backbone","underscore":"underscore"}],102:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],101:[function(require,module,exports){
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

@@ -41,6 +41,7 @@ public final class PledgesDonorFilterListManager implements FilterListManager {
     
     private static PledgesDonorFilterListManager pledgesDonorFilterListManager;
     private static Long donorRoleId = null;
+    private static final Long id = 99l;
     
     /**
      * 
@@ -70,6 +71,8 @@ public final class PledgesDonorFilterListManager implements FilterListManager {
     public Map<String, List<FilterListTreeNode>> getOrgListItems() {
         Map<String, List<FilterListTreeNode>> items = new HashMap<>();
         List<FilterListTreeNode> orgItems = new ArrayList<>();
+        List<Long> ids = new ArrayList<>();
+        ids.add(id);
 
         Set<Long> donorGroupsIds = getAllGroupIdsWithDonors();
         
@@ -89,6 +92,8 @@ public final class PledgesDonorFilterListManager implements FilterListManager {
                     FilterListTreeNode groupNode = new FilterListTreeNode();
                     groupNode.setId(orgGroup.getAmpOrgGrpId());
                     groupNode.setName(orgGroup.getName());
+                    // By setting listDefinitionIds we use the same logic than regular Donors in the filter widget.
+                    groupNode.setListDefinitionIds(ids);
                     typeNode.addChild(groupNode);
                 }
                 
@@ -115,6 +120,7 @@ public final class PledgesDonorFilterListManager implements FilterListManager {
         listDefinition.setItems(PLEDGES_DONORS_ITEMS_NAME);
         listDefinition.setTab(EPConstants.TAB_ORGANIZATIONS);
         listDefinition.setFiltered(true);
+        listDefinition.setId(id);
         listDefinitions.add(listDefinition);
 
         return listDefinitions;

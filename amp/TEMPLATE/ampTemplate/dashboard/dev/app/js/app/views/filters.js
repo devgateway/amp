@@ -87,8 +87,9 @@ module.exports = BackboneDash.View.extend({
       if(filterField.modelType === 'YEAR-SINGLE-VALUE' || filterField.modelType === 'DATE-RANGE-VALUES'){
     	  return self.getAppliedDateObject(filterObject,key);
       } else {
+    	  var name = filter.filterName || key;   	   
     	  return {
-    	        name: filter.filterName || key,
+    	        name: TranslationManager.getTranslated(name.replace(/-/g, " ")),
     	        id: key.replace(/[^\w]/g, ''), // remove anything non-alphanum
     	        detail: _(filter).map(function(value) {
     	          if (value.attributes !== undefined) {
@@ -113,13 +114,14 @@ module.exports = BackboneDash.View.extend({
 	  var dateRangeText = '';
 	  var filterName = filterField.filterName ? filterField.filterName : filterKey;
 	  if(filterKey === 'date') {
-		  dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
+		  dateRangeText = TranslationManager.getTranslated("Date Range");
 	  } else if(filterKey === 'computed-year') {
-		  dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
-	  } else {
-		  dateRangeText = app.translator.translateSync("amp.dashboard:" + filterName.replace(/[^\w]/g, '-'), filterName);
+		  dateRangeText = TranslationManager.getTranslated("Computed Year");
+	  } else {		  
+		  dateRangeText = TranslationManager.getTranslated(filterName.replace(/-/g, " "));			  		
 	  }
 	  var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
+		
 	  return {
 		  id: filterKey.replace(/[^\w]/g, '-'),
 		  name: dateRangeText,

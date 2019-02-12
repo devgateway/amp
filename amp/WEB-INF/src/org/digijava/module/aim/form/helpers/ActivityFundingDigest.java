@@ -2,6 +2,7 @@
 package org.digijava.module.aim.form.helpers;
 
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -279,10 +280,10 @@ public class ActivityFundingDigest {
         if (activityTotalCalculations.getTotActualComm() != null && activityTotalCalculations.getTotActualComm()
                 .doubleValue() != 0 && activityTotalCalculations.getTotActualDisb() != null
                 && activityTotalCalculations.getTotActualDisb().doubleValue() != 0) {
-            double deliveryRate = activityTotalCalculations.getTotActualDisb().doubleValue()
-                    / activityTotalCalculations.getTotActualComm().doubleValue();
-            NumberFormat formatter = DecimalFormat.getPercentInstance();
-            this.setDeliveryRate(formatter.format(deliveryRate).replace("%", " %"));
+            double deliveryRate = BigDecimal.valueOf(activityTotalCalculations.getTotActualDisb().doubleValue())
+                    .divide(BigDecimal.valueOf(activityTotalCalculations.getTotActualComm().doubleValue()))
+                    .scaleByPowerOfTen(2).doubleValue();
+            this.setDeliveryRate(FormatHelper.formatNumber(deliveryRate) + " %");
         }
     }
     

@@ -75,7 +75,7 @@ public class ValueValidatorTest {
         ValueValidator valueValidator = new ValueValidator();
 
         assertTrue("Sector must be valid",
-                valueValidator.isValid(importer, newFieldParent, null, sectorFieldDescription, SECTOR_FIELD));
+                valueValidator.isValid(importer, newFieldParent, sectorFieldDescription, SECTOR_FIELD));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class ValueValidatorTest {
         ValueValidator valueValidator = new ValueValidator();
 
         assertFalse("Sector must be invalid",
-                valueValidator.isValid(importer, newFieldParent, null, sectorFieldDescription, SECTOR_FIELD));
+                valueValidator.isValid(importer, newFieldParent, sectorFieldDescription, SECTOR_FIELD));
         assertEquals(ActivityErrors.FIELD_INVALID_VALUE, valueValidator.getErrorMessage());
     }
 
@@ -98,7 +98,7 @@ public class ValueValidatorTest {
         ValueValidator valueValidator = new ValueValidator();
 
         assertTrue("FY must be valid",
-                valueValidator.isValid(importer, newFieldParent, null, fyFieldDescription, FY_FIELD));
+                valueValidator.isValid(importer, newFieldParent, fyFieldDescription, FY_FIELD));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class ValueValidatorTest {
         ValueValidator valueValidator = new ValueValidator();
 
         assertFalse("FY must be invalid",
-                valueValidator.isValid(importer, newFieldParent, null, fyFieldDescription, FY_FIELD));
+                valueValidator.isValid(importer, newFieldParent, fyFieldDescription, FY_FIELD));
         assertEquals(ActivityErrors.FIELD_INVALID_VALUE, valueValidator.getErrorMessage());
     }
 }

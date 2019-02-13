@@ -12,6 +12,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolv
 import org.digijava.kernel.ampapi.endpoints.activity.values.FundingePledgesValueProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -175,6 +176,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     @Interchangeable(fieldTitle = "Currency", importable = true, pickIdOnly = true, required = ALWAYS)
     private AmpCurrency ampCurrencyId;
     private AmpOrganisation reportingOrgId;
+    @InterchangeableBackReference
     private AmpFunding ampFundingId;
     
     @Interchangeable(fieldTitle = "Fixed Exchange Rate", importable = true,

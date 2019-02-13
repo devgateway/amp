@@ -22,6 +22,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpComponentFundingDiscriminationConfigurer;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
@@ -38,6 +39,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     
     private Long ampComponentId;
 
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
 
     @Interchangeable(fieldTitle = COMPONENT_TITLE, required = ALWAYS, importable = true,

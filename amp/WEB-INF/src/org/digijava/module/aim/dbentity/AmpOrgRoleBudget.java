@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 
 
 public class AmpOrgRoleBudget implements Serializable, Comparable<AmpOrgRoleBudget>, Cloneable {
@@ -14,7 +15,8 @@ public class AmpOrgRoleBudget implements Serializable, Comparable<AmpOrgRoleBudg
     
     @Interchangeable(fieldTitle = "Budget Code", importable = true, required = ALWAYS)
     private String budgetCode;
-    
+
+    @InterchangeableBackReference
     private AmpOrgRole ampOrgRole;
     
     public Long getAmpOrgRoleBudgetId() {

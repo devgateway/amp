@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.util.Output;
 
 public class AmpIssues implements Serializable, Versionable, Cloneable {
@@ -18,6 +19,7 @@ public class AmpIssues implements Serializable, Versionable, Cloneable {
     @Interchangeable(fieldTitle = "Name", label = "Issue", importable = true)
     private String name ;
 
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
 
     @Interchangeable(fieldTitle = "Measures", importable = true, fmPath = "/Activity Form/Issues Section/Issue/Measure")

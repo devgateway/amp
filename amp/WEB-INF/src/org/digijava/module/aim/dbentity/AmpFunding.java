@@ -20,6 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpFundingDe
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -38,7 +39,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true, required = ALWAYS)
     
     private AmpOrganisation ampDonorOrgId;
-    @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true, importable = false)
+    @InterchangeableBackReference
     private AmpActivityVersion ampActivityId;
     private Long crsTransactionNo;
     @Interchangeable(fieldTitle="Financing ID",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id", importable=true)

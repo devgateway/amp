@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 
 public class AmpStructureCoordinate implements Serializable, Cloneable {
 
@@ -16,6 +17,7 @@ public class AmpStructureCoordinate implements Serializable, Cloneable {
     @Interchangeable(fieldTitle = "Longitude", importable = true)
     private String longitude;
 
+    @InterchangeableBackReference
     private AmpStructure structure;
 
     public Long getAmpStructureCoordinateId() {

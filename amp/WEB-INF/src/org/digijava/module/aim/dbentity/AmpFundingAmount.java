@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -37,8 +38,8 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
     };
     
     private Long ampFundingAmountId;
-    
-    @Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable = false)
+
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
     
     @Interchangeable(fieldTitle = "Amount", importable = true,

@@ -45,7 +45,7 @@ public class FundingOrgRolesValidator extends InputValidator {
     
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
 
         if (fieldPath.equals(FUNDING)) {
             return areOrgRolesValid(importer, newFieldParent, FUNDING, SRC_ORG, SRC_ROLE);

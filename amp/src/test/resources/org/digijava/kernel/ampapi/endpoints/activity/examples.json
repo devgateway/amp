@@ -1,0 +1,23 @@
+{
+  "back-references-example": {
+    "children": [
+      {
+        "grand_children": [
+          {
+            "payload": "first"
+          }
+        ]
+      },
+      {
+        "grand_children": [
+          {
+            "payload": "second"
+          },
+          {
+            "payload": "third"
+          }
+        ]
+      }
+    ]
+  }
+}

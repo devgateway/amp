@@ -149,7 +149,6 @@ public class ObjectImporter {
             // note: due to AMP-20766, we won't be able to fully detect invalid children
             String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
             if (fields.size() > 0 && !ignoreUnknownFields()) {
-                newParent = null;
                 for (String invalidField : fields) {
                     // no need to go through deep-first validation flow
                     validator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
@@ -199,8 +198,6 @@ public class ObjectImporter {
             if (newParent != null) {
                 newParent = setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
             }
-        } else {
-            newParent = null;
         }
         return newParent;
     }
@@ -489,10 +486,7 @@ public class ObjectImporter {
                         res = validateAndImport(newFieldValue, childFieldDef, newChild, fieldPath);
                     }
 
-                    if (res == null) {
-                        // validation failed, reset parent to stop config
-                        newParent = null;
-                    } else if (newParent != null && isCollection) {
+                    if (res != null && newParent != null && isCollection) {
                         configureDiscriminationField(res, fieldDef);
                         // actual links will be updated
                         ((Collection) newFieldValue).add(res);

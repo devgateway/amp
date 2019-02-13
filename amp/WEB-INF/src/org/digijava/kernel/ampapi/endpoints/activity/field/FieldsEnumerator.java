@@ -57,8 +57,6 @@ public class FieldsEnumerator {
             .add(ActivityFieldsConstants.APPROVAL_STATUS)
             .build();
 
-    private boolean internalUse;
-
     private FieldInfoProvider fieldInfoProvider;
 
     private FMService fmService;
@@ -71,16 +69,13 @@ public class FieldsEnumerator {
 
     /**
      * Fields Enumerator
-     * 
-     * @param internalUse flags if additional information for internal use is needed 
      */
     public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-                            TranslatorService translatorService, boolean internalUse,
+            TranslatorService translatorService,
             Function<String, Boolean> allowMultiplePrograms) {
         this.fieldInfoProvider = fieldInfoProvider;
         this.fmService = fmService;
         this.translatorService = translatorService;
-        this.internalUse = internalUse;
         interchangeDependencyResolver = new InterchangeDependencyResolver(fmService);
         this.allowMultiplePrograms = allowMultiplePrograms;
     }
@@ -104,7 +99,7 @@ public class FieldsEnumerator {
         Class<?> type = InterchangeUtils.getClassOfField(field);
         FieldType fieldType = null;
         Class<?> elementType = null;
-        if (interchangeable.pickIdOnly() || InterchangeUtils.isAmpActivityVersion(field.getType())) {
+        if (interchangeable.pickIdOnly()) {
             fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
         } else if (!InterchangeUtils.isSimpleType(field.getType())) {
             elementType = getType(field, context);
@@ -136,25 +131,19 @@ public class FieldsEnumerator {
         }
 
         apiField.setFieldNameInternal(field.getName());
-        if (internalUse) {
-            if (InterchangeUtils.isAmpActivityVersion(field.getType())) {
-                apiField.setActivity(true);
-            }
-        }
-        
+
         /* list type */
         
         apiField.setIdOnly(hasPossibleValues(field, interchangeable));
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
-            // FIXME remove condition that excludes activities
-            if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getType())) {
+            if (!interchangeable.pickIdOnly()) {
                 List<APIField> children = getAllAvailableFields(elementType, context);
                 if (children != null && children.size() > 0) {
                     apiField.setChildren(children);
                 }
             }
-            
+
             if (InterchangeUtils.isCollection(field)) {
                 if (!hasMaxSizeValidatorEnabled(field, context)
                         && interchangeable.multipleValues()) {
@@ -246,10 +235,6 @@ public class FieldsEnumerator {
         //StopWatch.next("Descending into", false, clazz.getName());
         for (Field field : InterchangeUtils.getFieldsAnnotatedWith(clazz,
                 Interchangeable.class, InterchangeableDiscriminator.class)) {
-
-            if (!internalUse && InterchangeUtils.isAmpActivityVersion(field.getType())) {
-                continue;
-            }
             Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
             if (interchangeable != null) {
                 context.getIntchStack().push(interchangeable);

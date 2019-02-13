@@ -20,7 +20,7 @@ public class AllowedInputValidator extends InputValidator {
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         return true;
 //      if (importer.isUpdate()) {
 //          if (fieldDescription.get(ActivityEPConstants.FIELD_NAME).equals(ActivityEPConstants.))

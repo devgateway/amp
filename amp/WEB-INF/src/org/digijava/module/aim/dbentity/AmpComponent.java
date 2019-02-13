@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
@@ -35,6 +36,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     
     private Long ampComponentId;
 
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
 
     @Interchangeable(fieldTitle = COMPONENT_TITLE, required = REQUIRED_ALWAYS, importable = true,

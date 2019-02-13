@@ -115,7 +115,7 @@ stage('Quick Test') {
             updateGitHubCommitStatus('jenkins/failfasttests', 'Testing in progress', 'PENDING')
 
             withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
-                def testStatus = sh returnStatus: true, script: "cd amp && mvn test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
+                def testStatus = sh returnStatus: true, script: "cd amp && mvn clean test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
 
                 // Archive unit test report
                 junit 'amp/target/surefire-reports/TEST-*.xml'

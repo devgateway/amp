@@ -150,16 +150,6 @@ public class InterchangeUtilsTest {
     }
 
     @Test
-    public void testIsAmpActivityVersion() {
-        assertFalse(InterchangeUtils.isAmpActivityVersion(Object.class));
-        assertFalse(InterchangeUtils.isAmpActivityVersion(Permissible.class));
-        assertFalse(InterchangeUtils.isAmpActivityVersion(AmpActivityFields.class));
-        assertTrue(InterchangeUtils.isAmpActivityVersion(AmpActivityVersion.class));
-        assertTrue(InterchangeUtils.isAmpActivityVersion(AmpActivity.class));
-        assertFalse(InterchangeUtils.isAmpActivityVersion(String.class));
-    }
-
-    @Test
     public void testGetFieldValueFromJsonSimple() throws Exception {
         JsonBean activity = new JsonBean();
         activity.set("name", "Activity Name");

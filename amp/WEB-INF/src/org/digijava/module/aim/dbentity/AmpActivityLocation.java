@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.util.Output;
 
@@ -18,7 +19,7 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
     //IATI-check: should be exported.
 //  @Interchangeable(fieldTitle="ID", id=true)
     private Long id;
-    @Interchangeable(fieldTitle = "ID", pickIdOnly=true)
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
     @Interchangeable(fieldTitle = "Location", pickIdOnly = true, importable = true, uniqueConstraint=true, required = ActivityEPConstants.REQUIRED_ALWAYS, 
             dependencies={

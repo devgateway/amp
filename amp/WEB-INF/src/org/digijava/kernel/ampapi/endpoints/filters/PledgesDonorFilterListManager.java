@@ -35,8 +35,9 @@ public final class PledgesDonorFilterListManager implements FilterListManager {
                 .add(FiltersConstants.PLEDGES_DONOR_TYPE)
                 .add(FiltersConstants.PLEDGES_DONOR_GROUP)
             .build();
-    
-    private static final String PLEDGES_DONORS_DEFINITION_NAME = "Pledges Donors";
+
+    // AMP-28716: Name is the same than pledgeIdentification.jsp
+    private static final String PLEDGES_DONORS_DEFINITION_NAME = "Organization Group";
     private static final String PLEDGES_DONORS_ITEMS_NAME = "donors";
     
     private static PledgesDonorFilterListManager pledgesDonorFilterListManager;

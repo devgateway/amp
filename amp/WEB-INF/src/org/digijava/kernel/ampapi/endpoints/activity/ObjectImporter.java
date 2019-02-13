@@ -428,23 +428,17 @@ public class ObjectImporter {
             Field newField = ReflectionUtil.getField(newParent, actualFieldName);
             Object newFieldValue;
             Class<?> subElementClass = fieldDef.getApiType().getElementType();
-            boolean isCollection = false;
             try {
                 newFieldValue = newField == null ? null : newField.get(newParent);
                 if (newParent != null && newFieldValue == null) {
                     newFieldValue = getNewInstance(newParent, newField);
-                }
-                // AMP-20766: we cannot correctly detect isCollection when current validation already failed
-                // (no parent obj ref)
-                if (newFieldValue != null && Collection.class.isAssignableFrom(newFieldValue.getClass())) {
-                    isCollection = true;
                 }
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 logger.error(e.getMessage());
                 throw new RuntimeException(e);
             }
 
-            if (isCollection && fieldDef.getApiType().isSimpleItemType()) {
+            if (isList && fieldDef.getApiType().isSimpleItemType()) {
                 Collection nvs = ((Collection<?>) childrenNewValues).stream()
                         .map(v -> toSimpleTypeValue(v, subElementClass)).collect(Collectors.toList());
                 ((Collection) newFieldValue).addAll(nvs);
@@ -474,7 +468,7 @@ public class ObjectImporter {
                     APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
 
                     Object res;
-                    if (isCollection) {
+                    if (isList) {
                         try {
                             Object newSubElement = subElementClass.newInstance();
                             res = validateAndImport(newSubElement, childrenFields, newChild, fieldPath);
@@ -486,7 +480,7 @@ public class ObjectImporter {
                         res = validateAndImport(newFieldValue, childFieldDef, newChild, fieldPath);
                     }
 
-                    if (res != null && newParent != null && isCollection) {
+                    if (res != null && newParent != null && isList) {
                         configureDiscriminationField(res, fieldDef);
                         // actual links will be updated
                         ((Collection) newFieldValue).add(res);

@@ -89,7 +89,7 @@ module.exports = BackboneDash.View.extend({
       } else {
     	  var name = filter.filterName || key;   	   
     	  return {
-    	        name: TranslationManager.getTranslated(name.replace(/-/g, " ")),
+    	        name: self.translate(name),
     	        id: key.replace(/[^\w]/g, ''), // remove anything non-alphanum
     	        detail: _(filter).map(function(value) {
     	          if (value.attributes !== undefined) {
@@ -114,11 +114,11 @@ module.exports = BackboneDash.View.extend({
 	  var dateRangeText = '';
 	  var filterName = filterField.filterName ? filterField.filterName : filterKey;
 	  if(filterKey === 'date') {
-		  dateRangeText = TranslationManager.getTranslated("Date Range");
+		  dateRangeText = this.translate("Dates");
 	  } else if(filterKey === 'computed-year') {
-		  dateRangeText = TranslationManager.getTranslated("Computed Year");
+		  dateRangeText = this.translate("Computed Year");
 	  } else {		  
-		  dateRangeText = TranslationManager.getTranslated(filterName.replace(/-/g, " "));			  		
+		  dateRangeText = this.translate(filterName);			  		
 	  }
 	  var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
 		
@@ -127,6 +127,9 @@ module.exports = BackboneDash.View.extend({
 		  name: dateRangeText,
 		  detail: [detail]
 		};	  
+  },
+  translate: function(name) {
+	 return this.app.translator.translateSync('amp.gis:pane-subfilters-' + name.replace(/ /g,'')  , name.replace(/-/g, " "));	 
   },
   hideFilterDetails: function() {
     this.renderApplied();

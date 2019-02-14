@@ -298,6 +298,7 @@ public class AmpARFilterConverter {
         } else {
             addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PLEDGES_PROGRAMS);
             addMultiLevelFilter(arFilter.getSelectedSecondaryPrograms(), ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
+            addMultiLevelFilter(arFilter.getSelectedNatPlanObj(), ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
         }
     }
 

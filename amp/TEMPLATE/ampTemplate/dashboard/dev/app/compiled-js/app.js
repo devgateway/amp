@@ -5066,9 +5066,8 @@ module.exports = BackboneDash.View.extend({
       if(filterField.modelType === 'YEAR-SINGLE-VALUE' || filterField.modelType === 'DATE-RANGE-VALUES'){
     	  return self.getAppliedDateObject(filterObject,key);
       } else {
-    	  var name = filter.filterName || key;   	   
     	  return {
-    	        name: TranslationManager.getTranslated(name.replace(/-/g, " ")),
+    	        name: filter.filterName || key,
     	        id: key.replace(/[^\w]/g, ''), // remove anything non-alphanum
     	        detail: _(filter).map(function(value) {
     	          if (value.attributes !== undefined) {
@@ -5093,14 +5092,13 @@ module.exports = BackboneDash.View.extend({
 	  var dateRangeText = '';
 	  var filterName = filterField.filterName ? filterField.filterName : filterKey;
 	  if(filterKey === 'date') {
-		  dateRangeText = TranslationManager.getTranslated("Date Range");
+		  dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
 	  } else if(filterKey === 'computed-year') {
-		  dateRangeText = TranslationManager.getTranslated("Computed Year");
-	  } else {		  
-		  dateRangeText = TranslationManager.getTranslated(filterName.replace(/-/g, " "));			  		
+		  dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
+	  } else {
+		  dateRangeText = app.translator.translateSync("amp.dashboard:" + filterName.replace(/[^\w]/g, '-'), filterName);
 	  }
 	  var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
-		
 	  return {
 		  id: filterKey.replace(/[^\w]/g, '-'),
 		  name: dateRangeText,
@@ -32470,7 +32468,7 @@ module.exports = BaseFilterView.extend({
 		  region.dayNamesMin = CUSTOM_REGION_OPTIONS[lang].dayNamesMin;
 	  }
 	  		  
-	  return this.$('#' + elementName).datepicker($.extend(options, region));  
+	  return this.$('#' + elementName).datepicker($.extend(options, region)).datepicker('option', 'dateFormat', this.filterView.getDateFormat()); 
   },
   
   renderTitle:function() {

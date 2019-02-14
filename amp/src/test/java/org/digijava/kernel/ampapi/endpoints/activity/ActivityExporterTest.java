@@ -25,19 +25,12 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 /**
  * @author Octavian Ciubotaru
  */
 public class ActivityExporterTest {
-
-    /**
-     * Required because of translations. See InterchangeUtils.getTranslationValues.
-     */
-    @Rule
-    public AMPRequestRule ampRequestRule = new AMPRequestRule();
 
     private List<APIField> fields;
 
@@ -128,7 +121,7 @@ public class ActivityExporterTest {
 
         assertThat(jsonActivity,
                 allOf(
-                        hasEntry("description", "Test Site-desc-en"),
+                        hasEntry("description", "desc"),
                         not(hasEntry("project_title", "test"))));
     }
 
@@ -140,6 +133,6 @@ public class ActivityExporterTest {
         JsonBean filter = new JsonBean();
         filter.set(ActivityEPConstants.FILTER_FIELDS, filterFields);
 
-        return new ActivityExporter(fields, filter);
+        return new ActivityExporter((f, c, v, o) -> v, fields, filter);
     }
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
@@ -18,6 +19,7 @@ public class AmpMeasure  implements Serializable, Cloneable {
     @Interchangeable(fieldTitle = "Name", label = "Measure", importable = true)
     private String name ;
 
+    @InterchangeableBackReference
     private AmpIssues issue;
 
     @Interchangeable(fieldTitle = "Actors", importable = true,

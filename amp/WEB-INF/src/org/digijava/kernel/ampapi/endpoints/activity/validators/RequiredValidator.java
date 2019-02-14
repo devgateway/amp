@@ -33,7 +33,7 @@ public class RequiredValidator extends InputValidator {
     
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         String fieldName = fieldDescription.getFieldName();
         Object fieldValue = newFieldParent.get(fieldName);
         String requiredStatus = fieldDescription.getRequired();

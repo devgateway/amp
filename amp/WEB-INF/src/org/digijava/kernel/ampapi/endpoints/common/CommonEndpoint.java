@@ -125,7 +125,7 @@ public class CommonEndpoint implements AmpEndpoint {
     }
 
     private List<PossibleValue> possibleValuesForCommonSettingsField(String fieldName) {
-        List<APIField> apiFields = AmpFieldsEnumerator.getPublicEnumerator().getCommonSettingsFields();
+        List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getCommonSettingsFields();
         return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, apiFields);
     }
 

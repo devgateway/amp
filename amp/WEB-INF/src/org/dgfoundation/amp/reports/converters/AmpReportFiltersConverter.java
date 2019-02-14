@@ -67,6 +67,9 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.DONOR_TYPE, AmpOrgType.class, "donorTypes", true);
         addFilter(ColumnConstants.DONOR_GROUP, AmpOrgGroup.class, "donorGroups", true);
 
+        addFilter(ColumnConstants.PLEDGES_DONOR_TYPE, AmpOrgType.class, "donorTypes", true);
+        addFilter(ColumnConstants.PLEDGES_DONOR_GROUP, AmpOrganisation.class, "donorGroups", true);
+
         // Related organizations section.
         addFilter(ColumnConstants.BENEFICIARY_AGENCY, AmpOrganisation.class, "beneficiaryAgency", true);
         addFilter(ColumnConstants.EXECUTING_AGENCY, AmpOrganisation.class, "executingAgency", true);
@@ -90,6 +93,13 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, AmpSector.class, "selectedTertiarySectors", false);
         addFilter(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, AmpSector.class, "selectedTertiarySectors", false);
 
+        addFilter(ColumnConstants.PLEDGES_SECTORS, AmpSector.class, "selectedSectors", true);
+        addFilter(ColumnConstants.PLEDGES_SECTORS_SUBSECTORS, AmpSector.class, "selectedSectors", false);
+        addFilter(ColumnConstants.PLEDGES_SECTORS_SUBSUBSECTORS, AmpSector.class, "selectedSectors", false);
+        addFilter(ColumnConstants.PLEDGES_SECONDARY_SECTORS, AmpSector.class, "selectedSecondarySectors", true);
+        addFilter(ColumnConstants.PLEDGES_SECONDARY_SUBSECTORS, AmpSector.class, "selectedSecondarySectors", false);
+        addFilter(ColumnConstants.PLEDGES_SECONDARY_SUBSUBSECTORS, AmpSector.class, "selectedSecondarySectors", false);
+
         // Programs and national objectives section.
         addFilter(ColumnConstants.PRIMARY_PROGRAM_LEVEL_0, AmpTheme.class, "selectedPrimaryPrograms", false);
         addFilter(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, AmpTheme.class, "selectedPrimaryPrograms", false);
@@ -100,6 +110,11 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.PRIMARY_PROGRAM_LEVEL_6, AmpTheme.class, "selectedPrimaryPrograms", false);
         addFilter(ColumnConstants.PRIMARY_PROGRAM_LEVEL_7, AmpTheme.class, "selectedPrimaryPrograms", false);
         addFilter(ColumnConstants.PRIMARY_PROGRAM_LEVEL_8, AmpTheme.class, "selectedPrimaryPrograms", false);
+
+        addFilter(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_0, AmpTheme.class, "selectedPrimaryPrograms", false);
+        addFilter(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_1, AmpTheme.class, "selectedPrimaryPrograms", false);
+        addFilter(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_2, AmpTheme.class, "selectedPrimaryPrograms", false);
+        addFilter(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_3, AmpTheme.class, "selectedPrimaryPrograms", false);
     
         addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_0, AmpTheme.class, "selectedSecondaryPrograms", false);
         addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, AmpTheme.class, "selectedSecondaryPrograms", false);
@@ -110,6 +125,11 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_6, AmpTheme.class, "selectedSecondaryPrograms", false);
         addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_7, AmpTheme.class, "selectedSecondaryPrograms", false);
         addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_8, AmpTheme.class, "selectedSecondaryPrograms", false);
+
+        addFilter(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_0, AmpTheme.class, "selectedSecondaryPrograms", false);
+        addFilter(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_1, AmpTheme.class, "selectedSecondaryPrograms", false);
+        addFilter(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2, AmpTheme.class, "selectedSecondaryPrograms", false);
+        addFilter(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3, AmpTheme.class, "selectedSecondaryPrograms", false);
     
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0, AmpTheme.class, "selectedNatPlanObj", false);
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, AmpTheme.class, "selectedNatPlanObj", false);       
@@ -120,16 +140,29 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6, AmpTheme.class, "selectedNatPlanObj", false);
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, AmpTheme.class, "selectedNatPlanObj", false);
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, AmpTheme.class, "selectedNatPlanObj", false);
+
+        addFilter(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0, AmpTheme.class, "selectedNatPlanObj", false);
+        addFilter(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1, AmpTheme.class, "selectedNatPlanObj", false);
+        addFilter(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2, AmpTheme.class, "selectedNatPlanObj", false);
+        addFilter(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3, AmpTheme.class, "selectedNatPlanObj", false);
         
         // Activity section.
         addFilter(ColumnConstants.STATUS, AmpCategoryValue.class, "statuses", true);
         addFilter(ColumnConstants.APPROVAL_STATUS, String.class, "approvalStatusSelected", true);
-        
+
+        addFilter(ColumnConstants.PLEDGE_STATUS, AmpCategoryValue.class, "statuses", true);
+
         // Location section.
         addFilter(ColumnConstants.COUNTRY, AmpCategoryValueLocations.class, "locationSelected", true);
-        addFilter(ColumnConstants.REGION, AmpCategoryValueLocations.class, "locationSelected", false);      
+        addFilter(ColumnConstants.REGION, AmpCategoryValueLocations.class, "locationSelected", false);
         addFilter(ColumnConstants.ZONE, AmpCategoryValueLocations.class, "locationSelected", false);
-        addFilter(ColumnConstants.DISTRICT, AmpCategoryValueLocations.class, "locationSelected", false);                
+        addFilter(ColumnConstants.DISTRICT, AmpCategoryValueLocations.class, "locationSelected", false);
+
+        addFilter(ColumnConstants.PLEDGES_COUNTRIES, AmpCategoryValueLocations.class, "locationSelected", true);
+        addFilter(ColumnConstants.PLEDGES_REGIONS, AmpCategoryValueLocations.class, "locationSelected", false);
+        addFilter(ColumnConstants.PLEDGES_ZONES, AmpCategoryValueLocations.class, "locationSelected", false);
+        addFilter(ColumnConstants.PLEDGES_DISTRICTS, AmpCategoryValueLocations.class, "locationSelected", false);
+        addFilter(ColumnConstants.PLEDGES_COMMUNAL_SECTION, AmpCategoryValueLocations.class, "locationSelected", false);
         
         // Financial section.
         addFilter(ColumnConstants.FINANCING_INSTRUMENT, AmpCategoryValue.class, "financingInstruments", true);
@@ -140,6 +173,9 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.MODE_OF_PAYMENT, AmpCategoryValue.class, "modeOfPayment", true);
         addFilter(ColumnConstants.EXPENDITURE_CLASS, AmpCategoryValue.class, "expenditureClass", true);
         addFilter(ColumnConstants.CONCESSIONALITY_LEVEL, AmpCategoryValue.class, "concessionalityLevel", true);
+
+        addFilter(ColumnConstants.PLEDGES_AID_MODALITY, AmpCategoryValue.class, "financingInstruments", true);
+        addFilter(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, AmpCategoryValue.class, "typeOfAssistance", true);
 
         // Other section.
         addFilter(ColumnConstants.HUMANITARIAN_AID, Integer.class, "humanitarianAid", true);
@@ -154,7 +190,7 @@ public class AmpReportFiltersConverter {
         addDateRangeFilter(ColumnConstants.FUNDING_CLOSING_DATE, "fromFundingClosingDate", "toFundingClosingDate");
         addDateRangeFilter(TRANSACTION_DATE, "fromDate", "toDate");
         this.ampARFilter.setComputedYear(this.filters.getComputedYear());
-        
+
         return this.ampARFilter;
     }
 

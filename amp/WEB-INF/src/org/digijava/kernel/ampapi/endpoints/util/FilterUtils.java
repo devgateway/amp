@@ -183,6 +183,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PLEDGES_STATUS, ColumnConstants.PLEDGE_STATUS);
         mapSimpleColumn(FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
         mapSimpleColumn(FiltersConstants.PLEDGES_ZONES, ColumnConstants.PLEDGES_ZONES);
+        mapSimpleColumn(FiltersConstants.PLEDGES_COMMUNAL_SECTION, ColumnConstants.PLEDGES_COMMUNAL_SECTION);
         mapSimpleColumn(FiltersConstants.PLEDGES_TITLES, ColumnConstants.PLEDGES_TITLES);
     
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_0, ColumnConstants.PRIMARY_PROGRAM_LEVEL_0);

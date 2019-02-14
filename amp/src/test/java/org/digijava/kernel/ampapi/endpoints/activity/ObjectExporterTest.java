@@ -42,7 +42,6 @@ public class ObjectExporterTest {
                 new TestFieldInfoProvider(),
                 new TestFMService(),
                 translatorService,
-                false,
                 program -> false);
         List<APIField> fields = enumerator.getAllAvailableFields(Dummy.class);
 

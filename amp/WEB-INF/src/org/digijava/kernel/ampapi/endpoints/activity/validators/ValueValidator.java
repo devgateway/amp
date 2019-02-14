@@ -33,7 +33,7 @@ public class ValueValidator extends InputValidator {
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         
         boolean importable = fieldDescription.isImportable();
         // input type, allowed input will be verified before, so nothing check here 

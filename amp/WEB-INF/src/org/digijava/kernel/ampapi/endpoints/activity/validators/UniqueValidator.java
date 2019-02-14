@@ -26,7 +26,7 @@ public class UniqueValidator extends InputValidator {
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         String fieldName = fieldDescription.getFieldName();
         String uniqueField = fieldDescription.getUniqueConstraint();
         if (StringUtils.isNotBlank(uniqueField)) {
@@ -45,5 +45,5 @@ public class UniqueValidator extends InputValidator {
         }
         return true;
     }
-    
+
 }

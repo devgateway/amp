@@ -75,42 +75,12 @@ def legacyMvnOptions = "-Djdbc.user=amp " +
         "-Djdbc.driverClassName=org.postgresql.Driver"
 
 def launchedByUser = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause').size() > 0
+def codeVersion
+def countries
 
 // Run fail fast tests
 stage('Quick Test') {
-    when (!launchedByUser) {
-        node {
-            try {
-                checkout scm
-
-                updateGitHubCommitStatus('jenkins/failfasttests', 'Testing in progress', 'PENDING')
-
-                withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
-                    def testStatus = sh returnStatus: true, script: "cd amp && mvn test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
-
-                    // Archive unit test report
-                    junit 'amp/target/surefire-reports/TEST-*.xml'
-
-                    if (testStatus != 0) {
-                        error "Tests command returned an error code!"
-                    }
-                }
-
-                updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: success', 'SUCCESS')
-            } catch (e) {
-                updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: error', 'ERROR')
-
-                throw e
-            }
-        }
-    }
-}
-
-def codeVersion
-
-stage('Build') {
     // Find list of countries which have database dumps compatible with ${codeVersion}
-    def countries
     node {
         checkout scm
 
@@ -119,7 +89,7 @@ stage('Build') {
         println "AMP Version: ${codeVersion}"
 
         countries = sh(returnStdout: true,
-                       script: "ssh sulfur 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                script: "ssh sulfur 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
                 .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"
@@ -127,12 +97,53 @@ stage('Build') {
         }
     }
 
-    timeout(15) {
-        milestone()
-        country = input(
-                message: "Proceed with build and deploy?",
-                parameters: [choice(choices: countries, name: 'country')])
-        milestone()
+    // Allow user to specify country before tests are run
+    if (launchedByUser) {
+        timeout(15) {
+            milestone()
+            country = input(
+                    message: "Proceed with test, build and deploy?",
+                    parameters: [choice(choices: countries, name: 'country')])
+            milestone()
+        }
+    }
+
+    node {
+        try {
+            checkout scm
+
+            updateGitHubCommitStatus('jenkins/failfasttests', 'Testing in progress', 'PENDING')
+
+            withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+                def testStatus = sh returnStatus: true, script: "cd amp && mvn clean test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
+
+                // Archive unit test report
+                junit 'amp/target/surefire-reports/TEST-*.xml'
+
+                if (testStatus != 0) {
+                    error "Tests command returned an error code!"
+                }
+            }
+
+            updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: success', 'SUCCESS')
+        } catch (e) {
+            updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: error', 'ERROR')
+
+            throw e
+        }
+    }
+}
+
+stage('Build') {
+
+    if (country == null) {
+        timeout(15) {
+            milestone()
+            country = input(
+                    message: "Proceed with build and deploy?",
+                    parameters: [choice(choices: countries, name: 'country')])
+            milestone()
+        }
     }
 
     ampUrl = "http://amp-${country}-${tag}-tc9.ampsite.net/"

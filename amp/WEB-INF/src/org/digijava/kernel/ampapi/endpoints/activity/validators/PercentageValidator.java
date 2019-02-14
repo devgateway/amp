@@ -26,7 +26,7 @@ public class PercentageValidator extends InputValidator {
     @SuppressWarnings("unchecked")
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         boolean isValid = true;
         String fieldName = fieldDescription.getFieldName();
         String percentageField = fieldDescription.getPercentageConstraint();

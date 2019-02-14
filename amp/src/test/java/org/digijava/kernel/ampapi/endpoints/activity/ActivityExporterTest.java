@@ -49,7 +49,6 @@ public class ActivityExporterTest {
                 new TestFieldInfoProvider(),
                 new TestFMService(),
                 translatorService,
-                false,
                 program -> false,
                 "project_code");
 

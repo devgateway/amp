@@ -3,9 +3,11 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -26,7 +29,9 @@ import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 
@@ -59,9 +64,16 @@ public class ObjectImporter {
     private Map<Class<? extends DiscriminationConfigurer>, DiscriminationConfigurer> discriminatorConfigurerCache =
             new HashMap<>();
 
+    private Deque<Object> backReferenceStack = new ArrayDeque<>();
+
     public ObjectImporter(InputValidatorProcessor validator, List<APIField> apiFields) {
+        this(validator, TranslationSettings.getCurrent(), apiFields);
+    }
+
+    public ObjectImporter(InputValidatorProcessor validator, TranslationSettings trnSettings,
+            List<APIField> apiFields) {
         this.validator = validator;
-        this.trnSettings = TranslationSettings.getCurrent();
+        this.trnSettings = trnSettings;
         this.apiFields = apiFields;
     }
 
@@ -99,40 +111,68 @@ public class ObjectImporter {
     }
 
     /**
+     * Entrypoint for converting and validation of json structure to internal object model.
+     *
+     * @param root
+     * @param json
+     * @return
+     */
+    public Object validateAndImport(Object root, Map<String, Object> json) {
+        return validateAndImport(root, apiFields, json, null);
+    }
+
+    /**
      * Recursive method (through ->validateAndImport->validateSubElements->[this method]
      * that attempts to validate the incoming JSON and import its data.
      * If there are any errors -> append them to the validator to propagate upwards
      * @param newParent Matched parent object in which resides the field of the activity we're importing or updating
      * (for example, AmpActivityVersion newActivity is newParent for 'sectors'
-     * @param oldParent Matched parent object in which the old activity field resides
      * @param fieldsDef definitions of the fields in this parent (from Fields Enumeration EP)
      * @param newJsonParent parent JSON object in which reside the analyzed fields
-     * @param oldJsonParent old parent JSON
      * @param fieldPath the underscorified path to the field currently validated & imported
      * @return currently updated object or null if any validation error occurred
      */
-    protected Object validateAndImport(Object newParent, Object oldParent, List<APIField> fieldsDef,
-            Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
-        Set<String> fields = new HashSet<String>(newJsonParent.keySet());
-        // process all valid definitions
-        for (APIField fieldDef : fieldsDef) {
-            newParent = validateAndImport(newParent, oldParent, fieldDef, newJsonParent, oldJsonParent, fieldPath);
-            fields.remove(fieldDef.getFieldName());
-        }
+    protected Object validateAndImport(Object newParent, List<APIField> fieldsDef,
+            Map<String, Object> newJsonParent, String fieldPath) {
+        restoreBackReferences(newParent);
+        try {
+            backReferenceStack.push(newParent);
 
-        // and error anything remained
-        // note: due to AMP-20766, we won't be able to fully detect invalid children
-        String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
-        if (fields.size() > 0 && !ignoreUnknownFields()) {
-            newParent = null;
-            for (String invalidField : fields) {
-                // no need to go through deep-first validation flow
-                validator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
-                        ActivityErrors.FIELD_INVALID, errors);
+            Set<String> fields = new HashSet<String>(newJsonParent.keySet());
+            // process all valid definitions
+            for (APIField fieldDef : fieldsDef) {
+                newParent = validateAndImport(newParent, fieldDef, newJsonParent, fieldPath);
+                fields.remove(fieldDef.getFieldName());
             }
-        }
 
-        return newParent;
+            // and error anything remained
+            // note: due to AMP-20766, we won't be able to fully detect invalid children
+            String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
+            if (fields.size() > 0 && !ignoreUnknownFields()) {
+                newParent = null;
+                for (String invalidField : fields) {
+                    // no need to go through deep-first validation flow
+                    validator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
+                            ActivityErrors.FIELD_INVALID, errors);
+                }
+            }
+
+            return newParent;
+        } finally {
+            backReferenceStack.pop();
+        }
+    }
+
+    private void restoreBackReferences(Object newParent) {
+        try {
+            Class<?> type = newParent.getClass();
+            Field[] backRefFields = FieldUtils.getFieldsWithAnnotation(type, InterchangeableBackReference.class);
+            for (Field backRefField : backRefFields) {
+                FieldUtils.writeField(backRefField, newParent, backReferenceStack.peek(), true);
+            }
+        } catch (IllegalAccessException | IllegalArgumentException e) {
+            throw new RuntimeException("Failed to restore back reference.", e);
+        }
     }
 
     protected boolean ignoreUnknownFields() {
@@ -142,24 +182,20 @@ public class ObjectImporter {
     /**
      * Validates and imports a single element (and its subelements)
      * @param newParent parent object containing the field
-     * @param oldParent old parent (for activity)
      * @param fieldDef JsonBean holding the description of the field (obtained from the Fields Enumerator EP)
      * @param newJsonParent JSON as imported
-     * @param oldJsonParent JSON of the old activity (if it's update) from the Export Activity EP
      * @param fieldPath underscorified path to the field
      * @return currently updated object or null if any validation error occurred
      */
-    private Object validateAndImport(Object newParent, Object oldParent, APIField fieldDef,
-            Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
+    private Object validateAndImport(Object newParent, APIField fieldDef,
+            Map<String, Object> newJsonParent, String fieldPath) {
         String fieldName = getFieldName(fieldDef, newJsonParent);
         String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
-        Object oldJsonValue = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
         Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
-        
-        boolean valid = validator.isValid(this, newJsonParent, oldJsonParent, fieldDef, currentFieldPath, errors);
+
+        boolean valid = validator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
         if (valid) {
-            newParent = validateSubElements(fieldDef, newParent, oldParent, newJsonValue, oldJsonValue,
-                    currentFieldPath);
+            newParent = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
             if (newParent != null) {
                 newParent = setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
             }
@@ -172,7 +208,7 @@ public class ObjectImporter {
     /**
      * Configures new value, no validation outside of this method scope, it must be verified before
      */
-    protected Object setNewField(Object newParent, APIField fieldDef, Map<String, Object> newJsonParent,
+    private Object setNewField(Object newParent, APIField fieldDef, Map<String, Object> newJsonParent,
             String fieldPath) {
         boolean importable = fieldDef.isImportable();
 
@@ -189,49 +225,28 @@ public class ObjectImporter {
         }
 
         if (!importable) {
-            setupNotImportableField(newParent, objField);
             // skip reconfiguration at this level if the field is not importable
             return newParent;
         }
 
-        // REFACTOR: remove old field usage
-        Object oldValue;
-        try {
-            oldValue = objField.get(newParent);
-        } catch (IllegalArgumentException | IllegalAccessException e1) {
-            logger.error(e1.getMessage());
-            throw new RuntimeException(e1);
-        }
-        Object newValue = getNewValue(objField, newParent, fieldValue, fieldDef, fieldPath);
-
-        if (newValue != null || oldValue != null) {
-            if (objField != null) {
-                try {
-                    if (newParent instanceof Collection) {
-                        ((Collection<Object>) newParent).add(newValue);
-                    } else {
-                        objField.set(newParent, newValue);
-                    }
-                } catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-                    logger.error(e.getMessage());
-                    throw new RuntimeException(e);
+        Object newValue = getNewValue(objField, newParent, fieldValue, fieldDef);
+        if (newValue != null) {
+            try {
+                if (newParent instanceof Collection) {
+                    ((Collection<Object>) newParent).add(newValue);
+                } else {
+                    objField.set(newParent, newValue);
                 }
+            } catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
+                logger.error(e.getMessage());
+                throw new RuntimeException(e);
             }
         }
         return newParent;
     }
 
-    /**
-     * This method is used by activity importer to create backwards references to activity from activity owned objects.
-     * This solution however is incomplete and should be revisited. It does not cover cases with more deep structure
-     * like AmpFunding -> AmpFundingDetail or AmpComponent -> AmpComponentFunding.
-     * FIXME find a proper solution for all cases
-     */
-    protected void setupNotImportableField(Object object, Field field) {
-    }
-
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected Object getNewValue(Field field, Object parentObj, Object jsonValue, APIField fieldDef, String fieldPath) {
+    private Object getNewValue(Field field, Object parentObj, Object jsonValue, APIField fieldDef) {
         boolean isCollection = Collection.class.isAssignableFrom(field.getType());
         if (jsonValue == null && !isCollection) {
             return null;
@@ -271,9 +286,6 @@ public class ObjectImporter {
             }
             // this is a simple type
         } else if (fieldType.isSimpleType()) {
-            if (jsonValue == null) {
-                return null;
-            }
             try {
                 if (Date.class.equals(field.getType())) {
                     value = InterchangeUtils.parseISO8601Date((String) jsonValue);
@@ -319,12 +331,14 @@ public class ObjectImporter {
      * @param value
      * @return
      */
-    protected Object getObjectReferencedById(Class<?> objectType, Object value) {
+    private Object getObjectReferencedById(Class<?> objectType, Object value) {
         if (Collection.class.isAssignableFrom(objectType)) {
             throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
         }
         if (ApprovalStatus.class.isAssignableFrom(objectType)) {
             return ApprovalStatus.fromId((Integer) value);
+        } else if (ResourceType.class.isAssignableFrom(objectType)) {
+            return ResourceType.fromId((Integer) value);
         } else if (InterchangeUtils.isSimpleType(objectType)) {
             return ConvertUtils.convert(value, objectType);
         } else {
@@ -338,7 +352,7 @@ public class ObjectImporter {
      * @param field
      * @return
      */
-    protected Object getNewInstance(Object parent, Field field) {
+    private Object getNewInstance(Object parent, Field field) {
         Object fieldValue;
         try {
             if (SortedSet.class.isAssignableFrom(field.getType())) {
@@ -385,14 +399,12 @@ public class ObjectImporter {
      * Validates sub-elements (recursively)
      * @param fieldDef
      * @param newParent
-     * @param oldParent
      * @param newJsonValue
-     * @param oldJsonValue
      * @param fieldPath
      * @return currently updated object or null if any validation error occurred
      */
-    protected Object validateSubElements(APIField fieldDef, Object newParent, Object oldParent, Object newJsonValue,
-            Object oldJsonValue, String fieldPath) {
+    private Object validateSubElements(APIField fieldDef, Object newParent, Object newJsonValue,
+            String fieldPath) {
         // simulate temporarily fieldDef
         fieldDef = fieldDef == null ? new APIField() : fieldDef;
         FieldType fieldType = fieldDef.getApiType().getFieldType();
@@ -407,27 +419,21 @@ public class ObjectImporter {
         boolean isList = fieldType.isList();
         if (idOnly && !(isList && fieldDef.getApiType().isSimpleItemType())) {
             return newParent;
-        }        
+        }
 
         // first validate all sub-elements
-        @SuppressWarnings("unchecked")
         List<APIField> childrenFields = fieldDef.getChildren();
         List<Map<String, Object>> childrenNewValues = getChildrenValues(newJsonValue, isList);
-        List<Map<String, Object>> childrenOldValues = getChildrenValues(oldJsonValue, isList);
-        
+
         // validate children, even if it is not a list -> to notify wrong entries
         if ((isList || childrenFields != null && childrenFields.size() > 0) && childrenNewValues != null) {
             String actualFieldName = fieldDef.getFieldNameInternal();
             Field newField = ReflectionUtil.getField(newParent, actualFieldName);
-            // REFACTOR: remove old parent and field usage, not relevant anymore
-            Field oldField = ReflectionUtil.getField(oldParent, actualFieldName);
-            Object newFieldValue = null;
-            Object oldFieldValue = null;
+            Object newFieldValue;
             Class<?> subElementClass = fieldDef.getApiType().getElementType();
             boolean isCollection = false;
             try {
                 newFieldValue = newField == null ? null : newField.get(newParent);
-                oldFieldValue = oldField == null ? null : oldField.get(oldParent);
                 if (newParent != null && newFieldValue == null) {
                     newFieldValue = getNewInstance(newParent, newField);
                 }
@@ -453,41 +459,36 @@ public class ObjectImporter {
                     for (String key : agreementMap.keySet()) {
                         HashMap<String, Object> kv = new HashMap<String, Object>();
                         Object val = agreementMap.get(key);
-    
+
                         if (val instanceof String) {
                             val = StringUtils.trim((String) val);
                         }
-    
+
                         kv.put(key, val);
                         childrenNewValues.add(kv);
                     }
                 }
-    
+
                 // process children
                 Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
                 while (iterNew.hasNext()) {
                     Map<String, Object> newChild = iterNew.next();
                     branchJsonVisitor.put(fieldPath, newChild);
                     APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
-                    Map<String, Object> oldChild = getMatchedOldValue(childFieldDef, childrenOldValues);
-    
-                    if (oldChild != null) {
-                        childrenOldValues.remove(oldChild);
-                    }
-                    Object res = null;
+
+                    Object res;
                     if (isCollection) {
                         try {
                             Object newSubElement = subElementClass.newInstance();
-                            res = validateAndImport(newSubElement, null, childrenFields, newChild, oldChild, fieldPath);
+                            res = validateAndImport(newSubElement, childrenFields, newChild, fieldPath);
                         } catch (InstantiationException | IllegalAccessException e) {
                             logger.error(e.getMessage());
                             throw new RuntimeException(e);
                         }
                     } else {
-                        res = validateAndImport(newFieldValue, oldFieldValue, childFieldDef, newChild, oldChild,
-                                fieldPath);
+                        res = validateAndImport(newFieldValue, childFieldDef, newChild, fieldPath);
                     }
-    
+
                     if (res == null) {
                         // validation failed, reset parent to stop config
                         newParent = null;
@@ -502,7 +503,7 @@ public class ObjectImporter {
         }
         return newParent;
     }
-    
+
     private Object toSimpleTypeValue(Object value, Class<?> type) {
         if (value == null || type.isAssignableFrom(value.getClass())) {
             return value;
@@ -533,21 +534,6 @@ public class ObjectImporter {
                 return jsonValues;
             }
         }
-        return null;
-    }
-
-    private Map<String, Object> getMatchedOldValue(APIField childDef, List<Map<String, Object>> oldValues) {
-        if (childDef != null && oldValues != null && oldValues.size() > 0) {
-            String fieldName = childDef.getFieldName();
-            if (StringUtils.isNotBlank(fieldName)) {
-                for (Map<String, Object> oldValue : oldValues) {
-                    if (oldValue.containsKey(fieldName)) {
-                        return oldValue;
-                    }
-                }
-            }
-        }
-
         return null;
     }
 

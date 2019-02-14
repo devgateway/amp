@@ -11,6 +11,6 @@ public class ResourceExporter extends ObjectExporter<AmpResource> {
 
     public ResourceExporter() {
         super(new DefaultTranslatedFieldReader(),
-                AmpFieldsEnumerator.getPublicEnumerator().getResourceFields());
+                AmpFieldsEnumerator.getEnumerator().getResourceFields());
     }
 }

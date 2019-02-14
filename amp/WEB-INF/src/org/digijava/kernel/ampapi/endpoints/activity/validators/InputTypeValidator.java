@@ -52,7 +52,7 @@ public class InputTypeValidator extends InputValidator {
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         FieldType fieldType = fieldDescription.getApiType().getFieldType();
         String fieldName = fieldDescription.getFieldName();
         Object item = newFieldParent.get(fieldName);
@@ -74,7 +74,7 @@ public class InputTypeValidator extends InputValidator {
             case BOOLEAN: return isValidBoolean(item);
             case LIST: return checkListFieldValidity(importer, item, fieldDesc);
             case LONG: return isValidLong(item);
-            default: return false; 
+            default: return false;
         }
     }
 

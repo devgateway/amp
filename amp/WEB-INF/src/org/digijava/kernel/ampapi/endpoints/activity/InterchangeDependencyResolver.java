@@ -10,6 +10,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ComponentFundingOrgsValidator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.FundingPledgesValidator;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -190,8 +191,8 @@ public class InterchangeDependencyResolver {
      * 
      * @param value
      * @param importer
-     * @param code
      * @param fieldDescription
+     * @param fieldParent
      * @return
      */
     public static boolean checkRequiredDependencyFulfilled(Object value, ObjectImporter importer, 
@@ -219,10 +220,10 @@ public class InterchangeDependencyResolver {
                         result = result && hasTransactions(fieldParent);
                         break;
                     case RESOURCE_TYPE_FILE_VALID_KEY:
-                        result = result && isResourceTypeValid(value, importer, fieldParent, ResourceEPConstants.FILE);
+                        result = result && isResourceTypeValid(value, importer, fieldParent, ResourceType.FILE);
                         break;
                     case RESOURCE_TYPE_LINK_VALID_KEY:
-                        result = result && isResourceTypeValid(value, importer, fieldParent, ResourceEPConstants.LINK);
+                        result = result && isResourceTypeValid(value, importer, fieldParent, ResourceType.LINK);
                         break;
                     default: 
                         break;
@@ -270,10 +271,10 @@ public class InterchangeDependencyResolver {
     }
     
     private static boolean isResourceTypeValid(Object value, ObjectImporter importer, 
-            Map<String, Object> fieldParent, String resourceType) {
+            Map<String, Object> fieldParent, ResourceType resourceType) {
         
         Object resType = fieldParent.get(InterchangeUtils.underscorify(ResourceEPConstants.RESOURCE_TYPE));
-        return resType != null && resType.equals(resourceType);
+        return resType != null && resType.equals(resourceType.getId());
     }
     
     

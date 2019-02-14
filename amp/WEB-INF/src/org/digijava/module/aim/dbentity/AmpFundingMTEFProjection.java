@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -34,6 +35,7 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
     @Interchangeable(fieldTitle = "Projection Date", importable = true, required = REQUIRED_ALWAYS)
     private Date projectionDate;
 
+    @InterchangeableBackReference
     private AmpFunding ampFunding;
 
     private Date reportingDate;

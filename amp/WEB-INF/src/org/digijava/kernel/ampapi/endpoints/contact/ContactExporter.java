@@ -12,6 +12,6 @@ public class ContactExporter extends ObjectExporter<AmpContact> {
 
     public ContactExporter() {
         super(new DefaultTranslatedFieldReader(),
-                AmpFieldsEnumerator.getPublicContactEnumerator().getContactFields());
+                AmpFieldsEnumerator.getContactEnumerator().getContactFields());
     }
 }

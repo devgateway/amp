@@ -258,6 +258,10 @@ public class AmpARFilterConverter {
 
     private String findSubSectorColumnName(String columnName, AmpSector sector) {
         AmpSector current = sector;
+        String sufix = "Sector";
+        if (arFilter.isPledgeFilter()) {
+            sufix = "Sectors";
+        }
         int depth = 0;
         while (current.getParentSectorId() != null) {
             current = current.getParentSectorId();
@@ -267,7 +271,7 @@ public class AmpARFilterConverter {
         if (depth == 0) {
             levelColumn = columnName;
         } else {
-            levelColumn = columnName + " " + StringUtils.repeat("Sub-", depth) + "Sector";
+            levelColumn = columnName + " " + StringUtils.repeat("Sub-", depth) + sufix;
         }
         return levelColumn;
     }

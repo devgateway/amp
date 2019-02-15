@@ -159,7 +159,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_SECTORS_SUB_SECTORS,
                 ColumnConstants.PLEDGES_SECONDARY_SUBSECTORS);
         mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_SECTORS_SUB_SUB_SECTORS,
-                ColumnConstants.PLEDGES_SECTORS_SUBSUBSECTORS);
+                ColumnConstants.PLEDGES_SECONDARY_SUBSUBSECTORS);
         
         mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS, ColumnConstants.PLEDGES_TERTIARY_SECTORS);
         mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS_SUB_SECTORS,

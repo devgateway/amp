@@ -226,15 +226,18 @@ public class AmpARFilterConverter {
     
     /** adds primary, secondary and tertiary sectors to the filters if specified */
     private void addSectorFilters() {
+        if (!arFilter.isPledgeFilter()) {
             addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", ColumnConstants.PRIMARY_SECTOR);
             addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", ColumnConstants.SECONDARY_SECTOR);
             addSectorSchemeFilters(arFilter.getSelectedTertiarySectors(), "Tertiary", ColumnConstants.TERTIARY_SECTOR);
             addSectorSchemeFilters(arFilter.getSelectedQuaternarySectors(), "Quaternary",
                     ColumnConstants.QUATERNARY_SECTOR);
             addSectorSchemeFilters(arFilter.getSelectedQuinarySectors(), "Quinary", ColumnConstants.QUINARY_SECTOR);
-
-        if (!arFilter.isPledgeFilter())
             addSectorSchemeFilters(arFilter.getSelectedTagSectors(), "Tag", ColumnConstants.SECTOR_TAG);
+        } else {
+            addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", ColumnConstants.PLEDGES_SECTORS);
+            addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+        }
     }
 
     private void addSectorSchemeFilters(Set<AmpSector> selectedEntries, String scheme, String columnName) {

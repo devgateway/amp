@@ -111,6 +111,10 @@ public class ReportsFilterPickerForm extends ActionForm {
     private String fromActivityActualCompletionDate;
     private String toActivityActualCompletionDate;
     private DynamicDateFilter dynamicActivityActualCompletionFilter = new DynamicDateFilter();
+    private String fromActualApprovalDate;
+    private String toActualApprovalDate;
+    private String fromProposedCompletionDate;
+    private String toProposedCompletionDate;
     private String fromActivityFinalContractingDate;
     private String toActivityFinalContractingDate;
     private DynamicDateFilter dynamicActivityFinalContractingFilter = new DynamicDateFilter();
@@ -1488,5 +1492,37 @@ public class ReportsFilterPickerForm extends ActionForm {
 
     public void setSelectedComponentFundingOrg(Object[] selectedComponentFundingOrg) {
         this.selectedComponentFundingOrg = selectedComponentFundingOrg;
+    }
+
+    public String getFromActualApprovalDate() {
+        return fromActualApprovalDate;
+    }
+
+    public void setFromActualApprovalDate(String fromActualApprovalDate) {
+        this.fromActualApprovalDate = fromActualApprovalDate;
+    }
+
+    public String getToActualApprovalDate() {
+        return toActualApprovalDate;
+    }
+
+    public void setToActualApprovalDate(String toActualApprovalDate) {
+        this.toActualApprovalDate = toActualApprovalDate;
+    }
+
+    public String getFromProposedCompletionDate() {
+        return fromProposedCompletionDate;
+    }
+
+    public void setFromProposedCompletionDate(String fromProposedCompletionDate) {
+        this.fromProposedCompletionDate = fromProposedCompletionDate;
+    }
+
+    public String getToProposedCompletionDate() {
+        return toProposedCompletionDate;
+    }
+
+    public void setToProposedCompletionDate(String toProposedCompletionDate) {
+        this.toProposedCompletionDate = toProposedCompletionDate;
     }
 }

@@ -133,9 +133,10 @@ Filters.prototype.success	= function (o) {
 
 Filters.prototype.failure = failureReportFunction;
 
-Filters.prototype.showFilters = function (reportContextId) {
+Filters.prototype.showFilters = function (reportContextId, auxId) {
 	widgetFilter.reportContextId = reportContextId;
 	if (widgetFilter.reportContextId === 'report_wizard') {
+	    widgetFilter.auxId = auxId; // used only for advanced search.
 		this.showFilterWidget();
 	} else if (widgetFilter.reportContextId === 'workspace_editor') {
 		var id = new URL(window.location).searchParams.get('tId');

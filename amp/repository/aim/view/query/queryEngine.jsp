@@ -7,10 +7,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
-<%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
+<%@ page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
-<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 
 <!-- Individual YUI CSS files -->
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
@@ -36,6 +35,17 @@
 	.panel-footer {
 		padding: 20px 15px;
 	}
+
+	.tab_opt_box_cont {
+		font-size: 11px;
+		color: #444;
+		background-color: #FFF;
+	}
+
+	.main_side_cont {
+		border-radius: 4px;
+		border: 1px solid #428bca;
+	}
 </style>
 
 <!-- Individual YUI JS files --> 
@@ -44,20 +54,19 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
-<script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>  		  
-		
-	<!-- Individual YUI JS files --> 
-		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
-		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
-		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
-		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
-		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
-		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
-		<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
-		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
-		
-		<script type="text/javascript" src="<digi:file src='module/aim/scripts/query/QueryManager.js'/>" ></script>
+<script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
+
+<!-- Individual YUI JS files -->
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
+<script type="text/javascript"
+		src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/underscore.js"></script>
@@ -101,12 +110,12 @@ queryValidCbObj	= {
 	};
 			queryCbObj		= {
 			success: function (o) {
-				var divObj		= document.getElementById("results");
+				var divObj		= document.getElementById("queryLabelsDiv");
 				divObj.innerHTML	= o.responseText;
 				animToResult();
 			},
 			failure: function (o) {
-				var divObj		= document.getElementById("results");
+				var divObj		= document.getElementById("queryLabelsDiv");
 				divObj.innerHTML	= "There was a problem with getting the results. Please try again";
 				
 			}
@@ -168,8 +177,8 @@ function validateSubmitQuery () {
 	}
 	
 	function changeStep(url) {
-		var divObj		= document.getElementById("results");
-		divObj.innerHTML	= 
+		var divObj		= document.getElementById("queryLabelsDiv");
+		divObj.innerHTML	=
 		"<div style='text-align: center'>" + "Please wait..." + 
 		"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
 		
@@ -179,16 +188,7 @@ function validateSubmitQuery () {
 
 	function initializeFilters() {
 		filterTabs	= new YAHOO.widget.TabView('tabview_container');
-		
 		YAHOO.amptab.afterFiltersLoad();
-		
-		document.getElementById("filterPickerSubmitButton").onclick	= function() { return false;};
-		YAHOO.util.Event.removeListener("filterPickerSubmitButton", "click");
-		YAHOO.util.Event.addListener("filterPickerSubmitButton", "click",  validateSubmitQuery);		
-		
-		YAHOO.util.Event.addListener("filterPickerResetButton", "click", buildLabels);		
-		
-		buildLabels();
 	}
 
 	YAHOO.util.Event.addListener(window, "load", initializeFilters) ;
@@ -200,9 +200,6 @@ function validateSubmitQuery () {
 	<fieldset class="main_side_cont" style="width: 900px; margin-left: auto; margin-right: auto;">
 		<legend><digi:trn>Selected Filters</digi:trn></legend>
 		<div id="queryLabelsDiv"><digi:trn>No filters selected so far</digi:trn></div>
-		<div style="text-align: center;">
-			<button class="buttonx_sm" id="refershResultsButton" onclick="submitQuery();"><digi:trn>Refresh Results</digi:trn></button> 
-		</div>
 	</fieldset>
 
 	<br />
@@ -215,6 +212,6 @@ function validateSubmitQuery () {
 	$(document).ready(function () {
 	    // TODO: Use a different constructor.
 		repFilters = new Filters('', '', '', '', '', '', '', '', '', true);
-		repFilters.showFilters('report_wizard');
+		repFilters.showFilters('report_wizard', '<%=ReportContextData.getCurrentReportContextId(request, true)%>');
 	});
 </script>

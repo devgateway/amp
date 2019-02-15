@@ -11,7 +11,8 @@ $(document).ready(function () {
     if (new URL(window.location).searchParams.get('type') === PLEDGE_ID) {
         reportTypeCode = PLEDGE_TYPE;
     }
-    var embedded = (document.URL.indexOf('queryEngine.do') > -1);
+    var advancedFilters = (document.URL.indexOf('queryEngine.do') > -1);
+    var embedded = advancedFilters;
     widgetFilter = new ampFilter({
         el: container,
         draggable: true,
@@ -27,22 +28,37 @@ $(document).ready(function () {
     events.listenTo(widgetFilter, 'close', function () {
         $(container).hide();
     });
+    events.listenTo(widgetFilter, 'reset', function () {
+        if (embedded) {
+            $('#queryLabelsDiv').html('<div id="queryLabelsDiv"><digi:trn>No filters selected so far</digi:trn></div>');
+        }
+    });
     events.listenTo(widgetFilter, 'apply', function () {
         // Save just applied filters in case the user hits "reset" button.
         var serializedFilters = widgetFilter.serialize() || {};
+        var url = '/aim/reportsFilterPicker.do?applyWithNewWidget=true&cacheBuster=';
+        if (advancedFilters) {
+            url += new Date().getTime() + '&reportContextId=' + widgetFilter.auxId + '&doreset=true&queryEngine=true';
+        } else {
+            url += new Date().getTime() + '&reportContextId=' + widgetFilter.reportContextId +
+                '&sourceIsReportWizard=true';
+        }
         $.ajax({
             type: 'POST',
-            url: '/aim/reportsFilterPicker.do?applyWithNewWidget=true&cacheBuster=' +
-                new Date().getTime() +
-                '&reportContextId=' + widgetFilter.reportContextId +
-                '&sourceIsReportWizard=true',
+            url: url,
             data: "filtersWidget=" + JSON.stringify(serializedFilters),
             success: function (data) {
-                $('#listFiltersDiv').html(data);
-                $('#hasFilters').val(true);
+                if (!embedded) {
+                    $('#listFiltersDiv').html(data);
+                    $('#hasFilters').val(true);
+                } else {
+                    $('#queryLabelsDiv').html(data);
+                }
             }
         });
-        $(container).hide();
-        $('#useFiltersCheckbox').attr('checked', 'checked');
+        if (!embedded) {
+            $(container).hide();
+            $('#useFiltersCheckbox').attr('checked', 'checked');
+        }
     });
 });

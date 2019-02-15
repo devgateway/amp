@@ -6,8 +6,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -17,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
@@ -26,7 +23,6 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.InterchangeableClassMapper;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -46,6 +42,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.editor.exception.EditorException;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
@@ -68,8 +65,6 @@ public class InterchangeUtils {
         addUnderscoredTitlesToMap(AmpContact.class);
         addUnderscoredTitlesToMap(AmpResource.class);
     }
-
-    private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>();
 
     private static TranslatorService translatorService = AMPTranslatorService.INSTANCE;
 
@@ -308,7 +303,7 @@ public class InterchangeUtils {
                     : (String) fieldValue;
             return getJsonStringValue(translatedText);
         } else if (fieldValue instanceof Date) {
-            return InterchangeUtils.formatISO8601Date((Date) fieldValue);
+            return DateTimeUtil.formatISO8601DateTime((Date) fieldValue);
         }
         
         return fieldValue;
@@ -327,30 +322,6 @@ public class InterchangeUtils {
     private static String getJsonStringValue(String value) {
         return StringUtils.isBlank(value) ? null : value;
     }
-
-    /**
-     * Gets a date formatted in ISO 8601 format. If the date is null, returns null.
-     * 
-     * @param date the date to be formatted
-     * @return String, date in ISO 8601 format
-     */
-    public static String formatISO8601Date(Date date) {
-        return date == null ? null : getDateFormatter().format(date);
-    }
-    
-    /**
-     * Rebuilds the date from the source
-     * @param date the source
-     * @return Date object
-     */
-    public static Date parseISO8601Date(String date) {
-        try {
-            return date == null ? null : getDateFormatter().parse(date);
-        } catch (ParseException e) {
-            LOGGER.warn(e.getMessage());
-            return null;
-        }
-    }   
 
     /**
      * Gets the ID of an enumerable object (used in Possible Values EP)
@@ -431,15 +402,6 @@ public class InterchangeUtils {
         return fieldTrnValues;
     }
     
-    protected static SimpleDateFormat getDateFormatter() {
-        if (DATE_FORMATTER.get() == null) {
-            SimpleDateFormat format = new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT);
-            format.setTimeZone(TimeZone.getTimeZone("UTC"));
-            DATE_FORMATTER.set(format);
-        }
-        return DATE_FORMATTER.get();
-    }
-
     /**
      * This is a special adjusted Session with FlusMode = Commit so that Hiberante doesn't try to commit intermediate 
      * changes while we still query some information

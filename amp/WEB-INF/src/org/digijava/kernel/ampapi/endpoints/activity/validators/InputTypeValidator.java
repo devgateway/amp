@@ -6,13 +6,12 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.validator.routines.FloatValidator;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.module.common.util.DateTimeUtil;
 
 
 /**
@@ -104,7 +103,7 @@ public class InputTypeValidator extends InputValidator {
     private boolean isValidDate(Object value) {
         return value == null || 
                 value instanceof String 
-                && InterchangeUtils.parseISO8601Date((String) value) != null;
+                && DateTimeUtil.parseISO8601DateTime((String) value) != null;
     }
 
     private boolean checkListFieldValidity(ObjectImporter importer, Object item, APIField fieldDescription) {

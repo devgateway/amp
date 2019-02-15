@@ -30,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.LongType;
 
@@ -200,10 +201,12 @@ public class ProjectList {
 
                         JsonBean bean = new JsonBean();
                         bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), rs.getLong("amp_activity_id"));
-                        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE), InterchangeUtils.formatISO8601Date(rs.getTimestamp("date_created")));
+                        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE),
+                                DateTimeUtil.formatISO8601DateTime(rs.getTimestamp("date_created")));
                         bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE), getTranslatableFieldValue("name", rs.getString("name"), rs.getLong("amp_activity_id")));
                         bean.set(iatiIdAmpField, rs.getString(iatiIdAmpField));
-                        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(rs.getTimestamp("date_updated")));
+                        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE),
+                                DateTimeUtil.formatISO8601DateTime(rs.getTimestamp("date_updated")));
                         bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
                         bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.WORKSPACES_EDIT), workspaces);
                         bean.set(ActivityEPConstants.EDIT, editable);
@@ -228,10 +231,12 @@ public class ProjectList {
         JsonBean bean = new JsonBean();
         String iatiIdAmpField = InterchangeUtils.getAmpIatiIdentifierFieldName();
         bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), a.getIdentifier());
-        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE), InterchangeUtils.formatISO8601Date(a.getCreatedDate()));
+        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE),
+                DateTimeUtil.formatISO8601DateTime(a.getCreatedDate()));
         bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE), getTranslatableFieldValue("name", a.getName(), (Long) a.getIdentifier()));
         bean.set(iatiIdAmpField, getIatiIdentifierValue(a, iatiIdAmpField));
-        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(a.getUpdatedDate()));
+        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE),
+                DateTimeUtil.formatISO8601DateTime(a.getUpdatedDate()));
         bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), a.getAmpId());
         bean.set(ActivityFieldsConstants.ACTIVITY_GROUP, a.getAmpActivityGroup());
         bean.set(ActivityEPConstants.EDIT, true);

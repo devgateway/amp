@@ -15,12 +15,9 @@ import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.gateperm.core.Permissible;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -153,7 +150,7 @@ public class InterchangeUtilsTest {
     public void testGetFieldValueFromJsonSimple() throws Exception {
         JsonBean activity = new JsonBean();
         activity.set("name", "Activity Name");
-        assertEquals("Activity Name", InterchangeUtils.getFieldValuesFromJsonActivity(activity, "name"));
+        assertEquals("Activity Name", ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, "name"));
     }
 
     @Test
@@ -162,20 +159,20 @@ public class InterchangeUtilsTest {
         JsonBean nestedObj = new JsonBean();
         nestedObj.set("field", "Nested Value");
         activity.set("nested", nestedObj);
-        assertEquals("Nested Value", InterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
+        assertEquals("Nested Value", ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
     }
 
     @Test
     public void testGetFieldValueFromJsonNestedMissing() throws Exception {
         JsonBean activity = new JsonBean();
-        assertEquals(null, InterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
+        assertEquals(null, ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
     }
 
     @Test
     public void testGetFieldValueFromJsonNestedWrongType() throws Exception {
         JsonBean activity = new JsonBean();
         activity.set("nested", new Object());
-        assertEquals(null, InterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
+        assertEquals(null, ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
     }
 
     @Test

@@ -301,16 +301,6 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         return new PublicGapAnalysis().doPublicGapAnalysis(input);
     }
     
-    @POST
-    @Path("/process-public-layer")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "processPublicLayer")
-    @ApiOperation("Just returns the same data so the GIS code doesn't break with public layers.")
-    public Map processPublicLayer(Map input) {
-        // Due to problems on the frontend for now we receive the public layer data and if there is no gap analysis then we return it without changes.
-        return input;
-    }    
-    
     @GET
     @Path("/export-map/")
     @Produces("application/vnd.ms-excel")

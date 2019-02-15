@@ -17,6 +17,7 @@ var paths = {
     entry: './app/js/app.js',
     compiled: './app/compiled-js/',
     sources: [
+      './app/index.html',
       './app/js/**/*.js',
       '!./app/js/tests/run/**',  // skip compiled test stuff
       '!./app/js/ugly/lib-src/**',  // skip hard-copied external sources
@@ -138,14 +139,8 @@ gulp.task('build-static', ['images'], function() {
     .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('build-rootstuff', function() {
-  return gulp.src(paths.rootStuff)
-    .pipe(gulp.dest(paths.dist));
-});
-
-
 gulp.task('build-html', function() {
-  return gulp.src('app/index.html')
+  return gulp.src('./app/index.html')
     .pipe(gulp.dest(paths.dist));
 });
 
@@ -224,9 +219,5 @@ gulp.task('dev', ['watch', 'serve', 'reload']);
 
 
 gulp.task('build', function(cb) {
-  runSequence(
-    'clean',
-    ['build-js', 'build-css', 'build-static', 'build-rootstuff', 'build-html'],
-    cb
-  );
+  runSequence('clean', 'build-js', 'build-css', 'build-static', 'build-html', cb);
 });

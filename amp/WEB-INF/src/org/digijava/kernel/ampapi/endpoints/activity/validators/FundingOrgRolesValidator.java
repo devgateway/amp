@@ -10,7 +10,7 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.Pair;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -93,7 +93,7 @@ public class FundingOrgRolesValidator extends InputValidator {
 
         Map<String, Long> roleIdsByCode = getOrgRoleIdsByCode();
 
-        List<String> orgRoleFields = InterchangeUtils.getDiscriminatedFieldTitlesByFieldName().get("orgrole");
+        List<String> orgRoleFields = FieldMap.getDiscriminatedFieldTitlesByFieldName().get("orgrole");
 
         for (String field : orgRoleFields) {
             Object orgRolesObj = ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, field);

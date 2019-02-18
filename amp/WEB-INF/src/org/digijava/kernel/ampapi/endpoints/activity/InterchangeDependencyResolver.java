@@ -200,7 +200,7 @@ public class InterchangeDependencyResolver {
             APIField fieldDescription, Map<String, Object> fieldParent) {
         
         List<String> deps = fieldDescription.getDependencies();
-        boolean doNotCheckRequired = InterchangeUtils.underscorify(ActivityFieldsConstants.DISASTER_RESPONSE)
+        boolean doNotCheckRequired = FieldMap.underscorify(ActivityFieldsConstants.DISASTER_RESPONSE)
                 .equals(fieldDescription.getFieldName());
         boolean result = !doNotCheckRequired;
         if (deps != null) {
@@ -275,7 +275,7 @@ public class InterchangeDependencyResolver {
     private static boolean isResourceTypeValid(Object value, ObjectImporter importer, 
             Map<String, Object> fieldParent, ResourceType resourceType) {
         
-        Object resType = fieldParent.get(InterchangeUtils.underscorify(ResourceEPConstants.RESOURCE_TYPE));
+        Object resType = fieldParent.get(FieldMap.underscorify(ResourceEPConstants.RESOURCE_TYPE));
         return resType != null && resType.equals(resourceType.getId());
     }
     
@@ -351,11 +351,11 @@ public class InterchangeDependencyResolver {
     }
     
     private static Object getTransactionType(Object e, JsonBean incomingActivity, Map<String, Object> fieldParent) {
-        return fieldParent.get(InterchangeUtils.underscorify(ActivityFieldsConstants.TRANSACTION_TYPE));
+        return fieldParent.get(FieldMap.underscorify(ActivityFieldsConstants.TRANSACTION_TYPE));
     }
     
     private static int getCollectionSize(Map<String, Object> fieldParent, String fieldName) {
-        Object collection = fieldParent.get(InterchangeUtils.underscorify(fieldName));
+        Object collection = fieldParent.get(FieldMap.underscorify(fieldName));
         if (collection != null && Collection.class.isAssignableFrom(collection.getClass())) {
             return ((Collection<?>) collection).size();
         }

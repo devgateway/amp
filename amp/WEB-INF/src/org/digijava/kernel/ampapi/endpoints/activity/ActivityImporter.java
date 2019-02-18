@@ -244,7 +244,7 @@ public class ActivityImporter extends ObjectImporter {
 
     private List<ApiErrorMessage> determineRequestedSaveMode() {
         if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-            String draftFieldName = InterchangeUtils.underscorify(ActivityFieldsConstants.IS_DRAFT);
+            String draftFieldName = FieldMap.underscorify(ActivityFieldsConstants.IS_DRAFT);
             Object draftAsObj = newJson.get(draftFieldName);
             if (draftAsObj == null) {
                 return Collections.singletonList(ActivityErrors.FIELD_REQUIRED.withDetails(draftFieldName));

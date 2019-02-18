@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.FEContext;
 import org.digijava.kernel.ampapi.endpoints.activity.FMService;
+import org.digijava.kernel.ampapi.endpoints.activity.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
@@ -34,7 +35,7 @@ public class ActivityFieldsEnumerator extends FieldsEnumerator {
         APIField apiField = super.describeField(field, context);
 
         Interchangeable interchangeable = context.getIntchStack().peek();
-        String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
+        String fieldTitle = FieldMap.underscorify(interchangeable.fieldTitle());
 
         if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
             apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
@@ -56,7 +57,7 @@ public class ActivityFieldsEnumerator extends FieldsEnumerator {
 
     protected boolean isVisible(String fmPath, FEContext context) {
         Interchangeable interchangeable = context.getIntchStack().peek();
-        String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
+        String fieldTitle = FieldMap.underscorify(interchangeable.fieldTitle());
 
         if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
             return true;

@@ -515,7 +515,7 @@ public class ActivityImporter extends ObjectImporter {
      */
     protected void initDefaults() {
         for (Field field : AmpActivityFields.class.getFields()) {
-            if (InterchangeUtils.isVersionableTextField(field)) {
+            if (ActivityTranslationUtils.isVersionableTextField(field)) {
                 initEditor(field);
             }
         }

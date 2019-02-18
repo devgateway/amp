@@ -51,7 +51,7 @@ public class InterchangeUtilsTest {
         when(translatorService.getEditorBodyEmptyInclude(any(), any(), any()))
                 .then(invocation -> "ed+" + invocation.getArguments()[2] + "+" + invocation.getArguments()[1]);
 
-        InterchangeUtils.setTranslatorService(translatorService);
+        ActivityTranslationUtils.setTranslatorService(translatorService);
     }
 
     private static AmpContentTranslation acm(String lang, String value) {
@@ -137,7 +137,7 @@ public class InterchangeUtilsTest {
     private Object translateFieldValue(Class<?> parentClass, String fieldName, Object fieldValue, Long parentObjectId)
             throws Exception {
         Field field = parentClass.getDeclaredField(fieldName);
-        return InterchangeUtils.getTranslationValues(field, parentClass, fieldValue, parentObjectId);
+        return ActivityTranslationUtils.getTranslationValues(field, parentClass, fieldValue, parentObjectId);
     }
 
     private Map<String, String> translationsEnFr(String enTranslation, String frTranslation) {

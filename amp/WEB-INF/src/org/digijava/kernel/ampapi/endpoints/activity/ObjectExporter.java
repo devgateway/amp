@@ -131,7 +131,7 @@ public abstract class ObjectExporter<T> {
 
             Class<?> objectClass = object.getClass();
 
-            return InterchangeUtils.getTranslationValues(field, objectClass, fieldValue, object);
+            return ActivityTranslationUtils.getTranslationValues(field, objectClass, fieldValue, object);
         } catch (NoSuchFieldException | IllegalAccessException | EditorException e) {
             throw new RuntimeException("Failed to read primitive field.", e);
         }

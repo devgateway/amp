@@ -273,7 +273,8 @@ public class ProjectList {
         try {
             Field field = AmpActivityFields.class.getDeclaredField(fieldName);
             
-            return InterchangeUtils.getTranslationValues(field, AmpActivityVersion.class, fieldValue, parentObjectId);
+            return ActivityTranslationUtils.getTranslationValues(field, AmpActivityVersion.class, fieldValue,
+                    parentObjectId);
         } catch (Exception e) {
             LOGGER.error("Couldn't translate the field value", e);
             throw new RuntimeException(e);

@@ -1,14 +1,5 @@
 package org.dgfoundation.amp.reports.converters;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -28,6 +19,15 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * an AmpReportFilters -> AmpARFilter converter (e.g. the opposite of {@link AmpARFilterConverter})
@@ -126,10 +126,14 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_7, AmpTheme.class, "selectedSecondaryPrograms", false);
         addFilter(ColumnConstants.SECONDARY_PROGRAM_LEVEL_8, AmpTheme.class, "selectedSecondaryPrograms", false);
 
-        addFilter(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_0, AmpTheme.class, "selectedSecondaryPrograms", false);
-        addFilter(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_1, AmpTheme.class, "selectedSecondaryPrograms", false);
-        addFilter(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2, AmpTheme.class, "selectedSecondaryPrograms", false);
-        addFilter(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3, AmpTheme.class, "selectedSecondaryPrograms", false);
+        addFilter(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_0, AmpTheme.class, "selectedSecondaryPrograms",
+                false);
+        addFilter(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_1, AmpTheme.class, "selectedSecondaryPrograms",
+                false);
+        addFilter(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2, AmpTheme.class, "selectedSecondaryPrograms",
+                false);
+        addFilter(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3, AmpTheme.class, "selectedSecondaryPrograms",
+                false);
     
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0, AmpTheme.class, "selectedNatPlanObj", false);
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, AmpTheme.class, "selectedNatPlanObj", false);       
@@ -141,10 +145,14 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, AmpTheme.class, "selectedNatPlanObj", false);
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, AmpTheme.class, "selectedNatPlanObj", false);
 
-        addFilter(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0, AmpTheme.class, "selectedNatPlanObj", false);
-        addFilter(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1, AmpTheme.class, "selectedNatPlanObj", false);
-        addFilter(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2, AmpTheme.class, "selectedNatPlanObj", false);
-        addFilter(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3, AmpTheme.class, "selectedNatPlanObj", false);
+        addFilter(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0, AmpTheme.class, "selectedNatPlanObj",
+                false);
+        addFilter(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1, AmpTheme.class, "selectedNatPlanObj",
+                false);
+        addFilter(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2, AmpTheme.class, "selectedNatPlanObj",
+                false);
+        addFilter(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3, AmpTheme.class, "selectedNatPlanObj",
+                false);
         
         // Activity section.
         addFilter(ColumnConstants.STATUS, AmpCategoryValue.class, "statuses", true);
@@ -182,11 +190,15 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.DISASTER_RESPONSE_MARKER, Integer.class, "disasterResponse", true);
         addDateRangeFilter(ColumnConstants.ACTUAL_START_DATE, "fromActivityStartDate", "toActivityStartDate");
         addDateRangeFilter(ColumnConstants.ISSUE_DATE, "fromIssueDate", "toIssueDate");
-        addDateRangeFilter(ColumnConstants.PROPOSED_APPROVAL_DATE, "fromProposedApprovalDate", "toProposedApprovalDate");
+        addDateRangeFilter(ColumnConstants.PROPOSED_APPROVAL_DATE, "fromProposedApprovalDate",
+                "toProposedApprovalDate");
         addDateRangeFilter(ColumnConstants.PROPOSED_START_DATE, "fromProposedStartDate", "toProposedStartDate");
-        addDateRangeFilter(ColumnConstants.ACTUAL_COMPLETION_DATE, "fromActivityActualCompletionDate", "toActivityActualCompletionDate");
-        addDateRangeFilter(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, "fromActivityFinalContractingDate", "toActivityFinalContractingDate");
-        addDateRangeFilter(ColumnConstants.EFFECTIVE_FUNDING_DATE, "fromEffectiveFundingDate", "toEffectiveFundingDate");
+        addDateRangeFilter(ColumnConstants.ACTUAL_COMPLETION_DATE, "fromActivityActualCompletionDate",
+                "toActivityActualCompletionDate");
+        addDateRangeFilter(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, "fromActivityFinalContractingDate",
+                "toActivityFinalContractingDate");
+        addDateRangeFilter(ColumnConstants.EFFECTIVE_FUNDING_DATE, "fromEffectiveFundingDate",
+                "toEffectiveFundingDate");
         addDateRangeFilter(ColumnConstants.FUNDING_CLOSING_DATE, "fromFundingClosingDate", "toFundingClosingDate");
         addDateRangeFilter(TRANSACTION_DATE, "fromDate", "toDate");
         this.ampARFilter.setComputedYear(this.filters.getComputedYear());

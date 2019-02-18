@@ -359,7 +359,7 @@ public class AmpARFilterConverter {
                 communalSections.add(loc);
             }
         }
-        if(!arFilter.isPledgeFilter()) {
+        if (!arFilter.isPledgeFilter()) {
             addFilter(countries, ColumnConstants.COUNTRY);
             addFilter(regions, ColumnConstants.REGION);
             addFilter(zones, ColumnConstants.ZONE);

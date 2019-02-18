@@ -3,17 +3,6 @@
  */
 package org.dgfoundation.amp.reports.converters;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -33,6 +22,17 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Translates report filters from ARFilters to a configuration that is applicable for Reports API.
@@ -97,10 +97,12 @@ public class AmpARFilterConverter {
             addApprovalStatus();
             addBooleansFilter(arFilter.getHumanitarianAid(), ColumnConstants.HUMANITARIAN_AID);
             addBooleansFilter(arFilter.getDisasterResponse(), ColumnConstants.DISASTER_RESPONSE_MARKER);
-            addBooleanFilter(arFilter.getGovernmentApprovalProcedures(), ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
+            addBooleanFilter(arFilter.getGovernmentApprovalProcedures(),
+                    ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
             addBooleanFilter(arFilter.getJointCriteria(), ColumnConstants.JOINT_CRITERIA);
             addBooleanFilter(arFilter.getShowArchived(), ColumnConstants.ARCHIVED);
-            addCategoryValueNamesFilter(arFilter.getProjectImplementingUnits(), ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
+            addCategoryValueNamesFilter(arFilter.getProjectImplementingUnits(),
+                    ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
             addCategoryValueNamesFilter(arFilter.getActivityPledgesTitle(), ColumnConstants.PLEDGES_TITLES);
             addCategoryValueNamesFilter(arFilter.getPerformanceAlertLevel(), ColumnConstants.PERFORMANCE_ALERT_LEVEL);
             addPerformanceAlertTypeFilter();
@@ -128,7 +130,8 @@ public class AmpARFilterConverter {
         if (arFilter.getApprovalStatusSelected() == null || arFilter.getApprovalStatusSelected().size() == 0) 
             return;
         List<String> values = new ArrayList<String>(arFilter.getApprovalStatusSelected());
-        filterRules.addFilterRule(new ReportColumn(ColumnConstants.APPROVAL_STATUS), new FilterRule(arFilter.getApprovalStatusSelectedStrings(), values, true));
+        filterRules.addFilterRule(new ReportColumn(ColumnConstants.APPROVAL_STATUS),
+                new FilterRule(arFilter.getApprovalStatusSelectedStrings(), values, true));
     }
     
     private void addPerformanceAlertTypeFilter() {
@@ -163,15 +166,19 @@ public class AmpARFilterConverter {
             logger.error(ex.getMessage());
         }
     }
-    
+
     private void addActivityDatesFilters() {
         addActualAppYear();
         addActivityDateFilter(arFilter.buildFromAndToActivityStartDateAsDate(), ColumnConstants.ACTUAL_START_DATE);
-        addActivityDateFilter(arFilter.buildFromAndToProposedApprovalDateAsDate(), ColumnConstants.PROPOSED_APPROVAL_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToProposedApprovalDateAsDate(),
+                ColumnConstants.PROPOSED_APPROVAL_DATE);
         addActivityDateFilter(arFilter.buildFromAndToProposedStartDateAsDate(), ColumnConstants.PROPOSED_START_DATE);
-        addActivityDateFilter(arFilter.buildFromAndToActivityActualCompletionDateAsDate(), ColumnConstants.ACTUAL_COMPLETION_DATE);
-        addActivityDateFilter(arFilter.buildFromAndToActivityFinalContractingDateAsDate(), ColumnConstants.FINAL_DATE_FOR_CONTRACTING);
-        addActivityDateFilter(arFilter.buildFromAndToEffectiveFundingDateAsDate(), ColumnConstants.EFFECTIVE_FUNDING_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToActivityActualCompletionDateAsDate(),
+                ColumnConstants.ACTUAL_COMPLETION_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToActivityFinalContractingDateAsDate(),
+                ColumnConstants.FINAL_DATE_FOR_CONTRACTING);
+        addActivityDateFilter(arFilter.buildFromAndToEffectiveFundingDateAsDate(),
+                ColumnConstants.EFFECTIVE_FUNDING_DATE);
         addActivityDateFilter(arFilter.buildFromAndToFundingClosingDateAsDate(), ColumnConstants.FUNDING_CLOSING_DATE);
         addActivityDateFilter(arFilter.buildFromAndToIssueDateAsDate(), ColumnConstants.ISSUE_DATE);
     }
@@ -214,7 +221,8 @@ public class AmpARFilterConverter {
             addFilter(arFilter.getBeneficiaryAgency(), ColumnConstants.BENEFICIARY_AGENCY);
             addFilter(arFilter.getResponsibleorg(), ColumnConstants.RESPONSIBLE_ORGANIZATION);
             addFilter(arFilter.getComponentFunding(), ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
-            addFilter(arFilter.getComponentSecondResponsible(), ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
+            addFilter(arFilter.getComponentSecondResponsible(),
+                    ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
             addFilter(arFilter.getContractingAgency(), ColumnConstants.CONTRACTING_AGENCY);
             //related agencies groups
             addFilter(arFilter.getContractingAgencyGroups(), ColumnConstants.CONTRACTING_AGENCY_GROUPS);
@@ -228,7 +236,8 @@ public class AmpARFilterConverter {
     private void addSectorFilters() {
         if (!arFilter.isPledgeFilter()) {
             addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", ColumnConstants.PRIMARY_SECTOR);
-            addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", ColumnConstants.SECONDARY_SECTOR);
+            addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary",
+                    ColumnConstants.SECONDARY_SECTOR);
             addSectorSchemeFilters(arFilter.getSelectedTertiarySectors(), "Tertiary", ColumnConstants.TERTIARY_SECTOR);
             addSectorSchemeFilters(arFilter.getSelectedQuaternarySectors(), "Quaternary",
                     ColumnConstants.QUATERNARY_SECTOR);
@@ -236,7 +245,8 @@ public class AmpARFilterConverter {
             addSectorSchemeFilters(arFilter.getSelectedTagSectors(), "Tag", ColumnConstants.SECTOR_TAG);
         } else {
             addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", ColumnConstants.PLEDGES_SECTORS);
-            addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+            addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary",
+                    ColumnConstants.PLEDGES_SECONDARY_SECTORS);
         }
     }
 
@@ -244,8 +254,10 @@ public class AmpARFilterConverter {
         if (selectedEntries == null || selectedEntries.isEmpty())
             return;
 
-        Map<Long, AmpSector> sectorsByIds = selectedEntries.stream().collect(Collectors.toMap(z -> z.getAmpSectorId(), z -> z));
-        Map<String, List<AmpSector>> sectorsByScheme = distributeEntities(SectorUtil.distributeSectorsByScheme(selectedEntries), sectorsByIds);
+        Map<Long, AmpSector> sectorsByIds = selectedEntries.stream()
+                .collect(Collectors.toMap(z -> z.getAmpSectorId(), z -> z));
+        Map<String, List<AmpSector>> sectorsByScheme = distributeEntities(SectorUtil
+                .distributeSectorsByScheme(selectedEntries), sectorsByIds);
 
 
         List<AmpSector> ampSectors = sectorsByScheme.get(scheme);

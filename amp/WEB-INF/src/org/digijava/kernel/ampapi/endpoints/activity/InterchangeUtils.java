@@ -235,10 +235,6 @@ public class InterchangeUtils {
         return possibleValuesEntity.value();
     }
 
-    public static boolean isCompositeField(Field field) {
-        return field.getAnnotation(InterchangeableDiscriminator.class) != null;
-    }
-
     public static boolean isVersionableTextField(Field field) {
         return field.getAnnotation(VersionableFieldTextEditor.class) != null;
     }

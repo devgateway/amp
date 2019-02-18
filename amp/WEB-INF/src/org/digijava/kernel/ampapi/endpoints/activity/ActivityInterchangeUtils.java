@@ -372,7 +372,7 @@ public final class ActivityInterchangeUtils {
 
             calculatedAmount = CurrencyWorker.convertWrapper(amount, frmExRt, toExRt, dt);
         } else {
-            InterchangeUtils.LOGGER.error("Some info is missed in PPC Calculations");
+            logger.error("Some info is missed in PPC Calculations");
         }
 
         return calculatedAmount.doubleValue();

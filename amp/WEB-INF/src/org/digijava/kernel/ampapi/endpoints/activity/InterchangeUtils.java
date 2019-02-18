@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.InterchangeableClassMapper;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -34,8 +33,6 @@ import org.hibernate.Session;
  * 
  */
 public class InterchangeUtils {
-
-    public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
 
     /**
      * Decides whether a class is enumerable (may be called in the Possible Values EP)

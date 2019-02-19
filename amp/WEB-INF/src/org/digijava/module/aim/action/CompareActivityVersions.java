@@ -352,7 +352,6 @@ public class CompareActivityVersions extends DispatchAction {
     public ActionForward viewDifferences(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
-        vForm.setOutputCollection(new ArrayList<CompareOutput>());
         vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId()));
 
         return mapping.findForward("forward");

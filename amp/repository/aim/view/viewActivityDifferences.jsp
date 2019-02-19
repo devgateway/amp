@@ -45,8 +45,17 @@
 	<html:hidden property="showMergeColumn" styleId="showMergeColumn"/>
 	<html:hidden property="method" styleId="method"/>
 	<html:hidden property="ampActivityId" styleId="ampActivityId"/>
-	
-	<div id="content"  class="yui-skin-sam" style="padding: 5px;"> 
+
+	<c:if test="${empty aimCompareActivityVersionsForm.outputCollectionGrouped}">
+		<c:set var="noPrevVer">
+			<digi:trn>The activity you chose is the latest and has no previous version.</digi:trn>
+		</c:set>
+		<script type="text/javascript">
+            alert("${noPrevVer}");
+            window.history.back();
+		</script>
+	</c:if>
+	<div id="content"  class="yui-skin-sam" style="padding: 5px;">
 		<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
 			<ul id="MyTabs" class="yui-nav">
 				<li class="selected">
@@ -90,7 +99,8 @@
 	            		</div>
 	        		</td>
 				</tr>
-				
+
+				<c:if test="${not empty aimCompareActivityVersionsForm.outputCollectionGrouped}">
 				<logic:iterate id="groupItem" property="outputCollectionGroupedAsSet" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
 					
 					<td rowspan="${groupItem.value.size()}" align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
@@ -141,7 +151,7 @@
 						</logic:iterate>
 
 					</td></tr>
-				</logic:iterate>	
+				</logic:iterate></c:if>
 				<%--
 				<logic:iterate id="iter" property="outputCollection" name="aimCompareActivityVersionsForm" indexId="index">
 					<tr>

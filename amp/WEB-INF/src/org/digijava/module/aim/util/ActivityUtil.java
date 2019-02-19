@@ -470,8 +470,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 Hibernate.initialize(str.getCoordinates());
             }
 
-            // initialize the fiscal year list field. Used in Activity API only
-            initializeFiscalYears(result);
+            ActivityUtil.initializeForApi(result);
 
         } catch (ObjectNotFoundException e) {
             logger.debug("AmpActivityVersion with id=" + id + " not found");
@@ -479,6 +478,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             throw new DgException("Cannot load AmpActivityVersion with id " + id, e);
         }
         return result;
+    }
+
+
+    public static void initializeForApi(AmpActivityVersion activity) {
+        // initialize the fiscal year list field. Used in Activity API only
+        initializeFiscalYears(activity);
     }
 
     /**

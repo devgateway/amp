@@ -222,6 +222,8 @@ public class ActivityImporter extends ObjectImporter {
 
             PersistenceManager.flushAndCommit(PersistenceManager.getSession());
         } catch (Throwable e) {
+            // error is not always logged at source; better duplicate it than have none
+            logger.error(e);
             PersistenceManager.rollbackCurrentSessionTx();
 
             if (e instanceof StaleStateException) {

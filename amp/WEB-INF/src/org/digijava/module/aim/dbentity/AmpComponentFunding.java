@@ -63,8 +63,6 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 
     @InterchangeableBackReference
     private AmpComponent component;
-    // @Interchangeable(fieldTitle="Exchange Rate")
-    private Float exchangeRate;
 
     /**
      * @return Returns the adjustmentType.
@@ -246,13 +244,6 @@ public class AmpComponentFunding implements Cloneable, Serializable {
      *
      * }
      */
-    public void setExchangeRate(Float exchangeRate) {
-        this.exchangeRate = exchangeRate;
-    }
-
-    public Float getExchangeRate() {
-        return exchangeRate;
-    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {

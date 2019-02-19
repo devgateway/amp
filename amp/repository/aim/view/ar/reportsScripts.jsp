@@ -151,7 +151,6 @@ background-color: yellow;css
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>?version=fantastic_15" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/saveReports.js'/>" ></script>
 
@@ -350,7 +349,6 @@ saveReportEngine	= null;
 		YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?timestamp=" + timestamp + "&reportContextId=" + reportContextId + "&overwriteBackUrl=" + window.location.pathname , {
 			success: function(o) {
 				document.getElementById("myFilter").innerHTML	= o.responseText;
-				YAHOO.amptab.afterFiltersLoad();
 			},
 			failure:function (o) {
 				document.getElementById("myFilter").innerHTML	= "<digi:trn jsFriendly='true'>There was a problem loading the filters</digi:trn>";

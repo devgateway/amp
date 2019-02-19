@@ -62,7 +62,6 @@
 <link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
 
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>?version=fantastic_15" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/underscore.js"></script>

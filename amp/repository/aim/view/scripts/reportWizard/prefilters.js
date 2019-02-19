@@ -114,7 +114,6 @@ Filters.prototype.success	= function (o) {
 		this.filterPanel.setBody( o.responseText );
 		this.filterTabs	= new YAHOO.widget.TabView('tabview_container');
 		
-		YAHOO.amptab.afterFiltersLoad();
 		this.filterPanel.cfg.setProperty("height", "482px" );
 		
 		this.filterPanel.show();

@@ -3,11 +3,10 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -18,7 +17,7 @@ public class DependencyValidator extends InputValidator {
     @Override
     public boolean isValid(ObjectImporter importer,
             Map<String, Object> newFieldParent,
-            Map<String, Object> oldFieldParent, APIField fieldDescription,
+            APIField fieldDescription,
             String fieldPath) {
         Object value = newFieldParent.get(fieldDescription.getFieldName());
         List<String> deps = fieldDescription.getDependencies();

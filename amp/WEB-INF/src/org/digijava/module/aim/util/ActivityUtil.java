@@ -42,7 +42,6 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.ar.util.FilterUtil;
-import org.digijava.module.aim.dbentity.AmpAPIFiscalYear;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -471,8 +470,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 Hibernate.initialize(str.getCoordinates());
             }
 
-            // initialize the fiscal year list field. Used in Activity API only
-            initializeFiscalYears(result);
+            ActivityUtil.initializeForApi(result);
 
         } catch (ObjectNotFoundException e) {
             logger.debug("AmpActivityVersion with id=" + id + " not found");
@@ -482,6 +480,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         return result;
     }
 
+
+    public static void initializeForApi(AmpActivityVersion activity) {
+        // initialize the fiscal year list field. Used in Activity API only
+        initializeFiscalYears(activity);
+    }
+
     /**
      * Initialize Fiscal Years list object in activity. Used in Activity API only.
      *
@@ -489,12 +493,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
      */
     private static void initializeFiscalYears(AmpActivityVersion activity) {
         if (activity.getFiscalYears() == null) {
-            List<AmpAPIFiscalYear> fiscalYears = new ArrayList<>();
+            List<Long> fiscalYears = new ArrayList<>();
             if (StringUtils.isNotBlank(activity.getFY())) {
                 try {
                     List<String> years = Arrays.asList(activity.getFY().split(","));
                     for (String year : years) {
-                        fiscalYears.add(new AmpAPIFiscalYear(Long.parseLong(year)));
+                        fiscalYears.add(Long.parseLong(year));
                     }
                     activity.setFiscalYears(new HashSet<>(fiscalYears));
                 } catch (NumberFormatException e) {
@@ -509,6 +513,15 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         return (Long) session.createQuery("select ampActivityId from AmpActivity where ampId=:ampId")
                 .setParameter("ampId", ampId)
                 .uniqueResult();
+    }
+
+    public static List<AmpActivityVersion> getActivitiesByAmpIds(List<String> ampIds) {
+        String queryString = "select a from "
+                + AmpActivity.class.getName()
+                + " a where a.ampId in (:ampIds) ";
+        return PersistenceManager.getSession().createQuery(queryString)
+                .setParameterList("ampIds", ampIds)
+                .list();
     }
   
   public static AmpActivityVersion loadAmpActivity(Long id){

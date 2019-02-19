@@ -18,7 +18,7 @@ public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
     private List<String> filteredFields = new ArrayList<>();
 
     public ActivityExporter(JsonBean filter) {
-        super(AmpFieldsEnumerator.getPublicEnumerator().getActivityFields());
+        super(AmpFieldsEnumerator.getEnumerator().getActivityFields());
         this.filter = filter;
     }
 

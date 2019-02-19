@@ -8,7 +8,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -60,7 +61,7 @@ public class ActivityImporterTest {
 
         AmpActivityVersion activity = new AmpActivityVersion();
         ActivityImporter importer = new ActivityImporter(activityFields);
-        importer.validateAndImport(activity, null, apiFields, json.any(), null, null );
+        importer.validateAndImport(activity, apiFields, json.any(), null);
         return importer.getErrors();
     }
 
@@ -68,7 +69,7 @@ public class ActivityImporterTest {
         TestFieldInfoProvider fieldInfoProvider = new TestFieldInfoProvider();
         TestFMService fmService = new TestFMService();
         TestTranslatorService translatorService = new TestTranslatorService();
-        return new FieldsEnumerator(fieldInfoProvider, fmService, translatorService, true, name -> true);
+        return new FieldsEnumerator(fieldInfoProvider, fmService, translatorService, name -> true);
     }
 
     private Map<Integer, ApiErrorMessage> errors(ApiErrorMessage... messages) {

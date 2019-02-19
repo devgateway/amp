@@ -25,6 +25,7 @@ import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
@@ -46,20 +47,13 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
-import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -90,7 +84,6 @@ public class ActivityImporter extends ObjectImporter {
 
     private AmpActivityVersion newActivity = null;
     private AmpActivityVersion oldActivity = null;
-    private JsonBean oldJson = null;
     private boolean update  = false;
     private SaveMode requestedSaveMode;
     private boolean downgradedToDraftSave = false;
@@ -163,7 +156,6 @@ public class ActivityImporter extends ObjectImporter {
         if (ampActivityId != null) {
             try {
                 oldActivity  = ActivityUtil.loadActivity(ampActivityId);
-                oldJson = InterchangeUtils.getActivity(oldActivity, null);
             } catch (DgException e) {
                 logger.error(e.getMessage());
                 errors.put(ActivityErrors.ACTIVITY_NOT_LOADED.id, ActivityErrors.ACTIVITY_NOT_LOADED);
@@ -208,12 +200,9 @@ public class ActivityImporter extends ObjectImporter {
                 newActivity = new AmpActivityVersion();
             }
             
-            // REFACTOR: we may no longer need to use oldJson
-            Map<String, Object> oldJsonParent = null;
             Map<String, Object> newJsonParent = newJson.any();
             
-            newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, newJsonParent, 
-                    oldJsonParent, null);
+            newActivity = (AmpActivityVersion) validateAndImport(newActivity, fieldsDef, newJsonParent, null);
             if (newActivity != null && errors.isEmpty()) {
                 // save new activity
                 prepareToSave();
@@ -233,6 +222,8 @@ public class ActivityImporter extends ObjectImporter {
 
             PersistenceManager.flushAndCommit(PersistenceManager.getSession());
         } catch (Throwable e) {
+            // error is not always logged at source; better duplicate it than have none
+            logger.error(e);
             PersistenceManager.rollbackCurrentSessionTx();
 
             if (e instanceof StaleStateException) {
@@ -513,17 +504,6 @@ public class ActivityImporter extends ObjectImporter {
         initDefaults();
     }
 
-    protected void setupNotImportableField(Object object, Field field) {
-        if (InterchangeUtils.isAmpActivityVersion(field.getType())) {
-            try {
-                field.set(object, newActivity);
-            } catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-                logger.error("Failed to set activity backwards reference.", e);
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
     private ChangeType determineChangeType() {
         if (AmpOfflineModeHolder.isAmpOfflineMode()) {
             return ChangeType.AMP_OFFLINE;
@@ -547,94 +527,13 @@ public class ActivityImporter extends ObjectImporter {
         initLocations();
         initFundings();
         initContacts();
-        updateIssues();
         updatePPCAmount();
         updateRoleFundings();
-        updateOrgRoles();
-        initComponents();
-        initStructures();
-        initDocs();
     }
 
-    private void initDocs() {
-        if (newActivity.getActivityDocuments() != null) {
-            newActivity.getActivityDocuments().forEach(ad -> ad.setAmpActivity(newActivity));
-        }
-    }
-
-    private void initComponents() {
-        if (newActivity.getComponents() != null) {
-            newActivity.getComponents().forEach(component -> initComponent(newActivity, component));
-        }
-    }
-
-    private void initComponent(AmpActivityVersion activity, AmpComponent component) {
-        component.setActivity(activity);
-        if (component.getFundings() != null) {
-            component.getFundings().forEach(f -> initComponentFunding(component, f));
-        }
-    }
-
-    private void initComponentFunding(AmpComponent component, AmpComponentFunding f) {
-        f.setComponent(component);
-    }
-    
-    private void initStructures() {
-        if (newActivity.getStructures() != null) {
-            newActivity.getStructures().forEach(structure -> initStructure(newActivity, structure));
-        }
-    }
-    
-    private void initStructure(AmpActivityVersion activity, AmpStructure structure) {
-        structure.setActivity(activity);
-        if (structure.getCoordinates() != null) {
-            structure.getCoordinates().forEach(coord -> initStructureCoordinate(structure, coord));
-        }
-    }
-    
-    private void initStructureCoordinate(AmpStructure structure, AmpStructureCoordinate coord) {
-        coord.setStructure(structure);
-    }
-
-    private void updateIssues() {
-        if (newActivity.getIssues() != null) {
-            newActivity.getIssues().forEach(issue -> initIssue(newActivity, issue));
-        }
-    }
-
-    private void initIssue(AmpActivityVersion activity, AmpIssues issue) {
-        issue.setActivity(activity);
-        if (issue.getMeasures() != null) {
-            issue.getMeasures().forEach(m -> initMeasure(issue, m));
-        }
-    }
-
-    private void initMeasure(AmpIssues issue, AmpMeasure measure) {
-        measure.setIssue(issue);
-        if (measure.getActors() != null) {
-            measure.getActors().forEach(actor -> initActor(measure, actor));
-        }
-    }
-
-    private void initActor(AmpMeasure measure, AmpActor actor) {
-        actor.setMeasure(measure);
-    }
-    
-    /*
-     * this was the original way to circumvent Hibernate exceptions on save. 
-     * Since a lot of generic workarounds have been applied, don't know if it's still relevant 
-     */
-    /**
-     * Do not remove, is relevant for AmpClassificationConfiguration configuration
-     */
     protected void initSectors() {
         if (newActivity.getSectors() == null) {
             newActivity.setSectors(new HashSet<AmpActivitySector>());
-        } else if (newActivity.getSectors().size() > 0) {
-            
-            for(AmpActivitySector acs : newActivity.getSectors()) {
-                acs.setActivityId(newActivity);
-            }
         }
     }
     
@@ -759,32 +658,6 @@ public class ActivityImporter extends ObjectImporter {
         }
     }
     
-    /**
-     * Updates activity org roles (missing org roles from fundings)
-     */
-    protected void updateOrgRoles() {
-        for (AmpFunding f : newActivity.getFunding()) {
-            if (f.getSourceRole() != null && f.getAmpDonorOrgId() != null) {
-                boolean found = false;
-                for (AmpOrgRole role : newActivity.getOrgrole()) {
-                        if (role.getRole().getRoleCode().equals(f.getSourceRole().getRoleCode()) 
-                                && role.getOrganisation().getAmpOrgId().equals(f.getAmpDonorOrgId().getAmpOrgId())) {
-                            found = true;
-                            break;
-                        }
-                }
-            
-                if (!found) {
-                    AmpOrgRole role = new AmpOrgRole();
-                    role.setOrganisation(f.getAmpDonorOrgId());
-                    role.setActivity(newActivity);
-                    role.setRole(f.getSourceRole());
-                    newActivity.getOrgrole().add(role);
-                }
-            }
-        }
-    }
-
     protected void postProcess() {
         String rootPath = TLSUtils.getRequest().getServletContext().getRealPath("/");
         Site site = TLSUtils.getSite();
@@ -804,13 +677,6 @@ public class ActivityImporter extends ObjectImporter {
      */
     public AmpActivityVersion getOldActivity() {
         return oldActivity;
-    }
-
-    /**
-     * @return the oldJson
-     */
-    public JsonBean getOldJson() {
-        return oldJson;
     }
 
     /**

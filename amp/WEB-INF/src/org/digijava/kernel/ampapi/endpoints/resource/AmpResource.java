@@ -69,8 +69,9 @@ public class AmpResource {
     private Long team;
     
     @PossibleValues(ResourceTypePossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Resource Type", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
-    private String resourceType;
+    @Interchangeable(fieldTitle = "Resource Type", importable = true, pickIdOnly = true,
+            required = ActivityEPConstants.REQUIRED_ALWAYS)
+    private ResourceType resourceType;
     
     private Map<String, String> translatedTitles;
     private Map<String, String> translatedDescriptions;
@@ -196,11 +197,11 @@ public class AmpResource {
         this.team = team;
     }
     
-    public String getResourceType() {
+    public ResourceType getResourceType() {
         return resourceType;
     }
 
-    public void setResourceType(String resourceType) {
+    public void setResourceType(ResourceType resourceType) {
         this.resourceType = resourceType;
     }
 

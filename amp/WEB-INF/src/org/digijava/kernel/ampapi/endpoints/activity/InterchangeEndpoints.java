@@ -27,7 +27,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Example;
+import io.swagger.annotations.ExampleProperty;
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityFunding;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityService;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewWorkspace;
@@ -73,7 +76,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             @PathParam("fieldName")
             @ApiParam(value = "fully qualified activity field", example = "locations~location")
             String fieldName) {
-        List<APIField> apiFields = AmpFieldsEnumerator.getPublicEnumerator().getActivityFields();
+        List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
         List<PossibleValue> possibleValues = InterchangeUtils.possibleValuesFor(fieldName, apiFields);
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
@@ -103,7 +106,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         if (fields == null) {
             response = Collections.emptyMap();
         } else {
-            List<APIField> apiFields = AmpFieldsEnumerator.getPublicEnumerator().getActivityFields();
+            List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
@@ -126,7 +129,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             notes = "For fields like locations, sectors, programs the object contains the ancestor values.")
     public Map<String, List<FieldIdValue>> getFieldValuesById(
             @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
-        List<APIField> apiFields = AmpFieldsEnumerator.getPublicEnumerator().getActivityFields();
+        List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
         Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds, apiFields);
 
         return response;
@@ -140,7 +143,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             + "structure.\n\n"
             + "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
     public List<APIField> getAvailableFields() {
-        return AmpFieldsEnumerator.getPublicEnumerator().getActivityFields();
+        return AmpFieldsEnumerator.getEnumerator().getActivityFields();
     }
     
     // TODO remove it as part of AMP-25568
@@ -229,6 +232,29 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             message = "project with full set of configured fields and their values"))
     public JsonBean getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
         return InterchangeUtils.getActivityByAmpId(ampId);
+    }
+
+    @POST
+    @Path("/projects")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectsByAmpIds", ui = false)
+    @ApiOperation("Retrieve full projects data by AMP Ids.")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
+        message = "A list of projects with full set of configured fields and their values. For each amp_id that is "
+            + "invalid or its export failed, the entry will provide only the 'amp_id' and the 'error'",
+        examples =
+            @Example(value = {
+                @ExampleProperty(
+                        mediaType = "application/json;charset=utf-8",
+                        value = "[\n  {\n    \"internal_id\": 912,\n    \"amp_id\": \"872329912\",\n    ...\n  },\n  "
+                                + "{\n    \"amp_id\": \"invalid\",\n    \"error\": {\n      \"0132\": "
+                                + "[{ \"Activity not found\": null }]\n    }\n  }\n]\n"
+                    )
+                })
+            ))
+    public Collection<JsonBean> getProjectsByAmpIds(@ApiParam(value = "List of amp-id", required = true)
+        List<String> ampIds) {
+        return InterchangeUtils.getActivitiesByAmpIds(ampIds);
     }
 
     @POST

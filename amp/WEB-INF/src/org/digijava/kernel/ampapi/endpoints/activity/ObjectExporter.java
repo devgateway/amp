@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.Identifiable;
@@ -64,10 +65,11 @@ public abstract class ObjectExporter<T> {
     private void readFieldValue(APIField field, Object object, JsonBean jsonObject, String fieldPath) {
         Object jsonValue;
         Object fieldValue = field.getFieldValueReader().get(object);
+        boolean isList = field.getApiType().getFieldType().isList();
 
-        if (field.isIdOnly()) {
+        if (field.isIdOnly() && !(isList && field.getApiType().isSimpleItemType())) {
             jsonValue = readFieldWithPossibleValues(field, fieldValue);
-        } else if (field.getFieldType().equals(ActivityEPConstants.FIELD_TYPE_LIST)) {
+        } else if (isList) {
             if (field.getFieldName().equals("activity_group")) { // FIXME hack because APIField.type cannot be object
                 jsonValue = getObjectJson(fieldValue, field.getChildren(), fieldPath);
             } else {
@@ -88,11 +90,11 @@ public abstract class ObjectExporter<T> {
      */
     private Object readFieldWithPossibleValues(APIField field, Object value) {
         Object singleValue = getSingleValue(value);
-        if (ApprovalStatus.class.isAssignableFrom(field.getType())) {
+        if (ApprovalStatus.class.isAssignableFrom(field.getApiType().getType())) {
             return ((ApprovalStatus) value).getId();
-        } else if (Identifiable.class.isAssignableFrom(field.getType())) {
+        } else if (Identifiable.class.isAssignableFrom(field.getApiType().getType())) {
             return singleValue == null ? null : ((Identifiable) singleValue).getIdentifier();
-        } else if (InterchangeUtils.isSimpleType(field.getType())) {
+        } else if (InterchangeUtils.isSimpleType(field.getApiType().getType())) {
             return singleValue;
         } else {
             throw new RuntimeException("Invalid field mapping. Must be either of simple type or identifiable. "
@@ -138,14 +140,20 @@ public abstract class ObjectExporter<T> {
     /**
      * Convert list of objects to a json array.
      */
-    private List<JsonBean> readCollection(APIField field, String fieldPath, Collection value) {
-        List<JsonBean> collectionJson = new ArrayList<>();
+    private List<?> readCollection(APIField field, String fieldPath, Collection value) {
+        List<Object> collectionOutput = new ArrayList<>();
         if (value != null) {
-            for (Object item : value) {
-                collectionJson.add(getObjectJson(item, field.getChildren(), fieldPath));
+            if (field.getApiType().isSimpleItemType()) {
+                for (Object item : value) {
+                    collectionOutput.add(item);
+                }
+            } else {
+                for (Object item : value) {
+                    collectionOutput.add(getObjectJson(item, field.getChildren(), fieldPath));
+                }
             }
         }
-        return collectionJson;
+        return collectionOutput;
     }
 
     protected boolean isFiltered(String fieldPath) {

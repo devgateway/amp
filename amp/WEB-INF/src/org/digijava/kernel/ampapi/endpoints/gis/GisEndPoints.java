@@ -257,23 +257,24 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         }
     }
 
-    /**
-     * FIXME simplify
-     * this operation is used to:
-     * 1. retrieve plain values (which should be GET /gis/indicators/{indicatorId}/values)
-     * 2. do gap analysis (which should be POST /gis/indicators/{indicatorId}/do-gap-analysis)
-     */
-    @POST
+    @GET
     @Path("/indicators/{indicatorId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "IndicatorById")
-    @ApiOperation("Get indicator")
+    @ApiOperation("Get indicator & values")
     @JsonView(Indicator.IndicatorView.class)
-    public Indicator getIndicatorsById(
-            SavedIndicatorGapAnalysisParameters input,
+    public Indicator getIndicatorsById(@PathParam ("indicatorId") Long indicatorId) {
+        return IndicatorUtils.getIndicatorsAndLocationValues(indicatorId);
+    }
+
+    @POST
+    @Path("/do-gap-analysis/{indicatorId}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Compute gap analysis for an indicator")
+    @JsonView(Indicator.IndicatorView.class)
+    public Indicator doGapAnalysisForIndicator(
+            PerformanceFilterParameters input,
             @PathParam ("indicatorId") Long indicatorId) {
-        boolean isGapAnalysis = EndpointUtils.getSingleValue(input.getGapAnalysis(), Boolean.FALSE);
-        return IndicatorUtils.getIndicatorsAndLocationValues(indicatorId, input, isGapAnalysis);
+        return IndicatorUtils.doGapAnalysis(indicatorId, input);
     }
 
     @GET
@@ -299,16 +300,6 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     public Indicator doGapAnalysis(RuntimeIndicatorGapAnalysisParameters input) {
         return new PublicGapAnalysis().doPublicGapAnalysis(input);
     }
-    
-    @POST
-    @Path("/process-public-layer")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "processPublicLayer")
-    @ApiOperation("Just returns the same data so the GIS code doesn't break with public layers.")
-    public Map processPublicLayer(Map input) {
-        // Due to problems on the frontend for now we receive the public layer data and if there is no gap analysis then we return it without changes.
-        return input;
-    }    
     
     @GET
     @Path("/export-map/")

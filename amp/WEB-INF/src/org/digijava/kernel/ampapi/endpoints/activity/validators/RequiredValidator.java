@@ -1,15 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.SaveMode;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -32,7 +33,7 @@ public class RequiredValidator extends InputValidator {
     
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         String fieldName = fieldDescription.getFieldName();
         Object fieldValue = newFieldParent.get(fieldName);
         String requiredStatus = fieldDescription.getRequired();
@@ -43,10 +44,7 @@ public class RequiredValidator extends InputValidator {
             boolean dependencyFulfilled = InterchangeDependencyResolver
                     .checkRequiredDependencyFulfilled(fieldValue, importer, fieldDescription, newFieldParent);
             
-            boolean shouldCheckForRequired = InterchangeDependencyResolver
-                    .shouldCheckForRequired(fieldValue, importer, fieldDescription, newFieldParent);
-            
-            if (dependencyFulfilled && shouldCheckForRequired) {
+            if (dependencyFulfilled) {
                 if (ActivityEPConstants.FIELD_ALWAYS_REQUIRED.equals(requiredStatus)) {
                     // field is always required -> can't save it even as a draft
                     return false;
@@ -75,10 +73,14 @@ public class RequiredValidator extends InputValidator {
     }
 
     private boolean isEmpty(Object fieldValue) {
-        return fieldValue == null || isEmptyString(fieldValue);
+        return fieldValue == null || isEmptyString(fieldValue) || isEmptyCollection(fieldValue);
     }
     
     private boolean isEmptyString(Object fieldValue) {
         return fieldValue instanceof String && StringUtils.isBlank((String) fieldValue);
+    }
+
+    private boolean isEmptyCollection(Object fieldValue) {
+        return Collection.class.isAssignableFrom(fieldValue.getClass()) && ((Collection<?>) fieldValue).size() == 0;
     }
 }

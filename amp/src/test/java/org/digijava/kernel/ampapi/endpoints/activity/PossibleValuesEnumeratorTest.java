@@ -16,6 +16,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import org.apache.struts.mock.MockHttpServletRequest;
 import org.apache.struts.mock.MockHttpSession;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -293,7 +296,7 @@ public class PossibleValuesEnumeratorTest {
     private List<PossibleValue> possibleValuesFor(Class<?> theClass, String field) {
         // TODO replace mock with a simple field info provider
         // TODO same for translatorService
-        List<APIField> fields = new FieldsEnumerator(provider, fmService, translatorService, false, name -> true)
+        List<APIField> fields = new FieldsEnumerator(provider, fmService, translatorService, name -> true)
                 .getAllAvailableFields(theClass);
         return new PossibleValuesEnumerator(possibleValuesDAO, translatorService)
                 .getPossibleValuesForField(field, fields);

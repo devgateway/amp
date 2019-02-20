@@ -30,9 +30,4 @@ public final class ResourceEPConstants {
     public static final String LINK = "link";
     public static final String FILE = "file";
     
-    public static final List<String> RESOURCE_TYPES = Collections.unmodifiableList(new ArrayList<String>() {{
-        this.add(LINK);
-        this.add(FILE);
-    }});
-    
 }

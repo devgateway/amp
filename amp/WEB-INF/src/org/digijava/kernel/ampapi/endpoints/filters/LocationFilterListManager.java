@@ -1,5 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_COMMUNAL_SECTION;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_REGION;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ZONE;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,13 +14,14 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.LocationSkeleton;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
@@ -26,7 +34,15 @@ public class LocationFilterListManager implements FilterListManager {
     
     public static final String LOCATION_NAME = "Locations";
     private static final String LOCATIONS_ITEMS_NAME = "locations";
-    
+
+    private static final Map<String, String> FILTER_COLUMN_BY_IMPL_LOC_KEY = new ImmutableMap.Builder<String, String>()
+            .put(IMPLEMENTATION_LOCATION_COUNTRY.getValueKey(), FiltersConstants.COUNTRY)
+            .put(IMPLEMENTATION_LOCATION_REGION.getValueKey(), FiltersConstants.REGION)
+            .put(IMPLEMENTATION_LOCATION_ZONE.getValueKey(), FiltersConstants.ZONE)
+            .put(IMPLEMENTATION_LOCATION_DISTRICT.getValueKey(), FiltersConstants.DISTRICT)
+            .put(IMPLEMENTATION_LOCATION_COMMUNAL_SECTION.getValueKey(), FiltersConstants.COMMUNAL_SECTION)
+            .build();
+
     private static LocationFilterListManager locationFilterListManager;
 
     public static LocationFilterListManager getInstance() {
@@ -64,14 +80,15 @@ public class LocationFilterListManager implements FilterListManager {
 
     protected List<String> getFilterIds() {
         List<String> filterIds = CategoryManagerUtil
-                .getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.IMPLEMENTATION_LOCATION_KEY)
+                .getAmpCategoryValueCollectionByKeyExcludeDeleted(IMPLEMENTATION_LOCATION_KEY)
                 .stream()
                 .sorted(Comparator.comparingInt(AmpCategoryValue::getIndex))
-                .map(acv -> acv.getValue().toLowerCase())
+                .map(acv -> FILTER_COLUMN_BY_IMPL_LOC_KEY.get(acv.getValue()))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         return filterIds;
     }
-    
+
     protected Map<String, List<FilterListTreeNode>> getLocationListItems() {
         Map<String, List<FilterListTreeNode>> items = new HashMap<>();
         List<FilterListTreeNode> locationItems = new ArrayList<>();

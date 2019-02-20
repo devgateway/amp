@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -239,7 +240,7 @@ public class ProjectList {
     }
 
     private static String getIatiIdentifierValue(AmpActivityVersion a, String iatiIdAmpField) {
-        APIField apiField = AmpFieldsEnumerator.getPublicEnumerator().getActivityFields().stream()
+        APIField apiField = AmpFieldsEnumerator.getEnumerator().getActivityFields().stream()
                 .filter(f -> f.getFieldName().equals(iatiIdAmpField))
                 .findAny().orElse(null);
         

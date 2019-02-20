@@ -9,6 +9,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.ObjectExporter;
 public class ResourceExporter extends ObjectExporter<AmpResource> {
 
     public ResourceExporter() {
-        super(AmpFieldsEnumerator.getPublicEnumerator().getResourceFields());
+        super(AmpFieldsEnumerator.getEnumerator().getResourceFields());
     }
 }

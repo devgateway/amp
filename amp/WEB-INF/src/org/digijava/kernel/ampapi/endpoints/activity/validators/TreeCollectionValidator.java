@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.ArrayList;
@@ -13,10 +10,10 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -47,7 +44,7 @@ public class TreeCollectionValidator extends InputValidator {
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         String fieldName = fieldDescription.getFieldName();
         boolean treeCollectionField = Boolean.TRUE.equals(fieldDescription.getTreeCollectionConstraint());
         String uniqueField = fieldDescription.getUniqueConstraint();
@@ -63,7 +60,7 @@ public class TreeCollectionValidator extends InputValidator {
                 
                 idValues = getUniqueValues(fieldValue, uniqueField);
                 
-                return isTreeCollectionValid(fieldDescription.getElementType(), idValues);
+                return isTreeCollectionValid(fieldDescription.getApiType().getElementType(), idValues);
             }
         }
 

@@ -27,10 +27,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.io.FileUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
@@ -59,7 +59,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
             notes = "Return JSON with fields information. See "
                     + "[Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
     public List<APIField> getAvailableFields() {
-        return AmpFieldsEnumerator.getPublicEnumerator().getResourceFields();
+        return AmpFieldsEnumerator.getEnumerator().getResourceFields();
     }
     
     @POST
@@ -76,7 +76,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
         if (fields == null) {
             response = emptyMap();
         } else {
-            List<APIField> apiFields = AmpFieldsEnumerator.getPublicEnumerator().getResourceFields();
+            List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getResourceFields();
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()

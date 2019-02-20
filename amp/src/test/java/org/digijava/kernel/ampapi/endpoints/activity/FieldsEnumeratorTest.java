@@ -3,23 +3,23 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NOT_REQUIRED;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LIST;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_LONG;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_TYPE_STRING;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
@@ -106,7 +106,7 @@ public class FieldsEnumeratorTest {
         when(invisibleFmService.isVisible(any(), any())).thenReturn(false);
 
         List<APIField> actual =
-                new FieldsEnumerator(provider, invisibleFmService, translatorService, false, name -> true)
+                new FieldsEnumerator(provider, invisibleFmService, translatorService, name -> true)
                         .getAllAvailableFields(OneFieldClass.class);
 
         assertEquals(Collections.emptyList(), actual);
@@ -219,7 +219,7 @@ public class FieldsEnumeratorTest {
     private static class MultipleValuesClass {
 
         @Interchangeable(fieldTitle = "field", multipleValues = false)
-        private List<String> field;
+        private List<Object> field;
     }
 
     @Test
@@ -228,6 +228,22 @@ public class FieldsEnumeratorTest {
 
         APIField expected = newListField();
         expected.setMultipleValues(false);
+
+        assertEqualsSingle(expected, actual);
+    }
+
+    private static class SimpleTypeListClass {
+
+        @Interchangeable(fieldTitle = "field")
+        private List<Long> field;
+    }
+
+    @Test
+    public void testSimpleTypeList() {
+        List<APIField> actual = fieldsFor(SimpleTypeListClass.class);
+
+        APIField expected = newListOfLongField();
+        expected.setMultipleValues(true);
 
         assertEqualsSingle(expected, actual);
     }
@@ -243,7 +259,7 @@ public class FieldsEnumeratorTest {
         List<APIField> actual = fieldsFor(LongFieldClass.class);
 
         APIField expected = newAPIField();
-        expected.setFieldType(FIELD_TYPE_LONG);
+        expected.setApiType(new APIType(Long.class));
 
         assertEqualsSingle(expected, actual);
     }
@@ -376,7 +392,7 @@ public class FieldsEnumeratorTest {
 
     @Test
     public void testFieldNameInternal() {
-        List<APIField> fields = fieldsForInternal(OneFieldClass.class);
+        List<APIField> fields = fieldsFor(OneFieldClass.class);
 
         APIField expected = newStringField();
         expected.setFieldName("one_field");
@@ -394,14 +410,14 @@ public class FieldsEnumeratorTest {
 
     @Test
     public void testActivityFlag() {
-        List<APIField> fields = fieldsForInternal(RefActivity.class);
+        List<APIField> fields = fieldsFor(RefActivity.class);
 
         APIField expected1 = newLongField();
         expected1.setFieldName("field1");
         expected1.setFieldLabel(fieldLabelFor("field1"));
         expected1.setFieldNameInternal("activity2");
         expected1.setIdOnly(true);
-        expected1.setActivity(true);
+        expected1.setApiType(new APIType(Long.class));
 
         assertEqualsDigest(Arrays.asList(expected1), fields);
     }
@@ -424,13 +440,13 @@ public class FieldsEnumeratorTest {
 
     @Test(expected = RuntimeException.class)
     public void testExceptionInTranslator() {
-        new FieldsEnumerator(provider, fmService, throwingTranslatorService, false, name -> true)
+        new FieldsEnumerator(provider, fmService, throwingTranslatorService, name -> true)
                 .getAllAvailableFields(OneFieldClass.class);
     }
 
     @Test
     public void testDefaultTranslation() {
-        List<APIField> fields = new FieldsEnumerator(provider, fmService, emptyTranslatorService, false, name -> true)
+        List<APIField> fields = new FieldsEnumerator(provider, fmService, emptyTranslatorService, name -> true)
                 .getAllAvailableFields(OneFieldClass.class);
 
         assertEquals(1, fields.size());
@@ -458,27 +474,33 @@ public class FieldsEnumeratorTest {
      */
     @Test
     public void testDatabaseIsNotAccessed() {
-        fieldsForInternal(AmpActivityVersion.class);
-        fieldsForInternal(AmpContact.class);
-        fieldsForInternal(CommonSettings.class);
-        fieldsForInternal(AmpResource.class);
+        fieldsFor(AmpActivityVersion.class);
+        fieldsFor(AmpContact.class);
+        fieldsFor(CommonSettings.class);
+        fieldsFor(AmpResource.class);
     }
 
     private APIField newListField() {
         APIField field = newAPIField();
-        field.setFieldType(FIELD_TYPE_LIST);
+        field.setApiType(new APIType(Collection.class, Object.class));
+        return field;
+    }
+
+    private APIField newListOfLongField() {
+        APIField field = newAPIField();
+        field.setApiType(new APIType(Collection.class, Long.class));
         return field;
     }
 
     private APIField newLongField() {
         APIField field = newAPIField();
-        field.setFieldType(FIELD_TYPE_LONG);
+        field.setApiType(new APIType(Long.class));
         return field;
     }
 
     private APIField newStringField() {
         APIField field = newAPIField();
-        field.setFieldType(FIELD_TYPE_STRING);
+        field.setApiType(new APIType(String.class));
         field.setFieldLength(TestFieldInfoProvider.MAX_STR_LEN);
         field.setTranslatable(false);
         return field;
@@ -498,12 +520,7 @@ public class FieldsEnumeratorTest {
     }
 
     private List<APIField> fieldsFor(Class<?> theClass) {
-        return new FieldsEnumerator(provider, fmService, translatorService, false, name -> true)
-                .getAllAvailableFields(theClass);
-    }
-
-    private List<APIField> fieldsForInternal(Class<?> theClass) {
-        return new FieldsEnumerator(provider, fmService, translatorService, true, name -> true)
+        return new FieldsEnumerator(provider, fmService, translatorService, name -> true)
                 .getAllAvailableFields(theClass);
     }
 

@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ComponentFundingOrgsValidator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.FundingPledgesValidator;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -156,21 +158,23 @@ public class InterchangeDependencyResolver {
         case AGREEMENT_TITLE_PRESENT_KEY : return checkFieldValuePresent(value, AGREEMENT_TITLE_PATH);
         case IMPLEMENTATION_LEVEL_VALID_KEY: return checkImplementationLevel(value, incomingActivity);
         case IMPLEMENTATION_LOCATION_VALID_KEY: return checkImplementationLocation(value, incomingActivity);
-        case COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY: return
-                DependencyCheckResult.convertToUnavailable(
-                checkTransactionType(value, incomingActivity, fieldParent, Constants.COMMITMENT) || 
-                checkTransactionType(value, incomingActivity, fieldParent, Constants.DISBURSEMENT));
-        case COMMITMENTS_PRESENT_KEY: 
-            return DependencyCheckResult.convertToUnavailable(checkTransactionType(value, incomingActivity, fieldParent, Constants.COMMITMENT));
-        case DISBURSEMENTS_PRESENT_KEY: 
-            return DependencyCheckResult.convertToUnavailable(checkTransactionType(value, incomingActivity, fieldParent, Constants.DISBURSEMENT));
-        case COMMITMENTS_DISASTER_RESPONSE_REQUIRED:
+        case COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY: {
             boolean isCommitment = checkTransactionType(value, incomingActivity, fieldParent, Constants.COMMITMENT);
-            return DependencyCheckResult.convertToUnavailable(!isCommitment);
-        case DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED:
             boolean isDisbursement = checkTransactionType(value, incomingActivity, fieldParent, Constants.DISBURSEMENT);
-            return DependencyCheckResult.convertToUnavailable(!isDisbursement);
-        case ORGANIZATION_PRESENT_KEY: 
+            return DependencyCheckResult.convertToUnavailable(value == null || isCommitment || isDisbursement);
+        } case COMMITMENTS_PRESENT_KEY: {
+            boolean isCommitment = checkTransactionType(value, incomingActivity, fieldParent, Constants.COMMITMENT);
+            return DependencyCheckResult.convertToUnavailable(value == null || isCommitment);
+        } case DISBURSEMENTS_PRESENT_KEY: {
+            boolean isDisbursement = checkTransactionType(value, incomingActivity, fieldParent, Constants.DISBURSEMENT);
+            return DependencyCheckResult.convertToUnavailable(value == null || isDisbursement);
+        } case COMMITMENTS_DISASTER_RESPONSE_REQUIRED: {
+            boolean isCommitment = checkTransactionType(value, incomingActivity, fieldParent, Constants.COMMITMENT);
+            return DependencyCheckResult.convertToUnavailable(value == null && isCommitment);
+        } case DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED: {
+            boolean isDisbursement = checkTransactionType(value, incomingActivity, fieldParent, Constants.DISBURSEMENT);
+            return DependencyCheckResult.convertToUnavailable(value == null && isDisbursement);
+        } case ORGANIZATION_PRESENT_KEY: 
             return checkComponentFundingOrg(value, incomingActivity);
         case FUNDING_ORGANIZATION_VALID_PRESENT_KEY: 
             return checkFundingPledgesOrgGroup(importer, value);
@@ -187,15 +191,17 @@ public class InterchangeDependencyResolver {
      * 
      * @param value
      * @param importer
-     * @param code
      * @param fieldDescription
+     * @param fieldParent
      * @return
      */
     public static boolean checkRequiredDependencyFulfilled(Object value, ObjectImporter importer, 
             APIField fieldDescription, Map<String, Object> fieldParent) {
         
         List<String> deps = fieldDescription.getDependencies();
-        boolean result = true;
+        boolean doNotCheckRequired = InterchangeUtils.underscorify(ActivityFieldsConstants.DISASTER_RESPONSE)
+                .equals(fieldDescription.getFieldName());
+        boolean result = !doNotCheckRequired;
         if (deps != null) {
             for (String dep : deps) {
                 switch (dep) {
@@ -203,21 +209,21 @@ public class InterchangeDependencyResolver {
                         result = result && isOnBudget(value, importer, fieldDescription);
                         break;
                     case COMMITMENTS_DISASTER_RESPONSE_REQUIRED:
-                        result = result && isPartOfCorrectTransaction(value, importer, fieldParent, 
+                        result = result || isPartOfCorrectTransaction(value, importer, fieldParent, 
                                 Constants.COMMITMENT);
                         break;
                     case DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED:
-                        result = result && isPartOfCorrectTransaction(value, importer, fieldParent, 
+                        result = result || isPartOfCorrectTransaction(value, importer, fieldParent, 
                                 Constants.DISBURSEMENT);
                         break;
                     case TRANSACTION_PRESENT_KEY:
                         result = result && hasTransactions(fieldParent);
                         break;
                     case RESOURCE_TYPE_FILE_VALID_KEY:
-                        result = result && isResourceTypeValid(value, importer, fieldParent, ResourceEPConstants.FILE);
+                        result = result && isResourceTypeValid(value, importer, fieldParent, ResourceType.FILE);
                         break;
                     case RESOURCE_TYPE_LINK_VALID_KEY:
-                        result = result && isResourceTypeValid(value, importer, fieldParent, ResourceEPConstants.LINK);
+                        result = result && isResourceTypeValid(value, importer, fieldParent, ResourceType.LINK);
                         break;
                     default: 
                         break;
@@ -226,37 +232,6 @@ public class InterchangeDependencyResolver {
         }
         
         return result;
-    }
-    
-    /**
-     * Checks if required dependency is fullfilled
-     *
-     * @param value
-     * @param importer
-     * @param fieldDescription
-     * @param fieldParent
-     * @return
-     */
-    public static boolean shouldCheckForRequired(Object value, ObjectImporter importer,
-                                                 APIField fieldDescription, Map<String, Object> fieldParent) {
-
-        List<String> deps = fieldDescription.getDependencies();
-        boolean result = true;
-        if (deps != null) {
-            if (deps.contains(COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY)) {
-                if (isPartOfCorrectTransaction(value, importer, fieldParent, Constants.COMMITMENT)) {
-                    return deps.contains(COMMITMENTS_DISASTER_RESPONSE_REQUIRED);
-                } else if (isPartOfCorrectTransaction(value, importer, fieldParent, Constants.DISBURSEMENT)) {
-                    return deps.contains(DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED);
-                }
-            } else if (deps.contains(COMMITMENTS_PRESENT_KEY)) {
-                return deps.contains(COMMITMENTS_DISASTER_RESPONSE_REQUIRED);
-            } else if (deps.contains(DISBURSEMENTS_PRESENT_KEY)) {
-                return deps.contains(DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED);
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -296,10 +271,10 @@ public class InterchangeDependencyResolver {
     }
     
     private static boolean isResourceTypeValid(Object value, ObjectImporter importer, 
-            Map<String, Object> fieldParent, String resourceType) {
+            Map<String, Object> fieldParent, ResourceType resourceType) {
         
         Object resType = fieldParent.get(InterchangeUtils.underscorify(ResourceEPConstants.RESOURCE_TYPE));
-        return resType != null && resType.equals(resourceType);
+        return resType != null && resType.equals(resourceType.getId());
     }
     
     

@@ -4,11 +4,10 @@ import static java.util.Collections.singletonList;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
@@ -29,7 +28,7 @@ public class ContactImporter extends ObjectImporter {
 
     public ContactImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getContactValidators()),
-                AmpFieldsEnumerator.getPrivateContactEnumerator().getContactFields());
+                AmpFieldsEnumerator.getContactEnumerator().getContactFields());
     }
 
     public List<ApiErrorMessage> createContact(JsonBean newJson) {
@@ -85,7 +84,7 @@ public class ContactImporter extends ObjectImporter {
                 cleanImportableFields(fieldsDef, contact);
             }
 
-            contact = (AmpContact) validateAndImport(contact, null, fieldsDef, newJson.any(), null, null);
+            contact = (AmpContact) validateAndImport(contact, fieldsDef, newJson.any(), null);
 
             if (contact == null) {
                 throw new ObjectConversionException();

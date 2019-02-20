@@ -136,10 +136,13 @@ public class ObjectExporter<T> {
         if (fieldValue instanceof Date) {
             return InterchangeUtils.formatISO8601Date((Date) fieldValue);
         } else {
-            // FIXME not all fields are translatable, we should return original value
             Field field = FieldUtils.getField(object.getClass(), apiField.getFieldNameInternal(), true);
             Class<?> objectClass = object.getClass();
-            return translatedFieldReader.get(field, objectClass, fieldValue, object);
+            if (translatedFieldReader.isTranslatable(field, objectClass)) {
+                return translatedFieldReader.get(field, objectClass, fieldValue, object);
+            } else {
+                return fieldValue;
+            }
         }
     }
 

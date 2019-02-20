@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.junit.Assert.assertThat;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,13 +48,20 @@ public class ObjectExporterTest {
 
         InterchangeUtils.setTranslatorService(translatorService);
 
-        exporter = new ObjectExporter<>((f, c, v, o) -> {
-            if (f.getName().equals("translated")) {
-                return "trn " + v;
-            } else {
-                return v;
-            }
-        }, fields);
+        exporter = new ObjectExporter<>(new DummyTranslatedFieldReader(), fields);
+    }
+
+    private static class DummyTranslatedFieldReader implements TranslatedFieldReader {
+
+        @Override
+        public Object get(Field field, Class<?> clazz, Object fieldValue, Object parentObject) {
+            return fieldValue == null ? null : "trn " + fieldValue;
+        }
+
+        @Override
+        public boolean isTranslatable(Field field, Class<?> clazz) {
+            return field.getName().equals("translated");
+        }
     }
 
     public static class Dummy implements Identifiable {

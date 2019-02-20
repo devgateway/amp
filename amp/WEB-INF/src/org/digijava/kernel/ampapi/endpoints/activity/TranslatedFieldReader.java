@@ -10,4 +10,6 @@ import java.lang.reflect.Field;
 public interface TranslatedFieldReader {
 
     Object get(Field field, Class<?> clazz, Object fieldValue, Object parentObject);
+
+    boolean isTranslatable(Field field, Class<?> clazz);
 }

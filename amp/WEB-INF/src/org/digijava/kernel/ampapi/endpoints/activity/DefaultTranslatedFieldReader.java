@@ -17,4 +17,8 @@ public class DefaultTranslatedFieldReader implements TranslatedFieldReader {
             throw new RuntimeException("Failed to read translated field.", e);
         }
     }
+
+    public boolean isTranslatable(Field field, Class<?> clazz) {
+        return InterchangeUtils.isTranslatable(field, clazz);
+    }
 }

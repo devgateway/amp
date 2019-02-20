@@ -22,6 +22,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -65,25 +66,28 @@ public class ActivityExporterTest {
     public void testPrograms() {
         HardcodedThemes hardcodedThemes = new HardcodedThemes();
 
-        AmpActivityProgram axe1 = new AmpActivityProgram();
-        axe1.setProgramPercentage(100f);
-        axe1.setProgram(hardcodedThemes.getTheme("Axe 1"));
-        axe1.setProgramSetting(hardcodedThemes.getPrimaryProgramSettings());
+        AmpTheme axe1 = hardcodedThemes.getTheme("Axe 1");
+        AmpActivityProgram actAxe1 = new AmpActivityProgram();
+        actAxe1.setProgramPercentage(100f);
+        actAxe1.setProgram(axe1);
+        actAxe1.setProgramSetting(hardcodedThemes.getPrimaryProgramSettings());
 
-        AmpActivityProgram instReform = new AmpActivityProgram();
-        instReform.setProgramPercentage(78f);
-        instReform.setProgram(hardcodedThemes.getTheme("Institutional Reform"));
-        instReform.setProgramSetting(hardcodedThemes.getSecondaryProgramSettings());
+        AmpTheme instReform = hardcodedThemes.getTheme("Institutional Reform");
+        AmpActivityProgram actInstReform = new AmpActivityProgram();
+        actInstReform.setProgramPercentage(78f);
+        actInstReform.setProgram(instReform);
+        actInstReform.setProgramSetting(hardcodedThemes.getSecondaryProgramSettings());
 
-        AmpActivityProgram edReform = new AmpActivityProgram();
-        edReform.setProgramPercentage(22f);
-        edReform.setProgram(hardcodedThemes.getTheme("Educational Reform"));
-        edReform.setProgramSetting(hardcodedThemes.getSecondaryProgramSettings());
+        AmpTheme edReform = hardcodedThemes.getTheme("Educational Reform");
+        AmpActivityProgram actEdReform = new AmpActivityProgram();
+        actEdReform.setProgramPercentage(22f);
+        actEdReform.setProgram(edReform);
+        actEdReform.setProgramSetting(hardcodedThemes.getSecondaryProgramSettings());
 
         Set<AmpActivityProgram> programs = new HashSet<>();
-        programs.add(axe1);
-        programs.add(instReform);
-        programs.add(edReform);
+        programs.add(actAxe1);
+        programs.add(actInstReform);
+        programs.add(actEdReform);
 
         AmpActivityVersion activity = new AmpActivityVersion();
         activity.setActPrograms(programs);
@@ -93,11 +97,11 @@ public class ActivityExporterTest {
         assertThat(jsonActivity,
                 (Matcher) allOf(
                         hasEntry(equalTo("primary_programs"),
-                                contains(actProgram(2L, 100F))),
+                                contains(actProgram(axe1.getAmpThemeId(), 100F))),
                         hasEntry(equalTo("secondary_programs"),
                                 containsInAnyOrder(
-                                        actProgram(8L, 78F),
-                                        actProgram(9L, 22F)))));
+                                        actProgram(instReform.getAmpThemeId(), 78F),
+                                        actProgram(edReform.getAmpThemeId(), 22F)))));
     }
 
     /**
@@ -133,6 +137,6 @@ public class ActivityExporterTest {
         JsonBean filter = new JsonBean();
         filter.set(ActivityEPConstants.FILTER_FIELDS, filterFields);
 
-        return new ActivityExporter((f, c, v, o) -> v, fields, filter);
+        return new ActivityExporter(new NoTranslatedFieldReader(), fields, filter);
     }
 }

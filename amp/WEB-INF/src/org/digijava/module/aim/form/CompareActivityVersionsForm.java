@@ -1,9 +1,11 @@
 package org.digijava.module.aim.form;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Multimap;
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -34,6 +36,22 @@ public class CompareActivityVersionsForm extends ActionForm {
     private boolean advancemode;
 
     private Map<String, List<CompareOutput>> outputCollectionGrouped;
+
+    // Map says the keys must be unique while a Multimap permits duplicate keys...
+    // isn't it awesome to have duplicate keys(AMP-ID)?
+    private Multimap<String, Map<String, List<CompareOutput>>> listOfOutputCollectionGrouped;
+
+    public void setListOfOutputCollectionGrouped(
+            Multimap<String, Map<String, List<CompareOutput>>> listOfOutputCollectionGrouped) {
+        this.listOfOutputCollectionGrouped = listOfOutputCollectionGrouped;
+    }
+
+    // Set added restriction(duplicate elements are prohibited) to interface methods it inherited from Collection.
+    // IMO, We don't want restrictions right now.
+    public Collection<Map.Entry<String, Map<String, List<CompareOutput>>>>
+        getListOfOutputCollectionGroupedCollection() {
+        return this.listOfOutputCollectionGrouped.entries();
+    }
 
     public Long getActivityOneId() {
         return activityOneId;

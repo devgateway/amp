@@ -46,7 +46,7 @@
 	<html:hidden property="method" styleId="method"/>
 	<html:hidden property="ampActivityId" styleId="ampActivityId"/>
 
-	<c:if test="${empty aimCompareActivityVersionsForm.outputCollectionGrouped}">
+	<c:if test="${empty aimCompareActivityVersionsForm.outputCollectionGrouped and aimCompareActivityVersionsForm.method != 'compareAll'}">
 		<c:set var="noPrevVer">
 			<digi:trn>The activity you chose is the latest and has no previous version.</digi:trn>
 		</c:set>
@@ -100,7 +100,49 @@
 	        		</td>
 				</tr>
 
-				<c:if test="${not empty aimCompareActivityVersionsForm.outputCollectionGrouped}">
+					<%-- Iterate through the list of output collections for compareAll method... --%>
+				<c:if test="${aimCompareActivityVersionsForm.method == 'compareAll'}">
+					<%int count = 0; %>
+					<logic:iterate id="listItem" property="listOfOutputCollectionGroupedCollection" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
+						<tr>
+						<td colspan="100%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-color:white; border-color: red;border-width: 1px; color:#0000A0; cursor: pointer; background-repeat: repeat-x; font-size: 13px;">
+						<div style="line-height: 80%;" align="left" class="underline" title="<bean:write name="listItem" property="key" filter="false"/>">
+							<strong><%out.print("<br> ["+(++count)+"]. "); %><bean:write name="listItem" property="key" filter="false"/></strong>
+						</div>
+
+						<logic:iterate id="groupId" property="value" name="listItem" type="java.util.Map.Entry" indexId="iterIdxx">
+							<tr><td rowspan="${groupId.value.size()}" align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
+							<digi:trn><bean:write property="key" name="groupId"/></digi:trn>
+							<logic:iterate id="changeId" name="groupId" property="value" indexId="iterIdx">
+								<logic:greaterThan name="iterIdx" value="0">
+									<tr>
+								</logic:greaterThan>
+								<td width="50%" align="left" valign="top" style="padding-left: 5px; border-right-width: 1px;" class="inside">
+									<div id="left${changeId.index}">
+										<logic:empty name="changeId" property="stringOutput[1]">&nbsp;</logic:empty>
+										<bean:write name="changeId" property="stringOutput[1]" filter="false"/>
+									</div>
+								</td>
+								<td width="50%" align="left" valign="top" style="padding-left: 5px; border-left-width: 1px;" class="inside">
+									<div id="right${changeId.index}">
+										<logic:empty name="changeId" property="stringOutput[0]">&nbsp;</logic:empty>
+										<bean:write name="changeId" property="stringOutput[0]" filter="false"/>
+									</div>
+								</td>
+								<logic:greaterThan name="iterIdx" value="0">
+									</tr>
+								</logic:greaterThan>
+							</logic:iterate>
+							</td></tr>
+						</logic:iterate>
+
+						</td>
+						</tr>
+					</logic:iterate>
+				</c:if>
+
+					<%-- if the method isn't compareAll, for any method is to keep the existing functionality and fix null pointer exception --%>
+				<c:if test="${(not empty aimCompareActivityVersionsForm.outputCollectionGrouped) and (aimCompareActivityVersionsForm.method != 'compareAll')}">
 				<logic:iterate id="groupItem" property="outputCollectionGroupedAsSet" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
 					
 					<td rowspan="${groupItem.value.size()}" align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
@@ -297,6 +339,11 @@ if(document.getElementById('method').value == "enableMerge") {
     document.getElementById('saveButton').disabled = "disabled";
     document.getElementById('saveButton').style.display = 'none';
     $('#backButton').prop('value', '<digi:trn>Back to Audit Logger</digi:trn>');
+}else if (document.aimCompareActivityVersionsForm.method.value === "compareAll"){
+    document.getElementById('saveButton').disabled = "disabled";
+    document.getElementById('saveButton').style.display = 'none';
+    $('#MyTabs').replaceWith('<font color="red" size="2%"><strong><digi:trn>&nbsp;&nbsp;List of Activities Compared to their Previous Versions</digi:trn></strong></font>');
+    document.getElementById('backButton').style.visibility = "hidden";
 }else {
     document.getElementById('saveButton').disabled = "disabled";
     document.getElementById('saveButton').style.display = 'none';

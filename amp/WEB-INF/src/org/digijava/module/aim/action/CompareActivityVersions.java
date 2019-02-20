@@ -13,7 +13,8 @@ import java.util.Map;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -353,6 +354,35 @@ public class CompareActivityVersions extends DispatchAction {
 
         CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
         vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId()));
+
+        return mapping.findForward("forward");
+    }
+
+    public ActionForward compareAll(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+                                    HttpServletResponse response) throws Exception {
+
+        CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
+
+        // We may have duplicate keys.. so time to switch to something like Multimap
+        Multimap<String, Map<String, List<CompareOutput>>> listOfOutputCollectionGrouped = ArrayListMultimap.create();
+
+        //Use lambda through the accept method from java consumer functional interface
+        // to create listOfOutputCollectionGrouped
+        AuditLoggerUtil.getListOfActivitiesFromAuditLogger().forEach((Object[] activityObj) -> {
+
+            Map<String, List<CompareOutput>> compareOutput;
+            try {
+                compareOutput = ActivityVersionUtil
+                        .compareActivities(Long.parseLong(String.valueOf(activityObj[0]).trim()));
+                if (compareOutput != null) {
+                    listOfOutputCollectionGrouped.put(String.valueOf(activityObj[1]).trim(), compareOutput);
+                }
+            } catch (Exception e) {
+                throw new NumberFormatException();
+            }
+
+        });
+        vForm.setListOfOutputCollectionGrouped(listOfOutputCollectionGrouped);
 
         return mapping.findForward("forward");
     }

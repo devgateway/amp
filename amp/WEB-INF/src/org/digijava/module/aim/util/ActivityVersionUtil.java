@@ -350,7 +350,8 @@ public class ActivityVersionUtil {
         Session session = PersistenceManager.getCurrentSession();
         AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
         AmpActivityVersion ampActivityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
-        // Since ampActivityTwo is a ref. variable of type AmpActivityVersion, we can't use equals() to compare references.
+        // Since ampActivityTwo is a ref. variable of type AmpActivityVersion,
+        // we can't use equals() to compare references.
         // Instead we use == operator to compare references, while equals() is to compare the object content.
         return (ampActivityTwo == null) ? null
                 : compareActivities(activityOneId, ampActivityTwo.getAmpActivityId());

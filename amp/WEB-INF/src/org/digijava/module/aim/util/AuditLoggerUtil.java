@@ -32,6 +32,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.DateType;
 import org.hibernate.type.StringType;
 /**
@@ -396,6 +400,27 @@ public class AuditLoggerUtil {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static List<AmpAuditLogger[]> getListOfActivitiesFromAuditLogger() {
+        Session session = null;
+        List<AmpAuditLogger[]> list = null;
+        try {
+            session = PersistenceManager.getSession();
+
+            // Get the list using the Criteria query.
+            Criteria criteria = session.createCriteria(AmpAuditLogger.class).setProjection(Projections.projectionList()
+                    .add(Projections.property("objectId")).add(Projections.property("objectName")));
+            criteria.add(Restrictions.ne("action", Constants.LOGIN_ACTION))
+                    .add(Restrictions.eq("objectType", AmpActivityVersion.class.getName()));
+            criteria.addOrder(Order.desc("modifyDate"));
+
+            list = criteria.list();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+        return list;
+
     }
     
     /**

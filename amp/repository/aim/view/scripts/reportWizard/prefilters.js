@@ -24,20 +24,6 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 	if ( !doReset )
 		this.resetString	= "";
 	
-	this.filterPanel = new YAHOO.widget.Panel("new", {
-			width:"870px",
-		    fixedcenter: true,
-		    constraintoviewport: true,
-		    underlay:"none",
-		    close:true,
-		    visible:false,
-		    modal:true,
-		    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
-		    draggable:true} );
-	this.filterPanel.setHeader(filterPanelName);
-	this.filterPanel.setBody("");
-	this.filterPanel.render(document.body);
-	
 	this.settingsPanel	= new YAHOO.widget.Panel("new2", {
 		width:"450px",
 	    fixedcenter: true,
@@ -64,7 +50,7 @@ function failureReportFunction(o) {
 	var getUserInformation = {
 		success : function(o) {
 			var response = [];
-			var currentPanel = o.argument.filter instanceof Filters ?  o.argument.filter.filterPanel : o.argument.filter.panel;			
+			var currentPanel = o.argument.filter.panel;
 			if (o.responseText !== undefined) {
 				try {
 	                // parse the json data
@@ -97,7 +83,7 @@ function failureReportFunction(o) {
 			}
 		},
 		failure : function(o) {
-			var currentPanel = o.argument instanceof Filters ?  o.argument.filter.filterPanel : o.argument.filter.panel;		
+			var currentPanel = o.argument.filter.panel;
 			var errorMessage = "<font color='red'> ";
 			errorMessage += TranslationManager.getTranslated('The URL is unreachable') + o.responseText + "</font>.";
 			currentPanel.setBody(errorMessage);
@@ -111,22 +97,15 @@ function failureReportFunction(o) {
 
 Filters.prototype.success	= function (o) {
 	if (o.responseText.length > 2) {
-		this.filterPanel.setBody( o.responseText );
 		this.filterTabs	= new YAHOO.widget.TabView('tabview_container');
-		
-		this.filterPanel.cfg.setProperty("height", "482px" );
-		
-		this.filterPanel.show();
-		
 		this.saveFilters	= new SaveFilters(this, false);
 		
 		//initCalendar();
 		document.getElementById("filterPickerSubmitButton").onclick	= function() { return false;};
 		YAHOO.util.Event.removeListener("filterPickerSubmitButton", "click");
 		YAHOO.util.Event.addListener( "filterPickerSubmitButton", "click", this.saveFilters.saveFilters, this.saveFilters, this.saveFilters ) ;
-		
 	} else {
-		this.filterPanel.setBody("<font color='red'>" + this.filterProblemsMessage + "</font>");
+		alert(this.filterProblemsMessage);
 	}
 };
 
@@ -196,7 +175,7 @@ Filters.prototype.fixZIndex = function(id, index) {
 function SaveFilters (filterObj, showSettings) {
 	this.filterObj		= filterObj;
 	this.showSettings	= showSettings==null?false:showSettings;
-	this.panel		= this.showSettings?filterObj.settingsPanel:filterObj.filterPanel;
+	this.panel		= this.showSettings?filterObj.settingsPanel:null;
 };
 
 SaveFilters.prototype.validateAndSaveFilters	= function (e, obj) {

@@ -50,7 +50,12 @@ public @interface Interchangeable {
     /**
      *Whether the field is always required, required for non-draft saves, or not required. 
      */
-    String required () default ActivityEPConstants.REQUIRED_NONE;
+    ActivityEPConstants.RequiredValidation required() default ActivityEPConstants.RequiredValidation.NONE;
+    
+    /**
+     * The field is required or not based on fm path. By default, if requiredFmPath is visible, the required is SUBMIT
+     */
+    String requiredFmPath() default "";
     
     /**
      * Used during serialization to replace an object with id. The object must implement {@link Identifiable}.

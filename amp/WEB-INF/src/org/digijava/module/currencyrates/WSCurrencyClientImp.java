@@ -28,7 +28,7 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
             this.currencyConvertor = new CurrencyConvertorLocator()
                     .getCurrencyConvertorSoap();
         } catch (ServiceException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
     public WSCurrencyClientImp(Integer minutes) {
@@ -46,7 +46,7 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
         try {
             values = getCurrencyRates(currencyCode, "USD");
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return values;
 
@@ -73,14 +73,14 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
                 }
             } catch (IllegalArgumentException e) {
                 rate = WSCurrencyClient.INVALID_CURRENCY_CODE;
-                logger.error(e);
+                logger.error(e.getMessage(), e);
         
             } catch ( org.apache.axis.AxisFault af) {
                 logger.error( "fault reason: " + af.getFaultReason() ,af);
                 rate = WSCurrencyClient.CONNECTION_ERROR;
             } catch (RemoteException e) {
                 rate = WSCurrencyClient.CONNECTION_ERROR;
-                logger.error(e);
+                logger.error(e.getMessage(), e);
             }
             
             values.put(currencyCode[i], rate);
@@ -95,10 +95,10 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
             rate = this.currencyConvertor.conversionRate(Currency.USD, c);
         } catch (IllegalArgumentException e) {
             rate = WSCurrencyClient.INVALID_CURRENCY_CODE;
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         } catch (RemoteException e) {
             rate = WSCurrencyClient.CONNECTION_ERROR;
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return rate;
     }

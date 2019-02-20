@@ -260,8 +260,5 @@ public class EUActivity implements Serializable, Identifiable, Versionable, Clon
         // TODO Auto-generated method stub
         return super.clone();
     }
-
-
-
-
+    
 }

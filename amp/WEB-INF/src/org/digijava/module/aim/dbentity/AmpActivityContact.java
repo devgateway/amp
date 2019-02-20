@@ -7,6 +7,7 @@ import java.util.TreeSet;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
 
@@ -14,8 +15,8 @@ import org.digijava.module.aim.util.Output;
 public class AmpActivityContact implements Versionable, Comparable, Serializable, Cloneable {
     
     private Long id;
-    
-    @Interchangeable(fieldTitle="Activity", pickIdOnly=true)
+
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
     
     @Interchangeable(fieldTitle="Contact", pickIdOnly=true, importable=true, uniqueConstraint=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
@@ -123,4 +124,5 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
 }

@@ -17,11 +17,7 @@
 		<property column="shape" name="shape" type="text" />
 		<property column="creation_date" name="creationdate" type="java.sql.Timestamp"/>
 		
-		<set name="activities" table="AMP_ACTIVITY_STRUCTURES" lazy="true" cascade="none">
-			<cache usage="read-write" />
-			<key column="amp_structure_id" />
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivityVersion" column="amp_activity_id" />
-		</set>
+		<many-to-one name="activity" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion" />
 		
 		<many-to-one name="type" column="type" 
 			class="org.digijava.module.aim.dbentity.AmpStructureType" cascade="none" />

@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
@@ -178,7 +177,7 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
         // TODO Auto-generated method stub
         return super.clone();
     }
-    
+
     public static class RegionalObservationComparator implements Comparator<AmpRegionalObservation>, Serializable {
 
         /**

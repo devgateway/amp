@@ -466,9 +466,6 @@ public final class ArConstants {
     public final static String EXCHANGE_RATES_CACHE="EXCHANGE_RATES_CACHE";
     public static final String VIEW_PUBLIC_PREFIX = "cached_";
     
-    public static String AMP_ACTIVITY_TABLE = "(\\bamp_activity\\b)";
-    public static String CACHED_ACTIVITY_TABLE = "cached_amp_activity";
-    
     public final static List<SyntheticColumnsMeta> syntheticColumns = Arrays.asList(
             new SyntheticColumnsMeta("Planned Disbursements - Capital", new CapitalCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements - Capital","Planned Disbursements")),
             new SyntheticColumnsMeta("Planned Disbursements - Expenditure", new CapitalExpenditureCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements - Expenditure","Planned Disbursements")),

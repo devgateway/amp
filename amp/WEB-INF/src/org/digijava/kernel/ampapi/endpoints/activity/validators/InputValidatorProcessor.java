@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Arrays;
@@ -8,10 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.contact.validators.PrimaryOrganisationContactValidator;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -75,18 +71,17 @@ public class InputValidatorProcessor {
      * Executes validation chain for the new field values
      *
      * @param importer         Activity Importer instance that holds other import information
-     * @param newFieldValue    new field JSON structure
-     * @param oldFieldValue    old field JSON structure
-     * @param fieldDescription field description
+     * @param newParent        new field JSON structure
+     * @param fieldDef         field description
      * @param errors           map to store errors
      * @return true if the current field passes the full validation chain
      */
-    public boolean isValid(ObjectImporter importer, Map<String, Object> newParent, Map<String, Object> oldParent,
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newParent,
                            APIField fieldDef, String fieldPath, Map<Integer, ApiErrorMessage> errors) {
         boolean valid = true;
         String fieldName = fieldPath.substring(fieldPath.lastIndexOf("~") + 1);
         for (InputValidator current : validators) {
-            boolean currentValid = current.isValid(importer, newParent, oldParent, fieldDef, fieldPath);
+            boolean currentValid = current.isValid(importer, newParent, fieldDef, fieldPath);
             valid = currentValid && valid;
 
             if (!currentValid) {

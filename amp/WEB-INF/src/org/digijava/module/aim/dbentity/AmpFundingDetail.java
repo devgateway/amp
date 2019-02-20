@@ -9,11 +9,12 @@ import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.FundingePledgesValueProvider;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypePossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.FundingePledgesValueProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.TransactionTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -139,7 +140,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
      * public static final int ARREAR = 10;
      */
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true, pickIdOnly = true,
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true,
             required = REQUIRED_ALWAYS)
     @PossibleValues(TransactionTypePossibleValuesProvider.class)
     private Integer transactionType;
@@ -178,6 +179,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     @Interchangeable(fieldTitle = "Currency", importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
     private AmpCurrency ampCurrencyId;
     private AmpOrganisation reportingOrgId;
+    @InterchangeableBackReference
     private AmpFunding ampFundingId;
     @Interchangeable(fieldTitle = "Fixed Exchange Rate", importable = true)
     private Double fixedExchangeRate;
@@ -217,8 +219,10 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     private boolean iatiAdded = false; //nonpersistant
     private Long checkSum;
     
-    @Interchangeable(fieldTitle = "Disaster Response", importable = true, required = REQUIRED_ALWAYS,
-            fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH + "|" + ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH,
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.DISASTER_RESPONSE, importable = true,
+            required = REQUIRED_ALWAYS,
+            fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH
+                    + "|" + ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH,
             dependencies = {
             InterchangeDependencyResolver.COMMITMENTS_PRESENT_KEY,
             InterchangeDependencyResolver.DISBURSEMENTS_PRESENT_KEY,
@@ -658,4 +662,5 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     public void setCheckSum(Long checkSum) {
         this.checkSum = checkSum;
     }
+    
 }

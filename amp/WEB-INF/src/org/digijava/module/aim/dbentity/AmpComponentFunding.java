@@ -18,8 +18,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.ComponentTransactionTypePossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.ComponentTransactionTypePossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -30,7 +31,7 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 
     private Long ampComponentFundingId;
 
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_TYPE, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_TYPE, importable = true, required = REQUIRED_ALWAYS)
     @PossibleValues(ComponentTransactionTypePossibleValuesProvider.class)
     private Integer transactionType;
 
@@ -60,7 +61,7 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_DESCRIPTION)
     private String description;
 
-    // @Interchangeable(fieldTitle="Component")
+    @InterchangeableBackReference
     private AmpComponent component;
     // @Interchangeable(fieldTitle="Exchange Rate")
     private Float exchangeRate;
@@ -257,5 +258,5 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
+    
 }

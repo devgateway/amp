@@ -22,7 +22,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -177,7 +179,7 @@ public class DateTimeUtil {
     }
     
     public static Date fromJulianNumberToDate(String julianNumber) {
-        if (julianNumber != null && !"999999998".equals(julianNumber)) {
+        if (julianNumber != null && !FiltersConstants.FILTER_UNDEFINED_MAX.equals(julianNumber)) {
             try {
                 int day = Integer.parseInt(julianNumber) - 2440587; 
                 julianNumber = Integer.toString(day);
@@ -241,4 +243,24 @@ public class DateTimeUtil {
         return (new java.sql.Date(date.getTime())).toLocalDate();
     }
 
+    /**
+     * Returns a date representing first day of the year. Uses Gregorian calendar.
+     */
+    public static Date firstDayOfYear(int year) {
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.clear();
+        calendar.set(Calendar.YEAR, year);
+        return calendar.getTime();
+    }
+
+    /**
+     * Returns a date representing last day of the year. Uses Gregorian calendar.
+     */
+    public static Date lastDayOfYear(int year) {
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.clear();
+        calendar.set(Calendar.YEAR, year + 1);
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        return calendar.getTime();
+    }
 }

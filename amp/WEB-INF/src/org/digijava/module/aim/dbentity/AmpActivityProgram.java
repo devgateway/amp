@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -17,7 +18,7 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
         private Float programPercentage;
         @Interchangeable(fieldTitle="Program", importable = true, pickIdOnly = true, uniqueConstraint = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
         private AmpTheme program;
-        @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true)
+        @InterchangeableBackReference
         private AmpActivityVersion activity;
         private AmpActivityProgramSettings programSetting;
         public Long getAmpActivityProgramId() {
@@ -110,4 +111,5 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
     protected Object clone() throws CloneNotSupportedException {
     return super.clone();
     }
+    
 }

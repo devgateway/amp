@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
@@ -23,53 +24,59 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
-import com.mockrunner.mock.web.MockRequestDispatcher;
-
 /**
  * Job to pull for activities that have been submitted but not yet validate
- * after GlobalSettingsConstants.DAYS_NOTIFY_ACTIVITY_SUBMITED_VALIDATION days
+ * after GlobalSettingsConstants.DAYS_NOTIFY_ACTIVITY_SUBMITTED_VALIDATION days
  * 
  * @author JulianEduardo
  *
  */
 public class NotifyActivitiesPendingValidationJob extends ConnectionCleaningJob implements StatefulJob {
+    
+    private static Logger logger = Logger.getLogger(NotifyActivitiesPendingValidationJob.class);
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         final List<AmpActivityVersion> activitiesToNotify = new ArrayList<>();
-        PersistenceManager.getSession().doWork(new Work() {
-
-            @Override
-            public void execute(Connection connection) throws SQLException {
-                String daysToNotify = FeaturesUtil
-                        .getGlobalSettingValue(GlobalSettingsConstants.DAYS_NOTIFY_ACTIVITY_SUBMITED_VALIDATION);
-                String condition = " where date_updated::date =(current_date - " + daysToNotify + ") "
-                        + " and approval_status in (" + Constants.ACTIVITY_NEEDS_APPROVAL_STATUS + ") and draft=false";
-
-                ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_activity", condition,
-                        TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(),
-                        connection, "*");
-                RsInfo activities = v.fetch(null);
-                while (activities.rs.next()) {
-                    AmpActivityVersion activity = new AmpActivityVersion();
-
-                    activity.setAmpActivityId(activities.rs.getLong("amp_activity_id"));
-                    activity.setName(activities.rs.getString("name"));
-                    activitiesToNotify.add(activity);
+        int daysToNotify = FeaturesUtil
+                .getGlobalSettingValueInteger(GlobalSettingsConstants.DAYS_NOTIFY_ACTIVITY_SUBMITTED_VALIDATION);
+        
+        if (daysToNotify >= 0) {
+            PersistenceManager.getSession().doWork(new Work() {
+        
+                @Override
+                public void execute(Connection connection) throws SQLException {
+                    String condition = " where date_updated::date =(current_date - " + daysToNotify + ") "
+                            + " and approval_status in (" + Constants.ACTIVITY_NEEDS_APPROVAL_STATUS + ") "
+                            + "and draft=false";
+            
+                    ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_activity", condition,
+                            TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(),
+                            connection, "*");
+                    RsInfo activities = v.fetch(null);
+                    while (activities.rs.next()) {
+                        AmpActivityVersion activity = new AmpActivityVersion();
+                
+                        activity.setAmpActivityId(activities.rs.getLong("amp_activity_id"));
+                        activity.setName(activities.rs.getString("name"));
+                        activitiesToNotify.add(activity);
+                    }
+                    activities.close();
                 }
-                activities.close();
+            });
+    
+            try {
+                for (AmpActivityVersion ampActivityVersion : activitiesToNotify) {
+                    new ActivityValidationWorkflowTrigger(ampActivityVersion);
+                }
+            } finally {
+                //clean request Thread created with mockito
+                TLSUtils.getThreadLocalInstance().request = null;
             }
-        });
-
-        try {
-            for (AmpActivityVersion ampActivityVersion : activitiesToNotify) {
-                new ActivityValidationWorkflowTrigger(ampActivityVersion);
-            }
-        } finally {
-            //clean request Thread created with mockito
-            TLSUtils.getThreadLocalInstance().request = null;
+        } else {
+            logger.warn(String.format("'%s' global settings is not configured",
+                    GlobalSettingsConstants.DAYS_NOTIFY_ACTIVITY_SUBMITTED_VALIDATION));
         }
-
     }
 
 }

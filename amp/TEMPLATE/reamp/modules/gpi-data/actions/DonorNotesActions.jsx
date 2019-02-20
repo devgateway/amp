@@ -65,10 +65,14 @@ export function save(data, indicatorCode){
             result.indicatorCode = indicatorCode;
             return dispatch(onSave(result));            
         } 
-        
+
+        let cid = data.cid;
         return donorNotesApi.save(data).then(response => {
             const result = {errors: [], indicatorCode: indicatorCode};
             result.donorNotes = response.data || data;
+            if (cid) {
+                result.donorNotes.cid = cid;
+            }
             if (response.result === "SAVED") {                    
                 result.donorNotes.isEditing = false;
                 result.infoMessages = [{messageKey: 'amp.gpi-data-donor-notes:save-successful'}];
@@ -146,9 +150,9 @@ export function saveAllEdits(donorNotesList, indicatorCode) {
             result.infoMessages = [];
             result.indicatorCode = indicatorCode;
             return dispatch(onSaveAllEdits(result));            
-        } 
-        
-        
+        }
+
+        let cids = Utils.getCids(donorNotesList);
         return donorNotesApi.save(donorNotesList).then(response => {
             const result = {errors:[], infoMessages: [], indicatorCode: indicatorCode};
             
@@ -167,7 +171,7 @@ export function saveAllEdits(donorNotesList, indicatorCode) {
                 }                    
             }               
             
-            result.donorNotesList = list;
+            result.donorNotesList = Utils.restoreCids(list, cids);
             result.errors = [...result.errors, ...allErrors];
             if (list.length > 0) {
                 var params = {};

@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -43,7 +43,7 @@ public class FundingOrgRolesValidator extends InputValidator {
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
 
         if (fieldPath.equals(FUNDING)) {
             return areOrgRolesValid(importer, newFieldParent, FUNDING, SRC_ORG, SRC_ROLE);
@@ -92,7 +92,7 @@ public class FundingOrgRolesValidator extends InputValidator {
 
         Map<String, Long> roleIdsByCode = getOrgRoleIdsByCode();
 
-        List<String> orgRoleFields = InterchangeUtils.discriminatedFieldsByFieldTitle.get(ActivityFieldsConstants.ORG_ROLE);
+        List<String> orgRoleFields = InterchangeUtils.getDiscriminatedFieldTitlesByFieldName().get("orgrole");
 
         for (String field : orgRoleFields) {
             Object orgRolesObj = InterchangeUtils.getFieldValuesFromJsonActivity(activity, field);

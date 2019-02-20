@@ -360,7 +360,7 @@ public class TrnTag
             try{
             backUrl = java.net.URLEncoder.encode(relativeSourceURL,"UTF-8");
             } catch (Exception ex){
-                logger.debug(ex);
+                logger.debug(ex.getMessage(), ex);
             backUrl = relativeSourceURL;
             }
 

@@ -26,9 +26,7 @@ import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -380,7 +378,7 @@ public class TeamMemberUtil {
             List<AmpTeamMember> atms = qry.list();
             List<TeamMemberMail> members = new ArrayList<>();
             for (AmpTeamMember atm : atms) {
-                members.add(new TeamMemberMail(atm.getAmpTeamMemId(), 
+                members.add(new TeamMemberMail(atm.getAmpTeamMemId(),
                         atm.getAmpTeam().getAmpTeamId(), atm.getUser().getEmail()));
             }
 
@@ -1456,32 +1454,21 @@ public class TeamMemberUtil {
         }
     }
 
-    public static void getActivitiesWsByTeamMemberComputed(Map<Long, Set<String>> activitiesWs, AmpTeamMember atm) {
-        CompleteWorkspaceFilter completeWSFilter = (CompleteWorkspaceFilter)
-                TLSUtils.getRequest().getSession().getAttribute(Constants.COMPLETE_TEAM_FILTER);
-        if (completeWSFilter != null) {
-            TeamMember teamMember = new TeamMember(atm);
-            Set<Long> visibleActivitiesIds = completeWSFilter.computeIds();
-            processActivitiesId(activitiesWs, teamMember, Optional.ofNullable(visibleActivitiesIds).
-                    orElse(Collections.emptySet()).stream());
-        }
-    }
-
-    public static void getActivitiesWsByTeamMember(Map<Long, Set<String>> activitiesWs, AmpTeamMember atm) {
+    public static void getActivitiesWsByTeamMember(Map<Long, Set<Long>> activitiesWs, AmpTeamMember atm) {
         TeamMember teamMember = new TeamMember(atm);
         List<Long> editableIds = ActivityUtil.getEditableActivityIdsNoSession(teamMember);
-        processActivitiesId(activitiesWs, teamMember, Optional.ofNullable(editableIds).orElse(Collections.emptyList()
-        ).stream());
+        processActivitiesId(activitiesWs, teamMember, Optional.ofNullable(editableIds)
+                .orElse(Collections.emptyList()).stream());
 
     }
 
-    private static void processActivitiesId(Map<Long, Set<String>> activitiesWs, TeamMember teamMember,
+    private static void processActivitiesId(Map<Long, Set<Long>> activitiesWs, TeamMember teamMember,
                                             Stream<Long> activityStream) {
         activityStream.forEach(actId -> {
             if (!activitiesWs.containsKey(actId)) {
-                activitiesWs.put(actId, new HashSet<String>());
+                activitiesWs.put(actId, new HashSet<Long>());
             }
-            activitiesWs.get(actId).add(teamMember.getTeamId().toString());
+            activitiesWs.get(actId).add(teamMember.getTeamId());
         });
     }
 }

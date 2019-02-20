@@ -19,12 +19,9 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.gateperm.core.Permissible;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -153,75 +150,6 @@ public class InterchangeUtilsTest {
     }
 
     @Test
-    public void testGetFieldByLongNameNonexistent() throws Exception {
-        assertEquals(null,
-                InterchangeUtils.getFieldByLongName("nonexistent"));
-    }
-
-    @Test
-    public void testGetFieldByLongNameName() throws Exception {
-        assertEquals(AmpActivityFields.class.getDeclaredField("name"),
-                InterchangeUtils.getFieldByLongName("project_title"));
-    }
-
-    @Test @Ignore
-    // FIXME fails because of a bug in deunderscorify
-    public void testGetFieldByLongNameTeamName() throws Exception {
-        assertEquals(AmpTeam.class.getDeclaredField("name"),
-                InterchangeUtils.getFieldByLongName("team~name"));
-    }
-
-    @Test
-    public void testGetFieldByLongNameCreatedByUser() throws Exception {
-        assertEquals(AmpTeamMember.class.getDeclaredField("user"),
-                InterchangeUtils.getFieldByLongName("created_by~user"));
-    }
-
-    @Test
-    public void testGetFieldByLongNameNonexistentWithChildren() throws Exception {
-        assertNull(InterchangeUtils.getFieldByLongName("nonexistent~name"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testGetConfigValueNoAnnotation() throws Exception {
-        InterchangeUtils.getConfigValue("project_title", AmpActivityFields.class.getDeclaredField("name"));
-    }
-
-    @Test
-    public void testGetConfigValueDiscriminatedNoMatch() throws Exception {
-        Field sectorsField = AmpActivityFields.class.getDeclaredField("sectors");
-        assertNull(InterchangeUtils.getConfigValue("not_sector", sectorsField));
-    }
-
-    @Test
-    public void testGetConfigValueDiscriminatedMatches() throws Exception {
-        Field sectorsField = AmpActivityFields.class.getDeclaredField("sectors");
-        assertEquals("Primary", InterchangeUtils.getConfigValue("primary_sectors", sectorsField));
-    }
-
-    @Test
-    public void testIsAmpActivityVersion() throws Exception {
-        // FIXME very high probability of incorrect behaviour
-        assertTrue(InterchangeUtils.isAmpActivityVersion(Object.class));
-        assertTrue(InterchangeUtils.isAmpActivityVersion(Permissible.class));
-        assertTrue(InterchangeUtils.isAmpActivityVersion(AmpActivityFields.class));
-        assertTrue(InterchangeUtils.isAmpActivityVersion(AmpActivityVersion.class));
-        assertFalse(InterchangeUtils.isAmpActivityVersion(String.class));
-        assertFalse(InterchangeUtils.isAmpActivityVersion(AmpActivity.class));
-    }
-
-    @Test
-    public void testGetPotentiallyDiscriminatedField() throws Exception {
-        assertEquals(AmpActivityFields.class.getDeclaredField("name"),
-                InterchangeUtils.getPotentiallyDiscriminatedField(AmpActivityFields.class, "project_title"));
-
-        assertEquals(AmpActivityFields.class.getDeclaredField("sectors"),
-                InterchangeUtils.getPotentiallyDiscriminatedField(AmpActivityFields.class, "primary_sectors"));
-
-        assertNull(InterchangeUtils.getPotentiallyDiscriminatedField(AmpActivityFields.class, "nonexisting"));
-    }
-
-    @Test
     public void testGetFieldValueFromJsonSimple() throws Exception {
         JsonBean activity = new JsonBean();
         activity.set("name", "Activity Name");
@@ -252,7 +180,7 @@ public class InterchangeUtilsTest {
 
     @Test
     public void testFormatDate() throws Exception {
-        assertEquals("1973-11-26T03:52:03.123+0300", InterchangeUtils.formatISO8601Date(new Date(123123123123L)));
+        assertEquals("1973-11-26T00:52:03.123+0000", InterchangeUtils.formatISO8601Date(new Date(123123123123L)));
     }
 
     @Test

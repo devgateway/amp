@@ -7,24 +7,21 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.endpoints.util.StreamUtils;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -51,7 +48,8 @@ public class ResourceImporter extends ObjectImporter {
     private AmpResource resource;
 
     public ResourceImporter() {
-        super(AmpResource.class, new InputValidatorProcessor(InputValidatorProcessor.getResourceValidators()));
+        super(new InputValidatorProcessor(InputValidatorProcessor.getResourceValidators()),
+                AmpFieldsEnumerator.getEnumerator().getResourceFields());
     }
 
     /**
@@ -78,7 +76,7 @@ public class ResourceImporter extends ObjectImporter {
     private List<ApiErrorMessage> importResource(JsonBean newJson, FormFile formFile) {
         this.newJson = newJson;
 
-        List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getResourceFields();
+        List<APIField> fieldsDef = getApiFields();
         
         String privateAttr = newJson.getString(ResourceEPConstants.PRIVATE);
         
@@ -106,16 +104,15 @@ public class ResourceImporter extends ObjectImporter {
             teamMemberCreator = TeamMemberUtil.getLoggedInTeamMember();
         }
 
-        if (formFile == null && ResourceEPConstants.FILE.equals(
-                String.valueOf(newJson.get(ResourceEPConstants.RESOURCE_TYPE)))) {
+        if (formFile == null && ResourceType.FILE.getId().equals(newJson.get(ResourceEPConstants.RESOURCE_TYPE))) {
             return singletonList(ResourceErrors.FILE_NOT_FOUND);
         }
         
         if (formFile != null) {
-            if (ResourceEPConstants.LINK.equals(String.valueOf(newJson.get(ResourceEPConstants.RESOURCE_TYPE)))) {
-                String details = String.format("%s '%s'. %s '%s'", TranslatorWorker.translateText("Resource type is"), 
-                        ResourceEPConstants.LINK, TranslatorWorker.translateText("Resource type should be"), 
-                        ResourceEPConstants.FILE);
+            if (ResourceType.LINK.getId().equals(newJson.get(ResourceEPConstants.RESOURCE_TYPE))) {
+                String details = String.format("%s '%s'. %s '%s'", TranslatorWorker.translateText("Resource type is"),
+                        ResourceType.LINK.getId(), TranslatorWorker.translateText("Resource type should be"),
+                        ResourceType.FILE.getId());
                 return singletonList(ResourceErrors.RESOURCE_TYPE_INVALID.withDetails(details));
             }
             
@@ -131,13 +128,13 @@ public class ResourceImporter extends ObjectImporter {
         
         try {
             resource = new AmpResource();
-            resource = (AmpResource) validateAndImport(resource, null, fieldsDef, newJson.any(), null, null);
+            resource = (AmpResource) validateAndImport(resource, fieldsDef, newJson.any(), null);
             
             if (resource == null) {
                 throw new ObjectConversionException();
             }
             
-            if (ResourceEPConstants.LINK.equals(resource.getResourceType())) {
+            if (ResourceType.LINK.equals(resource.getResourceType())) {
                 resource.setFileName(null);
             } else {
                 resource.setWebLink(null);
@@ -148,14 +145,11 @@ public class ResourceImporter extends ObjectImporter {
             resource.setAddingDate(new Date());
             
             if (errors.isEmpty()) {
-                ActionMessages messages = new ActionMessages();
                 TemporaryDocumentData tdd = getTemporaryDocumentData(resource, formFile);
-                NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), teamMemberCreator, messages);
+                NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), teamMemberCreator);
     
                 if (node != null) {
                     resource.setUuid(node.getUuid());
-                } else {
-                    reportErrors(messages);
                 }
             }
         } catch (ObjectConversionException | RuntimeException e) {
@@ -165,20 +159,6 @@ public class ResourceImporter extends ObjectImporter {
         }
 
         return new ArrayList<>(errors.values());
-    }
-
-    /**
-     * Copies struts messages to API error messages. If struts messages are empty will report a single API error
-     * message 'Failed without specifying a reason.'.
-     * @param messages struts messages to copy to API error messages
-     */
-    private void reportErrors(ActionMessages messages) {
-        if (messages.isEmpty()) {
-            errors.put(0, new ApiErrorMessage(0, "Failed without specifying a reason."));
-        } else {
-            StreamUtils.asStream((Iterator<Object>) messages.get())
-                    .forEach(m -> errors.put(0, new ApiErrorMessage(0, m.toString())));
-        }
     }
 
     private TemporaryDocumentData getTemporaryDocumentData(AmpResource resource, FormFile formFile) {
@@ -201,7 +181,7 @@ public class ResourceImporter extends ObjectImporter {
         tdd.setDate(calendar.getTime());
         tdd.setYearofPublication(String.valueOf(calendar.get(Calendar.YEAR)));
         
-        if (ResourceEPConstants.LINK.equals(resource.getResourceType())) {
+        if (ResourceType.LINK.equals(resource.getResourceType())) {
             tdd.setWebLink(resource.getWebLink());
         } else {
             tdd.setWebLink(null);

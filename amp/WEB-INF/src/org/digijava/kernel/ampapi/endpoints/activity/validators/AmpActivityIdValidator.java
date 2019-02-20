@@ -1,17 +1,14 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Map;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -34,7 +31,7 @@ public class AmpActivityIdValidator extends InputValidator {
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         // REFACTOR: let's define a flag (count = 2) once both amp_activity_id and amp_id are verified to immediately skip this validator
         boolean isValid = true;
         String fieldName = fieldDescription.getFieldName();

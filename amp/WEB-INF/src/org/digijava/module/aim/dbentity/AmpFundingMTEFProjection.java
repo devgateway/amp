@@ -7,14 +7,15 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
-public class AmpFundingMTEFProjection
-        implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection>, FundingInformationItem {
+public class AmpFundingMTEFProjection implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection>,
+        FundingInformationItem {
 
     private static final long serialVersionUID = -1583797313318079006L;
 
@@ -34,6 +35,7 @@ public class AmpFundingMTEFProjection
     @Interchangeable(fieldTitle = "Projection Date", importable = true, required = REQUIRED_ALWAYS)
     private Date projectionDate;
 
+    @InterchangeableBackReference
     private AmpFunding ampFunding;
 
     private Date reportingDate;

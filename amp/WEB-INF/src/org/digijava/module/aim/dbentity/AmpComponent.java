@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
@@ -29,12 +30,13 @@ import org.digijava.module.aim.util.Output;
  * @author Priyajith
  */
 @TranslatableClass (displayName = "Component")
-public class AmpComponent implements Serializable,Comparable<AmpComponent>, Versionable, Cloneable {
+public class AmpComponent implements Serializable, Comparable<AmpComponent>, Versionable, Cloneable {
     
     //IATI-check: to be ignored
     
     private Long ampComponentId;
 
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
 
     @Interchangeable(fieldTitle = COMPONENT_TITLE, required = REQUIRED_ALWAYS, importable = true,
@@ -53,7 +55,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING, importable = true)
     private Set<AmpComponentFunding> fundings;
-    
+
     public static class AmpComponentComparator implements Comparator<AmpComponent>{
         @Override
         public int compare(AmpComponent o1, AmpComponent o2) {
@@ -305,4 +307,5 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
     public String toString() {
         return title;
     }
+    
 }

@@ -1,17 +1,14 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -29,7 +26,7 @@ public class PercentageValidator extends InputValidator {
     @SuppressWarnings("unchecked")
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         boolean isValid = true;
         String fieldName = fieldDescription.getFieldName();
         String percentageField = fieldDescription.getPercentageConstraint();

@@ -8,25 +8,25 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-            UPDATE  amp_category_value_location SET geo_code = 203312 WHERE iso ILIKE 'CD';            
-            UPDATE  amp_category_value_location SET geo_code = 2287781 WHERE iso ILIKE 'CI';            
-            UPDATE  amp_category_value_location SET geo_code = 2413451 WHERE iso ILIKE 'GM';            
-            UPDATE  amp_category_value_location SET geo_code = 3608932 WHERE iso ILIKE 'HN';            
-            UPDATE  amp_category_value_location SET geo_code = 3723988 WHERE iso ILIKE 'HT';
-            UPDATE  amp_category_value_location SET geo_code = 831053 WHERE iso ILIKE 'KS';            
-            UPDATE  amp_category_value_location SET geo_code = 2275384 WHERE iso ILIKE 'LR';            
-            UPDATE  amp_category_value_location SET geo_code = 617790 WHERE iso ILIKE 'MD';
-            UPDATE  amp_category_value_location SET geo_code = 1062947 WHERE iso ILIKE 'MG';
-            UPDATE  amp_category_value_location SET geo_code = 2440476 WHERE iso ILIKE 'NE';
-            UPDATE  amp_category_value_location SET geo_code = 1282988 WHERE iso ILIKE 'NP';            
-            UPDATE  amp_category_value_location SET geo_code = 2245662 WHERE iso ILIKE 'SN';            
-            UPDATE  amp_category_value_location SET geo_code = 2434508 WHERE iso ILIKE 'TD';            
-            UPDATE  amp_category_value_location SET geo_code = 1966436 WHERE iso ILIKE 'TP';            
-            UPDATE  amp_category_value_location SET geo_code = 831053 WHERE iso ILIKE 'XK';            
-            UPDATE  amp_category_value_location SET geo_code = 1527747 WHERE iso ILIKE 'KG';            
-            UPDATE  amp_category_value_location SET geo_code = 1655842 WHERE iso ILIKE 'LA';            
-            UPDATE  amp_category_value_location SET geo_code = 927384 WHERE iso ILIKE 'MW';
-            UPDATE  amp_category_value_location SET geo_code = 226074 WHERE iso ILIKE 'UG';                 
+            UPDATE  amp_category_value_location SET geo_code = 203312 WHERE iso ILIKE 'CD' AND parent_location is null;            
+            UPDATE  amp_category_value_location SET geo_code = 2287781 WHERE iso ILIKE 'CI' AND parent_location is null;
+            UPDATE  amp_category_value_location SET geo_code = 2413451 WHERE iso ILIKE 'GM' AND parent_location is null;
+            UPDATE  amp_category_value_location SET geo_code = 3608932 WHERE iso ILIKE 'HN' AND parent_location is null;            
+            UPDATE  amp_category_value_location SET geo_code = 3723988 WHERE iso ILIKE 'HT' AND parent_location is null;
+            UPDATE  amp_category_value_location SET geo_code = 831053 WHERE iso ILIKE 'KS' AND parent_location is null;            
+            UPDATE  amp_category_value_location SET geo_code = 2275384 WHERE iso ILIKE 'LR' AND parent_location is null;            
+            UPDATE  amp_category_value_location SET geo_code = 617790 WHERE iso ILIKE 'MD' AND parent_location is null;
+            UPDATE  amp_category_value_location SET geo_code = 1062947 WHERE iso ILIKE 'MG' AND parent_location is null;
+            UPDATE  amp_category_value_location SET geo_code = 2440476 WHERE iso ILIKE 'NE' AND parent_location is null;
+            UPDATE  amp_category_value_location SET geo_code = 1282988 WHERE iso ILIKE 'NP' AND parent_location is null;            
+            UPDATE  amp_category_value_location SET geo_code = 2245662 WHERE iso ILIKE 'SN' AND parent_location is null;            
+            UPDATE  amp_category_value_location SET geo_code = 2434508 WHERE iso ILIKE 'TD' AND parent_location is null;            
+            UPDATE  amp_category_value_location SET geo_code = 1966436 WHERE iso ILIKE 'TP' AND parent_location is null;            
+            UPDATE  amp_category_value_location SET geo_code = 831053 WHERE iso ILIKE 'XK' AND parent_location is null;            
+            UPDATE  amp_category_value_location SET geo_code = 1527747 WHERE iso ILIKE 'KG AND parent_location is null';            
+            UPDATE  amp_category_value_location SET geo_code = 1655842 WHERE iso ILIKE 'LA' AND parent_location is null;            
+            UPDATE  amp_category_value_location SET geo_code = 927384 WHERE iso ILIKE 'MW' AND parent_location is null;
+            UPDATE  amp_category_value_location SET geo_code = 226074 WHERE iso ILIKE 'UG' AND parent_location is null;                 
             </lang>
         </script>
     </apply>

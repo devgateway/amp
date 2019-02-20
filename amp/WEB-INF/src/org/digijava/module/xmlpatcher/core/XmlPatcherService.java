@@ -15,18 +15,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.service.AbstractServiceImpl;
+import org.digijava.kernel.service.FatalServiceException;
 import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.service.ServiceException;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
+import org.digijava.module.xmlpatcher.exception.XmlPatcherHaltExecutionException;
 import org.digijava.module.xmlpatcher.jaxb.Patch;
 import org.digijava.module.xmlpatcher.scheduler.NaturalOrderXmlPatcherScheduler;
 import org.digijava.module.xmlpatcher.scheduler.XmlPatcherScheduler;
@@ -131,17 +132,15 @@ public class XmlPatcherService extends AbstractServiceImpl {
                 
                 XmlPatcherUtil.applyDeprecationTags(patch,log);
             } catch (NoSuchAlgorithmException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             } catch (IOException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             } catch (HibernateException e) {
-                logger.error(e);
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             } catch (SQLException e) {
-                logger.error(e);
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
 
             //the error may be that the patch is referencing for deprecation patches that do not exist.
@@ -184,10 +183,10 @@ public class XmlPatcherService extends AbstractServiceImpl {
                         XmlPatcherUtil.getXmlPatchAbsoluteFileName(ampPatch,
                                 serviceContext))));
             } catch (NoSuchAlgorithmException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             } catch (IOException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             }
             Patch patch = XmlPatcherUtil.getUnmarshalledPatch(serviceContext,
@@ -226,6 +225,9 @@ public class XmlPatcherService extends AbstractServiceImpl {
             log.setElapsed(System.currentTimeMillis() - timeStart);
             if(success || log.getError()) XmlPatcherUtil.addLogToPatch(ampPatch, log);
             DbUtil.update(ampPatch);
+            if (!success && log.getError() && patch != null && patch.isFailOnError()) {
+                throw new XmlPatcherHaltExecutionException(ampPatch.getPatchId());
+            }
         }
         logger.info(scheduledPatches.size()+" patches left unexecuted");
         return scheduledPatches;
@@ -234,6 +236,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
     @Override
     public void processInitEvent(ServiceContext serviceContext)
             throws ServiceException {
+        boolean patcherFailed = false;
         try {
             // workaround a design fault whereas a patch which was deleted and then a different one with the same name was readded remains marked as "deleted" by AMP and never executed.
             // AMP 2.7.1+ does not start without this fix (unless one does manual intervetions to the DB)
@@ -242,32 +245,33 @@ public class XmlPatcherService extends AbstractServiceImpl {
             java.sql.Connection conn = PersistenceManager.getJdbcConnection();
             conn.prepareStatement("UPDATE amp_xml_patch set state=0 WHERE patch_id similar to '((v)|(z)|(zz))%' AND location ='xmlpatches/general/views/' AND state=4;").executeUpdate();
             conn.close();
-            
+
             //discover newly added patches
             performPatchDiscovery(serviceContext.getRealPath("/"));
 
             //applying deprecation tags -read all deprecate tags in all patches
             //and flag deprecated the patches mentioned
             List<AmpXmlPatch> rawPatches = XmlPatcherUtil.getAllDiscoveredUnclosedPatches();
-            
+
             processDeprecation(rawPatches, serviceContext);
 
             //read patches again, after deprecation flags set (so only the ones that are not depr)
             rawPatches = XmlPatcherUtil.getAllDiscoveredUnclosedPatches();
             scheduler = (XmlPatcherScheduler) Class.forName(
                     XmlPatcherConstants.schedulersPackage + schedulerName)
-                    .getConstructors()[0].newInstance(new Object[] {
-                    schedulerProperties, rawPatches });
+                    .getConstructors()[0].newInstance(new Object[]{
+                    schedulerProperties, rawPatches});
             Collection<AmpXmlPatch> scheduledPatches = scheduler
                     .getScheduledPatchCollection();
 
-            
-            
+
             processAllUnclosedPatches(scheduledPatches, serviceContext);
-            
-            
+
+        } catch (XmlPatcherHaltExecutionException e) {
+            logger.error("Failed to apply patch.", e);
+            patcherFailed = true;
         } catch(Throwable e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             PersistenceManager.rollbackCurrentSessionTx();
             throw new ServiceException(e);
         }
@@ -275,6 +279,9 @@ public class XmlPatcherService extends AbstractServiceImpl {
         logger.info("refreshing GlobalSettingsCache...");
         PersistenceManager.getSession().getTransaction().commit();
         FeaturesUtil.buildGlobalSettingsCache(FeaturesUtil.getGlobalSettings()); // refresh global settings cache, as the startup process might have changed it (through XML patches, for example)
+        if (patcherFailed) {
+            throw new FatalServiceException("At least one patch failed to apply.");
+        }
     }
 
     /**

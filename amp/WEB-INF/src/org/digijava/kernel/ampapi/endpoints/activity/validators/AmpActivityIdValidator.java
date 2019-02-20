@@ -6,7 +6,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
-import org.digijava.kernel.ampapi.endpoints.activity.FieldMap;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;

@@ -1,6 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.contact;
 
-import org.digijava.kernel.ampapi.endpoints.activity.FieldMap;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 
 /**
  * @author Octavian Ciubotaru

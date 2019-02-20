@@ -3,6 +3,7 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
 /**

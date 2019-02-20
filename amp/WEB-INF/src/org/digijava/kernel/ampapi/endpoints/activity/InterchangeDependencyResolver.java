@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ComponentFundingOrgsValidator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.FundingPledgesValidator;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;

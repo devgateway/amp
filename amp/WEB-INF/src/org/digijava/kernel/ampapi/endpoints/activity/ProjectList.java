@@ -17,6 +17,7 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;

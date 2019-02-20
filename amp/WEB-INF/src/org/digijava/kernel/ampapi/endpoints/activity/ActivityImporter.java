@@ -26,6 +26,7 @@ import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;

@@ -27,6 +27,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
+import org.digijava.kernel.ampapi.endpoints.activity.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
@@ -50,9 +51,9 @@ public class ObjectImporter {
     protected JsonBean newJson;
     protected TranslationSettings trnSettings;
 
-    private Map<String, List<PossibleValue>> possibleValuesCached = new HashMap<>();
-
     private List<APIField> apiFields;
+
+    private PossibleValuesCache possibleValuesCached; 
 
     /**
      * This field is used for storing the current json values during field validation
@@ -76,6 +77,7 @@ public class ObjectImporter {
         this.validator = validator;
         this.trnSettings = trnSettings;
         this.apiFields = apiFields;
+        this.possibleValuesCached = new PossibleValuesCache(apiFields);
     }
 
     public List<APIField> getApiFields() {
@@ -313,14 +315,6 @@ public class ObjectImporter {
         }
 
         return value;
-    }
-
-    public List<PossibleValue> getPossibleValuesForFieldCached(String fieldPath) {
-        if (!possibleValuesCached.containsKey(fieldPath)) {
-            possibleValuesCached.put(fieldPath, PossibleValuesEnumerator.INSTANCE
-                    .getPossibleValuesForField(fieldPath, apiFields));
-        }
-        return possibleValuesCached.get(fieldPath);
     }
 
     /**
@@ -567,6 +561,10 @@ public class ObjectImporter {
         } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException("Failed to instantiate discriminator configurer " + configurer, e);
         }
+    }
+
+    public PossibleValuesCache getPossibleValuesCache() {
+        return this.possibleValuesCached;
     }
 
     /**

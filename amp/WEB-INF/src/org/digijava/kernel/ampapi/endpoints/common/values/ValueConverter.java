@@ -5,15 +5,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
@@ -23,6 +27,28 @@ import org.digijava.module.aim.dbentity.ApprovalStatus;
  */
 public class ValueConverter {
     private static final Logger logger = Logger.getLogger(ValueConverter.class);
+
+    private Map<Class<? extends DiscriminationConfigurer>, DiscriminationConfigurer> discriminatorConfigurerCache =
+            new HashMap<>();
+
+    /**
+     * Used to restore the value of the discrimination field.
+     */
+    public void configureDiscriminationField(Object obj, APIField fieldDef) {
+        if (fieldDef.getDiscriminationConfigurer() != null) {
+            DiscriminationConfigurer configurer = discriminatorConfigurerCache.computeIfAbsent(
+                    fieldDef.getDiscriminationConfigurer(), this::newConfigurer);
+            configurer.configure(obj, fieldDef.getDiscriminatorField(), fieldDef.getDiscriminatorValue());
+        }
+    }
+
+    private DiscriminationConfigurer newConfigurer(Class<? extends DiscriminationConfigurer> configurer) {
+        try {
+            return configurer.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException("Failed to instantiate discriminator configurer " + configurer, e);
+        }
+    }
 
     /**
      * Handles integer -> long and similar conversions, since exact type is not guaranteed during deserialisation 

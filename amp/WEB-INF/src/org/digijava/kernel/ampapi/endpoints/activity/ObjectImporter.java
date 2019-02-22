@@ -62,9 +62,6 @@ public class ObjectImporter {
      */
     private Map<String, Object> branchJsonVisitor = new HashMap<>();
 
-    private Map<Class<? extends DiscriminationConfigurer>, DiscriminationConfigurer> discriminatorConfigurerCache =
-            new HashMap<>();
-
     private Deque<Object> backReferenceStack = new ArrayDeque<>();
 
     public ObjectImporter(InputValidatorProcessor validator, List<APIField> apiFields) {
@@ -388,7 +385,7 @@ public class ObjectImporter {
                             Object newSubElement = subElementClass.newInstance();
                             res = validateAndImport(newSubElement, childrenFields, newChild, fieldPath);
                             if (res != null && newParent != null) {
-                                configureDiscriminationField(res, fieldDef);
+                                valueConverter.configureDiscriminationField(res, fieldDef);
                                 // actual links will be updated
                                 ((Collection) newFieldValue).add(res);
                             }
@@ -446,25 +443,6 @@ public class ObjectImporter {
             }
         }
         return null;
-    }
-
-    /**
-     * Used to restore the value of the discrimination field.
-     */
-    private void configureDiscriminationField(Object obj, APIField fieldDef) {
-        if (fieldDef.getDiscriminationConfigurer() != null) {
-            DiscriminationConfigurer configurer = discriminatorConfigurerCache.computeIfAbsent(
-                    fieldDef.getDiscriminationConfigurer(), this::newConfigurer);
-            configurer.configure(obj, fieldDef.getDiscriminatorField(), fieldDef.getDiscriminatorValue());
-        }
-    }
-
-    private DiscriminationConfigurer newConfigurer(Class<? extends DiscriminationConfigurer> configurer) {
-        try {
-            return configurer.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException("Failed to instantiate discriminator configurer " + configurer, e);
-        }
     }
 
     public PossibleValuesCache getPossibleValuesCache() {

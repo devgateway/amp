@@ -88,13 +88,11 @@ public class ObjectImporter {
      * Clean all importable fields and leave other fields intact.
      */
     protected void cleanImportableFields(List<APIField> fieldDefs, Object obj) {
-        if (obj == null) {
-            return;
+        if (obj != null) {
+            fieldDefs.stream()
+                    .filter(APIField::isImportable)
+                    .forEach(f -> cleanImportableField(f, obj));
         }
-
-        fieldDefs.stream()
-                .filter(APIField::isImportable)
-                .forEach(f -> cleanImportableField(f, obj));
     }
 
     private void cleanImportableField(APIField fieldDef, Object obj) {
@@ -133,7 +131,7 @@ public class ObjectImporter {
      * @param fieldsDef definitions of the fields in this parent (from Fields Enumeration EP)
      * @param newJsonParent parent JSON object in which reside the analyzed fields
      * @param fieldPath the underscorified path to the field currently validated & imported
-     * @return currently updated object or null if any validation error occurred
+     * @return currently updated object
      */
     protected Object validateAndImport(Object newParent, List<APIField> fieldsDef,
             Map<String, Object> newJsonParent, String fieldPath) {
@@ -182,12 +180,12 @@ public class ObjectImporter {
     }
 
     /**
-     * Validates and imports a single element (and its subelements)
+     * Validates and imports (if valid) a single element (and its subelements)
      * @param newParent parent object containing the field
      * @param fieldDef JsonBean holding the description of the field (obtained from the Fields Enumerator EP)
      * @param newJsonParent JSON as imported
      * @param fieldPath underscorified path to the field
-     * @return currently updated object or null if any validation error occurred
+     * @return currently updated object
      */
     private Object validateAndImport(Object newParent, APIField fieldDef,
             Map<String, Object> newJsonParent, String fieldPath) {
@@ -199,50 +197,43 @@ public class ObjectImporter {
         if (valid) {
             newParent = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
             if (newParent != null) {
-                newParent = setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
+                setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
             }
         }
         return newParent;
     }
 
     /**
-     * Configures new value, no validation outside of this method scope, it must be verified before
+     * Configures new value with assumption that it was already validated before
      */
-    private Object setNewField(Object newParent, APIField fieldDef, Map<String, Object> newJsonParent,
-            String fieldPath) {
+    private void setNewField(Object newParent, APIField fieldDef, Map<String, Object> newJsonParent, String fieldPath) {
         boolean importable = fieldDef.isImportable();
-
-        // note again: only checks in scope of this method are done here
-
         String fieldName = fieldDef.getFieldName();
         String actualFieldName = fieldDef.getFieldNameInternal();
         Object fieldValue = newJsonParent.get(fieldName);
         Field objField = ReflectionUtil.getField(newParent, actualFieldName);
         if (objField == null) {
-            // cannot set
-            logger.error("Actual Field not found: " + actualFieldName + ", fieldPath: " + fieldPath);
-            return null;
+            String error = "Actual Field not found: " + actualFieldName + ", fieldPath: " + fieldPath; 
+            logger.error(error);
+            throw new RuntimeException(error);
         }
 
-        if (!importable) {
-            // skip reconfiguration at this level if the field is not importable
-            return newParent;
-        }
-
-        Object newValue = getNewValue(objField, newParent, fieldValue, fieldDef);
-        if (newValue != null) {
-            try {
-                if (newParent instanceof Collection) {
-                    ((Collection<Object>) newParent).add(newValue);
-                } else {
-                    objField.set(newParent, newValue);
+        if (importable) {
+            Object newValue = getNewValue(objField, newParent, fieldValue, fieldDef);
+            // first we clear all fields (as of now), that's why setting a value here only when it is present
+            if (newValue != null) {
+                try {
+                    if (newParent instanceof Collection) {
+                        ((Collection<Object>) newParent).add(newValue);
+                    } else {
+                        objField.set(newParent, newValue);
+                    }
+                } catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
+                    logger.error(e.getMessage());
+                    throw new RuntimeException(e);
                 }
-            } catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-                logger.error(e.getMessage());
-                throw new RuntimeException(e);
             }
         }
-        return newParent;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

@@ -1,5 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
@@ -103,22 +106,25 @@ LoggerIdentifiable, Cloneable {
 
     //protected String govAgreementNumber;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ACTIVITY_ID, importable = false)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ACTIVITY_ID)
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
     @VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)
     protected Long ampActivityId ;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ID, required = "_ALWAYS_", importable = false)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ID)
     @VersionableFieldSimple(fieldTitle = "AMP Id", blockSingleChange = true)
     protected String ampId ;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_TITLE, importable = true, fmPath = "/Activity Form/Identification/Project Title", required = "_ALWAYS_")
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_TITLE, importable = true, required = ALWAYS,
+            fmPath = "/Activity Form/Identification/Project Title")
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
     @VersionableFieldSimple(fieldTitle = "Name", mandatoryForSingleChange = true)
     @TranslatableField
     protected String name ;
     
-    @Interchangeable(fieldTitle = "Description", importable = true, fmPath = "/Activity Form/Identification/Description", required = "/Activity Form/Identification/Required Validator for Description")
+    @Interchangeable(fieldTitle = "Description", importable = true,
+            fmPath = "/Activity Form/Identification/Description",
+            requiredFmPath = "/Activity Form/Identification/Required Validator for Description")
     @VersionableFieldTextEditor(fieldTitle = "Description")
     protected String description ;
 
@@ -130,7 +136,8 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldTextEditor(fieldTitle = "Lessons Learned")
     protected String lessonsLearned;
     
-    @Interchangeable(fieldTitle = "Objective", importable = true, fmPath = "/Activity Form/Identification/Objective", required = "/Activity Form/Identification/Required Validator for Objective")
+    @Interchangeable(fieldTitle = "Objective", importable = true, fmPath = "/Activity Form/Identification/Objective",
+            requiredFmPath = "/Activity Form/Identification/Required Validator for Objective")
     @VersionableFieldTextEditor(fieldTitle = "Objective")
     protected String objective ;
     
@@ -146,7 +153,7 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Document Space")
     protected String documentSpace;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.IS_DRAFT, required="_ALWAYS_", importable=false)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.IS_DRAFT)
     @VersionableFieldSimple(fieldTitle = "Is Draft?", blockSingleChange = true)
     protected Boolean draft;
 
@@ -176,7 +183,9 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Language")
     protected String language ;
 
-    @Interchangeable(fieldTitle = "Original Completion Date", importable = true, fmPath = "/Activity Form/Planning/Original Completion Date", required="/Activity Form/Planning/Required Validator for Original Completion Date")
+    @Interchangeable(fieldTitle = "Original Completion Date", importable = true,
+            fmPath = "/Activity Form/Planning/Original Completion Date",
+            requiredFmPath = "/Activity Form/Planning/Required Validator for Original Completion Date")
     @VersionableFieldSimple(fieldTitle = "Original Completion Date")
     protected Date originalCompDate;
     
@@ -212,7 +221,8 @@ LoggerIdentifiable, Cloneable {
     protected Set<IPAContract> contracts;
     
     //TTIL
-    @Interchangeable(fieldTitle = "Locations", importable = true, fmPath = "/Activity Form/Location", required = "/Activity Form/Location/Locations/Location required validator",
+    @Interchangeable(fieldTitle = "Locations", importable = true, fmPath = "/Activity Form/Location",
+            requiredFmPath = "/Activity Form/Location/Locations/Location required validator",
                     validators = @Validators (unique = "/Activity Form/Location/Locations/uniqueLocationsValidator", treeCollection = "/Activity Form/Location/Locations/Tree Validator"))
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.LOCATIONS)
     protected Set<AmpActivityLocation> locations ;
@@ -429,7 +439,9 @@ LoggerIdentifiable, Cloneable {
 //  @VersionableCollection(fieldTitle = "Component Fundings")
 //  protected Set<AmpComponentFunding> componentFundings;
 
-    @Interchangeable(fieldTitle = "Proposed Start Date", importable = true, fmPath = "/Activity Form/Planning/Proposed Start Date", required = "/Activity Form/Planning/Required Validator for Proposed Start Date")
+    @Interchangeable(fieldTitle = "Proposed Start Date", importable = true,
+            fmPath = "/Activity Form/Planning/Proposed Start Date",
+            requiredFmPath = "/Activity Form/Planning/Required Validator for Proposed Start Date")
     @VersionableFieldSimple(fieldTitle = "Proposed Start Date")
     protected Date proposedStartDate;
 
@@ -534,7 +546,7 @@ LoggerIdentifiable, Cloneable {
     /* Categories */
     @InterchangeableDiscriminator(discriminatorField = "ampCategoryClass.keyName",
     settings = {
-        @Interchangeable(fieldTitle = "Activity Status", importable=true, multipleValues=false, required = ActivityEPConstants.REQUIRED_ALWAYS,
+        @Interchangeable(fieldTitle = "Activity Status", importable = true, multipleValues = false, required = ALWAYS,
                 discriminatorOption = CategoryConstants.ACTIVITY_STATUS_KEY, fmPath="/Activity Form/Identification/Activity Status", pickIdOnly=true),
         @Interchangeable(fieldTitle = "Type of Cooperation", importable=true,  multipleValues = false,
                 /* "/Activity Form/Identification/Type of Cooperation" is used for SSC Type of Cooperation in preview display,
@@ -556,7 +568,8 @@ LoggerIdentifiable, Cloneable {
                 discriminatorOption = CategoryConstants.MODALITIES_KEY, fmPath="/Activity Form/Funding/Overview Section/Modalities", pickIdOnly=true),
         @Interchangeable(fieldTitle = "A C Chapter", label = "A.C. Chapter", importable = true, multipleValues = false,
                 discriminatorOption = CategoryConstants.ACCHAPTER_KEY, fmPath="/Activity Form/Identification/A.C. Chapter", pickIdOnly=true), 
-        @Interchangeable(fieldTitle = "Activity Budget", importable=true, multipleValues=false, required = "/Activity Form/Identification/Required Validator for Activity Budget", 
+        @Interchangeable(fieldTitle = "Activity Budget", importable = true, multipleValues = false,
+                requiredFmPath = "/Activity Form/Identification/Required Validator for Activity Budget",
                 discriminatorOption = CategoryConstants.ACTIVITY_BUDGET_KEY, fmPath="/Activity Form/Identification/Activity Budget", pickIdOnly=true), 
         @Interchangeable(fieldTitle = "Procurement System", importable=true, multipleValues=false, 
                 discriminatorOption = CategoryConstants.PROCUREMENT_SYSTEM_KEY, fmPath="/Activity Form/Identification/Procurement System", pickIdOnly=true),
@@ -606,44 +619,39 @@ LoggerIdentifiable, Cloneable {
      * This field is used for API only. The values are stored in database as a string using FY field
      */
     @Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", 
-            required = "/Activity Form/Identification/Budget Extras/Required Validator for fy",
+            requiredFmPath = "/Activity Form/Identification/Budget Extras/Required Validator for fy",
             dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY}, uniqueConstraint = true,
             validators = @Validators (unique = "/Activity Form/Identification/Budget Extras/FY"))
     @PossibleValues(FiscalYearPossibleValuesProvider.class)
     protected Set<Long> fiscalYears;
     
-    @Interchangeable(fieldTitle = "Vote", importable = true, 
+    @Interchangeable(fieldTitle = "Vote", importable = true, required = SUBMIT,
             fmPath = "/Activity Form/Identification/Budget Extras/Vote",
-            required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Vote")
     protected String vote;
     
-    @Interchangeable(fieldTitle = "Sub Vote", label = "Sub-Vote", importable = true,
+    @Interchangeable(fieldTitle = "Sub Vote", label = "Sub-Vote", importable = true, required = SUBMIT,
             fmPath = "/Activity Form/Identification/Budget Extras/Sub-Vote",
-            required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Sub Vote")
     protected String subVote;
     
-    @Interchangeable(fieldTitle = "Sub Program", label = "Sub-Program", importable = true,
+    @Interchangeable(fieldTitle = "Sub Program", label = "Sub-Program", importable = true, required = SUBMIT,
             fmPath = "/Activity Form/Identification/Budget Extras/Sub-Program",
-            required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Sub Program")
     protected String subProgram;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE, importable = true,
-            required = ActivityEPConstants.REQUIRED_ND,
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE, importable = true, required = SUBMIT,
             dependencies = InterchangeDependencyResolver.ON_BUDGET_KEY,
             fmPath = FMVisibility.ANY_FM + ActivityEPConstants.DONOR_PROJECT_CODE_FM_PATH
                     + "|" + ActivityEPConstants.BUDGET_EXTRAS_PROJECT_CODE_FM_PATH)
     @VersionableFieldSimple(fieldTitle = "Project Code")
     protected String projectCode;
 
-    @Interchangeable(fieldTitle = "Ministry Code", importable = true, 
+    @Interchangeable(fieldTitle = "Ministry Code", importable = true, required = SUBMIT,
             fmPath = "/Activity Form/Identification/Budget Extras/Ministry Code",
-            required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Ministry Code")
     protected String ministryCode;
@@ -662,7 +670,9 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Joint Criteria")
     protected Boolean jointCriteria;
     
-    @Interchangeable(fieldTitle = "Humanitarian Aid", importable = true, fmPath = "/Activity Form/Identification/Humanitarian Aid", required = "/Activity Form/Identification/Required Validator for Humanitarian Aid")
+    @Interchangeable(fieldTitle = "Humanitarian Aid", importable = true,
+            fmPath = "/Activity Form/Identification/Humanitarian Aid",
+            requiredFmPath = "/Activity Form/Identification/Required Validator for Humanitarian Aid")
     @VersionableFieldSimple(fieldTitle = "Humanitarian Aid")
     protected Boolean humanitarianAid;
 

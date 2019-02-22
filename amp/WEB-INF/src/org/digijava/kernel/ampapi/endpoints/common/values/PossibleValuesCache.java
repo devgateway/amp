@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activity.values;
+package org.digijava.kernel.ampapi.endpoints.common.values;
 
 import java.util.HashMap;
 import java.util.List;

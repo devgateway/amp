@@ -16,7 +16,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
-import org.digijava.kernel.ampapi.endpoints.activity.values.PossibleValuesCache;
+import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.junit.Before;
 import org.junit.Test;
 

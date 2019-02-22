@@ -27,8 +27,8 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
-import org.digijava.kernel.ampapi.endpoints.activity.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
+import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -99,7 +99,7 @@ public class ObjectImporter {
     private void cleanImportableField(APIField fieldDef, Object obj) {
         try {
             Field field = ReflectionUtil.getField(obj, fieldDef.getFieldNameInternal());
-            if (Collection.class.isAssignableFrom(field.getType())) {
+            if (InterchangeUtils.isCollection(field)) {
                 Collection collection = (Collection) PropertyUtils.getProperty(obj, fieldDef.getFieldNameInternal());
                 if (collection != null) {
                     collection.clear();
@@ -239,7 +239,7 @@ public class ObjectImporter {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private Object getNewValue(Field field, Object parentObj, Object jsonValue, APIField fieldDef) {
-        boolean isCollection = Collection.class.isAssignableFrom(field.getType());
+        boolean isCollection = InterchangeUtils.isCollection(field);
         if (jsonValue == null && !isCollection) {
             return null;
         }

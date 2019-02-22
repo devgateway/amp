@@ -242,7 +242,6 @@ public class ObjectImporter {
             return null;
         }
 
-        Object value = null;
         FieldType fieldType = fieldDef.getApiType().getFieldType();
         boolean idOnly = fieldDef.isIdOnly();
 
@@ -250,10 +249,11 @@ public class ObjectImporter {
         if (!isCollection && idOnly) {
             return valueConverter.getObjectById(field.getType(), jsonValue);
         }
+        
+        Object value = null;
 
-        // this is a collection
-        if (isCollection) {
-            try {
+        try {
+            if (isCollection) {
                 value = field.get(parentObj);
                 Collection col = (Collection) value;
                 if (col == null) {
@@ -261,47 +261,25 @@ public class ObjectImporter {
                 }
                 if (idOnly && jsonValue != null && !fieldDef.getApiType().isSimpleItemType()) {
                     Class<?> objectType = AIHelper.getGenericsParameterClass(field);
-                    try {
-                        Object res = valueConverter.getObjectById(objectType, jsonValue);
-                        col.add(res);
-                    } catch (IllegalArgumentException e) {
-                        logger.error(e.getMessage());
-                        throw new RuntimeException(e);
-                    }
-
+                    Object res = valueConverter.getObjectById(objectType, jsonValue);
+                    col.add(res);
                 }
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                logger.error(e.getMessage());
-                throw new RuntimeException(e);
-            }
-            // this is a simple type
-        } else if (fieldType.isSimpleType()) {
-            try {
+            } else if (fieldType.isSimpleType()) {
                 if (Date.class.equals(field.getType())) {
                     value = DateTimeUtil.parseISO8601DateTime((String) jsonValue);
                 } else if (String.class.equals(field.getType())) {
-                    // check if this is a translatable that expects multiple entries
                     value = extractString(field, parentObj, jsonValue);
                 } else {
-                    // a valueOf should work
                     Method valueOf = field.getType().getDeclaredMethod("valueOf", String.class);
-
                     value = valueOf.invoke(field.getType(), String.valueOf(jsonValue));
                 }
-            } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException
-                    | InvocationTargetException e) {
-                logger.error(e.getMessage());
-                throw new RuntimeException(e);
+            } else if (AmpAgreement.class.equals(field.getType())) {
+                value = field.get(parentObj);
             }
-        } else {
-            try {
-                if (AmpAgreement.class.equals(field.getType())) {
-                    value = field.get(parentObj);
-                }
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                logger.error(e.getMessage());
-                throw new RuntimeException(e);
-            }
+        } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException
+                | InvocationTargetException e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         return value;
@@ -336,9 +314,7 @@ public class ObjectImporter {
      * @param fieldPath
      * @return currently updated object or null if any validation error occurred
      */
-    private Object validateSubElements(APIField fieldDef, Object newParent, Object newJsonValue,
-            String fieldPath) {
-        // simulate temporarily fieldDef
+    private Object validateSubElements(APIField fieldDef, Object newParent, Object newJsonValue, String fieldPath) {
         fieldDef = fieldDef == null ? new APIField() : fieldDef;
         FieldType fieldType = fieldDef.getApiType().getFieldType();
         /*

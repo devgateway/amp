@@ -26,7 +26,7 @@ public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
     public JsonBean export(AmpActivityVersion object) {
         JsonBean resultJson = new JsonBean();
 
-        if (!InterchangeUtils.validateFilterActivityFields(filter, resultJson, getApiFields())) {
+        if (!ActivityInterchangeUtils.validateFilterActivityFields(filter, resultJson, getApiFields())) {
             return resultJson;
         }
 

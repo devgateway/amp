@@ -197,7 +197,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
             message = "project with full set of configured fields and their values"))
     public JsonBean getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
-        return InterchangeUtils.getActivity(projectId);
+        return ActivityInterchangeUtils.getActivity(projectId);
     }
 
     @POST
@@ -210,7 +210,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     public JsonBean getProject(
             @ApiParam("project id") @PathParam("projectId") Long projectId,
             @ApiParam("jsonBean with a list of fields that will be displayed") JsonBean filter) {
-        return InterchangeUtils.getActivity(projectId, filter);
+        return ActivityInterchangeUtils.getActivity(projectId, filter);
     }
 
     @GET
@@ -219,7 +219,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiMethod(authTypes = AuthRule.PUBLIC_VIEW_ACTIVITY, id = "getProjectsFilter", ui = false)
     public Response getProjectInfo(@PathParam("projectId") Long projectId) {
         ActivityInformation response =
-        InterchangeUtils.getActivityInformation(projectId);
+        ActivityInterchangeUtils.getActivityInformation(projectId);
         return Response.ok(response, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
@@ -231,7 +231,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
             message = "project with full set of configured fields and their values"))
     public JsonBean getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
-        return InterchangeUtils.getActivityByAmpId(ampId);
+        return ActivityInterchangeUtils.getActivityByAmpId(ampId);
     }
 
     @POST
@@ -254,7 +254,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             ))
     public Collection<JsonBean> getProjectsByAmpIds(@ApiParam(value = "List of amp-id", required = true)
         List<String> ampIds) {
-        return InterchangeUtils.getActivitiesByAmpIds(ampIds);
+        return ActivityInterchangeUtils.getActivitiesByAmpIds(ampIds);
     }
 
     @POST
@@ -272,7 +272,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
                     message = "error if invalid configuration is received")})
     public JsonBean addProject(@ApiParam("activity configuration") JsonBean newJson) {
-        return InterchangeUtils.importActivity(newJson, false, uri.getBaseUri() + "activity");
+        return ActivityInterchangeUtils.importActivity(newJson, false, uri.getBaseUri() + "activity");
     }
 
     @POST
@@ -308,7 +308,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             EndpointUtils.addGeneralError(newJson, ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details));
         }
 
-        return InterchangeUtils.importActivity(newJson, true, uri.getBaseUri() + "activity");
+        return ActivityInterchangeUtils.importActivity(newJson, true, uri.getBaseUri() + "activity");
     }
 
     @GET

@@ -14,15 +14,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.InterchangeableClassMapper;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.FlushMode;
@@ -142,9 +145,19 @@ public class InterchangeUtils {
         return possibleValuesEntity.value();
     }
 
-    public static Object getObjectById(Class<?> entityClass, Long id) {
-        // TODO: cache it
-        return PersistenceManager.getSession().get(entityClass.getName(), id);
+    public static Object getObjectById(Class<?> entityClass, Object id) {
+        if (Collection.class.isAssignableFrom(entityClass)) {
+            throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
+        }
+        if (ApprovalStatus.class.isAssignableFrom(entityClass)) {
+            return ApprovalStatus.fromId((Integer) id);
+        } else if (ResourceType.class.isAssignableFrom(entityClass)) {
+            return ResourceType.fromId((Integer) id);
+        } else if (InterchangeUtils.isSimpleType(entityClass)) {
+            return ConvertUtils.convert(id, entityClass);
+        } else {
+            return PersistenceManager.getSession().get(entityClass.getName(), Long.valueOf(id.toString()));
+        }
     }
 
     public static boolean isSimpleType(Class<?> clazz) {

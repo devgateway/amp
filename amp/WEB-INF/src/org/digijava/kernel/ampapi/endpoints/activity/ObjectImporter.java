@@ -250,7 +250,7 @@ public class ObjectImporter {
 
         // this field has possible values
         if (!isCollection && idOnly) {
-            return getObjectReferencedById(field.getType(), jsonValue);
+            return InterchangeUtils.getObjectById(field.getType(), jsonValue);
         }
 
         // this is a collection
@@ -264,7 +264,7 @@ public class ObjectImporter {
                 if (idOnly && jsonValue != null && !fieldDef.getApiType().isSimpleItemType()) {
                     Class<?> objectType = AIHelper.getGenericsParameterClass(field);
                     try {
-                        Object res = getObjectReferencedById(objectType, jsonValue);
+                        Object res = InterchangeUtils.getObjectById(objectType, jsonValue);
                         col.add(res);
                     } catch (IllegalArgumentException e) {
                         logger.error(e.getMessage());
@@ -307,27 +307,6 @@ public class ObjectImporter {
         }
 
         return value;
-    }
-
-    /**
-     * Gets the object identified by an ID, from the Possible Values EP
-     * @param objectType
-     * @param value
-     * @return
-     */
-    private Object getObjectReferencedById(Class<?> objectType, Object value) {
-        if (Collection.class.isAssignableFrom(objectType)) {
-            throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
-        }
-        if (ApprovalStatus.class.isAssignableFrom(objectType)) {
-            return ApprovalStatus.fromId((Integer) value);
-        } else if (ResourceType.class.isAssignableFrom(objectType)) {
-            return ResourceType.fromId((Integer) value);
-        } else if (InterchangeUtils.isSimpleType(objectType)) {
-            return ConvertUtils.convert(value, objectType);
-        } else {
-            return InterchangeUtils.getObjectById(objectType, Long.valueOf(value.toString()));
-        }
     }
 
     /**

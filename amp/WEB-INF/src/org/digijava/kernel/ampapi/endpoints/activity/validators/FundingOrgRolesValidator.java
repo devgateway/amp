@@ -41,7 +41,7 @@ public class FundingOrgRolesValidator extends InputValidator {
     private Set<Pair<Long, Long>> orgRoleDefinitions;
     
     private static final Set<String> TRANSACTION_PATHS = ActivityEPConstants.TRANSACTION_FIELD_NAMES.stream()
-            .map(transactionName -> FUNDING + "~" + InterchangeUtils.underscorify(transactionName))
+            .map(transactionName -> FUNDING + "~" + FieldMap.underscorify(transactionName))
             .collect(Collectors.toSet());
     
     @Override

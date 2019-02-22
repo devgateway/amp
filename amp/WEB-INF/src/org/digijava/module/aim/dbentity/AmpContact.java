@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +9,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactFieldsConstants;
@@ -34,10 +35,10 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     @Interchangeable(fieldTitle = "ID")
     private Long id;
     
-    @Interchangeable(fieldTitle = "Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Name", importable = true, required = ALWAYS)
     private String name;
     
-    @Interchangeable(fieldTitle = "Last Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Last Name", importable = true, required = ALWAYS)
     private String lastname;
 
     @PossibleValues(ContactTitlePossibleValuesProvider.class)

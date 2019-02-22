@@ -32,6 +32,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -418,6 +419,9 @@ public class ObjectImporter {
         if (idOnly && !(isList && fieldDef.getApiType().isSimpleItemType())) {
             return newParent;
         }
+        
+        // TODO AMP-28121 remove this temporary workaround
+        boolean isObject = AmpActivityGroup.class.isAssignableFrom(fieldDef.getApiType().getType());
 
         // first validate all sub-elements
         List<APIField> childrenFields = fieldDef.getChildren();
@@ -469,22 +473,21 @@ public class ObjectImporter {
                     APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
 
                     Object res;
-                    if (isList) {
+                    if (isList && !isObject) {
                         try {
                             Object newSubElement = subElementClass.newInstance();
                             res = validateAndImport(newSubElement, childrenFields, newChild, fieldPath);
+                            if (res != null && newParent != null) {
+                                configureDiscriminationField(res, fieldDef);
+                                // actual links will be updated
+                                ((Collection) newFieldValue).add(res);
+                            }
                         } catch (InstantiationException | IllegalAccessException e) {
                             logger.error(e.getMessage());
                             throw new RuntimeException(e);
                         }
                     } else {
                         res = validateAndImport(newFieldValue, childFieldDef, newChild, fieldPath);
-                    }
-
-                    if (res != null && newParent != null && isList) {
-                        configureDiscriminationField(res, fieldDef);
-                        // actual links will be updated
-                        ((Collection) newFieldValue).add(res);
                     }
                 }
                 // TODO: we also need to validate other children, some can be mandatory

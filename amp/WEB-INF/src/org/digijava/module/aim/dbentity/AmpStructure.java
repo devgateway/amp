@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,7 +31,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     
     @TranslatableField
     @Interchangeable(fieldTitle = "Title", importable = true, fmPath = "/Activity Form/Structures/Structure Title", 
-            required = ActivityEPConstants.REQUIRED_ALWAYS)
+            required = ALWAYS)
     private String title;
     
     @TranslatableField

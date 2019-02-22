@@ -145,21 +145,6 @@ public class InterchangeUtils {
         return possibleValuesEntity.value();
     }
 
-    public static Object getObjectById(Class<?> entityClass, Object id) {
-        if (Collection.class.isAssignableFrom(entityClass)) {
-            throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
-        }
-        if (ApprovalStatus.class.isAssignableFrom(entityClass)) {
-            return ApprovalStatus.fromId((Integer) id);
-        } else if (ResourceType.class.isAssignableFrom(entityClass)) {
-            return ResourceType.fromId((Integer) id);
-        } else if (InterchangeUtils.isSimpleType(entityClass)) {
-            return ConvertUtils.convert(id, entityClass);
-        } else {
-            return PersistenceManager.getSession().get(entityClass.getName(), Long.valueOf(id.toString()));
-        }
-    }
-
     public static boolean isSimpleType(Class<?> clazz) {
         return InterchangeableClassMapper.containsSimpleClass(clazz);
     }

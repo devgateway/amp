@@ -14,10 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
-import org.apache.commons.beanutils.ConvertUtils;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -29,13 +27,12 @@ import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
+import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpAgreement;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
@@ -48,6 +45,7 @@ public class ObjectImporter {
     private final InputValidatorProcessor validator;
 
     protected Map<Integer, ApiErrorMessage> errors = new HashMap<>();
+    protected ValueConverter valueConverter = new ValueConverter();
 
     protected JsonBean newJson;
     protected TranslationSettings trnSettings;
@@ -250,7 +248,7 @@ public class ObjectImporter {
 
         // this field has possible values
         if (!isCollection && idOnly) {
-            return InterchangeUtils.getObjectById(field.getType(), jsonValue);
+            return valueConverter.getObjectById(field.getType(), jsonValue);
         }
 
         // this is a collection
@@ -259,12 +257,12 @@ public class ObjectImporter {
                 value = field.get(parentObj);
                 Collection col = (Collection) value;
                 if (col == null) {
-                    col = (Collection) getNewInstance(parentObj, field);
+                    col = (Collection) valueConverter.getNewInstance(parentObj, field);
                 }
                 if (idOnly && jsonValue != null && !fieldDef.getApiType().isSimpleItemType()) {
                     Class<?> objectType = AIHelper.getGenericsParameterClass(field);
                     try {
-                        Object res = InterchangeUtils.getObjectById(objectType, jsonValue);
+                        Object res = valueConverter.getObjectById(objectType, jsonValue);
                         col.add(res);
                     } catch (IllegalArgumentException e) {
                         logger.error(e.getMessage());
@@ -307,34 +305,6 @@ public class ObjectImporter {
         }
 
         return value;
-    }
-
-    /**
-     * Generates an instance of the type of the field
-     * @param parent
-     * @param field
-     * @return
-     */
-    private Object getNewInstance(Object parent, Field field) {
-        Object fieldValue;
-        try {
-            if (SortedSet.class.isAssignableFrom(field.getType())) {
-                fieldValue = new TreeSet<>();
-            } else if (Set.class.isAssignableFrom(field.getType())) {
-                fieldValue = new HashSet<>();
-            } else if (List.class.isAssignableFrom(field.getType())) {
-                fieldValue = new ArrayList<>();
-            } else if (Collection.class.isAssignableFrom(field.getType())) {
-                fieldValue = new ArrayList<>();
-            } else {
-                fieldValue = field.getType().newInstance();
-            }
-            field.set(parent, fieldValue);
-        } catch (InstantiationException | IllegalAccessException e) {
-            logger.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return fieldValue;
     }
 
     protected String extractString(Field field, Object parentObj, Object jsonValue) {
@@ -400,7 +370,7 @@ public class ObjectImporter {
             try {
                 newFieldValue = newField == null ? null : newField.get(newParent);
                 if (newParent != null && newFieldValue == null) {
-                    newFieldValue = getNewInstance(newParent, newField);
+                    newFieldValue = valueConverter.getNewInstance(newParent, newField);
                 }
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 logger.error(e.getMessage());
@@ -409,7 +379,7 @@ public class ObjectImporter {
 
             if (isList && fieldDef.getApiType().isSimpleItemType()) {
                 Collection nvs = ((Collection<?>) childrenNewValues).stream()
-                        .map(v -> toSimpleTypeValue(v, subElementClass)).collect(Collectors.toList());
+                        .map(v -> valueConverter.toSimpleTypeValue(v, subElementClass)).collect(Collectors.toList());
                 ((Collection) newFieldValue).addAll(nvs);
             } else {
                 if (newFieldValue != null && AmpAgreement.class.isAssignableFrom(newFieldValue.getClass())
@@ -460,19 +430,6 @@ public class ObjectImporter {
         return newParent;
     }
 
-    private Object toSimpleTypeValue(Object value, Class<?> type) {
-        if (value == null || type.isAssignableFrom(value.getClass())) {
-            return value;
-        }
-        try {
-            Method valueOf = type.getMethod("valueOf", String.class);
-            return valueOf.invoke(type, value.toString());
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException e) {
-            logger.error("Could not automatically convert the value. The deserializer configuration may be missing.");
-            throw new RuntimeException(e);
-        }
-    }
 
     /**
      * Gets items marked under the "children" key in the hierarchical branch of the imported JSON

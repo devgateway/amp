@@ -42,7 +42,8 @@ public class ObjectImporter {
 
     private static final Logger logger = Logger.getLogger(ObjectImporter.class);
 
-    private final InputValidatorProcessor validator;
+    private final InputValidatorProcessor formatValidator;
+    private final InputValidatorProcessor businessRulesValidator;
 
     protected Map<Integer, ApiErrorMessage> errors = new HashMap<>();
     protected ValueConverter valueConverter = new ValueConverter();
@@ -64,13 +65,15 @@ public class ObjectImporter {
 
     private Deque<Object> backReferenceStack = new ArrayDeque<>();
 
-    public ObjectImporter(InputValidatorProcessor validator, List<APIField> apiFields) {
-        this(validator, TranslationSettings.getCurrent(), apiFields);
+    public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
+            List<APIField> apiFields) {
+        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiFields);
     }
 
-    public ObjectImporter(InputValidatorProcessor validator, TranslationSettings trnSettings,
-            List<APIField> apiFields) {
-        this.validator = validator;
+    public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator, 
+            TranslationSettings trnSettings, List<APIField> apiFields) {
+        this.formatValidator = formatValidator;
+        this.businessRulesValidator = businessRulesValidator;
         this.trnSettings = trnSettings;
         this.apiFields = apiFields;
         this.possibleValuesCached = new PossibleValuesCache(apiFields);
@@ -114,7 +117,7 @@ public class ObjectImporter {
      * @param json
      * @return
      */
-    public Object validateAndImport(Object root, Map<String, Object> json) {
+    public boolean validateAndImport(Object root, Map<String, Object> json) {
         return validateAndImport(root, apiFields, json, null);
     }
 
@@ -127,10 +130,11 @@ public class ObjectImporter {
      * @param fieldsDef definitions of the fields in this parent (from Fields Enumeration EP)
      * @param newJsonParent parent JSON object in which reside the analyzed fields
      * @param fieldPath the underscorified path to the field currently validated & imported
-     * @return currently updated object
+     * @return true if valid format. Check for all errors to find also business validation issues
      */
-    protected Object validateAndImport(Object newParent, List<APIField> fieldsDef,
+    protected boolean validateAndImport(Object newParent, List<APIField> fieldsDef,
             Map<String, Object> newJsonParent, String fieldPath) {
+        boolean isFormatValid = true;
         restoreBackReferences(newParent);
         try {
             backReferenceStack.push(newParent);
@@ -138,7 +142,7 @@ public class ObjectImporter {
             Set<String> fields = new HashSet<String>(newJsonParent.keySet());
             // process all valid definitions
             for (APIField fieldDef : fieldsDef) {
-                newParent = validateAndImport(newParent, fieldDef, newJsonParent, fieldPath);
+                isFormatValid = validateAndImport(newParent, fieldDef, newJsonParent, fieldPath) && isFormatValid;
                 fields.remove(fieldDef.getFieldName());
             }
 
@@ -146,14 +150,15 @@ public class ObjectImporter {
             // note: due to AMP-20766, we won't be able to fully detect invalid children
             String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
             if (fields.size() > 0 && !ignoreUnknownFields()) {
+                isFormatValid = false;
                 for (String invalidField : fields) {
                     // no need to go through deep-first validation flow
-                    validator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
+                    formatValidator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
                             ActivityErrors.FIELD_INVALID, errors);
                 }
             }
 
-            return newParent;
+            return isFormatValid;
         } finally {
             backReferenceStack.pop();
         }
@@ -181,22 +186,21 @@ public class ObjectImporter {
      * @param fieldDef JsonBean holding the description of the field (obtained from the Fields Enumerator EP)
      * @param newJsonParent JSON as imported
      * @param fieldPath underscorified path to the field
-     * @return currently updated object
+     * @return true if valid format. Check errors to see also any business rules validation errors. 
      */
-    private Object validateAndImport(Object newParent, APIField fieldDef,
+    private boolean validateAndImport(Object newParent, APIField fieldDef,
             Map<String, Object> newJsonParent, String fieldPath) {
         String fieldName = getFieldName(fieldDef, newJsonParent);
         String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
         Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
 
-        boolean valid = validator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
-        if (valid) {
-            newParent = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
-            if (newParent != null) {
-                setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
-            }
+        boolean isValidFormat = formatValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
+        if (isValidFormat) {
+            businessRulesValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
+            isValidFormat = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
+            setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
         }
-        return newParent;
+        return isValidFormat;
     }
 
     /**
@@ -311,7 +315,8 @@ public class ObjectImporter {
      * @param fieldPath
      * @return currently updated object or null if any validation error occurred
      */
-    private Object validateSubElements(APIField fieldDef, Object newParent, Object newJsonValue, String fieldPath) {
+    private boolean validateSubElements(APIField fieldDef, Object newParent, Object newJsonValue, String fieldPath) {
+        boolean isFormatValid = true;
         fieldDef = fieldDef == null ? new APIField() : fieldDef;
         FieldType fieldType = fieldDef.getApiType().getFieldType();
         /*
@@ -324,7 +329,7 @@ public class ObjectImporter {
         boolean idOnly = fieldDef.isIdOnly();
         boolean isList = fieldType.isList();
         if (idOnly && !(isList && fieldDef.getApiType().isSimpleItemType())) {
-            return newParent;
+            return isFormatValid;
         }
         
         // TODO AMP-28121 remove this temporary workaround
@@ -379,28 +384,29 @@ public class ObjectImporter {
                     branchJsonVisitor.put(fieldPath, newChild);
                     APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
 
-                    Object res;
                     if (isList && !isObject) {
                         try {
                             Object newSubElement = subElementClass.newInstance();
-                            res = validateAndImport(newSubElement, childrenFields, newChild, fieldPath);
-                            if (res != null && newParent != null) {
-                                valueConverter.configureDiscriminationField(res, fieldDef);
+                            isFormatValid = validateAndImport(newSubElement, childrenFields, newChild, fieldPath)
+                                    && isFormatValid;
+                            if (isFormatValid) {
+                                valueConverter.configureDiscriminationField(newSubElement, fieldDef);
                                 // actual links will be updated
-                                ((Collection) newFieldValue).add(res);
+                                ((Collection) newFieldValue).add(newSubElement);
                             }
                         } catch (InstantiationException | IllegalAccessException e) {
                             logger.error(e.getMessage());
                             throw new RuntimeException(e);
                         }
                     } else {
-                        res = validateAndImport(newFieldValue, childFieldDef, newChild, fieldPath);
+                        isFormatValid = validateAndImport(newFieldValue, childFieldDef, newChild, fieldPath)
+                                && isFormatValid;
                     }
                 }
                 // TODO: we also need to validate other children, some can be mandatory
             }
         }
-        return newParent;
+        return isFormatValid;
     }
 
 

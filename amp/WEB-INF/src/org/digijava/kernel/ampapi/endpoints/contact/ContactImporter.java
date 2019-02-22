@@ -27,7 +27,8 @@ public class ContactImporter extends ObjectImporter {
     private AmpContact contact;
 
     public ContactImporter() {
-        super(new InputValidatorProcessor(InputValidatorProcessor.getContactValidators()),
+        super(new InputValidatorProcessor(InputValidatorProcessor.getContactFormatValidators()),
+                new InputValidatorProcessor(InputValidatorProcessor.getContactBusinessRulesValidators()),
                 AmpFieldsEnumerator.getContactEnumerator().getContactFields());
     }
 
@@ -84,17 +85,16 @@ public class ContactImporter extends ObjectImporter {
                 cleanImportableFields(fieldsDef, contact);
             }
 
-            contact = (AmpContact) validateAndImport(contact, fieldsDef, newJson.any(), null);
+            validateAndImport(contact, fieldsDef, newJson.any(), null);
 
-            if (contact == null) {
-                throw new ObjectConversionException();
+            if (errors.isEmpty()) {
+                setupBeforeSave(contact, createdBy);
+                PersistenceManager.getSession().saveOrUpdate(contact);
+                PersistenceManager.flushAndCommit(PersistenceManager.getSession());
+            } else {
+                PersistenceManager.rollbackCurrentSessionTx();
             }
-
-            setupBeforeSave(contact, createdBy);
-            PersistenceManager.getSession().saveOrUpdate(contact);
-
-            PersistenceManager.flushAndCommit(PersistenceManager.getSession());
-        } catch (ObjectConversionException | RuntimeException e) {
+        } catch (RuntimeException e) {
             PersistenceManager.rollbackCurrentSessionTx();
 
             if (e instanceof RuntimeException) {

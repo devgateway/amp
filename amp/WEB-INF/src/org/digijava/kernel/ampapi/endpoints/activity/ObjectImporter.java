@@ -20,7 +20,6 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
@@ -350,7 +349,7 @@ public class ObjectImporter {
                 if (newParent != null && newFieldValue == null) {
                     newFieldValue = valueConverter.getNewInstance(newParent, newField);
                 }
-            } catch (IllegalArgumentException | IllegalAccessException e) {
+            } catch (IllegalAccessException e) {
                 logger.error(e.getMessage());
                 throw new RuntimeException(e);
             }
@@ -360,6 +359,7 @@ public class ObjectImporter {
                         .map(v -> valueConverter.toSimpleTypeValue(v, subElementClass)).collect(Collectors.toList());
                 ((Collection) newFieldValue).addAll(nvs);
             } else {
+                // FIXME remove custom handling for agreements
                 if (newFieldValue != null && AmpAgreement.class.isAssignableFrom(newFieldValue.getClass())
                         && childrenNewValues.size() == 1) {
                     Map<String, Object> agreementMap = childrenNewValues.get(0);
@@ -367,11 +367,9 @@ public class ObjectImporter {
                     for (String key : agreementMap.keySet()) {
                         HashMap<String, Object> kv = new HashMap<String, Object>();
                         Object val = agreementMap.get(key);
-
                         if (val instanceof String) {
                             val = StringUtils.trim((String) val);
                         }
-
                         kv.put(key, val);
                         childrenNewValues.add(kv);
                     }

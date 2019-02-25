@@ -63,22 +63,18 @@ public class CachingFieldsEnumerator {
     }
 
     public List<String> findActivityFieldPaths(Predicate<APIField> fieldFilter) {
-        return findFieldPaths(fieldFilter, AmpActivityFields.class);
+        return fieldsEnumerator.findFieldPaths(fieldFilter, getActivityFields());
     }
 
     public List<String> findContactFieldPaths(Predicate<APIField> fieldFilter) {
-        return findFieldPaths(fieldFilter, AmpContact.class);
+        return fieldsEnumerator.findFieldPaths(fieldFilter, getContactFields());
     }
 
     public List<String> findResourceFieldPaths(Predicate<APIField> fieldFilter) {
-        return findFieldPaths(fieldFilter, AmpResource.class);
+        return fieldsEnumerator.findFieldPaths(fieldFilter, getResourceFields());
     }
 
     public List<String> findCommonFieldPaths(Predicate<APIField> fieldFilter) {
-        return findFieldPaths(fieldFilter, CommonSettings.class);
-    }
-
-    private List<String> findFieldPaths(Predicate<APIField> fieldFilter, Class<?> clazz) {
-        return fieldsEnumerator.findFieldPaths(fieldFilter, getAllAvailableFields(clazz));
+        return fieldsEnumerator.findFieldPaths(fieldFilter, getCommonSettingsFields());
     }
 }

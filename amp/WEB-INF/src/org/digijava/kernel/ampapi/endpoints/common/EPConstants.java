@@ -112,4 +112,10 @@ public class EPConstants {
 
     public static final String ISO8601_DATE_AND_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     public static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd";
+    
+    public static final Map<String, Integer> DATE_FORMAT_STRICT_LENGTH = new HashMap<String, Integer>() {{
+        put(ISO8601_DATE_AND_TIME_FORMAT, 28);
+        put(ISO8601_DATE_FORMAT, 10);
+    }};
+    
 }

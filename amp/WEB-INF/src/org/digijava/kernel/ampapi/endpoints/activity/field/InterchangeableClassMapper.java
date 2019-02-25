@@ -21,19 +21,6 @@ public final class InterchangeableClassMapper {
         .put(java.lang.Enum.class, FieldType.STRING)
         .build();
 
-    private static final Set<Class<?>> JSON_SUPPORTED_CLASSES = new HashSet<Class<?>>() {{
-        add(Boolean.class);
-        add(Character.class);
-        add(Byte.class);
-        add(Short.class);
-        add(Integer.class);
-        add(Long.class);
-        add(Float.class);
-        add(Double.class);
-        add(String.class);
-        add(Date.class);
-    }};
-    
     private InterchangeableClassMapper() {
     }
     
@@ -43,10 +30,6 @@ public final class InterchangeableClassMapper {
     
     public static boolean containsSimpleClass(Class<?> clazz) {
         return CLASS_TO_TYPE.containsKey(adjust(clazz));
-    }
-    
-    public static boolean containsSupportedClass(Class<?> clazz) {
-        return JSON_SUPPORTED_CLASSES.contains(adjust(clazz));
     }
     
     private static Class<?> adjust(Class<?> clazz) {

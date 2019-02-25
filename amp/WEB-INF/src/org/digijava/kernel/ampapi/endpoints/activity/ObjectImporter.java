@@ -286,7 +286,8 @@ public class ObjectImporter {
         } else if (fieldType.isSimpleType()) {
             try {
                 if (Date.class.equals(field.getType())) {
-                    value = InterchangeUtils.parseISO8601Date((String) jsonValue);
+                    boolean isTimestampField = InterchangeUtils.isTimestampField(field);
+                    value = InterchangeUtils.parseISO8601DateTimestamp((String) jsonValue, isTimestampField);
                 } else if (String.class.equals(field.getType())) {
                     // check if this is a translatable that expects multiple entries
                     value = extractString(field, parentObj, jsonValue);

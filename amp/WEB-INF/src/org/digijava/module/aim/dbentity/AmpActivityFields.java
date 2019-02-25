@@ -29,6 +29,7 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTe
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.TimestampField;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -162,6 +163,7 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_AT)
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_AT)
+    @TimestampField
     protected Date lastImportedAt;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY, pickIdOnly=true)
@@ -473,21 +475,25 @@ LoggerIdentifiable, Cloneable {
     
     @Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_DATE, label = "Activity created on")
     @VersionableFieldSimple(fieldTitle = "Creation Date", blockSingleChange = true)
+    @TimestampField
     protected Date createdDate;
     
     @Interchangeable(fieldTitle = ActivityFieldsConstants.UPDATE_DATE,
             label = "Activity updated on")
     @VersionableFieldSimple(fieldTitle = "Update Date", blockSingleChange = true)
+    @TimestampField
     protected Date updatedDate;
 
     @Interchangeable(fieldTitle = "Iati Last Update Date", importable = true)
     @VersionableFieldSimple(fieldTitle = "Iati Last Update Date", blockSingleChange = true)
+    @TimestampField
     protected Date iatiLastUpdatedDate;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVED_BY, pickIdOnly=true)
     protected AmpTeamMember approvedBy;
     
     @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_DATE)
+    @TimestampField
     protected Date approvalDate;
 
 //  @Interchangeable(fieldTitle = "Regional Fundings", importable = true, fmPath = "/Activity Form/Regional Funding")

@@ -31,10 +31,8 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -251,7 +249,7 @@ public final class PreviewActivityService {
         transaction.setTransactionId(fd.getDbId());
         transaction.setTransactionAmount(convertedAmount);
         transaction.setTransactionDate(InterchangeUtils.formatISO8601Date(fd.getTransactionDate()));
-        transaction.setReportingDate(InterchangeUtils.formatISO8601Date(fd.getReportingDate()));
+        transaction.setReportingDate(InterchangeUtils.formatISO8601Timestamp(fd.getReportingDate()));
 
         return transaction;
     }

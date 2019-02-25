@@ -38,10 +38,12 @@ h3 {
   display: inline-block;
   margin: 0 20px 0 0;
   vertical-align: top;
-
   h5 {
     color: @c-title;
     font-weight: 800;
+    &::first-letter {
+	  text-transform: capitalize;
+   }
   }
   li {
     list-style-type: none;
@@ -607,3 +609,4 @@ fieldset[disabled] .btn-success.active {
   src: local('Open Sans'), local('OpenSans'), url(//fonts.gstatic.com/s/opensans/v10/cJZKeOuBrn4kERxqtaUH3VtXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
 }
+

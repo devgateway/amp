@@ -196,9 +196,6 @@ public class AmpARFilter extends PropertyListable {
     @PropertyListableIgnore
     private Integer computedYear;
 
-    @PropertyListableIgnore
-    private Integer actualAppYear;
-
     /**
      * whether this filter should queryAppend a WorkspaceFilter query in generateFilterQuery. Ignored when building a workspace filter (always ON)
      */
@@ -449,6 +446,12 @@ public class AmpARFilter extends PropertyListable {
     private Integer dynActivityStartFilterAmount;
     private String dynActivityStartFilterOperator;
     private String dynActivityStartFilterXPeriod;
+
+    private String fromActualApprovalDate;
+    private String toActualApprovalDate;
+
+    private String fromProposedCompletionDate;
+    private String toProposedCompletionDate;
 
     private String fromIssueDate;
     private String toIssueDate;
@@ -2111,6 +2114,14 @@ public class AmpARFilter extends PropertyListable {
         }
     }
 
+    public Date[] buildFromAndToActualApprovalDateAsDate() {
+        return buildFromAndTo(fromActualApprovalDate, toActualApprovalDate);
+    }
+
+    public Date[] buildFromAndToProposedCompletionDateAsDate() {
+        return buildFromAndTo(fromProposedCompletionDate, toProposedCompletionDate);
+    }
+
     /**
      * @param fromActivityStartDate the fromActivityStartDate to set
      */
@@ -2672,14 +2683,6 @@ public class AmpARFilter extends PropertyListable {
 
     public void setComputedYear(Integer computedYear) {
         this.computedYear = computedYear;
-    }
-
-    public Integer getActualAppYear() {
-        return actualAppYear;
-    }
-
-    public void setActualAppYear(Integer actualAppYear) {
-        this.actualAppYear = actualAppYear;
     }
 
     /**
@@ -3244,5 +3247,37 @@ public class AmpARFilter extends PropertyListable {
     
     public void setResponsibleAgencyGroups(Set<AmpOrgGroup> responsibleAgencyGroups) {
         this.responsibleAgencyGroups = responsibleAgencyGroups;
+    }
+
+    public String getFromActualApprovalDate() {
+        return fromActualApprovalDate;
+    }
+
+    public void setFromActualApprovalDate(String fromActualApprovalDate) {
+        this.fromActualApprovalDate = fromActualApprovalDate;
+    }
+
+    public String getToActualApprovalDate() {
+        return toActualApprovalDate;
+    }
+
+    public void setToActualApprovalDate(String toActualApprovalDate) {
+        this.toActualApprovalDate = toActualApprovalDate;
+    }
+
+    public String getFromProposedCompletionDate() {
+        return fromProposedCompletionDate;
+    }
+
+    public void setFromProposedCompletionDate(String fromProposedCompletionDate) {
+        this.fromProposedCompletionDate = fromProposedCompletionDate;
+    }
+
+    public String getToProposedCompletionDate() {
+        return toProposedCompletionDate;
+    }
+
+    public void setToProposedCompletionDate(String toProposedCompletionDate) {
+        this.toProposedCompletionDate = toProposedCompletionDate;
     }
 }

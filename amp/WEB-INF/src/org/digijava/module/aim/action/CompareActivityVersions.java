@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -11,6 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -35,8 +38,10 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.Versionable;
+import org.digijava.module.aim.form.AuditLoggerManagerForm;
 import org.digijava.module.aim.form.CompareActivityVersionsForm;
 import org.digijava.module.aim.helper.ActivityHistory;
 import org.digijava.module.aim.helper.Constants;
@@ -46,13 +51,16 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.StringType;
 
 public class CompareActivityVersions extends DispatchAction {
 
@@ -226,9 +234,9 @@ public class CompareActivityVersions extends DispatchAction {
                     if (params != null && params[0].getName().contains("java.util.Set")) {
                         Method auxGetMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
                                 AmpActivityVersion.class, "get");
-                        Set auxSet = (Set) auxGetMethod.invoke(oldActivity);
+                        Set<Object> auxSet = (Set<Object>) auxGetMethod.invoke(oldActivity);
                         if (auxSet == null) {
-                            auxSet = new HashSet();
+                            auxSet = new HashSet<Object>();
                         }
                         auxSet.add(addOriginalValueObject);
                         auxMethod.invoke(oldActivity, auxSet);
@@ -241,7 +249,7 @@ public class CompareActivityVersions extends DispatchAction {
                 if (remOriginalValueObject != null){
                     Class[] params = auxMethod.getParameterTypes();
                     if (params != null && params[0].getName().contains("java.util.Set")) {
-                        Class clazz = remOriginalValueObject.getClass();
+                        Class<? extends Object> clazz = remOriginalValueObject.getClass();
                         String idProperty = session.getSessionFactory().getClassMetadata(clazz)
                         .getIdentifierPropertyName();
                         
@@ -357,5 +365,25 @@ public class CompareActivityVersions extends DispatchAction {
 
         return mapping.findForward("forward");
     }
+    
+    
+    public ActionForward viewListDifferences(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        
+        
+        CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
+       Session session = PersistenceManager.getRequestDBSession();            
+     Query qry = session.createQuery("select  objectId from " +  
+              AmpAuditLogger.class.getName() + " where objecttype="+"'"+AmpActivityVersion.class.getName()+"'"+" order by modifyDate desc");
+       
+
+        List<Long> activitiesId = (qry.list());
+        vForm.setOutputCollection(new ArrayList<CompareOutput>());        
+ vForm.setOutputCollectionGroupedList(ActivityVersionUtil.compareActivities(activitiesId));
+  
+        return mapping.findForward("forward");
+          
+    }
+    
+    
 
 }

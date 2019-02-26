@@ -7,6 +7,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
+<%@page import="java.util.*"%>
+
 <%@page import="org.digijava.module.aim.services.auditcleaner.AuditCleaner"%>
 <style>
 .contentbox_border{
@@ -156,10 +158,21 @@ function exportScorecard () {
 }
 
 function viewDifferences(activityOneId) {
+	
+	
     document.aimCompareActivityVersionsForm.method.value = "viewDifferences";
     document.aimCompareActivityVersionsForm.activityOneId.value = activityOneId;
     document.aimCompareActivityVersionsForm.submit();
 }
+
+  function viewListDifferences() {
+	
+    document.aimCompareActivityVersionsForm.method.value = "viewListDifferences";
+   /*  document.aimCompareActivityVersionsForm.activitiesId.value = activitesId; */
+    document.aimCompareActivityVersionsForm.submit();
+} 
+ 
+
 </script>
 
 <h1 class="admintitle"><digi:trn key="aim:AuditLoggerManager">Audit Logger Manager</digi:trn></h1> 
@@ -386,8 +399,10 @@ function viewDifferences(activityOneId) {
 									</td>
 								</c:if>
 							</tr>
+						
 							<logic:iterate name="aimAuditLoggerManagerForm" property="logs"
-								id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
+								id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger"  >
+								
 								<tr>
 								<td class="auditloggername" width="280" height="18" align="center" title="${log.objectName}">
 									<c:choose>
@@ -453,14 +468,42 @@ function viewDifferences(activityOneId) {
 									</c:if>
 								</td>
 									<td>
+								
 										<c:if test="${not empty log.objectId && log.objectType=='org.digijava.module.aim.dbentity.AmpActivityVersion'}">
+										
 											<input type="button" title="<digi:trn>Click here to compare with previous version</digi:trn>" onclick="javascript:viewDifferences(${log.objectId})"
-												   class="dr-menu" value="&nbsp;&nbsp;<digi:trn>Compare</digi:trn>&nbsp;&nbsp;">
+												   class="dr-menu" 	value="&nbsp;&nbsp;<digi:trn>Compare</digi:trn>&nbsp;&nbsp;" name="yoye"> 
+												   
+												   
+										<%-- 	<input type="hidden"  id = "yo" value="${paramValues.log.objectId }"> --%>
+											
+											
 										</c:if>
 									</td>
-							</tr>
+							
+  
+	
+	
+
+	
+	</tr>
+						
+						
+					<%-- <c:out value="${log.objectId}" /> --%>
+														
                           </logic:iterate>
-						</table>
+     				<tr>
+                                 <td>
+										
+											<input type="button" title="<digi:trn>Click here to compare with p version</digi:trn>" onclick= "javascript:viewListDifferences()"
+												   class="dr-menu" value="&nbsp;&nbsp;<digi:trn>CompareAll</digi:trn>&nbsp;&nbsp;">
+										
+										
+										
+									</td> 
+                          </tr>   
+                        
+				 	 </table>
 						</div>
 						</div>					
 					</td>
@@ -571,6 +614,12 @@ function viewDifferences(activityOneId) {
 </script>
 </digi:form>
 <digi:form action="/compareActivityVersions.do" method="post" type="aimCompareActivityVersionsForm">
-	<input type="hidden" name="activityOneId" id="activityOneId" />
-	<input type="hidden" name="method" id="method" />
-</digi:form>
+	<input type="hidden" name="activityOneId" id="activityOneId" /> 	 
+	<input type="hidden" name="method" id="method" />	
+	
+
+	</digi:form> 
+
+ 
+
+

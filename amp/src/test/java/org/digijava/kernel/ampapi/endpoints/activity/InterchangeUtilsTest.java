@@ -207,19 +207,19 @@ public class InterchangeUtilsTest {
         assertEquals(date, InterchangeUtils.parseISO8601Date("1973-12-07"));
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testParseDateWrongFormat() {
-        assertNull(InterchangeUtils.parseISO8601Date("xyz"));
+        InterchangeUtils.parseISO8601Date("xyz");
     }
     
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testParseDateWrongLength() {
-        assertNull(InterchangeUtils.parseISO8601Date("2019-02-08x"));
+        InterchangeUtils.parseISO8601Date("2019-02-08x");
     }
     
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testParseTimestampWrongLength() {
-        assertNull(InterchangeUtils.parseISO8601Timestamp("1973-12-07T17:55:24.124+0300xyz"));
+        InterchangeUtils.parseISO8601Timestamp("1973-12-07T17:55:24.124+0300xyz");
     }
 
     @Test

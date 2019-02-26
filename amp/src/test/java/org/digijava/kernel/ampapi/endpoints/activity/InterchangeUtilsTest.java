@@ -18,6 +18,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -182,7 +183,8 @@ public class InterchangeUtilsTest {
     
     @Test
     public void testFormatDate() throws Exception {
-        assertEquals("1973-11-26", InterchangeUtils.formatISO8601Date(new Date(123123123123L)));
+        Date date = DateTime.now().withDate(1973, 11, 26).withTimeAtStartOfDay().toDate();
+        assertEquals("1973-11-26", InterchangeUtils.formatISO8601Date(date));
     }
 
     @Test
@@ -192,31 +194,36 @@ public class InterchangeUtilsTest {
 
     @Test
     public void testParseTimestamp() {
-        assertEquals(new Date(124124124124L), InterchangeUtils.parseISO8601DateTimestamp("1973-12-07T17:55:24.124+0300", true));
+        assertEquals(new Date(124124124124L), InterchangeUtils.parseISO8601Timestamp("1973-12-07T17:55:24.124+0300"));
     }
     
+    /**
+     * We need to assure that the date is saved correctly in DB.
+     * The date values are stored in DB with midnight time (00:00:00.000) and JDBC uses the local time zone to store it.
+     */
     @Test
     public void testParseDate() {
-        assertEquals(new Date(124059600000L), InterchangeUtils.parseISO8601DateTimestamp("1973-12-07", false));
+        Date date = DateTime.now().withDate(1973, 12, 7).withTimeAtStartOfDay().toDate();
+        assertEquals(date, InterchangeUtils.parseISO8601Date("1973-12-07"));
     }
 
     @Test
     public void testParseDateWrongFormat() {
-        assertNull(InterchangeUtils.parseISO8601DateTimestamp("xyz", true));
+        assertNull(InterchangeUtils.parseISO8601Date("xyz"));
     }
     
     @Test
     public void testParseDateWrongLength() {
-        assertNull(InterchangeUtils.parseISO8601DateTimestamp("2019-02-08x", false));
+        assertNull(InterchangeUtils.parseISO8601Date("2019-02-08x"));
     }
     
     @Test
     public void testParseTimestampWrongLength() {
-        assertNull(InterchangeUtils.parseISO8601DateTimestamp("1973-12-07T17:55:24.124+0300xyz", true));
+        assertNull(InterchangeUtils.parseISO8601Timestamp("1973-12-07T17:55:24.124+0300xyz"));
     }
 
     @Test
-    public void testParseDateNullInput() throws Exception {
-        assertNull(InterchangeUtils.parseISO8601DateTimestamp(null, true));
+    public void testParseDateNullInput() {
+        assertNull(InterchangeUtils.parseISO8601Date(null));
     }
 }

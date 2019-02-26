@@ -1877,7 +1877,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         } else if (activity.getModifiedDate() != null) {
             return activity.getModifiedDate();
         } else if (auditHistory != null) {
-            return InterchangeUtils.parseISO8601DateTimestamp(auditHistory.getModifiedDate(), true);
+            return InterchangeUtils.parseISO8601Timestamp(auditHistory.getModifiedDate());
         } else if (activity.getApprovalDate() != null) {
             return activity.getApprovalDate();
         } else if (activity.getCreatedDate() != null) {

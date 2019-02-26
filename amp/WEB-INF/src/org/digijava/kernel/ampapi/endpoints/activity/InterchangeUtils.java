@@ -531,15 +531,37 @@ public class InterchangeUtils {
     
     /**
      * Gets a date formatted in ISO 8601 date format. If the date is null, returns null.
-     * 
+     *
      * @param date the date to be formatted
-     * @param isDateTime if the value should be parsed using the ISO8601DateTime or ISO8601Date format
      * @return String, date in ISO 8601 date format
      */
     
-    public static Date parseISO8601DateTimestamp(String date, boolean isDateTime) {
+    public static Date parseISO8601Date(String date) {
+        return parseISO8601DateTimestamp(date, false);
+    }
+    
+    /**
+     * Gets a date formatted in ISO 8601 date time format. If the date is null, returns null.
+     *
+     * @param date the date to be formatted
+     * @return String, date in ISO 8601 date time format
+     */
+    
+    public static Date parseISO8601Timestamp(String date) {
+       return parseISO8601DateTimestamp(date, true);
+    }
+    
+    /**
+     * Gets a date formatted in ISO 8601 date time format. If the date is null, returns null.
+     * 
+     * @param date the date to be formatted
+     * @param isTimestamp if the value should be parsed using the ISO8601DateTime or ISO8601Date format
+     * @return String, date in ISO 8601 date time format
+     */
+    
+    public static Date parseISO8601DateTimestamp(String date, boolean isTimestamp) {
         try {
-            SimpleDateFormat formatter = isDateTime ? getTimestampFormatter() : getDateFormatter();
+            SimpleDateFormat formatter = isTimestamp ? getTimestampFormatter() : getDateFormatter();
             if (date != null) {
                 if (date.length() != EPConstants.DATE_FORMAT_STRICT_LENGTH.get(formatter.toPattern())) {
                     throw new ParseException("Unparseable date '" + date + "'", date.length());
@@ -547,7 +569,7 @@ public class InterchangeUtils {
                 return formatter.parse(date);
             }
         } catch (ParseException e) {
-            LOGGER.warn(e.getMessage());
+            throw new RuntimeException(e);
         }
         
         return null;
@@ -765,6 +787,10 @@ public class InterchangeUtils {
         return DATE_TIME_FORMATTER.get();
     }
     
+    /**
+     * This formatter is used to parse and format date values. Do not set explicitly the time zone.
+     * @return date formatter
+     */
     protected static SimpleDateFormat getDateFormatter() {
         if (DATE_FORMATTER.get() == null) {
             SimpleDateFormat format = new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT);

@@ -35,6 +35,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableBackRefere
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author Octavian Ciubotaru
@@ -286,7 +287,7 @@ public class ObjectImporter {
         } else if (fieldType.isSimpleType()) {
             try {
                 if (Date.class.equals(field.getType())) {
-                    value = InterchangeUtils.parseISO8601Date((String) jsonValue);
+                    value = DateTimeUtil.parseISO8601DateTime((String) jsonValue);
                 } else if (String.class.equals(field.getType())) {
                     // check if this is a translatable that expects multiple entries
                     value = extractString(field, parentObj, jsonValue);

@@ -3,24 +3,30 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.editor.exception.EditorException;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author Octavian Ciubotaru
  */
-public abstract class ObjectExporter<T> {
+public class ObjectExporter<T> {
 
     private List<APIField> apiFields;
 
-    public ObjectExporter(List<APIField> apiFields) {
+    private TranslatedFieldReader translatedFieldReader;
+
+    public ObjectExporter(TranslatedFieldReader translatedFieldReader, List<APIField> apiFields) {
+        this.translatedFieldReader = translatedFieldReader;
         this.apiFields = apiFields;
     }
 
@@ -29,7 +35,9 @@ public abstract class ObjectExporter<T> {
     }
 
     public JsonBean export(T object) {
-        return getObjectJson(object, apiFields, null);
+        JsonBean jb = new JsonBean();
+        jb.any().putAll(getObjectJson(object, apiFields, null));
+        return jb;
     }
 
     /**
@@ -38,9 +46,9 @@ public abstract class ObjectExporter<T> {
      * @param pathToObject the path to the object currently exported
      * @return itemJson object JSON containing the value of the item
      */
-    private JsonBean getObjectJson(Object item, List<APIField> apiFields, String pathToObject) {
+    private Map<String, Object> getObjectJson(Object item, List<APIField> apiFields, String pathToObject) {
 
-        JsonBean jsonObject = new JsonBean();
+        Map<String, Object> jsonObject = new LinkedHashMap<>();
 
         for (APIField field : apiFields) {
             String fieldTitle = field.getFieldName();
@@ -62,7 +70,7 @@ public abstract class ObjectExporter<T> {
      * @param jsonObject result JSON object which will be filled with the values of the fields
      * @param fieldPath the path of the field currently exported
      */
-    private void readFieldValue(APIField field, Object object, JsonBean jsonObject, String fieldPath) {
+    private void readFieldValue(APIField field, Object object, Map<String, Object> jsonObject, String fieldPath) {
         Object jsonValue;
         Object fieldValue = field.getFieldValueReader().get(object);
         boolean isList = field.getApiType().getFieldType().isList();
@@ -71,7 +79,7 @@ public abstract class ObjectExporter<T> {
             jsonValue = readFieldWithPossibleValues(field, fieldValue);
         } else if (isList) {
             if (field.getFieldName().equals("activity_group")) { // FIXME hack because APIField.type cannot be object
-                jsonValue = getObjectJson(fieldValue, field.getChildren(), fieldPath);
+                jsonValue = (fieldValue == null) ? null : getObjectJson(fieldValue, field.getChildren(), fieldPath);
             } else {
                 jsonValue = readCollection(field, fieldPath, (Collection) fieldValue);
             }
@@ -79,7 +87,7 @@ public abstract class ObjectExporter<T> {
             jsonValue = readPrimitive(field, object, fieldValue);
         }
 
-        jsonObject.set(field.getFieldName(), jsonValue);
+        jsonObject.put(field.getFieldName(), jsonValue);
     }
 
     /**
@@ -91,7 +99,7 @@ public abstract class ObjectExporter<T> {
     private Object readFieldWithPossibleValues(APIField field, Object value) {
         Object singleValue = getSingleValue(value);
         if (ApprovalStatus.class.isAssignableFrom(field.getApiType().getType())) {
-            return ((ApprovalStatus) value).getId();
+            return value == null ? null : ((ApprovalStatus) value).getId();
         } else if (Identifiable.class.isAssignableFrom(field.getApiType().getType())) {
             return singleValue == null ? null : ((Identifiable) singleValue).getIdentifier();
         } else if (InterchangeUtils.isSimpleType(field.getApiType().getType())) {
@@ -126,27 +134,27 @@ public abstract class ObjectExporter<T> {
      * Convert primitive value to json value.
      */
     private Object readPrimitive(APIField apiField, Object object, Object fieldValue) {
-        try {
+        if (fieldValue instanceof Date) {
+            return DateTimeUtil.formatISO8601DateTime((Date) fieldValue);
+        } else {
             Field field = FieldUtils.getField(object.getClass(), apiField.getFieldNameInternal(), true);
-
             Class<?> objectClass = object.getClass();
-
-            return InterchangeUtils.getTranslationValues(field, objectClass, fieldValue, object);
-        } catch (NoSuchFieldException | IllegalAccessException | EditorException e) {
-            throw new RuntimeException("Failed to read primitive field.", e);
+            if (translatedFieldReader.isTranslatable(field, objectClass)) {
+                return translatedFieldReader.get(field, objectClass, fieldValue, object);
+            } else {
+                return fieldValue;
+            }
         }
     }
 
     /**
      * Convert list of objects to a json array.
      */
-    private List<?> readCollection(APIField field, String fieldPath, Collection value) {
+    private List<Object> readCollection(APIField field, String fieldPath, Collection value) {
         List<Object> collectionOutput = new ArrayList<>();
         if (value != null) {
             if (field.getApiType().isSimpleItemType()) {
-                for (Object item : value) {
-                    collectionOutput.add(item);
-                }
+                collectionOutput.addAll(value);
             } else {
                 for (Object item : value) {
                     collectionOutput.add(getObjectJson(item, field.getChildren(), fieldPath));

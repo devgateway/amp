@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import java.util.HashSet;
+import javax.servlet.http.HttpServletResponse;
 import com.sun.jersey.spi.container.ContainerRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
@@ -8,11 +10,13 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
@@ -45,6 +49,7 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.ValidationStatus;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
+import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 
@@ -322,6 +327,55 @@ public class InterchangeUtils {
     
     public static boolean isResourceTextField(Field field) {
         return field.getAnnotation(ResourceTextField.class) != null;
+    }
+
+    /**
+     * Batch export of activities by amp-ids 
+     * @param ampIds
+     * @return
+     */
+    public static Collection<JsonBean> getActivitiesByAmpIds(List<String> ampIds) {
+        Map<String, JsonBean> jsonActivities = new HashMap<>();
+        ActivityExporter exporter = new ActivityExporter(null);
+        // TODO report duplicate/empty amp-ids?
+        Set<String> uniqueAmpIds = new HashSet(ampIds);
+        uniqueAmpIds.remove("");
+        ampIds = new ArrayList<>(uniqueAmpIds);
+        // temporary until the root cause for stale cache is fixed
+        PersistenceManager.getSession().setCacheMode(CacheMode.REFRESH);
+        for (int fromIndex = 0; fromIndex < ampIds.size(); fromIndex += ActivityEPConstants.BATCH_DB_QUERY_SIZE) {
+            int end = Math.min(ampIds.size(), fromIndex + ActivityEPConstants.BATCH_DB_QUERY_SIZE);
+            List<String> currentAmpIds = ampIds.subList(fromIndex, end);
+            List<AmpActivityVersion> activities = ActivityUtil.getActivitiesByAmpIds(currentAmpIds);
+            activities.forEach(activity -> {
+                String ampId = activity.getAmpId();
+                JsonBean result;
+                try {
+                    result = exporter.export(activity);
+                } catch (Exception e) {
+                    result = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage()));
+                } finally {
+                    PersistenceManager.getSession().evict(activity);
+                }
+                jsonActivities.put(ampId, result);
+            });
+            PersistenceManager.getSession().clear();
+        }
+        reportActivitiesNotFound(uniqueAmpIds, jsonActivities);
+        // Always succeed on normal exit, no matter if some activities export failed
+        EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_OK);
+        return jsonActivities.values();
+    }
+
+    private static void reportActivitiesNotFound(Set<String> ampIds, Map<String, JsonBean> processedActivities) {
+        if (processedActivities.size() != ampIds.size()) {
+            ampIds.removeAll(processedActivities.keySet());
+            ampIds.forEach(ampId -> {
+                JsonBean notFoundJson = ApiError.toError(ActivityErrors.ACTIVITY_NOT_FOUND);
+                notFoundJson.set(ActivityEPConstants.AMP_ID_FIELD_NAME, ampId);
+                processedActivities.put(ampId, notFoundJson);
+            });
+        }
     }
 
     public static JsonBean getActivityByAmpId(String ampId) {

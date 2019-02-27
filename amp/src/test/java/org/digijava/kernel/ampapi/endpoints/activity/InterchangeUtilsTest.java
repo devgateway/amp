@@ -16,6 +16,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class InterchangeUtilsTest {
         when(translatorService.getEditorBodyEmptyInclude(any(), any(), any()))
                 .then(invocation -> "ed+" + invocation.getArguments()[2] + "+" + invocation.getArguments()[1]);
 
-        InterchangeUtils.setTranslatorService(translatorService);
+        ActivityTranslationUtils.setTranslatorService(translatorService);
     }
 
     private static AmpContentTranslation acm(String lang, String value) {
@@ -127,7 +128,7 @@ public class InterchangeUtilsTest {
     private Object translateFieldValue(Class<?> parentClass, String fieldName, Object fieldValue, Long parentObjectId)
             throws Exception {
         Field field = parentClass.getDeclaredField(fieldName);
-        return InterchangeUtils.getTranslationValues(field, parentClass, fieldValue, parentObjectId);
+        return ActivityTranslationUtils.getTranslationValues(field, parentClass, fieldValue, parentObjectId);
     }
 
     private Map<String, String> translationsEnFr(String enTranslation, String frTranslation) {
@@ -141,7 +142,7 @@ public class InterchangeUtilsTest {
     public void testGetFieldValueFromJsonSimple() throws Exception {
         JsonBean activity = new JsonBean();
         activity.set("name", "Activity Name");
-        assertEquals("Activity Name", InterchangeUtils.getFieldValuesFromJsonActivity(activity, "name"));
+        assertEquals("Activity Name", ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, "name"));
     }
 
     @Test
@@ -150,44 +151,44 @@ public class InterchangeUtilsTest {
         JsonBean nestedObj = new JsonBean();
         nestedObj.set("field", "Nested Value");
         activity.set("nested", nestedObj);
-        assertEquals("Nested Value", InterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
+        assertEquals("Nested Value", ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
     }
 
     @Test
     public void testGetFieldValueFromJsonNestedMissing() throws Exception {
         JsonBean activity = new JsonBean();
-        assertEquals(null, InterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
+        assertEquals(null, ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
     }
 
     @Test
     public void testGetFieldValueFromJsonNestedWrongType() throws Exception {
         JsonBean activity = new JsonBean();
         activity.set("nested", new Object());
-        assertEquals(null, InterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
+        assertEquals(null, ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
     }
 
     @Test
     public void testFormatDate() throws Exception {
-        assertEquals("1973-11-26T00:52:03.123+0000", InterchangeUtils.formatISO8601Date(new Date(123123123123L)));
+        assertEquals("1973-11-26T00:52:03.123+0000", DateTimeUtil.formatISO8601DateTime(new Date(123123123123L)));
     }
 
     @Test
     public void testFormatDateNullInput() throws Exception {
-        assertNull(InterchangeUtils.formatISO8601Date(null));
+        assertNull(DateTimeUtil.formatISO8601DateTime(null));
     }
 
     @Test
     public void testParseDate() throws Exception {
-        assertEquals(new Date(124124124124L), InterchangeUtils.parseISO8601Date("1973-12-07T17:55:24.124+0300"));
+        assertEquals(new Date(124124124124L), DateTimeUtil.parseISO8601DateTime("1973-12-07T17:55:24.124+0300"));
     }
 
     @Test
     public void testParseDateWrongFormat() throws Exception {
-        assertNull(InterchangeUtils.parseISO8601Date("xyz"));
+        assertNull(DateTimeUtil.parseISO8601DateTime("xyz"));
     }
 
     @Test
     public void testParseDateNullInput() throws Exception {
-        assertNull(InterchangeUtils.parseISO8601Date(null));
+        assertNull(DateTimeUtil.parseISO8601DateTime(null));
     }
 }

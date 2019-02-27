@@ -14,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author Octavian Ciubotaru
@@ -134,7 +135,7 @@ public class ObjectExporter<T> {
      */
     private Object readPrimitive(APIField apiField, Object object, Object fieldValue) {
         if (fieldValue instanceof Date) {
-            return InterchangeUtils.formatISO8601Date((Date) fieldValue);
+            return DateTimeUtil.formatISO8601DateTime((Date) fieldValue);
         } else {
             Field field = FieldUtils.getField(object.getClass(), apiField.getFieldNameInternal(), true);
             Class<?> objectClass = object.getClass();

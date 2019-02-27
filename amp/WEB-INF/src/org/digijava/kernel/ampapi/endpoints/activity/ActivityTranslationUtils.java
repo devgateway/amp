@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,7 +17,6 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTe
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.editor.exception.EditorException;
 
 /**
@@ -41,6 +39,14 @@ public final class ActivityTranslationUtils {
 
     private static boolean isResourceTextField(Field field) {
         return field.getAnnotation(ResourceTextField.class) != null;
+    }
+
+    public static boolean isTranslatable(Field field, Class<?> clazz) {
+        TranslationSettings translationSettings = TranslationSettings.getCurrent();
+        boolean isTranslatable = translationSettings.isTranslatable(field);
+        boolean isEditor = isVersionableTextField(field);
+        boolean toTranslate = clazz.equals(AmpCategoryValue.class) && field.getName().equals("value");
+        return isTranslatable || isEditor || toTranslate;
     }
 
     /**
@@ -100,8 +106,6 @@ public final class ActivityTranslationUtils {
             String translatedText = toTranslate ? translatorService.translateText((String) fieldValue)
                     : (String) fieldValue;
             return getJsonStringValue(translatedText);
-        } else if (fieldValue instanceof Date) {
-            return DateTimeUtil.formatISO8601DateTime((Date) fieldValue);
         }
 
         return fieldValue;

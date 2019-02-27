@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -18,7 +19,11 @@ public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
     private List<String> filteredFields = new ArrayList<>();
 
     public ActivityExporter(JsonBean filter) {
-        super(AmpFieldsEnumerator.getEnumerator().getActivityFields());
+        this(new DefaultTranslatedFieldReader(), AmpFieldsEnumerator.getEnumerator().getActivityFields(), filter);
+    }
+
+    public ActivityExporter(TranslatedFieldReader translatedFieldReader, List<APIField> fields, JsonBean filter) {
+        super(translatedFieldReader, fields);
         this.filter = filter;
     }
 

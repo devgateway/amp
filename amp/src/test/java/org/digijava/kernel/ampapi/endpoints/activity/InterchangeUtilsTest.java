@@ -2,8 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -73,13 +71,6 @@ public class InterchangeUtilsTest {
 
         assertEquals(translationsEnFr("ct+en+1name", "ct+fr+1name"),
                 translateFieldValue(AmpActivityFields.class, "name", "test", 1L));
-    }
-
-    @Test
-    public void testTranslateForDate() throws Exception {
-        Date date = new Date();
-        assertEquals(DateTimeUtil.formatISO8601DateTime(date),
-                translateFieldValue(AmpActivityFields.class, "actualApprovalDate", date, null));
     }
 
     @Test

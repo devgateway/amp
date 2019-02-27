@@ -25,9 +25,10 @@ public class ActivityFieldsEnumerator extends FieldsEnumerator {
 
     public ActivityFieldsEnumerator(FieldInfoProvider fieldInfoProvider,
             FMService fmService, TranslatorService translatorService,
-            Function<String, Boolean> allowMultiplePrograms) {
+            Function<String, Boolean> allowMultiplePrograms,
+            String iatiIdentifierField) {
         super(fieldInfoProvider, fmService, translatorService, allowMultiplePrograms);
-        this.iatiIdentifierField = InterchangeUtils.getAmpIatiIdentifierFieldName();
+        this.iatiIdentifierField = iatiIdentifierField;
     }
 
     @Override

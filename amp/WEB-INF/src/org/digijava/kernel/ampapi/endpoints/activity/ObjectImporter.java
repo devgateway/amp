@@ -32,8 +32,10 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author Octavian Ciubotaru
@@ -149,7 +151,6 @@ public class ObjectImporter {
             // note: due to AMP-20766, we won't be able to fully detect invalid children
             String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
             if (fields.size() > 0 && !ignoreUnknownFields()) {
-                newParent = null;
                 for (String invalidField : fields) {
                     // no need to go through deep-first validation flow
                     validator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
@@ -199,8 +200,6 @@ public class ObjectImporter {
             if (newParent != null) {
                 newParent = setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
             }
-        } else {
-            newParent = null;
         }
         return newParent;
     }
@@ -288,7 +287,7 @@ public class ObjectImporter {
         } else if (fieldType.isSimpleType()) {
             try {
                 if (Date.class.equals(field.getType())) {
-                    value = InterchangeUtils.parseISO8601Date((String) jsonValue);
+                    value = DateTimeUtil.parseISO8601DateTime((String) jsonValue);
                 } else if (String.class.equals(field.getType())) {
                     // check if this is a translatable that expects multiple entries
                     value = extractString(field, parentObj, jsonValue);
@@ -420,6 +419,9 @@ public class ObjectImporter {
         if (idOnly && !(isList && fieldDef.getApiType().isSimpleItemType())) {
             return newParent;
         }
+        
+        // TODO AMP-28121 remove this temporary workaround
+        boolean isObject = AmpActivityGroup.class.isAssignableFrom(fieldDef.getApiType().getType());
 
         // first validate all sub-elements
         List<APIField> childrenFields = fieldDef.getChildren();
@@ -431,23 +433,17 @@ public class ObjectImporter {
             Field newField = ReflectionUtil.getField(newParent, actualFieldName);
             Object newFieldValue;
             Class<?> subElementClass = fieldDef.getApiType().getElementType();
-            boolean isCollection = false;
             try {
                 newFieldValue = newField == null ? null : newField.get(newParent);
                 if (newParent != null && newFieldValue == null) {
                     newFieldValue = getNewInstance(newParent, newField);
-                }
-                // AMP-20766: we cannot correctly detect isCollection when current validation already failed
-                // (no parent obj ref)
-                if (newFieldValue != null && Collection.class.isAssignableFrom(newFieldValue.getClass())) {
-                    isCollection = true;
                 }
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 logger.error(e.getMessage());
                 throw new RuntimeException(e);
             }
 
-            if (isCollection && fieldDef.getApiType().isSimpleItemType()) {
+            if (isList && fieldDef.getApiType().isSimpleItemType()) {
                 Collection nvs = ((Collection<?>) childrenNewValues).stream()
                         .map(v -> toSimpleTypeValue(v, subElementClass)).collect(Collectors.toList());
                 ((Collection) newFieldValue).addAll(nvs);
@@ -477,25 +473,21 @@ public class ObjectImporter {
                     APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
 
                     Object res;
-                    if (isCollection) {
+                    if (isList && !isObject) {
                         try {
                             Object newSubElement = subElementClass.newInstance();
                             res = validateAndImport(newSubElement, childrenFields, newChild, fieldPath);
+                            if (res != null && newParent != null) {
+                                configureDiscriminationField(res, fieldDef);
+                                // actual links will be updated
+                                ((Collection) newFieldValue).add(res);
+                            }
                         } catch (InstantiationException | IllegalAccessException e) {
                             logger.error(e.getMessage());
                             throw new RuntimeException(e);
                         }
                     } else {
                         res = validateAndImport(newFieldValue, childFieldDef, newChild, fieldPath);
-                    }
-
-                    if (res == null) {
-                        // validation failed, reset parent to stop config
-                        newParent = null;
-                    } else if (newParent != null && isCollection) {
-                        configureDiscriminationField(res, fieldDef);
-                        // actual links will be updated
-                        ((Collection) newFieldValue).add(res);
                     }
                 }
                 // TODO: we also need to validate other children, some can be mandatory

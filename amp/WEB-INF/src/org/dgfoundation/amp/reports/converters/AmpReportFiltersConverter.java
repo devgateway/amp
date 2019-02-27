@@ -193,6 +193,10 @@ public class AmpReportFiltersConverter {
         addDateRangeFilter(ColumnConstants.PROPOSED_APPROVAL_DATE, "fromProposedApprovalDate",
                 "toProposedApprovalDate");
         addDateRangeFilter(ColumnConstants.PROPOSED_START_DATE, "fromProposedStartDate", "toProposedStartDate");
+        addDateRangeFilter(ColumnConstants.ACTUAL_APPROVAL_DATE,
+                "fromActualApprovalDate", "toActualApprovalDate");
+        addDateRangeFilter(ColumnConstants.PROPOSED_COMPLETION_DATE,
+                "fromProposedCompletionDate", "toProposedCompletionDate");
         addDateRangeFilter(ColumnConstants.ACTUAL_COMPLETION_DATE, "fromActivityActualCompletionDate",
                 "toActivityActualCompletionDate");
         addDateRangeFilter(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, "fromActivityFinalContractingDate",

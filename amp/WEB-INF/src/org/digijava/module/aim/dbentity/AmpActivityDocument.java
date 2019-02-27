@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -21,7 +23,7 @@ public class AmpActivityDocument extends ObjectReferringDocument implements Seri
     @InterchangeableBackReference
     private AmpActivityVersion ampActivity;
 
-    @Interchangeable(fieldTitle = "Document Type", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Document Type", importable = true, required = ALWAYS)
     private String documentType;
     
     public String getDocumentType() {

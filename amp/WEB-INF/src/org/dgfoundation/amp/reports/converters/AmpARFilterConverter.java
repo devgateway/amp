@@ -168,7 +168,9 @@ public class AmpARFilterConverter {
     }
 
     private void addActivityDatesFilters() {
-        addActualAppYear();
+        addActivityDateFilter(arFilter.buildFromAndToActualApprovalDateAsDate(), ColumnConstants.ACTUAL_APPROVAL_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToProposedCompletionDateAsDate(),
+                ColumnConstants.PROPOSED_COMPLETION_DATE);
         addActivityDateFilter(arFilter.buildFromAndToActivityStartDateAsDate(), ColumnConstants.ACTUAL_START_DATE);
         addActivityDateFilter(arFilter.buildFromAndToProposedApprovalDateAsDate(),
                 ColumnConstants.PROPOSED_APPROVAL_DATE);
@@ -181,22 +183,6 @@ public class AmpARFilterConverter {
                 ColumnConstants.EFFECTIVE_FUNDING_DATE);
         addActivityDateFilter(arFilter.buildFromAndToFundingClosingDateAsDate(), ColumnConstants.FUNDING_CLOSING_DATE);
         addActivityDateFilter(arFilter.buildFromAndToIssueDateAsDate(), ColumnConstants.ISSUE_DATE);
-    }
-
-    /**
-     * old filter widget uses year for actual approval
-     * new filter widget uses date for actual approval
-     */
-    private void addActualAppYear() {
-        try {
-            if (arFilter.getActualAppYear() != null) {
-                Date from = DateTimeUtil.firstDayOfYear(arFilter.getActualAppYear());
-                Date to = DateTimeUtil.lastDayOfYear(arFilter.getActualAppYear());
-                filterRules.addDateRangeFilterRule(new ReportColumn(ColumnConstants.ACTUAL_APPROVAL_DATE), from, to);
-            }
-        } catch (AmpApiException ex) {
-            logger.error(ex.getMessage(), ex);
-        }
     }
 
     private void addActivityDateFilter(Date[] fromTo, String columnName) {

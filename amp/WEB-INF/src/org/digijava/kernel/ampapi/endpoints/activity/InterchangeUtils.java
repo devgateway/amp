@@ -415,6 +415,14 @@ public class InterchangeUtils {
         }
     }
 
+    public static boolean isTranslatable(Field field, Class<?> clazz) {
+        TranslationSettings translationSettings = TranslationSettings.getCurrent();
+        boolean isTranslatable = translationSettings.isTranslatable(field);
+        boolean isEditor = InterchangeUtils.isVersionableTextField(field);
+        boolean toTranslate = clazz.equals(AmpCategoryValue.class) && field.getName().equals("value");
+        return isTranslatable || isEditor || toTranslate;
+    }
+
     /**
      * Get the translation values of the field.
      * @param field
@@ -470,8 +478,6 @@ public class InterchangeUtils {
             String translatedText = toTranslate ? translatorService.translateText((String) fieldValue)
                     : (String) fieldValue;
             return getJsonStringValue(translatedText);
-        } else if (fieldValue instanceof Date) {
-            return InterchangeUtils.formatISO8601Date((Date) fieldValue);
         }
         
         return fieldValue;

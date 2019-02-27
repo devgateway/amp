@@ -128,7 +128,7 @@ public class ResourceImporter extends ObjectImporter {
         
         try {
             resource = new AmpResource();
-            resource = (AmpResource) validateAndImport(resource, fieldsDef, newJson.any(), null);
+            resource = (AmpResource) validateAndImport(resource, newJson.any());
             
             if (resource == null) {
                 throw new ObjectConversionException();

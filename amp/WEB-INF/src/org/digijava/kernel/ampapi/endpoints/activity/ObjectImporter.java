@@ -16,7 +16,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import javax.validation.groups.Default;
+
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
@@ -26,7 +34,11 @@ import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ErrorDecorator;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.LogErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
@@ -35,6 +47,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableBackRefere
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.aim.validator.groups.API;
 
 /**
  * @author Octavian Ciubotaru
@@ -67,6 +80,10 @@ public class ObjectImporter {
 
     private Deque<Object> backReferenceStack = new ArrayDeque<>();
 
+    private Validator beanValidator;
+
+    private Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper = new LogErrorsMapper();
+
     public ObjectImporter(InputValidatorProcessor validator, List<APIField> apiFields) {
         this(validator, TranslationSettings.getCurrent(), apiFields);
     }
@@ -76,6 +93,13 @@ public class ObjectImporter {
         this.validator = validator;
         this.trnSettings = trnSettings;
         this.apiFields = apiFields;
+
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        beanValidator = validatorFactory.getValidator();
+    }
+
+    public void setJsonErrorMapper(Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper) {
+        this.jsonErrorMapper = jsonErrorMapper;
     }
 
     public List<APIField> getApiFields() {
@@ -119,7 +143,15 @@ public class ObjectImporter {
      * @return
      */
     public Object validateAndImport(Object root, Map<String, Object> json) {
-        return validateAndImport(root, apiFields, json, null);
+        Object obj = validateAndImport(root, apiFields, json, null);
+        processViolationsForTypes(json, obj);
+        return obj;
+    }
+
+    private void processViolationsForTypes(Map<String, Object> json, Object obj) {
+        Set<ConstraintViolation<Object>> violations = beanValidator.validate(obj, API.class, Default.class);
+        JsonErrorIntegrator jsonErrorIntegrator = new JsonErrorIntegrator(jsonErrorMapper);
+        jsonErrorIntegrator.mapTypeErrors(json, violations, errors);
     }
 
     /**
@@ -133,7 +165,7 @@ public class ObjectImporter {
      * @param fieldPath the underscorified path to the field currently validated & imported
      * @return currently updated object or null if any validation error occurred
      */
-    protected Object validateAndImport(Object newParent, List<APIField> fieldsDef,
+    private Object validateAndImport(Object newParent, List<APIField> fieldsDef,
             Map<String, Object> newJsonParent, String fieldPath) {
         restoreBackReferences(newParent);
         try {
@@ -152,7 +184,7 @@ public class ObjectImporter {
             if (fields.size() > 0 && !ignoreUnknownFields()) {
                 for (String invalidField : fields) {
                     // no need to go through deep-first validation flow
-                    validator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
+                    ErrorDecorator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
                             ActivityErrors.FIELD_INVALID, errors);
                 }
             }

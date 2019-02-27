@@ -28,6 +28,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.Transla
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.ActivityErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -98,6 +99,7 @@ public class ActivityImporter extends ObjectImporter {
 
     public ActivityImporter(List<APIField> apiFields) {
         super(new InputValidatorProcessor(InputValidatorProcessor.getActivityValidators()), apiFields);
+        setJsonErrorMapper(new ActivityErrorsMapper());
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {
@@ -202,7 +204,7 @@ public class ActivityImporter extends ObjectImporter {
             
             Map<String, Object> newJsonParent = newJson.any();
             
-            newActivity = (AmpActivityVersion) validateAndImport(newActivity, fieldsDef, newJsonParent, null);
+            newActivity = (AmpActivityVersion) validateAndImport(newActivity, newJsonParent);
             if (newActivity != null && errors.isEmpty()) {
                 // save new activity
                 prepareToSave();

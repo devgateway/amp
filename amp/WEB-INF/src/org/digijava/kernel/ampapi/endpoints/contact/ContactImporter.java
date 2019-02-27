@@ -84,7 +84,7 @@ public class ContactImporter extends ObjectImporter {
                 cleanImportableFields(fieldsDef, contact);
             }
 
-            contact = (AmpContact) validateAndImport(contact, fieldsDef, newJson.any(), null);
+            contact = (AmpContact) validateAndImport(contact, newJson.any());
 
             if (contact == null) {
                 throw new ObjectConversionException();

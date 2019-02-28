@@ -91,6 +91,14 @@ public class ActivityEPConstants {
     // floating comparison constant
     public static final Double EPSILON = 0.0001;
 
+    /* 
+     * Based on local stats, 7 is the minimum DB query batch size with best outcome. 6-5 is pretty close, but going 
+     * lower makes the difference more noticeable. Growing the value up won't make a significant difference for some
+     * time. At about 16 and especially higher like 32 the performance impact is seen.
+     * Keeping it at the smallest optimal will allow a better performance for multiple users sync up (e.g. training). 
+     */
+    public static final Integer BATCH_DB_QUERY_SIZE = 7;
+
     public static final String FIELD_TITLE = "_FIELD_TITLE_";
     private static final String FUNDING_ITEM_FM_PATH = "/Activity Form/Funding/Funding Group/Funding Item";
 

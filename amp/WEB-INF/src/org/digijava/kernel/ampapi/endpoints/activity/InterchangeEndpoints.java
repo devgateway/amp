@@ -411,6 +411,37 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         return InterchangeUtils.getActivityByAmpId(ampId);
     }
 
+    /** A list of projects with full set of configured fields and their values. For each amp_id that is "
+     + "invalid or its export failed, the entry will provide only the 'amp_id' and the 'error'
+     *<h3> Sample Output:</h3>
+     * [
+     *    {
+     *       "internal_id":912,
+     *       "amp_id":"872329912"
+     *       ....
+     *    },
+     *    {
+     *       "amp_id":"invalid",
+     *       "error":{
+     *          "0132":[
+     *             {
+     *                "Activity not found":null
+     *             }
+     *          ]
+     *       }
+     *    }
+     * ]
+     * @param ampIds
+     * @return
+     */
+    @POST
+    @Path("/projects")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectsByAmpIds", ui = false)
+    public Collection<JsonBean> getProjectsByAmpIds(List<String> ampIds) {
+        return InterchangeUtils.getActivitiesByAmpIds(ampIds);
+    }
+
     /**
      * Imports an activity.
      * <p>Original behaviour: is_draft field cannot be specified. If saving as draft is allowed then activity will

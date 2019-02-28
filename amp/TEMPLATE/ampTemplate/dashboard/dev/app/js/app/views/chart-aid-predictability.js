@@ -27,13 +27,13 @@ module.exports = ChartViewBase.extend({
 	  var planned = this.model.get('showPlannedDisbursements');
 	  var actual = this.model.get('showActualDisbursements');
 	
-	  if (key == plannedDisbursementTrn) {
+	  if (key === plannedDisbursementTrn) {
 		  planned = !planned; 		 
-	  } else if (key == actualDisbursementTrn) {
+	  } else if (key === actualDisbursementTrn) {
 		  actual = !actual;
 	  }	
 	  
-	  if (planned == false && actual == false) {
+	  if (planned === false && actual === false) {
 		 //re-enable both measures 
 		  this.model.set('showPlannedDisbursements', true);
 		  this.model.set('showActualDisbursements', true);

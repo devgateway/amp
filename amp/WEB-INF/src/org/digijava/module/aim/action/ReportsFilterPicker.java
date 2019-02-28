@@ -17,6 +17,7 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
@@ -287,6 +288,8 @@ public class ReportsFilterPicker extends Action {
                         throw new RuntimeException("Unsupported type.");
                     }
                 }));
+                // TODO: Guardarla en settings.
+                boolean includeLocationChildren = jsonObjParams.getBoolean(EPConstants.INCLUDE_LOCATION_CHILDREN);
                 AmpReportFilters filterRules = FilterUtils.getFilters(filters, new AmpReportFilters());
                 AmpReportFiltersConverter converter = new AmpReportFiltersConverter(filterRules);
                 AmpARFilter ampARFilter = converter.buildFilters();

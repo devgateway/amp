@@ -111,6 +111,10 @@ public class ReportsFilterPickerForm extends ActionForm {
     private String fromActivityActualCompletionDate;
     private String toActivityActualCompletionDate;
     private DynamicDateFilter dynamicActivityActualCompletionFilter = new DynamicDateFilter();
+    private String fromPledgeDetailStartDate;
+    private String toPledgeDetailStartDate;
+    private String fromPledgeDetailEndDate;
+    private String toPledgeDetailEndDate;
     private String fromActualApprovalDate;
     private String toActualApprovalDate;
     private String fromProposedCompletionDate;
@@ -1525,4 +1529,38 @@ public class ReportsFilterPickerForm extends ActionForm {
     public void setToProposedCompletionDate(String toProposedCompletionDate) {
         this.toProposedCompletionDate = toProposedCompletionDate;
     }
+
+    public String getFromPledgeDetailStartDate() {
+        return fromPledgeDetailStartDate;
+    }
+
+    public void setFromPledgeDetailStartDate(String fromPledgeDetailStartDate) {
+        this.fromPledgeDetailStartDate = fromPledgeDetailStartDate;
+    }
+
+    public String getToPledgeDetailStartDate() {
+        return toPledgeDetailStartDate;
+    }
+
+    public void setToPledgeDetailStartDate(String toPledgeDetailStartDate) {
+        this.toPledgeDetailStartDate = toPledgeDetailStartDate;
+    }
+
+    public String getToPledgeDetailEndDate() {
+        return toPledgeDetailEndDate;
+    }
+
+    public void setToPledgeDetailEndDate(String toPledgeDetailEndDate) {
+        this.toPledgeDetailEndDate = toPledgeDetailEndDate;
+    }
+
+    public String getFromPledgeDetailEndDate() {
+        return fromPledgeDetailEndDate;
+    }
+
+    public void setFromPledgeDetailEndDate(String fromPledgeDetailEndDate) {
+        this.fromPledgeDetailEndDate = fromPledgeDetailEndDate;
+    }
+
+
 }

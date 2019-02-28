@@ -183,6 +183,9 @@ public class AmpARFilterConverter {
                 ColumnConstants.EFFECTIVE_FUNDING_DATE);
         addActivityDateFilter(arFilter.buildFromAndToFundingClosingDateAsDate(), ColumnConstants.FUNDING_CLOSING_DATE);
         addActivityDateFilter(arFilter.buildFromAndToIssueDateAsDate(), ColumnConstants.ISSUE_DATE);
+
+        addActivityDateFilter(arFilter.buildFromAndToPledgeDetailStartDateAsDate(), ColumnConstants.PLEDGES_DETAIL_START_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToPledgeDetailEndDateAsDate(), ColumnConstants.PLEDGES_DETAIL_END_DATE);
     }
 
     private void addActivityDateFilter(Date[] fromTo, String columnName) {

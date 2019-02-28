@@ -207,6 +207,11 @@ public class AmpReportFiltersConverter {
         addDateRangeFilter(TRANSACTION_DATE, "fromDate", "toDate");
         this.ampARFilter.setComputedYear(this.filters.getComputedYear());
 
+        addDateRangeFilter(ColumnConstants.PLEDGES_DETAIL_START_DATE, "fromPledgeDetailStartDate",
+                "toPledgeDetailStartDate");
+        addDateRangeFilter(ColumnConstants.PLEDGES_DETAIL_END_DATE, "fromPledgeDetailEndDate",
+                "toPledgeDetailEndDate");
+
         return this.ampARFilter;
     }
 

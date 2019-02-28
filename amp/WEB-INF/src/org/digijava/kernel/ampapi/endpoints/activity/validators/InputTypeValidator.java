@@ -102,9 +102,13 @@ public class InputTypeValidator extends InputValidator {
     }
 
     private boolean isValidDateTime(Object value, boolean isTimestamp) {
-        return value == null
-                || value instanceof String
-                && DateTimeUtil.parseISO8601DateTimestamp((String) value, isTimestamp) != null;
+        try {
+            return value == null
+                    || value instanceof String
+                    && DateTimeUtil.parseISO8601DateTimestamp((String) value, isTimestamp) != null;
+        } catch (RuntimeException e) {
+            return false;
+        }
     }
 
     private boolean checkListFieldValidity(ObjectImporter importer, Object item, APIField fieldDescription) {

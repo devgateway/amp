@@ -46,7 +46,7 @@ public class ActivityExporterTest {
                 program -> false,
                 "project_code");
 
-        InterchangeUtils.setTranslatorService(translatorService);
+        ActivityTranslationUtils.setTranslatorService(translatorService);
 
         fields = enumerator.getAllAvailableFields(AmpActivityFields.class);
     }

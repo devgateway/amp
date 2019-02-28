@@ -24,6 +24,7 @@ import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class ObjectExporterTest {
                 program -> false);
         List<APIField> fields = enumerator.getAllAvailableFields(Dummy.class);
 
-        InterchangeUtils.setTranslatorService(translatorService);
+        ActivityTranslationUtils.setTranslatorService(translatorService);
 
         exporter = new ObjectExporter<>(new DummyTranslatedFieldReader(), fields);
     }
@@ -317,7 +318,7 @@ public class ObjectExporterTest {
         Dummy dummy = new Dummy();
         dummy.dateValue = new Date();
 
-        String formattedDate = InterchangeUtils.formatISO8601Date(dummy.dateValue);
+        String formattedDate = DateTimeUtil.formatISO8601Date(dummy.dateValue);
 
         Map<String, Object> jsonObj = exporter.export(dummy).any();
 

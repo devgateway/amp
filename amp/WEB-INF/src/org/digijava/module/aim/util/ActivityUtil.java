@@ -33,7 +33,6 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -89,6 +88,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.IdWithValueShim;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
@@ -1877,7 +1877,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         } else if (activity.getModifiedDate() != null) {
             return activity.getModifiedDate();
         } else if (auditHistory != null) {
-            return InterchangeUtils.parseISO8601Timestamp(auditHistory.getModifiedDate());
+            return DateTimeUtil.parseISO8601Timestamp(auditHistory.getModifiedDate());
         } else if (activity.getApprovalDate() != null) {
             return activity.getApprovalDate();
         } else if (activity.getCreatedDate() != null) {
@@ -1899,15 +1899,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         for(AmpAuditLogger aal : activityLogObjects) {
             if (StringUtils.isNotEmpty(aal.getEditorName())) {
                 logActivityHistory.setModifiedBy(aal.getEditorName());
-                logActivityHistory.setModifiedDate(InterchangeUtils.formatISO8601Timestamp(aal.getLoggedDate()));
+                logActivityHistory.setModifiedDate(DateTimeUtil.formatISO8601Timestamp(aal.getLoggedDate()));
                 return logActivityHistory;
             } else if (StringUtils.isNotEmpty(aal.getEditorEmail())) {
                 try {
                     User u = UserUtils.getUserByEmail(aal.getEditorEmail());
                     if (u != null) {
                         logActivityHistory.setModifiedBy(String.format("%s %s", u.getFirstNames(), u.getLastName()));
-                        logActivityHistory.setModifiedDate(
-                                InterchangeUtils.formatISO8601Timestamp(aal.getLoggedDate()));
+                        logActivityHistory.setModifiedDate(DateTimeUtil.formatISO8601Timestamp(aal.getLoggedDate()));
                         return logActivityHistory;
                     }
                 } catch (DgException e) {
@@ -1973,7 +1972,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             ActivityHistory activityHistory = new ActivityHistory();
             activityHistory.setActivityId(activity.getAmpActivityId());
             activityHistory.setModifiedBy(ActivityUtil.getModifiedByUserName(activity, auditHistory));
-            activityHistory.setModifiedDate(InterchangeUtils.formatISO8601Timestamp(
+            activityHistory.setModifiedDate(DateTimeUtil.formatISO8601Timestamp(
                     ActivityUtil.getModifiedByDate(activity, auditHistory)));
 
             activitiesHistory.add(activityHistory);

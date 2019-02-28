@@ -18,7 +18,6 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.exception.DgException;
@@ -248,8 +247,8 @@ public final class PreviewActivityService {
         PreviewFundingTransaction transaction = new PreviewFundingTransaction();
         transaction.setTransactionId(fd.getDbId());
         transaction.setTransactionAmount(convertedAmount);
-        transaction.setTransactionDate(InterchangeUtils.formatISO8601Date(fd.getTransactionDate()));
-        transaction.setReportingDate(InterchangeUtils.formatISO8601Timestamp(fd.getReportingDate()));
+        transaction.setTransactionDate(DateTimeUtil.formatISO8601Timestamp(fd.getTransactionDate()));
+        transaction.setReportingDate(DateTimeUtil.formatISO8601Timestamp(fd.getReportingDate()));
 
         return transaction;
     }

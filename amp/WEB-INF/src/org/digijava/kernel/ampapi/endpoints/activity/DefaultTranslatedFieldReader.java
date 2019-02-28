@@ -12,13 +12,13 @@ public class DefaultTranslatedFieldReader implements TranslatedFieldReader {
     @Override
     public Object get(Field field, Class<?> clazz, Object fieldValue, Object parentObject) {
         try {
-            return InterchangeUtils.getTranslationValues(field, clazz, fieldValue, parentObject);
+            return ActivityTranslationUtils.getTranslationValues(field, clazz, fieldValue, parentObject);
         } catch (NoSuchFieldException | IllegalAccessException | EditorException e) {
             throw new RuntimeException("Failed to read translated field.", e);
         }
     }
 
     public boolean isTranslatable(Field field, Class<?> clazz) {
-        return InterchangeUtils.isTranslatable(field, clazz);
+        return ActivityTranslationUtils.isTranslatable(field, clazz);
     }
 }

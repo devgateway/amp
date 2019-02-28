@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ComponentFundingOrgsValidator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.FundingPledgesValidator;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;
@@ -81,7 +82,7 @@ public class InterchangeDependencyResolver {
      * @return
      */
     private static DependencyCheckResult checkFieldPresent(JsonBean incomingActivity, String path) {
-        Object externalValue = InterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, path);
+        Object externalValue = ActivityInterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, path);
         if (externalValue != null)
             return DependencyCheckResult.VALID;
         else 
@@ -110,7 +111,8 @@ public class InterchangeDependencyResolver {
      */
     private static DependencyCheckResult checkImplementationLevel(Object e, JsonBean incomingActivity) {
         //this object should be a Number (Long or Integer)
-        Object impLevelValue = InterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, IMPLEMENTATION_LEVEL_PATH);
+        Object impLevelValue = ActivityInterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity,
+                IMPLEMENTATION_LEVEL_PATH);
         if (impLevelValue == null)
             return DependencyCheckResult.INVALID_NOT_CONFIGURABLE;
         if (!Number.class.isAssignableFrom(e.getClass()))
@@ -211,7 +213,8 @@ public class InterchangeDependencyResolver {
         JsonBean incomingActivity = importer.getNewJson();
         
         Object referenceOnBudgetValue = getOnBudgetValue();
-        Object onOffBudgetValue = InterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, BUDGET_PATH);
+        Object onOffBudgetValue = ActivityInterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity,
+                BUDGET_PATH);
         if (onOffBudgetValue != null) {
             if (Number.class.isAssignableFrom(onOffBudgetValue.getClass())) {
                 onOffBudgetValue = ((Number) onOffBudgetValue).longValue();
@@ -224,7 +227,7 @@ public class InterchangeDependencyResolver {
     
     private static boolean isResourceTypeValid(Map<String, Object> fieldParent, ResourceType resourceType) {
         
-        Object resType = fieldParent.get(InterchangeUtils.underscorify(ResourceEPConstants.RESOURCE_TYPE));
+        Object resType = fieldParent.get(FieldMap.underscorify(ResourceEPConstants.RESOURCE_TYPE));
         return resType != null && resType.equals(resourceType.getId());
     }
     
@@ -253,7 +256,8 @@ public class InterchangeDependencyResolver {
      */
     private static DependencyCheckResult checkImplementationLocation(Object e, JsonBean incomingActivity) {
         //this object should be a Number (Long or Integer)
-        Object externalValue = InterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, IMPLEMENTATION_LEVEL_PATH);
+        Object externalValue = ActivityInterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity,
+                IMPLEMENTATION_LEVEL_PATH);
         if (e == null) {
             if (externalValue == null) {
                 return DependencyCheckResult.VALID;
@@ -288,15 +292,15 @@ public class InterchangeDependencyResolver {
     public static Object getOnBudgetValue() {
         return CategoryConstants.ACTIVITY_BUDGET_ON.getAmpCategoryValueFromDB().getIdentifier();
     }
-    
+
     private static int getCollectionSize(Map<String, Object> fieldParent, String fieldName) {
-        Object collection = fieldParent.get(InterchangeUtils.underscorify(fieldName));
+        Object collection = fieldParent.get(FieldMap.underscorify(fieldName));
         if (collection != null && Collection.class.isAssignableFrom(collection.getClass())) {
             return ((Collection<?>) collection).size();
         }
         return 0;
     }
-    
+
     /**
      * Performs a check on component funding org id corresponding to AmpOrganization objects -- 
      * whether those are included in the related organizations

@@ -21,7 +21,6 @@ import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.common.util.DateTimeUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -184,8 +183,10 @@ public class AmpARFilterConverter {
         addActivityDateFilter(arFilter.buildFromAndToFundingClosingDateAsDate(), ColumnConstants.FUNDING_CLOSING_DATE);
         addActivityDateFilter(arFilter.buildFromAndToIssueDateAsDate(), ColumnConstants.ISSUE_DATE);
 
-        addActivityDateFilter(arFilter.buildFromAndToPledgeDetailStartDateAsDate(), ColumnConstants.PLEDGES_DETAIL_START_DATE);
-        addActivityDateFilter(arFilter.buildFromAndToPledgeDetailEndDateAsDate(), ColumnConstants.PLEDGES_DETAIL_END_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToPledgeDetailStartDateAsDate(),
+                ColumnConstants.PLEDGES_DETAIL_START_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToPledgeDetailEndDateAsDate(),
+                ColumnConstants.PLEDGES_DETAIL_END_DATE);
     }
 
     private void addActivityDateFilter(Date[] fromTo, String columnName) {

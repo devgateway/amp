@@ -104,14 +104,16 @@ public class FieldsEnumerator {
         Class<?> elementType = null;
         if (interchangeable.pickIdOnly()) {
             fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
-        } else if (!InterchangeUtils.isSimpleType(field.getType())) {
+        } else if (InterchangeUtils.isCollection(field) && interchangeable.multipleValues()) {
             elementType = getType(field, context);
-            if (InterchangeUtils.isCollection(field) && InterchangeUtils.isSimpleType(elementType)) {
+            fieldType = FieldType.LIST;
+            if (InterchangeUtils.isSimpleType(elementType)) {
                 type = field.getClass();
             }
         }
         APIType apiType = new APIType(type, fieldType, elementType);
         apiField.setApiType(apiType);
+        boolean isCollection = apiType.getFieldType().isList();
 
         apiField.setPossibleValuesProviderClass(InterchangeUtils.getPossibleValuesProvider(field));
 
@@ -141,29 +143,20 @@ public class FieldsEnumerator {
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             if (!interchangeable.pickIdOnly()) {
-                List<APIField> children = getAllAvailableFields(elementType, context);
+                Class<?> clazz = isCollection ? elementType : type;
+                List<APIField> children = getAllAvailableFields(clazz, context);
                 if (children != null && children.size() > 0) {
                     apiField.setChildren(children);
                 }
             }
-
-            if (InterchangeUtils.isCollection(field)) {
-                if (!hasMaxSizeValidatorEnabled(field, context)
-                        && interchangeable.multipleValues()) {
-                    apiField.setMultipleValues(true);
-                    
-                    if (interchangeable.sizeLimit() > 1) {
-                        apiField.setSizeLimit(interchangeable.sizeLimit());
-                    }
-                } else {
-                    apiField.setMultipleValues(false);
+            if (isCollection) {
+                apiField.setMultipleValues(!hasMaxSizeValidatorEnabled(field, context));
+                if (interchangeable.sizeLimit() > 1) {
+                    apiField.setSizeLimit(interchangeable.sizeLimit());
                 }
-                
-                
                 if (hasPercentageValidatorEnabled(context)) {
                     apiField.setPercentageConstraint(getPercentageConstraint(field, context));
                 }
-                
                 String uniqueConstraint = getUniqueConstraint(apiField, field, context);
                 if (hasTreeCollectionValidatorEnabled(context)) {
                     apiField.setTreeCollectionConstraint(true);
@@ -171,9 +164,6 @@ public class FieldsEnumerator {
                 } else if (hasUniqueValidatorEnabled(context)) {
                     apiField.setUniqueConstraint(uniqueConstraint);
                 }
-                
-            } else if (!interchangeable.pickIdOnly()) {
-                apiField.setMultipleValues(false);
             }
         }
         
@@ -184,11 +174,9 @@ public class FieldsEnumerator {
         if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldInfoProvider.getType(field))) {
             apiField.setFieldLength(fieldInfoProvider.getMaxLength(field));
         }
-        
         if (StringUtils.isNotBlank(interchangeable.regexPattern())) {
             apiField.setRegexPattern(interchangeable.regexPattern());
         }
-
         if (StringUtils.isNotEmpty(interchangeable.discriminatorOption())) {
             apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
         }
@@ -208,7 +196,6 @@ public class FieldsEnumerator {
                 return type;
             }
         }
-    
         return InterchangeUtils.getClassOfField(field);
     }
 

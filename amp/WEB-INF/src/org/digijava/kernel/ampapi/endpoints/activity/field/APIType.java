@@ -40,7 +40,7 @@ public class APIType {
             if (InterchangeableClassMapper.containsSimpleClass(type)) {
                 fieldType = InterchangeableClassMapper.getCustomMapping(type);
             } else {
-                fieldType = FieldType.LIST;
+                fieldType = FieldType.OBJECT;
             }
         }
         if (fieldType.isList()) {

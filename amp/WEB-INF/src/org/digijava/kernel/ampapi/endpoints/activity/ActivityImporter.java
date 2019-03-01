@@ -98,7 +98,9 @@ public class ActivityImporter extends ObjectImporter {
     private Long latestActivityId;
 
     public ActivityImporter(List<APIField> apiFields) {
-        super(new InputValidatorProcessor(InputValidatorProcessor.getActivityValidators()), apiFields);
+        super(new InputValidatorProcessor(InputValidatorProcessor.getActivityFormatValidators()),
+                new InputValidatorProcessor(InputValidatorProcessor.getActivityBusinessRulesValidators()),
+                apiFields);
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {
@@ -203,8 +205,8 @@ public class ActivityImporter extends ObjectImporter {
             
             Map<String, Object> newJsonParent = newJson.any();
             
-            newActivity = (AmpActivityVersion) validateAndImport(newActivity, fieldsDef, newJsonParent, null);
-            if (newActivity != null && errors.isEmpty()) {
+            validateAndImport(newActivity, fieldsDef, newJsonParent, null);
+            if (errors.isEmpty()) {
                 // save new activity
                 prepareToSave();
                 boolean updateApprovalStatus = !AmpOfflineModeHolder.isAmpOfflineMode();

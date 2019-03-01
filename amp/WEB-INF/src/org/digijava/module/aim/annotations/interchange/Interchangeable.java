@@ -73,7 +73,7 @@ public @interface Interchangeable {
      * </pre>
      *
      * <p>During deserialization, id from json will be converted back using
-     * {@link InterchangeUtils#getObjectById(java.lang.Class, java.lang.Long)}.
+     * {@link ValueConverter#getObjectById(java.lang.Class, java.lang.Long)}.
      */
     boolean pickIdOnly() default false;
 

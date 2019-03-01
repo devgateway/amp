@@ -160,6 +160,10 @@ function viewDifferences(activityOneId) {
     document.aimCompareActivityVersionsForm.activityOneId.value = activityOneId;
     document.aimCompareActivityVersionsForm.submit();
 }
+function viewAllDifferences() {
+    document.aimCompareActivityVersionsForm.method.value = "viewAllDifferences";
+    document.aimCompareActivityVersionsForm.submit();
+}
 </script>
 
 <h1 class="admintitle"><digi:trn key="aim:AuditLoggerManager">Audit Logger Manager</digi:trn></h1> 
@@ -268,6 +272,8 @@ function viewDifferences(activityOneId) {
 						<div>
 						<div align="center" style="border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;border-right:1px solid #cccccc;">
 						<table width="100%" height="100%" border="0" align="center" cellpadding="0" cellspacing="0"  id="dataTable">
+						
+						<input type="button" onclick="viewAllDifferences()" value="<digi:trn>Compare All</digi:trn>">
 							<tr>
 								<td width="280" height="22" align="center" valign="center"bgcolor="#C7D4DB" >
 								<c:if 

@@ -35,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.form.CompareActivityVersionsForm;
@@ -53,6 +54,7 @@ import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.Query;
 
 public class CompareActivityVersions extends DispatchAction {
 
@@ -357,5 +359,18 @@ public class CompareActivityVersions extends DispatchAction {
 
         return mapping.findForward("forward");
     }
+    
+    public ActionForward viewAllDifferences(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
+        Map<Long, Map<String, List<CompareOutput>>> listoutputCollectionGrouped = new HashMap<Long, Map<String, List<CompareOutput>>>();
+        Session session = PersistenceManager.getRequestDBSession();
+        String qryStr = "select objectId from " + AmpAuditLogger.class.getName()
+                + " where objecttype =" + "'" + AmpActivityVersion.class.getName() + "'" + "order by modifyDate desc";
 
+         Query query = session.createQuery(qryStr);
+         List<Object> activityList = query.list();
+         listoutputCollectionGrouped = ActivityVersionUtil.compareActivities(activityList);        
+         vForm.setListoutputCollectionGrouped(listoutputCollectionGrouped);
+         return mapping.findForward("forward");
+    }
 }

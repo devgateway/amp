@@ -409,16 +409,18 @@ public class AmpARFilterConverter {
      * @param columnName - column name of the to apply the rule over or null if this is a custom ElementType
      */
     private void addFilter(Collection<? extends NameableOrIdentifiable> set, String columnName) {
+        if (set == null || set.isEmpty()) {
+            return;
+        }
+        
         Set<String> values = new LinkedHashSet<>();
         List<String> names = new LinkedList<>();
         
-        if (set != null) {
-            for (NameableOrIdentifiable identifiable: set) {
-                final String value = identifiable.getIdentifier().toString();
-                if (!values.contains(value)) {
-                    values.add(value);
-                    names.add(identifiable.getName());
-                }
+        for (NameableOrIdentifiable identifiable: set) {
+            final String value = identifiable.getIdentifier().toString();
+            if (!values.contains(value)) {
+                values.add(value);
+                names.add(identifiable.getName());
             }
         }
         

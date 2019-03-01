@@ -168,7 +168,6 @@ function viewDifferences(activityOneId) {
   function viewListDifferences() {
 	
     document.aimCompareActivityVersionsForm.method.value = "viewListDifferences";
-   /*  document.aimCompareActivityVersionsForm.activitiesId.value = activitesId; */
     document.aimCompareActivityVersionsForm.submit();
 } 
  
@@ -473,23 +472,13 @@ function viewDifferences(activityOneId) {
 										
 											<input type="button" title="<digi:trn>Click here to compare with previous version</digi:trn>" onclick="javascript:viewDifferences(${log.objectId})"
 												   class="dr-menu" 	value="&nbsp;&nbsp;<digi:trn>Compare</digi:trn>&nbsp;&nbsp;" name="yoye"> 
-												   
-												   
-										<%-- 	<input type="hidden"  id = "yo" value="${paramValues.log.objectId }"> --%>
-											
 											
 										</c:if>
 									</td>
-							
-  
-	
-	
-
-	
+		
 	</tr>
 						
-						
-					<%-- <c:out value="${log.objectId}" /> --%>
+					
 														
                           </logic:iterate>
      				<tr>

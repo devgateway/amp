@@ -1,22 +1,15 @@
 package org.digijava.module.aim.action;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -45,7 +38,6 @@ import org.digijava.module.aim.form.AuditLoggerManagerForm;
 import org.digijava.module.aim.form.CompareActivityVersionsForm;
 import org.digijava.module.aim.helper.ActivityHistory;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -115,8 +107,7 @@ public class CompareActivityVersions extends DispatchAction {
         return mapping.findForward("forward");
     }
 
-    private void modifyFundingOutputs (Map<String, List<CompareOutput>> outputGroupped) {
-
+    private void modifyFundingOutputs(Map<String, List<CompareOutput>> outputGroupped) {
 
     }
 
@@ -362,26 +353,25 @@ public class CompareActivityVersions extends DispatchAction {
         CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
         vForm.setOutputCollection(new ArrayList<CompareOutput>());
         vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId()));
-
         return mapping.findForward("forward");
     }
     
     
-    public ActionForward viewListDifferences(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
-        
-        CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
-       Session session = PersistenceManager.getRequestDBSession();            
-     Query qry = session.createQuery("select  objectId from " +  
-              AmpAuditLogger.class.getName() + " where objecttype="+"'"+AmpActivityVersion.class.getName()+"'"+" order by modifyDate desc");
-       
+    public ActionForward viewListDifferences(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
 
+        CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
+        Session session = PersistenceManager.getRequestDBSession();
+        Query qry = session.createQuery("select  objectId from " + AmpAuditLogger.class.getName() + " where objecttype="
+                + "'" + AmpActivityVersion.class.getName() + "'" + " order by modifyDate desc");
+
+        @SuppressWarnings("unchecked")
         List<Long> activitiesId = (qry.list());
-        vForm.setOutputCollection(new ArrayList<CompareOutput>());        
- vForm.setOutputCollectionGroupedList(ActivityVersionUtil.compareActivities(activitiesId));
-  
+
+        vForm.setOutputCollectionGroupedList(ActivityVersionUtil.compareActivities(activitiesId));
+
         return mapping.findForward("forward");
-          
+
     }
     
     

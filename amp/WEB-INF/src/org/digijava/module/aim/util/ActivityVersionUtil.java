@@ -43,6 +43,8 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 public class ActivityVersionUtil {
 
     private static Logger logger = Logger.getLogger(ActivityVersionUtil.class);
@@ -86,13 +88,10 @@ public class ActivityVersionUtil {
     }
 
     public static String generateFormattedOutput(Output out, Output out1) throws WorkerException {
-    
 
-        
-            Site site = TLSUtils.getSite();
-            String langCode = TLSUtils.getEffectiveLangCode();
-        
-        
+        Site site = TLSUtils.getSite();
+        String langCode = TLSUtils.getEffectiveLangCode();
+
         StringBuilder ret = new StringBuilder();
         if (out.getOutputs() != null) {
             // First level.
@@ -109,27 +108,32 @@ public class ActivityVersionUtil {
                         existsInOtherVersion = out1.getOutputByTitle(title) != null;
                     }
                     if (!title.trim().isEmpty()) {
-                        if (!existsInOtherVersion) ret.append("<font color='red'>");
-                        ret.append("<br/><b>").append(TranslatorWorker.translateText(auxOutput.getTitle()[i], langCode, site.getId())).
-                                append(":</b>&nbsp;");
-                        if (!existsInOtherVersion) ret.append("</font>");
+                        if (!existsInOtherVersion)
+                            ret.append("<font color='red'>");
+                        ret.append("<br/><b>")
+                                .append(TranslatorWorker.translateText(auxOutput.getTitle()[i], langCode, site.getId()))
+                                .append(":</b>&nbsp;");
+                        if (!existsInOtherVersion)
+                            ret.append("</font>");
                     }
                 }
                 for (int i = 0; i < auxOutput.getValue().length; i++) {
                     /*
-                     * if (auxOutput.getValue()[i] instanceof Date) { String
-                     * date = DateConversion.ConvertDateToString((Date)
-                     * auxOutput.getValue()[i]); ret += date; } else {
+                     * if (auxOutput.getValue()[i] instanceof Date) { String date =
+                     * DateConversion.ConvertDateToString((Date) auxOutput.getValue()[i]); ret +=
+                     * date; } else {
                      */
-                    if (auxOutput.getValue()[i]!=null){
+                    if (auxOutput.getValue()[i] != null) {
                         String text = auxOutput.getValue()[i].toString();
                         if (auxOutput.getTranslateValue())
                             text = TranslatorWorker.translateText(text, langCode, site.getId());
-                        if (!existsInOtherVersion) ret.append("<font color='red'>");
+                        if (!existsInOtherVersion)
+                            ret.append("<font color='red'>");
                         ret.append(org.digijava.module.aim.util.DbUtil.filter(text));
-                        if (!existsInOtherVersion) ret.append("</font>");
+                        if (!existsInOtherVersion)
+                            ret.append("</font>");
                     }
-                    
+
                 }
                 if (auxOutput.getOutputs() != null) {
 
@@ -137,7 +141,6 @@ public class ActivityVersionUtil {
                     if (out1 != null) {
                         output2 = out1.getOutputByTitle(auxOutput.getTitle()[0]);
                     }
-
 
                     // Second level.
                     String tabs = "<br/> &nbsp; &nbsp; &nbsp;";
@@ -152,9 +155,9 @@ public class ActivityVersionUtil {
 
                         ret.append(tabs);
                         for (int i = 0; i < auxOutput2.getTitle().length; i++) {
-                            ret.append("<b>").
-                                    append(TranslatorWorker.translateText(auxOutput2.getTitle()[i], langCode, site.getId())).
-                                    append("</b>");
+                            ret.append("<b>").append(
+                                    TranslatorWorker.translateText(auxOutput2.getTitle()[i], langCode, site.getId()))
+                                    .append("</b>");
                         }
                         for (int i = 0; i < auxOutput2.getValue().length; i++) {
                             boolean markAsDifferent = false;
@@ -162,12 +165,13 @@ public class ActivityVersionUtil {
                                 markAsDifferent = true;
                                 ret.append("<font color='red'>");
                             }
-                            
+
                             if (auxOutput2.getValue()[i] instanceof Timestamp) {
-                                String date = DateConversion.convertDateToString(new Date(((Timestamp) auxOutput2.getValue()[i]).getTime()));
+                                String date = DateConversion.convertDateToString(
+                                        new Date(((Timestamp) auxOutput2.getValue()[i]).getTime()));
                                 ret.append(date);
-                            } else if (auxOutput2.getValue()[i] instanceof BigDecimal 
-                                    || auxOutput2.getValue()[i] instanceof Double 
+                            } else if (auxOutput2.getValue()[i] instanceof BigDecimal
+                                    || auxOutput2.getValue()[i] instanceof Double
                                     || auxOutput2.getValue()[i] instanceof Float) {
                                 NumberFormat formatter = FormatHelper.getDecimalFormat();
                                 formatter.setMaximumFractionDigits(0);
@@ -349,8 +353,11 @@ public class ActivityVersionUtil {
 
         Session session = PersistenceManager.getCurrentSession();
         AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
+        
+        System.out.println(activityOneId);
+        
         AmpActivityVersion ampActivityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
-        return (ampActivityTwo.equals(null)) ? null
+        return (ampActivityTwo == null) ? null
                 : compareActivities(activityOneId, ampActivityTwo.getAmpActivityId());
 
     }
@@ -667,11 +674,12 @@ public class ActivityVersionUtil {
             throws Exception {
 
         Map<Long, Map<String, List<CompareOutput>>> listOfActivities = new HashMap<>();
+        for (Object activityId : activitiesId) {
 
-        for (Long activityId : activitiesId) {
-            Map<String, List<CompareOutput>> activityComparedToPreviousVersion = compareActivities(activityId);
+            Map<String, List<CompareOutput>> activityComparedToPreviousVersion = compareActivities(
+                    Long.parseLong(String.valueOf(activityId)));
             if (activityComparedToPreviousVersion != null) {
-                listOfActivities.put(activityId, activityComparedToPreviousVersion);
+                listOfActivities.put(Long.parseLong(String.valueOf(activityId)), activityComparedToPreviousVersion);
             }
         }
 

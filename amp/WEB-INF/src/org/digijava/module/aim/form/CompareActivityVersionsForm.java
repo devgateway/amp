@@ -2,8 +2,10 @@ package org.digijava.module.aim.form;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.ecs.xhtml.map;
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -14,9 +16,19 @@ public class CompareActivityVersionsForm extends ActionForm {
     private Long activityOneId;
 
     private Long activityTwoId;
+    
+    private Long [] activitiesId;
+    public Long[] getActivitiesId() {
+        return activitiesId;
+    }
+
+    public void setActivitiesId(Long[] activitiesId) {
+        this.activitiesId = activitiesId;
+    }
 
     private List<CompareOutput> outputCollection;
 
+    
     private AmpActivityVersion activityOne;
 
     private AmpActivityVersion activityTwo;
@@ -33,8 +45,12 @@ public class CompareActivityVersionsForm extends ActionForm {
     
     private boolean advancemode;
 
+   
     private Map<String, List<CompareOutput>> outputCollectionGrouped;
 
+    private Map<Long, Map<String, List<CompareOutput>>> outputCollectionGroupedList;
+    
+    
     public Long getActivityOneId() {
         return activityOneId;
     }
@@ -134,4 +150,19 @@ public class CompareActivityVersionsForm extends ActionForm {
     public Set<Map.Entry<String, List<CompareOutput>>> getOutputCollectionGroupedAsSet() {
         return this.outputCollectionGrouped.entrySet();
     }
+    
+    public void setOutputCollectionGroupedList( Map<Long, Map<String, List<CompareOutput>>> outputCollectionGroupedList) {
+        this.outputCollectionGroupedList = outputCollectionGroupedList;
+    }
+
+    
+    public Set<Map.Entry<Long, Map<String, List<CompareOutput>>>>
+    getOutputCollectionGroupedList(){
+        return this.outputCollectionGroupedList.entrySet();
+     
+    }
+
+    
+  
+    
 }

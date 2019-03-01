@@ -107,7 +107,7 @@ public class ProgramFilterListManager implements FilterListManager {
         return items;
     }
     
-    private List<AmpActivityProgramSettings> getProgramSettings() {
+    protected List<AmpActivityProgramSettings> getProgramSettings() {
         Set<String> visibleCols = ColumnsVisibility.getVisibleColumns();
         Session session = PersistenceManager.getSession();
         List<AmpActivityProgramSettings> allSettings = session.createCriteria(AmpActivityProgramSettings.class).list();

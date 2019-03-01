@@ -1532,11 +1532,14 @@ public class ReportsFilterPicker extends Action {
                 arf.setComputedYear(null);
                     
         }
-        if (filterForm.getActualAppYear()!=-1){
-            arf.setActualAppYear(filterForm.getActualAppYear());
-        }
-        else 
-            arf.setActualAppYear(null);
+        arf.setToActualApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToActualApprovalDate()));
+        arf.setFromActualApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromActualApprovalDate()));
+
+        arf.setToProposedCompletionDate(
+                FilterUtil.convertUiToArFilterDate(filterForm.getToProposedCompletionDate()));
+        arf.setFromProposedCompletionDate(
+                FilterUtil.convertUiToArFilterDate(filterForm.getFromProposedCompletionDate()));
+
         // arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
 
         Integer all = new Integer(-1);

@@ -58,11 +58,12 @@ public class ObjectImporterTest {
                 new FieldsEnumerator(provider, fmService, translatorService, s -> true);
         List<APIField> apiFields = fe.getAllAvailableFields(Parent.class);
 
-        InputValidatorProcessor validator = new InputValidatorProcessor(Collections.emptyList());
+        InputValidatorProcessor formatValidator = new InputValidatorProcessor(Collections.emptyList());
+        InputValidatorProcessor businessRulesValidator = new InputValidatorProcessor(Collections.emptyList());
 
         TranslationSettings plainEnglish = new TranslationSettings("en", Collections.singleton("en"), false);
 
-        ObjectImporter importer = new ObjectImporter(validator, plainEnglish, apiFields);
+        ObjectImporter importer = new ObjectImporter(formatValidator, businessRulesValidator, plainEnglish, apiFields);
 
         ObjectMapper om = new ObjectMapper();
         InputStream stream = ObjectImporterTest.class.getResourceAsStream("examples.json");
@@ -70,7 +71,8 @@ public class ObjectImporterTest {
 
         Map<String, Object> json = (Map<String, Object>) examples.get("back-references-example");
 
-        Parent parent = (Parent) importer.validateAndImport(new Parent(), json);
+        Parent parent = new Parent();
+        importer.validateAndImport(parent, json);
 
         Child child1 = parent.children.get(0);
         Child child2 = parent.children.get(1);

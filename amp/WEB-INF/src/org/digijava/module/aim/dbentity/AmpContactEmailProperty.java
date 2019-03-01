@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
@@ -8,7 +10,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
  */
 public class AmpContactEmailProperty extends AmpContactProperty {
 
-    @Interchangeable(fieldTitle = "Value", required = ActivityEPConstants.REQUIRED_ALWAYS, importable = true,
+    @Interchangeable(fieldTitle = "Value", required = ALWAYS, importable = true,
             regexPattern = ActivityEPConstants.REGEX_PATTERN_EMAIL)
     private String value;
 

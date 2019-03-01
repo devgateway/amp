@@ -7,7 +7,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.common.AmpConfiguration;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -101,10 +101,10 @@ public class ActionAuthorizer {
 
         Map<Integer, ApiErrorMessage> errors = new TreeMap<>();
 
-        if (authRules.contains(AuthRule.VIEW_ACTIVITY) && !InterchangeUtils.isViewableActivity(containerReq)) {
+        if (authRules.contains(AuthRule.VIEW_ACTIVITY) && !ActivityInterchangeUtils.isViewableActivity(containerReq)) {
             addError(methodInfo, errors, SecurityErrors.INVALID_REQUEST, "Activity doesn't exist or is not the latest version");
         }
-        if (authRules.contains(AuthRule.PUBLIC_VIEW_ACTIVITY) && !InterchangeUtils.
+        if (authRules.contains(AuthRule.PUBLIC_VIEW_ACTIVITY) && !ActivityInterchangeUtils.
                 canViewActivityIfCreatedInPrivateWs(containerReq)) {
             ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("You must be logged-in in the "
                     + "workspace where the activity was created");

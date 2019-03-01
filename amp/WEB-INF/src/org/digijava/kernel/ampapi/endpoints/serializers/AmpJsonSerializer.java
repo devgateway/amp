@@ -5,13 +5,12 @@ package org.digijava.kernel.ampapi.endpoints.serializers;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityTranslationUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
@@ -66,7 +65,7 @@ public abstract class AmpJsonSerializer<T extends Identifiable> extends JsonSeri
             Field field = value.get().getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
             Object fieldValue = field.get(value.get());
-            return InterchangeUtils.getTranslationValues(field, clazz, fieldValue, value.get().getIdentifier());
+            return ActivityTranslationUtils.getTranslationValues(field, clazz, fieldValue, value.get().getIdentifier());
         } catch (SecurityException | IllegalAccessException | IllegalArgumentException
                 | EditorException | NoSuchFieldException e) {
             throw new IOException(e);

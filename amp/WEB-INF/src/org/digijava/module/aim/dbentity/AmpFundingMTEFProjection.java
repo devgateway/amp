@@ -1,6 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.REQUIRED_ALWAYS;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -23,16 +23,16 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
     private Long ampFundingMTEFProjectionId;
 
     @Interchangeable(fieldTitle = "Projection", pickIdOnly = true, importable = true, 
-            discriminatorOption = CategoryConstants.MTEF_PROJECTION_KEY, required = REQUIRED_ALWAYS)
+            discriminatorOption = CategoryConstants.MTEF_PROJECTION_KEY, required = ALWAYS)
     private AmpCategoryValue projection;
 
-    @Interchangeable(fieldTitle = "Amount", importable = true, required = REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Amount", importable = true, required = ALWAYS)
     private Double amount;
 
-    @Interchangeable(fieldTitle = "Currency", pickIdOnly = true, importable = true, required = REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Currency", pickIdOnly = true, importable = true, required = ALWAYS)
     private AmpCurrency ampCurrency;
 
-    @Interchangeable(fieldTitle = "Projection Date", importable = true, required = REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Projection Date", importable = true, required = ALWAYS)
     private Date projectionDate;
 
     @InterchangeableBackReference

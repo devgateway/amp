@@ -104,11 +104,13 @@ public class FieldsEnumerator {
         Class<?> elementType = null;
         if (interchangeable.pickIdOnly()) {
             fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
-        } else if (InterchangeUtils.isCollection(field) && interchangeable.multipleValues()) {
+        } else if (InterchangeUtils.isCollection(field)) {
             elementType = getType(field, context);
-            fieldType = FieldType.LIST;
-            if (InterchangeUtils.isSimpleType(elementType)) {
-                type = field.getClass();
+            if (interchangeable.multipleValues()) {
+                fieldType = FieldType.LIST;
+                if (InterchangeUtils.isSimpleType(elementType)) {
+                    type = field.getClass();
+                }
             }
         }
         APIType apiType = new APIType(type, fieldType, elementType);

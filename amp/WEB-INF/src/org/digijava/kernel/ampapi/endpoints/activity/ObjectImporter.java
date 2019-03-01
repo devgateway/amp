@@ -273,8 +273,6 @@ public class ObjectImporter {
                     Method valueOf = field.getType().getDeclaredMethod("valueOf", String.class);
                     value = valueOf.invoke(field.getType(), String.valueOf(jsonValue));
                 }
-            } else if (AmpAgreement.class.equals(field.getType())) {
-                value = field.get(parentObj);
             }
         } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException
                 | InvocationTargetException e) {

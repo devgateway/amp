@@ -112,7 +112,10 @@ public class FieldsEnumerator {
                     type = field.getClass();
                 }
             }
+        } else if (field.getType().equals(java.util.Date.class)) {
+            fieldType = InterchangeUtils.isTimestampField(field) ? FieldType.TIMESTAMP : FieldType.DATE;
         }
+        
         APIType apiType = new APIType(type, fieldType, elementType);
         apiField.setApiType(apiType);
         boolean isCollection = apiType.getFieldType().isList();

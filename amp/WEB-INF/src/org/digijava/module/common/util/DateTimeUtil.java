@@ -49,7 +49,8 @@ public class DateTimeUtil {
     private static final Logger logger = LoggerFactory.getLogger(DateTimeUtil.class);
 
     private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<>();
-
+    private static final ThreadLocal<SimpleDateFormat> TIMESTAMP_FORMATTER = new ThreadLocal<>();
+    
     /**
      * Convert iso date to java.util.Calendar
      * example:
@@ -271,38 +272,104 @@ public class DateTimeUtil {
         calendar.add(Calendar.DAY_OF_YEAR, -1);
         return calendar.getTime();
     }
-
+    
     /**
-     * Gets a date formatted in ISO 8601 format. If the date is null, returns null.
+     * Gets a date formatted in ISO 8601 date format. If the date is null, returns null.
      *
      * @param date the date to be formatted
-     * @return String, date in ISO 8601 format
+     * @return String, date in ISO 8601 date format
      */
-    public static String formatISO8601DateTime(Date date) {
-        return date == null ? null : getDateFormatter().format(date);
+    public static String formatISO8601Date(Date date) {
+        return formatISO8601DateTimestamp(date, false);
     }
-
+    
     /**
-     * Parse a date time using ISO 8601 format. If date cannot be parsed null will be returned.
+     * Gets a date formatted in ISO 8601 date time format. If the date is null, returns null.
      *
-     * @param date the source
-     * @return Date object
+     * @param date the date to be formatted
+     * @return String, date in ISO 8601 date time format
      */
-    public static Date parseISO8601DateTime(String date) {
-        try {
-            return date == null ? null : getDateFormatter().parse(date);
-        } catch (ParseException e) {
-            logger.warn(e.getMessage());
-            return null;
-        }
+    public static String formatISO8601Timestamp(Date date) {
+        return formatISO8601DateTimestamp(date, true);
     }
-
+    
+    /**
+     * Gets a date formatted in ISO 8601 date time format. If the date is null, returns null.
+     *
+     * @param date the date to be formatted
+     * @param isTimestamp if the value should be parsed using the ISO8601DateTime or ISO8601Date format
+     * @return String, date in ISO 8601 date time format
+     */
+    public static String formatISO8601DateTimestamp(Date date, boolean isTimestamp) {
+        SimpleDateFormat formatter = isTimestamp ? getTimestampFormatter() : getDateFormatter();
+        return date == null ? null : formatter.format(date);
+    }
+    
+    /**
+     * Gets a date formatted in ISO 8601 date format. If the date is null, returns null.
+     *
+     * @param date the date to be formatted
+     * @return String, date in ISO 8601 date format
+     */
+    
+    public static Date parseISO8601Date(String date) {
+        return parseISO8601DateTimestamp(date, false);
+    }
+    
+    /**
+     * Gets a date formatted in ISO 8601 date time format. If the date is null, returns null.
+     *
+     * @param date the date to be formatted
+     * @return String, date in ISO 8601 date time format
+     */
+    
+    public static Date parseISO8601Timestamp(String date) {
+        return parseISO8601DateTimestamp(date, true);
+    }
+    
+    /**
+     * Gets a date formatted in ISO 8601 date time format. If the date is null, returns null.
+     *
+     * @param date the date to be formatted
+     * @param isTimestamp if the value should be parsed using the ISO8601DateTime or ISO8601Date format
+     * @return String, date in ISO 8601 date time format
+     */
+    
+    public static Date parseISO8601DateTimestamp(String date, boolean isTimestamp) {
+        try {
+            SimpleDateFormat formatter = isTimestamp ? getTimestampFormatter() : getDateFormatter();
+            if (date != null) {
+                if (date.length() != EPConstants.DATE_FORMAT_STRICT_LENGTH.get(formatter.toPattern())) {
+                    throw new ParseException("Unparseable date '" + date + "'", date.length());
+                }
+                return formatter.parse(date);
+            }
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        
+        return null;
+    }
+    
     private static SimpleDateFormat getDateFormatter() {
         if (DATE_FORMATTER.get() == null) {
-            SimpleDateFormat format = new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT);
-            format.setTimeZone(TimeZone.getTimeZone("UTC"));
+            SimpleDateFormat format = new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT);
+            format.setLenient(false);
             DATE_FORMATTER.set(format);
         }
+        
         return DATE_FORMATTER.get();
     }
+    
+    protected static SimpleDateFormat getTimestampFormatter() {
+        if (TIMESTAMP_FORMATTER.get() == null) {
+            SimpleDateFormat format = new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT);
+            format.setLenient(false);
+            format.setTimeZone(TimeZone.getTimeZone("UTC"));
+            TIMESTAMP_FORMATTER.set(format);
+        }
+        
+        return TIMESTAMP_FORMATTER.get();
+    }
+    
 }

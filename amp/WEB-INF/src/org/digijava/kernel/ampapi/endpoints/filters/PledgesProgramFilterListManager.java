@@ -86,22 +86,14 @@ public final class PledgesProgramFilterListManager extends ProgramFilterListMana
 
         return filterIds;
     }
-    
-    @Override
-    protected List<AmpActivityProgramSettings> getProgramSettings() {
-        Set<String> visibleCols = ColumnsVisibility.getVisibleColumns();
-        Session session = PersistenceManager.getSession();
-        List<AmpActivityProgramSettings> allSettings = session.createCriteria(AmpActivityProgramSettings.class).list();
-        List<AmpActivityProgramSettings> programSettings = allSettings.stream()
-                .filter(setting -> visibleCols.contains(getFilterDefinitionName(setting.getName())))
-                .filter(setting -> setting.getDefaultHierarchy() != null)
-                .collect(Collectors.toList());
-        
-        return programSettings;
-    }
-    
+
     @Override
     protected String getFilterDefinitionName(String programConfigurationName) {
+        return getColumnName(programConfigurationName);
+    }
+
+    @Override
+    protected String getColumnName(String programConfigurationName) {
         switch(programConfigurationName) {
             case ProgramUtil.PRIMARY_PROGRAM:
                 return ColumnConstants.PLEDGES_PROGRAMS;

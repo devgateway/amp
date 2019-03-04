@@ -52,7 +52,6 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
     private void initializeDeclaringClassOfFieldIfNeeded(Field field) {
         synchronized (lock) {
             Class clazz = getActualFieldClass(field);
-            classFieldInfo.clear();
             if (classFieldInfo.get(clazz) == null) {
                 initializeFields(clazz);
             }

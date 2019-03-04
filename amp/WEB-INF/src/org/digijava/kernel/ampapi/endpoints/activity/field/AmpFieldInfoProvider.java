@@ -5,78 +5,80 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityTranslationUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Octavian Ciubotaru
  */
 public class AmpFieldInfoProvider implements FieldInfoProvider {
-
-    private Class<?> rootClass;
-
+    
     private final Object lock = new Object();
-
-    private Map<Field, String> fieldTypes;
-    private Map<Field, Integer> fieldMaxLengths;
-
-    public AmpFieldInfoProvider(Class<?> rootClass) {
-        this.rootClass = rootClass;
-    }
-
+    
+    private Map<Class<?>, Map<String, FieldInfo>> classFieldInfo = new HashMap<>();
+    
     public Integer getMaxLength(Field field) {
-        initializeIfNeeded();
-        return fieldMaxLengths.get(field);
+        initializeDeclaringClassOfFieldIfNeeded(field);
+        return isFieldInitialized(field) ? getFieldInfo(field).getMaxLength() : null;
     }
-
+    
     @Override
     public boolean isTranslatable(Field field) {
         return TranslationSettings.getCurrent().isTranslatable(field);
     }
-
+    
     public String getType(Field field) {
-        initializeIfNeeded();
-        return fieldTypes.get(field);
+        initializeDeclaringClassOfFieldIfNeeded(field);
+        return isFieldInitialized(field) ? getFieldInfo(field).getType() : null;
     }
-
-    private void initializeIfNeeded() {
+    
+    private FieldInfo getFieldInfo(Field field) {
+        Class clazz = getActualFieldClass(field);
+        return classFieldInfo.get(clazz).get(field.getName());
+    }
+    
+    private void initializeDeclaringClassOfFieldIfNeeded(Field field) {
         synchronized (lock) {
-            if (fieldTypes == null) {
-                initialize();
+            Class clazz = getActualFieldClass(field);
+            classFieldInfo.clear();
+            if (classFieldInfo.get(clazz) == null) {
+                initializeFields(clazz);
             }
         }
     }
-
-    public void initialize() {
-        fieldTypes = new HashMap<>();
-        fieldMaxLengths = new HashMap<>();
-        fillFieldsLengthInformation(rootClass);
+    
+    private boolean isFieldInitialized(Field field) {
+        Class clazz = getActualFieldClass(field);
+        return classFieldInfo.containsKey(clazz) && classFieldInfo.get(clazz).get(field.getName()) != null;
     }
-
-    private void fillFieldsLengthInformation(Class<?> clazz) {
-        final Map<String, String> dbTypes = new HashMap<String, String>();
-        final Map<String, Integer> maxLengths = new HashMap<String, Integer>();
+    
+    private void initializeFields(Class<?> clazz) {
+        
+        Map<String, FieldInfo> fieldInfoMap = new HashMap<>();
+        
+        final Map<String, String> dbTypes = new HashMap<>();
+        final Map<String, Integer> maxLengths = new HashMap<>();
+        
         ClassMetadata meta = PersistenceManager.getClassMetadata(clazz);
+        
         if (meta == null) {
             return;
         }
+        
         AbstractEntityPersister entityPersister = (AbstractEntityPersister) meta;
-        String[] propertyNames = entityPersister.getPropertyNames();
         final String tableName = entityPersister.getTableName().toLowerCase();
-        Map<String, Field> interchangeableFields = getInterchangeableFields(clazz);
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
                 String allSectorsQuery = "SELECT column_name, data_type, character_maximum_length "
@@ -92,55 +94,48 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
                 }
             }
         });
+        
+        String[] identityNames = entityPersister.getIdentifierColumnNames();
+        if (identityNames.length > 0) {
+            String fieldName = entityPersister.getIdentifierPropertyName();
+            String colName = identityNames[0];
+            FieldInfo fieldInfo = getFieldInfo(clazz, dbTypes.get(colName), maxLengths.get(colName), fieldName);
+            fieldInfoMap.put(fieldName, fieldInfo);
+        }
+    
+        String[] propertyNames = entityPersister.getPropertyNames();
         for (int i = 0; i < propertyNames.length; i++) {
             String[] columnNames = entityPersister.getPropertyColumnNames(i);
             if (columnNames.length > 0) {
-                String colname = columnNames[0];
                 String fieldName = propertyNames[i];
-                if (interchangeableFields.get(fieldName) != null) {
-                    Field field = interchangeableFields.get(fieldName);
-                    fieldTypes.put(field, dbTypes.get(colname)); //maxLengths.get(colname)
-                    if (!field.isAnnotationPresent(VersionableFieldTextEditor.class)) {
-                        fieldMaxLengths.put(field, maxLengths.get(colname));
-                    }
-                }
+                String colName = columnNames[0];
+                FieldInfo fieldInfo = getFieldInfo(clazz, dbTypes.get(colName), maxLengths.get(colName), fieldName);
+                fieldInfoMap.put(fieldName, fieldInfo);
             }
         }
-        for (Field field : interchangeableFields.values()) {
-            Interchangeable ant = field.getAnnotation(Interchangeable.class);
-            if (ant != null && !ant.pickIdOnly() && !InterchangeUtils.isSimpleType(field.getType())) {
-                fillFieldsLengthInformation(InterchangeUtils.getClassOfField(field));
-            }
-            InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
-            if (antd != null) {
-                Set<Class> classes = new HashSet<>();
-                for (Interchangeable anti : antd.settings()) {
-                    Class type = anti.type() == Interchangeable.DefaultType.class
-                            ? InterchangeUtils.getClassOfField(field) : anti.type();
-                    if (!anti.pickIdOnly() && !InterchangeUtils.isSimpleType(type)) {
-                        classes.add(type);
-                    }
-                }
-                for (Class aClass : classes) {
-                    fillFieldsLengthInformation(aClass);
-                }
-            }
-        }
+        
+        classFieldInfo.put(clazz, fieldInfoMap);
     }
-
-    private Map<String, Field> getInterchangeableFields(Class<?> clazz) {
-        Map<String, Field> interFields = new HashMap<String, Field>();
-        Class<?> wClass = clazz;
-        while (wClass != Object.class) {
-            Field[] declaredFields = wClass.getDeclaredFields();
-            for (Field field : declaredFields) {
-                if (field.isAnnotationPresent(Interchangeable.class)
-                        || field.isAnnotationPresent(InterchangeableDiscriminator.class)) {
-                    interFields.put(field.getName(), field);
-                }
-            }
-            wClass = (Class<?>) wClass.getGenericSuperclass();
+    
+    private FieldInfo getFieldInfo(Class<?> clazz, String dbType, Integer maxLength, String fieldName) {
+        Field field = FieldUtils.getField(clazz, fieldName, true);
+        FieldInfo fieldInfo = new FieldInfo(dbType, null);
+        
+        if (!ActivityTranslationUtils.isVersionableTextField(field)) {
+            fieldInfo.setMaxLength(maxLength);
         }
-        return interFields;
+        
+        return fieldInfo;
+    }
+    
+    /**
+     * Get the actual field class mapped in Hibernate
+     * @param field
+     * @return
+     */
+    @NotNull
+    private Class getActualFieldClass(Field field) {
+        Class declaringClass = field.getDeclaringClass();
+        return declaringClass.equals(AmpActivityFields.class) ? AmpActivityVersion.class : declaringClass;
     }
 }

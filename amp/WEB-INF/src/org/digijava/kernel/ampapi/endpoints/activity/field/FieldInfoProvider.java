@@ -3,7 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.activity.field;
 import java.lang.reflect.Field;
 
 /**
- * This class provides some basic info about fields from db entities like: type, max lenght, is translatable?
+ * This class provides some basic info about fields from db entities like: type, max length, is translatable?
  *
  * @author Octavian Ciubotaru
  */

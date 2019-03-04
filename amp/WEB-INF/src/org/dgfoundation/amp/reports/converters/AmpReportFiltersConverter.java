@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
+import org.hibernate.ObjectNotFoundException;
 
 /**
  * an AmpReportFilters -> AmpARFilter converter (e.g. the opposite of {@link AmpARFilterConverter})
@@ -236,7 +237,7 @@ public class AmpReportFiltersConverter {
                 logger.info("Not found filter: " + filterColumnName);
             }
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException e) {
+                | InvocationTargetException | ObjectNotFoundException e) {
             logger.error(e, e);
         }
     }

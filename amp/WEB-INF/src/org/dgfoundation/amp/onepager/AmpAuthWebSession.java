@@ -5,7 +5,6 @@
 package org.dgfoundation.amp.onepager;
 
 import java.util.Collection;
-import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -15,11 +14,11 @@ import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.FMFormCache;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
@@ -44,8 +43,6 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
     private boolean fmMode;
     private TeamMember currentMember;
     private AmpTeamMember ampCurrentMember;
-    private HttpSession httpSession;
-    //private HttpServletRequest httpRequest;
     private Site site;
     private String isAdmin;
     private Long formType;
@@ -54,7 +51,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
     
     public String getIsAdmin() {
         if (isAdmin == null){
-            isAdmin = (String)httpSession.getAttribute("ampAdmin");
+            isAdmin = (String) getHttpSession().getAttribute("ampAdmin");
         }
         return isAdmin;
     }
@@ -68,7 +65,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
         fmMode = false;
         translatorMode = false;
         HttpServletRequest wRequest = (HttpServletRequest) request.getContainerRequest();
-        httpSession = wRequest.getSession();        
+        HttpSession httpSession = wRequest.getSession();
         currentMember = (TeamMember)httpSession.getAttribute("currentMember");
         isAdmin = (String)httpSession.getAttribute("ampAdmin");
         if (currentMember != null)
@@ -82,13 +79,17 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 
     public void reset(){
         formType = ActivityUtil.ACTIVITY_TYPE_PROJECT;
-        currentMember = (TeamMember)httpSession.getAttribute("currentMember");
-        isAdmin = (String)httpSession.getAttribute("ampAdmin");
+        currentMember = (TeamMember) getHttpSession().getAttribute("currentMember");
+        isAdmin = (String) getHttpSession().getAttribute("ampAdmin");
         if (currentMember != null)
             ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
         else
             ampCurrentMember = null;
         dirty();
+    }
+
+    public HttpSession getHttpSession() {
+        return ((HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest()).getSession();
     }
     
     
@@ -114,7 +115,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 
     public TeamMember getCurrentMember() {
         if (currentMember == null){
-            currentMember = (TeamMember)httpSession.getAttribute("currentMember");
+            currentMember = (TeamMember) getHttpSession().getAttribute("currentMember");
         }
         return currentMember;
     }
@@ -122,22 +123,6 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
         this.currentMember = currentMember;
     }
 
-    public HttpSession getHttpSession() {
-        return httpSession;
-    }
-//  public void setHttpSession(HttpSession httpSession) {
-//      this.httpSession = httpSession;
-//  }
-    
-//  public HttpServletRequest getHttpRequest()
-//  {
-//      return httpRequest;
-//  }
-    /*
-    public AmpAuthWebSession(final AuthenticatedWebApplication application, final Request request) {
-        super(application, request);
-    }
-    */
     public boolean isTranslatorMode() {
         return translatorMode;
     }

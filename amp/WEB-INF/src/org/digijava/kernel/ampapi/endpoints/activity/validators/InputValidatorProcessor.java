@@ -15,17 +15,21 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
  */
 public class InputValidatorProcessor {
 
-    public static List<InputValidator> getActivityValidators() {
+    public static List<InputValidator> getActivityFormatValidators() {
         return Arrays.asList(
                 new ValidFieldValidator(),
                 new AllowedInputValidator(),
                 new InputTypeValidator(),
+                new ValueValidator());
+    }
+
+    public static List<InputValidator> getActivityBusinessRulesValidators() {
+        return Arrays.asList(
                 new RequiredValidator(),
                 new ActivityTitleValidator(),
                 new AmpActivityIdValidator(),
                 new MultipleEntriesValidator(),
                 new UniqueValidator(),
-                new ValueValidator(),
                 new TreeCollectionValidator(),
                 new DependencyValidator(),
                 new PrimaryContactValidator(),
@@ -35,24 +39,32 @@ public class InputValidatorProcessor {
                 new RegexPatternValidator());
     }
 
-    public static List<InputValidator> getContactValidators() {
+    public static List<InputValidator> getContactFormatValidators() {
         return Arrays.asList(
                 new ValidFieldValidator(),
                 new InputTypeValidator(),
+                new ValueValidator());
+    }
+
+    public static List<InputValidator> getContactBusinessRulesValidators() {
+        return Arrays.asList(
                 new RequiredValidator(),
                 new MultipleEntriesValidator(),
                 new UniqueValidator(),
-                new ValueValidator(),
                 new PrimaryOrganisationContactValidator(),
                 new RegexPatternValidator());
     }
     
-    public static List<InputValidator> getResourceValidators() {
+    public static List<InputValidator> getResourceFormatValidators() {
         return Arrays.asList(
                 new ValidFieldValidator(),
                 new InputTypeValidator(),
-                new RequiredValidator(),
                 new ValueValidator());
+    }
+
+    public static List<InputValidator> getResourceBusinessRulesValidators() {
+        return Arrays.asList(
+                new RequiredValidator());
     }
 
     private final List<InputValidator> validators;

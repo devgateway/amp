@@ -1,6 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.contact;
 
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 
 /**
  * @author Octavian Ciubotaru
@@ -24,5 +24,5 @@ public final class ContactEPConstants {
     
     public static final int CONTACT_PROPERTY_MAX_SIZE = 3;
 
-    public static final String CREATED_BY = InterchangeUtils.underscorify(ContactFieldsConstants.CREATED_BY);
+    public static final String CREATED_BY = FieldMap.underscorify(ContactFieldsConstants.CREATED_BY);
 }

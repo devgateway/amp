@@ -10,7 +10,7 @@ import javax.validation.Path;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -35,24 +35,24 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
 
     private Map<String, String> programToJsonPath = ImmutableMap.<String, String>builder()
             .put(ProgramUtil.PRIMARY_PROGRAM,
-                    InterchangeUtils.underscorify(ActivityFieldsConstants.PRIMARY_PROGRAMS))
+                    FieldMap.underscorify(ActivityFieldsConstants.PRIMARY_PROGRAMS))
             .put(ProgramUtil.SECONDARY_PROGRAM,
-                    InterchangeUtils.underscorify(ActivityFieldsConstants.SECONDARY_PROGRAMS))
+                    FieldMap.underscorify(ActivityFieldsConstants.SECONDARY_PROGRAMS))
             .put(ProgramUtil.TERTIARY_PROGRAM,
-                    InterchangeUtils.underscorify(ActivityFieldsConstants.TERTIARY_PROGRAMS))
+                    FieldMap.underscorify(ActivityFieldsConstants.TERTIARY_PROGRAMS))
             .put(ProgramUtil.NATIONAL_PLAN_OBJECTIVE,
-                    InterchangeUtils.underscorify(ActivityFieldsConstants.NATIONAL_PLAN_OBJECTIVE))
+                    FieldMap.underscorify(ActivityFieldsConstants.NATIONAL_PLAN_OBJECTIVE))
             .build();
 
     private Map<String, String> sectorToJsonPath = ImmutableMap.<String, String>builder()
             .put(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME,
-                    InterchangeUtils.underscorify(ActivityFieldsConstants.PRIMARY_SECTORS))
+                    FieldMap.underscorify(ActivityFieldsConstants.PRIMARY_SECTORS))
             .put(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME,
-                    InterchangeUtils.underscorify(ActivityFieldsConstants.SECONDARY_SECTORS))
+                    FieldMap.underscorify(ActivityFieldsConstants.SECONDARY_SECTORS))
             .put(AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME,
-                    InterchangeUtils.underscorify(ActivityFieldsConstants.TERTIARY_SECTORS))
+                    FieldMap.underscorify(ActivityFieldsConstants.TERTIARY_SECTORS))
             .put(AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,
-                    InterchangeUtils.underscorify(ActivityFieldsConstants.TAG_SECTORS))
+                    FieldMap.underscorify(ActivityFieldsConstants.TAG_SECTORS))
             .build();
 
     @Override
@@ -92,7 +92,7 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
         }
 
         if (isLocationPercentageConstraint(v)) {
-            return new JsonConstraintViolation(InterchangeUtils.underscorify(ActivityFieldsConstants.LOCATIONS),
+            return new JsonConstraintViolation(FieldMap.underscorify(ActivityFieldsConstants.LOCATIONS),
                     ActivityErrors.FIELD_PERCENTAGE_SUM_BAD);
         }
 

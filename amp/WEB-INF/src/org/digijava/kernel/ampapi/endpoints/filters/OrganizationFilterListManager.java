@@ -122,23 +122,22 @@ public final class OrganizationFilterListManager implements FilterListManager {
         return items;
     }
 
-    /**
-     * @param treeDefinitions
-     */
     public List<FilterListDefinition> getOrgListDefinitions() {
         List<FilterListDefinition> listDefinitions = new ArrayList<>();
         List<AmpRole> visibleRoles = getVisibleRoles();
 
         for (AmpRole role : visibleRoles) {
-            FilterListDefinition listDefinition = new FilterListDefinition();
-            listDefinition.setId(role.getAmpRoleId());
-            listDefinition.setName(role.getName());
-            listDefinition.setDisplayName(TranslatorWorker.translateText(role.getName()));
-            listDefinition.setFilterIds(FiltersConstants.ORG_ROLE_CODE_TO_FILTER_LIST_IDS.get(role.getRoleCode()));
-            listDefinition.setFiltered(false);
-            listDefinition.setItems(ORGANIZATIONS_ITEMS_NAME);
-            listDefinition.setTab(ORG_ROLE_CODE_TO_TAB.get(role.getRoleCode()));
-            listDefinitions.add(listDefinition);
+            if (FiltersConstants.ORG_ROLE_CODE_TO_FILTER_LIST_IDS.get(role.getRoleCode()) != null) {
+                FilterListDefinition listDefinition = new FilterListDefinition();
+                listDefinition.setId(role.getAmpRoleId());
+                listDefinition.setName(role.getName());
+                listDefinition.setDisplayName(TranslatorWorker.translateText(role.getName()));
+                listDefinition.setFilterIds(FiltersConstants.ORG_ROLE_CODE_TO_FILTER_LIST_IDS.get(role.getRoleCode()));
+                listDefinition.setFiltered(false);
+                listDefinition.setItems(ORGANIZATIONS_ITEMS_NAME);
+                listDefinition.setTab(ORG_ROLE_CODE_TO_TAB.get(role.getRoleCode()));
+                listDefinitions.add(listDefinition);
+            }
         }
 
         return listDefinitions;

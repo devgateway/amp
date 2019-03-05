@@ -340,6 +340,8 @@ public class FilterUtil {
 
         form.setComputedYear(filter.getComputedYear() != null ? filter.getComputedYear() : -1);
         
+        form.getUndefinedOptions().addAll(filter.getUndefinedOptions());
+        
         return filter;
     }
     

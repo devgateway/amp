@@ -47,6 +47,7 @@ public class CountryCells extends HardcodedCells<PercentageTextCell>{
             cell("expenditure class", "Moldova", 8977, 1.000000),
             cell("mtef activity 1", "Moldova", 8977, 1.000000),
             cell("mtef activity 2", "Moldova", 8977, 1.000000),
+            cell("new activity with contracting", "", -999999999, 1.000000),
             cell("PID: original", "Moldova", 8977, 1.000000),
             cell("PID: original > actual", "Moldova", 8977, 1.000000),
             cell("PID: original, actual", "Moldova", 8977, 1.000000),

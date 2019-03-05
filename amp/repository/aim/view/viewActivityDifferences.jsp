@@ -90,7 +90,7 @@
 	            		</div>
 	        		</td>
 				</tr>
-				
+				       <c:if test="${aimCompareActivityVersionsForm.method == 'viewDifferences'}">
 				<logic:iterate id="groupItem" property="outputCollectionGroupedAsSet" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
 					
 					<td rowspan="${groupItem.value.size()}" align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
@@ -141,7 +141,75 @@
 						</logic:iterate>
 
 					</td></tr>
-				</logic:iterate>	
+									</logic:iterate>
+				</c:if>
+		
+     <c:if test="${aimCompareActivityVersionsForm.method == 'viewDifferences'}"> ;
+     
+     <logic:iterate id="listItem" property="listoutputCollectionGrouped" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
+     <tr> <td> <h4>
+		<div><digi:trn><bean:write name="listItem" property="key"/>
+		</digi:trn></div></h4> </td></tr>     
+									<logic:iterate id="groupItem" property="value" name="listItem" type="java.util.Map.Entry">
+					
+					<td rowspan="${groupItem.value.size()}" align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
+							<digi:trn><bean:write property="key" name="groupItem"/></digi:trn>
+					</td>
+						<logic:iterate id="diffItem" name="groupItem" property="value" indexId="iterIdx">
+								
+								<logic:greaterThan name="iterIdx" value="0">
+									<tr>
+								</logic:greaterThan>
+														<td width="50%" align="left" valign="top" style="padding-left: 5px; border-right-width: 0px;" class="inside">
+										<div id="left${diffItem.index}">
+											<logic:empty name="diffItem" property="stringOutput[1]">&nbsp;</logic:empty>
+											<bean:write name="diffItem" property="stringOutput[1]" filter="false"/>
+										</div>
+									</td>
+									<logic:equal value="true" name="aimCompareActivityVersionsForm" property="showMergeColumn">
+										<td align="center" valign="middle" class="inside">
+                                            <c:if test="${!diffItem.blockSingleChangeOutput}">
+                                                <button type="button" onClick="javascript:left(${diffItem.index});" style="border: none; background-color: transparent">
+                                                    <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
+                                                </button>
+                                            </c:if>
+										</td>
+										<td align="left" valign="top" style="padding-left: 5px;" class="inside">
+											<div id="merge${diffItem.index}">&nbsp;</div>
+										</td>
+										<td align="center" valign="middle" class="inside" style="border-right-width: 0px;">
+                                            <c:if test="${!diffItem.blockSingleChangeOutput}">
+                                                <button type="button" onClick="javascript:right(${diffItem.index});" style="border: none; background-color: transparent">
+                                                    <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
+                                                </button>
+                                            </c:if>
+										</td>
+                                        <c:if test="${!diffItem.blockSingleChangeOutput}">
+										    <input type="hidden" id='mergedValues[${diffItem.index}]' value="" name="mergedValues[${index}]"/>
+                                        </c:if>
+					                                        <c:if test="${!diffItem.blockSingleChangeOutput}">
+										    <input type="hidden" id='mergedValues[${diffItem.index}]' value="" name="mergedValues[${index}]"/>
+                                        </c:if>
+									</logic:equal>
+									<td width="50%" align="left" valign="top" style="padding-left: 5px; border-left-width: 0px;" class="inside">
+										<div id="right${diffItem.index}">
+											<logic:empty name="diffItem" property="stringOutput[0]">&nbsp;</logic:empty>
+											<bean:write name="diffItem" property="stringOutput[0]" filter="false"/>
+										</div>
+									</td>
+								<logic:greaterThan name="iterIdx" value="0">
+								</tr>
+								</logic:greaterThan>
+						</logic:iterate>
+
+
+					</td></tr>
+				</logic:iterate>
+					</td></tr>
+				</logic:iterate>
+     </c:if>
+					
+				
 				<%--
 				<logic:iterate id="iter" property="outputCollection" name="aimCompareActivityVersionsForm" indexId="index">
 					<tr>
@@ -181,6 +249,9 @@
 				--%>
 			</table>
 			<br/>
+						
+			<input id="backButton" type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="javascript:back()" />
+			
 		  	<input type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="javascript:back()" />
 		  	<logic:equal name="aimCompareActivityVersionsForm" property="advancemode" value="true">
 				<input id="mergeButton" type="button" value="<digi:trn>Enable Merge Process</digi:trn>" onclick="javascript:enableMerge();" />
@@ -192,9 +263,19 @@
 
 <script language="Javascript">
 function back() {
-	document.getElementById("method").value = "cancel";
-	document.getElementById('compareForm').submit();
+    if (document.aimCompareActivityVersionsForm.method.value =="viewDifferences"){
+        window.history.back();
+    }
+    else  if (document.aimCompareActivityVersionsForm.method.value =="DisplayviewDifferences"){
+        window.history.back();
+    }
+          
+    else{
+    document.getElementById("method").value = "cancel";
+        document.getElementById('compareForm').submit();
+    }
 }
+
 
 function enableMerge() {
 	document.getElementById('showMergeColumn').value = "true";
@@ -275,14 +356,25 @@ setHoveredTable("dataTable", true);
 setHoveredRow("rowHighlight");
 
 if(document.getElementById('method').value == "enableMerge") {
-	document.getElementById('mergeButton').disabled = "disabled";
-	document.getElementById('mergeButton').style.display = 'none';
-	document.getElementById('saveButton').disabled = "";
-	document.getElementById('saveButton').style.display = 'block';
-} else {
-	document.getElementById('saveButton').disabled = "disabled";
-	document.getElementById('saveButton').style.display = 'none';
+    document.getElementById('mergeButton').disabled = "disabled";
+    document.getElementById('mergeButton').style.display = 'none';
+    document.getElementById('saveButton').disabled = "";
+    document.getElementById('saveButton').style.display = 'block';
+}
+ else if (document.aimCompareActivityVersionsForm.method.value ==="viewDifferences"){
+    document.getElementById('saveButton').disabled = "disabled";
+    document.getElementById('saveButton').style.display = 'none';
+    $('#backButton').prop('value', '<digi:trn>Back to Audit Logger</digi:trn>');
 }
 
+    else if (document.aimCompareActivityVersionsForm.method.value === "DisplayviewDifferences"){
+        document.getElementById('saveButton').disabled = "disabled";
+        document.getElementById('saveButton').style.display = 'none';
+        $('#backButton').prop('value', '<digi:trn>Back to Audit Logger</digi:trn>');	
+
+}else {
+    document.getElementById('saveButton').disabled = "disabled";
+    document.getElementById('saveButton').style.display = 'none';
+}
 </script>
 		

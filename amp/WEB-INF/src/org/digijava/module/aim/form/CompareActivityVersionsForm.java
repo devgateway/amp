@@ -30,10 +30,9 @@ public class CompareActivityVersionsForm extends ActionForm {
     private String[] mergedValues = new String[] {};
 
     private Long ampActivityId;
-    
     private boolean advancemode;
-
     private Map<String, List<CompareOutput>> outputCollectionGrouped;
+    private Map<Long, Map<String ,List<CompareOutput>>> listoutputCollectionGrouped;
 
     public Long getActivityOneId() {
         return activityOneId;
@@ -131,7 +130,15 @@ public class CompareActivityVersionsForm extends ActionForm {
         this.outputCollectionGrouped = outputCollectionGrouped;
     }
 
-    public Set<Map.Entry<String, List<CompareOutput>>> getOutputCollectionGroupedAsSet() {
+    public Set<Map.Entry<String, List<CompareOutput>>> getListputCollectionGroupedAsSet() {
         return this.outputCollectionGrouped.entrySet();
     }
+
+
+public void setListoutputCollectionGrouped(Map<Long, Map<String, List<CompareOutput>>> listoutputCollectionGrouped) {
+    this.listoutputCollectionGrouped = listoutputCollectionGrouped;
 }
+
+}
+
+	

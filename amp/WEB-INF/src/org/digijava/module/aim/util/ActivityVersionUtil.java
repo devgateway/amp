@@ -345,17 +345,18 @@ public class ActivityVersionUtil {
     }
     
     
-    public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId) throws Exception {
-
+    public static Map<String, List<CompareOutput>> compareActivities(Long activity1Id) throws Exception {
+        Map<String, List<CompareOutput>> groupOutputCollection = new HashMap < String, List<CompareOutput >>();
         Session session = PersistenceManager.getCurrentSession();
-        AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
+        AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activity1Id);
         AmpActivityVersion ampActivityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
-        return (ampActivityTwo.equals(null)) ? null
-                : compareActivities(activityOneId, ampActivityTwo.getAmpActivityId());
-
+    
+        if (ampActivityTwo != null) 
+            groupOutputCollection = compareActivities(activity1Id, ampActivityTwo.getAmpActivityId());
+        return groupOutputCollection;
     }
-        
-       
+
+    
     public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId, Long activityTwoId)
             throws Exception {
         Session session = PersistenceManager.getCurrentSession();
@@ -663,20 +664,25 @@ public class ActivityVersionUtil {
         }
     }
 
-    public static Map<Long, Map<String, List<CompareOutput>>> compareActivities(List<Long> activitiesId)
+    public static Map<Long, Map<String, List<CompareOutput>>> compareActivities(List<Object> activitiesId)
             throws Exception {
+
 
         Map<Long, Map<String, List<CompareOutput>>> listOfActivities = new HashMap<>();
 
-        for (Long activityId : activitiesId) {
-            Map<String, List<CompareOutput>> activityComparedToPreviousVersion = compareActivities(activityId);
-            if (activityComparedToPreviousVersion != null) {
-                listOfActivities.put(activityId, activityComparedToPreviousVersion);
+
+        for (Object activityId : activitiesId) {
+            Map<String, List<CompareOutput>> ComparedToPreviousVersion = compareActivities(Long.parseLong((String) 
+            		activityId));
+            if (ComparedToPreviousVersion != null) {
+                listOfActivities.put(Long.parseLong((String) activityId), ComparedToPreviousVersion);
             }
         }
 
+
         return listOfActivities;
     }
+
      
     private static void addAsDifferentIfNnoPresent(List<CompareOutput> outputCollection, Field[] fields, int i,
             VersionableCollection auxAnnotation, Collection auxCollection2, Iterator iter1) {

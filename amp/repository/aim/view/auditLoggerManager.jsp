@@ -62,7 +62,7 @@ function submitClean(){
 	}
 
  <digi:context name="cleanurl" property="context/module/moduleinstance/auditLoggerManager.do?clean=true" />
-	document.aimAuditLoggerManagerForm.action = "<%=cleanurl%>";
+	document.aimAuditLoggerManagerForm.action = "<%=cleanurl%>"
 	document.aimAuditLoggerManagerForm.target = "_self";
 	document.aimAuditLoggerManagerForm.submit();
 }
@@ -153,6 +153,16 @@ function toggleSettings(){
 
 function exportScorecard () {
 	window.location =  "/rest/scorecard/export";
+}
+function viewDifferences(activityOneId) {
+    document.getElementById("method").value = "viewDifferences";
+    document.getElementById("activityOneId").value = activityOneId;
+    document.aimCompareActivityVersionsForm.submit();
+    
+}
+function DisplayviewDifferences() {
+    document.aimCompareActivityVersionsForm.method.value = "DisplayviewAllDifferences";
+    document.aimCompareActivityVersionsForm.submit();
 }
 
 </script>
@@ -263,6 +273,7 @@ function exportScorecard () {
 						<div>
 						<div align="center" style="border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;border-right:1px solid #cccccc;">
 						<table width="100%" height="100%" border="0" align="center" cellpadding="0" cellspacing="0"  id="dataTable">
+						<input type="button" onclick="DisplayviewDifferences()" value="<digi:trn>Compare All List </digi:trn>">
 							<tr>
 								<td width="280" height="22" align="center" valign="center"bgcolor="#C7D4DB" >
 								<c:if 
@@ -375,6 +386,19 @@ function exportScorecard () {
                                                                     </c:otherwise>
                                                                 </c:choose>				
                                         </td>
+                                        <td  align="center" valign="center"bgcolor="#C7D4DB"style="color: black;" nowrap>
+                                                                <c:choose>
+                                                                    <c:when test="${aimAuditLoggerManagerForm.sortBy!='detailasc'}">
+                                                                        <digi:link style="color:#376091;" href="/auditLoggerManager.do?sortBy=detailasc">
+                                                                            <b><digi:trn>Compare Activities</digi:trn></b>
+                                                                        </digi:link>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <digi:link style="color:#376091;" href="/auditLoggerManager.do?sortBy=detaildesc">
+                                                                            <b><digi:trn>Compare Activities</digi:trn></b>
+                                                                        </digi:link>
+                                                                    </c:otherwise>
+                                                                </c:choose>	
 							</tr>
 							<logic:iterate name="aimAuditLoggerManagerForm" property="logs"
 								id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
@@ -441,6 +465,13 @@ function exportScorecard () {
 									<c:if test="${empty log.detail}">
 										<digi:trn>No Data</digi:trn>
 									</c:if>
+								 </td>
+									<td>
+									
+					<c:if test="${not empty log.objectId && log.objectType=='org.digijava.module.aim.dbentity.AmpActivityVersion'}">;
+				<input type="button" title="Click to compare with previous version" onclick="javascript:viewDifferences(${log.objectId})"
+								   class="dr-menu" value="&nbsp;&nbsp;<digi:trn>Compare</digi:trn>&nbsp;&nbsp;">	
+								</c:if>
 								</td>
 							</tr>
                           </logic:iterate>
@@ -554,3 +585,8 @@ function exportScorecard () {
 	setHoveredTable("dataTable", false);
 </script>
 </digi:form>
+<digi:form action="/compareActivityVersions.do" method="post" type="aimCompareActivityVersionsForm">
+	<input type="hidden" name="activityOneId" id="activityOneId" />
+	<input type="hidden" name="method" id="method" />
+</digi:form>
+

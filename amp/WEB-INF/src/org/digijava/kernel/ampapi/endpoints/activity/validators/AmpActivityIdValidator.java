@@ -6,7 +6,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -58,8 +58,8 @@ public class AmpActivityIdValidator extends InputValidator {
             }
             
         // verify amp_id
-        } else if (InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID).equals(fieldName)) {
-            String ampId = (String) newFieldParent.get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID));
+        } else if (FieldMap.underscorify(ActivityFieldsConstants.AMP_ID).equals(fieldName)) {
+            String ampId = (String) newFieldParent.get(FieldMap.underscorify(ActivityFieldsConstants.AMP_ID));
             if (activityImporter.isUpdate()) {
                 if (activityImporter.getOldActivity() == null
                         || !activityImporter.getOldActivity().getAmpId().equals(ampId)) {

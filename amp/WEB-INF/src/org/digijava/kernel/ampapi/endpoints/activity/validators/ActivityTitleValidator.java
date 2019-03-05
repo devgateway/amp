@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -37,7 +37,7 @@ public class ActivityTitleValidator extends InputValidator {
         String fieldName = fieldDescription.getFieldName();
         
         // this validator only validates project title
-        if (InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE).equals(fieldName)) {
+        if (FieldMap.underscorify(ActivityFieldsConstants.PROJECT_TITLE).equals(fieldName)) {
             // replicating current AF functionality to validate the default language title value
             String lang = importer.getTrnSettings().getDefaultLangCode();
             // it's always required & type is validated earlier

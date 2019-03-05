@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
 /**
@@ -15,7 +16,7 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
  * @author Nadejda Mandrescu
  */
 public class ActivityEPConstants {
-    
+
     public enum RequiredValidation {
         NONE,
         SUBMIT,
@@ -60,10 +61,10 @@ public class ActivityEPConstants {
     
     // fields constants
     public static final String AMP_ACTIVITY_ID_FIELD_NAME = 
-            InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
-    public static final String AMP_ID_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID);
+            FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
+    public static final String AMP_ID_FIELD_NAME = FieldMap.underscorify(ActivityFieldsConstants.AMP_ID);
     public static final String MODIFIED_BY_FIELD_NAME = 
-            InterchangeUtils.underscorify(ActivityFieldsConstants.MODIFIED_BY);
+            FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY);
 
     public static final String AMP_ACTIVITY_ID = "amp-activity-id";
     public static final String AMP_ACTIVITY_LAST_VERSION_ID = "amp-activity-last-version-id";
@@ -120,7 +121,7 @@ public class ActivityEPConstants {
     public static final String AF_ID_FM_PATH = "/Activity Form/Identification";
     public static final String DONOR_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Donor Project Code";
     public static final String BUDGET_EXTRAS_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Budget Extras/Project Code";
-    
+
     public static final Set<String> TRANSACTION_FIELD_NAMES = ImmutableSet.of(
             ArConstants.COMMITMENT,
             ArConstants.DISBURSEMENT,
@@ -129,7 +130,7 @@ public class ActivityEPConstants {
             ArConstants.ESTIMATED_DISBURSEMENTS,
             ArConstants.ARREARS,
             ArConstants.DISBURSEMENT_ORDERS);
-    
+
     public static final String CONTACTS_PATH = "/Activity Form/Contacts";
     
     public static final String REGEX_PATTERN_EMAIL = 

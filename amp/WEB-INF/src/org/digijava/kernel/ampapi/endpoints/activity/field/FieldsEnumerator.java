@@ -27,6 +27,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolv
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldValueReader;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
@@ -89,7 +90,7 @@ public class FieldsEnumerator {
      */
     protected APIField describeField(Field field, FEContext context) {
         Interchangeable interchangeable = context.getIntchStack().peek();
-        String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
+        String fieldTitle = FieldMap.underscorify(interchangeable.fieldTitle());
 
         APIField apiField = new APIField();
         apiField.setFieldName(fieldTitle);
@@ -307,7 +308,7 @@ public class FieldsEnumerator {
         for (Field f : fields) {
             Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
             if (isVisible(interchangeable.fmPath(), context) && interchangeable.percentageConstraint()) {
-                return InterchangeUtils.underscorify(interchangeable.fieldTitle());
+                return FieldMap.underscorify(interchangeable.fieldTitle());
             }
         }
         
@@ -327,7 +328,7 @@ public class FieldsEnumerator {
         for (Field f : fields) {
             Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
             if (isVisible(interchangeable.fmPath(), context) && interchangeable.uniqueConstraint()) {
-                return InterchangeUtils.underscorify(interchangeable.fieldTitle());
+                return FieldMap.underscorify(interchangeable.fieldTitle());
             }
         }
 

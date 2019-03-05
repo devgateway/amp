@@ -38,8 +38,12 @@ public class TestTranslatorService implements TranslatorService {
     }
 
     @Override
-    public String getEditorBodyEmptyInclude(Site site, String editorKey, String language) throws EditorException {
-        throw new NotImplementedException("NOT IN USE YET");
+    public String getEditorBodyEmptyInclude(Site site, String editorKey, String language) {
+        if (editorKey == null) {
+            return null;
+        } else {
+            return String.format("%s-%s-%s", site.getName(), editorKey, language);
+        }
     }
 
     private Message msg(String locale, String text) {

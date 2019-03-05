@@ -2,19 +2,14 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
-import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.util.ProgramUtil;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import org.hibernate.Session;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.util.ProgramUtil;
 
 /**
  * This class generates the filter list (tree) object for pledges programs

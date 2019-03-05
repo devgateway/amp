@@ -35,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.form.CompareActivityVersionsForm;
@@ -53,6 +54,7 @@ import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.Query;
 
 public class CompareActivityVersions extends DispatchAction {
 
@@ -344,11 +346,35 @@ public class CompareActivityVersions extends DispatchAction {
             iscurrentworkspacemanager = true;
         if (ampCurrentMember.getAmpTeam().getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT))
             ispartofamanagetmentworkspace = true;
-        
         //If the current user is part of the management workspace or is not the workspace manager of a workspace that's not management then hide.
         vForm.setAdvancemode(!ispartofamanagetmentworkspace & iscurrentworkspacemanager);
     }
     
-   
+    public ActionForward viewDifferences(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) 
+    		throws Exception {
 
+        CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
+        vForm.setOutputCollection(new ArrayList<CompareOutput>());
+        vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId()));
+        return mapping.findForward("forward");
+    }
+
+
+    public ActionForward DisplayviewDifferences(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
+        Map<Long, Map<String, List<CompareOutput>>> listoutputCollectionGrouped = new HashMap<Long, Map<String, List<CompareOutput>>>();
+        Session session = PersistenceManager.getRequestDBSession();
+        String qr1str = "select objectId from " + AmpAuditLogger.class.getName()
+                + " where objecttype =" + "'" + AmpActivityVersion.class.getName() + "'" + "order by modifyDate desc";
+
+
+         Query query = session.createQuery(qr1str );
+         List<Object> activityList = query.list();
+         listoutputCollectionGrouped = ActivityVersionUtil.compareActivities(activityList);        
+         vForm.setListoutputCollectionGrouped(listoutputCollectionGrouped);
+         return mapping.findForward("forward");
+    }
 }
+
+
+ 

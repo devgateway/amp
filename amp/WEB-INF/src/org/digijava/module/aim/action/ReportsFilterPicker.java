@@ -244,22 +244,8 @@ public class ReportsFilterPicker extends Action {
                     return decideNextForward(mapping, filterForm, request, arf);
                 }               
             }
-            
-            // gone till here -> Apply or Reset Filters form 
-            if (request.getParameter("reset") != null)
-            {
-                AmpARFilter arf = createOrResetFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
-                return decideNextForward(mapping, filterForm, request, arf);
-            }
-    
-            if (request.getParameter("apply") != null)
-            {
-                // apply Filters form
-                AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
-                return decideNextForward(mapping, filterForm, request, arf);
-            }
 
-            if (request.getParameter("applyWithNewWidget") != null) {
+            if (request.getParameter("apply") != null) {
                 LinkedHashMap<String, Object> filters = new LinkedHashMap<>();
                 Map<String, String[]> parameters = request.getParameterMap();
                 String widgetFilters = parameters.get(FILTERS_WIDGET)[FIRST_ELEMENT];

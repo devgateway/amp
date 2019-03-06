@@ -71,17 +71,16 @@ import java.util.Set;
 public class ReportsFilterPicker extends Action {
     private static Logger logger = Logger.getLogger(ReportsFilterPicker.class);
 
-    public final static String ONLY_JOINT_CRITERIA = "0";
-    public final static String ONLY_GOV_PROCEDURES = "1";
+    public static final String ONLY_JOINT_CRITERIA = "0";
+    public static final String ONLY_GOV_PROCEDURES = "1";
 
-    public final static String PLEDGE_REPORT_REQUEST_ATTRIBUTE = "is_pledge_report";
+    public static final String PLEDGE_REPORT_REQUEST_ATTRIBUTE = "is_pledge_report";
 
     public static final String FILTERS_WIDGET = "filtersWidget";
     public static final String FILTERS = "filters";
     public static final int FIRST_ELEMENT = 0;
 
-
-    public final static Long tryParseLong(String input) {
+    public static final Long tryParseLong(String input) {
         try {
             return Long.parseLong(input);
         } catch (Exception e) {
@@ -105,34 +104,36 @@ public class ReportsFilterPicker extends Action {
                 ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
             }
 
-            if (request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null &&
-                    !FeaturesUtil.isVisibleModule("Public Report Generator")) {
+            if (request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null
+                    && !FeaturesUtil.isVisibleModule("Public Report Generator")) {
                 return mapping.findForward("mydesktop");
             }
 
-            if (request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null &&
-                    !FeaturesUtil.isVisibleModule("Public Report Generator")) {
+            if (request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null
+                    && !FeaturesUtil.isVisibleModule("Public Report Generator")) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return null;
             }
 
-            if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) &&
-                    ampTeam.getComputation() == false && !showWorkspaceFilterInTeamWorkspace) {
+            if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM)
+                    && ampTeam.getComputation() == false && !showWorkspaceFilterInTeamWorkspace) {
                 showWorkspaceFilter = false;
             }
             filterForm.setShowWorkspaceFilter(showWorkspaceFilter);
 
 
             String ampReportId = request.getParameter("ampReportId");
-            if ("".equals(ampReportId))
+            if ("".equals(ampReportId)) {
                 ampReportId = null;
+            }
 
             Long longAmpReportId = ampReportId == null ? null : tryParseLong(ampReportId);
 
             if (ampReportId == null) {
                 ampReportId = request.getParameter("reportContextId");
-                if ("".equals(ampReportId))
+                if ("".equals(ampReportId)) {
                     ampReportId = null;
+                }
                 longAmpReportId = ampReportId == null ? null : tryParseLong(ampReportId);
             }
             if (longAmpReportId == null) {
@@ -157,8 +158,9 @@ public class ReportsFilterPicker extends Action {
 
                     return mapping.findForward("forward");
                 }
-            } else
+            } else {
                 filterForm.setSourceIsReportWizard(false);
+            }
 
             filterForm.setAmpReportId(ampReportId);
 
@@ -170,8 +172,9 @@ public class ReportsFilterPicker extends Action {
                     filterForm.setReporttype(report.getType());
                     filterForm.setPledged(report.getType() == ArConstants.PLEDGES_TYPE);
                 }
-                if (ampReportId.length() > 0 && report != null && report.getDrilldownTab())
+                if (ampReportId.length() > 0 && report != null && report.getDrilldownTab()) {
                     request.getSession().setAttribute(Constants.CURRENT_TAB_REPORT, report);
+                }
             }
 
             // init form
@@ -291,8 +294,8 @@ public class ReportsFilterPicker extends Action {
         String selecteddecimalseparator = String.valueOf((usedDecimalFormat.getDecimalFormatSymbols()
                 .getDecimalSeparator()));
 
-        if (!selecteddecimalseparator.equalsIgnoreCase(".") &&
-                !selecteddecimalseparator.equalsIgnoreCase(",")) {
+        if (!selecteddecimalseparator.equalsIgnoreCase(".")
+                && !selecteddecimalseparator.equalsIgnoreCase(",")) {
             decimalseparators.add(selecteddecimalseparator);
         }
 
@@ -305,8 +308,8 @@ public class ReportsFilterPicker extends Action {
         String selectedgroupingseparator = String.valueOf(usedDecimalFormat
                 .getDecimalFormatSymbols().getGroupingSeparator());
 
-        if (!selectedgroupingseparator.equalsIgnoreCase(".") &&
-                !selectedgroupingseparator.equalsIgnoreCase(",")) {
+        if (!selectedgroupingseparator.equalsIgnoreCase(".")
+                && !selectedgroupingseparator.equalsIgnoreCase(",")) {
             groupseparators.add(selectedgroupingseparator);
         }
 
@@ -431,11 +434,13 @@ public class ReportsFilterPicker extends Action {
             throws DgException {
         AmpARFilter arf = getOrCreateFilter(filterForm);
 
-        if ((subsection & AmpARFilter.FILTER_SECTION_FILTERS) > 0)
+        if ((subsection & AmpARFilter.FILTER_SECTION_FILTERS) > 0) {
             fillFilterFromFilterForm(arf, filterForm);
+        }
 
-        if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0)
+        if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0) {
             fillFilterFromSettingsForm(arf, filterForm);
+        }
 
         arf.signalSettingsHaveBeenApplied();
         return arf;
@@ -445,11 +450,13 @@ public class ReportsFilterPicker extends Action {
             throws DgException {
         AmpARFilter arf = getOrCreateFilter(filterForm);
 
-        if ((subsection & AmpARFilter.FILTER_SECTION_FILTERS) > 0)
+        if ((subsection & AmpARFilter.FILTER_SECTION_FILTERS) > 0) {
             arf.fillWithDefaultsFilter(arf.getAmpReportId());
+        }
 
-        if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0)
+        if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0) {
             arf.fillWithDefaultsSettings();
+        }
 
         arf.postprocess();
         return arf;
@@ -468,8 +475,8 @@ public class ReportsFilterPicker extends Action {
                 filterForm.getCustomDecimalSymbol().charAt(0) : filterForm.getCustomDecimalSymbolTxt().charAt(0);
         arf.setDecimalseparator(decimalSeparator.toString());
 
-        boolean useGroupings = filterForm.getCustomUseGrouping() != null &&
-                filterForm.getCustomUseGrouping().booleanValue() == true;
+        boolean useGroupings = filterForm.getCustomUseGrouping() != null
+                && filterForm.getCustomUseGrouping().booleanValue() == true;
         arf.setCustomusegroupings(useGroupings);
 
         if (useGroupings) {
@@ -487,9 +494,9 @@ public class ReportsFilterPicker extends Action {
         Integer maximumDecimalPlaces = filterForm.getCustomDecimalPlaces();
         if (maximumDecimalPlaces == -2) {//CUSTOM
             arf.setMaximumFractionDigits(filterForm.getCustomDecimalPlacesTxt());
-        } else if (maximumDecimalPlaces > -1)
+        } else if (maximumDecimalPlaces > -1) {
             arf.setMaximumFractionDigits(maximumDecimalPlaces);
-        else {
+        } else {
             DecimalFormat defaultDecimalFormat = FormatHelper.getDecimalFormat();
             arf.setMaximumFractionDigits(defaultDecimalFormat.getMaximumFractionDigits());
         }
@@ -504,11 +511,13 @@ public class ReportsFilterPicker extends Action {
         arf.setCurrency(currency);
 
         //TODO-CONSTANTIN: these fields are absent from the form (not rendered in html), so they are always NULL here
-        if (filterForm.getRenderStartYear() != null)
+        if (filterForm.getRenderStartYear() != null) {
             arf.setRenderStartYear(filterForm.getRenderStartYear());
+        }
 
-        if (filterForm.getRenderEndYear() != null)
+        if (filterForm.getRenderEndYear() != null) {
             arf.setRenderEndYear(filterForm.getRenderEndYear());
+        }
 
         AmpFiscalCalendar selcal = null;
         if (filterForm.getCalendar() != null) {
@@ -523,25 +532,29 @@ public class ReportsFilterPicker extends Action {
     }
 
     public static <T extends Object> HashSet<T> nullOrCopy(Set<T> in) {
-        if (in == null)
+        if (in == null) {
             return null;
+        }
 
-        if (in.isEmpty())
+        if (in.isEmpty()) {
             return null;
+        }
 
         return new HashSet<T>(in);
     }
 
     public static Set<AmpCategoryValue> pumpCategoryValueSetFromForm(Object[] ids) {
-        if (ids == null || ids.length == 0)
+        if (ids == null || ids.length == 0) {
             return null;
+        }
 
         Set<AmpCategoryValue> result = new HashSet<AmpCategoryValue>();
         for (int i = 0; i < ids.length; i++) {
             Long id = (ids[i] instanceof Long) ? (Long) ids[i] : Long.parseLong(ids[i].toString());
             AmpCategoryValue value = CategoryManagerUtil.getAmpCategoryValueFromDb(id);
-            if (value != null)
+            if (value != null) {
                 result.add(value);
+            }
         }
         return result;
     }
@@ -697,10 +710,11 @@ public class ReportsFilterPicker extends Action {
         if (filterForm.getComputedYear() != -1) {
             arf.setComputedYear(filterForm.getComputedYear());
         } else {
-            if (FeaturesUtil.isVisibleFeature("Computed Columns Filters"))
+            if (FeaturesUtil.isVisibleFeature("Computed Columns Filters")) {
                 arf.setComputedYear(curYear);
-            else
+            } else {
                 arf.setComputedYear(null);
+            }
 
         }
         arf.setToActualApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToActualApprovalDate()));
@@ -722,8 +736,9 @@ public class ReportsFilterPicker extends Action {
                 if (val == 0) {
                     ranks = null;
                     break;
-                } else
+                } else {
                     ranks.add(val);
+                }
             }
             arf.setLineMinRank(ranks);
         }
@@ -758,8 +773,9 @@ public class ReportsFilterPicker extends Action {
             } else {
                 arf.setApprovalStatusSelected(null);
             }
-        } else
+        } else {
             arf.setApprovalStatusSelected(null);
+        }
 
         arf.setStatuses(pumpCategoryValueSetFromForm(filterForm.getSelectedStatuses()));
 
@@ -769,10 +785,11 @@ public class ReportsFilterPicker extends Action {
 
         arf.setPerformanceAlertType(pumpPerformanceAlertTypeSetFromForm(filterForm.getSelectedPerformanceAlertTypes()));
 
-        if (filterForm.getSelectedWorkspaces() != null && filterForm.getSelectedWorkspaces().length > 0)
+        if (filterForm.getSelectedWorkspaces() != null && filterForm.getSelectedWorkspaces().length > 0) {
             arf.setWorkspaces(new HashSet<AmpTeam>());
-        else
+        } else {
             arf.setWorkspaces(null);
+        }
 
         for (int i = 0;
              filterForm.getSelectedWorkspaces() != null && i < filterForm.getSelectedWorkspaces().length; i++) {
@@ -810,10 +827,12 @@ public class ReportsFilterPicker extends Action {
                     isGovProcedures = true;
                 }
             }
-            if (!isJointCriteria)
+            if (!isJointCriteria) {
                 arf.setJointCriteria(null);
-            if (!isGovProcedures)
+            }
+            if (!isGovProcedures) {
                 arf.setGovernmentApprovalProcedures(null);
+            }
         }
 //      arf.setGovernmentApprovalProcedures(filterForm.getGovernmentApprovalProcedures());
 //      arf.setJointCriteria(filterForm.getJointCriteria());
@@ -823,22 +842,26 @@ public class ReportsFilterPicker extends Action {
             for (int i = 0; i < filterForm.getSelectedDonorTypes().length; i++) {
                 Long id = Long.parseLong(filterForm.getSelectedDonorTypes()[i].toString());
                 AmpOrgType type = DbUtil.getAmpOrgType(id);
-                if (type != null)
+                if (type != null) {
                     arf.getDonorTypes().add(type);
+                }
             }
-        } else
+        } else {
             arf.setDonorTypes(null);
+        }
 
         if (filterForm.getSelectedDonorGroups() != null && filterForm.getSelectedDonorGroups().length > 0) {
             arf.setDonorGroups(new HashSet<AmpOrgGroup>());
             for (int i = 0; i < filterForm.getSelectedDonorGroups().length; i++) {
                 Long id = Long.parseLong(filterForm.getSelectedDonorGroups()[i].toString());
                 AmpOrgGroup grp = DbUtil.getAmpOrgGroup(id);
-                if (grp != null)
+                if (grp != null) {
                     arf.getDonorGroups().add(grp);
+                }
             }
-        } else
+        } else {
             arf.setDonorGroups(null);
+        }
 
         if (filterForm.getSelectedContractingAgencyGroups() != null
                 && filterForm.getSelectedContractingAgencyGroups().length > 0) {
@@ -846,18 +869,21 @@ public class ReportsFilterPicker extends Action {
             for (int i = 0; i < filterForm.getSelectedContractingAgencyGroups().length; i++) {
                 Long id = Long.parseLong(filterForm.getSelectedContractingAgencyGroups()[i].toString());
                 AmpOrgGroup grp = DbUtil.getAmpOrgGroup(id);
-                if (grp != null)
+                if (grp != null) {
                     arf.getContractingAgencyGroups().add(grp);
+                }
             }
-        } else
+        } else {
             arf.setContractingAgencyGroups(null);
+        }
 
         arf.setBudget(pumpCategoryValueSetFromForm(filterForm.getSelectedBudgets()));
 
         if (filterForm.getSelectedMultiDonor() != null && filterForm.getSelectedMultiDonor().length == 1) {
             arf.setMultiDonor((String) filterForm.getSelectedMultiDonor()[0]);
-        } else
+        } else {
             arf.setMultiDonor(null);
+        }
 
         arf.setJustSearch(filterForm.getJustSearch() == null ? false : filterForm.getJustSearch());
 
@@ -889,10 +915,11 @@ public class ReportsFilterPicker extends Action {
             arf.setShowArchived(null);
         } else {
             String selection = (String) filterForm.getSelectedArchivedStatus()[0];
-            if ("1".equals(selection))
+            if ("1".equals(selection)) {
                 arf.setShowArchived(false);
-            else
+            } else {
                 arf.setShowArchived(true);
+            }
         }
 
         arf.setHumanitarianAid(buildBooleanField(filterForm.getSelectedHumanitarianAid()));
@@ -904,13 +931,15 @@ public class ReportsFilterPicker extends Action {
     }
 
     protected static Set<Integer> buildBooleanField(Object[] values) {
-        if (values == null)
+        if (values == null) {
             return null;
+        }
 
         Set<Integer> res = new HashSet<>();
         for (Object obj : values) {
-            if (obj != null && Integer.parseInt(obj.toString()) > 0)
+            if (obj != null && Integer.parseInt(obj.toString()) > 0) {
                 res.add(Integer.parseInt(obj.toString()));
+            }
         }
         return res;
     }

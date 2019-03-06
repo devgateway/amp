@@ -65,6 +65,29 @@ public class LocationTotalPercentageValidatorTest extends AbstractTotalPercentag
     }
 
     @Test
+    public void testValidPercentageOneLocation() {
+        AmpActivity activity = new AmpActivity();
+        activity.setLocations(ImmutableSet.of(newActivityLocation(100f)));
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+
+        assertThat(violations, emptyIterable());
+    }
+
+    @Test
+    public void testValidPercentageManyLocations() {
+        AmpActivity activity = new AmpActivity();
+        activity.setLocations(ImmutableSet.of(
+                newActivityLocation(33f),
+                newActivityLocation(33f),
+                newActivityLocation(34f)));
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+
+        assertThat(violations, emptyIterable());
+    }
+
+    @Test
     public void testInvalidPercentageWithOneLocation() {
         AmpActivity activity = new AmpActivity();
         activity.setLocations(ImmutableSet.of(newActivityLocation(33f)));

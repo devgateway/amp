@@ -130,6 +130,18 @@ public class ProgramTotalPercentageValidatorTest extends AbstractTotalPercentage
                 programPercentageViolation(secondaryProgram)));
     }
 
+    @Test
+    public void testMixedPercentages() {
+        AmpActivity activity = new AmpActivity();
+        activity.setActPrograms(ImmutableSet.of(
+                newActProgram(primaryProgram, 100f),
+                newActProgram(secondaryProgram, 70f)));
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+
+        assertThat(violations, contains(programPercentageViolation(secondaryProgram)));
+    }
+
     /**
      * Matcher for an activity program percentage constraint violation.
      */

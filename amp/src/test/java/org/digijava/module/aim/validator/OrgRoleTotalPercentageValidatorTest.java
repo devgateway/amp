@@ -86,9 +86,22 @@ public class OrgRoleTotalPercentageValidatorTest extends AbstractTotalPercentage
     }
 
     @Test
-    public void testValidPercentageForOneNonDonor() {
+    public void testValidPercentageForOneNonDonorSingle() {
         AmpActivity activity = new AmpActivity();
         activity.setOrgrole(ImmutableSet.of(newOrgRole(implementingAgencyRole, 100f)));
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+
+        assertThat(violations, emptyIterable());
+    }
+
+    @Test
+    public void testValidPercentageForOneNonDonorMultiple() {
+        AmpActivity activity = new AmpActivity();
+        activity.setOrgrole(ImmutableSet.of(
+                newOrgRole(implementingAgencyRole, 33.33f),
+                newOrgRole(implementingAgencyRole, 33.33f),
+                newOrgRole(implementingAgencyRole, 33.34f)));
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
@@ -131,6 +144,18 @@ public class OrgRoleTotalPercentageValidatorTest extends AbstractTotalPercentage
                 containsInAnyOrder(
                         orgRolePercentageViolation(implementingAgencyRole),
                         orgRolePercentageViolation(executingAgencyRole)));
+    }
+
+    @Test
+    public void testMixedPercentages() {
+        AmpActivity activity = new AmpActivity();
+        activity.setOrgrole(ImmutableSet.of(
+                newOrgRole(implementingAgencyRole, 100f),
+                newOrgRole(executingAgencyRole, 50f)));
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+
+        assertThat(violations, contains(orgRolePercentageViolation(executingAgencyRole)));
     }
 
     /**

@@ -123,6 +123,18 @@ public class SectorsTotalPercentageValidatorTest extends AbstractTotalPercentage
                         sectorPercentageViolation(secondarySectors)));
     }
 
+    @Test
+    public void testMixedPercentage() {
+        AmpActivity activity = new AmpActivity();
+        activity.setSectors(ImmutableSet.of(
+                newActivitySector(primarySectors, 100f),
+                newActivitySector(secondarySectors, 99f)));
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+
+        assertThat(violations, contains(sectorPercentageViolation(secondarySectors)));
+    }
+
     /**
      * Matcher for an activity sector percentage constraint violation.
      */

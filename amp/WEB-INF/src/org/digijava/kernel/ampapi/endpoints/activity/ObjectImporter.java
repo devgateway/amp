@@ -34,7 +34,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.ErrorDecorator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
-import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.LogErrorsMapper;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.DefaultErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
@@ -78,7 +78,7 @@ public class ObjectImporter {
 
     private Validator beanValidator;
 
-    private Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper = new LogErrorsMapper();
+    private Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper = new DefaultErrorsMapper();
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
             List<APIField> apiFields) {

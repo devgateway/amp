@@ -5,12 +5,15 @@ package org.dgfoundation.amp.reports.converters;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,7 +25,10 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -50,6 +56,32 @@ public class AmpARFilterConverter {
     private AmpReportFilters filterRules;
     private ReportSettingsImpl settings;
     private AmpARFilter arFilter;
+    
+    public static final Map<String, String> AMP_AR_FILTER_FIELD_NAME_TO_COLUMN = Collections.unmodifiableMap(
+            new HashMap<String, String>() {{
+                put("donorTypes", ColumnConstants.DONOR_TYPE);
+                put("executingAgencyTypes", ColumnConstants.EXECUTING_AGENCY_TYPE);
+                put("implementingAgencyTypes", ColumnConstants.IMPLEMENTING_AGENCY_TYPE);
+                put("beneficiaryAgencyGroups", ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
+                put("contractingAgencyGroups", ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+                put("responsibleAgencyGroups", ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
+                put("componentFunding", ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
+                put("componentSecondResponsible", ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
+                put("selectedSectors", ColumnConstants.PRIMARY_SECTOR);
+                put("selectedSecondarySectors", ColumnConstants.SECONDARY_SECTOR);
+                put("selectedTertiarySectors", ColumnConstants.TERTIARY_SECTOR);
+                put("selectedNatPlanObj", ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0);
+                put("selectedPrimaryPrograms", ColumnConstants.PRIMARY_PROGRAM_LEVEL_0);
+                put("selectedSecondaryPrograms", ColumnConstants.SECONDARY_PROGRAM_LEVEL_0);
+                put("approvalStatusSelected", ColumnConstants.APPROVAL_STATUS);
+                put("locationSelected", ColumnConstants.COUNTRY);
+                put("financingInstruments", ColumnConstants.FINANCING_INSTRUMENT);
+                put("typeOfAssistance", ColumnConstants.TYPE_OF_ASSISTANCE);
+                put("budget", ColumnConstants.ON_OFF_TREASURY_BUDGET);
+                put("modeOfPayment", ColumnConstants.MODE_OF_PAYMENT);
+                put("humanitarianAid", ColumnConstants.HUMANITARIAN_AID);
+                put("disasterResponse", ColumnConstants.DISASTER_RESPONSE_MARKER);
+            }});
 
     /**
      * Translates report filters from ARFilters to a configuration that is applicable for Reports API.
@@ -71,6 +103,8 @@ public class AmpARFilterConverter {
         arFilter = tmpArFilter;
         */
         
+        addUndefinedOptions();
+        
         return filterRules;
     }
     
@@ -88,6 +122,33 @@ public class AmpARFilterConverter {
         //dates
         addFundingDatesFilters();
         addActivityDatesFilters();
+    }
+    
+    private void addUndefinedOptions() {
+        for (String fieldName : arFilter.getUndefinedOptions()) {
+            String columnName = AMP_AR_FILTER_FIELD_NAME_TO_COLUMN.get(fieldName);
+            
+            Optional<ReportElement> repElementOptional = filterRules.getAllFilterRules().keySet().stream()
+                    .filter(el -> el.entity.getEntityName().equals(columnName))
+                    .findAny();
+            
+            List<String> values = new LinkedList<>();
+            List<String> names = new LinkedList<>();
+    
+            if (repElementOptional.isPresent()) {
+                ReportElement reportElement = repElementOptional.get();
+                FilterRule filterRule = filterRules.getFilterRules().get(reportElement);
+                values.addAll(filterRule.values);
+                values.stream().forEach(val -> names.add(filterRule.valueToName.get(val)));
+                values.add(Long.toString(ColumnReportData.UNALLOCATED_ID));
+                names.add(FiltersConstants.UNDEFINED_NAME);
+                filterRules.getFilterRules().put(reportElement, new FilterRule(names, values, true));
+            } else {
+                values.add(Long.toString(ColumnReportData.UNALLOCATED_ID));
+                names.add(FiltersConstants.UNDEFINED_NAME);
+                addFilterRule(columnName, new FilterRule(names, values, true));
+            }
+        }
     }
     
     private void addProjectFilters() {
@@ -162,7 +223,9 @@ public class AmpARFilterConverter {
     }
     
     private void addActivityDatesFilters() {
-        addActualAppYear();
+        addActivityDateFilter(arFilter.buildFromAndToActualApprovalDateAsDate(), ColumnConstants.ACTUAL_APPROVAL_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToProposedCompletionDateAsDate(),
+                ColumnConstants.PROPOSED_COMPLETION_DATE);
         addActivityDateFilter(arFilter.buildFromAndToActivityStartDateAsDate(), ColumnConstants.ACTUAL_START_DATE);
         addActivityDateFilter(arFilter.buildFromAndToProposedApprovalDateAsDate(), ColumnConstants.PROPOSED_APPROVAL_DATE);
         addActivityDateFilter(arFilter.buildFromAndToProposedStartDateAsDate(), ColumnConstants.PROPOSED_START_DATE);
@@ -171,22 +234,6 @@ public class AmpARFilterConverter {
         addActivityDateFilter(arFilter.buildFromAndToEffectiveFundingDateAsDate(), ColumnConstants.EFFECTIVE_FUNDING_DATE);
         addActivityDateFilter(arFilter.buildFromAndToFundingClosingDateAsDate(), ColumnConstants.FUNDING_CLOSING_DATE);
         addActivityDateFilter(arFilter.buildFromAndToIssueDateAsDate(), ColumnConstants.ISSUE_DATE);
-    }
-
-    /**
-     * old filter widget uses year for actual approval
-     * new filter widget uses date for actual approval
-     */
-    private void addActualAppYear() {
-        try {
-            if (arFilter.getActualAppYear() != null) {
-                Date from = DateTimeUtil.firstDayOfYear(arFilter.getActualAppYear());
-                Date to = DateTimeUtil.lastDayOfYear(arFilter.getActualAppYear());
-                filterRules.addDateRangeFilterRule(new ReportColumn(ColumnConstants.ACTUAL_APPROVAL_DATE), from, to);
-            }
-        } catch (AmpApiException ex) {
-            logger.error(ex.getMessage(), ex);
-        }
     }
 
     private void addActivityDateFilter(Date[] fromTo, String columnName) {
@@ -205,9 +252,15 @@ public class AmpARFilterConverter {
         addFilter(arFilter.getDonnorgAgency(), ColumnConstants.DONOR_AGENCY);
         
         //Related Agencies
-        addFilter(arFilter.getImplementingAgency(), ColumnConstants.IMPLEMENTING_AGENCY);
+        addFilter(arFilter.getExecutingAgencyTypes(), ColumnConstants.EXECUTING_AGENCY_TYPE);
+        addFilter(arFilter.getExecutingAgencyGroups(), ColumnConstants.EXECUTING_AGENCY_GROUPS);
         addFilter(arFilter.getExecutingAgency(), ColumnConstants.EXECUTING_AGENCY);
+        addFilter(arFilter.getImplementingAgencyTypes(), ColumnConstants.IMPLEMENTING_AGENCY_TYPE);
+        addFilter(arFilter.getImplementingAgencyGroups(), ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
+        addFilter(arFilter.getImplementingAgency(), ColumnConstants.IMPLEMENTING_AGENCY);
+        addFilter(arFilter.getBeneficiaryAgencyGroups(), ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
         addFilter(arFilter.getBeneficiaryAgency(), ColumnConstants.BENEFICIARY_AGENCY);
+        addFilter(arFilter.getResponsibleAgencyGroups(), ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
         addFilter(arFilter.getResponsibleorg(), ColumnConstants.RESPONSIBLE_ORGANIZATION);
         addFilter(arFilter.getComponentFunding(), ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
         addFilter(arFilter.getComponentSecondResponsible(), ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
@@ -272,7 +325,7 @@ public class AmpARFilterConverter {
                     throw new RuntimeException("bug while restoring backmap for id: " + id + ", scheme: " + scheme);
                 res.get(scheme).add(entity);
             }
-        }           
+        }
         return res;
     }
 
@@ -352,21 +405,23 @@ public class AmpARFilterConverter {
     
     /**
      * Adds values (ids/names) list to the filter rules
-     * @param filterRules - filter rules storage
      * @param set - a collection of {@link Identifiable} objects to retrieve the values from
      * @param columnName - column name of the to apply the rule over or null if this is a custom ElementType
-     * @param type - column type or null if elemType is provided
      */
     private void addFilter(Collection<? extends NameableOrIdentifiable> set, String columnName) {
-        if (set == null || set.size() == 0) return;
-        Set<String> values = new LinkedHashSet<>(set.size());
-        List<String> names = new ArrayList<String>(set.size());
+        if (set == null || set.isEmpty()) {
+            return;
+        }
+        
+        Set<String> values = new LinkedHashSet<>();
+        List<String> names = new LinkedList<>();
+        
         for (NameableOrIdentifiable identifiable: set) {
             final String value = identifiable.getIdentifier().toString();
-            if (values.contains(value))
-                continue;
-            values.add(value);
-            names.add(identifiable.getName());
+            if (!values.contains(value)) {
+                values.add(value);
+                names.add(identifiable.getName());
+            }
         }
         
         addFilterRule(columnName, new FilterRule(names, new ArrayList<>(values), true));
@@ -416,6 +471,7 @@ public class AmpARFilterConverter {
             final String value = String.valueOf(categValue.getId());
             values.add(value);
         }
+        
         addFilterRule(columnName, new FilterRule(names, values, true));
     }
     

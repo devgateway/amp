@@ -1,14 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * This class generates the filter list object for computed year
@@ -59,17 +59,13 @@ public final class ComputedYearFilterListManager implements FilterListManager {
     
     private Map<String, List<FilterListTreeNode>> getFilterListItems() {
         Map<String, List<FilterListTreeNode>> items = new HashMap<>();
-        List<FilterListTreeNode> nodes = new ArrayList<>();
-        
-        long curYear = new GregorianCalendar().get(Calendar.YEAR);
-        
-        FilterListTreeNode currYearNode = new FilterListTreeNode();
-        currYearNode.setId(curYear);
-        currYearNode.setName(TranslatorWorker.translateText(FiltersConstants.CURRENT));
-        currYearNode.setValue(String.valueOf(curYear));
-        nodes.add(currYearNode);
+        List<FilterListTreeNode> nodes = new ArrayList<>();    
+             
+        int startYear = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.YEAR_RANGE_START);
+        int range = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
+        int endYear = startYear + range;        
        
-        for (long year = curYear - 1; year > curYear - NUM_OF_YEARS; year--) {
+        for (long year = endYear; year >= startYear; year--) {
             String yearStr = String.valueOf(year);
             FilterListTreeNode yearNode = new FilterListTreeNode();
             yearNode.setId(year);

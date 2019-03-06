@@ -26,6 +26,7 @@ import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
@@ -97,7 +98,9 @@ public class ActivityImporter extends ObjectImporter {
     private Long latestActivityId;
 
     public ActivityImporter(List<APIField> apiFields) {
-        super(new InputValidatorProcessor(InputValidatorProcessor.getActivityValidators()), apiFields);
+        super(new InputValidatorProcessor(InputValidatorProcessor.getActivityFormatValidators()),
+                new InputValidatorProcessor(InputValidatorProcessor.getActivityBusinessRulesValidators()),
+                apiFields);
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {
@@ -202,8 +205,8 @@ public class ActivityImporter extends ObjectImporter {
             
             Map<String, Object> newJsonParent = newJson.any();
             
-            newActivity = (AmpActivityVersion) validateAndImport(newActivity, fieldsDef, newJsonParent, null);
-            if (newActivity != null && errors.isEmpty()) {
+            validateAndImport(newActivity, fieldsDef, newJsonParent, null);
+            if (errors.isEmpty()) {
                 // save new activity
                 prepareToSave();
                 boolean updateApprovalStatus = !AmpOfflineModeHolder.isAmpOfflineMode();
@@ -246,7 +249,7 @@ public class ActivityImporter extends ObjectImporter {
 
     private List<ApiErrorMessage> determineRequestedSaveMode() {
         if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-            String draftFieldName = InterchangeUtils.underscorify(ActivityFieldsConstants.IS_DRAFT);
+            String draftFieldName = FieldMap.underscorify(ActivityFieldsConstants.IS_DRAFT);
             Object draftAsObj = newJson.get(draftFieldName);
             if (draftAsObj == null) {
                 return Collections.singletonList(ActivityErrors.FIELD_REQUIRED.withDetails(draftFieldName));
@@ -297,7 +300,7 @@ public class ActivityImporter extends ObjectImporter {
      * Check if team member can add activities.
      */
     private List<ApiErrorMessage> checkAddPermissions(AmpTeamMember teamMember) {
-        if (!InterchangeUtils.addActivityAllowed(new TeamMember(teamMember))) {
+        if (!ActivityInterchangeUtils.addActivityAllowed(new TeamMember(teamMember))) {
             return Collections.singletonList(SecurityErrors.NOT_ALLOWED.withDetails("Adding activity is not allowed"));
         } else {
             return Collections.emptyList();
@@ -308,7 +311,7 @@ public class ActivityImporter extends ObjectImporter {
      * Check if team member can edit the activity.
      */
     private List<ApiErrorMessage> checkEditPermissions(AmpTeamMember ampTeamMember, Long activityId) {
-        if (!InterchangeUtils.isEditableActivity(new TeamMember(ampTeamMember), activityId)) {
+        if (!ActivityInterchangeUtils.isEditableActivity(new TeamMember(ampTeamMember), activityId)) {
             return Collections.singletonList(SecurityErrors.NOT_ALLOWED.withDetails("No right to edit this activity"));
         } else {
             return Collections.emptyList();
@@ -517,7 +520,7 @@ public class ActivityImporter extends ObjectImporter {
      */
     protected void initDefaults() {
         for (Field field : AmpActivityFields.class.getFields()) {
-            if (InterchangeUtils.isVersionableTextField(field)) {
+            if (ActivityTranslationUtils.isVersionableTextField(field)) {
                 initEditor(field);
             }
         }
@@ -632,7 +635,7 @@ public class ActivityImporter extends ObjectImporter {
             AmpFundingAmount ppc = newActivity.getProjectCostByType(AmpFundingAmount.FundingType.PROPOSED);
             double funAmount = 0d;
             for(AmpAnnualProjectBudget apb : newActivity.getAnnualProjectBudgets()) {
-                funAmount += InterchangeUtils.doPPCCalculations(apb, ppc.getCurrencyCode());
+                funAmount += ActivityInterchangeUtils.doPPCCalculations(apb, ppc.getCurrencyCode());
             }
             if (ppc != null) {
                 ppc.setFunAmount(funAmount / AmountsUnits.getDefaultValue().divider);

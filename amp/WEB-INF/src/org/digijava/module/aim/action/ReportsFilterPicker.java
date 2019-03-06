@@ -3,6 +3,7 @@
  */
 package org.digijava.module.aim.action;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -1532,11 +1533,14 @@ public class ReportsFilterPicker extends Action {
                 arf.setComputedYear(null);
                     
         }
-        if (filterForm.getActualAppYear()!=-1){
-            arf.setActualAppYear(filterForm.getActualAppYear());
-        }
-        else 
-            arf.setActualAppYear(null);
+        arf.setToActualApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToActualApprovalDate()));
+        arf.setFromActualApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromActualApprovalDate()));
+
+        arf.setToProposedCompletionDate(
+                FilterUtil.convertUiToArFilterDate(filterForm.getToProposedCompletionDate()));
+        arf.setFromProposedCompletionDate(
+                FilterUtil.convertUiToArFilterDate(filterForm.getFromProposedCompletionDate()));
+
         // arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
 
         Integer all = new Integer(-1);
@@ -1558,7 +1562,7 @@ public class ReportsFilterPicker extends Action {
         //                  null : DynLocationManagerUtil.getLocation(filterForm.getRegionSelected(),false) );
         
         Set<AmpCategoryValueLocations> selectedRegions = null;
-        if (filterForm.getRegionSelected() != null){
+        if (ArrayUtils.isNotEmpty(filterForm.getRegionSelected())) {
             if (!filterForm.getRegionSelected()[0].toString().equals("-1")) {
                 selectedRegions = Util.getSelectedObjects(AmpCategoryValueLocations.class, filterForm.getRegionSelected());
             }
@@ -1722,6 +1726,9 @@ public class ReportsFilterPicker extends Action {
         
         arf.setHumanitarianAid(buildBooleanField(filterForm.getSelectedHumanitarianAid()));
         arf.setDisasterResponse(buildBooleanField(filterForm.getSelectedDisasterResponse()));
+        
+        arf.getUndefinedOptions().addAll(filterForm.getUndefinedOptions());
+        
         arf.postprocess();
     }
 

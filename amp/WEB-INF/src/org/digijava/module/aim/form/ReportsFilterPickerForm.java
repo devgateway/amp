@@ -4,7 +4,9 @@
  */
 package org.digijava.module.aim.form;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -111,6 +113,10 @@ public class ReportsFilterPickerForm extends ActionForm {
     private String fromActivityActualCompletionDate;
     private String toActivityActualCompletionDate;
     private DynamicDateFilter dynamicActivityActualCompletionFilter = new DynamicDateFilter();
+    private String fromActualApprovalDate;
+    private String toActualApprovalDate;
+    private String fromProposedCompletionDate;
+    private String toProposedCompletionDate;
     private String fromActivityFinalContractingDate;
     private String toActivityFinalContractingDate;
     private DynamicDateFilter dynamicActivityFinalContractingFilter = new DynamicDateFilter();
@@ -182,6 +188,7 @@ public class ReportsFilterPickerForm extends ActionForm {
     private String toEffectiveFundingDate;
     private String fromFundingClosingDate;
     private String toFundingClosingDate;
+    private List<String> undefinedOptions = new ArrayList<>();
 
     public int getCalendarsSize() {
         if (calendars == null) return 0;
@@ -1488,5 +1495,45 @@ public class ReportsFilterPickerForm extends ActionForm {
 
     public void setSelectedComponentFundingOrg(Object[] selectedComponentFundingOrg) {
         this.selectedComponentFundingOrg = selectedComponentFundingOrg;
+    }
+
+    public String getFromActualApprovalDate() {
+        return fromActualApprovalDate;
+    }
+
+    public void setFromActualApprovalDate(String fromActualApprovalDate) {
+        this.fromActualApprovalDate = fromActualApprovalDate;
+    }
+
+    public String getToActualApprovalDate() {
+        return toActualApprovalDate;
+    }
+
+    public void setToActualApprovalDate(String toActualApprovalDate) {
+        this.toActualApprovalDate = toActualApprovalDate;
+    }
+
+    public String getFromProposedCompletionDate() {
+        return fromProposedCompletionDate;
+    }
+
+    public void setFromProposedCompletionDate(String fromProposedCompletionDate) {
+        this.fromProposedCompletionDate = fromProposedCompletionDate;
+    }
+
+    public String getToProposedCompletionDate() {
+        return toProposedCompletionDate;
+    }
+
+    public void setToProposedCompletionDate(String toProposedCompletionDate) {
+        this.toProposedCompletionDate = toProposedCompletionDate;
+    }
+    
+    public List<String> getUndefinedOptions() {
+        return undefinedOptions;
+    }
+    
+    public void setUndefinedOptions(List<String> undefinedOptions) {
+        this.undefinedOptions = undefinedOptions;
     }
 }

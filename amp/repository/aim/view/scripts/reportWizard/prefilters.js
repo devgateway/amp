@@ -382,8 +382,6 @@ function ResetCustom(maxFractionDigits) {
 	aimReportsFilterPickerForm3.customAmountinThousands.options.selectedIndex = 0;
 	aimReportsFilterPickerForm3.calendar.value =aimReportsFilterPickerForm3.initialCal.value;
 	initFormatPopup();
-	document.aimReportsFilterPickerForm3.renderStartYear.value=-1;
-	document.aimReportsFilterPickerForm3.renderEndYear.value=-1;
 	if (aimReportsFilterPickerForm3.currency)
 		aimReportsFilterPickerForm3.currency.value=aimReportsFilterPickerForm3.defaultCurrency.value;
 }

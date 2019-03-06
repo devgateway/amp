@@ -73,6 +73,7 @@ public class ReportsFilterPicker extends Action {
 
     public static final String ONLY_JOINT_CRITERIA = "0";
     public static final String ONLY_GOV_PROCEDURES = "1";
+    private static final int DEFAULT_MAX_DECIMAL_PLACES = -2;
 
     public static final String PLEDGE_REPORT_REQUEST_ATTRIBUTE = "is_pledge_report";
 
@@ -116,7 +117,7 @@ public class ReportsFilterPicker extends Action {
             }
 
             if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM)
-                    && ampTeam.getComputation() == false && !showWorkspaceFilterInTeamWorkspace) {
+                    && !ampTeam.getComputation() && !showWorkspaceFilterInTeamWorkspace) {
                 showWorkspaceFilter = false;
             }
             filterForm.setShowWorkspaceFilter(showWorkspaceFilter);
@@ -471,17 +472,17 @@ public class ReportsFilterPicker extends Action {
     public static void fillFilterFromSettingsForm(AmpARFilter arf, ReportsFilterPickerForm filterForm) {
         //DecimalFormat custom = new DecimalFormat();
         //DecimalFormatSymbols ds = new DecimalFormatSymbols();
-        Character decimalSeparator = !"CUSTOM".equalsIgnoreCase(filterForm.getCustomDecimalSymbol()) ?
-                filterForm.getCustomDecimalSymbol().charAt(0) : filterForm.getCustomDecimalSymbolTxt().charAt(0);
+        Character decimalSeparator = !"CUSTOM".equalsIgnoreCase(filterForm.getCustomDecimalSymbol())
+                ? filterForm.getCustomDecimalSymbol().charAt(0) : filterForm.getCustomDecimalSymbolTxt().charAt(0);
         arf.setDecimalseparator(decimalSeparator.toString());
 
-        boolean useGroupings = filterForm.getCustomUseGrouping() != null
-                && filterForm.getCustomUseGrouping().booleanValue() == true;
+        boolean useGroupings = filterForm.getCustomUseGrouping() != null && filterForm.getCustomUseGrouping();
         arf.setCustomusegroupings(useGroupings);
 
         if (useGroupings) {
-            Character groupingSeparator = !"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter()) ?
-                    filterForm.getCustomGroupCharacter().charAt(0) : filterForm.getCustomGroupCharacterTxt().charAt(0);
+            Character groupingSeparator = !"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter())
+                    ? filterForm.getCustomGroupCharacter().charAt(0)
+                    : filterForm.getCustomGroupCharacterTxt().charAt(0);
             arf.setGroupingseparator(groupingSeparator.toString());
             arf.setGroupingsize(filterForm.getCustomGroupSize());
         }
@@ -492,7 +493,7 @@ public class ReportsFilterPicker extends Action {
         arf.setAmountinthousand(filterForm.getAmountinthousands());
 
         Integer maximumDecimalPlaces = filterForm.getCustomDecimalPlaces();
-        if (maximumDecimalPlaces == -2) {//CUSTOM
+        if (maximumDecimalPlaces == DEFAULT_MAX_DECIMAL_PLACES) { //CUSTOM
             arf.setMaximumFractionDigits(filterForm.getCustomDecimalPlacesTxt());
         } else if (maximumDecimalPlaces > -1) {
             arf.setMaximumFractionDigits(maximumDecimalPlaces);

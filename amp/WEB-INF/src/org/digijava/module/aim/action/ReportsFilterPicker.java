@@ -282,8 +282,8 @@ public class ReportsFilterPicker extends Action {
         }
 
         for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
-            filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
-            filterForm.getToYears().add(new BeanWrapperImpl(new Long(i)));
+            filterForm.getFromYears().add(new BeanWrapperImpl(i));
+            filterForm.getToYears().add(new BeanWrapperImpl(i));
         }
         ArrayList<String> decimalseparators = new ArrayList<String>();
         DecimalFormat usedDecimalFormat = FormatHelper.getDecimalFormat();
@@ -612,14 +612,14 @@ public class ReportsFilterPicker extends Action {
             arf.setSearchMode(filterForm.getSearchMode());
         }
 
-        arf.setYearFrom(filterForm.getFromYear() == null || filterForm.getFromYear().longValue() == -1
+        arf.setYearFrom(filterForm.getFromYear() == null || filterForm.getFromYear() == -1
                 ? null : filterForm.getFromYear().intValue());
-        arf.setYearTo(filterForm.getToYear() == null || filterForm.getToYear().longValue() == -1
+        arf.setYearTo(filterForm.getToYear() == null || filterForm.getToYear() == -1
                 ? null : filterForm.getToYear().intValue());
-        arf.setFromMonth(filterForm.getFromMonth() == null || filterForm.getFromMonth().intValue() == -1
-                ? null : filterForm.getFromMonth().intValue());
-        arf.setToMonth(filterForm.getToMonth() == null || filterForm.getToMonth().intValue() == -1
-                ? null : filterForm.getToMonth().intValue());
+        arf.setFromMonth(filterForm.getFromMonth() == null || filterForm.getFromMonth() == -1
+                ? null : filterForm.getFromMonth());
+        arf.setToMonth(filterForm.getToMonth() == null || filterForm.getToMonth() == -1
+                ? null : filterForm.getToMonth());
 
         arf.setFromDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromDate()));
         arf.setToDate(FilterUtil.convertUiToArFilterDate(filterForm.getToDate()));

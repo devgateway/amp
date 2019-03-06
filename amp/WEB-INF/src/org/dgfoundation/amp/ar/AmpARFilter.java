@@ -196,9 +196,6 @@ public class AmpARFilter extends PropertyListable {
     @PropertyListableIgnore
     private Integer computedYear;
 
-    @PropertyListableIgnore
-    private Integer actualAppYear;
-
     /**
      * whether this filter should queryAppend a WorkspaceFilter query in generateFilterQuery. Ignored when building a workspace filter (always ON)
      */
@@ -271,8 +268,10 @@ public class AmpARFilter extends PropertyListable {
      */
     @PropertyListableIgnore
     private String defaultValues;
-
+    
     private String multiDonor = null;
+    
+    private Set<String> undefinedOptions = new HashSet<>();
 
     public String getMultiDonor() {
         return multiDonor;
@@ -363,8 +362,15 @@ public class AmpARFilter extends PropertyListable {
     private Set regions = null;
     private Set<AmpIndicatorRiskRatings> risks = null;
     private Set<AmpOrgType> donorTypes = null;
+    private Set<AmpOrgType> executingAgencyTypes = null;
+    private Set<AmpOrgType> implementingAgencyTypes = null;
+    
     private Set<AmpOrgGroup> donorGroups = null;
+    private Set<AmpOrgGroup> beneficiaryAgencyGroups = null;
     private Set<AmpOrgGroup> contractingAgencyGroups = null;
+    private Set<AmpOrgGroup> executingAgencyGroups = null;
+    private Set<AmpOrgGroup> implementingAgencyGroups = null;
+    private Set<AmpOrgGroup> responsibleAgencyGroups = null;
 
     private Set<AmpOrganisation> responsibleorg = null;
     private Set<AmpOrganisation> componentFunding = null;
@@ -440,6 +446,12 @@ public class AmpARFilter extends PropertyListable {
     private Integer dynActivityStartFilterAmount;
     private String dynActivityStartFilterOperator;
     private String dynActivityStartFilterXPeriod;
+
+    private String fromActualApprovalDate;
+    private String toActualApprovalDate;
+
+    private String fromProposedCompletionDate;
+    private String toProposedCompletionDate;
 
     private String fromIssueDate;
     private String toIssueDate;
@@ -2102,6 +2114,14 @@ public class AmpARFilter extends PropertyListable {
         }
     }
 
+    public Date[] buildFromAndToActualApprovalDateAsDate() {
+        return buildFromAndTo(fromActualApprovalDate, toActualApprovalDate);
+    }
+
+    public Date[] buildFromAndToProposedCompletionDateAsDate() {
+        return buildFromAndTo(fromProposedCompletionDate, toProposedCompletionDate);
+    }
+
     /**
      * @param fromActivityStartDate the fromActivityStartDate to set
      */
@@ -2665,14 +2685,6 @@ public class AmpARFilter extends PropertyListable {
         this.computedYear = computedYear;
     }
 
-    public Integer getActualAppYear() {
-        return actualAppYear;
-    }
-
-    public void setActualAppYear(Integer actualAppYear) {
-        this.actualAppYear = actualAppYear;
-    }
-
     /**
      * @return the locationSelected
      */
@@ -3179,5 +3191,93 @@ public class AmpARFilter extends PropertyListable {
 
     public void setDynIssueFilterXPeriod(String dynIssueFilterXPeriod) {
         this.dynIssueFilterXPeriod = dynIssueFilterXPeriod;
+    }
+    
+    public Set<String> getUndefinedOptions() {
+        return undefinedOptions;
+    }
+    
+    public void setUndefinedOptions(Set<String> undefinedOptions) {
+        this.undefinedOptions = undefinedOptions;
+    }
+    
+    public Set<AmpOrgType> getExecutingAgencyTypes() {
+        return executingAgencyTypes;
+    }
+    
+    public void setExecutingAgencyTypes(Set<AmpOrgType> executingAgencyTypes) {
+        this.executingAgencyTypes = executingAgencyTypes;
+    }
+    
+    public Set<AmpOrgType> getImplementingAgencyTypes() {
+        return implementingAgencyTypes;
+    }
+    
+    public void setImplementingAgencyTypes(Set<AmpOrgType> implementingAgencyTypes) {
+        this.implementingAgencyTypes = implementingAgencyTypes;
+    }
+    
+    public Set<AmpOrgGroup> getBeneficiaryAgencyGroups() {
+        return beneficiaryAgencyGroups;
+    }
+    
+    public void setBeneficiaryAgencyGroups(Set<AmpOrgGroup> beneficiaryAgencyGroups) {
+        this.beneficiaryAgencyGroups = beneficiaryAgencyGroups;
+    }
+    
+    public Set<AmpOrgGroup> getExecutingAgencyGroups() {
+        return executingAgencyGroups;
+    }
+    
+    public void setExecutingAgencyGroups(Set<AmpOrgGroup> executingAgencyGroups) {
+        this.executingAgencyGroups = executingAgencyGroups;
+    }
+    
+    public Set<AmpOrgGroup> getImplementingAgencyGroups() {
+        return implementingAgencyGroups;
+    }
+    
+    public void setImplementingAgencyGroups(Set<AmpOrgGroup> implementingAgencyGroups) {
+        this.implementingAgencyGroups = implementingAgencyGroups;
+    }
+    
+    public Set<AmpOrgGroup> getResponsibleAgencyGroups() {
+        return responsibleAgencyGroups;
+    }
+    
+    public void setResponsibleAgencyGroups(Set<AmpOrgGroup> responsibleAgencyGroups) {
+        this.responsibleAgencyGroups = responsibleAgencyGroups;
+    }
+
+    public String getFromActualApprovalDate() {
+        return fromActualApprovalDate;
+    }
+
+    public void setFromActualApprovalDate(String fromActualApprovalDate) {
+        this.fromActualApprovalDate = fromActualApprovalDate;
+    }
+
+    public String getToActualApprovalDate() {
+        return toActualApprovalDate;
+    }
+
+    public void setToActualApprovalDate(String toActualApprovalDate) {
+        this.toActualApprovalDate = toActualApprovalDate;
+    }
+
+    public String getFromProposedCompletionDate() {
+        return fromProposedCompletionDate;
+    }
+
+    public void setFromProposedCompletionDate(String fromProposedCompletionDate) {
+        this.fromProposedCompletionDate = fromProposedCompletionDate;
+    }
+
+    public String getToProposedCompletionDate() {
+        return toProposedCompletionDate;
+    }
+
+    public void setToProposedCompletionDate(String toProposedCompletionDate) {
+        this.toProposedCompletionDate = toProposedCompletionDate;
     }
 }

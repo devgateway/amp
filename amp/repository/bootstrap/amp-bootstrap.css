@@ -230,3 +230,12 @@ div.amp-subgroup:hover {
 .nav > li > a {
   padding: 4px 6px;
 }
+
+ .pledge-orgs .dropdown-menu.open {
+	overflow-y: auto !important;
+}
+
+.pledge-orgs .dropdown-menu {
+    height: 600px !important;
+}
+

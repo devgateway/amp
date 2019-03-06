@@ -208,6 +208,12 @@ public class FilterUtil {
         form.getDynamicActivityActualCompletionFilter().setOperator(filter.getDynActivityActualCompletionFilterOperator());
         form.getDynamicActivityActualCompletionFilter().setxPeriod(filter.getDynActivityActualCompletionFilterXPeriod());
 
+        form.setToActualApprovalDate(convertArFilterToUiDate(filter.getToActualApprovalDate()));
+        form.setFromActualApprovalDate(convertArFilterToUiDate(filter.getFromActualApprovalDate()));
+
+        form.setToProposedCompletionDate(convertArFilterToUiDate(filter.getToProposedCompletionDate()));
+        form.setFromProposedCompletionDate(convertArFilterToUiDate(filter.getFromProposedCompletionDate()));
+
         form.setToActivityFinalContractingDate(convertArFilterToUiDate(filter.getToActivityFinalContractingDate()));
         form.setFromActivityFinalContractingDate(convertArFilterToUiDate(filter.getFromActivityFinalContractingDate()));
         form.getDynamicActivityFinalContractingFilter().setCurrentPeriod(filter.getDynActivityFinalContractingFilterCurrentPeriod());
@@ -333,6 +339,8 @@ public class FilterUtil {
         form.setSelectedDisasterResponse(collectValues(filter.getDisasterResponse()));
 
         form.setComputedYear(filter.getComputedYear() != null ? filter.getComputedYear() : -1);
+        
+        form.getUndefinedOptions().addAll(filter.getUndefinedOptions());
         
         return filter;
     }

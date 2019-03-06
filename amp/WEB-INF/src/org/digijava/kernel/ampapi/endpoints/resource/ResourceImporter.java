@@ -14,8 +14,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.upload.FormFile;
-import org.digijava.kernel.services.AmpFieldsEnumerator;
-import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -23,7 +21,9 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
@@ -48,7 +48,8 @@ public class ResourceImporter extends ObjectImporter {
     private AmpResource resource;
 
     public ResourceImporter() {
-        super(new InputValidatorProcessor(InputValidatorProcessor.getResourceValidators()),
+        super(new InputValidatorProcessor(InputValidatorProcessor.getResourceFormatValidators()),
+                new InputValidatorProcessor(InputValidatorProcessor.getResourceBusinessRulesValidators()),
                 AmpFieldsEnumerator.getEnumerator().getResourceFields());
     }
 
@@ -128,31 +129,29 @@ public class ResourceImporter extends ObjectImporter {
         
         try {
             resource = new AmpResource();
-            resource = (AmpResource) validateAndImport(resource, fieldsDef, newJson.any(), null);
-            
-            if (resource == null) {
-                throw new ObjectConversionException();
-            }
-            
-            if (ResourceType.LINK.equals(resource.getResourceType())) {
-                resource.setFileName(null);
-            } else {
-                resource.setWebLink(null);
-            }
-            
-            resource.setCreatorEmail(teamMemberCreator.getEmail());
-            resource.setTeam(teamMemberCreator.getTeamId());
-            resource.setAddingDate(new Date());
+            validateAndImport(resource, fieldsDef, newJson.any(), null);
             
             if (errors.isEmpty()) {
+                if (ResourceType.LINK.equals(resource.getResourceType())) {
+                    resource.setFileName(null);
+                } else {
+                    resource.setWebLink(null);
+                }
+                
+                resource.setCreatorEmail(teamMemberCreator.getEmail());
+                resource.setTeam(teamMemberCreator.getTeamId());
+                resource.setAddingDate(new Date());
                 TemporaryDocumentData tdd = getTemporaryDocumentData(resource, formFile);
                 NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), teamMemberCreator);
     
                 if (node != null) {
                     resource.setUuid(node.getUuid());
                 }
+            } else {
+                PersistenceManager.rollbackCurrentSessionTx();
             }
-        } catch (ObjectConversionException | RuntimeException e) {
+        } catch (RuntimeException e) {
+            // FIXME is any other RuntimeException simply ignored?
             if (e instanceof RuntimeException) {
                 throw new RuntimeException("Failed to create resource", e);
             }

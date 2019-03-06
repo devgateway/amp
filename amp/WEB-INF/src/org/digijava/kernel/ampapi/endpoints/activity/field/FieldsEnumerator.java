@@ -1,5 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.NONE;
 import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
 
 import java.lang.reflect.Field;
@@ -25,9 +28,9 @@ import org.digijava.kernel.ampapi.endpoints.activity.FEContext;
 import org.digijava.kernel.ampapi.endpoints.activity.FMService;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldValueReader;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
@@ -47,7 +50,7 @@ import com.google.common.collect.ImmutableSet;
  */
 public class FieldsEnumerator {
     
-    private static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
+    private static final Logger LOGGER = Logger.getLogger(FieldsEnumerator.class);
 
     /**
      * Fields that are importable & required by AMP Offline clients.
@@ -90,7 +93,7 @@ public class FieldsEnumerator {
      */
     protected APIField describeField(Field field, FEContext context) {
         Interchangeable interchangeable = context.getIntchStack().peek();
-        String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
+        String fieldTitle = FieldMap.underscorify(interchangeable.fieldTitle());
 
         APIField apiField = new APIField();
         apiField.setFieldName(fieldTitle);
@@ -308,7 +311,7 @@ public class FieldsEnumerator {
         for (Field f : fields) {
             Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
             if (isVisible(interchangeable.fmPath(), context) && interchangeable.percentageConstraint()) {
-                return InterchangeUtils.underscorify(interchangeable.fieldTitle());
+                return FieldMap.underscorify(interchangeable.fieldTitle());
             }
         }
         
@@ -328,7 +331,7 @@ public class FieldsEnumerator {
         for (Field f : fields) {
             Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
             if (isVisible(interchangeable.fmPath(), context) && interchangeable.uniqueConstraint()) {
-                return InterchangeUtils.underscorify(interchangeable.fieldTitle());
+                return FieldMap.underscorify(interchangeable.fieldTitle());
             }
         }
         
@@ -379,7 +382,7 @@ public class FieldsEnumerator {
             if (ant != null) {
                 context.feContext.getIntchStack().push(ant);
                 if (isFieldVisible(context.feContext)) {
-                    visit(field, InterchangeUtils.underscorify(ant.fieldTitle()), ant, visitor, context);
+                    visit(field, FieldMap.underscorify(ant.fieldTitle()), ant, visitor, context);
                 }
                 context.feContext.getIntchStack().pop();
             }
@@ -391,7 +394,7 @@ public class FieldsEnumerator {
                     context.feContext.getDiscriminationInfoStack().push(getDiscriminationInfo(field, ants));
                     context.feContext.getIntchStack().push(ants);
                     if (isFieldVisible(context.feContext)) {
-                        visit(field, InterchangeUtils.underscorify(ants.fieldTitle()), ants, visitor, context);
+                        visit(field, FieldMap.underscorify(ants.fieldTitle()), ants, visitor, context);
                     }
                     context.feContext.getIntchStack().pop();
                     context.feContext.getDiscriminationInfoStack().pop();
@@ -402,7 +405,7 @@ public class FieldsEnumerator {
 
     private void visit(Field field, String fieldName, Interchangeable ant, InterchangeVisitor visitor,
             VisitorContext context) {
-        context.pathStack.push(InterchangeUtils.underscorify(fieldName));
+        context.pathStack.push(FieldMap.underscorify(fieldName));
 
         visitor.visit(field, fieldName, context);
         Class<?> classOfField = getType(field, context.feContext);
@@ -423,21 +426,25 @@ public class FieldsEnumerator {
      */
     private String getRequiredValue(FEContext context, String fieldTitle) {
         Interchangeable fieldIntch = context.getIntchStack().peek();
-        String requiredValue = ActivityEPConstants.FIELD_NOT_REQUIRED;
-        String required = fieldIntch.required();
-
-        if (required.equals(ActivityEPConstants.REQUIRED_ALWAYS)) {
-            requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
-        } else if (required.equals(ActivityEPConstants.REQUIRED_ND)
-                || (!required.equals(ActivityEPConstants.REQUIRED_NONE) && isVisible(required, context))
-                || (hasRequiredValidatorEnabled(context))) {
-            if (fieldTitle.equals("location_percentage")) {
-                requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
+        
+        ActivityEPConstants.RequiredValidation required = fieldIntch.required();
+        String requiredFmPath = fieldIntch.requiredFmPath();
+        
+        if (StringUtils.isNotBlank(requiredFmPath)) {
+            if (isRequiredVisible(requiredFmPath, context)) {
+                required = required == NONE ? SUBMIT : required;
             } else {
-                requiredValue = ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
+                required = NONE;
             }
         }
-        return requiredValue;
+
+        if (required == ALWAYS) {
+            return ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
+        } else if (required == SUBMIT || hasRequiredValidatorEnabled(context)) {
+            return ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
+        }
+        
+        return ActivityEPConstants.FIELD_NOT_REQUIRED;
     }
 
     /**
@@ -527,6 +534,14 @@ public class FieldsEnumerator {
         Interchangeable interchangeable = context.getIntchStack().peek();
 
         return isVisible(interchangeable.fmPath(), context);
+    }
+    
+    protected boolean isRequiredVisible(String fmPath, FEContext context) {
+        Interchangeable peek = context.getIntchStack().pop();
+        boolean isVisible = fmService.isVisible(fmPath, context.getIntchStack());
+        context.getIntchStack().push(peek);
+        
+        return isVisible;
     }
 
     protected boolean isVisible(String fmPath, FEContext context) {

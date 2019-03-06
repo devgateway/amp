@@ -1,10 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
@@ -19,7 +20,8 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
     @InterchangeableBackReference
     private AmpActivityVersion activity;
     
-    @Interchangeable(fieldTitle="Contact", pickIdOnly=true, importable=true, uniqueConstraint=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Contact", pickIdOnly = true, importable = true, uniqueConstraint = true,
+            required = ALWAYS)
     private AmpContact contact;
     
     @Interchangeable(fieldTitle = ActivityFieldsConstants.PRIMARY_CONTACT, importable = true)

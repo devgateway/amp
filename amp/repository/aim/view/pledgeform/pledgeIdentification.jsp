@@ -43,7 +43,7 @@
 			<label for="org_grp_dropdown_id"><digi:trn>Organization Group</digi:trn></label>
 		</div>
 	
-		<div class="col-xs-6 col-xs-offset-1">
+		<div class="col-xs-6 col-xs-offset-1 pledge-orgs">
 			<html:select property="selectedOrgGrpId" styleId="org_grp_dropdown_id" styleClass="validate-mandatory">
 				<c:forEach var="orgGroup" items="${pledgeForm.orgGroups}">
 					<option value="${orgGroup.id}"<c:if test="${pledgeForm.selectedOrgGrpId == orgGroup.id}">selected="selected"</c:if> >

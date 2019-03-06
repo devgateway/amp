@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -17,7 +19,7 @@ public class AmpOrganisationContact implements Serializable,OrgProfileValue {
     private Long id;
     private AmpContact contact;
     
-    @Interchangeable(fieldTitle = "Organisation", pickIdOnly = true, required = ActivityEPConstants.REQUIRED_ALWAYS,
+    @Interchangeable(fieldTitle = "Organisation", pickIdOnly = true, required = ALWAYS,
             uniqueConstraint = true, importable = true)
     private AmpOrganisation organisation;
     

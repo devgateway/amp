@@ -147,11 +147,6 @@ public class InterchangeUtils {
         return possibleValuesEntity.value();
     }
 
-    public static Object getObjectById(Class<?> entityClass, Long id) {
-        // TODO: cache it
-        return PersistenceManager.getSession().get(entityClass.getName(), id);
-    }
-
     public static boolean isSimpleType(Class<?> clazz) {
         return InterchangeableClassMapper.containsSimpleClass(clazz);
     }

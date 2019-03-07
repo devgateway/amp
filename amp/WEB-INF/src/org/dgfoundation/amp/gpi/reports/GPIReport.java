@@ -2,10 +2,10 @@ package org.dgfoundation.amp.gpi.reports;
 
 import java.util.Map;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.digijava.kernel.ampapi.endpoints.gpi.GpiFormParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.Settings;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Report model used for GPI Reports
@@ -33,7 +33,7 @@ public class GPIReport {
     private ReportSpecification spec;
     
     @JsonIgnore
-    private JsonBean originalFormParams;
+    private GpiFormParameters originalFormParams;
 
     public GPIReportPage getPage() {
         return page;
@@ -75,11 +75,11 @@ public class GPIReport {
         this.spec = spec;
     }
 
-    public JsonBean getOriginalFormParams() {
+    public GpiFormParameters getOriginalFormParams() {
         return originalFormParams;
     }
 
-    public void setOriginalFormParams(JsonBean originalFormParams) {
+    public void setOriginalFormParams(GpiFormParameters originalFormParams) {
         this.originalFormParams = originalFormParams;
     }
 }

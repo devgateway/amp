@@ -257,8 +257,7 @@ public class ColumnFilterGenerator {
                         continue;
                     sb.append(" AND " + generatePropertyFilterSQLClause(property, cf.getViewFieldName()));
                 } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                    logger.error(e);
-                    e.printStackTrace();
+                    logger.error(e.getMessage(), e);
                 }
             }
         }

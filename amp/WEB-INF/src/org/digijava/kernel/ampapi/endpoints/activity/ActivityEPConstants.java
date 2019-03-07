@@ -3,6 +3,11 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
 /**
@@ -11,16 +16,19 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
  * @author Nadejda Mandrescu
  */
 public class ActivityEPConstants {
-    // Field configs
-    public static final String REQUIRED_NONE = "_NONE_";
-    public static final String REQUIRED_ALWAYS = "_ALWAYS_";
-    public static final String REQUIRED_ND = "_NOT_DRAFT_"; // temp. special case for project_code when Activity On Budget, do not use for other, use FM that defines
+
+    public enum RequiredValidation {
+        NONE,
+        SUBMIT,
+        ALWAYS
+    }
     
     // JSON fields
     public static final String ACTIVITY = "activity";
     public static final String FIELD_NAME = "field_name";
     public static final String FIELD_NAME_INTERNAL = "actual_field_name";
     public static final String FIELD_TYPE = "field_type";
+    public static final String ITEM_TYPE = "item-type";
     public static final String FIELD_LENGTH = "field_length";
     public static final String FIELD_LABEL = "field_label";
     public static final String IMPORTABLE = "importable";
@@ -53,10 +61,10 @@ public class ActivityEPConstants {
     
     // fields constants
     public static final String AMP_ACTIVITY_ID_FIELD_NAME = 
-            InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
-    public static final String AMP_ID_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID);
+            FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
+    public static final String AMP_ID_FIELD_NAME = FieldMap.underscorify(ActivityFieldsConstants.AMP_ID);
     public static final String MODIFIED_BY_FIELD_NAME = 
-            InterchangeUtils.underscorify(ActivityFieldsConstants.MODIFIED_BY);
+            FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY);
 
     public static final String AMP_ACTIVITY_ID = "amp-activity-id";
     public static final String AMP_ACTIVITY_LAST_VERSION_ID = "amp-activity-last-version-id";
@@ -70,14 +78,6 @@ public class ActivityEPConstants {
     public static final String MODIFIED_DATE = "modified-date";
     public static final String UPDATE_CURRENT_VERSION = "update-current-version";
 
-    // field types
-    public static final String FIELD_TYPE_LIST = "list";
-    public static final String FIELD_TYPE_STRING = "string";
-    public static final String FIELD_TYPE_BOOLEAN = "boolean";
-    public static final String FIELD_TYPE_LONG = "long";
-    public static final String FIELD_TYPE_FLOAT = "float";
-    public static final String FIELD_TYPE_DATE = "date";
-    
     // max length constants
     public static final String TYPE_VARCHAR = "character varying";
     
@@ -105,31 +105,31 @@ public class ActivityEPConstants {
     // some FM paths
     public static final String COMMITMENTS_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH + "/Commitments/Commitments Table";
     public static final String DISB_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH + "/Disbursements/Disbursements Table";
-    public static final String EST_DISB_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH 
+    public static final String ARREARS_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH + "/Arrears/Arrears Table";
+    public static final String DISB_ORDERS_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH
+            + "/Disbursement Orders/Disbursement Orders Table";
+    public static final String EST_DISB_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH
             + "/Estimated Disbursements/Estimated Disbursements Table";
     public static final String RELEASE_FUNDS_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH 
             + "/Release of Funds/Release of Funds Table";
+    public static final String EXPENDITURES_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH
+            + "/Expenditures/Expenditures Table";
     
-    public static final String COMMITMENTS_DISASTER_RESPONSE_FM_PATH = COMMITMENTS_TABLE_FM_PATH + "/Disaster Response";
-    public static final String DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH = DISB_TABLE_FM_PATH + "/Disaster Response";
-    
-    public static final String DISB_RECIPIENT_ROLE_FM_PATH = DISB_TABLE_FM_PATH 
-            + "/Funding Flows OrgRole Selector/Recipient Org Role";
-    public static final String COMMITMENTS_RECIPIENT_ROLE_FM_PATH = COMMITMENTS_TABLE_FM_PATH 
-            + "/Funding Flows OrgRole Selector/Recipient Org Role";
-    public static final String DISB_RECIPIENT_ORG_FM_PATH = DISB_TABLE_FM_PATH 
-            + "/Funding Flows OrgRole Selector/Recipient Organization";
-    public static final String COMMITMENTS_RECIPIENT_ORG_FM_PATH = COMMITMENTS_TABLE_FM_PATH 
-            + "/Funding Flows OrgRole Selector/Recipient Organization";
-
-    public static final String COMMITMENTS_PLEDGES_FM_PATH = COMMITMENTS_TABLE_FM_PATH + "/Pledges";
-    public static final String DISBURSEMENTS_PLEDGES_FM_PATH = DISB_TABLE_FM_PATH + "/Pledges";
-    public static final String ESTIMATED_DISBURSEMENTS_PLEDGES_FM_PATH = EST_DISB_TABLE_FM_PATH + "/Pledges";
-    public static final String RELEASE_OF_FUNDS_PLEDGES_FM_PATH = RELEASE_FUNDS_TABLE_FM_PATH + "/Pledges";
+    public static final String RECIPIENT_ROLE_FM_PATH = "/Funding Flows OrgRole Selector/Recipient Org Role";
+    public static final String RECIPIENT_ORG_FM_PATH = "/Funding Flows OrgRole Selector/Recipient Organization";
 
     public static final String AF_ID_FM_PATH = "/Activity Form/Identification";
     public static final String DONOR_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Donor Project Code";
     public static final String BUDGET_EXTRAS_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Budget Extras/Project Code";
+
+    public static final Set<String> TRANSACTION_FIELD_NAMES = ImmutableSet.of(
+            ArConstants.COMMITMENT,
+            ArConstants.DISBURSEMENT,
+            ArConstants.EXPENDITURE,
+            ArConstants.RELEASE_OF_FUNDS,
+            ArConstants.ESTIMATED_DISBURSEMENTS,
+            ArConstants.ARREARS,
+            ArConstants.DISBURSEMENT_ORDERS);
 
     public static final String CONTACTS_PATH = "/Activity Form/Contacts";
     

@@ -116,7 +116,7 @@ public class ColumnSavingEngine {
 
         }catch (Exception e) {
             logger.error("error in field visibility. pls check the field: "+newColumn.getColumnName() +" or its parent: "+featureName);
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             ret     = false;
         }
         return ret;

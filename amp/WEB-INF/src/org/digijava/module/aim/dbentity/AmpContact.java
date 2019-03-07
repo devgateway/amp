@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +9,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactFieldsConstants;
@@ -31,13 +32,13 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 @TranslatableClass (displayName = "Contact")
 public class AmpContact implements Comparable, Serializable, Cloneable, Versionable, Identifiable {
     
-    @Interchangeable(fieldTitle = "ID", id = true)
+    @Interchangeable(fieldTitle = "ID")
     private Long id;
     
-    @Interchangeable(fieldTitle = "Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Name", importable = true, required = ALWAYS)
     private String name;
     
-    @Interchangeable(fieldTitle = "Last Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Last Name", importable = true, required = ALWAYS)
     private String lastname;
 
     @PossibleValues(ContactTitlePossibleValuesProvider.class)
@@ -77,18 +78,19 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
             validators = @Validators(unique = FMVisibility.ALWAYS_VISIBLE_FM))
     private Set<AmpOrganisationContact> organizationContacts;
 
-    @Interchangeable(fieldTitle = "Properties")
     @InterchangeableDiscriminator(discriminatorField = "name", settings = {
             @Interchangeable(fieldTitle = ContactEPConstants.EMAIL, 
                     discriminatorOption = Constants.CONTACT_PROPERTY_NAME_EMAIL,
-                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true),
+                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true,
+                    type = AmpContactEmailProperty.class),
             @Interchangeable(fieldTitle = ContactEPConstants.PHONE, 
                     discriminatorOption = Constants.CONTACT_PROPERTY_NAME_PHONE,
-                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true),
+                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true,
+                    type = AmpContactPhoneProperty.class),
             @Interchangeable(fieldTitle = ContactEPConstants.FAX, 
                     discriminatorOption = Constants.CONTACT_PROPERTY_NAME_FAX,
-                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true)
-    })
+                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true,
+                    type = AmpContactFaxProperty.class)})
     private SortedSet<AmpContactProperty> properties;
 
     public AmpContact(){
@@ -276,5 +278,5 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     public Object getIdentifier() {
         return id;
     }
-
+    
 }

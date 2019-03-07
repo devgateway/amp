@@ -7,8 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.nireports.TranslatedDate;
@@ -26,23 +26,23 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
     
     @JsonProperty("id")
     private Long ampFiscalCalId;
-    
+
     @JsonProperty("start-month-num")
     private Integer startMonthNum;
-    
+
     @JsonProperty("year-offset")
     private Integer yearOffset;
-    
+
     @JsonProperty("start-day-num")
     private Integer startDayNum;
-    
+
     private String name;
-    
+
     private String description;
-    
+
     @JsonProperty("base-cal")
     private String baseCal;
-    
+
     @JsonProperty("is-fiscal")
     private Boolean isFiscal; // This indicates whether calendar is fiscal or not.
     
@@ -162,7 +162,7 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
     public void setIsFiscal(Boolean isFiscal) {
         this.isFiscal = isFiscal;
     }
-    
+
     @Override
     @JsonIgnore
     public List<ValueTranslatabePair> getValuesForOrgReport(){
@@ -211,12 +211,12 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
     public String getDefaultFiscalYearPrefix() {
         return this.getworker().getDefaultFiscalPrefix();
     }
-    
+
     @Override
     public int parseYear(String year, String prefix) {
         return this.getworker().parseYear(year, prefix);
     }
-    
+
     @Override
     public int parseYear(String year) {
         String prefix = TranslatorWorker.translateText(this.getworker().getDefaultFiscalPrefix());

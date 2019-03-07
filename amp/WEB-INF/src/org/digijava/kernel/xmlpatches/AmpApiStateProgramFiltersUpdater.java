@@ -5,9 +5,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 
 /**
  * This class is used by XML Patcher to rename old program filter names to new id.
@@ -58,7 +59,7 @@ public class AmpApiStateProgramFiltersUpdater extends AbstractAmpApiStateUpdater
     }
 
     private void copyAndRenameFilters(JsonNode oldFilters, ObjectNode newFilters) {
-        Iterator<String> filterNames = oldFilters.getFieldNames();
+        Iterator<String> filterNames = oldFilters.fieldNames();
         while (filterNames.hasNext()) {
             String filterName = filterNames.next();
             String newFilterName = FILTERS_TO_RENAME.getOrDefault(filterName, filterName);

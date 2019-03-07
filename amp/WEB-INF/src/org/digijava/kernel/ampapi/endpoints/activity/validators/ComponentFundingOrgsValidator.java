@@ -5,14 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
 /**
  * @author Octavian Ciubotaru
@@ -26,7 +25,7 @@ public class ComponentFundingOrgsValidator extends InputValidator {
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-            Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
 
         if (fieldPath.equals(COMP_FUND_ORGANIZATION)) {
             return isValid(importer.getNewJson(), newFieldParent.get(fieldDescription.getFieldName()));
@@ -50,10 +49,10 @@ public class ComponentFundingOrgsValidator extends InputValidator {
     private Set<Long> getOrgIds(JsonBean activity) {
         Set<Long> orgIds = new HashSet<>();
 
-        List<String> orgRoleFields = InterchangeUtils.discriminatedFieldsByFieldTitle.get(ActivityFieldsConstants.ORG_ROLE);
+        List<String> orgRoleFields = FieldMap.getDiscriminatedFieldTitlesByFieldName().get("orgrole");
 
         for (String field : orgRoleFields) {
-            Object orgRolesObj = InterchangeUtils.getFieldValuesFromJsonActivity(activity, field);
+            Object orgRolesObj = ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, field);
             if (orgRolesObj != null && orgRolesObj instanceof Collection) {
                 Collection<?> orgRolesColl = (Collection<?>) orgRolesObj;
                 for (Object orgRoleObj : orgRolesColl) {

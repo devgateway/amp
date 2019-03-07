@@ -162,7 +162,7 @@ module.exports = Backbone.Collection
 
     if (!_.isEmpty(aryOfIDs)) {
       // do an api request to get remaining ones
-      this.url = '/rest/gis/activities/' + aryOfIDs.join(',');
+      this.url = '/rest/gis/activities?' + aryOfIDs.map(function(id) { return "id="+id; }).join('&');
       var payload = {};
       if (this.appData.filter) {
         _.extend(payload, this.appData.filter.serialize());
@@ -243,7 +243,7 @@ module.exports = Backbone.Collection
 			var activities = new TempActivityCollection([], {
 				appData : this.appData
 			});
-			activities.url = '/rest/gis/activities/' + aryOfIDs.join(',');
+			activities.url = '/rest/gis/activities?' + aryOfIDs.map(function(id) { return "id="+id; }).join('&');
 			activities.fetch({
 				remove : false,
 				data : JSON.stringify(payload),

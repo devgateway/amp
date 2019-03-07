@@ -3,7 +3,9 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
@@ -17,6 +19,11 @@ public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
     private List<String> filteredFields = new ArrayList<>();
 
     public ActivityExporter(JsonBean filter) {
+        this(new DefaultTranslatedFieldReader(), AmpFieldsEnumerator.getEnumerator().getActivityFields(), filter);
+    }
+
+    public ActivityExporter(TranslatedFieldReader translatedFieldReader, List<APIField> fields, JsonBean filter) {
+        super(translatedFieldReader, fields);
         this.filter = filter;
     }
 
@@ -24,7 +31,7 @@ public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
     public JsonBean export(AmpActivityVersion object) {
         JsonBean resultJson = new JsonBean();
 
-        if (!InterchangeUtils.validateFilterActivityFields(filter, resultJson)) {
+        if (!ActivityInterchangeUtils.validateFilterActivityFields(filter, resultJson, getApiFields())) {
             return resultJson;
         }
 
@@ -33,15 +40,6 @@ public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
         }
 
         return super.export(object);
-    }
-
-    @Override
-    protected Class<?> getClassOf(Object object) {
-        if (object instanceof AmpActivityVersion) {
-            return object.getClass().getSuperclass();
-        } else {
-            return object.getClass();
-        }
     }
 
     /**

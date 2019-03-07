@@ -71,6 +71,11 @@ public class ContactInfoUtil {
         return returnValue;
     }
     
+    public static List<AmpContact> getContacts(List<Long> ids) {
+        String queryString = "select a from " + AmpContact.class.getName() + " a where a.id in (:ids)";
+        return PersistenceManager.getSession().createQuery(queryString).setParameterList("ids", ids).list();
+    }
+    
     public static int getContactsCount(String email,Long id) throws Exception{
         int retValue=0;
         Session session=null;
@@ -167,7 +172,7 @@ public class ContactInfoUtil {
             }           
             contacts=query.list();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return contacts;
     }
@@ -207,7 +212,7 @@ public class ContactInfoUtil {
             }
             contacts = query.list();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw e;
         }
         return contacts;

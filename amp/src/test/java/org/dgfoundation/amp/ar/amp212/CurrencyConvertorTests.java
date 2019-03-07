@@ -9,7 +9,7 @@ import java.util.TreeMap;
 
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -23,7 +23,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class CurrencyConvertorTests extends ReportingTestCase {
+public class CurrencyConvertorTests extends AmpReportingTestCase {
     final CurrencyConvertor convertor;
     final String BASE_CURRENCY = "USD";
     

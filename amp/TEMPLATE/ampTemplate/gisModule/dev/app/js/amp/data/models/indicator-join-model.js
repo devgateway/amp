@@ -17,6 +17,9 @@ const readyStateRequestReceived = 2;
 const readyStateProcessingRequest = 3;
 const readyStateResponseReady = 4;
 const JOIN_BOUNDARIES_PREFIX = 'J';
+const EMPTY_JSON_FILE = 'empty.json';
+const GAP_ANALYSIS_URL = '/rest/gis/do-gap-analysis';
+const INDICATOR_LAYER_URL = '/rest/gis/indicators/';
 
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
@@ -93,7 +96,7 @@ module.exports = Backbone.Model
 
 loadAll: function(options) {
 	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){		  	  
-		  this.url = '/rest/gis/indicators/' + this.getId(); 
+		  this.url = INDICATOR_LAYER_URL + this.getId();
 	  }else if(this.get('type') === 'Indicator Layers'){
 		  this.url = '/rest/gis/indicator-layers/' + this.get('id');
 	  }	
@@ -110,60 +113,82 @@ loadAll: function(options) {
   },
   fetch: function(){	
 	  var self = this;
-	  	  
+	  var isGapAnalysis = app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected');
+	  var httpMethod = isGapAnalysis || this.attributes.isStoredInLocalStorage ? 'POST' : 'GET';
+	  var settings = app.data.settingsWidget.toAPIFormat();	  
 	  var filter = {};
+	  
 	  if (app.data.filter) {
 		  _.extend(filter, app.data.filter.serialize());
-	  }
-	  var settings = app.data.settingsWidget.toAPIFormat();	  	  
+	  }	  	  	  
 	  
-	  if(this.attributes.isStoredInLocalStorage === true){		  
-		  IndicatorLayerLocalStorage.cleanUp();
-		  var layer = IndicatorLayerLocalStorage.findById(this.getId());
-		  if(!_.isUndefined(layer)){
-			  IndicatorLayerLocalStorage.updateLastUsedTime(layer);			  
-			  var params = {};
-			  params.type = 'POST';
-			  if (app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected')) {
-				// If Gap analysis selected we call the EP to reprocess the local data.
-				  this.url = '/rest/gis/do-gap-analysis';
-				  params.data = {indicator: layer, settings: settings, isGapAnalysis: true};
-				  params.data = JSON.stringify(_.extend(params.data, filter));
-			  } else {
-				  // If gap analysis is NOT selected then we send the data from localStorage anyway, the EP will return it without changes.
-				  // This is needed because after the gap analysis is selected we cant render again the original public layer.	
-				  
-				  this.url = '/rest/gis/process-public-layer';
-				  layer.unit = StringUtil.getMultilangString(layer,'unit', app.data.generalSettings); // Needed preprocess for popups.
-				  layer.description = StringUtil.getMultilangString(layer,'description', app.data.generalSettings);				  
-				  params.data = JSON.stringify(layer);
-			  }			  
-			  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
-			  return this.lastFetchXhr;				  
-		  } else {
-			  console.error('Invalid layer.');
-		  }
+	  if (this.attributes.isStoredInLocalStorage === true) {		  
+	     return this._fetchLocalLayer(httpMethod, filter, settings, isGapAnalysis);
 	  } else {
-		// By adding this section here in fetch we are sure any call made over /rest/indicators/id will have the right parameters without duplicating code.  
+		return this._fetchServerLayer(httpMethod, filter, settings, isGapAnalysis);
+	  }	  
+  },
+  _fetchLocalLayer: function(httpMethod, filter, settings, isGapAnalysis) {
+	  IndicatorLayerLocalStorage.cleanUp();
+	  var layer = IndicatorLayerLocalStorage.findById(this.getId());
+	  if (!_.isUndefined(layer)) {
+		  IndicatorLayerLocalStorage.updateLastUsedTime(layer);			  
+		  var params = {};
+		  params.type = httpMethod;
+		  if (isGapAnalysis) {
+			// If Gap analysis selected we call the EP to reprocess the local data.
+			  this.url = GAP_ANALYSIS_URL;
+			  params.data = {indicator: layer, settings: settings};
+			  params.data = JSON.stringify(_.extend(params.data, filter));
+		  } else {
+              /* If gap analysis is NOT selected then we use the data from localStorage instead of going to an EP,
+              so we set the url to an empty .json file and then the parse function will use the data we already have.*/
+              this.url = EMPTY_JSON_FILE;
+
+			  layer.unit = StringUtil.getMultilangString(layer,'unit', app.data.generalSettings); // Needed preprocess for popups.
+			  layer.description = StringUtil.getMultilangString(layer,'description', app.data.generalSettings);
+			  params.data = JSON.stringify(layer);
+		  }
+		  this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
+		  return this.lastFetchXhr;
+	  } else {
+		  console.error('Invalid layer.');
+	  }
+  },
+  _fetchServerLayer: function(httpMethod, filter, settings, isGapAnalysis) {
+	   // By adding this section here in fetch we are sure any call made over /rest/indicators/id will have the right parameters without duplicating code.
 		if (this.lastFetchXhr && this.lastFetchXhr.readyState > this.readyStateNotInitialized && this.lastFetchXhr.readyState < this.readyStateResponseReady) {
 			return this.lastFetchXhr.abort();
 		}
-		filter.gapAnalysis = app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected');
-		filter.settings = settings;
+
 		var params = {};
-	    params.type = 'POST';
-	    params.data = JSON.stringify(filter);
-	    // "params" will set the right type + filters + settings + gap analysis.
+		params.type = httpMethod;
+		if (isGapAnalysis) {
+			this.url = GAP_ANALYSIS_URL + '/' + this.getId() ;
+			params.data = JSON.stringify(filter);
+			filter.settings = settings;
+		} else {
+			this.url = INDICATOR_LAYER_URL + this.getId() ;
+		}
+
 	    this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, params);
 	    return this.lastFetchXhr;
-	  }	  
   },
-  parse: function(response, options){	  
-	  //if from /rest/gis/indicators/ add prefix to id prevent collision
-	  if(!_.isFunction(this.url) && !_.isUndefined(this.url) && this.url.indexOf('/rest/gis/indicators/') !== -1){	
-		  response.id = app.constants.JOIN_BOUNDARIES_PREFIX +  response.id;
-	  }
-	  return response;	  
+  parse: function(response, options){
+      /* This is a special case where we dont need to go to the backend but use data we already have. */
+      if (options && options.url === EMPTY_JSON_FILE) {
+          response = JSON.parse(options.data);
+      } else if (!_.isFunction(this.url) &&
+          !_.isUndefined(this.url) && this.url.indexOf(INDICATOR_LAYER_URL) !== -1) {
+          //if from /rest/gis/indicators/ add prefix to id prevent collision
+          response.id = app.constants.JOIN_BOUNDARIES_PREFIX + response.id;
+      }
+	  if (typeof response.title !== "string") {
+          response.title = StringUtil.getMultilangString(response, 'name', app.data.generalSettings);
+          response.description = StringUtil.getMultilangString(response, 'description', app.data.generalSettings);
+          response.unit = StringUtil.getMultilangString(response, 'unit', app.data.generalSettings);
+      }
+      return response;
   },
   updatePaletteRange: function() {
     var min = +Infinity,
@@ -183,11 +208,11 @@ loadAll: function(options) {
   _valuesAreIntegers: function(){
 	  if(this.get('values')){
 		  var integerValues = this.get('values').filter(function(item){
-			  return item.value % 1 === 0;  
-		  });	  
-		  return integerValues.length === this.get('values').length;  
+			  return item.value % 1 === 0;
+		  });
+		  return integerValues.length === this.get('values').length;
 	  }
-	  return false 
+	  return false
    },
    //find max value
    _getMaxValue: function(){
@@ -195,34 +220,34 @@ loadAll: function(options) {
 	   if(this.get('values')){
 		   var values = _.pluck(this.get('values'),'value');
 		   result =  _.max(values);
-	   }	  
+	   }
 	   return result;
-   },   
+   },
    _getMinValue: function(){
 	   var result = +Infinity;
 	   if(this.get('values')){
 		   var values = _.pluck(this.get('values'),'value');
 		   result =  _.min(values);
-	   }	  
+	   }
 	   return result;
-   },  
+   },
    analyzeValues: function(){
 	   this.maxValue = this._getMaxValue();
    	   this.minValue = this._getMinValue();
-   	   this.valuesAreIntegers = this._valuesAreIntegers(); 
+   	   this.valuesAreIntegers = this._valuesAreIntegers();
    },
   _joinDataWithBoundaries: function(boundaryGeoJSON) {
     var self = this;
     var values = _.map(this.get('values'), function(value){
-    	value.geoId = value.geoId ? $.trim(value.geoId) : value.geoId; 
+    	value.geoId = value.geoId ? $.trim(value.geoId) : value.geoId;
     	return value;
     });
-   
+
     var indexedValues = _.indexBy(values, 'geoId');
     if(indexedValues["null"]) {
         indexedValues[0] = indexedValues["null"]; //hack for some countries the geoId is null.
     }
-       
+
     var admKey = this.get('adminLevel').replace('-', '').toUpperCase();
 
     // copy boundary geoJSON, and inject data
@@ -233,16 +258,16 @@ loadAll: function(options) {
         // replacing for now, to save weight
     	var admCode = feature.properties[admKey + '_CODE'];
     	feature.id = admCode ? $.trim(admCode) : admCode;
-        feature.properties.name = feature.properties[admKey + '_NAME'] || ''; 
-        
+        feature.properties.name = feature.properties[admKey + '_NAME'] || '';
+
         var value = null;
         if (!_.isUndefined(indexedValues[feature.id]) && !_.isNull(indexedValues[feature.id])) {
         	value = indexedValues[feature.id].value;
-        } 
-        
+        }
+
         return _.extend(feature, {
           properties: _.extend(feature.properties, {
-            value: value 
+            value: value
           })
         });
       })

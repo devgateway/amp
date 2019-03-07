@@ -10,21 +10,24 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.SerializableComparator;
 
 
-public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable
-{
+public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable {
     //IATI-check: not to be ignored
     private Long ampOrgRoleId;
-    @Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable = false)
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
-    @Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true, uniqueConstraint=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    
+    @Interchangeable(fieldTitle = "Organization", importable = true, pickIdOnly = true, uniqueConstraint = true,
+            required = ActivityEPConstants.RequiredValidation.ALWAYS)
     private AmpOrganisation organisation;
+    
     private AmpRole role;
     @Interchangeable(fieldTitle = "Percentage", importable = true, percentageConstraint = true,
-            fmPath = FMVisibility.PARENT_FM + "/percentage", required = ActivityEPConstants.REQUIRED_ALWAYS)
+            fmPath = FMVisibility.PARENT_FM + "/percentage", required = ActivityEPConstants.RequiredValidation.ALWAYS)
     private Float   percentage;
     @Interchangeable(fieldTitle = "Budgets", importable = true, fmPath = FMVisibility.PARENT_FM + "/Budget Code")
     private Set <AmpOrgRoleBudget> budgets;
@@ -277,4 +280,4 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
         this.gpiNiSurveys = gpiNiSurveys;
     }
     
-}   
+}

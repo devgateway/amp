@@ -189,7 +189,7 @@ public class ActivityVersionUtil {
             try {
                 aux = Integer.valueOf(gsValue).intValue();
             } catch (NumberFormatException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
             }
         }
         return aux;
@@ -220,11 +220,10 @@ public class ActivityVersionUtil {
      * it and ready to save.
      * 
      * @param in
-     * @param member
      * @return
      * @throws CloneNotSupportedException
      */
-    public static AmpActivityVersion cloneActivity(AmpActivityVersion in, AmpTeamMember member) throws CloneNotSupportedException {
+    public static AmpActivityVersion cloneActivity(AmpActivityVersion in) throws CloneNotSupportedException {
         AmpActivityVersion out = (AmpActivityVersion) in.clone();
         
         Class clazz = AmpActivityFields.class;
@@ -239,7 +238,6 @@ public class ActivityVersionUtil {
         }
 
         out.setAmpActivityGroup(null);
-        out.setModifiedBy(member);
         return out;
     }
     
@@ -281,7 +279,6 @@ public class ActivityVersionUtil {
                 method = clazz.getMethod("set" + setName, Collection.class);
             method.invoke(out, returnSet);
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("Can't init set '"+ setName +"':", e);
         }
     }

@@ -60,4 +60,5 @@ public class AmpGPINiSurvey implements Serializable, Cloneable, Comparable<AmpGP
         // TODO Auto-generated method stub
         return super.clone();
     }
+    
 }

@@ -22,12 +22,18 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -39,6 +45,10 @@ import org.digijava.module.translation.exotic.AmpDateFormatter;
  */
 
 public class DateTimeUtil {
+
+    private static final Logger logger = LoggerFactory.getLogger(DateTimeUtil.class);
+
+    private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<>();
 
     /**
      * Convert iso date to java.util.Calendar
@@ -177,7 +187,7 @@ public class DateTimeUtil {
     }
     
     public static Date fromJulianNumberToDate(String julianNumber) {
-        if (julianNumber != null && !"999999998".equals(julianNumber)) {
+        if (julianNumber != null && !FiltersConstants.FILTER_UNDEFINED_MAX.equals(julianNumber)) {
             try {
                 int day = Integer.parseInt(julianNumber) - 2440587; 
                 julianNumber = Integer.toString(day);
@@ -241,4 +251,58 @@ public class DateTimeUtil {
         return (new java.sql.Date(date.getTime())).toLocalDate();
     }
 
+    /**
+     * Returns a date representing first day of the year. Uses Gregorian calendar.
+     */
+    public static Date firstDayOfYear(int year) {
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.clear();
+        calendar.set(Calendar.YEAR, year);
+        return calendar.getTime();
+    }
+
+    /**
+     * Returns a date representing last day of the year. Uses Gregorian calendar.
+     */
+    public static Date lastDayOfYear(int year) {
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.clear();
+        calendar.set(Calendar.YEAR, year + 1);
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        return calendar.getTime();
+    }
+
+    /**
+     * Gets a date formatted in ISO 8601 format. If the date is null, returns null.
+     *
+     * @param date the date to be formatted
+     * @return String, date in ISO 8601 format
+     */
+    public static String formatISO8601DateTime(Date date) {
+        return date == null ? null : getDateFormatter().format(date);
+    }
+
+    /**
+     * Parse a date time using ISO 8601 format. If date cannot be parsed null will be returned.
+     *
+     * @param date the source
+     * @return Date object
+     */
+    public static Date parseISO8601DateTime(String date) {
+        try {
+            return date == null ? null : getDateFormatter().parse(date);
+        } catch (ParseException e) {
+            logger.warn(e.getMessage());
+            return null;
+        }
+    }
+
+    private static SimpleDateFormat getDateFormatter() {
+        if (DATE_FORMATTER.get() == null) {
+            SimpleDateFormat format = new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT);
+            format.setTimeZone(TimeZone.getTimeZone("UTC"));
+            DATE_FORMATTER.set(format);
+        }
+        return DATE_FORMATTER.get();
+    }
 }

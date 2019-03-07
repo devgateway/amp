@@ -125,7 +125,7 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
                             && !roc.parentColumn.columnName.equals("Totals")) {
                         if (years.get(roc.parentColumn.columnName) == null) {
                             years.put(roc.parentColumn.columnName, new GPIIndicator6Item(
-                                    new BigDecimal(((AmountCell) rc).extractValue()), BigDecimal.ZERO));
+                                    ((AmountCell) rc).extractValue(), BigDecimal.ZERO));
                         }
                     } else if (roc.parentColumn == null) {
                         donor = rc.displayedValue;
@@ -235,7 +235,7 @@ public class GPIReport6OutputBuilder extends GPIReportOutputBuilder {
             if (MeasureConstants.PLANNED_DISBURSEMENTS.equals(roc.originalColumnName)
                     && NiReportsEngine.TOTALS_COLUMN_NAME.equals(roc.parentColumn.originalColumnName)) {
                 summaryColumns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
-                totalDisbursements = new BigDecimal(((AmountCell) rc).extractValue());
+                totalDisbursements = ((AmountCell) rc).extractValue();
                 break;
             }
         }

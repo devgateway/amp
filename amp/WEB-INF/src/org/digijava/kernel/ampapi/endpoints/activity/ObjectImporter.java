@@ -245,11 +245,16 @@ public class ObjectImporter {
         FieldType fieldType = fieldDef.getApiType().getFieldType();
         boolean idOnly = fieldDef.isIdOnly();
 
+        // on a business rule validation error we configure the input to progress with further validation
+        if (jsonValue != null && JsonBean.class.isAssignableFrom(jsonValue.getClass())) {
+            jsonValue = ((JsonBean) jsonValue).get(ActivityEPConstants.INPUT);
+        }
+
         // this field has possible values
         if (!isCollection && idOnly) {
             return valueConverter.getObjectById(field.getType(), jsonValue);
         }
-        
+
         Object value = null;
 
         try {

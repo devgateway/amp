@@ -3,6 +3,7 @@
  */
 package org.digijava.module.aim.action;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -1566,7 +1567,7 @@ public class ReportsFilterPicker extends Action {
         //                  null : DynLocationManagerUtil.getLocation(filterForm.getRegionSelected(),false) );
         
         Set<AmpCategoryValueLocations> selectedRegions = null;
-        if (filterForm.getRegionSelected() != null){
+        if (ArrayUtils.isNotEmpty(filterForm.getRegionSelected())) {
             if (!filterForm.getRegionSelected()[0].toString().equals("-1")) {
                 selectedRegions = Util.getSelectedObjects(AmpCategoryValueLocations.class, filterForm.getRegionSelected());
             }
@@ -1730,6 +1731,9 @@ public class ReportsFilterPicker extends Action {
         
         arf.setHumanitarianAid(buildBooleanField(filterForm.getSelectedHumanitarianAid()));
         arf.setDisasterResponse(buildBooleanField(filterForm.getSelectedDisasterResponse()));
+        
+        arf.getUndefinedOptions().addAll(filterForm.getUndefinedOptions());
+        
         arf.postprocess();
     }
 

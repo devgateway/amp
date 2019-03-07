@@ -8,6 +8,7 @@ import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -40,7 +41,7 @@ public class AmpReportFiltersConverter {
     private AmpReportFilters filters;
     private AmpARFilter ampARFilter;
     private static final String TRANSACTION_DATE = "DATE";
-
+    
     public AmpReportFiltersConverter(AmpReportFilters filters) {
         if (filters == null) {
             filters = new AmpReportFilters();
@@ -71,11 +72,19 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.PLEDGES_DONOR_GROUP, AmpOrganisation.class, "donorGroups", true);
 
         // Related organizations section.
+        addFilter(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, AmpOrgGroup.class, "beneficiaryAgencyGroups", true);
         addFilter(ColumnConstants.BENEFICIARY_AGENCY, AmpOrganisation.class, "beneficiaryAgency", true);
+        addFilter(ColumnConstants.EXECUTING_AGENCY_TYPE, AmpOrgType.class, "executingAgencyTypes", true);
+        addFilter(ColumnConstants.EXECUTING_AGENCY_GROUPS, AmpOrgGroup.class, "executingAgencyGroups", true);
         addFilter(ColumnConstants.EXECUTING_AGENCY, AmpOrganisation.class, "executingAgency", true);
+        addFilter(ColumnConstants.CONTRACTING_AGENCY_GROUPS, AmpOrgGroup.class, "contractingAgencyGroups", true);
         addFilter(ColumnConstants.CONTRACTING_AGENCY, AmpOrganisation.class, "contractingAgency", true);
+        addFilter(ColumnConstants.IMPLEMENTING_AGENCY_TYPE, AmpOrgType.class, "implementingAgencyTypes", true);
+        addFilter(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, AmpOrgGroup.class, "implementingAgencyGroups", true);
         addFilter(ColumnConstants.IMPLEMENTING_AGENCY, AmpOrganisation.class, "implementingAgency", true);
         //addFilter(ColumnConstants.REGIONAL_GROUP, AmpOrganisation.class, "", true);
+        addFilter(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, AmpOrganisation.class,
+                "responsibleAgencyGroups", true);
         addFilter(ColumnConstants.RESPONSIBLE_ORGANIZATION, AmpOrganisation.class, "responsibleorg", true);
         addFilter(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, AmpOrganisation.class, "componentFunding", true);
         addFilter(ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, AmpOrganisation.class,
@@ -250,7 +259,9 @@ public class AmpReportFiltersConverter {
                         Iterator<String> iValues = filterRule.values.iterator();
                         while (iValues.hasNext()) {
                             String auxValue = iValues.next();
-                            if (ampARFilterFieldClass.toString().equals("class java.lang.String")) {
+                            if (auxValue.equals(Long.toString(ColumnReportData.UNALLOCATED_ID))) {
+                                ampARFilter.getUndefinedOptions().add(ampARFilterFieldName);
+                            } else if (ampARFilterFieldClass.toString().equals("class java.lang.String")) {
                                 values.add(auxValue);
                             } else if (ampARFilterFieldClass.toString().equals("class java.lang.Integer")) {
                                 values.add(Integer.valueOf(auxValue));

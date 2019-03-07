@@ -61,6 +61,7 @@ public final class ContactUtil {
                     result = exporter.export(contact);
                 } catch (Exception e) {
                     result = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage()));
+                    result.set(ContactEPConstants.ID, contact.getId());
                 } finally {
                     PersistenceManager.getSession().evict(contact);
                 }

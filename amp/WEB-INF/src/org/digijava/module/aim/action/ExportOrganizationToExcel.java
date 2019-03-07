@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpContactPhoneProperty;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrgRecipient;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
@@ -1185,8 +1186,8 @@ public class ExportOrganizationToExcel extends DispatchAction {
                         longestEmailRecord = currentRecord;
                     }
                 }else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-                    currentRecord = TranslatorWorker.translateText(property.getPhoneCategory()) + " "
-                            + property.getValue();
+                    String phoneCategory = ((AmpContactPhoneProperty) property).getPhoneCategory();
+                    currentRecord = TranslatorWorker.translateText(phoneCategory) + " " + property.getValue();
                     phones+= currentRecord + ";\n";
                     if(currentRecord.length() > longestEmailRecord.length()){
                         longestPhoneRecord = currentRecord;

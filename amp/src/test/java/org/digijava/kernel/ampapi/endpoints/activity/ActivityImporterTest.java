@@ -8,10 +8,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
+import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.junit.Rule;
 import org.junit.Test;
@@ -54,10 +57,19 @@ public class ActivityImporterTest {
     }
 
     private Map<Integer, ApiErrorMessage> validate(JsonBean json) {
+        List<APIField> activityFields = createTestFieldsEnumerator().getAllAvailableFields(AmpActivityFields.class);
+
         AmpActivityVersion activity = new AmpActivityVersion();
-        ActivityImporter importer = new ActivityImporter();
-        importer.validateAndImport(activity, null, apiFields, json.any(), null, null );
+        ActivityImporter importer = new ActivityImporter(activityFields);
+        importer.validateAndImport(activity, apiFields, json.any(), null);
         return importer.getErrors();
+    }
+
+    private FieldsEnumerator createTestFieldsEnumerator() {
+        TestFieldInfoProvider fieldInfoProvider = new TestFieldInfoProvider();
+        TestFMService fmService = new TestFMService();
+        TestTranslatorService translatorService = new TestTranslatorService();
+        return new FieldsEnumerator(fieldInfoProvider, fmService, translatorService, name -> true);
     }
 
     private Map<Integer, ApiErrorMessage> errors(ApiErrorMessage... messages) {

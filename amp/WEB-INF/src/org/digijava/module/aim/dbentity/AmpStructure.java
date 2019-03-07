@@ -1,15 +1,17 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
@@ -29,7 +31,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     
     @TranslatableField
     @Interchangeable(fieldTitle = "Title", importable = true, fmPath = "/Activity Form/Structures/Structure Title", 
-            required = ActivityEPConstants.REQUIRED_ALWAYS)
+            required = ALWAYS)
     private String title;
     
     @TranslatableField
@@ -53,8 +55,9 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     @Interchangeable(fieldTitle = "Type", pickIdOnly = true, importable = true, 
             fmPath = "/Activity Form/Structures/Structure Type")
     private AmpStructureType type;
-    
-    private Set<AmpActivityVersion> activities;
+
+    @InterchangeableBackReference
+    private AmpActivityVersion activity;
     
     private Set<AmpStructureImg> images;
     
@@ -70,12 +73,12 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     private Long structureColorId;
     private Integer tempId; // client side id used for identifying structures
 
-    public Set<AmpActivityVersion> getActivities() {
-        return activities;
+    public AmpActivityVersion getActivity() {
+        return activity;
     }
 
-    public void setActivities(Set<AmpActivityVersion> activities) {
-        this.activities = activities;
+    public void setActivity(AmpActivityVersion activity) {
+        this.activity = activity;
     }
 
     public Long getAmpStructureId() {
@@ -177,8 +180,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpStructure aux = (AmpStructure) clone();
-        aux.setActivities(new HashSet<AmpActivityVersion>());
-        aux.getActivities().add(newActivity);
+        aux.setActivity(newActivity);
         aux.setAmpStructureId(null);
         
         if (aux.getImages() != null && aux.getImages().size() > 0) {

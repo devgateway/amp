@@ -2,13 +2,12 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.List;
 import java.util.Map;
-
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -34,65 +33,50 @@ public class ValueValidator extends InputValidator {
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         
         boolean importable = fieldDescription.isImportable();
         // input type, allowed input will be verified before, so nothing check here 
         if (!importable)
             return true;
         
-        //temporary debug
         if (!isValidLength(newFieldParent, fieldDescription))
             return false;
         if (!isValidPercentage(newFieldParent, fieldDescription)) 
             return false;
 
         // FIXME possible values are not always available for all fields, must check only for select fields (not all)
-        List<PossibleValue> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath);
+        List<PossibleValue> possibleValues = importer.getPossibleValuesCache().getPossibleValues(fieldPath);
+        Object value = newFieldParent.get(fieldDescription.getFieldName());
         
-        if (possibleValues.size() != 0) {
-            Object value = newFieldParent.get(fieldDescription.getFieldName());
-            
-            if (value != null) {
-                boolean idOnly = Boolean.TRUE.equals(fieldDescription.isIdOnly());
-                // convert to string the ids to avoid long-integer comparison
-                String valueStr = value.toString();
-                if (idOnly) {
-                    if (findById(possibleValues, valueStr) != null) {
-                        return true;
-                    }
-                } else {
-                    if (findByValue(possibleValues, valueStr) != null) {
-                        return true;
-                    }
+        if (possibleValues.size() != 0 && value != null) {
+            if (fieldDescription.getApiType().getFieldType().isList()) {
+                if (fieldDescription.getApiType().isSimpleItemType()) {
+                    return ((List<?>) value).stream().allMatch(v -> isAllowedValue(possibleValues, v));
                 }
-                // wrong value configured if it is not found in allowed options
+                // possible values definition allowed at simple type list level only
                 return false;
+            } else {
+                return isAllowedValue(possibleValues, value);
             }
         }
-        // nothing failed so far? then we are good to go
         return true;
     }
+    
+    private boolean isAllowedValue(List<PossibleValue> possibleValues, Object value) {
+        // convert to string the ids to avoid long-integer comparison
+        return findById(possibleValues, String.valueOf(value)) != null;
+    }
 
+    // TODO it would be nice if possible values could be extended to retrieve one single possible value by id.
+    // this will reduce this operation from O(n) to O(log N) or O(1)
+    // reason: fields can repeat and may have thousands of possible values
     private PossibleValue findById(List<PossibleValue> possibleValues, String id) {
         for (PossibleValue possibleValue : possibleValues) {
             if (id.equals(possibleValue.getId().toString())) {
                 return possibleValue;
             }
             PossibleValue childPossibleValue = findById(possibleValue.getChildren(), id);
-            if (childPossibleValue != null) {
-                return childPossibleValue;
-            }
-        }
-        return null;
-    }
-
-    private PossibleValue findByValue(List<PossibleValue> possibleValues, String value) {
-        for (PossibleValue possibleValue : possibleValues) {
-            if (value.equals(possibleValue.getValue())) {
-                return possibleValue;
-            }
-            PossibleValue childPossibleValue = findByValue(possibleValue.getChildren(), value);
             if (childPossibleValue != null) {
                 return childPossibleValue;
             }

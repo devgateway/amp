@@ -24,6 +24,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.QuartzJobClassUtils;
 import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.message.jobs.ConnectionCleaningJob;
+import org.digijava.module.message.jobs.NonConcurrentJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.SchedulerException;
@@ -36,7 +37,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Octavian Ciubotaru
  */
-public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
+public class DownloadAmpOfflineReleasesJob extends NonConcurrentJob {
 
     private final Logger logger = LoggerFactory.getLogger(DownloadAmpOfflineReleasesJob.class);
 
@@ -50,7 +51,7 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
     private AmpRegistryService ampRegistryService = AmpRegistryService.INSTANCE;
 
     @Override
-    public void executeInternal(JobExecutionContext context) throws JobExecutionException {
+    public void executeNonConcurrentInternal(JobExecutionContext context) throws JobExecutionException {
         if (FeaturesUtil.isAmpOfflineEnabled()) {
             initialize(context);
 

@@ -7,17 +7,17 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
-import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -27,19 +27,14 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class NiComputedMeasuresTests extends ReportingTestCase {
+public class NiComputedMeasuresTests extends AmpReportingTestCase {
     
     final List<String> acts = Arrays.asList(
             "expenditure class", 
             "Eth Water",
             "activity with directed MTEFs"
         );
-    
-    @Override
-    protected NiReportExecutor getNiExecutor(List<String> activityNames) {
-        AmpReportsScratchpad.forcedNowDate = LocalDate.of(2016, 5, 3);
-        return getDbExecutor(activityNames);
-    }
+
     final List<String> ppcActs = Arrays.asList(
             "Proposed Project Cost 1 - USD",
             "Proposed Project Cost 2 - EUR",
@@ -295,7 +290,11 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
         runNiTestCase(spec, "en", Arrays.asList("expenditure class"), cor);
         
     }
-    
+
+    @Before
+    public void setup() {
+        AmpReportsScratchpad.forcedNowDate = LocalDate.of(2016, 5, 3);
+    }
     
     @After
     public void tearDown() {

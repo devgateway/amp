@@ -1,9 +1,5 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -11,13 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import clover.org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -48,7 +44,7 @@ public class TreeCollectionValidator extends InputValidator {
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         String fieldName = fieldDescription.getFieldName();
         boolean treeCollectionField = Boolean.TRUE.equals(fieldDescription.getTreeCollectionConstraint());
         String uniqueField = fieldDescription.getUniqueConstraint();
@@ -58,15 +54,13 @@ public class TreeCollectionValidator extends InputValidator {
             Set<Long> idValues = new HashSet<Long>();
             
             if (fieldValue != null && fieldValue.size() > 1) {
-                Field field = InterchangeUtils.getFieldByLongName(fieldName);
-                
-                if (StringUtils.isBlank(uniqueField) || field == null) {
+                if (StringUtils.isBlank(uniqueField)) {
                     throw new RuntimeException("The treeCollectionValidator cannot check the field that does not have fields with unique constraint");
                 }
                 
                 idValues = getUniqueValues(fieldValue, uniqueField);
                 
-                return isTreeCollectionValid(field, idValues);
+                return isTreeCollectionValid(fieldDescription.getApiType().getElementType(), idValues);
             }
         }
 
@@ -96,12 +90,11 @@ public class TreeCollectionValidator extends InputValidator {
     }
     
     /**
-     * @param field field to be checked
+     * @param clazz collection element type
      * @param idValuesSet the Set containing unique id values
      * @return boolean if the collection does not contains children and parents
      */
-    private boolean isTreeCollectionValid(Field field, Set<Long> idValuesSet) {
-        Class<?> clazz = InterchangeUtils.getGenericClass(field);
+    private boolean isTreeCollectionValid(Class<?> clazz, Set<Long> idValuesSet) {
         Set<Long> tmpIdValues = new HashSet<Long>();
         tmpIdValues.addAll(idValuesSet);
         

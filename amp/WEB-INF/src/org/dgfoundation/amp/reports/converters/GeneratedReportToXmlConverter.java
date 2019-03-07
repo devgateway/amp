@@ -5,6 +5,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
@@ -30,8 +31,6 @@ import org.dgfoundation.amp.reports.xml.Sort;
 import org.dgfoundation.amp.reports.xml.Sorting;
 import org.dgfoundation.amp.reports.xml.Values;
 import org.dgfoundation.amp.reports.xml.YearRange;
-
-import clover.org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * A utility class to convert a GenerateReport to XML Document
@@ -186,7 +185,7 @@ public class GeneratedReportToXmlConverter {
             }
 
             sort.setAsc(Boolean.toString(sorter.ascending));
-            sort.setValue(StringEscapeUtils.escapeXml("[" + pathName + "]"));
+            sort.setValue(StringEscapeUtils.escapeXml10("[" + pathName + "]"));
             sorting.getSort().add(sort);
         });
 

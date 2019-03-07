@@ -249,6 +249,7 @@ public final class ActivityInterchangeUtils {
                     result = exporter.export(activity);
                 } catch (Exception e) {
                     result = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage()));
+                    // test
                 } finally {
                     PersistenceManager.getSession().evict(activity);
                 }

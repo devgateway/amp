@@ -573,19 +573,8 @@ public class ReportsFilterPicker extends Action {
         return null;
     }
 
-    /**
-     * fills an AmpARFilter instance with Filters data from a ReportsFilterPickerForm
-     * @param arf
-     * @param filterForm
-     * @see #fillFilterFromSettingsForm(AmpARFilter, ReportsFilterPickerForm) for copying the settings part
-     */
-    public static void fillFilterFromFilterForm(AmpARFilter arf, ReportsFilterPickerForm filterForm)
-            throws DgException {
-        Session session = PersistenceManager.getSession();
-        arf.readRequestData(TLSUtils.getRequest(), AmpARFilter.FILTER_SECTION_FILTERS, null);
-
+    private static void fillFilterSectors(AmpARFilter arf, ReportsFilterPickerForm filterForm) {
         // for each sector we have also to add the subsectors
-
         Set<AmpSector> selectedSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedSectors());
         Set<AmpSector> selectedSecondarySectors = Util.getSelectedObjects(AmpSector.class,
                 filterForm.getSelectedSecondarySectors());
@@ -604,8 +593,9 @@ public class ReportsFilterPicker extends Action {
         arf.setSelectedQuaternarySectors(nullOrCopy(selectedQuaternarySectors));
         arf.setSelectedQuinarySectors(nullOrCopy(selectedQuinarySectors));
         arf.setSelectedTagSectors(nullOrCopy(selectedTagSectors));
+    }
 
-
+    private static void fillFilterPrograms(AmpARFilter arf, ReportsFilterPickerForm filterForm) {
         Set<AmpTheme> selectedNatPlanObj = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedNatPlanObj());
         Set<AmpTheme> selectedPrimaryPrograms = Util.getSelectedObjects(AmpTheme.class,
                 filterForm.getSelectedPrimaryPrograms());
@@ -615,18 +605,9 @@ public class ReportsFilterPicker extends Action {
         arf.setSelectedNatPlanObj(nullOrCopy(selectedNatPlanObj));
         arf.setSelectedPrimaryPrograms(nullOrCopy(selectedPrimaryPrograms));
         arf.setSelectedSecondaryPrograms(nullOrCopy(selectedSecondaryPrograms));
+    }
 
-//      AmpApplicationSettings tempSettings = ReportFilterFormUtil.getAppSetting();
-
-        if (filterForm.getText() != null) {
-            arf.setText(filterForm.getText());
-        }
-
-        if (filterForm.getIndexString() != null) {
-            arf.setIndexText(filterForm.getIndexString());
-            arf.setSearchMode(filterForm.getSearchMode());
-        }
-
+    private static void fillFilterDates(AmpARFilter arf, ReportsFilterPickerForm filterForm) {
         arf.setYearFrom(filterForm.getFromYear() == null || filterForm.getFromYear() == -1
                 ? null : filterForm.getFromYear().intValue());
         arf.setYearTo(filterForm.getToYear() == null || filterForm.getToYear() == -1
@@ -704,8 +685,6 @@ public class ReportsFilterPicker extends Action {
         arf.setDynFundingClosingFilterOperator(filterForm.getDynamicFundingClosingFilter().getOperator());
         arf.setDynFundingClosingFilterXPeriod(filterForm.getDynamicFundingClosingFilter().getxPeriod());
 
-        arf.setSelectedActivityPledgesSettings(Integer.parseInt(filterForm.getSelectedActivityPledgesSettings()));
-
         int curYear = new GregorianCalendar().get(Calendar.YEAR);
 
         if (filterForm.getComputedYear() != -1) {
@@ -725,11 +704,100 @@ public class ReportsFilterPicker extends Action {
                 FilterUtil.convertUiToArFilterDate(filterForm.getToProposedCompletionDate()));
         arf.setFromProposedCompletionDate(
                 FilterUtil.convertUiToArFilterDate(filterForm.getFromProposedCompletionDate()));
+    }
 
-        // arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
+    private static void fillFilterOrganizations(AmpARFilter arf, ReportsFilterPickerForm filterForm) {
+        arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency()));
+        arf.setDonnorgAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedDonnorAgency()));
+        arf.setResponsibleorg(ReportsUtil.processSelectedFilters(filterForm.getSelectedresponsibleorg()));
+        arf.setComponentFunding(ReportsUtil.processSelectedFilters(filterForm.getSelectedComponentFundingOrg()));
+        arf.setComponentSecondResponsible(ReportsUtil
+                .processSelectedFilters(filterForm.getSelectedComponentSecondResponsibleOrg()));
 
+        arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency()));
+        arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency()));
+        arf.setContractingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedContractingAgency()));
+        if (filterForm.getSelectedDonorTypes() != null && filterForm.getSelectedDonorTypes().length > 0) {
+            arf.setDonorTypes(new HashSet<AmpOrgType>());
+            for (int i = 0; i < filterForm.getSelectedDonorTypes().length; i++) {
+                Long id = Long.parseLong(filterForm.getSelectedDonorTypes()[i].toString());
+                AmpOrgType type = DbUtil.getAmpOrgType(id);
+                if (type != null) {
+                    arf.getDonorTypes().add(type);
+                }
+            }
+        } else {
+            arf.setDonorTypes(null);
+        }
+        if (filterForm.getSelectedDonorGroups() != null && filterForm.getSelectedDonorGroups().length > 0) {
+            arf.setDonorGroups(new HashSet<AmpOrgGroup>());
+            for (int i = 0; i < filterForm.getSelectedDonorGroups().length; i++) {
+                Long id = Long.parseLong(filterForm.getSelectedDonorGroups()[i].toString());
+                AmpOrgGroup grp = DbUtil.getAmpOrgGroup(id);
+                if (grp != null) {
+                    arf.getDonorGroups().add(grp);
+                }
+            }
+        } else {
+            arf.setDonorGroups(null);
+        }
+        if (filterForm.getSelectedContractingAgencyGroups() != null
+                && filterForm.getSelectedContractingAgencyGroups().length > 0) {
+            arf.setContractingAgencyGroups(new HashSet<AmpOrgGroup>());
+            for (int i = 0; i < filterForm.getSelectedContractingAgencyGroups().length; i++) {
+                Long id = Long.parseLong(filterForm.getSelectedContractingAgencyGroups()[i].toString());
+                AmpOrgGroup grp = DbUtil.getAmpOrgGroup(id);
+                if (grp != null) {
+                    arf.getContractingAgencyGroups().add(grp);
+                }
+            }
+        } else {
+            arf.setContractingAgencyGroups(null);
+        }
+        if (filterForm.getSelectedMultiDonor() != null && filterForm.getSelectedMultiDonor().length == 1) {
+            arf.setMultiDonor((String) filterForm.getSelectedMultiDonor()[0]);
+        } else {
+            arf.setMultiDonor(null);
+        }
+    }
+
+    private static void fillFilterCategories(AmpARFilter arf, ReportsFilterPickerForm filterForm) {
+        arf.setStatuses(pumpCategoryValueSetFromForm(filterForm.getSelectedStatuses()));
+        arf.setExpenditureClass(pumpCategoryValueSetFromForm(filterForm.getSelectedExpenditureClasses()));
+        arf.setPerformanceAlertLevel(pumpCategoryValueSetFromForm(filterForm.getSelectedPerformanceAlertLevels()));
+        arf.setProjectCategory(pumpCategoryValueSetFromForm(filterForm.getSelectedProjectCategory()));
+        arf.setFinancingInstruments(pumpCategoryValueSetFromForm(filterForm.getSelectedFinancingInstruments()));
+        arf.setFundingStatus(pumpCategoryValueSetFromForm(filterForm.getSelectedFundingStatus()));
+        arf.setAidModalities(pumpCategoryValueSetFromForm(filterForm.getSelectedAidModalities()));
+        arf.setTypeOfAssistance(pumpCategoryValueSetFromForm(filterForm.getSelectedTypeOfAssistance()));
+        arf.setModeOfPayment(pumpCategoryValueSetFromForm(filterForm.getSelectedModeOfPayment()));
+        arf.setProjectImplementingUnits(pumpCategoryValueSetFromForm(filterForm.getSelectedProjectImplUnit()));
+        arf.setActivityPledgesTitle(pumpCategoryValueSetFromForm(filterForm.getSelectedActivityPledgesTitle()));
+        arf.setBudget(pumpCategoryValueSetFromForm(filterForm.getSelectedBudgets()));
+    }
+
+    /**
+     * fills an AmpARFilter instance with Filters data from a ReportsFilterPickerForm
+     * @param arf
+     * @param filterForm
+     * @see #fillFilterFromSettingsForm(AmpARFilter, ReportsFilterPickerForm) for copying the settings part
+     */
+    public static void fillFilterFromFilterForm(AmpARFilter arf, ReportsFilterPickerForm filterForm)
+            throws DgException {
+        Session session = PersistenceManager.getSession();
+        arf.readRequestData(TLSUtils.getRequest(), AmpARFilter.FILTER_SECTION_FILTERS, null);
+        fillFilterSectors(arf, filterForm);
+        fillFilterPrograms(arf, filterForm);
+        if (filterForm.getText() != null) {
+            arf.setText(filterForm.getText());
+        }
+        if (filterForm.getIndexString() != null) {
+            arf.setIndexText(filterForm.getIndexString());
+            arf.setSearchMode(filterForm.getSearchMode());
+        }
+        fillFilterDates(arf, filterForm);
+        arf.setSelectedActivityPledgesSettings(Integer.parseInt(filterForm.getSelectedActivityPledgesSettings()));
         Integer all = new Integer(-1);
-
         if (filterForm.getLineMinRanks() != null && filterForm.getLineMinRanks().length > 0) {
             ArrayList<Integer> ranks = new ArrayList<Integer>();
             for (int i = 0; i < filterForm.getLineMinRanks().length; i++) {
@@ -743,10 +811,6 @@ public class ReportsFilterPicker extends Action {
             }
             arf.setLineMinRank(ranks);
         }
-        //if (!all.equals(filterForm.getRegionSelected()))
-        //  arf.setRegionSelected(filterForm.getRegionSelected() == null || filterForm.getRegionSelected() == -1 ? 
-        //                  null : DynLocationManagerUtil.getLocation(filterForm.getRegionSelected(),false) );
-
         Set<AmpCategoryValueLocations> selectedRegions = null;
         if (ArrayUtils.isNotEmpty(filterForm.getRegionSelected())) {
             if (!filterForm.getRegionSelected()[0].toString().equals("-1")) {
@@ -754,7 +818,6 @@ public class ReportsFilterPicker extends Action {
                         filterForm.getRegionSelected());
             }
         }
-
         if (selectedRegions != null && selectedRegions.size() > 0) {
             arf.setLocationSelected(new HashSet<AmpCategoryValueLocations>());
             arf.getLocationSelected().addAll(selectedRegions);
@@ -762,7 +825,6 @@ public class ReportsFilterPicker extends Action {
             arf.setLocationSelected(null);
             //arf.setRelatedLocations(null);
         }
-
         if (!all.equals(filterForm.getApprovalStatusSelected())) {
             if (filterForm.getApprovalStatusSelected() != null) {
                 ArrayList<String> appvals = new ArrayList<String>();
@@ -777,43 +839,23 @@ public class ReportsFilterPicker extends Action {
         } else {
             arf.setApprovalStatusSelected(null);
         }
-
-        arf.setStatuses(pumpCategoryValueSetFromForm(filterForm.getSelectedStatuses()));
-
-        arf.setExpenditureClass(pumpCategoryValueSetFromForm(filterForm.getSelectedExpenditureClasses()));
-
-        arf.setPerformanceAlertLevel(pumpCategoryValueSetFromForm(filterForm.getSelectedPerformanceAlertLevels()));
-
+        fillFilterCategories(arf, filterForm);
         arf.setPerformanceAlertType(pumpPerformanceAlertTypeSetFromForm(filterForm.getSelectedPerformanceAlertTypes()));
-
         if (filterForm.getSelectedWorkspaces() != null && filterForm.getSelectedWorkspaces().length > 0) {
             arf.setWorkspaces(new HashSet<AmpTeam>());
         } else {
             arf.setWorkspaces(null);
         }
-
         for (int i = 0;
              filterForm.getSelectedWorkspaces() != null && i < filterForm.getSelectedWorkspaces().length; i++) {
             Long workspaceId = Long.parseLong(filterForm.getSelectedWorkspaces()[i].toString());
             AmpTeam value = (AmpTeam) session.load(AmpTeam.class, workspaceId);
             arf.getWorkspaces().add(value);
         }
-
-        arf.setProjectCategory(pumpCategoryValueSetFromForm(filterForm.getSelectedProjectCategory()));
-        arf.setFinancingInstruments(pumpCategoryValueSetFromForm(filterForm.getSelectedFinancingInstruments()));
-        arf.setFundingStatus(pumpCategoryValueSetFromForm(filterForm.getSelectedFundingStatus()));
-        arf.setAidModalities(pumpCategoryValueSetFromForm(filterForm.getSelectedAidModalities()));
-        arf.setTypeOfAssistance(pumpCategoryValueSetFromForm(filterForm.getSelectedTypeOfAssistance()));
-        arf.setModeOfPayment(pumpCategoryValueSetFromForm(filterForm.getSelectedModeOfPayment()));
-        arf.setProjectImplementingUnits(pumpCategoryValueSetFromForm(filterForm.getSelectedProjectImplUnit()));
-        arf.setActivityPledgesTitle(pumpCategoryValueSetFromForm(filterForm.getSelectedActivityPledgesTitle()));
-
         if (filterForm.getPageSize() != null) {
             arf.setPageSize(filterForm.getPageSize()); // set page size in the ARF filter
         }
-
         arf.setRisks(Util.getSelectedObjects(AmpIndicatorRiskRatings.class, filterForm.getSelectedRisks()));
-
         if (filterForm.getSelectedActivitySettings() != null && filterForm.getSelectedActivitySettings().length > 0) {
             boolean isJointCriteria = false;
             boolean isGovProcedures = false;
@@ -835,60 +877,7 @@ public class ReportsFilterPicker extends Action {
                 arf.setGovernmentApprovalProcedures(null);
             }
         }
-//      arf.setGovernmentApprovalProcedures(filterForm.getGovernmentApprovalProcedures());
-//      arf.setJointCriteria(filterForm.getJointCriteria());
-
-        if (filterForm.getSelectedDonorTypes() != null && filterForm.getSelectedDonorTypes().length > 0) {
-            arf.setDonorTypes(new HashSet<AmpOrgType>());
-            for (int i = 0; i < filterForm.getSelectedDonorTypes().length; i++) {
-                Long id = Long.parseLong(filterForm.getSelectedDonorTypes()[i].toString());
-                AmpOrgType type = DbUtil.getAmpOrgType(id);
-                if (type != null) {
-                    arf.getDonorTypes().add(type);
-                }
-            }
-        } else {
-            arf.setDonorTypes(null);
-        }
-
-        if (filterForm.getSelectedDonorGroups() != null && filterForm.getSelectedDonorGroups().length > 0) {
-            arf.setDonorGroups(new HashSet<AmpOrgGroup>());
-            for (int i = 0; i < filterForm.getSelectedDonorGroups().length; i++) {
-                Long id = Long.parseLong(filterForm.getSelectedDonorGroups()[i].toString());
-                AmpOrgGroup grp = DbUtil.getAmpOrgGroup(id);
-                if (grp != null) {
-                    arf.getDonorGroups().add(grp);
-                }
-            }
-        } else {
-            arf.setDonorGroups(null);
-        }
-
-        if (filterForm.getSelectedContractingAgencyGroups() != null
-                && filterForm.getSelectedContractingAgencyGroups().length > 0) {
-            arf.setContractingAgencyGroups(new HashSet<AmpOrgGroup>());
-            for (int i = 0; i < filterForm.getSelectedContractingAgencyGroups().length; i++) {
-                Long id = Long.parseLong(filterForm.getSelectedContractingAgencyGroups()[i].toString());
-                AmpOrgGroup grp = DbUtil.getAmpOrgGroup(id);
-                if (grp != null) {
-                    arf.getContractingAgencyGroups().add(grp);
-                }
-            }
-        } else {
-            arf.setContractingAgencyGroups(null);
-        }
-
-        arf.setBudget(pumpCategoryValueSetFromForm(filterForm.getSelectedBudgets()));
-
-        if (filterForm.getSelectedMultiDonor() != null && filterForm.getSelectedMultiDonor().length == 1) {
-            arf.setMultiDonor((String) filterForm.getSelectedMultiDonor()[0]);
-        } else {
-            arf.setMultiDonor(null);
-        }
-
         arf.setJustSearch(filterForm.getJustSearch() == null ? false : filterForm.getJustSearch());
-
-
         arf.setWorkspaceonly(filterForm.getWorkspaceonly() == null ? false : filterForm.getWorkspaceonly());
         
         /*THIS IS USED FOR PLEDGES IN ORDER TO SHOW ONLY PLEDGES ASSOCIATED TO THE ACTIVITIES
@@ -898,20 +887,9 @@ public class ReportsFilterPicker extends Action {
         } else {
             arf.setAmpTeamsforpledges(null);
         }
-
-        arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency()));
-        arf.setDonnorgAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedDonnorAgency()));
-        arf.setResponsibleorg(ReportsUtil.processSelectedFilters(filterForm.getSelectedresponsibleorg()));
-        arf.setComponentFunding(ReportsUtil.processSelectedFilters(filterForm.getSelectedComponentFundingOrg()));
-        arf.setComponentSecondResponsible(ReportsUtil
-                .processSelectedFilters(filterForm.getSelectedComponentSecondResponsibleOrg()));
-
-        arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency()));
-        arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency()));
-        arf.setContractingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedContractingAgency()));
+        fillFilterOrganizations(arf, filterForm);
         arf.setProjectCategory(ReportsUtil
                 .processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpCategoryValue.class));
-
         if (filterForm.getSelectedArchivedStatus() == null || filterForm.getSelectedArchivedStatus().length != 1) {
             arf.setShowArchived(null);
         } else {
@@ -922,12 +900,9 @@ public class ReportsFilterPicker extends Action {
                 arf.setShowArchived(true);
             }
         }
-
         arf.setHumanitarianAid(buildBooleanField(filterForm.getSelectedHumanitarianAid()));
         arf.setDisasterResponse(buildBooleanField(filterForm.getSelectedDisasterResponse()));
-
         arf.getUndefinedOptions().addAll(filterForm.getUndefinedOptions());
-
         arf.postprocess();
     }
 

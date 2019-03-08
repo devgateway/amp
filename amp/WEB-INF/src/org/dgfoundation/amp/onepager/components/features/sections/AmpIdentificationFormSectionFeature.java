@@ -148,7 +148,7 @@ implements AmpRequiredComponentContainer{
                     }*/
 
                     for (ActivityLuceneDocument activity : list) {
-                        if (StringUtils.equals(ampId, activity.getAmpActivityId())) {
+                        if (!StringUtils.equals(ampId, activity.getAmpActivityId())) {
                             moreThanSelf = true;
                             logger.info("There is a similiarity match!. Current amp id: " + ampId
                                     + " Match activity with amp id " + activity.getAmpActivityId());

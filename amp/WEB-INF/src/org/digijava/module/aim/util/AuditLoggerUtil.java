@@ -402,9 +402,9 @@ public class AuditLoggerUtil {
         }
     }
 
-    public static List<AmpAuditLogger[]> getListOfActivitiesFromAuditLogger() {
+    public static List<Object[]> getListOfActivitiesFromAuditLogger() {
         Session session = null;
-        List<AmpAuditLogger[]> list = null;
+        List<Object[]> list = null;
         try {
             session = PersistenceManager.getSession();
 

@@ -666,19 +666,26 @@ public class ActivityVersionUtil {
         }
     }
 
-    public static Map<Long, Map<String, List<CompareOutput>>> compareActivities(List<Long> activitiesId)
-            throws Exception {
+    public static Map<String, Map<String, List<CompareOutput>>> getOutputCollectionGrouped() {
 
-        Map<Long, Map<String, List<CompareOutput>>> listOfActivities = new HashMap<>();
+        Map<String, Map<String, List<CompareOutput>>> listOfOutputCollectionGrouped = new HashMap<>();
 
-        for (Long activityId : activitiesId) {
-            Map<String, List<CompareOutput>> activityComparedToPreviousVersion = compareActivities(activityId);
-            if (activityComparedToPreviousVersion != null) {
-                listOfActivities.put(activityId, activityComparedToPreviousVersion);
+        //Use lambda through the accept method from java consumer functional interface
+        // to create listOfOutputCollectionGrouped
+        AuditLoggerUtil.getListOfActivitiesFromAuditLogger().forEach((Object[] activityObj) -> {
+            Map<String, List<CompareOutput>> compareOutput;
+            try {
+                compareOutput = compareActivities(Long.parseLong(String.valueOf(activityObj[0]).trim()));
+                if (compareOutput != null) {
+                    listOfOutputCollectionGrouped.put(String.valueOf(activityObj[1]).trim(), compareOutput);
+                }
+            } catch (Throwable e) {
+                return; //Get rid if any exception in the current iteration and continue with next iteration
             }
-        }
+        });
 
-        return listOfActivities;
+        return listOfOutputCollectionGrouped;
+
     }
      
     private static void addAsDifferentIfNnoPresent(List<CompareOutput> outputCollection, Field[] fields, int i,

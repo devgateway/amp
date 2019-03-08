@@ -1208,7 +1208,7 @@ public class LuceneUtil implements Serializable {
     
                 ActivityLuceneDocument activityLuceneDocument = new ActivityLuceneDocument();
                 activityLuceneDocument.setProjectId(doc.get(ID_FIELD));
-                activityLuceneDocument.setAmpActivityId(AMP_ID_FIELD);
+                activityLuceneDocument.setAmpActivityId(doc.get(AMP_ID_FIELD));
                 // Set the title of the activity
                 activityLuceneDocument.setName(doc.get(fieldName));
                 logger.info("Found similar named activity with a score: " + scoreDoc.score + " Title: "

@@ -153,4 +153,8 @@ public class AmpClassificationConfiguration implements Serializable, Identifiabl
 //      return null;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

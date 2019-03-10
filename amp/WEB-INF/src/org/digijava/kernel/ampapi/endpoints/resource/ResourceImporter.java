@@ -129,7 +129,7 @@ public class ResourceImporter extends ObjectImporter {
         
         try {
             resource = new AmpResource();
-            validateAndImport(resource, fieldsDef, newJson.any(), null);
+            validateAndImport(resource, newJson.any());
             
             if (errors.isEmpty()) {
                 if (ResourceType.LINK.equals(resource.getResourceType())) {
@@ -137,7 +137,7 @@ public class ResourceImporter extends ObjectImporter {
                 } else {
                     resource.setWebLink(null);
                 }
-                
+
                 resource.setCreatorEmail(teamMemberCreator.getEmail());
                 resource.setTeam(teamMemberCreator.getTeamId());
                 resource.setAddingDate(new Date());

@@ -166,10 +166,8 @@ public class FieldsEnumeratorTest {
     public void testComposition() {
         List<APIField> actual = fieldsFor(Composition.class);
 
-        APIField expected = newListField();
-        expected.setMultipleValues(false);
+        APIField expected = newObjectField();
         APIField nestedField = newLongField();
-//        nestedField.setFieldLabel(fieldLabelFor(nestedField.getFieldName()));
         expected.setChildren(Arrays.asList(nestedField));
 
         assertEqualsSingle(expected, actual);
@@ -292,8 +290,7 @@ public class FieldsEnumeratorTest {
     public void testMultipleValues() {
         List<APIField> actual = fieldsFor(MultipleValuesClass.class);
 
-        APIField expected = newListField();
-        expected.setMultipleValues(false);
+        APIField expected = newObjectField();
 
         assertEqualsSingle(expected, actual);
     }
@@ -548,13 +545,19 @@ public class FieldsEnumeratorTest {
 
     private APIField newListField() {
         APIField field = newAPIField();
-        field.setApiType(new APIType(Collection.class, Object.class));
+        field.setApiType(new APIType(Collection.class, FieldType.LIST, Object.class));
+        return field;
+    }
+
+    private APIField newObjectField() {
+        APIField field = newAPIField();
+        field.setApiType(new APIType(Object.class));
         return field;
     }
 
     private APIField newListOfLongField() {
         APIField field = newAPIField();
-        field.setApiType(new APIType(Collection.class, Long.class));
+        field.setApiType(new APIType(Collection.class, FieldType.LIST, Long.class));
         return field;
     }
 

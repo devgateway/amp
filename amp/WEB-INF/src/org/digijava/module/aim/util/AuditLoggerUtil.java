@@ -119,6 +119,17 @@ public class AuditLoggerUtil {
         return null;
     }
     
+    public static List<Object> getListOfActivitiesFromAuditLogger() {
+        Session session = PersistenceManager.getRequestDBSession();
+        String qryStr = "select objectId from " + AmpAuditLogger.class.getName()
+                + " where objecttype =" + "'" + AmpActivityVersion.class.getName() + "'" + "order by modifyDate desc";
+
+         Query query = session.createQuery(qryStr);
+         List<Object> activityList = query.list();
+         return activityList;
+    }
+    
+    
     public static void logUserLogin(HttpServletRequest request,User currentUser,String action){
         Session session = null;
         Transaction tx = null;

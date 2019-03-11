@@ -363,13 +363,7 @@ public class CompareActivityVersions extends DispatchAction {
     public ActionForward viewAllDifferences(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
         Map<Long, Map<String, List<CompareOutput>>> listoutputCollectionGrouped = new HashMap<Long, Map<String, List<CompareOutput>>>();
-        Session session = PersistenceManager.getRequestDBSession();
-        String qryStr = "select objectId from " + AmpAuditLogger.class.getName()
-                + " where objecttype =" + "'" + AmpActivityVersion.class.getName() + "'" + "order by modifyDate desc";
-
-         Query query = session.createQuery(qryStr);
-         List<Object> activityList = query.list();
-         listoutputCollectionGrouped = ActivityVersionUtil.compareActivities(activityList);        
+         listoutputCollectionGrouped = ActivityVersionUtil.compareActivities(AuditLoggerUtil.getListOfActivitiesFromAuditLogger());        
          vForm.setListoutputCollectionGrouped(listoutputCollectionGrouped);
          return mapping.findForward("forward");
     }

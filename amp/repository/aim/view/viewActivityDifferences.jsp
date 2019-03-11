@@ -91,58 +91,8 @@
 	        		</td>
 				</tr>
        <c:if test="${aimCompareActivityVersionsForm.method == 'viewDifferences'}">
-				<logic:iterate id="groupItem" property="outputCollectionGroupedAsSet" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
-					
-					<td rowspan="${groupItem.value.size()}" align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
-							<digi:trn><bean:write property="key" name="groupItem"/></digi:trn>
-					</td>
-						<logic:iterate id="diffItem" name="groupItem" property="value" indexId="iterIdx">
-								
-								<logic:greaterThan name="iterIdx" value="0">
-									<tr>
-								</logic:greaterThan>
-									<td width="50%" align="left" valign="top" style="padding-left: 5px; border-right-width: 0px;" class="inside">
-										<div id="left${diffItem.index}">
-											<logic:empty name="diffItem" property="stringOutput[1]">&nbsp;</logic:empty>
-											<bean:write name="diffItem" property="stringOutput[1]" filter="false"/>
-										</div>
-									</td>
-									<logic:equal value="true" name="aimCompareActivityVersionsForm" property="showMergeColumn">
-										<td align="center" valign="middle" class="inside">
-                                            <c:if test="${!diffItem.blockSingleChangeOutput}">
-                                                <button type="button" onClick="javascript:left(${diffItem.index});" style="border: none; background-color: transparent">
-                                                    <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
-                                                </button>
-                                            </c:if>
-										</td>
-										<td align="left" valign="top" style="padding-left: 5px;" class="inside">
-											<div id="merge${diffItem.index}">&nbsp;</div>
-										</td>
-										<td align="center" valign="middle" class="inside" style="border-right-width: 0px;">
-                                            <c:if test="${!diffItem.blockSingleChangeOutput}">
-                                                <button type="button" onClick="javascript:right(${diffItem.index});" style="border: none; background-color: transparent">
-                                                    <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
-                                                </button>
-                                            </c:if>
-										</td>
-                                        <c:if test="${!diffItem.blockSingleChangeOutput}">
-										    <input type="hidden" id='mergedValues[${diffItem.index}]' value="" name="mergedValues[${index}]"/>
-                                        </c:if>
-									</logic:equal>
-									<td width="50%" align="left" valign="top" style="padding-left: 5px; border-left-width: 0px;" class="inside">
-										<div id="right${diffItem.index}">
-											<logic:empty name="diffItem" property="stringOutput[0]">&nbsp;</logic:empty>
-											<bean:write name="diffItem" property="stringOutput[0]" filter="false"/>
-										</div>
-									</td>
-								<logic:greaterThan name="iterIdx" value="0">
-								</tr>
-								</logic:greaterThan>
-						</logic:iterate>
-
-					</td></tr>
-				</logic:iterate>
-				</c:if>
+       <jsp:include page = "outputcollectionGrouped.jsp" />
+	   </c:if>
 		
      <c:if test="${aimCompareActivityVersionsForm.method == 'viewAllDifferences'}"> 
      
@@ -150,57 +100,7 @@
      <tr> <td> <h4>
 		<div><digi:trn><bean:write name="listItem" property="key"/>
 		</digi:trn></div></h4> </td></tr>     
-				<logic:iterate id="groupItem" property="value" name="listItem" type="java.util.Map.Entry">
-					
-					<td rowspan="${groupItem.value.size()}" align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
-							<digi:trn><bean:write property="key" name="groupItem"/></digi:trn>
-					</td>
-						<logic:iterate id="diffItem" name="groupItem" property="value" indexId="iterIdx">
-								
-								<logic:greaterThan name="iterIdx" value="0">
-									<tr>
-								</logic:greaterThan>
-									<td width="50%" align="left" valign="top" style="padding-left: 5px; border-right-width: 0px;" class="inside">
-										<div id="left${diffItem.index}">
-											<logic:empty name="diffItem" property="stringOutput[1]">&nbsp;</logic:empty>
-											<bean:write name="diffItem" property="stringOutput[1]" filter="false"/>
-										</div>
-									</td>
-									<logic:equal value="true" name="aimCompareActivityVersionsForm" property="showMergeColumn">
-										<td align="center" valign="middle" class="inside">
-                                            <c:if test="${!diffItem.blockSingleChangeOutput}">
-                                                <button type="button" onClick="javascript:left(${diffItem.index});" style="border: none; background-color: transparent">
-                                                    <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
-                                                </button>
-                                            </c:if>
-										</td>
-										<td align="left" valign="top" style="padding-left: 5px;" class="inside">
-											<div id="merge${diffItem.index}">&nbsp;</div>
-										</td>
-										<td align="center" valign="middle" class="inside" style="border-right-width: 0px;">
-                                            <c:if test="${!diffItem.blockSingleChangeOutput}">
-                                                <button type="button" onClick="javascript:right(${diffItem.index});" style="border: none; background-color: transparent">
-                                                    <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
-                                                </button>
-                                            </c:if>
-										</td>
-                                        <c:if test="${!diffItem.blockSingleChangeOutput}">
-										    <input type="hidden" id='mergedValues[${diffItem.index}]' value="" name="mergedValues[${index}]"/>
-                                        </c:if>
-									</logic:equal>
-									<td width="50%" align="left" valign="top" style="padding-left: 5px; border-left-width: 0px;" class="inside">
-										<div id="right${diffItem.index}">
-											<logic:empty name="diffItem" property="stringOutput[0]">&nbsp;</logic:empty>
-											<bean:write name="diffItem" property="stringOutput[0]" filter="false"/>
-										</div>
-									</td>
-								<logic:greaterThan name="iterIdx" value="0">
-								</tr>
-								</logic:greaterThan>
-						</logic:iterate>
-
-					</td></tr>
-				</logic:iterate>
+		<jsp:include page = "outputcollectionGrouped.jsp" />		
 					</td></tr>
 				</logic:iterate>
      </c:if>

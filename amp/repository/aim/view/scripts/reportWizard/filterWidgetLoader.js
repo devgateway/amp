@@ -36,7 +36,7 @@ $(document).ready(function () {
     events.listenTo(widgetFilter, 'apply', function () {
         // Save just applied filters in case the user hits "reset" button.
         var serializedFilters = widgetFilter.serialize() || {};
-        var url = '/aim/reportsFilterPicker.do?applyWithNewWidget=true&cacheBuster=';
+        var url = '/aim/reportsFilterPicker.do?apply=true&cacheBuster=';
         if (advancedFilters) {
             url += new Date().getTime() + '&reportContextId=' + widgetFilter.auxId + '&doreset=true&queryEngine=true';
         } else {

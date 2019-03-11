@@ -1520,6 +1520,11 @@ public class ReportsFilterPicker extends Action {
         arf.setDynFundingClosingFilterOperator(filterForm.getDynamicFundingClosingFilter().getOperator());
         arf.setDynFundingClosingFilterXPeriod(filterForm.getDynamicFundingClosingFilter().getxPeriod());
 
+        arf.setFromPledgeDetailStartDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromPledgeDetailStartDate()));
+        arf.setToPledgeDetailStartDate(FilterUtil.convertUiToArFilterDate(filterForm.getToPledgeDetailStartDate()));
+        arf.setFromPledgeDetailEndDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromPledgeDetailEndDate()));
+        arf.setToPledgeDetailEndDate(FilterUtil.convertUiToArFilterDate(filterForm.getToPledgeDetailEndDate()));
+
         arf.setSelectedActivityPledgesSettings(Integer.parseInt(filterForm.getSelectedActivityPledgesSettings()));
 
         int curYear = new GregorianCalendar().get(Calendar.YEAR);

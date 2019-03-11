@@ -83,6 +83,7 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
         put(ColumnConstants.REGION, ColumnConstants.PLEDGES_REGIONS);
         put(ColumnConstants.DISTRICT, ColumnConstants.PLEDGES_DISTRICTS);
         put(ColumnConstants.COUNTRY, ColumnConstants.PLEDGES_COUNTRIES);
+        put(ColumnConstants.COMMUNAL_SECTION, ColumnConstants.PLEDGES_COMMUNAL_SECTION);
     }};
 
     public static final Map<String, String> DONOR_TO_REGIONAL_COLUMNS = new ImmutableMap.Builder<String, String>()

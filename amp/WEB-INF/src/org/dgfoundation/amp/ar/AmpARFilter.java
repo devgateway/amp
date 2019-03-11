@@ -112,7 +112,9 @@ public class AmpARFilter extends PropertyListable {
             "fromProposedStartDate", "toProposedStartDate",
             "fromEffectiveFundingDate", "toEffectiveFundingDate",
             "fromFundingClosingDate", "toFundingClosingDate",
-            "fromProposedApprovalDate", "toProposedApprovalDate"));
+            "fromProposedApprovalDate", "toProposedApprovalDate",
+            "fromPledgeDetailStartDate", "toPledgeDetailStartDate",
+            "fromPledgeDetailEndDate", "toPledgeDetailEndDate"));
 
     public final static Long TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES = -997L;
 
@@ -459,6 +461,11 @@ public class AmpARFilter extends PropertyListable {
     private Integer dynIssueFilterAmount;
     private String dynIssueFilterOperator;
     private String dynIssueFilterXPeriod;
+
+    private String fromPledgeDetailStartDate;
+    private String toPledgeDetailStartDate;
+    private String fromPledgeDetailEndDate;
+    private String toPledgeDetailEndDate;
 
     private String fromActivityActualCompletionDate;
     private String toActivityActualCompletionDate;
@@ -3280,4 +3287,58 @@ public class AmpARFilter extends PropertyListable {
     public void setToProposedCompletionDate(String toProposedCompletionDate) {
         this.toProposedCompletionDate = toProposedCompletionDate;
     }
+
+    public String getFromPledgeDetailStartDate() {
+        return fromPledgeDetailStartDate;
+    }
+
+    public void setFromPledgeDetailStartDate(String fromPledgeDetailStartDate) {
+        this.fromPledgeDetailStartDate = fromPledgeDetailStartDate;
+    }
+
+    public String getFromPledgeDetailEndDate() {
+        return fromPledgeDetailEndDate;
+    }
+
+    public String getToPledgeDetailStartDate() {
+        return toPledgeDetailStartDate;
+    }
+
+    public void setToPledgeDetailStartDate(String toPledgeDetailStartDate) {
+        this.toPledgeDetailStartDate = toPledgeDetailStartDate;
+    }
+
+    public String getToPledgeDetailEndDate() {
+        return toPledgeDetailEndDate;
+    }
+
+    public void setToPledgeDetailEndDate(String toPledgeDetailEndDate) {
+        this.toPledgeDetailEndDate = toPledgeDetailEndDate;
+    }
+
+    public void setFromPledgeDetailEndDate(String fromPledgeDetailEndDate) {
+        this.fromPledgeDetailEndDate = fromPledgeDetailEndDate;
+    }
+
+    /**
+     * @return a ['from', 'to'] pair for PledgeDetailStartDate range or [null, null] if none is configured
+     */
+    public Date[] buildFromAndToPledgeDetailStartDateAsDate() {
+        Date[] dateRange = buildFromAndTo(fromPledgeDetailStartDate, toPledgeDetailStartDate);
+        if (dateRange != null) {
+            return dateRange;
+        } else {
+            return null;
+        }
+    }
+
+    public Date[] buildFromAndToPledgeDetailEndDateAsDate() {
+        Date[] dateRange = buildFromAndTo(fromPledgeDetailEndDate, toPledgeDetailEndDate);
+        if (dateRange != null) {
+            return dateRange;
+        } else {
+            return null;
+        }
+    }
+
 }

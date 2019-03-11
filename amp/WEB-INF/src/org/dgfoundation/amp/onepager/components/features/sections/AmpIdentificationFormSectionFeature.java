@@ -6,8 +6,11 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 
@@ -131,29 +134,29 @@ implements AmpRequiredComponentContainer{
                 logger.info("Searching similar activity name for activity: "+ sTitle);
                 List<ActivityLuceneDocument> list = LuceneUtil.findActivitiesMoreLikeThis(
                         context.getRealPath("/") + LuceneUtil.ACTIVITY_INDEX_DIRECTORY, sTitle, langCode, 2);
-                if (! list.isEmpty()) {
+                
+                StringBuilder currentAmpId = new StringBuilder();
+                if (AmpIdentificationFormSectionFeature.this.am.getObject() != null) {
+                    currentAmpId.append(AmpIdentificationFormSectionFeature.this.am.getObject().getAmpId());
+                }
+    
+                Map<String, String> duplicatedAmpIds = list.stream()
+                        .filter(activity -> !StringUtils.equals(currentAmpId.toString(), activity.getAmpActivityId()))
+                        .collect(Collectors.toMap(
+                                ActivityLuceneDocument::getAmpActivityId, ActivityLuceneDocument::getName,
+                                (oldValue, newValue) -> oldValue, HashMap::new));
+                
+                if (!duplicatedAmpIds.isEmpty()) {
                     String ret = TranslatorUtil
                             .getTranslation("Warning! Potential duplicates! The database already contains project(s) with similar title(s):")+"\n";
                     boolean moreThanSelf = false;
                     // avoiding comparison with itself
-                    String ampId = null;
-                    if (AmpIdentificationFormSectionFeature.this.am.getObject() != null) {
-                        ampId = AmpIdentificationFormSectionFeature.this.am.getObject().getAmpId();
-                    }
-
-                    // the activity has not been saved yet (even as a draft)
-                    /* we should include then all results found
-                    if (activityId == null) {
-                        return null;
-                    }*/
-
-                    for (ActivityLuceneDocument activity : list) {
-                        if (!StringUtils.equals(ampId, activity.getAmpActivityId())) {
+                    
+                    for (String ampId : duplicatedAmpIds.keySet()) {
                             moreThanSelf = true;
-                            logger.info("There is a similiarity match!. Current amp id: " + ampId
-                                    + " Match activity with amp id " + activity.getAmpActivityId());
-                            ret += " - " + activity.getName() + "\n";
-                        }
+                            logger.info("There is a similiarity match!. Current amp id: " + currentAmpId
+                                    + " Match activity with amp id " + ampId);
+                            ret += " - " + duplicatedAmpIds.get(ampId) + "\n";
                     }
                     if (moreThanSelf) {
                         return ret;

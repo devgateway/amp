@@ -67,6 +67,16 @@ public class ActivityFieldsConstants {
     public static final String ACTIVITY_GROUP = "activity_group";
     public static final String DISASTER_RESPONSE = "Disaster Response";
 
+    public static final String NATIONAL_PLAN_OBJECTIVE = "National Plan Objective";
+    public static final String PRIMARY_PROGRAMS = "Primary Programs";
+    public static final String SECONDARY_PROGRAMS = "Secondary Programs";
+    public static final String TERTIARY_PROGRAMS = "Tertiary Programs";
+
+    public static final String PRIMARY_SECTORS = "Primary Sectors";
+    public static final String SECONDARY_SECTORS = "Secondary Sectors";
+    public static final String TERTIARY_SECTORS = "Tertiary Sectors";
+    public static final String TAG_SECTORS = "Tag Sectors";
+
     public static final Map<String, String> ORG_ROLE_CODES = new ImmutableMap.Builder<String, String>()
             .put(FieldMap.underscorify(DONOR_ORGANIZATION), Constants.FUNDING_AGENCY)
             .put(FieldMap.underscorify(RESPONSIBLE_ORGANIZATION), Constants.RESPONSIBLE_ORGANISATION)

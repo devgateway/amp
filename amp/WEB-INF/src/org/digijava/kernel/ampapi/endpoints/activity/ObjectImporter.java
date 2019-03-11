@@ -271,7 +271,8 @@ public class ObjectImporter {
                 }
             } else if (fieldType.isSimpleType()) {
                 if (Date.class.equals(field.getType())) {
-                    value = DateTimeUtil.parseISO8601DateTime((String) jsonValue);
+                    boolean isTimestampField = InterchangeUtils.isTimestampField(field);
+                    value = DateTimeUtil.parseISO8601DateTimestamp((String) jsonValue, isTimestampField);
                 } else if (String.class.equals(field.getType())) {
                     value = extractString(field, parentObj, jsonValue);
                 } else {

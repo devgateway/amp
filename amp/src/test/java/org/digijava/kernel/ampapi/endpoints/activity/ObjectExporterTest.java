@@ -318,7 +318,7 @@ public class ObjectExporterTest {
         Dummy dummy = new Dummy();
         dummy.dateValue = new Date();
 
-        String formattedDate = DateTimeUtil.formatISO8601DateTime(dummy.dateValue);
+        String formattedDate = DateTimeUtil.formatISO8601Date(dummy.dateValue);
 
         Map<String, Object> jsonObj = exporter.export(dummy).any();
 

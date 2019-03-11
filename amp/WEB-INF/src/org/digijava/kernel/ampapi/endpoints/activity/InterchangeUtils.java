@@ -23,6 +23,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;
+import org.digijava.module.aim.annotations.interchange.TimestampField;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.FlushMode;
@@ -87,6 +88,10 @@ public class InterchangeUtils {
      */
     public static boolean isCollection(Field field) {
         return Collection.class.isAssignableFrom(field.getType());
+    }
+    
+    public static boolean isTimestampField(Field field) {
+        return field.getAnnotation(TimestampField.class) != null;
     }
 
     /**

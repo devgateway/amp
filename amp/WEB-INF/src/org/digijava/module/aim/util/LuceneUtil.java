@@ -125,10 +125,11 @@ public class LuceneUtil implements Serializable {
     /**
      *
      */
-    public final static String ID_FIELD = "id";
+    public static final String ID_FIELD = "id";
+    
+    public static final String AMP_ID_FIELD = "ampId";
 
-
-    public final static int MAX_LUCENE_RESULTS  = 2000;
+    public static final int MAX_LUCENE_RESULTS  = 2000;
 
     /**
      * LUCENE INDEX PATH: use the LUCENE_BASE_DIR + new 
@@ -892,7 +893,7 @@ public class LuceneUtil implements Serializable {
         }
 
         HashMap<String, String> regularFieldNames = new HashMap<String, String>();
-        regularFieldNames.put("ampId", actLuceneDoc.getProjectId());
+        regularFieldNames.put(AMP_ID_FIELD, actLuceneDoc.getProjectId());
         regularFieldNames.put("name", actLuceneDoc.getName());
 
         Long id = Long.valueOf(actLuceneDoc.getAmpActivityId());
@@ -1156,7 +1157,7 @@ public class LuceneUtil implements Serializable {
      * @return a list of similar {@link AmpActivityVersion} titles
      *
      */
-    public static List<AmpActivity> findActivitiesMoreLikeThis(String index,
+    public static List<ActivityLuceneDocument> findActivitiesMoreLikeThis(String index,
                                                                String origSearchString,
                                                                String langCode,
                                                                int maxLuceneResults) {
@@ -1196,7 +1197,7 @@ public class LuceneUtil implements Serializable {
                     .getGlobalSettingValue(GlobalSettingsConstants.ACTIVITY_TITLE_SIMILARITY_SENSITIVITY));
 
 
-            List<AmpActivity> activityTitles = new ArrayList<AmpActivity>();
+            List<ActivityLuceneDocument> activityLuceneDocuments = new ArrayList<>();
             for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
                 //skip documents with a score lower than #minDocumentScore
                 if (scoreDoc.score < minDocumentScore) {
@@ -1204,17 +1205,19 @@ public class LuceneUtil implements Serializable {
                 }
 
                 Document doc = indexSearcher.doc(scoreDoc.doc);
-
-                AmpActivity activityWithIdAndTitle = new AmpActivity();
-                activityWithIdAndTitle.setAmpId(doc.get(ID_FIELD));
+    
+                ActivityLuceneDocument activityLuceneDocument = new ActivityLuceneDocument();
+                activityLuceneDocument.setProjectId(doc.get(ID_FIELD));
+                activityLuceneDocument.setAmpActivityId(doc.get(AMP_ID_FIELD));
                 // Set the title of the activity
-                activityWithIdAndTitle.setName(doc.get(fieldName));
+                activityLuceneDocument.setName(doc.get(fieldName));
                 logger.info("Found similar named activity with a score: " + scoreDoc.score + " Title: "
-                        + activityWithIdAndTitle.getName() + " Id: " + activityWithIdAndTitle.getAmpId());
-                activityTitles.add(activityWithIdAndTitle);
+                        + activityLuceneDocument.getName() + " AmpId: " + activityLuceneDocument.getAmpActivityId()
+                        + " ActivityId: " + activityLuceneDocument.getProjectId());
+                activityLuceneDocuments.add(activityLuceneDocument);
             }
 
-            return activityTitles;
+            return activityLuceneDocuments;
 
         } catch (CorruptIndexException e) {
             // TODO Auto-generated catch block

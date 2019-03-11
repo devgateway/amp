@@ -1212,7 +1212,8 @@ public class LuceneUtil implements Serializable {
                 // Set the title of the activity
                 activityLuceneDocument.setName(doc.get(fieldName));
                 logger.info("Found similar named activity with a score: " + scoreDoc.score + " Title: "
-                        + activityLuceneDocument.getName() + " AmpId: " + activityLuceneDocument.getAmpActivityId());
+                        + activityLuceneDocument.getName() + " AmpId: " + activityLuceneDocument.getAmpActivityId()
+                        + " ActivityId: " + activityLuceneDocument.getProjectId());
                 activityLuceneDocuments.add(activityLuceneDocument);
             }
 

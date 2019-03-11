@@ -2,16 +2,17 @@ package org.digijava.kernel.services.sync.model;
 
 import java.util.Date;
 import java.util.List;
-
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601TimeStampSerializer;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author Octavian Ciubotaru
  */
 public class SystemDiff {
 
-    @JsonProperty @JsonSerialize(using = ISO8601TimeStampSerializer.class)
+    @JsonProperty
+    @JsonSerialize(using = ISO8601TimeStampSerializer.class)
     private Date timestamp;
 
     @JsonProperty("global-settings")
@@ -67,6 +68,11 @@ public class SystemDiff {
 
     @JsonProperty("feature-manager")
     private boolean featureManager;
+
+    /**
+     * Set when field definitions any entity changed.
+     */
+    private boolean fields;
 
     public void updateTimestamp(Date timestamp) {
         if (this.timestamp == null || (timestamp != null && this.timestamp.before(timestamp))) {
@@ -153,5 +159,12 @@ public class SystemDiff {
     public void setCalendars(ListDiff<Long> calendars) {
         this.calendars = calendars;
     }
-    
+
+    public boolean isFields() {
+        return fields;
+    }
+
+    public void setFields(boolean fields) {
+        this.fields = fields;
+    }
 }

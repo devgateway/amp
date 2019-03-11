@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -34,8 +35,6 @@ import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.kernel.translator.TranslatorWorker;
-
-import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * Component to be extended directly by AMP Field Types. An AMP field contains a

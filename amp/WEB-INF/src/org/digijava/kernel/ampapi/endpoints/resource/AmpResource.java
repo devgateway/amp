@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.util.Date;
 import java.util.Map;
 
@@ -20,15 +22,15 @@ public class AmpResource {
     @Interchangeable(fieldTitle = "UUID")
     private String uuid;
     
-    @Interchangeable(fieldTitle = "Title", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Title", importable = true, required = ALWAYS)
     @ResourceTextField(fieldTitle = "Title", translationsField = "translatedTitles")
     private String title;
     
-    @Interchangeable(fieldTitle = "File Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS,
+    @Interchangeable(fieldTitle = "File Name", importable = true, required = ALWAYS,
             dependencies = InterchangeDependencyResolver.RESOURCE_TYPE_FILE_VALID_KEY)
     private String fileName;
     
-    @Interchangeable(fieldTitle = "Web Link", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS,
+    @Interchangeable(fieldTitle = "Web Link", importable = true, required = ALWAYS,
             dependencies = InterchangeDependencyResolver.RESOURCE_TYPE_LINK_VALID_KEY)
     private String webLink;
     
@@ -59,18 +61,19 @@ public class AmpResource {
     @Interchangeable(fieldTitle = "Public")
     private Boolean isPublic;
     
-    @Interchangeable(fieldTitle = "Private", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Private", importable = true, required = ALWAYS)
     private Boolean isPrivate;
     
-    @Interchangeable(fieldTitle = "Creator Email", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Creator Email", importable = true, required = ALWAYS)
     private String creatorEmail;
     
-    @Interchangeable(fieldTitle = "Team", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Team", importable = true, required = ALWAYS)
     private Long team;
     
     @PossibleValues(ResourceTypePossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Resource Type", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
-    private String resourceType;
+    @Interchangeable(fieldTitle = "Resource Type", importable = true, pickIdOnly = true,
+            required = ALWAYS)
+    private ResourceType resourceType;
     
     private Map<String, String> translatedTitles;
     private Map<String, String> translatedDescriptions;
@@ -196,11 +199,11 @@ public class AmpResource {
         this.team = team;
     }
     
-    public String getResourceType() {
+    public ResourceType getResourceType() {
         return resourceType;
     }
 
-    public void setResourceType(String resourceType) {
+    public void setResourceType(ResourceType resourceType) {
         this.resourceType = resourceType;
     }
 

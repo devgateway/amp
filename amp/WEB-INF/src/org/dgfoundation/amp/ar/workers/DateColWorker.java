@@ -47,7 +47,7 @@ public class DateColWorker extends ColumnWorker {
             if (strValue!=null) //check for nul value
             value=sdf.parse(strValue);
         } catch (Exception e1) {
-            logger.error(e1);
+            logger.error(e1.getMessage(), e1);
             logger.info("Exception encountered parsing a transaction date!", e1);
         }
         

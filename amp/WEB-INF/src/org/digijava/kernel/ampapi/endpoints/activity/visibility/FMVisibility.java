@@ -34,6 +34,8 @@ public class FMVisibility {
     private static Date lastTreeVisibilityUpdate;
 
     /**
+     * FIXME refactor without using the annotation?
+     *
      * Checks if a given FM path is enabled 
      * @param fmPath, the String with the FM path
      * @return true if is enabled, false otherwise

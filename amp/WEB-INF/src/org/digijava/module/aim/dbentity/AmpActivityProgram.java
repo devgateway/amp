@@ -1,10 +1,12 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -13,11 +15,12 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
 //      @Interchangeable(fieldTitle="Activity ID", importable=false, pickIdOnly=true)
         private Long ampActivityProgramId;
         @Interchangeable(fieldTitle = "Program Percentage", importable = true, percentageConstraint = true,
-                required = ActivityEPConstants.REQUIRED_ALWAYS)
+                required = ALWAYS)
         private Float programPercentage;
-        @Interchangeable(fieldTitle="Program", importable = true, pickIdOnly = true, uniqueConstraint = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+        @Interchangeable(fieldTitle = "Program", importable = true, pickIdOnly = true, uniqueConstraint = true,
+                required = ALWAYS)
         private AmpTheme program;
-        @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true)
+        @InterchangeableBackReference
         private AmpActivityVersion activity;
         private AmpActivityProgramSettings programSetting;
         public Long getAmpActivityProgramId() {
@@ -110,4 +113,5 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
     protected Object clone() throws CloneNotSupportedException {
     return super.clone();
     }
+    
 }

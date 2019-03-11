@@ -13,17 +13,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpIssueTreePanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure;
@@ -33,9 +30,11 @@ import org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure;
  * @since Nov 9, 2010
  */
 public class AmpLineMinistryObservationsFormSectionFeature extends
-        AmpFormSectionFeaturePanel {
+        AmpFormSectionFeaturePanel implements AmpRequiredComponentContainer {
 
     private static final long serialVersionUID = -6654390083784446344L;
+
+    private List<FormComponent<?>> requiredFormComponents = new ArrayList<>();
 
     public AmpLineMinistryObservationsFormSectionFeature(String id, String fmName,
             final IModel<AmpActivityVersion> am) throws Exception {
@@ -62,7 +61,9 @@ public class AmpLineMinistryObservationsFormSectionFeature extends
             protected void onPopulateItem(
                     org.dgfoundation.amp.onepager.components.ListItem<AmpLineMinistryObservation> item) {
                 try {
-                    AmpIssueTreePanel aitp = new AmpIssueTreePanel("issue", classTree, setName, labelName, item.getModel(), setModel, AmpLineMinistryObservation.class, 0, "Regional Obsevation Field");
+                    AmpIssueTreePanel aitp = new AmpIssueTreePanel("issue", classTree, setName, labelName,
+                            item.getModel(), 0, "Regional Obsevation Field",
+                            AmpLineMinistryObservationsFormSectionFeature.this);
                     aitp.setOutputMarkupId(true);
                     item.add(aitp);
                 } catch (Exception e) {
@@ -85,5 +86,10 @@ public class AmpLineMinistryObservationsFormSectionFeature extends
             }
         };
         add(addbutton);
+    }
+
+    @Override
+    public List<FormComponent<?>> getRequiredFormComponents() {
+        return requiredFormComponents;
     }
 }

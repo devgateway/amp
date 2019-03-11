@@ -21,6 +21,9 @@ public class OrganisationValueProvider extends GenericInterchangeableValueProvid
         if (organisation.getOrgGrpId().getName() != null) {
             builder.put("organization_group", organisation.getOrgGrpId().getName());
         }
+        if (organisation.getBudgetOrgCode() != null) {
+            builder.put("budget_organization_code", organisation.getBudgetOrgCode());
+        }
         return builder.build();
     }
 }

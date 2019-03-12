@@ -13,8 +13,10 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityTranslationUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
@@ -52,7 +54,6 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
     private void initializeDeclaringClassOfFieldIfNeeded(Field field) {
         synchronized (lock) {
             Class clazz = getActualFieldClass(field);
-            classFieldInfo.clear();
             if (classFieldInfo.get(clazz) == null) {
                 initializeFields(clazz);
             }
@@ -136,6 +137,12 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
     @NotNull
     private Class getActualFieldClass(Field field) {
         Class declaringClass = field.getDeclaringClass();
-        return declaringClass.equals(AmpActivityFields.class) ? AmpActivityVersion.class : declaringClass;
+        if (declaringClass.equals(AmpActivityFields.class)) {
+            return AmpActivityVersion.class;
+        } else if (declaringClass.equals(ObjectReferringDocument.class)) {
+            return AmpActivityDocument.class;
+        }
+        
+        return declaringClass;
     }
 }

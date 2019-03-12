@@ -84,7 +84,7 @@ public class ContactImporter extends ObjectImporter {
                 cleanImportableFields(fieldsDef, contact);
             }
 
-            validateAndImport(contact, fieldsDef, newJson.any(), null);
+            validateAndImport(contact, newJson.any());
 
             if (errors.isEmpty()) {
                 setupBeforeSave(contact, createdBy);

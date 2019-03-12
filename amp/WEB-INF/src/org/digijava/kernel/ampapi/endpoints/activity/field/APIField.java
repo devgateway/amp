@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -64,7 +65,7 @@ public class APIField {
     private Integer fieldLength;
 
     @JsonProperty(ActivityEPConstants.CHILDREN)
-    private List<APIField> children;
+    private List<APIField> children = new ArrayList<>();
 
     @JsonProperty(ActivityEPConstants.DEPENDENCIES)
     private List<String> dependencies;

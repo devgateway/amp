@@ -14,7 +14,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import javax.validation.groups.Default;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
@@ -23,7 +30,11 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ErrorDecorator;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.DefaultErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
@@ -33,6 +44,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableBackRefere
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.aim.validator.groups.API;
 
 /**
  * @author Octavian Ciubotaru
@@ -52,7 +64,7 @@ public class ObjectImporter {
 
     private List<APIField> apiFields;
 
-    private PossibleValuesCache possibleValuesCached; 
+    private PossibleValuesCache possibleValuesCached;
 
     /**
      * This field is used for storing the current json values during field validation
@@ -64,18 +76,29 @@ public class ObjectImporter {
 
     private Deque<Object> backReferenceStack = new ArrayDeque<>();
 
+    private Validator beanValidator;
+
+    private Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper = new DefaultErrorsMapper();
+
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
             List<APIField> apiFields) {
         this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiFields);
     }
 
-    public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator, 
+    public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
             TranslationSettings trnSettings, List<APIField> apiFields) {
         this.formatValidator = formatValidator;
         this.businessRulesValidator = businessRulesValidator;
         this.trnSettings = trnSettings;
         this.apiFields = apiFields;
         this.possibleValuesCached = new PossibleValuesCache(apiFields);
+
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        beanValidator = validatorFactory.getValidator();
+    }
+
+    public void setJsonErrorMapper(Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper) {
+        this.jsonErrorMapper = jsonErrorMapper;
     }
 
     public List<APIField> getApiFields() {
@@ -117,7 +140,17 @@ public class ObjectImporter {
      * @return
      */
     public boolean validateAndImport(Object root, Map<String, Object> json) {
-        return validateAndImport(root, apiFields, json, null);
+        boolean isFormatValid = validateAndImport(root, apiFields, json, null);
+        if (isFormatValid) {
+            processViolationsForTypes(json, root);
+        }
+        return isFormatValid;
+    }
+
+    private void processViolationsForTypes(Map<String, Object> json, Object obj) {
+        Set<ConstraintViolation<Object>> violations = beanValidator.validate(obj, API.class, Default.class);
+        JsonErrorIntegrator jsonErrorIntegrator = new JsonErrorIntegrator(jsonErrorMapper);
+        jsonErrorIntegrator.mapTypeErrors(json, violations, errors);
     }
 
     /**
@@ -131,7 +164,7 @@ public class ObjectImporter {
      * @param fieldPath the underscorified path to the field currently validated & imported
      * @return true if valid format. Check for all errors to find also business validation issues
      */
-    protected boolean validateAndImport(Object newParent, List<APIField> fieldsDef,
+    private boolean validateAndImport(Object newParent, List<APIField> fieldsDef,
             Map<String, Object> newJsonParent, String fieldPath) {
         boolean isFormatValid = true;
         restoreBackReferences(newParent);
@@ -152,7 +185,7 @@ public class ObjectImporter {
                 isFormatValid = false;
                 for (String invalidField : fields) {
                     // no need to go through deep-first validation flow
-                    formatValidator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
+                    ErrorDecorator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
                             ActivityErrors.FIELD_INVALID, errors);
                 }
             }
@@ -185,7 +218,7 @@ public class ObjectImporter {
      * @param fieldDef JsonBean holding the description of the field (obtained from the Fields Enumerator EP)
      * @param newJsonParent JSON as imported
      * @param fieldPath underscorified path to the field
-     * @return true if valid format. Check errors to see also any business rules validation errors. 
+     * @return true if valid format. Check errors to see also any business rules validation errors.
      */
     private boolean validateAndImport(Object newParent, APIField fieldDef,
             Map<String, Object> newJsonParent, String fieldPath) {
@@ -212,7 +245,7 @@ public class ObjectImporter {
         Object fieldValue = newJsonParent.get(fieldName);
         Field objField = ReflectionUtil.getField(newParent, actualFieldName);
         if (objField == null) {
-            String error = "Actual Field not found: " + actualFieldName + ", fieldPath: " + fieldPath; 
+            String error = "Actual Field not found: " + actualFieldName + ", fieldPath: " + fieldPath;
             logger.error(error);
             throw new RuntimeException(error);
         }

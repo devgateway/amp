@@ -61,9 +61,10 @@ public final class ActivityInterchangeUtils {
      *
      * @return latest project overview or an error if invalid configuration is received
      */
-    public static JsonBean importActivity(JsonBean newJson, boolean update, String endpointContextPath) {
+    public static JsonBean importActivity(JsonBean newJson, boolean update, boolean canDowngradeToDraft,
+            String endpointContextPath) {
         List<APIField> activityFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
-        ActivityImporter importer = new ActivityImporter(activityFields);
+        ActivityImporter importer = new ActivityImporter(activityFields, canDowngradeToDraft);
         List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update, endpointContextPath);
 
         return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors);

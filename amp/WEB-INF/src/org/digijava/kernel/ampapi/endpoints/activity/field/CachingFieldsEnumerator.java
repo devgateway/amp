@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
-import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -67,19 +66,19 @@ public class CachingFieldsEnumerator {
         return actualCache.computeIfAbsent(clazz, key -> fieldsEnumerator.getAllAvailableFields(clazz));
     }
 
-    public List<String> findActivityFieldPaths(Predicate<Field> fieldFilter) {
-        return fieldsEnumerator.findFieldPaths(fieldFilter, AmpActivityFields.class);
+    public List<String> findActivityFieldPaths(Predicate<APIField> fieldFilter) {
+        return fieldsEnumerator.findFieldPaths(fieldFilter, getActivityFields());
     }
 
-    public List<String> findContactFieldPaths(Predicate<Field> fieldFilter) {
-        return fieldsEnumerator.findFieldPaths(fieldFilter, AmpContact.class);
+    public List<String> findContactFieldPaths(Predicate<APIField> fieldFilter) {
+        return fieldsEnumerator.findFieldPaths(fieldFilter, getContactFields());
     }
 
-    public List<String> findResourceFieldPaths(Predicate<Field> fieldFilter) {
-        return fieldsEnumerator.findFieldPaths(fieldFilter, AmpResource.class);
+    public List<String> findResourceFieldPaths(Predicate<APIField> fieldFilter) {
+        return fieldsEnumerator.findFieldPaths(fieldFilter, getResourceFields());
     }
 
-    public List<String> findCommonFieldPaths(Predicate<Field> fieldFilter) {
-        return fieldsEnumerator.findFieldPaths(fieldFilter, CommonSettings.class);
+    public List<String> findCommonFieldPaths(Predicate<APIField> fieldFilter) {
+        return fieldsEnumerator.findFieldPaths(fieldFilter, getCommonSettingsFields());
     }
 }

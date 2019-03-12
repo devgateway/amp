@@ -53,6 +53,7 @@ public class RegionCells extends HardcodedCells<PercentageTextCell>{
             cell("expenditure class", "Chisinau City", 9088, 1.000000),
             cell("mtef activity 1", "", -8977, 1.000000),
             cell("mtef activity 2", "Anenii Noi County", 9085, 1.000000),
+            cell("new activity with contracting", "", -999999999, 1.000000),
             cell("PID: original", "Balti County", 9086, 1.000000),
             cell("PID: original > actual", "", -8977, 1.000000),
             cell("PID: original, actual", "Balti County", 9086, 1.000000),

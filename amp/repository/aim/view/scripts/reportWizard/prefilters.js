@@ -144,7 +144,7 @@ Filters.prototype.showFilters = function (reportContextId, auxId) {
         this.showFilterWidget();
     } else if (widgetFilter.reportContextId === 'workspace_editor') {
         var id = new URL(window.location).searchParams.get('tId');
-        if (id) {
+        if (id && widgetFilter.gotSavedFilters !== true) {
             this.loadSavedFilterData(id, false);
         } else {
             this.showFilterWidget();

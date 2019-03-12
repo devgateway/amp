@@ -111,18 +111,17 @@ public class PossibleValuesEnumerator {
      * Returns a predicate that matches all fields that have possible values.
      * @return a predicate
      */
-    public Predicate<Field> fieldsWithPossibleValues() {
-        List<Class<?>> entityClasses = getEntityClasses(getAllSyncEntities());
-        return classOfFieldIs(assignableFromAny(entityClasses))
-                .or(fieldHasPossibleValuesProvider());
+    public Predicate<APIField> fieldsWithPossibleValues() {
+        return fieldsDependingOn(getAllSyncEntities())
+                .or(fieldWithPossibleValueProvider());
     }
 
     /**
      * Returns a predicate that matches all fields that have a possible values provider.
-     * @return a predicate.
+     * @return a predicate
      */
-    private Predicate<Field> fieldHasPossibleValuesProvider() {
-        return field -> InterchangeUtils.getPossibleValuesProvider(field) != null;
+    private Predicate<APIField> fieldWithPossibleValueProvider() {
+        return f -> f.getPossibleValuesProviderClass() != null;
     }
 
     /**
@@ -130,10 +129,10 @@ public class PossibleValuesEnumerator {
      * @param syncEntities sync entities that have changed
      * @return field filter
      */
-    public Predicate<Field> fieldsDependingOn(Set<String> syncEntities) {
-        List<Class<?>> targetClasses = getEntityClasses(syncEntities);
-        return classOfFieldIs(assignableFromAny(targetClasses))
-                .or(classOfPossibleValuesIs(assignableFromAny(targetClasses)));
+    public Predicate<APIField> fieldsDependingOn(Set<String> syncEntities) {
+        List<Class<?>> entityClasses = getEntityClasses(syncEntities);
+        return f -> entityClasses.stream()
+                .anyMatch(f.getApiType().getType()::isAssignableFrom);
     }
 
     /**
@@ -149,18 +148,6 @@ public class PossibleValuesEnumerator {
             }
         });
         return targetClasses;
-    }
-
-    /**
-     * Predicate that filters fields by the properties of possible values class.
-     * @param classPredicate predicate for possible values class
-     * @return a predicate
-     */
-    private Predicate<Field> classOfPossibleValuesIs(Predicate<Class<?>> classPredicate) {
-        return field -> {
-            Class<?> entityClass = InterchangeUtils.getPossibleValuesClass(field);
-            return entityClass != null && classPredicate.test(entityClass);
-        };
     }
 
     /**

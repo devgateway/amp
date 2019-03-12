@@ -3,27 +3,28 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NOT_REQUIRED;
-
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.NONE;
-
-
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableSet;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
@@ -34,9 +35,11 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.services.sync.model.SyncConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.junit.Before;
@@ -62,6 +65,11 @@ public class FieldsEnumeratorTest {
     @Mock private TranslatorService throwingTranslatorService;
     @Mock private TranslatorService emptyTranslatorService;
 
+    @Mock private PossibleValuesDAO possibleValuesDAO;
+
+    private FieldsEnumerator fieldsEnumerator;
+    private PossibleValuesEnumerator pvEnumerator;
+
     @Before
     public void setUp() throws Exception {
         translatorService = new TestTranslatorService();
@@ -71,6 +79,9 @@ public class FieldsEnumeratorTest {
         when(throwingTranslatorService.getAllTranslationOfBody(any(), any())).thenThrow(new WorkerException());
 
         when(emptyTranslatorService.getAllTranslationOfBody(any(), any())).thenReturn(Collections.emptyList());
+
+        fieldsEnumerator = new FieldsEnumerator(provider, fmService, translatorService, name -> true);
+        pvEnumerator = new PossibleValuesEnumerator(possibleValuesDAO, translatorService);
     }
 
     @Test
@@ -164,25 +175,25 @@ public class FieldsEnumeratorTest {
 
         @Interchangeable(fieldTitle = "field_required_fm_hidden", requiredFmPath = "fm hidden")
         private String fieldRequiredFmEntryHidden;
-    
+
         @Interchangeable(fieldTitle = "field_required_implicit_fm_path_visible", requiredFmPath = "fm visible")
         private String fieldRequiredFmPathVisibleImplicit;
-    
+
         @Interchangeable(fieldTitle = "field_required_implicit_fm_path_hidden", requiredFmPath = "fm hidden")
         private String fieldRequiredFmPathHiddenImplicit;
-    
+
         @Interchangeable(fieldTitle = "field_required_submit_fm_path_visible", requiredFmPath = "fm visible",
                 required = SUBMIT)
         private String fieldRequiredSubmitFmPathVisible;
-    
+
         @Interchangeable(fieldTitle = "field_required_submit_fm_path_hidden", requiredFmPath = "fm hidden",
                 required = SUBMIT)
         private String fieldRequiredSubmitFmPathHidden;
-    
+
         @Interchangeable(fieldTitle = "field_required_always_fm_path_visible", requiredFmPath = "fm visible",
                 required = ALWAYS)
         private String fieldRequiredAlwaysFmPathVisible;
-    
+
         @Interchangeable(fieldTitle = "field_required_always_fm_path_hidden", requiredFmPath = "fm hidden",
                 required = ALWAYS)
         private String fieldRequiredAlwaysFmPathHidden;
@@ -516,6 +527,32 @@ public class FieldsEnumeratorTest {
         fieldsFor(AmpResource.class);
     }
 
+    @Test
+    public void testFieldsWithPossibleValuesPredicate() {
+        List<APIField> fields = fieldsEnumerator.getAllAvailableFields(AmpActivityFields.class);
+
+        Predicate<APIField> fieldFilter = pvEnumerator.fieldsWithPossibleValues();
+
+        List<String> fieldPaths = fieldsEnumerator.findFieldPaths(fieldFilter, fields);
+
+        assertThat(fieldPaths, hasItems(
+                "team", // ref by type
+                "primary_sectors~sector", // nested ref by type
+                "approval_status", // ref by possible value
+                "fundings~commitments~pledge")); // nested ref by possible value
+    }
+
+    @Test
+    public void testFieldsDependingOnPredicate() {
+        List<APIField> fields = fieldsEnumerator.getAllAvailableFields(AmpActivityFields.class);
+        Predicate<APIField> fieldFilter = pvEnumerator.fieldsDependingOn(ImmutableSet.of(SyncConstants.Entities.SECTOR));
+
+        List<String> fieldPaths = fieldsEnumerator.findFieldPaths(fieldFilter, fields);
+
+        assertThat(fieldPaths, hasItems("primary_sectors~sector"));
+        assertThat(fieldPaths, not(hasItems("team", "approval_status", "fundings~commitments~pledge")));
+    }
+
     private APIField newListField() {
         APIField field = newAPIField();
         field.setApiType(new APIType(Collection.class, Object.class));
@@ -556,8 +593,7 @@ public class FieldsEnumeratorTest {
     }
 
     private List<APIField> fieldsFor(Class<?> theClass) {
-        return new FieldsEnumerator(provider, fmService, translatorService, name -> true)
-                .getAllAvailableFields(theClass);
+        return fieldsEnumerator.getAllAvailableFields(theClass);
     }
 
     private void assertEqualsDigest(List<APIField> expected, List<APIField> actual) {

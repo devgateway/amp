@@ -53,7 +53,6 @@ public class FieldsEnumerator {
      * Fields that are importable & required by AMP Offline clients.
      */
     private static final Set<String> OFFLINE_REQUIRED_FIELDS = new ImmutableSet.Builder<String>()
-            .add(ActivityFieldsConstants.IS_DRAFT)
             .add(ActivityFieldsConstants.APPROVAL_STATUS)
             .build();
 

@@ -697,8 +697,6 @@ public class ScorecardService {
                     throw new ApiRuntimeException(
                             ApiError.toError("Exception while getting org types amount: " + e.getMessage()));
                 }
-                throw new ApiRuntimeException(
-                        ApiError.toError("Exception while getting org types amount: "));
             }
         });
         

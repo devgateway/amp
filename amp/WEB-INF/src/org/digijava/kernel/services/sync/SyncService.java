@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CALENDAR;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CONTACT;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.EXCHANGE_RATES;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.FEATURE_MANAGER;
@@ -11,7 +12,6 @@ import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.GLO
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.LOCATORS;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.MAP_TILES;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.RESOURCE;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CALENDAR;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.TRANSLATION;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACES;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_FILTER_DATA;
@@ -21,7 +21,6 @@ import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WOR
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.DELETED;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.UPDATED;
 
-import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -51,9 +50,9 @@ import javax.sql.DataSource;
 
 import org.apache.jackrabbit.util.ISO8601;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
-import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.currency.CurrencyService;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
@@ -62,6 +61,7 @@ import org.digijava.kernel.ampapi.endpoints.resource.ResourceUtil;
 import org.digijava.kernel.ampapi.endpoints.sync.SyncRequest;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.services.sync.model.ActivityChange;
 import org.digijava.kernel.services.sync.model.ExchangeRatesDiff;
 import org.digijava.kernel.services.sync.model.ListDiff;
@@ -264,27 +264,27 @@ public class SyncService implements InitializingBean {
     }
     
     private List<String> findChangedActivityPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
-        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+        Predicate<APIField> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
         return fieldsEnumerator.findActivityFieldPaths(fieldFilter);
     }
 
     private List<String> findChangedContactPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
-        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+        Predicate<APIField> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
         return fieldsEnumerator.findContactFieldPaths(fieldFilter);
     }
 
     private List<String> findChangedResourcePossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
-        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+        Predicate<APIField> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
         return fieldsEnumerator.findResourceFieldPaths(fieldFilter);
     }
 
     private List<String> findChangedCommonPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
-        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+        Predicate<APIField> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
         return fieldsEnumerator.findCommonFieldPaths(fieldFilter);
     }
 
-    private Predicate<Field> getChangedFields(SystemDiff systemDiff, Date lastSyncTime) {
-        Predicate<Field> fieldFilter;
+    private Predicate<APIField> getChangedFields(SystemDiff systemDiff, Date lastSyncTime) {
+        Predicate<APIField> fieldFilter;
         if (lastSyncTime == null) {
             fieldFilter = possibleValuesEnumerator.fieldsWithPossibleValues();
         } else {

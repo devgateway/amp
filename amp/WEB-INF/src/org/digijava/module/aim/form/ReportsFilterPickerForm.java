@@ -4,7 +4,9 @@
  */
 package org.digijava.module.aim.form;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -111,6 +113,10 @@ public class ReportsFilterPickerForm extends ActionForm {
     private String fromActivityActualCompletionDate;
     private String toActivityActualCompletionDate;
     private DynamicDateFilter dynamicActivityActualCompletionFilter = new DynamicDateFilter();
+    private String fromPledgeDetailStartDate;
+    private String toPledgeDetailStartDate;
+    private String fromPledgeDetailEndDate;
+    private String toPledgeDetailEndDate;
     private String fromActualApprovalDate;
     private String toActualApprovalDate;
     private String fromProposedCompletionDate;
@@ -186,6 +192,7 @@ public class ReportsFilterPickerForm extends ActionForm {
     private String toEffectiveFundingDate;
     private String fromFundingClosingDate;
     private String toFundingClosingDate;
+    private List<String> undefinedOptions = new ArrayList<>();
 
     public int getCalendarsSize() {
         if (calendars == null) return 0;
@@ -1524,5 +1531,45 @@ public class ReportsFilterPickerForm extends ActionForm {
 
     public void setToProposedCompletionDate(String toProposedCompletionDate) {
         this.toProposedCompletionDate = toProposedCompletionDate;
+    }
+    
+    public List<String> getUndefinedOptions() {
+        return undefinedOptions;
+    }
+    
+    public void setUndefinedOptions(List<String> undefinedOptions) {
+        this.undefinedOptions = undefinedOptions;
+    }
+
+    public String getFromPledgeDetailStartDate() {
+        return fromPledgeDetailStartDate;
+    }
+
+    public void setFromPledgeDetailStartDate(String fromPledgeDetailStartDate) {
+        this.fromPledgeDetailStartDate = fromPledgeDetailStartDate;
+    }
+
+    public String getToPledgeDetailStartDate() {
+        return toPledgeDetailStartDate;
+    }
+
+    public void setToPledgeDetailStartDate(String toPledgeDetailStartDate) {
+        this.toPledgeDetailStartDate = toPledgeDetailStartDate;
+    }
+
+    public String getToPledgeDetailEndDate() {
+        return toPledgeDetailEndDate;
+    }
+
+    public void setToPledgeDetailEndDate(String toPledgeDetailEndDate) {
+        this.toPledgeDetailEndDate = toPledgeDetailEndDate;
+    }
+
+    public String getFromPledgeDetailEndDate() {
+        return fromPledgeDetailEndDate;
+    }
+
+    public void setFromPledgeDetailEndDate(String fromPledgeDetailEndDate) {
+        this.fromPledgeDetailEndDate = fromPledgeDetailEndDate;
     }
 }

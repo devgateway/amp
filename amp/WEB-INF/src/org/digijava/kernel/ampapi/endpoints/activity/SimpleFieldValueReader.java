@@ -25,4 +25,8 @@ public class SimpleFieldValueReader implements FieldValueReader {
                     String.format("Failed to read %s field value from %s.", fieldName, targetObject));
         }
     }
+
+    public String getFieldName() {
+        return fieldName;
+    }
 }

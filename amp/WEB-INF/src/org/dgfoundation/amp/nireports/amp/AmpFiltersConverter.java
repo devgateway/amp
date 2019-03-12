@@ -140,8 +140,11 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
     
         if (this.spec.getReportType() == ArConstants.PLEDGES_TYPE) {
             /**
-             * there is no "pledges filter widget": the filter widget uses hardcoded column names (the ones from the donor reports).
-             * In order to support filtering in pledge reports, we will convert the donor-columns references to pledges-columns references
+             * there is no "pledges filter widget":
+             * the filter widget uses hardcoded column names (the ones from the donor reports).
+             *
+             * In order to support filtering in pledge reports,
+             * we will convert the donor-columns references to pledges-columns references
              */
             columnName = DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
         }

@@ -1,11 +1,8 @@
 package org.digijava.module.aim.action;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -13,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -352,8 +348,16 @@ public class CompareActivityVersions extends DispatchAction {
     public ActionForward viewDifferences(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
-        vForm.setOutputCollection(new ArrayList<CompareOutput>());
         vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId()));
+
+        return mapping.findForward("forward");
+    }
+
+    public ActionForward compareAll(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+                                    HttpServletResponse response) throws Exception {
+
+        CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
+        vForm.setListOfOutputCollectionGrouped(ActivityVersionUtil.getOutputCollectionGrouped());
 
         return mapping.findForward("forward");
     }

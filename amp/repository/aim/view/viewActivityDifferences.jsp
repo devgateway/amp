@@ -45,12 +45,26 @@
 	<html:hidden property="showMergeColumn" styleId="showMergeColumn"/>
 	<html:hidden property="method" styleId="method"/>
 	<html:hidden property="ampActivityId" styleId="ampActivityId"/>
-	
-	<div id="content"  class="yui-skin-sam" style="padding: 5px;"> 
+
+	<c:if test="${empty aimCompareActivityVersionsForm.outputCollectionGrouped and aimCompareActivityVersionsForm.method != 'compareAll'}">
+		<c:set var="noPrevVer">
+			<digi:trn>The activity you chose is the latest and has no previous version.</digi:trn>
+		</c:set>
+		<script type="text/javascript">
+            alert("${noPrevVer}");
+            window.history.back();
+		</script>
+	</c:if>
+	<div id="content"  class="yui-skin-sam" style="padding: 5px;">
 		<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
 			<ul id="MyTabs" class="yui-nav">
 				<li class="selected">
-					<a/><div><digi:trn>Compare Activities</digi:trn></div></a>
+					<c:if test="${aimCompareActivityVersionsForm.method == 'compareAll'}">
+						<a><div><digi:trn>List of Activities Compared to their Previous Versions</digi:trn></div></a>
+					</c:if>
+					<c:if test="${aimCompareActivityVersionsForm.method != 'compareAll'}">
+						<a><div><digi:trn>Compare Activities</digi:trn></div></a>
+					</c:if>
 				</li>
 			</ul>
 		</div>
@@ -90,95 +104,29 @@
 	            		</div>
 	        		</td>
 				</tr>
-				
-				<logic:iterate id="groupItem" property="outputCollectionGroupedAsSet" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
-					
-					<td rowspan="${groupItem.value.size()}" align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
-							<digi:trn><bean:write property="key" name="groupItem"/></digi:trn>
-					</td>
-						<logic:iterate id="diffItem" name="groupItem" property="value" indexId="iterIdx">
-								
-								<logic:greaterThan name="iterIdx" value="0">
-									<tr>
-								</logic:greaterThan>
-									<td width="50%" align="left" valign="top" style="padding-left: 5px; border-right-width: 0px;" class="inside">
-										<div id="left${diffItem.index}">
-											<logic:empty name="diffItem" property="stringOutput[1]">&nbsp;</logic:empty>
-											<bean:write name="diffItem" property="stringOutput[1]" filter="false"/>
-										</div>
-									</td>
-									<logic:equal value="true" name="aimCompareActivityVersionsForm" property="showMergeColumn">
-										<td align="center" valign="middle" class="inside">
-                                            <c:if test="${!diffItem.blockSingleChangeOutput}">
-                                                <button type="button" onClick="javascript:left(${diffItem.index});" style="border: none; background-color: transparent">
-                                                    <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
-                                                </button>
-                                            </c:if>
-										</td>
-										<td align="left" valign="top" style="padding-left: 5px;" class="inside">
-											<div id="merge${diffItem.index}">&nbsp;</div>
-										</td>
-										<td align="center" valign="middle" class="inside" style="border-right-width: 0px;">
-                                            <c:if test="${!diffItem.blockSingleChangeOutput}">
-                                                <button type="button" onClick="javascript:right(${diffItem.index});" style="border: none; background-color: transparent">
-                                                    <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
-                                                </button>
-                                            </c:if>
-										</td>
-                                        <c:if test="${!diffItem.blockSingleChangeOutput}">
-										    <input type="hidden" id='mergedValues[${diffItem.index}]' value="" name="mergedValues[${index}]"/>
-                                        </c:if>
-									</logic:equal>
-									<td width="50%" align="left" valign="top" style="padding-left: 5px; border-left-width: 0px;" class="inside">
-										<div id="right${diffItem.index}">
-											<logic:empty name="diffItem" property="stringOutput[0]">&nbsp;</logic:empty>
-											<bean:write name="diffItem" property="stringOutput[0]" filter="false"/>
-										</div>
-									</td>
-								<logic:greaterThan name="iterIdx" value="0">
-								</tr>
-								</logic:greaterThan>
-						</logic:iterate>
 
-					</td></tr>
-				</logic:iterate>	
-				<%--
-				<logic:iterate id="iter" property="outputCollection" name="aimCompareActivityVersionsForm" indexId="index">
-					<tr>
-						<td align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
-							<digi:trn><bean:write name="iter" property="descriptionOutput"/></digi:trn>
-						</td>
-						<td align="left" valign="top" style="padding-left: 5px; border-right-width: 0px;" class="inside">
-							<div id="left${index}">
-								<logic:empty name="iter" property="stringOutput[1]">&nbsp;</logic:empty>
-								<bean:write name="iter" property="stringOutput[1]" filter="false"/>
-							</div>
-						</td>
-						<logic:equal value="true" name="aimCompareActivityVersionsForm" property="showMergeColumn">
-							<td align="center" valign="middle" class="inside">
-								<button type="button" onClick="javascript:left(${index});" style="border: none; background-color: transparent">
-									<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
-								</button>	
+					<%-- Iterate through the list of output collections for compareAll method... --%>
+				<c:if test="${aimCompareActivityVersionsForm.method == 'compareAll'}">
+					<%int count = 0; %>
+					<logic:iterate id="listItem" property="listOfOutputCollectionGroupedCollection" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
+						<tr>
+							<td colspan="100%"  class="inside" style="background-color:#E9ECC3; border-color: red; border-width: 1px; color:#0000A0; cursor: pointer; background-repeat: repeat-x; font-size: 13px;">
+								<div style="line-height: 95%;"align="left" class="underline" title="<bean:write name="listItem" property="key" filter="false"/>">
+									<strong><%out.print("<br> ["+(++count)+"]. "); %><bean:write name="listItem" property="key" filter="false"/></strong>
+								</div>
+								<bean:define id="beanGroupItem" name="listItem" property="value" scope="page" toScope="request"/>
+								<jsp:include page="viewGroupedOutput.jsp"/>
 							</td>
-							<td align="left" valign="top" style="padding-left: 5px;" class="inside">
-								<div id="merge${index}">&nbsp;</div>
-							</td>
-							<td align="center" valign="middle" class="inside" style="border-right-width: 0px;">
-								<button type="button" onClick="javascript:right(${index});" style="border: none; background-color: transparent">
-									<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
-								</button>	
-							</td>
-							<input type="hidden" id='mergedValues[${index}]' value="" name="mergedValues[${index}]"/>
-						</logic:equal>
-						<td align="left" valign="top" style="padding-left: 5px; border-left-width: 0px;" class="inside">
-							<div id="right${index}">
-								<logic:empty name="iter" property="stringOutput[0]">&nbsp;</logic:empty>
-								<bean:write name="iter" property="stringOutput[0]" filter="false"/>
-							</div>
-						</td>
-					</tr>
-				</logic:iterate>
-				--%>
+						</tr>
+					</logic:iterate>
+				</c:if>
+
+					<%-- if the method isn't compareAll, for any method is to keep the existing functionality and fix null pointer exception --%>
+				<c:if test="${(not empty aimCompareActivityVersionsForm.outputCollectionGrouped) and (aimCompareActivityVersionsForm.method != 'compareAll')}">
+					<bean:define id="beanGroupItem" name="aimCompareActivityVersionsForm" property="outputCollectionGroupedAsSet" scope="page" toScope="request"/>
+					<jsp:include page="viewGroupedOutput.jsp"/>
+				</c:if>
+
 			</table>
 			<br/>
 			<input id="backButton" type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="javascript:back()" />
@@ -287,6 +235,10 @@ if(document.getElementById('method').value == "enableMerge") {
     document.getElementById('saveButton').disabled = "disabled";
     document.getElementById('saveButton').style.display = 'none';
     $('#backButton').prop('value', '<digi:trn>Back to Audit Logger</digi:trn>');
+}else if (document.aimCompareActivityVersionsForm.method.value === "compareAll"){
+    document.getElementById('saveButton').disabled = "disabled";
+    document.getElementById('saveButton').style.display = 'none';
+    document.getElementById('backButton').style.visibility = "hidden";
 }else {
     document.getElementById('saveButton').disabled = "disabled";
     document.getElementById('saveButton').style.display = 'none';

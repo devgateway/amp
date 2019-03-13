@@ -133,8 +133,12 @@ public class CompareActivityVersionsForm extends ActionForm {
         this.outputCollectionGrouped = outputCollectionGrouped;
     }
 
-    public Set<Map.Entry<Long, Map<String, List<CompareOutput>>>> getListoutputCollectionGrouped() {
+    public Set<Map.Entry<Long, Map<String, List<CompareOutput>>>> getListoutputCollectionGroupedAsSet() {
         return this.listoutputCollectionGrouped.entrySet();
+    }
+    
+    public Map<Long, Map<String, List<CompareOutput>>> getListoutputCollectionGrouped() {
+        return listoutputCollectionGrouped;
     }
     
     public void setListoutputCollectionGrouped(Map<Long, Map<String, List<CompareOutput>>> listoutputCollectionGrouped) {

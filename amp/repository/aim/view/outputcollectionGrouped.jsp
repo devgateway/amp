@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <digi:instance property="aimCompareActivityVersionsForm" />
-				<logic:iterate id="groupItem" property="outputCollectionGroupedAsSet" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
+				<logic:iterate id="groupItem" property="outputCollectionGrouped" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
 					
 					<td rowspan="${groupItem.value.size()}" align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
 							<digi:trn><bean:write property="key" name="groupItem"/></digi:trn>
@@ -60,6 +60,5 @@
 								</tr>
 								</logic:greaterThan>
 						</logic:iterate>
-
-					</td></tr>
+					</td></tr>					
 				</logic:iterate>

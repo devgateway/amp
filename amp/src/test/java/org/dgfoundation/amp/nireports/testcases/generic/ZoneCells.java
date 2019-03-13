@@ -53,6 +53,7 @@ public class ZoneCells extends HardcodedCells<PercentageTextCell>{
             cell("expenditure class", "", -9088, 1.000000),
             cell("mtef activity 1", "", -8977, 1.000000),
             cell("mtef activity 2", "", -9085, 1.000000),
+            cell("new activity with contracting", "", -999999999, 1.000000),
             cell("PID: original", "", -9086, 1.000000),
             cell("PID: original > actual", "", -8977, 1.000000),
             cell("PID: original, actual", "", -9086, 1.000000),

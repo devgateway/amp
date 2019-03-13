@@ -24,6 +24,11 @@ public class DiscriminatedFieldValueReader extends SimpleFieldValueReader {
     @Override
     public Object get(Object targetObject) {
         Object obj = super.get(targetObject);
+        if (!(obj instanceof Collection)) {
+            throw new IllegalStateException(String.format(
+                    "Value read from %s field of %s is either null or does not implement java.util.Collection",
+                    getFieldName(), targetObject.getClass().getSimpleName()));
+        }
         Collection collection = (Collection) obj;
         List<Object> filteredItems = new ArrayList<>();
         for (Object item : collection) {

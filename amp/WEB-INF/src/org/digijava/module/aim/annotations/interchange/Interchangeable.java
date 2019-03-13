@@ -73,7 +73,7 @@ public @interface Interchangeable {
      * </pre>
      *
      * <p>During deserialization, id from json will be converted back using
-     * {@link InterchangeUtils#getObjectById(java.lang.Class, java.lang.Long)}.
+     * {@link ValueConverter#getObjectById(java.lang.Class, java.lang.Long)}.
      */
     boolean pickIdOnly() default false;
 
@@ -116,6 +116,12 @@ public @interface Interchangeable {
     
     /* constraints for multi-level validators */
     boolean uniqueConstraint() default false;
+
+    /**
+     * Used to mark percentage field for an object in collection for which all percentages must sum to 100.
+     * <p>Not used for validation in the backend buy might be useful for API clients in future to determine if
+     * this constraint is enabled or not (via FM rules).</p>
+     */
     boolean percentageConstraint() default false;
 
     int sizeLimit() default 1;

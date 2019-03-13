@@ -42,7 +42,7 @@ public final class PledgesDonorFilterListManager implements FilterListManager {
     
     private static PledgesDonorFilterListManager pledgesDonorFilterListManager;
     private static Long donorRoleId = null;
-    private static final Long id = 99l;
+    private static final Long ID = 99L;
     
     /**
      * 
@@ -73,7 +73,7 @@ public final class PledgesDonorFilterListManager implements FilterListManager {
         Map<String, List<FilterListTreeNode>> items = new HashMap<>();
         List<FilterListTreeNode> orgItems = new ArrayList<>();
         List<Long> ids = new ArrayList<>();
-        ids.add(id);
+        ids.add(ID);
 
         Set<Long> donorGroupsIds = getAllGroupIdsWithDonors();
         
@@ -121,7 +121,7 @@ public final class PledgesDonorFilterListManager implements FilterListManager {
         listDefinition.setItems(PLEDGES_DONORS_ITEMS_NAME);
         listDefinition.setTab(EPConstants.TAB_ORGANIZATIONS);
         listDefinition.setFiltered(true);
-        listDefinition.setId(id);
+        listDefinition.setId(ID);
         listDefinitions.add(listDefinition);
 
         return listDefinitions;

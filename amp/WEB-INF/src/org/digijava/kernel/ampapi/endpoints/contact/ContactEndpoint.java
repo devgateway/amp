@@ -4,6 +4,7 @@ import static java.util.Collections.emptyMap;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -89,6 +90,15 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @ApiOperation("Retrieve contact")
     public JsonBean getContact(@ApiParam("contact id") @PathParam("id") Long id) {
         return ContactUtil.getContact(id);
+    }
+    
+    @POST
+    @Path("/batch")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
+    @ApiOperation("Retrieve contacts")
+    public Collection<JsonBean> getContact(List<Long> ids) {
+        return ContactUtil.getContacts(ids);
     }
 
     @PUT

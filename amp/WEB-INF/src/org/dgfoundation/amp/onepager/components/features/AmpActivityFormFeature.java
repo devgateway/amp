@@ -1056,7 +1056,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     && compFundItem.getTransactionDate() != null) {
                 itemTransactionType = compFundItem.getTransactionType();
                 amount = compFundItem.getTransactionAmount();
-                exchangeRate = (compFundItem.getExchangeRate() == null ? null : compFundItem.getExchangeRate().doubleValue());
                 currency = compFundItem.getCurrency();
                 currencyDate = new java.sql.Date(compFundItem.getTransactionDate().getTime());
                 if (!compFundItem.getComponent().equals(parent))

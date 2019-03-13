@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import org.digijava.kernel.ampapi.endpoints.activity.AMPFMService;
 import org.digijava.kernel.ampapi.endpoints.activity.AllowMultipleProgramsPredicate;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.ActivityFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.AmpFieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
@@ -44,10 +45,12 @@ public final class AmpFieldsEnumerator implements InitializingBean {
 
         Function<String, Boolean> allowMultiplePrograms = new AllowMultipleProgramsPredicate();
 
+        String iatiIdentifierFieldName = InterchangeUtils.getAmpIatiIdentifierFieldName();
+
         AMPFMService fmService = new AMPFMService();
         enumerator = new CachingFieldsEnumerator(syncDAO,
                 new ActivityFieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE,
-                        allowMultiplePrograms));
+                        allowMultiplePrograms, iatiIdentifierFieldName));
 
         AmpFieldInfoProvider contactFieldInfoProvider = new AmpFieldInfoProvider(AmpContact.class);
         contactEnumerator = new CachingFieldsEnumerator(syncDAO,

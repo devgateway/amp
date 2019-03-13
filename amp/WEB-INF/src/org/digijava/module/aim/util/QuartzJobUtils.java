@@ -262,7 +262,7 @@ public class QuartzJobUtils {
 
     public static void runJobIfNotPaused(String name) {
         QuartzJobForm job = getJobByName(name);
-        if (!job.isPaused()) {
+        if (job != null && !job.isPaused()) {
             runJob(job);
         }
     }

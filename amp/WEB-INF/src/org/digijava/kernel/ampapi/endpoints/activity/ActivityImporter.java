@@ -139,7 +139,8 @@ public class ActivityImporter extends ObjectImporter {
                     SecurityErrors.INVALID_TEAM.withDetails("Invalid team member in modified_by field."));
         }
 
-        if (org.dgfoundation.amp.onepager.util.ActivityUtil.isActivityStale(ampActivityId)) {
+        Long activityGroupVersion = AIHelper.getActivityGroupVersionOrNull(newJson);
+        if (org.dgfoundation.amp.onepager.util.ActivityUtil.isActivityStale(ampActivityId, activityGroupVersion)) {
             return Collections.singletonList(
                     ActivityErrors.ACTIVITY_IS_STALE.withDetails("Activity is not the latest version."));
         }
@@ -195,10 +196,8 @@ public class ActivityImporter extends ObjectImporter {
 
                 cleanImportableFields(fieldsDef, newActivity);
 
-                if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-                    PersistenceManager.getSession().evict(newActivity.getAmpActivityGroup());
-                    newActivity.getAmpActivityGroup().setVersion(-1L);
-                }
+                PersistenceManager.getSession().evict(newActivity.getAmpActivityGroup());
+                newActivity.getAmpActivityGroup().setVersion(-1L);
             } else if (!update) {
                 newActivity = new AmpActivityVersion();
             }

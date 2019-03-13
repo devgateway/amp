@@ -422,22 +422,26 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
     }
 
     /**
-     * Checks if the activity is stale just by looking at ampActivityId. Used only for the case when new activity
-     * versions are created.
+     * Checks if the activity is stale. Used only for the case when new activity versions are created.
      */
-    public static boolean isActivityStale(Long ampActivityId) {
+    public static boolean isActivityStale(Long ampActivityId, Long activityGroupVersion) {
         Number activityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityVersion.class)
                 .add(Restrictions.eq("ampActivityId", ampActivityId))
                 .setProjection(Projections.count("ampActivityId"))
                 .uniqueResult();
+        if (activityCount.longValue() == 0) {
+            return false;
+        }
 
         Number latestActivityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityGroup.class)
                 .createAlias("ampActivityLastVersion", "a")
-                .add(Restrictions.eq("a.ampActivityId", ampActivityId))
+                .add(Restrictions.and(
+                        Restrictions.eq("a.ampActivityId", ampActivityId),
+                        Restrictions.eq("version", activityGroupVersion)))
                 .setProjection(Projections.count("a.ampActivityId"))
                 .uniqueResult();
 
-        return activityCount.longValue() == 1 && latestActivityCount.longValue() == 0;
+        return latestActivityCount.longValue() == 0;
     }
 
     /**

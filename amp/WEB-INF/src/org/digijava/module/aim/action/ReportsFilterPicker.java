@@ -244,6 +244,10 @@ public class ReportsFilterPicker extends Action {
                 AmpReportFiltersConverter converter = new AmpReportFiltersConverter(filterRules);
                 AmpARFilter ampARFilter = converter.buildFilters();
                 ampARFilter.fillWithDefaultsSettings();
+                if (jsonObjParams.get(EPConstants.INCLUDE_LOCATION_CHILDREN) != null) {
+                    filterForm.setIncludeLocationChildren(
+                            (Boolean) jsonObjParams.get(EPConstants.INCLUDE_LOCATION_CHILDREN));
+                }
                 FilterUtil.populateForm(filterForm, ampARFilter, longAmpReportId);
                 // We need to "recreate" the arfilter or it wont be shown.
                 ampARFilter = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
@@ -913,6 +917,7 @@ public class ReportsFilterPicker extends Action {
         arf.setHumanitarianAid(buildBooleanField(filterForm.getSelectedHumanitarianAid()));
         arf.setDisasterResponse(buildBooleanField(filterForm.getSelectedDisasterResponse()));
         arf.getUndefinedOptions().addAll(filterForm.getUndefinedOptions());
+        arf.setIncludeLocationChildren(filterForm.getIncludeLocationChildren());
         arf.postprocess();
     }
 

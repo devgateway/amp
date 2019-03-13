@@ -145,6 +145,8 @@ public class ReportsFilterPickerForm extends ActionForm {
     //private boolean isnewreport;
     private Long countYearFrom;
     
+    private Boolean includeLocationChildren = true;
+    
 //  private List nationalPlanningObjectives;
 //  private List primaryPrograms;
 //  private List secondaryPrograms;
@@ -1571,5 +1573,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 
     public void setFromPledgeDetailEndDate(String fromPledgeDetailEndDate) {
         this.fromPledgeDetailEndDate = fromPledgeDetailEndDate;
+    }
+    
+    public Boolean getIncludeLocationChildren() {
+        return includeLocationChildren;
+    }
+    
+    public void setIncludeLocationChildren(Boolean includeLocationChildren) {
+        this.includeLocationChildren = includeLocationChildren;
     }
 }

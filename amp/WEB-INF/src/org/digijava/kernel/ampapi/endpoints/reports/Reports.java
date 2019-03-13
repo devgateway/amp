@@ -830,6 +830,10 @@ public class Reports implements ErrorReportingEndpoint {
                     newFilters.setCurrency(CurrencyUtil.getAmpcurrency(currency));
                     newFilters.setCalendarType(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(calendar)));
                 }
+                
+                if (formParams.getIncludeLocationChildren() != null) {
+                    newFilters.setIncludeLocationChildren(formParams.getIncludeLocationChildren());
+                }
 
                 logger.info(newFilters);
 

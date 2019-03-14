@@ -238,8 +238,6 @@ public class ReportsFilterPicker extends Action {
                         throw new RuntimeException("Unsupported type.");
                     }
                 }));
-                // TODO: Guardarla en settings.
-                boolean includeLocationChildren = jsonObjParams.getBoolean(EPConstants.INCLUDE_LOCATION_CHILDREN);
                 AmpReportFilters filterRules = FilterUtils.getFilters(filters, new AmpReportFilters());
                 AmpReportFiltersConverter converter = new AmpReportFiltersConverter(filterRules);
                 AmpARFilter ampARFilter = converter.buildFilters();

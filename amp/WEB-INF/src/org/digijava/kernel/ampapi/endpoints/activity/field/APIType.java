@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,12 +20,18 @@ public class APIType {
 
     @JsonProperty(ActivityEPConstants.ITEM_TYPE)
     private final FieldType itemType;
-
+    
     /**
      * Meaningful only when fieldType is list.
      */
     @JsonIgnore
     private final Class<?> elementType;
+    
+    @JsonCreator
+    public APIType(@JsonProperty(ActivityEPConstants.FIELD_TYPE) String fieldType) {
+        this(null, FieldType.valueOf(fieldType.toUpperCase()),
+                FieldType.valueOf(fieldType.toUpperCase()) == FieldType.LIST ? Object.class : null);
+    }
 
     public APIType(Class<?> type) {
         this(type, null, null);

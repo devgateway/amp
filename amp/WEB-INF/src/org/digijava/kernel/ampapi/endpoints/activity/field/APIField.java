@@ -93,7 +93,10 @@ public class APIField {
 
     @JsonIgnore
     private FieldValueReader fieldValueReader;
-
+    
+    public APIField() {
+    }
+    
     public void setFieldValueReader(FieldValueReader fieldValueReader) {
         this.fieldValueReader = fieldValueReader;
     }

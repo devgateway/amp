@@ -106,11 +106,11 @@
 		
      <c:if test="${aimCompareActivityVersionsForm.method == 'viewAllDifferences'}"> 
      <logic:iterate id="listItem" property="listoutputCollectionGrouped" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
-     <tr> <td> <h4>
+     <tr id="skip" > <td colspan="3"> <h4>
 		<div> <strong><bean:write name="listItem" property="key" filter="false"/></strong>
 		</div></h4> </td></tr>  
 		<logic:iterate id="groupItem" property="value" name="listItem" type="java.util.Map.Entry">
-					
+					<tr>
 					<td rowspan="${groupItem.value.size()}" align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
 							<digi:trn><bean:write property="key" name="groupItem"/></digi:trn>
 					</td>
@@ -247,17 +247,17 @@ function left(id) {
 }
 
 function setStripsTable(tableId, classOdd, classEven) {
-	var tableElement = document.getElementById(tableId);
-	if (tableElement) {
-		rows = tableElement.getElementsByTagName('tr');
-		for(var i = 0, n = rows.length; i < n; ++i) {
-			if(i%2 == 0)
+
+	var rows = $('#'+ tableId +' > tbody > tr:not(#skip)');
+	if (rows) {
+		for (var i = 0, n = rows.length; i < n; ++i) {
+			if (i % 2 == 0)
 				rows[i].className = classEven;
 			else
 				rows[i].className = classOdd;
 		}
-		rows = null;
 	}
+	rows = null;
 }
 
 function setHoveredTable(tableId, hasHeaders) {

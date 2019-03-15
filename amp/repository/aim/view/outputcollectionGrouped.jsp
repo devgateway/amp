@@ -13,7 +13,7 @@
 
 <digi:instance property="aimCompareActivityVersionsForm" />
 				<logic:iterate id="groupItem" property="outputCollectionGrouped" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
-					
+				<tr>
 					<td rowspan="${groupItem.value.size()}" align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
 							<digi:trn><bean:write property="key" name="groupItem"/></digi:trn>
 					</td>

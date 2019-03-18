@@ -96,18 +96,18 @@ public class ExportFilterUtils {
             }
         } 
         
-		if (ColumnConstants.APPROVAL_STATUS.equals(columnName)) {
-			List<String> vals = filter.getValue().values.stream().collect(Collectors.toList());
-			vals.replaceAll(status -> {
-				if (Long.toString(ColumnReportData.UNALLOCATED_ID).equals(status)) {
-					return TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME);
-				} else {
-					return TranslatorWorker.translateText(FilterUtils.getApprovalStatusByNumber(new Integer(status)));
-				}
-			});
+        if (ColumnConstants.APPROVAL_STATUS.equals(columnName)) {
+            List<String> vals = filter.getValue().values.stream().collect(Collectors.toList());
+            vals.replaceAll(status -> {
+                if (Long.toString(ColumnReportData.UNALLOCATED_ID).equals(status)) {
+                    return TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME);
+                } else {
+                    return TranslatorWorker.translateText(FilterUtils.getApprovalStatusByNumber(new Integer(status)));
+                }
+            });
 
-			return vals;
-		}
+            return vals;
+        }
 
         if (ColumnConstants.TEAM.equals(columnName)) {
             Set<Long> allIds = filter.getValue().addIds(null).stream().collect(Collectors.toSet());
@@ -137,12 +137,12 @@ public class ExportFilterUtils {
      * @return
      */
     private static Map<Long, String> fetchEntities(NamedElemType elemType, String elemName, Set<Long> allIds) {
-		Map<Long, String> entities = new HashMap<Long, String>();
-		if (allIds.contains(ColumnReportData.UNALLOCATED_ID)) {
-			entities.put(ColumnReportData.UNALLOCATED_ID,
-					TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME));
-		}
-        
+        Map<Long, String> entities = new HashMap<Long, String>();
+        if (allIds.contains(ColumnReportData.UNALLOCATED_ID)) {
+            entities.put(ColumnReportData.UNALLOCATED_ID,
+                    TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME));
+        }
+
         switch(elemType) {
             case SECTOR: 
                 SectorUtil.getAllSectors().stream().filter(sector -> allIds.contains(sector.getAmpSectorId())).forEach(sector -> {
@@ -199,15 +199,15 @@ public class ExportFilterUtils {
         List<String> values = new ArrayList<String>();
 
         if (rule.values != null) {
-        	rule.values.forEach(value -> {
-        		if (FilterRule.TRUE_VALUE.equals(value)) {
-        			values.add(TranslatorWorker.translateText("Yes"));
-        		} else if (FilterRule.FALSE_VALUE.equals(value)) {
-        			values.add(TranslatorWorker.translateText("No"));
-        		} else  if (Long.toString(ColumnReportData.UNALLOCATED_ID).equals(value)) {
-        			values.add(TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME));
-        		}       		
-        	});
+            rule.values.forEach(value -> {
+                if (FilterRule.TRUE_VALUE.equals(value)) {
+                    values.add(TranslatorWorker.translateText("Yes"));
+                } else if (FilterRule.FALSE_VALUE.equals(value)) {
+                    values.add(TranslatorWorker.translateText("No"));
+                } else if (Long.toString(ColumnReportData.UNALLOCATED_ID).equals(value)) {
+                    values.add(TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME));
+                }
+            });
         }
 
         return values;

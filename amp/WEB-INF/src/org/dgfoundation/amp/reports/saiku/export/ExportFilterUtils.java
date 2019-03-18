@@ -97,8 +97,8 @@ public class ExportFilterUtils {
         } 
         
         if (ColumnConstants.APPROVAL_STATUS.equals(columnName)) {
-            List<String> vals = filter.getValue().values.stream().collect(Collectors.toList());
-            vals.replaceAll(status -> {
+			List<String> vals = filter.getValue().values.stream().collect(Collectors.toList());
+			vals.replaceAll(status -> {
 				if (Long.toString(ColumnReportData.UNALLOCATED_ID).equals(status)) {
 					return TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME);
 				} else {
@@ -137,11 +137,11 @@ public class ExportFilterUtils {
      * @return
      */
     private static Map<Long, String> fetchEntities(NamedElemType elemType, String elemName, Set<Long> allIds) {
-        Map<Long, String> entities = new HashMap<Long, String>();
-
-        if (allIds.contains(ColumnReportData.UNALLOCATED_ID)) {
-        	entities.put(ColumnReportData.UNALLOCATED_ID, TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME));
-        }
+		Map<Long, String> entities = new HashMap<Long, String>();
+		if (allIds.contains(ColumnReportData.UNALLOCATED_ID)) {
+			entities.put(ColumnReportData.UNALLOCATED_ID,
+					TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME));
+		}
         
         switch(elemType) {
             case SECTOR: 

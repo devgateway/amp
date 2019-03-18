@@ -96,7 +96,7 @@ public class ExportFilterUtils {
             }
         } 
         
-        if (ColumnConstants.APPROVAL_STATUS.equals(columnName)) {
+		if (ColumnConstants.APPROVAL_STATUS.equals(columnName)) {
 			List<String> vals = filter.getValue().values.stream().collect(Collectors.toList());
 			vals.replaceAll(status -> {
 				if (Long.toString(ColumnReportData.UNALLOCATED_ID).equals(status)) {
@@ -105,10 +105,10 @@ public class ExportFilterUtils {
 					return TranslatorWorker.translateText(FilterUtils.getApprovalStatusByNumber(new Integer(status)));
 				}
 			});
-            
-            return vals;
-        } 
-        
+
+			return vals;
+		}
+
         if (ColumnConstants.TEAM.equals(columnName)) {
             Set<Long> allIds = filter.getValue().addIds(null).stream().collect(Collectors.toSet());
             Map<Long, String> entities = new HashMap<Long, String>();

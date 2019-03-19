@@ -80,6 +80,7 @@ public class AmpARFilterConverter {
                 put("modeOfPayment", ColumnConstants.MODE_OF_PAYMENT);
                 put("humanitarianAid", ColumnConstants.HUMANITARIAN_AID);
                 put("disasterResponse", ColumnConstants.DISASTER_RESPONSE_MARKER);
+                put("statuses", ColumnConstants.STATUS);
             }});
 
     /**

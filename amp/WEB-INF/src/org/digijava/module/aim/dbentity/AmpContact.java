@@ -91,7 +91,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
                     discriminatorOption = Constants.CONTACT_PROPERTY_NAME_FAX,
                     sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true,
                     type = AmpContactFaxProperty.class)})
-    private SortedSet<AmpContactProperty> properties;
+    private SortedSet<AmpContactProperty> properties = new TreeSet<>();
 
     public AmpContact(){
         

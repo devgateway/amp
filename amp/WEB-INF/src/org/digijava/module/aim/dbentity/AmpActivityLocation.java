@@ -4,10 +4,10 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 
 import java.io.Serializable;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.util.Output;
 
@@ -19,8 +19,10 @@ import org.digijava.module.aim.util.Output;
  */
 public class AmpActivityLocation implements Versionable, Serializable, Cloneable {
     //IATI-check: should be exported.
-//  @Interchangeable(fieldTitle="ID", id=true)
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long id;
+
     @InterchangeableBackReference
     private AmpActivityVersion activity;
     @Interchangeable(fieldTitle = "Location", pickIdOnly = true, importable = true, uniqueConstraint = true,

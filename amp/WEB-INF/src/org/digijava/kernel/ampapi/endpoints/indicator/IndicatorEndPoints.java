@@ -16,6 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -108,7 +109,7 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
             notes = "The file exported will have 2 columns, the first one with the category values for the "
                     + "administrative level indicated and the second one with the values uploaded for this "
                     + "indicator layer if they exist.")
-    public StreamingOutput download(
+    public Response download(
             @ApiParam("indicator name to query for indicator name") @QueryParam("admLevelId") long admLevelId,
             @ApiParam("adm Level ID to query for category value") @QueryParam("name") String indicatorName) {
 

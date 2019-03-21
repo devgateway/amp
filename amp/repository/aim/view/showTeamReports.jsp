@@ -684,14 +684,14 @@ $(document).ready(function() {
 							</c:set>
 							<c:choose>
 								<c:when test="${report.budgetExporter}">
-									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&budgetExporter=true&type=${report.type}" title="${translation}">
+									<a href="/reportWizard.do?editReportId=${report.ampReportId}&budgetExporter=true&type=${report.type}" title="${translation}">
 										<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
-									</digi:link>
+									</a>
 								</c:when>
 								<c:otherwise>
-									<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&type=${report.type}" title="${translation}">
+									<a href="/reportWizard.do?editReportId=${report.ampReportId}&type=${report.type}" title="${translation}">
 										<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
-									</digi:link> 
+									</a>
 								</c:otherwise>
 							</c:choose>&nbsp;
 							<c:set var="translation">

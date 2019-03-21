@@ -77,6 +77,7 @@ public final class PledgesProgramFilterListManager extends ProgramFilterListMana
     protected List<String> getProgramFilterIds(AmpActivityProgramSettings setting) {
         List<String> filterIds = NAME_TO_COLUMNS.get(setting.getName()).stream()
             .map(col -> FilterUtils.INSTANCE.idFromColumnName(col))
+            .sorted()
             .collect(Collectors.toList());
 
         return filterIds;

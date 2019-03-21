@@ -601,10 +601,13 @@ public class ReportsFilterPicker extends Action {
                 filterForm.getSelectedPrimaryPrograms());
         Set<AmpTheme> selectedSecondaryPrograms = Util.getSelectedObjects(AmpTheme.class,
                 filterForm.getSelectedSecondaryPrograms());
+        Set<AmpTheme> selectedTertiaryPrograms = Util.getSelectedObjects(AmpTheme.class,
+                filterForm.getSelectedTertiaryPrograms());
 
         arf.setSelectedNatPlanObj(nullOrCopy(selectedNatPlanObj));
         arf.setSelectedPrimaryPrograms(nullOrCopy(selectedPrimaryPrograms));
         arf.setSelectedSecondaryPrograms(nullOrCopy(selectedSecondaryPrograms));
+        arf.setSelectedTertiaryPrograms(nullOrCopy(selectedTertiaryPrograms));
     }
 
     private static void fillFilterDates(AmpARFilter arf, ReportsFilterPickerForm filterForm) {

@@ -26,7 +26,7 @@ public class UserVerifiedDateJob extends ConnectionCleaningJob implements Statef
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
 
         Date curDate = new Date();
-        Date dateBeforeDays = AmpDateUtils.getDateBeforeDays(curDate,30);
+        Date dateBeforeDays = AmpDateUtils.getDateBeforeDays(curDate, 0);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 

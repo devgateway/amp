@@ -67,6 +67,20 @@ public class ApiFieldStructuralServiceTest {
         assertTrue(service.existsStructuralChanges(getAmpApiFields(), clientFields));
     }
     
+    @Test
+    public void existsStructuralChangesDifferentTypeLists() {
+        List<APIField> clientFields = new ArrayList<>();
+        
+        APIField listFields = newListField("list");
+        listFields.getChildren().add(newStringField("id"));
+        
+        clientFields.add(newLongField("id"));
+        clientFields.add(newStringField("title"));
+        clientFields.add(listFields);
+        
+        assertTrue(service.existsStructuralChanges(getAmpApiFields(), clientFields));
+    }
+    
     public List<APIField> getAmpApiFields() {
         List<APIField> fields = new ArrayList<>();
         

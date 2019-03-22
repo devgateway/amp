@@ -16,6 +16,7 @@ import org.dgfoundation.amp.visibility.data.FMSettingsMediator;
 import org.dgfoundation.amp.visibility.data.FMTree;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.FMSettingsConfig;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Feature Manager services that can be used by FM, menu and other endpoints 
@@ -75,12 +76,22 @@ public class FMService {
                     .toFlattenedTree(config.getFullEnabledPaths());
                 fmSettingsResult.put(module, entries);
             } else {
-                fmSettingsResult.put(module, getFmSettingsAsTree(module,
-                        config.getRequiredPaths()).asJson(config.getFullEnabledPaths()));
+                FMTree fmTree = getFmSettingsAsTree(module, config.getRequiredPaths());
+                fmSettingsResult.put(module, getTreeValue(module, fmTree, config.getFullEnabledPaths()));
             }
         }
     }
-
+    
+    public static Object getTreeValue(String module, FMTree fmTree, Boolean fullEnabledPaths) {
+        JsonBean fmTreeJson = fmTree.asJson(fullEnabledPaths);
+        
+        Map.Entry<String, Object> entry = fmTreeJson.any().entrySet().stream()
+                .filter(e -> e.getKey().toLowerCase().equals(module.toLowerCase()))
+                .findAny().get();
+        
+        return entry.getValue();
+    }
+    
     /**
      * Get FM entries as a tree structure. If filter is specified and non-empty then FM entries will be filtered.
      * @param module for which to return FM entries

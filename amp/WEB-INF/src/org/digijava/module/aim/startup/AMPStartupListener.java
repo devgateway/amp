@@ -26,6 +26,7 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.importers.GazeteerCSVImporter;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.swagger.SwaggerConfigurer;
 import org.digijava.kernel.content.ContentRepositoryManager;
 import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
@@ -186,6 +187,7 @@ public class AMPStartupListener extends HttpServlet implements
             initNiReports();
             importGazeteer();
             registerEhCacheMBeans();
+            checkAPISanity();
 
             new SwaggerConfigurer().configure();
 
@@ -288,5 +290,9 @@ public class AMPStartupListener extends HttpServlet implements
         catch (Exception e){
             logger.error("cannot import gazeteer",e);
         }
-    }   
+    }
+
+    private void checkAPISanity() {
+        ApiError.COMPONENT_ID_CLASS_MAP.size();
+    }
 }

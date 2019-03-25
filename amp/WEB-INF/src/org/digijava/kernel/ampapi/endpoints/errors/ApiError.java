@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -52,7 +53,8 @@ public class ApiError {
      *  Stores the mapping between the component and it's Id (C).
      *  Component id 0 is reserved for all errors that are not tied to any component.
      */
-    private final static Map<String, Integer> COMPONENT_ID_CLASS_MAP = new HashMap<String, Integer>() {{
+    public static final Map<String, Integer> COMPONENT_ID_CLASS_MAP = configureComponentClassToIdMap(
+            new HashMap<String, Integer>() {{
         put(InterchangeEndpoints.class.getName(), 1);
         put(Security.class.getName(), 2);
         put(Reports.class.getName(), 3);
@@ -64,11 +66,24 @@ public class ApiError {
         put(AmpConfiguration.class.getName(), 9);
         put(ContactEndpoint.class.getName(), 10);
         put(PerformanceRulesEndpoint.class.getName(), 11);
-    }};
+    }});
 
     private final static Set<String> COMPONENTS_WITH_NEW_ERROR_FORMAT = new HashSet<>(
             Collections.singletonList(InterchangeEndpoints.class.getName()));
-    
+
+    private static Map<String, Integer> configureComponentClassToIdMap(Map<String, Integer> source) {
+        Set<Integer> usedIds = new TreeSet<>();
+        // Component id 0 is reserved for all errors that are not tied to any component.
+        usedIds.add(0);
+        source.forEach((cn, id) -> {
+            if (usedIds.contains(id)) {
+                throw new RuntimeException("Class '" + cn + "' cannot be mapped to id=" + id + ". Id already in use.");
+            }
+            usedIds.add(id);
+        });
+        return Collections.unmodifiableMap(source);
+    }
+
     /**
      * Returns a JSON object with a single error message  => generic 0 error code with one error in the list.
      * @param errorMessage

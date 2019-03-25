@@ -126,6 +126,8 @@ public class FieldsEnumerator {
         apiField.setApiType(apiType);
 
         apiField.setPossibleValuesProviderClass(InterchangeUtils.getPossibleValuesProvider(field));
+        String cPVPath = StringUtils.isBlank(interchangeable.commonPV()) ? null : interchangeable.commonPV();
+        apiField.setCommonPossibleValuesPath(cPVPath); 
 
         String label = getLabelOf(interchangeable);
         apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));

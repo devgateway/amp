@@ -21,7 +21,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "field_name", "apiType", "field_label", "required", "importable", "dependencies", "id_only",
     "multiple_values", "percentage_constraint", "unique_constraint", "tree_collection", "translatable", "regex_pattern",
-    "regex_constraint", "field_length", "size_limit" })
+    "regex_constraint", "field_length", "size_limit", "common-possible-values" })
 public class APIField {
 
     @JsonProperty(ActivityEPConstants.FIELD_NAME)
@@ -93,6 +93,9 @@ public class APIField {
 
     @JsonIgnore
     private FieldValueReader fieldValueReader;
+
+    @JsonProperty(ActivityEPConstants.COMMON_POSSIBLE_VALUES)
+    private String commonPossibleValuesPath;
 
     public void setFieldValueReader(FieldValueReader fieldValueReader) {
         this.fieldValueReader = fieldValueReader;
@@ -281,6 +284,14 @@ public class APIField {
         this.discriminationConfigurer = discriminationConfigurer;
     }
 
+    public String getCommonPossibleValuesPath() {
+        return commonPossibleValuesPath;
+    }
+
+    public void setCommonPossibleValuesPath(String commonPossibleValuesPath) {
+        this.commonPossibleValuesPath = commonPossibleValuesPath;
+    }
+
     @Override
     public String toString() {
         return "APIField{" + "fieldName='" + fieldName + '\'' + ", fieldType='" + this.apiType.getFieldType() + '\''
@@ -290,6 +301,7 @@ public class APIField {
                 + translatable + ", multipleValues=" + multipleValues
                 + ", uniqueConstraint='" + uniqueConstraint + '\'' + ", percentageConstraint='" + percentageConstraint
                 + '\'' + ", treeCollectionConstraint=" + treeCollectionConstraint + ", fieldLength=" + fieldLength
+                + ", common-possible-values='" + commonPossibleValuesPath + "'"
                 + ", children=" + children + ", dependencies=" + dependencies + ", percentage=" + percentage 
                 + ", regex_pattern=" + regexPattern + "}";
     }

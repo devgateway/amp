@@ -63,6 +63,17 @@ public class InterchangeUtils {
         return n.doubleValue();
     }
 
+    public static Long getLongOrNullOnError(Object obj) {
+        if (obj instanceof Long) {
+            return (Long) obj;
+        }
+        if (!Number.class.isInstance(obj)) {
+            return null;
+        }
+        Number n = (Number) obj;
+        return n.longValue();
+    }
+
     /**
      * transforms a Map<String,String> to a JsonBean with equal structure
      * 

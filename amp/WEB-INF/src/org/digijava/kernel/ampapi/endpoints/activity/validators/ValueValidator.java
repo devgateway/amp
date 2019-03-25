@@ -1,13 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getDoubleFromJsonNumber;
+import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getLongOrNullOnError;
+
 import java.util.List;
 import java.util.Map;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -45,43 +47,23 @@ public class ValueValidator extends InputValidator {
         if (!isValidPercentage(newFieldParent, fieldDescription)) 
             return false;
 
-        // FIXME possible values are not always available for all fields, must check only for select fields (not all)
-        List<PossibleValue> possibleValues = importer.getPossibleValuesCache().getPossibleValues(fieldPath);
+        PossibleValuesCache pvc = importer.getPossibleValuesCache();
         Object value = newFieldParent.get(fieldDescription.getFieldName());
+        String cPVPath = fieldDescription.getCommonPossibleValuesPath();
         
-        if (possibleValues.size() != 0 && value != null) {
+        if (pvc.hasPossibleValues(fieldPath, cPVPath) && value != null) {
             if (fieldDescription.getApiType().getFieldType().isList()) {
                 if (fieldDescription.getApiType().isSimpleItemType()) {
-                    return ((List<?>) value).stream().allMatch(v -> isAllowedValue(possibleValues, v));
+                    return ((List<?>) value).stream().allMatch(
+                            v -> pvc.isAllowed(getLongOrNullOnError(v), fieldPath, cPVPath));
                 }
                 // possible values definition allowed at simple type list level only
                 return false;
             } else {
-                return isAllowedValue(possibleValues, value);
+                return pvc.isAllowed(getLongOrNullOnError(value), fieldPath, cPVPath);
             }
         }
         return true;
-    }
-    
-    private boolean isAllowedValue(List<PossibleValue> possibleValues, Object value) {
-        // convert to string the ids to avoid long-integer comparison
-        return findById(possibleValues, String.valueOf(value)) != null;
-    }
-
-    // TODO it would be nice if possible values could be extended to retrieve one single possible value by id.
-    // this will reduce this operation from O(n) to O(log N) or O(1)
-    // reason: fields can repeat and may have thousands of possible values
-    private PossibleValue findById(List<PossibleValue> possibleValues, String id) {
-        for (PossibleValue possibleValue : possibleValues) {
-            if (id.equals(possibleValue.getId().toString())) {
-                return possibleValue;
-            }
-            PossibleValue childPossibleValue = findById(possibleValue.getChildren(), id);
-            if (childPossibleValue != null) {
-                return childPossibleValue;
-            }
-        }
-        return null;
     }
 
     private boolean isValidPercentage(Map<String, Object> newFieldParent,
@@ -92,7 +74,7 @@ public class ValueValidator extends InputValidator {
         }
 
         //attempt to get the number out of this one
-        Double val = InterchangeUtils.getDoubleFromJsonNumber(newFieldParent.get(fieldDescription.getFieldName()));
+        Double val = getDoubleFromJsonNumber(newFieldParent.get(fieldDescription.getFieldName()));
         if (val != null
                 && (val < ActivityEPConstants.EPSILON || val - MAXIMUM_PERCENTAGE > ActivityEPConstants.EPSILON)) {
             this.isValidPercentage = false;

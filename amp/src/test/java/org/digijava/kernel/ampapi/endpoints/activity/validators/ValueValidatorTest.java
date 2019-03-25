@@ -14,6 +14,7 @@ import java.util.Map;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
@@ -48,16 +49,11 @@ public class ValueValidatorTest {
     private ActivityImporter importer;
     private APIField sectorFieldDescription;
     private APIField fyFieldDescription;
+    private PossibleValuesEnumerator pvEnumerator;
     private PossibleValuesCache possibleValuesCached;
 
     @Before
     public void setUp() throws Exception {
-        importer = mock(ActivityImporter.class);
-        possibleValuesCached = mock(PossibleValuesCache.class);
-        when(importer.getPossibleValuesCache()).thenReturn(possibleValuesCached);
-        when(possibleValuesCached.getPossibleValues(SECTOR_FIELD)).thenReturn(SECTOR_POSSIBLE_VALUES);
-        when(possibleValuesCached.getPossibleValues(FY_FIELD)).thenReturn(FY_POSSIBLE_VALUES);
-
         sectorFieldDescription = new APIField();
         sectorFieldDescription.setFieldName(SECTOR_FIELD);
         sectorFieldDescription.setImportable(true);
@@ -69,6 +65,17 @@ public class ValueValidatorTest {
         fyFieldDescription.setImportable(true);
         fyFieldDescription.setIdOnly(true);
         fyFieldDescription.setApiType(new APIType(Collection.class, Long.class));
+
+        List<APIField> apiFields = Arrays.asList(sectorFieldDescription, fyFieldDescription);
+
+        pvEnumerator = mock(PossibleValuesEnumerator.class);
+        when(pvEnumerator.getPossibleValuesForField(SECTOR_FIELD, apiFields)).thenReturn(SECTOR_POSSIBLE_VALUES);
+        when(pvEnumerator.getPossibleValuesForField(FY_FIELD, apiFields)).thenReturn(FY_POSSIBLE_VALUES);
+
+        possibleValuesCached = new PossibleValuesCache(pvEnumerator, apiFields);
+
+        importer = mock(ActivityImporter.class);
+        when(importer.getPossibleValuesCache()).thenReturn(possibleValuesCached);
     }
 
     @Test

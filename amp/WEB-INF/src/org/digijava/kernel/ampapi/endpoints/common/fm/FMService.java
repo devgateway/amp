@@ -16,7 +16,6 @@ import org.dgfoundation.amp.visibility.data.FMSettingsMediator;
 import org.dgfoundation.amp.visibility.data.FMTree;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.FMSettingsConfig;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Feature Manager services that can be used by FM, menu and other endpoints 
@@ -77,19 +76,12 @@ public class FMService {
                 fmSettingsResult.put(module, entries);
             } else {
                 FMTree fmTree = getFmSettingsAsTree(module, config.getRequiredPaths());
-                fmSettingsResult.put(module, getTreeValue(module, fmTree, config.getFullEnabledPaths()));
+                Map<String, Object> enabledPaths = fmTree.asJson(config.getFullEnabledPaths()).any();
+                if (enabledPaths != null) {
+                    fmSettingsResult.putAll(enabledPaths);
+                }
             }
         }
-    }
-    
-    public static Object getTreeValue(String module, FMTree fmTree, Boolean fullEnabledPaths) {
-        JsonBean fmTreeJson = fmTree.asJson(fullEnabledPaths);
-        
-        Map.Entry<String, Object> entry = fmTreeJson.any().entrySet().stream()
-                .filter(e -> e.getKey().toLowerCase().equals(module.toLowerCase()))
-                .findAny().get();
-        
-        return entry.getValue();
     }
     
     /**

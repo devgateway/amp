@@ -17,6 +17,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpFundingDetailDiscriminationConfigurer;
+import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -36,9 +37,11 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     
     @Interchangeable(fieldTitle = "Funding ID")
     private Long ampFundingId;
-    @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true, required = ALWAYS)
-    
+
+    @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true, required = ALWAYS,
+            commonPV = CommonFieldsConstants.COMMON_ORGANIZATION)
     private AmpOrganisation ampDonorOrgId;
+
     @InterchangeableBackReference
     private AmpActivityVersion ampActivityId;
     private Long crsTransactionNo;

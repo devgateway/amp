@@ -187,7 +187,7 @@ public class AMPStartupListener extends HttpServlet implements
             initNiReports();
             importGazeteer();
             registerEhCacheMBeans();
-            checkAPISanity();
+            initAPI();
 
             new SwaggerConfigurer().configure();
 
@@ -292,7 +292,7 @@ public class AMPStartupListener extends HttpServlet implements
         }
     }
 
-    private void checkAPISanity() {
-        ApiError.COMPONENT_ID_CLASS_MAP.size();
+    private void initAPI() {
+        ApiError.configureComponentClassToIdMap();
     }
 }

@@ -7,7 +7,6 @@ import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEME
 import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_REGION;
 import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ZONE;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -18,11 +17,18 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableMap;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationSkeleton;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 /**
  * This class generates the filter list (tree) object for locations
@@ -112,14 +118,28 @@ public class LocationFilterListManager implements FilterListManager {
      * @return Country ids with children
      */
     protected List<Long> getCountriesWithChildrenIds() {
-        String query = "SELECT acvl.id FROM amp_category_value_location acvl "
-                + "WHERE acvl.parent_location IS NULL "
-                + "AND acvl.id IN (SELECT DISTINCT parent_location FROM amp_category_value_location)";
         
-        Collection<BigInteger> countryCollection = PersistenceManager.getSession().createSQLQuery(query).list();
+        Session session = PersistenceManager.getSession();
+        
+        String queryString = "SELECT loc FROM " + AmpCategoryValueLocations.class.getName()
+                + " loc WHERE loc.parentLocation IS NULL "
+                + " AND (loc.deleted != true)"
+                + " AND (loc.id IN (SELECT DISTINCT parentLocation FROM "
+                + AmpCategoryValueLocations.class.getName() + "))";
+        
+        Query qry = session.createQuery(queryString);
+        qry.setCacheable(true);
+        Collection<AmpCategoryValueLocations> countryCollection = qry.list();
+    
+        AmpApplicationSettings appSettings = EndpointUtils.getAppSettings();
+        final boolean showAllCountries = appSettings == null ? false : appSettings.getShowAllCountries();
+    
+        final String defaultIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
+        
         List<Long> countryIds = countryCollection
                 .stream()
-                .map(b -> Long.valueOf(b.intValue()))
+                .filter(country -> showAllCountries || country.getIso().equals(defaultIso))
+                .map(country -> country.getId())
                 .collect(Collectors.toList());
         
         return countryIds;

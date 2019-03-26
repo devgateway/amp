@@ -1387,6 +1387,14 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         return years;
     }
 
+    public static boolean isFiscalYearInRange(int year) {
+        int rangeStartYear = FeaturesUtil
+                .getGlobalSettingValueInteger(GlobalSettingsConstants.YEAR_RANGE_START);
+        int rangeNumber = FeaturesUtil
+                .getGlobalSettingValueInteger(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
+        return year >= rangeStartYear && year < rangeStartYear + rangeNumber;
+    }
+
     /**
      * Calculate object checksum based on HashCode of not null values to
      * determine if the object has been changed

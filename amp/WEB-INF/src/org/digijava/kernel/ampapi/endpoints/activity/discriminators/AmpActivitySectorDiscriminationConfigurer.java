@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.dgfoundation.amp.algo.Memoizer;
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
+import org.digijava.kernel.ampapi.endpoints.common.values.providers.SectorPossibleValuesProvider;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.util.SectorUtil;
@@ -30,5 +31,10 @@ public class AmpActivitySectorDiscriminationConfigurer implements Discrimination
     public void configure(Object obj, String fieldName, String discriminationValue) {
         AmpActivitySector sector = (AmpActivitySector) obj;
         sector.setClassificationConfig(map.get().get(discriminationValue));
+    }
+
+    @Override
+    public SectorPossibleValuesProvider getPossibleValuesProvider(String discriminationValue) {
+        return new SectorPossibleValuesProvider(discriminationValue);
     }
 }

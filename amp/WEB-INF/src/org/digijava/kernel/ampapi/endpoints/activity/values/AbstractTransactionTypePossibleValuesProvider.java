@@ -18,7 +18,9 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 /**
  * @author Octavian Ciubotaru
  */
-public abstract class AbstractTransactionTypePossibleValuesProvider extends PossibleValuesProvider {
+// TODO is no longer referenced -> remove?
+@Deprecated
+public abstract class AbstractTransactionTypePossibleValuesProvider implements PossibleValuesProvider {
 
     private boolean filterByValues;
     private List<String> values;

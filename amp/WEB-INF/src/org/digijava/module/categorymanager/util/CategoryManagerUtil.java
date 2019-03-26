@@ -8,6 +8,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,6 +35,9 @@ import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
@@ -495,6 +499,21 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 
         return treeSet;
     }
+
+    public static boolean isExitingAmpCategoryValue(String categoryKey, Long id, boolean onlyVisible) {
+        List<Criterion> meetAll = Arrays.asList(
+                Restrictions.eq("ampCategoryClass.keyName", categoryKey),
+                Restrictions.eq("id", id));
+        if (onlyVisible) {
+            meetAll.add(Restrictions.eqOrIsNull("deleted", false));
+        }
+        Number categoryCount = (Number) PersistenceManager.getSession().createCriteria(AmpCategoryValue.class)
+                .add(Restrictions.and(meetAll.toArray(new Criterion[meetAll.size()])))
+                .setProjection(Projections.count("id"))
+                .uniqueResult();
+        return categoryCount.intValue() == 1;
+    }
+
     /**
      * This is a wrapper function for getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered). 
      * The function is called with ordered = false
@@ -909,7 +928,6 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     public static List<AmpCategoryValue> getAllAcceptableValuesForACVClass(String categoryKey, Collection<AmpCategoryValue> relatedCollection)
     {
         List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
-//      collectionByKey.addAll(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey));
         Collection<AmpCategoryValue> collectionPrefiltered = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey);
         for (AmpCategoryValue acv: collectionPrefiltered){
             if (acv!= null && acv.isVisible())
@@ -925,7 +943,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
         }
         return collectionByKey;
     }
-    
+
     /**
      * null-guards the result
      * @param id

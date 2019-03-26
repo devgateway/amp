@@ -32,14 +32,17 @@ public interface PossibleValuesDAO {
 
     List<Object[]> getThemes(String configType);
 
+    boolean isThemeValid(String configType, Long id);
+
     List<Object[]> getSectors(String configType);
+
+    boolean isSectorValid(String configType, Long id);
 
     List<Object[]> getPossibleLocations();
 
-    List<AmpComponentType> getComponentTypes();
-    
-    List<AmpContact> getContacts();
-    
+    boolean isLocationValid(Long id);
+
     List<AmpOrganisation> getOrganisations();
-    
+
+    boolean isOrganizationValid(Long id);
 }

@@ -25,6 +25,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.FEContext;
 import org.digijava.kernel.ampapi.endpoints.activity.FMService;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldValueReader;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
@@ -125,7 +126,7 @@ public class FieldsEnumerator {
         APIType apiType = new APIType(type, fieldType, elementType);
         apiField.setApiType(apiType);
 
-        apiField.setPossibleValuesProviderClass(InterchangeUtils.getPossibleValuesProvider(field));
+        apiField.setPossibleValuesProviderClass(getPossibleValuesProvider(field));
         String cPVPath = StringUtils.isBlank(interchangeable.commonPV()) ? null : interchangeable.commonPV();
         apiField.setCommonPossibleValuesPath(cPVPath); 
 
@@ -217,6 +218,19 @@ public class FieldsEnumerator {
 
     private boolean hasPossibleValues(Field field, Interchangeable interchangeable) {
         return interchangeable.pickIdOnly() || field.isAnnotationPresent(PossibleValues.class);
+    }
+
+    /**
+     * Obtains the possible values provider class of the field, if it has one
+     * @param field
+     * @return null if the field doesn't have a provider class attached, otherwise -- the class
+     */
+    public Class<? extends PossibleValuesProvider> getPossibleValuesProvider(Field field) {
+        PossibleValues ant = field.getAnnotation(PossibleValues.class);
+        if (ant != null) {
+            return ant.value();
+        }
+        return null;
     }
 
     private Class<?> getType(Field field, FEContext context) {

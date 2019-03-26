@@ -217,6 +217,9 @@ public class ApiError {
     }
 
     private static Integer getErrorComponentIdFromStackTrace(StackTraceElement[] stackTrace) {
+        if (componentIdClassMap == null) {
+            configureComponentClassToIdMap();
+        }
         for (StackTraceElement st : stackTrace) {
             if (componentIdClassMap.containsKey(st.getClassName())) {
                 return componentIdClassMap.get(st.getClassName());

@@ -53,7 +53,7 @@ public class ApiError {
      *  Stores the mapping between the component and it's Id (C).
      *  Component id 0 is reserved for all errors that are not tied to any component.
      */
-    private static Map<String, Integer> COMPONENT_ID_CLASS_MAP;
+    private static Map<String, Integer> componentIdClassMap;
 
     public static void configureComponentClassToIdMap() {
         Map<String, Integer> source = new HashMap<String, Integer>() {{
@@ -78,7 +78,7 @@ public class ApiError {
             }
             usedIds.add(id);
         });
-        COMPONENT_ID_CLASS_MAP = Collections.unmodifiableMap(source);
+        componentIdClassMap = Collections.unmodifiableMap(source);
     }
 
     private final static Set<String> COMPONENTS_WITH_NEW_ERROR_FORMAT = new HashSet<>(
@@ -218,8 +218,8 @@ public class ApiError {
 
     private static Integer getErrorComponentIdFromStackTrace(StackTraceElement[] stackTrace) {
         for (StackTraceElement st : stackTrace) {
-            if (COMPONENT_ID_CLASS_MAP.containsKey(st.getClassName())) {
-                return COMPONENT_ID_CLASS_MAP.get(st.getClassName());
+            if (componentIdClassMap.containsKey(st.getClassName())) {
+                return componentIdClassMap.get(st.getClassName());
             }
         }
         

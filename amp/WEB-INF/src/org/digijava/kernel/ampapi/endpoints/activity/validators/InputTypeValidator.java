@@ -73,6 +73,7 @@ public class InputTypeValidator extends InputValidator {
             case FLOAT: return isValidFloat(item);
             case BOOLEAN: return isValidBoolean(item);
             case LIST: return checkListFieldValidity(importer, item, fieldDesc);
+            case OBJECT: return checkObjectFieldValidity(item);
             case LONG: return isValidLong(item);
             default: return false;
         }
@@ -121,6 +122,10 @@ public class InputTypeValidator extends InputValidator {
             }
             return true;
         }
+        return Map.class.isAssignableFrom(item.getClass());
+    }
+
+    private boolean checkObjectFieldValidity(Object item) {
         return Map.class.isAssignableFrom(item.getClass());
     }
 

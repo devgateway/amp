@@ -114,10 +114,13 @@ public class FieldsEnumerator {
         Class<?> elementType = null;
         if (interchangeable.pickIdOnly()) {
             fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
-        } else if (!InterchangeUtils.isSimpleType(field.getType())) {
+        } else if (InterchangeUtils.isCollection(field)) {
             elementType = getType(field, context);
-            if (InterchangeUtils.isCollection(field) && InterchangeUtils.isSimpleType(elementType)) {
-                type = field.getClass();
+            if (interchangeable.multipleValues()) {
+                fieldType = FieldType.LIST;
+                if (InterchangeUtils.isSimpleType(elementType)) {
+                    type = field.getClass();
+                }
             }
         } else if (field.getType().equals(java.util.Date.class)) {
             fieldType = InterchangeUtils.isTimestampField(field) ? FieldType.TIMESTAMP : FieldType.DATE;
@@ -125,6 +128,7 @@ public class FieldsEnumerator {
         
         APIType apiType = new APIType(type, fieldType, elementType);
         apiField.setApiType(apiType);
+        boolean isCollection = apiType.getFieldType().isList();
 
         apiField.setPossibleValuesProviderClass(getPossibleValuesProvider(field));
         String cPVPath = StringUtils.isBlank(interchangeable.commonPV()) ? null : interchangeable.commonPV();
@@ -156,29 +160,20 @@ public class FieldsEnumerator {
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             if (!interchangeable.pickIdOnly()) {
-                List<APIField> children = getAllAvailableFields(elementType, context);
+                Class<?> clazz = isCollection ? elementType : type;
+                List<APIField> children = getAllAvailableFields(clazz, context);
                 if (children != null && children.size() > 0) {
                     apiField.setChildren(children);
                 }
             }
-
-            if (InterchangeUtils.isCollection(field)) {
-                if (!hasMaxSizeValidatorEnabled(field, context)
-                        && interchangeable.multipleValues()) {
-                    apiField.setMultipleValues(true);
-                    
-                    if (interchangeable.sizeLimit() > 1) {
-                        apiField.setSizeLimit(interchangeable.sizeLimit());
-                    }
-                } else {
-                    apiField.setMultipleValues(false);
+            if (isCollection) {
+                apiField.setMultipleValues(!hasMaxSizeValidatorEnabled(field, context));
+                if (interchangeable.sizeLimit() > 1) {
+                    apiField.setSizeLimit(interchangeable.sizeLimit());
                 }
-                
-                
                 if (hasPercentageValidatorEnabled(context)) {
                     apiField.setPercentageConstraint(getPercentageConstraint(field, context));
                 }
-                
                 String uniqueConstraint = getUniqueConstraint(apiField, field, context);
                 if (hasTreeCollectionValidatorEnabled(context)) {
                     apiField.setTreeCollectionConstraint(true);
@@ -186,9 +181,6 @@ public class FieldsEnumerator {
                 } else if (hasUniqueValidatorEnabled(context)) {
                     apiField.setUniqueConstraint(uniqueConstraint);
                 }
-                
-            } else if (!interchangeable.pickIdOnly()) {
-                apiField.setMultipleValues(false);
             }
         }
         
@@ -199,11 +191,9 @@ public class FieldsEnumerator {
         if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldInfoProvider.getType(field))) {
             apiField.setFieldLength(fieldInfoProvider.getMaxLength(field));
         }
-        
         if (StringUtils.isNotBlank(interchangeable.regexPattern())) {
             apiField.setRegexPattern(interchangeable.regexPattern());
         }
-
         if (StringUtils.isNotEmpty(interchangeable.discriminatorOption())) {
             apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
         }
@@ -241,7 +231,6 @@ public class FieldsEnumerator {
                 return type;
             }
         }
-    
         return InterchangeUtils.getClassOfField(field);
     }
 

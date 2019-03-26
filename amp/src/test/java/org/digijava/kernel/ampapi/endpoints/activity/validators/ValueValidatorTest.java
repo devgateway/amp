@@ -17,6 +17,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +65,7 @@ public class ValueValidatorTest {
         fyFieldDescription.setFieldName(FY_FIELD);
         fyFieldDescription.setImportable(true);
         fyFieldDescription.setIdOnly(true);
-        fyFieldDescription.setApiType(new APIType(Collection.class, Long.class));
+        fyFieldDescription.setApiType(new APIType(Collection.class, FieldType.LIST, Long.class));
 
         List<APIField> apiFields = Arrays.asList(sectorFieldDescription, fyFieldDescription);
 

@@ -312,8 +312,6 @@ public class ObjectImporter {
                     Method valueOf = field.getType().getDeclaredMethod("valueOf", String.class);
                     value = valueOf.invoke(field.getType(), String.valueOf(jsonValue));
                 }
-            } else if (AmpAgreement.class.equals(field.getType())) {
-                value = field.get(parentObj);
             }
         } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException
                 | InvocationTargetException e) {
@@ -370,12 +368,9 @@ public class ObjectImporter {
             return isFormatValid;
         }
         
-        // TODO AMP-28121 remove this temporary workaround
-        boolean isObject = AmpActivityGroup.class.isAssignableFrom(fieldDef.getApiType().getType());
-
         // first validate all sub-elements
         List<APIField> childrenFields = fieldDef.getChildren();
-        List<Map<String, Object>> childrenNewValues = getChildrenValues(newJsonValue, isList);
+        List<Map<String, Object>> childrenNewValues = getChildrenValues(newJsonValue, fieldType);
 
         // validate children, even if it is not a list -> to notify wrong entries
         if ((isList || childrenFields != null && childrenFields.size() > 0) && childrenNewValues != null) {
@@ -421,7 +416,7 @@ public class ObjectImporter {
                     branchJsonVisitor.put(fieldPath, newChild);
                     APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
 
-                    if (isList && !isObject) {
+                    if (isList || fieldDef.isDiscriminatedObject()) {
                         try {
                             Object newSubElement = subElementClass.newInstance();
                             isFormatValid = validateAndImport(newSubElement, childrenFields, newChild, fieldPath)
@@ -453,11 +448,11 @@ public class ObjectImporter {
      * @param isList
      * @return
      */
-    private List<Map<String, Object>> getChildrenValues(Object jsonValue, boolean isList) {
+    private List<Map<String, Object>> getChildrenValues(Object jsonValue, FieldType fieldType) {
         if (jsonValue != null) {
-            if (jsonValue instanceof List) {
+            if (fieldType.isList()) {
                 return (List<Map<String, Object>>) jsonValue;
-            } else if (isList && jsonValue instanceof Map) {
+            } else if (fieldType.isObject()) {
                 List<Map<String, Object>> jsonValues = new ArrayList<Map<String, Object>>();
                 jsonValues.add((Map<String, Object>) jsonValue);
                 return jsonValues;

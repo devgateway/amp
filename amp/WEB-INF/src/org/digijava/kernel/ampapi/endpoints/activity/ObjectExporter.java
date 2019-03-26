@@ -78,12 +78,17 @@ public class ObjectExporter<T> {
 
         if (field.isIdOnly() && !(isList && field.getApiType().isSimpleItemType())) {
             jsonValue = readFieldWithPossibleValues(field, fieldValue);
+        } else if (field.getApiType().getFieldType().isObject()) {
+            if (fieldValue != null && Collection.class.isAssignableFrom(fieldValue.getClass())) {
+                Collection col = (Collection) fieldValue;
+                if (col.size() > 1) {
+                    throw new RuntimeException("Multiple values found for an object field");
+                }
+                fieldValue = col.size() == 1 ? col.iterator().next() : null; 
+            }   
+            jsonValue = (fieldValue == null) ? null : getObjectJson(fieldValue, field.getChildren(), fieldPath);
         } else if (isList) {
-            if (field.getFieldName().equals("activity_group")) { // FIXME hack because APIField.type cannot be object
-                jsonValue = (fieldValue == null) ? null : getObjectJson(fieldValue, field.getChildren(), fieldPath);
-            } else {
-                jsonValue = readCollection(field, fieldPath, (Collection) fieldValue);
-            }
+            jsonValue = readCollection(field, fieldPath, (Collection) fieldValue);
         } else {
             jsonValue = readPrimitive(field, object, fieldValue);
         }

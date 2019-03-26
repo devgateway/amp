@@ -292,6 +292,11 @@ public class APIField {
         this.commonPossibleValuesPath = commonPossibleValuesPath;
     }
 
+    @JsonIgnore
+    public boolean isDiscriminatedObject() {
+        return apiType.getFieldType().isObject() && discriminationConfigurer != null; 
+    }
+
     @Override
     public String toString() {
         return "APIField{" + "fieldName='" + fieldName + '\'' + ", fieldType='" + this.apiType.getFieldType() + '\''

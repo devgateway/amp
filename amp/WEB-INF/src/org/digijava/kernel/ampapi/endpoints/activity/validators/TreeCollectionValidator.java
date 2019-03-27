@@ -148,6 +148,7 @@ public class TreeCollectionValidator extends InputValidator {
             }
         } catch (DgException e) {
             logger.error(e.getMessage(), e);
+            throw new RuntimeException(e);
         }
         
         return false;

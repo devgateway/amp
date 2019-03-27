@@ -14,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.TimestampField;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -125,8 +126,11 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
             return arg0.hashCode() - arg1.hashCode();
         }
     }
+
+    @InterchangeableId
     @Interchangeable(fieldTitle = "Transaction ID")
     private Long ampFundDetailId;
+
     private Integer fiscalYear;
     private Integer fiscalQuarter;
     

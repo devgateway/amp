@@ -8,6 +8,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolv
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.LocationPossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.util.Output;
@@ -20,8 +21,10 @@ import org.digijava.module.aim.util.Output;
  */
 public class AmpActivityLocation implements Versionable, Serializable, Cloneable {
     //IATI-check: should be exported.
-//  @Interchangeable(fieldTitle="ID", id=true)
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long id;
+
     @InterchangeableBackReference
     private AmpActivityVersion activity;
 

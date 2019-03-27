@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
+import static java.util.stream.Collectors.toList;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.NONE;
@@ -20,13 +21,13 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.DiscriminatedFieldValueReader;
+import org.digijava.kernel.ampapi.endpoints.activity.DiscriminatedFieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.FEContext;
 import org.digijava.kernel.ampapi.endpoints.activity.FMService;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
-import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldValueReader;
+import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
@@ -35,6 +36,7 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -108,6 +110,8 @@ public class FieldsEnumerator {
         APIField apiField = new APIField();
         apiField.setFieldName(fieldTitle);
 
+        apiField.setId(field.isAnnotationPresent(InterchangeableId.class));
+
         // for discriminated case we can override the type here
         Class<?> type = InterchangeUtils.getClassOfField(field);
         FieldType fieldType = null;
@@ -129,6 +133,11 @@ public class FieldsEnumerator {
         APIType apiType = new APIType(type, fieldType, elementType);
         apiField.setApiType(apiType);
         boolean isCollection = apiType.getFieldType().isList();
+
+        if (apiField.isId()
+                && (apiType.getFieldType() == FieldType.OBJECT || apiType.getFieldType() == FieldType.LIST)) {
+            throw new RuntimeException("Id must use primitive data type.");
+        }
 
         apiField.setPossibleValuesProviderClass(getPossibleValuesProvider(field));
         String cPVPath = StringUtils.isBlank(interchangeable.commonPV()) ? null : interchangeable.commonPV();
@@ -161,10 +170,7 @@ public class FieldsEnumerator {
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             if (!interchangeable.pickIdOnly()) {
                 Class<?> clazz = isCollection ? elementType : type;
-                List<APIField> children = getAllAvailableFields(clazz, context);
-                if (children != null && children.size() > 0) {
-                    apiField.setChildren(children);
-                }
+                apiField.setChildren(getAllAvailableFields(clazz, context));
             }
             if (isCollection) {
                 apiField.setMultipleValues(!hasMaxSizeValidatorEnabled(field, context));
@@ -201,6 +207,21 @@ public class FieldsEnumerator {
         if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
             apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
             apiField.setImportable(true);
+        }
+
+        if (apiField.getApiType().getFieldType() == FieldType.LIST
+                && apiField.getApiType().getItemType() == FieldType.OBJECT) {
+            List<APIField> idFields = apiField.getChildren().stream()
+                    .filter(APIField::isId)
+                    .limit(2)
+                    .collect(toList());
+            if (idFields.isEmpty()) {
+                throw new RuntimeException("Id field is missing: " + apiField);
+            }
+            if (idFields.size() > 1) {
+                throw new RuntimeException("Only one id field is expected.");
+            }
+            apiField.setIdChild(idFields.get(0));
         }
 
         return apiField;
@@ -265,7 +286,7 @@ public class FieldsEnumerator {
                 context.getIntchStack().push(interchangeable);
                 if (isFieldVisible(context)) {
                     APIField descr = describeField(field, context);
-                    descr.setFieldValueReader(new SimpleFieldValueReader(field.getName()));
+                    descr.setFieldAccessor(new SimpleFieldAccessor(field.getName()));
                     result.add(descr);
                 }
                 context.getIntchStack().pop();
@@ -280,7 +301,7 @@ public class FieldsEnumerator {
                         APIField descr = describeField(field, context);
                         descr.setDiscriminatorField(discriminator.discriminatorField());
                         descr.setDiscriminationConfigurer(discriminator.configurer());
-                        descr.setFieldValueReader(new DiscriminatedFieldValueReader(field.getName(),
+                        descr.setFieldAccessor(new DiscriminatedFieldAccessor(new SimpleFieldAccessor(field.getName()),
                                 discriminator.discriminatorField(), settings[i].discriminatorOption()));
                         result.add(descr);
                     }

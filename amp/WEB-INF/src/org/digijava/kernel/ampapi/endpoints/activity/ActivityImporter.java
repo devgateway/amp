@@ -195,8 +195,6 @@ public class ActivityImporter extends ObjectImporter {
                 oldActivity.setAmpId(newActivity.getAmpId());
                 oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
 
-                cleanImportableFields(fieldsDef, newActivity);
-
                 if (AmpOfflineModeHolder.isAmpOfflineMode()) {
                     PersistenceManager.getSession().evict(newActivity.getAmpActivityGroup());
                     newActivity.getAmpActivityGroup().setVersion(-1L);

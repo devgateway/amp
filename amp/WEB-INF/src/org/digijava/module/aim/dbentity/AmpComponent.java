@@ -25,6 +25,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
@@ -38,7 +39,9 @@ import org.digijava.module.aim.util.Output;
 public class AmpComponent implements Serializable, Comparable<AmpComponent>, Versionable, Cloneable {
     
     //IATI-check: to be ignored
-    
+
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long ampComponentId;
 
     @InterchangeableBackReference
@@ -71,7 +74,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
                     fmPath = "/Activity Form/Components/Component/Components Expenditures/Expenditure Table",
                     importable = true)
     })
-    private Set<AmpComponentFunding> fundings;
+    private Set<AmpComponentFunding> fundings = new HashSet<>();
 
     public static class AmpComponentComparator implements Comparator<AmpComponent>{
         @Override

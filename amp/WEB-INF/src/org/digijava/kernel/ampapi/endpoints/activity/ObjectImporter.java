@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Deque;
 import java.util.HashMap;
@@ -23,7 +24,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
@@ -41,7 +41,6 @@ import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.aim.validator.groups.API;
@@ -103,33 +102,6 @@ public class ObjectImporter {
 
     public List<APIField> getApiFields() {
         return apiFields;
-    }
-
-    /**
-     * Clean all importable fields and leave other fields intact.
-     */
-    protected void cleanImportableFields(List<APIField> fieldDefs, Object obj) {
-        if (obj != null) {
-            fieldDefs.stream()
-                    .filter(APIField::isImportable)
-                    .forEach(f -> cleanImportableField(f, obj));
-        }
-    }
-
-    private void cleanImportableField(APIField fieldDef, Object obj) {
-        try {
-            Field field = ReflectionUtil.getField(obj, fieldDef.getFieldNameInternal());
-            if (InterchangeUtils.isCollection(field)) {
-                Collection collection = (Collection) PropertyUtils.getProperty(obj, fieldDef.getFieldNameInternal());
-                if (collection != null) {
-                    collection.clear();
-                }
-            } else {
-                PropertyUtils.setProperty(obj, fieldDef.getFieldNameInternal(), null);
-            }
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Failed to clean importable field " + fieldDef, e);
-        }
     }
 
     /**
@@ -252,18 +224,15 @@ public class ObjectImporter {
 
         if (importable) {
             Object newValue = getNewValue(objField, newParent, fieldValue, fieldDef);
-            // first we clear all fields (as of now), that's why setting a value here only when it is present
-            if (newValue != null) {
-                try {
-                    if (newParent instanceof Collection) {
-                        ((Collection<Object>) newParent).add(newValue);
-                    } else {
-                        objField.set(newParent, newValue);
-                    }
-                } catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-                    logger.error(e.getMessage());
-                    throw new RuntimeException(e);
+            try {
+                if (newParent instanceof Collection) {
+                    ((Collection<Object>) newParent).add(newValue);
+                } else {
+                    objField.set(newParent, newValue);
                 }
+            } catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
+                logger.error(e.getMessage());
+                throw new RuntimeException(e);
             }
         }
     }
@@ -353,7 +322,7 @@ public class ObjectImporter {
      */
     private boolean validateSubElements(APIField fieldDef, Object newParent, Object newJsonValue, String fieldPath) {
         boolean isFormatValid = true;
-        fieldDef = fieldDef == null ? new APIField() : fieldDef;
+        fieldDef = fieldDef == null ? new APIField() : fieldDef; // FIXME fieldDef must always be present!
         FieldType fieldType = fieldDef.getApiType().getFieldType();
         /*
          * Sub-elements by default are valid when not provided.
@@ -373,19 +342,13 @@ public class ObjectImporter {
         List<Map<String, Object>> childrenNewValues = getChildrenValues(newJsonValue, fieldType);
 
         // validate children, even if it is not a list -> to notify wrong entries
-        if ((isList || childrenFields != null && childrenFields.size() > 0) && childrenNewValues != null) {
+        if (isList || childrenFields.size() > 0) {
             String actualFieldName = fieldDef.getFieldNameInternal();
             Field newField = ReflectionUtil.getField(newParent, actualFieldName);
-            Object newFieldValue;
             Class<?> subElementClass = fieldDef.getApiType().getElementType();
-            try {
-                newFieldValue = newField == null ? null : newField.get(newParent);
-                if (newParent != null && newFieldValue == null) {
-                    newFieldValue = valueConverter.getNewInstance(newParent, newField);
-                }
-            } catch (IllegalAccessException e) {
-                logger.error(e.getMessage());
-                throw new RuntimeException(e);
+            Object newFieldValue = fieldDef.getFieldAccessor().get(newParent);
+            if (newFieldValue == null) {
+                newFieldValue = valueConverter.getNewInstance(newParent, newField);
             }
 
             if (isList && fieldDef.getApiType().isSimpleItemType()) {
@@ -394,7 +357,7 @@ public class ObjectImporter {
                 ((Collection) newFieldValue).addAll(nvs);
             } else {
                 // FIXME remove custom handling for agreements
-                if (newFieldValue != null && AmpAgreement.class.isAssignableFrom(newFieldValue.getClass())
+                if (AmpAgreement.class.isAssignableFrom(newFieldValue.getClass())
                         && childrenNewValues.size() == 1) {
                     Map<String, Object> agreementMap = childrenNewValues.get(0);
                     childrenNewValues.clear();
@@ -410,42 +373,162 @@ public class ObjectImporter {
                 }
 
                 // process children
-                Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
-                while (iterNew.hasNext()) {
-                    Map<String, Object> newChild = iterNew.next();
-                    branchJsonVisitor.put(fieldPath, newChild);
-                    APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
+                if (isList) {
+                    APIField idField = fieldDef.getIdChild();
+                    Collection newFieldValueCollection = (Collection) newFieldValue;
+                    Map<Object, Object> newValueById = groupById(idField, newFieldValueCollection);
 
-                    if (isList || fieldDef.isDiscriminatedObject()) {
-                        try {
-                            Object newSubElement = subElementClass.newInstance();
-                            isFormatValid = validateAndImport(newSubElement, childrenFields, newChild, fieldPath)
-                                    && isFormatValid;
-                            if (isFormatValid) {
-                                valueConverter.configureDiscriminationField(newSubElement, fieldDef);
-                                // actual links will be updated
-                                ((Collection) newFieldValue).add(newSubElement);
-                            }
-                        } catch (InstantiationException | IllegalAccessException e) {
-                            logger.error(e.getMessage());
-                            throw new RuntimeException(e);
+                    removeElementsWithNullIds(idField, newFieldValueCollection);
+
+                    // match elements by ids and import them
+                    Set<Object> jsonIds = new HashSet<>();
+                    for (Map<String, Object> newChild : childrenNewValues) {
+                        Object jsonId = newChild.get(idField.getFieldName());
+                        jsonId = convert(idField.getApiType().getType(), jsonId);
+
+                        if (jsonId != null) {
+                            jsonIds.add(jsonId);
                         }
-                    } else {
+                        Object element = newValueById.get(jsonId);
+                        boolean notYetAdded = false;
+                        if (element == null) {
+                            element = valueConverter.instantiate(subElementClass);
+                            notYetAdded = true;
+                        }
+                        branchJsonVisitor.put(fieldPath, newChild);
+                        isFormatValid = validateAndImport(element, childrenFields, newChild, fieldPath)
+                                && isFormatValid;
+                        if (isFormatValid) {
+                            valueConverter.configureDiscriminationField(element, fieldDef);
+                            // actual links will be updated
+                            if (notYetAdded) {
+                                newFieldValueCollection.add(element);
+                            }
+                        }
+                    }
+
+                    removeByIdExcept(idField, newFieldValueCollection, jsonIds);
+                } else if (fieldDef.isDiscriminatedObject()) {
+                    Collection newFieldValueCollection = (Collection) newFieldValue;
+                    Map<String, Object> newChild = childrenNewValues.isEmpty()
+                            ? Collections.emptyMap() : childrenNewValues.get(0);
+                    if (newFieldValueCollection.size() > 1) {
+                        throw new RuntimeException("Expected one element at most! At: " + fieldPath);
+                    }
+                    if (newJsonValue != null) { // avoid creating new object if it is missing in json
+                        Object element;
+                        boolean notYetAdded = false;
+                        if (newFieldValueCollection.isEmpty()) {
+                            element = valueConverter.instantiate(subElementClass);
+                            notYetAdded = true;
+                        } else {
+                            element = newFieldValueCollection.iterator().next();
+                        }
+                        branchJsonVisitor.put(fieldPath, newChild);
+                        isFormatValid = validateAndImport(element, childrenFields, newChild, fieldPath)
+                                && isFormatValid;
+                        if (isFormatValid) {
+                            valueConverter.configureDiscriminationField(element, fieldDef);
+                            if (notYetAdded) {
+                                newFieldValueCollection.add(element);
+                            }
+                        }
+                    }
+                } else {
+                    Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
+                    while (iterNew.hasNext()) {
+                        Map<String, Object> newChild = iterNew.next();
+                        branchJsonVisitor.put(fieldPath, newChild);
+
+                        APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
                         isFormatValid = validateAndImport(newFieldValue, childFieldDef, newChild, fieldPath)
                                 && isFormatValid;
                     }
                 }
                 // TODO: we also need to validate other children, some can be mandatory
             }
+
+            fieldDef.getFieldAccessor().set(newParent, newFieldValue);
         }
         return isFormatValid;
     }
 
+    /**
+     * <p>Convert a collection of elements to map by where key is the id and value is element from collection.</p>
+     *
+     * <p>Null ids are not added to the map. In case of duplicate ids an exception is raised.<p/>
+     */
+    private Map<Object, Object> groupById(APIField idField, Collection collection) {
+        Map<Object, Object> groupedById = new HashMap<>();
+        for (Object v : collection) {
+            Object id = readField(v, idField.getFieldNameInternal());
+            if (id != null) {
+                Object old = groupedById.put(id, v);
+                if (old != null) {
+                    throw new IllegalStateException("Duplicate key " + id);
+                }
+            }
+        }
+        return groupedById;
+    }
+
+    /**
+     * Remove elements from collection except specified ids. Elements with null ids are never removed.
+     */
+    private void removeByIdExcept(APIField idField, Collection collection, Set<Object> exceptIds) {
+        Iterator iterator = collection.iterator();
+        while (iterator.hasNext()) {
+            Object element = iterator.next();
+            Object id = readField(element, idField.getFieldNameInternal());
+            if (id != null && !exceptIds.contains(id)) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private void removeElementsWithNullIds(APIField idField, Collection newFieldValueCollection) {
+        Iterator iterator = newFieldValueCollection.iterator();
+        while (iterator.hasNext()) {
+            Object element = iterator.next();
+            Object id = readField(element, idField.getFieldNameInternal());
+            if (id == null) {
+                iterator.remove();
+            }
+        }
+    }
+
+    /**
+     * Try to convert the value to the required type. Currently only supports Integer to Long conversion. If conversion
+     * is not possible then it will raise an exception.
+     *
+     * Sometimes value has wrong type and a correction is needed. It comes from the fact that Jackson deserialization
+     * target is a Map and thus small numbers are read as Integer and larger numbers as Long.
+     */
+    private Object convert(Class<?> requiredType, Object value) {
+        if (value == null) {
+            return value;
+        }
+        if (Long.class.equals(requiredType) && value instanceof Integer) {
+            value = ((Integer) value).longValue();
+        }
+        if (!requiredType.isAssignableFrom(value.getClass())) {
+            throw new RuntimeException("Cannot convert " + value + " to " + requiredType);
+        }
+        return value;
+    }
+
+    private Object readField(Object target, String fieldName) {
+        try {
+            return FieldUtils.readField(target, fieldName, true);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Failed to read field.", e);
+        }
+    }
 
     /**
      * Gets items marked under the "children" key in the hierarchical branch of the imported JSON
      * @param jsonValue
-     * @param isList
+     * @param fieldType
      * @return
      */
     private List<Map<String, Object>> getChildrenValues(Object jsonValue, FieldType fieldType) {
@@ -458,11 +541,11 @@ public class ObjectImporter {
                 return jsonValues;
             }
         }
-        return null;
+        return Collections.emptyList();
     }
 
     private APIField getMatchedFieldDef(Map<String, Object> newValue, List<APIField> fieldDefs) {
-        if (fieldDefs != null && fieldDefs.size() > 0) {
+        if (fieldDefs.size() > 0) {
             // if we have only 1 child element, then this is a list of elements and only this definition is expected
             // or new value is empty, but we expect something
             if (fieldDefs.size() == 1 || newValue == null || newValue.isEmpty()) {
@@ -480,7 +563,7 @@ public class ObjectImporter {
                 }
             }
         }
-        return null;
+        return null; // why this happens? is throwing an error a better option?
     }
 
     public PossibleValuesCache getPossibleValuesCache() {

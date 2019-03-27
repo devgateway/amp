@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.discriminators;
 
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 
 /**
@@ -15,8 +14,4 @@ public class AmpFundingDetailDiscriminationConfigurer implements DiscriminationC
         transaction.setTransactionType(Integer.valueOf(discriminationValue));
     }
 
-    @Override
-    public PossibleValuesProvider getPossibleValuesProvider(String discriminationValue) {
-        return null;
-    }
 }

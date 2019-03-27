@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.dgfoundation.amp.algo.Memoizer;
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
-import org.digijava.kernel.ampapi.endpoints.common.values.providers.ThemePossibleValuesProvider;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -30,10 +29,5 @@ public class AmpActivityProgramDiscriminatorConfigurer implements Discrimination
     public void configure(Object obj, String fieldName, String discriminationValue) {
         AmpActivityProgram program = (AmpActivityProgram) obj;
         program.setProgramSetting(programSettingsByName.get().get(discriminationValue));
-    }
-
-    @Override
-    public ThemePossibleValuesProvider getPossibleValuesProvider(String discriminationValue) {
-        return new ThemePossibleValuesProvider(discriminationValue);
     }
 }

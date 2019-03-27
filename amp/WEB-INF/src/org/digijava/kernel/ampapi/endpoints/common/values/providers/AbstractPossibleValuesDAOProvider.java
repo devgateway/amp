@@ -12,7 +12,8 @@ import com.google.common.collect.ListMultimap;
 /**
  * @author Nadejda Mandrescu
  */
-public abstract class AbstractPossibleValuesDAOProvider extends AbstractPossibleValuesBaseProvider {
+public abstract class AbstractPossibleValuesDAOProvider extends AbstractPossibleValuesBaseProvider
+    implements DiscriminatedPossibleValuesProvider {
     protected String discriminatorValue;
     protected boolean isCheckDeleted;
 
@@ -24,6 +25,11 @@ public abstract class AbstractPossibleValuesDAOProvider extends AbstractPossible
     protected abstract List<Object[]> getDAOItems();
 
     protected abstract Object getExtraInfo(Object[] items);
+
+    @Override
+    public String getDiscriminatorValue() {
+        return this.discriminatorValue;
+    }
 
     @Override
     public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {

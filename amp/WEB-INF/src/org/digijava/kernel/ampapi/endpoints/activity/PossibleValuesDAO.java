@@ -3,8 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.util.List;
 
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpComponentType;
-import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**

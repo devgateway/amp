@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.digijava.kernel.ampapi.endpoints.activity.ImplementationLocationExtraInfo;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
@@ -46,8 +45,7 @@ public class ImplementationLocationPossibleValuesProvider implements PossibleVal
 
     @Override
     public boolean isAllowed(Long id) {
-        // TODO
-        throw new NotImplementedException();
+        return CategoryManagerUtil.isExitingAmpCategoryValue(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, id, true);
     }
 
 }

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.dgfoundation.amp.algo.Memoizer;
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.util.OrganisationUtil;
@@ -31,8 +30,4 @@ public class AmpOrgRoleDiscriminationConfigurer implements DiscriminationConfigu
         role.setRole(rolesByCode.get().get(discriminationValue));
     }
 
-    @Override
-    public PossibleValuesProvider getPossibleValuesProvider(String discriminationValue) {
-        return null;
-    }
 }

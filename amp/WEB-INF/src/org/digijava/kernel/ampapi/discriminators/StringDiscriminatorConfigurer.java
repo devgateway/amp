@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.discriminators;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 
 /**
  * Simplest case when discriminator is just a plain string.
@@ -21,8 +20,4 @@ public class StringDiscriminatorConfigurer implements DiscriminationConfigurer {
         }
     }
 
-    @Override
-    public PossibleValuesProvider getPossibleValuesProvider(String discriminationValue) {
-        return null;
-    }
 }

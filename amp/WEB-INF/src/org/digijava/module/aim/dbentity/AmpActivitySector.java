@@ -6,9 +6,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.values.providers.SectorPossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.Output;
 
 public class AmpActivitySector implements Versionable, Serializable, Cloneable {
@@ -19,7 +21,8 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 
     @InterchangeableBackReference
     private AmpActivityVersion activityId;
-    
+
+    @PossibleValues(SectorPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Sector", importable = true, pickIdOnly = true, uniqueConstraint = true,
             required = ALWAYS)
     private AmpSector sectorId;

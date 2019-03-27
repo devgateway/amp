@@ -242,6 +242,9 @@ public class InterchangeUtils {
     }
 
     public static ApiRuntimeException newServerErrorException(String message, Throwable e) {
+        if (e instanceof ApiRuntimeException) {
+            return (ApiRuntimeException) e;
+        }
         JsonBean error = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR
                 .withDetails(message));
         return new ApiRuntimeException(Response.Status.INTERNAL_SERVER_ERROR, error, e);

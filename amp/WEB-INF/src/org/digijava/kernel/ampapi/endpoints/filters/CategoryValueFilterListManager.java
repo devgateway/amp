@@ -33,7 +33,7 @@ public final class CategoryValueFilterListManager implements FilterListManager {
                 new CategoryBean(ColumnConstants.MODE_OF_PAYMENT, CategoryConstants.MODE_OF_PAYMENT_KEY))
             .put(FiltersConstants.STATUS, 
                 new CategoryBean(FiltersConstants.ACTIVITY_STATUS_NAME, CategoryConstants.ACTIVITY_STATUS_KEY))
-            .put(FiltersConstants.ON_OFF_TREASURY_BUDGET, 
+            .put(FiltersConstants.ACTIVITY_BUDGET,
                 new CategoryBean(FiltersConstants.ACTIVITY_BUDGET_NAME, CategoryConstants.ACTIVITY_BUDGET_KEY))
             .put(FiltersConstants.FUNDING_STATUS, 
                 new CategoryBean(ColumnConstants.FUNDING_STATUS, CategoryConstants.FUNDING_STATUS_KEY))

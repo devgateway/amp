@@ -206,10 +206,10 @@ public class GPIReportUtils {
             spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_GROUP));
         }
         
-        spec.addColumn(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET));
+        spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_BUDGET));
         spec.addColumn(new ReportColumn(ColumnConstants.HAS_EXECUTING_AGENCY));
         
-        spec.getHierarchies().add(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET));
+        spec.getHierarchies().add(new ReportColumn(ColumnConstants.ACTIVITY_BUDGET));
         spec.getHierarchies().add(new ReportColumn(ColumnConstants.HAS_EXECUTING_AGENCY));
 
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));

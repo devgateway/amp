@@ -291,15 +291,15 @@ public class NiFiltersEndpoint {
     /**
      * List the possible values of 'Activity Budget' filter.
      * 
-     * @return filter definition and values of 'on-off-treasure-budget' filter.
+     * @return filter definition and values of 'activity-budget' filter.
      */
     @GET
     @Path("/activityBudget/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.ON_OFF_TREASURY_BUDGET, name = FiltersConstants.ACTIVITY_BUDGET_NAME)
-    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.ON_OFF_TREASURY_BUDGET)
+    @ApiMethod(id = FiltersConstants.ACTIVITY_BUDGET, name = FiltersConstants.ACTIVITY_BUDGET_NAME)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.ACTIVITY_BUDGET)
     public FilterList getActivityBudget() {
-        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.ON_OFF_TREASURY_BUDGET);
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.ACTIVITY_BUDGET);
     }   
     
     /**

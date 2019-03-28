@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 
 /**
@@ -19,14 +21,21 @@ public class PossibleValuesCache {
     private Map<String, Set<Long>> cacheIds = new HashMap<>();
     private List<APIField> apiFields;
     private PossibleValuesEnumerator pvEnumerator;
+    private PossibleValueSource pvSource;
 
-    public PossibleValuesCache(PossibleValuesEnumerator pvEnumerator) {
-        this.pvEnumerator = pvEnumerator;
+    public PossibleValuesCache(PossibleValuesEnumerator pvEnumerator, PossibleValueSource pvSource) {
+        this (pvEnumerator, null, pvSource);
     }
 
     public PossibleValuesCache(PossibleValuesEnumerator pvEnumerator, List<APIField> apiFields) {
+        this (pvEnumerator, apiFields, PossibleValueSource.POSSIBLE_VALUES_CACHE);
+    }
+
+    public PossibleValuesCache(PossibleValuesEnumerator pvEnumerator, List<APIField> apiFields,
+            PossibleValueSource pvSource) {
         this.apiFields = apiFields;
         this.pvEnumerator = pvEnumerator;
+        this.pvSource = pvSource;
     }
 
     public List<PossibleValue> getPossibleValues(String fieldPath, String commonFieldPath) {
@@ -49,14 +58,47 @@ public class PossibleValuesCache {
         return pvs != null && pvs.size() > 0;
     }
 
-    // TODO it would be nice if possible values could be extended to retrieve one single possible value by id.
-    // this will reduce this operation from O(n) to O(log N) or O(1)
-    // reason: fields can repeat and may have thousands of possible values
     public boolean isAllowed(Long id, String fieldPath, String commonFieldPath) {
+        switch (pvSource) {
+        case POSSIBLE_VALUES_CACHE:
+            return isAllowedUsePossibleValuesCache(id, fieldPath, commonFieldPath);
+        case POSSIBLE_VALUES_IDS_CACHE:
+            return isAllowedUseIdsCache(id, fieldPath, commonFieldPath);
+        case DIRECT_SOURCE:
+            return isAllowedUseDirectSource(id, fieldPath);
+        default:
+            throw new NotImplementedException();
+        }
+    }
+
+    private boolean isAllowedUsePossibleValuesCache(Long id, String fieldPath, String commonFieldPath) {
+        List<PossibleValue> pvs = getPossibleValues(fieldPath, commonFieldPath);
+        return findById(pvs, id) != null;
+    }
+
+    private PossibleValue findById(List<PossibleValue> possibleValues, Long id) {
+        for (PossibleValue possibleValue : possibleValues) {
+            if (id.equals(possibleValue.getId())) {
+                return possibleValue;
+            }
+            PossibleValue childPossibleValue = findById(possibleValue.getChildren(), id);
+            if (childPossibleValue != null) {
+                return childPossibleValue;
+            }
+        }
+        return null;
+    }
+
+    private boolean isAllowedUseIdsCache(Long id, String fieldPath, String commonFieldPath) {
         String actualFieldPath = commonFieldPath == null ? fieldPath : commonFieldPath;
         Set<Long> allowedIds = cacheIds.computeIfAbsent(actualFieldPath,
                 key -> collectPossibleValueIds(new HashSet<Long>(), getPossibleValues(fieldPath, commonFieldPath)));
         return allowedIds.contains(id);
+    }
+
+    private boolean isAllowedUseDirectSource(Long id, String fieldPath) {
+        PossibleValuesProvider pvp = pvEnumerator.getPossibleValuesProviderForField(fieldPath, null, apiFields);
+        return pvp.isAllowed(id);
     }
 
     private Set<Long> collectPossibleValueIds(Set<Long> ids, List<PossibleValue> pvs) {

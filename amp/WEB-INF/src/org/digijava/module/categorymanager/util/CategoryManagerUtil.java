@@ -8,7 +8,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -35,9 +34,6 @@ import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
@@ -501,17 +497,15 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     }
 
     public static boolean isExitingAmpCategoryValue(String categoryKey, Long id, boolean onlyVisible) {
-        List<Criterion> meetAll = Arrays.asList(
-                Restrictions.eq("ampCategoryClass.keyName", categoryKey),
-                Restrictions.eq("id", id));
-        if (onlyVisible) {
-            meetAll.add(Restrictions.eqOrIsNull("deleted", false));
-        }
-        Number categoryCount = (Number) PersistenceManager.getSession().createCriteria(AmpCategoryValue.class)
-                .add(Restrictions.and(meetAll.toArray(new Criterion[meetAll.size()])))
-                .setProjection(Projections.count("id"))
-                .uniqueResult();
-        return categoryCount.intValue() == 1;
+        Integer count = (Integer) PersistenceManager.getSession().createQuery(
+                "select count(a) from " + AmpCategoryValue.class.getName()
+                + " a where a.id=:id "
+                + (onlyVisible ? "and (a.deleted=false or a.deleted is null) " : "") 
+                + "and a.ampCategoryClass.keyName=:keyName")
+            .setParameter("id", id)
+            .setParameter("keyName", categoryKey)
+            .uniqueResult();
+        return count == 1;
     }
 
     /**

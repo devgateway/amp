@@ -168,13 +168,12 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
         AmpOrgRole clonedAmpOrgRole = (AmpOrgRole) clone();
         clonedAmpOrgRole.activity = newActivity;
         clonedAmpOrgRole.ampOrgRoleId = null;
-        
+    
         if (getGpiNiSurveys() != null && !getGpiNiSurveys().isEmpty()) {
             AmpGPINiSurvey clonedSurvey = (AmpGPINiSurvey) getGpiNiSurveys().iterator().next().clone();
             clonedSurvey.setAmpGPINiSurveyId(null);
             clonedSurvey.setAmpOrgRole(clonedAmpOrgRole);
-            
-    
+        
             if (clonedSurvey.getResponses() != null) {
                 final Set<AmpGPINiSurveyResponse> clonedSurveyResponses = new HashSet<AmpGPINiSurveyResponse>();
                 clonedSurvey.getResponses().forEach(r -> {
@@ -193,8 +192,19 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
             clonedAmpOrgRole.setGpiNiSurveys(null);
             clonedAmpOrgRole.setGpiNiSurveys(new HashSet<>());
             clonedAmpOrgRole.getGpiNiSurveys().add(clonedSurvey);
-        }else{
+        } else {
             clonedAmpOrgRole.setGpiNiSurveys(null);
+        }
+        
+        if (getBudgets() != null && !getBudgets().isEmpty()) {
+            clonedAmpOrgRole.setBudgets(new HashSet<>());
+            for (AmpOrgRoleBudget budget : getBudgets()) {
+                AmpOrgRoleBudget clonedBudget = (AmpOrgRoleBudget) budget.clone();
+                clonedBudget.setAmpOrgRole(clonedAmpOrgRole);
+                clonedAmpOrgRole.getBudgets().add(clonedBudget);
+            }
+        } else {
+            clonedAmpOrgRole.setBudgets(null);
         }
         
         return clonedAmpOrgRole;

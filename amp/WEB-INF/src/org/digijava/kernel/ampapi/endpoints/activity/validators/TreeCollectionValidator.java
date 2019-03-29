@@ -30,11 +30,11 @@ import org.hibernate.Session;
 
 /**
  * Validates that both parent and child items are not present in the collection
- * 
+ *
  * @author Viorel Chihai
  */
 public class TreeCollectionValidator extends InputValidator {
-    
+
     private static final Logger logger = Logger.getLogger(TreeCollectionValidator.class);
 
     @Override
@@ -43,23 +43,27 @@ public class TreeCollectionValidator extends InputValidator {
     }
 
     @Override
-    public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-            APIField fieldDescription, String fieldPath) {
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent, APIField fieldDescription,
+            String fieldPath) {
         String fieldName = fieldDescription.getFieldName();
         boolean treeCollectionField = Boolean.TRUE.equals(fieldDescription.getTreeCollectionConstraint());
         String uniqueField = fieldDescription.getUniqueConstraint();
-        
+
         if (treeCollectionField) {
-            Collection<Map<String, Object>> fieldValue = (Collection<Map<String, Object>>) newFieldParent.get(fieldName);
+            Collection<Map<String, Object>> fieldValue = (Collection<Map<String, Object>>) newFieldParent
+                    .get(fieldName);
             Set<Long> idValues = new HashSet<Long>();
-            
+
             if (fieldValue != null && fieldValue.size() > 1) {
                 if (StringUtils.isBlank(uniqueField)) {
-                    throw new RuntimeException("The treeCollectionValidator cannot check the field that does not have fields with unique constraint");
+                    // See AMP-29028 status or ensure to clarify if it is valid to allow duplicate entries
+                    throw new RuntimeException("Cannot validate the tree collection for '" + fieldPath
+                            + "'. Please enable 'unique' validator for this field or implement support for "
+                            + "tree collection validation without unique constraint.");
                 }
-                
+
                 idValues = getUniqueValues(fieldValue, uniqueField);
-                
+
                 return isTreeCollectionValid(fieldDescription.getApiType().getElementType(), idValues);
             }
         }
@@ -70,8 +74,9 @@ public class TreeCollectionValidator extends InputValidator {
     /**
      * Returns a Set of unique id values from the Collection <JsonBean>
      * containing the fieldPathToId
-     * 
-     * @param fieldValues   the Collection <JsonBean> with a list of fields from which the
+     *
+     * @param fieldValues the Collection <JsonBean> with a list of fields from
+     * which the
      * @param fieldPathToId String path of the parent.
      * @return collection with unique id values
      */
@@ -85,10 +90,10 @@ public class TreeCollectionValidator extends InputValidator {
                 }
             }
         }
-        
+
         return idValuesSet;
     }
-    
+
     /**
      * @param clazz collection element type
      * @param idValuesSet the Set containing unique id values
@@ -97,21 +102,22 @@ public class TreeCollectionValidator extends InputValidator {
     private boolean isTreeCollectionValid(Class<?> clazz, Set<Long> idValuesSet) {
         Set<Long> tmpIdValues = new HashSet<Long>();
         tmpIdValues.addAll(idValuesSet);
-        
+
         for (Long id : idValuesSet) {
             tmpIdValues.remove(id);
-            
+
             if (clazz.equals(AmpActivitySector.class) && isPresentParentSectorInCollection(id, tmpIdValues)) {
                 return false;
             } else if (clazz.equals(AmpActivityProgram.class) && isPresentParentProgramInCollection(id, tmpIdValues)) {
                 return false;
-            } else if (clazz.equals(AmpActivityLocation.class) && isPresentParentLocationInCollection(id, tmpIdValues)) {
+            } else if (clazz.equals(AmpActivityLocation.class)
+                    && isPresentParentLocationInCollection(id, tmpIdValues)) {
                 return false;
-            } 
-            
+            }
+
             tmpIdValues.add(id);
         }
-        
+
         return true;
     }
 
@@ -122,16 +128,16 @@ public class TreeCollectionValidator extends InputValidator {
      */
     private boolean isPresentParentSectorInCollection(Long sectorId, Set<Long> idValues) {
         Collection<AmpSector> parentSectors = SectorUtil.getAmpParentSectors(sectorId);
-        
+
         for (AmpSector t : parentSectors) {
-            if(idValues.contains(t.getAmpSectorId())) {
+            if (idValues.contains(t.getAmpSectorId())) {
                 return true;
-            } 
+            }
         }
-        
+
         return false;
     }
-    
+
     /**
      * @param programId of the program
      * @param idValues the collection containing programs id form the request
@@ -140,20 +146,20 @@ public class TreeCollectionValidator extends InputValidator {
     private boolean isPresentParentProgramInCollection(Long programId, Set<Long> idValues) {
         try {
             Collection<AmpTheme> parentThemes = ProgramUtil.getAncestorThemes(ProgramUtil.getThemeById(programId));
-            
+
             for (AmpTheme t : parentThemes) {
-                if(idValues.contains(t.getAmpThemeId())) {
+                if (idValues.contains(t.getAmpThemeId())) {
                     return true;
-                } 
+                }
             }
         } catch (DgException e) {
             logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
-        
+
         return false;
     }
-    
+
     /**
      * @param locationId of the location
      * @param idValues the collection containing locations id form the request
@@ -169,25 +175,26 @@ public class TreeCollectionValidator extends InputValidator {
             logger.error(ex.getMessage());
             return false;
         }
-        
+
         Collection<AmpCategoryValueLocations> parentLocations = getParentLocations(oldLocation.getLocation());
-        
+
         for (AmpCategoryValueLocations t : parentLocations) {
-            if(idValues.contains(t.getId())) {
+            if (idValues.contains(t.getId())) {
                 return true;
-            } 
+            }
         }
-        
+
         return false;
     }
-    
+
     /**
      * @param location of type AmpCategoryValueLocations
-     * @return returnList the ArrayList<AmpCategoryValueLocations> with all parents of the location
+     * @return returnList the ArrayList<AmpCategoryValueLocations> with all
+     * parents of the location
      */
     private static List<AmpCategoryValueLocations> getParentLocations(AmpCategoryValueLocations location) {
         ArrayList<AmpCategoryValueLocations> returnList = new ArrayList<AmpCategoryValueLocations>();
-        
+
         if (location != null) {
             AmpCategoryValueLocations temp = location;
             while (temp.getParentLocation() != null) {
@@ -195,7 +202,7 @@ public class TreeCollectionValidator extends InputValidator {
                 returnList.add(0, temp);
             }
         }
-        
+
         return returnList;
     }
 }

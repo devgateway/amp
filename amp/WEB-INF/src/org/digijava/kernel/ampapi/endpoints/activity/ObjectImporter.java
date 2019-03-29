@@ -386,9 +386,8 @@ public class ObjectImporter {
                         Object jsonId = newChild.get(idField.getFieldName());
                         jsonId = convert(idField.getApiType().getType(), jsonId);
 
-                        if (jsonId != null) {
-                            jsonIds.add(jsonId);
-                        }
+                        jsonIds.add(jsonId);
+
                         Object element = newValueById.get(jsonId);
                         boolean notYetAdded = false;
                         if (element == null) {

@@ -34,7 +34,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
             fmPath = FMVisibility.PARENT_FM + "/percentage", required = ActivityEPConstants.RequiredValidation.ALWAYS)
     private Float   percentage;
     @Interchangeable(fieldTitle = "Budgets", importable = true, fmPath = FMVisibility.PARENT_FM + "/Budget Code")
-    private Set <AmpOrgRoleBudget> budgets;
+    private Set<AmpOrgRoleBudget> budgets = new HashSet<>();
     
     @Interchangeable(fieldTitle = "Additional Info", importable = true, label = "Department/Division",
             fmPath = FMVisibility.PARENT_FM + "/relOrgadditionalInfo")

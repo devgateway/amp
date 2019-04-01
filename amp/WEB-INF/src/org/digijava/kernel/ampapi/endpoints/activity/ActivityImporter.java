@@ -88,6 +88,7 @@ public class ActivityImporter extends ObjectImporter {
     private AmpActivityVersion oldActivity = null;
     private boolean update = false;
     private SaveMode requestedSaveMode;
+    private boolean canDowngradeToDraft = false;
     private boolean downgradedToDraftSave = false;
     private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
     private boolean isDraftFMEnabled;
@@ -101,11 +102,12 @@ public class ActivityImporter extends ObjectImporter {
 
     private Date latestApporvalDate;
 
-    public ActivityImporter(List<APIField> apiFields) {
+    public ActivityImporter(List<APIField> apiFields, boolean canDowngradeToDraft) {
         super(new InputValidatorProcessor(InputValidatorProcessor.getActivityFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getActivityBusinessRulesValidators()),
                 apiFields);
         setJsonErrorMapper(new ActivityErrorsMapper());
+        this.canDowngradeToDraft = canDowngradeToDraft;
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {
@@ -117,6 +119,7 @@ public class ActivityImporter extends ObjectImporter {
         this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
         this.endpointContextPath = endpointContextPath;
         this.isProcessApprovalStatus = AmpOfflineModeHolder.isAmpOfflineMode();
+        initRequestedSaveMode();
     }
 
     /**
@@ -129,11 +132,6 @@ public class ActivityImporter extends ObjectImporter {
     public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update, String endpointContextPath) {
         init(newJson, update, endpointContextPath);
 
-        List<ApiErrorMessage> saveModeErrors = determineRequestedSaveMode();
-        if (!saveModeErrors.isEmpty()) {
-            return saveModeErrors;
-        }
-
         // retrieve fields definition for internal use
         List<APIField> fieldsDef = getApiFields();
         // get existing activity if this is an update request
@@ -145,7 +143,8 @@ public class ActivityImporter extends ObjectImporter {
                     SecurityErrors.INVALID_TEAM.withDetails("Invalid team member in modified_by field."));
         }
 
-        if (org.dgfoundation.amp.onepager.util.ActivityUtil.isActivityStale(ampActivityId)) {
+        Long activityGroupVersion = AIHelper.getActivityGroupVersionOrNull(newJson);
+        if (org.dgfoundation.amp.onepager.util.ActivityUtil.isActivityStale(ampActivityId, activityGroupVersion)) {
             return Collections.singletonList(
                     ActivityErrors.ACTIVITY_IS_STALE.withDetails("Activity is not the latest version."));
         }
@@ -202,10 +201,8 @@ public class ActivityImporter extends ObjectImporter {
 
                 cleanImportableFields(fieldsDef, newActivity);
 
-                if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-                    PersistenceManager.getSession().evict(newActivity.getAmpActivityGroup());
-                    newActivity.getAmpActivityGroup().setVersion(-1L);
-                }
+                PersistenceManager.getSession().evict(newActivity.getAmpActivityGroup());
+                newActivity.getAmpActivityGroup().setVersion(-1L);
             } else if (!update) {
                 newActivity = new AmpActivityVersion();
             }
@@ -214,7 +211,6 @@ public class ActivityImporter extends ObjectImporter {
 
             validateAndImport(newActivity, newJsonParent);
             if (errors.isEmpty()) {
-                // save new activity
                 prepareToSave();
 
                 newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
@@ -251,26 +247,6 @@ public class ActivityImporter extends ObjectImporter {
         }
 
         return new ArrayList<ApiErrorMessage>(errors.values());
-    }
-
-    private List<ApiErrorMessage> determineRequestedSaveMode() {
-        if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-            String draftFieldName = FieldMap.underscorify(ActivityFieldsConstants.IS_DRAFT);
-            Object draftAsObj = newJson.get(draftFieldName);
-            if (draftAsObj == null) {
-                return Collections.singletonList(ActivityErrors.FIELD_REQUIRED.withDetails(draftFieldName));
-            }
-            if (!(draftAsObj instanceof Boolean)) {
-                return Collections.singletonList(ActivityErrors.FIELD_INVALID_TYPE.withDetails(draftFieldName));
-            }
-            boolean draft = (boolean) draftAsObj;
-            requestedSaveMode = draft ? DRAFT : SUBMIT;
-            if (requestedSaveMode == DRAFT && !isDraftFMEnabled) {
-                return Collections.singletonList(ActivityErrors.SAVE_AS_DRAFT_FM_DISABLED.withDetails(draftFieldName));
-            }
-        }
-
-        return Collections.emptyList();
     }
 
     /**
@@ -509,19 +485,8 @@ public class ActivityImporter extends ObjectImporter {
         }
 
         newActivity.setChangeType(determineChangeType().toString());
-        if (requestedSaveMode != null) {
-            newActivity.setDraft(requestedSaveMode == DRAFT);
-        } else {
-            // IATI draft semantics
-            if (update) {
-                // on update try to keep previous status
-                // if validation for non-draft activity failed but it succeeded for draft activity then change to draft true
-                if (isDraftFMEnabled && downgradedToDraftSave) {
-                    newActivity.setDraft(true);
-                }
-            } else {
-                newActivity.setDraft(isDraftFMEnabled);
-            }
+        if (downgradedToDraftSave) {
+            newActivity.setDraft(true);
         }
         initDefaults();
     }
@@ -714,6 +679,15 @@ public class ActivityImporter extends ObjectImporter {
         return isDraftFMEnabled;
     }
 
+    private void initRequestedSaveMode() {
+        String draftFieldName = FieldMap.underscorify(ActivityFieldsConstants.IS_DRAFT);
+        Object draftAsObj = newJson.get(draftFieldName);
+        if (draftAsObj != null && draftAsObj instanceof Boolean) {
+            boolean draft = (boolean) draftAsObj;
+            requestedSaveMode = draft ? DRAFT : SUBMIT;
+        }
+    }
+
     /**
      * Return save mode for validation purposes. If this value is null then validators can assume that they validate
      * activity for submission (non-draft) with possibility to downgrade with draft save. However if returned value
@@ -750,6 +724,10 @@ public class ActivityImporter extends ObjectImporter {
      */
     public String getSourceURL() {
         return sourceURL;
+    }
+
+    public boolean isDowngradeToDraft() {
+        return this.canDowngradeToDraft;
     }
 
     public void downgradeToDraftSave() {

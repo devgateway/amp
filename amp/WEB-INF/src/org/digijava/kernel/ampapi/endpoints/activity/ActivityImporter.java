@@ -95,13 +95,11 @@ public class ActivityImporter extends ObjectImporter {
     private boolean isMultilingual;
     private boolean isProcessApprovalFields;
     private User currentUser;
+    private AmpTeamMember modifiedBy;
     private String sourceURL;
     private String endpointContextPath;
     // latest activity id in case there was attempt to update older version of an activity
     private Long latestActivityId;
-
-    private Date latestApporvalDate;
-    private AmpTeamMember latestApporvedBy;
 
     public ActivityImporter(List<APIField> apiFields, boolean canDowngradeToDraft, boolean isProcessApprovalFields) {
         super(new InputValidatorProcessor(InputValidatorProcessor.getActivityFormatValidators()),
@@ -116,6 +114,11 @@ public class ActivityImporter extends ObjectImporter {
         this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
         this.update = update;
         this.currentUser = TeamUtil.getCurrentUser();
+        if (AmpOfflineModeHolder.isAmpOfflineMode()) {
+            modifiedBy = TeamMemberUtil.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson.any()));
+        } else {
+            modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+        }
         this.newJson = newJson;
         this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH, null);
         this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
@@ -138,8 +141,7 @@ public class ActivityImporter extends ObjectImporter {
         // get existing activity if this is an update request
         Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
 
-        AmpTeamMember teamMember = getModifiedBy(newJson);
-        if (teamMember == null) {
+        if (modifiedBy == null) {
             return Collections.singletonList(
                     SecurityErrors.INVALID_TEAM.withDetails("Invalid team member in modified_by field."));
         }
@@ -150,7 +152,7 @@ public class ActivityImporter extends ObjectImporter {
                     ActivityErrors.ACTIVITY_IS_STALE.withDetails("Activity is not the latest version."));
         }
 
-        List<ApiErrorMessage> messages = checkPermissions(update, ampActivityId, teamMember);
+        List<ApiErrorMessage> messages = checkPermissions(update, ampActivityId, modifiedBy);
         if (!messages.isEmpty()) {
             return messages;
         }
@@ -183,7 +185,7 @@ public class ActivityImporter extends ObjectImporter {
             if (oldActivity != null) {
                 currentVersion = oldActivity.getAmpActivityGroup().getVersion();
 
-                key = ActivityGatekeeper.lockActivity(activityId, teamMember.getAmpTeamMemId());
+                key = ActivityGatekeeper.lockActivity(activityId, modifiedBy.getAmpTeamMemId());
 
                 if (key == null) { //lock not acquired
                     logger.error("Cannot aquire lock during IATI update for activity " + activityId);
@@ -198,8 +200,6 @@ public class ActivityImporter extends ObjectImporter {
                 oldActivity = ActivityVersionUtil.cloneActivity(oldActivity);
                 oldActivity.setAmpId(newActivity.getAmpId());
                 oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
-                this.latestApporvalDate = oldActivity.getApprovalDate();
-                this.latestApporvedBy = oldActivity.getApprovedBy();
 
                 cleanImportableFields(fieldsDef, newActivity);
 
@@ -216,7 +216,7 @@ public class ActivityImporter extends ObjectImporter {
                 prepareToSave();
 
                 newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
-                        translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
+                        translations, modifiedBy, Boolean.TRUE.equals(newActivity.getDraft()),
                         PersistenceManager.getSession(), SaveContext.api(!isProcessApprovalFields));
 
                 postProcess();
@@ -256,12 +256,8 @@ public class ActivityImporter extends ObjectImporter {
      * For AMP Offline clients this is the value retrieved from modified_by field of the activity. For other clients
      * it is the session user.
      */
-    public AmpTeamMember getModifiedBy(JsonBean newJson) {
-        if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-            return TeamMemberUtil.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson));
-        } else {
-            return TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
-        }
+    public AmpTeamMember getModifiedBy() {
+        return modifiedBy;
     }
 
     /**
@@ -474,12 +470,12 @@ public class ActivityImporter extends ObjectImporter {
 
         if (isProcessApprovalFields) {
             Date newApprovalDate = newActivity.getApprovalDate();
-            if (newApprovalDate != null && !newApprovalDate.equals(this.latestApporvalDate)) {
+            if (newApprovalDate != null && !newApprovalDate.equals(oldActivity.getApprovalDate())) {
                 newActivity.setApprovalDate(new Date());
             }
         } else {
-            newActivity.setApprovalDate(this.latestApporvalDate);
-            newActivity.setApprovedBy(this.latestApporvedBy);
+            newActivity.setApprovalDate(oldActivity.getApprovalDate());
+            newActivity.setApprovedBy(oldActivity.getApprovedBy());
         }
 
         if (!update) {
@@ -719,6 +715,10 @@ public class ActivityImporter extends ObjectImporter {
      */
     public boolean isMultilingual() {
         return isMultilingual;
+    }
+
+    public boolean isProcessApprovalFields() {
+        return isProcessApprovalFields;
     }
 
     /**

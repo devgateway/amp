@@ -587,6 +587,32 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
     }
 
     /**
+     * Verifies if the team member can approve an activity from the specified team
+     * See {@link #setActivityStatus(AmpTeamMember, boolean, AmpActivityFields, AmpActivityVersion, boolean, boolean)}
+     * @param atm the team member to check
+     * @param activityTeamId the team id that activity belongs to that the TM can have the approval right
+     * @param oldApprovalStatus the old approval status
+     * @return true if the user is allowed to approve the activity
+     */
+    public static boolean canApprove(AmpTeamMember atm, Long activityTeamId, ApprovalStatus oldApprovalStatus) {
+        Long teamMemberTeamId = atm.getAmpTeam().getAmpTeamId();
+        String validation = org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
+        if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))
+                && !"validationOff".equalsIgnoreCase(validation)) {
+            AmpTeamMemberRoles role = atm.getAmpMemberRole();
+            if (role.getTeamHead() || role.isApprover()) {
+                Boolean isSameWorkspace = atm.getAmpTeam().getAmpTeamId().equals(activityTeamId);
+                return isSameWorkspace || atm.getAmpTeam().getCrossteamvalidation();
+            } else if ("newOnly".equals(validation)) {
+                return oldApprovalStatus != null && !oldApprovalStatus.equals(ApprovalStatus.STARTED);
+            }
+        } else {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Method used to load the last version of an object
      * @param am
      * @param id

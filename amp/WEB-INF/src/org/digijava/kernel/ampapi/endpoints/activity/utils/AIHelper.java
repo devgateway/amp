@@ -13,25 +13,25 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
 /**
  * Helper methods for Activity Import
- * 
+ *
  * @author Nadejda Mandrescu
  */
 public class AIHelper {
-    
+
     private static final Logger logger = Logger.getLogger(AIHelper.class);
-    /** 
+    /**
      * Stores all field paths within AmpActivityVersion tree that back reference the Activity.
      */
     private ActivityImporter activityImporter;
-    
+
     /**
-     * 
+     *
      * @param activityImporter
      */
     public AIHelper(ActivityImporter activityImporter) {
         this.activityImporter = activityImporter;
     }
-    
+
     /**
      * Retrieves the class specified as type for Generics
      * @param field
@@ -65,7 +65,7 @@ public class AIHelper {
      * @param root
      * @return Long representation or null if invalid or missing
      */
-    public static Long getModifiedByOrNull(JsonBean root) {
+    public static Long getModifiedByOrNull(Map<String, Object> root) {
         return longOrNull(root.get(ActivityEPConstants.MODIFIED_BY_FIELD_NAME));
     }
 

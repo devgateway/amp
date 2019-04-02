@@ -20,6 +20,7 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ChangeType;
@@ -470,7 +471,8 @@ public class ActivityImporter extends ObjectImporter {
 
         if (isProcessApprovalFields) {
             Date newApprovalDate = newActivity.getApprovalDate();
-            if (newApprovalDate != null && !newApprovalDate.equals(oldActivity.getApprovalDate())) {
+            if (newApprovalDate != null && !newApprovalDate.equals(oldActivity.getApprovalDate())
+                    || AmpARFilter.VALIDATED_ACTIVITY_STATUS.contains(newActivity.getApprovalStatus())) {
                 newActivity.setApprovalDate(new Date());
             }
         } else {

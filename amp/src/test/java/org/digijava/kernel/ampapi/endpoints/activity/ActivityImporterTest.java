@@ -7,6 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
@@ -51,7 +52,7 @@ public class ActivityImporterTest {
 
     private Map<Integer, ApiErrorMessage> validate(JsonBean json) {
         AmpActivityVersion activity = new AmpActivityVersion();
-        ActivityImporter importer = new ActivityImporter(Collections.emptyList(), true);
+        ActivityImporter importer = new ActivityImporter(Collections.emptyList(), true, false);
         importer.validateAndImport(activity, json.any());
         return importer.getErrors();
     }

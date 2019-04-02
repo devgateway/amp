@@ -93,7 +93,7 @@ public class ActivityImporter extends ObjectImporter {
     private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
     private boolean isDraftFMEnabled;
     private boolean isMultilingual;
-    private boolean isProcessApprovalStatus;
+    private boolean isProcessApprovalFields;
     private User currentUser;
     private String sourceURL;
     private String endpointContextPath;
@@ -101,13 +101,15 @@ public class ActivityImporter extends ObjectImporter {
     private Long latestActivityId;
 
     private Date latestApporvalDate;
+    private AmpTeamMember latestApporvedBy;
 
-    public ActivityImporter(List<APIField> apiFields, boolean canDowngradeToDraft) {
+    public ActivityImporter(List<APIField> apiFields, boolean canDowngradeToDraft, boolean isProcessApprovalFields) {
         super(new InputValidatorProcessor(InputValidatorProcessor.getActivityFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getActivityBusinessRulesValidators()),
                 apiFields);
         setJsonErrorMapper(new ActivityErrorsMapper());
         this.canDowngradeToDraft = canDowngradeToDraft;
+        this.isProcessApprovalFields = isProcessApprovalFields;
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {
@@ -118,7 +120,6 @@ public class ActivityImporter extends ObjectImporter {
         this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH, null);
         this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
         this.endpointContextPath = endpointContextPath;
-        this.isProcessApprovalStatus = AmpOfflineModeHolder.isAmpOfflineMode();
         initRequestedSaveMode();
     }
 
@@ -156,7 +157,7 @@ public class ActivityImporter extends ObjectImporter {
 
         // check if any error were already detected in upper layers
         Map<Integer, ApiErrorMessage> existingErrors = (TreeMap<Integer, ApiErrorMessage>) newJson.get(ActivityEPConstants.INVALID);
-        
+
         if (existingErrors != null && existingErrors.size() > 0) {
             errors.putAll(existingErrors);
         }
@@ -198,6 +199,7 @@ public class ActivityImporter extends ObjectImporter {
                 oldActivity.setAmpId(newActivity.getAmpId());
                 oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
                 this.latestApporvalDate = oldActivity.getApprovalDate();
+                this.latestApporvedBy = oldActivity.getApprovedBy();
 
                 cleanImportableFields(fieldsDef, newActivity);
 
@@ -215,7 +217,7 @@ public class ActivityImporter extends ObjectImporter {
 
                 newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
                         translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
-                        PersistenceManager.getSession(), SaveContext.api(!isProcessApprovalStatus));
+                        PersistenceManager.getSession(), SaveContext.api(!isProcessApprovalFields));
 
                 postProcess();
             } else {
@@ -470,14 +472,14 @@ public class ActivityImporter extends ObjectImporter {
         newActivity.setLastImportedAt(new Date());
         newActivity.setLastImportedBy(currentUser);
 
-        if (isProcessApprovalStatus) {
+        if (isProcessApprovalFields) {
             Date newApprovalDate = newActivity.getApprovalDate();
             if (newApprovalDate != null && !newApprovalDate.equals(this.latestApporvalDate)) {
                 newActivity.setApprovalDate(new Date());
             }
         } else {
-            // this will be obsolete once we will no longer cleanup fields
             newActivity.setApprovalDate(this.latestApporvalDate);
+            newActivity.setApprovedBy(this.latestApporvedBy);
         }
 
         if (!update) {

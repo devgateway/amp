@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -31,14 +30,11 @@ import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
-
-import com.google.common.collect.ImmutableSet;
 
 /**
  * Enumerate & describe all fields of an object used for import / export in API.
@@ -50,21 +46,6 @@ public class FieldsEnumerator {
     private static final Logger LOGGER = Logger.getLogger(FieldsEnumerator.class);
 
     private String iatiIdentifierField;
-
-    /**
-     * Fields that are importable & required by AMP Offline clients.
-     */
-    private static final Set<String> OFFLINE_REQUIRED_FIELDS = new ImmutableSet.Builder<String>()
-            .add(ActivityFieldsConstants.APPROVAL_STATUS)
-            .build();
-
-    /**
-     * Fields that are importable by AMP Offline clients only.
-     */
-    private static final Set<String> OFFLINE_IMPORTABLE_FIELDS = new ImmutableSet.Builder<String>()
-            .add(ActivityFieldsConstants.APPROVED_BY)
-            .add(ActivityFieldsConstants.APPROVAL_DATE)
-            .build();
 
     private FieldInfoProvider fieldInfoProvider;
 
@@ -80,8 +61,8 @@ public class FieldsEnumerator {
      * Fields Enumerator
      */
     public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-                            TranslatorService translatorService,
-                            Function<String, Boolean> allowMultiplePrograms) {
+            TranslatorService translatorService,
+            Function<String, Boolean> allowMultiplePrograms) {
         this(fieldInfoProvider, fmService, translatorService, allowMultiplePrograms, null);
     }
 
@@ -102,7 +83,7 @@ public class FieldsEnumerator {
     /**
      * describes a field in a complex JSON structure
      * see the wiki for details, too many options to be listed here
-     * 
+     *
      * @param field field to be described
      * @param context current context
      * @return field definition
@@ -142,15 +123,6 @@ public class FieldsEnumerator {
         apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
         apiField.setRequired(getRequiredValue(context, fieldTitle));
         apiField.setImportable(interchangeable.importable());
-        if (AmpOfflineModeHolder.isAmpOfflineMode() && OFFLINE_REQUIRED_FIELDS.contains(interchangeable.fieldTitle())) {
-            apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
-            apiField.setImportable(true);
-        }
-
-        if (AmpOfflineModeHolder.isAmpOfflineMode()
-                && OFFLINE_IMPORTABLE_FIELDS.contains(interchangeable.fieldTitle())) {
-            apiField.setImportable(true);
-        }
 
         if (interchangeable.percentageConstraint()) {
             apiField.setPercentage(true);

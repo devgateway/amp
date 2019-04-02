@@ -489,8 +489,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
     }
 
     private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity,boolean rejected) {
-        Long teamMemberTeamId=ampCurrentMember.getAmpTeam().getAmpTeamId();
-        String validation = org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
+        String validation = getValidationSetting(ampCurrentMember);
 
         //setting activity status....
         AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
@@ -499,8 +498,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         Boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId().equals(a.getTeam().getAmpTeamId());
 
         // Check if validation is ON in GS and APP Settings
-        if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))
-                && !"validationOff".equalsIgnoreCase(validation)) {
+        if (!"validationOff".equalsIgnoreCase(validation)) {
             if (teamLeadFlag) {
                 if (draft) {
                     if (rejected) {
@@ -595,10 +593,8 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
      * @return true if the user is allowed to approve the activity
      */
     public static boolean canApprove(AmpTeamMember atm, Long activityTeamId, ApprovalStatus oldApprovalStatus) {
-        Long teamMemberTeamId = atm.getAmpTeam().getAmpTeamId();
-        String validation = org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
-        if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))
-                && !"validationOff".equalsIgnoreCase(validation)) {
+        String validation = getValidationSetting(atm);
+        if (!"validationOff".equalsIgnoreCase(validation)) {
             AmpTeamMemberRoles role = atm.getAmpMemberRole();
             if (role.getTeamHead() || role.isApprover()) {
                 Boolean isSameWorkspace = atm.getAmpTeam().getAmpTeamId().equals(activityTeamId);
@@ -610,6 +606,23 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
             return true;
         }
         return false;
+    }
+
+    public static boolean canApproveWith(ApprovalStatus approvalStatus, AmpTeamMember atm, boolean isNewActivity) {
+        String validation = getValidationSetting(atm);
+        if (!"validationOff".equalsIgnoreCase(validation)) {
+            return ApprovalStatus.APPROVED.equals(approvalStatus);
+        }
+        ApprovalStatus allowed = isNewActivity ? ApprovalStatus.STARTED_APPROVED : ApprovalStatus.APPROVED;
+        return allowed.equals(approvalStatus);
+    }
+
+    private static String getValidationSetting(AmpTeamMember atm) {
+        Long teamMemberTeamId = atm.getAmpTeam().getAmpTeamId();
+        if (!"On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))) {
+            return "validationOff";
+        }
+        return org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
     }
 
     /**

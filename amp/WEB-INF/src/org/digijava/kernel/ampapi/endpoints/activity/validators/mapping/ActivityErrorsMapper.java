@@ -114,7 +114,7 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
                     ActivityErrors.FIELD_PERCENTAGE_SUM_BAD);
         }
 
-        Class<?> cvbc = constraintToViolation.get(v.getConstraintDescriptor().getAnnotation());
+        Class<?> cvbc = constraintToViolation.get(v.getConstraintDescriptor().getAnnotation().annotationType());
         if (cvbc != null) {
             try {
                 ConstraintViolationBuilder cvb = ((Class<? extends ConstraintViolationBuilder>) cvbc).newInstance();

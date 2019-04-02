@@ -3,6 +3,7 @@ package org.digijava.module.aim.validator.approval;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.helper.Constants;
 
@@ -17,11 +18,14 @@ public class ApprovalStatusConstraint implements ConstraintValidator<ApprovalSta
 
     @Override
     public boolean isValid(AmpActivityFields activity, ConstraintValidatorContext context) {
-        if (activity.getApprovalStatus() == null) {
+        org.digijava.module.aim.dbentity.ApprovalStatus approvalStatus =  activity.getApprovalStatus();
+        if (approvalStatus == null) {
             return false;
         }
         if (!Constants.ACTIVITY_NEEDS_APPROVAL_STATUS_SET.contains(activity.getApprovalStatus())) {
-            return Boolean.FALSE.equals(activity.getDraft());
+            boolean isSubmitted = Boolean.FALSE.equals(activity.getDraft());
+            boolean isNew = activity.getAmpId() == null;
+            return isSubmitted && ActivityUtil.canApproveWith(approvalStatus, activity.getApprovedBy(), isNew);
         }
         return true;
     }

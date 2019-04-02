@@ -54,6 +54,7 @@ import org.hibernate.Session;
 @LocationTotalPercentage(groups = API.class)
 @SectorsTotalPercentage(groups = API.class)
 @ProgramTotalPercentage(groups = API.class)
+@org.digijava.module.aim.validator.approval.ApprovalStatus(groups = API.class)
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
 LoggerIdentifiable, Cloneable {
 

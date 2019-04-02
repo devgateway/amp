@@ -11,6 +11,7 @@ public enum FieldType {
     FLOAT("float"),
     BOOLEAN("boolean"),
     DATE("date"),
+    TIMESTAMP("timestamp"),
     LIST("list"),
     OBJECT("object");
 
@@ -39,6 +40,10 @@ public enum FieldType {
 
     public boolean isObject() {
         return FieldType.OBJECT.equals(this);
+    }
+    
+    public boolean isTimestamp() {
+        return FieldType.TIMESTAMP.equals(this);
     }
 
     @Override

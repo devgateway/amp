@@ -285,14 +285,11 @@ public class ObjectExporterTest {
 
         Map<String, Object> jsonObj = exporter.export(dummy).any();
 
-        assertThat(jsonObj,
-                (Matcher) allOf(
-                        hasEntry(equalTo("sub_a"), contains(hasEntry("sub_name", "First Sub"))),
-                        hasEntry(equalTo("sub_b"), contains(hasEntry("sub_name", "Second Sub")))));
+        assertThat(jsonObj, (Matcher) hasEntry(equalTo("sub_a"), hasEntry("sub_name", "First Sub")));
+        assertThat(jsonObj, (Matcher) hasEntry(equalTo("sub_b"), contains(hasEntry("sub_name", "Second Sub"))));
     }
 
-    @Test
-    @SuppressWarnings("unchecked")
+    @Test(expected = RuntimeException.class)
     public void testDiscriminatedObjMultiple() {
         Dummy dummy = new Dummy();
         dummy.discriminatedSubs = ImmutableList.of(
@@ -300,17 +297,7 @@ public class ObjectExporterTest {
                 new DummySub("A", "Second Sub"),
                 new DummySub("B", "Third Sub"));
 
-        Map<String, Object> jsonObj = exporter.export(dummy).any();
-
-        assertThat(jsonObj,
-                (Matcher) allOf(
-                        hasEntry(
-                                equalTo("sub_a"),
-                                containsInAnyOrder(
-                                        hasEntry("sub_name", "First Sub"),
-                                        hasEntry("sub_name", "Second Sub"))),
-                        hasEntry(equalTo("sub_b"),
-                                contains(hasEntry("sub_name", "Third Sub")))));
+        exporter.export(dummy).any();
     }
 
     @Test
@@ -318,7 +305,7 @@ public class ObjectExporterTest {
         Dummy dummy = new Dummy();
         dummy.dateValue = new Date();
 
-        String formattedDate = DateTimeUtil.formatISO8601DateTime(dummy.dateValue);
+        String formattedDate = DateTimeUtil.formatISO8601Date(dummy.dateValue);
 
         Map<String, Object> jsonObj = exporter.export(dummy).any();
 

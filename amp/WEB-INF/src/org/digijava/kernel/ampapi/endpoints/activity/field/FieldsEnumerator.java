@@ -48,6 +48,8 @@ import com.google.common.collect.ImmutableSet;
 public class FieldsEnumerator {
     
     private static final Logger LOGGER = Logger.getLogger(FieldsEnumerator.class);
+    
+    private String iatiIdentifierField;
 
     /**
      * Fields that are importable & required by AMP Offline clients.
@@ -66,18 +68,28 @@ public class FieldsEnumerator {
     private InterchangeDependencyResolver interchangeDependencyResolver;
 
     private Function<String, Boolean> allowMultiplePrograms;
+    
+    /**
+     * Fields Enumerator
+     */
+    public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
+                            TranslatorService translatorService,
+                            Function<String, Boolean> allowMultiplePrograms) {
+        this(fieldInfoProvider, fmService, translatorService, allowMultiplePrograms, null);
+    }
 
     /**
      * Fields Enumerator
      */
     public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
             TranslatorService translatorService,
-            Function<String, Boolean> allowMultiplePrograms) {
+            Function<String, Boolean> allowMultiplePrograms, String iatiIdentifierField) {
         this.fieldInfoProvider = fieldInfoProvider;
         this.fmService = fmService;
         this.translatorService = translatorService;
         interchangeDependencyResolver = new InterchangeDependencyResolver(fmService);
         this.allowMultiplePrograms = allowMultiplePrograms;
+        this.iatiIdentifierField = iatiIdentifierField;
     }
 
     /**
@@ -101,14 +113,21 @@ public class FieldsEnumerator {
         Class<?> elementType = null;
         if (interchangeable.pickIdOnly()) {
             fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
-        } else if (!InterchangeUtils.isSimpleType(field.getType())) {
+        } else if (InterchangeUtils.isCollection(field)) {
             elementType = getType(field, context);
-            if (InterchangeUtils.isCollection(field) && InterchangeUtils.isSimpleType(elementType)) {
-                type = field.getClass();
+            if (interchangeable.multipleValues()) {
+                fieldType = FieldType.LIST;
+                if (InterchangeUtils.isSimpleType(elementType)) {
+                    type = field.getClass();
+                }
             }
+        } else if (field.getType().equals(java.util.Date.class)) {
+            fieldType = InterchangeUtils.isTimestampField(field) ? FieldType.TIMESTAMP : FieldType.DATE;
         }
+        
         APIType apiType = new APIType(type, fieldType, elementType);
         apiField.setApiType(apiType);
+        boolean isCollection = apiType.getFieldType().isList();
 
         apiField.setPossibleValuesProviderClass(InterchangeUtils.getPossibleValuesProvider(field));
 
@@ -138,29 +157,20 @@ public class FieldsEnumerator {
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             if (!interchangeable.pickIdOnly()) {
-                List<APIField> children = getAllAvailableFields(elementType, context);
+                Class<?> clazz = isCollection ? elementType : type;
+                List<APIField> children = getAllAvailableFields(clazz, context);
                 if (children != null && children.size() > 0) {
                     apiField.setChildren(children);
                 }
             }
-
-            if (InterchangeUtils.isCollection(field)) {
-                if (!hasMaxSizeValidatorEnabled(field, context)
-                        && interchangeable.multipleValues()) {
-                    apiField.setMultipleValues(true);
-                    
-                    if (interchangeable.sizeLimit() > 1) {
-                        apiField.setSizeLimit(interchangeable.sizeLimit());
-                    }
-                } else {
-                    apiField.setMultipleValues(false);
+            if (isCollection) {
+                apiField.setMultipleValues(!hasMaxSizeValidatorEnabled(field, context));
+                if (interchangeable.sizeLimit() > 1) {
+                    apiField.setSizeLimit(interchangeable.sizeLimit());
                 }
-                
-                
                 if (hasPercentageValidatorEnabled(context)) {
                     apiField.setPercentageConstraint(getPercentageConstraint(field, context));
                 }
-                
                 String uniqueConstraint = getUniqueConstraint(apiField, field, context);
                 if (hasTreeCollectionValidatorEnabled(context)) {
                     apiField.setTreeCollectionConstraint(true);
@@ -168,9 +178,6 @@ public class FieldsEnumerator {
                 } else if (hasUniqueValidatorEnabled(context)) {
                     apiField.setUniqueConstraint(uniqueConstraint);
                 }
-                
-            } else if (!interchangeable.pickIdOnly()) {
-                apiField.setMultipleValues(false);
             }
         }
         
@@ -181,13 +188,16 @@ public class FieldsEnumerator {
         if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldInfoProvider.getType(field))) {
             apiField.setFieldLength(fieldInfoProvider.getMaxLength(field));
         }
-        
         if (StringUtils.isNotBlank(interchangeable.regexPattern())) {
             apiField.setRegexPattern(interchangeable.regexPattern());
         }
-
         if (StringUtils.isNotEmpty(interchangeable.discriminatorOption())) {
             apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
+        }
+    
+        if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
+            apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
+            apiField.setImportable(true);
         }
 
         return apiField;
@@ -205,7 +215,6 @@ public class FieldsEnumerator {
                 return type;
             }
         }
-    
         return InterchangeUtils.getClassOfField(field);
     }
 
@@ -480,8 +489,26 @@ public class FieldsEnumerator {
         
         return isVisible;
     }
-
-    protected boolean isVisible(String fmPath, FEContext context) {
-        return fmService.isVisible(fmPath, context.getIntchStack());
+    
+    /**
+     * Decides whether a field stores iati-identifier value
+     *
+     * @param fieldName
+     * @return true if is iati-identifier
+     */
+    private boolean isFieldIatiIdentifier(String fieldName) {
+        return StringUtils.equals(this.iatiIdentifierField, fieldName);
     }
+    
+    protected boolean isVisible(String fmPath, FEContext context) {
+        Interchangeable interchangeable = context.getIntchStack().peek();
+        String fieldTitle = FieldMap.underscorify(interchangeable.fieldTitle());
+        
+        if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
+            return true;
+        } else {
+            return fmService.isVisible(fmPath, context.getIntchStack());
+        }
+    }
+    
 }

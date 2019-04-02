@@ -63,9 +63,10 @@ public class ApprovedByValidator extends InputValidator {
             return false;
         }
 
-        Long teamId = getLong(newFieldParent.get(ActivityFieldsConstants.TEAM));
+        Long teamId = getLong(newFieldParent.get(FieldMap.underscorify(ActivityFieldsConstants.TEAM)));
         AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(approvedById);
-        return ActivityUtil.canApprove(atm, teamId, importer.getOldActivity().getApprovalStatus());
+        ApprovalStatus oas = importer.getOldActivity() == null ? null : importer.getOldActivity().getApprovalStatus();
+        return ActivityUtil.canApprove(atm, teamId, oas);
     }
 
 }

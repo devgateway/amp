@@ -12,6 +12,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -52,6 +53,7 @@ public class ActivityImporterTest {
 
     private Map<Integer, ApiErrorMessage> validate(JsonBean json) {
         AmpActivityVersion activity = new AmpActivityVersion();
+        activity.setApprovalStatus(ApprovalStatus.STARTED);
         ActivityImporter importer = new ActivityImporter(Collections.emptyList(), true, false);
         importer.validateAndImport(activity, json.any());
         return importer.getErrors();

@@ -1,5 +1,6 @@
 package org.digijava.module.aim.validator;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -10,6 +11,7 @@ import javax.validation.groups.Default;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.validator.groups.API;
+import org.digijava.module.aim.validator.percentage.AbstractTotalPercentageValidator;
 import org.junit.Before;
 
 /**
@@ -30,6 +32,14 @@ public abstract class AbstractTotalPercentageValidatorTest {
     }
 
     public Set<ConstraintViolation<AmpActivity>> validateForAPI(AmpActivity activity) {
-        return getValidator().validate(activity, API.class, Default.class);
+        Set<ConstraintViolation<AmpActivity>> violations = getValidator().validate(activity, API.class, Default.class);
+        violations.removeIf(v -> {
+            List<?> classes = v.getConstraintDescriptor().getConstraintValidatorClasses();
+            Long totPercClassesCount = classes.stream()
+                    .filter(c -> AbstractTotalPercentageValidator.class.isAssignableFrom((Class<?>) c))
+                    .count();
+            return totPercClassesCount == 0;
+        });
+        return violations;
     }
 }

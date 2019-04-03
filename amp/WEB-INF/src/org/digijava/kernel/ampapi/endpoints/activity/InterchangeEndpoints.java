@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -263,16 +264,18 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "addProject", ui = false)
     @ApiOperation(
             value = "Imports an activity.",
-            notes = "Original behaviour: is_draft field cannot be specified. If saving as draft is allowed then "
-                    + "activity will be saved as draft. Otherwise activity will be saved as submitted.\n\n"
-                    + "AMP Offline behaviour (User-Agent: AMPOffline): is_draft field is importable and it's"
-                    + "value is always honored.")
+            notes = "Saving as draft will be allowed only if this is also possible in AMP Activity Form. "
+                    + "When is_draft is false, but some required fields for submit are invalid/missing, then activity "
+                    + "will be saved as draft if can-downgrade-to-draft is true. Otherwise will be rejected.\n\n")
     @ApiResponses({
-            @ApiResponse(code = HttpServletResponse.SC_OK, message = "latest project overview"),
+            @ApiResponse(code = HttpServletResponse.SC_OK, message = "the latest project short overview"),
             @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
                     message = "error if invalid configuration is received")})
-    public JsonBean addProject(@ApiParam("activity configuration") JsonBean newJson) {
-        return ActivityInterchangeUtils.importActivity(newJson, false, uri.getBaseUri() + "activity");
+    public JsonBean addProject(
+            @ApiParam("can downgrade to draft") @QueryParam("can-downgrade-to-draft") @DefaultValue("false")
+            boolean canDowngradeToDraft, @ApiParam("activity configuration") JsonBean newJson) {
+        return ActivityInterchangeUtils.importActivity(newJson, false, canDowngradeToDraft,
+                uri.getBaseUri() + "activity");
     }
 
     @POST
@@ -281,10 +284,9 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "updateProject", ui = false)
     @ApiOperation(
             value = "Updates an activity",
-            notes = "Original behaviour: is_draft field cannot be specified. If existing activity was submitted then "
-                    + "at import this status will be kept if possible. Otherwise activity will be saved as draft.\n\n"
-                    + "AMP Offline behaviour (User-Agent: AMPOffline): is_draft field is importable and it's value "
-                    + "is always honored.\n\n"
+            notes = "Saving as draft will be allowed only if this is also possible in AMP Activity Form. "
+                    + "When is_draft is false, but some required fields for submit are invalid/missing, then activity "
+                    + "will be saved as draft if can-downgrade-to-draft is true. Otherwise will be rejected.\n\n"
                     + "AMP Offline must use optimistic lock in order to update activity. For other clients locking is "
                     + "optional. Locking is achieved by sending last known value of activity_group.version. "
                     + "If activity was updated in meantime then version will be different and subsequent updates "
@@ -295,6 +297,8 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                     message = "error if invalid configuration is received")})
     public JsonBean updateProject(
             @ApiParam("the id of the activity which should be updated") @PathParam("projectId") Long projectId,
+            @ApiParam("can downgrade to draft") @QueryParam("can-downgrade-to-draft") @DefaultValue("false")
+            boolean canDowngradeToDraft,
             @ApiParam("activity configuration") JsonBean newJson) {
         /*
          * Originally it was defined as PUT to avoid these type of issues checked here.
@@ -308,7 +312,8 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             EndpointUtils.addGeneralError(newJson, ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details));
         }
 
-        return ActivityInterchangeUtils.importActivity(newJson, true, uri.getBaseUri() + "activity");
+        return ActivityInterchangeUtils.importActivity(newJson, true, canDowngradeToDraft,
+                uri.getBaseUri() + "activity");
     }
 
     @GET

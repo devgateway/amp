@@ -116,13 +116,21 @@ public class RequiredValidatorTest {
     @Test
     public void testSubmissionRequiredFieldMissingAndSaveAsDraftDisabled() throws Exception {
         when(importer.isDraftFMEnabled()).thenReturn(false);
+        when(importer.isDowngradeToDraft()).thenReturn(true);
 
         assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.SAVE_AS_DRAFT_FM_DISABLED, false);
     }
 
     @Test
-    public void testSubmissionRequiredFieldMissingAndSaveAsDraftEnabled() throws Exception {
+    public void testSubmissionRequiredFieldMissingAndSaveAsDraftEnabledDowngradeAllowed() throws Exception {
+        when(importer.isDowngradeToDraft()).thenReturn(true);
         assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), null, true);
+    }
+
+    @Test
+    public void testSubmissionRequiredFieldMissingAndSaveAsDraftEnabledDowngradeNotAllowed() throws Exception {
+        when(importer.isDowngradeToDraft()).thenReturn(false);
+        assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test

@@ -55,16 +55,18 @@ public class RequiredValidator extends InputValidator {
                     ActivityImporter activityImporter = (ActivityImporter) importer;
                     // field required for submitted activities, but we can save it as a draft
                     // unless it's disabled in FM
-                    if (!activityImporter.isDraftFMEnabled()
-                            && activityImporter.getRequestedSaveMode() != SaveMode.SUBMIT) {
-                        this.draftDisabled = true;
-                        return false;
+                    if (activityImporter.getRequestedSaveMode() != SaveMode.DRAFT) {
+                        if (activityImporter.isDowngradeToDraft()) {
+                            if (activityImporter.isDraftFMEnabled()) {
+                                activityImporter.downgradeToDraftSave();
+                            } else {
+                                this.draftDisabled = true;
+                                return false;
+                            }
+                        } else {
+                            return false;
+                        }
                     }
-                    // ok, it's enabled, downgrade to draft if save mode is not specified
-                    if (activityImporter.getRequestedSaveMode() == null) {
-                        activityImporter.downgradeToDraftSave();
-                    }
-                    return activityImporter.getRequestedSaveMode() != SaveMode.SUBMIT;
                 }
             }
         }

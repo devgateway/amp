@@ -62,6 +62,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.ARCHIVED, ColumnConstants.ARCHIVED);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY, ColumnConstants.BENEFICIARY_AGENCY);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_GROUP, ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_TYPE, ColumnConstants.BENEFICIARY_AGENCY_TYPE);
         mapSimpleColumn(FiltersConstants.COMMUNAL_SECTION, ColumnConstants.COMMUNAL_SECTION);
         mapSimpleColumn(FiltersConstants.COMPONENT_FUNDING_ORGANIZATION,
                 ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
@@ -71,6 +72,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.CONCESSIONALITY_LEVEL, ColumnConstants.CONCESSIONALITY_LEVEL);
         mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY);
         mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_GROUP, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_TYPE, ColumnConstants.CONTRACTING_AGENCY_TYPE);
         mapSimpleColumn(FiltersConstants.COUNTRY, ColumnConstants.COUNTRY);
         mapSimpleColumn(FiltersConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.DISASTER_RESPONSE_MARKER);
         mapSimpleColumn(FiltersConstants.DISTRICT, ColumnConstants.DISTRICT);
@@ -204,6 +206,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
         mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION_GROUP,
                 ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
+        mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION_TYPE, ColumnConstants.RESPONSIBLE_ORGANIZATION_TYPE);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_0, ColumnConstants.SECONDARY_PROGRAM_LEVEL_0);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_1, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_2, ColumnConstants.SECONDARY_PROGRAM_LEVEL_2);

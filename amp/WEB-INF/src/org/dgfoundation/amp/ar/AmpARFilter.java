@@ -400,6 +400,9 @@ public class AmpARFilter extends PropertyListable {
     private Set<AmpOrgType> donorTypes = null;
     private Set<AmpOrgType> executingAgencyTypes = null;
     private Set<AmpOrgType> implementingAgencyTypes = null;
+    private Set<AmpOrgType> responsibleAgencyTypes = null;
+    private Set<AmpOrgType> contractingAgencyTypes = null;
+    private Set<AmpOrgType> beneficiaryAgencyTypes = null;
     
     private Set<AmpOrgGroup> donorGroups = null;
     private Set<AmpOrgGroup> beneficiaryAgencyGroups = null;
@@ -3265,6 +3268,14 @@ public class AmpARFilter extends PropertyListable {
     public void setBeneficiaryAgencyGroups(Set<AmpOrgGroup> beneficiaryAgencyGroups) {
         this.beneficiaryAgencyGroups = beneficiaryAgencyGroups;
     }
+
+    public Set<AmpOrgType> getBeneficiaryAgencyTypes() {
+        return beneficiaryAgencyTypes;
+    }
+
+    public void setBeneficiaryAgencyTypes(Set<AmpOrgType> beneficiaryAgencyTypes) {
+        this.beneficiaryAgencyTypes = beneficiaryAgencyTypes;
+    }
     
     public Set<AmpOrgGroup> getExecutingAgencyGroups() {
         return executingAgencyGroups;
@@ -3288,6 +3299,22 @@ public class AmpARFilter extends PropertyListable {
     
     public void setResponsibleAgencyGroups(Set<AmpOrgGroup> responsibleAgencyGroups) {
         this.responsibleAgencyGroups = responsibleAgencyGroups;
+    }
+
+    public Set<AmpOrgType> getResponsibleAgencyTypes() {
+        return responsibleAgencyTypes;
+    }
+
+    public void setResponsibleAgencyTypes(Set<AmpOrgType> responsibleAgencyTypes) {
+        this.responsibleAgencyTypes = responsibleAgencyTypes;
+    }
+
+    public Set<AmpOrgType> getContractingAgencyTypes() {
+        return contractingAgencyTypes;
+    }
+
+    public void setContractingAgencyTypes(Set<AmpOrgType> contractingAgencyTypes) {
+        this.contractingAgencyTypes = contractingAgencyTypes;
     }
 
     public String getFromActualApprovalDate() {

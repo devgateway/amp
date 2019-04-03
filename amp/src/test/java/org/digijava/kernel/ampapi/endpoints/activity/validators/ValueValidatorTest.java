@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
@@ -83,7 +84,7 @@ public class ValueValidatorTest {
     }
 
     @Test
-    public void testPossibleValueNonRootSector() throws Exception {
+    public void testPossibleValueNonRootSector() {
         Map<String, Object> newFieldParent = new HashMap<>();
         newFieldParent.put(SECTOR_FIELD, LEAF_SECTOR_ID.intValue());
 
@@ -94,7 +95,7 @@ public class ValueValidatorTest {
     }
 
     @Test
-    public void testPossibleValueInvalidSector() throws Exception {
+    public void testPossibleValueInvalidSector() {
         Map<String, Object> newFieldParent = new HashMap<>();
         newFieldParent.put(SECTOR_FIELD, INVALID_SECTOR_ID.intValue());
 
@@ -106,7 +107,7 @@ public class ValueValidatorTest {
     }
 
     @Test
-    public void testPossibleValueFYValid() throws Exception {
+    public void testPossibleValueFYValid() {
         Map<String, Object> newFieldParent = new HashMap<>();
         newFieldParent.put(FY_FIELD, Arrays.asList(VALID_FY_ID));
 
@@ -117,7 +118,7 @@ public class ValueValidatorTest {
     }
 
     @Test
-    public void testPossibleValueFYInvalid() throws Exception {
+    public void testPossibleValueFYInvalid() {
         Map<String, Object> newFieldParent = new HashMap<>();
         newFieldParent.put(FY_FIELD, Arrays.asList(INVALID_FY_ID));
 
@@ -129,7 +130,7 @@ public class ValueValidatorTest {
     }
 
     @Test
-    public void testDraftSubmissionDraftFMDisabled() throws Exception {
+    public void testDraftSubmissionDraftFMDisabled() {
         when(importer.getRequestedSaveMode()).thenReturn(SaveMode.DRAFT);
         when(importer.isDraftFMEnabled()).thenReturn(false);
 

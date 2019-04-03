@@ -489,8 +489,6 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
     }
 
     private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity,boolean rejected) {
-        String validation = getValidationSetting(ampCurrentMember);
-
         //setting activity status....
         AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
         boolean teamLeadFlag =  role.getTeamHead() || role.isApprover();
@@ -498,7 +496,8 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         Boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId().equals(a.getTeam().getAmpTeamId());
 
         // Check if validation is ON in GS and APP Settings
-        if (!"validationOff".equalsIgnoreCase(validation)) {
+        String validation = getValidationSetting(ampCurrentMember);
+        if (isProjectValidationOn(validation)) {
             if (teamLeadFlag) {
                 if (draft) {
                     if (rejected) {
@@ -541,7 +540,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                     }
                 }
             } else {
-                if ("newOnly".equals(validation)) {
+                if (Constants.PROJECT_VALIDATION_FOR_NEW_ONLY.equals(validation)) {
                     if (newActivity) {
                         // all the new activities will have the started status
                         a.setApprovalStatus(ApprovalStatus.STARTED);
@@ -557,7 +556,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                             a.setApprovalStatus(ApprovalStatus.APPROVED);
                     }
                 } else {
-                    if ("allEdits".equals(validation)) {
+                    if (Constants.PROJECT_VALIDATION_FOR_ALL_EDITS.equals(validation)) {
                         if (newActivity) {
                             a.setApprovalStatus(ApprovalStatus.STARTED);
                         } else {
@@ -594,12 +593,12 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
      */
     public static boolean canApprove(AmpTeamMember atm, Long activityTeamId, ApprovalStatus oldApprovalStatus) {
         String validation = getValidationSetting(atm);
-        if (!"validationOff".equalsIgnoreCase(validation)) {
+        if (isProjectValidationOn(validation)) {
             AmpTeamMemberRoles role = atm.getAmpMemberRole();
             if (role.getTeamHead() || role.isApprover()) {
                 Boolean isSameWorkspace = atm.getAmpTeam().getAmpTeamId().equals(activityTeamId);
                 return isSameWorkspace || atm.getAmpTeam().getCrossteamvalidation();
-            } else if ("newOnly".equals(validation)) {
+            } else if (Constants.PROJECT_VALIDATION_FOR_NEW_ONLY.equals(validation)) {
                 return oldApprovalStatus != null && !oldApprovalStatus.equals(ApprovalStatus.STARTED);
             }
         } else {
@@ -610,7 +609,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
 
     public static boolean canApproveWith(ApprovalStatus approvalStatus, AmpTeamMember atm, boolean isNewActivity) {
         String validation = getValidationSetting(atm);
-        if (!"validationOff".equalsIgnoreCase(validation)) {
+        if (isProjectValidationOn(validation)) {
             return ApprovalStatus.APPROVED.equals(approvalStatus);
         }
         ApprovalStatus allowed = isNewActivity ? ApprovalStatus.STARTED_APPROVED : ApprovalStatus.APPROVED;
@@ -619,10 +618,15 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
 
     private static String getValidationSetting(AmpTeamMember atm) {
         Long teamMemberTeamId = atm.getAmpTeam().getAmpTeamId();
-        if (!"On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))) {
-            return "validationOff";
+        String gsValidationOnOff = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION);
+        if (!Constants.PROJECT_VALIDATION_ON.equals(gsValidationOnOff)) {
+            return Constants.PROJECT_VALIDATION_OFF;
         }
         return org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
+    }
+
+    private static boolean isProjectValidationOn(String validation) {
+        return !Constants.PROJECT_VALIDATION_OFF.equalsIgnoreCase(validation);
     }
 
     /**

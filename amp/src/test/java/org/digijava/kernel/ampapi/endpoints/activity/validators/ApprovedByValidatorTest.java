@@ -1,5 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
+import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_FOR_ALL_EDITS;
+import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_FOR_NEW_ONLY;
+import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_OFF;
+import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_ON;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -116,7 +120,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testValidApprovedByWhenRequestedToProcess() {
-        mockValidation("On", "allEdits", validAmpTeamMember);
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, validAmpTeamMember);
 
         ApprovedByValidator validator = new ApprovedByValidator();
 
@@ -128,7 +132,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testValidApprovedByWhenValidationIsOffForNewActivity() {
-        mockValidation("validationOff", "allEdits", validAmpTeamMember);
+        mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, validAmpTeamMember);
 
         ApprovedByValidator validator = new ApprovedByValidator();
 
@@ -141,7 +145,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testValidApprovedByWhenValidationIsOffForOldActivity() {
-        mockValidation("validationOff", "allEdits", validAmpTeamMember);
+        mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, validAmpTeamMember);
 
         AmpActivityVersion ampActivity = mock(AmpActivityVersion.class);
         when(importer.getOldActivity()).thenReturn(ampActivity);
@@ -157,7 +161,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testValidApprovedByWhenValidationIsForNewOnly() {
-        mockValidation("On", "newOnly", validAmpTeamMember);
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, validAmpTeamMember);
         when(validAmpTeamMember.getAmpMemberRole()).thenReturn(notApproverRoles);
 
         AmpActivityVersion ampActivity = mock(AmpActivityVersion.class);
@@ -174,7 +178,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testInvalidApprovedByWhenValidationIsForNewOnlyExistingActivity() {
-        mockValidation("On", "newOnly", validAmpTeamMember);
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, validAmpTeamMember);
         when(validAmpTeamMember.getAmpMemberRole()).thenReturn(notApproverRoles);
 
         AmpActivityVersion ampActivity = mock(AmpActivityVersion.class);
@@ -191,7 +195,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testInvalidApprovedByWhenValidationIsForNewOnlyNewActivity() {
-        mockValidation("On", "newOnly", validAmpTeamMember);
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, validAmpTeamMember);
         when(validAmpTeamMember.getAmpMemberRole()).thenReturn(notApproverRoles);
 
         ApprovedByValidator validator = new ApprovedByValidator();
@@ -204,7 +208,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testValidApprovedByWhenNoApprovalStatusSet() {
-        mockValidation("On", "allEdits", validAmpTeamMember);
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, validAmpTeamMember);
 
         ApprovedByValidator validator = new ApprovedByValidator();
 
@@ -216,7 +220,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testInvalidApprovedByWhenNoApprovalStatusSet() {
-        mockValidation("On", "allEdits", validAmpTeamMember);
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, validAmpTeamMember);
 
         ApprovedByValidator validator = new ApprovedByValidator();
 
@@ -228,7 +232,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testInvalidApprovedByWhenInvalidApprovalStatus() {
-        mockValidation("On", "allEdits", validAmpTeamMember);
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, validAmpTeamMember);
 
         ApprovedByValidator validator = new ApprovedByValidator();
 
@@ -241,7 +245,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testValidApprovedByWhenNotApprovedAndInvalidApprover() {
-        mockValidation("On", "allEdits", validAmpTeamMember);
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, validAmpTeamMember);
         when(validAmpTeamMember.getAmpMemberRole()).thenReturn(notApproverRoles);
 
         ApprovedByValidator validator = new ApprovedByValidator();
@@ -254,7 +258,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testInvalidApprovedByWhenNotMatchingModifiedBy() {
-        mockValidation("On", "allEdits", invalidAmpTeamMember);
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, invalidAmpTeamMember);
 
         ApprovedByValidator validator = new ApprovedByValidator();
 
@@ -266,7 +270,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testValidApprovedByWhenCrossTeamValidation() {
-        mockValidation("On", "allEdits", validAmpTeamMember);
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, validAmpTeamMember);
         when(validAmpTeam.getCrossteamvalidation()).thenReturn(true);
 
         ApprovedByValidator validator = new ApprovedByValidator();
@@ -281,7 +285,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testInvalidApprovedByWhenCrossTeamValidationIsOff() {
-        mockValidation("On", "allEdits", validAmpTeamMember);
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, validAmpTeamMember);
         when(validAmpTeam.getCrossteamvalidation()).thenReturn(false);
 
         ApprovedByValidator validator = new ApprovedByValidator();

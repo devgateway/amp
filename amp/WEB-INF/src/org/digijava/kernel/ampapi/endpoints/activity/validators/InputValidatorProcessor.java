@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.contact.validators.PrimaryOrganisationContactValidator;
@@ -10,7 +11,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
  * Defines input validation chain and executes it
- * 
+ *
  * @author Nadejda Mandrescu
  */
 public class InputValidatorProcessor {
@@ -28,6 +29,7 @@ public class InputValidatorProcessor {
                 new RequiredValidator(),
                 new ActivityTitleValidator(),
                 new AmpActivityIdValidator(),
+                new ApprovedByValidator(),
                 new MultipleEntriesValidator(),
                 new UniqueValidator(),
                 new TreeCollectionValidator(),
@@ -54,7 +56,7 @@ public class InputValidatorProcessor {
                 new PrimaryOrganisationContactValidator(),
                 new RegexPatternValidator());
     }
-    
+
     public static List<InputValidator> getResourceFormatValidators() {
         return Arrays.asList(
                 new ValidFieldValidator(),
@@ -83,7 +85,7 @@ public class InputValidatorProcessor {
      * @return true if the current field passes the full validation chain
      */
     public boolean isValid(ObjectImporter importer, Map<String, Object> newParent,
-                           APIField fieldDef, String fieldPath, Map<Integer, ApiErrorMessage> errors) {
+            APIField fieldDef, String fieldPath, Map<Integer, ApiErrorMessage> errors) {
         boolean valid = true;
         String fieldName = fieldPath.substring(fieldPath.lastIndexOf("~") + 1);
         for (InputValidator current : validators) {

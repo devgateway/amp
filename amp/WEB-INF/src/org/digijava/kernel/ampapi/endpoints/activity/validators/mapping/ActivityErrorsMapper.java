@@ -1,14 +1,17 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators.mapping;
 
+import java.lang.annotation.Annotation;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.annotation.PostConstruct;
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
 
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -16,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.validator.approval.ApprovalStatus;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
 import org.digijava.module.aim.validator.percentage.ProgramTotalPercentage;
@@ -27,6 +31,16 @@ import org.digijava.module.aim.validator.percentage.SectorsTotalPercentage;
  * @author Octavian Ciubotaru
  */
 public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonConstraintViolation> {
+
+    @PostConstruct
+    private void validateConfig() {
+        constraintToViolation.forEach((c, v) -> {
+            if (!Annotation.class.isAssignableFrom(c)
+                    || ConstraintViolationBuilder.class.isAssignableFrom(v)) {
+                throw new RuntimeException("Invalid mapping from " + c.getName() + " to " + v.getName());
+            }
+        });
+    }
 
     private Map<String, String> roleCodeToJsonPath = ImmutableBiMap.<String, String>builder()
             .putAll(ActivityFieldsConstants.ORG_ROLE_CODES)
@@ -53,6 +67,10 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
                     FieldMap.underscorify(ActivityFieldsConstants.TERTIARY_SECTORS))
             .put(AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,
                     FieldMap.underscorify(ActivityFieldsConstants.TAG_SECTORS))
+            .build();
+
+    private Map<Class<?>, Class<?>> constraintToViolation = ImmutableMap.<Class<?>, Class<?>>builder()
+            .put(ApprovalStatus.class, ApprovalStatusViolationBuilder.class)
             .build();
 
     @Override
@@ -94,6 +112,16 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
         if (isLocationPercentageConstraint(v)) {
             return new JsonConstraintViolation(FieldMap.underscorify(ActivityFieldsConstants.LOCATIONS),
                     ActivityErrors.FIELD_PERCENTAGE_SUM_BAD);
+        }
+
+        Class<?> cvbc = constraintToViolation.get(v.getConstraintDescriptor().getAnnotation().annotationType());
+        if (cvbc != null) {
+            try {
+                ConstraintViolationBuilder cvb = ((Class<? extends ConstraintViolationBuilder>) cvbc).newInstance();
+                return cvb.build(v);
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new RuntimeException("Could not generate the contraint violation json object");
+            }
         }
 
         throw new RuntimeException("Cannot map constraint violation onto json object. Violation: " + v);

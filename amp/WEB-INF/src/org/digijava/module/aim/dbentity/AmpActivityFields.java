@@ -54,6 +54,7 @@ import org.hibernate.Session;
 @LocationTotalPercentage(groups = API.class)
 @SectorsTotalPercentage(groups = API.class)
 @ProgramTotalPercentage(groups = API.class)
+@org.digijava.module.aim.validator.approval.ApprovalStatus(groups = API.class)
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
 LoggerIdentifiable, Cloneable {
 
@@ -507,10 +508,10 @@ LoggerIdentifiable, Cloneable {
     @TimestampField
     protected Date iatiLastUpdatedDate;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVED_BY, pickIdOnly=true)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVED_BY, pickIdOnly = true, importable = true)
     protected AmpTeamMember approvedBy;
     
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_DATE)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_DATE, importable = true)
     @TimestampField
     protected Date approvalDate;
 
@@ -518,7 +519,7 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = "Regional Fundings")
     protected Set <AmpRegionalFunding> regionalFundings;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS, pickIdOnly = true)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS, pickIdOnly = true, importable = true)
     @PossibleValues(ApprovalStatusPossibleValuesProvider.class)
     @VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
     private ApprovalStatus approvalStatus;

@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.NONE;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
 
 import java.lang.reflect.Field;
@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -31,32 +30,22 @@ import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 
-import com.google.common.collect.ImmutableSet;
-
 /**
  * Enumerate & describe all fields of an object used for import / export in API.
- * 
+ *
  * @author acartaleanu, Octavian Ciubotaru
  */
 public class FieldsEnumerator {
-    
-    private static final Logger LOGGER = Logger.getLogger(FieldsEnumerator.class);
-    
-    private String iatiIdentifierField;
 
-    /**
-     * Fields that are importable & required by AMP Offline clients.
-     */
-    private static final Set<String> OFFLINE_REQUIRED_FIELDS = new ImmutableSet.Builder<String>()
-            .add(ActivityFieldsConstants.APPROVAL_STATUS)
-            .build();
+    private static final Logger LOGGER = Logger.getLogger(FieldsEnumerator.class);
+
+    private String iatiIdentifierField;
 
     private FieldInfoProvider fieldInfoProvider;
 
@@ -67,13 +56,13 @@ public class FieldsEnumerator {
     private InterchangeDependencyResolver interchangeDependencyResolver;
 
     private Function<String, Boolean> allowMultiplePrograms;
-    
+
     /**
      * Fields Enumerator
      */
     public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-                            TranslatorService translatorService,
-                            Function<String, Boolean> allowMultiplePrograms) {
+            TranslatorService translatorService,
+            Function<String, Boolean> allowMultiplePrograms) {
         this(fieldInfoProvider, fmService, translatorService, allowMultiplePrograms, null);
     }
 
@@ -94,7 +83,7 @@ public class FieldsEnumerator {
     /**
      * describes a field in a complex JSON structure
      * see the wiki for details, too many options to be listed here
-     * 
+     *
      * @param field field to be described
      * @param context current context
      * @return field definition
@@ -123,7 +112,7 @@ public class FieldsEnumerator {
         } else if (field.getType().equals(java.util.Date.class)) {
             fieldType = InterchangeUtils.isTimestampField(field) ? FieldType.TIMESTAMP : FieldType.DATE;
         }
-        
+
         APIType apiType = new APIType(type, fieldType, elementType);
         apiField.setApiType(apiType);
         boolean isCollection = apiType.getFieldType().isList();
@@ -134,12 +123,8 @@ public class FieldsEnumerator {
         apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
         apiField.setRequired(getRequiredValue(context, fieldTitle));
         apiField.setImportable(interchangeable.importable());
-        if (AmpOfflineModeHolder.isAmpOfflineMode() && OFFLINE_REQUIRED_FIELDS.contains(interchangeable.fieldTitle())) {
-            apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
-            apiField.setImportable(true);
-        }
 
-        if (interchangeable.percentageConstraint()){
+        if (interchangeable.percentageConstraint()) {
             apiField.setPercentage(true);
         }
         List<String> actualDependencies =
@@ -151,7 +136,7 @@ public class FieldsEnumerator {
         apiField.setFieldNameInternal(field.getName());
 
         /* list type */
-        
+
         apiField.setIdOnly(hasPossibleValues(field, interchangeable));
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
@@ -179,7 +164,7 @@ public class FieldsEnumerator {
                 }
             }
         }
-        
+
         // only String fields should clarify if they are translatable or not
         if (java.lang.String.class.equals(field.getType())) {
             apiField.setTranslatable(fieldInfoProvider.isTranslatable(field));
@@ -193,7 +178,7 @@ public class FieldsEnumerator {
         if (StringUtils.isNotEmpty(interchangeable.discriminatorOption())) {
             apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
         }
-    
+
         if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
             apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
             apiField.setImportable(true);
@@ -233,7 +218,7 @@ public class FieldsEnumerator {
 
     /**
      * Describes each @Interchangeable field of a class
-     * 
+     *
      * @param clazz the class to be described
      * @param context current context
      * @return field definitions
@@ -283,7 +268,7 @@ public class FieldsEnumerator {
 
     /**
      * Picks available translations for a label.
-     * 
+     *
      * @param label the label to be translated
      * @return a map from the ISO2 code -> translation in said text
      */
@@ -303,9 +288,10 @@ public class FieldsEnumerator {
         }
         return translations;
     }
-    
+
     /**
      * Find nested field with a percentage constraint.
+     *
      * @param field field to check
      * @param context current context
      * @return name of the field with percentage constraint
@@ -319,10 +305,10 @@ public class FieldsEnumerator {
                 return FieldMap.underscorify(interchangeable.fieldTitle());
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Describes each @Interchangeable field of a class
      */
@@ -371,10 +357,10 @@ public class FieldsEnumerator {
      */
     private String getRequiredValue(FEContext context, String fieldTitle) {
         Interchangeable fieldIntch = context.getIntchStack().peek();
-        
+
         ActivityEPConstants.RequiredValidation required = fieldIntch.required();
         String requiredFmPath = fieldIntch.requiredFmPath();
-        
+
         if (StringUtils.isNotBlank(requiredFmPath)) {
             if (isRequiredVisible(requiredFmPath, context)) {
                 required = required == NONE ? SUBMIT : required;
@@ -388,12 +374,13 @@ public class FieldsEnumerator {
         } else if (required == SUBMIT || hasRequiredValidatorEnabled(context)) {
             return ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
         }
-        
+
         return ActivityEPConstants.FIELD_NOT_REQUIRED;
     }
 
     /**
      * Determine if the field contains unique validator
+     *
      * @param context current context
      * @return boolean if the field contains unique validator
      */
@@ -403,6 +390,7 @@ public class FieldsEnumerator {
 
     /**
      * Determine if the field contains tree collection validator
+     *
      * @param context current context
      * @return boolean if the field contains tree collection validator
      */
@@ -412,13 +400,13 @@ public class FieldsEnumerator {
 
     /**
      * Determine if the field contains maxsize validator
+     *
      * @param context current context
      * @return boolean if the field contains maxsize validator
      */
     private boolean hasMaxSizeValidatorEnabled(Field field, FEContext context) {
         if (AmpActivityProgram.class.equals(InterchangeUtils.getGenericClass(field))) {
             return allowMultiplePrograms.apply(context.getIntchStack().peek().discriminatorOption());
-
 
         } else {
             return hasValidatorEnabled(context, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
@@ -427,6 +415,7 @@ public class FieldsEnumerator {
 
     /**
      * Determine if the field contains required validator
+     *
      * @param context current context
      * @return boolean if the field contains required validator
      */
@@ -436,6 +425,7 @@ public class FieldsEnumerator {
 
     /**
      * Determine if the field contains percentage validator
+     *
      * @param context current context
      * @return boolean if the field contains percentage validator
      */
@@ -445,6 +435,7 @@ public class FieldsEnumerator {
 
     /**
      * Determine if the field contains a certain validator
+     *
      * @param context current context
      * @param validatorName the name of the validator (unique, maxSize, minSize, percentage, treeCollection)
      * @return boolean if the field contains unique validator
@@ -480,15 +471,15 @@ public class FieldsEnumerator {
 
         return isVisible(interchangeable.fmPath(), context);
     }
-    
+
     protected boolean isRequiredVisible(String fmPath, FEContext context) {
         Interchangeable peek = context.getIntchStack().pop();
         boolean isVisible = fmService.isVisible(fmPath, context.getIntchStack());
         context.getIntchStack().push(peek);
-        
+
         return isVisible;
     }
-    
+
     /**
      * Decides whether a field stores iati-identifier value
      *
@@ -498,16 +489,16 @@ public class FieldsEnumerator {
     private boolean isFieldIatiIdentifier(String fieldName) {
         return StringUtils.equals(this.iatiIdentifierField, fieldName);
     }
-    
+
     protected boolean isVisible(String fmPath, FEContext context) {
         Interchangeable interchangeable = context.getIntchStack().peek();
         String fieldTitle = FieldMap.underscorify(interchangeable.fieldTitle());
-        
+
         if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
             return true;
         } else {
             return fmService.isVisible(fmPath, context.getIntchStack());
         }
     }
-    
+
 }

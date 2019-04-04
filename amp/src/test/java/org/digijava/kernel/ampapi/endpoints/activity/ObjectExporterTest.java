@@ -20,6 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
@@ -151,6 +152,10 @@ public class ObjectExporterTest {
     }
 
     public static class DummySub {
+
+        @InterchangeableId
+        @Interchangeable(fieldTitle = "Id")
+        private Long id;
 
         private String type;
 

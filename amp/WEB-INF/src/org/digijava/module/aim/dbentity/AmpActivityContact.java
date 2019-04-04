@@ -9,12 +9,15 @@ import java.util.TreeSet;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
 
 @TranslatableClass (displayName="ActivityContact")
 public class AmpActivityContact implements Versionable, Comparable, Serializable, Cloneable {
-    
+
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long id;
 
     @InterchangeableBackReference

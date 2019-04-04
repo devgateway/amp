@@ -254,7 +254,7 @@ public class ProjectList {
                 .findAny().orElse(null);
         
         if (apiField != null) {
-            return (String) apiField.getFieldValueReader().get(a);
+            return (String) apiField.getFieldAccessor().get(a);
         }
         
         return null;

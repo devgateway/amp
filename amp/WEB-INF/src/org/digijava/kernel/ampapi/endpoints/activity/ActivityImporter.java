@@ -200,8 +200,6 @@ public class ActivityImporter extends ObjectImporter {
                 oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
                 this.latestApporvalDate = oldActivity.getApprovalDate();
 
-                cleanImportableFields(fieldsDef, newActivity);
-
                 if (AmpOfflineModeHolder.isAmpOfflineMode()) {
                     PersistenceManager.getSession().evict(newActivity.getAmpActivityGroup());
                     newActivity.getAmpActivityGroup().setVersion(-1L);
@@ -577,8 +575,8 @@ public class ActivityImporter extends ObjectImporter {
         } else {
             for (AmpOrgRole aor : newActivity.getOrgrole()) {
                 //set budgets, or we'll have errors on several entities pointing to the same set
-                if (aor.getBudgets() != null) {
-                    Set<AmpOrgRoleBudget> aorbSet = new HashSet<AmpOrgRoleBudget>();
+                if (aor.getBudgets() != null && !aor.getBudgets().isEmpty()) {
+                    Set<AmpOrgRoleBudget> aorbSet = new HashSet<>();
                     aorbSet.addAll(aor.getBudgets());
                     aor.setBudgets(aorbSet);
                 }

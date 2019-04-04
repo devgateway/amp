@@ -99,9 +99,12 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
         String[] identityNames = entityPersister.getIdentifierColumnNames();
         if (identityNames.length > 0) {
             String fieldName = entityPersister.getIdentifierPropertyName();
-            String colName = identityNames[0];
-            FieldInfo fieldInfo = getFieldInfo(clazz, dbTypes.get(colName), maxLengths.get(colName), fieldName);
-            fieldInfoMap.put(fieldName, fieldInfo);
+            Field field = FieldUtils.getField(clazz, fieldName, true);
+            if (field != null) {
+                String colName = identityNames[0];
+                FieldInfo fieldInfo = getFieldInfo(clazz, dbTypes.get(colName), maxLengths.get(colName), field);
+                fieldInfoMap.put(fieldName, fieldInfo);
+            }
         }
     
         String[] propertyNames = entityPersister.getPropertyNames();
@@ -109,20 +112,23 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
             String[] columnNames = entityPersister.getPropertyColumnNames(i);
             if (columnNames.length > 0) {
                 String fieldName = propertyNames[i];
-                String colName = columnNames[0];
-                FieldInfo fieldInfo = getFieldInfo(clazz, dbTypes.get(colName), maxLengths.get(colName), fieldName);
-                fieldInfoMap.put(fieldName, fieldInfo);
+                Field field = FieldUtils.getField(clazz, fieldName, true);
+                // it could be possible that the fieldName could be part of a subclass and is not part of clazz
+                if (field != null) {
+                    String colName = columnNames[0];
+                    FieldInfo fieldInfo = getFieldInfo(clazz, dbTypes.get(colName), maxLengths.get(colName), field);
+                    fieldInfoMap.put(fieldName, fieldInfo);
+                }
             }
         }
         
         classFieldInfo.put(clazz, fieldInfoMap);
     }
     
-    private FieldInfo getFieldInfo(Class<?> clazz, String dbType, Integer maxLength, String fieldName) {
-        Field field = FieldUtils.getField(clazz, fieldName, true);
+    private FieldInfo getFieldInfo(Class<?> clazz, String dbType, Integer maxLength, Field field) {
         FieldInfo fieldInfo = new FieldInfo(dbType, null);
         
-        if (!ActivityTranslationUtils.isVersionableTextField(field)) {
+        if (field != null && !ActivityTranslationUtils.isVersionableTextField(field)) {
             fieldInfo.setMaxLength(maxLength);
         }
         

@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,6 +44,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class ApprovedByValidatorTest {
     private static final String APPROVAL_STATUS_FIELD = FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS);
     private static final String APPROVED_BY_FIELD = FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY);
+    private static final String APPROVAL_DATE_FIELD = FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE);
     private static final String TEAM_FIELD = FieldMap.underscorify(ActivityFieldsConstants.TEAM);
 
     private ActivityImporter importer;
@@ -86,6 +89,7 @@ public class ApprovedByValidatorTest {
         invalidAmpTeamMember = mock(AmpTeamMember.class);
         when(invalidAmpTeamMember.getAmpTeamMemId()).thenReturn(INVALID_TEAM_MEMBER_ID);
         when(TeamMemberUtil.getAmpTeamMember(INVALID_TEAM_MEMBER_ID)).thenReturn(invalidAmpTeamMember);
+        when(invalidAmpTeamMember.getAmpMemberRole()).thenReturn(notApproverRoles);
 
         invalidAmpTeam = mock(AmpTeam.class);
         when(invalidAmpTeam.getAmpTeamId()).thenReturn(INVALID_TEAM_ID);
@@ -267,12 +271,17 @@ public class ApprovedByValidatorTest {
     @Test
     public void testValidApprovedByWhenNotMatchingModifiedByValidateNewOnly() {
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, validAmpTeamMember);
+        // reusing the mock with another name to avoid confusion
+        AmpTeamMember crossTeamApprover = invalidAmpTeamMember;
 
         AmpActivityVersion ampActivity = mock(AmpActivityVersion.class);
-        when(ampActivity.getApprovedBy()).thenReturn(invalidAmpTeamMember);
+        when(ampActivity.getApprovedBy()).thenReturn(crossTeamApprover);
         when(importer.getOldActivity()).thenReturn(ampActivity);
+        when(ampActivity.getApprovalDate()).thenReturn(new Date());
         when(ampActivity.getApprovalStatus()).thenReturn(ApprovalStatus.APPROVED);
-        // when(ampActivity.getApprovalStatus()).thenReturn(ApprovalStatus.STARTED);
+
+        when(crossTeamApprover.getAmpMemberRole()).thenReturn(teamHeadApproverRoles);
+        when(crossTeamApprover.getAmpTeam().getCrossteamvalidation()).thenReturn(true);
 
         ApprovedByValidator validator = new ApprovedByValidator();
 
@@ -285,15 +294,18 @@ public class ApprovedByValidatorTest {
     @Test
     public void testInvalidApprovedByForValidatedActivityWhenNotMatchingModifiedByAndPastApprovalValidateNewOnly() {
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, validAmpTeamMember);
+        Date pastApprovalDate = new Date();
 
         AmpActivityVersion ampActivity = mock(AmpActivityVersion.class);
         when(ampActivity.getApprovedBy()).thenReturn(validAmpTeamMember);
+        when(ampActivity.getApprovalDate()).thenReturn(pastApprovalDate);
         when(importer.getOldActivity()).thenReturn(ampActivity);
         when(ampActivity.getApprovalStatus()).thenReturn(ApprovalStatus.APPROVED);
 
         ApprovedByValidator validator = new ApprovedByValidator();
 
         Map<String, Object> activity = approvalFields(INVALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
+        activity.put(APPROVAL_DATE_FIELD, DateTimeUtil.formatISO8601Timestamp(pastApprovalDate));
 
         assertFalse("Apprved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
@@ -304,7 +316,6 @@ public class ApprovedByValidatorTest {
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, validAmpTeamMember);
 
         AmpActivityVersion ampActivity = mock(AmpActivityVersion.class);
-        when(ampActivity.getApprovedBy()).thenReturn(invalidAmpTeamMember);
         when(importer.getOldActivity()).thenReturn(ampActivity);
         when(ampActivity.getApprovalStatus()).thenReturn(ApprovalStatus.STARTED);
 

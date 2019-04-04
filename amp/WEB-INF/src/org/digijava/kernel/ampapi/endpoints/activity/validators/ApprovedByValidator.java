@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
-import static org.digijava.module.aim.dbentity.ApprovalStatus.STARTED;
-
+import java.util.Date;
 import java.util.Map;
 
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
@@ -16,6 +15,8 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.common.util.DateTimeUtil;
+
 
 /**
  * @author Nadejda Mandrecsu
@@ -64,15 +65,33 @@ public class ApprovedByValidator extends InputValidator {
         AmpTeamMember approvedBy = TeamMemberUtil.getAmpTeamMember(approvedById);
         ApprovalStatus oas = importer.getOldActivity() == null ? null : importer.getOldActivity().getApprovalStatus();
         if (!modifiedBy.getAmpTeamMemId().equals(approvedById)) {
-            if (oas != null && !oas.equals(STARTED) && ActivityUtil.isProjectValidationForNewOnly(approvedBy)) {
+            if (oas != null && ActivityUtil.isProjectValidationForNewOnly(approvedBy)) {
                 AmpTeamMember oa = importer.getOldActivity().getApprovedBy();
-                return oa != null && oa.getAmpTeamMemId().equals(approvedById);
+                Object approvalDate = getNewApprovalDate(newFieldParent);
+                // New only validation: once approved, new edits do not update the approver (the old one is kept)
+                // -> the "new" approved_by from JSON can be actually the correct initial approver,
+                // but as lone as it wasn't reapproved (detectable through approval_date change)
+                if (oa != null && importer.getOldActivity().getApprovalDate().equals(approvalDate)) {
+                    return oa.getAmpTeamMemId().equals(approvedById);
+                }
+                // otherwise in AMP Offline: can be approved by user A, edited by user B and then synced ->
+                // hence we'll validate below that "user A" is still allowed to be recorded as approver during import
+            } else {
+                return false;
             }
-            return false;
         }
 
         Long teamId = getLong(newFieldParent.get(FieldMap.underscorify(ActivityFieldsConstants.TEAM)));
         return ActivityUtil.canApprove(approvedBy, teamId, oas);
+    }
+
+    private Date getNewApprovalDate(Map<String, Object> newFieldParent) {
+        try {
+            String dateStr = (String) newFieldParent.get(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE));
+            return DateTimeUtil.parseISO8601Timestamp(dateStr);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

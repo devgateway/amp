@@ -371,8 +371,9 @@ public class ActivityUtil {
         String validation = org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamId);
 
         if (activity.getDraft() != null) {
-            if (!activity.getDraft() && !("validationOff".equals(validation))) {
-                if (!isApproved(activity) && ("allEdits".equals(validation) || newActivity)) {
+            if (!activity.getDraft() && !(Constants.PROJECT_VALIDATION_OFF.equals(validation))) {
+                if (!isApproved(activity)
+                        && (Constants.PROJECT_VALIDATION_FOR_ALL_EDITS.equals(validation) || newActivity)) {
                     additionalDetails = "pending approval";
                 }
             } else if (activity.getDraft()) {

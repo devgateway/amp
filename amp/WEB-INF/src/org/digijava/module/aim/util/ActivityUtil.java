@@ -2066,7 +2066,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             boolean isTeamMemberValidator = isTeamMemberValidator(teamMember, activity);
             
             if (isTeamMemberValidator) {
-                if ("alledits".equalsIgnoreCase(validationOption)) {
+                if (Constants.PROJECT_VALIDATION_FOR_ALL_EDITS.equalsIgnoreCase(validationOption)) {
                     if (activity.getTeam() != null
                             && (ApprovalStatus.STARTED.equals(activity.getApprovalStatus())
                             || ApprovalStatus.EDITED.equals(activity.getApprovalStatus()))) {
@@ -2074,7 +2074,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     }
                 } else {
                     //it will display the validate label only if it is just started and was not approved not even once
-                    if ("newonly".equalsIgnoreCase(validationOption)
+                    if (Constants.PROJECT_VALIDATION_FOR_NEW_ONLY.equalsIgnoreCase(validationOption)
                             && ApprovalStatus.STARTED.equals(activity.getApprovalStatus())) {
                             canValidate = true;
                         }

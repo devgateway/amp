@@ -51,10 +51,12 @@ public class ApprovedByValidatorTest {
     private static final Long INVALID_TEAM_MEMBER_ID = 200l;
     private static final Long VALID_TEAM_ID = 5l;
     private static final Long VALID_CROSS_TEAM_ID = 15l;
+    private static final Long INVALID_TEAM_ID = 20l;
 
     private AmpTeamMember invalidAmpTeamMember;
     private AmpTeamMember validAmpTeamMember;
     private AmpTeam validAmpTeam;
+    private AmpTeam invalidAmpTeam;
     private AmpTeamMemberRoles teamHeadApproverRoles;
     private AmpTeamMemberRoles notApproverRoles;
 
@@ -83,6 +85,11 @@ public class ApprovedByValidatorTest {
 
         invalidAmpTeamMember = mock(AmpTeamMember.class);
         when(invalidAmpTeamMember.getAmpTeamMemId()).thenReturn(INVALID_TEAM_MEMBER_ID);
+        when(TeamMemberUtil.getAmpTeamMember(INVALID_TEAM_MEMBER_ID)).thenReturn(invalidAmpTeamMember);
+
+        invalidAmpTeam = mock(AmpTeam.class);
+        when(invalidAmpTeam.getAmpTeamId()).thenReturn(INVALID_TEAM_ID);
+        when(invalidAmpTeamMember.getAmpTeam()).thenReturn(invalidAmpTeam);
 
         approvedByFieldDesc = new APIField();
         approvedByFieldDesc.setFieldName(APPROVED_BY_FIELD);
@@ -256,8 +263,61 @@ public class ApprovedByValidatorTest {
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
+
     @Test
-    public void testInvalidApprovedByWhenNotMatchingModifiedBy() {
+    public void testValidApprovedByWhenNotMatchingModifiedByValidateNewOnly() {
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, validAmpTeamMember);
+
+        AmpActivityVersion ampActivity = mock(AmpActivityVersion.class);
+        when(ampActivity.getApprovedBy()).thenReturn(invalidAmpTeamMember);
+        when(importer.getOldActivity()).thenReturn(ampActivity);
+        when(ampActivity.getApprovalStatus()).thenReturn(ApprovalStatus.APPROVED);
+        // when(ampActivity.getApprovalStatus()).thenReturn(ApprovalStatus.STARTED);
+
+        ApprovedByValidator validator = new ApprovedByValidator();
+
+        Map<String, Object> activity = approvalFields(INVALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
+
+        assertTrue("Apprved by must be valid",
+                validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
+    }
+
+    @Test
+    public void testInvalidApprovedByForValidatedActivityWhenNotMatchingModifiedByAndPastApprovalValidateNewOnly() {
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, validAmpTeamMember);
+
+        AmpActivityVersion ampActivity = mock(AmpActivityVersion.class);
+        when(ampActivity.getApprovedBy()).thenReturn(validAmpTeamMember);
+        when(importer.getOldActivity()).thenReturn(ampActivity);
+        when(ampActivity.getApprovalStatus()).thenReturn(ApprovalStatus.APPROVED);
+
+        ApprovedByValidator validator = new ApprovedByValidator();
+
+        Map<String, Object> activity = approvalFields(INVALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
+
+        assertFalse("Apprved by must be invalid",
+                validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
+    }
+
+    @Test
+    public void testInvalidApprovedByForUnvalidatedActivityWhenNotMatchingModifiedByValidateNewOnly() {
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, validAmpTeamMember);
+
+        AmpActivityVersion ampActivity = mock(AmpActivityVersion.class);
+        when(ampActivity.getApprovedBy()).thenReturn(invalidAmpTeamMember);
+        when(importer.getOldActivity()).thenReturn(ampActivity);
+        when(ampActivity.getApprovalStatus()).thenReturn(ApprovalStatus.STARTED);
+
+        ApprovedByValidator validator = new ApprovedByValidator();
+
+        Map<String, Object> activity = approvalFields(INVALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
+
+        assertFalse("Apprved by must be invalid",
+                validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
+    }
+
+    @Test
+    public void testInvalidApprovedByWhenNotMatchingModifiedByValidateAllEdits() {
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, invalidAmpTeamMember);
 
         ApprovedByValidator validator = new ApprovedByValidator();

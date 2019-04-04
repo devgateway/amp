@@ -597,7 +597,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         if (isProjectValidationOn(validation)) {
             AmpTeamMemberRoles role = atm.getAmpMemberRole();
             if (role.getTeamHead() || role.isApprover()) {
-                Boolean isSameWorkspace = atm.getAmpTeam().getAmpTeamId().equals(activityTeamId);
+                boolean isSameWorkspace = atm.getAmpTeam().getAmpTeamId().equals(activityTeamId);
                 return isSameWorkspace || atm.getAmpTeam().getCrossteamvalidation();
             } else if (Constants.PROJECT_VALIDATION_FOR_NEW_ONLY.equals(validation)) {
                 return oldApprovalStatus != null && !oldApprovalStatus.equals(ApprovalStatus.STARTED);
@@ -618,16 +618,21 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
     }
 
     private static String getValidationSetting(AmpTeamMember atm) {
-        Long teamMemberTeamId = atm.getAmpTeam().getAmpTeamId();
+        Long teamId = atm.getAmpTeam().getAmpTeamId();
         String gsValidationOnOff = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION);
         if (!Constants.PROJECT_VALIDATION_ON.equals(gsValidationOnOff)) {
             return Constants.PROJECT_VALIDATION_OFF;
         }
-        return org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
+        return org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamId);
     }
 
     private static boolean isProjectValidationOn(String validation) {
         return !Constants.PROJECT_VALIDATION_OFF.equalsIgnoreCase(validation);
+    }
+
+    public static boolean isProjectValidationForNewOnly(AmpTeamMember atm) {
+        String validation = getValidationSetting(atm);
+        return Constants.PROJECT_VALIDATION_FOR_NEW_ONLY.equals(validation);
     }
 
     /**

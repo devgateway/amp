@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
+import static org.digijava.module.aim.dbentity.ApprovalStatus.STARTED;
+
 import java.util.Map;
 
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
@@ -59,14 +61,18 @@ public class ApprovedByValidator extends InputValidator {
         }
 
         AmpTeamMember modifiedBy = importer.getModifiedBy();
+        AmpTeamMember approvedBy = TeamMemberUtil.getAmpTeamMember(approvedById);
+        ApprovalStatus oas = importer.getOldActivity() == null ? null : importer.getOldActivity().getApprovalStatus();
         if (!modifiedBy.getAmpTeamMemId().equals(approvedById)) {
+            if (oas != null && !oas.equals(STARTED) && ActivityUtil.isProjectValidationForNewOnly(approvedBy)) {
+                AmpTeamMember oa = importer.getOldActivity().getApprovedBy();
+                return oa != null && oa.getAmpTeamMemId().equals(approvedById);
+            }
             return false;
         }
 
         Long teamId = getLong(newFieldParent.get(FieldMap.underscorify(ActivityFieldsConstants.TEAM)));
-        AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(approvedById);
-        ApprovalStatus oas = importer.getOldActivity() == null ? null : importer.getOldActivity().getApprovalStatus();
-        return ActivityUtil.canApprove(atm, teamId, oas);
+        return ActivityUtil.canApprove(approvedBy, teamId, oas);
     }
 
 }

@@ -4,16 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.util.Output;
 
 public class AmpAnnualProjectBudget implements Serializable, Versionable, Cloneable, Comparable {
 
     //IATI-check: to be ignored
-    private static final Logger logger = Logger.getLogger(AmpAnnualProjectBudget.class);
-    
+
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long ampAnnualProjectBudgetId;
     
     @Interchangeable(fieldTitle="Amount", importable = true)

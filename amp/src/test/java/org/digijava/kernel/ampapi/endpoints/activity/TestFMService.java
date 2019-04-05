@@ -9,8 +9,11 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
  */
 public class TestFMService implements FMService {
 
+    public static final String HIDDEN_FM_PATH = "fm hidden";
+    public static final String VISIBLE_FM_PATH = "fm visible";
+
     @Override
     public boolean isVisible(String fmPath, Deque<Interchangeable> intchStack) {
-        return !fmPath.equals("fm hidden");
+        return !fmPath.equals(HIDDEN_FM_PATH);
     }
 }

@@ -6,13 +6,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.util.Output;
 
 public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long ampActivitySectorId;
 
     @InterchangeableBackReference

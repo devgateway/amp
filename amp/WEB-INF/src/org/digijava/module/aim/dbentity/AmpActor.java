@@ -4,13 +4,17 @@ import java.io.Serializable;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
 @TranslatableClass (displayName = "Actor")
 public class AmpActor  implements Serializable, Cloneable {
     //IATI-check: not used in IATI
-    private Long ampActorId ;
+
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
+    private Long ampActorId;
 
     @Interchangeable(fieldTitle = "Name", label = "Actor", importable = true)
     @TranslatableField

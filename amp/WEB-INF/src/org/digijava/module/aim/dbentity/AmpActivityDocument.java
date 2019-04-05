@@ -5,9 +5,9 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 
@@ -18,6 +18,8 @@ import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
  */
 public class AmpActivityDocument extends ObjectReferringDocument implements Serializable, Versionable, Cloneable {
 
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long id;
 
     @InterchangeableBackReference

@@ -54,7 +54,7 @@ public class ActivityImporterTest {
     private Map<Integer, ApiErrorMessage> validate(JsonBean json) {
         AmpActivityVersion activity = new AmpActivityVersion();
         activity.setApprovalStatus(ApprovalStatus.STARTED);
-        ActivityImporter importer = new ActivityImporter(Collections.emptyList(), true, false);
+        ActivityImporter importer = new ActivityImporter(Collections.emptyList(), new ActivityImportRules(true, false));
         importer.validateAndImport(activity, json.any());
         return importer.getErrors();
     }

@@ -280,8 +280,10 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             @ApiParam("process approval fields") @QueryParam("process-approval-fields") @DefaultValue("false")
             boolean isProcessApprovalFields,
             @ApiParam("activity configuration") JsonBean newJson) {
-        return ActivityInterchangeUtils.importActivity(newJson, false, canDowngradeToDraft, isProcessApprovalFields,
-                uri.getBaseUri() + "activity");
+
+        ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields);
+
+        return ActivityInterchangeUtils.importActivity(newJson, false, rules, uri.getBaseUri() + "activity");
     }
 
     @POST
@@ -320,8 +322,9 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             EndpointUtils.addGeneralError(newJson, ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details));
         }
 
-        return ActivityInterchangeUtils.importActivity(newJson, true, canDowngradeToDraft, isProcessApprovalFields,
-                uri.getBaseUri() + "activity");
+        ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields);
+
+        return ActivityInterchangeUtils.importActivity(newJson, true, rules, uri.getBaseUri() + "activity");
     }
 
     @GET

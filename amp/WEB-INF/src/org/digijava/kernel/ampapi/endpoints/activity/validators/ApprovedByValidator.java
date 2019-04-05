@@ -29,7 +29,7 @@ public class ApprovedByValidator extends InputValidator {
     public boolean isValid(ObjectImporter objImporter, Map<String, Object> newFieldParent, APIField fieldDesc,
             String fieldPath) {
         ActivityImporter importer = (ActivityImporter) objImporter;
-        if (importer.isProcessApprovalFields()) {
+        if (importer.getImportRules().isProcessApprovalFields()) {
             if (FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY).equals(fieldDesc.getFieldName())) {
                 return isValidApprovedBy(importer, newFieldParent, fieldDesc);
             }

@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
@@ -57,10 +58,14 @@ public class ApprovedByValidatorTest {
     private AmpTeam validAmpTeam;
     private AmpTeamMemberRoles teamHeadApproverRoles;
     private AmpTeamMemberRoles notApproverRoles;
+    private ActivityImportRules importRules;
 
     @Before
     public void setUp() throws Exception {
         importer = mock(ActivityImporter.class);
+        importRules = mock(ActivityImportRules.class);
+        when(importer.getImportRules()).thenReturn(importRules);
+
         PowerMockito.mockStatic(TeamMemberUtil.class);
         PowerMockito.mockStatic(FeaturesUtil.class);
         PowerMockito.mockStatic(DbUtil.class);
@@ -92,7 +97,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testValidApprovedByWhenNotRequestedToProcess() {
-        when(importer.isProcessApprovalFields()).thenReturn(false);
+        when(importRules.isProcessApprovalFields()).thenReturn(false);
 
         ApprovedByValidator validator = new ApprovedByValidator();
         Map<String, Object> activity = invalidApprovalFields();
@@ -103,7 +108,7 @@ public class ApprovedByValidatorTest {
 
     @Test
     public void testInvalidApprovedByWhenRequestedToProcess() {
-        when(importer.isProcessApprovalFields()).thenReturn(true);
+        when(importRules.isProcessApprovalFields()).thenReturn(true);
 
         ApprovedByValidator validator = new ApprovedByValidator();
         Map<String, Object> activity = invalidApprovalFields();
@@ -299,7 +304,7 @@ public class ApprovedByValidatorTest {
 
     private void mockValidation(String gsValue, String ampTeamValue, AmpTeamMember modifiedBy) {
         when(importer.getModifiedBy()).thenReturn(modifiedBy);
-        when(importer.isProcessApprovalFields()).thenReturn(true);
+        when(importRules.isProcessApprovalFields()).thenReturn(true);
         when(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION)).thenReturn(gsValue);
         when(DbUtil.getValidationFromTeamAppSettings(Matchers.anyLong())).thenReturn(ampTeamValue);
     }

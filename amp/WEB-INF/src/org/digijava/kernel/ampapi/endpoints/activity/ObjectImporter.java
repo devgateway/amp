@@ -31,10 +31,10 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ErrorDecorator;
-import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
-import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.DefaultErrorsMapper;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
@@ -42,8 +42,8 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.dbentity.AmpAgreement;
-import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.aim.validator.groups.API;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author Octavian Ciubotaru
@@ -56,6 +56,7 @@ public class ObjectImporter {
     private final InputValidatorProcessor businessRulesValidator;
 
     protected Map<Integer, ApiErrorMessage> errors = new HashMap<>();
+    protected Map<Integer, ApiErrorMessage> warnings = new HashMap<>();
     protected ValueConverter valueConverter = new ValueConverter();
 
     protected JsonBean newJson;
@@ -68,7 +69,7 @@ public class ObjectImporter {
     /**
      * This field is used for storing the current json values during field validation
      * E.g: validate the pledge field (present in funding_details)
-     * fundings - will contain the json values of the parent of funding_details 
+     * fundings - will contain the json values of the parent of funding_details
      * fundings~funding_details - will contain the json values of the parent of pledge
      */
     private Map<String, Object> branchJsonVisitor = new HashMap<>();
@@ -153,12 +154,12 @@ public class ObjectImporter {
             // and error anything remained
             // note: due to AMP-20766, we won't be able to fully detect invalid children
             String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
-            if (fields.size() > 0 && !ignoreUnknownFields()) {
+            if (fields.size() > 0) {
                 isFormatValid = false;
                 for (String invalidField : fields) {
                     // no need to go through deep-first validation flow
                     ErrorDecorator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
-                            ActivityErrors.FIELD_INVALID, errors);
+                            ActivityErrors.FIELD_INVALID, warnings);
                 }
             }
 
@@ -178,10 +179,6 @@ public class ObjectImporter {
         } catch (IllegalAccessException | IllegalArgumentException e) {
             throw new RuntimeException("Failed to restore back reference.", e);
         }
-    }
-
-    protected boolean ignoreUnknownFields() {
-        return false;
     }
 
     /**
@@ -338,7 +335,7 @@ public class ObjectImporter {
         if (idOnly && !(isList && fieldDef.getApiType().isSimpleItemType())) {
             return isFormatValid;
         }
-        
+
         // first validate all sub-elements
         List<APIField> childrenFields = fieldDef.getChildren();
         List<Map<String, Object>> childrenNewValues = getChildrenValues(newJsonValue, fieldType);
@@ -588,5 +585,9 @@ public class ObjectImporter {
     public Map<String, Object> getBranchJsonVisitor() {
         return branchJsonVisitor;
     }
-    
+
+    public Collection<ApiErrorMessage> getWarnings() {
+        return warnings.values();
+    }
+
 }

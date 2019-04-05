@@ -142,7 +142,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -155,7 +155,7 @@ public class ApprovedByValidatorTest {
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID,
                 ApprovalStatus.STARTED_APPROVED);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -171,7 +171,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -188,7 +188,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -205,7 +205,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -218,7 +218,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -230,7 +230,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(null, VALID_TEAM_ID, null);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -242,7 +242,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, null);
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -255,7 +255,7 @@ public class ApprovedByValidatorTest {
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, null);
         activity.put(APPROVAL_STATUS_FIELD, 999l);
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -268,7 +268,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.EDITED);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -292,7 +292,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(INVALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -312,7 +312,7 @@ public class ApprovedByValidatorTest {
         Map<String, Object> activity = approvalFields(INVALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
         activity.put(APPROVAL_DATE_FIELD, DateTimeUtil.formatISO8601Timestamp(pastApprovalDate));
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -328,7 +328,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(INVALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -340,7 +340,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -354,7 +354,7 @@ public class ApprovedByValidatorTest {
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_CROSS_TEAM_ID,
                 ApprovalStatus.APPROVED);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -369,7 +369,7 @@ public class ApprovedByValidatorTest {
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_CROSS_TEAM_ID,
                 ApprovalStatus.APPROVED);
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 

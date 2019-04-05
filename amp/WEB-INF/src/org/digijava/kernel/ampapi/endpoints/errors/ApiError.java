@@ -18,6 +18,7 @@ import com.google.common.base.Joiner;
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeEndpoints;
 import org.digijava.kernel.ampapi.endpoints.common.AmpConfiguration;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactEndpoint;
 import org.digijava.kernel.ampapi.endpoints.currency.Currencies;
@@ -44,7 +45,6 @@ public class ApiError {
     public final static int GENERIC_HANDLED_ERROR_CODE = 0;
     public final static int GENERIC_UNHANDLED_ERROR_CODE = 1;
 
-    public final static String JSON_ERROR_CODE = "error";
     public final static String API_ERROR_PATTERN = "%02d%02d";
 
     public final static String UNKOWN_ERROR = "Unknown Error";
@@ -134,6 +134,10 @@ public class ApiError {
         return FORMATTER.convert(messages);
     }
 
+    public static Map<String, Collection<Object>> formatNoWrap(Collection<?> messages) {
+        return (Map<String, Collection<Object>>) format(messages).get(EPConstants.ERROR);
+    }
+
     private JsonBean convert(Collection<?> errorMessages) {
         Map<String, Collection<Object>> errors = new HashMap<>();
 
@@ -185,6 +189,10 @@ public class ApiError {
         return FORMATTER.convert(apiErrorMessage);
     }
 
+    public static Map<String, Collection<Object>> formatNoWrap(ApiErrorMessage apiErrorMessage) {
+        return (Map<String, Collection<Object>>) format(apiErrorMessage).get(EPConstants.ERROR);
+    }
+
     private JsonBean convert(ApiErrorMessage apiErrorMessage) {
         Map<String, Collection<Object>> error = new HashMap<>();
         error.put(getErrorId(getErrorComponentId(), apiErrorMessage.id), Arrays.asList(getErrorText(apiErrorMessage)));
@@ -208,7 +216,7 @@ public class ApiError {
             processErrorResponseStatus();
         }
         JsonBean resultErrorBean = new JsonBean();
-        resultErrorBean.set(JSON_ERROR_CODE, errors);
+        resultErrorBean.set(EPConstants.ERROR, errors);
         return resultErrorBean;
     }
 
@@ -334,7 +342,7 @@ public class ApiError {
      */
     public static String toXmlErrorString(JsonBean errorBean) {
         JsonBean responseErrorBean = new JsonBean();
-        Map<String, Collection<Object>> errorBeans = (Map<String, Collection<Object>>) errorBean.get(JSON_ERROR_CODE);
+        Map<String, Collection<Object>> errorBeans = (Map<String, Collection<Object>>) errorBean.get(EPConstants.ERROR);
         List<Map<String, Object>> errors = new ArrayList<>();
 
         for(String key : errorBeans.keySet()) {
@@ -346,7 +354,7 @@ public class ApiError {
         }
 
         Map<String, Object> errorsMap = new HashMap<>();
-        errorsMap.put(JSON_ERROR_CODE, errors);
+        errorsMap.put(EPConstants.ERROR, errors);
         responseErrorBean.set("errors", errorsMap);
 
         JSONObject o = new JSONObject(responseErrorBean.asJsonString());

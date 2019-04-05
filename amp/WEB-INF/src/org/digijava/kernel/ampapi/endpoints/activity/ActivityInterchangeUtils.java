@@ -12,6 +12,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.PathSegment;
 
+import com.sun.jersey.spi.container.ContainerRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -42,8 +44,6 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.ValidationStatus;
 import org.hibernate.CacheMode;
 
-import com.sun.jersey.spi.container.ContainerRequest;
-
 /**
  * @author Octavian Ciubotaru
  */
@@ -65,10 +65,10 @@ public final class ActivityInterchangeUtils {
      *
      * @return latest project overview or an error if invalid configuration is received
      */
-    public static JsonBean importActivity(JsonBean newJson, boolean update, boolean canDowngradeToDraft,
-            boolean isProcessApprovalFields, String endpointContextPath) {
+    public static JsonBean importActivity(JsonBean newJson, boolean update, ActivityImportRules rules,
+            String endpointContextPath) {
         List<APIField> activityFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
-        ActivityImporter importer = new ActivityImporter(activityFields, canDowngradeToDraft, isProcessApprovalFields);
+        ActivityImporter importer = new ActivityImporter(activityFields, rules);
         List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update, endpointContextPath);
 
         return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors);

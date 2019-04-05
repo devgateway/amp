@@ -17,7 +17,9 @@ import java.util.Collections;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
@@ -49,10 +51,13 @@ public class RequiredValidatorTest {
 
     @Mock
     private ActivityImporter importer = mock(ActivityImporter.class);
+    @Mock
+    private ActivityImportRules importRules = mock(ActivityImportRules.class);
 
     @Before
     public void setUp() throws Exception {
         when(importer.isDraftFMEnabled()).thenReturn(true); // by default save as draft is allowed in fm
+        when(importer.getImportRules()).thenReturn(importRules);
     }
 
     @Test
@@ -92,7 +97,7 @@ public class RequiredValidatorTest {
     public void testAlwaysRequiredFieldNotPresent() throws Exception {
         assertValidator(EMPTY_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
-    
+
     @Test
     public void testAlwaysRequiredCollectionNotPresent() throws Exception {
         assertValidator(EMPTY_BEAN, fdList(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
@@ -116,20 +121,20 @@ public class RequiredValidatorTest {
     @Test
     public void testSubmissionRequiredFieldMissingAndSaveAsDraftDisabled() throws Exception {
         when(importer.isDraftFMEnabled()).thenReturn(false);
-        when(importer.isDowngradeToDraft()).thenReturn(true);
+        when(importRules.isCanDowngradeToDraft()).thenReturn(true);
 
         assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.SAVE_AS_DRAFT_FM_DISABLED, false);
     }
 
     @Test
     public void testSubmissionRequiredFieldMissingAndSaveAsDraftEnabledDowngradeAllowed() throws Exception {
-        when(importer.isDowngradeToDraft()).thenReturn(true);
+        when(importRules.isCanDowngradeToDraft()).thenReturn(true);
         assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), null, true);
     }
 
     @Test
     public void testSubmissionRequiredFieldMissingAndSaveAsDraftEnabledDowngradeNotAllowed() throws Exception {
-        when(importer.isDowngradeToDraft()).thenReturn(false);
+        when(importRules.isCanDowngradeToDraft()).thenReturn(false);
         assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
@@ -146,7 +151,7 @@ public class RequiredValidatorTest {
 
         assertValidator(EMPTY_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
-    
+
     @Test
     public void testSubmitModeAlwaysRequiredFieldEmptyValueNotPresent() throws Exception {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
@@ -167,7 +172,7 @@ public class RequiredValidatorTest {
 
         assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
-    
+
     @Test
     public void testSubmitModeSubmissionRequiredFieldPresentEmptyValue() throws Exception {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
@@ -182,7 +187,7 @@ public class RequiredValidatorTest {
 
         assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
-    
+
     @Test
     public void testSubmitModeSubmissionRequiredFieldEmptyValueNotPresentSaveAsDraftDisabled() throws Exception {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);

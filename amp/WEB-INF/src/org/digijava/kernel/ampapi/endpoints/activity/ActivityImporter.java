@@ -88,13 +88,12 @@ public class ActivityImporter extends ObjectImporter {
     private AmpActivityVersion newActivity = null;
     private AmpActivityVersion oldActivity = null;
     private boolean update = false;
+    private ActivityImportRules rules;
     private SaveMode requestedSaveMode;
-    private boolean canDowngradeToDraft = false;
     private boolean downgradedToDraftSave = false;
     private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
     private boolean isDraftFMEnabled;
     private boolean isMultilingual;
-    private boolean isProcessApprovalFields;
     private User currentUser;
     private AmpTeamMember modifiedBy;
     private String sourceURL;
@@ -102,13 +101,12 @@ public class ActivityImporter extends ObjectImporter {
     // latest activity id in case there was attempt to update older version of an activity
     private Long latestActivityId;
 
-    public ActivityImporter(List<APIField> apiFields, boolean canDowngradeToDraft, boolean isProcessApprovalFields) {
+    public ActivityImporter(List<APIField> apiFields, ActivityImportRules rules) {
         super(new InputValidatorProcessor(InputValidatorProcessor.getActivityFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getActivityBusinessRulesValidators()),
                 apiFields);
         setJsonErrorMapper(new ActivityErrorsMapper());
-        this.canDowngradeToDraft = canDowngradeToDraft;
-        this.isProcessApprovalFields = isProcessApprovalFields;
+        this.rules = rules;
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {
@@ -216,7 +214,7 @@ public class ActivityImporter extends ObjectImporter {
 
                 newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
                         translations, modifiedBy, Boolean.TRUE.equals(newActivity.getDraft()),
-                        PersistenceManager.getSession(), SaveContext.api(!isProcessApprovalFields));
+                        PersistenceManager.getSession(), SaveContext.api(!rules.isProcessApprovalFields()));
 
                 postProcess();
             } else {
@@ -467,7 +465,7 @@ public class ActivityImporter extends ObjectImporter {
         newActivity.setLastImportedAt(new Date());
         newActivity.setLastImportedBy(currentUser);
 
-        if (isProcessApprovalFields) {
+        if (rules.isProcessApprovalFields()) {
             Date newApprovalDate = newActivity.getApprovalDate();
             if (newApprovalDate != null && !newApprovalDate.equals(oldActivity.getApprovalDate())
                     || AmpARFilter.VALIDATED_ACTIVITY_STATUS.contains(newActivity.getApprovalStatus())) {
@@ -717,8 +715,8 @@ public class ActivityImporter extends ObjectImporter {
         return isMultilingual;
     }
 
-    public boolean isProcessApprovalFields() {
-        return isProcessApprovalFields;
+    public ActivityImportRules getImportRules() {
+        return rules;
     }
 
     /**
@@ -726,10 +724,6 @@ public class ActivityImporter extends ObjectImporter {
      */
     public String getSourceURL() {
         return sourceURL;
-    }
-
-    public boolean isDowngradeToDraft() {
-        return this.canDowngradeToDraft;
     }
 
     public void downgradeToDraftSave() {

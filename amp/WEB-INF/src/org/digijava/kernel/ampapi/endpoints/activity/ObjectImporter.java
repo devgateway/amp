@@ -200,8 +200,10 @@ public class ObjectImporter {
 
         boolean isValidFormat = formatValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
         if (isValidFormat) {
-            businessRulesValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
             isValidFormat = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
+            if (isValidFormat) {
+                businessRulesValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
+            }
             setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
         }
         return isValidFormat;

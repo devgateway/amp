@@ -990,11 +990,13 @@ deleted 6 fields, do not reinsert
 
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>
+<field:display name="Beneficiary Agency Type" feature="Beneficiary Agency"></field:display>
 <field:display name="Contracting Agency Department/Division"  feature="Contracting Agency"></field:display>
 <field:display name="Contracting Agency Groups" feature="Contracting Agency"></field:display>
 <field:display name="Contracting Agency Acronym"  feature="Contracting Agency"></field:display>
+<field:display name="Contracting Agency Type"  feature="Contracting Agency"></field:display>
 <field:display name="Executing Agency Groups" feature="Executing Agency"></field:display>
-<field:display name="Executing Agency Type" feature="Executing Agency"></field:display>   
+<field:display name="Executing Agency Type" feature="Executing Agency"></field:display>
 <field:display name="Executing Agency Department/Division" feature="Executing Agency"></field:display>
 <field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display>
 <field:display name="Implementing Agency Type" feature="Implementing Agency"></field:display>  
@@ -1003,6 +1005,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Regional Group Department/Division"  feature="Regional Group"></field:display> 
 <field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Department/Division"  feature="Responsible Organization"></field:display>
+<field:display name="Responsible Organization Type" feature="Responsible Organization"></field:display>
 <field:display name="Sector Group Department/Division"  feature="Sector Group"></field:display>
 
 <feature:display name="Pledges Columns" module="Pledges"></feature:display>

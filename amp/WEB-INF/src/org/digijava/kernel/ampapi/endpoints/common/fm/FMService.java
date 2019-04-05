@@ -75,12 +75,15 @@ public class FMService {
                     .toFlattenedTree(config.getFullEnabledPaths());
                 fmSettingsResult.put(module, entries);
             } else {
-                fmSettingsResult.put(module, getFmSettingsAsTree(module,
-                        config.getRequiredPaths()).asJson(config.getFullEnabledPaths()));
+                FMTree fmTree = getFmSettingsAsTree(module, config.getRequiredPaths());
+                Map<String, Object> enabledPaths = fmTree.asJson(config.getFullEnabledPaths()).any();
+                if (enabledPaths != null) {
+                    fmSettingsResult.putAll(enabledPaths);
+                }
             }
         }
     }
-
+    
     /**
      * Get FM entries as a tree structure. If filter is specified and non-empty then FM entries will be filtered.
      * @param module for which to return FM entries

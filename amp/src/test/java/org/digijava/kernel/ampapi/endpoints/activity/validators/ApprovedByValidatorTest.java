@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,6 +45,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class ApprovedByValidatorTest {
     private static final String APPROVAL_STATUS_FIELD = FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS);
     private static final String APPROVED_BY_FIELD = FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY);
+    private static final String APPROVAL_DATE_FIELD = FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE);
     private static final String TEAM_FIELD = FieldMap.underscorify(ActivityFieldsConstants.TEAM);
 
     private ActivityImporter importer;
@@ -52,10 +55,12 @@ public class ApprovedByValidatorTest {
     private static final Long INVALID_TEAM_MEMBER_ID = 200l;
     private static final Long VALID_TEAM_ID = 5l;
     private static final Long VALID_CROSS_TEAM_ID = 15l;
+    private static final Long INVALID_TEAM_ID = 20l;
 
     private AmpTeamMember invalidAmpTeamMember;
     private AmpTeamMember validAmpTeamMember;
     private AmpTeam validAmpTeam;
+    private AmpTeam invalidAmpTeam;
     private AmpTeamMemberRoles teamHeadApproverRoles;
     private AmpTeamMemberRoles notApproverRoles;
     private ActivityImportRules importRules;
@@ -88,6 +93,12 @@ public class ApprovedByValidatorTest {
 
         invalidAmpTeamMember = mock(AmpTeamMember.class);
         when(invalidAmpTeamMember.getAmpTeamMemId()).thenReturn(INVALID_TEAM_MEMBER_ID);
+        when(TeamMemberUtil.getAmpTeamMember(INVALID_TEAM_MEMBER_ID)).thenReturn(invalidAmpTeamMember);
+        when(invalidAmpTeamMember.getAmpMemberRole()).thenReturn(notApproverRoles);
+
+        invalidAmpTeam = mock(AmpTeam.class);
+        when(invalidAmpTeam.getAmpTeamId()).thenReturn(INVALID_TEAM_ID);
+        when(invalidAmpTeamMember.getAmpTeam()).thenReturn(invalidAmpTeam);
 
         approvedByFieldDesc = new APIField();
         approvedByFieldDesc.setFieldName(APPROVED_BY_FIELD);
@@ -131,7 +142,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -144,7 +155,7 @@ public class ApprovedByValidatorTest {
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID,
                 ApprovalStatus.STARTED_APPROVED);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -160,7 +171,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -177,7 +188,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -194,7 +205,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -207,7 +218,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -219,7 +230,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(null, VALID_TEAM_ID, null);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -231,7 +242,7 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, null);
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -244,7 +255,7 @@ public class ApprovedByValidatorTest {
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, null);
         activity.put(APPROVAL_STATUS_FIELD, 999l);
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -257,19 +268,79 @@ public class ApprovedByValidatorTest {
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.EDITED);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
+                validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
+    }
+
+
+    @Test
+    public void testValidApprovedByWhenNotMatchingModifiedByValidateNewOnly() {
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, validAmpTeamMember);
+        // reusing the mock with another name to avoid confusion
+        AmpTeamMember crossTeamApprover = invalidAmpTeamMember;
+
+        AmpActivityVersion ampActivity = mock(AmpActivityVersion.class);
+        when(ampActivity.getApprovedBy()).thenReturn(crossTeamApprover);
+        when(importer.getOldActivity()).thenReturn(ampActivity);
+        when(ampActivity.getApprovalDate()).thenReturn(new Date());
+        when(ampActivity.getApprovalStatus()).thenReturn(ApprovalStatus.APPROVED);
+
+        when(crossTeamApprover.getAmpMemberRole()).thenReturn(teamHeadApproverRoles);
+        when(crossTeamApprover.getAmpTeam().getCrossteamvalidation()).thenReturn(true);
+
+        ApprovedByValidator validator = new ApprovedByValidator();
+
+        Map<String, Object> activity = approvalFields(INVALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
+
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
     @Test
-    public void testInvalidApprovedByWhenNotMatchingModifiedBy() {
+    public void testInvalidApprovedByForValidatedActivityWhenNotMatchingModifiedByAndPastApprovalValidateNewOnly() {
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, validAmpTeamMember);
+        Date pastApprovalDate = new Date();
+
+        AmpActivityVersion ampActivity = mock(AmpActivityVersion.class);
+        when(ampActivity.getApprovedBy()).thenReturn(validAmpTeamMember);
+        when(ampActivity.getApprovalDate()).thenReturn(pastApprovalDate);
+        when(importer.getOldActivity()).thenReturn(ampActivity);
+        when(ampActivity.getApprovalStatus()).thenReturn(ApprovalStatus.APPROVED);
+
+        ApprovedByValidator validator = new ApprovedByValidator();
+
+        Map<String, Object> activity = approvalFields(INVALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
+        activity.put(APPROVAL_DATE_FIELD, DateTimeUtil.formatISO8601Timestamp(pastApprovalDate));
+
+        assertFalse("Approved by must be invalid",
+                validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
+    }
+
+    @Test
+    public void testInvalidApprovedByForUnvalidatedActivityWhenNotMatchingModifiedByValidateNewOnly() {
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, validAmpTeamMember);
+
+        AmpActivityVersion ampActivity = mock(AmpActivityVersion.class);
+        when(importer.getOldActivity()).thenReturn(ampActivity);
+        when(ampActivity.getApprovalStatus()).thenReturn(ApprovalStatus.STARTED);
+
+        ApprovedByValidator validator = new ApprovedByValidator();
+
+        Map<String, Object> activity = approvalFields(INVALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
+
+        assertFalse("Approved by must be invalid",
+                validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
+    }
+
+    @Test
+    public void testInvalidApprovedByWhenNotMatchingModifiedByValidateAllEdits() {
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, invalidAmpTeamMember);
 
         ApprovedByValidator validator = new ApprovedByValidator();
 
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_TEAM_ID, ApprovalStatus.APPROVED);
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -283,7 +354,7 @@ public class ApprovedByValidatorTest {
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_CROSS_TEAM_ID,
                 ApprovalStatus.APPROVED);
 
-        assertTrue("Apprved by must be valid",
+        assertTrue("Approved by must be valid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 
@@ -298,7 +369,7 @@ public class ApprovedByValidatorTest {
         Map<String, Object> activity = approvalFields(VALID_TEAM_MEMBER_ID, VALID_CROSS_TEAM_ID,
                 ApprovalStatus.APPROVED);
 
-        assertFalse("Apprved by must be invalid",
+        assertFalse("Approved by must be invalid",
                 validator.isValid(importer, activity, approvedByFieldDesc, APPROVED_BY_FIELD));
     }
 

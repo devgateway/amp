@@ -14,6 +14,7 @@ import io.swagger.models.properties.LongProperty;
 import io.swagger.models.properties.StringProperty;
 import org.digijava.kernel.ampapi.swagger.converters.ModelDescriber;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * @author Octavian Ciubotaru
@@ -84,7 +85,8 @@ public class AmpApplicationSettingsSerializer extends JsonSerializer<AmpApplicat
         model.addProperty("currency", new StringProperty().example("USD"));
         model.addProperty("fiscal-calendar", new LongProperty());
         model.addProperty("language", new StringProperty().example("en"));
-        model.addProperty("validation", new StringProperty()._enum(Arrays.asList("validationOff", "allEdits")));
+        model.addProperty("validation", new StringProperty()._enum(
+                Arrays.asList(Constants.PROJECT_VALIDATION_OFF, Constants.PROJECT_VALIDATION_FOR_ALL_EDITS)));
         model.addProperty("show-all-countries", new BooleanProperty().example(false));
         model.addProperty("default-team-report", new LongProperty().example(null));
         model.addProperty("default-reports-per-page", new IntegerProperty());

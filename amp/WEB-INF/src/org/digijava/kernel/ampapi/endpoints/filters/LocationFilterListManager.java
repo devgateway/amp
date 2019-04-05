@@ -134,11 +134,11 @@ public class LocationFilterListManager implements FilterListManager {
         AmpApplicationSettings appSettings = EndpointUtils.getAppSettings();
         final boolean showAllCountries = appSettings == null ? false : appSettings.getShowAllCountries();
     
-        final String defaultIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
+        String defaultCountryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
         
         List<Long> countryIds = countryCollection
                 .stream()
-                .filter(country -> showAllCountries || country.getIso().equals(defaultIso))
+                .filter(country -> showAllCountries || country.getIso().equals(defaultCountryIso))
                 .map(country -> country.getId())
                 .collect(Collectors.toList());
         

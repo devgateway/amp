@@ -11,13 +11,17 @@ import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.SerializableComparator;
 
 
 public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable {
     //IATI-check: not to be ignored
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long ampOrgRoleId;
+
     @InterchangeableBackReference
     private AmpActivityVersion activity;
     
@@ -30,7 +34,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
             fmPath = FMVisibility.PARENT_FM + "/percentage", required = ActivityEPConstants.RequiredValidation.ALWAYS)
     private Float   percentage;
     @Interchangeable(fieldTitle = "Budgets", importable = true, fmPath = FMVisibility.PARENT_FM + "/Budget Code")
-    private Set <AmpOrgRoleBudget> budgets;
+    private Set<AmpOrgRoleBudget> budgets = new HashSet<>();
     
     @Interchangeable(fieldTitle = "Additional Info", importable = true, label = "Department/Division",
             fmPath = FMVisibility.PARENT_FM + "/relOrgadditionalInfo")

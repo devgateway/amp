@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
@@ -13,7 +14,9 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 public class AmpMeasure  implements Serializable, Cloneable {
     //IATI-check: seems used only in issues -- commenting out (to be ignored).
 
-    private Long ampMeasureId ;
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
+    private Long ampMeasureId;
 
     @TranslatableField
     @Interchangeable(fieldTitle = "Name", label = "Measure", importable = true)

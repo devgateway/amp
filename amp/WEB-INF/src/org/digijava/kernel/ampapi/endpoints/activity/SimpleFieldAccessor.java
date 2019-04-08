@@ -5,13 +5,15 @@ import java.util.Objects;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 /**
+ * TODO rename to Reflective
+ *
  * @author Octavian Ciubotaru
  */
-public class SimpleFieldValueReader implements FieldValueReader {
+public class SimpleFieldAccessor implements FieldAccessor {
 
     private String fieldName;
 
-    public SimpleFieldValueReader(String fieldName) {
+    public SimpleFieldAccessor(String fieldName) {
         this.fieldName = fieldName;
     }
 
@@ -26,7 +28,14 @@ public class SimpleFieldValueReader implements FieldValueReader {
         }
     }
 
-    public String getFieldName() {
-        return fieldName;
+    @Override
+    public void set(Object targetObject, Object value) {
+        Objects.requireNonNull(targetObject);
+        try {
+            FieldUtils.writeField(targetObject, fieldName, value, true);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(
+                    String.format("Failed to write %s field value to %s.", fieldName, targetObject));
+        }
     }
 }

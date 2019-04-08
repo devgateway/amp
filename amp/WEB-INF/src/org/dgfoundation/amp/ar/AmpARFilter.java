@@ -233,6 +233,9 @@ public class AmpARFilter extends PropertyListable {
 
     @PropertyListableIgnore
     private Set<AmpTheme> relatedSecondaryProgs;
+    
+    @PropertyListableIgnore
+    private Set<AmpTheme> relatedTertiaryProgs;
 
     @PropertyListableIgnore
     private List<AmpTheme> nationalPlanningObjectives;
@@ -252,6 +255,11 @@ public class AmpARFilter extends PropertyListable {
     @PropertyListableIgnore
     private List<AmpTheme> secondaryPrograms;
     private Set<AmpTheme> selectedSecondaryPrograms;
+    
+    @PropertyListableIgnore
+    private List<AmpTheme> tertiaryPrograms;
+    
+    private Set<AmpTheme> selectedTertiaryPrograms;
 
     /**
      * only valid after the query has been generated
@@ -311,6 +319,15 @@ public class AmpARFilter extends PropertyListable {
     public void setRelatedSecondaryProgs(Set<AmpTheme> relatedSecondaryProgs) {
         this.relatedSecondaryProgs = relatedSecondaryProgs;
     }
+    
+    @PropertyListableIgnore
+    public Set<AmpTheme> getRelatedTertiaryProgs() {
+        return relatedTertiaryProgs;
+    }
+    
+    public void setRelatedTertiaryProgs(Set<AmpTheme> relatedTertiaryProgs) {
+        this.relatedTertiaryProgs = relatedTertiaryProgs;
+    }
 
     @PropertyListableIgnore
     public Set<AmpTheme> getRelatedPrimaryProgs() {
@@ -338,6 +355,15 @@ public class AmpARFilter extends PropertyListable {
     public void setSecondaryPrograms(List<AmpTheme> secondaryPrograms) {
         this.secondaryPrograms = secondaryPrograms;
     }
+    
+    @PropertyListableIgnore
+    public List<AmpTheme> getTertiaryPrograms() {
+        return tertiaryPrograms;
+    }
+    
+    public void setTertiaryPrograms(List<AmpTheme> tertiaryPrograms) {
+        this.tertiaryPrograms = tertiaryPrograms;
+    }
 
     public Set<AmpTheme> getSelectedNatPlanObj() {
         return selectedNatPlanObj;
@@ -361,6 +387,14 @@ public class AmpARFilter extends PropertyListable {
 
     public void setSelectedSecondaryPrograms(Set<AmpTheme> selectedSecondaryPrograms) {
         this.selectedSecondaryPrograms = selectedSecondaryPrograms;
+    }
+    
+    public Set<AmpTheme> getSelectedTertiaryPrograms() {
+        return selectedTertiaryPrograms;
+    }
+    
+    public void setSelectedTertiaryPrograms(Set<AmpTheme> selectedTertiaryPrograms) {
+        this.selectedTertiaryPrograms = selectedTertiaryPrograms;
     }
 
     private Set regions = null;

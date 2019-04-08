@@ -1877,7 +1877,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         } else if (activity.getModifiedDate() != null) {
             return activity.getModifiedDate();
         } else if (auditHistory != null) {
-            return DateTimeUtil.parseISO8601DateTime(auditHistory.getModifiedDate());
+            return DateTimeUtil.parseISO8601Timestamp(auditHistory.getModifiedDate());
         } else if (activity.getApprovalDate() != null) {
             return activity.getApprovalDate();
         } else if (activity.getCreatedDate() != null) {
@@ -1899,14 +1899,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         for(AmpAuditLogger aal : activityLogObjects) {
             if (StringUtils.isNotEmpty(aal.getEditorName())) {
                 logActivityHistory.setModifiedBy(aal.getEditorName());
-                logActivityHistory.setModifiedDate(DateTimeUtil.formatISO8601DateTime(aal.getLoggedDate()));
+                logActivityHistory.setModifiedDate(DateTimeUtil.formatISO8601Timestamp(aal.getLoggedDate()));
                 return logActivityHistory;
             } else if (StringUtils.isNotEmpty(aal.getEditorEmail())) {
                 try {
                     User u = UserUtils.getUserByEmail(aal.getEditorEmail());
                     if (u != null) {
                         logActivityHistory.setModifiedBy(String.format("%s %s", u.getFirstNames(), u.getLastName()));
-                        logActivityHistory.setModifiedDate(DateTimeUtil.formatISO8601DateTime(aal.getLoggedDate()));
+                        logActivityHistory.setModifiedDate(DateTimeUtil.formatISO8601Timestamp(aal.getLoggedDate()));
                         return logActivityHistory;
                     }
                 } catch (DgException e) {
@@ -1972,7 +1972,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             ActivityHistory activityHistory = new ActivityHistory();
             activityHistory.setActivityId(activity.getAmpActivityId());
             activityHistory.setModifiedBy(ActivityUtil.getModifiedByUserName(activity, auditHistory));
-            activityHistory.setModifiedDate(DateTimeUtil.formatISO8601DateTime(
+            activityHistory.setModifiedDate(DateTimeUtil.formatISO8601Timestamp(
                     ActivityUtil.getModifiedByDate(activity, auditHistory)));
 
             activitiesHistory.add(activityHistory);

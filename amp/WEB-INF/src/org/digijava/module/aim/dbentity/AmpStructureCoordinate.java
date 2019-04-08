@@ -4,11 +4,14 @@ import java.io.Serializable;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 
 public class AmpStructureCoordinate implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -6217182726089147778L;
 
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long ampStructureCoordinateId;
 
     @Interchangeable(fieldTitle = "Latitude", importable = true)

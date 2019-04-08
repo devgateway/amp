@@ -35,7 +35,7 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
     public static final Map<String, String> DONOR_COLUMNS_TO_PLEDGE_COLUMNS = new HashMap<String, String>() {{
         put(ColumnConstants.PROJECT_TITLE, ColumnConstants.PLEDGES_TITLES);
         put(ColumnConstants.STATUS, ColumnConstants.PLEDGE_STATUS);
-        put(ColumnConstants.MODALITIES, ColumnConstants.PLEDGES_AID_MODALITY);
+        put(ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.PLEDGES_AID_MODALITY);
         
         put(ColumnConstants.DONOR_GROUP, ColumnConstants.PLEDGES_DONOR_GROUP);
         put(ColumnConstants.DONOR_TYPE, ColumnConstants.PLEDGES_DONOR_TYPE);
@@ -83,7 +83,7 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
         put(ColumnConstants.QUINARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PLEDGES_QUINARY_SUBSUBSECTORS);
 
         put(ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
-        
+    
         put(ColumnConstants.ZONE, ColumnConstants.PLEDGES_ZONES);
         put(ColumnConstants.REGION, ColumnConstants.PLEDGES_REGIONS);
         put(ColumnConstants.DISTRICT, ColumnConstants.PLEDGES_DISTRICTS);

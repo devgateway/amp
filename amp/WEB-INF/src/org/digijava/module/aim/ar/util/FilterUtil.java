@@ -168,6 +168,7 @@ public class FilterUtil {
         form.setSelectedNatPlanObj( FilterUtil.getObjectsIds(filter.getSelectedNatPlanObj()) );
         form.setSelectedPrimaryPrograms( FilterUtil.getObjectsIds(filter.getSelectedPrimaryPrograms()) );
         form.setSelectedSecondaryPrograms( FilterUtil.getObjectsIds(filter.getSelectedSecondaryPrograms()) );
+        form.setSelectedTertiaryPrograms(FilterUtil.getObjectsIds(filter.getSelectedTertiaryPrograms()));
         
         form.setRegionSelected( FilterUtil.getObjectsIds( filter.getLocationSelected() ) );
         
@@ -436,6 +437,7 @@ public class FilterUtil {
         Set<AmpTheme> selectedNatPlanObj = arf.getSelectedNatPlanObj();
         Set<AmpTheme> selectedPrimaryPrograms = arf.getSelectedPrimaryPrograms();
         Set<AmpTheme> selectedSecondaryPrograms = arf.getSelectedSecondaryPrograms();
+        Set<AmpTheme> selectedTertiaryPrograms = arf.getSelectedTertiaryPrograms();
         
         if (selectedNatPlanObj != null && selectedNatPlanObj.size() > 0) {
             arf.setNationalPlanningObjectives( new ArrayList<AmpTheme>(selectedNatPlanObj) );           
@@ -466,6 +468,17 @@ public class FilterUtil {
             arf.setSecondaryPrograms(null);
             arf.setSelectedSecondaryPrograms(null);
             arf.setRelatedSecondaryProgs(null);
+        }
+    
+        if (selectedTertiaryPrograms != null && selectedTertiaryPrograms.size() > 0) {
+            arf.setTertiaryPrograms(new ArrayList<>(selectedTertiaryPrograms));
+            arf.setRelatedTertiaryProgs(new HashSet<>());
+            ProgramUtil.collectFilteringInformation(selectedTertiaryPrograms, arf.getTertiaryPrograms(),
+                    arf.getRelatedTertiaryProgs());
+        } else {
+            arf.setTertiaryPrograms(null);
+            arf.setSelectedTertiaryPrograms(null);
+            arf.setRelatedTertiaryProgs(null);
         }
     }
 

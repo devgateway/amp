@@ -153,6 +153,7 @@ public class ReportsFilterPickerForm extends ActionForm {
     private Object[] selectedNatPlanObj;
     private Object[] selectedPrimaryPrograms;
     private Object[] selectedSecondaryPrograms;
+    private Object[] selectedTertiaryPrograms;
     private Integer renderStartYear; // the range of dates columns that has
     // to be render, years not in range will
     // be computables for totals but wont be
@@ -640,6 +641,10 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public Object[] getSelectedSecondaryPrograms() {
         return this.selectedSecondaryPrograms;
+    }
+    
+    public Object[] getSelectedTertiaryPrograms() {
+        return this.selectedTertiaryPrograms;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -1206,6 +1211,10 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public void setSelectedSecondaryPrograms(final Object[] selectedSecondaryPrograms) {
         this.selectedSecondaryPrograms = selectedSecondaryPrograms;
+    }
+    
+    public void setSelectedTertiaryPrograms(final Object[] selectedTertiaryPrograms) {
+        this.selectedTertiaryPrograms = selectedTertiaryPrograms;
     }
     
     @java.lang.SuppressWarnings("all")

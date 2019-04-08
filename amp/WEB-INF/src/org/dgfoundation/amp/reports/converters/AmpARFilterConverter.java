@@ -16,6 +16,7 @@ import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
+import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -72,6 +73,7 @@ public class AmpARFilterConverter {
                 put("selectedNatPlanObj", ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0);
                 put("selectedPrimaryPrograms", ColumnConstants.PRIMARY_PROGRAM_LEVEL_0);
                 put("selectedSecondaryPrograms", ColumnConstants.SECONDARY_PROGRAM_LEVEL_0);
+                put("selectedTertiaryPrograms", ColumnConstants.TERTIARY_PROGRAM_LEVEL_0);
                 put("approvalStatusSelected", ColumnConstants.APPROVAL_STATUS);
                 put("locationSelected", ColumnConstants.COUNTRY);
                 put("financingInstruments", ColumnConstants.FINANCING_INSTRUMENT);
@@ -80,6 +82,7 @@ public class AmpARFilterConverter {
                 put("modeOfPayment", ColumnConstants.MODE_OF_PAYMENT);
                 put("humanitarianAid", ColumnConstants.HUMANITARIAN_AID);
                 put("disasterResponse", ColumnConstants.DISASTER_RESPONSE_MARKER);
+                put("statuses", ColumnConstants.STATUS);
             }});
 
     /**
@@ -125,7 +128,7 @@ public class AmpARFilterConverter {
     
     private void addUndefinedOptions() {
         for (String fieldName : arFilter.getUndefinedOptions()) {
-            String columnName = AMP_AR_FILTER_FIELD_NAME_TO_COLUMN.get(fieldName);
+            String columnName = getColumnName(fieldName);
             
             Optional<ReportElement> repElementOptional = filterRules.getAllFilterRules().keySet().stream()
                     .filter(el -> el.entity.getEntityName().equals(columnName))
@@ -148,6 +151,16 @@ public class AmpARFilterConverter {
                 addFilterRule(columnName, new FilterRule(names, values, true));
             }
         }
+    }
+    
+    private String getColumnName(String fieldName) {
+        String columnName = AMP_AR_FILTER_FIELD_NAME_TO_COLUMN.get(fieldName);
+    
+        if (arFilter.isPledgeFilter()) {
+            columnName = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.get(columnName);
+        }
+        
+        return columnName;
     }
     
     private void addProjectFilters() {
@@ -364,16 +377,13 @@ public class AmpARFilterConverter {
     private void addProgramAndNationalObjectivesFilters() {
         if (!arFilter.isPledgeFilter()) {
             addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PRIMARY_PROGRAM);
-
             addMultiLevelFilter(arFilter.getSelectedSecondaryPrograms(), ColumnConstants.SECONDARY_PROGRAM);
-
-            //TODO: how to detect tertiary programs
-            //addFilter(arFilter.get(), ColumnConstants.TERTIARY_PROGRAM, entityType);
-
+            addMultiLevelFilter(arFilter.getSelectedTertiaryPrograms(), ColumnConstants.TERTIARY_PROGRAM);
             addMultiLevelFilter(arFilter.getSelectedNatPlanObj(), ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
         } else {
             addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PLEDGES_PROGRAMS);
             addMultiLevelFilter(arFilter.getSelectedSecondaryPrograms(), ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
+            addMultiLevelFilter(arFilter.getSelectedTertiaryPrograms(), ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
             addMultiLevelFilter(arFilter.getSelectedNatPlanObj(), ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
         }
     }

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
-import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
@@ -28,7 +27,7 @@ public class ContactImporter extends ObjectImporter {
     public ContactImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getContactFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getContactBusinessRulesValidators()),
-                AmpFieldsEnumerator.getContactEnumerator().getContactFields());
+                AmpFieldsEnumerator.getEnumerator().getContactFields());
     }
 
     public List<ApiErrorMessage> createContact(JsonBean newJson) {
@@ -42,9 +41,6 @@ public class ContactImporter extends ObjectImporter {
     private List<ApiErrorMessage> importContact(Long contactId, JsonBean newJson) {
         this.newJson = newJson;
 
-
-        List<APIField> fieldsDef = getApiFields();
-        
         Object contactJsonId = newJson.get(ContactEPConstants.ID);
         
         if (contactJsonId != null) {
@@ -80,8 +76,6 @@ public class ContactImporter extends ObjectImporter {
                 if (contact == null) {
                     ApiErrorResponse.reportResourceNotFound(ContactErrors.CONTACT_NOT_FOUND);
                 }
-                
-                cleanImportableFields(fieldsDef, contact);
             }
 
             validateAndImport(contact, newJson.any());
@@ -95,10 +89,7 @@ public class ContactImporter extends ObjectImporter {
             }
         } catch (RuntimeException e) {
             PersistenceManager.rollbackCurrentSessionTx();
-
-            if (e instanceof RuntimeException) {
-                throw new RuntimeException("Failed to import contact", e);
-            }
+            throw new RuntimeException("Failed to import contact", e);
         }
 
         return new ArrayList<>(errors.values());

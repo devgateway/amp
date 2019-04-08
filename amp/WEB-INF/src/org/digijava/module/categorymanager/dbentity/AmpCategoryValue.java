@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
@@ -91,14 +92,6 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
     public int compareTo(AmpCategoryValue a) {
         // TODO Auto-generated method stub
         return this.getId().compareTo(a.getId());
-    }
-
-    public boolean equals (Object o) {
-        if(!(o instanceof AmpCategoryValue)) return false;
-        AmpCategoryValue a = (AmpCategoryValue) o;
-        if ( a == null )
-            return false;
-        return this.getId().equals( a.getId() );
     }
 
     public Set<AmpCategoryValue> getUsedValues() {
@@ -199,5 +192,18 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
             this.deleted = false;
         else
             this.deleted = deleted;
+    }
+
+    public boolean equals(Object o) {
+        if (!(o instanceof AmpCategoryValue)) {
+            return false;
+        }
+        AmpCategoryValue a = (AmpCategoryValue) o;
+        return this.getId().equals(a.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

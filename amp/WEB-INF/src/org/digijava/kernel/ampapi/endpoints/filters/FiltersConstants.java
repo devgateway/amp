@@ -100,8 +100,8 @@ public class FiltersConstants {
     public static final String PLEDGES_PROGRAMS_LEVEL_2 = "pledges-programs-level-2";
     public static final String PLEDGES_PROGRAMS_LEVEL_3 = "pledges-programs-level-3";
     public static final String PLEDGES_SECONDARY_PROGRAMS = "pledges-secondary-programs";
-    public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_1 = "pledges-secondary-programs-level-0";
-    public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_0 = "pledges-secondary-programs-level-1";
+    public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_0 = "pledges-secondary-programs-level-0";
+    public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_1 = "pledges-secondary-programs-level-1";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_2 = "pledges-secondary-programs-level-2";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_3 = "pledges-secondary-programs-level-3";
     public static final String PLEDGES_TERTIARY_PROGRAMS = "pledges-tertiary-programs";

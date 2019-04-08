@@ -145,6 +145,25 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3, AmpTheme.class, "selectedSecondaryPrograms",
                 false);
     
+        addFilter(ColumnConstants.TERTIARY_PROGRAM_LEVEL_0, AmpTheme.class, "selectedTertiaryPrograms", false);
+        addFilter(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1, AmpTheme.class, "selectedTertiaryPrograms", false);
+        addFilter(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2, AmpTheme.class, "selectedTertiaryPrograms", false);
+        addFilter(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3, AmpTheme.class, "selectedTertiaryPrograms", false);
+        addFilter(ColumnConstants.TERTIARY_PROGRAM_LEVEL_4, AmpTheme.class, "selectedTertiaryPrograms", false);
+        addFilter(ColumnConstants.TERTIARY_PROGRAM_LEVEL_5, AmpTheme.class, "selectedTertiaryPrograms", false);
+        addFilter(ColumnConstants.TERTIARY_PROGRAM_LEVEL_6, AmpTheme.class, "selectedTertiaryPrograms", false);
+        addFilter(ColumnConstants.TERTIARY_PROGRAM_LEVEL_7, AmpTheme.class, "selectedTertiaryPrograms", false);
+        addFilter(ColumnConstants.TERTIARY_PROGRAM_LEVEL_8, AmpTheme.class, "selectedTertiaryPrograms", false);
+    
+        addFilter(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_0, AmpTheme.class, "selectedTertiaryPrograms",
+                false);
+        addFilter(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_1, AmpTheme.class, "selectedTertiaryPrograms",
+                false);
+        addFilter(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2, AmpTheme.class, "selectedTertiaryPrograms",
+                false);
+        addFilter(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_3, AmpTheme.class, "selectedTertiaryPrograms",
+                false);
+    
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0, AmpTheme.class, "selectedNatPlanObj", false);
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, AmpTheme.class, "selectedNatPlanObj", false);       
         addFilter(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, AmpTheme.class, "selectedNatPlanObj", false);

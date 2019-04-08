@@ -571,16 +571,7 @@ public class ActivityImporter extends ObjectImporter {
 
     protected void initOrgRoles() {
         if (newActivity.getOrgrole() == null) {
-            newActivity.setOrgrole(new HashSet<AmpOrgRole>());
-        } else {
-            for (AmpOrgRole aor : newActivity.getOrgrole()) {
-                //set budgets, or we'll have errors on several entities pointing to the same set
-                if (aor.getBudgets() != null && !aor.getBudgets().isEmpty()) {
-                    Set<AmpOrgRoleBudget> aorbSet = new HashSet<>();
-                    aorbSet.addAll(aor.getBudgets());
-                    aor.setBudgets(aorbSet);
-                }
-            }
+            newActivity.setOrgrole(new HashSet<>());
         }
     }
 

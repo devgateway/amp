@@ -488,7 +488,8 @@ LoggerIdentifiable, Cloneable {
 
 
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_BY, pickIdOnly = true, label = "Activity created by")
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_BY, pickIdOnly = true, label = "Activity created by",
+            importable = true)
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.CREATED_BY, blockSingleChange = true)
     protected AmpTeamMember activityCreator;
     
@@ -748,7 +749,7 @@ LoggerIdentifiable, Cloneable {
     protected Date modifiedDate;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY, pickIdOnly = true,
-            label = "Activity last updated by")
+            label = "Activity last updated by", importable = true)
     @VersionableFieldSimple(fieldTitle = "Modified By")
     protected AmpTeamMember modifiedBy;
     

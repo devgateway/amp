@@ -110,7 +110,7 @@ public class ActivityImporter extends ObjectImporter {
         this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
         this.update = update;
         this.currentUser = TeamUtil.getCurrentUser();
-        if (AmpOfflineModeHolder.isAmpOfflineMode()) {
+        if (rules.isTrackEditors()) {
             modifiedBy = TeamMemberUtil.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson.any()));
         } else {
             modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());

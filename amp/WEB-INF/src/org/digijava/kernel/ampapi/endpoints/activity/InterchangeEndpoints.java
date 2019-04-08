@@ -279,9 +279,12 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             boolean canDowngradeToDraft,
             @ApiParam("process approval fields") @QueryParam("process-approval-fields") @DefaultValue("false")
             boolean isProcessApprovalFields,
+            @ApiParam("use created_by and modified_by from input instead of user session") @QueryParam("track-editors")
+            @DefaultValue("false") boolean isTrackEditors,
             @ApiParam("activity configuration") JsonBean newJson) {
 
-        ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields);
+        ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
+                isTrackEditors);
 
         return ActivityInterchangeUtils.importActivity(newJson, false, rules, uri.getBaseUri() + "activity");
     }
@@ -309,6 +312,8 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             boolean canDowngradeToDraft,
             @ApiParam("process approval fields") @QueryParam("process-approval-fields") @DefaultValue("false")
             boolean isProcessApprovalFields,
+            @ApiParam("use created_by and modified_by from input instead of user session") @QueryParam("track-editors")
+            @DefaultValue("false") boolean isTrackEditors,
             @ApiParam("activity configuration") JsonBean newJson) {
         /*
          * Originally it was defined as PUT to avoid these type of issues checked here.
@@ -322,7 +327,8 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             EndpointUtils.addGeneralError(newJson, ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details));
         }
 
-        ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields);
+        ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
+                isTrackEditors);
 
         return ActivityInterchangeUtils.importActivity(newJson, true, rules, uri.getBaseUri() + "activity");
     }

@@ -9,9 +9,12 @@ public class ActivityImportRules {
 
     private boolean isProcessApprovalFields;
 
-    public ActivityImportRules(boolean canDowngradeToDraft, boolean isProcessApprovalFields) {
+    private boolean isTrackEditors;
+
+    public ActivityImportRules(boolean canDowngradeToDraft, boolean isProcessApprovalFields, boolean isTrackEditors) {
         this.canDowngradeToDraft = canDowngradeToDraft;
         this.isProcessApprovalFields = isProcessApprovalFields;
+        this.isTrackEditors = isTrackEditors;
     }
 
     public boolean isCanDowngradeToDraft() {
@@ -22,4 +25,7 @@ public class ActivityImportRules {
         return isProcessApprovalFields;
     }
 
+    public boolean isTrackEditors() {
+        return isTrackEditors;
+    }
 }

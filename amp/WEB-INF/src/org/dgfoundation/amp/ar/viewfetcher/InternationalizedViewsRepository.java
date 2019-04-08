@@ -364,6 +364,12 @@ public class InternationalizedViewsRepository {
 
                 addViewDef(this, new I18nViewDescription("v_pledges_programs").
                         addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+    
+                addViewDef(this, new I18nViewDescription("v_pledges_programs_level_0").
+                        addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+    
+                addViewDef(this, new I18nViewDescription("v_pledges_programs_level_1").
+                        addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 
                 addViewDef(this, new I18nViewDescription("v_pledges_programs_level_2").
                         addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
@@ -372,6 +378,12 @@ public class InternationalizedViewsRepository {
                         addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 
                 addViewDef(this, new I18nViewDescription("v_pledges_secondary_programs").
+                        addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+    
+                addViewDef(this, new I18nViewDescription("v_pledges_secondary_programs_level_0").
+                        addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+    
+                addViewDef(this, new I18nViewDescription("v_pledges_secondary_programs_level_1").
                         addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 
                 addViewDef(this, new I18nViewDescription("v_pledges_secondary_programs_level_2").
@@ -384,6 +396,12 @@ public class InternationalizedViewsRepository {
                 
                 addViewDef(this, new I18nViewDescription("v_pledges_tertiary_programs").
                         addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+    
+                addViewDef(this, new I18nViewDescription("v_pledges_tertiary_programs_level_0").
+                        addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+    
+                addViewDef(this, new I18nViewDescription("v_pledges_tertiary_programs_level_1").
+                        addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 
                 addViewDef(this, new I18nViewDescription("v_pledges_tertiary_programs_level_2").
                         addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
@@ -394,6 +412,12 @@ public class InternationalizedViewsRepository {
                 addSimpleTranslatedView(this, "v_pledges_type_of_assistance", "category_value", "id");
                 
                 addViewDef(this, new I18nViewDescription("v_pledges_npd_objectives").
+                        addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+    
+                addViewDef(this, new I18nViewDescription("v_pledges_npd_objectives_level_0").
+                        addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+    
+                addViewDef(this, new I18nViewDescription("v_pledges_npd_objectives_level_1").
                         addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 
                 addViewDef(this, new I18nViewDescription("v_pledges_npd_objectives_level_2").

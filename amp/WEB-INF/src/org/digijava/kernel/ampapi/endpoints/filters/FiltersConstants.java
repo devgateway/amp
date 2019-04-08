@@ -100,8 +100,8 @@ public class FiltersConstants {
     public static final String PLEDGES_PROGRAMS_LEVEL_2 = "pledges-programs-level-2";
     public static final String PLEDGES_PROGRAMS_LEVEL_3 = "pledges-programs-level-3";
     public static final String PLEDGES_SECONDARY_PROGRAMS = "pledges-secondary-programs";
-    public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_1 = "pledges-secondary-programs-level-0";
-    public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_0 = "pledges-secondary-programs-level-1";
+    public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_0 = "pledges-secondary-programs-level-0";
+    public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_1 = "pledges-secondary-programs-level-1";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_2 = "pledges-secondary-programs-level-2";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_3 = "pledges-secondary-programs-level-3";
     public static final String PLEDGES_TERTIARY_PROGRAMS = "pledges-tertiary-programs";
@@ -130,6 +130,7 @@ public class FiltersConstants {
     public static final String PLEDGES_TITLES = "pledges-titles";
     public static final String PLEDGES_TYPE_OF_ASSISTANCE = "pledges-type-of-assistance";
     public static final String PLEDGES_ZONES = "pledges-zones";
+    public static final String PLEDGES_COMMUNAL_SECTION = "communal-section";
     public static final String PRIMARY_PROGRAM_LEVEL_0 = "primary-program-level-0";
     public static final String PRIMARY_PROGRAM_LEVEL_1 = "primary-program-level-1";
     public static final String PRIMARY_PROGRAM_LEVEL_2 = "primary-program-level-2";

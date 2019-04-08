@@ -125,10 +125,11 @@ public class LuceneUtil implements Serializable {
     /**
      *
      */
-    public final static String ID_FIELD = "id";
+    public static final String ID_FIELD = "id";
+    
+    public static final String AMP_ID_FIELD = "ampId";
 
-
-    public final static int MAX_LUCENE_RESULTS  = 2000;
+    public static final int MAX_LUCENE_RESULTS  = 2000;
 
     /**
      * LUCENE INDEX PATH: use the LUCENE_BASE_DIR + new 
@@ -498,7 +499,9 @@ public class LuceneUtil implements Serializable {
                 int chunkStart = chunkNo * CHUNK_SIZE, chunkEnd = (chunkNo + 1) * CHUNK_SIZE;
 
                 Statement st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-                String qryStr = String.format("SELECT vt.* FROM v_titles vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                String qryStr = String.format("SELECT vt.* FROM v_titles vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
 
                 ResultSet rs = st.executeQuery(qryStr);
 
@@ -527,7 +530,9 @@ public class LuceneUtil implements Serializable {
                 }
                 // the correct view is v_amp_id, the view with name v_ampid
                 // is not used
-                qryStr = String.format("SELECT vt.* FROM v_amp_id vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_amp_id vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -542,7 +547,9 @@ public class LuceneUtil implements Serializable {
                     //
                 }
 
-                qryStr = String.format("SELECT vt.* FROM v_description vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_description vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -557,7 +564,9 @@ public class LuceneUtil implements Serializable {
                     //
                 }
 
-                qryStr = String.format("SELECT vt.* FROM v_objectives vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_objectives vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -572,7 +581,9 @@ public class LuceneUtil implements Serializable {
                     //
                 }
 
-                qryStr = String.format("SELECT vt.* FROM v_purposes vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_purposes vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -589,7 +600,9 @@ public class LuceneUtil implements Serializable {
                     //
                 }
 
-                qryStr = String.format("SELECT vt.* FROM v_results vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_results vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -623,7 +636,9 @@ public class LuceneUtil implements Serializable {
 //              }
 
                 // Bolivia component code
-                qryStr = String.format("SELECT vt.* FROM v_bolivia_component_code vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_bolivia_component_code vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 rs = st.executeQuery(qryStr);
                 rs.last();
                 logger.info("Starting iteration of " + rs.getRow() + " v_bolivia_component_code!");
@@ -639,7 +654,8 @@ public class LuceneUtil implements Serializable {
                     isNext = rs.next();
                 }
                 // new budget codes
-                qryStr = "select r.activity,string_agg(r.budget_code, ' ; ' ) as budget_codes from amp_org_role r, v_activity_latest_and_validated a where a.amp_activity_id=r.activity and activity >= "
+                qryStr = "select r.activity, string_agg(r.budget_code, ' ; ' ) as budget_codes "
+                        + "from amp_org_role r, amp_activity a where a.amp_activity_id=r.activity and activity >= "
                         + chunkStart + " and activity < " + chunkEnd + " group by activity";
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -892,7 +908,7 @@ public class LuceneUtil implements Serializable {
         }
 
         HashMap<String, String> regularFieldNames = new HashMap<String, String>();
-        regularFieldNames.put("ampId", actLuceneDoc.getProjectId());
+        regularFieldNames.put(AMP_ID_FIELD, actLuceneDoc.getProjectId());
         regularFieldNames.put("name", actLuceneDoc.getName());
 
         Long id = Long.valueOf(actLuceneDoc.getAmpActivityId());
@@ -1156,7 +1172,7 @@ public class LuceneUtil implements Serializable {
      * @return a list of similar {@link AmpActivityVersion} titles
      *
      */
-    public static List<AmpActivity> findActivitiesMoreLikeThis(String index,
+    public static List<ActivityLuceneDocument> findActivitiesMoreLikeThis(String index,
                                                                String origSearchString,
                                                                String langCode,
                                                                int maxLuceneResults) {
@@ -1196,7 +1212,7 @@ public class LuceneUtil implements Serializable {
                     .getGlobalSettingValue(GlobalSettingsConstants.ACTIVITY_TITLE_SIMILARITY_SENSITIVITY));
 
 
-            List<AmpActivity> activityTitles = new ArrayList<AmpActivity>();
+            List<ActivityLuceneDocument> activityLuceneDocuments = new ArrayList<>();
             for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
                 //skip documents with a score lower than #minDocumentScore
                 if (scoreDoc.score < minDocumentScore) {
@@ -1204,17 +1220,19 @@ public class LuceneUtil implements Serializable {
                 }
 
                 Document doc = indexSearcher.doc(scoreDoc.doc);
-
-                AmpActivity activityWithIdAndTitle = new AmpActivity();
-                activityWithIdAndTitle.setAmpId(doc.get(ID_FIELD));
+    
+                ActivityLuceneDocument activityLuceneDocument = new ActivityLuceneDocument();
+                activityLuceneDocument.setProjectId(doc.get(ID_FIELD));
+                activityLuceneDocument.setAmpActivityId(doc.get(AMP_ID_FIELD));
                 // Set the title of the activity
-                activityWithIdAndTitle.setName(doc.get(fieldName));
+                activityLuceneDocument.setName(doc.get(fieldName));
                 logger.info("Found similar named activity with a score: " + scoreDoc.score + " Title: "
-                        + activityWithIdAndTitle.getName() + " Id: " + activityWithIdAndTitle.getAmpId());
-                activityTitles.add(activityWithIdAndTitle);
+                        + activityLuceneDocument.getName() + " AmpId: " + activityLuceneDocument.getAmpActivityId()
+                        + " ActivityId: " + activityLuceneDocument.getProjectId());
+                activityLuceneDocuments.add(activityLuceneDocument);
             }
 
-            return activityTitles;
+            return activityLuceneDocuments;
 
         } catch (CorruptIndexException e) {
             // TODO Auto-generated catch block

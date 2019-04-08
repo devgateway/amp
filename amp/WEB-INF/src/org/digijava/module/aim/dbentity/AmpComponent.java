@@ -5,9 +5,8 @@
 
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.REQUIRED_ALWAYS;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_DESCRIPTION;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TITLE;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TYPE;
 
@@ -19,10 +18,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.ArConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpComponentFundingDiscriminationConfigurer;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Output;
 
 /**
@@ -33,13 +37,15 @@ import org.digijava.module.aim.util.Output;
 public class AmpComponent implements Serializable, Comparable<AmpComponent>, Versionable, Cloneable {
     
     //IATI-check: to be ignored
-    
+
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long ampComponentId;
 
     @InterchangeableBackReference
     private AmpActivityVersion activity;
 
-    @Interchangeable(fieldTitle = COMPONENT_TITLE, required = REQUIRED_ALWAYS, importable = true,
+    @Interchangeable(fieldTitle = COMPONENT_TITLE, required = ALWAYS, importable = true,
             fmPath="/Activity Form/Components/Component/Component Information/Component Title")
     @TranslatableField
     private String title;
@@ -53,8 +59,20 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
 
     private String code;
 
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING, importable = true)
-    private Set<AmpComponentFunding> fundings;
+    @InterchangeableDiscriminator(discriminatorField = "transactionType",
+        configurer = AmpComponentFundingDiscriminationConfigurer.class,
+        settings = {
+            @Interchangeable(fieldTitle = ArConstants.COMMITMENT, discriminatorOption = "" + Constants.COMMITMENT,
+                    fmPath = "/Activity Form/Components/Component/Components Commitments/Commitment Table",
+                    importable = true),
+            @Interchangeable(fieldTitle = ArConstants.DISBURSEMENT, discriminatorOption = "" + Constants.DISBURSEMENT,
+                    fmPath = "/Activity Form/Components/Component/Components Disbursements/Disbursement Table",
+                    importable = true),
+            @Interchangeable(fieldTitle = ArConstants.EXPENDITURE, discriminatorOption = "" + Constants.EXPENDITURE,
+                    fmPath = "/Activity Form/Components/Component/Components Expenditures/Expenditure Table",
+                    importable = true)
+    })
+    private Set<AmpComponentFunding> fundings = new HashSet<>();
 
     public static class AmpComponentComparator implements Comparator<AmpComponent>{
         @Override
@@ -220,7 +238,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
             out.getOutputs().add(new Output(null, new String[] { "URL" }, new Object[] { this.Url }));
         }
         
-        List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings); 
+        List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings);
         auxFundings.sort(COMPONENT_FUNDING_COMPARATOR);
         Iterator<AmpComponentFunding> iter = auxFundings.iterator();
         
@@ -261,7 +279,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         StringBuffer ret = new StringBuffer();
         ret.append("-" + this.code+ "-" + this.description + "-" + this.Url + "-" + this.creationdate);
         
-        List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings); 
+        List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings);
         auxFundings.sort(COMPONENT_FUNDING_COMPARATOR);
         Iterator<AmpComponentFunding> iter = auxFundings.iterator();
         

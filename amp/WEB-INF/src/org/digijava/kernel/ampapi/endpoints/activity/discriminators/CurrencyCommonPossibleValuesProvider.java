@@ -8,11 +8,9 @@ import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.currency.CurrencyEPConstants;
-import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 
-@PossibleValuesEntity(AmpCurrency.class)
 public class CurrencyCommonPossibleValuesProvider extends PossibleValuesProvider {
     
     @Override

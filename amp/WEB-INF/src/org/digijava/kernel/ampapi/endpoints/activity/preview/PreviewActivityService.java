@@ -18,7 +18,6 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.exception.DgException;
@@ -31,10 +30,8 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -250,8 +247,8 @@ public final class PreviewActivityService {
         PreviewFundingTransaction transaction = new PreviewFundingTransaction();
         transaction.setTransactionId(fd.getDbId());
         transaction.setTransactionAmount(convertedAmount);
-        transaction.setTransactionDate(InterchangeUtils.formatISO8601Date(fd.getTransactionDate()));
-        transaction.setReportingDate(InterchangeUtils.formatISO8601Date(fd.getReportingDate()));
+        transaction.setTransactionDate(DateTimeUtil.formatISO8601Timestamp(fd.getTransactionDate()));
+        transaction.setReportingDate(DateTimeUtil.formatISO8601Timestamp(fd.getReportingDate()));
 
         return transaction;
     }

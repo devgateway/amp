@@ -16,6 +16,8 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
+import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,12 +49,15 @@ public class ValueValidatorTest {
     private ActivityImporter importer;
     private APIField sectorFieldDescription;
     private APIField fyFieldDescription;
+    private PossibleValuesCache possibleValuesCached;
 
     @Before
     public void setUp() throws Exception {
         importer = mock(ActivityImporter.class);
-        when(importer.getPossibleValuesForFieldCached(SECTOR_FIELD)).thenReturn(SECTOR_POSSIBLE_VALUES);
-        when(importer.getPossibleValuesForFieldCached(FY_FIELD)).thenReturn(FY_POSSIBLE_VALUES);
+        possibleValuesCached = mock(PossibleValuesCache.class);
+        when(importer.getPossibleValuesCache()).thenReturn(possibleValuesCached);
+        when(possibleValuesCached.getPossibleValues(SECTOR_FIELD)).thenReturn(SECTOR_POSSIBLE_VALUES);
+        when(possibleValuesCached.getPossibleValues(FY_FIELD)).thenReturn(FY_POSSIBLE_VALUES);
 
         sectorFieldDescription = new APIField();
         sectorFieldDescription.setFieldName(SECTOR_FIELD);
@@ -64,7 +69,7 @@ public class ValueValidatorTest {
         fyFieldDescription.setFieldName(FY_FIELD);
         fyFieldDescription.setImportable(true);
         fyFieldDescription.setIdOnly(true);
-        fyFieldDescription.setApiType(new APIType(Collection.class, Long.class));
+        fyFieldDescription.setApiType(new APIType(Collection.class, FieldType.LIST, Long.class));
     }
 
     @Test

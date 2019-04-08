@@ -4,6 +4,7 @@ import static java.util.Collections.emptyMap;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -47,7 +48,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
             value = "Provides full set of available fields and their settings/rules in a hierarchical structure.",
             notes = "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration).")
     public List<APIField> getAvailableFields() {
-        return AmpFieldsEnumerator.getContactEnumerator().getContactFields();
+        return AmpFieldsEnumerator.getEnumerator().getContactFields();
     }
 
     @POST
@@ -69,7 +70,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
         if (fields == null) {
             response = emptyMap();
         } else {
-            List<APIField> apiFields = AmpFieldsEnumerator.getContactEnumerator().getContactFields();
+            List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getContactFields();
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
@@ -89,6 +90,15 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @ApiOperation("Retrieve contact")
     public JsonBean getContact(@ApiParam("contact id") @PathParam("id") Long id) {
         return ContactUtil.getContact(id);
+    }
+    
+    @POST
+    @Path("/batch")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
+    @ApiOperation("Retrieve contacts")
+    public Collection<JsonBean> getContact(List<Long> ids) {
+        return ContactUtil.getContacts(ids);
     }
 
     @PUT

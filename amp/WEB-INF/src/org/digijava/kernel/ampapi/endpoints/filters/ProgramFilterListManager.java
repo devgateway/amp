@@ -107,12 +107,12 @@ public class ProgramFilterListManager implements FilterListManager {
         return items;
     }
     
-    private List<AmpActivityProgramSettings> getProgramSettings() {
+    protected List<AmpActivityProgramSettings> getProgramSettings() {
         Set<String> visibleCols = ColumnsVisibility.getVisibleColumns();
         Session session = PersistenceManager.getSession();
         List<AmpActivityProgramSettings> allSettings = session.createCriteria(AmpActivityProgramSettings.class).list();
         List<AmpActivityProgramSettings> programSettings = allSettings.stream()
-                .filter(setting -> visibleCols.contains(ProgramUtil.NAME_TO_COLUMN_MAP.get(setting.getName())))
+                .filter(setting -> visibleCols.contains(getColumnName(setting.getName())))
                 .filter(setting -> setting.getDefaultHierarchy() != null)
                 .collect(Collectors.toList());
         
@@ -136,14 +136,22 @@ public class ProgramFilterListManager implements FilterListManager {
         
         return node;
     }
-    
+
     /**
      * @param programConfigurationName
      * @return
      */
     protected String getFilterDefinitionName(String programConfigurationName) {
-        return programConfigurationName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE) 
+        return programConfigurationName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)
                 ? ColumnConstants.NATIONAL_PLANNING_OBJECTIVES : programConfigurationName;
+    }
+
+    /**
+     * @param programConfigurationName
+     * @return
+     */
+    protected String getColumnName(String programConfigurationName) {
+        return ProgramUtil.NAME_TO_COLUMN_MAP.get(programConfigurationName);
     }
 
 }

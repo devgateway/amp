@@ -112,7 +112,9 @@ public class AmpARFilter extends PropertyListable {
             "fromProposedStartDate", "toProposedStartDate",
             "fromEffectiveFundingDate", "toEffectiveFundingDate",
             "fromFundingClosingDate", "toFundingClosingDate",
-            "fromProposedApprovalDate", "toProposedApprovalDate"));
+            "fromProposedApprovalDate", "toProposedApprovalDate",
+            "fromPledgeDetailStartDate", "toPledgeDetailStartDate",
+            "fromPledgeDetailEndDate", "toPledgeDetailEndDate"));
 
     public final static Long TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES = -997L;
 
@@ -196,9 +198,6 @@ public class AmpARFilter extends PropertyListable {
     @PropertyListableIgnore
     private Integer computedYear;
 
-    @PropertyListableIgnore
-    private Integer actualAppYear;
-
     /**
      * whether this filter should queryAppend a WorkspaceFilter query in generateFilterQuery. Ignored when building a workspace filter (always ON)
      */
@@ -234,6 +233,9 @@ public class AmpARFilter extends PropertyListable {
 
     @PropertyListableIgnore
     private Set<AmpTheme> relatedSecondaryProgs;
+    
+    @PropertyListableIgnore
+    private Set<AmpTheme> relatedTertiaryProgs;
 
     @PropertyListableIgnore
     private List<AmpTheme> nationalPlanningObjectives;
@@ -253,6 +255,11 @@ public class AmpARFilter extends PropertyListable {
     @PropertyListableIgnore
     private List<AmpTheme> secondaryPrograms;
     private Set<AmpTheme> selectedSecondaryPrograms;
+    
+    @PropertyListableIgnore
+    private List<AmpTheme> tertiaryPrograms;
+    
+    private Set<AmpTheme> selectedTertiaryPrograms;
 
     /**
      * only valid after the query has been generated
@@ -271,8 +278,10 @@ public class AmpARFilter extends PropertyListable {
      */
     @PropertyListableIgnore
     private String defaultValues;
-
+    
     private String multiDonor = null;
+    
+    private Set<String> undefinedOptions = new HashSet<>();
 
     public String getMultiDonor() {
         return multiDonor;
@@ -308,6 +317,15 @@ public class AmpARFilter extends PropertyListable {
     public void setRelatedSecondaryProgs(Set<AmpTheme> relatedSecondaryProgs) {
         this.relatedSecondaryProgs = relatedSecondaryProgs;
     }
+    
+    @PropertyListableIgnore
+    public Set<AmpTheme> getRelatedTertiaryProgs() {
+        return relatedTertiaryProgs;
+    }
+    
+    public void setRelatedTertiaryProgs(Set<AmpTheme> relatedTertiaryProgs) {
+        this.relatedTertiaryProgs = relatedTertiaryProgs;
+    }
 
     @PropertyListableIgnore
     public Set<AmpTheme> getRelatedPrimaryProgs() {
@@ -335,6 +353,15 @@ public class AmpARFilter extends PropertyListable {
     public void setSecondaryPrograms(List<AmpTheme> secondaryPrograms) {
         this.secondaryPrograms = secondaryPrograms;
     }
+    
+    @PropertyListableIgnore
+    public List<AmpTheme> getTertiaryPrograms() {
+        return tertiaryPrograms;
+    }
+    
+    public void setTertiaryPrograms(List<AmpTheme> tertiaryPrograms) {
+        this.tertiaryPrograms = tertiaryPrograms;
+    }
 
     public Set<AmpTheme> getSelectedNatPlanObj() {
         return selectedNatPlanObj;
@@ -359,12 +386,27 @@ public class AmpARFilter extends PropertyListable {
     public void setSelectedSecondaryPrograms(Set<AmpTheme> selectedSecondaryPrograms) {
         this.selectedSecondaryPrograms = selectedSecondaryPrograms;
     }
+    
+    public Set<AmpTheme> getSelectedTertiaryPrograms() {
+        return selectedTertiaryPrograms;
+    }
+    
+    public void setSelectedTertiaryPrograms(Set<AmpTheme> selectedTertiaryPrograms) {
+        this.selectedTertiaryPrograms = selectedTertiaryPrograms;
+    }
 
     private Set regions = null;
     private Set<AmpIndicatorRiskRatings> risks = null;
     private Set<AmpOrgType> donorTypes = null;
+    private Set<AmpOrgType> executingAgencyTypes = null;
+    private Set<AmpOrgType> implementingAgencyTypes = null;
+    
     private Set<AmpOrgGroup> donorGroups = null;
+    private Set<AmpOrgGroup> beneficiaryAgencyGroups = null;
     private Set<AmpOrgGroup> contractingAgencyGroups = null;
+    private Set<AmpOrgGroup> executingAgencyGroups = null;
+    private Set<AmpOrgGroup> implementingAgencyGroups = null;
+    private Set<AmpOrgGroup> responsibleAgencyGroups = null;
 
     private Set<AmpOrganisation> responsibleorg = null;
     private Set<AmpOrganisation> componentFunding = null;
@@ -441,12 +483,23 @@ public class AmpARFilter extends PropertyListable {
     private String dynActivityStartFilterOperator;
     private String dynActivityStartFilterXPeriod;
 
+    private String fromActualApprovalDate;
+    private String toActualApprovalDate;
+
+    private String fromProposedCompletionDate;
+    private String toProposedCompletionDate;
+
     private String fromIssueDate;
     private String toIssueDate;
     private String dynIssueFilterCurrentPeriod;
     private Integer dynIssueFilterAmount;
     private String dynIssueFilterOperator;
     private String dynIssueFilterXPeriod;
+
+    private String fromPledgeDetailStartDate;
+    private String toPledgeDetailStartDate;
+    private String fromPledgeDetailEndDate;
+    private String toPledgeDetailEndDate;
 
     private String fromActivityActualCompletionDate;
     private String toActivityActualCompletionDate;
@@ -2102,6 +2155,14 @@ public class AmpARFilter extends PropertyListable {
         }
     }
 
+    public Date[] buildFromAndToActualApprovalDateAsDate() {
+        return buildFromAndTo(fromActualApprovalDate, toActualApprovalDate);
+    }
+
+    public Date[] buildFromAndToProposedCompletionDateAsDate() {
+        return buildFromAndTo(fromProposedCompletionDate, toProposedCompletionDate);
+    }
+
     /**
      * @param fromActivityStartDate the fromActivityStartDate to set
      */
@@ -2665,14 +2726,6 @@ public class AmpARFilter extends PropertyListable {
         this.computedYear = computedYear;
     }
 
-    public Integer getActualAppYear() {
-        return actualAppYear;
-    }
-
-    public void setActualAppYear(Integer actualAppYear) {
-        this.actualAppYear = actualAppYear;
-    }
-
     /**
      * @return the locationSelected
      */
@@ -3180,4 +3233,146 @@ public class AmpARFilter extends PropertyListable {
     public void setDynIssueFilterXPeriod(String dynIssueFilterXPeriod) {
         this.dynIssueFilterXPeriod = dynIssueFilterXPeriod;
     }
+    
+    public Set<String> getUndefinedOptions() {
+        return undefinedOptions;
+    }
+    
+    public void setUndefinedOptions(Set<String> undefinedOptions) {
+        this.undefinedOptions = undefinedOptions;
+    }
+    
+    public Set<AmpOrgType> getExecutingAgencyTypes() {
+        return executingAgencyTypes;
+    }
+    
+    public void setExecutingAgencyTypes(Set<AmpOrgType> executingAgencyTypes) {
+        this.executingAgencyTypes = executingAgencyTypes;
+    }
+    
+    public Set<AmpOrgType> getImplementingAgencyTypes() {
+        return implementingAgencyTypes;
+    }
+    
+    public void setImplementingAgencyTypes(Set<AmpOrgType> implementingAgencyTypes) {
+        this.implementingAgencyTypes = implementingAgencyTypes;
+    }
+    
+    public Set<AmpOrgGroup> getBeneficiaryAgencyGroups() {
+        return beneficiaryAgencyGroups;
+    }
+    
+    public void setBeneficiaryAgencyGroups(Set<AmpOrgGroup> beneficiaryAgencyGroups) {
+        this.beneficiaryAgencyGroups = beneficiaryAgencyGroups;
+    }
+    
+    public Set<AmpOrgGroup> getExecutingAgencyGroups() {
+        return executingAgencyGroups;
+    }
+    
+    public void setExecutingAgencyGroups(Set<AmpOrgGroup> executingAgencyGroups) {
+        this.executingAgencyGroups = executingAgencyGroups;
+    }
+    
+    public Set<AmpOrgGroup> getImplementingAgencyGroups() {
+        return implementingAgencyGroups;
+    }
+    
+    public void setImplementingAgencyGroups(Set<AmpOrgGroup> implementingAgencyGroups) {
+        this.implementingAgencyGroups = implementingAgencyGroups;
+    }
+    
+    public Set<AmpOrgGroup> getResponsibleAgencyGroups() {
+        return responsibleAgencyGroups;
+    }
+    
+    public void setResponsibleAgencyGroups(Set<AmpOrgGroup> responsibleAgencyGroups) {
+        this.responsibleAgencyGroups = responsibleAgencyGroups;
+    }
+
+    public String getFromActualApprovalDate() {
+        return fromActualApprovalDate;
+    }
+
+    public void setFromActualApprovalDate(String fromActualApprovalDate) {
+        this.fromActualApprovalDate = fromActualApprovalDate;
+    }
+
+    public String getToActualApprovalDate() {
+        return toActualApprovalDate;
+    }
+
+    public void setToActualApprovalDate(String toActualApprovalDate) {
+        this.toActualApprovalDate = toActualApprovalDate;
+    }
+
+    public String getFromProposedCompletionDate() {
+        return fromProposedCompletionDate;
+    }
+
+    public void setFromProposedCompletionDate(String fromProposedCompletionDate) {
+        this.fromProposedCompletionDate = fromProposedCompletionDate;
+    }
+
+    public String getToProposedCompletionDate() {
+        return toProposedCompletionDate;
+    }
+
+    public void setToProposedCompletionDate(String toProposedCompletionDate) {
+        this.toProposedCompletionDate = toProposedCompletionDate;
+    }
+
+    public String getFromPledgeDetailStartDate() {
+        return fromPledgeDetailStartDate;
+    }
+
+    public void setFromPledgeDetailStartDate(String fromPledgeDetailStartDate) {
+        this.fromPledgeDetailStartDate = fromPledgeDetailStartDate;
+    }
+
+    public String getFromPledgeDetailEndDate() {
+        return fromPledgeDetailEndDate;
+    }
+
+    public String getToPledgeDetailStartDate() {
+        return toPledgeDetailStartDate;
+    }
+
+    public void setToPledgeDetailStartDate(String toPledgeDetailStartDate) {
+        this.toPledgeDetailStartDate = toPledgeDetailStartDate;
+    }
+
+    public String getToPledgeDetailEndDate() {
+        return toPledgeDetailEndDate;
+    }
+
+    public void setToPledgeDetailEndDate(String toPledgeDetailEndDate) {
+        this.toPledgeDetailEndDate = toPledgeDetailEndDate;
+    }
+
+    public void setFromPledgeDetailEndDate(String fromPledgeDetailEndDate) {
+        this.fromPledgeDetailEndDate = fromPledgeDetailEndDate;
+    }
+
+    /**
+     * @return a ['from', 'to'] pair for PledgeDetailStartDate range or [null, null] if none is configured
+     */
+    public Date[] buildFromAndToPledgeDetailStartDateAsDate() {
+        Date[] dateRange = buildFromAndTo(fromPledgeDetailStartDate, toPledgeDetailStartDate);
+        if (dateRange != null) {
+            return dateRange;
+        } else {
+            return null;
+        }
+    }
+
+    public Date[] buildFromAndToPledgeDetailEndDateAsDate() {
+        Date[] dateRange = buildFromAndTo(fromPledgeDetailEndDate, toPledgeDetailEndDate);
+        if (dateRange != null) {
+            return dateRange;
+        } else {
+            return null;
+        }
+    }
+
 }

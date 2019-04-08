@@ -35,24 +35,29 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
     public static final Map<String, String> DONOR_COLUMNS_TO_PLEDGE_COLUMNS = new HashMap<String, String>() {{
         put(ColumnConstants.PROJECT_TITLE, ColumnConstants.PLEDGES_TITLES);
         put(ColumnConstants.STATUS, ColumnConstants.PLEDGE_STATUS);
-        put(ColumnConstants.MODALITIES, ColumnConstants.PLEDGES_AID_MODALITY);
+        put(ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.PLEDGES_AID_MODALITY);
         
         put(ColumnConstants.DONOR_GROUP, ColumnConstants.PLEDGES_DONOR_GROUP);
         put(ColumnConstants.DONOR_TYPE, ColumnConstants.PLEDGES_DONOR_TYPE);
-        
+    
+        put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0,
+                ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0);
         put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, 
                 ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1);
         put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2);
         put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3);
-        
+    
+        put(ColumnConstants.PRIMARY_PROGRAM_LEVEL_0, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_0);
         put(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_1);
         put(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_2);
         put(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_3);
-        
+    
+        put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_0, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_0);
         put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_1);
         put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2);
         put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3);
-        
+    
+        put(ColumnConstants.TERTIARY_PROGRAM_LEVEL_0, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_0);
         put(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_1);
         put(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2);
         put(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_3);
@@ -78,11 +83,12 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
         put(ColumnConstants.QUINARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PLEDGES_QUINARY_SUBSUBSECTORS);
 
         put(ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
-        
+    
         put(ColumnConstants.ZONE, ColumnConstants.PLEDGES_ZONES);
         put(ColumnConstants.REGION, ColumnConstants.PLEDGES_REGIONS);
         put(ColumnConstants.DISTRICT, ColumnConstants.PLEDGES_DISTRICTS);
         put(ColumnConstants.COUNTRY, ColumnConstants.PLEDGES_COUNTRIES);
+        put(ColumnConstants.COMMUNAL_SECTION, ColumnConstants.PLEDGES_COMMUNAL_SECTION);
     }};
 
     public static final Map<String, String> DONOR_TO_REGIONAL_COLUMNS = new ImmutableMap.Builder<String, String>()
@@ -132,6 +138,17 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
         }
         
         columnName = removeIdSuffixIfNeeded(schema, columnName);
+    
+        if (this.spec.getReportType() == ArConstants.PLEDGES_TYPE) {
+            /**
+             * there is no "pledges filter widget":
+             * the filter widget uses hardcoded column names (the ones from the donor reports).
+             *
+             * In order to support filtering in pledge reports,
+             * we will convert the donor-columns references to pledges-columns references
+             */
+            columnName = DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
+        }
 
         if (this.spec.getReportType() == ArConstants.REGIONAL_TYPE) {
             columnName = DONOR_TO_REGIONAL_COLUMNS.getOrDefault(columnName, columnName);

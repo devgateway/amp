@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -7,9 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
@@ -25,11 +27,13 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
 
     private static final long serialVersionUID = 1L;
 
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long ampStructureId;
     
     @TranslatableField
     @Interchangeable(fieldTitle = "Title", importable = true, fmPath = "/Activity Form/Structures/Structure Title", 
-            required = ActivityEPConstants.REQUIRED_ALWAYS)
+            required = ALWAYS)
     private String title;
     
     @TranslatableField

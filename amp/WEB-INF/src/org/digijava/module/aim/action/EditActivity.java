@@ -1945,7 +1945,7 @@ public class EditActivity extends Action {
 
                 java.sql.Date dt = new java.sql.Date(ampCompFund.getTransactionDate().getTime());
 
-                double frmExRt = ampCompFund.getExchangeRate() != null ? ampCompFund.getExchangeRate() : Util.getExchange(ampCompFund.getCurrency().getCurrencyCode(), dt);
+                double frmExRt = Util.getExchange(ampCompFund.getCurrency().getCurrencyCode(), dt);
                 double toExRt = Util.getExchange(toCurrCode, dt);
                 DecimalWraper amt = CurrencyWorker.convertWrapper(ampCompFund.getTransactionAmount(), frmExRt, toExRt, dt);
 

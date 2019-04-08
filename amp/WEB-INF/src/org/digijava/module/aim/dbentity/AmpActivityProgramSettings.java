@@ -153,4 +153,8 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
 //          return null;
         }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

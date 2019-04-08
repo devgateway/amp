@@ -507,7 +507,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Path("/financingInstruments/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.FINANCING_INSTRUMENT, columns = ColumnConstants.FINANCING_INSTRUMENT,
-            name="Financing Instruments", tab=EPConstants.TAB_FINANCIALS)
+            name = ColumnConstants.FINANCING_INSTRUMENT, tab = EPConstants.TAB_FINANCIALS)
     @ApiOperation("Return financing instruments")
     public FilterDescriptor getFinancingInstruments() {
         return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY, ColumnConstants.FINANCING_INSTRUMENT);

@@ -40,7 +40,7 @@ public class APIType {
             if (InterchangeableClassMapper.containsSimpleClass(type)) {
                 fieldType = InterchangeableClassMapper.getCustomMapping(type);
             } else {
-                fieldType = FieldType.LIST;
+                fieldType = FieldType.OBJECT;
             }
         }
         if (fieldType.isList()) {
@@ -50,8 +50,8 @@ public class APIType {
             this.itemType = InterchangeableClassMapper.containsSimpleClass(elementType)
                     ? InterchangeableClassMapper.getCustomMapping(elementType) : FieldType.OBJECT;
              
-        } else if (elementType != null) {
-            throw new RuntimeException("Only a list type can specify an elementType");
+        } else if (elementType != null && !fieldType.isObject()) {
+            throw new RuntimeException("Only a list type or discriminated object can specify an elementType");
         } else {
             this.itemType = null;
         }

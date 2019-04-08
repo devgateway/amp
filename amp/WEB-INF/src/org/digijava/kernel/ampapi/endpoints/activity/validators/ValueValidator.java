@@ -46,7 +46,7 @@ public class ValueValidator extends InputValidator {
             return false;
 
         // FIXME possible values are not always available for all fields, must check only for select fields (not all)
-        List<PossibleValue> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath);
+        List<PossibleValue> possibleValues = importer.getPossibleValuesCache().getPossibleValues(fieldPath);
         Object value = newFieldParent.get(fieldDescription.getFieldName());
         
         if (possibleValues.size() != 0 && value != null) {

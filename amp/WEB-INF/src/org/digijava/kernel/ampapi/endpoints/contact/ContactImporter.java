@@ -5,9 +5,7 @@ import static java.util.Collections.singletonList;
 import java.util.ArrayList;
 import java.util.List;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
-import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
-import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
@@ -27,8 +25,9 @@ public class ContactImporter extends ObjectImporter {
     private AmpContact contact;
 
     public ContactImporter() {
-        super(new InputValidatorProcessor(InputValidatorProcessor.getContactValidators()),
-                AmpFieldsEnumerator.getContactEnumerator().getContactFields());
+        super(new InputValidatorProcessor(InputValidatorProcessor.getContactFormatValidators()),
+                new InputValidatorProcessor(InputValidatorProcessor.getContactBusinessRulesValidators()),
+                AmpFieldsEnumerator.getEnumerator().getContactFields());
     }
 
     public List<ApiErrorMessage> createContact(JsonBean newJson) {
@@ -42,9 +41,6 @@ public class ContactImporter extends ObjectImporter {
     private List<ApiErrorMessage> importContact(Long contactId, JsonBean newJson) {
         this.newJson = newJson;
 
-
-        List<APIField> fieldsDef = getApiFields();
-        
         Object contactJsonId = newJson.get(ContactEPConstants.ID);
         
         if (contactJsonId != null) {
@@ -80,26 +76,20 @@ public class ContactImporter extends ObjectImporter {
                 if (contact == null) {
                     ApiErrorResponse.reportResourceNotFound(ContactErrors.CONTACT_NOT_FOUND);
                 }
-                
-                cleanImportableFields(fieldsDef, contact);
             }
 
-            contact = (AmpContact) validateAndImport(contact, fieldsDef, newJson.any(), null);
+            validateAndImport(contact, newJson.any());
 
-            if (contact == null) {
-                throw new ObjectConversionException();
+            if (errors.isEmpty()) {
+                setupBeforeSave(contact, createdBy);
+                PersistenceManager.getSession().saveOrUpdate(contact);
+                PersistenceManager.flushAndCommit(PersistenceManager.getSession());
+            } else {
+                PersistenceManager.rollbackCurrentSessionTx();
             }
-
-            setupBeforeSave(contact, createdBy);
-            PersistenceManager.getSession().saveOrUpdate(contact);
-
-            PersistenceManager.flushAndCommit(PersistenceManager.getSession());
-        } catch (ObjectConversionException | RuntimeException e) {
+        } catch (RuntimeException e) {
             PersistenceManager.rollbackCurrentSessionTx();
-
-            if (e instanceof RuntimeException) {
-                throw new RuntimeException("Failed to import contact", e);
-            }
+            throw new RuntimeException("Failed to import contact", e);
         }
 
         return new ArrayList<>(errors.values());

@@ -4,13 +4,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.util.ProgramUtil;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * This class generates the filter list (tree) object for pledges programs
@@ -78,13 +77,19 @@ public final class PledgesProgramFilterListManager extends ProgramFilterListMana
     protected List<String> getProgramFilterIds(AmpActivityProgramSettings setting) {
         List<String> filterIds = NAME_TO_COLUMNS.get(setting.getName()).stream()
             .map(col -> FilterUtils.INSTANCE.idFromColumnName(col))
+            .sorted()
             .collect(Collectors.toList());
 
         return filterIds;
     }
-    
+
     @Override
     protected String getFilterDefinitionName(String programConfigurationName) {
+        return getColumnName(programConfigurationName);
+    }
+
+    @Override
+    protected String getColumnName(String programConfigurationName) {
         switch(programConfigurationName) {
             case ProgramUtil.PRIMARY_PROGRAM:
                 return ColumnConstants.PLEDGES_PROGRAMS;

@@ -273,9 +273,6 @@ public class ActivityUtil {
             session.update(group);
         }
         a.setAmpActivityGroup(group);
-        Date updatedDate = Calendar.getInstance().getTime();
-        if (a.getCreatedDate() == null)
-            a.setCreatedDate(updatedDate);
 
         if (context.isUpdateActivityStatus()) {
             setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
@@ -345,7 +342,11 @@ public class ActivityUtil {
     
         activity.setModifiedBy(modifier);
     
-        if (activity.getAmpActivityId() == null || activity.getActivityCreator() == null) {
+        if (activity.getCreatedDate() == null) {
+            activity.setCreatedDate(updateDate);
+        }
+    
+        if (activity.getActivityCreator() == null) {
             activity.setActivityCreator(modifier);
         }
     }

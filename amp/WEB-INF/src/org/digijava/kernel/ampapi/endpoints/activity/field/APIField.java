@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.FieldValueReader;
+import org.digijava.kernel.ampapi.endpoints.activity.FieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
@@ -24,9 +24,12 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
     "regex_constraint", "field_length", "size_limit" })
 public class APIField {
 
+    @JsonProperty("id")
+    private boolean id;
+
     @JsonProperty(ActivityEPConstants.FIELD_NAME)
     private String fieldName;
-    
+
     @JsonUnwrapped
     private APIType apiType;
 
@@ -64,6 +67,9 @@ public class APIField {
     @JsonProperty(ActivityEPConstants.FIELD_LENGTH)
     private Integer fieldLength;
 
+    @JsonIgnore
+    private APIField idChild;
+
     @JsonProperty(ActivityEPConstants.CHILDREN)
     private List<APIField> children = new ArrayList<>();
 
@@ -92,17 +98,14 @@ public class APIField {
     private Class<? extends PossibleValuesProvider> possibleValuesProviderClass;
 
     @JsonIgnore
-    private FieldValueReader fieldValueReader;
-    
-    public APIField() {
-    }
-    
-    public void setFieldValueReader(FieldValueReader fieldValueReader) {
-        this.fieldValueReader = fieldValueReader;
+    private FieldAccessor fieldAccessor;
+
+    public void setFieldAccessor(FieldAccessor fieldAccessor) {
+        this.fieldAccessor = fieldAccessor;
     }
 
-    public FieldValueReader getFieldValueReader() {
-        return fieldValueReader;
+    public FieldAccessor getFieldAccessor() {
+        return fieldAccessor;
     }
 
     public Class<? extends PossibleValuesProvider> getPossibleValuesProviderClass() {
@@ -118,16 +121,32 @@ public class APIField {
         return fieldName;
     }
 
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }
+
+    public boolean isId() {
+        return id;
+    }
+
+    public void setId(boolean id) {
+        this.id = id;
+    }
+
+    public APIField getIdChild() {
+        return idChild;
+    }
+
+    public void setIdChild(APIField idChild) {
+        this.idChild = idChild;
+    }
+
     public JsonBean getFieldLabel() {
         return fieldLabel;
     }
 
     public void setFieldLabel(JsonBean fieldLabel) {
         this.fieldLabel = fieldLabel;
-    }
-
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
     }
 
     public String getFieldNameInternal() {
@@ -282,6 +301,11 @@ public class APIField {
     public void setDiscriminationConfigurer(
             Class<? extends DiscriminationConfigurer> discriminationConfigurer) {
         this.discriminationConfigurer = discriminationConfigurer;
+    }
+
+    @JsonIgnore
+    public boolean isDiscriminatedObject() {
+        return apiType.getFieldType().isObject() && discriminationConfigurer != null; 
     }
 
     @Override

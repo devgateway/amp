@@ -204,12 +204,12 @@ public class ProjectList {
                         JsonBean bean = new JsonBean();
                         bean.set(FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), actId);
                         bean.set(FieldMap.underscorify(ActivityFieldsConstants.CREATED_DATE),
-                                DateTimeUtil.formatISO8601DateTime(rs.getTimestamp("date_created")));
+                                DateTimeUtil.formatISO8601Timestamp(rs.getTimestamp("date_created")));
                         bean.set(FieldMap.underscorify(ActivityFieldsConstants.PROJECT_TITLE),
                                 getTranslatableFieldValue("name", rs.getString("name"), actId));
                         bean.set(iatiIdAmpField, rs.getString(iatiIdAmpField));
                         bean.set(FieldMap.underscorify(ActivityFieldsConstants.UPDATE_DATE),
-                                DateTimeUtil.formatISO8601DateTime(rs.getTimestamp("date_updated")));
+                                DateTimeUtil.formatISO8601Timestamp(rs.getTimestamp("date_updated")));
                         bean.set(FieldMap.underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
                         bean.set(FieldMap.underscorify(ActivityFieldsConstants.WORKSPACES_EDIT), workspaces);
                         bean.set(ActivityEPConstants.EDIT, editable);
@@ -235,12 +235,12 @@ public class ProjectList {
         String iatiIdAmpField = InterchangeUtils.getAmpIatiIdentifierFieldName();
         bean.set(FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), a.getIdentifier());
         bean.set(FieldMap.underscorify(ActivityFieldsConstants.CREATED_DATE),
-                DateTimeUtil.formatISO8601DateTime(a.getCreatedDate()));
+                DateTimeUtil.formatISO8601Timestamp(a.getCreatedDate()));
         bean.set(FieldMap.underscorify(ActivityFieldsConstants.PROJECT_TITLE),
                 getTranslatableFieldValue("name", a.getName(), (Long) a.getIdentifier()));
         bean.set(iatiIdAmpField, getIatiIdentifierValue(a, iatiIdAmpField));
         bean.set(FieldMap.underscorify(ActivityFieldsConstants.UPDATE_DATE),
-                DateTimeUtil.formatISO8601DateTime(a.getUpdatedDate()));
+                DateTimeUtil.formatISO8601Timestamp(a.getUpdatedDate()));
         bean.set(FieldMap.underscorify(ActivityFieldsConstants.AMP_ID), a.getAmpId());
         bean.set(ActivityFieldsConstants.ACTIVITY_GROUP, a.getAmpActivityGroup());
         bean.set(ActivityEPConstants.EDIT, true);
@@ -254,7 +254,7 @@ public class ProjectList {
                 .findAny().orElse(null);
         
         if (apiField != null) {
-            return (String) apiField.getFieldValueReader().get(a);
+            return (String) apiField.getFieldAccessor().get(a);
         }
         
         return null;

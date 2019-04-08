@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -77,25 +76,37 @@ public class ValueConverter {
      * @return
      */
     public Object getNewInstance(Object parent, Field field) {
-        Object fieldValue;
         try {
-            if (SortedSet.class.isAssignableFrom(field.getType())) {
-                fieldValue = new TreeSet<>();
-            } else if (Set.class.isAssignableFrom(field.getType())) {
-                fieldValue = new HashSet<>();
-            } else if (List.class.isAssignableFrom(field.getType())) {
-                fieldValue = new ArrayList<>();
-            } else if (Collection.class.isAssignableFrom(field.getType())) {
-                fieldValue = new ArrayList<>();
-            } else {
-                fieldValue = field.getType().newInstance();
-            }
+            Class<?> concreteType = findConcreteType(field.getType());
+            Object fieldValue = instantiate(concreteType);
             field.set(parent, fieldValue);
+            return fieldValue;
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    // this class can work with plain lists
+    private Class findConcreteType(Class type) {
+        if (SortedSet.class.isAssignableFrom(type)) {
+            return TreeSet.class;
+        } else if (Set.class.isAssignableFrom(type)) {
+            return HashSet.class;
+        } else if (Collection.class.isAssignableFrom(type)) {
+            return ArrayList.class;
+        } else {
+            return type;
+        }
+    }
+
+    public Object instantiate(Class type) {
+        try {
+            return type.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return fieldValue;
     }
 
     public Object getObjectById(Class<?> entityClass, Object id) {

@@ -13,6 +13,8 @@ import org.digijava.kernel.ampapi.endpoints.activity.values.FundingePledgesValue
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.TimestampField;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -123,8 +125,11 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
             return arg0.hashCode() - arg1.hashCode();
         }
     }
+
+    @InterchangeableId
     @Interchangeable(fieldTitle = "Transaction ID")
     private Long ampFundDetailId;
+
     private Integer fiscalYear;
     private Integer fiscalQuarter;
     
@@ -162,9 +167,13 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     @Interchangeable(fieldTitle = "Transaction Date", importable = true, required = ALWAYS)
     private Date transactionDate;
     private Date transactionDate2;
+    
     @Interchangeable(fieldTitle = "Reporting Date", importable = true)
+    @TimestampField
     private Date reportingDate;
-    @Interchangeable(fieldTitle = "Updated Date", importable = false)
+    
+    @Interchangeable(fieldTitle = "Updated Date")
+    @TimestampField
     private Date updatedDate;
 
     @Interchangeable(fieldTitle = "Transaction Amount", importable = true, required = ALWAYS)

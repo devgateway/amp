@@ -16,7 +16,7 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 import org.dgfoundation.amp.reports.converters.HardcodedThemes;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.field.ActivityFieldsEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -39,7 +39,7 @@ public class ActivityExporterTest {
     public void setUp() {
         TestTranslatorService translatorService = new TestTranslatorService();
 
-        ActivityFieldsEnumerator enumerator = new ActivityFieldsEnumerator(
+        FieldsEnumerator enumerator = new FieldsEnumerator(
                 new TestFieldInfoProvider(),
                 new TestFMService(),
                 translatorService,

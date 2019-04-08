@@ -247,8 +247,8 @@ public final class PreviewActivityService {
         PreviewFundingTransaction transaction = new PreviewFundingTransaction();
         transaction.setTransactionId(fd.getDbId());
         transaction.setTransactionAmount(convertedAmount);
-        transaction.setTransactionDate(DateTimeUtil.formatISO8601DateTime(fd.getTransactionDate()));
-        transaction.setReportingDate(DateTimeUtil.formatISO8601DateTime(fd.getReportingDate()));
+        transaction.setTransactionDate(DateTimeUtil.formatISO8601Timestamp(fd.getTransactionDate()));
+        transaction.setReportingDate(DateTimeUtil.formatISO8601Timestamp(fd.getReportingDate()));
 
         return transaction;
     }

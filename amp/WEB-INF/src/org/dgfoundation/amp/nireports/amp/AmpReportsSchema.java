@@ -46,7 +46,6 @@ import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -437,7 +436,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_entity(ColumnConstants.MINORITIES, "v_minorities", DG_EDITOR_POSTPROCESSOR);
         degenerate_dimension(ColumnConstants.MODALITIES, "v_modalities", catsDimension, true);
         degenerate_dimension(ColumnConstants.MODE_OF_PAYMENT, "v_mode_of_payment", catsDimension);
-        degenerate_dimension(ColumnConstants.ON_OFF_TREASURY_BUDGET, "v_on_off_budget", catsDimension, true);
+        degenerate_dimension(ColumnConstants.ACTIVITY_BUDGET, "v_activity_budget", catsDimension, true);
         no_dimension(ColumnConstants.ORGANIZATIONS_AND_PROJECT_ID, "v_project_id");
         degenerate_dimension(ColumnConstants.PAYMENT_CAPITAL___RECURRENT, "v_mode_of_payment_capital_recurrent", catsDimension);
         degenerate_dimension(ColumnConstants.PROCUREMENT_SYSTEM, "v_procurement_system", catsDimension, true);

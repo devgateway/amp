@@ -6,6 +6,7 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 
 /**
  * @author Octavian Ciubotaru
@@ -33,7 +34,7 @@ public class QueryModel implements Cloneable {
     private String secondCurrency;
     
     @ApiModelProperty("Should location option in filters include children or not.")
-    @JsonProperty("include-location-children")
+    @JsonProperty(EPConstants.INCLUDE_LOCATION_CHILDREN)
     private Boolean includeLocationChildren;
 
     public Integer getPage() {

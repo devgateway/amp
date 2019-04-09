@@ -282,6 +282,8 @@ public class AmpARFilter extends PropertyListable {
     private String multiDonor = null;
     
     private Set<String> undefinedOptions = new HashSet<>();
+    
+    private boolean includeLocationChildren;
 
     public String getMultiDonor() {
         return multiDonor;
@@ -898,6 +900,7 @@ public class AmpARFilter extends PropertyListable {
         this.setProjectImplementingUnits(null);
         this.setSortByAsc(true);
         this.setHierarchySorters(new ArrayList<String>());
+        this.setIncludeLocationChildren(true);
         this.budgetExport = false;
 
         HttpServletRequest request = TLSUtils.getRequest();
@@ -3353,7 +3356,15 @@ public class AmpARFilter extends PropertyListable {
     public void setFromPledgeDetailEndDate(String fromPledgeDetailEndDate) {
         this.fromPledgeDetailEndDate = fromPledgeDetailEndDate;
     }
-
+    
+    public boolean isIncludeLocationChildren() {
+        return includeLocationChildren;
+    }
+    
+    public void setIncludeLocationChildren(boolean includeLocationChildren) {
+        this.includeLocationChildren = includeLocationChildren;
+    }
+    
     /**
      * @return a ['from', 'to'] pair for PledgeDetailStartDate range or [null, null] if none is configured
      */

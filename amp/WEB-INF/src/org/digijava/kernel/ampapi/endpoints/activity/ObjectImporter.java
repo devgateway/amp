@@ -29,7 +29,6 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
-import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ErrorDecorator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.DefaultErrorsMapper;
@@ -69,7 +68,7 @@ public class ObjectImporter {
     /**
      * This field is used for storing the current json values during field validation
      * E.g: validate the pledge field (present in funding_details)
-     * fundings - will contain the json values of the parent of funding_details 
+     * fundings - will contain the json values of the parent of funding_details
      * fundings~funding_details - will contain the json values of the parent of pledge
      */
     private Map<String, Object> branchJsonVisitor = new HashMap<>();
@@ -232,18 +231,16 @@ public class ObjectImporter {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private Object getNewValue(Field field, Object parentObj, Object jsonValue, APIField fieldDef) {
         boolean isCollection = InterchangeUtils.isCollection(field);
+        // on a business rule validation error we configure the input to progress with further validation
+        if (jsonValue != null && JsonBean.class.isAssignableFrom(jsonValue.getClass())) {
+            jsonValue = ((JsonBean) jsonValue).get(ActivityEPConstants.INPUT);
+        }
         if (jsonValue == null && !isCollection) {
             return null;
         }
 
         FieldType fieldType = fieldDef.getApiType().getFieldType();
         boolean idOnly = fieldDef.isIdOnly();
-
-        // on a business rule validation error we configure the input to progress with further validation
-        if (jsonValue != null && JsonBean.class.isAssignableFrom(jsonValue.getClass())) {
-            jsonValue = ((JsonBean) jsonValue).get(ActivityEPConstants.INPUT);
-        }
-
         // this field has possible values
         if (!isCollection && idOnly) {
             return valueConverter.getObjectById(field.getType(), jsonValue);
@@ -255,11 +252,11 @@ public class ObjectImporter {
             if (isCollection) {
                 value = fieldDef.getFieldAccessor().get(parentObj);
                 Collection col = (Collection) value;
-                
+
                 if (col == null) {
                     col = (Collection) valueConverter.getNewInstance(parentObj, field);
                 }
-                
+
                 if (idOnly && jsonValue != null && !fieldDef.getApiType().isSimpleItemType()) {
                     Object res = valueConverter.getObjectById(fieldDef.getApiType().getType(), jsonValue);
                     col.clear();

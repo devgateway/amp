@@ -293,11 +293,6 @@ public class ActivityImporter extends ObjectImporter {
     }
 
     @Override
-    protected boolean ignoreUnknownFields() {
-        return AmpOfflineModeHolder.isAmpOfflineMode();
-    }
-
-    @Override
     protected String extractString(Field field, Object parentObj, Object jsonValue) {
         return extractTranslationsOrSimpleValue(field, parentObj, jsonValue);
     }

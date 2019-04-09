@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -71,11 +72,11 @@ public final class ActivityInterchangeUtils {
         ActivityImporter importer = new ActivityImporter(activityFields, rules);
         List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update, endpointContextPath);
 
-        return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors);
+        return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors, importer.getWarnings());
     }
 
     private static JsonBean getImportResult(AmpActivityVersion newActivity, JsonBean newJson,
-            List<ApiErrorMessage> errors) {
+            List<ApiErrorMessage> errors, Collection<ApiErrorMessage> warnings) {
         JsonBean result = null;
         if (errors.size() == 0 && newActivity == null) {
             // no new activity, but also errors are missing -> unknown error
@@ -95,6 +96,9 @@ public final class ActivityInterchangeUtils {
             } else {
                 result = activities.get(0);
             }
+        }
+        if (warnings.size() > 0) {
+            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings));
         }
         return result;
     }
@@ -124,7 +128,7 @@ public final class ActivityInterchangeUtils {
                 PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(field, fields);
             }
         } catch (ApiRuntimeException e) {
-            result.set(ApiError.JSON_ERROR_CODE, e.getUnwrappedError());
+            result.set(EPConstants.ERROR, e.getUnwrappedError());
             return false;
         }
 
@@ -136,7 +140,7 @@ public final class ActivityInterchangeUtils {
                 + "\" : [\"field1\", \"field2\", ..., \"fieldn\"]}";
 
         JsonBean errorBean = ApiError.toError(message);
-        result.set(ApiError.JSON_ERROR_CODE, errorBean.get(ApiError.JSON_ERROR_CODE));
+        result.set(EPConstants.ERROR, errorBean.get(EPConstants.ERROR));
     }
 
     /**

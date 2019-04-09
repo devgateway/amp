@@ -769,9 +769,9 @@ deleted 6 fields, do not reinsert
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 
 <field:display name="Objectively Verifiable Indicators" feature="Identification"></field:display> 
- <field:display name="On/Off/Treasury Budget" feature="Budget"></field:display>
- <field:display name="Project Code" feature="Budget"></field:display>
- <field:display name="Sub-Program" feature="Budget"></field:display> 
+<field:display name="Activity Budget" feature="Budget"></field:display>
+<field:display name="Project Code" feature="Budget"></field:display>
+<field:display name="Sub-Program" feature="Budget"></field:display>
 <field:display name="Sub-Vote" feature="Budget"></field:display> 
 <field:display name="Vote" feature="Budget"></field:display>
 <field:display name="Validate Mandatory Vote" feature="Budget"></field:display>

@@ -78,7 +78,7 @@ public class AmpARFilterConverter {
                 put("locationSelected", ColumnConstants.COUNTRY);
                 put("financingInstruments", ColumnConstants.FINANCING_INSTRUMENT);
                 put("typeOfAssistance", ColumnConstants.TYPE_OF_ASSISTANCE);
-                put("budget", ColumnConstants.ON_OFF_TREASURY_BUDGET);
+                put("budget", ColumnConstants.ACTIVITY_BUDGET);
                 put("modeOfPayment", ColumnConstants.MODE_OF_PAYMENT);
                 put("humanitarianAid", ColumnConstants.HUMANITARIAN_AID);
                 put("disasterResponse", ColumnConstants.DISASTER_RESPONSE_MARKER);
@@ -510,9 +510,7 @@ public class AmpARFilterConverter {
             addCategoryValueNamesFilter(arFilter.getTypeOfAssistance(), ColumnConstants.TYPE_OF_ASSISTANCE);
         }
         
-        //TODO capital vs Recurrent
-        //addCategoryValueNamesFilter(arFilter.get, ColumnConstants., ReportEntityType.ENTITY_TYPE_ACTIVITY);
-        addCategoryValueNamesFilter(arFilter.getBudget(), ColumnConstants.ON_OFF_TREASURY_BUDGET);
+        addCategoryValueNamesFilter(arFilter.getBudget(), ColumnConstants.ACTIVITY_BUDGET);
     }
     
     private void addCategoryValueNamesFilter(Set<AmpCategoryValue> set, String columnName) {

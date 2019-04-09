@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
 	<jira>AMP-14167</jira>
 	<keyword>Views</keyword>
-	<author>Alexandru Artimon</author>
+	<author>Viorel Chihai</author>
 	<description>recreate view, this will always be the last version of the view</description>
 	<trigger type="all">
 		<condition type="custom">
@@ -19,8 +19,8 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    DROP VIEW IF EXISTS v_on_off_budget CASCADE;
-			    CREATE OR REPLACE VIEW v_on_off_budget AS 
+			    DROP VIEW IF EXISTS v_activity_budget CASCADE;
+			    CREATE OR REPLACE VIEW v_activity_budget AS
 			    SELECT aav.amp_activity_id, v.budget AS budget, COALESCE(v.budget_id, -999999999) AS budget_id 
                 FROM amp_activity_version aav
                 LEFT JOIN (
@@ -34,8 +34,8 @@
 			    ) v
 			    ON aav.amp_activity_id = v.amp_activity_id;
 			    			
-                DROP VIEW IF EXISTS v_ssc_on_off_budget CASCADE;
-			    CREATE OR REPLACE VIEW v_ssc_on_off_budget AS
+                DROP VIEW IF EXISTS v_ssc_activity_budget CASCADE;
+			    CREATE OR REPLACE VIEW v_ssc_activity_budget AS
 			    SELECT aav.amp_activity_id, v.budget AS budget, COALESCE(v.budget_id, -999999999) AS budget_id
 			    FROM amp_activity_version aav
                 LEFT JOIN (

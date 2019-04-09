@@ -13,9 +13,12 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Joiner;
+
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeEndpoints;
 import org.digijava.kernel.ampapi.endpoints.common.AmpConfiguration;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactEndpoint;
 import org.digijava.kernel.ampapi.endpoints.currency.Currencies;
@@ -31,24 +34,21 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.json.JSONObject;
 import org.json.XML;
 
-import com.google.common.base.Joiner;
-
 /**
  * Defines API Error Utility class for manipulating ApiErrorMessage objects
  * @author Viorel Chihai
  */
 
 public class ApiError {
-    
+
     public final static int GENERAL_ERROR_CODE = 0;
     public final static int GENERIC_HANDLED_ERROR_CODE = 0;
     public final static int GENERIC_UNHANDLED_ERROR_CODE = 1;
-    
-    public final static String JSON_ERROR_CODE = "error";
+
     public final static String API_ERROR_PATTERN = "%02d%02d";
-    
+
     public final static String UNKOWN_ERROR = "Unknown Error";
-    
+
     /**
      *  Stores the mapping between the component and it's Id (C).
      *  Component id 0 is reserved for all errors that are not tied to any component.
@@ -82,7 +82,16 @@ public class ApiError {
     }
 
     private final static Set<String> COMPONENTS_WITH_NEW_ERROR_FORMAT = new HashSet<>(
-            Collections.singletonList(InterchangeEndpoints.class.getName()));    
+            Collections.singletonList(InterchangeEndpoints.class.getName()));
+
+    private static final ApiError FORMATTER = new ApiError(false);
+    private static final ApiError FORMATTER_AND_STATUS_REPORTER = new ApiError(true);
+
+    private boolean isUpdateResponseStatus;
+
+    public ApiError(boolean isUpdateResponseStatus) {
+        this.isUpdateResponseStatus = isUpdateResponseStatus;
+    }
 
     /**
      * Returns a JSON object with a single error message  => generic 0 error code with one error in the list.
@@ -90,14 +99,18 @@ public class ApiError {
      * @return the json of the error. E.g.: {0: [“Generic error 1”]}
      */
     public static JsonBean toError(String errorMessage) {
-        Map<String, Collection<Object>> error = new HashMap<>();
-        error.put(String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE), Arrays.asList(errorMessage));
-        
-        return getResultErrorBean(error);
+        return FORMATTER_AND_STATUS_REPORTER.convert(errorMessage);
     };
-    
+
+    private JsonBean convert(String errorMessage) {
+        Map<String, Collection<Object>> error = new HashMap<>();
+        error.put(String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE),
+                Arrays.asList(errorMessage));
+        return getResultErrorBean(error);
+    }
+
     /**
-     * Builds a JSON with all errors stored in this group. 
+     * Builds a JSON with all errors stored in this group.
      * @param errorsGroup
      * @return
      * @see {@link #toError(Collection)}
@@ -105,7 +118,7 @@ public class ApiError {
     public static JsonBean toError(ApiEMGroup errorsGroup) {
         return toError(errorsGroup.getAllErrors());
     }
-    
+
     /**
      * Returns a JSON object with list of error messages
      * list of error messages => generic 0 error code with the given list of errors
@@ -114,8 +127,20 @@ public class ApiError {
      * @return the JSON object of the error. E.g.: {0: [“Generic error 1”, “Generic error 2”], 135: [“Forbidden fields have been configured: sector_id”], 123: [“Generic error 1”]}
      */
     public static JsonBean toError(Collection<?> errorMessages) {
+        return FORMATTER_AND_STATUS_REPORTER.convert(errorMessages);
+    }
+
+    public static JsonBean format(Collection<?> messages) {
+        return FORMATTER.convert(messages);
+    }
+
+    public static Map<String, Collection<Object>> formatNoWrap(Collection<?> messages) {
+        return (Map<String, Collection<Object>>) format(messages).get(EPConstants.ERROR);
+    }
+
+    private JsonBean convert(Collection<?> errorMessages) {
         Map<String, Collection<Object>> errors = new HashMap<>();
-        
+
         if (errorMessages != null && errorMessages.size() > 0) {
             if (errorMessages.iterator().next() instanceof String) {
                 String generalErrorCode = String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE);
@@ -134,27 +159,43 @@ public class ApiError {
                 }
             }
         }
-        
+
         return getResultErrorBean(errors);
     };
-    
+
     public static JsonBean toError(ApiErrorMessage apiErrorMessage, Throwable e) {
+        return FORMATTER_AND_STATUS_REPORTER.convert(apiErrorMessage, e);
+    }
+
+    public JsonBean convert(ApiErrorMessage apiErrorMessage, Throwable e) {
+
         Map<String, Collection<Object>> error = new HashMap<>();
         error.put(getErrorId(getErrorComponentIdFromException(e), apiErrorMessage.id),
                 Arrays.asList(getErrorText(apiErrorMessage)));
 
         return getResultErrorBean(error);
     };
-    
+
     /**
      * Returns a JSON object with a single error message. Generic 0 error code with one error in the list.
      * @param apiErrorMessage ApiErrorMessage object
      * @return the json of the error. E.g.: {"0102": ["Generic error 1"]}
      */
     public static JsonBean toError(ApiErrorMessage apiErrorMessage) {
+        return FORMATTER_AND_STATUS_REPORTER.convert(apiErrorMessage);
+    }
+
+    public static JsonBean format(ApiErrorMessage apiErrorMessage) {
+        return FORMATTER.convert(apiErrorMessage);
+    }
+
+    public static Map<String, Collection<Object>> formatNoWrap(ApiErrorMessage apiErrorMessage) {
+        return (Map<String, Collection<Object>>) format(apiErrorMessage).get(EPConstants.ERROR);
+    }
+
+    private JsonBean convert(ApiErrorMessage apiErrorMessage) {
         Map<String, Collection<Object>> error = new HashMap<>();
         error.put(getErrorId(getErrorComponentId(), apiErrorMessage.id), Arrays.asList(getErrorText(apiErrorMessage)));
-        
         return getResultErrorBean(error);
     };
 
@@ -169,19 +210,19 @@ public class ApiError {
             EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
         }
     }
-    
-    private static JsonBean getResultErrorBean(Map<String, Collection<Object>> errors) {
-        processErrorResponseStatus();
 
+    private JsonBean getResultErrorBean(Map<String, Collection<Object>> errors) {
+        if (isUpdateResponseStatus) {
+            processErrorResponseStatus();
+        }
         JsonBean resultErrorBean = new JsonBean();
-        resultErrorBean.set(JSON_ERROR_CODE, errors);
-        
+        resultErrorBean.set(EPConstants.ERROR, errors);
         return resultErrorBean;
     }
-    
+
     /**
      * Builds full error code, that can be used for logging.
-     * Please refer to {@link #toError(ApiErrorMessage)} and its overloaded alternatives 
+     * Please refer to {@link #toError(ApiErrorMessage)} and its overloaded alternatives
      * to generate a correct Amp API Error response.
      * @param error API Message error reference
      * @return full error code
@@ -189,9 +230,9 @@ public class ApiError {
     public static String getErrorCode(ApiErrorMessage error) {
         return getErrorId(getErrorComponentId(), error.id);
     }
-    
+
     /**
-     * Returns the id of the ApiErrorMessage object. A lookup for the class code will be made on the stacktrace . 
+     * Returns the id of the ApiErrorMessage object. A lookup for the class code will be made on the stacktrace .
      * @param componentId component id
      * @param errorId error id
      * @return the id of the error
@@ -203,16 +244,14 @@ public class ApiError {
             return String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, errorId);
         }
     }
-    
+
     private static Integer getErrorComponentId() {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        
         return getErrorComponentIdFromStackTrace(stackTrace);
     }
 
     private static Integer getErrorComponentIdFromException(Throwable e) {
         StackTraceElement[] stackTrace = e.getStackTrace();
-
         return getErrorComponentIdFromStackTrace(stackTrace);
     }
 
@@ -225,7 +264,6 @@ public class ApiError {
                 return componentIdClassMap.get(st.getClassName());
             }
         }
-        
         return GENERAL_ERROR_CODE;
     }
 
@@ -236,16 +274,14 @@ public class ApiError {
      */
     private static boolean isNewErrorFormat() {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-
         for (StackTraceElement st : stackTrace) {
             if (COMPONENTS_WITH_NEW_ERROR_FORMAT.contains(st.getClassName())) {
                 return true;
             }
         }
-
         return false;
     }
-    
+
     /**
      * Convert ApiErrorMessage to an error object. Some components use expanded errors while others use flattened.
      * See {@link #isNewErrorFormat()}.
@@ -298,17 +334,17 @@ public class ApiError {
 
         return errorText;
     }
-    
+
     /**
-     * 
+     *
      * @param errorBean
      * @return convert a error JsonBean into a well-formed, element-normal XML string
      */
     public static String toXmlErrorString(JsonBean errorBean) {
         JsonBean responseErrorBean = new JsonBean();
-        Map<String, Collection<Object>> errorBeans = (Map<String, Collection<Object>>) errorBean.get(JSON_ERROR_CODE);
+        Map<String, Collection<Object>> errorBeans = (Map<String, Collection<Object>>) errorBean.get(EPConstants.ERROR);
         List<Map<String, Object>> errors = new ArrayList<>();
-        
+
         for(String key : errorBeans.keySet()) {
             Map<String, Object> err = new HashMap<>();
             Collection<Object> error = errorBeans.get(key);
@@ -316,14 +352,14 @@ public class ApiError {
             err.put("value", error);
             errors.add(err);
         }
-        
+
         Map<String, Object> errorsMap = new HashMap<>();
-        errorsMap.put(JSON_ERROR_CODE, errors);
+        errorsMap.put(EPConstants.ERROR, errors);
         responseErrorBean.set("errors", errorsMap);
-        
+
         JSONObject o = new JSONObject(responseErrorBean.asJsonString());
         String xmlString = XML.toString(o);
-        
+
         return xmlString;
     }
 }

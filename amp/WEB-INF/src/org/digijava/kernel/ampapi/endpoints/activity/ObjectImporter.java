@@ -31,10 +31,10 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ErrorDecorator;
-import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
-import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.DefaultErrorsMapper;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
@@ -42,8 +42,8 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.dbentity.AmpAgreement;
-import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.aim.validator.groups.API;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author Octavian Ciubotaru
@@ -56,7 +56,8 @@ public class ObjectImporter {
     private final InputValidatorProcessor businessRulesValidator;
 
     protected Map<Integer, ApiErrorMessage> errors = new HashMap<>();
-    protected ValueConverter valueConverter = new ValueConverter();
+    protected Map<Integer, ApiErrorMessage> warnings = new HashMap<>();
+    protected ValueConverter valueConverter;
 
     protected JsonBean newJson;
     protected TranslationSettings trnSettings;
@@ -81,16 +82,18 @@ public class ObjectImporter {
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
             List<APIField> apiFields) {
-        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiFields);
+        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiFields,
+                new ValueConverter());
     }
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
-            TranslationSettings trnSettings, List<APIField> apiFields) {
+            TranslationSettings trnSettings, List<APIField> apiFields, ValueConverter valueConverter) {
         this.formatValidator = formatValidator;
         this.businessRulesValidator = businessRulesValidator;
         this.trnSettings = trnSettings;
         this.apiFields = apiFields;
         this.possibleValuesCached = new PossibleValuesCache(apiFields);
+        this.valueConverter = valueConverter;
 
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         beanValidator = validatorFactory.getValidator();
@@ -153,12 +156,12 @@ public class ObjectImporter {
             // and error anything remained
             // note: due to AMP-20766, we won't be able to fully detect invalid children
             String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
-            if (fields.size() > 0 && !ignoreUnknownFields()) {
+            if (fields.size() > 0) {
                 isFormatValid = false;
                 for (String invalidField : fields) {
                     // no need to go through deep-first validation flow
                     ErrorDecorator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
-                            ActivityErrors.FIELD_INVALID, errors);
+                            ActivityErrors.FIELD_INVALID, warnings);
                 }
             }
 
@@ -178,10 +181,6 @@ public class ObjectImporter {
         } catch (IllegalAccessException | IllegalArgumentException e) {
             throw new RuntimeException("Failed to restore back reference.", e);
         }
-    }
-
-    protected boolean ignoreUnknownFields() {
-        return false;
     }
 
     /**
@@ -226,16 +225,7 @@ public class ObjectImporter {
 
         if (importable) {
             Object newValue = getNewValue(objField, newParent, fieldValue, fieldDef);
-            try {
-                if (newParent instanceof Collection) {
-                    ((Collection<Object>) newParent).add(newValue);
-                } else {
-                    objField.set(newParent, newValue);
-                }
-            } catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-                logger.error(e.getMessage());
-                throw new RuntimeException(e);
-            }
+            fieldDef.getFieldAccessor().set(newParent, newValue);
         }
     }
 
@@ -263,14 +253,16 @@ public class ObjectImporter {
 
         try {
             if (isCollection) {
-                value = field.get(parentObj);
+                value = fieldDef.getFieldAccessor().get(parentObj);
                 Collection col = (Collection) value;
+                
                 if (col == null) {
                     col = (Collection) valueConverter.getNewInstance(parentObj, field);
                 }
+                
                 if (idOnly && jsonValue != null && !fieldDef.getApiType().isSimpleItemType()) {
-                    Class<?> objectType = AIHelper.getGenericsParameterClass(field);
-                    Object res = valueConverter.getObjectById(objectType, jsonValue);
+                    Object res = valueConverter.getObjectById(fieldDef.getApiType().getType(), jsonValue);
+                    col.clear();
                     col.add(res);
                 }
             } else if (fieldType.isSimpleType()) {
@@ -338,7 +330,7 @@ public class ObjectImporter {
         if (idOnly && !(isList && fieldDef.getApiType().isSimpleItemType())) {
             return isFormatValid;
         }
-        
+
         // first validate all sub-elements
         List<APIField> childrenFields = fieldDef.getChildren();
         List<Map<String, Object>> childrenNewValues = getChildrenValues(newJsonValue, fieldType);
@@ -588,5 +580,9 @@ public class ObjectImporter {
     public Map<String, Object> getBranchJsonVisitor() {
         return branchJsonVisitor;
     }
-    
+
+    public Collection<ApiErrorMessage> getWarnings() {
+        return warnings.values();
+    }
+
 }

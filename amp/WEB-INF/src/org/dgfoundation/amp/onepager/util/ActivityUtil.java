@@ -271,9 +271,6 @@ public class ActivityUtil {
             }
             group.setAmpActivityLastVersion(a);
             session.update(group);
-        } else {
-            a.setCreatedDate(Calendar.getInstance().getTime());
-            a.setActivityCreator(ampCurrentMember);
         }
         
         a.setAmpActivityGroup(group);
@@ -300,7 +297,7 @@ public class ActivityUtil {
         saveProjectCosts(a, session);
         saveStructures(a, session);
         updateFiscalYears(a);
-        updateModifyCreateInfo(a, ampCurrentMember);
+        updateModifyCreateInfo(a, ampCurrentMember, newActivity);
 
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
@@ -329,7 +326,8 @@ public class ActivityUtil {
      * @param activity
      * @param teamMember
      */
-    public static void updateModifyCreateInfo(AmpActivityVersion activity, AmpTeamMember teamMember) {
+    public static void updateModifyCreateInfo(AmpActivityVersion activity, AmpTeamMember teamMember,
+            boolean newActivity) {
         Date updateDate = Calendar.getInstance().getTime();
     
         activity.setUpdatedDate(updateDate);
@@ -340,6 +338,14 @@ public class ActivityUtil {
         }
     
         activity.setModifiedBy(teamMember);
+
+        if (newActivity) {
+            activity.setCreatedDate(updateDate);
+            // when activity is imported from AMP Offline, creator will be set and can be different from modifier
+            if (activity.getActivityCreator() == null) {
+                activity.setActivityCreator(teamMember);
+            }
+        }
     }
 
     private static void logAudit(AmpTeamMember teamMember, AmpActivityVersion activity, boolean newActivity) {

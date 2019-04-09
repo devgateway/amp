@@ -110,10 +110,13 @@ public class ActivityImporter extends ObjectImporter {
         this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
         this.update = update;
         this.currentUser = TeamUtil.getCurrentUser();
-        if (AmpOfflineModeHolder.isAmpOfflineMode()) {
+        if (rules.isTrackEditors()) {
             modifiedBy = TeamMemberUtil.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson.any()));
         } else {
             modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+            Long mId = modifiedBy == null ? null : modifiedBy.getAmpTeamMemId();
+            newJson.set(FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY), mId);
+            newJson.any().remove(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY));
         }
         this.newJson = newJson;
         this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH, null);

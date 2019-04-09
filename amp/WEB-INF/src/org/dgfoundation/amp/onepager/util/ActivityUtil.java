@@ -271,11 +271,12 @@ public class ActivityUtil {
             }
             group.setAmpActivityLastVersion(a);
             session.update(group);
+        } else {
+            a.setCreatedDate(Calendar.getInstance().getTime());
+            a.setActivityCreator(ampCurrentMember);
         }
+        
         a.setAmpActivityGroup(group);
-        Date updatedDate = Calendar.getInstance().getTime();
-        if (a.getCreatedDate() == null)
-            a.setCreatedDate(updatedDate);
 
         if (context.isUpdateActivityStatus()) {
             setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
@@ -334,20 +335,11 @@ public class ActivityUtil {
         activity.setUpdatedDate(updateDate);
         activity.setModifiedDate(updateDate);
     
-        AmpTeamMember modifier = teamMember;
-        if (modifier == null) {
-            modifier = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
-        }
-    
-        if (modifier == null) {
+        if (teamMember == null) {
             throw new RuntimeException("Modified team member cannot be null");
         }
     
-        activity.setModifiedBy(modifier);
-    
-        if (activity.getAmpActivityId() == null || activity.getActivityCreator() == null) {
-            activity.setActivityCreator(modifier);
-        }
+        activity.setModifiedBy(teamMember);
     }
 
     private static void logAudit(AmpTeamMember teamMember, AmpActivityVersion activity, boolean newActivity) {

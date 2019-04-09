@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletResponse;
@@ -54,8 +53,6 @@ import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
@@ -462,11 +459,12 @@ public class ActivityImporter extends ObjectImporter {
 
         if (rules.isProcessApprovalFields()) {
             Date newApprovalDate = newActivity.getApprovalDate();
-            if (newApprovalDate != null && !newApprovalDate.equals(oldActivity.getApprovalDate())
+            if (newApprovalDate != null
+                    && (oldActivity == null || !newApprovalDate.equals(oldActivity.getApprovalDate()))
                     || AmpARFilter.VALIDATED_ACTIVITY_STATUS.contains(newActivity.getApprovalStatus())) {
                 newActivity.setApprovalDate(new Date());
             }
-        } else {
+        } else if (oldActivity != null) {
             newActivity.setApprovalDate(oldActivity.getApprovalDate());
             newActivity.setApprovedBy(oldActivity.getApprovedBy());
         }
@@ -529,16 +527,7 @@ public class ActivityImporter extends ObjectImporter {
 
     protected void initOrgRoles() {
         if (newActivity.getOrgrole() == null) {
-            newActivity.setOrgrole(new HashSet<AmpOrgRole>());
-        } else {
-            for (AmpOrgRole aor : newActivity.getOrgrole()) {
-                //set budgets, or we'll have errors on several entities pointing to the same set
-                if (aor.getBudgets() != null && !aor.getBudgets().isEmpty()) {
-                    Set<AmpOrgRoleBudget> aorbSet = new HashSet<>();
-                    aorbSet.addAll(aor.getBudgets());
-                    aor.setBudgets(aorbSet);
-                }
-            }
+            newActivity.setOrgrole(new HashSet<>());
         }
     }
 

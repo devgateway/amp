@@ -57,7 +57,7 @@ public class ObjectImporter {
 
     protected Map<Integer, ApiErrorMessage> errors = new HashMap<>();
     protected Map<Integer, ApiErrorMessage> warnings = new HashMap<>();
-    protected ValueConverter valueConverter = new ValueConverter();
+    protected ValueConverter valueConverter;
 
     protected JsonBean newJson;
     protected TranslationSettings trnSettings;
@@ -69,7 +69,7 @@ public class ObjectImporter {
     /**
      * This field is used for storing the current json values during field validation
      * E.g: validate the pledge field (present in funding_details)
-     * fundings - will contain the json values of the parent of funding_details
+     * fundings - will contain the json values of the parent of funding_details 
      * fundings~funding_details - will contain the json values of the parent of pledge
      */
     private Map<String, Object> branchJsonVisitor = new HashMap<>();
@@ -82,16 +82,18 @@ public class ObjectImporter {
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
             List<APIField> apiFields) {
-        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiFields);
+        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiFields,
+                new ValueConverter());
     }
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
-            TranslationSettings trnSettings, List<APIField> apiFields) {
+            TranslationSettings trnSettings, List<APIField> apiFields, ValueConverter valueConverter) {
         this.formatValidator = formatValidator;
         this.businessRulesValidator = businessRulesValidator;
         this.trnSettings = trnSettings;
         this.apiFields = apiFields;
         this.possibleValuesCached = new PossibleValuesCache(apiFields);
+        this.valueConverter = valueConverter;
 
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         beanValidator = validatorFactory.getValidator();
@@ -223,16 +225,7 @@ public class ObjectImporter {
 
         if (importable) {
             Object newValue = getNewValue(objField, newParent, fieldValue, fieldDef);
-            try {
-                if (newParent instanceof Collection) {
-                    ((Collection<Object>) newParent).add(newValue);
-                } else {
-                    objField.set(newParent, newValue);
-                }
-            } catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-                logger.error(e.getMessage());
-                throw new RuntimeException(e);
-            }
+            fieldDef.getFieldAccessor().set(newParent, newValue);
         }
     }
 
@@ -260,14 +253,16 @@ public class ObjectImporter {
 
         try {
             if (isCollection) {
-                value = field.get(parentObj);
+                value = fieldDef.getFieldAccessor().get(parentObj);
                 Collection col = (Collection) value;
+                
                 if (col == null) {
                     col = (Collection) valueConverter.getNewInstance(parentObj, field);
                 }
+                
                 if (idOnly && jsonValue != null && !fieldDef.getApiType().isSimpleItemType()) {
-                    Class<?> objectType = AIHelper.getGenericsParameterClass(field);
-                    Object res = valueConverter.getObjectById(objectType, jsonValue);
+                    Object res = valueConverter.getObjectById(fieldDef.getApiType().getType(), jsonValue);
+                    col.clear();
                     col.add(res);
                 }
             } else if (fieldType.isSimpleType()) {

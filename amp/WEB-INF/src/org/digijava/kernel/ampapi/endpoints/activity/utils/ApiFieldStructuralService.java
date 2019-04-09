@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 
 /**
  * Utility class used for detecting structural changes of api fields during AMP offline synchronization
@@ -33,13 +33,17 @@ public final class ApiFieldStructuralService {
             return true;
         }
         
-        Map<String, FieldType> ampFieldsType = getFieldsTypeMap(ampFields);
-        Map<String, FieldType> clientFieldsType = getFieldsTypeMap(clientFields);
+        Map<String, APIType> ampFieldsType = getFieldsTypeMap(ampFields);
+        Map<String, APIType> clientFieldsType = getFieldsTypeMap(clientFields);
         
         for (String fieldName : clientFieldsType.keySet()) {
-            if (ampFieldsType.containsKey(fieldName)
-                    && ampFieldsType.get(fieldName) != clientFieldsType.get(fieldName)) {
-                return true;
+            APIType clientApiType = clientFieldsType.get(fieldName);
+            APIType ampApiType = ampFieldsType.getOrDefault(fieldName, null);
+            if (ampApiType != null) {
+                    if (clientApiType.getFieldType() != ampApiType.getFieldType()
+                            || clientApiType.getElementType() != ampApiType.getElementType()) {
+                        return true;
+                }
             }
         }
         
@@ -48,21 +52,21 @@ public final class ApiFieldStructuralService {
         return ampFieldsType.size() > 0;
     }
     
-    private Map<String, FieldType> getFieldsTypeMap(List<APIField> apiFields) {
-        Map<String, FieldType> fieldsTypeMap = new HashMap<>();
+    private Map<String, APIType> getFieldsTypeMap(List<APIField> apiFields) {
+        Map<String, APIType> fieldsTypeMap = new HashMap<>();
         for (APIField apiField : apiFields) {
             addApiFieldToMap(apiField, fieldsTypeMap, "");
         }
         return fieldsTypeMap;
     }
     
-    private void addApiFieldToMap(APIField apiField, Map<String, FieldType> apiFieldMap, String fieldPath) {
+    private void addApiFieldToMap(APIField apiField, Map<String, APIType> apiFieldMap, String fieldPath) {
         if (StringUtils.isNotEmpty(fieldPath)) {
             fieldPath += "~";
         }
         fieldPath += apiField.getFieldName();
         
-        apiFieldMap.put(fieldPath, apiField.getApiType().getFieldType());
+        apiFieldMap.put(fieldPath, apiField.getApiType());
         for (APIField field : apiField.getChildren()) {
             addApiFieldToMap(field, apiFieldMap, fieldPath);
         }

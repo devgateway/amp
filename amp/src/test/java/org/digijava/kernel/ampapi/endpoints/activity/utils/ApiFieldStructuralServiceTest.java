@@ -48,6 +48,7 @@ public class ApiFieldStructuralServiceTest {
         clientFields.add(newLongField("id"));
         clientFields.add(newStringField("title"));
         clientFields.add(newStringField("title2"));
+        clientFields.add(newListPrimitiveField("primitives", Integer.class));
         clientFields.add(listFields);
         
         assertFalse(service.existsStructuralChanges(getAmpApiFields(), clientFields));
@@ -81,14 +82,30 @@ public class ApiFieldStructuralServiceTest {
         assertTrue(service.existsStructuralChanges(getAmpApiFields(), clientFields));
     }
     
+    @Test
+    public void existsStructuralChangesDifferentEntityTypeInList() {
+        List<APIField> clientFields = new ArrayList<>();
+    
+        APIField listFields = newListField("list");
+        listFields.getChildren().add(newLongField("id"));
+    
+        clientFields.add(newLongField("id"));
+        clientFields.add(newStringField("title"));
+        clientFields.add(listFields);
+        clientFields.add(newListPrimitiveField("primitives", String.class));
+        
+        assertTrue(service.existsStructuralChanges(getAmpApiFields(), clientFields));
+    }
+    
     public List<APIField> getAmpApiFields() {
         List<APIField> fields = new ArrayList<>();
         
         APIField listFields = newListField("list");
         listFields.getChildren().add(newLongField("id"));
-        
+    
         fields.add(newLongField("id"));
         fields.add(newStringField("title"));
+        fields.add(newListPrimitiveField("primitives", Integer.class));
         fields.add(listFields);
         
         return fields;
@@ -99,6 +116,13 @@ public class ApiFieldStructuralServiceTest {
         APIField field = new APIField();
         field.setFieldName(fieldName);
         field.setApiType(new APIType(Collection.class, Object.class));
+        return field;
+    }
+    
+    private APIField newListPrimitiveField(String fieldName, Class<?> elementType) {
+        APIField field = new APIField();
+        field.setFieldName(fieldName);
+        field.setApiType(new APIType(Collection.class, elementType));
         return field;
     }
     

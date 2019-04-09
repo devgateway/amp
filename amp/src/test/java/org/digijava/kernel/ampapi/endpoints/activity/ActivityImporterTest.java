@@ -61,7 +61,8 @@ public class ActivityImporterTest {
     private ActivityImporter validateAndRetrieveImporter(JsonBean json) {
         AmpActivityVersion activity = new AmpActivityVersion();
         activity.setApprovalStatus(ApprovalStatus.STARTED);
-        ActivityImporter importer = new ActivityImporter(Collections.emptyList(), new ActivityImportRules(true, false));
+        ActivityImporter importer = new ActivityImporter(Collections.emptyList(), new ActivityImportRules(true, false,
+                false));
         importer.validateAndImport(activity, json.any());
         return importer;
     }

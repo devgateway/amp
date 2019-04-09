@@ -73,6 +73,27 @@ public class DiscriminatedFieldAccessorTest {
         assertThat(obj.categories,
                 containsInAnyOrder(cat("A", "1"), cat("C", "3"), cat("B", "5"), cat("B", "6")));
     }
+    
+    @Test
+    public void testDiscriminatedUpdate() {
+        Obj obj = new Obj();
+        obj.categories.add(new Category("A", "1"));
+        obj.categories.add(new Category("B", "2"));
+        obj.categories.add(new Category("C", "3"));
+        obj.categories.add(new Category("B", "4"));
+    
+        List<Category> newCatsA = ImmutableList.of(new Category("A", "7"));
+        FieldAccessor accessorA = new DiscriminatedFieldAccessor(new SimpleFieldAccessor("categories"), "kind", "A");
+        accessorA.set(obj, newCatsA);
+        
+        List<Category> newCatsB = ImmutableList.of(new Category("B", "5"), new Category("B", "6"));
+        FieldAccessor accessorB = new DiscriminatedFieldAccessor(new SimpleFieldAccessor("categories"), "kind", "B");
+        accessorB.set(obj, newCatsB);
+        
+        
+        assertThat(obj.categories,
+                containsInAnyOrder(cat("A", "7"), cat("C", "3"), cat("B", "5"), cat("B", "6")));
+    }
 
     private Matcher<Category> cat(String kind, String value) {
         return allOf(hasProperty("kind", is(kind)), hasProperty("value", is(value)));

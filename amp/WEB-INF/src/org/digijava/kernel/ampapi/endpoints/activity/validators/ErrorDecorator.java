@@ -35,8 +35,6 @@ public final class ErrorDecorator {
     }
 
     private static void addErrorInJson(Map<String, Object> newParent, String fieldName, ApiErrorMessage error) {
-        // REFACTOR: to split to reuse some functionality in order to be able to add a generic error not necessarily
-        // related to a field
         String errorCode = ApiError.getErrorCode(error);
         JsonBean newField = new JsonBean();
         Object newFieldValue = newParent.get(fieldName);

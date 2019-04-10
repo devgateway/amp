@@ -84,7 +84,7 @@ public class ActivityImporter extends ObjectImporter {
 
     private AmpActivityVersion newActivity = null;
     private AmpActivityVersion oldActivity = null;
-    private boolean update = false;
+    
     private ActivityImportRules rules;
     private SaveMode requestedSaveMode;
     private boolean downgradedToDraftSave = false;
@@ -135,8 +135,6 @@ public class ActivityImporter extends ObjectImporter {
     public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update, String endpointContextPath) {
         init(newJson, update, endpointContextPath);
 
-        // retrieve fields definition for internal use
-        List<APIField> fieldsDef = getApiFields();
         // get existing activity if this is an update request
         Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
 

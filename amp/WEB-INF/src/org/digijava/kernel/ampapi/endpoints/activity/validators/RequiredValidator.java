@@ -30,17 +30,28 @@ public class RequiredValidator extends InputValidator {
 
         return ActivityErrors.FIELD_REQUIRED;
     }
-
+    
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
+                           APIField fieldDescription, String fieldPath) {
+        return isValid(importer, null, newFieldParent, fieldDescription, fieldPath);
+    }
+    
+    @Override
+    public boolean isValid(ObjectImporter importer, Object currentObject, Map<String, Object> newFieldParent,
             APIField fieldDescription, String fieldPath) {
         String fieldName = fieldDescription.getFieldName();
         Object fieldValue = newFieldParent.get(fieldName);
         String requiredStatus = fieldDescription.getRequired();
         boolean importable = fieldDescription.isImportable();
+    
+        if (!newFieldParent.containsKey(fieldName) && importer.isUpdate()) {
+            fieldValue = fieldDescription.getFieldAccessor().get(currentObject);
+        }
+        
         // don't care if value has something
         if (importable && isEmpty(fieldValue)) {
-
+    
             boolean dependencyFulfilled = InterchangeDependencyResolver
                     .checkRequiredDependencyFulfilled(fieldValue, importer, fieldDescription, newFieldParent);
 

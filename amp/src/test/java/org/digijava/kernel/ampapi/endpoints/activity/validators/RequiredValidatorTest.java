@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -55,28 +56,28 @@ public class RequiredValidatorTest {
     private ActivityImportRules importRules = mock(ActivityImportRules.class);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         when(importer.isDraftFMEnabled()).thenReturn(true); // by default save as draft is allowed in fm
         when(importer.getImportRules()).thenReturn(importRules);
     }
 
     @Test
-    public void testNotRequiredFieldNotPresent() throws Exception {
+    public void testNotRequiredFieldNotPresent() {
         assertValidator(EMPTY_BEAN, fd(FIELD_NOT_REQUIRED), null, false);
     }
 
     @Test
-    public void testNotRequiredCollectionNotPresent() throws Exception {
+    public void testNotRequiredCollectionNotPresent() {
         assertValidator(EMPTY_BEAN, fd(FIELD_NOT_REQUIRED), null, false);
     }
 
     @Test
-    public void testNotRequiredCollectionEmpty() throws Exception {
+    public void testNotRequiredCollectionEmpty() {
         assertValidator(EMPTY_LIST_BEAN, fd(FIELD_NOT_REQUIRED), null, false);
     }
 
     @Test
-    public void testNotImportableFieldNotPresent() throws Exception {
+    public void testNotImportableFieldNotPresent() {
         APIField fd = fd(FIELD_NOT_REQUIRED);
         fd.setImportable(false);
 
@@ -84,42 +85,42 @@ public class RequiredValidatorTest {
     }
 
     @Test
-    public void testAlwaysRequiredFieldPresent() throws Exception {
+    public void testAlwaysRequiredFieldPresent() {
         assertValidator(SAMPLE_BEAN, fd(FIELD_ALWAYS_REQUIRED), null, false);
     }
 
     @Test
-    public void testAlwaysRequiredCollectionPresent() throws Exception {
+    public void testAlwaysRequiredCollectionPresent() {
         assertValidator(LIST_BEAN, fdList(FIELD_ALWAYS_REQUIRED), null, false);
     }
 
     @Test
-    public void testAlwaysRequiredFieldNotPresent() throws Exception {
+    public void testAlwaysRequiredFieldNotPresent() {
         assertValidator(EMPTY_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test
-    public void testAlwaysRequiredCollectionNotPresent() throws Exception {
+    public void testAlwaysRequiredCollectionNotPresent() {
         assertValidator(EMPTY_BEAN, fdList(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test
-    public void testAlwaysRequiredFieldEmptyValueNotPresent() throws Exception {
+    public void testAlwaysRequiredFieldEmptyValueNotPresent() {
         assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test
-    public void testAlwaysRequiredCollctionEmptyValueNotPresent() throws Exception {
+    public void testAlwaysRequiredCollectionEmptyValueNotPresent() {
         assertValidator(EMPTY_LIST_BEAN, fdList(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test
-    public void testSubmissionRequiredFieldPresent() throws Exception {
+    public void testSubmissionRequiredFieldPresent() {
         assertValidator(SAMPLE_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), null, false);
     }
 
     @Test
-    public void testSubmissionRequiredFieldMissingAndSaveAsDraftDisabled() throws Exception {
+    public void testSubmissionRequiredFieldMissingAndSaveAsDraftDisabled() {
         when(importer.isDraftFMEnabled()).thenReturn(false);
         when(importRules.isCanDowngradeToDraft()).thenReturn(true);
 
@@ -127,61 +128,61 @@ public class RequiredValidatorTest {
     }
 
     @Test
-    public void testSubmissionRequiredFieldMissingAndSaveAsDraftEnabledDowngradeAllowed() throws Exception {
+    public void testSubmissionRequiredFieldMissingAndSaveAsDraftEnabledDowngradeAllowed() {
         when(importRules.isCanDowngradeToDraft()).thenReturn(true);
         assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), null, true);
     }
 
     @Test
-    public void testSubmissionRequiredFieldMissingAndSaveAsDraftEnabledDowngradeNotAllowed() throws Exception {
+    public void testSubmissionRequiredFieldMissingAndSaveAsDraftEnabledDowngradeNotAllowed() {
         when(importRules.isCanDowngradeToDraft()).thenReturn(false);
         assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test
-    public void testDraftModeAlwaysRequiredFieldNotPresent() throws Exception {
+    public void testDraftModeAlwaysRequiredFieldNotPresent() {
         when(importer.getRequestedSaveMode()).thenReturn(DRAFT);
 
         assertValidator(EMPTY_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test
-    public void testSubmitModeAlwaysRequiredFieldNotPresent() throws Exception {
+    public void testSubmitModeAlwaysRequiredFieldNotPresent() {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
 
         assertValidator(EMPTY_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test
-    public void testSubmitModeAlwaysRequiredFieldEmptyValueNotPresent() throws Exception {
+    public void testSubmitModeAlwaysRequiredFieldEmptyValueNotPresent() {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
 
         assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test
-    public void testDraftModeSubmissionRequiredFieldNotPresent() throws Exception {
+    public void testDraftModeSubmissionRequiredFieldNotPresent() {
         when(importer.getRequestedSaveMode()).thenReturn(DRAFT);
 
         assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), null, false);
     }
 
     @Test
-    public void testSubmitModeSubmissionRequiredFieldNotPresent() throws Exception {
+    public void testSubmitModeSubmissionRequiredFieldNotPresent() {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
 
         assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test
-    public void testSubmitModeSubmissionRequiredFieldPresentEmptyValue() throws Exception {
+    public void testSubmitModeSubmissionRequiredFieldPresentEmptyValue() {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
 
         assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test
-    public void testSubmitModeSubmissionRequiredFieldNotPresentSaveAsDraftDisabled() throws Exception {
+    public void testSubmitModeSubmissionRequiredFieldNotPresentSaveAsDraftDisabled() {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
         when(importer.isDraftFMEnabled()).thenReturn(false);
 
@@ -189,11 +190,58 @@ public class RequiredValidatorTest {
     }
 
     @Test
-    public void testSubmitModeSubmissionRequiredFieldEmptyValueNotPresentSaveAsDraftDisabled() throws Exception {
+    public void testSubmitModeSubmissionRequiredFieldEmptyValueNotPresentSaveAsDraftDisabled() {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
         when(importer.isDraftFMEnabled()).thenReturn(false);
 
         assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
+    }
+    
+    @Test
+    public void testAlwaysRequiredFieldNotPresentInJsonPresentInObject() {
+        when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
+        
+        assertValidator(EMPTY_BEAN, null, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
+    }
+    
+    @Test
+    public void testAlwaysRequiredFieldNotPresentInJsonPresentInObjectOnUpdate() {
+        when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
+        when(importer.isUpdate()).thenReturn(true);
+        
+        assertValidator(EMPTY_BEAN, "test", fd(FIELD_ALWAYS_REQUIRED), null, false);
+    }
+    
+    @Test
+    public void testAlwaysRequiredFieldNotPresentInJsonPresentInObjectCollectionOnUpdate() {
+        when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
+        when(importer.isUpdate()).thenReturn(true);
+        
+        assertValidator(EMPTY_BEAN, Stream.of("test"), fd(FIELD_ALWAYS_REQUIRED), null, false);
+    }
+    
+    @Test
+    public void testAlwaysRequiredFieldNotPresentInJsonNotPresentInObjectOnUpdate() {
+        when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
+        when(importer.isUpdate()).thenReturn(true);
+        
+        assertValidator(EMPTY_BEAN, null, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
+    }
+    
+    @Test
+    public void testAlwaysRequiredFieldNotPresentInJsonNotPresentInObjectEmptyOnUpdate() {
+        when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
+        when(importer.isUpdate()).thenReturn(true);
+        
+        assertValidator(EMPTY_BEAN, "", fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
+    }
+    
+    @Test
+    public void testAlwaysRequiredFieldNotPresentInJsonNotPresentInObjectEmptyCollectionOnUpdate() {
+        when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
+        when(importer.isUpdate()).thenReturn(true);
+        
+        assertValidator(EMPTY_BEAN, Collections.emptyList(), fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     private APIField fd(String required) {
@@ -210,13 +258,18 @@ public class RequiredValidatorTest {
         fd.setApiType(new APIType(Collection.class, String.class));
         return fd;
     }
-
+    
     private void assertValidator(Map<String, Object> bean, APIField fieldDescription,
+                                 ApiErrorMessage expectedErrorMessage, boolean downgradeExpected) {
+        assertValidator(bean, null, fieldDescription, expectedErrorMessage, downgradeExpected);
+    }
+
+    private void assertValidator(Map<String, Object> bean, Object currentValue, APIField fieldDescription,
             ApiErrorMessage expectedErrorMessage, boolean downgradeExpected) {
 
         RequiredValidator validator = new RequiredValidator();
 
-        boolean valid = validator.isValid(importer, bean, fieldDescription, SAMPLE_FIELD);
+        boolean valid = validator.isValid(importer, currentValue, bean, fieldDescription, SAMPLE_FIELD);
 
         assertEquals(expectedErrorMessage == null, valid);
         if (expectedErrorMessage != null) {

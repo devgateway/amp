@@ -78,6 +78,8 @@ public class ObjectImporter {
     private Validator beanValidator;
 
     private Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper = new DefaultErrorsMapper();
+    
+    protected boolean update = false;
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
             List<APIField> apiFields) {
@@ -194,13 +196,14 @@ public class ObjectImporter {
             Map<String, Object> newJsonParent, String fieldPath) {
         String fieldName = getFieldName(fieldDef, newJsonParent);
         String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
+        
         Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
 
-        boolean isValidFormat = formatValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
+        boolean isValidFormat = formatValidator.isValid(this, newParent, newJsonParent, fieldDef, currentFieldPath);
         if (isValidFormat) {
             isValidFormat = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
             if (isValidFormat) {
-                businessRulesValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
+                businessRulesValidator.isValid(this, newParent, newJsonParent, fieldDef, currentFieldPath);
             }
             setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
         }
@@ -222,7 +225,7 @@ public class ObjectImporter {
             throw new RuntimeException(error);
         }
 
-        if (importable) {
+        if (importable && newJsonParent.containsKey(fieldName)) {
             Object newValue = getNewValue(objField, newParent, fieldValue, fieldDef);
             fieldDef.getFieldAccessor().set(newParent, newValue);
         }
@@ -235,6 +238,7 @@ public class ObjectImporter {
         if (jsonValue != null && JsonBean.class.isAssignableFrom(jsonValue.getClass())) {
             jsonValue = ((JsonBean) jsonValue).get(ActivityEPConstants.INPUT);
         }
+        
         if (jsonValue == null && !isCollection) {
             return null;
         }
@@ -577,7 +581,15 @@ public class ObjectImporter {
     public Map<String, Object> getBranchJsonVisitor() {
         return branchJsonVisitor;
     }
-
+    
+    public Map<Integer, ApiErrorMessage> getErrors() {
+        return errors;
+    }
+    
+    public boolean isUpdate() {
+        return update;
+    }
+    
     public Collection<ApiErrorMessage> getWarnings() {
         return warnings.values();
     }

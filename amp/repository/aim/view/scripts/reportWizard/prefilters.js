@@ -164,6 +164,7 @@ Filters.prototype.loadSavedFilterData = function (id, isReport) {
         url: url + id,
         success: function (data) {
             filters = isReport ? data.reportMetadata.reportSpec.filters : data[FILTER_OBJECT];
+            filters.includeLocationChildren = data.reportMetadata.reportSpec.includeLocationChildren;
             widgetFilter.deserialize({filters: filters}, {silent: true});
             self.showFilterWidget();
         }

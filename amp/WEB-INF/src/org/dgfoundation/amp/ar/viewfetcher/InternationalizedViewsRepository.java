@@ -339,7 +339,7 @@ public class InternationalizedViewsRepository {
                         addTrnColDef("terms_assist_name", "terms_assist_id").
                         addTrnColDef("financing_instrument_name", "financing_instrument_id"));
                                 
-                addSimpleTranslatedView(this, "v_on_off_budget", "budget", "budget_id");
+                addSimpleTranslatedView(this, "v_activity_budget", "budget", "budget_id");
                 
                 addSimpleTranslatedView(this, "v_pledges_aid_modality", "name", "amp_modality_id");
                 

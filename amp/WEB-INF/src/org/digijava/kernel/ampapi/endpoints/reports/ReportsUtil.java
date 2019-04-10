@@ -537,25 +537,26 @@ public class ReportsUtil {
     private static void configureIncludeLocationChildrenFilters(ReportSpecificationImpl specImpl,
                                                                 ReportFormParameters formParams) {
         if (formParams.getIncludeLocationChildren() != null) {
-            boolean includeLocationChildren = formParams.getIncludeLocationChildren();
-            if (!includeLocationChildren) {
-                List<String> locationIds = new ArrayList<>();
-                AmpReportFilters filterRules = (AmpReportFilters) specImpl.getFilters();
-                for (Entry<ReportElement, FilterRule> filterRule : filterRules.getFilterRules().entrySet()) {
-                    if (isFilterLocationType(filterRule)) {
-                       locationIds.addAll(filterRule.getValue().values);
-                    }
+            specImpl.setIncludeLocationChildren(formParams.getIncludeLocationChildren());
+        }
+    
+        if (!specImpl.isIncludeLocationChildren()) {
+            List<String> locationIds = new ArrayList<>();
+            AmpReportFilters filterRules = (AmpReportFilters) specImpl.getFilters();
+            for (Entry<ReportElement, FilterRule> filterRule : filterRules.getFilterRules().entrySet()) {
+                if (isFilterLocationType(filterRule)) {
+                    locationIds.addAll(filterRule.getValue().values);
                 }
-                
-                if (!locationIds.isEmpty()) {
-                    filterRules.addFilterRule(new ReportColumn(ColumnConstants.RAW_LOCATION), 
-                            new FilterRule(locationIds, true));
-                }
+            }
+        
+            if (!locationIds.isEmpty()) {
+                filterRules.addFilterRule(new ReportColumn(ColumnConstants.RAW_LOCATION),
+                        new FilterRule(locationIds, true));
             }
         }
     }
-    
     /**
+ 
      * Determine if the filter rule is of location type
      * 
      * @param filterRule

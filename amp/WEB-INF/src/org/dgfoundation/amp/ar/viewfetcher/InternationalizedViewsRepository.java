@@ -211,6 +211,10 @@ public class InternationalizedViewsRepository {
 
                 addViewDef(this, new I18nViewDescription("v_beneficiary_agency_groups").
                         addColumnDef(new I18nViewColumnDescription("org_grp_name", "org_grp_id", AmpOrgGroup.class, "orgGrpName")));
+    
+                addViewDef(this, new I18nViewDescription("v_beneficiary_agency_type").
+                        addColumnDef(new I18nViewColumnDescription("org_type_name", "org_type_id",
+                                AmpOrgType.class, "orgType")));
 
                 addViewDef(this, new I18nViewDescription("v_component_funding_organization_name").
                         addColumnDef(new I18nViewColumnDescription("org_name", "org_id", AmpOrganisation.class, "name")));
@@ -220,6 +224,10 @@ public class InternationalizedViewsRepository {
 
                 addViewDef(this, new I18nViewDescription("v_contracting_agency_groups").
                         addColumnDef(new I18nViewColumnDescription("org_grp_name", "org_grp_id", AmpOrgGroup.class, "orgGrpName")));
+    
+                addViewDef(this, new I18nViewDescription("v_contracting_agency_type").
+                        addColumnDef(new I18nViewColumnDescription("org_type_name", "org_type_id",
+                                AmpOrgType.class, "orgType")));
 
                 addViewDef(this, new I18nViewDescription("v_contribution_funding").
                         addColumnDef(new I18nViewColumnDescription("donor_name", "amp_org_id", AmpOrganisation.class, "name")).
@@ -482,6 +490,10 @@ public class InternationalizedViewsRepository {
 
                 addViewDef(this, new I18nViewDescription("v_responsible_organisation").
                         addColumnDef(new I18nViewColumnDescription("org_name", "org_id", AmpOrganisation.class, "name")));
+    
+                addViewDef(this, new I18nViewDescription("v_responsible_org_type").
+                        addColumnDef(new I18nViewColumnDescription("org_type_name", "org_type_id",
+                                AmpOrgType.class, "orgType")));
 
                 addViewDef(this, new I18nViewDescription("v_secondary_sectors").
                         addColumnDef(new I18nViewColumnDescription("name", "amp_sector_id", AmpSector.class, "name")));

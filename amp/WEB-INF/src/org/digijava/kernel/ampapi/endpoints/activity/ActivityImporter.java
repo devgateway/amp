@@ -63,6 +63,7 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.validator.ActivityValidationContext;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
@@ -252,6 +253,10 @@ public class ActivityImporter extends ObjectImporter {
 
     @Override
     protected void beforeViolationsCheck() {
+        ActivityValidationContext avc = new ActivityValidationContext();
+        avc.setOldActivity(oldActivity);
+        newActivity.setActivityValidationContext(avc);
+
         org.dgfoundation.amp.onepager.util.ActivityUtil.prepareToSave(
                 newActivity, oldActivity, modifiedBy, isDraft(), saveContext);
     }

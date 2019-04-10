@@ -327,7 +327,7 @@ public class ActivityUtil {
         return a;
     }
 
-    private static boolean isNewActivity(AmpActivityVersion a) {
+    public static <T extends AmpActivityFields> boolean isNewActivity(T a) {
         return a.getAmpActivityId() == null;
     }
 

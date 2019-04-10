@@ -24,7 +24,7 @@ public class ApprovalStatusConstraint implements ConstraintValidator<ApprovalSta
         }
         if (!Constants.ACTIVITY_NEEDS_APPROVAL_STATUS_SET.contains(activity.getApprovalStatus())) {
             boolean isSubmitted = Boolean.FALSE.equals(activity.getDraft());
-            boolean isNew = activity.getAmpId() == null;
+            boolean isNew = ActivityUtil.isNewActivity(activity);
             return isSubmitted && ActivityUtil.canApproveWith(approvalStatus, activity.getApprovedBy(), isNew);
         }
         return true;

@@ -5,7 +5,7 @@ import static org.digijava.module.aim.validator.ConstraintMatchers.propertyNode;
 import static org.digijava.module.aim.validator.ConstraintMatchers.violationWithPath;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import java.util.Set;
 
@@ -13,16 +13,18 @@ import javax.validation.ConstraintViolation;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
+import org.digijava.module.aim.validator.percentage.LocationTotalPercentageValidator;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class LocationTotalPercentageValidatorTest extends AbstractTotalPercentageValidatorTest {
+public class LocationTotalPercentageValidatorTest extends AbstractValidatorTest<LocationTotalPercentageValidator> {
 
     @Test
     public void testNotAppliedInHibernate() {

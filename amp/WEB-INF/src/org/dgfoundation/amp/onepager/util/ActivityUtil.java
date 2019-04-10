@@ -183,7 +183,20 @@ public class ActivityUtil {
         
         return a;
     }
-    
+
+    public static void prepareToSave(AmpActivityVersion a, AmpActivityVersion oldA,
+            AmpTeamMember ampCurrentMember, boolean draft, SaveContext context) {
+        boolean newActivity = isNewActivity(a);
+
+        if (newActivity) {
+            a.setTeam(ampCurrentMember.getAmpTeam());
+        }
+
+        if (context.isUpdateActivityStatus()) {
+            setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
+        }
+    }
+
     /**
      * saves a new version of an activity
      * returns newActivity
@@ -192,14 +205,8 @@ public class ActivityUtil {
             Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
             Session session, SaveContext context) throws Exception
     {
-        //saveFundingOrganizationRole(a);
         AmpActivityVersion oldA = a;
-        boolean newActivity = false;
-
-        if (a.getAmpActivityId() == null){
-            a.setTeam(ampCurrentMember.getAmpTeam());
-            newActivity = true;
-        }
+        boolean newActivity = isNewActivity(a);
 
         if (a.getDraft() == null)
             a.setDraft(false);
@@ -248,6 +255,10 @@ public class ActivityUtil {
             }
         }
 
+        if (context.isPrepareToSave()) {
+            prepareToSave(a, oldA, ampCurrentMember, draft, context);
+        }
+
         if (a.getAmpActivityGroup() == null){
             //we need to create a group for this activity
             AmpActivityGroup tmpGroup = new AmpActivityGroup();
@@ -274,10 +285,6 @@ public class ActivityUtil {
         }
         
         a.setAmpActivityGroup(group);
-
-        if (context.isUpdateActivityStatus()) {
-            setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
-        }
 
         if (isActivityForm) {
 
@@ -319,7 +326,11 @@ public class ActivityUtil {
 
         return a;
     }
-    
+
+    private static boolean isNewActivity(AmpActivityVersion a) {
+        return a.getAmpActivityId() == null;
+    }
+
     /**
      * To be used every time when the activity is saved/updated
      *

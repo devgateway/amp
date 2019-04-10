@@ -106,6 +106,9 @@ public class ObjectImporter {
         return apiFields;
     }
 
+    protected void beforeViolationsCheck() {
+    }
+
     /**
      * Entrypoint for converting and validation of json structure to internal object model.
      *
@@ -116,6 +119,7 @@ public class ObjectImporter {
     public boolean validateAndImport(Object root, Map<String, Object> json) {
         boolean isFormatValid = validateAndImport(root, apiFields, json, null);
         if (isFormatValid) {
+            beforeViolationsCheck();
             processViolationsForTypes(json, root);
         }
         return isFormatValid;

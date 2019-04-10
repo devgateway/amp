@@ -86,6 +86,7 @@ public class ActivityImporter extends ObjectImporter {
     private AmpActivityVersion oldActivity = null;
     private boolean update = false;
     private ActivityImportRules rules;
+    private SaveContext saveContext;
     private SaveMode requestedSaveMode;
     private boolean downgradedToDraftSave = false;
     private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
@@ -104,6 +105,7 @@ public class ActivityImporter extends ObjectImporter {
                 apiFields);
         setJsonErrorMapper(new ActivityErrorsMapper());
         this.rules = rules;
+        this.saveContext = SaveContext.api(!rules.isProcessApprovalFields());
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {
@@ -214,7 +216,7 @@ public class ActivityImporter extends ObjectImporter {
 
                 newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
                         translations, modifiedBy, Boolean.TRUE.equals(newActivity.getDraft()),
-                        PersistenceManager.getSession(), SaveContext.api(!rules.isProcessApprovalFields()));
+                        PersistenceManager.getSession(), saveContext);
 
                 postProcess();
             } else {
@@ -246,6 +248,16 @@ public class ActivityImporter extends ObjectImporter {
         }
 
         return new ArrayList<ApiErrorMessage>(errors.values());
+    }
+
+    @Override
+    protected void beforeViolationsCheck() {
+        org.dgfoundation.amp.onepager.util.ActivityUtil.prepareToSave(
+                newActivity, oldActivity, modifiedBy, isDraft(), saveContext);
+    }
+
+    public boolean isDraft() {
+        return DRAFT.equals(requestedSaveMode) || this.downgradedToDraftSave;
     }
 
     /**

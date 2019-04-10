@@ -253,12 +253,14 @@ public class ActivityImporter extends ObjectImporter {
 
     @Override
     protected void beforeViolationsCheck() {
+        newActivity.setDraft(isDraft());
+
         ActivityValidationContext avc = new ActivityValidationContext();
         avc.setOldActivity(oldActivity);
         newActivity.setActivityValidationContext(avc);
 
         org.dgfoundation.amp.onepager.util.ActivityUtil.prepareToSave(
-                newActivity, oldActivity, modifiedBy, isDraft(), saveContext);
+                newActivity, oldActivity, modifiedBy, newActivity.getDraft(), saveContext);
     }
 
     public boolean isDraft() {
@@ -494,9 +496,6 @@ public class ActivityImporter extends ObjectImporter {
         }
 
         newActivity.setChangeType(determineChangeType().toString());
-        if (downgradedToDraftSave) {
-            newActivity.setDraft(true);
-        }
         initDefaults();
     }
 

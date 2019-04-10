@@ -1,6 +1,7 @@
 package org.digijava.module.aim.validator;
 
 import static org.digijava.module.aim.dbentity.ApprovalStatus.APPROVED;
+import static org.digijava.module.aim.dbentity.ApprovalStatus.REJECTED;
 import static org.digijava.module.aim.dbentity.ApprovalStatus.STARTED;
 import static org.digijava.module.aim.dbentity.ApprovalStatus.STARTED_APPROVED;
 import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_FOR_ALL_EDITS;
@@ -20,6 +21,7 @@ import javax.validation.ConstraintViolation;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -44,6 +46,7 @@ public class ApprovalStatusConstraintTest extends AbstractValidatorTest<Approval
     private static final Long TEAM_ID = 1l;
 
     private AmpTeamMember ampTeamMember;
+    private AmpTeamMemberRoles roles;
     private AmpTeam ampTeam;
 
     @Override
@@ -54,9 +57,12 @@ public class ApprovalStatusConstraintTest extends AbstractValidatorTest<Approval
         PowerMockito.mockStatic(DbUtil.class);
 
         ampTeamMember = mock(AmpTeamMember.class);
+        roles = mock(AmpTeamMemberRoles.class);
         ampTeam = mock(AmpTeam.class);
         when(ampTeamMember.getAmpTeam()).thenReturn(ampTeam);
         when(ampTeam.getAmpTeamId()).thenReturn(TEAM_ID);
+        when(ampTeamMember.getAmpMemberRole()).thenReturn(roles);
+        when(roles.getTeamHead()).thenReturn(true);
     }
 
     @Test
@@ -79,13 +85,82 @@ public class ApprovalStatusConstraintTest extends AbstractValidatorTest<Approval
     }
 
     @Test
-    public void testApprovalStatusNeedsApproval() {
+    public void testNeedsApprovalNewDraftActivityValidationOn() {
         AmpActivity activity = new AmpActivity();
         activity.setApprovalStatus(STARTED);
+        activity.setDraft(true);
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
         assertThat(violations, emptyIterable());
+    }
+
+    @Test
+    public void testNeedsApprovalNewSubmittedActivityByApproverValidationOn() {
+        AmpActivity activity = new AmpActivity();
+        activity.setApprovalStatus(STARTED);
+        activity.setDraft(false);
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+
+        assertThat(violations, contains(approvalStatusViolation()));
+    }
+
+    @Test
+    public void testNeedsApprovalNewSubmittedActivityByNonApproverValidationOn() {
+        AmpActivity activity = new AmpActivity();
+        activity.setApprovalStatus(STARTED);
+        activity.setDraft(false);
+
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
+        when(roles.getTeamHead()).thenReturn(false);
+        when(roles.isApprover()).thenReturn(false);
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+
+        assertThat(violations, emptyIterable());
+    }
+
+    @Test
+    public void testNeedsApprovalNewSubmittedActivityByNonApproverValidationOff() {
+        AmpActivity activity = new AmpActivity();
+        activity.setApprovalStatus(STARTED);
+
+        mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+
+        assertThat(violations, contains(approvalStatusViolation()));
+    }
+
+    @Test
+    public void testRejectedNewDraftActivityByApprover() {
+        AmpActivity activity = new AmpActivity();
+        activity.setApprovalStatus(REJECTED);
+        activity.setDraft(true);
+
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+
+        assertThat(violations, emptyIterable());
+    }
+
+    @Test
+    public void testRejectedNewDraftActivityByNonApprover() {
+        AmpActivity activity = new AmpActivity();
+        activity.setApprovalStatus(REJECTED);
+        activity.setDraft(true);
+
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
+        when(roles.getTeamHead()).thenReturn(false);
+        when(roles.isApprover()).thenReturn(false);
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+
+        assertThat(violations, contains(approvalStatusViolation()));
     }
 
     @Test
@@ -155,6 +230,10 @@ public class ApprovalStatusConstraintTest extends AbstractValidatorTest<Approval
         when(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION)).thenReturn(gsValidation);
         when(DbUtil.getValidationFromTeamAppSettings(Matchers.anyLong())).thenReturn(teamValidation);
         activity.setApprovedBy(ampTeamMember);
+        activity.setModifiedBy(ampTeamMember);
+        activity.setTeam(ampTeam);
+        ActivityValidationContext avc = new ActivityValidationContext();
+        activity.setActivityValidationContext(avc);
     }
 
     private Matcher<ConstraintViolation> approvalStatusViolation() {

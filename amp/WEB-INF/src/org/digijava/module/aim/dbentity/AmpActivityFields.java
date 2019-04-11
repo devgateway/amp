@@ -37,7 +37,6 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
-import org.digijava.module.aim.validator.ActivityValidationContext;
 import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
@@ -774,16 +773,6 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "PPC Annual Budgets")
     protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
-
-    protected transient ActivityValidationContext activityValidationContext;
-
-    public ActivityValidationContext getActivityValidationContext() {
-        return activityValidationContext;
-    }
-
-    public void setActivityValidationContext(ActivityValidationContext activityValidationContext) {
-        this.activityValidationContext = activityValidationContext;
-    }
 
         public Boolean getMergedActivity() {
             return mergedActivity;

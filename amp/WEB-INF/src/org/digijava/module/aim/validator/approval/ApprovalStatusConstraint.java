@@ -36,10 +36,7 @@ public class ApprovalStatusConstraint implements ConstraintValidator<ApprovalSta
                 return ActivityUtil.canReject(activity.getModifiedBy(), activityTeamId, activity.getDraft());
             }
 
-            ActivityValidationContext avc = activity.getActivityValidationContext();
-            if (avc == null) {
-                throw new RuntimeException("ActivityValidationContext not configured");
-            }
+            ActivityValidationContext avc = ActivityValidationContext.getOrThrow();
             AmpActivityFields oldA = avc.getOldActivity();
             org.digijava.module.aim.dbentity.ApprovalStatus oas = oldA == null ? null : oldA.getApprovalStatus();
             return activity.getDraft() || !ActivityUtil.canApprove(activity.getModifiedBy(), activityTeamId, oas);

@@ -30,6 +30,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.Criteria;
@@ -402,6 +403,26 @@ public class AuditLoggerUtil {
         }
     }
 
+
+    public static List<Object[]> getListOfActivitiesFromAuditLogger2() {
+        String query = "select * from ( "
+                + " select  aav.amp_activity_id current_id ,  "
+                + " lead(aav.amp_activity_id, 1) "
+                + " over(partition by aav.amp_activity_group_id order by aav.amp_activity_id asc) previous_id, "
+                + " aal.objectname, aav.amp_activity_group_id, "
+                + " aal.id  from amp_activity_version aav "
+                + " left join amp_audit_logger aal on "
+                + " (aal.objecttype ='org.digijava.module.aim.dbentity.AmpActivityVersion' "
+                + "  and cast (aal.objectId AS INTEGER) = aav.amp_activity_id) "
+                + " order by amp_activity_group_id desc "
+                + " ) t where t.id is not null";
+
+        Session session = PersistenceManager.getSession();
+        SQLQuery sqlQuery = session.createSQLQuery(query);
+        return sqlQuery.list();
+    }
+
+    //TODO this code is to be removed and rename above method with out the 2
     public static List<Object[]> getListOfActivitiesFromAuditLogger() {
         Session session = null;
         List<Object[]> list = null;

@@ -14,6 +14,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -42,6 +45,7 @@ import org.digijava.module.editor.util.DbUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.util.StopWatch;
 
 public class ActivityVersionUtil {
 
@@ -84,15 +88,20 @@ public class ActivityVersionUtil {
         // TODO Auto-generated method stub
         return generateFormattedOutput(out, null);
     }
-
+    //TODO This constant is to avoid having checkstyle complain about magic numbers
+    public static Long DEFAULT_SITE_ID = 3L;
     public static String generateFormattedOutput(Output out, Output out1) throws WorkerException {
+
     
 
         
-            Site site = TLSUtils.getSite();
-            String langCode = TLSUtils.getEffectiveLangCode();
-        
-        
+        /*Site site = TLSUtils.getSite();
+        String langCode = TLSUtils.getEffectiveLangCode();*/
+        //TODO we need to find a way to receive this two hardcoded values as a parameter. It will always be the same
+        //TODO but it can change
+        Long siteId = DEFAULT_SITE_ID;
+        String langCode = "en";
+
         StringBuilder ret = new StringBuilder();
         if (out.getOutputs() != null) {
             // First level.
@@ -109,9 +118,11 @@ public class ActivityVersionUtil {
                         existsInOtherVersion = out1.getOutputByTitle(title) != null;
                     }
                     if (!title.trim().isEmpty()) {
-                        if (!existsInOtherVersion) ret.append("<font color='red'>");
-                        ret.append("<br/><b>").append(TranslatorWorker.translateText(auxOutput.getTitle()[i], langCode, site.getId())).
-                                append(":</b>&nbsp;");
+                        if (!existsInOtherVersion) {
+                            ret.append("<font color='red'>");
+                        }
+                        ret.append("<br/><b>").append(TranslatorWorker.translateText(auxOutput.getTitle()[i], langCode,
+                                siteId)).append(":</b>&nbsp;");
                         if (!existsInOtherVersion) ret.append("</font>");
                     }
                 }
@@ -121,10 +132,10 @@ public class ActivityVersionUtil {
                      * date = DateConversion.ConvertDateToString((Date)
                      * auxOutput.getValue()[i]); ret += date; } else {
                      */
-                    if (auxOutput.getValue()[i]!=null){
+                    if (auxOutput.getValue()[i] != null) {
                         String text = auxOutput.getValue()[i].toString();
                         if (auxOutput.getTranslateValue())
-                            text = TranslatorWorker.translateText(text, langCode, site.getId());
+                            text = TranslatorWorker.translateText(text, langCode, siteId);
                         if (!existsInOtherVersion) ret.append("<font color='red'>");
                         ret.append(org.digijava.module.aim.util.DbUtil.filter(text));
                         if (!existsInOtherVersion) ret.append("</font>");
@@ -153,7 +164,7 @@ public class ActivityVersionUtil {
                         ret.append(tabs);
                         for (int i = 0; i < auxOutput2.getTitle().length; i++) {
                             ret.append("<b>").
-                                    append(TranslatorWorker.translateText(auxOutput2.getTitle()[i], langCode, site.getId())).
+                                    append(TranslatorWorker.translateText(auxOutput2.getTitle()[i], langCode, siteId)).
                                     append("</b>");
                         }
                         for (int i = 0; i < auxOutput2.getValue().length; i++) {
@@ -175,7 +186,7 @@ public class ActivityVersionUtil {
                             } else {
                                 String text = auxOutput2.getValue()[i].toString();
                                 if (auxOutput2.getTranslateValue())
-                                    text = TranslatorWorker.translateText(text, langCode, site.getId());
+                                    text = TranslatorWorker.translateText(text, langCode, siteId);
                                 ret.append(org.digijava.module.aim.util.DbUtil.filter(text));
                             }
                             if (markAsDifferent)
@@ -347,7 +358,8 @@ public class ActivityVersionUtil {
     
     public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId) throws Exception {
 
-        Session session = PersistenceManager.getCurrentSession();
+
+        Session session = PersistenceManager.getRequestDBSession();
         AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
         AmpActivityVersion ampActivityTwo = ActivityUtil.getPreviousVersion(ampActivityOne);
         // Since ampActivityTwo is a ref. variable of type AmpActivityVersion,
@@ -361,7 +373,7 @@ public class ActivityVersionUtil {
        
     public static Map<String, List<CompareOutput>> compareActivities(Long activityOneId, Long activityTwoId)
             throws Exception {
-        Session session = PersistenceManager.getCurrentSession();
+        Session session = PersistenceManager.getRequestDBSession();
         AmpActivityVersion ampActivityOne = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityOneId);
 
         Hibernate.initialize(ampActivityOne);
@@ -573,10 +585,17 @@ public class ActivityVersionUtil {
                 output.setBlockSingleChangeOutput(false);
                 output.setMandatoryForSingleChangeOutput(false);
                 output.setDescriptionOutput(auxAnnotation.fieldTitle());
-                Site site = TLSUtils.getSite();
-                String lang = TLSUtils.getEffectiveLangCode();
-                String auxBody1 = DbUtil.getEditorBody(site, auxResult1, lang);
-                String auxBody2 = DbUtil.getEditorBody(site, auxResult2, lang);
+                //TODO Since we will be inside a thread that is different than the one that populated TLSUTILS we
+                //TODO need to find a way to pass siteId and lang as parameter
+                //TODO in Ethiopia language will always be en but if in the future is decided to use
+                //TODO Amharic then we need to pass properly the parameters
+                //TODO this comment to be removed in the final commit.
+                //Site site = TLSUtils.getSite();
+                String siteId = "amp";
+                //String lang = TLSUtils.getEffectiveLangCode();
+                String lang = "en";
+                String auxBody1 = DbUtil.getEditorBody(siteId, auxResult1, lang);
+                String auxBody2 = DbUtil.getEditorBody(siteId, auxResult2, lang);
                 auxBody1 = auxBody1 != null ? auxBody1 : "";
                 auxBody2 = auxBody2 != null ? auxBody2 : "";
                 if (!auxBody1.trim().equals(auxBody2.trim())) {
@@ -665,28 +684,94 @@ public class ActivityVersionUtil {
             }
         }
     }
+    //TODO move this to a constant File
+    //TODO currently the code is fetching gall entries from audit logger
+    //TODO test with several batch sizes to see if performace is improved.
+    //TODO also check that no more than 10 connections to the database are open
+    //TODO you can use the following query to do it
+    //TODO select *
+    //TODO from pg_stat_activity
+    //TODO where datname = 'amp_ethiopia_2135' --replace this with the name of the database in your local postgres.
+    //TODO and application_name =''
 
+
+    //TODO also please check if the performance increase by fetching the records in batches instead of doing
+    //TODO it alltogehter and spliting
+    public static final Integer BATCH_SIZE = 10;
     public static Map<String, Map<String, List<CompareOutput>>> getOutputCollectionGrouped() {
 
         Map<String, Map<String, List<CompareOutput>>> listOfOutputCollectionGrouped = new HashMap<>();
 
-        //Use lambda through the accept method from java consumer functional interface
-        // to create listOfOutputCollectionGrouped
-        AuditLoggerUtil.getListOfActivitiesFromAuditLogger().forEach((Object[] activityObj) -> {
-            Map<String, List<CompareOutput>> compareOutput;
-            try {
-                compareOutput = compareActivities(Long.parseLong(String.valueOf(activityObj[0]).trim()));
-                if (compareOutput != null) {
-                    listOfOutputCollectionGrouped.put(String.valueOf(activityObj[1]).trim(), compareOutput);
-                }
-            } catch (Throwable e) {
-                return; //Get rid if any exception in the current iteration and continue with next iteration
-            }
-        });
+        StopWatch sw = new StopWatch("");
 
+        List<ActivityComparisonResult> results = new ArrayList<>();
+        //TODO once AuditLoggerUtil.getListOfActivitiesFromAuditLogger is removed replace the call here
+
+        List<Object[]> activitiesFromAuditLogger = AuditLoggerUtil.getListOfActivitiesFromAuditLogger2();
+
+        sw.start("Batch Size " + BATCH_SIZE);
+        for (int startIndex = 0; startIndex < activitiesFromAuditLogger.size(); startIndex += BATCH_SIZE) {
+            int endIndex = Math.min(activitiesFromAuditLogger.size(), startIndex + BATCH_SIZE);
+
+            List<Object[]>  subList = activitiesFromAuditLogger.subList(startIndex, endIndex);
+
+            List<CompletableFuture<ActivityComparisonResult>> projectsToBePosted =
+                    subList.stream()
+                            .map(activityObj -> processComparison(activityObj)).collect(Collectors.toList());
+
+            List<ActivityComparisonResult> result =
+                    projectsToBePosted.stream()
+                            .map(CompletableFuture::join)
+                            .collect(Collectors.toList());
+
+            results.addAll(result);
+        }
+        sw.stop();
+        //TODO notice that results might be scrambled as a result for parallel processing so we need to order
+        //TODO the records as they are coming from audit logger. please do the needed changes to do it
+        System.out.println("count parallel  " + results.stream().count());
+        sw.start("Iterate over results");
+        //TODO we need to change the code signature to return results
+        //TODO and iterate through this in the view instead of iterating and puting inside listOfOutputCollectionGrouped
+
+        results.stream().forEach(result -> {
+            listOfOutputCollectionGrouped.put(result.getName(), result.getCompareOutput());
+        });
+        sw.stop();
+        System.out.println(sw.prettyPrint());
         return listOfOutputCollectionGrouped;
 
     }
+    public static CompletableFuture<ActivityComparisonResult> processComparison(Object[]activityObject) {
+
+        CompletableFuture<ActivityComparisonResult> future =
+                CompletableFuture.supplyAsync(new Supplier<ActivityComparisonResult>() {
+                    //TODO this can be replaced with a lambda expresion leaving the full for clarify, before merging
+                    //TODO we can replace with lambda expresion
+            @Override
+            public ActivityComparisonResult get() {
+                Long currentActivityId = Long.valueOf(activityObject[0].toString());
+                Long previousActivityId = Long.valueOf(activityObject[1].toString());
+                String name = activityObject[2].toString();
+                Map<String, List<CompareOutput>> compareOutput = null;
+                try {
+                    compareOutput = compareActivities(currentActivityId, previousActivityId);
+                } catch (Exception e) {
+                    //TODO PROPERLY NOTIFY AN ERROR AND DO NOT SWALLOW EXCEPTIONS
+                    e.printStackTrace();
+                    PersistenceManager.rollbackCurrentSessionTx();
+                } finally {
+                    PersistenceManager.endSessionLifecycle();
+                }
+                return new ActivityComparisonResult(currentActivityId, compareOutput, name);
+            }
+        });
+        return future;
+    }
+
+
+
+
      
     private static void addAsDifferentIfNnoPresent(List<CompareOutput> outputCollection, Field[] fields, int i,
             VersionableCollection auxAnnotation, Collection auxCollection2, Iterator iter1) {

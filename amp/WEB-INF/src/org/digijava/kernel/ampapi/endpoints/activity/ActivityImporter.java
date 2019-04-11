@@ -63,6 +63,7 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.validator.ActivityValidationContext;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
@@ -86,6 +87,7 @@ public class ActivityImporter extends ObjectImporter {
     private AmpActivityVersion oldActivity = null;
     private boolean update = false;
     private ActivityImportRules rules;
+    private SaveContext saveContext;
     private SaveMode requestedSaveMode;
     private boolean downgradedToDraftSave = false;
     private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
@@ -104,6 +106,7 @@ public class ActivityImporter extends ObjectImporter {
                 apiFields);
         setJsonErrorMapper(new ActivityErrorsMapper());
         this.rules = rules;
+        this.saveContext = SaveContext.api(!rules.isProcessApprovalFields());
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {
@@ -214,7 +217,7 @@ public class ActivityImporter extends ObjectImporter {
 
                 newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
                         translations, modifiedBy, Boolean.TRUE.equals(newActivity.getDraft()),
-                        PersistenceManager.getSession(), SaveContext.api(!rules.isProcessApprovalFields()));
+                        PersistenceManager.getSession(), saveContext);
 
                 postProcess();
             } else {
@@ -246,6 +249,22 @@ public class ActivityImporter extends ObjectImporter {
         }
 
         return new ArrayList<ApiErrorMessage>(errors.values());
+    }
+
+    @Override
+    protected void beforeViolationsCheck() {
+        newActivity.setDraft(isDraft());
+
+        ActivityValidationContext avc = new ActivityValidationContext();
+        avc.setOldActivity(oldActivity);
+        newActivity.setActivityValidationContext(avc);
+
+        org.dgfoundation.amp.onepager.util.ActivityUtil.prepareToSave(
+                newActivity, oldActivity, modifiedBy, newActivity.getDraft(), saveContext);
+    }
+
+    public boolean isDraft() {
+        return DRAFT.equals(requestedSaveMode) || this.downgradedToDraftSave;
     }
 
     /**
@@ -477,9 +496,6 @@ public class ActivityImporter extends ObjectImporter {
         }
 
         newActivity.setChangeType(determineChangeType().toString());
-        if (downgradedToDraftSave) {
-            newActivity.setDraft(true);
-        }
         initDefaults();
     }
 

@@ -14,18 +14,20 @@ import javax.validation.ConstraintViolation;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
+import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentageValidator;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class OrgRoleTotalPercentageValidatorTest extends AbstractTotalPercentageValidatorTest {
+public class OrgRoleTotalPercentageValidatorTest extends AbstractValidatorTest<OrgRoleTotalPercentageValidator> {
 
     private AmpRole donorRole =
             newRole(1L, Constants.ROLE_CODE_DONOR, "Donor");

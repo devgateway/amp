@@ -6,7 +6,7 @@ import static org.digijava.module.aim.validator.ConstraintMatchers.violationWith
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import java.util.Set;
 
@@ -14,17 +14,19 @@ import javax.validation.ConstraintViolation;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.validator.percentage.SectorsTotalPercentage;
+import org.digijava.module.aim.validator.percentage.SectorsTotalPercentageValidator;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class SectorsTotalPercentageValidatorTest extends AbstractTotalPercentageValidatorTest {
+public class SectorsTotalPercentageValidatorTest extends AbstractValidatorTest<SectorsTotalPercentageValidator> {
 
     private AmpClassificationConfiguration primarySectors =
             newConfig(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME);

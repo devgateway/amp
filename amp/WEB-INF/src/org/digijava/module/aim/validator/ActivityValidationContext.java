@@ -7,7 +7,7 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
  */
 public class ActivityValidationContext {
 
-    private static ThreadLocal<ActivityValidationContext> CONTEXT = new ThreadLocal<>();
+    private static ThreadLocal<ActivityValidationContext> context = new ThreadLocal<>();
 
     private AmpActivityFields oldActivity;
 
@@ -19,8 +19,8 @@ public class ActivityValidationContext {
         this.oldActivity = oldActivity;
     }
 
-    public static void set(ActivityValidationContext context) {
-        CONTEXT.set(context);
+    public static void set(ActivityValidationContext ctx) {
+        context.set(ctx);
     }
 
     /**
@@ -28,11 +28,11 @@ public class ActivityValidationContext {
      * @return activity validation context
      */
     public static ActivityValidationContext getOrThrow() {
-        ActivityValidationContext context = CONTEXT.get();
-        if (context == null) {
+        ActivityValidationContext ctx = context.get();
+        if (ctx == null) {
             throw new RuntimeException("ActivityValidationContext not configured");
         }
-        return context;
+        return ctx;
     }
 
 }

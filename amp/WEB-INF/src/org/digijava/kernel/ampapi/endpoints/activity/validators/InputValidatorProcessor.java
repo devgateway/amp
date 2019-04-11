@@ -29,7 +29,6 @@ public class InputValidatorProcessor {
                 new RequiredValidator(),
                 new ActivityTitleValidator(),
                 new AmpActivityIdValidator(),
-                new CreatedByValidator(),
                 new ApprovedByValidator(),
                 new MultipleEntriesValidator(),
                 new UniqueValidator(),

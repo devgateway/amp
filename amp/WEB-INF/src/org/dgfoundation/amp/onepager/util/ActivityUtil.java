@@ -102,11 +102,10 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.util.CollectionUtils;
 
 /**
  * Util class used to manipulate an activity
- * @author aartimon@dginternational.org 
+ * @author aartimon@dginternational.org
  * @since Jun 17, 2011
  */
 public class ActivityUtil {
@@ -173,14 +172,14 @@ public class ActivityUtil {
             logger.error("Error saving activity:", exception); // Log the exception
             throw new RuntimeException("Can't save activity:", exception);
         }
-        
+
         if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS_SET.contains(a.getApprovalStatus())) {
             new ActivityValidationWorkflowTrigger(a);
         }
-        
+
         List<AmpContentTranslation> translations = values == null ? new ArrayList<>() : new ArrayList<>(values);
         LuceneUtil.addUpdateActivity(rootRealPath, !newActivity, site, locale, a, oldA, translations);
-        
+
         return a;
     }
 
@@ -188,8 +187,10 @@ public class ActivityUtil {
             AmpTeamMember ampCurrentMember, boolean draft, SaveContext context) {
         boolean newActivity = isNewActivity(a);
 
+        updateModifyCreateInfo(a, ampCurrentMember, newActivity);
+
         if (newActivity) {
-            a.setTeam(ampCurrentMember.getAmpTeam());
+            a.setTeam(a.getActivityCreator().getAmpTeam());
         }
 
         if (context.isUpdateActivityStatus()) {
@@ -203,8 +204,8 @@ public class ActivityUtil {
      */
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
             Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
-            Session session, SaveContext context) throws Exception
-    {
+            Session session, SaveContext context) throws Exception {
+
         AmpActivityVersion oldA = a;
         boolean newActivity = isNewActivity(a);
 
@@ -283,7 +284,7 @@ public class ActivityUtil {
             group.setAmpActivityLastVersion(a);
             session.update(group);
         }
-        
+
         a.setAmpActivityGroup(group);
 
         if (isActivityForm) {
@@ -304,7 +305,6 @@ public class ActivityUtil {
         saveProjectCosts(a, session);
         saveStructures(a, session);
         updateFiscalYears(a);
-        updateModifyCreateInfo(a, ampCurrentMember, newActivity);
 
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
@@ -314,7 +314,7 @@ public class ActivityUtil {
             session.saveOrUpdate(a);
             //session.update(a);
         }
-        
+
         updatePerformanceRules(oldA, a);
 
         if (newActivity){
@@ -340,14 +340,14 @@ public class ActivityUtil {
     public static void updateModifyCreateInfo(AmpActivityVersion activity, AmpTeamMember teamMember,
             boolean newActivity) {
         Date updateDate = Calendar.getInstance().getTime();
-    
+
         activity.setUpdatedDate(updateDate);
         activity.setModifiedDate(updateDate);
-    
+
         if (teamMember == null) {
             throw new RuntimeException("Modified team member cannot be null");
         }
-    
+
         activity.setModifiedBy(teamMember);
 
         if (newActivity) {
@@ -399,7 +399,7 @@ public class ActivityUtil {
                 || ApprovalStatus.STARTED_APPROVED.equals(approvalStatus);
     }
 
-private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityVersion a) {
+    private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityVersion a) {
         PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
 
         Set<AmpPerformanceRule> matchedRules = new HashSet<>();
@@ -411,10 +411,10 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         ruleManager.deleteActivityPerformanceRule(PersistenceManager.getSession(), oldA.getAmpActivityId());
         ruleManager.updateActivityPerformanceRules(a.getAmpActivityId(), matchedRules);
     }
-    
+
     private static void updateFiscalYears(AmpActivityVersion a) {
         Set<Long> actFiscalYears = a.getFiscalYears();
-        
+
         if (actFiscalYears != null) {
             List<Long> fiscalYears = new ArrayList<>(actFiscalYears);
             fiscalYears.sort(Comparator.naturalOrder());
@@ -498,7 +498,8 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         }
     }
 
-    private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity,boolean rejected) {
+    private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a,
+            AmpActivityVersion oldA, boolean newActivity, boolean rejected) {
         boolean teamLeadFlag =  isApprover(ampCurrentMember);
         Boolean crossTeamValidation = ampCurrentMember.getAmpTeam().getCrossteamvalidation();
         Boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId().equals(a.getTeam().getAmpTeamId());
@@ -983,7 +984,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                 } catch (JCRSessionException ex) {
                     // we catch the exception and show a warning, but allow the activity to be saved
                     logger.warn("The JCR Session couldn't be opened. " + "The document " + tdd.getName()
-                            + " will not be saved.", ex);
+                    + " will not be saved.", ex);
                 }
             }
         }
@@ -1101,7 +1102,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                             try {
                                 if (nw.getNode().hasProperty(CrConstants.PROPERTY_DATA))
                                     fileData = nw.getNode().getProperty(CrConstants.PROPERTY_DATA).getStream();
-//                                  .getBinary().getStream();
+                                //                                  .getBinary().getStream();
                                 if (nw.getNode().hasProperty(CrConstants.PROPERTY_FILE_SIZE))
                                     fileSize = Bytes.bytes(nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE).getLong());
                                 DocumentManagerUtil.logoutJcrSessions(req);
@@ -1159,7 +1160,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
      * @param deletedResources
      */
     private static void deleteGPINiResources(AmpActivityVersion a, HashSet<AmpGPINiSurveyResponseDocument>
-            deletedResources) {
+    deletedResources) {
         if (deletedResources != null) {
             for (AmpGPINiSurveyResponseDocument tmpDoc : deletedResources) {
                 AmpGPINiSurveyResponse surveyResponse = tmpDoc.getSurveyResponse();
@@ -1249,7 +1250,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                 } catch (JCRSessionException ex) {
                     // we catch the exception and show a warning, but allow the activity to be saved
                     logger.warn("The JCR Session couldn't be opened. " + "The document " + tdd.getName()
-                            + " will not be saved.", ex);
+                    + " will not be saved.", ex);
                 }
 
             }
@@ -1297,7 +1298,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
     }
 
     public static void saveContacts(AmpActivityVersion a, Session session, boolean checkForContactsRemoval,
-                                    AmpTeamMember teamMember) throws Exception {
+            AmpTeamMember teamMember) throws Exception {
         Set<AmpActivityContact> activityContacts=a.getActivityContacts();
         // if activity contains contact,which is not in contact list, we should remove it
         Long oldActivityId = a.getAmpActivityId();
@@ -1327,15 +1328,15 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         }
 
         boolean newActivity = a.getAmpActivityId() == null;
-        
-        //to avoid saving the same contact twice on the same session, we keep track of the 
+
+        //to avoid saving the same contact twice on the same session, we keep track of the
         //already saved ones.
         Map <Long,Boolean> savedContacts = new HashMap <Long,Boolean> ();
         AmpTeamMember creator = teamMember;
         if (creator == null) {
             creator = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
         }
-    
+
         //add or edit activity contact and amp contact
         if (activityContacts != null && activityContacts.size() > 0) {
             for (AmpActivityContact activityContact : activityContacts) {
@@ -1361,7 +1362,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
             }
         }
     }
-    
+
     private static void saveAnnualProjectBudgets(AmpActivityVersion a,
             Session session) throws Exception {
         if (a.getAmpActivityId() != null) {
@@ -1371,7 +1372,7 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
             }
         }
     }
-    
+
     private static void saveStructures(AmpActivityVersion a, Session session) throws Exception {
         if (a.getAmpActivityId() != null) {
             for (AmpStructure structure : a.getStructures()) {
@@ -1390,10 +1391,10 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         }
 
     }
-    
+
     /**
      * Determine if in a activity a related organization is attached to a funding or not
-     * 
+     *
      * @param activity
      * @param orgRole
      * @return
@@ -1402,24 +1403,24 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         Set<AmpFunding> fundings = activity.getFunding();
         AmpOrganisation org = orgRole.getOrganisation();
         AmpRole role = orgRole.getRole();
-        
+
         for (AmpFunding ampFunding : fundings) {
-            if (ampFunding.getAmpDonorOrgId().getAmpOrgId().equals(org.getAmpOrgId()) 
+            if (ampFunding.getAmpDonorOrgId().getAmpOrgId().equals(org.getAmpOrgId())
                     && ((ampFunding.getSourceRole() == null && role.getRoleCode().equals(Constants.FUNDING_AGENCY))
-                     || (ampFunding.getSourceRole() != null 
-                     && ampFunding.getSourceRole().getRoleCode().equals(role.getRoleCode())))) {
-                
+                            || (ampFunding.getSourceRole() != null
+                            && ampFunding.getSourceRole().getRoleCode().equals(role.getRoleCode())))) {
+
                 return true;
             }
         }
 
-        
+
         return false;
     }
-    
+
     /**
      * Determine if in a activity a related organization is attached to a component funding or not
-     * 
+     *
      * @param activity
      * @param org
      * @return
@@ -1428,23 +1429,23 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         Long ampOrgId = org.getAmpOrgId();
         Set<AmpComponentFunding> componentFundings = activity.getComponents().stream()
                 .flatMap(c -> c.getFundings().stream())
-                .filter(c -> c.getReportingOrganization() != null 
-                    || c.getComponentSecondResponsibleOrganization() != null)
+                .filter(c -> c.getReportingOrganization() != null
+                || c.getComponentSecondResponsibleOrganization() != null)
                 .collect(Collectors.toSet());
-        
+
         for (AmpComponentFunding acf : componentFundings) {
-            if ((acf.getReportingOrganization() != null 
-                        && acf.getReportingOrganization().getAmpOrgId().equals(ampOrgId))
-                    || (acf.getComponentSecondResponsibleOrganization() != null 
-                        && acf.getComponentSecondResponsibleOrganization().getAmpOrgId().equals(ampOrgId))) {
-                
+            if ((acf.getReportingOrganization() != null
+                    && acf.getReportingOrganization().getAmpOrgId().equals(ampOrgId))
+                    || (acf.getComponentSecondResponsibleOrganization() != null
+                    && acf.getComponentSecondResponsibleOrganization().getAmpOrgId().equals(ampOrgId))) {
+
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Get the range list of fiscal years (FY field from budget extras component, identification section in AF)
      * @return
@@ -1454,11 +1455,11 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                 .getGlobalSettingValueInteger(GlobalSettingsConstants.YEAR_RANGE_START);
         int rangeNumber = FeaturesUtil
                 .getGlobalSettingValueInteger(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
-        
+
         List<String> years = Stream.iterate(rangeStartYear, i -> i + 1)
                 .limit(rangeNumber).map(i -> i.toString())
                 .collect(Collectors.toList());
-        
+
         return years;
     }
 

@@ -42,6 +42,7 @@ import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
 import org.digijava.module.aim.validator.percentage.ProgramTotalPercentage;
 import org.digijava.module.aim.validator.percentage.SectorsTotalPercentage;
+import org.digijava.module.aim.validator.user.MatchExistingCreator;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -486,8 +487,7 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Proposed Completion Date")
     protected Date proposedCompletionDate;
 
-
-
+    @MatchExistingCreator(groups = API.class)
     @Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_BY, pickIdOnly = true, label = "Activity created by",
             importable = true)
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.CREATED_BY, blockSingleChange = true)

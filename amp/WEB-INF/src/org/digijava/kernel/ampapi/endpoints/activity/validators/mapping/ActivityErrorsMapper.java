@@ -24,6 +24,7 @@ import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
 import org.digijava.module.aim.validator.percentage.ProgramTotalPercentage;
 import org.digijava.module.aim.validator.percentage.SectorsTotalPercentage;
+import org.digijava.module.aim.validator.user.MatchExistingCreator;
 
 /**
  * Map activity errors onto json structure.
@@ -71,6 +72,7 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
 
     private Map<Class<?>, Class<?>> constraintToViolation = ImmutableMap.<Class<?>, Class<?>>builder()
             .put(ApprovalStatus.class, ApprovalStatusViolationBuilder.class)
+            .put(MatchExistingCreator.class, MatchExistingCreatorViolationBuilder.class)
             .build();
 
     @Override

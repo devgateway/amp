@@ -49,6 +49,8 @@ import org.slf4j.LoggerFactory;
 public class ResourceEndpoint implements ErrorReportingEndpoint {
 
     private static final Logger logger = LoggerFactory.getLogger(ResourceEndpoint.class);
+
+    private static ResourceService resourceService = new ResourceService();
     
     @GET
     @Path("fields")
@@ -116,7 +118,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                     + " }\n"
                     + " </pre>")
     public JsonBean getResource(@PathParam("uuid") String uuid) {
-        return ResourceUtil.getResource(uuid);
+        return resourceService.getResource(uuid);
     }
     
     @GET
@@ -124,7 +126,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getAllResources", ui = false)
     @ApiOperation("Retrieve all resources from AMP.")
     public List<JsonBean> getAllResources() {
-        return ResourceUtil.getAllResources();
+        return resourceService.getAllResources();
     }
     
     @POST
@@ -132,7 +134,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @ApiMethod(id = "getAllResourcesByIds", ui = false)
     @ApiOperation("Retrieve resources from AMP.")
     public List<JsonBean> getAllResources(List<String> uuids) {
-        return ResourceUtil.getAllResources(uuids);
+        return resourceService.getAllResources(uuids);
     }
 
     @PUT
@@ -153,7 +155,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     public JsonBean createResource(JsonBean resource) {
         ResourceImporter importer = new ResourceImporter();
         List<ApiErrorMessage> errors = importer.createResource(resource);
-        return ResourceUtil.getImportResult(importer.getResource(), importer.getNewJson(), errors);
+        return resourceService.getImportResult(importer.getResource(), importer.getNewJson(), errors);
     }
 
     @PUT
@@ -191,7 +193,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
 
             ResourceImporter importer = new ResourceImporter();
             List<ApiErrorMessage> errors = importer.createResource(resource, formFile);
-            return ResourceUtil.getImportResult(importer.getResource(), importer.getNewJson(), errors);
+            return resourceService.getImportResult(importer.getResource(), importer.getNewJson(), errors);
         } catch (IOException e) {
             logger.error("Failed to process file.", e);
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST,

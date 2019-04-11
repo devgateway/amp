@@ -39,6 +39,7 @@ import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceService;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.dbentity.AmpAgreement;
@@ -64,6 +65,8 @@ public class ObjectImporter {
     private List<APIField> apiFields;
 
     private PossibleValuesCache possibleValuesCached;
+
+    private ResourceService resourceService = new ResourceService();
 
     /**
      * This field is used for storing the current json values during field validation
@@ -564,6 +567,10 @@ public class ObjectImporter {
 
     public PossibleValuesCache getPossibleValuesCache() {
         return this.possibleValuesCached;
+    }
+
+    public ResourceService getResourceService() {
+        return this.resourceService;
     }
 
     /**

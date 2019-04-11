@@ -8,7 +8,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.resource.ResourceUtil;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
 /**
@@ -17,7 +16,7 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
  * @author Viorel Chihai
  */
 public class UUIDValidator extends InputValidator {
-    
+
     @Override
     public ApiErrorMessage getErrorMessage() {
         return ActivityErrors.FIELD_INVALID_VALUE;
@@ -29,7 +28,7 @@ public class UUIDValidator extends InputValidator {
         
         if (fieldDescription.getFieldName().equals(FieldMap.underscorify(ActivityFieldsConstants.UUID))) {
             String uuid = StringUtils.trim((String) newFieldParent.get(fieldDescription.getFieldName()));
-            return ResourceUtil.getPrivateUuids().contains(uuid);
+            return importer.getResourceService().getPrivateUuids().contains(uuid);
         }
 
         return true;

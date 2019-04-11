@@ -198,13 +198,17 @@ public class ActivityImporter extends ObjectImporter {
                 }
 
                 newActivity = oldActivity;
-                // REFACTOR: we may no longer need to use old activity
                 oldActivity = ActivityVersionUtil.cloneActivity(oldActivity);
                 oldActivity.setAmpId(newActivity.getAmpId());
                 oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
 
                 PersistenceManager.getSession().evict(newActivity.getAmpActivityGroup());
                 newActivity.getAmpActivityGroup().setVersion(-1L);
+                // TODO AMP-28993: remove explicitly resetting createdBy since it is cleared during init
+                if (!rules.isTrackEditors()) {
+                    Long createdById = oldActivity.getActivityCreator().getAmpTeamMemId();
+                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY), createdById);
+                }
             } else if (!update) {
                 newActivity = new AmpActivityVersion();
             }

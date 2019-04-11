@@ -11,7 +11,6 @@ import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Set;
@@ -19,9 +18,6 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -41,13 +37,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ FeaturesUtil.class, DbUtil.class })
-public class ApprovalStatusConstraintTest extends AbstractValidatorTest<ApprovalStatusConstraint> {
-
-    private static final Long TEAM_ID = 1l;
-
-    private AmpTeamMember ampTeamMember;
-    private AmpTeamMemberRoles roles;
-    private AmpTeam ampTeam;
+public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<ApprovalStatusConstraint> {
 
     @Override
     @Before
@@ -55,14 +45,6 @@ public class ApprovalStatusConstraintTest extends AbstractValidatorTest<Approval
         super.setUp();
         PowerMockito.mockStatic(FeaturesUtil.class);
         PowerMockito.mockStatic(DbUtil.class);
-
-        ampTeamMember = mock(AmpTeamMember.class);
-        roles = mock(AmpTeamMemberRoles.class);
-        ampTeam = mock(AmpTeam.class);
-        when(ampTeamMember.getAmpTeam()).thenReturn(ampTeam);
-        when(ampTeam.getAmpTeamId()).thenReturn(TEAM_ID);
-        when(ampTeamMember.getAmpMemberRole()).thenReturn(roles);
-        when(roles.getTeamHead()).thenReturn(true);
     }
 
     @Test
@@ -232,8 +214,6 @@ public class ApprovalStatusConstraintTest extends AbstractValidatorTest<Approval
         activity.setApprovedBy(ampTeamMember);
         activity.setModifiedBy(ampTeamMember);
         activity.setTeam(ampTeam);
-        ActivityValidationContext avc = new ActivityValidationContext();
-        activity.setActivityValidationContext(avc);
     }
 
     private Matcher<ConstraintViolation> approvalStatusViolation() {

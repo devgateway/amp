@@ -250,6 +250,7 @@ public class ActivityImporter extends ObjectImporter {
             }
         } finally {
             ActivityGatekeeper.unlockActivity(activityId, key);
+            ActivityValidationContext.set(null);
         }
 
         return new ArrayList<ApiErrorMessage>(errors.values());
@@ -261,7 +262,7 @@ public class ActivityImporter extends ObjectImporter {
 
         ActivityValidationContext avc = new ActivityValidationContext();
         avc.setOldActivity(oldActivity);
-        newActivity.setActivityValidationContext(avc);
+        ActivityValidationContext.set(avc);
 
         org.dgfoundation.amp.onepager.util.ActivityUtil.prepareToSave(
                 newActivity, oldActivity, modifiedBy, newActivity.getDraft(), saveContext);

@@ -192,7 +192,7 @@ public final class ResourceUtil {
         return nodeUuids;
     }
     
-    private static List<? extends String> getPrivateUuids() {
+    public static List<? extends String> getPrivateUuids() {
         return getUuidsFromPath("private");
     }
     

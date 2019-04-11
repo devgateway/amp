@@ -40,7 +40,10 @@ public class CreatedByValidator extends InputValidator {
         if (importer.getOldActivity() == null) {
             return cId != null;
         }
+        /* TODO AMP-28993: uncomment to also allow null created by
         return cId == null || importer.getOldActivity().getActivityCreator().getAmpTeamMemId().equals(cId);
+         */
+        return importer.getOldActivity().getActivityCreator().getAmpTeamMemId().equals(cId);
     }
 
 }

@@ -29,22 +29,20 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
-import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ErrorDecorator;
-import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
-import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.DefaultErrorsMapper;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.resource.ResourceService;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.dbentity.AmpAgreement;
-import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.aim.validator.groups.API;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author Octavian Ciubotaru
@@ -65,8 +63,6 @@ public class ObjectImporter {
     private List<APIField> apiFields;
 
     private PossibleValuesCache possibleValuesCached;
-
-    private ResourceService resourceService = new ResourceService();
 
     /**
      * This field is used for storing the current json values during field validation
@@ -567,10 +563,6 @@ public class ObjectImporter {
 
     public PossibleValuesCache getPossibleValuesCache() {
         return this.possibleValuesCached;
-    }
-
-    public ResourceService getResourceService() {
-        return this.resourceService;
     }
 
     /**

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
@@ -28,7 +29,7 @@ public class UUIDValidator extends InputValidator {
         
         if (fieldDescription.getFieldName().equals(FieldMap.underscorify(ActivityFieldsConstants.UUID))) {
             String uuid = StringUtils.trim((String) newFieldParent.get(fieldDescription.getFieldName()));
-            return importer.getResourceService().getPrivateUuids().contains(uuid);
+            return ((ActivityImporter) importer).getResourceService().getPrivateUuids().contains(uuid);
         }
 
         return true;

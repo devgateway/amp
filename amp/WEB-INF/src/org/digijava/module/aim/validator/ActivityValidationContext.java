@@ -9,7 +9,16 @@ public class ActivityValidationContext {
 
     private static ThreadLocal<ActivityValidationContext> context = new ThreadLocal<>();
 
+    private AmpActivityFields newActivity;
     private AmpActivityFields oldActivity;
+
+    public AmpActivityFields getNewActivity() {
+        return newActivity;
+    }
+
+    public void setNewActivity(AmpActivityFields newActivity) {
+        this.newActivity = newActivity;
+    }
 
     public AmpActivityFields getOldActivity() {
         return oldActivity;

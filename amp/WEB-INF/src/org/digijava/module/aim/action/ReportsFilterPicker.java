@@ -917,6 +917,7 @@ public class ReportsFilterPicker extends Action {
         }
         arf.setHumanitarianAid(buildBooleanField(filterForm.getSelectedHumanitarianAid()));
         arf.setDisasterResponse(buildBooleanField(filterForm.getSelectedDisasterResponse()));
+        arf.getUndefinedOptions().clear(); 
         arf.getUndefinedOptions().addAll(filterForm.getUndefinedOptions());
         arf.setIncludeLocationChildren(filterForm.getIncludeLocationChildren());
         arf.postprocess();

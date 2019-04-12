@@ -260,7 +260,21 @@ public class ActivityImporter extends ObjectImporter {
     protected void beforeViolationsCheck() {
         newActivity.setDraft(isDraft());
 
+        if (rules.isProcessApprovalFields()) {
+            Date newApprovalDate = newActivity.getApprovalDate();
+            if (newApprovalDate != null
+                    && (oldActivity == null || !newApprovalDate.equals(oldActivity.getApprovalDate()))
+                    || AmpARFilter.VALIDATED_ACTIVITY_STATUS.contains(newActivity.getApprovalStatus())) {
+                newActivity.setApprovalDate(new Date());
+            }
+        } else if (oldActivity != null) {
+            newActivity.setApprovalDate(oldActivity.getApprovalDate());
+            newActivity.setApprovedBy(oldActivity.getApprovedBy());
+            newActivity.setApprovalStatus(oldActivity.getApprovalStatus());
+        }
+
         ActivityValidationContext avc = new ActivityValidationContext();
+        avc.setNewActivity(newActivity);
         avc.setOldActivity(oldActivity);
         ActivityValidationContext.set(avc);
 
@@ -483,18 +497,6 @@ public class ActivityImporter extends ObjectImporter {
     protected void prepareToSave() {
         newActivity.setLastImportedAt(new Date());
         newActivity.setLastImportedBy(currentUser);
-
-        if (rules.isProcessApprovalFields()) {
-            Date newApprovalDate = newActivity.getApprovalDate();
-            if (newApprovalDate != null
-                    && (oldActivity == null || !newApprovalDate.equals(oldActivity.getApprovalDate()))
-                    || AmpARFilter.VALIDATED_ACTIVITY_STATUS.contains(newActivity.getApprovalStatus())) {
-                newActivity.setApprovalDate(new Date());
-            }
-        } else if (oldActivity != null) {
-            newActivity.setApprovalDate(oldActivity.getApprovalDate());
-            newActivity.setApprovedBy(oldActivity.getApprovedBy());
-        }
 
         if (!update) {
             newActivity.setAmpActivityGroup(null);

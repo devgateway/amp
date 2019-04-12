@@ -19,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.approval.ApprovalStatus;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
@@ -75,6 +76,19 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
             .put(MatchExistingCreator.class, MatchExistingCreatorViolationBuilder.class)
             .build();
 
+    private Map<Class<?>, String> violationsWithGenericInvalidFieldBuilder = ImmutableMap.<Class<?>, String>builder()
+            .put(AllowedApprover.class, FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY))
+            .build();
+
+    private ConstraintViolationBuilder getViolationBuilder(ConstraintViolation v) {
+        Class<? extends Annotation> aClass = v.getConstraintDescriptor().getAnnotation().annotationType();
+        String fieldPath = violationsWithGenericInvalidFieldBuilder.get(aClass);
+        if (fieldPath != null) {
+            return new InvalidFieldViolationBuilder(fieldPath);
+        }
+        return null;
+    }
+
     @Override
     public JsonConstraintViolation apply(ConstraintViolation v) {
         if (isOrgRolePercentageConstraint(v)) {
@@ -124,6 +138,10 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
             } catch (InstantiationException | IllegalAccessException e) {
                 throw new RuntimeException("Could not generate the contraint violation json object");
             }
+        }
+        ConstraintViolationBuilder cvb = getViolationBuilder(v);
+        if (cvb != null) {
+            return cvb.build(v);
         }
 
         throw new RuntimeException("Cannot map constraint violation onto json object. Violation: " + v);

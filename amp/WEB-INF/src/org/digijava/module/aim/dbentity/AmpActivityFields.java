@@ -37,6 +37,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
@@ -509,6 +510,7 @@ LoggerIdentifiable, Cloneable {
     @TimestampField
     protected Date iatiLastUpdatedDate;
 
+    @AllowedApprover(groups = API.class)
     @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVED_BY, pickIdOnly = true, importable = true)
     protected AmpTeamMember approvedBy;
     

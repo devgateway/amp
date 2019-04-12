@@ -25,6 +25,7 @@ public abstract class AbstractActivityValidatorTest<T extends ConstraintValidato
     public AbstractActivityValidatorTest() {
         super();
         ActivityValidationContext avc = new ActivityValidationContext();
+        avc.setNewActivity(new AmpActivity());
         ActivityValidationContext.set(avc);
     }
 
@@ -40,11 +41,13 @@ public abstract class AbstractActivityValidatorTest<T extends ConstraintValidato
         when(ampTeam.getAmpTeamId()).thenReturn(TEAM_ID);
         when(ampTeamMember.getAmpMemberRole()).thenReturn(roles);
         when(roles.getTeamHead()).thenReturn(true);
+        when(roles.isApprover()).thenReturn(true);
     }
 
     public AmpActivity getDefaultActivity() {
         AmpActivity activity = new AmpActivity();
         activity.setActivityCreator(ampTeamMember);
+        activity.setTeam(ampTeam);
         activity.setDraft(true);
         return activity;
     }

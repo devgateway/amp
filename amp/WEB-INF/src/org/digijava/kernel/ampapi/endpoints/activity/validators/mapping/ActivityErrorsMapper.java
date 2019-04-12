@@ -20,7 +20,7 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.validator.approval.AllowedApprover;
-import org.digijava.module.aim.validator.approval.ApprovalStatus;
+import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
 import org.digijava.module.aim.validator.percentage.ProgramTotalPercentage;
@@ -72,7 +72,7 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
             .build();
 
     private Map<Class<?>, Class<?>> constraintToViolation = ImmutableMap.<Class<?>, Class<?>>builder()
-            .put(ApprovalStatus.class, ApprovalStatusViolationBuilder.class)
+            .put(AllowedApprovalStatus.class, ApprovalStatusViolationBuilder.class)
             .put(MatchExistingCreator.class, MatchExistingCreatorViolationBuilder.class)
             .build();
 

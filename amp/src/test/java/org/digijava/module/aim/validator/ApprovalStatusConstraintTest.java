@@ -21,7 +21,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.validator.approval.ApprovalStatus;
+import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
 import org.digijava.module.aim.validator.approval.ApprovalStatusConstraint;
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -214,10 +214,11 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
         activity.setApprovedBy(ampTeamMember);
         activity.setModifiedBy(ampTeamMember);
         activity.setTeam(ampTeam);
+        ActivityValidationContext.getOrThrow().setNewActivity(activity);
     }
 
     private Matcher<ConstraintViolation> approvalStatusViolation() {
-        return hasViolation(ApprovalStatus.class);
+        return hasViolation(AllowedApprovalStatus.class);
     }
 
 }

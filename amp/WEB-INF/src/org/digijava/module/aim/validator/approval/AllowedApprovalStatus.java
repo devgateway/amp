@@ -1,6 +1,6 @@
 package org.digijava.module.aim.validator.approval;
 
-import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Documented;
@@ -18,9 +18,9 @@ import javax.validation.Payload;
  */
 @Documented
 @Retention(RUNTIME)
-@Target(TYPE)
+@Target(FIELD)
 @Constraint(validatedBy = ApprovalStatusConstraint.class)
-public @interface ApprovalStatus {
+public @interface AllowedApprovalStatus {
 
     String message() default "{org.digijava.module.aim.validator.InvalidFieldValue.message}";
 

@@ -37,6 +37,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
 import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
@@ -56,7 +57,6 @@ import org.hibernate.Session;
 @LocationTotalPercentage(groups = API.class)
 @SectorsTotalPercentage(groups = API.class)
 @ProgramTotalPercentage(groups = API.class)
-@org.digijava.module.aim.validator.approval.ApprovalStatus(groups = API.class)
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
 LoggerIdentifiable, Cloneable {
 
@@ -522,6 +522,7 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = "Regional Fundings")
     protected Set <AmpRegionalFunding> regionalFundings;
 
+    @AllowedApprovalStatus(groups = API.class)
     @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS, pickIdOnly = true, importable = true)
     @PossibleValues(ApprovalStatusPossibleValuesProvider.class)
     @VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)

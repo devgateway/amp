@@ -19,8 +19,8 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
+import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
 import org.digijava.module.aim.validator.percentage.ProgramTotalPercentage;
@@ -72,12 +72,14 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
             .build();
 
     private Map<Class<?>, Class<?>> constraintToViolation = ImmutableMap.<Class<?>, Class<?>>builder()
-            .put(AllowedApprovalStatus.class, ApprovalStatusViolationBuilder.class)
-            .put(MatchExistingCreator.class, MatchExistingCreatorViolationBuilder.class)
+            // customize if anything extra needed or use some common default below
+            // e.g. .put(AllowedApprovalStatus.class, ApprovalStatusViolationBuilder.class)
             .build();
 
     private Map<Class<?>, String> violationsWithGenericInvalidFieldBuilder = ImmutableMap.<Class<?>, String>builder()
+            .put(AllowedApprovalStatus.class, FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS))
             .put(AllowedApprover.class, FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY))
+            .put(MatchExistingCreator.class, FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY))
             .build();
 
     private ConstraintViolationBuilder getViolationBuilder(ConstraintViolation v) {

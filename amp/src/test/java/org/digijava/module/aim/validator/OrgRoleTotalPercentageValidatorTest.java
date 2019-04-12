@@ -27,7 +27,8 @@ import org.junit.Test;
 /**
  * @author Octavian Ciubotaru
  */
-public class OrgRoleTotalPercentageValidatorTest extends AbstractValidatorTest<OrgRoleTotalPercentageValidator> {
+public class OrgRoleTotalPercentageValidatorTest
+extends AbstractActivityValidatorTest<OrgRoleTotalPercentageValidator> {
 
     private AmpRole donorRole =
             newRole(1L, Constants.ROLE_CODE_DONOR, "Donor");

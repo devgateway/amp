@@ -27,7 +27,8 @@ import org.junit.Test;
 /**
  * @author Octavian Ciubotaru
  */
-public class ProgramTotalPercentageValidatorTest extends AbstractValidatorTest<ProgramTotalPercentageValidator> {
+public class ProgramTotalPercentageValidatorTest
+extends AbstractActivityValidatorTest<ProgramTotalPercentageValidator> {
 
     private AmpActivityProgramSettings primaryProgram = newActProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
     private AmpActivityProgramSettings secondaryProgram = newActProgramSettings(ProgramUtil.SECONDARY_PROGRAM);

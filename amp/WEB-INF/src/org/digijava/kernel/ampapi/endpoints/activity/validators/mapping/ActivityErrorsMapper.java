@@ -19,11 +19,13 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.validator.approval.ApprovalStatus;
+import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
+import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
 import org.digijava.module.aim.validator.percentage.ProgramTotalPercentage;
 import org.digijava.module.aim.validator.percentage.SectorsTotalPercentage;
+import org.digijava.module.aim.validator.user.MatchExistingCreator;
 
 /**
  * Map activity errors onto json structure.
@@ -70,8 +72,24 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
             .build();
 
     private Map<Class<?>, Class<?>> constraintToViolation = ImmutableMap.<Class<?>, Class<?>>builder()
-            .put(ApprovalStatus.class, ApprovalStatusViolationBuilder.class)
+            // customize if anything extra needed or use some common default below
+            // e.g. .put(AllowedApprovalStatus.class, ApprovalStatusViolationBuilder.class)
             .build();
+
+    private Map<Class<?>, String> violationsWithGenericInvalidFieldBuilder = ImmutableMap.<Class<?>, String>builder()
+            .put(AllowedApprovalStatus.class, FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS))
+            .put(AllowedApprover.class, FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY))
+            .put(MatchExistingCreator.class, FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY))
+            .build();
+
+    private ConstraintViolationBuilder getViolationBuilder(ConstraintViolation v) {
+        Class<? extends Annotation> aClass = v.getConstraintDescriptor().getAnnotation().annotationType();
+        String fieldPath = violationsWithGenericInvalidFieldBuilder.get(aClass);
+        if (fieldPath != null) {
+            return new InvalidFieldViolationBuilder(fieldPath);
+        }
+        return null;
+    }
 
     @Override
     public JsonConstraintViolation apply(ConstraintViolation v) {
@@ -122,6 +140,10 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
             } catch (InstantiationException | IllegalAccessException e) {
                 throw new RuntimeException("Could not generate the contraint violation json object");
             }
+        }
+        ConstraintViolationBuilder cvb = getViolationBuilder(v);
+        if (cvb != null) {
+            return cvb.build(v);
         }
 
         throw new RuntimeException("Cannot map constraint violation onto json object. Violation: " + v);

@@ -24,7 +24,8 @@ import org.junit.Test;
 /**
  * @author Octavian Ciubotaru
  */
-public class LocationTotalPercentageValidatorTest extends AbstractValidatorTest<LocationTotalPercentageValidator> {
+public class LocationTotalPercentageValidatorTest
+extends AbstractActivityValidatorTest<LocationTotalPercentageValidator> {
 
     @Test
     public void testNotAppliedInHibernate() {

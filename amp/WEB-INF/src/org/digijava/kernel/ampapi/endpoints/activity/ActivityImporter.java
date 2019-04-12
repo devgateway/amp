@@ -250,6 +250,7 @@ public class ActivityImporter extends ObjectImporter {
             }
         } finally {
             ActivityGatekeeper.unlockActivity(activityId, key);
+            ActivityValidationContext.set(null);
         }
 
         return new ArrayList<ApiErrorMessage>(errors.values());
@@ -259,9 +260,23 @@ public class ActivityImporter extends ObjectImporter {
     protected void beforeViolationsCheck() {
         newActivity.setDraft(isDraft());
 
+        if (rules.isProcessApprovalFields()) {
+            Date newApprovalDate = newActivity.getApprovalDate();
+            if (newApprovalDate != null
+                    && (oldActivity == null || !newApprovalDate.equals(oldActivity.getApprovalDate()))
+                    || AmpARFilter.VALIDATED_ACTIVITY_STATUS.contains(newActivity.getApprovalStatus())) {
+                newActivity.setApprovalDate(new Date());
+            }
+        } else if (oldActivity != null) {
+            newActivity.setApprovalDate(oldActivity.getApprovalDate());
+            newActivity.setApprovedBy(oldActivity.getApprovedBy());
+            newActivity.setApprovalStatus(oldActivity.getApprovalStatus());
+        }
+
         ActivityValidationContext avc = new ActivityValidationContext();
+        avc.setNewActivity(newActivity);
         avc.setOldActivity(oldActivity);
-        newActivity.setActivityValidationContext(avc);
+        ActivityValidationContext.set(avc);
 
         org.dgfoundation.amp.onepager.util.ActivityUtil.prepareToSave(
                 newActivity, oldActivity, modifiedBy, newActivity.getDraft(), saveContext);
@@ -482,18 +497,6 @@ public class ActivityImporter extends ObjectImporter {
     protected void prepareToSave() {
         newActivity.setLastImportedAt(new Date());
         newActivity.setLastImportedBy(currentUser);
-
-        if (rules.isProcessApprovalFields()) {
-            Date newApprovalDate = newActivity.getApprovalDate();
-            if (newApprovalDate != null
-                    && (oldActivity == null || !newApprovalDate.equals(oldActivity.getApprovalDate()))
-                    || AmpARFilter.VALIDATED_ACTIVITY_STATUS.contains(newActivity.getApprovalStatus())) {
-                newActivity.setApprovalDate(new Date());
-            }
-        } else if (oldActivity != null) {
-            newActivity.setApprovalDate(oldActivity.getApprovalDate());
-            newActivity.setApprovedBy(oldActivity.getApprovedBy());
-        }
 
         if (!update) {
             newActivity.setAmpActivityGroup(null);

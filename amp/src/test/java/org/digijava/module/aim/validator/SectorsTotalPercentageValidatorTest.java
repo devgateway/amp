@@ -26,7 +26,8 @@ import org.junit.Test;
 /**
  * @author Octavian Ciubotaru
  */
-public class SectorsTotalPercentageValidatorTest extends AbstractValidatorTest<SectorsTotalPercentageValidator> {
+public class SectorsTotalPercentageValidatorTest
+extends AbstractActivityValidatorTest<SectorsTotalPercentageValidator> {
 
     private AmpClassificationConfiguration primarySectors =
             newConfig(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME);

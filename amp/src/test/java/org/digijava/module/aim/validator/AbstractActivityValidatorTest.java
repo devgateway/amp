@@ -16,6 +16,7 @@ import org.junit.Before;
  */
 public abstract class AbstractActivityValidatorTest<T extends ConstraintValidator> extends AbstractValidatorTest<T> {
     protected static final Long TEAM_ID = 1l;
+    protected static final Long TM1 = 1l;
 
     protected AmpTeamMember ampTeamMember;
     protected AmpTeamMemberRoles roles;
@@ -34,6 +35,7 @@ public abstract class AbstractActivityValidatorTest<T extends ConstraintValidato
         ampTeamMember = mock(AmpTeamMember.class);
         roles = mock(AmpTeamMemberRoles.class);
         ampTeam = mock(AmpTeam.class);
+        when(ampTeamMember.getAmpTeamMemId()).thenReturn(TM1);
         when(ampTeamMember.getAmpTeam()).thenReturn(ampTeam);
         when(ampTeam.getAmpTeamId()).thenReturn(TEAM_ID);
         when(ampTeamMember.getAmpMemberRole()).thenReturn(roles);

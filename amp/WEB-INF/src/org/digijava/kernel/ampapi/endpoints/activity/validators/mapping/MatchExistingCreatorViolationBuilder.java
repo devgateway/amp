@@ -9,7 +9,7 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 /**
  * @author Nadejda Mandrescu
  */
-public class MatchExistingCreatorViolationBuilder  implements ConstraintViolationBuilder {
+public class MatchExistingCreatorViolationBuilder implements ConstraintViolationBuilder {
 
     @Override
     public JsonConstraintViolation build(ConstraintViolation v) {

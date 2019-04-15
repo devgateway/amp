@@ -185,7 +185,7 @@ public class ActivityUtil {
 
     public static void prepareToSave(AmpActivityVersion a, AmpActivityVersion oldA,
             AmpTeamMember ampCurrentMember, boolean draft, SaveContext context) {
-        boolean newActivity = isNewActivity(a);
+        boolean newActivity = isNewActivity(oldA == null ? a : oldA);
 
         updateModifyCreateInfo(a, ampCurrentMember, newActivity);
 
@@ -328,6 +328,7 @@ public class ActivityUtil {
     }
 
     public static <T extends AmpActivityFields> boolean isNewActivity(T a) {
+        // it would be nicer to rely upon AMP ID, but some old activities may lack it
         return a.getAmpActivityId() == null;
     }
 

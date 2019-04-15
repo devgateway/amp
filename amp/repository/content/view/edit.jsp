@@ -259,22 +259,22 @@ div.fakefile2 input {
                             <tr>
                               <td align="center">
                               <img src="/repository/content/view/layout_1.png"/><br />
-                              <html:radio name="contentForm" property="layout" value="1" disabled="false" />
+                              <html:radio name="contentForm" property="contentLayout" value="1" disabled="false" />
                               <br />
                               </td>
                               <td align="center">
                               <img src="/repository/content/view/layout_2.png" /><br />
-                              <html:radio property="layout" value="2" disabled="false" />
+                              <html:radio property="contentLayout" value="2" disabled="false" />
                               <br />
                               </td>
                               <td align="center">
                               <img src="/repository/content/view/layout_3.png" /><br />
-                              <html:radio property="layout" value="3" disabled="false" />
+                              <html:radio property="contentLayout" value="3" disabled="false" />
                               <br />
                               </td>
                               <td align="center">
                               <img src="/repository/content/view/layout_4.png" /><br />
-                              <html:radio property="layout" value="4" disabled="false" />
+                              <html:radio property="contentLayout" value="4" disabled="false" />
                               <br />
                               </td>
                             </tr>
@@ -301,7 +301,7 @@ div.fakefile2 input {
                 	<c:forEach var="layoutNumber" begin="1" end="4">
                     <c:set var="displayLayout">
                         <c:choose>
-                            <c:when test="${contentForm.layout eq layoutNumber}">
+                            <c:when test="${contentForm.contentLayout eq layoutNumber}">
                             display:block
                             </c:when>
                             <c:otherwise>

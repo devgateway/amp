@@ -39,6 +39,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
 import org.digijava.module.aim.validator.approval.AllowedApprover;
+import org.digijava.module.aim.validator.contact.PrimaryContact;
 import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
@@ -424,7 +425,8 @@ LoggerIdentifiable, Cloneable {
     protected String secMiCntPhoneNumber;
 //  @Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Fax")
     protected String secMiCntFaxNumber;
-
+    
+    @PrimaryContact(groups = API.class)
     @VersionableCollection(fieldTitle = "Activity Contacts")
     @InterchangeableDiscriminator(discriminatorField = "contactType", settings = {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.DONOR_CONTACT, importable = true, discriminatorOption = Constants.DONOR_CONTACT, 

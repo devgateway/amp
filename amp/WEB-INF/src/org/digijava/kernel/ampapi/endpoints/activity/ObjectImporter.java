@@ -117,8 +117,20 @@ public class ObjectImporter {
      * @return
      */
     public boolean validateAndImport(Object root, Map<String, Object> json) {
+        return validateAndImport(root, json, false);
+    }
+
+    /**
+     * This method is used to bypass violations and other configurations.
+     * TODO to be updated during refactoring for Activity Importer unit tests
+     * @param root
+     * @param json
+     * @param validateFormatOnly set it to true for test only
+     * @return
+     */
+    public boolean validateAndImport(Object root, Map<String, Object> json, boolean validateFormatOnly) {
         boolean isFormatValid = validateAndImport(root, apiFields, json, null);
-        if (isFormatValid) {
+        if (isFormatValid && !validateFormatOnly) {
             beforeViolationsCheck();
             processViolationsForTypes(json, root);
         }

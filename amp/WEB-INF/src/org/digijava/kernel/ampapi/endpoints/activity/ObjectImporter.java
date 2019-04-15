@@ -156,11 +156,10 @@ public class ObjectImporter {
                 fields.remove(fieldDef.getFieldName());
             }
 
-            // and error anything remained
+            // and warn anything remained
             // note: due to AMP-20766, we won't be able to fully detect invalid children
             String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
             if (fields.size() > 0) {
-                isFormatValid = false;
                 for (String invalidField : fields) {
                     // no need to go through deep-first validation flow
                     ErrorDecorator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,

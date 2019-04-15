@@ -117,8 +117,20 @@ public class ObjectImporter {
      * @return
      */
     public boolean validateAndImport(Object root, Map<String, Object> json) {
+        return validateAndImport(root, json, false);
+    }
+
+    /**
+     * This method is used to bypass violations and other configurations.
+     * TODO to be updated during refactoring for Activity Importer unit tests
+     * @param root
+     * @param json
+     * @param validateFormatOnly set it to true for test only
+     * @return
+     */
+    public boolean validateAndImport(Object root, Map<String, Object> json, boolean validateFormatOnly) {
         boolean isFormatValid = validateAndImport(root, apiFields, json, null);
-        if (isFormatValid) {
+        if (isFormatValid && !validateFormatOnly) {
             beforeViolationsCheck();
             processViolationsForTypes(json, root);
         }
@@ -156,11 +168,10 @@ public class ObjectImporter {
                 fields.remove(fieldDef.getFieldName());
             }
 
-            // and error anything remained
+            // and warn anything remained
             // note: due to AMP-20766, we won't be able to fully detect invalid children
             String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
             if (fields.size() > 0) {
-                isFormatValid = false;
                 for (String invalidField : fields) {
                     // no need to go through deep-first validation flow
                     ErrorDecorator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,

@@ -63,7 +63,7 @@ public class ActivityImporterTest {
         activity.setApprovalStatus(ApprovalStatus.STARTED);
         ActivityImporter importer = new ActivityImporter(Collections.emptyList(), new ActivityImportRules(true, false,
                 false));
-        importer.validateAndImport(activity, json.any());
+        importer.validateAndImport(activity, json.any(), true);
         return importer;
     }
 

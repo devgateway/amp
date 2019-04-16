@@ -715,6 +715,7 @@ public class LuceneUtil implements Serializable {
         IndexWriter indexWriter = null;
         try {
             IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, LuceneUtil.ANALYZER);
+            indexWriterConfig.setWriteLockTimeout(LOCK_OBTAIN_WAIT_FOREVER);
             Directory directory = FSDirectory.open(new File(idx));
             indexWriter = new IndexWriter(directory, indexWriterConfig);
             indexWriter.deleteDocuments(term);

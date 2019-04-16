@@ -30,7 +30,7 @@ define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','un
 		});
 		app.TabsApp.listenTo(app.TabsApp.filtersWidget, 'apply', function(data) {			
 			// Save just applied filters in case the user hits "reset" button.
-			app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize() || {};
+			app.TabsApp.serializedFilters = data || {};
 			
 			// Get list of human friendly applied filters we will use in the
 			// accordion.

@@ -79,7 +79,8 @@ var process_spec = function(data) {
 		report_type : data.reportMetadata.reportSpec.reportType,
 		settings_data: data.reportMetadata.settings,
 		original_currency: data.reportMetadata.reportSpec.showOriginalCurrency,
-		page_timestamp: + new Date()
+		page_timestamp: + new Date(),
+		includeLocationChildren: data.reportMetadata.reportSpec.includeLocationChildren
 	};
 	defaults[report_fieldname] = report_identifier;
 	var model = Backbone.Model.extend({

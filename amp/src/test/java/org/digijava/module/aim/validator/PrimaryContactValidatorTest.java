@@ -48,7 +48,7 @@ public class PrimaryContactValidatorTest extends AbstractActivityValidatorTest<P
     }
 
     @Test
-    public void testEmptySectors() {
+    public void testEmptyContacts() {
         AmpActivity activity = new AmpActivity();
         activity.setSectors(ImmutableSet.of());
 

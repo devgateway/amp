@@ -23,6 +23,12 @@ public class AllowedApproverConstraint implements ConstraintValidator<AllowedApp
     public boolean isValid(AmpTeamMember value, ConstraintValidatorContext context) {
         ActivityValidationContext avc = ActivityValidationContext.getOrThrow();
         AmpActivityFields newA = avc.getNewActivity();
+        AmpActivityFields oldA = avc.getOldActivity();
+
+        if (oldA != null && oldA.getApprovedBy() != null && value == null) {
+            return false;
+        }
+
         ApprovalStatus approvalStatus = newA.getApprovalStatus();
         if (approvalStatus == null) {
             return value == null;
@@ -35,7 +41,6 @@ public class AllowedApproverConstraint implements ConstraintValidator<AllowedApp
 
         AmpTeamMember modifiedBy = newA.getModifiedBy();
         AmpTeamMember approvedBy = newA.getApprovedBy();
-        AmpActivityFields oldA = avc.getOldActivity();
         ApprovalStatus oldApprovalStatus = oldA == null ? null : oldA.getApprovalStatus();
         if (!modifiedBy.equals(approvedBy)) {
             if (oldApprovalStatus != null && ActivityUtil.isProjectValidationForNewOnly(modifiedBy)) {

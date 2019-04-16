@@ -22,6 +22,7 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
@@ -33,11 +34,12 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 public class AmpFunding implements Serializable, Versionable, Cloneable {
     //IATI-check: not ignored!
     private static final long serialVersionUID = 1L;
-    
+
+    @InterchangeableId
     @Interchangeable(fieldTitle = "Funding ID")
     private Long ampFundingId;
+
     @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true, required = ALWAYS)
-    
     private AmpOrganisation ampDonorOrgId;
     @InterchangeableBackReference
     private AmpActivityVersion ampActivityId;
@@ -102,7 +104,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
                     fmPath = ActivityEPConstants.EXPENDITURES_TABLE_FM_PATH,
                     importable = true)
         })
-    private Set<AmpFundingDetail> fundingDetails;
+    private Set<AmpFundingDetail> fundingDetails = new HashSet<>();
     
     @Interchangeable(fieldTitle = ActivityFieldsConstants.MTEF_PROJECTIONS, importable = true,
             fmPath = "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections")

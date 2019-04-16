@@ -42,6 +42,7 @@ public class FiltersConstants {
     public static final String ARCHIVED = "archived";
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";
     public static final String BENEFICIARY_AGENCY_GROUP = "beneficiary-agency-group";
+    public static final String BENEFICIARY_AGENCY_TYPE = "beneficiary-agency-type";
     public static final String COMMUNAL_SECTION = "communal-section";
     public static final String COMPONENT_FUNDING_ORGANIZATION = "component-funding-organization";
     public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "component-second-responsible-organization";
@@ -49,6 +50,7 @@ public class FiltersConstants {
     public static final String CONCESSIONALITY_LEVEL = "concessionality-level";
     public static final String CONTRACTING_AGENCY = "contracting-agency";
     public static final String CONTRACTING_AGENCY_GROUP = "contracting-agency-group";
+    public static final String CONTRACTING_AGENCY_TYPE = "contracting-agency-type";
     public static final String COUNTRY = "country";
     public static final String DISASTER_RESPONSE_MARKER = "disaster-response-marker";
     public static final String DISTRICT = "district";
@@ -79,7 +81,7 @@ public class FiltersConstants {
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_6 = "national-planning-objectives-level-6";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_7 = "national-planning-objectives-level-7";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_8 = "national-planning-objectives-level-8";
-    public static final String ON_OFF_TREASURY_BUDGET = "on-off-treasury-budget";
+    public static final String ACTIVITY_BUDGET = "activity-budget";
     public static final String PERFORMANCE_ALERT_LEVEL = "performance-alert-level";
     public static final String PERFORMANCE_ALERT_TYPE = "performance-alert-type";
     public static final String PLEDGES_AID_MODALITY = "pledges-aid-modality";
@@ -148,6 +150,7 @@ public class FiltersConstants {
     public static final String REGION = "region";
     public static final String RESPONSIBLE_ORGANIZATION = "responsible-organization";
     public static final String RESPONSIBLE_ORGANIZATION_GROUP = "responsible-organization-group";
+    public static final String RESPONSIBLE_ORGANIZATION_TYPE = "responsible-organization-type";
     public static final String SECONDARY_PROGRAM_LEVEL_0 = "secondary-program-level-0";
     public static final String SECONDARY_PROGRAM_LEVEL_1 = "secondary-program-level-1";
     public static final String SECONDARY_PROGRAM_LEVEL_2 = "secondary-program-level-2";
@@ -223,10 +226,12 @@ public class FiltersConstants {
         put(Constants.IMPLEMENTING_AGENCY, Arrays.asList(IMPLEMENTING_AGENCY_TYPE, IMPLEMENTING_AGENCY_GROUP,
                 IMPLEMENTING_AGENCY));
         put(Constants.EXECUTING_AGENCY, Arrays.asList(EXECUTING_AGENCY_TYPE, EXECUTING_AGENCY_GROUP, EXECUTING_AGENCY));
-        put(Constants.BENEFICIARY_AGENCY, Arrays.asList("", BENEFICIARY_AGENCY_GROUP, BENEFICIARY_AGENCY));
-        put(Constants.CONTRACTING_AGENCY, Arrays.asList("", CONTRACTING_AGENCY_GROUP, CONTRACTING_AGENCY));
-        put(Constants.RESPONSIBLE_ORGANISATION, Arrays.asList("", RESPONSIBLE_ORGANIZATION_GROUP,
-                RESPONSIBLE_ORGANIZATION));
+        put(Constants.BENEFICIARY_AGENCY, Arrays.asList(BENEFICIARY_AGENCY_TYPE, BENEFICIARY_AGENCY_GROUP,
+                BENEFICIARY_AGENCY));
+        put(Constants.CONTRACTING_AGENCY, Arrays.asList(CONTRACTING_AGENCY_TYPE, CONTRACTING_AGENCY_GROUP,
+                CONTRACTING_AGENCY));
+        put(Constants.RESPONSIBLE_ORGANISATION, Arrays.asList(RESPONSIBLE_ORGANIZATION_TYPE,
+                RESPONSIBLE_ORGANIZATION_GROUP, RESPONSIBLE_ORGANIZATION));
         put(Constants.COMPONENT_FUNDING_ORGANIZATION, Arrays.asList("", "", COMPONENT_FUNDING_ORGANIZATION));
         put(Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
                 Arrays.asList("", "", COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION));

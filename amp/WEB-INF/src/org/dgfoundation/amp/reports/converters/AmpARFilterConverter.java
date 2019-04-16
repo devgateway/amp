@@ -61,10 +61,15 @@ public class AmpARFilterConverter {
             new HashMap<String, String>() {{
                 put("donorTypes", ColumnConstants.DONOR_TYPE);
                 put("executingAgencyTypes", ColumnConstants.EXECUTING_AGENCY_TYPE);
+                put("executingAgencyGroups", ColumnConstants.EXECUTING_AGENCY_GROUPS);
+                put("implementingAgencyGroups", ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
                 put("implementingAgencyTypes", ColumnConstants.IMPLEMENTING_AGENCY_TYPE);
                 put("beneficiaryAgencyGroups", ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
+                put("beneficiaryAgencyTypes", ColumnConstants.BENEFICIARY_AGENCY_TYPE);
                 put("contractingAgencyGroups", ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+                put("contractingAgencyTypes", ColumnConstants.CONTRACTING_AGENCY_TYPE);
                 put("responsibleAgencyGroups", ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
+                put("responsibleAgencyTypes", ColumnConstants.RESPONSIBLE_ORGANIZATION_TYPE);
                 put("componentFunding", ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
                 put("componentSecondResponsible", ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
                 put("selectedSectors", ColumnConstants.PRIMARY_SECTOR);
@@ -78,7 +83,7 @@ public class AmpARFilterConverter {
                 put("locationSelected", ColumnConstants.COUNTRY);
                 put("financingInstruments", ColumnConstants.FINANCING_INSTRUMENT);
                 put("typeOfAssistance", ColumnConstants.TYPE_OF_ASSISTANCE);
-                put("budget", ColumnConstants.ON_OFF_TREASURY_BUDGET);
+                put("budget", ColumnConstants.ACTIVITY_BUDGET);
                 put("modeOfPayment", ColumnConstants.MODE_OF_PAYMENT);
                 put("humanitarianAid", ColumnConstants.HUMANITARIAN_AID);
                 put("disasterResponse", ColumnConstants.DISASTER_RESPONSE_MARKER);
@@ -288,16 +293,19 @@ public class AmpARFilterConverter {
             addFilter(arFilter.getImplementingAgencyTypes(), ColumnConstants.IMPLEMENTING_AGENCY_TYPE);
             addFilter(arFilter.getImplementingAgencyGroups(), ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
             addFilter(arFilter.getImplementingAgency(), ColumnConstants.IMPLEMENTING_AGENCY);
+            addFilter(arFilter.getBeneficiaryAgencyTypes(), ColumnConstants.BENEFICIARY_AGENCY_TYPE);
             addFilter(arFilter.getBeneficiaryAgencyGroups(), ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
             addFilter(arFilter.getBeneficiaryAgency(), ColumnConstants.BENEFICIARY_AGENCY);
             addFilter(arFilter.getResponsibleAgencyGroups(), ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
             addFilter(arFilter.getResponsibleorg(), ColumnConstants.RESPONSIBLE_ORGANIZATION);
+            addFilter(arFilter.getResponsibleAgencyTypes(), ColumnConstants.RESPONSIBLE_ORGANIZATION_TYPE);
             addFilter(arFilter.getComponentFunding(), ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
             addFilter(arFilter.getComponentSecondResponsible(),
                     ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
             addFilter(arFilter.getContractingAgency(), ColumnConstants.CONTRACTING_AGENCY);
             //related agencies groups
             addFilter(arFilter.getContractingAgencyGroups(), ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+            addFilter(arFilter.getContractingAgencyTypes(), ColumnConstants.CONTRACTING_AGENCY_TYPE);
         } else {
             addFilter(arFilter.getDonorTypes(), ColumnConstants.PLEDGES_DONOR_TYPE);
             addFilter(arFilter.getDonorGroups(), ColumnConstants.PLEDGES_DONOR_GROUP);
@@ -512,9 +520,7 @@ public class AmpARFilterConverter {
             addCategoryValueNamesFilter(arFilter.getTypeOfAssistance(), ColumnConstants.TYPE_OF_ASSISTANCE);
         }
         
-        //TODO capital vs Recurrent
-        //addCategoryValueNamesFilter(arFilter.get, ColumnConstants., ReportEntityType.ENTITY_TYPE_ACTIVITY);
-        addCategoryValueNamesFilter(arFilter.getBudget(), ColumnConstants.ON_OFF_TREASURY_BUDGET);
+        addCategoryValueNamesFilter(arFilter.getBudget(), ColumnConstants.ACTIVITY_BUDGET);
     }
     
     private void addCategoryValueNamesFilter(Set<AmpCategoryValue> set, String columnName) {

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.Identifiable;
@@ -72,17 +73,22 @@ public class ObjectExporter<T> {
      */
     private void readFieldValue(APIField field, Object object, Map<String, Object> jsonObject, String fieldPath) {
         Object jsonValue;
-        Object fieldValue = field.getFieldValueReader().get(object);
+        Object fieldValue = field.getFieldAccessor().get(object);
         boolean isList = field.getApiType().getFieldType().isList();
 
         if (field.isIdOnly() && !(isList && field.getApiType().isSimpleItemType())) {
             jsonValue = readFieldWithPossibleValues(field, fieldValue);
+        } else if (field.getApiType().getFieldType().isObject()) {
+            if (fieldValue != null && Collection.class.isAssignableFrom(fieldValue.getClass())) {
+                Collection col = (Collection) fieldValue;
+                if (col.size() > 1) {
+                    throw new RuntimeException("Multiple values found for an object field");
+                }
+                fieldValue = col.size() == 1 ? col.iterator().next() : null; 
+            }   
+            jsonValue = (fieldValue == null) ? null : getObjectJson(fieldValue, field.getChildren(), fieldPath);
         } else if (isList) {
-            if (field.getFieldName().equals("activity_group")) { // FIXME hack because APIField.type cannot be object
-                jsonValue = (fieldValue == null) ? null : getObjectJson(fieldValue, field.getChildren(), fieldPath);
-            } else {
-                jsonValue = readCollection(field, fieldPath, (Collection) fieldValue);
-            }
+            jsonValue = readCollection(field, fieldPath, (Collection) fieldValue);
         } else {
             jsonValue = readPrimitive(field, object, fieldValue);
         }
@@ -135,7 +141,8 @@ public class ObjectExporter<T> {
      */
     private Object readPrimitive(APIField apiField, Object object, Object fieldValue) {
         if (fieldValue instanceof Date) {
-            return DateTimeUtil.formatISO8601DateTime((Date) fieldValue);
+            boolean isTimestamp = apiField.getApiType().getFieldType() == FieldType.TIMESTAMP;
+            return DateTimeUtil.formatISO8601DateTimestamp((Date) fieldValue, isTimestamp);
         } else {
             Field field = FieldUtils.getField(object.getClass(), apiField.getFieldNameInternal(), true);
             Class<?> objectClass = object.getClass();

@@ -21,7 +21,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolv
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -29,6 +29,8 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 public class AmpComponentFunding implements Cloneable, Serializable {
     // IATI-check: to be ignored
 
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long ampComponentFundingId;
 
     private Integer transactionType;

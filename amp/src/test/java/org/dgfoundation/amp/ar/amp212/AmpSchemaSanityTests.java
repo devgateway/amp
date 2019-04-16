@@ -95,7 +95,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 ColumnConstants.PROJECT_CATEGORY, ColumnConstants.FUNDING_STATUS, ColumnConstants.MODE_OF_PAYMENT,
                 ColumnConstants.PAYMENT_CAPITAL___RECURRENT, ColumnConstants.BUDGET_DEPARTMENT, ColumnConstants.BUDGET_ORGANIZATION,
                 ColumnConstants.BUDGET_SECTOR, ColumnConstants.BUDGET_PROGRAM, ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, 
-                ColumnConstants.JOINT_CRITERIA, ColumnConstants.ON_OFF_TREASURY_BUDGET, ColumnConstants.MULTI_DONOR, 
+                ColumnConstants.JOINT_CRITERIA, ColumnConstants.ACTIVITY_BUDGET, ColumnConstants.MULTI_DONOR,
                 ColumnConstants.AGREEMENT_TITLE_CODE, ColumnConstants.AGREEMENT_CODE, ColumnConstants.PROJECT_IMPLEMENTING_UNIT,
                 ColumnConstants.TYPE_OF_COOPERATION, ColumnConstants.TYPE_OF_IMPLEMENTATION, ColumnConstants.MODALITIES, 
                 ColumnConstants.BUDGET_STRUCTURE, ColumnConstants.INDIRECT_ON_BUDGET, ColumnConstants.HUMANITARIAN_AID,

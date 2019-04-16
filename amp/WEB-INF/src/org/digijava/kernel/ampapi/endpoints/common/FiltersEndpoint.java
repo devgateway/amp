@@ -427,11 +427,11 @@ public class FiltersEndpoint implements AmpEndpoint {
     @GET
     @Path("/activityBudget/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.ON_OFF_TREASURY_BUDGET, columns = ColumnConstants.ON_OFF_TREASURY_BUDGET,
+    @ApiMethod(ui = true, id = FiltersConstants.ACTIVITY_BUDGET, columns = ColumnConstants.ACTIVITY_BUDGET,
             name="Activity Budget", tab=EPConstants.TAB_FINANCIALS)
     @ApiOperation("Return Activity Budget")
     public FilterDescriptor getActivityBudget() {
-        return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.ON_OFF_TREASURY_BUDGET);
+        return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.ACTIVITY_BUDGET);
     }   
 
     @GET
@@ -507,7 +507,7 @@ public class FiltersEndpoint implements AmpEndpoint {
     @Path("/financingInstruments/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.FINANCING_INSTRUMENT, columns = ColumnConstants.FINANCING_INSTRUMENT,
-            name="Financing Instruments", tab=EPConstants.TAB_FINANCIALS)
+            name = ColumnConstants.FINANCING_INSTRUMENT, tab = EPConstants.TAB_FINANCIALS)
     @ApiOperation("Return financing instruments")
     public FilterDescriptor getFinancingInstruments() {
         return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY, ColumnConstants.FINANCING_INSTRUMENT);

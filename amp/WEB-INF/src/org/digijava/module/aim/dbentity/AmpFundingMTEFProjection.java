@@ -8,6 +8,7 @@ import java.util.Date;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -19,6 +20,7 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 
     private static final long serialVersionUID = -1583797313318079006L;
 
+    @InterchangeableId
     @Interchangeable(fieldTitle = "Transaction ID")
     private Long ampFundingMTEFProjectionId;
 

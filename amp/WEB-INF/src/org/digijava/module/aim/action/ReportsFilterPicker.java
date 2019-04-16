@@ -17,6 +17,7 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -241,6 +242,10 @@ public class ReportsFilterPicker extends Action {
                 AmpReportFiltersConverter converter = new AmpReportFiltersConverter(filterRules);
                 AmpARFilter ampARFilter = converter.buildFilters();
                 ampARFilter.fillWithDefaultsSettings();
+                if (jsonObjParams.get(EPConstants.INCLUDE_LOCATION_CHILDREN) != null) {
+                    filterForm.setIncludeLocationChildren(
+                            (Boolean) jsonObjParams.get(EPConstants.INCLUDE_LOCATION_CHILDREN));
+                }
                 FilterUtil.populateForm(filterForm, ampARFilter, longAmpReportId);
                 // We need to "recreate" the arfilter or it wont be shown.
                 ampARFilter = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
@@ -912,7 +917,9 @@ public class ReportsFilterPicker extends Action {
         }
         arf.setHumanitarianAid(buildBooleanField(filterForm.getSelectedHumanitarianAid()));
         arf.setDisasterResponse(buildBooleanField(filterForm.getSelectedDisasterResponse()));
+        arf.getUndefinedOptions().clear(); 
         arf.getUndefinedOptions().addAll(filterForm.getUndefinedOptions());
+        arf.setIncludeLocationChildren(filterForm.getIncludeLocationChildren());
         arf.postprocess();
     }
 

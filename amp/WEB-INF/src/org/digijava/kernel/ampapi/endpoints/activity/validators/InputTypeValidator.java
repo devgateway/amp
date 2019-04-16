@@ -68,10 +68,12 @@ public class InputTypeValidator extends InputValidator {
             case STRING:
                 return isStringValid(item, Boolean.TRUE.equals(fieldDesc.isTranslatable()),
                         importer.getTrnSettings().getAllowedLangCodes());
-            case DATE: return isValidDate(item);
+            case DATE: return isValidDateTime(item, false);
+            case TIMESTAMP: return isValidDateTime(item, true);
             case FLOAT: return isValidFloat(item);
             case BOOLEAN: return isValidBoolean(item);
             case LIST: return checkListFieldValidity(importer, item, fieldDesc);
+            case OBJECT: return checkObjectFieldValidity(item);
             case LONG: return isValidLong(item);
             default: return false;
         }
@@ -100,10 +102,14 @@ public class InputTypeValidator extends InputValidator {
         return false;
     }
 
-    private boolean isValidDate(Object value) {
-        return value == null || 
-                value instanceof String 
-                && DateTimeUtil.parseISO8601DateTime((String) value) != null;
+    private boolean isValidDateTime(Object value, boolean isTimestamp) {
+        try {
+            return value == null
+                    || value instanceof String
+                    && DateTimeUtil.parseISO8601DateTimestamp((String) value, isTimestamp) != null;
+        } catch (RuntimeException e) {
+            return false;
+        }
     }
 
     private boolean checkListFieldValidity(ObjectImporter importer, Object item, APIField fieldDescription) {
@@ -116,6 +122,10 @@ public class InputTypeValidator extends InputValidator {
             }
             return true;
         }
+        return Map.class.isAssignableFrom(item.getClass());
+    }
+
+    private boolean checkObjectFieldValidity(Object item) {
         return Map.class.isAssignableFrom(item.getClass());
     }
 

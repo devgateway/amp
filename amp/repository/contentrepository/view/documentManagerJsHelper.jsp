@@ -199,6 +199,9 @@ font-weight : bold;
 <c:set var="keywordstrn">
 	<digi:trn jsFriendly="true">Keywords</digi:trn>
 </c:set>
+<c:set var="keywordModetrn">
+    <digi:trn jsFriendly="true">Keyword Mode</digi:trn>
+</c:set>
 
 
 <script type="text/javascript">
@@ -287,6 +290,10 @@ font-weight : bold;
 	function getkeywordsext(){
 		return '${labelstrn}';
 	}
+	
+	function getkeywordModeext(){
+        return '${keywordModetrn}';
+    }
 </script>
 <c:set var="translation1">
 	<digi:trn jsFriendly="true">Are you sure you want to delete this document ?</digi:trn>
@@ -1789,6 +1796,7 @@ function getTemplateLabelsCb(formName, infoDivId) {
 			labels: "<digi:trn>Labels</digi:trn>",
 			filters: "<digi:trn>Filters</digi:trn>",
 			keywords: "<digi:trn>Keywords</digi:trn>",
+			mode: "<digi:trn>Mode</digi:trn>",
 			apply: "<digi:trn>Apply</digi:trn>",
 			close: "<digi:trn>Close</digi:trn>"
 	};

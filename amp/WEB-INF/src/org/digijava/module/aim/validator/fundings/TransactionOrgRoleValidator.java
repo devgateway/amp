@@ -34,6 +34,7 @@ public class TransactionOrgRoleValidator implements ConstraintValidator<Transact
         AmpActivityFields a = avc.getNewActivity();
         
         Set<Pair<Long, Long>> orgRoles = a.getOrgrole().stream()
+                .filter(orgRole -> orgRole.getOrganisation() != null && orgRole.getRole() != null)
                 .map(orgRole -> Pair.of(orgRole.getOrganisation().getAmpOrgId(), orgRole.getRole().getAmpRoleId()))
                 .collect(Collectors.toSet());
         
@@ -43,8 +44,7 @@ public class TransactionOrgRoleValidator implements ConstraintValidator<Transact
             Long roleId = fd.getRecipientRole() != null ? fd.getRecipientRole().getAmpRoleId() : null;
             
             if (orgId != null && roleId != null) {
-                Pair<Long, Long> pair = Pair.of(fd.getRecipientOrg().getAmpOrgId(),
-                        fd.getRecipientRole().getAmpRoleId());
+                Pair<Long, Long> pair = Pair.of(orgId, roleId);
                 if (!orgRoles.contains(pair)) {
                     addConstraintViolationForTransaction(context, fd.getTransactionType());
                     valid = false;

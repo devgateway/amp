@@ -38,6 +38,15 @@ public class FundingOrgRoleValidatorTest extends AbstractActivityValidatorTest<F
     private AmpOrganisation org1 = newOrganisation(1L, "Org 1");
     private AmpOrganisation org2 = newOrganisation(2L, "Org 2");
     private AmpOrganisation org3 = newOrganisation(3L, "Org 3");
+    
+    @Test
+    public void testNotAppliedInHibernate() {
+        AmpActivity activity = new AmpActivity();
+        
+        Set<ConstraintViolation<AmpActivity>> violations = getValidator().validate(activity);
+        
+        assertThat(violations, emptyIterable());
+    }
 
     @Test
     public void testNullOrgRolesAndFundings() {
@@ -85,6 +94,17 @@ public class FundingOrgRoleValidatorTest extends AbstractActivityValidatorTest<F
         AmpActivity activity = new AmpActivity();
         activity.setOrgrole(ImmutableSet.of(newOrgRole(org1, donorRole)));
         activity.setFunding(ImmutableSet.of());
+        
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+        
+        assertThat(violations, emptyIterable());
+    }
+    
+    @Test
+    public void testNullValues() {
+        AmpActivity activity = new AmpActivity();
+        activity.setOrgrole(ImmutableSet.of(newOrgRole(null, null)));
+        activity.setFunding(ImmutableSet.of(newFunding(null, null)));
         
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
         

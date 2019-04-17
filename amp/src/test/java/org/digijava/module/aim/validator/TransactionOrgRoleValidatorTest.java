@@ -47,14 +47,23 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
     private AmpOrganisation org3 = newOrganisation(3L, "Org 3");
     
     @Test
-    public void testNullOrgRolesAndFundings() {
+    public void testNotAppliedInHibernate() {
         AmpActivity activity = new AmpActivity();
-
-        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-
+        
+        Set<ConstraintViolation<AmpActivity>> violations = getValidator().validate(activity);
+        
         assertThat(violations, emptyIterable());
     }
-
+    
+    @Test
+    public void testNullOrgRolesAndFundings() {
+        AmpActivity activity = new AmpActivity();
+        
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+        
+        assertThat(violations, emptyIterable());
+    }
+    
     @Test
     public void testEmptyOrgRolesAndFundings() {
         AmpActivity activity = new AmpActivity();
@@ -65,7 +74,23 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         assertThat(violations, emptyIterable());
     }
-
+    
+    @Test
+    public void testNullValues() {
+        AmpActivity activity = new AmpActivity();
+        activity.setOrgrole(ImmutableSet.of(newOrgRole(null, null)));
+    
+        AmpFunding funding = newFunding(null, null);
+        funding.setFundingDetails(ImmutableSet.of(newTransaction(Constants.COMMITMENT, null, null)));
+    
+        activity.setFunding(ImmutableSet.of(funding));
+        
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+        
+        assertThat(violations, emptyIterable());
+    }
+    
+    
     @Test
     public void testNullOrgRole() {
         AmpActivity activity = new AmpActivity();

@@ -12,6 +12,7 @@ import javax.validation.Path;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
 
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -23,6 +24,8 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
 import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.contact.PrimaryContact;
+import org.digijava.module.aim.validator.fundings.TransactionOrgRole;
+import org.digijava.module.aim.validator.fundings.FundingOrgRole;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
 import org.digijava.module.aim.validator.percentage.ProgramTotalPercentage;
@@ -83,6 +86,17 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
                     FieldMap.underscorify(ActivityFieldsConstants.TERTIARY_SECTORS))
             .put(AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,
                     FieldMap.underscorify(ActivityFieldsConstants.TAG_SECTORS))
+            .build();
+    
+    private Map<Integer, String> transactionToJsonPath = ImmutableMap.<Integer, String>builder()
+            .put(new Integer(Constants.COMMITMENT), FieldMap.underscorify(ArConstants.COMMITMENT))
+            .put(new Integer(Constants.DISBURSEMENT), FieldMap.underscorify(ArConstants.DISBURSEMENT))
+            .put(new Integer(Constants.ARREARS), FieldMap.underscorify(ArConstants.ARREARS))
+            .put(new Integer(Constants.DISBURSEMENT_ORDER), FieldMap.underscorify(ArConstants.DISBURSEMENT_ORDERS))
+            .put(new Integer(Constants.ESTIMATED_DONOR_DISBURSEMENT),
+                    FieldMap.underscorify(ArConstants.ESTIMATED_DISBURSEMENTS))
+            .put(new Integer(Constants.RELEASE_OF_FUNDS), FieldMap.underscorify(ArConstants.RELEASE_OF_FUNDS))
+            .put(new Integer(Constants.EXPENDITURE), FieldMap.underscorify(ArConstants.EXPENDITURE))
             .build();
 
     private Map<Class<?>, Class<?>> constraintToViolation = ImmutableMap.<Class<?>, Class<?>>builder()
@@ -155,6 +169,22 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
             
             return new JsonConstraintViolation(jsonPath, ActivityErrors.UNIQUE_PRIMARY_CONTACT);
         }
+    
+        if (isFundingOrgRoleConstraint(v)) {
+            String jsonPath = FieldMap.underscorify(ActivityFieldsConstants.FUNDINGS);
+            return new JsonConstraintViolation(jsonPath, ActivityErrors.ORGANIZATION_ROLE_PAIR_NOT_DECLARED);
+        }
+    
+        if (isTransactionOrgRoleConstraint(v)) {
+            Integer transactionType = getTransactionType(v);
+            String jsonPath = String.format("%s~%s", FieldMap.underscorify(ActivityFieldsConstants.FUNDINGS),
+                    transactionToJsonPath.get(transactionType));
+            if (jsonPath == null) {
+                throw new RuntimeException("Cannot find json path for transaction " + transactionType);
+            }
+        
+            return new JsonConstraintViolation(jsonPath, ActivityErrors.ORGANIZATION_ROLE_PAIR_NOT_DECLARED);
+        }
 
         Class<?> cvbc = constraintToViolation.get(v.getConstraintDescriptor().getAnnotation().annotationType());
         if (cvbc != null) {
@@ -188,12 +218,24 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
     private String getContactType(ConstraintViolation v) {
         return (String) getSecondNodeKey(v);
     }
+    
+    private Integer getTransactionType(ConstraintViolation v) {
+        return (Integer) getTransactionNodeKey(v);
+    }
 
     private Object getSecondNodeKey(ConstraintViolation v) {
         Iterator<Path.Node> iterator = v.getPropertyPath().iterator();
         iterator.next();
         Path.Node percentageNode = iterator.next();
         return percentageNode.getKey();
+    }
+    
+    private Object getTransactionNodeKey(ConstraintViolation v) {
+        Iterator<Path.Node> iterator = v.getPropertyPath().iterator();
+        iterator.next();
+        iterator.next();
+        Path.Node transactionNode = iterator.next();
+        return transactionNode.getKey();
     }
 
     private boolean isOrgRolePercentageConstraint(ConstraintViolation violation) {
@@ -214,5 +256,13 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
     
     private boolean isPrimaryContactConstraint(ConstraintViolation violation) {
         return violation.getConstraintDescriptor().getAnnotation() instanceof PrimaryContact;
+    }
+    
+    private boolean isFundingOrgRoleConstraint(ConstraintViolation violation) {
+        return violation.getConstraintDescriptor().getAnnotation() instanceof FundingOrgRole;
+    }
+    
+    private boolean isTransactionOrgRoleConstraint(ConstraintViolation violation) {
+        return violation.getConstraintDescriptor().getAnnotation() instanceof TransactionOrgRole;
     }
 }

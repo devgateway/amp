@@ -35,7 +35,7 @@ public class InputValidatorProcessor {
                 new DependencyValidator(),
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),
-                new FundingOrgRolesValidator(),
+//                new FundingOrgRolesValidator(),
                 new RegexPatternValidator());
     }
 

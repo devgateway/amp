@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivityProgramDiscriminatorConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpFundingAmountDiscriminationConfigurer;
@@ -40,6 +42,7 @@ import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
 import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.contact.PrimaryContact;
+import org.digijava.module.aim.validator.fundings.FundingOrgRole;
 import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
@@ -285,8 +288,11 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = "Activity Internal IDs")
     protected Set<AmpActivityInternalId> internalIds ;
     
-    @Interchangeable(fieldTitle = "Fundings", importable = true, fmPath = "/Activity Form/Funding")
-    @VersionableCollection(fieldTitle = "Fundings")
+    @Valid
+    @FundingOrgRole(groups = API.class)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.FUNDINGS, importable = true,
+            fmPath = "/Activity Form/Funding")
+    @VersionableCollection(fieldTitle = ActivityFieldsConstants.FUNDINGS)
     protected Set<AmpFunding> funding;
     
     //TODO show this field?

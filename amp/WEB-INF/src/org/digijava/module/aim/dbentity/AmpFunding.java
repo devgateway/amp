@@ -27,6 +27,8 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.aim.validator.fundings.TransactionOrgRole;
+import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -76,6 +78,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     private String comments;
     private Date signatureDate;
     
+    @TransactionOrgRole(groups = API.class)
     @InterchangeableDiscriminator(discriminatorField = "transactionType",
         configurer = AmpFundingDetailDiscriminationConfigurer.class,
         settings = {

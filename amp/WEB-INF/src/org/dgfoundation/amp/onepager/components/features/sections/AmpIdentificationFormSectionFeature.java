@@ -226,6 +226,11 @@ implements AmpRequiredComponentContainer{
                             "crisNumber"), "Cris Number", AmpFMTypes.MODULE);
             govAgreementNum.setTextContainerDefaultMaxSize();
             add(crisNumber);
+    
+            AmpTextFieldPanel<String> iatiIdentifier = new AmpTextFieldPanel<>(
+                    "iatiIdentifier", new PropertyModel<>(am, "iatiIdentifier"), "IATI Identifier", AmpFMTypes.MODULE);
+            iatiIdentifier.setTextContainerDefaultMaxSize();
+            add(iatiIdentifier);
 
             AmpCategorySelectFieldPanel acChapter = new AmpCategorySelectFieldPanel(
                     "acChapter", CategoryConstants.ACCHAPTER_KEY,

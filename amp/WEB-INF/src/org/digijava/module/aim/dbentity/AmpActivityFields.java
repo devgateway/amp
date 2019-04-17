@@ -165,6 +165,9 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "Document Space", importable = true)
     @VersionableFieldSimple(fieldTitle = "Document Space")
     protected String documentSpace;
+    
+    @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.IATI_IDENTIFIER)
+    protected String iatiIdentifier;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.IS_DRAFT, required = ALWAYS, importable = true)
     @VersionableFieldSimple(fieldTitle = "Is Draft?", blockSingleChange = true)
@@ -776,7 +779,7 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "PPC Annual Budgets")
     protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
-
+    
         public Boolean getMergedActivity() {
             return mergedActivity;
         }
@@ -2218,5 +2221,14 @@ LoggerIdentifiable, Cloneable {
         public void setCostAmounts(Set<AmpFundingAmount> costAmounts) {
             this.costAmounts = costAmounts;
         }
+    
+    public String getIatiIdentifier() {
+        return iatiIdentifier;
+    }
+    
+    public void setIatiIdentifier(String iatiIdentifier) {
+        this.iatiIdentifier = iatiIdentifier;
+    }
+    
 }
 

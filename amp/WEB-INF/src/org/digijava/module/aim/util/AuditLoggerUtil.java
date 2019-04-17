@@ -408,7 +408,7 @@ public class AuditLoggerUtil {
         String query = "select * from ( "
                 + " select  aav.amp_activity_id current_id ,  "
                 + " lead(aav.amp_activity_id, 1) "
-                + " over(partition by aav.amp_activity_group_id order by aav.amp_activity_id asc) previous_id, "
+                + " over(partition by aav.amp_activity_group_id order by aav.amp_activity_id desc) previous_id, "
                 + " aal.objectname, aav.amp_activity_group_id, "
                 + " aal.id  from amp_activity_version aav "
                 + " left join amp_audit_logger aal on "

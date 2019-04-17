@@ -605,6 +605,16 @@ body {background:none;}
 									</tr>
 									</module:display>
 
+								    <module:display name="/Activity Form/Identification/IATI Identifier" parentModule="/Activity Form/Identification">
+									    <tr>
+										   <td class="field_name" >
+											   <b><digi:trn key="aim:iatiIdentifier">IATI Identifier</digi:trn></b>
+										   </td>
+										   <td bgcolor="#ffffff">
+											   <c:out value="${aimEditActivityForm.identification.iatiIdentifier}"/>&nbsp;</td>
+									    </tr>
+								    </module:display>
+
 									<module:display name="/Activity Form/Identification/Procurement System" parentModule="/Activity Form/Identification">
 									<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">
 									<tr>

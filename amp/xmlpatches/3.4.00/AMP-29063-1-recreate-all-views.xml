@@ -2,7 +2,7 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true"
            xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-    <jira>AMP-29103</jira>
+    <jira>AMP-29063</jira>
     <keyword>Views</keyword>
     <author>vchihai</author>
     <description>recreate all views</description>

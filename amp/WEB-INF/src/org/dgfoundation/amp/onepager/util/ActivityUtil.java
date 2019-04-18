@@ -629,6 +629,9 @@ public class ActivityUtil {
     }
 
     public static boolean canApproveWith(ApprovalStatus approvalStatus, AmpTeamMember atm, boolean isNewActivity) {
+        if (atm == null) {
+            return false;
+        }
         String validation = getValidationSetting(atm);
         if (isProjectValidationOn(validation)) {
             return ApprovalStatus.APPROVED.equals(approvalStatus);

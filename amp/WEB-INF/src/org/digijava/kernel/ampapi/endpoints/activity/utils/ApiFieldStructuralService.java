@@ -41,7 +41,7 @@ public final class ApiFieldStructuralService {
             APIType ampApiType = ampFieldsType.getOrDefault(fieldName, null);
             if (ampApiType != null) {
                     if (clientApiType.getFieldType() != ampApiType.getFieldType()
-                            || clientApiType.getElementType() != ampApiType.getElementType()) {
+                            || clientApiType.getItemType() != ampApiType.getItemType()) {
                         return true;
                 }
             }

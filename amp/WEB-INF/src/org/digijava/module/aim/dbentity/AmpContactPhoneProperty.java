@@ -3,11 +3,10 @@ package org.digijava.module.aim.dbentity;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.contact.ContactPhoneTypePossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * @author Octavian Ciubotaru
@@ -22,8 +21,8 @@ public class AmpContactPhoneProperty extends AmpContactProperty {
             regexPattern = ActivityEPConstants.REGEX_PATTERN_PHONE_EXTENSION)
     private String extensionValue;
 
-    @PossibleValues(ContactPhoneTypePossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Type", importable = true, pickIdOnly = true)
+    @Interchangeable(fieldTitle = "Type", importable = true, pickIdOnly = true,
+            discriminatorOption = CategoryConstants.CONTACT_PHONE_TYPE_KEY)
     private AmpCategoryValue type;
 
     public String getExtensionValue() {
@@ -39,6 +38,7 @@ public class AmpContactPhoneProperty extends AmpContactProperty {
         return value;
     }
 
+    @Override
     public void setValue(String value) {
         this.value = value;
     }

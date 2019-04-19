@@ -4,11 +4,9 @@ import static java.util.Collections.emptyMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
@@ -23,8 +21,6 @@ public class ActivityImporterTest {
 
     @Rule
     public AMPRequestRule ampRequestRule = new AMPRequestRule();
-
-    private List<APIField> apiFields = Arrays.asList();
 
     @Test
     public void testValidationReportUnknownField() throws Exception {
@@ -55,8 +51,8 @@ public class ActivityImporterTest {
 
     private Map<Integer, ApiErrorMessage> validate(JsonBean json) {
         AmpActivityVersion activity = new AmpActivityVersion();
-        ActivityImporter importer = new ActivityImporter();
-        importer.validateAndImport(activity, null, apiFields, json.any(), null, null );
+        ActivityImporter importer = new ActivityImporter(Collections.emptyList());
+        importer.validateAndImport(activity, json.any());
         return importer.getErrors();
     }
 

@@ -4,10 +4,7 @@ import static java.util.Collections.singletonList;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
-import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -16,7 +13,6 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -29,7 +25,9 @@ public class ContactImporter extends ObjectImporter {
     private AmpContact contact;
 
     public ContactImporter() {
-        super(AmpContact.class, new InputValidatorProcessor(InputValidatorProcessor.getContactValidators()));
+        super(new InputValidatorProcessor(InputValidatorProcessor.getContactFormatValidators()),
+                new InputValidatorProcessor(InputValidatorProcessor.getContactBusinessRulesValidators()),
+                AmpFieldsEnumerator.getEnumerator().getContactFields());
     }
 
     public List<ApiErrorMessage> createContact(JsonBean newJson) {
@@ -43,9 +41,6 @@ public class ContactImporter extends ObjectImporter {
     private List<ApiErrorMessage> importContact(Long contactId, JsonBean newJson) {
         this.newJson = newJson;
 
-
-        List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_CONTACT_ENUMERATOR.getContactFields();
-        
         Object contactJsonId = newJson.get(ContactEPConstants.ID);
         
         if (contactJsonId != null) {
@@ -81,26 +76,20 @@ public class ContactImporter extends ObjectImporter {
                 if (contact == null) {
                     ApiErrorResponse.reportResourceNotFound(ContactErrors.CONTACT_NOT_FOUND);
                 }
-                
-                cleanImportableFields(fieldsDef, contact);
             }
 
-            contact = (AmpContact) validateAndImport(contact, null, fieldsDef, newJson.any(), null, null);
+            validateAndImport(contact, newJson.any());
 
-            if (contact == null) {
-                throw new ObjectConversionException();
+            if (errors.isEmpty()) {
+                setupBeforeSave(contact, createdBy);
+                PersistenceManager.getSession().saveOrUpdate(contact);
+                PersistenceManager.flushAndCommit(PersistenceManager.getSession());
+            } else {
+                PersistenceManager.rollbackCurrentSessionTx();
             }
-
-            setupBeforeSave(contact, createdBy);
-            PersistenceManager.getSession().saveOrUpdate(contact);
-
-            PersistenceManager.flushAndCommit(PersistenceManager.getSession());
-        } catch (ObjectConversionException | RuntimeException e) {
+        } catch (RuntimeException e) {
             PersistenceManager.rollbackCurrentSessionTx();
-
-            if (e instanceof RuntimeException) {
-                throw new RuntimeException("Failed to import contact", e);
-            }
+            throw new RuntimeException("Failed to import contact", e);
         }
 
         return new ArrayList<>(errors.values());
@@ -120,15 +109,6 @@ public class ContactImporter extends ObjectImporter {
         }
         contact.getProperties().forEach(p -> p.setContact(contact));
         contact.getOrganizationContacts().forEach(o -> o.setContact(contact));
-    }
-
-    @Override
-    protected void configureCustom(Object obj, APIField fieldDef) {
-        super.configureCustom(obj, fieldDef);
-
-        if (obj instanceof AmpContactProperty) {
-            ((AmpContactProperty) obj).setName(fieldDef.getDiscriminator());
-        }
     }
 
     public AmpContact getContact() {

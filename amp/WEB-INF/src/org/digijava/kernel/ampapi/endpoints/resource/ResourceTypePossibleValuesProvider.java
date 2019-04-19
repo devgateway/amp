@@ -14,25 +14,9 @@ public class ResourceTypePossibleValuesProvider extends PossibleValuesProvider {
     @Override
     public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
         List<PossibleValue> values = new ArrayList<>();
-        for (String type : ResourceEPConstants.RESOURCE_TYPES) {
-            values.add(new PossibleValue(type, type, ImmutableMap.of()));
+        for (ResourceType type : ResourceType.values()) {
+            values.add(new PossibleValue(type.getId().longValue(), type.getName(), ImmutableMap.of()));
         }
         return values;
     }
-
-    @Override
-    public Object toJsonOutput(Object object) {
-        return object;
-    }
-
-    @Override
-    public Long getIdOf(Object value) {
-        return null;
-    }
-
-    @Override
-    public Object toAmpFormat(Object obj) {
-        return obj;
-    }
-
 }

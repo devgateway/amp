@@ -1,20 +1,52 @@
 package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings.FreezeOptions;
 
 public class DataFreezeEvent {
+    
+    @ApiModelProperty("client side id")
     private Long id;
+    
     private Long cid;
+    
     private Boolean enabled = Boolean.TRUE;
+    
+    @ApiModelProperty(example = "30")
     private Integer gracePeriod;
-    private String freezingDate;
-    private String openPeriodStart;
-    private String openPeriodEnd;
+    
+    @JsonSerialize(using = ISO8601DateSerializer.class)
+    @ApiModelProperty(example = "2018-06-18")
+    private Date freezingDate;
+    
+    @JsonSerialize(using = ISO8601DateSerializer.class)
+    @ApiModelProperty(example = "2018-06-18")
+    private Date openPeriodStart;
+    
+    @JsonSerialize(using = ISO8601DateSerializer.class)
+    @ApiModelProperty(example = "2018-07-18")
+    private Date openPeriodEnd;
+    
     private Boolean sendNotification = Boolean.FALSE;
+    
+    @ApiModelProperty(value = "freeze option")
     private FreezeOptions freezeOption;
+    
+    @ApiModelProperty(value = "filters used to filter activities",
+            example = "\"type-of-assistance\":[80],\"status\":[64],\"primary-sector\":[7610]")
     private String filters;
-    private Integer count; // number of affected activities
+    
+    @ApiModelProperty("number of affected activities")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Integer count;
+    
     private Integer notificationDays;
+    
     private Boolean executed = Boolean.FALSE;
 
     public Integer getCount() {
@@ -52,27 +84,27 @@ public class DataFreezeEvent {
         this.gracePeriod = gracePeriod;
     }
 
-    public String getFreezingDate() {
+    public Date getFreezingDate() {
         return freezingDate;
     }
 
-    public void setFreezingDate(String freezingDate) {
+    public void setFreezingDate(Date freezingDate) {
         this.freezingDate = freezingDate;
     }
 
-    public String getOpenPeriodStart() {
+    public Date getOpenPeriodStart() {
         return openPeriodStart;
     }
 
-    public void setOpenPeriodStart(String openPeriodStart) {
+    public void setOpenPeriodStart(Date openPeriodStart) {
         this.openPeriodStart = openPeriodStart;
     }
 
-    public String getOpenPeriodEnd() {
+    public Date getOpenPeriodEnd() {
         return openPeriodEnd;
     }
 
-    public void setOpenPeriodEnd(String openPeriodEnd) {
+    public void setOpenPeriodEnd(Date openPeriodEnd) {
         this.openPeriodEnd = openPeriodEnd;
     }
 

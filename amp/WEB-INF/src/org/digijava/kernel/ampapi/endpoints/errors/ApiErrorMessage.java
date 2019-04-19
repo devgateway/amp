@@ -1,8 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.errors;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
+
+import org.dgfoundation.amp.annotations.checkstyle.IgnoreCanonicalNames;
 
 /**
  * Defines API Error Message template and stores custom value if needed
@@ -10,6 +13,7 @@ import java.util.Objects;
  * @author Nadejda Mandrescu
  */
 public class ApiErrorMessage {
+
     /** Message custom Error Code [0..99] within its component/method */
     public final Integer id;
     /** 
@@ -21,11 +25,14 @@ public class ApiErrorMessage {
      * </dl>
      */
     public final String description;
+
     /** (Optional) Error message prefix, custom value, e.g. "Missing fields: " */
     public final String prefix;
-    /** (Optional) Error details (e.g. "project_title"), without prefix */
-    public final List<String> values;
-    
+
+    /** (Optional) Unique error details (e.g. "project_title"), without prefix */
+    @IgnoreCanonicalNames
+    public final Set<String> values;
+
     /**
      * Defines an ApiErrorMessage 
      * @param id see {@link #id}
@@ -35,7 +42,7 @@ public class ApiErrorMessage {
     public ApiErrorMessage(Integer id, String description, String prefix) {
         this(id, description, prefix, null);
     }
-    
+
     /**
      * Defines an ApiErrorMessahe 
      * @param id see {@link #id id}
@@ -45,7 +52,7 @@ public class ApiErrorMessage {
         this(id, description, null, null);
     }
 
-    private ApiErrorMessage(int id, String description, String prefix, List<String> values) {
+    private ApiErrorMessage(int id, String description, String prefix, Set<String> values) {
         if (id <0 || id > 99) {
             throw new RuntimeException(String.format("Invalid id = %d, must be within [0..99] range.", id));
         }
@@ -63,11 +70,13 @@ public class ApiErrorMessage {
      * @param value details, see {@link #values}
      */
     public ApiErrorMessage withDetails(String value) {
-        List<String> newValues = new ArrayList<>();
+        Set<String> newValues = new LinkedHashSet<>();
         if (values != null) {
             newValues.addAll(values);
         }
-        newValues.add(value);
+        if (value != null) {
+            newValues.add(value);
+        }
         return new ApiErrorMessage(id, description, prefix, newValues);
     }
 
@@ -75,15 +84,15 @@ public class ApiErrorMessage {
      * Configures an {@link #ApiErrorMessage(Integer, String, String)} with more details
      * @param details details, see {@link #values}
      */
-    public ApiErrorMessage withDetails(List<String> details) {
-        List<String> newValues = new ArrayList<>();
+    public ApiErrorMessage withDetails(Collection<String> details) {
+        Set<String> newValues = new LinkedHashSet<>();
         if (values != null) {
             newValues.addAll(values);
         }
         newValues.addAll(details);
         return new ApiErrorMessage(id, description, prefix, newValues);
     }
-    
+
     @Override
     public String toString() {
         return "[" + id + "] " + 

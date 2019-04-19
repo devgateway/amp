@@ -15,13 +15,15 @@ if (BRANCH_NAME ==~ /feature\/AMP-\d+.*/) {
 def branch = env.CHANGE_ID == null ? BRANCH_NAME : null
 def pr = env.CHANGE_ID
 def registryKey = env.AMP_REGISTRY_PRIVATE_KEY
+def changePretty = (pr != null) ? "pull request ${pr}" : "branch ${branch}"
 
 println "Branch: ${branch}"
 println "Pull request: ${pr}"
 println "Tag: ${tag}"
 
-def codeVersion
 def dbVersion
+def country
+def ampUrl
 
 def updateGitHubCommitStatus(context, message, state) {
     repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
@@ -45,7 +47,7 @@ def updateGitHubCommitStatus(context, message, state) {
 
 // Run checkstyle only for PR builds
 stage('Checkstyle') {
-    if (branch == null) {
+    when (branch == null) {
         node {
             try {
                 checkout scm
@@ -64,10 +66,87 @@ stage('Checkstyle') {
     }
 }
 
-stage('Build') {
-    timeout(15) {
-        input "Proceed with build?"
+def legacyMvnOptions = "-Djdbc.user=amp " +
+        "-Djdbc.password=amp122006 " +
+        "-Djdbc.db=amp " +
+        "-Djdbc.host=db " +
+        "-Djdbc.port=5432 " +
+        "-DdbName=postgresql " +
+        "-Djdbc.driverClassName=org.postgresql.Driver"
+
+def launchedByUser = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause').size() > 0
+def codeVersion
+def countries
+
+// Run fail fast tests
+stage('Quick Test') {
+    // Find list of countries which have database dumps compatible with ${codeVersion}
+    node {
+        checkout scm
+
+        // Find AMP version
+        codeVersion = readMavenPom(file: 'amp/pom.xml').version
+        println "AMP Version: ${codeVersion}"
+
+        countries = sh(returnStdout: true,
+                script: "ssh sulfur 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                .trim()
+        if (countries == "") {
+            println "There are no database backups compatible with ${codeVersion}"
+            currentBuild.result = 'FAILURE'
+        }
     }
+
+    // Allow user to specify country before tests are run
+    if (launchedByUser) {
+        timeout(15) {
+            milestone()
+            country = input(
+                    message: "Proceed with test, build and deploy?",
+                    parameters: [choice(choices: countries, name: 'country')])
+            milestone()
+        }
+    }
+
+    node {
+        try {
+            checkout scm
+
+            updateGitHubCommitStatus('jenkins/failfasttests', 'Testing in progress', 'PENDING')
+
+            withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+                def testStatus = sh returnStatus: true, script: "cd amp && mvn clean test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
+
+                // Archive unit test report
+                junit 'amp/target/surefire-reports/TEST-*.xml'
+
+                if (testStatus != 0) {
+                    error "Tests command returned an error code!"
+                }
+            }
+
+            updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: success', 'SUCCESS')
+        } catch (e) {
+            updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: error', 'ERROR')
+
+            throw e
+        }
+    }
+}
+
+stage('Build') {
+
+    if (country == null) {
+        timeout(15) {
+            milestone()
+            country = input(
+                    message: "Proceed with build and deploy?",
+                    parameters: [choice(choices: countries, name: 'country')])
+            milestone()
+        }
+    }
+
+    ampUrl = "http://amp-${country}-${tag}-tc9.ampsite.net/"
 
     node {
         checkout scm
@@ -78,22 +157,19 @@ stage('Build') {
         def imageIds = sh(returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\"").trim()
         sh(returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag} > /dev/null")
 
-        // Find AMP version
-        codeVersion = readMavenPom(file: 'amp/pom.xml').version
-        println "AMP Version: ${codeVersion}"
-
         if (imageIds.equals("")) {
             withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
                 try {
                     sh returnStatus: true, script: 'tar -xf ../amp-node-cache.tar'
 
                     // Build AMP
-                    sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildSource=${tag} -e"
+                    sh "cd amp && mvn -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
 
                     // Build Docker images & push it
                     sh "docker build -q -t phosphorus:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
                     sh "docker push phosphorus:5000/amp-webapp:${tag} > /dev/null"
                 } finally {
+
                     // Cleanup after Docker & Maven
                     sh returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag}"
                     sh returnStatus: true, script: "cd amp && mvn clean -Djdbc.db=dummy"
@@ -104,8 +180,14 @@ stage('Build') {
                             " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules" +
                             " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node" +
                             " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules" +
+                            " amp/TEMPLATE/ampTemplate/node_modules/amp-translate/node" +
+                            " amp/TEMPLATE/ampTemplate/node_modules/amp-translate/node_modules" +
+                            " amp/TEMPLATE/ampTemplate/node_modules/amp-state/node" +
+                            " amp/TEMPLATE/ampTemplate/node_modules/amp-state/node_modules" +
                             " amp/TEMPLATE/ampTemplate/gisModule/dev/node" +
                             " amp/TEMPLATE/ampTemplate/gisModule/dev/node_modules" +
+                            " amp/TEMPLATE/ampTemplate/dashboard/dev/node" +
+                            " amp/TEMPLATE/ampTemplate/dashboard/dev/node_modules" +
                             " amp/TEMPLATE/reamp/node" +
                             " amp/TEMPLATE/reamp/node_modules"
                 }
@@ -115,32 +197,9 @@ stage('Build') {
 }
 
 def deployed = false
-def country
-
-def changePretty = (pr != null) ? "pull request ${pr}" : "branch ${branch}"
-def ampUrl
 
 // If this stage fails then next stage will retry deployment. Otherwise next stage will be skipped.
 stage('Deploy') {
-
-    // Find list of countries which have database dumps compatible with ${codeVersion}
-    def countries
-    node {
-        countries = sh(returnStdout: true, script: "ssh sulfur 'cd /opt/amp_dbs && amp-db ls ${codeVersion}'").trim()
-        if (countries == "") {
-            println "There are no database backups compatible with ${codeVersion}"
-            currentBuild.result = 'FAILURE'
-        }
-    }
-
-    timeout(time: 1, unit: 'HOURS') {
-        milestone()
-        country = input message: "Proceed with deploy?", parameters: [choice(choices: countries, name: 'country')]
-        milestone()
-    }
-
-    ampUrl = "http://amp-${country}-${tag}-tc9.ampsite.net/"
-
     node {
         try {
             // Find latest database version compatible with ${codeVersion}

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +21,9 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.ActivityFilter;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.newreports.ReportEnvBuilder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.helper.AmpActivityFake;
@@ -35,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.LoggerIdentifiable;
@@ -45,7 +46,6 @@ import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.contentrepository.util.DocumentsNodesAttributeManager;
-import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.search.helper.Resource;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -251,8 +251,6 @@ public class SearchUtil {
 
         StopWatch.reset("Search");
 
-        String workspaceQuery = WorkspaceFilter.generateWorkspaceFilterQuery(tm);
-
         AmpARFilter filter = new AmpARFilter();
 
         /**
@@ -265,8 +263,11 @@ public class SearchUtil {
                                                                                 // other
                                                                                 // auxiliary
                                                                                 // info
+
+        if (request.getParameter("searchMode") != null) {
+            filter.setSearchMode(request.getParameter("searchMode"));
+        }
         filter.setIndexText(keyword);
-        filter.generateFilterQuery(request, false, true);
 
         // String hsqlQuery = filter.getGeneratedFilterQuery().replaceAll(
         // "FROM amp_activity", "FROM " + AmpActivity.class.getName());
@@ -278,13 +279,14 @@ public class SearchUtil {
 
         session = PersistenceManager.getSession();
 
+        Set<Long> ids = ActivityFilter.getInstance().filter(filter, ReportEnvBuilder.forSession());
+
         // not a very nice solution, but I kept the old code and idea and just
         // added some speed
         String newQueryString = "SELECT f.amp_activity_id, f.amp_id, "
                 + AmpActivityVersion.sqlStringForName("f.amp_activity_id")
                 + " AS name, f.approval_status, f.draft FROM amp_activity f WHERE f.amp_activity_id in ("
-                + filter.getGeneratedFilterQuery() + ""
-                /* + "INTERSECT "+ workspaceQuery */+ ")";
+                + Util.toCSStringForIN(ids) + ")";
         SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("amp_activity_id", LongType.INSTANCE);
         newQuery = newQuery.addScalar("amp_id", org.hibernate.type.StandardBasicTypes.STRING);
         newQuery = newQuery.addScalar("name", org.hibernate.type.StandardBasicTypes.STRING);
@@ -292,7 +294,7 @@ public class SearchUtil {
         newQuery = newQuery.addScalar("draft", org.hibernate.type.StandardBasicTypes.BOOLEAN);
 
         LinkedHashMap<Long, LoggerIdentifiable> sortingActivities = new LinkedHashMap<>();
-        for (Long i : filter.getAmpActivityIdOrder()) {
+        for (Long i : ids) {
             sortingActivities.put(i,null);
         }
 
@@ -458,7 +460,8 @@ public class SearchUtil {
             if (tm.getTeamAccessType().equals("Management")) {
                 query.append(String.format(
                         " and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ",
-                        Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
+                        ApprovalStatus.STARTED_APPROVED.getDbName(),
+                        ApprovalStatus.APPROVED.getDbName()));
             }
         }
 

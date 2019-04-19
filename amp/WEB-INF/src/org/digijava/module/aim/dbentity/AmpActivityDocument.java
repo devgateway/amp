@@ -1,18 +1,15 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import javax.jcr.Node;
-
-import org.apache.jackrabbit.core.persistence.PersistenceManager;
-import org.dgfoundation.amp.onepager.models.AmpActivityModel;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.util.Output;
-import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 /**
  * 
@@ -21,11 +18,14 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  */
 public class AmpActivityDocument extends ObjectReferringDocument implements Serializable, Versionable, Cloneable {
 
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long id;
-    
+
+    @InterchangeableBackReference
     private AmpActivityVersion ampActivity;
 
-    @Interchangeable(fieldTitle = "Document Type", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Document Type", importable = true, required = ALWAYS)
     private String documentType;
     
     public String getDocumentType() {
@@ -111,4 +111,5 @@ public class AmpActivityDocument extends ObjectReferringDocument implements Seri
         // TODO Auto-generated method stub
         return super.clone();
     }
+
 }

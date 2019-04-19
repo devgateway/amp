@@ -3,7 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.performance.matcher.definition;
 import java.util.List;
 import java.util.function.Function;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
@@ -15,10 +16,13 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceR
  */
 public class PerformanceRuleMatcherAttribute {
 
+    @ApiModelProperty(example = "fundingDate")
     private String name;
 
+    @ApiModelProperty(example = "Funding Date")
     private String description;
 
+    @ApiModelProperty(example = "FUNDING_DATE")
     private AmpPerformanceRuleAttribute.PerformanceRuleAttributeType type;
 
     @JsonProperty(PerformanceRuleConstants.JSON_ATTRIBUTE_POSSIBLE_VALUES)

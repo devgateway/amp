@@ -10,24 +10,31 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.SerializableComparator;
 
 
-public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable
-{
+public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable {
     //IATI-check: not to be ignored
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long ampOrgRoleId;
-    @Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable = false)
+
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
-    @Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true, uniqueConstraint=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    
+    @Interchangeable(fieldTitle = "Organization", importable = true, pickIdOnly = true, uniqueConstraint = true,
+            required = ActivityEPConstants.RequiredValidation.ALWAYS)
     private AmpOrganisation organisation;
+    
     private AmpRole role;
     @Interchangeable(fieldTitle = "Percentage", importable = true, percentageConstraint = true,
-            fmPath = FMVisibility.PARENT_FM + "/percentage", required = ActivityEPConstants.REQUIRED_ALWAYS)
+            fmPath = FMVisibility.PARENT_FM + "/percentage", required = ActivityEPConstants.RequiredValidation.ALWAYS)
     private Float   percentage;
     @Interchangeable(fieldTitle = "Budgets", importable = true, fmPath = FMVisibility.PARENT_FM + "/Budget Code")
-    private Set <AmpOrgRoleBudget> budgets;
+    private Set<AmpOrgRoleBudget> budgets = new HashSet<>();
     
     @Interchangeable(fieldTitle = "Additional Info", importable = true, label = "Department/Division",
             fmPath = FMVisibility.PARENT_FM + "/relOrgadditionalInfo")
@@ -161,13 +168,12 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
         AmpOrgRole clonedAmpOrgRole = (AmpOrgRole) clone();
         clonedAmpOrgRole.activity = newActivity;
         clonedAmpOrgRole.ampOrgRoleId = null;
-        
+    
         if (getGpiNiSurveys() != null && !getGpiNiSurveys().isEmpty()) {
             AmpGPINiSurvey clonedSurvey = (AmpGPINiSurvey) getGpiNiSurveys().iterator().next().clone();
             clonedSurvey.setAmpGPINiSurveyId(null);
             clonedSurvey.setAmpOrgRole(clonedAmpOrgRole);
-            
-    
+        
             if (clonedSurvey.getResponses() != null) {
                 final Set<AmpGPINiSurveyResponse> clonedSurveyResponses = new HashSet<AmpGPINiSurveyResponse>();
                 clonedSurvey.getResponses().forEach(r -> {
@@ -186,8 +192,19 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
             clonedAmpOrgRole.setGpiNiSurveys(null);
             clonedAmpOrgRole.setGpiNiSurveys(new HashSet<>());
             clonedAmpOrgRole.getGpiNiSurveys().add(clonedSurvey);
-        }else{
+        } else {
             clonedAmpOrgRole.setGpiNiSurveys(null);
+        }
+        
+        if (getBudgets() != null && !getBudgets().isEmpty()) {
+            clonedAmpOrgRole.setBudgets(new HashSet<>());
+            for (AmpOrgRoleBudget budget : getBudgets()) {
+                AmpOrgRoleBudget clonedBudget = (AmpOrgRoleBudget) budget.clone();
+                clonedBudget.setAmpOrgRole(clonedAmpOrgRole);
+                clonedAmpOrgRole.getBudgets().add(clonedBudget);
+            }
+        } else {
+            clonedAmpOrgRole.setBudgets(null);
         }
         
         return clonedAmpOrgRole;
@@ -277,4 +294,4 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
         this.gpiNiSurveys = gpiNiSurveys;
     }
     
-}   
+}

@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 import org.dgfoundation.amp.nireports.NiCurrency;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
+import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -16,16 +17,13 @@ import org.hibernate.Query;
 public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Identifiable, NiCurrency
 {
     //IATI-check: to not be ignored. obtained from possible values 
-    @Interchangeable(fieldTitle="ID", id = true)
+    @PossibleValueId
     private Long ampCurrencyId;
-    @Interchangeable(fieldTitle="Currency Code", value = true)
+    @PossibleValueValue
     private String currencyCode;
-    @Interchangeable(fieldTitle="Country Name")
     private String countryName;
-    @Interchangeable(fieldTitle="Currency Name")
     @TranslatableField
     private String currencyName;
-    
     private AmpCategoryValueLocations countryLocation;
     private Integer activeFlag;
     

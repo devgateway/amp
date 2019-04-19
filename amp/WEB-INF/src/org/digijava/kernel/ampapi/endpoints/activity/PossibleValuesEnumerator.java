@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -22,17 +21,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyCommonPossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.GenericInterchangeableValueProvider;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.services.sync.model.SyncConstants.Entities;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValueProvider;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
+import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentType;
@@ -108,18 +111,17 @@ public class PossibleValuesEnumerator {
      * Returns a predicate that matches all fields that have possible values.
      * @return a predicate
      */
-    public Predicate<Field> fieldsWithPossibleValues() {
-        List<Class<?>> entityClasses = getEntityClasses(getAllSyncEntities());
-        return classOfFieldIs(assignableFromAny(entityClasses))
-                .or(fieldHasPossibleValuesProvider());
+    public Predicate<APIField> fieldsWithPossibleValues() {
+        return fieldsDependingOn(getAllSyncEntities())
+                .or(fieldWithPossibleValueProvider());
     }
 
     /**
      * Returns a predicate that matches all fields that have a possible values provider.
-     * @return a predicate.
+     * @return a predicate
      */
-    private Predicate<Field> fieldHasPossibleValuesProvider() {
-        return field -> InterchangeUtils.getPossibleValuesProvider(field) != null;
+    private Predicate<APIField> fieldWithPossibleValueProvider() {
+        return f -> f.getPossibleValuesProviderClass() != null;
     }
 
     /**
@@ -127,10 +129,10 @@ public class PossibleValuesEnumerator {
      * @param syncEntities sync entities that have changed
      * @return field filter
      */
-    public Predicate<Field> fieldsDependingOn(Set<String> syncEntities) {
-        List<Class<?>> targetClasses = getEntityClasses(syncEntities);
-        return classOfFieldIs(assignableFromAny(targetClasses))
-                .or(classOfPossibleValuesIs(assignableFromAny(targetClasses)));
+    public Predicate<APIField> fieldsDependingOn(Set<String> syncEntities) {
+        List<Class<?>> entityClasses = getEntityClasses(syncEntities);
+        return f -> entityClasses.stream()
+                .anyMatch(f.getApiType().getType()::isAssignableFrom);
     }
 
     /**
@@ -146,18 +148,6 @@ public class PossibleValuesEnumerator {
             }
         });
         return targetClasses;
-    }
-
-    /**
-     * Predicate that filters fields by the properties of possible values class.
-     * @param classPredicate predicate for possible values class
-     * @return a predicate
-     */
-    private Predicate<Field> classOfPossibleValuesIs(Predicate<Class<?>> classPredicate) {
-        return field -> {
-            Class<?> entityClass = InterchangeUtils.getPossibleValuesClass(field);
-            return entityClass != null && classPredicate.test(entityClass);
-        };
     }
 
     /**
@@ -178,66 +168,84 @@ public class PossibleValuesEnumerator {
         return clazz -> classes.stream().anyMatch(clazz::isAssignableFrom);
     }
 
+    public List<PossibleValue> getPossibleValuesForField(String longFieldName, List<APIField> apiFields) {
+        return getPossibleValuesForField(longFieldName, null, apiFields);
+    }
+
     /**
      * recursive method that gets possible values that can be held by a field
-     * @param longFieldName underscorified field name 
-     * @param clazz the class on which the method operates
+     *
+     * FIXME maybe redo the way discriminatorOption is passed down the stack??
+     * for example someone forgot to apply discrimination value for category value field and discriminatorOption from
+     * stack is now acting like category class key?
+     *
+     * @param longFieldName underscorified field name
      * @param discriminatorOption recursive option to be passed down if there was a discriminator option higher up
      * @return JSON object containing the possible values that can be held by the field
      */
-    public List<PossibleValue> getPossibleValuesForField(String longFieldName, Class<?> clazz, String discriminatorOption) {
+    private List<PossibleValue> getPossibleValuesForField(String longFieldName,
+            String discriminatorOption, List<APIField> apiFields) {
 
-        String fieldName = "";
         if (longFieldName.contains("~")) {
             /*
              * we might have a field containing a discriminator description,
              * but what we actually need is underneath -> obtain name of the field underneath
              * */
-            fieldName = longFieldName.substring(0, longFieldName.indexOf('~') );
-            Field field = InterchangeUtils.getPotentiallyDiscriminatedField(clazz, fieldName);
-            if (field == null) {
-                throw newBadRequestException(ActivityErrors.FIELD_INVALID.withDetails(fieldName));
-            }
-            
-            String configString = discriminatorOption == null? null : discriminatorOption;
-            if (InterchangeUtils.isCompositeField(field)) {
-                configString =  InterchangeUtils.getConfigValue(fieldName, field);
+            String fieldName = longFieldName.substring(0, longFieldName.indexOf('~'));
+            APIField apiField = findField(apiFields, fieldName);
+
+            String configString = discriminatorOption;
+            if (apiField.getDiscriminatorValue() != null) {
+                configString = apiField.getDiscriminatorValue();
             }
             
             return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1),
-                    InterchangeUtils.getClassOfField(field), configString);
+                    configString, apiField.getChildren());
         } else {
             /*
              * the last field might contain discriminated values
              * if it is such a field, it's a special case for each class
              * 
              * */
-            Field finalField =  InterchangeUtils.getPotentiallyDiscriminatedField(clazz, longFieldName);
-            if (finalField == null) {
-                throw newBadRequestException(ActivityErrors.FIELD_INVALID.withDetails(longFieldName));
-            } else {
-                String configString = discriminatorOption == null? null : discriminatorOption;
-                if (InterchangeUtils.isCompositeField(finalField)) {
-                    configString =  InterchangeUtils.getConfigValue(longFieldName, finalField);
-                }
 
-                try {
-                    Class<? extends PossibleValuesProvider> providerClass =
-                            InterchangeUtils.getPossibleValuesProvider(finalField);
-                    if (providerClass != null) {
-                        return getPossibleValuesDirectly(providerClass);
-                    }
-                } catch (Exception e) {
-                    throw newBadRequestException(ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR
-                            .withDetails(Objects.toString(e.getMessage())));
-                }
-                if (InterchangeUtils.isCompositeField(finalField) || configString != null) {
-                    return getPossibleValuesForComplexField(finalField, configString);
-                }
+            APIField apiField = findField(apiFields, longFieldName);
 
-                return getPossibleValuesForField(finalField);
+            String configString = discriminatorOption;
+            if (apiField.getDiscriminatorValue() != null) {
+                configString = apiField.getDiscriminatorValue();
             }
+
+            try {
+                Class<? extends PossibleValuesProvider> providerClass = apiField.getPossibleValuesProviderClass();
+                if (providerClass != null) {
+                    return getPossibleValuesDirectly(providerClass);
+                }
+            } catch (Exception e) {
+                throw newServerErrorException("Failed to obtain possible values.", e);
+            }
+            if (apiField.getDiscriminatorValue() != null || configString != null) {
+                return getPossibleValuesForComplexField(apiField, configString);
+            }
+
+            return getPossibleValuesForField(apiField);
         }
+    }
+
+    private APIField findField(List<APIField> apiFields, String fieldName) {
+        return apiFields.stream()
+                .filter(f -> f.getFieldName().equals(fieldName))
+                .findFirst()
+                .orElseThrow(() -> newBadRequestException(ActivityErrors.FIELD_INVALID.withDetails(fieldName)));
+    }
+
+    private ApiRuntimeException newServerErrorException(String message) {
+        return newServerErrorException(message, null);
+    }
+
+    private ApiRuntimeException newServerErrorException(String message, Throwable e) {
+        JsonBean error = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR
+                .withDetails(message));
+        return new ApiRuntimeException(Response.Status.INTERNAL_SERVER_ERROR, error, e);
     }
 
     private ApiRuntimeException newBadRequestException(ApiErrorMessage message) {
@@ -251,8 +259,6 @@ public class PossibleValuesEnumerator {
      * @return
      * @throws IllegalAccessException
      * @throws InstantiationException
-     * @throws SecurityException
-     * @throws ExceptionInInitializerError
      */
     private List<PossibleValue> getPossibleValuesDirectly(
             Class<? extends PossibleValuesProvider> possibleValuesProviderClass)
@@ -264,42 +270,36 @@ public class PossibleValuesEnumerator {
     /**
      * Complex fields are discriminated fields -- when several underscorified paths 
      * lead to the same Java field. This method gets possible values for such fields
-     * @param field
      * @param configValue
      * @return
      */
-    private List<PossibleValue> getPossibleValuesForComplexField(Field field, String configValue) {
+    private List<PossibleValue> getPossibleValuesForComplexField(APIField apiField, String configValue) {
         /*AmpActivitySector || AmpComponentFunding || AmpActivityProgram*/
         List<Object[]> items;
-        Class<?> clazz = InterchangeUtils.getClassOfField(field);
+        Class<?> clazz = apiField.getApiType().getType();
         if (clazz.equals(AmpSector.class)) {
-            return getPossibleSectors(field, configValue);
+            return getPossibleSectors(configValue);
         } else if (clazz.equals(AmpTheme.class)) {
-            return getPossibleThemes(field, configValue);
+            return getPossibleThemes(configValue);
         } else if (clazz.equals(AmpCategoryValue.class)){
-            return getPossibleCategoryValues(field, configValue);
+            return getPossibleCategoryValues(apiField);
         } else if (clazz.equals(AmpClassificationConfiguration.class)) {
             return getPossibleValuesGenericCase(clazz,
                     () -> Collections.singletonList(possibleValuesDAO.getAmpClassificationConfiguration(configValue)));
         }
 
         //not a complex field, after all
-        return getPossibleValuesForField(field);
+        return getPossibleValuesForField(apiField);
     }
     
     /**
      * Generic method for obtaining possible values for most cases (without any fancy special cases)
-     * @param field
      * @return
      */
-
-    private List<PossibleValue> getPossibleValuesForField(Field field) {
-        if (!InterchangeUtils.isFieldEnumerable(field))
-            return new ArrayList<>();
-        Class<?> clazz = InterchangeUtils.getClassOfField(field);
-
+    private List<PossibleValue> getPossibleValuesForField(APIField apiField) {
+        Class<?> clazz = apiField.getApiType().getType();
         if (clazz.isAssignableFrom(AmpCategoryValue.class))
-            return getPossibleCategoryValues(field, null);
+            return getPossibleCategoryValues(apiField);
         if (clazz.isAssignableFrom(AmpLocation.class))
             return getPossibleLocations();
         if (clazz.isAssignableFrom(AmpComponentType.class))
@@ -313,7 +313,12 @@ public class PossibleValuesEnumerator {
         if (clazz.isAssignableFrom(AmpCurrency.class)) {
             return getPossibleCurrencies();
         }
-        return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
+
+        if (InterchangeUtils.isEnumerable(apiField.getApiType().getType())) {
+            return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     private List<PossibleValue> getComponentTypes() {
@@ -332,37 +337,43 @@ public class PossibleValuesEnumerator {
 
     private <T> List<PossibleValue> getPossibleValuesGenericCase(Class<T> clazz,
             Supplier<List> possibleValuesSupplier) {
-        Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class);
-        String idFieldName = null;
-        String valueFieldName = null;
-        for (Field passField : fields) {
-            Interchangeable ant = passField.getAnnotation(Interchangeable.class);
-            if (ant.id()) {
-                idFieldName = passField.getName();
-            }
-            if (ant.value()) {
-                valueFieldName = passField.getName();
-            }
-        }
-        InterchangeableValueProvider<T> valueProvider = null;
-        if (clazz.isAnnotationPresent(InterchangeableValue.class)) {
-            valueProvider = getInterchangeableValueProvider(clazz);
-        }
-        if (valueProvider == null && valueFieldName != null) {
-            valueProvider = new GenericInterchangeableValueProvider<>(clazz, valueFieldName);
-        }
-        if (idFieldName == null || valueProvider == null) {
-            String err = "Cannot provide possible values for " + clazz.getName()
-                    + " since we need both 'id' and 'value' fields configured";
-            LOGGER.error(err);
-            return Collections.emptyList();
-        }
+
+        String idFieldName = getIdFieldName(clazz);
+
+        InterchangeableValueProvider<T> valueProvider = getValueProvider(clazz);
+
         List<T> objectList = possibleValuesSupplier.get();
-        String finalIdFieldName = idFieldName;
-        InterchangeableValueProvider<T> finalValueProvider = valueProvider;
         return objectList.stream()
-                .map(o -> getGenericPossibleValue(o, finalIdFieldName, finalValueProvider))
+                .map(o -> getGenericPossibleValue(o, idFieldName, valueProvider))
                 .collect(toList());
+    }
+
+    private <T> InterchangeableValueProvider<T> getValueProvider(Class<T> clazz) {
+        if (clazz.isAnnotationPresent(InterchangeableValue.class)) {
+            return getInterchangeableValueProvider(clazz);
+        }
+
+        Field[] valueFields = FieldUtils.getFieldsWithAnnotation(clazz, PossibleValueValue.class);
+        if (valueFields.length == 0) {
+            throw newServerErrorException("Could not find a field annotated with @PossibleValueValue in " + clazz);
+        }
+        if (valueFields.length > 1) {
+            throw newServerErrorException("Found more than one field annotated with @PossibleValueValue in " + clazz);
+        }
+        String valueFieldName = valueFields[0].getName();
+
+        return new GenericInterchangeableValueProvider<>(clazz, valueFieldName);
+    }
+
+    private <T> String getIdFieldName(Class<T> clazz) {
+        Field[] idFields = FieldUtils.getFieldsWithAnnotation(clazz, PossibleValueId.class);
+        if (idFields.length == 0) {
+            throw newServerErrorException("Could not find a field annotated with @PossibleValueId in " + clazz);
+        }
+        if (idFields.length > 1) {
+            throw newServerErrorException("Found more than one field annotated with @PossibleValueId in " + clazz);
+        }
+        return idFields[0].getName();
     }
 
     private <T> InterchangeableValueProvider<T> getInterchangeableValueProvider(Class<T> clazz) {
@@ -370,7 +381,7 @@ public class PossibleValuesEnumerator {
         try {
             return annotation.value().newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException("Failed to instantiate value provider for " + clazz, e);
+            throw newServerErrorException("Failed to instantiate value provider for " + clazz, e);
         }
     }
 
@@ -386,7 +397,7 @@ public class PossibleValuesEnumerator {
             Object extraInfo = valueProvider.getExtraInfo(object);
             return new PossibleValue(id, value, translatedValue, extraInfo);
         } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Failed to extract possible value object from " + object, e);
+            throw newServerErrorException("Failed to extract possible value object from " + object, e);
         }
     }
 
@@ -432,13 +443,13 @@ public class PossibleValuesEnumerator {
         }
         return convertToHierarchical(groupedValues);
     }
-    
-    private List<PossibleValue> getPossibleSectors(Field field, String configValue) {
+
+    private List<PossibleValue> getPossibleSectors(String configValue) {
         List<Object[]> items = possibleValuesDAO.getSectors(configValue);
         return setProperties(items, false, this::getSectorExtraInfo);
     }
-    
-    private List<PossibleValue> getPossibleThemes(Field field, String configValue) {
+
+    private List<PossibleValue> getPossibleThemes(String configValue) {
         List<Object[]> items = possibleValuesDAO.getThemes(configValue);
         return setProperties(items, false, this::getThemeExtraInfo);
     }
@@ -458,28 +469,20 @@ public class PossibleValuesEnumerator {
 
     /**
      * Gets possible values for the AmpCategoryValue class
-     * @param field
-     * @param discriminatorOption 
-     * @return
      */
     @SuppressWarnings("unchecked")
-    private List<PossibleValue> getPossibleCategoryValues(Field field, String discriminatorOption) {
-        Interchangeable ant = field.getAnnotation(Interchangeable.class);
+    private List<PossibleValue> getPossibleCategoryValues(APIField apiField) {
+        String discriminatorOption = apiField.getDiscriminatorValue();
         if (StringUtils.isBlank(discriminatorOption)) {
-            discriminatorOption = ant.discriminatorOption();
+            throw newServerErrorException("Category value field without discriminator value. " + apiField);
         }
-        if (StringUtils.isNotBlank(discriminatorOption)) {
-            if (discriminatorOption.equals(CategoryConstants.IMPLEMENTATION_LOCATION_KEY)) {
-                return getImplementationLocationValues();
-            } else {
-                List<Object[]> objColList = possibleValuesDAO.getCategoryValues(discriminatorOption);
-                return setProperties(objColList, true, this::getCategoryValueExtraInfo);
-            }
+
+        if (discriminatorOption.equals(CategoryConstants.IMPLEMENTATION_LOCATION_KEY)) {
+            return getImplementationLocationValues();
         } else {
-            LOGGER.error("discriminatorOption is not configured for CategoryValue [" + field.getName() + "]");
+            List<Object[]> objColList = possibleValuesDAO.getCategoryValues(discriminatorOption);
+            return setProperties(objColList, true, this::getCategoryValueExtraInfo);
         }
-        
-        return Collections.emptyList();
     }
 
     private List<PossibleValue> getImplementationLocationValues() {
@@ -555,16 +558,16 @@ public class PossibleValuesEnumerator {
         Integer index = ((Number) (item[CategoryValueExtraInfo.EXTRA_INFO_START_INDEX])).intValue();
         return new CategoryValueExtraInfo(index);
     }
-    
+
     private Object getSectorExtraInfo(Object[] item) {
         Long parentSectorId = item.length > 2 ? (Long) item[PossibleValuesDAO.SECTOR_PARENT_ID_POS] : null;
-        
+
         return new SectorExtraInfo(parentSectorId);
     }
-    
+
     private Object getThemeExtraInfo(Object[] item) {
         Long parentProgramId = item.length > 2 ? (Long) item[PossibleValuesDAO.THEME_PARENT_ID_POS] : null;
-        
+
         return new ProgramExtraInfo(parentProgramId);
     }
 }

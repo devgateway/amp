@@ -2,16 +2,17 @@ package org.digijava.kernel.services.sync.model;
 
 import java.util.Date;
 import java.util.List;
-
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601TimeStampSerializer;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author Octavian Ciubotaru
  */
 public class SystemDiff {
 
-    @JsonProperty @JsonSerialize(using = ISO8601TimeStampSerializer.class)
+    @JsonProperty
+    @JsonSerialize(using = ISO8601TimeStampSerializer.class)
     private Date timestamp;
 
     @JsonProperty("global-settings")
@@ -43,6 +44,9 @@ public class SystemDiff {
 
     @JsonProperty("activity-possible-values-fields")
     private List<String> activityPossibleValuesFields;
+    
+    @JsonProperty("activity-fields-structural-changes")
+    private boolean activityFieldsStructuralChanges;
 
     @JsonProperty
     private ListDiff<Long> contacts;
@@ -50,11 +54,17 @@ public class SystemDiff {
     @JsonProperty("contact-possible-values-fields")
     private List<String> contactPossibleValuesFields;
     
+    @JsonProperty("contact-fields-structural-changes")
+    private boolean contactFieldsStructuralChanges;
+    
     @JsonProperty
     private ListDiff<String> resources;
     
     @JsonProperty("resource-possible-values-fields")
     private List<String> resourcePossibleValuesFields;
+    
+    @JsonProperty("resource-fields-structural-changes")
+    private boolean resourceFieldsStructuralChanges;
     
     @JsonProperty("common-possible-values-fields")
     private List<String> commonPossibleValuesFields;
@@ -67,6 +77,11 @@ public class SystemDiff {
 
     @JsonProperty("feature-manager")
     private boolean featureManager;
+    
+    /**
+     * Set when field definitions any entity changed.
+     */
+    private boolean fields;
 
     public void updateTimestamp(Date timestamp) {
         if (this.timestamp == null || (timestamp != null && this.timestamp.before(timestamp))) {
@@ -121,13 +136,37 @@ public class SystemDiff {
     public void setActivityPossibleValuesFields(List<String> activityPossibleValuesFields) {
         this.activityPossibleValuesFields = activityPossibleValuesFields;
     }
-
+    
+    public void setActivityFieldsStructuralChanges(boolean activityFieldsStructuralChanges) {
+        this.activityFieldsStructuralChanges = activityFieldsStructuralChanges;
+    }
+    
+    public boolean isActivityFieldsStructuralChanges() {
+        return activityFieldsStructuralChanges;
+    }
+    
     public void setContactPossibleValuesFields(List<String> contactPossibleValuesFields) {
         this.contactPossibleValuesFields = contactPossibleValuesFields;
     }
     
+    public void setContactFieldsStructuralChanges(boolean contactFieldsStructuralChanges) {
+        this.contactFieldsStructuralChanges = contactFieldsStructuralChanges;
+    }
+    
+    public boolean isContactFieldsStructuralChanges() {
+        return contactFieldsStructuralChanges;
+    }
+    
     public void setResourcePossibleValuesFields(List<String> resourcePossibleValuesFields) {
         this.resourcePossibleValuesFields = resourcePossibleValuesFields;
+    }
+    
+    public void setResourceFieldsStructuralChanges(boolean resourceFieldsStructuralChanges) {
+        this.resourceFieldsStructuralChanges = resourceFieldsStructuralChanges;
+    }
+    
+    public boolean isResourceFieldsStructuralChanges() {
+        return resourceFieldsStructuralChanges;
     }
     
     public void setCommonPossibleValuesFields(List<String> commonPossibleValuesFields) {
@@ -153,5 +192,12 @@ public class SystemDiff {
     public void setCalendars(ListDiff<Long> calendars) {
         this.calendars = calendars;
     }
-    
+
+    public boolean isFields() {
+        return fields;
+    }
+
+    public void setFields(boolean fields) {
+        this.fields = fields;
+    }
 }

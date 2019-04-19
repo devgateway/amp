@@ -1,25 +1,31 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.util.Output;
 
 public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long ampActivitySectorId;
-    
-    @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true)
+
+    @InterchangeableBackReference
     private AmpActivityVersion activityId;
     
-    @Interchangeable(fieldTitle="Sector", importable = true , pickIdOnly = true, uniqueConstraint = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Sector", importable = true, pickIdOnly = true, uniqueConstraint = true,
+            required = ALWAYS)
     private AmpSector sectorId;
     
     @Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true, 
-            fmPath = FMVisibility.PARENT_FM + "/sectorPercentage", required = ActivityEPConstants.REQUIRED_ALWAYS)
+            fmPath = FMVisibility.PARENT_FM + "/sectorPercentage", required = ALWAYS)
     private Float sectorPercentage;
 
     private AmpClassificationConfiguration classificationConfig;
@@ -122,4 +128,6 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
         // TODO Auto-generated method stub
         return super.clone();
     }
+    
+
 }

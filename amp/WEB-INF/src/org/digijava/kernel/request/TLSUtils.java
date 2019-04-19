@@ -38,7 +38,7 @@ public class TLSUtils {
     public HttpServletRequest request;
     private static String forcedLangCode = null;
     private Boolean forcedSSCWorkspace;
-    
+
     public static String getLangCode() {
         if (TLSUtils.forcedLangCode != null) {
             return TLSUtils.forcedLangCode;
@@ -153,12 +153,11 @@ public class TLSUtils {
         TLSUtils instance = getThreadLocalInstance();
         return instance.request;
     }
-    
+
     public static TLSUtils getThreadLocalInstance()
     {
         TLSUtils res = threadLocalInstance.get();
-        if (res == null)
-        {
+        if (res == null) {
             res = new TLSUtils();
             threadLocalInstance.set(res);
         }
@@ -233,7 +232,7 @@ public class TLSUtils {
         
         populateMockSiteDomain(mockRequest, "/");
         populate(mockRequest);
-        
+
     }
 
     private static void populateMockSiteDomain(HttpServletRequest httpRequest, String mainPath) {
@@ -280,5 +279,5 @@ public class TLSUtils {
         }
 
     }
-         
+
 }

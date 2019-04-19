@@ -7,11 +7,10 @@ import static org.mockito.Mockito.mock;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,7 +59,7 @@ public class RegexPatternValidatorTest {
         RegexPatternValidator regexValidator = new RegexPatternValidator();
 
         assertTrue("Value is valid",
-                regexValidator.isValid(importer, newFieldParent, null, phoneFieldDescription, VALUE_FIELD));
+                regexValidator.isValid(importer, newFieldParent, phoneFieldDescription, VALUE_FIELD));
     }
 
     @Test
@@ -71,7 +70,7 @@ public class RegexPatternValidatorTest {
         RegexPatternValidator regexValidator = new RegexPatternValidator();
 
         assertFalse("Value must be invalid",
-                regexValidator.isValid(importer, newFieldParent, null, faxFieldDescription, VALUE_FIELD));
+                regexValidator.isValid(importer, newFieldParent, faxFieldDescription, VALUE_FIELD));
         assertEquals(ActivityErrors.FIELD_INVALID_VALUE, regexValidator.getErrorMessage());
     }
     
@@ -83,7 +82,7 @@ public class RegexPatternValidatorTest {
         RegexPatternValidator regexValidator = new RegexPatternValidator();
 
         assertFalse("Value must be invalid",
-                regexValidator.isValid(importer, newFieldParent, null, emailFieldDescription, VALUE_FIELD));
+                regexValidator.isValid(importer, newFieldParent, emailFieldDescription, VALUE_FIELD));
         assertEquals(ActivityErrors.FIELD_INVALID_VALUE, regexValidator.getErrorMessage());
     }
 }

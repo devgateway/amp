@@ -5,13 +5,12 @@ package org.digijava.kernel.ampapi.endpoints.serializers;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.map.JsonSerializer;
-import org.codehaus.jackson.map.SerializerProvider;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityTranslationUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
@@ -19,7 +18,7 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.exception.EditorException;
 
 /**
- * Common base for AMP indetifiable entities serialization
+ * Common base for AMP identifiable entities serialization
  * 
  * @author Nadejda Mandrescu
  */
@@ -66,9 +65,9 @@ public abstract class AmpJsonSerializer<T extends Identifiable> extends JsonSeri
             Field field = value.get().getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
             Object fieldValue = field.get(value.get());
-            return InterchangeUtils.getTranslationValues(field, clazz, fieldValue, (Long) value.get().getIdentifier());
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException | EditorException | NoSuchFieldException e) {
+            return ActivityTranslationUtils.getTranslationValues(field, clazz, fieldValue, value.get().getIdentifier());
+        } catch (SecurityException | IllegalAccessException | IllegalArgumentException
+                | EditorException | NoSuchFieldException e) {
             throw new IOException(e);
         }
     }

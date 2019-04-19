@@ -2,9 +2,6 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -12,9 +9,7 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
 
         private AmpTheme defaultHierarchy;
         private boolean allowMultiple;
-        @Interchangeable(fieldTitle="ID", id=true)
         private Long ampProgramSettingsId;
-        @Interchangeable(fieldTitle="Name", value=true)
         private String name;
         public AmpTheme getDefaultHierarchy() {
                 return defaultHierarchy;
@@ -79,4 +74,8 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
 //          return null;
         }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

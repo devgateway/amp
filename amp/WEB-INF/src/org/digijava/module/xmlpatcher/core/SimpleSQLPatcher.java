@@ -140,8 +140,7 @@ public class SimpleSQLPatcher {
                     "006",
                     "DROP VIEW IF EXISTS amp_activity CASCADE ",
                     "DROP VIEW IF EXISTS v_act_pp_details",
-                    "DROP VIEW IF EXISTS v_mondrian_programs",
-                    
+
                     "ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS linked_activities",
                     "ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS contract_details",
                     "ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS version",
@@ -242,53 +241,6 @@ public class SimpleSQLPatcher {
                     "DROP VIEW IF EXISTS v_sectors_cached"
                     ));
             
-            addPatch(new SimpleSQLPatch("008",
-                    "DROP TABLE IF EXISTS mondrian_raw_donor_transactions",
-                    
-                    "DROP TABLE IF EXISTS mondrian_locations",
-                    "DROP TABLE IF EXISTS mondrian_locations_en",
-                    "DROP TABLE IF EXISTS mondrian_locations_ro",
-                    "DROP TABLE IF EXISTS mondrian_locations_fr",
-                    
-                    "DROP TABLE IF EXISTS mondrian_sectors",
-                    "DROP TABLE IF EXISTS mondrian_sectors_en",
-                    "DROP TABLE IF EXISTS mondrian_sectors_ro",
-                    "DROP TABLE IF EXISTS mondrian_sectors_fr",
-                    
-                    "DROP TABLE IF EXISTS mondrian_programs",
-                    "DROP TABLE IF EXISTS mondrian_programs_en",
-                    "DROP TABLE IF EXISTS mondrian_programs_ro",
-                    "DROP TABLE IF EXISTS mondrian_programs_fr",
-                    
-                    "DROP TABLE IF EXISTS mondrian_organizations",
-                    "DROP TABLE IF EXISTS mondrian_organizations_en",
-                    "DROP TABLE IF EXISTS mondrian_organizations_ro",
-                    "DROP TABLE IF EXISTS mondrian_organizations_fr",
-                    
-                    "DROP TABLE IF EXISTS mondrian_activity_texts",
-                    "DROP TABLE IF EXISTS mondrian_activity_texts_en",
-                    "DROP TABLE IF EXISTS mondrian_activity_texts_ro",
-                    "DROP TABLE IF EXISTS mondrian_activity_texts_fr",
-                    
-                    "DROP TABLE IF EXISTS mondrian_raw_donor_transactions",
-                    "DROP TABLE IF EXISTS etl_executing_agencies",
-                    "DROP TABLE IF EXISTS etl_beneficiary_agencies",
-                    "DROP TABLE IF EXISTS etl_implementing_agencies",
-                    "DROP TABLE IF EXISTS etl_responsible_agencies",
-                    "DROP TABLE IF EXISTS etl_locations",
-                    "DROP TABLE IF EXISTS etl_activity_program_national_plan_objective",
-                    "DROP TABLE IF EXISTS etl_activity_program_primary_program",
-                    "DROP TABLE IF EXISTS etl_activity_program_secondary_program",
-                    "DROP TABLE IF EXISTS etl_activity_program_tertiary_program",
-                    "DROP TABLE IF EXISTS etl_activity_sector_primary",
-                    "DROP TABLE IF EXISTS etl_activity_sector_secondary",
-                    "DROP TABLE IF EXISTS etl_activity_sector_tertiary",
-                    "DROP TABLE IF EXISTS etl_locations",
-                    
-                    "DROP TABLE IF EXISTS mondrian_dates",
-                    "DROP TABLE IF EXISTS mondrian_fact_table",
-                    "DROP TABLE IF EXISTS mondrian_exchange_rates"
-                    ));
             //dropping the table so hibernate creates the sequence correctly
             //this is a not yet implemented feature
             
@@ -354,7 +306,6 @@ public class SimpleSQLPatcher {
                     "DELETE FROM amp_columns where columnname = 'Project uses national audit systems'",
 
                     // Has Mondrian reference
-                    "DROP VIEW IF EXISTS v_mondrian_activity_fixed_texts CASCADE", 
                     // "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS prj_implementation_unit",
                     "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS imac_approved CASCADE",
                     "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_oversight CASCADE",
@@ -398,7 +349,7 @@ public class SimpleSQLPatcher {
             throw new RuntimeException("could not find data source!");
     }
     
-    protected void createDummyViewIfMissingOrTable(Connection conn, String viewName, String query, boolean force) {
+    protected void createDummyViewIfMissingOrTable(Connection conn, String viewName, String query) {
         if (!SQLUtils.isView(conn, viewName)) {
             logger.error(viewName + " is not a view");
             SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + viewName + " CASCADE");
@@ -418,10 +369,10 @@ public class SimpleSQLPatcher {
         if (recreatingViews || ampActivityIsNotView || aaHasOtherColumnsThanAav) {
             logger.error("forcing recreating views!");
             SQLUtils.executeQuery(conn, "UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart'");
-            if (SQLUtils.isTable(conn, "amp_etl_changelog") && (recreatingViews || ampActivityIsNotView || aaHasOtherColumnsThanAav)) {
-                SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('full_etl_request', 999)");
-            }
-            createDummyViewIfMissingOrTable(conn, "amp_activity", "SELECT aav.* from amp_activity_version aav JOIN amp_activity_group aag ON aav.amp_activity_id = aag.amp_activity_last_version_id AND (aav.deleted IS NULL or aav.deleted = false)", recreatingViews);
+            createDummyViewIfMissingOrTable(conn, "amp_activity",
+                    "SELECT aav.* from amp_activity_version aav "
+                            + "JOIN amp_activity_group aag ON aav.amp_activity_id = aag.amp_activity_last_version_id "
+                            + "AND (aav.deleted IS NULL or aav.deleted = false)");
         }
     }
     
@@ -470,7 +421,7 @@ public class SimpleSQLPatcher {
             "LEFT JOIN amp_activity_version aav ON (aag.amp_activity_group_id = aav.amp_activity_group_id) " + 
             "AND (aav.deleted IS NULL OR aav.deleted = false) AND (aav.draft IS NULL or aav.draft = false) " + 
             "AND (aav.approval_status IN (%s)) " + 
-            "GROUP BY aag.amp_activity_group_id", Util.toCSString(AmpARFilter.validatedActivityStatus));
+            "GROUP BY aag.amp_activity_group_id", Util.toCSString(AmpARFilter.VALIDATED_ACTIVITY_STATUS));
         SQLUtils.executeQuery(conn, query);
         
         String query2 = "CREATE OR REPLACE VIEW v_activity_latest_and_validated AS " + 

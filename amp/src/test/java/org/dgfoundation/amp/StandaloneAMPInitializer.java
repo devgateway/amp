@@ -8,7 +8,6 @@ import org.apache.log4j.LogManager;
 import org.apache.struts.mock.MockHttpServletRequest;
 import org.apache.struts.mock.MockHttpSession;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
-import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.content.ContentRepositoryManager;
@@ -33,32 +32,32 @@ public class StandaloneAMPInitializer {
     private static boolean SETUP = false;
     
     public static synchronized void initialize() {
-        try {
-            if (SETUP) {
-                return;
+        PersistenceManager.inTransaction(() -> {
+            try {
+                if (SETUP) {
+                    return;
+                }
+
+                configureLog4j();
+                HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
+
+                ResourceStreamHandlerFactory.installIfNeeded();
+
+                DigiConfigManager.initialize("./repository");
+                PersistenceManager.initialize(false, null);
+                ContentRepositoryManager.initialize();
+
+                TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
+                InternationalizedViewsRepository.i18Models.size(); // force init outside of testcases
+
+                populateMockRequest();
+                configureMockTranslationRequest();
+
+                SETUP = true;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-
-            configureLog4j();
-            HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-            MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_212";
-            
-            org.digijava.kernel.ampapi.mondrian.util.Connection.IS_TESTING = true;
-            ResourceStreamHandlerFactory.installIfNeeded();
-
-            DigiConfigManager.initialize("./repository");
-            PersistenceManager.initialize(false, null);
-            ContentRepositoryManager.initialize();
-            
-            TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
-            InternationalizedViewsRepository.i18Models.size(); // force init outside of testcases
-
-            populateMockRequest();
-            configureMockTranslationRequest();
-
-            SETUP = true;
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+        });
     }
 
     public static MockHttpServletRequest populateMockRequest() {

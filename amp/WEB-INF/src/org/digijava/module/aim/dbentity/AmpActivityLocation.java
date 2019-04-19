@@ -1,10 +1,13 @@
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+
 import java.io.Serializable;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.util.Output;
 
@@ -14,22 +17,25 @@ import org.digijava.module.aim.util.Output;
  * @author Irakli Kobiashvili
  *
  */
-public class AmpActivityLocation implements Versionable,Serializable, Cloneable {
+public class AmpActivityLocation implements Versionable, Serializable, Cloneable {
     //IATI-check: should be exported.
-//  @Interchangeable(fieldTitle="ID", id=true)
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long id;
-    @Interchangeable(fieldTitle = "ID", pickIdOnly=true)
+
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
-    @Interchangeable(fieldTitle = "Location", pickIdOnly = true, importable = true, uniqueConstraint=true, required = ActivityEPConstants.REQUIRED_ALWAYS, 
+    @Interchangeable(fieldTitle = "Location", pickIdOnly = true, importable = true, uniqueConstraint = true,
+            required = ALWAYS,
             dependencies={
                             InterchangeDependencyResolver.IMPLEMENTATION_LEVEL_PRESENT_KEY,
                             InterchangeDependencyResolver.IMPLEMENTATION_LEVEL_VALID_KEY,
                             InterchangeDependencyResolver.IMPLEMENTATION_LOCATION_PRESENT_KEY
             })
     private AmpLocation location;
-    @Interchangeable(fieldTitle = "Location Percentage",
+    @Interchangeable(fieldTitle = "Location Percentage", required = ALWAYS,
             fmPath = "/Activity Form/Location/Locations/Location Item/locationPercentage",
-            required = "/Activity Form/Location/Locations/Location percentage required",
+            requiredFmPath = "/Activity Form/Location/Locations/Location percentage required",
             percentageConstraint = true, importable = true)
     @Validators (percentage = "/Activity Form/Location/Locations/locationPercentageTotal" )
     private Float locationPercentage;
@@ -121,4 +127,5 @@ public class AmpActivityLocation implements Versionable,Serializable, Cloneable 
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
 }

@@ -11,14 +11,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -28,10 +31,9 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.LongType;
-
-import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * Project List generation class
@@ -80,7 +82,7 @@ public class ProjectList {
         List<Long> editableIds = ActivityUtil.getEditableActivityIdsNoSession(tm);
         
         // get list of the workspaces where the user is member of and can edit each activity
-        Map<Long, Set<String>> activitiesWs = getEditableWorkspacesForActivities(tm);
+        Map<Long, Set<Long>> activitiesWs = getEditableWorkspacesForActivities(tm);
         
         List<JsonBean> notViewableActivities = getActivitiesByIds(viewableIds, activitiesWs, tm, false, false);
         
@@ -100,8 +102,8 @@ public class ProjectList {
         return activityMap.values();
     }
 
-    public static Map<Long, Set<String>> getEditableWorkspacesForActivities(TeamMember tm) {
-        Map<Long, Set<String>> activitiesWs = new HashMap<>();
+    public static Map<Long, Set<Long>> getEditableWorkspacesForActivities(TeamMember tm) {
+        Map<Long, Set<Long>> activitiesWs = new HashMap<>();
         try {
             User currentUser = UserUtils.getUserByEmail(tm.getEmail());
             Collection<AmpTeamMember> currentTeamMembers = TeamMemberUtil.getAllAmpTeamMembersByUser(currentUser);
@@ -120,14 +122,15 @@ public class ProjectList {
 
 
     private static void populateActivityMap(Map<String, JsonBean> activityMap, List<JsonBean> activities) {
+        String ampIdFieldName = FieldMap.underscorify(ActivityFieldsConstants.AMP_ID);
+        String activityIdFieldName = FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
         for (JsonBean activity : activities) {
-            JsonBean activityOnMap = activityMap.get((String) activity.get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID)));
+            JsonBean activityOnMap = activityMap.get((String) activity.get(ampIdFieldName));
             // if it is not on the map, or activity is a newer
             // version than the one already on the Map then we put it on the Map
             if (activityOnMap == null
-                    || (Long) activity.get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID)) > (Long) activityOnMap
-                            .get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID))) {
-                activityMap.put((String) activity.get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID)), activity);
+                    || (Long) activity.get(activityIdFieldName) > (Long) activityOnMap.get(activityIdFieldName)) {
+                activityMap.put((String) activity.get(ampIdFieldName), activity);
             }
         }
     }
@@ -166,11 +169,11 @@ public class ProjectList {
      * @param activityIds List with the ids (amp_activity_id) of the activities to include or exclude
      * @param activitiesWs 
      * @param viewable whether the list of activities is viewable or not
-     * @param editable whether the list of activities is editable or not
      * @return List <JsonBean> of the activities generated from including/excluding the List<Long> of activityIds
      */
-    public static List<JsonBean> getActivitiesByIds(final List<Long> activityIds, final Map<Long, Set<String>> activitiesWs, final TeamMember tm, final boolean include,
-            final boolean viewable) {
+    public static List<JsonBean> getActivitiesByIds(final List<Long> activityIds,
+                                                    final Map<Long, Set<Long>> activitiesWs, final TeamMember tm,
+                                                    final boolean include, final boolean viewable) {
         final List<JsonBean> activitiesList = new ArrayList<JsonBean>();
         
         String iatiIdAmpField = InterchangeUtils.getAmpIatiIdentifierFieldName();
@@ -195,17 +198,20 @@ public class ProjectList {
                     ResultSet rs = rsi.rs;
                     while (rs.next()) {
                         long actId = rs.getLong("amp_activity_id");
-                        Set<String> workspaces = activitiesWs.containsKey(actId) ? activitiesWs.get(actId) : null;
-                        boolean editable = workspaces != null ? workspaces.contains(tm.getTeamId().toString()) : false;
+                        Set<Long> workspaces = activitiesWs.containsKey(actId) ? activitiesWs.get(actId) : null;
+                        boolean editable = workspaces != null ? workspaces.contains(tm.getTeamId()) : false;
 
                         JsonBean bean = new JsonBean();
-                        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), rs.getLong("amp_activity_id"));
-                        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE), InterchangeUtils.formatISO8601Date(rs.getTimestamp("date_created")));
-                        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE), getTranslatableFieldValue("name", rs.getString("name"), rs.getLong("amp_activity_id")));
+                        bean.set(FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), actId);
+                        bean.set(FieldMap.underscorify(ActivityFieldsConstants.CREATED_DATE),
+                                DateTimeUtil.formatISO8601Timestamp(rs.getTimestamp("date_created")));
+                        bean.set(FieldMap.underscorify(ActivityFieldsConstants.PROJECT_TITLE),
+                                getTranslatableFieldValue("name", rs.getString("name"), actId));
                         bean.set(iatiIdAmpField, rs.getString(iatiIdAmpField));
-                        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(rs.getTimestamp("date_updated")));
-                        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
-                        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.WORKSPACES_EDIT), workspaces);
+                        bean.set(FieldMap.underscorify(ActivityFieldsConstants.UPDATE_DATE),
+                                DateTimeUtil.formatISO8601Timestamp(rs.getTimestamp("date_updated")));
+                        bean.set(FieldMap.underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
+                        bean.set(FieldMap.underscorify(ActivityFieldsConstants.WORKSPACES_EDIT), workspaces);
                         bean.set(ActivityEPConstants.EDIT, editable);
                         bean.set(ActivityEPConstants.VIEW, viewable);
                         activitiesList.add(bean);
@@ -227,25 +233,31 @@ public class ProjectList {
     public static JsonBean getActivityInProjectListFormat(AmpActivityVersion a, boolean editable, boolean viewable) {
         JsonBean bean = new JsonBean();
         String iatiIdAmpField = InterchangeUtils.getAmpIatiIdentifierFieldName();
-        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), a.getIdentifier());
-        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE), InterchangeUtils.formatISO8601Date(a.getCreatedDate()));
-        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE), getTranslatableFieldValue("name", a.getName(), (Long) a.getIdentifier()));
+        bean.set(FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), a.getIdentifier());
+        bean.set(FieldMap.underscorify(ActivityFieldsConstants.CREATED_DATE),
+                DateTimeUtil.formatISO8601Timestamp(a.getCreatedDate()));
+        bean.set(FieldMap.underscorify(ActivityFieldsConstants.PROJECT_TITLE),
+                getTranslatableFieldValue("name", a.getName(), (Long) a.getIdentifier()));
         bean.set(iatiIdAmpField, getIatiIdentifierValue(a, iatiIdAmpField));
-        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(a.getUpdatedDate()));
-        bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), a.getAmpId());
+        bean.set(FieldMap.underscorify(ActivityFieldsConstants.UPDATE_DATE),
+                DateTimeUtil.formatISO8601Timestamp(a.getUpdatedDate()));
+        bean.set(FieldMap.underscorify(ActivityFieldsConstants.AMP_ID), a.getAmpId());
+        bean.set(ActivityFieldsConstants.ACTIVITY_GROUP, a.getAmpActivityGroup());
         bean.set(ActivityEPConstants.EDIT, true);
         bean.set(ActivityEPConstants.VIEW, true);
         return bean;
     }
 
     private static String getIatiIdentifierValue(AmpActivityVersion a, String iatiIdAmpField) {
-        Field field = InterchangeUtils.getFieldByLongName(iatiIdAmpField);
-        try {
-            return (String) PropertyUtils.getProperty(a, field.getName());
-        } catch (Exception e) {
-            LOGGER.error("Couldn't fetch the field value", e);
-            throw new RuntimeException(e);
+        APIField apiField = AmpFieldsEnumerator.getEnumerator().getActivityFields().stream()
+                .filter(f -> f.getFieldName().equals(iatiIdAmpField))
+                .findAny().orElse(null);
+        
+        if (apiField != null) {
+            return (String) apiField.getFieldAccessor().get(a);
         }
+        
+        return null;
     }
 
     /**
@@ -262,7 +274,8 @@ public class ProjectList {
         try {
             Field field = AmpActivityFields.class.getDeclaredField(fieldName);
             
-            return InterchangeUtils.getTranslationValues(field, AmpActivityVersion.class, fieldValue, parentObjectId);
+            return ActivityTranslationUtils.getTranslationValues(field, AmpActivityVersion.class, fieldValue,
+                    parentObjectId);
         } catch (Exception e) {
             LOGGER.error("Couldn't translate the field value", e);
             throw new RuntimeException(e);

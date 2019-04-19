@@ -30,7 +30,7 @@ public final class ReflectionUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
         return field;

@@ -18,8 +18,9 @@ import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
 import org.dgfoundation.amp.gpi.reports.export.GPIReportExportType;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
+import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 
 /**
  * The service for building GPI reports
@@ -53,7 +54,7 @@ public final class GPIReportService {
      *  "page"          : 1,                                                        <br/>
      *  "recordsPerPage": 10,                                                       <br/>
      *  "filters"       : //see filters                                             <br/>
-     *  "settings"      : //see {@link EndpointUtils#applySettings}                 <br/>
+     *  "settings"      : //see {@link SettingsUtils#applySettings}                 <br/>
      *  "hierarchy"     : "donor-agency"                                            <br/>
      * }                                                                            <br/>
      * 
@@ -71,12 +72,12 @@ public final class GPIReportService {
      * </dl>
      * @return GPIReport result for the requested page and pagination information
      */
-    public GPIReport getGPIReport(String indicatorCode, JsonBean formParams) {
-        int page = EndpointUtils.getSingleValue(formParams, "page", 0);
-        int recordsPerPage = EndpointUtils.getSingleValue(formParams, "recordsPerPage",
+    public GPIReport getGPIReport(String indicatorCode, GpiFormParameters formParams) {
+        int page = EndpointUtils.getSingleValue(formParams.getPage(), 0);
+        int recordsPerPage = EndpointUtils.getSingleValue(formParams.getRecordsPerPage(),
                 ReportPaginationUtils.getRecordsNumberPerPage());
 
-        int output = EndpointUtils.getSingleValue(formParams, "output", 1);
+        int output = EndpointUtils.getSingleValue(formParams.getOutput(), 1);
 
         GeneratedReport niReport = GPIReportUtils.getGeneratedReportForIndicator(indicatorCode, formParams);
         GPIReportOutputBuilder gpiReportOutputBuilder = getGPIReportOutputBuilder(indicatorCode, output);
@@ -113,22 +114,25 @@ public final class GPIReportService {
         }
     }
 
-    public Response exportGPIReport(String indicatorCode, JsonBean formParams, String type) {
-        formParams.set("recordsPerPage", Integer.MAX_VALUE);
+    public Response exportGPIReport(String indicatorCode, GpiFormParameters formParams, String type) {
+        formParams.setRecordsPerPage(Integer.MAX_VALUE);
         GPIReport gpiReport = getGPIReport(indicatorCode, formParams);
         
         return getExportAsResponse(indicatorCode, type, gpiReport, formParams);
     }
-    
-    public Response getExportAsResponse(String indicatorCode, String type, GPIReport report, JsonBean formParams) {
+
+    public Response getExportAsResponse(String indicatorCode, String type, GPIReport report,
+            GpiFormParameters formParams) {
         String fileName = String.format("Indicator_%s.%s", indicatorCode, type);
         try {
             byte[] doc = exportGPIReport(indicatorCode, report, formParams, type);
             
             if (doc != null) {
                 logger.info("Send GPI export data to browser...");
+                
+                MediaType mediaType = EndpointUtils.getMediaType(type);
 
-                return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
+                return Response.ok(doc, mediaType)
                         .header("content-disposition", "attachment; filename = " + fileName)
                         .header("content-length", doc.length).build();
             } else {
@@ -144,19 +148,19 @@ public final class GPIReportService {
     /** Method used for exporting a NiReport. 
      * @param indicatorCode 
      * @param report
-     * @param reportId
-     * @param queryObject
+     * @param formParams
      * @param type
      * @return
      * @throws Exception
      */
-    private byte[] exportGPIReport(String indicatorCode, GPIReport report, JsonBean formParams, String type) throws Exception {
+    private byte[] exportGPIReport(String indicatorCode, GPIReport report, GpiFormParameters formParams,
+            String type) throws Exception {
         
         GPIReportExportType exporter = null;
-        int output = EndpointUtils.getSingleValue(formParams, "output", 1);
+        int output = EndpointUtils.getSingleValue(formParams.getOutput(), 1);
         
         switch (type) {
-            case GPIReportConstants.XLSX: 
+            case AMPReportExportConstants.XLSX:
                 switch (indicatorCode) {
                     case GPIReportConstants.REPORT_1 :
                         if (output == 2) {
@@ -181,7 +185,7 @@ public final class GPIReportService {
                         exporter = GPIReportExportType.XLSX;
                     } 
                 break;
-            case GPIReportConstants.PDF: 
+            case AMPReportExportConstants.PDF:
                 switch (indicatorCode) {
                     case GPIReportConstants.REPORT_1 :
                         if (output == 2) {

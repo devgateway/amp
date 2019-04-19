@@ -13,8 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -74,7 +72,10 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFe
 import org.dgfoundation.amp.onepager.components.features.sections.AmpAidEffectivenessFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpLineMinistryObservationsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalObservationsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFundingInfoSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -100,7 +101,6 @@ import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 import org.dgfoundation.amp.onepager.validators.StringRequiredValidator;
 import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -116,7 +116,6 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -216,44 +215,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         toggleFormRichTextComponent(enabled,target, ifs,visit); 
                     }
                     });
-        
-        form.visitChildren(AmpDonorFundingFormSectionFeature.class,
-                new IVisitor<AmpDonorFundingFormSectionFeature, Void>() {
-                    @Override
-                    public void component(
-                            AmpDonorFundingFormSectionFeature ifs,
-                            IVisit<Void> visit) {
-                        toggleFormComponent (enabled,target,ifs,visit);                 }
-                });
-        visitChildren(AmpActivityBudgetExtrasPanel.class,
-                new IVisitor<AmpActivityBudgetExtrasPanel, Void>() {
-                    @Override
-                    public void component(
-                            AmpActivityBudgetExtrasPanel ifs,
-                            IVisit<Void> visit) {
-                        toggleFormComponent (enabled,target,ifs,visit);
-                    }
-                });
-        visitChildren(AmpAidEffectivenessFormSectionFeature.class,
-                new IVisitor<AmpAidEffectivenessFormSectionFeature, Void>() {
-                    @Override
-                    public void component(
-                            AmpAidEffectivenessFormSectionFeature ifs,
-                            IVisit<Void> visit) {
-                        toggleFormComponent (enabled,target,ifs,visit);
-                    }
-                });
 
-        visitChildren(AmpPlanningFormSectionFeature.class,
-                new IVisitor<AmpPlanningFormSectionFeature, Void>() {
-                    @Override
-                    public void component(
-                            AmpPlanningFormSectionFeature ifs,
-                            IVisit<Void> visit) {
-                        toggleFormComponent (enabled,target,ifs,visit);
-                    }
-                });     
-        
+        toggleFormComponent(form, AmpIssuesFormSectionFeature.class, enabled, target);
+        toggleFormComponent(form, AmpLineMinistryObservationsFormSectionFeature.class, enabled, target);
+        toggleFormComponent(form, AmpRegionalObservationsFormSectionFeature.class, enabled, target);
+        toggleFormComponent(form, AmpDonorFundingFormSectionFeature.class, enabled, target);
+        toggleFormComponent(form, AmpActivityBudgetExtrasPanel.class, enabled, target);
+        toggleFormComponent(form, AmpAidEffectivenessFormSectionFeature.class, enabled, target);
+        toggleFormComponent(form, AmpPlanningFormSectionFeature.class, enabled, target);
+
         visitChildren(AmpProjectCost.class,
                 new IVisitor<AmpProjectCost, Void>() {
                     @Override
@@ -263,16 +233,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         toggleFormComponent (enabled, target, ifs, visit, false);
                     }
                 });
-        visitChildren(AmpDonorFundingInfoSubsectionFeature.class,
-                new IVisitor<AmpDonorFundingInfoSubsectionFeature, Void>() {
-                    @Override
-                    public void component(
-                            AmpDonorFundingInfoSubsectionFeature ifs,
-                            IVisit<Void> visit) {
-                        toggleFormComponent (enabled,target,ifs,visit);
-                    }
-                });     
-        
+
+        toggleFormComponent(form, AmpDonorFundingInfoSubsectionFeature.class, enabled, target);
+
         visitChildren(AmpProjectCost.class,
                 new IVisitor<Component, Object>() {
                     @Override
@@ -305,6 +268,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
           
         
     }
+
+    private <T extends Component & AmpRequiredComponentContainer> void toggleFormComponent(
+            Form form, Class<T> componentClass, boolean enabled, AjaxRequestTarget target) {
+        form.visitChildren(componentClass,
+                (IVisitor<T, Void>) (ifs, visit) -> toggleFormComponent(enabled, target, ifs, visit));
+    }
+
        private void toggleFormRichTextComponent (boolean enabled, final AjaxRequestTarget target,
                 AmpIdentificationFormSectionFeature ifs, IVisit<Void> visit) {
             List <FormComponent<?>> requiredComponents = ifs.getRequiredRichTextFormComponents();
@@ -323,17 +293,18 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             AmpRequiredComponentContainer ifs, IVisit<Void> visit, boolean stopVisit) {
         List <FormComponent<?>> requiredComponents = ifs.getRequiredFormComponents();
         for (FormComponent<?> component : requiredComponents) {
-        String js = String.format("$('#%s').blur();",
-                component.getMarkupId());
-        component.setRequired(enabled);
-        target.appendJavaScript(js);
-        target.add(component);
+            if (component.isVisibleInHierarchy()) {
+                String js = String.format("$('#%s').blur();", component.getMarkupId());
+                component.setRequired(enabled);
+                target.appendJavaScript(js);
+                target.add(component);
+            }
         }
         // some components like AmpProjectCost do not need to stop and process all elements
         if (stopVisit)
             visit.stop();
     }
-    
+
     private ListView<AmpComponentPanel> featureList;
 
     /**
@@ -1085,7 +1056,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     && compFundItem.getTransactionDate() != null) {
                 itemTransactionType = compFundItem.getTransactionType();
                 amount = compFundItem.getTransactionAmount();
-                exchangeRate = (compFundItem.getExchangeRate() == null ? null : compFundItem.getExchangeRate().doubleValue());
                 currency = compFundItem.getCurrency();
                 currencyDate = new java.sql.Date(compFundItem.getTransactionDate().getTime());
                 if (!compFundItem.getComponent().equals(parent))
@@ -1217,7 +1187,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         String validation = DbUtil.getValidationFromTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
         
         if (activity.getDraft() != null&& !activity.getDraft()&&!("validationOff".equals(validation))) {
-            if (isApproved(newActivity)) {
+            if (ActivityUtil.isApproved(newActivity)) {
                 if (modifiedBy != null) {
                     AmpTeamMemberRoles role = modifiedBy.getAmpMemberRole();
                     if(!role.isApprover()){
@@ -1258,12 +1228,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             target.appendJavaScript("window.onbeforeunload = null; window.location.replace('/aim/');");
             target.add(feedbackPanel);
         }
-    }
-
-    private boolean isApproved(AmpActivityVersion activity) {
-        String approvalStatus = activity.getApprovalStatus();
-        return Constants.APPROVED_STATUS.equals(approvalStatus)
-                || Constants.STARTED_APPROVED_STATUS.equals(approvalStatus);
     }
 
     private void quickMenu(IModel<AmpActivityVersion> am, AbstractReadOnlyModel<List<AmpComponentPanel>> listModel) {

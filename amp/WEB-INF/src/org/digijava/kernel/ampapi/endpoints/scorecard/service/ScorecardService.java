@@ -14,9 +14,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.common.model.Org;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ActivityUpdate;
@@ -24,7 +27,6 @@ import org.digijava.kernel.ampapi.endpoints.scorecard.model.ColoredCell;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ColoredCell.Colors;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
 import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -43,9 +45,6 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
-
-import clover.org.apache.commons.lang.StringUtils;
-import clover.org.apache.log4j.Logger;
 
 /**
  * Service class for Scorecard generation
@@ -257,17 +256,15 @@ public class ScorecardService {
 
     /**
      * Returns a list of all the donors
-     * 
-     * @return List <String>
      */
     public List<AmpOrganisation> getFilteredDonors() {
         List<AmpOrganisation> donors = new ArrayList<AmpOrganisation>();
-        List<JsonBean> donorJson = QueryUtil.getDonors(true);
-        for (JsonBean bean : donorJson) {
+        List<Org> orgs = QueryUtil.getDonors(true);
+        for (Org org : orgs) {
             AmpOrganisation donor = new AmpOrganisation();
-            donor.setName(bean.getString("name"));
-            donor.setAmpOrgId(Long.valueOf(bean.getString("id")));
-            donor.setAcronym(bean.getString("acronym"));
+            donor.setName(org.getName());
+            donor.setAmpOrgId(org.getId());
+            donor.setAcronym(org.getAcronym());
             donors.add(donor);
         }
         return donors;
@@ -606,9 +603,9 @@ public class ScorecardService {
     private Map<Long, Map<String, ColoredCell>> initializeScorecardCellData() {
         Map<Long, Map<String, ColoredCell>> data = new HashMap<Long, Map<String, ColoredCell>>();
         List<Quarter> quarters = getQuarters();
-        List<JsonBean> donors = QueryUtil.getDonors(true);
-        for (JsonBean donor : donors) {
-            Long donorId = (Long) donor.get("id");
+        List<Org> donors = QueryUtil.getDonors(true);
+        for (Org donor : donors) {
+            Long donorId = donor.getId();
             Map<String, ColoredCell> quarterCellMap = new HashMap<String, ColoredCell>();
             for (Quarter quarter : quarters) {
 

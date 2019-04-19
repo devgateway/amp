@@ -48,10 +48,6 @@ public class InterchangeUtils {
         return fields.length > 0;
     }
 
-    public static String getAmpIatiIdentifierFieldName() {
-        return ActivityEPConstants.IATI_IDENTIFIER_AMP_FIELD_DEFAULT_NAME;
-    }
-
     public static Double getDoubleFromJsonNumber(Object obj) {
         if (!Number.class.isInstance(obj))
             return null;

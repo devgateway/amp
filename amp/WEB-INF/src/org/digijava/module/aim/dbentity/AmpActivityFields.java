@@ -310,12 +310,6 @@ LoggerIdentifiable, Cloneable {
     @Deprecated
     protected Set referenceDocs;
 
-    /*
-    @Deprecated
-    @VersionableCollection(fieldTitle = "Activity Programs")
-    protected Set activityPrograms;
-     */
-
     // use contFirstName and contLastName instead.
     // The field is defunct
 

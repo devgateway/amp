@@ -152,15 +152,6 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.IPAContract" />
 		</set>
 
-		<!--
-		DEPRECATED
-		<set name="activityPrograms" table="AMP_ACTIVITY_THEME" cascade="none">
-			<cache usage="read-write" />
-			<key column="amp_activity_id" />
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpTheme" column="amp_theme_id" />
-		</set>
-		-->
-
 		<set name="locations" cascade="all-delete-orphan" inverse="true">
 			<cache usage="read-write"/>
 			<key column="amp_activity_id" />

@@ -65,6 +65,7 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.validator.ActivityValidationContext;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
@@ -110,6 +111,7 @@ public class ActivityImporter extends ObjectImporter {
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {
+        Map<String, Object> input = newJson.any();
         this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
         this.update = update;
         this.currentUser = TeamUtil.getCurrentUser();
@@ -119,7 +121,12 @@ public class ActivityImporter extends ObjectImporter {
             modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
             Long mId = modifiedBy == null ? null : modifiedBy.getAmpTeamMemId();
             newJson.set(FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY), mId);
-            newJson.any().remove(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY));
+            input.remove(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY));
+        }
+        if (!rules.isProcessApprovalFields()) {
+            input.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY));
+            input.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE));
+            input.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS));
         }
         this.newJson = newJson;
         this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH, null);
@@ -209,6 +216,15 @@ public class ActivityImporter extends ObjectImporter {
                     Long createdById = oldActivity.getActivityCreator().getAmpTeamMemId();
                     newJson.set(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY), createdById);
                 }
+                // TODO AMP-28993: remove explicitly resetting approval fields since they are cleared during init
+                if (!rules.isProcessApprovalFields()) {
+                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY),
+                            oldActivity.getApprovedBy() == null ? null : oldActivity.getApprovedBy().getAmpTeamMemId());
+                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE),
+                            DateTimeUtil.formatISO8601Timestamp(oldActivity.getApprovalDate()));
+                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS),
+                            oldActivity.getApprovalStatus().getId());
+                }
             } else if (!update) {
                 newActivity = new AmpActivityVersion();
             }
@@ -267,10 +283,6 @@ public class ActivityImporter extends ObjectImporter {
                     || AmpARFilter.VALIDATED_ACTIVITY_STATUS.contains(newActivity.getApprovalStatus())) {
                 newActivity.setApprovalDate(new Date());
             }
-        } else if (oldActivity != null) {
-            newActivity.setApprovalDate(oldActivity.getApprovalDate());
-            newActivity.setApprovedBy(oldActivity.getApprovedBy());
-            newActivity.setApprovalStatus(oldActivity.getApprovalStatus());
         }
 
         ActivityValidationContext avc = new ActivityValidationContext();

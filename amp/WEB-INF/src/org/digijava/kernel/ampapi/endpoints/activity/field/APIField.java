@@ -18,7 +18,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 /**
  * @author Octavian Ciubotaru
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ "field_name", "apiType", "field_label", "required", "importable", "dependencies", "id_only",
     "multiple_values", "percentage_constraint", "unique_constraint", "tree_collection", "translatable", "regex_pattern",
     "regex_constraint", "field_length", "size_limit" })

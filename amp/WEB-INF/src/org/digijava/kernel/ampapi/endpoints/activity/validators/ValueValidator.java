@@ -2,19 +2,24 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getDoubleFromJsonNumber;
 import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getLongOrNullOnError;
+import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
 
 import java.util.List;
 import java.util.Map;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
 /**
  * Validates that field value is allowed
- * 
+ *
  * @author Nadejda Mandrescu
  */
 public class ValueValidator extends InputValidator {
@@ -23,6 +28,7 @@ public class ValueValidator extends InputValidator {
 
     private boolean isValidLength = true;
     private boolean isValidPercentage = true;
+    private boolean draftDisabled = false;
 
     @Override
     public ApiErrorMessage getErrorMessage() {
@@ -30,27 +36,34 @@ public class ValueValidator extends InputValidator {
             return ActivityErrors.FIELD_INVALID_LENGTH;
         if (!isValidPercentage)
             return ActivityErrors.FIELD_INVALID_PERCENTAGE;
+        if (draftDisabled) {
+            return ActivityErrors.SAVE_AS_DRAFT_FM_DISABLED;
+        }
         return ActivityErrors.FIELD_INVALID_VALUE;
     }
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
             APIField fieldDescription, String fieldPath) {
-        
+
         boolean importable = fieldDescription.isImportable();
-        // input type, allowed input will be verified before, so nothing check here 
+        // input type, allowed input will be verified before, so nothing check here
         if (!importable)
             return true;
-        
+
         if (!isValidLength(newFieldParent, fieldDescription))
             return false;
-        if (!isValidPercentage(newFieldParent, fieldDescription)) 
+        if (!isValidPercentage(newFieldParent, fieldDescription)) {
             return false;
+        }
+        if (!isValidDraft(importer, newFieldParent, fieldDescription)) {
+            return false;
+        }
 
         PossibleValuesCache pvc = importer.getPossibleValuesCache();
         Object value = newFieldParent.get(fieldDescription.getFieldName());
         String cPVPath = fieldDescription.getCommonPossibleValuesPath();
-        
+
         if (pvc.hasPossibleValues(fieldPath, cPVPath) && value != null) {
             if (fieldDescription.getApiType().getFieldType().isList()) {
                 if (fieldDescription.getApiType().isSimpleItemType()) {
@@ -80,7 +93,7 @@ public class ValueValidator extends InputValidator {
             this.isValidPercentage = false;
             return false;
         }
-        
+
         return true;
     }
 
@@ -112,6 +125,22 @@ public class ValueValidator extends InputValidator {
         if (String.class.isAssignableFrom(obj.getClass())){
             if (maxLength < ((String) obj).length())
                 return false;
+        }
+        return true;
+    }
+
+    private boolean isValidDraft(ObjectImporter importer, Map<String, Object> newFieldParent,
+            APIField fieldDescription) {
+        String draftFieldName = FieldMap.underscorify(ActivityFieldsConstants.IS_DRAFT);
+        if (draftFieldName.equals(fieldDescription.getFieldName())) {
+            if (!(importer instanceof ActivityImporter)) {
+                throw new RuntimeException("Draft flag not supported for " + importer.getClass());
+            }
+            ActivityImporter activityImporter = (ActivityImporter) importer;
+            if (activityImporter.getRequestedSaveMode() == DRAFT && !activityImporter.isDraftFMEnabled()) {
+                this.draftDisabled = true;
+                return false;
+            }
         }
         return true;
     }

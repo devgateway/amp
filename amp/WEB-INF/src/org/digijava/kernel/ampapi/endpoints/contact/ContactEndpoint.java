@@ -18,12 +18,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -32,6 +26,13 @@ import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * @author Octavian Ciubotaru
@@ -91,7 +92,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     public JsonBean getContact(@ApiParam("contact id") @PathParam("id") Long id) {
         return ContactUtil.getContact(id);
     }
-    
+
     @POST
     @Path("/batch")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -109,7 +110,8 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     public JsonBean createContact(JsonBean contact) {
         ContactImporter importer = new ContactImporter();
         List<ApiErrorMessage> errors = importer.createContact(contact);
-        return ContactUtil.getImportResult(importer.getContact(), importer.getNewJson(), errors);
+        return ContactUtil.getImportResult(importer.getContact(), importer.getNewJson(), errors,
+                importer.getWarnings());
     }
 
     @POST
@@ -121,7 +123,8 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     public JsonBean updateContact(@ApiParam("id of the existing contact") @PathParam("id") Long id, JsonBean contact) {
         ContactImporter importer = new ContactImporter();
         List<ApiErrorMessage> errors = importer.updateContact(id, contact);
-        return ContactUtil.getImportResult(importer.getContact(), importer.getNewJson(), errors);
+        return ContactUtil.getImportResult(importer.getContact(), importer.getNewJson(), errors,
+                importer.getWarnings());
     }
 
     @Override

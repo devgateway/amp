@@ -1,0 +1,53 @@
+package org.digijava.module.aim.validator.approval;
+
+import static org.digijava.module.aim.dbentity.ApprovalStatus.REJECTED;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.validator.ActivityValidationContext;
+
+/**
+ * @author Nadejda Mandrescu
+ */
+public class ApprovalStatusConstraint implements ConstraintValidator<AllowedApprovalStatus, ApprovalStatus> {
+
+    @Override
+    public void initialize(AllowedApprovalStatus constraintAnnotation) {
+    }
+
+    @Override
+    public boolean isValid(ApprovalStatus approvalStatus, ConstraintValidatorContext context) {
+        if (approvalStatus == null) {
+            return false;
+        }
+        ActivityValidationContext avc = ActivityValidationContext.getOrThrow();
+        AmpActivityFields activity = avc.getNewActivity();
+
+        if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS_SET.contains(approvalStatus)) {
+            if (!ActivityUtil.isProjectValidationOn()) {
+                return false;
+            }
+
+            Long activityTeamId = activity.getTeam().getAmpTeamId();
+
+            if (REJECTED.equals(approvalStatus)) {
+                return ActivityUtil.canReject(activity.getModifiedBy(), activityTeamId, activity.getDraft());
+            }
+
+            AmpActivityFields oldA = avc.getOldActivity();
+            ApprovalStatus oas = oldA == null ? null : oldA.getApprovalStatus();
+            return activity.getDraft() || !ActivityUtil.canApprove(activity.getModifiedBy(), activityTeamId, oas);
+
+        } else {
+            boolean isSubmitted = Boolean.FALSE.equals(activity.getDraft());
+            boolean isNew = ActivityUtil.isNewActivity(activity);
+            return isSubmitted && ActivityUtil.canApproveWith(approvalStatus, activity.getApprovedBy(), isNew);
+        }
+    }
+
+}

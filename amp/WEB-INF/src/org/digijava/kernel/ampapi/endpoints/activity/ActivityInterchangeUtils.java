@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.PathSegment;
 
 import com.sun.jersey.spi.container.ContainerRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -57,20 +59,24 @@ public final class ActivityInterchangeUtils {
      * Imports or Updates an activity
      * @param newJson new activity configuration
      * @param update flags whether this is an import or an update request
+     * @param canDowngradeToDraft if allowed to downgrade to draft when some submit required field values are missing
+     * @param isProcessApprovalFields if to enforce approval fields from input. Otherwise the AF save workflow
+     * will be used to configure them
      * @param endpointContextPath full API method path where this method has been called
      *
      * @return latest project overview or an error if invalid configuration is received
      */
-    public static JsonBean importActivity(JsonBean newJson, boolean update, String endpointContextPath) {
+    public static JsonBean importActivity(JsonBean newJson, boolean update, ActivityImportRules rules,
+            String endpointContextPath) {
         List<APIField> activityFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
-        ActivityImporter importer = new ActivityImporter(activityFields);
+        ActivityImporter importer = new ActivityImporter(activityFields, rules);
         List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update, endpointContextPath);
 
-        return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors);
+        return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors, importer.getWarnings());
     }
 
     private static JsonBean getImportResult(AmpActivityVersion newActivity, JsonBean newJson,
-            List<ApiErrorMessage> errors) {
+            List<ApiErrorMessage> errors, Collection<ApiErrorMessage> warnings) {
         JsonBean result = null;
         if (errors.size() == 0 && newActivity == null) {
             // no new activity, but also errors are missing -> unknown error
@@ -90,6 +96,9 @@ public final class ActivityInterchangeUtils {
             } else {
                 result = activities.get(0);
             }
+        }
+        if (warnings.size() > 0) {
+            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings));
         }
         return result;
     }
@@ -119,7 +128,7 @@ public final class ActivityInterchangeUtils {
                 PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(field, fields);
             }
         } catch (ApiRuntimeException e) {
-            result.set(ApiError.JSON_ERROR_CODE, e.getUnwrappedError());
+            result.set(EPConstants.ERROR, e.getUnwrappedError());
             return false;
         }
 
@@ -131,7 +140,7 @@ public final class ActivityInterchangeUtils {
                 + "\" : [\"field1\", \"field2\", ..., \"fieldn\"]}";
 
         JsonBean errorBean = ApiError.toError(message);
-        result.set(ApiError.JSON_ERROR_CODE, errorBean.get(ApiError.JSON_ERROR_CODE));
+        result.set(EPConstants.ERROR, errorBean.get(EPConstants.ERROR));
     }
 
     /**
@@ -354,7 +363,7 @@ public final class ActivityInterchangeUtils {
                 return null;
             }
             fieldPath = path.substring(fieldPath.indexOf('~') + 1);
-            }
+        }
         //path is complete, object is set to proper value
         return currentBranch.get(fieldPath);
     }

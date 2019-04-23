@@ -27,6 +27,11 @@ public final class ConstraintMatchers {
     private ConstraintMatchers() {
     }
 
+    static Matcher<ConstraintViolation> hasViolation(Class<? extends Annotation> constraintAnnotation) {
+        return hasProperty("constraintDescriptor",
+                hasProperty("annotation", is(instanceOf(constraintAnnotation))));
+    }
+
     /**
      * Matches a constraint violation with property path matching all node matchers in the specified order.
      */

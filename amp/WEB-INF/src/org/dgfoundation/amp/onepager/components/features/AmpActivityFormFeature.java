@@ -1186,18 +1186,19 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
         String validation = DbUtil.getValidationFromTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
         
-        if (activity.getDraft() != null&& !activity.getDraft()&&!("validationOff".equals(validation))) {
+        if (activity.getDraft() != null && !activity.getDraft()
+                && !(Constants.PROJECT_VALIDATION_OFF.equals(validation))) {
             if (ActivityUtil.isApproved(newActivity)) {
                 if (modifiedBy != null) {
                     AmpTeamMemberRoles role = modifiedBy.getAmpMemberRole();
                     if(!role.isApprover()){
-                        if(oldId==null||("allEdits".equals(validation))){
+                        if (oldId == null || (Constants.PROJECT_VALIDATION_FOR_ALL_EDITS.equals(validation))) {
                             new ApprovedActivityTrigger(newActivity,modifiedBy); //if TL or approver created activity, then no Trigger is needed
                         }
                     }
                 }
             }else{
-                if("allEdits".equals(validation)||oldId==null){
+                if (Constants.PROJECT_VALIDATION_FOR_ALL_EDITS.equals(validation) || oldId == null) {
                     new NotApprovedActivityTrigger(newActivity);
                 }
             }

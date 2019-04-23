@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.junit.Test;
 
 public class ApiFieldStructuralServiceTest {
@@ -97,6 +98,21 @@ public class ApiFieldStructuralServiceTest {
         assertTrue(service.existsStructuralChanges(getAmpApiFields(), clientFields));
     }
     
+    @Test
+    public void notExistsStructuralChangesSameEntityTypeInList() {
+        List<APIField> clientFields = new ArrayList<>();
+        
+        APIField listFields = newListField("list");
+        listFields.getChildren().add(newLongField("id"));
+        
+        clientFields.add(newLongField("id"));
+        clientFields.add(newStringField("title"));
+        clientFields.add(listFields);
+        clientFields.add(newListPrimitiveField("primitives", Integer.class));
+        
+        assertFalse(service.existsStructuralChanges(getAmpApiFields(), clientFields));
+    }
+    
     public List<APIField> getAmpApiFields() {
         List<APIField> fields = new ArrayList<>();
         
@@ -115,14 +131,14 @@ public class ApiFieldStructuralServiceTest {
     private APIField newListField(String fieldName) {
         APIField field = new APIField();
         field.setFieldName(fieldName);
-        field.setApiType(new APIType(Collection.class, Object.class));
+        field.setApiType(new APIType(Collection.class, FieldType.LIST, Object.class));
         return field;
     }
     
     private APIField newListPrimitiveField(String fieldName, Class<?> elementType) {
         APIField field = new APIField();
         field.setFieldName(fieldName);
-        field.setApiType(new APIType(Collection.class, elementType));
+        field.setApiType(new APIType(Collection.class, FieldType.LIST, elementType));
         return field;
     }
     

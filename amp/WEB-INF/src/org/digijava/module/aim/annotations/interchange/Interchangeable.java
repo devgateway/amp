@@ -4,7 +4,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -58,6 +59,11 @@ public @interface Interchangeable {
     String requiredFmPath() default "";
     
     /**
+     * The field is read only or not based on fm path. If readOnlyFmPath is visible, read only is true
+     */
+    String readOnlyFmPath() default "";
+    
+    /**
      * Used during serialization to replace an object with id. The object must implement {@link Identifiable}.
      * <p>Example:
      * <pre>{@code
@@ -73,7 +79,7 @@ public @interface Interchangeable {
      * </pre>
      *
      * <p>During deserialization, id from json will be converted back using
-     * {@link ValueConverter#getObjectById(java.lang.Class, java.lang.Long)}.
+     * {@link ValueConverter#getObjectById(java.lang.Class, java.lang.Object)}.
      */
     boolean pickIdOnly() default false;
 
@@ -81,8 +87,8 @@ public @interface Interchangeable {
 
     /**
      * Specifies the dependencies used for later checking in DependencyValidator. 
-     * Dependencies (path and value) are encoded via {@link InterchangeDependencyMapper} public static strings,
-     * like {@link InterchangeDependencyMapper#ON_BUDGET_CODE}. 
+     * Dependencies (path and value) are encoded via {@link InterchangeDependencyResolver} public static strings,
+     * like {@link InterchangeDependencyResolver#ON_BUDGET_KEY}.
      * @return
      */
     String[] dependencies() default {};

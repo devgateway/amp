@@ -47,8 +47,6 @@ public class FieldsEnumerator {
 
     private static final Logger LOGGER = Logger.getLogger(FieldsEnumerator.class);
 
-    private String iatiIdentifierField;
-
     private FieldInfoProvider fieldInfoProvider;
 
     private FMService fmService;
@@ -63,23 +61,12 @@ public class FieldsEnumerator {
      * Fields Enumerator
      */
     public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-            TranslatorService translatorService,
-            Function<String, Boolean> allowMultiplePrograms) {
-        this(fieldInfoProvider, fmService, translatorService, allowMultiplePrograms, null);
-    }
-
-    /**
-     * Fields Enumerator
-     */
-    public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-            TranslatorService translatorService,
-            Function<String, Boolean> allowMultiplePrograms, String iatiIdentifierField) {
+            TranslatorService translatorService, Function<String, Boolean> allowMultiplePrograms) {
         this.fieldInfoProvider = fieldInfoProvider;
         this.fmService = fmService;
         this.translatorService = translatorService;
         interchangeDependencyResolver = new InterchangeDependencyResolver(fmService);
         this.allowMultiplePrograms = allowMultiplePrograms;
-        this.iatiIdentifierField = iatiIdentifierField;
     }
 
     /**
@@ -183,11 +170,6 @@ public class FieldsEnumerator {
         }
         if (StringUtils.isNotEmpty(interchangeable.discriminatorOption())) {
             apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
-        }
-
-        if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
-            apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
-            apiField.setImportable(true);
         }
 
         if (apiField.getApiType().getFieldType() == FieldType.LIST
@@ -501,25 +483,8 @@ public class FieldsEnumerator {
         return isVisible;
     }
 
-    /**
-     * Decides whether a field stores iati-identifier value
-     *
-     * @param fieldName
-     * @return true if is iati-identifier
-     */
-    private boolean isFieldIatiIdentifier(String fieldName) {
-        return StringUtils.equals(this.iatiIdentifierField, fieldName);
-    }
-
     protected boolean isVisible(String fmPath, FEContext context) {
-        Interchangeable interchangeable = context.getIntchStack().peek();
-        String fieldTitle = FieldMap.underscorify(interchangeable.fieldTitle());
-
-        if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
-            return true;
-        } else {
-            return fmService.isVisible(fmPath, context.getIntchStack());
-        }
+        return fmService.isVisible(fmPath, context.getIntchStack());
     }
 
 }

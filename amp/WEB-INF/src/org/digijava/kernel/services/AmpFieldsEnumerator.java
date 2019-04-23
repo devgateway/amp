@@ -35,9 +35,7 @@ public final class AmpFieldsEnumerator implements InitializingBean {
         Function<String, Boolean> allowMultiplePrograms = new AllowMultipleProgramsPredicate();
 
         AMPFMService fmService = new AMPFMService();
-        String iatiField = InterchangeUtils.getAmpIatiIdentifierFieldName();
         enumerator = new CachingFieldsEnumerator(syncDAO,
-                new FieldsEnumerator(fieldProvider, fmService, AMPTranslatorService.INSTANCE, allowMultiplePrograms,
-                        iatiField));
+                new FieldsEnumerator(fieldProvider, fmService, AMPTranslatorService.INSTANCE, allowMultiplePrograms));
     }
 }

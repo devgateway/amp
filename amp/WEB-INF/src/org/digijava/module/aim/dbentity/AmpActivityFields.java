@@ -165,7 +165,9 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "Document Space", importable = true)
     @VersionableFieldSimple(fieldTitle = "Document Space")
     protected String documentSpace;
-    
+
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.IATI_IDENTIFIER, importable = true,
+            fmPath = "/Activity Form/Identification/IATI Identifier")
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.IATI_IDENTIFIER)
     protected String iatiIdentifier;
 

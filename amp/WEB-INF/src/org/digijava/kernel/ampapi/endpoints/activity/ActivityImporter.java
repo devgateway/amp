@@ -149,6 +149,7 @@ public class ActivityImporter extends ObjectImporter {
         List<APIField> fieldsDef = getApiFields();
         // get existing activity if this is an update request
         Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
+        boolean oldActivityDraft = false;
 
         if (modifiedBy == null) {
             return Collections.singletonList(
@@ -193,6 +194,7 @@ public class ActivityImporter extends ObjectImporter {
 
             if (oldActivity != null) {
                 currentVersion = oldActivity.getAmpActivityGroup().getVersion();
+                oldActivityDraft = oldActivity.getDraft();
 
                 key = ActivityGatekeeper.lockActivity(activityId, modifiedBy.getAmpTeamMemId());
 
@@ -234,9 +236,12 @@ public class ActivityImporter extends ObjectImporter {
             validateAndImport(newActivity, newJsonParent);
             if (errors.isEmpty()) {
                 prepareToSave();
-
+                
+                boolean newActitityDraft = Boolean.TRUE.equals(newActivity.getDraft());
+                Boolean draftChange = oldActivityDraft != newActitityDraft;
+                
                 newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
-                        translations, modifiedBy, Boolean.TRUE.equals(newActivity.getDraft()),
+                        translations, modifiedBy, newActitityDraft, draftChange,
                         PersistenceManager.getSession(), saveContext);
 
                 postProcess();

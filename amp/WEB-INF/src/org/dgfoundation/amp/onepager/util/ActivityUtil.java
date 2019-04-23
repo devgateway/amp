@@ -197,6 +197,12 @@ public class ActivityUtil {
             setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
         }
     }
+    
+    public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
+            Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
+            Session session, SaveContext context) throws Exception {
+        return saveActivityNewVersion(a, translations, ampCurrentMember, draft, null, session, context);
+    }
 
     /**
      * saves a new version of an activity
@@ -204,14 +210,15 @@ public class ActivityUtil {
      */
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
             Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
-            Session session, SaveContext context) throws Exception {
+            Boolean draftChange, Session session, SaveContext context) throws Exception {
 
         AmpActivityVersion oldA = a;
         boolean newActivity = isNewActivity(a);
 
         if (a.getDraft() == null)
             a.setDraft(false);
-        boolean draftChange = draft != a.getDraft();
+    
+        boolean draftIsChanged = draftChange == null ? draft != a.getDraft() : draftChange;
         a.setDraft(draft);
 
         a.setDeleted(false);
@@ -228,7 +235,7 @@ public class ActivityUtil {
             ContentTranslationUtil.cloneTranslations(a, translations);
 
         //is versioning activated?
-        boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
+        boolean createNewVersion = (draft == draftIsChanged) && ActivityVersionUtil.isVersioningEnabled();
         boolean isActivityForm = context.getSource() == ActivitySource.ACTIVITY_FORM;
         if (createNewVersion){
             try {
@@ -298,7 +305,7 @@ public class ActivityUtil {
         }
 
         saveAgreements(a, session, isActivityForm);
-        saveContacts(a, session, (draft != draftChange), ampCurrentMember);
+        saveContacts(a, session, (draft != draftIsChanged), ampCurrentMember);
 
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);

@@ -172,11 +172,6 @@ public class FieldsEnumerator {
             apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
         }
 
-        if (!AmpOfflineModeHolder.isAmpOfflineMode()) {
-            apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
-            apiField.setImportable(true);
-        }
-
         if (apiField.getApiType().getFieldType() == FieldType.LIST
                 && apiField.getApiType().getItemType() == FieldType.OBJECT) {
             List<APIField> idFields = apiField.getChildren().stream()
@@ -489,14 +484,7 @@ public class FieldsEnumerator {
     }
 
     protected boolean isVisible(String fmPath, FEContext context) {
-        Interchangeable interchangeable = context.getIntchStack().peek();
-        String fieldTitle = FieldMap.underscorify(interchangeable.fieldTitle());
-
-        if (!AmpOfflineModeHolder.isAmpOfflineMode()) {
-            return true;
-        } else {
-            return fmService.isVisible(fmPath, context.getIntchStack());
-        }
+        return fmService.isVisible(fmPath, context.getIntchStack());
     }
 
 }

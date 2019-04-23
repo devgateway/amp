@@ -194,12 +194,10 @@ public class GlobalSettingsConstants {
 
     public static final String  IMPORT_PROCESSOR_URL = "Import processor endpoint URL";
     
-    public static final String  IATI_IDENTIFIER_AMP_FIELD = "IATI Identifier AMP field";
-    
     public static final String  LIMIT_FILE_TYPE_FOR_UPLOAD = "Limit upload of file types";
 
     public static final String  NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION = "Number of days before automatic validation";
-
+    
     public static final String REORDER_FUNDING_ITEMS = "Reorder funding items";
 
     public static final String AMP_REGISTRY_URL = "AMP Registry URL";
@@ -218,7 +216,4 @@ public class GlobalSettingsConstants {
      */
     public final static Set<String> SETTINGS_TO_HIDE = new HashSet<>(Arrays.asList(REPORT_WIZARD_VISIBILITY_SOURCE));
     
-    
-    
-
 }

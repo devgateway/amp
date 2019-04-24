@@ -118,8 +118,13 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     }
 
     @Test
-    public void testRejectedNewDraftActivityByApprover() {
-        AmpActivity activity = new AmpActivity();
+    public void testRejectedDraftActivityByApprover() throws CloneNotSupportedException {
+        AmpActivity oldActivity = new AmpActivity();
+        oldActivity.setAmpActivityId(1L);
+        oldActivity.setDraft(false);
+        ActivityValidationContext.getOrThrow().setOldActivity(oldActivity);
+        
+        AmpActivity activity = (AmpActivity) oldActivity.clone();
         activity.setApprovalStatus(REJECTED);
         activity.setDraft(true);
 
@@ -128,6 +133,19 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
         assertThat(violations, emptyIterable());
+    }
+    
+    @Test
+    public void testRejectedNewDraftActivityByApprover() {
+        AmpActivity activity = new AmpActivity();
+        activity.setApprovalStatus(REJECTED);
+        activity.setDraft(true);
+        
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
+        
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
+        
+        assertThat(violations, contains(approvalStatusViolation()));
     }
 
     @Test

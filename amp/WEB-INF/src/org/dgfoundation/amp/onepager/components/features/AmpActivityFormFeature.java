@@ -88,6 +88,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpProjectCost;
 import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSimpleValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
+import org.dgfoundation.amp.onepager.helper.ActionButtonCancelLink;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -112,7 +113,6 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
-import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -309,12 +309,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
     /**
      * @param id
-     * @param model
+     * @param am
      * @param fmName
      * @param newActivity 
      * @param listModel 
-     * @param hideLabel
-     * @throws Exception 
+     * @throws Exception
      */
     public AmpActivityFormFeature(String id, final IModel<AmpActivityVersion> am,
             String fmName, final boolean newActivity, AbstractReadOnlyModel<List<AmpComponentPanel>> listModel) throws Exception {
@@ -516,37 +515,30 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         saveAndSubmit.getButton().setDefaultFormProcessing(false);
         saveAndSubmit.setAffectedByFreezing(false);
         activityForm.add(saveAndSubmit);
-        
-        AmpAjaxLinkField saveReject=new AmpAjaxLinkField("saveReject", "Reject Activity", "Reject activity") {
+    
+        AmpAjaxLinkField rejectActivityLink = new AmpAjaxLinkField("saveReject", "Reject Activity", "Reject activity") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
-
             }
+        
             @Override
             protected void onBeforeRender() {
                 super.onBeforeRender();
-                AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
-                //if the user is approver of the workspace
-                //or is the teamlead of the ws
-                //and the activity is not new (make not sense to reject a newly created activity)
                 
-                this.setVisible(( !newActivity && (wicketSession.getAmpCurrentMember().getAmpMemberRole().isApprover() 
-                        || (wicketSession.getAmpCurrentMember().getAmpTeam().getTeamLead()!=null &&wicketSession.getAmpCurrentMember().getAmpTeam().getTeamLead().equals(wicketSession.getAmpCurrentMember())))
-                        )&&  !am.getObject().getDraft());
+                AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
+                AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
+                this.setVisible(ActivityUtil.canReject(ampCurrentMember, am.getObject().getDraft(), newActivity));
             }
         };
-        saveReject.getButton().add(isSubmit);
-        
-        saveReject.getButton().add(new AttributeModifier("onclick", ""));
-        
-        saveReject.getButton().add(new AttributePrepender("onclick", new Model<String>("showRejectActivityPanel();"), ""));
-        saveReject.getButton().add(closeEditors);
-        saveReject.getButton().add(clickMonEval);
-        
-
-        
-        saveReject.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons rejectButton")));
-        activityForm.add(saveReject);
+        rejectActivityLink.getButton().add(isSubmit);
+        rejectActivityLink.getButton().add(new AttributeModifier("onclick", ""));
+        rejectActivityLink.getButton().add(
+                new AttributePrepender("onclick", new Model<>("showRejectActivityPanel();"), ""));
+        rejectActivityLink.getButton().add(closeEditors);
+        rejectActivityLink.getButton().add(clickMonEval);
+        rejectActivityLink.getButton().add(new AttributeModifier("class",
+                new Model<>("sideMenuButtons rejectButton")));
+        activityForm.add(rejectActivityLink);
         
         AmpAjaxLinkField saveAsDraft = new AmpAjaxLinkField("saveAsDraft", "Save as Draft", "Save as Draft") {
             @Override
@@ -604,32 +596,32 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         activityForm.add(myDraftOpts);
 
         
-        final AmpAjaxLinkField cancelSaveAsDraft = new AmpAjaxLinkField("saveAsDraftCanceld", "Cancel", "Cancel") {
+        final AmpAjaxLinkField cancelLink = new AmpAjaxLinkField("saveAsDraftCanceld", "Cancel", "Cancel") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 // TODO Auto-generated method stub
                 
             }
         };
-        cancelSaveAsDraft.getButton().add(new AttributeModifier("onclick", "hideDraftPanel();enableButtons2();"));
-        cancelSaveAsDraft.add(isSubmit);
-        cancelSaveAsDraft.setVisible(true);
-        cancelSaveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
-        cancelSaveAsDraft.setOutputMarkupId(true);
-        cancelSaveAsDraft.setAffectedByFreezing(false);
-        activityForm.add(cancelSaveAsDraft);
+        cancelLink.getButton().add(new AttributeModifier("onclick", "hideDraftPanel();enableButtons2();"));
+        cancelLink.add(isSubmit);
+        cancelLink.setVisible(true);
+        cancelLink.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
+        cancelLink.setOutputMarkupId(true);
+        cancelLink.setAffectedByFreezing(false);
+        activityForm.add(cancelLink);
 
         AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                onSubmitSaveAsDraft(am, feedbackPanel, redirected, this,cancelSaveAsDraft,
-                            target, form,false);
+                onSaveAsDraft(am, feedbackPanel, redirected,
+                        new ActionButtonCancelLink(this, cancelLink), target, form);
             }
             
             @Override
             protected void onError(final AjaxRequestTarget target, Form<?> form) {
                 super.onError(target, form);
-                onErrorSaveAsDraft(feedbackPanel, target, form); 
+                onErrorSaveAsDraftOrReject(feedbackPanel, target, form);
             }
             @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
@@ -640,7 +632,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
     
 
         String onClickSaveAsDraft = "$(\"#"+ saveAsDraftAction.getButton().getMarkupId() +"\").prop('disabled', true);";
-        onClickSaveAsDraft += "$(\"#"+ cancelSaveAsDraft.getButton().getMarkupId() +"\").prop('disabled', true);";
+        onClickSaveAsDraft += "$(\"#" + cancelLink.getButton().getMarkupId() + "\").prop('disabled', true);";
 
         saveAsDraftAction.getButton().setDefaultFormProcessing(false); //disable global validation of the form
         saveAsDraftAction.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
@@ -672,17 +664,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpButtonField rejectActivityAction = new AmpButtonField("rejectActivityAction", "Reject Activity", AmpFMTypes.MODULE, true) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                onSubmitSaveAsDraft(am, feedbackPanel, redirected, this,cancelSaveAsDraft,
-                            target, form,true);
+                onReject(am, feedbackPanel, redirected, new ActionButtonCancelLink(this, cancelLink), target, form);
             }
 
-
-            
             @Override
             protected void onError(final AjaxRequestTarget target, Form<?> form) {
                 super.onError(target, form);
-                onErrorSaveAsDraft(feedbackPanel, target, form); 
+                onErrorSaveAsDraftOrReject(feedbackPanel, target, form);
             }
+            
             @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                 generateEnableButtonsOnError(attributes);
@@ -1271,78 +1261,95 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         };
         attributes.getAjaxCallListeners().add(listener);
     }
-
+    
+    protected void onSaveAsDraft(final IModel<AmpActivityVersion> am, final FeedbackPanel feedbackPanel,
+                                 final Model<Integer> redirected, final ActionButtonCancelLink actionButtonCancelLink,
+                                 AjaxRequestTarget target, Form<?> form) {
+        
+        target.appendJavaScript("hideDraftPanel();");
+        
+        onSaveAsDraftOrReject(am, feedbackPanel, redirected, actionButtonCancelLink, target, form, false);
+    }
+    
+    protected void onReject(final IModel<AmpActivityVersion> am, final FeedbackPanel feedbackPanel,
+                            final Model<Integer> redirected, final ActionButtonCancelLink actionButtonCancelLink,
+                            AjaxRequestTarget target, Form<?> form) {
+        
+        target.appendJavaScript("hideRejectActivityPanel();");
+        
+        onSaveAsDraftOrReject(am, feedbackPanel, redirected, actionButtonCancelLink, target, form, true);
+    }
+    
     /**
-     * Method used from saveAsDraft and Reject activity(the only difference
-     * between them is that reject prior to saving the activity changes the
-     * status of the activity and sends the messages if the user has chosen to
+     * Method used from saveAsDraft and Reject activity(the only difference between them is that reject prior to saving
+     * the activity changes the status of the activity and sends the messages if the user has chosen to
      * 
      * @param am
      * @param feedbackPanel
      * @param redirected
-     * @param cancelSaveAsDraft
+     * @param actionButtonCancelLink
      * @param target
      * @param form
      */
-    protected void onSubmitSaveAsDraft(final IModel<AmpActivityVersion> am,
-    final FeedbackPanel feedbackPanel, final Model<Integer> redirected,
-    final AmpButtonField saveAsDraft,final AmpAjaxLinkField cancelSaveAsDraft, AjaxRequestTarget target,
-    Form<?> form, boolean isReject) {
-        // reenable buttons
-        if(!isReject){
-            target.appendJavaScript("hideDraftPanel();");   
-        }else{
-            target.appendJavaScript("hideRejectActivityPanel();");
-        }
-        
-        processAndUpdateForm(false, am, form, target,saveAsDraft.getButton());
+    protected void onSaveAsDraftOrReject(final IModel<AmpActivityVersion> am, final FeedbackPanel feedbackPanel,
+                                         final Model<Integer> redirected,
+                                         final ActionButtonCancelLink actionButtonCancelLink, AjaxRequestTarget target,
+                                         Form<?> form, boolean isRejected) {
+    
+        final AmpButtonField actionButton = actionButtonCancelLink.getActionButton();
+        final AmpAjaxLinkField cancelAction = actionButtonCancelLink.getCancelActionLink();
+    
+        processAndUpdateForm(false, am, form, target, actionButton.getButton());
 
-        // only in the eventuality that the title field is valid (is not empty)
-        // we proceed with the real save!
-        if (!form.hasError()){
-            //if no error happend and we are rejecting we
-            //* change the approval status to rejected
-            //* send a message to the creator of the activity
-            saveMethod(target, am, feedbackPanel, true, redirected,isReject);
-            if(isReject){ //is is reject we send the message
-                try {
-                    AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
-                    sendRejectMessage(am.getObject().getRejectMessage(),am.getObject().getActivityCreator(),wicketSession.getCurrentMember(),am.getObject());
-                } catch (AimException e) {
-                    logger.error("Cannot create reject message",e);
-                }
-            }
-        }
-        else {
+        // only in the eventuality that the title field is valid (is not empty) we proceed with the real save!
+        if (form.hasError()) {
             // We need to re-enable the keepAlive here or it will fail to start after a failed save as submit.
             OnePager op = this.findParent(OnePager.class);
             op.getEditLockRefresher().setEnabled(true);
-            if(op.getTimer()!=null){
+            if (op.getTimer() != null) {
                 op.getTimer().restart(target);
-            }           
-            target.add(saveAsDraft);
-            target.add(cancelSaveAsDraft);
-            onErrorSaveAsDraft(feedbackPanel, target, form);
-            if(autoSaveTimer!=null && autoSaveTimer.isStopped()){
+            }
+    
+            target.add(actionButton);
+            target.add(cancelAction);
+    
+            onErrorSaveAsDraftOrReject(feedbackPanel, target, form);
+            
+            if (autoSaveTimer != null && autoSaveTimer.isStopped()) {
                 autoSaveTimer.restart(target);
             }
+        } else {
+            //if no error happend and we are rejecting we change the approval status to rejected
+            // send a message to the creator of the activity
+            saveMethod(target, am, feedbackPanel, true, redirected, isRejected);
+            
+            if (isRejected) {
+                sendRejectMessage(am);
+            }
         }
+        
         target.appendJavaScript("enableButtons2();");
     }
 
-    protected void onErrorSaveAsDraft(final FeedbackPanel feedbackPanel,
-            final AjaxRequestTarget target, Form<?> form) {
+    protected void onErrorSaveAsDraftOrReject(FeedbackPanel feedbackPanel, AjaxRequestTarget target, Form<?> form) {
         target.appendJavaScript("enableButtons2();");
         formSubmitErrorHandle(form, target, feedbackPanel);
     }
 
-    private void sendRejectMessage(String messageToSend,AmpTeamMember tmTo,TeamMember tmFrom,AmpActivityVersion linkedActivity) throws AimException {
+    private void sendRejectMessage(IModel<AmpActivityVersion> activityModel) {
+        AmpActivityVersion activity = activityModel.getObject();
+        String messageToSend = activity.getRejectMessage();
+        AmpTeamMember tmTo = activity.getActivityCreator();
+        
+        AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
+        TeamMember tmFrom = wicketSession.getCurrentMember();
+        
         AmpMessage message = new AmpAlert();
         String senderName;
         Long activityId;
         User user;
-        activityId=(Long)linkedActivity.getIdentifier();
-        user=TeamMemberUtil.getAmpTeamMember(tmFrom.getMemberId()).getUser();
+        activityId = (Long) activity.getIdentifier();
+        user = TeamMemberUtil.getAmpTeamMember(tmFrom.getMemberId()).getUser();
         message.setName(TranslatorWorker.translateText("Activity Rejected"));
         message.setSenderType(MessageConstants.SENDER_TYPE_USER);
         message.setSenderId(tmFrom.getMemberId());
@@ -1372,13 +1379,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
         AmpMessageState state = new AmpMessageState();
         state.setMessage(message);
-        state.setSender(tmFrom.getMemberName()+";"+tmFrom.getTeamName());
-        AmpMessageUtil.saveOrUpdateMessageState(state);
-        try{ 
+        state.setSender(tmFrom.getMemberName() + ";" + tmFrom.getTeamName());
+        
+        try {
+            AmpMessageUtil.saveOrUpdateMessageState(state);
             AmpMessageUtil.createMessageState(message, tmTo);
         } catch (Exception e) {
-            throw new AimException("cannot create message state",e);
+            logger.error("Cannot create reject message", e);
+            throw new RuntimeException(e);
         }
+        
         message.addMessageReceiver(tmTo);
         AmpMessageUtil.saveOrUpdateMessage(message);
 

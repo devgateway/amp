@@ -615,14 +615,29 @@ public class ActivityUtil {
         }
         return false;
     }
-
-    public static boolean canReject(AmpTeamMember atm, Long activityTeamId, boolean isDraft) {
-        if (isDraft && isProjectValidationOn(getValidationSetting(atm))) {
-            return isApprover(atm);
-        }
-        return false;
+    
+    /**
+     *  An activity can be rejected only if:
+     *  1. the activity is not new
+     *  2. the activity is not draft
+     *  3. the validation settings is set to on
+     *  4. the user is approver of the workspace or is the teamlead of the ws
+     *
+     * @param atm
+     * @param isDraft
+     * @param isNewActivity
+     * @return
+     */
+    public static boolean canReject(AmpTeamMember atm, boolean isDraft, boolean isNewActivity) {
+        return !isNewActivity && !isDraft && isProjectValidationOn(getValidationSetting(atm)) && isApprover(atm);
     }
-
+    
+    /**
+     * Detect if the teammember is approver of the workspace or is the teamlead of the ws
+     *
+     * @param atm team member
+     * @return
+     */
     private static boolean isApprover(AmpTeamMember atm) {
         AmpTeamMemberRoles role = atm.getAmpMemberRole();
         return role.getTeamHead() || role.isApprover();

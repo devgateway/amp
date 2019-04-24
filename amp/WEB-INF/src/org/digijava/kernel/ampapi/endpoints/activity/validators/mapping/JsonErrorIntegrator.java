@@ -35,7 +35,8 @@ public class JsonErrorIntegrator {
     public <T> void mapTypeErrors(Map<String, Object> json, Set<ConstraintViolation<T>> violations,
             Map<Integer, ApiErrorMessage> errors) {
         for (ConstraintViolation v : violations) {
-            if (isViolationForType(v)) {
+            // TODO not sure why was needed to restrict to Type violations only, hence adding also for field
+            if (isViolationForType(v) || isViolationForField(v)) {
                 JsonConstraintViolation jsonConstraintViolation = mapper.apply(v);
                 if (jsonConstraintViolation != null) {
 
@@ -51,12 +52,21 @@ public class JsonErrorIntegrator {
         }
     }
 
-
     private boolean isViolationForType(ConstraintViolation v) {
         try {
             // Hibernate implementation of Bean Validation 2 API exposes getElementType() method directly.
             // For now we're reading the property directly.
             return ElementType.TYPE.equals(FieldUtils.readField(v, "elementType", true));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Failed to determine elementType of a constraint violation", e);
+        }
+    }
+
+    private boolean isViolationForField(ConstraintViolation v) {
+        try {
+            // Hibernate implementation of Bean Validation 2 API exposes getElementType() method directly.
+            // For now we're reading the property directly.
+            return ElementType.FIELD.equals(FieldUtils.readField(v, "elementType", true));
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Failed to determine elementType of a constraint violation", e);
         }

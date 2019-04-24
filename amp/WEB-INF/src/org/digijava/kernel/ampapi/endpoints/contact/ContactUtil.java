@@ -11,6 +11,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletResponse;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -29,7 +30,8 @@ public final class ContactUtil {
     private ContactUtil() {
     }
 
-    public static JsonBean getImportResult(AmpContact contact, JsonBean json, List<ApiErrorMessage> errors) {
+    public static JsonBean getImportResult(AmpContact contact, JsonBean json, List<ApiErrorMessage> errors,
+            Collection<ApiErrorMessage> warnings) {
         JsonBean result;
         if (errors.size() == 0 && contact == null) {
             result = ApiError.toError(ApiError.UNKOWN_ERROR);
@@ -42,6 +44,9 @@ public final class ContactUtil {
             result.set(ContactEPConstants.NAME, contact.getName());
             result.set(ContactEPConstants.LAST_NAME, contact.getLastname());
         }
+        if (!warnings.isEmpty()) {
+            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings));
+        }
         return result;
     }
 
@@ -49,7 +54,7 @@ public final class ContactUtil {
         Map<Long, JsonBean> jsonContacts = new TreeMap<>();
         ids = new ArrayList<>(new TreeSet<>(ids));
         ContactExporter exporter = new ContactExporter();
-        
+
         for (int fromIndex = 0; fromIndex < ids.size(); fromIndex += ActivityEPConstants.BATCH_DB_QUERY_SIZE) {
             // for simplicity using the same DB batch size as for activities
             int end = Math.min(ids.size(), fromIndex + ActivityEPConstants.BATCH_DB_QUERY_SIZE);
@@ -87,11 +92,11 @@ public final class ContactUtil {
 
     public static JsonBean getContact(Long id) {
         AmpContact contact = (AmpContact) PersistenceManager.getSession().get(AmpContact.class, id);
-        
+
         if (contact == null) {
             ApiErrorResponse.reportResourceNotFound(ContactErrors.CONTACT_NOT_FOUND);
         }
-        
+
         return new ContactExporter().export(contact);
     }
 }

@@ -35,7 +35,8 @@ $(document).ready(function () {
     });
     events.listenTo(widgetFilter, 'apply', function () {
         // Save just applied filters in case the user hits "reset" button.
-        var serializedFilters = widgetFilter.serialize() || {};
+    	$('#queryLabelsDiv').html('<div><img class="loading-spinner" src="/TEMPLATE/ampTemplate/img_2/loading-icon.gif" /></div>');
+    	var serializedFilters = widgetFilter.serialize() || {};
         var url = '/aim/reportsFilterPicker.do?apply=true&cacheBuster=';
         if (advancedFilters) {
             url += new Date().getTime() + '&reportContextId=' + widgetFilter.auxId + '&doreset=true&queryEngine=true';
@@ -54,11 +55,14 @@ $(document).ready(function () {
                 } else {
                     $('#queryLabelsDiv').html(data);
                 }
+                
+                document.getElementById('queryLabelsDiv').scrollIntoView();
             }
         });
         if (!embedded) {
             $(container).hide();
             $('#useFiltersCheckbox').attr('checked', 'checked');
         }
+        
     });
 });

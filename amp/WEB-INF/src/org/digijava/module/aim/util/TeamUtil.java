@@ -380,9 +380,9 @@ public class TeamUtil {
             ampAppSettings.setFiscalCalendar(fiscal);
             ampAppSettings.setLanguage("en");
             if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION).equalsIgnoreCase("off")){
-                ampAppSettings.setValidation("validationOff");
+                ampAppSettings.setValidation(Constants.PROJECT_VALIDATION_OFF);
             }else{
-                ampAppSettings.setValidation("allEdits");
+                ampAppSettings.setValidation(Constants.PROJECT_VALIDATION_FOR_ALL_EDITS);
             }
             session.save(ampAppSettings);
 

@@ -1610,7 +1610,7 @@ public class EditActivity extends Action {
             //there is another simple way to write these "if"s, but it is more clear like this
             eaForm.setButtonText("edit");
             if(activity!=null && activity.getDraft()!=null && !activity.getDraft())
-                if("Off".toLowerCase().compareTo(globalProjectsValidation.toLowerCase())==0){
+                if (Constants.PROJECT_VALIDATION_OFF.equalsIgnoreCase(globalProjectsValidation.toLowerCase())) {
                     //global validation off
                     eaForm.setButtonText("edit");
                 } else {

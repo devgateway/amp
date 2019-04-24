@@ -65,6 +65,7 @@ public class ActivityFieldsConstants {
     public static final String REGIONAL_GROUP = "Regional Group";
     public static final String SECTOR_GROUP = "Sector Group";
     public static final String ACTIVITY_GROUP = "activity_group";
+    public static final String VERSION = "version";
     public static final String DISASTER_RESPONSE = "Disaster Response";
 
     public static final String NATIONAL_PLAN_OBJECTIVE = "National Plan Objective";

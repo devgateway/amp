@@ -135,7 +135,7 @@ var Query = Backbone.Model.extend({
     	
         var filters;
         if (filtersObject) {
-        	filters = filtersObject;
+        	filters = filtersObject.filter;
         }
         	
         var self = this;

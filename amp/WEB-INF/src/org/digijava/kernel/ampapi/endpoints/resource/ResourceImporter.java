@@ -42,7 +42,7 @@ import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
  * @author Viorel Chihai
  */
 public class ResourceImporter extends ObjectImporter {
-    
+
     private static final Logger logger = Logger.getLogger(ResourceImporter.class);
 
     private AmpResource resource;
@@ -78,25 +78,25 @@ public class ResourceImporter extends ObjectImporter {
         this.newJson = newJson;
 
         List<APIField> fieldsDef = getApiFields();
-        
+
         String privateAttr = newJson.getString(ResourceEPConstants.PRIVATE);
-        
+
         if (StringUtils.isBlank(privateAttr)) {
             return singletonList(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.PRIVATE));
         }
-        
+
         if (!Boolean.parseBoolean(privateAttr)) {
             return singletonList(ResourceErrors.PRIVATE_RESOURCE_SUPPORTED_ONLY
                     .withDetails(ResourceEPConstants.PRIVATE));
         }
-        
+
         TeamMember teamMemberCreator = null;
         if (AmpOfflineModeHolder.isAmpOfflineMode()) {
             List<ApiErrorMessage> errorMessages = validateCreatorEmailTeam(newJson);
             if (errorMessages != null) {
                 return errorMessages;
             }
-            
+
             String creatorEmail = newJson.getString(ResourceEPConstants.CREATOR_EMAIL);
             Long teamId = getLongOrNull(newJson.get(ResourceEPConstants.TEAM));
             AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(creatorEmail, teamId);
@@ -108,7 +108,7 @@ public class ResourceImporter extends ObjectImporter {
         if (formFile == null && ResourceType.FILE.getId().equals(newJson.get(ResourceEPConstants.RESOURCE_TYPE))) {
             return singletonList(ResourceErrors.FILE_NOT_FOUND);
         }
-        
+
         if (formFile != null) {
             if (ResourceType.LINK.getId().equals(newJson.get(ResourceEPConstants.RESOURCE_TYPE))) {
                 String details = String.format("%s '%s'. %s '%s'", TranslatorWorker.translateText("Resource type is"),
@@ -116,21 +116,21 @@ public class ResourceImporter extends ObjectImporter {
                         ResourceType.FILE.getId());
                 return singletonList(ResourceErrors.RESOURCE_TYPE_INVALID.withDetails(details));
             }
-            
+
             long maxSizeInMB = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
             long maxFileSizeInBytes = maxSizeInMB * FileUtils.ONE_MB;
             if (formFile.getFileSize() > maxFileSizeInBytes) {
                 long fileSizeInMB = formFile.getFileSize() / FileUtils.ONE_MB;
-                String errorMessage = String.format("%s %sMB. %s %sMB", TranslatorWorker.translateText("File size is"), 
+                String errorMessage = String.format("%s %sMB. %s %sMB", TranslatorWorker.translateText("File size is"),
                         fileSizeInMB, TranslatorWorker.translateText("Max size allowed is"), maxSizeInMB);
                 return singletonList(ResourceErrors.FILE_SIZE_INVALID.withDetails(errorMessage));
             }
         }
-        
+
         try {
             resource = new AmpResource();
             validateAndImport(resource, newJson.any());
-            
+
             if (errors.isEmpty()) {
                 if (ResourceType.LINK.equals(resource.getResourceType())) {
                     resource.setFileName(null);
@@ -143,7 +143,7 @@ public class ResourceImporter extends ObjectImporter {
                 resource.setAddingDate(new Date());
                 TemporaryDocumentData tdd = getTemporaryDocumentData(resource, formFile);
                 NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), teamMemberCreator);
-    
+
                 if (node != null) {
                     resource.setUuid(node.getUuid());
                 }
@@ -162,7 +162,7 @@ public class ResourceImporter extends ObjectImporter {
 
     private TemporaryDocumentData getTemporaryDocumentData(AmpResource resource, FormFile formFile) {
         TemporaryDocumentData tdd = new TemporaryDocumentData();
-        
+
         tdd.setTitle(resource.getTitle());
         tdd.setName(resource.getFileName());
         tdd.setDescription(resource.getDescription());
@@ -170,16 +170,16 @@ public class ResourceImporter extends ObjectImporter {
         tdd.setTranslatedTitles(resource.getTranslatedTitles());
         tdd.setTranslatedNotes(resource.getTranslatedNotes());
         tdd.setTranslatedDescriptions(resource.getTranslatedDescriptions());
-        
+
         if (resource.getType() != null) {
             tdd.setCmDocTypeId(resource.getType().getId());
         }
-        
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(resource.getAddingDate());
         tdd.setDate(calendar.getTime());
         tdd.setYearofPublication(String.valueOf(calendar.get(Calendar.YEAR)));
-        
+
         if (ResourceType.LINK.equals(resource.getResourceType())) {
             tdd.setWebLink(resource.getWebLink());
         } else {
@@ -187,19 +187,19 @@ public class ResourceImporter extends ObjectImporter {
             tdd.setFileSize(formFile.getFileSize());
             tdd.setFormFile(formFile);
         }
-        
+
         return tdd;
     }
 
     public AmpResource getResource() {
         return resource;
     }
-    
+
     @Override
     protected String extractString(Field field, Object parentObj, Object jsonValue) {
         return extractTranslationsOrSimpleValue(field, parentObj, jsonValue);
     }
-    
+
     private String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
         TranslationType trnType = trnSettings.getTranslatableType(field);
         String value = null;
@@ -215,7 +215,7 @@ public class ResourceImporter extends ObjectImporter {
             }
             value = extractResourceTranslation(field, parentObj, resourceText);
         }
-        
+
         return value;
     }
 
@@ -229,10 +229,10 @@ public class ResourceImporter extends ObjectImporter {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        
+
         return (String) jsonValue.get(trnSettings.getDefaultLangCode());
     }
-    
+
     private Long getLongOrNull(Object obj) {
         if (obj instanceof Number) {
             return ((Number) obj).longValue();
@@ -240,33 +240,33 @@ public class ResourceImporter extends ObjectImporter {
             return null;
         }
     }
-    
+
     /**
      * validates creator email and team
-     * 
+     *
      * @param newJson
      * @return
      */
     private List<ApiErrorMessage> validateCreatorEmailTeam(JsonBean newJson) {
-        
+
         Object creatorEmail = newJson.get(ResourceEPConstants.CREATOR_EMAIL);
         if (creatorEmail == null || StringUtils.isBlank(creatorEmail.toString())) {
             return singletonList(ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.CREATOR_EMAIL));
         }
-        
+
         Object team = newJson.get(ResourceEPConstants.TEAM);
         if (team == null || getLongOrNull(team) == null) {
             return singletonList(ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.TEAM));
         }
-        
+
         User creatorUser = creatorEmail != null ? UserUtils.getUserByEmailAddress(creatorEmail.toString()) : null;
         if (creatorUser == null) {
             return singletonList(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.CREATOR_EMAIL));
         }
-        
+
         Long teamId = getLongOrNull(team);
         AmpTeam ampTeam = TeamUtil.getAmpTeam(teamId);
-        
+
         if (ampTeam == null) {
             return singletonList(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.TEAM));
         }
@@ -284,10 +284,5 @@ public class ResourceImporter extends ObjectImporter {
 
         return null;
     }
-    
-    @Override
-    protected boolean ignoreUnknownFields() {
-        return AmpOfflineModeHolder.isAmpOfflineMode();
-    }
-    
+
 }

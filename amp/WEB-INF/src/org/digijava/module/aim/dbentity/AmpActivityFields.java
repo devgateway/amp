@@ -37,11 +37,14 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
+import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
 import org.digijava.module.aim.validator.percentage.ProgramTotalPercentage;
 import org.digijava.module.aim.validator.percentage.SectorsTotalPercentage;
+import org.digijava.module.aim.validator.user.MatchExistingCreator;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -163,7 +166,7 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Document Space")
     protected String documentSpace;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.IS_DRAFT)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.IS_DRAFT, required = ALWAYS, importable = true)
     @VersionableFieldSimple(fieldTitle = "Is Draft?", blockSingleChange = true)
     protected Boolean draft;
 
@@ -485,9 +488,9 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Proposed Completion Date")
     protected Date proposedCompletionDate;
 
-
-
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_BY, pickIdOnly = true, label = "Activity created by")
+    @MatchExistingCreator(groups = API.class)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_BY, pickIdOnly = true, label = "Activity created by",
+            importable = true)
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.CREATED_BY, blockSingleChange = true)
     protected AmpTeamMember activityCreator;
     
@@ -507,10 +510,11 @@ LoggerIdentifiable, Cloneable {
     @TimestampField
     protected Date iatiLastUpdatedDate;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVED_BY, pickIdOnly=true)
+    @AllowedApprover(groups = API.class)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVED_BY, pickIdOnly = true, importable = true)
     protected AmpTeamMember approvedBy;
     
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_DATE)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_DATE, importable = true)
     @TimestampField
     protected Date approvalDate;
 
@@ -518,7 +522,8 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = "Regional Fundings")
     protected Set <AmpRegionalFunding> regionalFundings;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS, pickIdOnly = true)
+    @AllowedApprovalStatus(groups = API.class)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS, pickIdOnly = true, importable = true)
     @PossibleValues(ApprovalStatusPossibleValuesProvider.class)
     @VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
     private ApprovalStatus approvalStatus;
@@ -747,7 +752,7 @@ LoggerIdentifiable, Cloneable {
     protected Date modifiedDate;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY, pickIdOnly = true,
-            label = "Activity last updated by")
+            label = "Activity last updated by", importable = true)
     @VersionableFieldSimple(fieldTitle = "Modified By")
     protected AmpTeamMember modifiedBy;
     
@@ -771,7 +776,7 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "PPC Annual Budgets")
     protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
-    
+
         public Boolean getMergedActivity() {
             return mergedActivity;
         }

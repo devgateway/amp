@@ -454,4 +454,9 @@ public final class Constants {
     public static final String AUTOMATIC_VALIDATION_JOB_CLASS_NAME =
             "org.digijava.module.message.jobs.ActivityAutomaticValidationJob";
 
+    public static final String PROJECT_VALIDATION_ON = "On";
+    public static final String PROJECT_VALIDATION_OFF = "validationOff";
+    public static final String PROJECT_VALIDATION_FOR_ALL_EDITS = "allEdits";
+    public static final String PROJECT_VALIDATION_FOR_NEW_ONLY = "newOnly";
+
 }

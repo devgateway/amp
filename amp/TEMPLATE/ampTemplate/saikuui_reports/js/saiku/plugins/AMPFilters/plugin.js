@@ -46,7 +46,7 @@ var AMPFilters = Backbone.View.extend({
 				});
 				Saiku.events.listenTo(window.currentFilter, 'apply', function(data) {
 					var filterObject = window.currentFilter.serialize();
-					self.workspace.query.run_query(filterObject.filters || {}, null);
+					self.workspace.query.run_query(filterObject || {}, null);
 					self.filters_button.removeClass('on');
 					$('#filter-popup').hide();
 				});
@@ -58,7 +58,8 @@ var AMPFilters = Backbone.View.extend({
 				Saiku.logger.log("AMPFilters.parseSavedFilters");
 		        if (window.currentFilter !== undefined) {
 		            window.currentFilter.loaded.done(function() {
-			            var auxFilters = obj.workspace.query.get('filters');			            
+			            var auxFilters = obj.workspace.query.get('filters');
+			            auxFilters.includeLocationChildren = obj.workspace.query.get('includeLocationChildren');
 			            window.currentFilter.deserialize({filters: auxFilters}, {
 			            	silent : true
 			            });

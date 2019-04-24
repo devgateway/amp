@@ -201,7 +201,9 @@ public class ActivityUtil {
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
             Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
             Session session, SaveContext context) throws Exception {
-        return saveActivityNewVersion(a, translations, ampCurrentMember, draft, null, session, context);
+        
+        boolean draftChange = detectDraftChange(a, draft);
+        return saveActivityNewVersion(a, translations, ampCurrentMember, draft, draftChange, session, context);
     }
 
     /**
@@ -210,17 +212,12 @@ public class ActivityUtil {
      */
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
             Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
-            Boolean draftChange, Session session, SaveContext context) throws Exception {
+            boolean draftChange, Session session, SaveContext context) throws Exception {
 
         AmpActivityVersion oldA = a;
         boolean newActivity = isNewActivity(a);
 
-        if (a.getDraft() == null)
-            a.setDraft(false);
-    
-        boolean draftIsChanged = draftChange == null ? draft != a.getDraft() : draftChange;
         a.setDraft(draft);
-
         a.setDeleted(false);
         //we will check what is comming in funding
         Set<AmpFunding> af = a.getFunding();
@@ -235,7 +232,7 @@ public class ActivityUtil {
             ContentTranslationUtil.cloneTranslations(a, translations);
 
         //is versioning activated?
-        boolean createNewVersion = (draft == draftIsChanged) && ActivityVersionUtil.isVersioningEnabled();
+        boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
         boolean isActivityForm = context.getSource() == ActivitySource.ACTIVITY_FORM;
         if (createNewVersion){
             try {
@@ -305,7 +302,7 @@ public class ActivityUtil {
         }
 
         saveAgreements(a, session, isActivityForm);
-        saveContacts(a, session, (draft != draftIsChanged), ampCurrentMember);
+        saveContacts(a, session, (draft != draftChange), ampCurrentMember);
 
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);
@@ -333,7 +330,11 @@ public class ActivityUtil {
 
         return a;
     }
-
+    
+    public static boolean detectDraftChange(AmpActivityVersion a, boolean draft) {
+        return Boolean.TRUE.equals(a.getDraft()) != draft;
+    }
+    
     public static <T extends AmpActivityFields> boolean isNewActivity(T a) {
         // it would be nicer to rely upon AMP ID, but some old activities may lack it
         return a.getAmpActivityId() == null;

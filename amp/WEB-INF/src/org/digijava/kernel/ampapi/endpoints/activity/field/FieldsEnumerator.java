@@ -502,7 +502,6 @@ public class FieldsEnumerator {
     }
 
     protected boolean isVisible(String fmPath, FEContext context) {
-        context.getIntchStack().peek();
         return fmService.isVisible(fmPath, context.getIntchStack());
     }
     

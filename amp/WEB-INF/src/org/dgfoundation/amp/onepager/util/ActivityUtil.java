@@ -197,6 +197,14 @@ public class ActivityUtil {
             setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
         }
     }
+    
+    public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
+            Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
+            Session session, SaveContext context) throws Exception {
+        
+        boolean draftChange = detectDraftChange(a, draft);
+        return saveActivityNewVersion(a, translations, ampCurrentMember, draft, draftChange, session, context);
+    }
 
     /**
      * saves a new version of an activity
@@ -204,16 +212,12 @@ public class ActivityUtil {
      */
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
             Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
-            Session session, SaveContext context) throws Exception {
+            boolean draftChange, Session session, SaveContext context) throws Exception {
 
         AmpActivityVersion oldA = a;
         boolean newActivity = isNewActivity(a);
 
-        if (a.getDraft() == null)
-            a.setDraft(false);
-        boolean draftChange = draft != a.getDraft();
         a.setDraft(draft);
-
         a.setDeleted(false);
         //we will check what is comming in funding
         Set<AmpFunding> af = a.getFunding();
@@ -326,7 +330,11 @@ public class ActivityUtil {
 
         return a;
     }
-
+    
+    public static boolean detectDraftChange(AmpActivityVersion a, boolean draft) {
+        return Boolean.TRUE.equals(a.getDraft()) != draft;
+    }
+    
     public static <T extends AmpActivityFields> boolean isNewActivity(T a) {
         // it would be nicer to rely upon AMP ID, but some old activities may lack it
         return a.getAmpActivityId() == null;

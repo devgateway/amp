@@ -36,7 +36,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -519,11 +519,11 @@ public class ActivityImporter extends ObjectImporter {
     }
 
     private ChangeType determineChangeType() {
-        if (AmpOfflineModeHolder.isAmpOfflineMode()) {
+        if (AmpClientModeHolder.isOfflineClient()) {
             return ChangeType.AMP_OFFLINE;
-        } else {
-            return ChangeType.IMPORT;
         }
+        
+        return ChangeType.IMPORT;
     }
 
     /**

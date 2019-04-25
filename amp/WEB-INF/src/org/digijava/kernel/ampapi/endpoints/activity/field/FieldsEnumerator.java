@@ -28,9 +28,10 @@ import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
-import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
@@ -118,7 +119,7 @@ public class FieldsEnumerator {
         String label = getLabelOf(interchangeable);
         apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
         apiField.setRequired(getRequiredValue(context, fieldTitle));
-        apiField.setImportable(interchangeable.importable());
+        apiField.setImportable(getImportableValue(context, fieldTitle, interchangeable));
 
         if (interchangeable.percentageConstraint()) {
             apiField.setPercentage(true);
@@ -359,6 +360,10 @@ public class FieldsEnumerator {
      * N (no) = not required. .
      */
     private String getRequiredValue(FEContext context, String fieldTitle) {
+        if (isFieldIatiIdentifier(fieldTitle) && AmpClientModeHolder.isIatiImporterClient()) {
+            return ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
+        }
+        
         Interchangeable fieldIntch = context.getIntchStack().peek();
 
         ActivityEPConstants.RequiredValidation required = fieldIntch.required();
@@ -379,6 +384,20 @@ public class FieldsEnumerator {
         }
 
         return ActivityEPConstants.FIELD_NOT_REQUIRED;
+    }
+    
+    private boolean getImportableValue(FEContext context, String fieldTitle, Interchangeable interchangeable) {
+        if (isFieldIatiIdentifier(fieldTitle) && AmpClientModeHolder.isIatiImporterClient()) {
+            return true;
+        }
+        
+        boolean importable = interchangeable.importable();
+        
+        if (StringUtils.isNotBlank(interchangeable.readOnlyFmPath())) {
+            return importable && !isVisible(interchangeable.readOnlyFmPath(), context);
+        }
+        
+        return importable;
     }
 
     /**
@@ -471,7 +490,6 @@ public class FieldsEnumerator {
 
     private boolean isFieldVisible(FEContext context) {
         Interchangeable interchangeable = context.getIntchStack().peek();
-
         return isVisible(interchangeable.fmPath(), context);
     }
 
@@ -485,6 +503,10 @@ public class FieldsEnumerator {
 
     protected boolean isVisible(String fmPath, FEContext context) {
         return fmService.isVisible(fmPath, context.getIntchStack());
+    }
+    
+    private boolean isFieldIatiIdentifier(String fieldName) {
+        return StringUtils.equals(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER), fieldName);
     }
 
 }

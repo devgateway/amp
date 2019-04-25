@@ -628,13 +628,14 @@ public class ActivityUtil {
         return role.getTeamHead() || role.isApprover();
     }
 
-    public static boolean canApproveWith(ApprovalStatus approvalStatus, AmpTeamMember atm, boolean isNewActivity) {
+    public static boolean canApproveWith(ApprovalStatus approvalStatus, AmpTeamMember atm, boolean isNewActivity,
+            Boolean isDraft) {
         if (atm == null) {
             return false;
         }
         String validation = getValidationSetting(atm);
         if (isProjectValidationOn(validation)) {
-            return ApprovalStatus.APPROVED.equals(approvalStatus);
+            return Boolean.FALSE.equals(isDraft) && ApprovalStatus.APPROVED.equals(approvalStatus);
         }
         ApprovalStatus allowed = isNewActivity ? ApprovalStatus.STARTED_APPROVED : ApprovalStatus.APPROVED;
         return allowed.equals(approvalStatus);

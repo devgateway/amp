@@ -521,6 +521,8 @@ public class ActivityImporter extends ObjectImporter {
     private ChangeType determineChangeType() {
         if (AmpClientModeHolder.isOfflineClient()) {
             return ChangeType.AMP_OFFLINE;
+        } else if (AmpClientModeHolder.isIatiImporterClient()) {
+            return ChangeType.IATI_IMPORTER;
         }
         
         return ChangeType.IMPORT;

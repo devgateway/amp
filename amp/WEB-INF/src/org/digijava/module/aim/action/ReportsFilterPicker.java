@@ -723,6 +723,11 @@ public class ReportsFilterPicker extends Action {
 
     private static void fillFilterOrganizations(AmpARFilter arf, ReportsFilterPickerForm filterForm) {
         arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency()));
+        arf.setBeneficiaryAgencyTypes(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgencyTypes(),
+                AmpOrgType.class));
+        arf.setBeneficiaryAgencyGroups(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgencyGroups(),
+                AmpOrgType.class));
+
         arf.setDonnorgAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedDonnorAgency()));
         arf.setResponsibleorg(ReportsUtil.processSelectedFilters(filterForm.getSelectedresponsibleorg()));
         arf.setComponentFunding(ReportsUtil.processSelectedFilters(filterForm.getSelectedComponentFundingOrg()));
@@ -732,6 +737,7 @@ public class ReportsFilterPicker extends Action {
         arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency()));
         arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency()));
         arf.setContractingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedContractingAgency()));
+
         if (filterForm.getSelectedDonorTypes() != null && filterForm.getSelectedDonorTypes().length > 0) {
             arf.setDonorTypes(new HashSet<AmpOrgType>());
             for (int i = 0; i < filterForm.getSelectedDonorTypes().length; i++) {

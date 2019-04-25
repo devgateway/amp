@@ -300,6 +300,8 @@ public class FilterUtil {
 
         form.setSelectedDonorTypes( FilterUtil.getObjectsIds(filter.getDonorTypes()) );
         form.setSelectedDonorGroups( FilterUtil.getObjectsIds(filter.getDonorGroups()) );
+        form.setSelectedBeneficiaryAgencyTypes( FilterUtil.getObjectsIds(filter.getBeneficiaryAgencyTypes()) );
+        form.setSelectedBeneficiaryAgencyGroups( FilterUtil.getObjectsIds(filter.getBeneficiaryAgencyGroups()) );
         form.setSelectedContractingAgencyGroups( FilterUtil.getObjectsIds(filter.getContractingAgencyGroups()) );
 
         form.setSelectedBudgets(FilterUtil.getObjectsIds(filter.getBudget()));

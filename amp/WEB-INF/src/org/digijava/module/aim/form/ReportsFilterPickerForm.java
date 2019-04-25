@@ -77,6 +77,8 @@ public class ReportsFilterPickerForm extends ActionForm {
     private Long[] selectedConcensionalityLevel;
     private Object[] selectedDonorTypes; // ids of AmpOrgType
     private Object[] selectedDonorGroups; //
+    private Object[] selectedBeneficiaryAgencyTypes;
+    private Object[] selectedBeneficiaryAgencyGroups;
     private Object[] selectedContractingAgencyGroups; //
     private Object[] selectedExecutingAgency;
     private Object[] selectedContractingAgency;
@@ -948,7 +950,23 @@ public class ReportsFilterPickerForm extends ActionForm {
     public void setSelectedDonorTypes(final Object[] selectedDonorTypes) {
         this.selectedDonorTypes = selectedDonorTypes;
     }
-    
+
+    public Object[] getSelectedBeneficiaryAgencyTypes() {
+        return selectedBeneficiaryAgencyTypes;
+    }
+
+    public void setSelectedBeneficiaryAgencyTypes(Object[] selectedBeneficiaryAgencyTypes) {
+        this.selectedBeneficiaryAgencyTypes = selectedBeneficiaryAgencyTypes;
+    }
+
+    public Object[] getSelectedBeneficiaryAgencyGroups() {
+        return selectedBeneficiaryAgencyGroups;
+    }
+
+    public void setSelectedBeneficiaryAgencyGroups(Object[] selectedBeneficiaryAgencyGroups) {
+        this.selectedBeneficiaryAgencyGroups = selectedBeneficiaryAgencyGroups;
+    }
+
     @java.lang.SuppressWarnings("all")
     public void setSelectedDonorGroups(final Object[] selectedDonorGroups) {
         this.selectedDonorGroups = selectedDonorGroups;

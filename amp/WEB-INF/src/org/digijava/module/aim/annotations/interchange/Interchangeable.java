@@ -35,6 +35,14 @@ public @interface Interchangeable {
     String fmPath() default "";
     
     /**
+     * Path to the common possible values that will be checked for values to avoid rebuilding the same list of options
+     * for fields that depend on the same possible values like organization lists.
+     * Note: initial usage in activity import validation. Later can use for export and values EP in AMP-25943 
+     * @return the alias for common possible values
+     */
+    String commonPV() default "";
+
+    /**
      * Whether the collection field in AF supports several values. It will be used just for collection fields
      * (like: one activity might have several sectors assigned, or only one)
      */

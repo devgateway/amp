@@ -91,7 +91,7 @@ public class ObjectImporter {
         this.businessRulesValidator = businessRulesValidator;
         this.trnSettings = trnSettings;
         this.apiFields = apiFields;
-        this.possibleValuesCached = new PossibleValuesCache(apiFields);
+        this.possibleValuesCached = new PossibleValuesCache(PossibleValuesEnumerator.INSTANCE, apiFields);
         this.valueConverter = valueConverter;
 
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();

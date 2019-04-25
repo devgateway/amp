@@ -11,6 +11,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.values.FundingePledgesValueProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
@@ -182,7 +183,8 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     private String version;
     private String calType;
     private String orgRoleCode; // defunct
-    @Interchangeable(fieldTitle = "Currency", importable = true, pickIdOnly = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Currency", importable = true, pickIdOnly = true, required = ALWAYS,
+            commonPV = CommonFieldsConstants.COMMON_CURRENCY)
     private AmpCurrency ampCurrencyId;
     private AmpOrganisation reportingOrgId;
     @InterchangeableBackReference
@@ -209,11 +211,13 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     private Float capitalSpendingPercentage;
     
     @Interchangeable(fieldTitle = "Recipient Organization", importable = true, pickIdOnly = true,
-            fmPath = FMVisibility.PARENT_FM + ActivityEPConstants.RECIPIENT_ORG_FM_PATH)
+            fmPath = FMVisibility.PARENT_FM + ActivityEPConstants.RECIPIENT_ORG_FM_PATH,
+            commonPV = CommonFieldsConstants.COMMON_ORGANIZATION)
     private AmpOrganisation recipientOrg;
     
     @Interchangeable(fieldTitle = "Recipient Role", importable = true, pickIdOnly = true,
-            fmPath = FMVisibility.PARENT_FM + ActivityEPConstants.RECIPIENT_ROLE_FM_PATH)
+            fmPath = FMVisibility.PARENT_FM + ActivityEPConstants.RECIPIENT_ROLE_FM_PATH,
+            commonPV = CommonFieldsConstants.COMMON_ROLE)
     private AmpRole recipientRole;
     
     @Interchangeable(fieldTitle = "Expenditure Classification", importable = true,

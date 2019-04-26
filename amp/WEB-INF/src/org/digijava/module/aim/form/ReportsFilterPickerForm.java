@@ -80,9 +80,16 @@ public class ReportsFilterPickerForm extends ActionForm {
     private Object[] selectedBeneficiaryAgencyTypes;
     private Object[] selectedBeneficiaryAgencyGroups;
     private Object[] selectedContractingAgencyGroups; //
+    private Object[] selectedContractingAgencyTypes;
+    private Object[] selectedExecutingAgencyTypes;
+    private Object[] selectedExecutingAgencyGroups;
     private Object[] selectedExecutingAgency;
     private Object[] selectedContractingAgency;
     private Object[] selectedImplementingAgency;
+    private Object[] selectedImplementingAgencyTypes;
+    private Object[] selectedImplementingAgencyGroups;
+    private Object[] selectedResponsibleOrgTypes;
+    private Object[] selectedResponsibleOrgGroups;
     private Object[] selectedBeneficiaryAgency;
     private Object[] selectedDonnorAgency;
     private Object[] selectedProjectCategory;
@@ -403,6 +410,38 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public Object[] getSelectedImplementingAgency() {
         return this.selectedImplementingAgency;
+    }
+
+    public Object[] getSelectedImplementingAgencyTypes() {
+        return selectedImplementingAgencyTypes;
+    }
+
+    public void setSelectedImplementingAgencyTypes(Object[] selectedImplementingAgencyTypes) {
+        this.selectedImplementingAgencyTypes = selectedImplementingAgencyTypes;
+    }
+
+    public Object[] getSelectedImplementingAgencyGroups() {
+        return selectedImplementingAgencyGroups;
+    }
+
+    public void setSelectedImplementingAgencyGroups(Object[] selectedImplementingAgencyGroups) {
+        this.selectedImplementingAgencyGroups = selectedImplementingAgencyGroups;
+    }
+
+    public Object[] getSelectedResponsibleOrgTypes() {
+        return selectedResponsibleOrgTypes;
+    }
+
+    public void setSelectedResponsibleOrgTypes(Object[] selectedResponsibleOrgTypes) {
+        this.selectedResponsibleOrgTypes = selectedResponsibleOrgTypes;
+    }
+
+    public Object[] getSelectedResponsibleOrgGroups() {
+        return selectedResponsibleOrgGroups;
+    }
+
+    public void setSelectedResponsibleOrgGroups(Object[] selectedResponsibleOrgGroups) {
+        this.selectedResponsibleOrgGroups = selectedResponsibleOrgGroups;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -976,7 +1015,34 @@ public class ReportsFilterPickerForm extends ActionForm {
     public void setSelectedContractingAgencyGroups(final Object[] selectedContractingAgencyGroups) {
         this.selectedContractingAgencyGroups = selectedContractingAgencyGroups;
     }
-    
+
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedContractingAgencyTypes(final Object[] selectedContractingAgencyTypes) {
+        this.selectedContractingAgencyTypes = selectedContractingAgencyTypes;
+    }
+
+    public Object[] getSelectedContractingAgencyTypes() {
+        return selectedContractingAgencyTypes;
+    }
+
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedExecutingAgencyTypes(final Object[] selectedExecutingAgencyTypes) {
+        this.selectedExecutingAgencyTypes = selectedExecutingAgencyTypes;
+    }
+
+    public Object[] getSelectedExecutingAgencyTypes() {
+        return selectedExecutingAgencyTypes;
+    }
+
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedExecutingAgencyGroups(final Object[] selectedExecutingAgencyGroups) {
+        this.selectedExecutingAgencyGroups = selectedExecutingAgencyGroups;
+    }
+
+    public Object[] getSelectedExecutingAgencyGroups() {
+        return selectedExecutingAgencyGroups;
+    }
+
     @java.lang.SuppressWarnings("all")
     public void setSelectedExecutingAgency(final Object[] selectedExecutingAgency) {
         this.selectedExecutingAgency = selectedExecutingAgency;

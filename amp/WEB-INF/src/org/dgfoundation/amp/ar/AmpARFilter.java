@@ -3272,6 +3272,22 @@ public class AmpARFilter extends PropertyListable {
         this.beneficiaryAgencyGroups = beneficiaryAgencyGroups;
     }
 
+    public Set<AmpOrgType> getResponsibleOrgTypes() {
+        return responsibleAgencyTypes;
+    }
+
+    public void setResponsibleOrgTypes(Set<AmpOrgType> responsibleAgencyTypes) {
+        this.responsibleAgencyTypes = responsibleAgencyTypes;
+    }
+
+    public Set<AmpOrgGroup> getResponsibleOrgGroups() {
+        return responsibleAgencyGroups;
+    }
+
+    public void setResponsibleOrgGroups(Set<AmpOrgGroup> responsibleAgencyGroups) {
+        this.responsibleAgencyGroups = responsibleAgencyGroups;
+    }
+
     public Set<AmpOrgType> getBeneficiaryAgencyTypes() {
         return beneficiaryAgencyTypes;
     }

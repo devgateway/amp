@@ -151,9 +151,11 @@ public class AmpARFilterConverter {
                 names.add(FiltersConstants.UNDEFINED_NAME);
                 filterRules.getFilterRules().put(reportElement, new FilterRule(names, values, true));
             } else {
-                values.add(Long.toString(ColumnReportData.UNALLOCATED_ID));
-                names.add(FiltersConstants.UNDEFINED_NAME);
-                addFilterRule(columnName, new FilterRule(names, values, true));
+                if (columnName != null) {
+                    values.add(Long.toString(ColumnReportData.UNALLOCATED_ID));
+                    names.add(FiltersConstants.UNDEFINED_NAME);
+                    addFilterRule(columnName, new FilterRule(names, values, true));
+                }            
             }
         }
     }

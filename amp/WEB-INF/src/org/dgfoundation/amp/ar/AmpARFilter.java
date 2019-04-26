@@ -104,7 +104,8 @@ public class AmpARFilter extends PropertyListable {
 
     public final static String SDF_OUT_FORMAT_STRING = "yyyy-MM-dd";
     public final static String SDF_IN_FORMAT_STRING = "dd/MM/yyyy";
-
+    public static final String UNDEFINED_OPTIONS = "undefinedOptions";
+    
     public static final Set<String> DATE_PROPERTIES = new HashSet<>(Arrays.asList("fromDate", "toDate",
             "fromActivityActualCompletionDate", "toActivityActualCompletionDate",
             "fromActivityFinalContractingDate", "toActivityFinalContractingDate",

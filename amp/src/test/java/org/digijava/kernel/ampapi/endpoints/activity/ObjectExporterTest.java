@@ -172,7 +172,7 @@ public class ObjectExporterTest {
         }
     }
 
-    private static class OnePV extends PossibleValuesProvider {
+    private static class OnePV implements PossibleValueProviderTest {
 
         @Override
         public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {

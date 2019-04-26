@@ -13,4 +13,5 @@ public class AmpFundingAmountDiscriminationConfigurer implements DiscriminationC
         AmpFundingAmount fundingAmount = (AmpFundingAmount) obj;
         fundingAmount.setFunType(AmpFundingAmount.FundingType.valueOf(discriminationValue));
     }
+
 }

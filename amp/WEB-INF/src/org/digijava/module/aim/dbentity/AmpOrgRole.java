@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
@@ -26,7 +27,8 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     private AmpActivityVersion activity;
     
     @Interchangeable(fieldTitle = "Organization", importable = true, pickIdOnly = true, uniqueConstraint = true,
-            required = ActivityEPConstants.RequiredValidation.ALWAYS)
+            required = ActivityEPConstants.RequiredValidation.ALWAYS,
+            commonPV = CommonFieldsConstants.COMMON_ORGANIZATION)
     private AmpOrganisation organisation;
     
     private AmpRole role;

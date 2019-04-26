@@ -141,6 +141,11 @@ Filters.prototype.showFilters = function (reportContextId, auxId) {
     widgetFilter.reportContextId = reportContextId;
     if (widgetFilter.reportContextId === 'report_wizard') {
         widgetFilter.auxId = auxId; // used only for advanced search.
+        if (widgetFilter.view.firstRender) {
+            /*TODO: In order to improve loading speed of the filters we should avoid extra serialization/deserialization
+            but right now those 2 processes do initializations we need for report generator.*/
+            widgetFilter.deserialize({filters: {}}, {silent: true});
+        }
         this.showFilterWidget();
     } else if (widgetFilter.reportContextId === 'workspace_editor') {
         var id = new URL(window.location).searchParams.get('tId');

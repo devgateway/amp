@@ -54,9 +54,8 @@ $(document).ready(function () {
                     $('#hasFilters').val(true);
                 } else {
                     $('#queryLabelsDiv').html(data);
+                    document.getElementById('queryLabelsDiv').scrollIntoView();
                 }
-                
-                document.getElementById('queryLabelsDiv').scrollIntoView();
             }
         });
         if (!embedded) {

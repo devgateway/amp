@@ -300,16 +300,16 @@ public class FilterUtil {
 
         form.setSelectedDonorTypes( FilterUtil.getObjectsIds(filter.getDonorTypes()) );
         form.setSelectedDonorGroups( FilterUtil.getObjectsIds(filter.getDonorGroups()) );
-        form.setSelectedBeneficiaryAgencyTypes( FilterUtil.getObjectsIds(filter.getBeneficiaryAgencyTypes()) );
-        form.setSelectedBeneficiaryAgencyGroups( FilterUtil.getObjectsIds(filter.getBeneficiaryAgencyGroups()) );
-        form.setSelectedContractingAgencyTypes( FilterUtil.getObjectsIds(filter.getContractingAgencyTypes()) );
-        form.setSelectedContractingAgencyGroups( FilterUtil.getObjectsIds(filter.getContractingAgencyGroups()) );
-        form.setSelectedExecutingAgencyTypes( FilterUtil.getObjectsIds(filter.getExecutingAgencyTypes()) );
-        form.setSelectedExecutingAgencyGroups( FilterUtil.getObjectsIds(filter.getExecutingAgencyGroups()) );
-        form.setSelectedImplementingAgencyTypes( FilterUtil.getObjectsIds(filter.getImplementingAgencyTypes()) );
-        form.setSelectedImplementingAgencyGroups( FilterUtil.getObjectsIds(filter.getImplementingAgencyGroups()) );
-        form.setSelectedResponsibleOrgTypes( FilterUtil.getObjectsIds(filter.getResponsibleAgencyTypes()) );
-        form.setSelectedResponsibleOrgGroups( FilterUtil.getObjectsIds(filter.getResponsibleAgencyGroups()) );
+        form.setSelectedBeneficiaryAgencyTypes(FilterUtil.getObjectsIds(filter.getBeneficiaryAgencyTypes()));
+        form.setSelectedBeneficiaryAgencyGroups(FilterUtil.getObjectsIds(filter.getBeneficiaryAgencyGroups()));
+        form.setSelectedContractingAgencyTypes(FilterUtil.getObjectsIds(filter.getContractingAgencyTypes()));
+        form.setSelectedContractingAgencyGroups(FilterUtil.getObjectsIds(filter.getContractingAgencyGroups()));
+        form.setSelectedExecutingAgencyTypes(FilterUtil.getObjectsIds(filter.getExecutingAgencyTypes()));
+        form.setSelectedExecutingAgencyGroups(FilterUtil.getObjectsIds(filter.getExecutingAgencyGroups()));
+        form.setSelectedImplementingAgencyTypes(FilterUtil.getObjectsIds(filter.getImplementingAgencyTypes()));
+        form.setSelectedImplementingAgencyGroups(FilterUtil.getObjectsIds(filter.getImplementingAgencyGroups()));
+        form.setSelectedResponsibleOrgTypes(FilterUtil.getObjectsIds(filter.getResponsibleAgencyTypes()));
+        form.setSelectedResponsibleOrgGroups(FilterUtil.getObjectsIds(filter.getResponsibleAgencyGroups()));
 
         form.setSelectedBudgets(FilterUtil.getObjectsIds(filter.getBudget()));
         

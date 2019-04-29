@@ -104,6 +104,7 @@ public class FieldsEnumerator {
         Class<?> type = InterchangeUtils.getClassOfField(field);
         FieldType fieldType = null;
         Class<?> elementType = null;
+        apiField.setInternalFieldType(field.getType());
         if (interchangeable.pickIdOnly()) {
             fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
         } else if (InterchangeUtils.isCollection(field)) {
@@ -111,7 +112,7 @@ public class FieldsEnumerator {
             if (interchangeable.multipleValues()) {
                 fieldType = FieldType.LIST;
                 if (InterchangeUtils.isSimpleType(elementType)) {
-                    type = field.getClass();
+                    type = field.getType();
                 }
             }
         } else if (field.getType().equals(java.util.Date.class)) {
@@ -120,7 +121,8 @@ public class FieldsEnumerator {
 
         APIType apiType = new APIType(type, fieldType, elementType);
         apiField.setApiType(apiType);
-        boolean isCollection = apiType.getFieldType().isList();
+        
+        boolean isList = apiType.getFieldType().isList();
 
         if (apiField.isId()
                 && (apiType.getFieldType() == FieldType.OBJECT || apiType.getFieldType() == FieldType.LIST)) {
@@ -153,10 +155,10 @@ public class FieldsEnumerator {
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             if (!interchangeable.pickIdOnly()) {
-                Class<?> clazz = isCollection ? elementType : type;
+                Class<?> clazz = isList ? elementType : type;
                 apiField.setChildren(getAllAvailableFields(clazz, context));
             }
-            if (isCollection) {
+            if (isList) {
                 apiField.setMultipleValues(!hasMaxSizeValidatorEnabled(field, context));
                 if (interchangeable.sizeLimit() > 1) {
                     apiField.setSizeLimit(interchangeable.sizeLimit());
@@ -177,6 +179,7 @@ public class FieldsEnumerator {
         // only String fields should clarify if they are translatable or not
         if (java.lang.String.class.equals(field.getType())) {
             apiField.setTranslatable(fieldInfoProvider.isTranslatable(field));
+            apiField.setTranslationType(fieldInfoProvider.getTranslatableType(field));
         }
         if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldInfoProvider.getType(field))) {
             apiField.setFieldLength(fieldInfoProvider.getMaxLength(field));
@@ -207,6 +210,8 @@ public class FieldsEnumerator {
             }
             apiField.setIdChild(idFields.get(0));
         }
+        
+        
 
         return apiField;
     }

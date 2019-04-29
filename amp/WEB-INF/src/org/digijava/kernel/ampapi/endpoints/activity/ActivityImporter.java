@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
-import static org.digijava.module.aim.util.ActivityUtil.loadActivity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
-import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
@@ -59,6 +57,7 @@ import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
@@ -150,7 +149,6 @@ public class ActivityImporter extends ObjectImporter {
         List<APIField> fieldsDef = getApiFields();
         // get existing activity if this is an update request
         Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
-        boolean oldActivityDraft = false;
 
         if (modifiedBy == null) {
             return Collections.singletonList(
@@ -158,7 +156,7 @@ public class ActivityImporter extends ObjectImporter {
         }
 
         Long activityGroupVersion = AIHelper.getActivityGroupVersionOrNull(newJson);
-        if (ActivityUtil.isActivityStale(ampActivityId, activityGroupVersion)) {
+        if (org.dgfoundation.amp.onepager.util.ActivityUtil.isActivityStale(ampActivityId, activityGroupVersion)) {
             return Collections.singletonList(
                     ActivityErrors.ACTIVITY_IS_STALE.withDetails("Activity is not the latest version."));
         }
@@ -177,7 +175,7 @@ public class ActivityImporter extends ObjectImporter {
 
         if (ampActivityId != null) {
             try {
-                oldActivity = loadActivity(ampActivityId);
+                oldActivity = ActivityUtil.loadActivity(ampActivityId);
             } catch (DgException e) {
                 logger.error(e.getMessage());
                 errors.put(ActivityErrors.ACTIVITY_NOT_LOADED.id, ActivityErrors.ACTIVITY_NOT_LOADED);
@@ -195,7 +193,6 @@ public class ActivityImporter extends ObjectImporter {
 
             if (oldActivity != null) {
                 currentVersion = oldActivity.getAmpActivityGroup().getVersion();
-                oldActivityDraft = oldActivity.getDraft();
 
                 key = ActivityGatekeeper.lockActivity(activityId, modifiedBy.getAmpTeamMemId());
 
@@ -237,9 +234,9 @@ public class ActivityImporter extends ObjectImporter {
             validateAndImport(newActivity, newJsonParent);
             if (errors.isEmpty()) {
                 prepareToSave();
-                boolean draftChange = ActivityUtil.detectDraftChange(newActivity, oldActivityDraft);
-                newActivity = ActivityUtil.saveActivityNewVersion(newActivity, translations, modifiedBy,
-                        Boolean.TRUE.equals(newActivity.getDraft()), draftChange,
+
+                newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
+                        translations, modifiedBy, Boolean.TRUE.equals(newActivity.getDraft()),
                         PersistenceManager.getSession(), saveContext);
 
                 postProcess();
@@ -293,7 +290,8 @@ public class ActivityImporter extends ObjectImporter {
         avc.setOldActivity(oldActivity);
         ActivityValidationContext.set(avc);
 
-        ActivityUtil.prepareToSave(newActivity, oldActivity, modifiedBy, newActivity.getDraft(), saveContext);
+        org.dgfoundation.amp.onepager.util.ActivityUtil.prepareToSave(
+                newActivity, oldActivity, modifiedBy, newActivity.getDraft(), saveContext);
     }
 
     public boolean isDraft() {
@@ -348,12 +346,12 @@ public class ActivityImporter extends ObjectImporter {
     }
 
     @Override
-    protected String extractString(Field field, Object parentObj, Object jsonValue) {
-        return extractTranslationsOrSimpleValue(field, parentObj, jsonValue);
+    protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
+        return extractTranslationsOrSimpleValue(apiField, parentObj, jsonValue);
     }
 
-    protected String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
-        TranslationType trnType = trnSettings.getTranslatableType(field);
+    protected String extractTranslationsOrSimpleValue(APIField apiField, Object parentObj, Object jsonValue) {
+        TranslationType trnType = apiField.getTranslationType();
         // no translation expected
         if (TranslationType.NONE == trnType) {
             return (String) jsonValue;
@@ -361,7 +359,7 @@ public class ActivityImporter extends ObjectImporter {
         // base table value
         String value = null;
         if (TranslationType.STRING == trnType) {
-            value = extractContentTranslation(field, parentObj, (Map<String, Object>) jsonValue);
+            value = extractContentTranslation(apiField, parentObj, (Map<String, Object>) jsonValue);
         } else {
             Map<String, Object> editorText = null;
             if (trnSettings.isMultilingual()) {
@@ -371,7 +369,7 @@ public class ActivityImporter extends ObjectImporter {
                 editorText = new HashMap<String, Object>();
                 editorText.put(trnSettings.getDefaultLangCode(), jsonValue);
             }
-            value = extractTextTranslations(field, parentObj, editorText);
+            value = extractTextTranslations(apiField, parentObj, editorText);
         }
         return value;
     }
@@ -379,19 +377,20 @@ public class ActivityImporter extends ObjectImporter {
     /**
      * Stores all provided translations
      *
-     * @param field the field to translate
+     * @param apiField the api field
      * @param parentObj the object the field is part of
      * @param trnJson <lang, value> map of translations for each language
      * @return value to be stored in the base table
      */
-    protected String extractContentTranslation(Field field, Object parentObj, Map<String, Object> trnJson) {
+    protected String extractContentTranslation(APIField apiField, Object parentObj, Map<String, Object> trnJson) {
         String value = null;
         String currentLangValue = null;
         String anyLangValue = null;
 
         String objectClass = parentObj.getClass().getName();
         Long objId = (Long) ((Identifiable) parentObj).getIdentifier();
-        List<AmpContentTranslation> trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId, field.getName());
+        List<AmpContentTranslation> trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId,
+                apiField.getFieldNameInternal());
         if (objId == null) {
             objId = (long) System.identityHashCode(parentObj);
         }
@@ -410,7 +409,8 @@ public class ActivityImporter extends ObjectImporter {
             if (translation == null) {
                 trnList.remove(act);
             } else if (act == null) {
-                act = new AmpContentTranslation(objectClass, objId, field.getName(), langCode, translation);
+                String fieldName = apiField.getFieldNameInternal();
+                act = new AmpContentTranslation(objectClass, objId, fieldName, langCode, translation);
                 trnList.add(act);
             } else {
                 act.setTranslation(translation);
@@ -438,23 +438,18 @@ public class ActivityImporter extends ObjectImporter {
     /**
      * Stores Rich Text Editor entries
      *
-     * @param field reference field for the key
+     * @param apiField reference api field for the key
      * @param parentObj the object the field is part of
      * @param trnJson <lang, value> map of translations for each language
      * @return dg_editor key reference to be stored in the base table
      */
-    protected String extractTextTranslations(Field field, Object parentObj, Map<String, Object> trnJson) {
+    protected String extractTextTranslations(APIField apiField, Object parentObj, Map<String, Object> trnJson) {
         String key = null;
         if (update) { // all editor keys must exist before
-            try {
-                key = (String) field.get(parentObj);
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                logger.error(e.getMessage());
-                throw new RuntimeException(e);
-            }
+            key = (String) apiField.getFieldAccessor().get(parentObj);
         }
         if (key == null) { // init it in any case
-            key = getEditorKey(field.getName());
+            key = getEditorKey(apiField.getFieldNameInternal());
         }
         for (Entry<String, Object> trn : trnJson.entrySet()) {
             String langCode = trn.getKey();

@@ -248,7 +248,7 @@ LoggerIdentifiable, Cloneable {
             requiredFmPath = "/Activity Form/Location/Locations/Location required validator",
                     validators = @Validators (unique = "/Activity Form/Location/Locations/uniqueLocationsValidator", treeCollection = "/Activity Form/Location/Locations/Tree Validator"))
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.LOCATIONS)
-    protected Set<AmpActivityLocation> locations ;
+    protected Set<AmpActivityLocation> locations = new HashSet<>();
     
     @VersionableCollection(fieldTitle = "Org. Role")
     @InterchangeableDiscriminator(discriminatorField = "role.roleCode",
@@ -282,11 +282,11 @@ LoggerIdentifiable, Cloneable {
     
     @Interchangeable(fieldTitle = "Activity Internal IDs", importable = true, fmPath = "/Activity Form/Activity Internal IDs")
     @VersionableCollection(fieldTitle = "Activity Internal IDs")
-    protected Set<AmpActivityInternalId> internalIds ;
+    protected Set<AmpActivityInternalId> internalIds = new HashSet<>();
     
     @Interchangeable(fieldTitle = "Fundings", importable = true, fmPath = "/Activity Form/Funding")
     @VersionableCollection(fieldTitle = "Fundings")
-    protected Set<AmpFunding> funding;
+    protected Set<AmpFunding> funding = new HashSet<>();
     
     //TODO show this field?
     //TODO-reply: we should first figure out what it is
@@ -304,7 +304,7 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = "Issues", importable = true, fmPath = "/Activity Form/Issues Section")
     @VersionableCollection(fieldTitle = "Issues")
-    protected Set<AmpIssues> issues;
+    protected Set<AmpIssues> issues = new HashSet<>();
 
 //  @Interchangeable(fieldTitle = "Regional Observations", importable = true, fmPath = "/Activity Form/Regional Observations")
     @VersionableCollection(fieldTitle = "Regional Observations")
@@ -452,11 +452,11 @@ LoggerIdentifiable, Cloneable {
     
     @Interchangeable(fieldTitle = "Components", importable = true, fmPath = "/Activity Form/Components")
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.COMPONENTS)
-    protected Set<AmpComponent> components;
+    protected Set<AmpComponent> components = new HashSet<>();
 
     @Interchangeable(fieldTitle = "Structures", importable = true, fmPath = "/Activity Form/Structures")
     @VersionableCollection(fieldTitle = "Structures")
-    protected Set<AmpStructure> structures;
+    protected Set<AmpStructure> structures = new HashSet<>();
 
 //  @Interchangeable(fieldTitle = "Component Fundings", importable = true, fmPath = "/Activity Form/Components")
 //  @VersionableCollection(fieldTitle = "Component Fundings")
@@ -570,7 +570,7 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = "Activity Documents", fmPath = "/Activity Form/Related Documents", importable = true)
     @VersionableCollection(fieldTitle = "Activity Documents")
-    protected Set<AmpActivityDocument> activityDocuments = null;
+    protected Set<AmpActivityDocument> activityDocuments = new HashSet<>();
     
     /* Categories */
     @InterchangeableDiscriminator(discriminatorField = "ampCategoryClass.keyName",
@@ -652,7 +652,7 @@ LoggerIdentifiable, Cloneable {
             dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY}, uniqueConstraint = true,
             validators = @Validators (unique = "/Activity Form/Identification/Budget Extras/FY"))
     @PossibleValues(FiscalYearPossibleValuesProvider.class)
-    protected Set<Long> fiscalYears;
+    protected Set<Long> fiscalYears = new HashSet<>();
     
     @Interchangeable(fieldTitle = "Vote", importable = true, required = SUBMIT,
             fmPath = "/Activity Form/Identification/Budget Extras/Vote",
@@ -775,7 +775,7 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "PPC Annual Budgets")
-    protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
+    protected Set<AmpAnnualProjectBudget> annualProjectBudgets = new HashSet<>();
 
         public Boolean getMergedActivity() {
             return mergedActivity;

@@ -19,6 +19,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,6 +39,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.WorkerException;
@@ -77,6 +79,8 @@ public class FieldsEnumeratorTest {
 
     private FieldsEnumerator fieldsEnumerator;
     private PossibleValuesEnumerator pvEnumerator;
+    
+    private ValueConverter valueConverter;
 
     @Before
     public void setUp() throws Exception {
@@ -90,6 +94,7 @@ public class FieldsEnumeratorTest {
 
         fieldsEnumerator = new FieldsEnumerator(provider, fmService, translatorService, name -> true);
         pvEnumerator = new PossibleValuesEnumerator(possibleValuesDAO, translatorService);
+        valueConverter = new ValueConverter();
     }
 
     @Test
@@ -685,6 +690,29 @@ public class FieldsEnumeratorTest {
     @Test(expected = RuntimeException.class)
     public void testTwoIdsNotAllowed() {
         fieldsEnumerator.getAllAvailableFields(ObjWithCollectionWithTwoIds.class);
+    }
+    
+    
+    @Test
+    public void testAPIFieldActivityFields() {
+        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(AmpActivityVersion.class,
+                fieldsFor(AmpActivityFields.class));
+        assertEquals(nullableAPIFields, Collections.emptyList());
+    }
+    
+    private List<APIField> getAPIFieldWithNullCollections(Class<?> type, List<APIField> apiFields) {
+        List<APIField> nullableAPIFields = new ArrayList<>();
+        Object object = valueConverter.getNewInstance(type);
+        for (APIField apiField : apiFields) {
+            if (apiField.isCollection() && apiField.getFieldAccessor().get(object) == null) {
+                nullableAPIFields.add(apiField);
+            }
+            if (apiField.isCollection() && !apiField.getApiType().getFieldType().isSimpleType()) {
+                getAPIFieldWithNullCollections(apiField.getApiType().getType(), apiField.getChildren());
+            }
+        }
+        
+        return nullableAPIFields;
     }
 
     private APIField newListField() {

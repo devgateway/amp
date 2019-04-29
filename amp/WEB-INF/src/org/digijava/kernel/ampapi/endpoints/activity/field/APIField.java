@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,6 +14,7 @@ import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
@@ -32,6 +34,9 @@ public class APIField {
 
     @JsonUnwrapped
     private APIType apiType;
+    
+    @JsonIgnore
+    private Class<?> internalFieldType;
 
     @JsonProperty(ActivityEPConstants.FIELD_LABEL)
     private JsonBean fieldLabel;
@@ -102,6 +107,9 @@ public class APIField {
 
     @JsonProperty(ActivityEPConstants.COMMON_POSSIBLE_VALUES)
     private String commonPossibleValuesPath;
+    
+    @JsonIgnore
+    private TranslationSettings.TranslationType translationType;
 
     public void setFieldAccessor(FieldAccessor fieldAccessor) {
         this.fieldAccessor = fieldAccessor;
@@ -318,7 +326,30 @@ public class APIField {
     public boolean isDiscriminatedObject() {
         return apiType.getFieldType().isObject() && discriminationConfigurer != null; 
     }
-
+    
+    @JsonIgnore
+    public boolean isCollection() {
+        return Collection.class.isAssignableFrom(internalFieldType);
+    }
+    
+    @JsonIgnore
+    public Class<?> getInternalFieldType() {
+        return internalFieldType;
+    }
+    
+    public void setInternalFieldType(Class<?> internalFieldType) {
+        this.internalFieldType = internalFieldType;
+    }
+    
+    @JsonIgnore
+    public TranslationSettings.TranslationType getTranslationType() {
+        return translationType;
+    }
+    
+    public void setTranslationType(TranslationSettings.TranslationType translationType) {
+        this.translationType = translationType;
+    }
+    
     @Override
     public String toString() {
         return "APIField{" + "fieldName='" + fieldName + '\'' + ", fieldType='" + this.apiType.getFieldType() + '\''

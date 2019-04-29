@@ -195,13 +195,12 @@ public class ResourceImporter extends ObjectImporter {
         return resource;
     }
 
-    @Override
-    protected String extractString(Field field, Object parentObj, Object jsonValue) {
-        return extractTranslationsOrSimpleValue(field, parentObj, jsonValue);
+    protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
+        return extractTranslationsOrSimpleValue(apiField, parentObj, jsonValue);
     }
 
-    private String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
-        TranslationType trnType = trnSettings.getTranslatableType(field);
+    private String extractTranslationsOrSimpleValue(APIField apiField, Object parentObj, Object jsonValue) {
+        TranslationType trnType = apiField.getTranslationType();
         String value = null;
         if (TranslationType.NONE == trnType) {
             value = (String) jsonValue;
@@ -210,18 +209,19 @@ public class ResourceImporter extends ObjectImporter {
             if (trnSettings.isMultilingual()) {
                 resourceText = (Map<String, Object>) jsonValue;
             } else {
-                resourceText = new HashMap<String, Object>();
+                resourceText = new HashMap<>();
                 resourceText.put(trnSettings.getDefaultLangCode(), jsonValue);
             }
-            value = extractResourceTranslation(field, parentObj, resourceText);
+            value = extractResourceTranslation(apiField, parentObj, resourceText);
         }
 
         return value;
     }
 
-    private String extractResourceTranslation(Field field, Object parentObj, Map<String, Object> jsonValue) {
-        String translatedMapFieldName = field.getAnnotation(ResourceTextField.class).translationsField();
+    private String extractResourceTranslation(APIField apiField, Object parentObj, Map<String, Object> jsonValue) {
         try {
+            Field field = parentObj.getClass().getField(apiField.getFieldNameInternal());
+            String translatedMapFieldName = field.getAnnotation(ResourceTextField.class).translationsField();
             Field translatedMapField = parentObj.getClass().getDeclaredField(translatedMapFieldName);
             translatedMapField.setAccessible(true);
             translatedMapField.set(parentObj, jsonValue);

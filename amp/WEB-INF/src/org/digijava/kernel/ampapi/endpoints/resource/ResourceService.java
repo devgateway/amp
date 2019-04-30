@@ -194,7 +194,7 @@ public class ResourceService {
         return nodeUuids;
     }
 
-    private List<? extends String> getPrivateUuids() {
+    public List<String> getPrivateUuids() {
         return getUuidsFromPath("private");
     }
 

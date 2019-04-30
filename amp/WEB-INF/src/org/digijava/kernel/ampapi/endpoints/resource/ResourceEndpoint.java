@@ -23,11 +23,8 @@ import javax.ws.rs.core.Response;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+
 import org.apache.commons.io.FileUtils;
-import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -38,8 +35,13 @@ import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
  * @author Viorel Chihai
@@ -49,7 +51,7 @@ import org.slf4j.LoggerFactory;
 public class ResourceEndpoint implements ErrorReportingEndpoint {
 
     private static final Logger logger = LoggerFactory.getLogger(ResourceEndpoint.class);
-
+    
     private static ResourceService resourceService = new ResourceService();
     
     @GET
@@ -63,7 +65,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     public List<APIField> getAvailableFields() {
         return AmpFieldsEnumerator.getEnumerator().getResourceFields();
     }
-    
+
     @POST
     @Path("field/values")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -90,7 +92,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     private List<PossibleValue> possibleValuesFor(String fieldName, List<APIField> apiFields) {
         return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, apiFields);
     }
-    
+
     @GET
     @Path("{uuid}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -120,7 +122,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     public JsonBean getResource(@PathParam("uuid") String uuid) {
         return resourceService.getResource(uuid);
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getAllResources", ui = false)
@@ -128,7 +130,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     public List<JsonBean> getAllResources() {
         return resourceService.getAllResources();
     }
-    
+
     @POST
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getAllResourcesByIds", ui = false)
@@ -155,7 +157,8 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     public JsonBean createResource(JsonBean resource) {
         ResourceImporter importer = new ResourceImporter();
         List<ApiErrorMessage> errors = importer.createResource(resource);
-        return resourceService.getImportResult(importer.getResource(), importer.getNewJson(), errors);
+        return resourceService.getImportResult(importer.getResource(), importer.getNewJson(), errors,
+                importer.getWarnings());
     }
 
     @PUT
@@ -193,7 +196,8 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
 
             ResourceImporter importer = new ResourceImporter();
             List<ApiErrorMessage> errors = importer.createResource(resource, formFile);
-            return resourceService.getImportResult(importer.getResource(), importer.getNewJson(), errors);
+            return resourceService.getImportResult(importer.getResource(), importer.getNewJson(), errors,
+                    importer.getWarnings());
         } catch (IOException e) {
             logger.error("Failed to process file.", e);
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST,
@@ -207,5 +211,5 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     public Class<?> getErrorsClass() {
         return ResourceErrors.class;
     }
-    
+
 }

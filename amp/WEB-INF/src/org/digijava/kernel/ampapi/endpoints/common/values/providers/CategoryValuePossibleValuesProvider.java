@@ -1,0 +1,33 @@
+package org.digijava.kernel.ampapi.endpoints.common.values.providers;
+
+import java.util.List;
+
+import org.digijava.kernel.ampapi.endpoints.activity.CategoryValueExtraInfo;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+/**
+ * @author Nadejda Mandrescu
+ */
+public class CategoryValuePossibleValuesProvider extends AbstractPossibleValuesDAOProvider {
+
+    public CategoryValuePossibleValuesProvider(String discriminatorValue) {
+        super(discriminatorValue, true);
+    }
+
+    @Override
+    protected List<Object[]> getDAOItems() {
+        return possibleValuesDAO.getCategoryValues(discriminatorValue);
+    }
+
+    @Override
+    protected Object getExtraInfo(Object[] items) {
+        Integer index = ((Number) (items[CategoryValueExtraInfo.EXTRA_INFO_START_INDEX])).intValue();
+        return new CategoryValueExtraInfo(index);
+    }
+
+    @Override
+    public boolean isAllowed(Long id) {
+        return CategoryManagerUtil.isExitingAmpCategoryValue(discriminatorValue, id, isCheckDeleted);
+    }
+
+}

@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -11,13 +11,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.SaveMode;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,6 +33,7 @@ public class ValueValidatorTest {
 
     private static final String SECTOR_FIELD = "sector";
     private static final String FY_FIELD = "fy";
+    private static final String DRAFT_FIELD = FieldMap.underscorify(ActivityFieldsConstants.IS_DRAFT);
 
     private static final String ROOT_SECTOR_NAME = "root sector";
     private static final Long ROOT_SECTOR_ID = 1L;
@@ -49,16 +55,12 @@ public class ValueValidatorTest {
     private ActivityImporter importer;
     private APIField sectorFieldDescription;
     private APIField fyFieldDescription;
+    private APIField draftFieldDescription;
+    private PossibleValuesEnumerator pvEnumerator;
     private PossibleValuesCache possibleValuesCached;
 
     @Before
     public void setUp() throws Exception {
-        importer = mock(ActivityImporter.class);
-        possibleValuesCached = mock(PossibleValuesCache.class);
-        when(importer.getPossibleValuesCache()).thenReturn(possibleValuesCached);
-        when(possibleValuesCached.getPossibleValues(SECTOR_FIELD)).thenReturn(SECTOR_POSSIBLE_VALUES);
-        when(possibleValuesCached.getPossibleValues(FY_FIELD)).thenReturn(FY_POSSIBLE_VALUES);
-
         sectorFieldDescription = new APIField();
         sectorFieldDescription.setFieldName(SECTOR_FIELD);
         sectorFieldDescription.setImportable(true);
@@ -70,10 +72,26 @@ public class ValueValidatorTest {
         fyFieldDescription.setImportable(true);
         fyFieldDescription.setIdOnly(true);
         fyFieldDescription.setApiType(new APIType(Collection.class, FieldType.LIST, Long.class));
+
+        List<APIField> apiFields = Arrays.asList(sectorFieldDescription, fyFieldDescription);
+        
+        draftFieldDescription = new APIField();
+        draftFieldDescription.setFieldName(DRAFT_FIELD);
+        draftFieldDescription.setImportable(true);
+        draftFieldDescription.setApiType(new APIType(Boolean.class));
+
+        pvEnumerator = mock(PossibleValuesEnumerator.class);
+        when(pvEnumerator.getPossibleValuesForField(SECTOR_FIELD, apiFields)).thenReturn(SECTOR_POSSIBLE_VALUES);
+        when(pvEnumerator.getPossibleValuesForField(FY_FIELD, apiFields)).thenReturn(FY_POSSIBLE_VALUES);
+
+        possibleValuesCached = new PossibleValuesCache(pvEnumerator, apiFields);
+
+        importer = mock(ActivityImporter.class);
+        when(importer.getPossibleValuesCache()).thenReturn(possibleValuesCached);
     }
 
     @Test
-    public void testPossibleValueNonRootSector() throws Exception {
+    public void testPossibleValueNonRootSector() {
         Map<String, Object> newFieldParent = new HashMap<>();
         newFieldParent.put(SECTOR_FIELD, LEAF_SECTOR_ID.intValue());
 
@@ -84,7 +102,7 @@ public class ValueValidatorTest {
     }
 
     @Test
-    public void testPossibleValueInvalidSector() throws Exception {
+    public void testPossibleValueInvalidSector() {
         Map<String, Object> newFieldParent = new HashMap<>();
         newFieldParent.put(SECTOR_FIELD, INVALID_SECTOR_ID.intValue());
 
@@ -96,7 +114,7 @@ public class ValueValidatorTest {
     }
 
     @Test
-    public void testPossibleValueFYValid() throws Exception {
+    public void testPossibleValueFYValid() {
         Map<String, Object> newFieldParent = new HashMap<>();
         newFieldParent.put(FY_FIELD, Arrays.asList(VALID_FY_ID));
 
@@ -107,7 +125,7 @@ public class ValueValidatorTest {
     }
 
     @Test
-    public void testPossibleValueFYInvalid() throws Exception {
+    public void testPossibleValueFYInvalid() {
         Map<String, Object> newFieldParent = new HashMap<>();
         newFieldParent.put(FY_FIELD, Arrays.asList(INVALID_FY_ID));
 
@@ -116,5 +134,20 @@ public class ValueValidatorTest {
         assertFalse("FY must be invalid",
                 valueValidator.isValid(importer, newFieldParent, fyFieldDescription, FY_FIELD));
         assertEquals(ActivityErrors.FIELD_INVALID_VALUE, valueValidator.getErrorMessage());
+    }
+
+    @Test
+    public void testDraftSubmissionDraftFMDisabled() {
+        when(importer.getRequestedSaveMode()).thenReturn(SaveMode.DRAFT);
+        when(importer.isDraftFMEnabled()).thenReturn(false);
+
+        Map<String, Object> newFieldParent = new HashMap<>();
+        newFieldParent.put(DRAFT_FIELD, true);
+
+        ValueValidator valueValidator = new ValueValidator();
+
+        assertFalse("Draft must be invalid",
+                valueValidator.isValid(importer, newFieldParent, draftFieldDescription, DRAFT_FIELD));
+        assertEquals(ActivityErrors.SAVE_AS_DRAFT_FM_DISABLED, valueValidator.getErrorMessage());
     }
 }

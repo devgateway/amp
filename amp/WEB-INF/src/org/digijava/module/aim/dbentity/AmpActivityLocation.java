@@ -5,9 +5,11 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 import java.io.Serializable;
 
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.ampapi.endpoints.common.values.providers.LocationPossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.util.Output;
 
@@ -25,6 +27,8 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
 
     @InterchangeableBackReference
     private AmpActivityVersion activity;
+
+    @PossibleValues(LocationPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Location", pickIdOnly = true, importable = true, uniqueConstraint = true,
             required = ALWAYS,
             dependencies={

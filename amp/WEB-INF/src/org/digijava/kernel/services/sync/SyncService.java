@@ -54,6 +54,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiFieldStructuralService;
 import org.digijava.kernel.ampapi.endpoints.currency.CurrencyService;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
 import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
@@ -151,7 +152,12 @@ public class SyncService implements InitializingBean {
         if (lastSyncTime == null) {
             systemDiff.updateTimestamp(new Date());
         }
-
+    
+    
+        systemDiff.setActivityFieldsStructuralChanges(existsActivityStructuralChanges(syncRequest));
+        systemDiff.setContactFieldsStructuralChanges(existsContactStructuralChanges(syncRequest));
+        systemDiff.setResourceFieldsStructuralChanges(existsResourceStructuralChanges(syncRequest));
+        
         updateDiffsForWsAndGs(systemDiff, lastSyncTime);
         updateDiffForWorkspaceMembers(systemDiff, lastSyncTime);
         updateDiffForUsers(systemDiff, lastSyncTime);
@@ -171,7 +177,7 @@ public class SyncService implements InitializingBean {
         systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
 
         systemDiff.setFields(shouldSyncFieldsDefinitions(lastSyncTime, systemDiff));
-
+        
         updateDiffForFeatureManager(systemDiff, syncRequest);
 
         if (systemDiff.getTimestamp() == null) {
@@ -324,13 +330,17 @@ public class SyncService implements InitializingBean {
     private void updateDiffsForActivities(SystemDiff systemDiff, SyncRequest syncRequest) {
         List<Long> userIds = syncRequest.getUserIds();
         Date lastSyncTime = syncRequest.getLastSyncTime();
+        
+        if (systemDiff.isActivityFieldsStructuralChanges()) {
+            lastSyncTime = null;
+        }
 
         List<ActivityChange> allChanges = getAllActivityChanges(lastSyncTime);
         List<ActivityChange> visibleActivities = getVisibleActivities(userIds);
 
         Set<String> visibleAmpIds = getAmpIds(visibleActivities);
         Set<String> offlineAmpIds = new HashSet<>();
-        if (syncRequest.getAmpIds() != null) {
+        if (syncRequest.getAmpIds() != null && !systemDiff.isActivityFieldsStructuralChanges()) {
             offlineAmpIds.addAll(syncRequest.getAmpIds());
         }
     
@@ -350,7 +360,7 @@ public class SyncService implements InitializingBean {
 
         deleted.addAll(subtract(offlineAmpIds, visibleAmpIds));
         modified.addAll(subtract(visibleAmpIds, offlineAmpIds));
-
+        
         systemDiff.setActivities(new ListDiff<>(new ArrayList<>(deleted), new ArrayList<>(modified)));
 
         Date maxModifiedDate = maxModifiedDate(visibleActivities);
@@ -422,7 +432,7 @@ public class SyncService implements InitializingBean {
     }
 
     private void updateDiffsForContacts(SystemDiff systemDiff, SyncRequest syncRequest) {
-        if (syncRequest.getLastSyncTime() == null) {
+        if (syncRequest.getLastSyncTime() == null || systemDiff.isContactFieldsStructuralChanges()) {
             systemDiff.setContacts(new ListDiff<>(emptyList(), ContactInfoUtil.getContactIds()));
         } else {
             List<AmpOfflineChangelog> changeLogs = loadChangeLog(syncRequest.getLastSyncTime(), asList(CONTACT));
@@ -440,7 +450,7 @@ public class SyncService implements InitializingBean {
     }
 
     private void updateDiffsForResources(SystemDiff systemDiff, SyncRequest syncRequest) {
-        if (syncRequest.getLastSyncTime() == null) {
+        if (syncRequest.getLastSyncTime() == null || systemDiff.isResourceFieldsStructuralChanges()) {
             systemDiff.setResources(new ListDiff<>(emptyList(), resourceService.getAllNodeUuids()));
         } else {
             List<String> updated = new ArrayList<>();
@@ -737,4 +747,24 @@ public class SyncService implements InitializingBean {
 
         return resources;
     }
+    
+    
+    private boolean existsActivityStructuralChanges(SyncRequest syncRequest) {
+        ApiFieldStructuralService structuralService = ApiFieldStructuralService.getInstance();
+        return structuralService.existsStructuralChanges(AmpFieldsEnumerator.getEnumerator().getActivityFields(),
+                syncRequest.getActivityFields());
+    }
+    
+    private boolean existsContactStructuralChanges(SyncRequest syncRequest) {
+        ApiFieldStructuralService structuralService = ApiFieldStructuralService.getInstance();
+        return structuralService.existsStructuralChanges(AmpFieldsEnumerator.getEnumerator().getContactFields(),
+                syncRequest.getContactFields());
+    }
+    
+    private boolean existsResourceStructuralChanges(SyncRequest syncRequest) {
+        ApiFieldStructuralService structuralService = ApiFieldStructuralService.getInstance();
+        return structuralService.existsStructuralChanges(AmpFieldsEnumerator.getEnumerator().getResourceFields(),
+                syncRequest.getResourceFields());
+    }
+    
 }

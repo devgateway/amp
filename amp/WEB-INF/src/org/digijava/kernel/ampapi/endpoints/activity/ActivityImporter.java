@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
+import static org.digijava.module.aim.util.ActivityUtil.loadActivity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -14,14 +15,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
@@ -54,19 +56,18 @@ import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.validator.ActivityValidationContext;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
@@ -88,38 +89,54 @@ public class ActivityImporter extends ObjectImporter {
     private AmpActivityVersion newActivity = null;
     private AmpActivityVersion oldActivity = null;
     private boolean update = false;
+    private ActivityImportRules rules;
+    private SaveContext saveContext;
     private SaveMode requestedSaveMode;
     private boolean downgradedToDraftSave = false;
     private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
     private boolean isDraftFMEnabled;
     private boolean isMultilingual;
-    private boolean isProcessApprovalStatus;
     private User currentUser;
+    private AmpTeamMember modifiedBy;
     private String sourceURL;
     private String endpointContextPath;
     // latest activity id in case there was attempt to update older version of an activity
     private Long latestActivityId;
-
-    private Date latestApporvalDate;
     
     private ResourceService resourceService = new ResourceService();
 
-    public ActivityImporter(List<APIField> apiFields) {
+    public ActivityImporter(List<APIField> apiFields, ActivityImportRules rules) {
         super(new InputValidatorProcessor(InputValidatorProcessor.getActivityFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getActivityBusinessRulesValidators()),
                 apiFields);
         setJsonErrorMapper(new ActivityErrorsMapper());
+        this.rules = rules;
+        this.saveContext = SaveContext.api(!rules.isProcessApprovalFields());
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {
+        Map<String, Object> input = newJson.any();
         this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
         this.update = update;
         this.currentUser = TeamUtil.getCurrentUser();
+        if (rules.isTrackEditors()) {
+            modifiedBy = TeamMemberUtil.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson.any()));
+        } else {
+            modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+            Long mId = modifiedBy == null ? null : modifiedBy.getAmpTeamMemId();
+            newJson.set(FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY), mId);
+            input.remove(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY));
+        }
+        if (!rules.isProcessApprovalFields()) {
+            input.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY));
+            input.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE));
+            input.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS));
+        }
         this.newJson = newJson;
         this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH, null);
         this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
         this.endpointContextPath = endpointContextPath;
-        this.isProcessApprovalStatus = AmpOfflineModeHolder.isAmpOfflineMode();
+        initRequestedSaveMode();
     }
 
     /**
@@ -132,42 +149,38 @@ public class ActivityImporter extends ObjectImporter {
     public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update, String endpointContextPath) {
         init(newJson, update, endpointContextPath);
 
-        List<ApiErrorMessage> saveModeErrors = determineRequestedSaveMode();
-        if (!saveModeErrors.isEmpty()) {
-            return saveModeErrors;
-        }
-
         // retrieve fields definition for internal use
         List<APIField> fieldsDef = getApiFields();
         // get existing activity if this is an update request
         Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
+        boolean oldActivityDraft = false;
 
-        AmpTeamMember teamMember = getModifiedBy(newJson);
-        if (teamMember == null) {
+        if (modifiedBy == null) {
             return Collections.singletonList(
                     SecurityErrors.INVALID_TEAM.withDetails("Invalid team member in modified_by field."));
         }
 
-        if (org.dgfoundation.amp.onepager.util.ActivityUtil.isActivityStale(ampActivityId)) {
+        Long activityGroupVersion = AIHelper.getActivityGroupVersionOrNull(newJson);
+        if (ActivityUtil.isActivityStale(ampActivityId, activityGroupVersion)) {
             return Collections.singletonList(
                     ActivityErrors.ACTIVITY_IS_STALE.withDetails("Activity is not the latest version."));
         }
 
-        List<ApiErrorMessage> messages = checkPermissions(update, ampActivityId, teamMember);
+        List<ApiErrorMessage> messages = checkPermissions(update, ampActivityId, modifiedBy);
         if (!messages.isEmpty()) {
             return messages;
         }
 
         // check if any error were already detected in upper layers
         Map<Integer, ApiErrorMessage> existingErrors = (TreeMap<Integer, ApiErrorMessage>) newJson.get(ActivityEPConstants.INVALID);
-        
+
         if (existingErrors != null && existingErrors.size() > 0) {
             errors.putAll(existingErrors);
         }
 
         if (ampActivityId != null) {
             try {
-                oldActivity = ActivityUtil.loadActivity(ampActivityId);
+                oldActivity = loadActivity(ampActivityId);
             } catch (DgException e) {
                 logger.error(e.getMessage());
                 errors.put(ActivityErrors.ACTIVITY_NOT_LOADED.id, ActivityErrors.ACTIVITY_NOT_LOADED);
@@ -185,8 +198,9 @@ public class ActivityImporter extends ObjectImporter {
 
             if (oldActivity != null) {
                 currentVersion = oldActivity.getAmpActivityGroup().getVersion();
+                oldActivityDraft = oldActivity.getDraft();
 
-                key = ActivityGatekeeper.lockActivity(activityId, teamMember.getAmpTeamMemId());
+                key = ActivityGatekeeper.lockActivity(activityId, modifiedBy.getAmpTeamMemId());
 
                 if (key == null) { //lock not acquired
                     logger.error("Cannot aquire lock during IATI update for activity " + activityId);
@@ -197,15 +211,25 @@ public class ActivityImporter extends ObjectImporter {
                 }
 
                 newActivity = oldActivity;
-                // REFACTOR: we may no longer need to use old activity
                 oldActivity = ActivityVersionUtil.cloneActivity(oldActivity);
                 oldActivity.setAmpId(newActivity.getAmpId());
                 oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
-                this.latestApporvalDate = oldActivity.getApprovalDate();
 
-                if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-                    PersistenceManager.getSession().evict(newActivity.getAmpActivityGroup());
-                    newActivity.getAmpActivityGroup().setVersion(-1L);
+                PersistenceManager.getSession().evict(newActivity.getAmpActivityGroup());
+                newActivity.getAmpActivityGroup().setVersion(-1L);
+                // TODO AMP-28993: remove explicitly resetting createdBy since it is cleared during init
+                if (!rules.isTrackEditors()) {
+                    Long createdById = oldActivity.getActivityCreator().getAmpTeamMemId();
+                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY), createdById);
+                }
+                // TODO AMP-28993: remove explicitly resetting approval fields since they are cleared during init
+                if (!rules.isProcessApprovalFields()) {
+                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY),
+                            oldActivity.getApprovedBy() == null ? null : oldActivity.getApprovedBy().getAmpTeamMemId());
+                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE),
+                            DateTimeUtil.formatISO8601Timestamp(oldActivity.getApprovalDate()));
+                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS),
+                            oldActivity.getApprovalStatus().getId());
                 }
             } else if (!update) {
                 newActivity = new AmpActivityVersion();
@@ -215,12 +239,11 @@ public class ActivityImporter extends ObjectImporter {
 
             validateAndImport(newActivity, newJsonParent);
             if (errors.isEmpty()) {
-                // save new activity
                 prepareToSave();
-
-                newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
-                        translations, teamMember, Boolean.TRUE.equals(newActivity.getDraft()),
-                        PersistenceManager.getSession(), SaveContext.api(!isProcessApprovalStatus));
+                boolean draftChange = ActivityUtil.detectDraftChange(newActivity, oldActivityDraft);
+                newActivity = ActivityUtil.saveActivityNewVersion(newActivity, translations, modifiedBy,
+                        Boolean.TRUE.equals(newActivity.getDraft()), draftChange,
+                        PersistenceManager.getSession(), saveContext);
 
                 postProcess();
             } else {
@@ -249,29 +272,35 @@ public class ActivityImporter extends ObjectImporter {
             }
         } finally {
             ActivityGatekeeper.unlockActivity(activityId, key);
+            ActivityValidationContext.set(null);
         }
 
         return new ArrayList<ApiErrorMessage>(errors.values());
     }
 
-    private List<ApiErrorMessage> determineRequestedSaveMode() {
-        if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-            String draftFieldName = FieldMap.underscorify(ActivityFieldsConstants.IS_DRAFT);
-            Object draftAsObj = newJson.get(draftFieldName);
-            if (draftAsObj == null) {
-                return Collections.singletonList(ActivityErrors.FIELD_REQUIRED.withDetails(draftFieldName));
-            }
-            if (!(draftAsObj instanceof Boolean)) {
-                return Collections.singletonList(ActivityErrors.FIELD_INVALID_TYPE.withDetails(draftFieldName));
-            }
-            boolean draft = (boolean) draftAsObj;
-            requestedSaveMode = draft ? DRAFT : SUBMIT;
-            if (requestedSaveMode == DRAFT && !isDraftFMEnabled) {
-                return Collections.singletonList(ActivityErrors.SAVE_AS_DRAFT_FM_DISABLED.withDetails(draftFieldName));
+    @Override
+    protected void beforeViolationsCheck() {
+        newActivity.setDraft(isDraft());
+
+        if (rules.isProcessApprovalFields()) {
+            Date newApprovalDate = newActivity.getApprovalDate();
+            if (newApprovalDate != null
+                    && (oldActivity == null || !newApprovalDate.equals(oldActivity.getApprovalDate()))
+                    || AmpARFilter.VALIDATED_ACTIVITY_STATUS.contains(newActivity.getApprovalStatus())) {
+                newActivity.setApprovalDate(new Date());
             }
         }
 
-        return Collections.emptyList();
+        ActivityValidationContext avc = new ActivityValidationContext();
+        avc.setNewActivity(newActivity);
+        avc.setOldActivity(oldActivity);
+        ActivityValidationContext.set(avc);
+
+        ActivityUtil.prepareToSave(newActivity, oldActivity, modifiedBy, newActivity.getDraft(), saveContext);
+    }
+
+    public boolean isDraft() {
+        return DRAFT.equals(requestedSaveMode) || this.downgradedToDraftSave;
     }
 
     /**
@@ -279,12 +308,8 @@ public class ActivityImporter extends ObjectImporter {
      * For AMP Offline clients this is the value retrieved from modified_by field of the activity. For other clients
      * it is the session user.
      */
-    public AmpTeamMember getModifiedBy(JsonBean newJson) {
-        if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-            return TeamMemberUtil.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson));
-        } else {
-            return TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
-        }
+    public AmpTeamMember getModifiedBy() {
+        return modifiedBy;
     }
 
     /**
@@ -323,11 +348,6 @@ public class ActivityImporter extends ObjectImporter {
         } else {
             return Collections.emptyList();
         }
-    }
-
-    @Override
-    protected boolean ignoreUnknownFields() {
-        return AmpOfflineModeHolder.isAmpOfflineMode();
     }
 
     @Override
@@ -495,35 +515,11 @@ public class ActivityImporter extends ObjectImporter {
         newActivity.setLastImportedAt(new Date());
         newActivity.setLastImportedBy(currentUser);
 
-        if (isProcessApprovalStatus) {
-            Date newApprovalDate = newActivity.getApprovalDate();
-            if (newApprovalDate != null && !newApprovalDate.equals(this.latestApporvalDate)) {
-                newActivity.setApprovalDate(new Date());
-            }
-        } else {
-            // this will be obsolete once we will no longer cleanup fields
-            newActivity.setApprovalDate(this.latestApporvalDate);
-        }
-
         if (!update) {
             newActivity.setAmpActivityGroup(null);
         }
 
         newActivity.setChangeType(determineChangeType().toString());
-        if (requestedSaveMode != null) {
-            newActivity.setDraft(requestedSaveMode == DRAFT);
-        } else {
-            // IATI draft semantics
-            if (update) {
-                // on update try to keep previous status
-                // if validation for non-draft activity failed but it succeeded for draft activity then change to draft true
-                if (isDraftFMEnabled && downgradedToDraftSave) {
-                    newActivity.setDraft(true);
-                }
-            } else {
-                newActivity.setDraft(isDraftFMEnabled);
-            }
-        }
         initDefaults();
     }
 
@@ -706,6 +702,15 @@ public class ActivityImporter extends ObjectImporter {
         return isDraftFMEnabled;
     }
 
+    private void initRequestedSaveMode() {
+        String draftFieldName = FieldMap.underscorify(ActivityFieldsConstants.IS_DRAFT);
+        Object draftAsObj = newJson.get(draftFieldName);
+        if (draftAsObj != null && draftAsObj instanceof Boolean) {
+            boolean draft = (boolean) draftAsObj;
+            requestedSaveMode = draft ? DRAFT : SUBMIT;
+        }
+    }
+
     /**
      * Return save mode for validation purposes. If this value is null then validators can assume that they validate
      * activity for submission (non-draft) with possibility to downgrade with draft save. However if returned value
@@ -735,6 +740,10 @@ public class ActivityImporter extends ObjectImporter {
      */
     public boolean isMultilingual() {
         return isMultilingual;
+    }
+
+    public ActivityImportRules getImportRules() {
+        return rules;
     }
 
     /**

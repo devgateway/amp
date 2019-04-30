@@ -423,16 +423,17 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
       return PersistenceManager.getSession().createSQLQuery(queryString).addEntity(AmpActivityLocation.class)
               .setParameter("actId", activityId, LongType.INSTANCE).list();
   }
-
-  /**
-   * Load activity from db.
-   * Use this one instead of method below this if you realy want to load all data.
-   * @author irakli
-   * @param id
-   * @return
-   * @throws DgException
-   */
-  public static AmpActivityVersion loadActivity(Long id) throws DgException {
+    
+    
+    /**
+     * Load activity from db.
+     * Use this one instead of method below this if you realy want to load all data.
+     * @author irakli
+     * @param id
+     * @return
+     * @throws DgException
+     */
+    public static AmpActivityVersion loadActivity(Long id) throws DgException {
         AmpActivityVersion result = null;
         Session session = PersistenceManager.getRequestDBSession();
         try {
@@ -469,9 +470,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 Hibernate.initialize(str.getType());
                 Hibernate.initialize(str.getCoordinates());
             }
-
+            
             ActivityUtil.initializeForApi(result);
-
+            
         } catch (ObjectNotFoundException e) {
             logger.debug("AmpActivityVersion with id=" + id + " not found");
         } catch (Exception e) {
@@ -479,7 +480,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         }
         return result;
     }
-
 
     public static void initializeForApi(AmpActivityVersion activity) {
         // initialize the fiscal year list field. Used in Activity API only
@@ -2066,7 +2066,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             boolean isTeamMemberValidator = isTeamMemberValidator(teamMember, activity);
             
             if (isTeamMemberValidator) {
-                if ("alledits".equalsIgnoreCase(validationOption)) {
+                if (Constants.PROJECT_VALIDATION_FOR_ALL_EDITS.equalsIgnoreCase(validationOption)) {
                     if (activity.getTeam() != null
                             && (ApprovalStatus.STARTED.equals(activity.getApprovalStatus())
                             || ApprovalStatus.EDITED.equals(activity.getApprovalStatus()))) {
@@ -2074,7 +2074,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     }
                 } else {
                     //it will display the validate label only if it is just started and was not approved not even once
-                    if ("newonly".equalsIgnoreCase(validationOption)
+                    if (Constants.PROJECT_VALIDATION_FOR_NEW_ONLY.equalsIgnoreCase(validationOption)
                             && ApprovalStatus.STARTED.equals(activity.getApprovalStatus())) {
                             canValidate = true;
                         }

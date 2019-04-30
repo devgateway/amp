@@ -4,14 +4,14 @@ import static java.util.Collections.singletonList;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.digijava.kernel.services.AmpFieldsEnumerator;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
@@ -42,7 +42,7 @@ public class ContactImporter extends ObjectImporter {
         this.newJson = newJson;
 
         Object contactJsonId = newJson.get(ContactEPConstants.ID);
-        
+
         if (contactJsonId != null) {
             if (contactId != null) {
                 if (!contactId.equals(getLongOrNull(contactJsonId))) {
@@ -72,7 +72,7 @@ public class ContactImporter extends ObjectImporter {
                 contact = new AmpContact();
             } else {
                 contact = (AmpContact) PersistenceManager.getSession().get(AmpContact.class, contactId);
-                
+
                 if (contact == null) {
                     ApiErrorResponse.reportResourceNotFound(ContactErrors.CONTACT_NOT_FOUND);
                 }
@@ -114,10 +114,5 @@ public class ContactImporter extends ObjectImporter {
     public AmpContact getContact() {
         return contact;
     }
-    
-    @Override
-    protected boolean ignoreUnknownFields() {
-        return AmpOfflineModeHolder.isAmpOfflineMode();
-    }
-    
+
 }

@@ -9,6 +9,7 @@ import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
@@ -49,7 +50,7 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
     protected Double funAmount;
     
     @Interchangeable(fieldTitle = "Currency", importable = true, fmPath = FMVisibility.PARENT_FM + "/Currency",
-            pickIdOnly = true)
+            pickIdOnly = true, commonPV = CommonFieldsConstants.COMMON_CURRENCY)
     @VersionableFieldSimple(fieldTitle = "Currency")
     private AmpCurrency currency;
     

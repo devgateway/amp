@@ -191,7 +191,7 @@ public class PossibleValuesEnumeratorTest {
         private String field;
     }
 
-    static class ThrowingPossibleValuesProvider extends PossibleValuesProvider {
+    static class ThrowingPossibleValuesProvider implements PossibleValueProviderTest {
         @Override
         public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
             throw new RuntimeException("some reason");

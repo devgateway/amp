@@ -507,7 +507,7 @@ public class ActivityUtil {
         }
     }
 
-    private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a,
+    private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean savedAsDraft, AmpActivityFields a,
             AmpActivityVersion oldA, boolean newActivity, boolean rejected) {
         boolean teamLeadFlag =  isApprover(ampCurrentMember);
         Boolean crossTeamValidation = ampCurrentMember.getAmpTeam().getCrossteamvalidation();
@@ -517,7 +517,7 @@ public class ActivityUtil {
         String validation = getValidationSetting(ampCurrentMember);
         if (isProjectValidationOn(validation)) {
             if (teamLeadFlag) {
-                if (draft) {
+                if (savedAsDraft) {
                     if (rejected) {
                         a.setApprovalStatus(ApprovalStatus.REJECTED);
                     } else {

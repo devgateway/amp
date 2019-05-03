@@ -1,13 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.contact;
 
-import static java.util.Collections.singletonList;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -30,15 +26,15 @@ public class ContactImporter extends ObjectImporter {
                 AmpFieldsEnumerator.getEnumerator().getContactFields());
     }
 
-    public List<ApiErrorMessage> createContact(JsonBean newJson) {
+    public ContactImporter createContact(JsonBean newJson) {
         return importContact(null, newJson);
     }
 
-    public List<ApiErrorMessage> updateContact(Long contactId, JsonBean newJson) {
+    public ContactImporter updateContact(Long contactId, JsonBean newJson) {
         return importContact(contactId, newJson);
     }
 
-    private List<ApiErrorMessage> importContact(Long contactId, JsonBean newJson) {
+    private ContactImporter importContact(Long contactId, JsonBean newJson) {
         this.newJson = newJson;
 
         Object contactJsonId = newJson.get(ContactEPConstants.ID);
@@ -46,24 +42,28 @@ public class ContactImporter extends ObjectImporter {
         if (contactJsonId != null) {
             if (contactId != null) {
                 if (!contactId.equals(getLongOrNull(contactJsonId))) {
-                    return singletonList(ContactErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.ID));
+                    addError(ContactErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.ID));
+                    return this;
                 }
             } else {
-                return singletonList(ContactErrors.FIELD_READ_ONLY.withDetails(ContactEPConstants.ID));
+                addError(ContactErrors.FIELD_READ_ONLY.withDetails(ContactEPConstants.ID));
+                return this;
             }
         }
 
         Object createdById = newJson.get(ContactEPConstants.CREATED_BY);
         AmpTeamMember createdBy = TeamMemberUtil.getAmpTeamMember(getLongOrNull(createdById));
         if (createdById != null && createdBy == null) {
-            return singletonList(ContactErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.CREATED_BY));
+            addError(ContactErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.CREATED_BY));
+            return this;
         }
         if (contactId == null && createdBy == null) {
             TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
             if (teamMember != null) {
                 createdBy = TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId());
             } else {
-                return singletonList(ContactErrors.FIELD_REQUIRED.withDetails(ContactEPConstants.CREATED_BY));
+                addError(ContactErrors.FIELD_REQUIRED.withDetails(ContactEPConstants.CREATED_BY));
+                return this;
             }
         }
 
@@ -92,7 +92,7 @@ public class ContactImporter extends ObjectImporter {
             throw new RuntimeException("Failed to import contact", e);
         }
 
-        return new ArrayList<>(errors.values());
+        return this;
     }
 
     private Long getLongOrNull(Object obj) {
@@ -113,6 +113,31 @@ public class ContactImporter extends ObjectImporter {
 
     public AmpContact getContact() {
         return contact;
+    }
+    
+    /**
+     * Get the result of import/update contact in JsonBean format
+     *
+     * @return JsonBean the result of the import or update action
+     */
+    public JsonBean getResult() {
+        JsonBean result;
+        if (errors.size() == 0 && contact == null) {
+            result = ApiError.toError(ApiError.UNKOWN_ERROR);
+        } else if (errors.size() > 0) {
+            result = ApiError.toError(errors.values());
+            result.set(ContactEPConstants.CONTACT, newJson);
+        } else {
+            result = new JsonBean();
+            result.set(ContactEPConstants.ID, contact.getId());
+            result.set(ContactEPConstants.NAME, contact.getName());
+            result.set(ContactEPConstants.LAST_NAME, contact.getLastname());
+        }
+        if (!warnings.isEmpty()) {
+            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings.values()));
+        }
+        
+        return result;
     }
 
 }

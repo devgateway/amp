@@ -30,26 +30,6 @@ public final class ContactUtil {
     private ContactUtil() {
     }
 
-    public static JsonBean getImportResult(AmpContact contact, JsonBean json, List<ApiErrorMessage> errors,
-            Collection<ApiErrorMessage> warnings) {
-        JsonBean result;
-        if (errors.size() == 0 && contact == null) {
-            result = ApiError.toError(ApiError.UNKOWN_ERROR);
-        } else if (errors.size() > 0) {
-            result = ApiError.toError(errors);
-            result.set(ContactEPConstants.CONTACT, json);
-        } else {
-            result = new JsonBean();
-            result.set(ContactEPConstants.ID, contact.getId());
-            result.set(ContactEPConstants.NAME, contact.getName());
-            result.set(ContactEPConstants.LAST_NAME, contact.getLastname());
-        }
-        if (!warnings.isEmpty()) {
-            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings));
-        }
-        return result;
-    }
-
     public static Collection<JsonBean> getContacts(List<Long> ids) {
         Map<Long, JsonBean> jsonContacts = new TreeMap<>();
         ids = new ArrayList<>(new TreeSet<>(ids));
@@ -77,17 +57,6 @@ public final class ContactUtil {
         // Always succeed on normal exit, no matter if some activities export failed
         EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_OK);
         return jsonContacts.values();
-    }
-
-    private static void reportContactsNotFound(Set<Long> ids, Map<Long, JsonBean> jsonContacts) {
-        if (jsonContacts.size() != ids.size()) {
-            ids.removeAll(jsonContacts.keySet());
-            ids.forEach(id -> {
-                JsonBean notFoundJson = ApiError.toError(ContactErrors.CONTACT_NOT_FOUND);
-                notFoundJson.set(ContactEPConstants.ID, id);
-                jsonContacts.put(id, notFoundJson);
-            });
-        }
     }
 
     public static JsonBean getContact(Long id) {

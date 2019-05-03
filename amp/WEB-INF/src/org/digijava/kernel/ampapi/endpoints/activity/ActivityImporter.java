@@ -6,7 +6,7 @@ import static org.digijava.module.aim.util.ActivityUtil.loadActivity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,8 +32,10 @@ import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.ActivityErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
@@ -141,9 +143,9 @@ public class ActivityImporter extends ObjectImporter {
      *
      * @param newJson new activity configuration
      * @param update  flags whether this is an import or an update request
-     * @return a list of API errors, that is empty if no error detected
+     * @return ActivityImporter instance
      */
-    public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update, String endpointContextPath) {
+    public ActivityImporter importOrUpdate(JsonBean newJson, boolean update, String endpointContextPath) {
         init(newJson, update, endpointContextPath);
 
         // retrieve fields definition for internal use
@@ -153,19 +155,20 @@ public class ActivityImporter extends ObjectImporter {
         boolean oldActivityDraft = false;
 
         if (modifiedBy == null) {
-            return Collections.singletonList(
-                    SecurityErrors.INVALID_TEAM.withDetails("Invalid team member in modified_by field."));
+            addError(SecurityErrors.INVALID_TEAM.withDetails("Invalid team member in modified_by field."));
+            return this;
         }
 
         Long activityGroupVersion = AIHelper.getActivityGroupVersionOrNull(newJson);
         if (ActivityUtil.isActivityStale(ampActivityId, activityGroupVersion)) {
-            return Collections.singletonList(
-                    ActivityErrors.ACTIVITY_IS_STALE.withDetails("Activity is not the latest version."));
+            addError(ActivityErrors.ACTIVITY_IS_STALE.withDetails("Activity is not the latest version."));
+            return this;
         }
 
-        List<ApiErrorMessage> messages = checkPermissions(update, ampActivityId, modifiedBy);
-        if (!messages.isEmpty()) {
-            return messages;
+        checkPermissions(update, ampActivityId, modifiedBy);
+        
+        if (!errors.isEmpty()) {
+            return this;
         }
 
         // check if any error were already detected in upper layers
@@ -186,7 +189,7 @@ public class ActivityImporter extends ObjectImporter {
 
         String activityId = ampActivityId == null ? null : ampActivityId.toString();
         String key = null;
-
+        
         Long currentVersion = null;
 
         try {
@@ -272,7 +275,7 @@ public class ActivityImporter extends ObjectImporter {
             ActivityValidationContext.set(null);
         }
 
-        return new ArrayList<ApiErrorMessage>(errors.values());
+        return this;
     }
 
     @Override
@@ -315,35 +318,31 @@ public class ActivityImporter extends ObjectImporter {
      * @param update true for edit, false for add
      * @param ampActivityId activity id to check, used only for edit case
      * @param teamMember team member to check
-     * @return list of errors, in case of success list will be empty
+     *
      */
-    private List<ApiErrorMessage> checkPermissions(boolean update, Long ampActivityId, AmpTeamMember teamMember) {
+    private void checkPermissions(boolean update, Long ampActivityId, AmpTeamMember teamMember) {
         if (update) {
-            return checkEditPermissions(teamMember, ampActivityId);
+            checkEditPermissions(teamMember, ampActivityId);
         } else {
-            return checkAddPermissions(teamMember);
+            checkAddPermissions(teamMember);
         }
     }
 
     /**
      * Check if team member can add activities.
      */
-    private List<ApiErrorMessage> checkAddPermissions(AmpTeamMember teamMember) {
+    private void checkAddPermissions(AmpTeamMember teamMember) {
         if (!ActivityInterchangeUtils.addActivityAllowed(new TeamMember(teamMember))) {
-            return Collections.singletonList(SecurityErrors.NOT_ALLOWED.withDetails("Adding activity is not allowed"));
-        } else {
-            return Collections.emptyList();
+            addError(SecurityErrors.NOT_ALLOWED.withDetails("Adding activity is not allowed"));
         }
     }
 
     /**
      * Check if team member can edit the activity.
      */
-    private List<ApiErrorMessage> checkEditPermissions(AmpTeamMember ampTeamMember, Long activityId) {
+    private void checkEditPermissions(AmpTeamMember ampTeamMember, Long activityId) {
         if (!ActivityInterchangeUtils.isEditableActivity(new TeamMember(ampTeamMember), activityId)) {
-            return Collections.singletonList(SecurityErrors.NOT_ALLOWED.withDetails("No right to edit this activity"));
-        } else {
-            return Collections.emptyList();
+            addError(SecurityErrors.NOT_ALLOWED.withDetails("No right to edit this activity"));
         }
     }
 
@@ -759,6 +758,39 @@ public class ActivityImporter extends ObjectImporter {
      */
     public void setLatestActivityId(Long latestActivityId) {
         this.latestActivityId = latestActivityId;
+    }
+    
+    /**
+     * Get the result of import/update activity in JsonBean format
+     *
+     * @return JsonBean the result of the import or update action
+     */
+    public JsonBean getResult() {
+        JsonBean result = null;
+        if (errors.size() == 0 && newActivity == null) {
+            // no new activity, but also errors are missing -> unknown error
+            result = ApiError.toError(ApiError.UNKOWN_ERROR);
+        } else if (errors.size() > 0) {
+            result = ApiError.toError(errors.values());
+            result.set(ActivityEPConstants.ACTIVITY, newJson);
+        } else {
+            List<JsonBean> activities = null;
+            if (newActivity != null && newActivity.getAmpActivityId() != null) {
+                // editable, viewable, since was just created/updated
+                activities = Arrays.asList(ProjectList.getActivityInProjectListFormat(newActivity, true, true));
+            }
+            if (activities == null || activities.size() == 0) {
+                result = ApiError.toError(ApiError.UNKOWN_ERROR);
+                result.set(ActivityEPConstants.ACTIVITY, newJson);
+            } else {
+                result = activities.get(0);
+            }
+        }
+        if (warnings.size() > 0) {
+            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings.values()));
+        }
+        
+        return result;
     }
 
 }

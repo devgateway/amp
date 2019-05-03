@@ -153,10 +153,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                     + "</pre>")
 
     public JsonBean createResource(JsonBean resource) {
-        ResourceImporter importer = new ResourceImporter();
-        List<ApiErrorMessage> errors = importer.createResource(resource);
-        return ResourceUtil.getImportResult(importer.getResource(), importer.getNewJson(), errors,
-                importer.getWarnings());
+        return new ResourceImporter().createResource(resource).getResult();
     }
 
     @PUT
@@ -191,11 +188,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                 FileUtils.copyInputStreamToFile(uploadedInputStream, file);
                 formFile = new JerseyFileAdapter(fileDetail, file);
             }
-
-            ResourceImporter importer = new ResourceImporter();
-            List<ApiErrorMessage> errors = importer.createResource(resource, formFile);
-            return ResourceUtil.getImportResult(importer.getResource(), importer.getNewJson(), errors,
-                    importer.getWarnings());
+            return new ResourceImporter().createResource(resource, formFile).getResult();
         } catch (IOException e) {
             logger.error("Failed to process file.", e);
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST,

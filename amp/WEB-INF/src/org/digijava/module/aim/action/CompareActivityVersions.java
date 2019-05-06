@@ -22,31 +22,25 @@ import org.apache.wicket.util.string.Strings;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
-import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
-import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
-import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.form.CompareActivityVersionsForm;
-import org.digijava.module.aim.helper.ActivityHistory;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.versioning.ActivityComparisonContext;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.FlushMode;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -84,7 +78,6 @@ public class CompareActivityVersions extends DispatchAction {
             //activity.setModifiedDate(Calendar.getInstance().getTime()); 
             group.setAmpActivityLastVersion(activity);
             session.update(group);
-            //session.update(activity);
 
             Site site = RequestUtils.getSite(request);
             Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
@@ -95,9 +88,11 @@ public class CompareActivityVersions extends DispatchAction {
         }
 
         vForm.setOutputCollection(new ArrayList<CompareOutput>());
-      
-       vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId(),
-          vForm.getActivityTwoId()));
+        ActivityComparisonContext context = new ActivityComparisonContext(TLSUtils.getSite().getId(),
+                TLSUtils.getSite().getName(), TLSUtils.getEffectiveLangCode());
+
+        vForm.setOutputCollectionGrouped(ActivityVersionUtil.compareActivities(vForm.getActivityOneId(),
+          vForm.getActivityTwoId(), context));
        
     
         return mapping.findForward("forward");
@@ -357,7 +352,7 @@ public class CompareActivityVersions extends DispatchAction {
                                     HttpServletResponse response) throws Exception {
 
         CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
-        vForm.setListOfOutputCollectionGrouped(ActivityVersionUtil.getOutputCollectionGrouped());
+        vForm.setActivityComparisonResultList(ActivityVersionUtil.getOutputCollectionGrouped());
 
         return mapping.findForward("forward");
     }

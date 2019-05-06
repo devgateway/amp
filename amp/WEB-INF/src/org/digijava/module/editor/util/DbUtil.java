@@ -484,7 +484,7 @@ public class DbUtil {
      * @throws EditorException
      */
     public static String getEditorBody(Site site, String editorKey, String language) throws EditorException {
-        return getEditorBody( site.getSiteId(),  editorKey,  language);
+        return getEditorBody(site.getSiteId(),  editorKey,  language);
     }
 
     /**

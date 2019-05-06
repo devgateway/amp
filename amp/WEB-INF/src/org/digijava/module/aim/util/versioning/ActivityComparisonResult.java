@@ -1,4 +1,4 @@
-package org.digijava.module.aim.util;
+package org.digijava.module.aim.util.versioning;
 
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 
@@ -9,12 +9,15 @@ public class ActivityComparisonResult {
 
     private Long activityId;
     private String name;
+    private Long ampAuditLoggerId;
     private Map<String, List<CompareOutput>> compareOutput;
 
-    public ActivityComparisonResult(Long activityid, Map<String, List<CompareOutput>> compareOutput, String name) {
-        this.activityId = activityid;
+    public ActivityComparisonResult(Long activityId, Map<String, List<CompareOutput>> compareOutput, String name,
+                                    Long  ampAuditLoggerId) {
+        this.activityId = activityId;
         this.compareOutput = compareOutput;
         this.name = name;
+        this.ampAuditLoggerId = ampAuditLoggerId;
     }
     public Long getActivityId() {
         return activityId;
@@ -38,5 +41,13 @@ public class ActivityComparisonResult {
 
     public void setCompareOutput(Map<String, List<CompareOutput>> compareOutput) {
         this.compareOutput = compareOutput;
+    }
+
+    public Long getAmpAuditLoggerId() {
+        return ampAuditLoggerId;
+    }
+
+    public void setAmpAuditLoggerId(Long ampAuditLoggerId) {
+        this.ampAuditLoggerId = ampAuditLoggerId;
     }
 }

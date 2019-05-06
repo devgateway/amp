@@ -36,6 +36,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceService;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
@@ -101,6 +102,8 @@ public class ActivityImporter extends ObjectImporter {
     private String endpointContextPath;
     // latest activity id in case there was attempt to update older version of an activity
     private Long latestActivityId;
+    
+    private ResourceService resourceService = new ResourceService();
 
     public ActivityImporter(List<APIField> apiFields, ActivityImportRules rules) {
         super(new InputValidatorProcessor(InputValidatorProcessor.getActivityFormatValidators()),
@@ -752,6 +755,10 @@ public class ActivityImporter extends ObjectImporter {
 
     public void downgradeToDraftSave() {
         this.downgradedToDraftSave = true;
+    }
+    
+    public ResourceService getResourceService() {
+        return this.resourceService;
     }
 
     /**

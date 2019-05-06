@@ -111,6 +111,9 @@ public class APIField {
     @JsonIgnore
     private TranslationSettings.TranslationType translationType;
 
+    @JsonIgnore
+    private boolean isCollection;
+
     public void setFieldAccessor(FieldAccessor fieldAccessor) {
         this.fieldAccessor = fieldAccessor;
     }
@@ -329,7 +332,7 @@ public class APIField {
     
     @JsonIgnore
     public boolean isCollection() {
-        return Collection.class.isAssignableFrom(internalFieldType);
+        return isCollection;
     }
     
     @JsonIgnore
@@ -339,6 +342,7 @@ public class APIField {
     
     public void setInternalFieldType(Class<?> internalFieldType) {
         this.internalFieldType = internalFieldType;
+        this.isCollection = Collection.class.isAssignableFrom(internalFieldType);
     }
     
     @JsonIgnore

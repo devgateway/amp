@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
+import static org.digijava.module.aim.util.ActivityUtil.loadActivity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
@@ -57,7 +59,6 @@ import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
@@ -156,7 +157,7 @@ public class ActivityImporter extends ObjectImporter {
         }
 
         Long activityGroupVersion = AIHelper.getActivityGroupVersionOrNull(newJson);
-        if (org.dgfoundation.amp.onepager.util.ActivityUtil.isActivityStale(ampActivityId, activityGroupVersion)) {
+        if (ActivityUtil.isActivityStale(ampActivityId, activityGroupVersion)) {
             return Collections.singletonList(
                     ActivityErrors.ACTIVITY_IS_STALE.withDetails("Activity is not the latest version."));
         }
@@ -175,7 +176,7 @@ public class ActivityImporter extends ObjectImporter {
 
         if (ampActivityId != null) {
             try {
-                oldActivity = ActivityUtil.loadActivity(ampActivityId);
+                oldActivity = loadActivity(ampActivityId);
             } catch (DgException e) {
                 logger.error(e.getMessage());
                 errors.put(ActivityErrors.ACTIVITY_NOT_LOADED.id, ActivityErrors.ACTIVITY_NOT_LOADED);
@@ -235,7 +236,7 @@ public class ActivityImporter extends ObjectImporter {
             if (errors.isEmpty()) {
                 prepareToSave();
 
-                newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity,
+                newActivity = ActivityUtil.saveActivityNewVersion(newActivity,
                         translations, modifiedBy, Boolean.TRUE.equals(newActivity.getDraft()),
                         PersistenceManager.getSession(), saveContext);
 
@@ -290,8 +291,7 @@ public class ActivityImporter extends ObjectImporter {
         avc.setOldActivity(oldActivity);
         ActivityValidationContext.set(avc);
 
-        org.dgfoundation.amp.onepager.util.ActivityUtil.prepareToSave(
-                newActivity, oldActivity, modifiedBy, newActivity.getDraft(), saveContext);
+        ActivityUtil.prepareToSave(newActivity, oldActivity, modifiedBy, newActivity.getDraft(), saveContext);
     }
 
     public boolean isDraft() {

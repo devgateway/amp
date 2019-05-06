@@ -22,11 +22,17 @@ public class ApprovalStatusConstraint implements ConstraintValidator<AllowedAppr
 
     @Override
     public boolean isValid(ApprovalStatus approvalStatus, ConstraintValidatorContext context) {
+
         if (approvalStatus == null) {
             return false;
         }
+
         ActivityValidationContext avc = ActivityValidationContext.getOrThrow();
+        AmpActivityFields oldA = avc.getOldActivity();
         AmpActivityFields activity = avc.getNewActivity();
+
+        boolean isNew = ActivityUtil.isNewActivity(activity);
+        boolean oldDraft = oldA != null ? oldA.getDraft() : false;
 
         if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS_SET.contains(approvalStatus)) {
             if (!ActivityUtil.isProjectValidationOn()) {
@@ -36,15 +42,12 @@ public class ApprovalStatusConstraint implements ConstraintValidator<AllowedAppr
             Long activityTeamId = activity.getTeam().getAmpTeamId();
 
             if (REJECTED.equals(approvalStatus)) {
-                return ActivityUtil.canReject(activity.getModifiedBy(), activityTeamId, activity.getDraft());
+                return activity.getDraft() && ActivityUtil.canReject(activity.getModifiedBy(), oldDraft, isNew);
             }
 
-            AmpActivityFields oldA = avc.getOldActivity();
             ApprovalStatus oas = oldA == null ? null : oldA.getApprovalStatus();
             return activity.getDraft() || !ActivityUtil.canApprove(activity.getModifiedBy(), activityTeamId, oas);
-
         } else {
-            boolean isNew = ActivityUtil.isNewActivity(activity);
             return ActivityUtil.canApproveWith(approvalStatus, activity.getApprovedBy(), isNew, activity.getDraft());
         }
     }

@@ -150,6 +150,7 @@ public class ActivityImporter extends ObjectImporter {
         List<APIField> fieldsDef = getApiFields();
         // get existing activity if this is an update request
         Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
+        boolean oldActivityDraft = false;
 
         if (modifiedBy == null) {
             return Collections.singletonList(
@@ -194,6 +195,7 @@ public class ActivityImporter extends ObjectImporter {
 
             if (oldActivity != null) {
                 currentVersion = oldActivity.getAmpActivityGroup().getVersion();
+                oldActivityDraft = oldActivity.getDraft();
 
                 key = ActivityGatekeeper.lockActivity(activityId, modifiedBy.getAmpTeamMemId());
 
@@ -235,9 +237,9 @@ public class ActivityImporter extends ObjectImporter {
             validateAndImport(newActivity, newJsonParent);
             if (errors.isEmpty()) {
                 prepareToSave();
-
-                newActivity = ActivityUtil.saveActivityNewVersion(newActivity,
-                        translations, modifiedBy, Boolean.TRUE.equals(newActivity.getDraft()),
+                boolean draftChange = ActivityUtil.detectDraftChange(newActivity, oldActivityDraft);
+                newActivity = ActivityUtil.saveActivityNewVersion(newActivity, translations, modifiedBy,
+                        Boolean.TRUE.equals(newActivity.getDraft()), draftChange,
                         PersistenceManager.getSession(), saveContext);
 
                 postProcess();

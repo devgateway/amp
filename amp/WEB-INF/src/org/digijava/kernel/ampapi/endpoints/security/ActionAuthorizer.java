@@ -11,7 +11,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.common.AmpConfiguration;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.security.RuleHierarchy;
@@ -54,7 +54,7 @@ public class ActionAuthorizer {
         Collection<AuthRule> authRules = ruleHierarchy.getEffectiveRules(apiMethod.authTypes());
         
         if (authRules.contains(AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {
-            ApiErrorResponse.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
+            ApiErrorResponseService.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
             return;
         }
         
@@ -63,14 +63,14 @@ public class ActionAuthorizer {
             
             if (!FeaturesUtil.isAmpOfflineEnabled()) {
                 ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("AMP Offline is not enabled");
-                ApiErrorResponse.reportForbiddenAccess(errorMessage);
+                ApiErrorResponseService.reportForbiddenAccess(errorMessage);
                 return;
             }
             
             if (!AmpOfflineModeHolder.isAmpOfflineMode()) {
                 ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED
                         .withDetails("AMP Offline User-Agent is not present in request headers");
-                ApiErrorResponse.reportForbiddenAccess(errorMessage);
+                ApiErrorResponseService.reportForbiddenAccess(errorMessage);
                 return;
             }
             
@@ -78,7 +78,7 @@ public class ActionAuthorizer {
             AmpVersionService ampVersionService = SpringUtil.getBean(AmpVersionService.class);
             
             if (!ampVersionService.isAmpOfflineCompatible(clientRelease)) {
-                ApiErrorResponse.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED
+                ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED
                         .withDetails("AMP Offline is not compatible"));
                 return;
             }
@@ -86,13 +86,13 @@ public class ActionAuthorizer {
         
         if (authRules.contains(AuthRule.IN_WORKSPACE) && !TeamUtil.isUserInWorkspace()) {
             ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("No workspace selected");
-            ApiErrorResponse.reportForbiddenAccess(errorMessage);
+            ApiErrorResponseService.reportForbiddenAccess(errorMessage);
             return;
         }
         
         if (authRules.contains(AuthRule.IN_ADMIN) && !TeamUtil.isCurrentMemberAdmin()) {
             ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("You must be logged-in as admin");
-            ApiErrorResponse.reportForbiddenAccess(errorMessage);
+            ApiErrorResponseService.reportForbiddenAccess(errorMessage);
             return;
         }
 
@@ -108,12 +108,12 @@ public class ActionAuthorizer {
                 canViewActivityIfCreatedInPrivateWs(containerReq)) {
             ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("You must be logged-in in the "
                     + "workspace where the activity was created");
-            ApiErrorResponse.reportForbiddenAccess(errorMessage);
+            ApiErrorResponseService.reportForbiddenAccess(errorMessage);
             return;
         }
 
         if (!errors.isEmpty()) {
-            ApiErrorResponse.reportForbiddenAccess(ApiError.toError(errors.values()));
+            ApiErrorResponseService.reportForbiddenAccess(ApiError.toError(errors.values()));
         }
     }
     

@@ -21,7 +21,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.entity.Locale;
@@ -107,7 +106,7 @@ public class PossibleValuesEnumeratorTest {
             possibleValuesFor("");
             fail();
         } catch (ApiRuntimeException e) {
-            assertJsonEquals(e.getError(), "{\"error\":{\"0007\":[\"(Invalid field) \"]}}");
+            assertJsonEquals(e.getError().asJsonString(), "{\"error\":{\"0007\":[\"(Invalid field) \"]}}");
         }
     }
 
@@ -117,7 +116,7 @@ public class PossibleValuesEnumeratorTest {
             possibleValuesFor("no_such_field");
             fail();
         } catch (ApiRuntimeException e) {
-            assertJsonEquals(e.getError(), "{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}");
+            assertJsonEquals(e.getError().asJsonString(), "{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}");
         }
     }
 
@@ -147,7 +146,7 @@ public class PossibleValuesEnumeratorTest {
             possibleValuesFor("no_such_field~id");
             fail();
         } catch (ApiRuntimeException e) {
-            assertJsonEquals(e.getError(), "{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}");
+            assertJsonEquals(e.getError().asJsonString(), "{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}");
         }
     }
 
@@ -204,7 +203,7 @@ public class PossibleValuesEnumeratorTest {
             possibleValuesFor(WithThrowingProvider.class, "field");
             fail();
         } catch (ApiRuntimeException e) {
-            assertJsonEquals(e.getError(),
+            assertJsonEquals(e.getError().asJsonString(),
                     "{\"error\":{\"0001\":[\"(Internal Error) Failed to obtain possible values.\"]}}");
         }
     }
@@ -284,8 +283,7 @@ public class PossibleValuesEnumeratorTest {
         assertEquals(expectedJson, actualJson);
     }
 
-    private void assertJsonEquals(JsonBean jsonBean, String expectedJson) throws IOException {
-        String actualJson = new ObjectMapper().writeValueAsString(jsonBean);
+    private void assertJsonEquals(String actualJson, String expectedJson) throws IOException {
         assertEquals(expectedJson, actualJson);
     }
 

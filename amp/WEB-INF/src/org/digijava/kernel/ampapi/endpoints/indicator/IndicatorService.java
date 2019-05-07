@@ -12,7 +12,7 @@ import org.dgfoundation.amp.menu.MenuUtils;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -64,7 +64,7 @@ public class IndicatorService {
     public static Indicator getIndicatorById(long id) {
 
         if (!IndicatorUtils.hasRights(id)) {
-            ApiErrorResponse.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
+            ApiErrorResponseService.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
         }
 
         AmpIndicatorLayer indicatorLayer = DynLocationManagerUtil.getIndicatorLayerById(id);
@@ -83,7 +83,7 @@ public class IndicatorService {
 
     public static IndicatorOperationResult deleteIndicatorById(long id) {
         if (!IndicatorUtils.hasRights(id)) {
-            ApiErrorResponse.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
+            ApiErrorResponseService.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
         }
 
         AmpIndicatorLayer indicatorLayer = DynLocationManagerUtil.getIndicatorLayerById(id);
@@ -141,7 +141,7 @@ public class IndicatorService {
         Long indicatorId = updater.getIndicatorId();
         
         if (indicatorId != null && !IndicatorUtils.hasRights(indicatorId)) {
-            ApiErrorResponse.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
+            ApiErrorResponseService.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
         }
         
         AmpIndicatorLayer indLayer = updater.getIndicatorLayer();

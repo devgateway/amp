@@ -10,7 +10,6 @@ import io.swagger.annotations.ApiOperation;
 import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Allows any endpoint to report all its possible errors. Implementations must provide a class that holds all errors
@@ -27,10 +26,10 @@ public interface ErrorReportingEndpoint extends AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "errors", ui = false)
     @ApiOperation("Errors reported by this endpoint")
-    default JsonBean getErrors() {
-        JsonBean jsonBean = ApiError.toError(errorCollector.collect(getErrorsClass()));
+    default ApiErrorResponse getErrors() {
+        ApiErrorResponse errorResponse = ApiError.format(errorCollector.collect(getErrorsClass()));
         EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_OK);
-        return jsonBean;
+        return errorResponse;
     }
 
     /**

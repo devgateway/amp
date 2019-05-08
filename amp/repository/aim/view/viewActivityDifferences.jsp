@@ -108,13 +108,14 @@
 					<%-- Iterate through the list of output collections for compareAll method... --%>
 				<c:if test="${aimCompareActivityVersionsForm.method == 'compareAll'}">
 					<%int count = 0; %>
-					<logic:iterate id="listItem" property="listOfOutputCollectionGroupedCollection" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
+					<logic:iterate id="listItem" property="activityComparisonResultList" name="aimCompareActivityVersionsForm" type="org.digijava.module.aim.util.versioning.ActivityComparisonResult">
 						<tr>
 							<td colspan="100%"  class="inside" style="background-color:#E9ECC3; border-color: red; border-width: 1px; color:#0000A0; cursor: pointer; background-repeat: repeat-x; font-size: 13px;">
-								<div style="line-height: 95%;"align="left" class="underline" title="<bean:write name="listItem" property="key" filter="false"/>">
-									<strong><%out.print("<br> ["+(++count)+"]. "); %><bean:write name="listItem" property="key" filter="false"/></strong>
+
+								<div style="line-height: 95%;"align="left" class="underline" title="<bean:write name="listItem" property="name" filter="false"/>">
+									<strong><%out.print("<br> ["+(++count)+"]. "); %><bean:write name="listItem" property="name" filter="false"/></strong>
 								</div>
-								<bean:define id="beanGroupItem" name="listItem" property="value" scope="page" toScope="request"/>
+								<bean:define id="beanGroupItem" name="listItem" property="compareOutput" scope="page" toScope="request"/>
 								<jsp:include page="viewGroupedOutput.jsp"/>
 							</td>
 						</tr>

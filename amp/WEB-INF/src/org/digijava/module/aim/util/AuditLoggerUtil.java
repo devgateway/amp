@@ -30,6 +30,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.Criteria;
@@ -402,27 +403,28 @@ public class AuditLoggerUtil {
         }
     }
 
+
     public static List<Object[]> getListOfActivitiesFromAuditLogger() {
-        Session session = null;
-        List<Object[]> list = null;
-        try {
-            session = PersistenceManager.getSession();
+        String query = "select * from ( "
+                + " select  aav.amp_activity_id current_id ,  "
+                + " lead(aav.amp_activity_id, 1) "
+                + " over(partition by aav.amp_activity_group_id order by aav.amp_activity_id desc) previous_id, "
+                + " aal.objectname, aav.amp_activity_group_id, "
+                + " aal.id  from amp_activity_version aav "
+                + " left join amp_audit_logger aal on "
+                + " (aal.objecttype ='org.digijava.module.aim.dbentity.AmpActivityVersion' "
+                + "  and cast (aal.objectId AS INTEGER) = aav.amp_activity_id"
+                + "   and trim(aal.detail) ='approved') "
+                + "   and aav.approval_status in ('approved','startedapproved') "
+                + " order by amp_activity_group_id desc "
+                + " ) t where t.id is not null"
+                + " and t.previous_id is not null";
 
-            // Get the list using the Criteria query.
-            Criteria criteria = session.createCriteria(AmpAuditLogger.class).setProjection(Projections.projectionList()
-                    .add(Projections.property("objectId")).add(Projections.property("objectName")));
-            criteria.add(Restrictions.ne("action", Constants.LOGIN_ACTION))
-                    .add(Restrictions.eq("objectType", AmpActivityVersion.class.getName()));
-            criteria.addOrder(Order.desc("modifyDate"));
-
-            list = criteria.list();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-        return list;
-
+        Session session = PersistenceManager.getSession();
+        SQLQuery sqlQuery = session.createSQLQuery(query);
+        return sqlQuery.list();
     }
-    
+
     /**
      * This class is used for sorting by name.
      * @author Diego Dimunzio

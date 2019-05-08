@@ -476,20 +476,33 @@ public class DbUtil {
     }
 
     /**
-     * Retrieves editor body text. Gives priority to chosen language, else returns English, else returns any, else returns null
-     * @param siteId
-     * @param editorKey
-     * @param language
-     * @return
+     *
+     * @param site Site object for the current deployed amp
+     * @param editorKey editor key to fetch the body for
+     * @param language lanaguage of the body
+     * @return the body for the given parameters
      * @throws EditorException
      */
-    public static String getEditorBody(Site site, String editorKey, String language) throws EditorException
-    {
+    public static String getEditorBody(Site site, String editorKey, String language) throws EditorException {
+        return getEditorBody(site.getSiteId(),  editorKey,  language);
+    }
+
+    /**
+     * Retrieves editor body text. Gives priority to chosen language, else returns English, else returns any,
+     *  else returns null
+     * @param siteId
+     * @param editorKey editor key to fetch the body for
+     * @param language language of the body
+     * @return the body for the given parameters
+     * @throws EditorException
+     */
+    public static String getEditorBody(String siteId, String editorKey, String language) throws EditorException {
         String bodyEn = null; // translation in English
         String bodyOther = null; // translation in any language which is not English and is not the requested one
-    
-        String stat = String.format("SELECT body, language FROM dg_editor WHERE site_id = '%s' AND editor_key = '%s'", site.getSiteId(), editorKey);
-        List<Object[]> res = PersistenceManager.getSession().createSQLQuery(stat).list();
+
+        String stat = String.format("SELECT body, language FROM dg_editor WHERE site_id = '%s' AND editor_key = '%s'",
+                siteId, editorKey);
+        List<Object[]> res = PersistenceManager.getRequestDBSession().createSQLQuery(stat).list();
         for(Object[] entry:res)
         {
             String editorBody = PersistenceManager.getString(entry[0]);

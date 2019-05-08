@@ -6,8 +6,8 @@ import java.util.Set;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.util.versioning.ActivityComparisonResult;
 
 public class CompareActivityVersionsForm extends ActionForm {
 
@@ -35,16 +35,15 @@ public class CompareActivityVersionsForm extends ActionForm {
 
     private Map<String, List<CompareOutput>> outputCollectionGrouped;
 
-    private Map<String, Map<String, List<CompareOutput>>> listOfOutputCollectionGrouped;
 
-    public void setListOfOutputCollectionGrouped(
-            Map<String, Map<String, List<CompareOutput>>> listOfOutputCollectionGrouped) {
-        this.listOfOutputCollectionGrouped = listOfOutputCollectionGrouped;
+    private List<ActivityComparisonResult> activityComparisonResultList;
+
+    public List<ActivityComparisonResult> getActivityComparisonResultList() {
+        return this.activityComparisonResultList;
     }
 
-    public Set<Map.Entry<String, Map<String, List<CompareOutput>>>>
-        getListOfOutputCollectionGroupedCollection() {
-        return this.listOfOutputCollectionGrouped.entrySet();
+    public void setActivityComparisonResultList(List<ActivityComparisonResult> activityComparisonResultList) {
+        this.activityComparisonResultList = activityComparisonResultList;
     }
 
     public Long getActivityOneId() {

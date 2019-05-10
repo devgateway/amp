@@ -84,15 +84,6 @@ public class ApiError {
     private final static Set<String> COMPONENTS_WITH_NEW_ERROR_FORMAT = new HashSet<>(
             Collections.singletonList(InterchangeEndpoints.class.getName()));
 
-    private static final ApiError FORMATTER = new ApiError(false);
-    private static final ApiError FORMATTER_AND_STATUS_REPORTER = new ApiError(true);
-
-    private boolean isUpdateResponseStatus;
-
-    public ApiError(boolean isUpdateResponseStatus) {
-        this.isUpdateResponseStatus = isUpdateResponseStatus;
-    }
-
     /**
      * Returns an ApiErrorResponse object with a single error message
      * generic 0 error code with one error in the list.

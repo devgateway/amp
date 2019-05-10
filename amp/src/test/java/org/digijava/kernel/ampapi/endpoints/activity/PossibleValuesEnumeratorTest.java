@@ -20,6 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
@@ -101,22 +102,22 @@ public class PossibleValuesEnumeratorTest {
     }
 
     @Test
-    public void testEmptyField() throws IOException {
+    public void testEmptyField() {
         try {
             possibleValuesFor("");
             fail();
         } catch (ApiRuntimeException e) {
-            assertJsonEquals(e.getError().asJsonString(), "{\"error\":{\"0007\":[\"(Invalid field) \"]}}");
+            assertErrorJsonEquals(e.getError(), "{\"error\":{\"0007\":[\"(Invalid field) \"]}}");
         }
     }
 
     @Test
-    public void testInvalidField() throws IOException {
+    public void testInvalidField() {
         try {
             possibleValuesFor("no_such_field");
             fail();
         } catch (ApiRuntimeException e) {
-            assertJsonEquals(e.getError().asJsonString(), "{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}");
+            assertErrorJsonEquals(e.getError(), "{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}");
         }
     }
 
@@ -141,12 +142,12 @@ public class PossibleValuesEnumeratorTest {
     }
 
     @Test
-    public void testNestedInvalid() throws IOException {
+    public void testNestedInvalid() {
         try {
             possibleValuesFor("no_such_field~id");
             fail();
         } catch (ApiRuntimeException e) {
-            assertJsonEquals(e.getError().asJsonString(), "{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}");
+            assertErrorJsonEquals(e.getError(), "{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}");
         }
     }
 
@@ -198,12 +199,12 @@ public class PossibleValuesEnumeratorTest {
     }
 
     @Test
-    public void testDiscriminatorThrows() throws IOException {
+    public void testDiscriminatorThrows() {
         try {
             possibleValuesFor(WithThrowingProvider.class, "field");
             fail();
         } catch (ApiRuntimeException e) {
-            assertJsonEquals(e.getError().asJsonString(),
+            assertErrorJsonEquals(e.getError(),
                     "{\"error\":{\"0001\":[\"(Internal Error) Failed to obtain possible values.\"]}}");
         }
     }
@@ -283,8 +284,8 @@ public class PossibleValuesEnumeratorTest {
         assertEquals(expectedJson, actualJson);
     }
 
-    private void assertJsonEquals(String actualJson, String expectedJson) throws IOException {
-        assertEquals(expectedJson, actualJson);
+    private void assertErrorJsonEquals(ApiErrorResponse errorResponse, String expectedJson) {
+        assertEquals(expectedJson, errorResponse.asJsonString());
     }
 
     private List<PossibleValue> possibleValuesFor(String field) {

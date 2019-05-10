@@ -55,7 +55,6 @@ public class ActionAuthorizer {
         
         if (authRules.contains(AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {
             ApiErrorResponseService.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
-            return;
         }
         
         if (authRules.contains(AuthRule.AMP_OFFLINE) 
@@ -64,14 +63,12 @@ public class ActionAuthorizer {
             if (!FeaturesUtil.isAmpOfflineEnabled()) {
                 ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("AMP Offline is not enabled");
                 ApiErrorResponseService.reportForbiddenAccess(errorMessage);
-                return;
             }
             
             if (!AmpOfflineModeHolder.isAmpOfflineMode()) {
                 ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED
                         .withDetails("AMP Offline User-Agent is not present in request headers");
                 ApiErrorResponseService.reportForbiddenAccess(errorMessage);
-                return;
             }
             
             AmpOfflineRelease clientRelease = AmpConfiguration.detectClientRelease();
@@ -80,20 +77,17 @@ public class ActionAuthorizer {
             if (!ampVersionService.isAmpOfflineCompatible(clientRelease)) {
                 ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED
                         .withDetails("AMP Offline is not compatible"));
-                return;
             }
         }
         
         if (authRules.contains(AuthRule.IN_WORKSPACE) && !TeamUtil.isUserInWorkspace()) {
             ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("No workspace selected");
             ApiErrorResponseService.reportForbiddenAccess(errorMessage);
-            return;
         }
         
         if (authRules.contains(AuthRule.IN_ADMIN) && !TeamUtil.isCurrentMemberAdmin()) {
             ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("You must be logged-in as admin");
             ApiErrorResponseService.reportForbiddenAccess(errorMessage);
-            return;
         }
 
         String methodInfo = String.format("%s %s.%s, authType = %s", containerReq.getMethod(),
@@ -109,7 +103,6 @@ public class ActionAuthorizer {
             ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("You must be logged-in in the "
                     + "workspace where the activity was created");
             ApiErrorResponseService.reportForbiddenAccess(errorMessage);
-            return;
         }
 
         if (!errors.isEmpty()) {

@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.errors;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -8,7 +7,6 @@ import javax.ws.rs.core.MediaType;
 
 import io.swagger.annotations.ApiOperation;
 import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
 /**
@@ -27,9 +25,7 @@ public interface ErrorReportingEndpoint extends AmpEndpoint {
     @ApiMethod(id = "errors", ui = false)
     @ApiOperation("Errors reported by this endpoint")
     default ApiErrorResponse getErrors() {
-        ApiErrorResponse errorResponse = ApiError.format(errorCollector.collect(getErrorsClass()));
-        EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_OK);
-        return errorResponse;
+        return ApiError.format(errorCollector.collect(getErrorsClass()));
     }
 
     /**

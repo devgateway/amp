@@ -56,6 +56,7 @@ public class ActivityEPConstants {
     public static final String PERCENTAGE_CONSTRAINT = "percentage_constraint";
     public static final String DEPENDENCIES ="dependencies";
     public static final String TREE_COLLECTION_CONSTRAINT = "tree_collection";
+    public static final String COMMON_POSSIBLE_VALUES = "common-possible-values";
     
     public static final String PREVIEW_CURRENCY_ID = "currency-id";
     

@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -54,6 +55,7 @@ import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -645,7 +647,7 @@ public class FieldsEnumeratorTest {
         new FieldsEnumerator(provider, fmService, throwingTranslatorService, name -> true)
                 .getAllAvailableFields(OneFieldClass.class);
     }
-
+    
     @Test
     public void testDefaultTranslation() {
         List<APIField> fields = new FieldsEnumerator(provider, fmService, emptyTranslatorService, name -> true)
@@ -654,7 +656,50 @@ public class FieldsEnumeratorTest {
         assertEquals(1, fields.size());
         assertEquals("One Field", fields.get(0).getFieldLabel().get("EN"));
     }
-
+    
+    @Test
+    public void testNonEmptyChildren() {
+        String originalJson = "[{\"field_name\":\"field\"," +
+                "\"field_type\":\"object\"," +
+                "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                "\"required\":\"N\"," +
+                "\"importable\":false," +
+                "\"id\":false," +
+                "\"children\":[{" +
+                    "\"field_name\":\"field\"," +
+                    "\"field_type\":\"long\"," +
+                    "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                    "\"required\":\"N\"," +
+                    "\"importable\":false," +
+                    "\"id\":false" +
+                    "}]" +
+                "}]";
+        try {
+            List<APIField> actual = fieldsFor(Composition.class);
+            String actualJson = new ObjectMapper().writeValueAsString(actual);
+            assertEquals(originalJson, actualJson);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Test
+    public void testEmptyChildren() {
+        String originalJson = "[{\"field_name\":\"field\"" +
+                ",\"field_type\":\"long\"," +
+                "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                "\"required\":\"N\"," +
+                "\"importable\":false," +
+                "\"id\":false}]";
+        try {
+            List<APIField> actual = fieldsFor(NestedField.class);
+            String actualJson = new ObjectMapper().writeValueAsString(actual);
+            assertEquals(originalJson, actualJson);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     private static class Dependencies {
 
         @Interchangeable(fieldTitle = "field", dependencies = {"dep1", "dep2"})

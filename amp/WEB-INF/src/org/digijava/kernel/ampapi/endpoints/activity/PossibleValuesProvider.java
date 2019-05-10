@@ -12,7 +12,9 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
  * employ special procedures in obtaining possible values and 
  * specific activity values in for a full project information
  */
-public abstract class PossibleValuesProvider {
+public interface PossibleValuesProvider {
 
-    public abstract List<PossibleValue> getPossibleValues(TranslatorService translatorService);
+    List<PossibleValue> getPossibleValues(TranslatorService translatorService);
+
+    boolean isAllowed(Long id);
 }

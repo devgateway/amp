@@ -197,6 +197,14 @@ public class ActivityUtil {
             setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
         }
     }
+    
+    public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
+            Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
+            Session session, SaveContext context) throws Exception {
+        
+        boolean draftChange = detectDraftChange(a, draft);
+        return saveActivityNewVersion(a, translations, ampCurrentMember, draft, draftChange, session, context);
+    }
 
     /**
      * saves a new version of an activity
@@ -204,16 +212,12 @@ public class ActivityUtil {
      */
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
             Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
-            Session session, SaveContext context) throws Exception {
+            boolean draftChange, Session session, SaveContext context) throws Exception {
 
         AmpActivityVersion oldA = a;
         boolean newActivity = isNewActivity(a);
 
-        if (a.getDraft() == null)
-            a.setDraft(false);
-        boolean draftChange = draft != a.getDraft();
         a.setDraft(draft);
-
         a.setDeleted(false);
         //we will check what is comming in funding
         Set<AmpFunding> af = a.getFunding();
@@ -326,7 +330,11 @@ public class ActivityUtil {
 
         return a;
     }
-
+    
+    public static boolean detectDraftChange(AmpActivityVersion a, boolean draft) {
+        return Boolean.TRUE.equals(a.getDraft()) != draft;
+    }
+    
     public static <T extends AmpActivityFields> boolean isNewActivity(T a) {
         // it would be nicer to rely upon AMP ID, but some old activities may lack it
         return a.getAmpActivityId() == null;
@@ -499,7 +507,7 @@ public class ActivityUtil {
         }
     }
 
-    private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a,
+    private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean savedAsDraft, AmpActivityFields a,
             AmpActivityVersion oldA, boolean newActivity, boolean rejected) {
         boolean teamLeadFlag =  isApprover(ampCurrentMember);
         Boolean crossTeamValidation = ampCurrentMember.getAmpTeam().getCrossteamvalidation();
@@ -509,7 +517,7 @@ public class ActivityUtil {
         String validation = getValidationSetting(ampCurrentMember);
         if (isProjectValidationOn(validation)) {
             if (teamLeadFlag) {
-                if (draft) {
+                if (savedAsDraft) {
                     if (rejected) {
                         a.setApprovalStatus(ApprovalStatus.REJECTED);
                     } else {
@@ -615,26 +623,42 @@ public class ActivityUtil {
         }
         return false;
     }
-
-    public static boolean canReject(AmpTeamMember atm, Long activityTeamId, boolean isDraft) {
-        if (isDraft && isProjectValidationOn(getValidationSetting(atm))) {
-            return isApprover(atm);
-        }
-        return false;
+    
+    /**
+     *  An activity can be rejected only if:
+     *  1. the activity is not new
+     *  2. the activity is not draft
+     *  3. the validation settings is set to on
+     *  4. the user is approver of the workspace or is the teamlead of the ws
+     *
+     * @param atm
+     * @param isDraft
+     * @param isNewActivity
+     * @return
+     */
+    public static boolean canReject(AmpTeamMember atm, boolean isDraft, boolean isNewActivity) {
+        return !isNewActivity && !isDraft && isProjectValidationOn(getValidationSetting(atm)) && isApprover(atm);
     }
-
+    
+    /**
+     * Detect if the teammember is approver of the workspace or is the teamlead of the ws
+     *
+     * @param atm team member
+     * @return
+     */
     private static boolean isApprover(AmpTeamMember atm) {
         AmpTeamMemberRoles role = atm.getAmpMemberRole();
         return role.getTeamHead() || role.isApprover();
     }
 
-    public static boolean canApproveWith(ApprovalStatus approvalStatus, AmpTeamMember atm, boolean isNewActivity) {
+    public static boolean canApproveWith(ApprovalStatus approvalStatus, AmpTeamMember atm, boolean isNewActivity,
+            Boolean isDraft) {
         if (atm == null) {
             return false;
         }
         String validation = getValidationSetting(atm);
         if (isProjectValidationOn(validation)) {
-            return ApprovalStatus.APPROVED.equals(approvalStatus);
+            return Boolean.FALSE.equals(isDraft) && ApprovalStatus.APPROVED.equals(approvalStatus);
         }
         ApprovalStatus allowed = isNewActivity ? ApprovalStatus.STARTED_APPROVED : ApprovalStatus.APPROVED;
         return allowed.equals(approvalStatus);
@@ -1465,6 +1489,14 @@ public class ActivityUtil {
                 .collect(Collectors.toList());
 
         return years;
+    }
+
+    public static boolean isFiscalYearInRange(int year) {
+        int rangeStartYear = FeaturesUtil
+                .getGlobalSettingValueInteger(GlobalSettingsConstants.YEAR_RANGE_START);
+        int rangeNumber = FeaturesUtil
+                .getGlobalSettingValueInteger(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
+        return year >= rangeStartYear && year < rangeStartYear + rangeNumber;
     }
 
     /**

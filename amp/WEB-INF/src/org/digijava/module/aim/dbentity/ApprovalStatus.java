@@ -53,4 +53,13 @@ public enum ApprovalStatus implements Identifiable {
         }
         throw new IllegalArgumentException("Unknown approval status: " + id);
     }
+
+    public static boolean isValid(Integer id) {
+        for (ApprovalStatus value : values()) {
+            if (value.id.equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

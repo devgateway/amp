@@ -5,9 +5,11 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.digijava.kernel.ampapi.endpoints.common.values.providers.ThemePossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -20,6 +22,8 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
         @Interchangeable(fieldTitle = "Program Percentage", importable = true, percentageConstraint = true,
                 required = ALWAYS)
         private Float programPercentage;
+
+        @PossibleValues(ThemePossibleValuesProvider.class)
         @Interchangeable(fieldTitle = "Program", importable = true, pickIdOnly = true, uniqueConstraint = true,
                 required = ALWAYS)
         private AmpTheme program;

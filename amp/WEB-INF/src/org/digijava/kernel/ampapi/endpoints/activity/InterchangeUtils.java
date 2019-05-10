@@ -14,14 +14,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.InterchangeableClassMapper;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.TimestampField;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -53,6 +57,17 @@ public class InterchangeUtils {
             return null;
         Number n = (Number) obj;
         return n.doubleValue();
+    }
+
+    public static Long getLongOrNullOnError(Object obj) {
+        if (obj instanceof Long) {
+            return (Long) obj;
+        }
+        if (!Number.class.isInstance(obj)) {
+            return null;
+        }
+        Number n = (Number) obj;
+        return n.longValue();
     }
 
     /**
@@ -111,19 +126,6 @@ public class InterchangeUtils {
             throw new RuntimeException("Raw types are not allowed!");
         }
         return ((Class<?>) genericTypes[0]);
-    }
-
-    /**
-     * Obtains the possible values provider class of the field, if it has one
-     * @param field
-     * @return null if the field doesn't have a provider class attached, otherwise -- the class
-     */
-    public static Class<? extends PossibleValuesProvider> getPossibleValuesProvider(Field field) {
-        PossibleValues ant = field.getAnnotation(PossibleValues.class);
-        if (ant != null) {
-            return ant.value();
-        }
-        return null;
     }
 
     public static boolean isSimpleType(Class<?> clazz) {
@@ -226,4 +228,18 @@ public class InterchangeUtils {
         }
         return annotatedFields;
     }
+
+    public static ApiRuntimeException newServerErrorException(String message) {
+        return newServerErrorException(message, null);
+    }
+
+    public static ApiRuntimeException newServerErrorException(String message, Throwable e) {
+        if (e instanceof ApiRuntimeException) {
+            return (ApiRuntimeException) e;
+        }
+        JsonBean error = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR
+                .withDetails(message));
+        return new ApiRuntimeException(Response.Status.INTERNAL_SERVER_ERROR, error, e);
+    }
+
 }

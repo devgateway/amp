@@ -79,6 +79,7 @@ public class ActivityFieldsConstants {
     public static final String TAG_SECTORS = "Tag Sectors";
     
     public static final String IATI_IDENTIFIER = "IATI Identifier";
+    public static final String UUID = "UUID";
 
     public static final Map<String, String> ORG_ROLE_CODES = new ImmutableMap.Builder<String, String>()
             .put(FieldMap.underscorify(DONOR_ORGANIZATION), Constants.FUNDING_AGENCY)

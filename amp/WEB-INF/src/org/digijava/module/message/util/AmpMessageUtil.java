@@ -49,7 +49,7 @@ public class AmpMessageUtil {
         return returnValue;
     }
     
-    public static void saveOrUpdateMessage(AmpMessage message) throws AimException {
+    public static void saveOrUpdateMessage(AmpMessage message) {
         PersistenceManager.getSession().saveOrUpdate(message);
     }
     

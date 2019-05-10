@@ -58,7 +58,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiFieldStructuralSer
 import org.digijava.kernel.ampapi.endpoints.currency.CurrencyService;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
 import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
-import org.digijava.kernel.ampapi.endpoints.resource.ResourceUtil;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceService;
 import org.digijava.kernel.ampapi.endpoints.sync.SyncRequest;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -107,6 +107,8 @@ public class SyncService implements InitializingBean {
     private PossibleValuesEnumerator possibleValuesEnumerator = PossibleValuesEnumerator.INSTANCE;
     private CachingFieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.getEnumerator();
     private CurrencyService currencyService = CurrencyService.INSTANCE;
+
+    private ResourceService resourceService = new ResourceService();
 
     private AmpOfflineChangelogRepository ampOfflineChangelogRepository = AmpOfflineChangelogRepository.INSTANCE;
 
@@ -449,7 +451,7 @@ public class SyncService implements InitializingBean {
 
     private void updateDiffsForResources(SystemDiff systemDiff, SyncRequest syncRequest) {
         if (syncRequest.getLastSyncTime() == null || systemDiff.isResourceFieldsStructuralChanges()) {
-            systemDiff.setResources(new ListDiff<>(emptyList(), ResourceUtil.getAllNodeUuids()));
+            systemDiff.setResources(new ListDiff<>(emptyList(), resourceService.getAllNodeUuids()));
         } else {
             List<String> updated = new ArrayList<>();
 

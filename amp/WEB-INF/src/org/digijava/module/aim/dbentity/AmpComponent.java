@@ -20,8 +20,10 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpComponentFundingDiscriminationConfigurer;
+import org.digijava.kernel.ampapi.endpoints.activity.values.providers.ComponentTypePossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -94,6 +96,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         }
     }
 
+    @PossibleValues(ComponentTypePossibleValuesProvider.class)
     @Interchangeable(fieldTitle = COMPONENT_TYPE, importable = true, pickIdOnly = true,
             fmPath = "/Activity Form/Components/Component/Component Information/Component Type")
     private AmpComponentType type;

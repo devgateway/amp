@@ -13,7 +13,8 @@ import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
+import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.junit.Rule;
@@ -41,7 +42,7 @@ public class ActivityImporterTest {
     @Test
     public void testValidationIgnoreUnknownFieldInAmpOffline() throws Exception {
         try {
-            AmpOfflineModeHolder.setAmpOfflineMode(true);
+            AmpClientModeHolder.setClientMode(ClientMode.AMP_OFFLINE);
 
             JsonBean json = new JsonBean();
             json.set("foo", "bar");
@@ -50,7 +51,7 @@ public class ActivityImporterTest {
 
             assertThat(actualErrors, is(emptyMap()));
         } finally {
-            AmpOfflineModeHolder.setAmpOfflineMode(false);
+            AmpClientModeHolder.setClientMode(null);
         }
     }
 

@@ -3461,6 +3461,15 @@ public class ExportActivityToWordBuilder {
             }
             generateOverAllTableRows(identificationSubTable1, columnName, columnVal, null);
         }
+    
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/IATI Identifier")) {
+            columnName = TranslatorWorker.translateText("IATI Identifier");
+            columnVal = "";
+            if (StringUtils.isNotBlank(identification.getIatiIdentifier())) {
+                columnVal = identification.getIatiIdentifier();
+            }
+            generateOverAllTableRows(identificationSubTable1, columnName, columnVal, null);
+        }
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Procurement System")) {
             columnName = TranslatorWorker.translateText("Procurement System");

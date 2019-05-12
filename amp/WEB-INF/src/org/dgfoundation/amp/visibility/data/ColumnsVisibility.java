@@ -150,7 +150,8 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put("/Activity Form/Identification/Budget Extras/Sub-Program", ColumnConstants.SUB_PROGRAM);
         put("/Activity Form/Identification/Budget Extras/Vote", ColumnConstants.VOTE);
         put("/Activity Form/Identification/Cris Number", ColumnConstants.CRIS_NUMBER);
-        put("/Activity Form/Identification/Financial Instrument", ColumnConstants.FINANCIAL_INSTRUMENT); 
+        put("/Activity Form/Identification/IATI Identifier", ColumnConstants.IATI_IDENTIFIER);
+        put("/Activity Form/Identification/Financial Instrument", ColumnConstants.FINANCIAL_INSTRUMENT);
         put("/Activity Form/Identification/Government Agreement Number", ColumnConstants.GOVERNMENT_AGREEMENT_NUMBER);
         put("/Activity Form/Identification/Government Approval Procedures", ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
         put("/Activity Form/Identification/Joint Criteria", ColumnConstants.JOINT_CRITERIA);

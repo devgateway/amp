@@ -176,15 +176,14 @@ public class ProjectList {
                                                     final boolean include, final boolean viewable) {
         final List<JsonBean> activitiesList = new ArrayList<JsonBean>();
         
-        String iatiIdAmpField = InterchangeUtils.getAmpIatiIdentifierFieldName();
-
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
                 String ids = StringUtils.join(activityIds, ",");
                 String negate = include ? "" : " NOT ";
                 String query = "SELECT act.amp_activity_id as amp_activity_id, act.amp_id as amp_id, act.name as name, "
                         + "act.date_created as date_created, "
-                        + "act.%s as %s, act.date_updated as date_updated, at.name as team_name "
+                        + "act.iati_identifier as iati_identifier, act.date_updated as date_updated, "
+                        + "at.name as team_name "
                         + "FROM amp_activity act "
                         + "JOIN amp_team at ON act.amp_team_id = at.amp_team_id ";
 
@@ -192,9 +191,7 @@ public class ProjectList {
                     query += " WHERE act.amp_activity_id " + negate + " in (" + ids + ")";
                 }
 
-                String allActivitiesQuery = String.format(query, iatiIdAmpField, iatiIdAmpField);
-
-                try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allActivitiesQuery, null)) {
+                try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
                     ResultSet rs = rsi.rs;
                     while (rs.next()) {
                         long actId = rs.getLong("amp_activity_id");
@@ -207,7 +204,8 @@ public class ProjectList {
                                 DateTimeUtil.formatISO8601Timestamp(rs.getTimestamp("date_created")));
                         bean.set(FieldMap.underscorify(ActivityFieldsConstants.PROJECT_TITLE),
                                 getTranslatableFieldValue("name", rs.getString("name"), actId));
-                        bean.set(iatiIdAmpField, rs.getString(iatiIdAmpField));
+                        bean.set(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER),
+                                rs.getString("iati_identifier"));
                         bean.set(FieldMap.underscorify(ActivityFieldsConstants.UPDATE_DATE),
                                 DateTimeUtil.formatISO8601Timestamp(rs.getTimestamp("date_updated")));
                         bean.set(FieldMap.underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
@@ -232,13 +230,12 @@ public class ProjectList {
      */
     public static JsonBean getActivityInProjectListFormat(AmpActivityVersion a, boolean editable, boolean viewable) {
         JsonBean bean = new JsonBean();
-        String iatiIdAmpField = InterchangeUtils.getAmpIatiIdentifierFieldName();
         bean.set(FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), a.getIdentifier());
         bean.set(FieldMap.underscorify(ActivityFieldsConstants.CREATED_DATE),
                 DateTimeUtil.formatISO8601Timestamp(a.getCreatedDate()));
         bean.set(FieldMap.underscorify(ActivityFieldsConstants.PROJECT_TITLE),
                 getTranslatableFieldValue("name", a.getName(), (Long) a.getIdentifier()));
-        bean.set(iatiIdAmpField, getIatiIdentifierValue(a, iatiIdAmpField));
+        bean.set(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER), a.getIatiIdentifier());
         bean.set(FieldMap.underscorify(ActivityFieldsConstants.UPDATE_DATE),
                 DateTimeUtil.formatISO8601Timestamp(a.getUpdatedDate()));
         bean.set(FieldMap.underscorify(ActivityFieldsConstants.AMP_ID), a.getAmpId());
@@ -246,18 +243,6 @@ public class ProjectList {
         bean.set(ActivityEPConstants.EDIT, true);
         bean.set(ActivityEPConstants.VIEW, true);
         return bean;
-    }
-
-    private static String getIatiIdentifierValue(AmpActivityVersion a, String iatiIdAmpField) {
-        APIField apiField = AmpFieldsEnumerator.getEnumerator().getActivityFields().stream()
-                .filter(f -> f.getFieldName().equals(iatiIdAmpField))
-                .findAny().orElse(null);
-        
-        if (apiField != null) {
-            return (String) apiField.getFieldAccessor().get(a);
-        }
-        
-        return null;
     }
 
     /**

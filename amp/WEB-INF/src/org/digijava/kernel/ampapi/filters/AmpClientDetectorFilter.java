@@ -13,38 +13,49 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 
 /**
- * Detects whenever a request was issued by AMP Offline and saves this value for the duration of the request.
+ * Detects whenever a request was issued by AMP Offline or IATI Importer.
+ * Stores this value for the duration of the request.
  *
  * @author Octavian Ciubotaru
  */
-public class AmpOfflineClientDetectorFilter implements Filter {
+public class AmpClientDetectorFilter implements Filter {
 
     private static final String AMP_OFFLINE_USER_AGENT_PREFIX = "AMPOffline";
+    private static final String IATI_IMPORTER_USER_AGENT_PREFIX = "IATIImporter";
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
         try {
-            AmpOfflineModeHolder.setAmpOfflineMode(isAmpOfflineRequest((HttpServletRequest) servletRequest));
+            AmpClientModeHolder.setClientMode(getAmpClientRequest((HttpServletRequest) servletRequest));
             filterChain.doFilter(servletRequest, servletResponse);
         } finally {
-            AmpOfflineModeHolder.setAmpOfflineMode(null);
+            AmpClientModeHolder.setClientMode(null);
         }
     }
 
-    private boolean isAmpOfflineRequest(HttpServletRequest httpServletRequest) {
+    private ClientMode getAmpClientRequest(HttpServletRequest httpServletRequest) {
         Enumeration<String> headers = httpServletRequest.getHeaders(HttpHeaders.USER_AGENT);
         while (headers.hasMoreElements()) {
             String userAgent = headers.nextElement();
             if (isAmpOfflineAgent(userAgent)) {
-                return true;
+                return ClientMode.AMP_OFFLINE;
+            }
+    
+            if (isIatiImporterAgent(userAgent)) {
+                return ClientMode.IATI_IMPORTER;
             }
         }
-        return false;
+        
+        return null;
     }
 
     private boolean isAmpOfflineAgent(String userAgent) {
         return userAgent != null && userAgent.startsWith(AMP_OFFLINE_USER_AGENT_PREFIX);
+    }
+    
+    private boolean isIatiImporterAgent(String userAgent) {
+        return userAgent != null && userAgent.startsWith(IATI_IMPORTER_USER_AGENT_PREFIX);
     }
 
     @Override

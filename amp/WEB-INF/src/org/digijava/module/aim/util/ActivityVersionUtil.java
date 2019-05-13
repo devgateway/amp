@@ -147,18 +147,17 @@ public class ActivityVersionUtil {
                                 markAsDifferent = true;
                                 ret.append("<font color='red'>");
                             }
-                            
-                            if (auxOutput2.getValue()[i] instanceof Timestamp) {
-                                String date = DateConversion.convertDateToString(new Date(((Timestamp) auxOutput2.getValue()[i]).getTime()));
-                                ret.append(date);
-                            } else if (auxOutput2.getValue()[i] instanceof BigDecimal 
-                                    || auxOutput2.getValue()[i] instanceof Double 
-                                    || auxOutput2.getValue()[i] instanceof Float) {
+                            Object value = auxOutput2.getValue()[i];
+                            if (value instanceof Timestamp) {
+                                ret.append(DateConversion.convertDateToString(new Date(((Timestamp) value).getTime())));
+                            } else if (value instanceof BigDecimal
+                                    || value instanceof Double
+                                    || value instanceof Float) {
                                 NumberFormat formatter = FormatHelper.getDecimalFormat();
                                 formatter.setMaximumFractionDigits(0);
-                                ret.append(formatter.format(auxOutput2.getValue()[i]));
+                                ret.append(formatter.format(value));
                             } else {
-                                String text = auxOutput2.getValue()[i].toString();
+                                String text = value != null ? value.toString() : "";
                                 if (auxOutput2.getTranslateValue())
                                     text = TranslatorWorker.translateText(text, langCode, site.getId());                                                                 
                                 ret.append(DbUtil.filter(text));                                                               

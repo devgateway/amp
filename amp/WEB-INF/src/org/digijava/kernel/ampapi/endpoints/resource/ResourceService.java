@@ -30,7 +30,7 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 /**
  * @author Viorel Chihai
  */
-public final class ResourceUtil {
+public class ResourceService {
 
     /** the maximum number of minutes to keep a list of public documents in memory after generation */
     public static final int ENTRY_EXPIRATION_MINUTES = 10;
@@ -45,10 +45,7 @@ public final class ResourceUtil {
 
     public static final String PRIVATE_PATH_ITEM = "private";
 
-    private ResourceUtil() {
-    }
-
-    public static JsonBean getResource(String uuid) {
+    public JsonBean getResource(String uuid) {
 
         AmpResource resource = new AmpResource();
         Node readNode = DocumentManagerUtil.getReadNode(uuid, TLSUtils.getRequest());
@@ -103,7 +100,7 @@ public final class ResourceUtil {
         return new ResourceExporter().export(resource);
     }
 
-    private static boolean isPrivate(NodeWrapper nodeWrapper) throws RepositoryException {
+    private boolean isPrivate(NodeWrapper nodeWrapper) throws RepositoryException {
         return nodeWrapper.getNode().getPath().contains(PRIVATE_PATH_ITEM);
     }
 
@@ -112,7 +109,7 @@ public final class ResourceUtil {
      *
      * @return
      */
-    public static List<JsonBean> getAllResources() {
+    public List<JsonBean> getAllResources() {
         List<JsonBean> resources = new ArrayList<>();
         List<String> resourceUuids = getAllNodeUuids();
 
@@ -129,7 +126,7 @@ public final class ResourceUtil {
      * @param uuids the list of uuids
      * @return
      */
-    public static List<JsonBean> getAllResources(List<String> uuids) {
+    public List<JsonBean> getAllResources(List<String> uuids) {
         List<JsonBean> resources = new ArrayList<>();
 
         for (String uuid : uuids) {
@@ -144,7 +141,7 @@ public final class ResourceUtil {
      *
      * @return list of node uuids
      */
-    public static List<String> getAllNodeUuids() {
+    public List<String> getAllNodeUuids() {
         List<String> nodeUuids = new ArrayList<>();
         nodeUuids.addAll(getPrivateUuids());
         nodeUuids.addAll(getTeamUuids());
@@ -152,15 +149,15 @@ public final class ResourceUtil {
         return nodeUuids;
     }
 
-    private static List<? extends String> getPrivateUuids() {
+    public List<String> getPrivateUuids() {
         return getUuidsFromPath("private");
     }
 
-    private static List<String> getTeamUuids() {
+    private List<String> getTeamUuids() {
         return getUuidsFromPath("team");
     }
 
-    private static List<String> getUuidsFromPath(String path) {
+    private List<String> getUuidsFromPath(String path) {
         Session session = DocumentManagerUtil.getReadSession(TLSUtils.getRequest());
         List<String> uuids = new ArrayList<>();
         try {
@@ -178,14 +175,14 @@ public final class ResourceUtil {
         return uuids;
     }
 
-    private static List<String> getPublicResources() {
+    private List<String> getPublicResources() {
         String sessionId = TLSUtils.getRequest().getSession().getId();
         PUBLIC_RESOURCES_MAP.putIfAbsent(sessionId, getPublicResourcesFromDb());
 
         return PUBLIC_RESOURCES_MAP.get(sessionId);
     }
 
-    private static List<String> getPublicResourcesFromDb() {
+    private List<String> getPublicResourcesFromDb() {
         List<String> publicDocs = new ArrayList<>();
         String query = "SELECT uuid FROM cr_document_node_attributes";
 

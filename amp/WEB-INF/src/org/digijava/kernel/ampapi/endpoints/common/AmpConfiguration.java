@@ -36,7 +36,7 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.kernel.request.TLSUtils;
@@ -98,7 +98,7 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
 
     public static AmpOfflineRelease detectClientRelease() {
         AmpOfflineRelease release = null;
-        if (AmpOfflineModeHolder.isAmpOfflineMode()) {
+        if (AmpClientModeHolder.isOfflineClient()) {
             try {
                 String userAgent = TLSUtils.getRequest().getHeader("User-Agent");
                 release = AmpOfflineRelease.fromUserAgent(userAgent);

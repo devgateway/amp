@@ -24,16 +24,25 @@ package org.digijava.kernel.entity;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.StringUtils;
 
 
 public class Locale implements Serializable {
+    
+    private Long id;
 
     private String name;
     private String code;
     private boolean available;
     private String messageLangKey;
     private Boolean leftToRight;
-
+    
+    private String region;
+    
+    private String unicodeExtension;
+    
+    private java.util.Locale systemLocale;
+    
     public Locale() {
     }
 
@@ -42,7 +51,15 @@ public class Locale implements Serializable {
         this.name = name;
         this.leftToRight = Boolean.TRUE;
     }
-
+    
+    public Long getId() {
+        return id;
+    }
+    
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public String getName() {
         return name;
     }
@@ -83,12 +100,43 @@ public class Locale implements Serializable {
     public void setLeftToRight(Boolean leftToRight) {
         this.leftToRight = leftToRight;
     }
-
+    
+    public String getRegion() {
+        return region;
+    }
+    
+    public void setRegion(String region) {
+        this.region = region;
+    }
+    
+    public String getUnicodeExtension() {
+        return unicodeExtension;
+    }
+    
+    public void setUnicodeExtension(String unicodeExtension) {
+        this.unicodeExtension = unicodeExtension;
+    }
+    
     public String getDirection() {
         if (leftToRight == null) {
             return "ltr";
         }
         return leftToRight.booleanValue() ? "ltr": "rtl";
+    }
+    
+    public java.util.Locale getSystemLocale() {
+        if (systemLocale == null) {
+            java.util.Locale.Builder localeBuilder = new java.util.Locale.Builder().setLanguage(code);
+            if (StringUtils.isNotBlank(region)) {
+                localeBuilder.setRegion(region);
+            }
+            if (StringUtils.isNotBlank(unicodeExtension)) {
+                localeBuilder.setExtension(java.util.Locale.UNICODE_LOCALE_EXTENSION, unicodeExtension);
+            }
+            systemLocale = localeBuilder.build();
+        }
+        
+        return systemLocale;
     }
     
     @Override

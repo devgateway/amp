@@ -532,7 +532,16 @@ public class SiteUtils {
         Locale locale = getDefaultSite().getLocale(TLSUtils.getEffectiveLangCode());
         return !locale.getLeftToRight();
     }
-
+    
+    /**
+     * Get the current system java locale
+     *
+     * @return Locale
+     */
+    public static java.util.Locale getCurrentSystemLocale() {
+        return getDefaultSite().getLocale(TLSUtils.getEffectiveLangCode()).getSystemLocale();
+    }
+    
     public static String getBaseUrl() {
         String url = "";
         Set<SiteDomain> siteDomains = SiteUtils.getDefaultSite().getSiteDomains();

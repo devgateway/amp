@@ -6,7 +6,8 @@ package org.dgfoundation.amp.onepager.util;
 public enum ChangeType {
     MANUAL("Manual"),
     IMPORT("IMPORT"),
-    AMP_OFFLINE("AMP Offline");
+    AMP_OFFLINE("AMP Offline"),
+    IATI_IMPORTER("IATI Importer"),;
 
     private String value;
 

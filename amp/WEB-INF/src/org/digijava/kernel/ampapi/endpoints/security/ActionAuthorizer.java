@@ -13,7 +13,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.security.RuleHierarchy;
 import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -58,14 +58,14 @@ public class ActionAuthorizer {
         }
         
         if (authRules.contains(AuthRule.AMP_OFFLINE) 
-                || (authRules.contains(AuthRule.AMP_OFFLINE_OPTIONAL) && AmpOfflineModeHolder.isAmpOfflineMode())) {
+                || (authRules.contains(AuthRule.AMP_OFFLINE_OPTIONAL) && AmpClientModeHolder.isOfflineClient())) {
             
             if (!FeaturesUtil.isAmpOfflineEnabled()) {
                 ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("AMP Offline is not enabled");
                 ApiErrorResponseService.reportForbiddenAccess(errorMessage);
             }
             
-            if (!AmpOfflineModeHolder.isAmpOfflineMode()) {
+            if (!AmpClientModeHolder.isOfflineClient()) {
                 ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED
                         .withDetails("AMP Offline User-Agent is not present in request headers");
                 ApiErrorResponseService.reportForbiddenAccess(errorMessage);

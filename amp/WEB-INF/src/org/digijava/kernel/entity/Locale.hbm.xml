@@ -10,5 +10,9 @@
 		<property column="AVAILABLE" name="available" type="boolean" />
 		<property column="MESSAGE_LANG_KEY" name="messageLangKey" type="java.lang.String" />
 		<property column="LEFT_TO_RIGHT" name="leftToRight" type="java.lang.Boolean" />
+
+		<property column="region" name="region" type="java.lang.String" />
+		<property column="unicode_extension" name="unicodeExtension" type="java.lang.String" />
+
 	</class>
 </hibernate-mapping>

@@ -61,11 +61,20 @@ public class AuditLoggerManager extends MultiAction {
             }
                 
         }
+        
+
         Collection<AmpAuditLogger> logs=AuditLoggerUtil.getLogObjects(vForm.isWithLogin());
         
         if (request.getParameter("sortBy")!=null){
             vForm.setSortBy(request.getParameter("sortBy"));
         }
+        
+        if(vForm.getFilterBy()!=null){
+            if(vForm.getFilterBy().equalsIgnoreCase("User")){
+               vForm.setSelectedUser(AuditLoggerUtil.getUsersFromLog());  
+            }
+        }
+
         if(vForm.getSortBy()!=null){
                     Long siteId = RequestUtils.getSiteDomain(request).getSite().getId();
                     String langCode = RequestUtils.getNavigationLanguage(request).getCode();
@@ -179,6 +188,21 @@ public class AuditLoggerManager extends MultiAction {
         }
         return  modeSelect(mapping, form, request, response);
     }
+    
+    
+    public ActionForward auditFilter(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        
+        AuditLoggerManagerForm vForm = (AuditLoggerManagerForm) form;
+        if(vForm.getFilterBy().equalsIgnoreCase("User")){
+            List user = vForm.getSelectedUser();
+        }
+        return null;
+    }
+        
+        
+        
 
     public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         return mapping.findForward("forward");
@@ -249,5 +273,5 @@ public class AuditLoggerManager extends MultiAction {
         
         
     }
-    
 }
+

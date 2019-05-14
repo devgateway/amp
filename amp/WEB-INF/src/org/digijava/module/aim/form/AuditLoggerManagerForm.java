@@ -2,6 +2,8 @@ package org.digijava.module.aim.form;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 
@@ -21,6 +23,14 @@ public class AuditLoggerManagerForm extends ActionForm implements Serializable{
     private String frecuency;
     private boolean withLogin;
     
+    private String filterBy;
+    
+    private List<String> selectedUser;
+    private String selectedTeam;
+    private Date dateFrom;
+    private Date dateTo;
+    
+
     public String getUseraction() {
         return useraction;
     }
@@ -101,5 +111,43 @@ public class AuditLoggerManagerForm extends ActionForm implements Serializable{
 
     public void setWithLogin(boolean withLogin) {
         this.withLogin = withLogin;
+    }
+    public List getSelectedUser() {
+        return selectedUser;
+    }
+
+    public void setSelectedUser(List<String> users) {
+        this.selectedUser = users;
+    }
+    public String getSelectedTeam() {
+        return selectedTeam;
+    }
+
+    public void setSelectedTeam(String selectedTeam) {
+        this.selectedTeam = selectedTeam;
+    }
+
+    public Date getDateFrom() {
+        return dateFrom;
+    }
+
+    public void setDateFrom(Date dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    public Date getDateTo() {
+        return dateTo;
+    }
+
+    public void setDateTo(Date dateTo) {
+        this.dateTo = dateTo;
+    }
+    
+    public String getFilterBy() {
+        return filterBy;
+    }
+
+    public void setFilterBy(String filterBy) {
+        this.filterBy = filterBy;
     }
 }

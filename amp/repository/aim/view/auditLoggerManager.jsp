@@ -56,6 +56,26 @@ function actionChanged(value){
 	}
 }
 
+function filterChanged(value){
+		if (value == 'User'){
+			document.getElementById("filterdate").style="display:none";
+			document.getElementById("filteraction").style="display:show";
+			document.aimAuditLoggerManagerForm.filterBy.value = value;		
+//			document.aimAuditLoggerManagerForm.method.value = "auditUsersList";
+ 		    document.aimAuditLoggerManagerForm.submit();
+ 		    
+		}
+		if (value == 'Workspace'){
+			document.getElementById("filterdate").style="display:none";
+			document.getElementById("filteraction").style="display:show";
+		}
+		if (value == 'Date'){
+			document.getElementById("filterdate").style="display:show";
+			document.getElementById("filteraction").style="display:none";
+		}
+}
+
+
 function submitClean(){
 	if (document.getElementById("actionId").value == 'delete' && ! confirm("<digi:trn jsFriendly='true'>Do you really want to delete this log information</digi:trn> ?")){
 		return;
@@ -65,6 +85,16 @@ function submitClean(){
 	document.aimAuditLoggerManagerForm.action = "<%=cleanurl%>";
 	document.aimAuditLoggerManagerForm.target = "_self";
 	document.aimAuditLoggerManagerForm.submit();
+}
+
+function submitFilter() {
+	if (document.getElementById("userId").value != null) {
+	if (document.getElementById("filterId").value == 'User') {
+		var filtervalue = document.getElementById("userId").value;	
+		document.aimAuditLoggerManagerForm.selectedUser.value = filtervalue;
+		document.aimAuditLoggerManagerForm.submit();
+	} 
+}
 }
 
 function toggleLoggs(){
@@ -151,6 +181,22 @@ function toggleSettings(){
 	}
 }
 
+function toggleFilterSettings(){
+	var currentFilterSettings = $('#currentFilterSettings');
+	var displayFilterButton = $('#displayFilterButton');
+	if(currentFilterSettings.css('display') == "inline-flex"){
+		currentFilterSettings.hide();
+		$('#exportScorecard').hide();
+		displayFilterButton.html('<digi:trn jsFriendly="true" key="aim:Showfilteroptions">Show Filter options</digi:trn>'+ ' &gt;&gt;');
+	}
+	else
+	{
+		currentFilterSettings.css('display', 'inline-flex');
+		$('#exportScorecard').css('display','inline-flex');
+		displayFilterButton.html('<digi:trn jsFriendly="true" key="aim:Hidefilteroptions">Hide Filter options</digi:trn>'+ ' &lt;&lt;');
+	}
+}
+
 function exportScorecard () {
 	window.location =  "/rest/scorecard/export";
 }
@@ -176,6 +222,7 @@ function compareAll(){
 <!-- End of Logo -->
 <digi:form action="/auditLoggerManager.do" method="post">
 <input type="hidden" name="withLogin">
+<input type="hidden" name="method" id="method" />
 <center>
 <div id="auditloggermanagercontainer">
 <table cellpadding="0" cellspacing="0">
@@ -276,6 +323,56 @@ function compareAll(){
 										   value="&nbsp;&nbsp;<digi:trn>Compare All</digi:trn>&nbsp;&nbsp;"
 										   style="cursor: pointer; font-style: italic; float: right; margin: 0.5% 1.5% 0.5%;">
 								</c:if> <br>
+								
+				  
+				  <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleFilterSettings();" id="displayFilterButton">
+				  <digi:trn key="aim:Showfilteroptions">Show Filter options</digi:trn> &gt;&gt;</span>
+                                &nbsp;<br>
+								<div style="display:none;background-color:#ffffff;padding:2px" id="currentFilterSettings" >
+                                 <table cellpadding="2" cellspacing="2" border="0" width="250px">
+                                 <tr>
+                                 	<td align="right">
+                                 	<strong><digi:trn>Filter by:</digi:trn>&nbsp;&nbsp;</strong>
+                                	</td>
+                                	<td>
+                                 	<html:select property="filterBy" styleClass="inp-text" styleId="filterId" onchange="filterChanged(this.value);">
+                                 		<html:option value="User"><digi:trn>User</digi:trn> </html:option>
+                                 		<html:option value="Date"><digi:trn>Date</digi:trn> </html:option>
+                                 		<html:option value="Workspace"><digi:trn>Workspace</digi:trn> </html:option>
+                                 	</html:select>
+                                 	</td>
+                                 	<tr>
+                                 	<td align="right">
+                                 	<strong id ="filterBy" style="display:none"><digi:trn>Filter by:</digi:trn>&nbsp;&nbsp;</strong>
+                                	</td>
+                                 	<td>
+                                 	<html:select property="selectedUser" styleClass="inp-text" styleId="filteraction" style="display:none">
+
+                                 	</html:select>
+                                 	</td>
+                                 	</tr>
+                                 	<tr>
+                                 	<td align="left">
+                                 	<input type="text" id="filterdate" style="display:none;">
+                                 	</td>
+                                 	</tr>                                                                 
+                                 <tr>
+                                	<td align="right">
+                                 		<input  class="dr-menu" type="button" onclick="submitFilter()" value="<digi:trn>Apply</digi:trn>">
+                                 		&nbsp;
+									</td>
+									
+									<td align="left">
+									
+																			<input class="dr-menu" type="button" value="<digi:trn>Reset</digi:trn>" onclick="document.aimAuditLoggerManagerForm.reset();toggleSettings()">
+									</td>
+                                 </tr>
+                                 </table>
+                                 </div>
+									</div>                        
+                            	</div>
+                          		<br>
+                          		
 				<table width="100%" height="100%" cellpadding="0" cellspacing="0" bgColor=#ffffff id="auditloggertable">
 				<tr>
 						<td colspan="2" valign="top" >
@@ -489,6 +586,7 @@ function compareAll(){
 							<c:set target="${urlParamsFirst}" property="page" value="1"/>
 							<c:set target="${urlParamsFirst}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsFirst}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
+							<c:set target="${urlParamsFirst}" property="filterBy" value="${aimAuditLoggerManagerForm.filterBy}" />
 							<c:set var="translation">
 								<digi:trn key="aim:firstpage">First Page</digi:trn>
 							</c:set>
@@ -499,6 +597,7 @@ function compareAll(){
 							<c:set target="${urlParamsPrevious}" property="page" value="${aimAuditLoggerManagerForm.currentPage -1}"/>
 							<c:set target="${urlParamsPrevious}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsPrevious}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
+							<c:set target="${urlParamsPrevious}" property="filterBy" value="${aimAuditLoggerManagerForm.filterBy}" />
 							<c:set var="translation">
 								<digi:trn key="aim:previouspage">Previous Page</digi:trn>
 							</c:set>|
@@ -516,6 +615,7 @@ function compareAll(){
 						<c:set target="${urlParams1}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 						<c:set target="${urlParams1}" property="page"><%=pages%></c:set>
 						<c:set target="${urlParams1}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
+						<c:set target="${urlParams1}" property="filterBy" value="${aimAuditLoggerManagerForm.filterBy}" />
 						<c:if test="${aimAuditLoggerManagerForm.currentPage == pages && aimAuditLoggerManagerForm.pagesSize > 1}">
 							<font color="#FF0000"><%=pages%></font>
 							|	
@@ -535,6 +635,7 @@ function compareAll(){
 							<c:set target="${urlParamsNext}" property="page" value="${aimAuditLoggerManagerForm.currentPage+1}"/>
 							<c:set target="${urlParamsNext}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsNext}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
+							<c:set target="${urlParamsNext}" property="filterBy" value="${aimAuditLoggerManagerForm.filterBy}" />
 							<c:set var="translation"> <digi:trn key="aim:nextpage">Next Page</digi:trn></c:set>
 							<digi:link  href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsNext" title="${translation}">
 								<span style="font-size: 8pt; font-family: Tahoma;"><digi:trn key="aim:next">Next</digi:trn></span>
@@ -545,12 +646,14 @@ function compareAll(){
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsLast}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
+							<c:set target="${urlParamsLast}" property="filterBy" value="${aimAuditLoggerManagerForm.filterBy}" />
 						</c:if>
 						
 						<c:if test="${aimAuditLoggerManagerForm.pagesSize < aimAuditLoggerManagerForm.pagesToShow}">
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
 							<c:set target="${urlParamsLast}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
+							<c:set target="${urlParamsLast}" property="filterBy" value="${aimAuditLoggerManagerForm.filterBy}" />
 						</c:if>
 						<c:set var="translation"><digi:trn key="aim:lastpage">Last Page</digi:trn></c:set>
 						<digi:link href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsLast" title="${translation}">

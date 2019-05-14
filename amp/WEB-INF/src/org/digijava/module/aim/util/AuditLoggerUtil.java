@@ -259,6 +259,14 @@ public class AuditLoggerUtil {
         }
     }
     
+    public static List<String> getUsersFromLog() {
+        String query = "select distinct editorname from amp_audit_logger order by editorname asc";
+        Session session = PersistenceManager.getSession();
+        SQLQuery sqlQuery = session.createSQLQuery(query);
+        return sqlQuery.list();                
+    }
+    
+        
     /**
      * 
      * @return

@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
@@ -50,7 +51,7 @@ public class RemoveCalendarEventTrigger extends Trigger {
     }
     
     private String buildDateFromEvent(Date date){
-       String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+       String pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
        if (pattern == null) {
            pattern = "dd/MM/yyyy";
        }

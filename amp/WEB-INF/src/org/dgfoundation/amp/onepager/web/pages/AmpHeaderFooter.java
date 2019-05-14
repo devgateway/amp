@@ -18,8 +18,7 @@ import org.dgfoundation.amp.onepager.behaviors.DocumentReadyBehavior;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.util.UrlEmbederComponent;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.SiteUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +27,8 @@ import javax.servlet.http.HttpSession;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author mpostelnicu@dgateway.org
@@ -38,16 +39,20 @@ public class AmpHeaderFooter extends WebPage {
 
     public AmpHeaderFooter() {
         List<Cookie> cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
-
+        Map<String, Locale> ampLocales = (Map<String, Locale>) SiteUtils.getDefaultSite()
+                .getTranslationLanguages().stream()
+                .collect(Collectors.toMap(org.digijava.kernel.entity.Locale::getCode,
+                        org.digijava.kernel.entity.Locale::getSystemLocale));
+    
         if (cookies != null) {
             boolean localeSet = false;
             Iterator<Cookie> it = cookies.iterator();
             while (it.hasNext()) {
-                Cookie cookie = (Cookie) it.next();
+                Cookie cookie = it.next();
                 if (cookie.getName().equals("digi_language")) {
                     String languageCode = cookie.getValue();
-                    Session.get().setLocale(new Locale(languageCode));
-                    if (languageCode != null) {
+                    if (languageCode != null && ampLocales.containsKey(languageCode)) {
+                        Session.get().setLocale(ampLocales.get(languageCode));
                         localeSet = true;
                         break;
                     }
@@ -55,7 +60,7 @@ public class AmpHeaderFooter extends WebPage {
             }
 
             if (!localeSet){
-                Session.get().setLocale(new Locale(TranslatorWorker.getDefaultLocalCode()));
+                Session.get().setLocale(SiteUtils.getCurrentSystemLocale());
             }
         }
         

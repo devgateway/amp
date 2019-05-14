@@ -44,13 +44,13 @@ public abstract class AmpDateFormatter {
     
     protected final Locale locale;
     protected final String pattern;
-    protected final DateTimeFormatter dtf;
-    
     protected AmpDateFormatter(Locale locale, String pattern) {
         this.locale = locale;
         this.pattern = pattern;
         dtf = DateTimeFormatter.ofPattern(this.pattern).withLocale(locale);
     }
+    
+    protected final DateTimeFormatter dtf;
     
     public String format(Date date) {
         if (date == null) return null;

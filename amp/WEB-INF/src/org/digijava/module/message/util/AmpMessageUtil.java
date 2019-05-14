@@ -15,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpEmail;
@@ -737,7 +738,7 @@ public class AmpMessageUtil {
     }
     
     public static String buildDateFromEvent(Date date){
-        String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+        String pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
         if (pattern == null) {
             pattern = "dd/MM/yyyy";
         }

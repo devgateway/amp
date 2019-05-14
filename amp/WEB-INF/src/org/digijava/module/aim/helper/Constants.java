@@ -127,11 +127,6 @@ public final class Constants {
     //public static  String COUNTRY_ISO = "";
     //public static  String COUNTRY = "";
 
-    public static final String GLOBALSETTINGS_DATEFORMAT="Default Date Format";
-    public static final String GLOBALSETTINGS_COMPUTE_TOTALS="Compute Totals for Activities";
-    public static final String GLOBALSETTINGS_MULTISECTORSELECT="Multi-Sector Selecting";
-    public static final String GLOBALSETTINGS_INCLUDE_PLANNED="Totals include planned";
-    
     //added in burkina
     //moved to GlobalSettingsCOnstants
     //public static final String GLOBALSETTINGS_DEFAULT_EX_RATE_SEPARATOR="Default Exchange Rate Separator";

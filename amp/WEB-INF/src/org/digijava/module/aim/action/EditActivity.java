@@ -168,8 +168,6 @@ public class EditActivity extends Action {
 
 
     AmpActivityVersion activity = null;
-    String computeTotals = FeaturesUtil.getGlobalSettingValue(Constants.
-        GLOBALSETTINGS_COMPUTE_TOTALS);
 
     boolean debug = request.getParameter("debug") != null;
 

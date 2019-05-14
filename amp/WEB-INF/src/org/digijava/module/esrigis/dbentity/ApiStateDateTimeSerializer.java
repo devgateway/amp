@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import io.swagger.models.properties.DateTimeProperty;
 import io.swagger.models.properties.Property;
 import org.digijava.kernel.ampapi.swagger.converters.PropertyDescriber;
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -29,7 +29,7 @@ public class ApiStateDateTimeSerializer extends StdSerializer<Date> implements P
         if (value == null) {
             gen.writeNull();
         } else {
-            String formatString = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+            String formatString = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
             DateFormat df = new SimpleDateFormat(formatString + "'T'HH:mm'Z'");
             TimeZone tz = TimeZone.getTimeZone("UTC");
 

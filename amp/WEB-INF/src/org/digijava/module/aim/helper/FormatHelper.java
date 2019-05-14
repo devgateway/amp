@@ -213,10 +213,6 @@ public class FormatHelper {
         return String.valueOf(getDefaultFormat().getDecimalFormatSymbols().getGroupingSeparator());
     }
 
-    public final static String formatDate(GregorianCalendar date, String formatString) {
-        return date == null ? null : new SimpleDateFormat(formatString).format(date.getTime());
-    }
-    
     public final static boolean isValidDateString(String sDate, SimpleDateFormat formatter) {
         if (sDate == null)
             return true;
@@ -231,11 +227,21 @@ public class FormatHelper {
     }
     
     public static GregorianCalendar parseLocalizedDate(String sDate) {
-        return parseDate(sDate, Locale.forLanguageTag(TLSUtils.getEffectiveLangCode()));
+        return parseDate(sDate, SiteUtils.getCurrentSystemLocale());
     }
     
     public static GregorianCalendar parseDate(String sDate) {
         return parseDate(sDate, Locale.getDefault());
+    }
+    
+    public static Date parseDate2(String sDate) {
+        try {
+            LocalDate ld = AmpDateFormatterFactory.getDefaultFormatter().parseDate(sDate);
+            return java.sql.Date.valueOf(ld);
+        } catch (Exception e) {
+            logger.error("Can't parse date " + sDate, e);
+            return null;
+        }
     }
     
     private static GregorianCalendar parseDate(String sDate, Locale locale){
@@ -251,19 +257,7 @@ public class FormatHelper {
         }
     }
     
-    public static Date parseDate2(String sDate){
-        try {
-            LocalDate ld = AmpDateFormatterFactory.getDefaultFormatter().parseDate(sDate);
-            return java.sql.Date.valueOf(ld);
-        } catch (Exception e) {
-            logger.error("Can't parse date " + sDate, e);
-            return null;
-        }
-    }
-    
    public static String formatDate(Date date) {
-       if(date == null) return null;
-       String defaultFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
-       return new SimpleDateFormat(defaultFormat, Locale.forLanguageTag(TLSUtils.getEffectiveLangCode())).format(date); 
+       return date != null ? AmpDateFormatterFactory.getLocalizedFormatter().format(date) : null;
    }
 }

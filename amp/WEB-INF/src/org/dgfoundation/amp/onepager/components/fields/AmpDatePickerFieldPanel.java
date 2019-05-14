@@ -58,7 +58,7 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
         String readonly = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.READONLY_DATES);
         if (readonly != null && "TRUE".equals(readonly.toUpperCase()))
             date.add(new AttributeModifier("readonly","readonly"));
-        String datePattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+        String datePattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
         date.add(new AttributeModifier("placeholder", datePattern));
         dateWrapper.add(date);
         initFormComponent(date);

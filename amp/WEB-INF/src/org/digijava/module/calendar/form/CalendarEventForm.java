@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.calendar.entity.DateBreakDown;
@@ -403,7 +404,7 @@ public class CalendarEventForm
 //        organizations = null;
 //        selOrganizations = null;
         
-       String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+       String dtformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
     if (dtformat == null){
         dtformat = "dd/mm/yyyy";
         }

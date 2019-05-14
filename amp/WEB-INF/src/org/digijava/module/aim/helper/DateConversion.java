@@ -117,7 +117,7 @@ public class DateConversion
         if (strDate == null)
             return null;
         try{
-            String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+            String pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
             if (pattern == null || pattern.equals("")) {
                 pattern = "MMM/dd/yyyy";
             }

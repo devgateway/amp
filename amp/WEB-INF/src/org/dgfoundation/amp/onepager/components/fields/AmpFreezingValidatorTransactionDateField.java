@@ -1,20 +1,13 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.convert.converter.DateConverter;
-import org.dgfoundation.amp.onepager.components.FundingListEditor;
-import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
-import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.validators.AmpFreezingValidatorTransactionDate;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
-
-import com.tonbeller.wcf.form.FormComponent;
 
 /**
  * Transaction date validator
@@ -27,7 +20,7 @@ public class AmpFreezingValidatorTransactionDateField extends AmpSimpleValidator
 
     /**
      * @param id
-     * @param responseComponentInput
+     * @param ampFundingDetail
      * @param fmName
      */
     public AmpFreezingValidatorTransactionDateField(String id, IModel<AmpFundingDetail> ampFundingDetail,
@@ -52,7 +45,7 @@ public class AmpFreezingValidatorTransactionDateField extends AmpSimpleValidator
                 //Ideally this should be date but for that we need to extend
                 //AmpHiddenFieldPanel to be able to override a formatter
                 SimpleDateFormat dateFormatter = new SimpleDateFormat(
-                        FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT));
+                        FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
                 if (fundingMOdel.getObject().getTransactionDate() != null) {
                     return dateFormatter.format(fundingMOdel.getObject().getTransactionDate());
                 } else {

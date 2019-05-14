@@ -42,7 +42,7 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -213,7 +213,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                 }
                 
                 PropertyModel<Date> dateModel = new PropertyModel<Date>(item.getModel(), "date.time");
-                String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+                String pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
                 pattern = pattern.replace('m', 'M');
                 SimpleDateFormat formater = new SimpleDateFormat(pattern);
                 String formatedDate = formater.format(dateModel.getObject());

@@ -20,7 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
@@ -91,7 +91,7 @@ public class ResourceImporter extends ObjectImporter {
         }
 
         TeamMember teamMemberCreator = null;
-        if (AmpOfflineModeHolder.isAmpOfflineMode()) {
+        if (AmpClientModeHolder.isOfflineClient()) {
             List<ApiErrorMessage> errorMessages = validateCreatorEmailTeam(newJson);
             if (errorMessages != null) {
                 return errorMessages;

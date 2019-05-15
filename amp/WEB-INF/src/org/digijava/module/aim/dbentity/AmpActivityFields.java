@@ -166,6 +166,12 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Document Space")
     protected String documentSpace;
 
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.IATI_IDENTIFIER, importable = true,
+            fmPath = "/Activity Form/Identification/IATI Identifier",
+            readOnlyFmPath = "/Activity Form/Identification/IATI Identifier Read Only")
+    @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.IATI_IDENTIFIER)
+    protected String iatiIdentifier;
+
     @Interchangeable(fieldTitle = ActivityFieldsConstants.IS_DRAFT, required = ALWAYS, importable = true)
     @VersionableFieldSimple(fieldTitle = "Is Draft?", blockSingleChange = true)
     protected Boolean draft;
@@ -350,12 +356,6 @@ LoggerIdentifiable, Cloneable {
      */
     @Deprecated
     protected Set referenceDocs;
-
-    /*
-    @Deprecated
-    @VersionableCollection(fieldTitle = "Activity Programs")
-    protected Set activityPrograms;
-     */
 
     // use contFirstName and contLastName instead.
     // The field is defunct
@@ -775,6 +775,7 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "PPC Annual Budgets")
+
     protected Set<AmpAnnualProjectBudget> annualProjectBudgets = new HashSet<>();
 
         public Boolean getMergedActivity() {
@@ -2218,5 +2219,14 @@ LoggerIdentifiable, Cloneable {
         public void setCostAmounts(Set<AmpFundingAmount> costAmounts) {
             this.costAmounts = costAmounts;
         }
+    
+    public String getIatiIdentifier() {
+        return iatiIdentifier;
+    }
+    
+    public void setIatiIdentifier(String iatiIdentifier) {
+        this.iatiIdentifier = iatiIdentifier;
+    }
+    
 }
 

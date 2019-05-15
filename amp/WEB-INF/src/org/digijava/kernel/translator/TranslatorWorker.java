@@ -41,7 +41,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LuceneWorker;
@@ -247,7 +247,7 @@ public class TranslatorWorker {
      */
     private static void processAmpOfflineMessage(TranslatorWorker worker, String text, Message message) {
         boolean updateRequired = false;
-        if (AmpOfflineModeHolder.isAmpOfflineMode() && !isAmpOfflineMessage(message)) {
+        if (AmpClientModeHolder.isOfflineClient() && !isAmpOfflineMessage(message)) {
             message.setAmpOffline(true);
             updateRequired = true;
         }

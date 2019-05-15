@@ -668,6 +668,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
         private String projectCategoryOtherInfo = null;
         private String modalitiesOtherInfo = null;
         private String activitySummary = null;
+        private String iatiIdentifier;
         
         private String conditionality = null;
         private String projectManagement = null;
@@ -915,7 +916,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
         public String getCrisNumber() {
             return this.crisNumber;
         }
-        
+    
+        public String getIatiIdentifier() {
+            return iatiIdentifier;
+        }
+    
+        public void setIatiIdentifier(String iatiIdentifier) {
+            this.iatiIdentifier = iatiIdentifier;
+        }
+    
         @java.lang.SuppressWarnings("all")
         public Long[] getSelOrgs() {
             return this.selOrgs;

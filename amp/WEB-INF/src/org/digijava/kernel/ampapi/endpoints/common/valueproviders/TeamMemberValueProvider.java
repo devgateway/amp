@@ -12,6 +12,6 @@ public class TeamMemberValueProvider implements InterchangeableValueProvider<Amp
     @Override
     public String getValue(AmpTeamMember member) {
         User user = member.getUser();
-        return String.format("%s %s - %s", user.getFirstNames(), user.getLastName(), member.getAmpTeam().getName());
+        return String.format("%s %s", user.getFirstNames(), user.getLastName());
     }
 }

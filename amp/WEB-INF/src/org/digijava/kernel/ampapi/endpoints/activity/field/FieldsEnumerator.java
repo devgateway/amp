@@ -29,9 +29,10 @@ import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
-import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
@@ -48,8 +49,6 @@ public class FieldsEnumerator {
 
     private static final Logger LOGGER = Logger.getLogger(FieldsEnumerator.class);
 
-    private String iatiIdentifierField;
-
     private FieldInfoProvider fieldInfoProvider;
 
     private FMService fmService;
@@ -64,23 +63,12 @@ public class FieldsEnumerator {
      * Fields Enumerator
      */
     public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-            TranslatorService translatorService,
-            Function<String, Boolean> allowMultiplePrograms) {
-        this(fieldInfoProvider, fmService, translatorService, allowMultiplePrograms, null);
-    }
-
-    /**
-     * Fields Enumerator
-     */
-    public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-            TranslatorService translatorService,
-            Function<String, Boolean> allowMultiplePrograms, String iatiIdentifierField) {
+            TranslatorService translatorService, Function<String, Boolean> allowMultiplePrograms) {
         this.fieldInfoProvider = fieldInfoProvider;
         this.fmService = fmService;
         this.translatorService = translatorService;
         interchangeDependencyResolver = new InterchangeDependencyResolver(fmService);
         this.allowMultiplePrograms = allowMultiplePrograms;
-        this.iatiIdentifierField = iatiIdentifierField;
     }
 
     /**
@@ -136,7 +124,7 @@ public class FieldsEnumerator {
         String label = getLabelOf(interchangeable);
         apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
         apiField.setRequired(getRequiredValue(context, fieldTitle));
-        apiField.setImportable(interchangeable.importable());
+        apiField.setImportable(getImportableValue(context, fieldTitle, interchangeable));
 
         if (interchangeable.percentageConstraint()) {
             apiField.setPercentage(true);
@@ -189,11 +177,6 @@ public class FieldsEnumerator {
         }
         if (StringUtils.isNotEmpty(interchangeable.discriminatorOption())) {
             apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
-        }
-
-        if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
-            apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
-            apiField.setImportable(true);
         }
 
         if (apiField.getApiType().getFieldType() == FieldType.LIST
@@ -398,6 +381,10 @@ public class FieldsEnumerator {
      * N (no) = not required. .
      */
     private String getRequiredValue(FEContext context, String fieldTitle) {
+        if (isFieldIatiIdentifier(fieldTitle) && AmpClientModeHolder.isIatiImporterClient()) {
+            return ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
+        }
+        
         Interchangeable fieldIntch = context.getIntchStack().peek();
 
         ActivityEPConstants.RequiredValidation required = fieldIntch.required();
@@ -418,6 +405,20 @@ public class FieldsEnumerator {
         }
 
         return ActivityEPConstants.FIELD_NOT_REQUIRED;
+    }
+    
+    private boolean getImportableValue(FEContext context, String fieldTitle, Interchangeable interchangeable) {
+        if (isFieldIatiIdentifier(fieldTitle) && AmpClientModeHolder.isIatiImporterClient()) {
+            return true;
+        }
+        
+        boolean importable = interchangeable.importable();
+        
+        if (StringUtils.isNotBlank(interchangeable.readOnlyFmPath())) {
+            return importable && !isVisible(interchangeable.readOnlyFmPath(), context);
+        }
+        
+        return importable;
     }
 
     /**
@@ -510,7 +511,6 @@ public class FieldsEnumerator {
 
     private boolean isFieldVisible(FEContext context) {
         Interchangeable interchangeable = context.getIntchStack().peek();
-
         return isVisible(interchangeable.fmPath(), context);
     }
 
@@ -522,25 +522,12 @@ public class FieldsEnumerator {
         return isVisible;
     }
 
-    /**
-     * Decides whether a field stores iati-identifier value
-     *
-     * @param fieldName
-     * @return true if is iati-identifier
-     */
-    private boolean isFieldIatiIdentifier(String fieldName) {
-        return StringUtils.equals(this.iatiIdentifierField, fieldName);
-    }
-
     protected boolean isVisible(String fmPath, FEContext context) {
-        Interchangeable interchangeable = context.getIntchStack().peek();
-        String fieldTitle = FieldMap.underscorify(interchangeable.fieldTitle());
-
-        if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
-            return true;
-        } else {
-            return fmService.isVisible(fmPath, context.getIntchStack());
-        }
+        return fmService.isVisible(fmPath, context.getIntchStack());
+    }
+    
+    private boolean isFieldIatiIdentifier(String fieldName) {
+        return StringUtils.equals(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER), fieldName);
     }
 
 }

@@ -18,6 +18,7 @@ import org.dgfoundation.amp.onepager.behaviors.DocumentReadyBehavior;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.util.UrlEmbederComponent;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
 
 import javax.servlet.http.Cookie;
@@ -60,7 +61,7 @@ public class AmpHeaderFooter extends WebPage {
             }
 
             if (!localeSet){
-                Session.get().setLocale(SiteUtils.getCurrentSystemLocale());
+                Session.get().setLocale(TLSUtils.getCurrentSystemLocale());
             }
         }
         

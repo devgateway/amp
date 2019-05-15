@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 
-import org.digijava.kernel.util.SiteUtils;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.common.util.DateTimeUtil;
 
 public class AmpDateFormatterFactory {
@@ -68,7 +68,7 @@ public class AmpDateFormatterFactory {
      * @return
      */
     public static AmpDateFormatter getLocalizedFormatter(String pattern) {
-        return getLocalizedFormatter(pattern, SiteUtils.getCurrentSystemLocale());
+        return getLocalizedFormatter(pattern, TLSUtils.getCurrentSystemLocale());
     }
     
     /**

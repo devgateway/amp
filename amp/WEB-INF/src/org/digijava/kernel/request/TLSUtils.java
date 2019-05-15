@@ -38,6 +38,7 @@ public class TLSUtils {
     public HttpServletRequest request;
     private static String forcedLangCode = null;
     private Boolean forcedSSCWorkspace;
+    private static Locale forcedLocale = null;
 
     public static String getLangCode() {
         if (TLSUtils.forcedLangCode != null) {
@@ -78,7 +79,24 @@ public class TLSUtils {
             return "en";
         }
     }
-
+    
+    public static Locale getCurrentLocale() {
+        if (forcedLocale != null) {
+            return forcedLocale;
+        }
+        
+        return SiteUtils.getDefaultSite().getLocale(TLSUtils.getEffectiveLangCode());
+    }
+    
+    /**
+     * Get the current system java locale
+     *
+     * @return Locale
+     */
+    public static java.util.Locale getCurrentSystemLocale() {
+        return getCurrentLocale().getSystemLocale();
+    }
+    
     public void setForcedSSCWorkspace(Boolean forcedSSCWorkspace) {
         this.forcedSSCWorkspace = forcedSSCWorkspace;
     }
@@ -124,6 +142,9 @@ public class TLSUtils {
         forcedLangCode = langCode;
     }
     
+    public static void offlineSetForcedLocale(Locale locale) {
+        forcedLocale = locale;
+    }
     /**
      * calculates the effectively-used language code, e.g. either the currently-set one OR the default one ("en")
      * @return

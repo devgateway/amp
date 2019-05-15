@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiUtils;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 
@@ -152,5 +153,6 @@ public abstract class AmpTestCase extends Assert
     
     public void setLocale(String locale) {
         TLSUtils.offlineSetForcedLanguage(locale);
+        TLSUtils.offlineSetForcedLocale(new Locale(locale, locale));
     }
 }

@@ -10,7 +10,8 @@ Saiku.events.bind('session:new', function(session) {
 	        if(Settings.PAGINATION) {
 	        	$(".pagination_sprite").show();
 	        	$(".pagination_info").show();
-	        	$(this.el).find(".pagination_info").val(this.query.get('page') + "/" + this.query.get('max_page_no'));
+	        	$(this.el).find(".pagination_info").val(
+                    translateNumber(this.query.get('page')) + "/" + translateNumber(this.query.get('max_page_no')));
 	        }
 	        else {
 	        	$(".pagination_sprite").hide();
@@ -18,6 +19,14 @@ Saiku.events.bind('session:new', function(session) {
         	}
         });
     }
+
+	function translateNumber(input) {
+		if (Saiku.i18n.locale === "ar" && Saiku.i18n.region === 'EG') {
+        	return TranslationManager.convertNumbersToEasternArabic(input.toString())
+        }
+
+		return input;
+	}
 
     // Attach stats to existing tabs
     for(var i = 0; i < Saiku.tabs._tabs.length; i++) {

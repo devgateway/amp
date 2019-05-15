@@ -399,7 +399,9 @@ public class SettingsUtils {
 
         settings.setNumberDivider(AmountsUnits.getDefaultValue().divider);
 
-        settings.setLanguage(TLSUtils.getEffectiveLangCode());
+        settings.setLanguage(SiteUtils.getCurrentSystemLocale().getLanguage());
+    
+        settings.setRegion(SiteUtils.getCurrentSystemLocale().getCountry());
     
         settings.setDefaultLanguage(TLSUtils.getSite().getDefaultLanguage().getCode());
     

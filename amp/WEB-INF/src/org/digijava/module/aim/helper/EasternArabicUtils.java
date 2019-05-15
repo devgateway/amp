@@ -4,7 +4,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
-import org.digijava.kernel.util.SiteUtils;
 
 public final class EasternArabicUtils {
     
@@ -44,10 +43,9 @@ public final class EasternArabicUtils {
         return text;
     }
     
-    public static boolean isLocaleEasternArabic() {
-        Locale currentLocale = SiteUtils.getCurrentSystemLocale();
-        return currentLocale.getLanguage().equals(CODE_ARABIC_LANGUAGE)
-                && currentLocale.getExtension(Locale.UNICODE_LOCALE_EXTENSION).equals(NUMERIC_ARABIC_EXTENSION);
+    public static boolean isLocaleEasternArabic(Locale locale) {
+        return locale.getLanguage().equals(CODE_ARABIC_LANGUAGE)
+                && locale.getExtension(Locale.UNICODE_LOCALE_EXTENSION).equals(NUMERIC_ARABIC_EXTENSION);
     }
     
 }

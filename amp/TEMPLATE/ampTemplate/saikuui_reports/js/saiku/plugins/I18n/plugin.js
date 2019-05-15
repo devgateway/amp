@@ -20,6 +20,7 @@
 Saiku.i18n = {
     locale: (window.currentLanguage || navigator.language || navigator.browserLanguage ||
         navigator.systemLanguage || navigator.userLanguage).substring(0, 2).toLowerCase(),
+    region: "",
     po_file: {},
     translate: function (specificElement) {
     	Saiku.logger.log("I18N.translate");
@@ -37,8 +38,12 @@ Saiku.i18n = {
         if (Saiku.i18n.locale == 'zh') Saiku.i18n.locale = 'cn';
 
         if (Saiku.i18n.locale != "en") {
+            var fileName = Saiku.i18n.locale;
+            if ($.trim(Saiku.i18n.region) != "") {
+                fileName += "_" + Saiku.i18n.region;
+            }
             $.ajax({
-                url: "js/saiku/plugins/I18n/po/" + Saiku.i18n.locale + ".json",
+                url: "js/saiku/plugins/I18n/po/" + fileName + ".json",
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
@@ -276,8 +281,10 @@ if(Settings.USE_AMP_LANGUAGE) {
 	$.getJSON("/rest/amp/settings", function(data) {
 		//debugger;
 		var language = data["language"];
+        var region = data["region"];
 		window.currentLanguage = language;
 		Saiku.i18n.locale = language;
+        Saiku.i18n.region = region;
 		Saiku.i18n.automatic_i18n();
 	});
 }

@@ -3,6 +3,7 @@ package org.digijava.module.translation.exotic;
 import java.time.LocalDate;
 import java.util.Locale;
 
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.helper.EasternArabicUtils;
 
 /**
@@ -19,7 +20,7 @@ public class AmpSimpleDateFormatter extends AmpDateFormatter {
     
     @Override
     public String format(LocalDate date) {
-        if (EasternArabicUtils.isLocaleEasternArabic()) {
+        if (EasternArabicUtils.isLocaleEasternArabic(SiteUtils.getCurrentSystemLocale())) {
             return EasternArabicUtils.convertWesternArabicToEasternArabic(dtf.format(date));
         }
     
@@ -28,7 +29,7 @@ public class AmpSimpleDateFormatter extends AmpDateFormatter {
     
     @Override
     public LocalDate parseDate(String in) {
-        if (EasternArabicUtils.isLocaleEasternArabic()) {
+        if (EasternArabicUtils.isLocaleEasternArabic(SiteUtils.getCurrentSystemLocale())) {
             return dtf.parse(EasternArabicUtils.convertEasternArabicToWasternArabic(in), LocalDate::from);
         }
         

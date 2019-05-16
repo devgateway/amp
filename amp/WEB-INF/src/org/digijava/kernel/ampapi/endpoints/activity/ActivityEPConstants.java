@@ -56,6 +56,7 @@ public class ActivityEPConstants {
     public static final String PERCENTAGE_CONSTRAINT = "percentage_constraint";
     public static final String DEPENDENCIES ="dependencies";
     public static final String TREE_COLLECTION_CONSTRAINT = "tree_collection";
+    public static final String COMMON_POSSIBLE_VALUES = "common-possible-values";
     
     public static final String PREVIEW_CURRENCY_ID = "currency-id";
     
@@ -73,7 +74,6 @@ public class ActivityEPConstants {
     public static final String VALIDATION_STATUS = "validation-status";
     public static final String DAYS_FOR_AUTOMATIC_VALIDATION = "days-for-automatic-validation";
     public static final String ACTIVITY_TEAM = "activity-team";
-    public static final String IATI_IDENTIFIER_AMP_FIELD_DEFAULT_NAME = "project_code";
     public static final String VERSION_HISTORY = "version-history";
     public static final String MODIFIED_BY = "modified-by";
     public static final String MODIFIED_DATE = "modified-date";

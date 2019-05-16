@@ -24,7 +24,6 @@ import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.approval.AllowedApproverConstraint;
 import org.hamcrest.Matcher;
@@ -94,7 +93,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
     }
 
     @Test
-    public void testValidApprovedByWhenNoApprovalStatus() {
+    public void testValidNullApprovedByWhenNoApprovalStatus() {
         AmpActivity newActivity = getDefaultActivity();
 
         mockValidation("any", "any", newActivity, null);
@@ -102,6 +101,40 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(newActivity);
 
         assertThat(violations, emptyIterable());
+    }
+
+    @Test
+    public void testValidNullApprovedByWhenNewActivityNotApproved() {
+        AmpActivity newActivity = getAmpActivity(null, notApprover, ApprovalStatus.STARTED);
+
+        mockValidation("any", "any", newActivity, null);
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(newActivity);
+
+        assertThat(violations, emptyIterable());
+    }
+
+    @Test
+    public void testInvalidNullApprovedByWhenPreviouselyApprovedActivityNotApproved() {
+        AmpActivity newActivity = getAmpActivity(null, notApprover, ApprovalStatus.EDITED);
+        AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.APPROVED);
+
+        mockValidation("any", "any", newActivity, oldActivity);
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(newActivity);
+
+        assertThat(violations, contains(approverViolation()));
+    }
+
+    @Test
+    public void testNullApprovedByWhenApproved() {
+        AmpActivity newActivity = getAmpActivity(null, ampTeamMember, ApprovalStatus.APPROVED);
+
+        mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, newActivity, null);
+
+        Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(newActivity);
+
+        assertThat(violations, contains(approverViolation()));
     }
 
     @Test

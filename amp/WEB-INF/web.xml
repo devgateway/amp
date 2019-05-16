@@ -177,11 +177,11 @@
 	</listener>
 
 	<filter>
-		<filter-name>ampOfflineClientDetector</filter-name>
-		<filter-class>org.digijava.kernel.ampapi.filters.AmpOfflineClientDetectorFilter</filter-class>
+		<filter-name>ampClientDetector</filter-name>
+		<filter-class>org.digijava.kernel.ampapi.filters.AmpClientDetectorFilter</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>ampOfflineClientDetector</filter-name>
+		<filter-name>ampClientDetector</filter-name>
 		<url-pattern>/rest/*</url-pattern>
 	</filter-mapping>
 

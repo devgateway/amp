@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -38,10 +39,14 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
+import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.services.sync.model.SyncConstants;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
@@ -50,6 +55,7 @@ import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -125,6 +131,27 @@ public class FieldsEnumeratorTest {
         private Date timestampField;
     }
     
+    private static class ReadOnlyFieldClass {
+        
+        @Interchangeable(fieldTitle = "Read Only Empty Field", importable = true)
+        private String readOnlyEmpty;
+    
+        @Interchangeable(fieldTitle = "Read Only Hidden Field", importable = true, readOnlyFmPath = HIDDEN_FM_PATH)
+        private String readOnlyHidden;
+    
+        @Interchangeable(fieldTitle = "Read Only Visible Field", importable = true, readOnlyFmPath = VISIBLE_FM_PATH)
+        private String readOnlyVisible;
+    
+        @Interchangeable(fieldTitle = "Not Importable Read Only Hidden Field", readOnlyFmPath = HIDDEN_FM_PATH)
+        private String notImportableReadOnlyHidden;
+    }
+    
+    private static class IatiFieldClass {
+        @Interchangeable(fieldTitle = ActivityFieldsConstants.IATI_IDENTIFIER, importable = true,
+                readOnlyFmPath = VISIBLE_FM_PATH)
+        private String iatiField;
+    }
+    
     @Test
     public void testOneField() {
         List<APIField> actual = fieldsFor(OneFieldClass.class);
@@ -152,7 +179,84 @@ public class FieldsEnumeratorTest {
     
         assertEqualsDigest(Arrays.asList(dateField, timestampField), actual);
     }
-
+    
+    @Test
+    public void testReadOnlyField() {
+        List<APIField> actual = fieldsFor(ReadOnlyFieldClass.class);
+    
+        APIField readOnlyEmpty = newStringField();
+        readOnlyEmpty.setFieldName("read_only_empty_field");
+        readOnlyEmpty.setFieldLabel(fieldLabelFor("Read Only Empty Field"));
+        readOnlyEmpty.setImportable(true);
+    
+        APIField readOnlyHidden = newStringField();
+        readOnlyHidden.setFieldName("read_only_hidden_field");
+        readOnlyHidden.setFieldLabel(fieldLabelFor("Read Only Hidden Field"));
+        readOnlyHidden.setImportable(true);
+    
+        APIField readOnlyVisible = newStringField();
+        readOnlyVisible.setFieldName("read_only_visible_field");
+        readOnlyVisible.setFieldLabel(fieldLabelFor("Read Only Visible Field"));
+        readOnlyVisible.setImportable(false);
+    
+        APIField notImportableReadOnlyVisible = newStringField();
+        notImportableReadOnlyVisible.setFieldName("not_importable_read_only_hidden_field");
+        notImportableReadOnlyVisible.setFieldLabel(fieldLabelFor("Not Importable Read Only Hidden Field"));
+        notImportableReadOnlyVisible.setImportable(false);
+    
+        assertEqualsDigest(
+                Arrays.asList(readOnlyEmpty, readOnlyHidden, readOnlyVisible, notImportableReadOnlyVisible), actual);
+    }
+    
+    @Test
+    public void testIatiFieldIatiImporterMode() {
+        AmpClientModeHolder.setClientMode(ClientMode.IATI_IMPORTER);
+        try {
+            List<APIField> actual = fieldsFor(IatiFieldClass.class);
+            
+            APIField expected = newStringField();
+            expected.setFieldName(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER));
+            expected.setFieldLabel(fieldLabelFor(ActivityFieldsConstants.IATI_IDENTIFIER));
+            expected.setImportable(true);
+            expected.setRequired(FIELD_ALWAYS_REQUIRED);
+            
+            assertEqualsSingle(expected, actual);
+        } finally {
+            AmpClientModeHolder.setClientMode(null);
+        }
+    }
+    
+    @Test
+    public void testIatiFieldOfflineMode() {
+        AmpClientModeHolder.setClientMode(ClientMode.AMP_OFFLINE);
+        try {
+            List<APIField> actual = fieldsFor(IatiFieldClass.class);
+    
+            APIField expected = newStringField();
+            expected.setFieldName(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER));
+            expected.setFieldLabel(fieldLabelFor(ActivityFieldsConstants.IATI_IDENTIFIER));
+            expected.setImportable(false);
+            expected.setRequired(FIELD_NOT_REQUIRED);
+    
+            assertEqualsSingle(expected, actual);
+        } finally {
+            AmpClientModeHolder.setClientMode(null);
+        }
+    }
+    
+    @Test
+    public void testIatiFieldDefaultMode() {
+        List<APIField> actual = fieldsFor(IatiFieldClass.class);
+        
+        APIField expected = newStringField();
+        expected.setFieldName(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER));
+        expected.setFieldLabel(fieldLabelFor(ActivityFieldsConstants.IATI_IDENTIFIER));
+        expected.setImportable(false);
+        expected.setRequired(FIELD_NOT_REQUIRED);
+        
+        assertEqualsSingle(expected, actual);
+    }
+    
     @Test
     public void testInvisibleField() {
         FMService invisibleFmService = mock(FMService.class);
@@ -230,7 +334,7 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "field_required_always_fm_path_hidden", requiredFmPath = HIDDEN_FM_PATH,
                 required = ALWAYS)
         private String fieldRequiredAlwaysFmPathHidden;
-
+    
         @Interchangeable(fieldTitle = "field_required_min_size_on",
                 validators = @Validators(minSize = VISIBLE_FM_PATH))
         private String fieldRequiredMinSizeOn;
@@ -543,7 +647,7 @@ public class FieldsEnumeratorTest {
         new FieldsEnumerator(provider, fmService, throwingTranslatorService, name -> true)
                 .getAllAvailableFields(OneFieldClass.class);
     }
-
+    
     @Test
     public void testDefaultTranslation() {
         List<APIField> fields = new FieldsEnumerator(provider, fmService, emptyTranslatorService, name -> true)
@@ -552,7 +656,50 @@ public class FieldsEnumeratorTest {
         assertEquals(1, fields.size());
         assertEquals("One Field", fields.get(0).getFieldLabel().get("EN"));
     }
-
+    
+    @Test
+    public void testNonEmptyChildren() {
+        String originalJson = "[{\"field_name\":\"field\"," +
+                "\"field_type\":\"object\"," +
+                "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                "\"required\":\"N\"," +
+                "\"importable\":false," +
+                "\"id\":false," +
+                "\"children\":[{" +
+                    "\"field_name\":\"field\"," +
+                    "\"field_type\":\"long\"," +
+                    "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                    "\"required\":\"N\"," +
+                    "\"importable\":false," +
+                    "\"id\":false" +
+                    "}]" +
+                "}]";
+        try {
+            List<APIField> actual = fieldsFor(Composition.class);
+            String actualJson = new ObjectMapper().writeValueAsString(actual);
+            assertEquals(originalJson, actualJson);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Test
+    public void testEmptyChildren() {
+        String originalJson = "[{\"field_name\":\"field\"" +
+                ",\"field_type\":\"long\"," +
+                "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                "\"required\":\"N\"," +
+                "\"importable\":false," +
+                "\"id\":false}]";
+        try {
+            List<APIField> actual = fieldsFor(NestedField.class);
+            String actualJson = new ObjectMapper().writeValueAsString(actual);
+            assertEquals(originalJson, actualJson);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     private static class Dependencies {
 
         @Interchangeable(fieldTitle = "field", dependencies = {"dep1", "dep2"})

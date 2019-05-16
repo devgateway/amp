@@ -35,7 +35,8 @@ public class InputValidatorProcessor {
                 new DependencyValidator(),
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),
-                new RegexPatternValidator());
+                new RegexPatternValidator(),
+                new UUIDValidator());
     }
 
     public static List<InputValidator> getContactFormatValidators() {

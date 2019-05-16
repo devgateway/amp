@@ -12,6 +12,14 @@ config.entry["activity-preview/script"] = "./modules/activity-preview/script.es6
 config.output.filename = "modules/[name].min.js";
 delete config.output.publicPath;
 delete config.devtool;
+config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
+	    	name: 'dependencies-bundle',
+	        filename: 'dependencies-bundle.js',
+	        minChunks(module, count) {
+	            var context = module.context;                 
+	            return context && context.indexOf('node_modules') >= 0 && count > 1;
+	        }
+	      }));
 config.plugins.push(new webpack.optimize.UglifyJsPlugin({sourceMap: false, compress: false}));
 config.plugins.push(new webpack.optimize.DedupePlugin());
 config.plugins.push(new webpack.DefinePlugin({

@@ -18,10 +18,10 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 /**
  * @author Octavian Ciubotaru
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ "field_name", "apiType", "field_label", "required", "importable", "dependencies", "id_only",
     "multiple_values", "percentage_constraint", "unique_constraint", "tree_collection", "translatable", "regex_pattern",
-    "regex_constraint", "field_length", "size_limit" })
+    "regex_constraint", "field_length", "size_limit", "common-possible-values" })
 public class APIField {
 
     @JsonProperty("id")
@@ -99,6 +99,9 @@ public class APIField {
 
     @JsonIgnore
     private FieldAccessor fieldAccessor;
+
+    @JsonProperty(ActivityEPConstants.COMMON_POSSIBLE_VALUES)
+    private String commonPossibleValuesPath;
 
     public void setFieldAccessor(FieldAccessor fieldAccessor) {
         this.fieldAccessor = fieldAccessor;
@@ -303,6 +306,14 @@ public class APIField {
         this.discriminationConfigurer = discriminationConfigurer;
     }
 
+    public String getCommonPossibleValuesPath() {
+        return commonPossibleValuesPath;
+    }
+
+    public void setCommonPossibleValuesPath(String commonPossibleValuesPath) {
+        this.commonPossibleValuesPath = commonPossibleValuesPath;
+    }
+
     @JsonIgnore
     public boolean isDiscriminatedObject() {
         return apiType.getFieldType().isObject() && discriminationConfigurer != null; 
@@ -317,6 +328,7 @@ public class APIField {
                 + translatable + ", multipleValues=" + multipleValues
                 + ", uniqueConstraint='" + uniqueConstraint + '\'' + ", percentageConstraint='" + percentageConstraint
                 + '\'' + ", treeCollectionConstraint=" + treeCollectionConstraint + ", fieldLength=" + fieldLength
+                + ", common-possible-values='" + commonPossibleValuesPath + "'"
                 + ", children=" + children + ", dependencies=" + dependencies + ", percentage=" + percentage 
                 + ", regex_pattern=" + regexPattern + "}";
     }

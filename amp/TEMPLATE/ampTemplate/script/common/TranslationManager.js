@@ -7,6 +7,19 @@ var TranslationManager = {
 var prefix = '';
 var availableLanguages = null;
 
+var easternToWesternArabicSymbolMap = {
+    '1': '١',
+    '2': '٢',
+    '3': '٣',
+    '4': '٤',
+    '5': '٥',
+    '6': '٦',
+    '7': '٧',
+    '8': '٨',
+    '9': '٩',
+    '0': '٠'
+}
+
 function TranslationManager() {
 	if (!(this instanceof TranslationManager)) {
 		throw new TypeError("TranslationManager constructor cannot be called as a function.");
@@ -38,6 +51,12 @@ function lookForTranslationByKey(key) {
 	} else {
 		return null;
 	}
+}
+
+TranslationManager.convertNumbersToEasternArabic = function(input) {
+    return input.replace(/\d/g, function (match) {
+        return easternToWesternArabicSymbolMap[match];
+    }).replace(/,/g, '،');
 }
 
 

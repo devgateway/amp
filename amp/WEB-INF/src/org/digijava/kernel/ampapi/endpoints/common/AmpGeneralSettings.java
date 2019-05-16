@@ -29,6 +29,9 @@ public class AmpGeneralSettings {
     @JsonProperty("language")
     private String language;
     
+    @JsonProperty("region")
+    private String region;
+    
     @JsonProperty("default-language")
     private String defaultLanguage;
     
@@ -177,6 +180,14 @@ public class AmpGeneralSettings {
     
     public void setDefaultLanguage(String defaultLanguage) {
         this.defaultLanguage = defaultLanguage;
+    }
+    
+    public String getRegion() {
+        return region;
+    }
+    
+    public void setRegion(String region) {
+        this.region = region;
     }
     
     public Boolean getRtlDirection() {

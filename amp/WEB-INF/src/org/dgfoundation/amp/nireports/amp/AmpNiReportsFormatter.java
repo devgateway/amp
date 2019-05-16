@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,9 +17,9 @@ import org.dgfoundation.amp.nireports.output.NiReportsFormatter;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 import org.dgfoundation.amp.nireports.output.CellFormatter;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.helper.EasternArabicUtils;
+import org.digijava.module.aim.helper.EasternArabicService;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.common.util.DateTimeUtil;
 
@@ -86,8 +83,8 @@ public class AmpNiReportsFormatter extends NiReportsFormatter {
     
     protected String getNameTranslation(Column niCol) {
         if (niCol.splitCell != null && NiReportsEngine.PSEUDOCOLUMN_YEAR.equals(niCol.splitCell.entityType)) {
-            if (EasternArabicUtils.isLocaleEasternArabic(SiteUtils.getCurrentSystemLocale())) {
-                return EasternArabicUtils.convertWesternArabicToEasternArabic(niCol.name);
+            if (EasternArabicService.getInstance().isLocaleEasternArabic(TLSUtils.getCurrentSystemLocale())) {
+                return EasternArabicService.getInstance().convertWesternArabicToEasternArabic(niCol.name);
             }
             return niCol.name;
         }

@@ -494,7 +494,7 @@ public class ShowCalendarEvent extends Action {
             calendar.setSiteId(moduleInstance.getSite().getSiteId());
 
             // selected start date and selected end date
-            String dtformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+            String dtformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
             if (dtformat == null) {
                 dtformat = "dd/MM/yyyy";
             }
@@ -731,7 +731,7 @@ public class ShowCalendarEvent extends Action {
     
     private ActionErrors validateDate(String eventStartDate,String eventEndDate, CalendarEventForm form) throws Exception{   
         ActionErrors errors=new ActionErrors();
-        String dtformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+        String dtformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
         if (dtformat == null) {
             dtformat = "dd/MM/yyyy";
         }

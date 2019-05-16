@@ -4,8 +4,11 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang.StringUtils;
 
-public final class EasternArabicUtils {
+public final class EasternArabicService {
+    
+    private static EasternArabicService service;
     
     public static final String CODE_ARABIC_LANGUAGE = "ar";
     public static final String NUMERIC_ARABIC_EXTENSION = "nu-arab";
@@ -23,11 +26,19 @@ public final class EasternArabicUtils {
             .put('9', '\u0669')
             .build();
     
-    private EasternArabicUtils() {
+    private EasternArabicService() {
     
     }
     
-    public static String convertWesternArabicToEasternArabic(String text) {
+    public static EasternArabicService getInstance() {
+        if (service == null) {
+            service = new EasternArabicService();
+        }
+        
+        return service;
+    }
+    
+    public String convertWesternArabicToEasternArabic(String text) {
         for (Map.Entry<Character, Character> entry : ARABIC_NUMERALS.entrySet()) {
             text = text.replace(entry.getKey(), entry.getValue());
         }
@@ -35,7 +46,7 @@ public final class EasternArabicUtils {
         return text;
     }
     
-    public static String convertEasternArabicToWasternArabic(String text) {
+    public String convertEasternArabicToWasternArabic(String text) {
         for (Map.Entry<Character, Character> entry : ARABIC_NUMERALS.entrySet()) {
             text = text.replace(entry.getValue(), entry.getKey());
         }
@@ -43,9 +54,9 @@ public final class EasternArabicUtils {
         return text;
     }
     
-    public static boolean isLocaleEasternArabic(Locale locale) {
-        return locale.getLanguage().equals(CODE_ARABIC_LANGUAGE)
-                && locale.getExtension(Locale.UNICODE_LOCALE_EXTENSION).equals(NUMERIC_ARABIC_EXTENSION);
+    public boolean isLocaleEasternArabic(Locale locale) {
+        return StringUtils.equals(locale.getLanguage(), CODE_ARABIC_LANGUAGE)
+                && StringUtils.equals(locale.getExtension(Locale.UNICODE_LOCALE_EXTENSION), NUMERIC_ARABIC_EXTENSION);
     }
     
 }

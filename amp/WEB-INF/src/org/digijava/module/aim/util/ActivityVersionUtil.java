@@ -149,7 +149,8 @@ public class ActivityVersionUtil {
                             }
                             Object value = auxOutput2.getValue()[i];
                             if (value instanceof Timestamp) {
-                                ret.append(DateConversion.convertDateToString(new Date(((Timestamp) value).getTime())));
+                                ret.append(DateConversion.convertDateToLocalizedString(
+                                        new Date(((Timestamp) value).getTime())));
                             } else if (value instanceof BigDecimal
                                     || value instanceof Double
                                     || value instanceof Float) {

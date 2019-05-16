@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class AmpAuditLogger implements Comparable, Serializable {
@@ -178,7 +178,7 @@ public class AmpAuditLogger implements Comparable, Serializable {
     public String getSloggeddate() {
         if (this.loggedDate != null) {
             String pattern = FeaturesUtil
-                    .getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+                    .getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
             pattern = pattern.replace('m', 'M');
             SimpleDateFormat formater = new SimpleDateFormat(pattern);
             sloggeddate = formater.format(this.loggedDate.getTime());
@@ -193,7 +193,7 @@ public class AmpAuditLogger implements Comparable, Serializable {
     public String getSmodifydate() {
         if (this.modifyDate != null) {
             String pattern = FeaturesUtil
-                    .getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+                    .getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
             pattern = pattern.replace('m', 'M');
             SimpleDateFormat formater = new SimpleDateFormat(pattern);
             this.smodifydate = formater.format(this.modifyDate.getTime());

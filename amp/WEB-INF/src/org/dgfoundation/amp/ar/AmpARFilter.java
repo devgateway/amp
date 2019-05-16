@@ -45,7 +45,6 @@ import org.dgfoundation.amp.newreports.ReportEnvBuilder;
 import org.dgfoundation.amp.newreports.IReportEnvironment;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -1058,7 +1057,7 @@ public class AmpARFilter extends PropertyListable {
         Integer defaultGroupSize        = usedDecimalFormat.getGroupingSize();
 
         DecimalFormat custom = new DecimalFormat();
-        DecimalFormatSymbols ds = new DecimalFormatSymbols(SiteUtils.getCurrentSystemLocale());
+        DecimalFormatSymbols ds = new DecimalFormatSymbols(TLSUtils.getCurrentSystemLocale());
         if (decimalSeparator != null){
             ds.setDecimalSeparator(decimalSeparator.charAt(0));
         }else{

@@ -1,3 +1,4 @@
+<%@ page import="org.digijava.module.aim.helper.GlobalSettingsConstants" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -136,7 +137,7 @@
 	YUI_DAY_NAMES_MEDIUM = ["<digi:trn>Sun</digi:trn>", "<digi:trn>Mon</digi:trn>", "<digi:trn>Tue</digi:trn>", "<digi:trn>Wed</digi:trn>", 
                                "<digi:trn>Thu</digi:trn>", "<digi:trn>Fri</digi:trn>", "<digi:trn>Sat</digi:trn>"];
 
-	var dateFormat = '<%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT) %>';
+	var dateFormat = '<%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT) %>';
 	if (dateFormat == 'null')
 		dateFormat = 'dd/mm/yyyy';
 	

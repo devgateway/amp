@@ -5,11 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.digijava.module.aim.dbentity.AmpActivityFrozen;
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class AmpFreezingValidatorTransactionDate extends AmpSemanticValidator<String> {
@@ -32,7 +31,7 @@ public class AmpFreezingValidatorTransactionDate extends AmpSemanticValidator<St
         }
         
         SimpleDateFormat dateFormatter = new SimpleDateFormat(
-                FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT));
+                FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
         Date transactionDate;
         try {
             transactionDate = dateFormatter.parse(validatable.getValue());

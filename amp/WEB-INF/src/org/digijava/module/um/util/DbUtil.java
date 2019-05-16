@@ -632,26 +632,6 @@ public class DbUtil {
         return getList(OrganizationType.class.getName(), "type");
     }
 
-    /**
-     * Get Content Alerts from DB
-     *
-     * @return
-     * @throws UMException
-     */
-    public static List getContentAlerts() throws UMException {
-        return getList(ContentAlert.class.getName(), null);
-    }
-
-    /**
-     * Get How Did you hear list from DB
-     *
-     * @return
-     * @throws UMException
-     */
-    public static List getHowDidYouHear() throws UMException {
-        return getList(HowDidYouHear.class.getName(), null);
-    }
-
     public static List getLanguages() throws UMException {
         return getList(Locale.class.getName(), null);
     }

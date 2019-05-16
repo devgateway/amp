@@ -2240,7 +2240,7 @@ public class ExportActivityToWordBuilder {
                                 .getTransactionType()), null, null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
-                                .addRowLtrData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
+                                .addRowLtrData(DateConversion.convertDateToLocalizedString(regFnd.getTransactionDate()))
                                 .addRowLtrData(regFnd.getTransactionAmount().toString())
                                 .addRowData(regFnd.getCurrency().getCurrencyCode()));
                         createSectionTable(eshRegFundingDetails);
@@ -2257,7 +2257,7 @@ public class ExportActivityToWordBuilder {
                                 .getTransactionType()), null, null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
-                                .addRowLtrData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
+                                .addRowLtrData(DateConversion.convertDateToLocalizedString(regFnd.getTransactionDate()))
                                 .addRowLtrData(regFnd.getTransactionAmount().toString())
                                 .addRowData(regFnd.getCurrency().getCurrencyCode()));
                         createSectionTable(eshRegFundingDetails);
@@ -2274,7 +2274,7 @@ public class ExportActivityToWordBuilder {
                                 .getTransactionType()), null, null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
-                                .addRowLtrData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
+                                .addRowLtrData(DateConversion.convertDateToLocalizedString(regFnd.getTransactionDate()))
                                 .addRowLtrData(regFnd.getTransactionAmount().toString())
                                 .addRowData(regFnd.getCurrency().getCurrencyCode()));
                         createSectionTable(eshRegFundingDetails);
@@ -2644,11 +2644,11 @@ public class ExportActivityToWordBuilder {
         }
         if (fnd.getEffectiveFundingDate() != null) {
             eshDonorInfo.addRowData(new ExportSectionHelperRowData("Effective Funding Date", null, null, true)
-                    .addRowLtrData(DateConversion.convertDateToString(fnd.getEffectiveFundingDate())));
+                    .addRowLtrData(DateConversion.convertDateToLocalizedString(fnd.getEffectiveFundingDate())));
         }
         if (fnd.getFundingClosingDate() != null) {
             eshDonorInfo.addRowData(new ExportSectionHelperRowData("Funding Closing Date", null, null, true)
-                    .addRowLtrData(DateConversion.convertDateToString(fnd.getFundingClosingDate())));
+                    .addRowLtrData(DateConversion.convertDateToLocalizedString(fnd.getFundingClosingDate())));
         }
 
         if (fnd.getRatificationDate() != null) {

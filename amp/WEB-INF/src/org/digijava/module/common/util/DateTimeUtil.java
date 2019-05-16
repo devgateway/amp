@@ -71,7 +71,7 @@ public class DateTimeUtil {
 
 
     public static String getGlobalPattern() {
-        String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+        String pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
         if (pattern == null){
             pattern = Constants.CALENDAR_DATE_FORMAT;
         }
@@ -99,11 +99,11 @@ public class DateTimeUtil {
         return formatter.format(date);
     }
     
-    public static Date parseDate(String date) throws Exception{
+    public static Date parseDate(String date) throws Exception {
         // TODO This should be in some other Utility class, FormatUtil may be, or just Util
-        String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
-        if (pattern==null){
-            pattern=Constants.CALENDAR_DATE_FORMAT;
+        String pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+        if (pattern == null) {
+            pattern = Constants.CALENDAR_DATE_FORMAT;
         }
         pattern = pattern.replace('m', 'M');
         SimpleDateFormat formater=new SimpleDateFormat(pattern);
@@ -111,11 +111,11 @@ public class DateTimeUtil {
         return result;
     }
 
-    public static Date parseDateForPicker(String date) throws Exception{
+    public static Date parseDateForPicker(String date) throws Exception {
         // TODO This should be in some other Utility class, FormatUtil may be, or just Util
-        String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
-        if (pattern==null){
-            pattern=Constants.CALENDAR_DATE_PICKER;
+        String pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
+        if (pattern == null) {
+            pattern = Constants.CALENDAR_DATE_PICKER;
         }
         // AMP-2828 by mouhamad
         pattern = pattern.replace("m", "M");
@@ -141,7 +141,7 @@ public class DateTimeUtil {
         // TODO This should be in some other Utility class, FormatUtil may be, or just Util
         String pattern = null;
         if (format == null) {
-            pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+            pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
             if (pattern == null) {
                 pattern = Constants.CALENDAR_DATE_PICKER;
             }

@@ -6,7 +6,6 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.exception.DgException;
@@ -18,6 +17,7 @@ import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.IndicatorThemeBean;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.HibernateException;
@@ -1438,7 +1438,7 @@ public class IndicatorUtil {
                     
                     //================
                     // AMP-2828 by mouhamad
-                    String dateFormat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
+                    String dateFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
                     dateFormat = dateFormat.replace("m", "M");
                       
                     SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);

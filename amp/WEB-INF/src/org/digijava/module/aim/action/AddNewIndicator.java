@@ -19,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.NewIndicatorForm;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -103,7 +104,7 @@ public class AddNewIndicator
             }
             
         // AMP-2828 by mouhamad
-        String dateFormat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
+        String dateFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
         SimpleDateFormat sdf = null;
         //temporary workaround
         if (dateFormat!=null){

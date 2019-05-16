@@ -64,17 +64,16 @@ public class AmpDateFormatterFactory {
     /**
      * Gets a localized formatter with a specified pattern.
      * Locale picked from current request.
-     * @param format
+     * @param pattern
      * @return
      */
     public static AmpDateFormatter getLocalizedFormatter(String pattern) {
-        String langCode = TLSUtils.getEffectiveLangCode();
-        return getLocalizedFormatter(pattern, Locale.forLanguageTag(langCode));
+        return getLocalizedFormatter(pattern, TLSUtils.getCurrentSystemLocale());
     }
     
     /**
      * Gets a localized formatter with a specified pattern.
-     * @param format
+     * @param pattern
      * @return
      */
     public static AmpDateFormatter getLocalizedFormatter(String pattern, Locale locale) {

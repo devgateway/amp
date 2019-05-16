@@ -56,7 +56,7 @@ public class QuarterInformationPanel extends AmpFieldPanel {
         cal.set(Calendar.YEAR, currentFiscalYear);
 
         String pattern = FeaturesUtil
-                .getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+                .getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
         pattern = pattern.replace('m', 'M');
         SimpleDateFormat formatter = new SimpleDateFormat(pattern);
 

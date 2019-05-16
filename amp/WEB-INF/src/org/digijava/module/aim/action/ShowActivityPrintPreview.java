@@ -465,7 +465,8 @@ public class ShowActivityPrintPreview
                                                 .ConvertDecimalToText(
                                                     ampRegFund
                                                     .getTransactionAmount().doubleValue()));
-                        fd.setTransactionDate(DateConversion.convertDateToString(ampRegFund.getTransactionDate()));
+                        fd.setTransactionDate(
+                                DateConversion.convertDateToLocalizedString(ampRegFund.getTransactionDate()));
                         fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampRegFund.getTransactionDate()));
 
                         fd.setTransactionType(ampRegFund.getTransactionType()

@@ -7,7 +7,7 @@ import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.dgfoundation.amp.onepager.converters.StrictPatternDateConverter;
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -22,7 +22,7 @@ public class AmpDatePickerRegular extends DateTextField {
     private static final long serialVersionUID = 1L;
 
     public static AmpDatePickerRegular newDatePicker(String id, IModel<Date> model){
-        String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+        String pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
         pattern = pattern.replace('m', 'M');
         return new AmpDatePickerRegular(id, model, pattern);
     }

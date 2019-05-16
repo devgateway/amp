@@ -298,10 +298,10 @@ public class Funding implements Serializable {
         this.setConditions(ampFunding.getConditions());
         this.setDonorObjective(ampFunding.getDonorObjective());
         this.setCapitalSpendingPercentage(ampFunding.getCapitalSpendingPercentage());
-        this.setFundingClassificationDate(DateConversion.convertDateToString(ampFunding.getFundingClassificationDate
-                ()));
-        this.setEffectiveFundingDate(DateConversion.convertDateToString(ampFunding.getEffectiveFundingDate()));
-        this.setFundingClosingDate(DateConversion.convertDateToString(ampFunding.getFundingClosingDate()));
+        this.setFundingClassificationDate(
+                DateConversion.convertDateToLocalizedString(ampFunding.getFundingClassificationDate()));
+        this.setEffectiveFundingDate(DateConversion.convertDateToLocalizedString(ampFunding.getEffectiveFundingDate()));
+        this.setFundingClosingDate(DateConversion.convertDateToLocalizedString(ampFunding.getFundingClosingDate()));
         this.setRatificationDate(DateConversion.convertDateToLocalizedString(ampFunding.getRatificationDate()));
         this.setGracePeriod(ampFunding.getGracePeriod());
         this.setInterestRate(ampFunding.getInterestRate());

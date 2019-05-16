@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.util.convert.converter.AbstractNumberConverter;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 
@@ -100,7 +99,7 @@ public class FormatHelper {
     public static DecimalFormat getDecimalFormatNotRounded(){
         String decimalSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);
         String groupSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);
-        DecimalFormatSymbols decSymbols = new DecimalFormatSymbols(SiteUtils.getCurrentSystemLocale());
+        DecimalFormatSymbols decSymbols = new DecimalFormatSymbols(TLSUtils.getCurrentSystemLocale());
         decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
         decSymbols.setGroupingSeparator(groupSeparator.charAt(0));
         return new DecimalFormat("###,###.###", decSymbols);
@@ -138,7 +137,7 @@ public class FormatHelper {
             decimalSeparator=decimalSeparator.replace(' ', '\u00A0');
             groupSeparator=groupSeparator.replace(' ', '\u00A0');
         }
-        DecimalFormatSymbols decSymbols = new DecimalFormatSymbols(SiteUtils.getCurrentSystemLocale());
+        DecimalFormatSymbols decSymbols = new DecimalFormatSymbols(TLSUtils.getCurrentSystemLocale());
         decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
         if(groupSeparator!=null){
             decSymbols.setGroupingSeparator(groupSeparator.charAt(0));
@@ -194,7 +193,7 @@ public class FormatHelper {
             }*/
     }
     
-    DecimalFormatSymbols decSymbols = new DecimalFormatSymbols(SiteUtils.getCurrentSystemLocale());
+    DecimalFormatSymbols decSymbols = new DecimalFormatSymbols(TLSUtils.getCurrentSystemLocale());
     decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
     
     if(groupSeparator!=null){
@@ -213,10 +212,6 @@ public class FormatHelper {
         return String.valueOf(getDefaultFormat().getDecimalFormatSymbols().getGroupingSeparator());
     }
 
-    public final static String formatDate(GregorianCalendar date, String formatString) {
-        return date == null ? null : new SimpleDateFormat(formatString).format(date.getTime());
-    }
-    
     public final static boolean isValidDateString(String sDate, SimpleDateFormat formatter) {
         if (sDate == null)
             return true;
@@ -231,11 +226,21 @@ public class FormatHelper {
     }
     
     public static GregorianCalendar parseLocalizedDate(String sDate) {
-        return parseDate(sDate, Locale.forLanguageTag(TLSUtils.getEffectiveLangCode()));
+        return parseDate(sDate, TLSUtils.getCurrentSystemLocale());
     }
     
     public static GregorianCalendar parseDate(String sDate) {
         return parseDate(sDate, Locale.getDefault());
+    }
+    
+    public static Date parseDate2(String sDate) {
+        try {
+            LocalDate ld = AmpDateFormatterFactory.getDefaultFormatter().parseDate(sDate);
+            return java.sql.Date.valueOf(ld);
+        } catch (Exception e) {
+            logger.error("Can't parse date " + sDate, e);
+            return null;
+        }
     }
     
     private static GregorianCalendar parseDate(String sDate, Locale locale){
@@ -251,19 +256,7 @@ public class FormatHelper {
         }
     }
     
-    public static Date parseDate2(String sDate){
-        try {
-            LocalDate ld = AmpDateFormatterFactory.getDefaultFormatter().parseDate(sDate);
-            return java.sql.Date.valueOf(ld);
-        } catch (Exception e) {
-            logger.error("Can't parse date " + sDate, e);
-            return null;
-        }
-    }
-    
    public static String formatDate(Date date) {
-       if(date == null) return null;
-       String defaultFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
-       return new SimpleDateFormat(defaultFormat, Locale.forLanguageTag(TLSUtils.getEffectiveLangCode())).format(date); 
+       return date != null ? AmpDateFormatterFactory.getLocalizedFormatter().format(date) : null;
    }
 }

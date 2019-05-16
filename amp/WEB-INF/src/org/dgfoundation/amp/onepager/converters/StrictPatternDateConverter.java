@@ -8,20 +8,20 @@ import java.util.Locale;
 
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.util.convert.ConversionException;
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class StrictPatternDateConverter extends PatternDateConverter {
 
 
     public StrictPatternDateConverter() {
-        super(Constants.GLOBALSETTINGS_DATEFORMAT, false);
+        super(GlobalSettingsConstants.DEFAULT_DATE_FORMAT, false);
     }
 
     private ConversionException getException() {
         ConversionException conv = new ConversionException("StrictPatternDateConverter");
         conv.setResourceKey("StrictPatternDateConverter");
-        conv.setVariable("format", FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT));
+        conv.setVariable("format", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
         return conv;
     }
 
@@ -56,7 +56,8 @@ public class StrictPatternDateConverter extends PatternDateConverter {
     }
 
     private SimpleDateFormat getDateFormatter(Locale locale) {
-        SimpleDateFormat formatter = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT), locale);
+        SimpleDateFormat formatter = new SimpleDateFormat(
+                FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT), locale);
         formatter.setLenient(false);  
         return formatter;
     }

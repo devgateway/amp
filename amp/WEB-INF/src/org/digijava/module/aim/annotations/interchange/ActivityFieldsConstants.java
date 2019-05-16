@@ -39,6 +39,7 @@ public class ActivityFieldsConstants {
     public static final String MOFED_CONTACT = "Mofed Contact Information";
     public static final String IMPL_EXECUTING_AGENCY_CONTACT = "Implementing/Executing Agency Contact Information";
     public static final String PRIMARY_CONTACT = "Mark as primary";
+    public static final String FUNDINGS = "Fundings";
     public static final String FUNDING_DETAILS = "Funding Details";
     public static final String MTEF_PROJECTIONS = "MTEF Projections";
     public static final String LOCATIONS = "Locations";

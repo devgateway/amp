@@ -1,7 +1,9 @@
 package org.digijava.module.aim.validator;
 
-import static org.digijava.module.aim.validator.ConstraintMatchers.iterableNode;
+import static org.digijava.module.aim.validator.ConstraintMatchers.inIterableNode;
+import static org.digijava.module.aim.validator.ConstraintMatchers.inIterableNodeAtKey;
 import static org.digijava.module.aim.validator.ConstraintMatchers.nodeAtKey;
+import static org.digijava.module.aim.validator.ConstraintMatchers.propertyNode;
 import static org.digijava.module.aim.validator.ConstraintMatchers.violationWithPath;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -152,7 +154,7 @@ public class PrimaryContactValidatorTest extends AbstractActivityValidatorTest<P
      */
     private Matcher<ConstraintViolation> primaryContactViolation(String type) {
         return violationWithPath(PrimaryContact.class,
-                ImmutableList.of(iterableNode("activityContacts"), nodeAtKey("activityContacts", type)));
+                ImmutableList.of(propertyNode("activityContacts"), inIterableNodeAtKey("activityContacts", type)));
     }
 
     private AmpActivityContact newActivityContact(String contactType, Boolean primary) {

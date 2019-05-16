@@ -23,6 +23,8 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
 import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.contact.PrimaryContact;
+import org.digijava.module.aim.validator.fundings.TransactionOrgRole;
+import org.digijava.module.aim.validator.fundings.FundingOrgRole;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
 import org.digijava.module.aim.validator.percentage.ProgramTotalPercentage;
@@ -84,10 +86,12 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
             .put(AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,
                     FieldMap.underscorify(ActivityFieldsConstants.TAG_SECTORS))
             .build();
-
+    
     private Map<Class<?>, Class<?>> constraintToViolation = ImmutableMap.<Class<?>, Class<?>>builder()
             // customize if anything extra needed or use some common default below
             // e.g. .put(AllowedApprovalStatus.class, ApprovalStatusViolationBuilder.class)
+            .put(FundingOrgRole.class, OrgRoleViolationBuilder.class)
+            .put(TransactionOrgRole.class, OrgRoleViolationBuilder.class)
             .build();
 
     private Map<Class<?>, String> violationsWithGenericInvalidFieldBuilder = ImmutableMap.<Class<?>, String>builder()
@@ -155,7 +159,7 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
             
             return new JsonConstraintViolation(jsonPath, ActivityErrors.UNIQUE_PRIMARY_CONTACT);
         }
-
+    
         Class<?> cvbc = constraintToViolation.get(v.getConstraintDescriptor().getAnnotation().annotationType());
         if (cvbc != null) {
             try {
@@ -188,14 +192,14 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
     private String getContactType(ConstraintViolation v) {
         return (String) getSecondNodeKey(v);
     }
-
+    
     private Object getSecondNodeKey(ConstraintViolation v) {
         Iterator<Path.Node> iterator = v.getPropertyPath().iterator();
         iterator.next();
         Path.Node percentageNode = iterator.next();
         return percentageNode.getKey();
     }
-
+    
     private boolean isOrgRolePercentageConstraint(ConstraintViolation violation) {
         return violation.getConstraintDescriptor().getAnnotation() instanceof OrgRoleTotalPercentage;
     }

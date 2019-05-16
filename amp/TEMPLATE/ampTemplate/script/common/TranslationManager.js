@@ -7,7 +7,7 @@ var TranslationManager = {
 var prefix = '';
 var availableLanguages = null;
 
-var easternArabicSymbolMap = {
+var easternToWesternArabicSymbolMap = {
     '1': '١',
     '2': '٢',
     '3': '٣',
@@ -18,18 +18,7 @@ var easternArabicSymbolMap = {
     '8': '٨',
     '9': '٩',
     '0': '٠'
-}, easternArabicNumberMap = {
-    '١': '1',
-    '٢': '2',
-    '٣': '3',
-    '٤': '4',
-    '٥': '5',
-    '٦': '6',
-    '٧': '7',
-    '٨': '8',
-    '٩': '9',
-    '٠': '0'
-};
+}
 
 function TranslationManager() {
 	if (!(this instanceof TranslationManager)) {
@@ -66,14 +55,8 @@ function lookForTranslationByKey(key) {
 
 TranslationManager.convertNumbersToEasternArabic = function(input) {
     return input.replace(/\d/g, function (match) {
-        return easternArabicSymbolMap[match];
+        return easternToWesternArabicSymbolMap[match];
     }).replace(/,/g, '،');
-}
-
-TranslationManager.convertNumbersToWesternArabic =  function(input) {
-    return input.replace(/[١٢٣٤٥٦٧٨٩٠]/g, function (match) {
-        return easternArabicNumberMap[match];
-    }).replace(/،/g, ',');
 }
 
 

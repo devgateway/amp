@@ -10,8 +10,13 @@ Saiku.events.bind('session:new', function(session) {
 	        if(Settings.PAGINATION) {
 	        	$(".pagination_sprite").show();
 	        	$(".pagination_info").show();
-	        	$(this.el).find(".pagination_info").val(
-                    translateNumber(this.query.get('page')) + "/" + translateNumber(this.query.get('max_page_no')));
+	        	paginationInfo = $(this.el).find(".pagination_info");
+
+	        	if (Saiku.i18n.rtlDirection) {
+	        		paginationInfo.val(translateNumber(this.query.get('max_page_no') + "/" + translateNumber(this.query.get('page'))));
+                } else {
+                    paginationInfo.val(this.query.get('page') + "/" + this.query.get('max_page_no'));
+				}
 	        }
 	        else {
 	        	$(".pagination_sprite").hide();

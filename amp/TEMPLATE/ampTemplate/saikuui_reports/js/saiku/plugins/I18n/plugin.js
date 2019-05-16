@@ -21,6 +21,7 @@ Saiku.i18n = {
     locale: (window.currentLanguage || navigator.language || navigator.browserLanguage ||
         navigator.systemLanguage || navigator.userLanguage).substring(0, 2).toLowerCase(),
     region: "",
+    rtlDirection: "",
     po_file: {},
     translate: function (specificElement) {
     	Saiku.logger.log("I18N.translate");
@@ -281,10 +282,10 @@ if(Settings.USE_AMP_LANGUAGE) {
 	$.getJSON("/rest/amp/settings", function(data) {
 		//debugger;
 		var language = data["language"];
-        var region = data["region"];
 		window.currentLanguage = language;
 		Saiku.i18n.locale = language;
-        Saiku.i18n.region = region;
+        Saiku.i18n.region = data["region"];
+        Saiku.i18n.rtlDirection = data["rtl-direction"];
 		Saiku.i18n.automatic_i18n();
 	});
 }

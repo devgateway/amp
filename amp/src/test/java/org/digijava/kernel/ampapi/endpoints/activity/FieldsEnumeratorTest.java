@@ -175,12 +175,12 @@ public class FieldsEnumeratorTest {
         APIField dateField = newListField();
         dateField.setFieldName("date-field");
         dateField.setFieldLabel(fieldLabelFor("date-field"));
-        dateField.setApiType(new APIType(Date.class, FieldType.DATE, null));
+        dateField.setApiType(new APIType(Date.class, FieldType.DATE));
     
         APIField timestampField = newListField();
         timestampField.setFieldName("timestamp-field");
         timestampField.setFieldLabel(fieldLabelFor("timestamp-field"));
-        timestampField.setApiType(new APIType(Date.class, FieldType.TIMESTAMP, null));
+        timestampField.setApiType(new APIType(Date.class, FieldType.TIMESTAMP));
     
         assertEqualsDigest(Arrays.asList(dateField, timestampField), actual);
     }
@@ -854,8 +854,9 @@ public class FieldsEnumeratorTest {
             if (apiField.isCollection() && apiField.getFieldAccessor().get(object) == null) {
                 nullableAPIFields.add(apiField);
             }
-            if (apiField.isCollection() && !apiField.getApiType().getFieldType().isSimpleType()) {
-                getAPIFieldWithNullCollections(apiField.getApiType().getType(), apiField.getChildren());
+            if (apiField.isCollection() && !InterchangeUtils.isSimpleType(apiField.getApiType().getType())) {
+                nullableAPIFields.addAll(
+                        getAPIFieldWithNullCollections(apiField.getApiType().getType(), apiField.getChildren()));
             }
         }
         
@@ -864,7 +865,7 @@ public class FieldsEnumeratorTest {
 
     private APIField newListField() {
         APIField field = newAPIField();
-        field.setApiType(new APIType(Collection.class, FieldType.LIST, Object.class));
+        field.setApiType(new APIType(Object.class, FieldType.LIST));
         return field;
     }
 
@@ -876,7 +877,7 @@ public class FieldsEnumeratorTest {
 
     private APIField newListOfLongField() {
         APIField field = newAPIField();
-        field.setApiType(new APIType(Collection.class, FieldType.LIST, Long.class));
+        field.setApiType(new APIType(Long.class, FieldType.LIST));
         return field;
     }
 

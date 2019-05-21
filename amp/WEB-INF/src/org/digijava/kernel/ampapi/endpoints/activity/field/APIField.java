@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,9 +34,6 @@ public class APIField {
     @JsonUnwrapped
     private APIType apiType;
     
-    @JsonIgnore
-    private Class<?> internalFieldType;
-
     @JsonProperty(ActivityEPConstants.FIELD_LABEL)
     private JsonBean fieldLabel;
 
@@ -335,14 +331,8 @@ public class APIField {
         return isCollection;
     }
     
-    @JsonIgnore
-    public Class<?> getInternalFieldType() {
-        return internalFieldType;
-    }
-    
-    public void setInternalFieldType(Class<?> internalFieldType) {
-        this.internalFieldType = internalFieldType;
-        this.isCollection = Collection.class.isAssignableFrom(internalFieldType);
+    public void setIsCollection(boolean isCollection) {
+        this.isCollection = isCollection;
     }
     
     @JsonIgnore

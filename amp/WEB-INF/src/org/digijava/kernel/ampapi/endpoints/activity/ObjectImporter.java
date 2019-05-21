@@ -305,11 +305,16 @@ public class ObjectImporter {
 
         // validate children, even if it is not a list -> to notify wrong entries
         if (isList || childrenFields.size() > 0) {
-            Class<?> subElementClass = fieldDef.getApiType().getElementType();
+            Class<?> subElementClass = fieldDef.getApiType().getType();
             Object newFieldValue = fieldDef.getFieldAccessor().get(newParent);
             
             if (newFieldValue == null) {
-                newFieldValue = valueConverter.getNewInstance(fieldDef.getInternalFieldType());
+                if (isList) {
+                    newFieldValue = new ArrayList<>();
+                } else {
+                    newFieldValue = valueConverter.getNewInstance(fieldDef.getApiType().getType());
+                }
+                
                 fieldDef.getFieldAccessor().set(newParent, newFieldValue);
             }
 

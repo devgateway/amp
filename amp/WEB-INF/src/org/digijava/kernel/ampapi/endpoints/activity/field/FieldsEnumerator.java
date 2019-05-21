@@ -91,23 +91,19 @@ public class FieldsEnumerator {
         // for discriminated case we can override the type here
         Class<?> type = InterchangeUtils.getClassOfField(field);
         FieldType fieldType = null;
-        Class<?> elementType = null;
-        apiField.setInternalFieldType(field.getType());
+        apiField.setIsCollection(Collection.class.isAssignableFrom(field.getType()));
         if (interchangeable.pickIdOnly()) {
             fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
         } else if (InterchangeUtils.isCollection(field)) {
-            elementType = getType(field, context);
+            type = getType(field, context);
             if (interchangeable.multipleValues()) {
                 fieldType = FieldType.LIST;
-                if (InterchangeUtils.isSimpleType(elementType)) {
-                    type = field.getType();
-                }
             }
         } else if (field.getType().equals(java.util.Date.class)) {
             fieldType = InterchangeUtils.isTimestampField(field) ? FieldType.TIMESTAMP : FieldType.DATE;
         }
 
-        APIType apiType = new APIType(type, fieldType, elementType);
+        APIType apiType = new APIType(type, fieldType);
         apiField.setApiType(apiType);
         
         boolean isList = apiType.getFieldType().isList();
@@ -143,8 +139,7 @@ public class FieldsEnumerator {
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             if (!interchangeable.pickIdOnly()) {
-                Class<?> clazz = isList ? elementType : type;
-                apiField.setChildren(getAllAvailableFields(clazz, context));
+                apiField.setChildren(getAllAvailableFields(type, context));
             }
             if (isList) {
                 apiField.setMultipleValues(!hasMaxSizeValidatorEnabled(field, context));

@@ -114,7 +114,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     
     @Interchangeable(fieldTitle = ActivityFieldsConstants.MTEF_PROJECTIONS, importable = true,
             fmPath = "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections")
-    private Set<AmpFundingMTEFProjection> mtefProjections;
+    private Set<AmpFundingMTEFProjection> mtefProjections = new HashSet<>();
     
     @Interchangeable(fieldTitle="Active",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Active", importable = true)
     private Boolean active;

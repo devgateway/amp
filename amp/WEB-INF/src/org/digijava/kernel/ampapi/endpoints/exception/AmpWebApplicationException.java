@@ -11,8 +11,8 @@ import javax.ws.rs.core.Response;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * AMP wrapper WebApplicationException
@@ -34,8 +34,8 @@ public class AmpWebApplicationException extends WebApplicationException {
         this(status, ApiError.toError(errors));
     }
     
-    public AmpWebApplicationException(Response.Status status, JsonBean error) {
-        super(ApiErrorResponse.buildResponse(status, error));
+    public AmpWebApplicationException(Response.Status status, ApiErrorResponse error) {
+        super(ApiErrorResponseService.buildResponse(status, error));
     }
 
 }

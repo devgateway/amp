@@ -8,7 +8,7 @@ import org.dgfoundation.amp.reports.xml.Report;
 import org.dgfoundation.amp.reports.xml.ReportParameter;
 import org.dgfoundation.amp.reports.xml.XmlReportUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 
 /**
  * Provides an API for manipulating xml reports
@@ -26,9 +26,9 @@ public class ApiXMLService {
         ReportFormParameters formParams = XmlReportUtil.convertXmlCustomReportToJsonObj(reportParameter);
         
         if (reportId == null) {
-            JsonBean errorValidJson = ReportsUtil.validateReportConfig(formParams, true);
-            if (errorValidJson != null) {
-                throw new ApiRuntimeException(Response.Status.BAD_REQUEST, errorValidJson);
+            ApiErrorResponse errorResponse = ReportsUtil.validateReportConfig(formParams, true);
+            if (errorResponse != null) {
+                throw new ApiRuntimeException(Response.Status.BAD_REQUEST, errorResponse);
             }
             
             // we need reportId only to store the report result in cache

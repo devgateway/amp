@@ -52,7 +52,7 @@
 	<I>${listable.beanName}</I>
 	<logic:iterate id="prop" name="pMap">
     	<c:if test="${prop.key != 'renderEndYear' && prop.key != 'renderStartYear' }">
-            <div class="wizard-settings-List"><i>${prop.key}</i>: <c:out value="${prop.value}" /></div>
+            <div class="wizard-settings-List"><i><digi:trn>${prop.key}</digi:trn></i>: <digi:easternArabicNumber><c:out value="${prop.value}" /></digi:easternArabicNumber></div>
 		</c:if> <div class="wizard-settings-List-div">|</div>
 	</logic:iterate>
 </logic:equal>

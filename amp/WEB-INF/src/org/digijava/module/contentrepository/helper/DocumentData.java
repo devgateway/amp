@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.helper.EasternArabicService;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.jcrentity.Label;
@@ -520,7 +521,11 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
         documentData.setDescription(nodeWrapper.getDescription());
         documentData.setNotes(nodeWrapper.getNotes());
         documentData.setFileSize(nodeWrapper.getFileSizeInMegabytes());
-        documentData.setCalendar(nodeWrapper.getDate());
+        String nodeDate = nodeWrapper.getDate();
+        if (EasternArabicService.getInstance().isLocaleEasternArabic(TLSUtils.getCurrentSystemLocale())) {
+            nodeDate = EasternArabicService.getInstance().convertWesternArabicToEasternArabic(nodeDate);
+        }
+        documentData.setCalendar(nodeDate);
         documentData.setVersionNumber(nodeWrapper.getVersionNumber());
         documentData.setContentType(nodeWrapper.getContentType());
         documentData.setWebLink(nodeWrapper.getWebLink());

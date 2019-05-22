@@ -1,5 +1,8 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
+import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
+import static org.apache.poi.ss.usermodel.CellType.STRING;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +16,7 @@ import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -29,7 +33,10 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.helper.EasternArabicService;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -46,7 +53,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
     
     public final int currencyUnitsRowPosition = 1;
     public final int initHeaderRowOffset = 3;
-
+    
     private static final int IN_MEMORY_ROWS = 10;
     
     /**
@@ -71,21 +78,20 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
      * Without this conversion ReportCell.displayedValue and ReportCell.value->double will be different.   
      */
     protected AmountsUnits amountUnits = null;
-
+    
     /**
      * generates a workbook containing data about 1 or 2 reports. Normally you'd want both reports to actually be the
      * same one generated in different currencies, but the code does not care and you can put as different reports as
      * you want
      * 
-     * @param report1
+     * @param report
      *            - the first report
-     * @param report2
+     * @param dualReport
      *            - the second report, might be null
      */
     @Override
     public byte[] exportReport(GeneratedReport report, GeneratedReport dualReport) throws Exception {
         logger.info("Start generating Excel Report...");
-//      this.requiresMemoryCare = requiresMemoryCare(report);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         SXSSFWorkbook wb = new SXSSFWorkbook(-1);
         template = new SaikuReportExcelTemplate(wb);
@@ -112,7 +118,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
      */
     protected void addReportSheetToWorkbook(SXSSFWorkbook wb, GeneratedReport report, String sheetName) {
         SXSSFSheet reportSheet = wb.createSheet(TranslatorWorker.translateText(sheetName));
-        cachedWidths.computeIfAbsent(reportSheet.getSheetName(), k -> new HashMap<Integer, Integer>());
+        reportSheet.setRightToLeft(SiteUtils.isEffectiveLangRTL());
+        cachedWidths.computeIfAbsent(reportSheet.getSheetName(), k -> new HashMap<>());
         
         generateReportSheet(wb, reportSheet, report);
         postProcessGeneratedSheet(reportSheet, report);
@@ -134,7 +141,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
     
     protected void addSummarySheetToWorkbook(SXSSFWorkbook wb, GeneratedReport report, String sheetName) {
         SXSSFSheet summarySheet = wb.createSheet(TranslatorWorker.translateText(sheetName));
-        generateSummarySheet(wb, summarySheet, report.spec);
+        summarySheet.setRightToLeft(SiteUtils.isEffectiveLangRTL());
+        generateSummarySheet(summarySheet, report.spec);
     }
     
     protected void addDualSummarySheetToWorkbook(SXSSFWorkbook wb, GeneratedReport dualReport) {
@@ -225,7 +233,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
         }
 
         for (CellRangeAddress ca : mergedCells) {
-            SaikuReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
+            SaikuReportExcelTemplate.fillHeaderRegionWithBorder(sheet, ca);
         }
     }
     
@@ -251,7 +259,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
      * @param report
      * @param reportContents
      * @param level
-     * @param row
+     * @param hierarchyCells
      * @return
      */
     protected void renderTableRow(SXSSFSheet sheet, GeneratedReport report, ReportArea reportContents, int level,
@@ -300,7 +308,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
      * @param report
      * @param reportContents
      * @param level
-     * @param row
+     * @param hierarchyCells
      * @return
      */
     protected void renderGroupRow(SXSSFSheet sheet, GeneratedReport report, ReportArea reportContents, int level,
@@ -330,7 +338,6 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
      * @param report
      * @param reportContents
      * @param level
-     * @param row
      */
     protected void renderSubTotalRow(Sheet sheet, GeneratedReport report, ReportArea reportContents, int level) {
         Row row = sheet.createRow(sheet.getLastRowNum() + 1);
@@ -375,9 +382,13 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
     protected Cell createTotalCell(Sheet sheet, Row row, int i, GeneratedReport report, ReportCell rc) {
         Cell cell = null;
         if (i == 0 && report.spec.getColumns().size() > 0) {
-            cell = row.createCell(i, Cell.CELL_TYPE_STRING);
+            cell = row.createCell(i, STRING);
             String value = TranslatorWorker.translateText("Report Totals");
-            cell.setCellValue(value + " (" + report.reportContents.getNrEntities() + ")");
+            String nrEntities = String.format("%s", report.reportContents.getNrEntities());
+            if (EasternArabicService.getInstance().isLocaleEasternArabic(TLSUtils.getCurrentSystemLocale())) {
+                nrEntities = EasternArabicService.getInstance().convertWesternArabicToEasternArabic(nrEntities);
+            }
+            cell.setCellValue(value + " (" + nrEntities + ")");
             setMaxColWidth(sheet, cell, i);
         } else {
             return createCell(sheet, row, i, rc);
@@ -393,11 +404,12 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
      * @return
      */
     protected Cell createCell(Sheet sheet, Row row, int i, ReportCell rc) {
-        int cellType = getCellType(rc);
+        CellType cellType = getCellType(rc);
         Cell cell = row.createCell(i, cellType);
-        if (cellType == Cell.CELL_TYPE_NUMERIC) {
+        if (cellType == NUMERIC) {
             cell.setCellValue(getDoubleValue(rc));
-        } else if (cellType == Cell.CELL_TYPE_STRING) {
+            cell.setCellStyle(template.getNumberStyle());
+        } else if (cellType == STRING) {
             cell.setCellValue(getStringValue(rc));
         }
         
@@ -410,10 +422,10 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
         Map<Integer, Integer> widths = cachedWidths.get(sheet.getSheetName());
         IntWrapper width = new IntWrapper().inc(10);
         switch (cell.getCellType()) {
-            case Cell.CELL_TYPE_STRING:
+            case STRING:
                 width.set(cell.getStringCellValue().length());
                 break;
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 width.set(Double.toString(cell.getNumericCellValue()).length());
                 break;
         }
@@ -422,12 +434,12 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
     }
 
 
-    protected int getCellType(ReportCell reportCell) {
+    protected CellType getCellType(ReportCell reportCell) {
         if (reportCell instanceof AmountCell) {
-            return Cell.CELL_TYPE_NUMERIC;
+            return NUMERIC;
         }
         
-        return Cell.CELL_TYPE_STRING;
+        return STRING;
     }
     
     protected double getDoubleValue(ReportCell reportCell) {
@@ -443,12 +455,10 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
     /**
      * Add extra info about filters applied, currency and settings.
      * 
-     * @param wb
      * @param summarySheet
      * @param reportSpec
-     * @param queryObject
      */
-    private void generateSummarySheet(SXSSFWorkbook workbook, SXSSFSheet summarySheet, ReportSpecification reportSpec) {
+    private void generateSummarySheet(SXSSFSheet summarySheet, ReportSpecification reportSpec) {
         IntWrapper currLine = new IntWrapper();
         
         renderSummaryFilters(summarySheet, reportSpec, currLine);
@@ -548,9 +558,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
      * to the process.
      * 
      * @param sheet
-     * @param totalColNumber
-     * @param hierarchies
-     * @param headers
+     * @param report
      */
     protected void calculateColumnsWidth(Sheet sheet, GeneratedReport report) {
         Map<Integer, Integer> sheetWidths = cachedWidths.get(sheet.getSheetName());

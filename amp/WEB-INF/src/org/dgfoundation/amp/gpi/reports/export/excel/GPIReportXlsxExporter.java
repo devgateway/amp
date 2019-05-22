@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.gpi.reports.export.excel;
 
+import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
+
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -10,6 +12,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -35,6 +38,13 @@ import org.digijava.module.aim.util.FeaturesUtil;
  *
  */
 public class GPIReportXlsxExporter implements GPIReportExporter {
+    
+    public static final int SUMMARY_COLUMN_POS_1 = 1;
+    public static final int SUMMARY_COLUMN_POS_2 = 2;
+    public static final int SUMMARY_COLUMN_POS_3 = 3;
+    public static final int SUMMARY_COLUMN_POS_4 = 4;
+    public static final int SUMMARY_COLUMN_POS_5 = 5;
+    public static final int SUMMARY_COLUMN_POS_6 = 6;
 
     protected GPIReportExcelTemplate template;
 
@@ -112,7 +122,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
 
     protected void addSummarySheetToWorkbook(SXSSFWorkbook wb, GPIReport report, String sheetName) {
         SXSSFSheet summarySheet = wb.createSheet(TranslatorWorker.translateText(sheetName));
-        generateSummarySheet(wb, summarySheet, report);
+        generateSummarySheet(summarySheet, report);
     }
 
     protected void postProcessGeneratedSheet(Sheet sheet, GPIReport report) {
@@ -185,14 +195,14 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
      * @param sheet
      * @param row
      * @param i
-     * @param column
+     * @param columnName
      * @param value
      * @return
      */
     public Cell createCell(GPIReport report, Sheet sheet, Row row, int i, String columnName, String value) {
-        int cellType = getCellType(columnName);
+        CellType cellType = getCellType(columnName);
         Cell cell = row.createCell(i, cellType);
-        if (cellType == Cell.CELL_TYPE_NUMERIC) {
+        if (cellType == NUMERIC) {
             DecimalFormat df = report.getSpec().getSettings().getCurrencyFormat();
             double val = 0;
             try {
@@ -201,7 +211,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
                 logger.error(e.getMessage(), e);
             }
             cell.setCellValue(val);
-        } else if (cellType == Cell.CELL_TYPE_STRING) {
+        } else if (cellType == CellType.STRING) {
             cell.setCellValue(value);
         }
         
@@ -220,7 +230,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
         Map<Integer, Integer> widths = cachedWidths.get(sheet.getSheetName());
         IntWrapper width = new IntWrapper().inc(10);
         switch (cell.getCellType()) {
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 width.set(Double.toString(cell.getNumericCellValue()).length());
                 break;
             default:
@@ -231,8 +241,8 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
         widths.compute(i, (k, v) -> v == null ? width.value : v < width.value ? width.value : v);
     }
 
-    public int getCellType(String columnName) {
-        return Cell.CELL_TYPE_STRING;
+    public CellType getCellType(String columnName) {
+        return CellType.STRING;
     }
     
     protected boolean hasSpecificStyle(String columnName) {
@@ -250,11 +260,10 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
     /**
      * Add extra info about filters applied, currency and settings.
      * 
-     * @param wb
      * @param summarySheet
      * @param report
      */
-    protected void generateSummarySheet(SXSSFWorkbook workbook, SXSSFSheet summarySheet, GPIReport report) {
+    protected void generateSummarySheet(SXSSFSheet summarySheet, GPIReport report) {
         IntWrapper currLine = new IntWrapper();
 
         renderSummaryFilters(summarySheet, report, currLine);
@@ -325,7 +334,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
      * summary sheet
      *
      * @param summarySheet
-     * @param reportSpec
+     * @param report
      * @param currLine
      */
     protected void renderSummarySettings(Sheet summarySheet, GPIReport report, IntWrapper currLine) {
@@ -359,9 +368,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
      * sheet.autoSizeColumn can add several minutes to the process.
      * 
      * @param sheet
-     * @param totalColNumber
-     * @param hierarchies
-     * @param headers
+     * @param report
      */
     protected void calculateColumnsWidth(Sheet sheet, GPIReport report) {
         Map<Integer, Integer> sheetWidths = cachedWidths.get(sheet.getSheetName());

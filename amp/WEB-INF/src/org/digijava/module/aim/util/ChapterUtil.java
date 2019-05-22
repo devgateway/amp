@@ -5,16 +5,14 @@ import java.text.DecimalFormat;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpChapter;
 import org.digijava.module.aim.dbentity.AmpImputation;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class ChapterUtil {
     private static Logger logger = Logger.getLogger(ChapterUtil.class);
@@ -66,9 +64,9 @@ public class ChapterUtil {
     }
 
     public static String getNumberFromCell(Cell c) {
-        if (c.getCellType() == Cell.CELL_TYPE_STRING) {
+        if (c.getCellType() == CellType.STRING) {
             return c.getStringCellValue();
-        } else if (c.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+        } else if (c.getCellType() == CellType.NUMERIC) {
             return df.format(c.getNumericCellValue());
         } else
             throw new RuntimeException("Unsupported Cell Type "

@@ -23,24 +23,20 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.view.xls.XLSExportType;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
@@ -140,58 +136,6 @@ public class CSVExportAction
           rd.setSortAscending( ReportContextData.getFromRequest().getSortAscending());
         }
     
-//      //show title+desc
-//      rowId.inc();
-//      colId.reset();
-//      row = sheet.createRow(rowId.shortValue());
-//      HSSFCell cell = row.createCell(colId.shortValue());
-//  
-//      Site site = RequestUtils.getSite(request);
-//      Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-//  
-//      String siteId=site.getSiteId();
-//      String locale=navigationLanguage.getCode(); 
-//      
-//      String translatedNotes = "";
-//      if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
-//          translatedNotes = TranslatorWorker.translateText("Amounts are in thousands (000)", locale, siteId);
-//      }
-//      if ("".equalsIgnoreCase(translatedNotes)) {
-//          translatedNotes = AmpReports.getNote(session);
-//      }
-//      
-//      
-//      cell.setCellValue(translatedNotes + "\n");
-//      
-//      grdx.makeColSpan(rd.getTotalDepth(),false);
-//      rowId.inc();
-//      colId.reset();
-//  
-//      row = sheet.createRow(rowId.shortValue());
-//      cell = row.createCell(colId.shortValue());
-//      
-//      
-//      String translatedReportName="Report Name:";
-//      String translatedReportDescription="Description:";
-//      try{    
-//          translatedReportName=TranslatorWorker.translateText("Report Name:",locale,siteId);
-//          translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
-//      }catch (WorkerException e){;}
-//  
-//      cell.setCellValue(translatedReportName+": " + r.getName());
-//  
-//      grdx.makeColSpan(rd.getTotalDepth(),false);
-//      rowId.inc();
-//      colId.reset();
-//  
-//      row = sheet.createRow(rowId.shortValue());
-//      cell = row.createCell(colId.shortValue());
-//      cell.setCellValue(translatedReportDescription+": " + r.getReportDescription());
-//  
-//      grdx.makeColSpan(rd.getTotalDepth(),false);
-//      rowId.inc();
-//      colId.reset();
-        
         grdx.createHeaderNameAndDescription(request);
         
         grdx.setAutoSize(false);
@@ -230,7 +174,7 @@ public class CSVExportAction
               }
 
             if (ccell != null) {
-              if (ccell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+              if (ccell.getCellType() == CellType.NUMERIC) {
                 s = Double.toString(ccell.getNumericCellValue());
                 if (s.matches(".*[eE].*")) {
                     double value = Double.parseDouble(String.valueOf(ccell.getNumericCellValue()));

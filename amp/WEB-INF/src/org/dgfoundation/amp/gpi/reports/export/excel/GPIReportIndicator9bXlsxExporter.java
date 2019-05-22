@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -25,10 +26,6 @@ import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
  */
 public class GPIReportIndicator9bXlsxExporter extends GPIReportXlsxExporter {
     
-    private static final int SUMMARY_COLUMN_POS_2 = 2;
-    private static final int SUMMARY_COLUMN_POS_3 = 3;
-    private static final int SUMMARY_COLUMN_POS_5 = 5;
-    private static final int SUMMARY_COLUMN_POS_4 = 4;
     private static final int SUMMARY_ROW_OFFSET = 4;
     
     private static final short DEFAULT_HEIGHT_OF_SUMMARY_MERGED_REGION = 800;
@@ -44,7 +41,7 @@ public class GPIReportIndicator9bXlsxExporter extends GPIReportXlsxExporter {
      * @param report
      */
     protected void renderReportTableHeader(Workbook wb, Sheet sheet, GPIReport report) {
-        Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
+        Set<CellRangeAddress> mergedCells = new HashSet<>();
         
         Row row = sheet.createRow(initHeaderRowOffset);
         
@@ -64,7 +61,7 @@ public class GPIReportIndicator9bXlsxExporter extends GPIReportXlsxExporter {
         }
 
         for (CellRangeAddress ca : mergedCells) {
-            GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
+            GPIReportExcelTemplate.fillHeaderRegionWithBorder(sheet, ca);
         }
     }
     
@@ -74,7 +71,7 @@ public class GPIReportIndicator9bXlsxExporter extends GPIReportXlsxExporter {
      * @param report
      */
     protected void renderReportTableSummary(Workbook wb, Sheet sheet, GPIReport report) {
-        Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
+        Set<CellRangeAddress> mergedCells = new HashSet<>();
         
         Map<String, GPIReportOutputColumn> columns = report.getSummary().keySet().stream()
                 .collect(Collectors.toMap(GPIReportOutputColumn::getOriginalColumnName, Function.identity()));
@@ -94,7 +91,7 @@ public class GPIReportIndicator9bXlsxExporter extends GPIReportXlsxExporter {
                 MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES));
 
         for (CellRangeAddress ca : mergedCells) {
-            GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
+            GPIReportExcelTemplate.fillHeaderRegionWithBorder(sheet, ca);
         }
     }
     
@@ -143,13 +140,13 @@ public class GPIReportIndicator9bXlsxExporter extends GPIReportXlsxExporter {
     }
 
     @Override
-    public int getCellType(String columnName) {
+    public CellType getCellType(String columnName) {
         switch (columnName) {
             case MeasureConstants.NATIONAL_BUDGET_EXECUTION_PROCEDURES:
             case MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES:
             case MeasureConstants.NATIONAL_AUDITING_PROCEDURES:
             case MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES:
-                return Cell.CELL_TYPE_NUMERIC;
+                return CellType.NUMERIC;
         default:
             return super.getCellType(columnName);
         }

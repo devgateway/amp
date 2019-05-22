@@ -12,6 +12,8 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
@@ -68,12 +70,12 @@ public class PlainColumnReportDataXLS extends ColumnReportDataXLS {
         HSSFFont font= wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
         font.setFontHeightInPoints(new Short("8"));
-        cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        cs.setBorderBottom(BorderStyle.THIN);
+        cs.setBorderLeft(BorderStyle.THIN);
+        cs.setBorderRight(BorderStyle.THIN);
+        cs.setBorderTop(BorderStyle.THIN);
         cs.setFont(font);
-        cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        cs.setVerticalAlignment(VerticalAlignment.TOP);
         return cs;
     }
     

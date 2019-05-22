@@ -117,7 +117,8 @@ public class ExportSectorManager2XSL extends Action {
                                         row = sheet.createRow(rowIndex++);
                                     }
                                     mergeRowsNum += threeLevelSectors.size();
-                                    addMergedRegion(wb, sheet, row.getRowNum() - threeLevelSectors.size(), row.getRowNum() - 1, 2, 2);
+                                    addMergedRegion(sheet, row.getRowNum() - threeLevelSectors.size(),
+                                            row.getRowNum() - 1, 2, 2);
                                 } else {
                                     cellIndex = 3;
                                     cell = row.createCell(cellIndex++);
@@ -127,7 +128,7 @@ public class ExportSectorManager2XSL extends Action {
                                 }
                             }
 
-                            addMergedRegion(wb, sheet, row.getRowNum() - mergeRowsNum, row.getRowNum() - 1, 1, 1);
+                            addMergedRegion(sheet, row.getRowNum() - mergeRowsNum, row.getRowNum() - 1, 1, 1);
                         } else {
                             cellIndex = 2;
                             for(int i = 0; i < 2; i++){
@@ -140,7 +141,7 @@ public class ExportSectorManager2XSL extends Action {
                         totalMerge += mergeRowsNum;
                     }
                     // Set the border and border colors.
-                    addMergedRegion(wb, sheet, row.getRowNum() - totalMerge, row.getRowNum() - 1, 0, 0);
+                    addMergedRegion(sheet, row.getRowNum() - totalMerge, row.getRowNum() - 1, 0, 0);
                 } else {
                     cellIndex = 1;
                     for (int i = 0; i < 3; i++) {
@@ -171,9 +172,9 @@ public class ExportSectorManager2XSL extends Action {
      * @param firstCol Index of first column
      * @param lastCol Index of last column (inclusive), must be equal to or larger than {@code firstCol}
      */
-    private void addMergedRegion(HSSFWorkbook wb, HSSFSheet sheet, int firstRow, int lastRow, int firstCol, int lastCol) {
+    private void addMergedRegion(HSSFSheet sheet, int firstRow, int lastRow, int firstCol, int lastCol) {
         CellRangeAddress region = new CellRangeAddress(firstRow, lastRow, firstCol, lastCol);
-        AdminXSLExportUtil.applyingStylesToRegion(region, sheet, wb);
+        AdminXSLExportUtil.applyingStylesToRegion(region, sheet);
         
         if (region.getNumberOfCells() > 1) {
             sheet.addMergedRegion(region);

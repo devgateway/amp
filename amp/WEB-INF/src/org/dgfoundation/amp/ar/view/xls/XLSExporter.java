@@ -7,6 +7,12 @@
 package org.dgfoundation.amp.ar.view.xls;
 
 
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BLUE;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BROWN;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.LIGHT_YELLOW;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.TURQUOISE;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.WHITE;
+
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -15,10 +21,12 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFRegionUtil;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
@@ -34,19 +42,6 @@ public abstract class XLSExporter extends Exporter {
     
     protected static Logger logger = Logger.getLogger(XLSExporter.class);
 
-    
-//  public static void resetStyles() {
-//        regularStyle = null;
-//        amountStyle = null;
-//        highlightedStyle = null;
-//        hierarchyLevel1Style=null;
-//        hierarchyOtherStyle=null;
-//        amountHierarchyLevel1Style=null;
-//        amountHierarchyOtherStyle=null;
-//  }
-    
-    //private boolean autoSize = true;
-    
     
     /********************************************************
      * When adding new CellStyles, don't forget to inherit 
@@ -135,12 +130,12 @@ public abstract class XLSExporter extends Exporter {
             HSSFFont font= wb.createFont();
             font.setFontName(HSSFFont.FONT_ARIAL);
             font.setFontHeightInPoints(new Short("8"));
-            cs.setBorderBottom(HSSFCellStyle.BORDER_NONE);
-            cs.setBorderLeft(HSSFCellStyle.BORDER_NONE);
-            cs.setBorderRight(HSSFCellStyle.BORDER_NONE);
-            cs.setBorderTop(HSSFCellStyle.BORDER_NONE);
+            cs.setBorderBottom(BorderStyle.NONE);
+            cs.setBorderLeft(BorderStyle.NONE);
+            cs.setBorderRight(BorderStyle.NONE);
+            cs.setBorderTop(BorderStyle.NONE);
             cs.setFont(font);
-            cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+            cs.setVerticalAlignment(VerticalAlignment.TOP);
             regularStyle = cs;
         }
         return regularStyle;
@@ -151,17 +146,17 @@ public abstract class XLSExporter extends Exporter {
             HSSFCellStyle cs = wb.createCellStyle();
             HSSFFont font= wb.createFont();
             font.setFontName(HSSFFont.FONT_ARIAL);
-            font.setColor( HSSFColor.BLUE.index );
-            cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
+            font.setColor(BLUE.getIndex());
+            cs.setBorderBottom(BorderStyle.THIN);
+            cs.setBorderLeft(BorderStyle.THIN);
+            cs.setBorderRight(BorderStyle.THIN);
+            cs.setBorderTop(BorderStyle.THIN);
             HSSFDataFormat df = wb.createDataFormat();
             cs.setDataFormat(df.getFormat("General"));
         
             cs.setFont(font);
             cs.setWrapText(true);
-            cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+            cs.setVerticalAlignment(VerticalAlignment.TOP);
             amountStyle = cs;
         }
         return amountStyle;
@@ -172,18 +167,18 @@ public abstract class XLSExporter extends Exporter {
             HSSFCellStyle cs = wb.createCellStyle();
             HSSFFont font= wb.createFont();
             font.setFontName(HSSFFont.FONT_ARIAL);
-            font.setColor(HSSFColor.BROWN.index);
-            font.setBoldweight(Font.BOLDWEIGHT_BOLD);
-            cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
+            font.setColor(BROWN.getIndex());
+            font.setBold(true);
+            cs.setBorderBottom(BorderStyle.THIN);
+            cs.setBorderLeft(BorderStyle.THIN);
+            cs.setBorderRight(BorderStyle.THIN);
+            cs.setBorderTop(BorderStyle.THIN);
             HSSFDataFormat df = wb.createDataFormat();
             cs.setDataFormat(df.getFormat("General"));
         
             cs.setFont(font);
             cs.setWrapText(true);
-            cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+            cs.setVerticalAlignment(VerticalAlignment.TOP);
             pledgeStyle = cs;
         }
         return pledgeStyle;
@@ -193,20 +188,20 @@ public abstract class XLSExporter extends Exporter {
         if (amountHierarchyLevel1Style == null) {
             HSSFCellStyle cs = wb.createCellStyle();
             HSSFFont font= wb.createFont();
-            cs.setFillForegroundColor(HSSFColor.TURQUOISE.index);
-            cs.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
+            cs.setFillForegroundColor(TURQUOISE.getIndex());
+            cs.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             font.setFontName(HSSFFont.FONT_ARIAL);
-            font.setColor( HSSFColor.BLUE.index );
-            cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
+            font.setColor(BLUE.getIndex());
+            cs.setBorderBottom(BorderStyle.THIN);
+            cs.setBorderLeft(BorderStyle.THIN);
+            cs.setBorderRight(BorderStyle.THIN);
+            cs.setBorderTop(BorderStyle.THIN);
             HSSFDataFormat df = wb.createDataFormat();
             cs.setDataFormat(df.getFormat("General"));
         
             cs.setFont(font);
             cs.setWrapText(true);
-            cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+            cs.setVerticalAlignment(VerticalAlignment.TOP);
             amountHierarchyLevel1Style = cs;
         }
         return amountHierarchyLevel1Style;
@@ -217,20 +212,20 @@ public abstract class XLSExporter extends Exporter {
         if (amountHierarchyOtherStyle == null) {
             HSSFCellStyle cs = wb.createCellStyle();
             HSSFFont font= wb.createFont();
-            cs.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
-            cs.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
+            cs.setFillForegroundColor(LIGHT_YELLOW.getIndex());
+            cs.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             font.setFontName(HSSFFont.FONT_ARIAL);
-            font.setColor( HSSFColor.BLUE.index );
-            cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
+            font.setColor(BLUE.getIndex());
+            cs.setBorderBottom(BorderStyle.THIN);
+            cs.setBorderLeft(BorderStyle.THIN);
+            cs.setBorderRight(BorderStyle.THIN);
+            cs.setBorderTop(BorderStyle.THIN);
             HSSFDataFormat df = wb.createDataFormat();
             cs.setDataFormat(df.getFormat("General"));
         
             cs.setFont(font);
             cs.setWrapText(true);
-            cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+            cs.setVerticalAlignment(VerticalAlignment.TOP);
             amountHierarchyOtherStyle = cs;
         }
         return amountHierarchyOtherStyle;
@@ -240,25 +235,16 @@ public abstract class XLSExporter extends Exporter {
         if (highlightedStyle == null) {
             HSSFCellStyle cs = wb.createCellStyle();
             cs.setWrapText(true);
-            cs.setFillForegroundColor(HSSFColor.WHITE.index);
-            cs.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
+            cs.setFillForegroundColor(WHITE.getIndex());
+            cs.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             HSSFFont font = wb.createFont();
             font.setFontName(HSSFFont.FONT_ARIAL);
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-            cs.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-            //if (border) {
-                      cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
-            /*
-            } else {
-                      cs.setBorderBottom(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderLeft(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderRight(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderTop(HSSFCellStyle.BORDER_NONE);
-            }
-            */
+            font.setBold(true);
+            cs.setAlignment(HorizontalAlignment.CENTER);
+            cs.setBorderBottom(BorderStyle.THIN);
+            cs.setBorderLeft(BorderStyle.THIN);
+            cs.setBorderRight(BorderStyle.THIN);
+            cs.setBorderTop(BorderStyle.THIN);
             cs.setFont(font);
             highlightedStyle = cs;
         }
@@ -270,25 +256,16 @@ public abstract class XLSExporter extends Exporter {
     protected HSSFCellStyle getHierarchyLevel1Style() {
         if (hierarchyLevel1Style == null) {
             HSSFCellStyle cs = wb.createCellStyle();
-            cs.setFillForegroundColor(HSSFColor.TURQUOISE.index);
-            cs.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
+            cs.setFillForegroundColor(TURQUOISE.getIndex());
+            cs.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             HSSFFont font = wb.createFont();
             font.setFontName(HSSFFont.FONT_ARIAL);
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-            cs.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-            //if (border) {
-                      cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
-            /*          
-            } else {
-                      cs.setBorderBottom(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderLeft(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderRight(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderTop(HSSFCellStyle.BORDER_NONE);
-            }
-            */
+            font.setBold(true);
+            cs.setAlignment(HorizontalAlignment.LEFT);
+            cs.setBorderBottom(BorderStyle.THIN);
+            cs.setBorderLeft(BorderStyle.THIN);
+            cs.setBorderRight(BorderStyle.THIN);
+            cs.setBorderTop(BorderStyle.THIN);
             cs.setFont(font);
             cs.setWrapText(true);
             hierarchyLevel1Style = cs;
@@ -300,25 +277,16 @@ public abstract class XLSExporter extends Exporter {
     protected HSSFCellStyle getHierarchyOtherStyle() {
         if (hierarchyOtherStyle == null) {
             HSSFCellStyle cs = wb.createCellStyle();
-            cs.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
-            cs.setFillPattern((short) HSSFCellStyle.SOLID_FOREGROUND);
+            cs.setFillForegroundColor(LIGHT_YELLOW.getIndex());
+            cs.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             HSSFFont font = wb.createFont();
             font.setFontName(HSSFFont.FONT_ARIAL);
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-            cs.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-            //if (border) {
-                      cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
-                      cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
-            /*
-            } else {
-                      cs.setBorderBottom(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderLeft(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderRight(HSSFCellStyle.BORDER_NONE);
-                      cs.setBorderTop(HSSFCellStyle.BORDER_NONE);
-            }
-            */
+            font.setBold(true);
+            cs.setAlignment(HorizontalAlignment.LEFT);
+            cs.setBorderBottom(BorderStyle.THIN);
+            cs.setBorderLeft(BorderStyle.THIN);
+            cs.setBorderRight(BorderStyle.THIN);
+            cs.setBorderTop(BorderStyle.THIN);
             cs.setFont(font);
             cs.setWrapText(true);
             hierarchyOtherStyle = cs;
@@ -342,11 +310,12 @@ public abstract class XLSExporter extends Exporter {
             return;
         CellRangeAddress r = new CellRangeAddress(rowId.intValue(), rowId.intValue() + rowSpan - 1, colId.intValue(), colId.intValue() + colSpan - 1);
 //      Region r=new Region(rowId.intValue(), colId.shortValue(), rowId.intValue() + rowSpan - 1, (short) (colId.shortValue() + colSpan - 1));
-        HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
-        HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
-        if (borderRight)
-            HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
-        HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, r, sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, r, sheet);
+        if (borderRight) {
+            RegionUtil.setBorderRight(BorderStyle.THIN, r, sheet);
+        }
+        RegionUtil.setBorderTop(BorderStyle.THIN, r, sheet);
         sheet.addMergedRegion(r);
         sheet.autoSizeColumn(colId.intValue());
         colId.inc(colSpan);
@@ -358,16 +327,16 @@ public abstract class XLSExporter extends Exporter {
         CellRangeAddress r = new CellRangeAddress(rowId.intValue(), colId.intValue(), rowId.intValue(), colId.intValue() + size);
 //      Region r=new Region(rowId.intValue(), colId.shortValue(),rowId.intValue(), (short) (colId.shortValue() + size));
         try {
-            if (border){
-                HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
-                HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
-                HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
-                HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
-            }else{
-                HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
-                HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
-                HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
-                HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
+            if (border) {
+                RegionUtil.setBorderBottom(BorderStyle.THIN, r, sheet);
+                RegionUtil.setBorderLeft(BorderStyle.THIN, r, sheet);
+                RegionUtil.setBorderRight(BorderStyle.THIN, r, sheet);
+                RegionUtil.setBorderTop(BorderStyle.THIN, r, sheet);
+            } else {
+                RegionUtil.setBorderBottom(BorderStyle.NONE, r, sheet);
+                RegionUtil.setBorderLeft(BorderStyle.NONE, r, sheet);
+                RegionUtil.setBorderRight(BorderStyle.NONE, r, sheet);
+                RegionUtil.setBorderTop(BorderStyle.NONE, r, sheet);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -377,16 +346,6 @@ public abstract class XLSExporter extends Exporter {
         } catch(Exception e) {
             logger.error(e.getMessage(), e);
         }
-//      try{
-//          sheet.autoSizeColumn(r.getColumnFrom());
-//      } catch(Exception e) {
-//          logger.error(e);
-//          e.printStackTrace();
-//      }
-    
-//        if (this.autoSize) {
-//            sheet.autoSizeColumn(r.getColumnFrom());
-//        }
         colId.inc(++size);
     }
 
@@ -402,16 +361,16 @@ public abstract class XLSExporter extends Exporter {
 //      Region r=new Region(rowId.intValue(), colId.shortValue(),
 //              rowId.intValue() + size, colId.shortValue());
         try {
-            if (border){
-                HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
-                HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
-                HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
-                HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
-            }else{
-                HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
-                HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
-                HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
-                HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
+            if (border) {
+                RegionUtil.setBorderBottom(BorderStyle.THIN, r, sheet);
+                RegionUtil.setBorderLeft(BorderStyle.THIN, r, sheet);
+                RegionUtil.setBorderRight(BorderStyle.THIN, r, sheet);
+                RegionUtil.setBorderTop(BorderStyle.THIN, r, sheet);
+            } else {
+                RegionUtil.setBorderBottom(BorderStyle.NONE, r, sheet);
+                RegionUtil.setBorderLeft(BorderStyle.NONE, r, sheet);
+                RegionUtil.setBorderRight(BorderStyle.NONE, r, sheet);
+                RegionUtil.setBorderTop(BorderStyle.NONE, r, sheet);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

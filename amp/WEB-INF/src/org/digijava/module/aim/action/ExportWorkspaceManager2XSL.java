@@ -1,5 +1,8 @@
 package org.digijava.module.aim.action;
 
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BLACK;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BROWN;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,13 +17,13 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.view.xls.XLSExporter;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -65,42 +68,42 @@ public class ExportWorkspaceManager2XSL extends Action {
      // title cells
         HSSFCellStyle titleCS = wb.createCellStyle();
         titleCS.setWrapText(true);
-        titleCS.setFillForegroundColor(HSSFColor.BROWN.index);
+        titleCS.setFillForegroundColor(BROWN.getIndex());
         HSSFFont fontHeader = wb.createFont();
         fontHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontHeader.setFontHeightInPoints((short) 10);
-        fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-        titleCS.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        titleCS.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        titleCS.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        titleCS.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        titleCS.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        fontHeader.setBold(true);
+        titleCS.setAlignment(HorizontalAlignment.CENTER);
+        titleCS.setBorderBottom(BorderStyle.THIN);
+        titleCS.setBorderLeft(BorderStyle.THIN);
+        titleCS.setBorderRight(BorderStyle.THIN);
+        titleCS.setBorderTop(BorderStyle.THIN);
         titleCS.setFont(fontHeader);
 
         // ordinary cells
         HSSFCellStyle cs = wb.createCellStyle();
         HSSFFont font = wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
-        font.setColor(HSSFColor.BLACK.index);
-        cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        font.setColor(BLACK.getIndex());
+        cs.setBorderLeft(BorderStyle.THIN);
+        cs.setBorderRight(BorderStyle.THIN);
         HSSFDataFormat df = wb.createDataFormat();
         cs.setDataFormat(df.getFormat("General"));
         
 
         cs.setFont(font);
         cs.setWrapText(true);
-        cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        cs.setVerticalAlignment(VerticalAlignment.TOP);
         
         // ordinary cells with bottom border
         HSSFCellStyle csLastCell = wb.createCellStyle();
 
-        csLastCell.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        csLastCell.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        csLastCell.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        csLastCell.setBorderBottom(BorderStyle.THIN);
+        csLastCell.setBorderLeft(BorderStyle.THIN);
+        csLastCell.setBorderRight(BorderStyle.THIN);
         csLastCell.setFont(font);
         csLastCell.setWrapText(true);
-        csLastCell.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        csLastCell.setVerticalAlignment(VerticalAlignment.TOP);
 
         HSSFCellStyle style =wb.createCellStyle();
         style.setFont(font);

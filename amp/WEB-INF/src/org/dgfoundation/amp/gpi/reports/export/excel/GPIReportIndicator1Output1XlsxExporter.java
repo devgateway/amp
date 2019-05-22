@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -55,18 +56,16 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
     
     protected void addRemarkSheetToWorkbook(SXSSFWorkbook wb, GPIReport report, String sheetName) {
         SXSSFSheet remarkSheet = wb.createSheet(TranslatorWorker.translateText(sheetName));
-        generateRemarkSheet(wb, remarkSheet, report);
+        generateRemarkSheet(remarkSheet, report);
     }
     
     /**
      * Add extra info about filters applied, currency and settings.
      * 
-     * @param wb
      * @param remarkSheet
-     * @param reportSpec
-     * @param queryObject
+     * @param report
      */
-    protected void generateRemarkSheet(SXSSFWorkbook workbook, SXSSFSheet remarkSheet, GPIReport report) {
+    protected void generateRemarkSheet(SXSSFSheet remarkSheet, GPIReport report) {
         IntWrapper currLine = new IntWrapper();
         
         Row calendarRow = remarkSheet.createRow(currLine.intValue());
@@ -166,16 +165,20 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
                 firstRow + 1, firstRow + 1, firstCol + 21, firstCol + 21));
         
         for (CellRangeAddress ca : mergedCells) {
-            GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
+            GPIReportExcelTemplate.fillHeaderRegionWithBorder(sheet, ca);
         }
     }
 
     /**
      * @param sheet
+     * @param row
      * @param headerLabel
-     * @param initColPos
-     * @param initRowPos
-     * @return
+     * @param firstRow
+     * @param lastRow
+     * @param firstCol
+     * @param lastCol
+     *
+     * @return CellRangeAddress
      */
     private CellRangeAddress createHeaderCell(Sheet sheet, Row row, String headerLabel, int firstRow, int lastRow,
             int firstCol, int lastCol) {
@@ -235,37 +238,39 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
     
     @Override
     protected void renderReportTableSummary(Workbook wb, Sheet sheet, GPIReport report) {
-        Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
+        Set<CellRangeAddress> mergedCells = new HashSet<>();
         Row summaryRow = sheet.createRow(initSummaryRowOffset);
         
         Map<String, GPIReportOutputColumn> columns = report.getSummary().keySet().stream()
                 .collect(Collectors.toMap(GPIReportOutputColumn::getOriginalColumnName, Function.identity()));
         
-        
-        mergedCells.add(createSummaryCell(sheet, summaryRow, report, initSummaryRowOffset, initSummaryRowOffset, 1, 1,
+        mergedCells.add(createSummaryCell(summaryRow, report, SUMMARY_COLUMN_POS_1, SUMMARY_COLUMN_POS_1,
                 GPIReportConstants.GPI_1_Q1, columns));
-        mergedCells.add(createSummaryCell(sheet, summaryRow, report, initSummaryRowOffset, initSummaryRowOffset, 2, 2, 
+        mergedCells.add(createSummaryCell(summaryRow, report, SUMMARY_COLUMN_POS_2, SUMMARY_COLUMN_POS_2,
                 GPIReportConstants.GPI_1_Q2, columns));
-        mergedCells.add(createSummaryCell(sheet, summaryRow, report, initSummaryRowOffset, initSummaryRowOffset, 3, 4,
+        mergedCells.add(createSummaryCell(summaryRow, report, SUMMARY_COLUMN_POS_3, SUMMARY_COLUMN_POS_3,
                 GPIReportConstants.GPI_1_Q3, columns));
-        mergedCells.add(createSummaryCell(sheet, summaryRow, report, initSummaryRowOffset, initSummaryRowOffset, 5, 6,
+        mergedCells.add(createSummaryCell(summaryRow, report, SUMMARY_COLUMN_POS_5, SUMMARY_COLUMN_POS_6,
                 GPIReportConstants.GPI_1_Q4, columns));
 
         for (CellRangeAddress ca : mergedCells) {
-            GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
+            GPIReportExcelTemplate.fillHeaderRegionWithBorder(sheet, ca);
         }
     }
     
     /**
-     * @param sheet
-     * @param headerLabel
-     * @param initColPos
-     * @param initRowPos
-     * @return
+     * @param row
+     * @param report
+     * @param firstCol
+     * @param lastCol
+     * @param columnName
+     * @param columns
+     *
+     * @return CellRangeAddress
      */
-    private CellRangeAddress createSummaryCell(Sheet sheet, Row row, GPIReport report, int firstRow, int lastRow, 
-            int firstCol, int lastCol, String columnName, Map<String, GPIReportOutputColumn> columns) {
-        
+    private CellRangeAddress createSummaryCell(Row row, GPIReport report, int firstCol, int lastCol, String columnName,
+                                               Map<String, GPIReportOutputColumn> columns) {
+        Sheet sheet = row.getSheet();
         String summaryValue = report.getSummary().get(columns.get(columnName));
         String summaryLabel = String.format("%s\n%s", summaryValue == null ? "" : summaryValue,
                 getColumnHeaderLabel(GPIReportConstants.INDICATOR_1_1_SUMMARY_LABELS, columnName));
@@ -275,7 +280,7 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
         cell.setCellStyle(template.getSummaryCellStyle());
         setMaxColWidth(sheet, cell, firstCol);
 
-        CellRangeAddress mergedHeaderCell = new CellRangeAddress(firstRow, lastRow, firstCol, lastCol);
+        CellRangeAddress mergedHeaderCell = new CellRangeAddress(row.getRowNum(), row.getRowNum(), firstCol, lastCol);
         
         if (mergedHeaderCell.getNumberOfCells() > 1)
             sheet.addMergedRegion(mergedHeaderCell);
@@ -342,8 +347,8 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
     /**
      * @param sheet
      * @param report
-     * @param i
-     * @param columns
+     * @param colPos
+     * @param column
      * @param rowData
      */
     private void createDataCell(SXSSFSheet sheet, Row row, GPIReport report, int colPos, 
@@ -384,7 +389,7 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
     }
     
     @Override
-    public int getCellType(String columnName) {
+    public CellType getCellType(String columnName) {
         switch(columnName) {
             case GPIReportConstants.GPI_1_Q1:
             case ColumnConstants.GPI_1_Q6:
@@ -392,7 +397,7 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
             case ColumnConstants.GPI_1_Q8:
             case ColumnConstants.GPI_1_Q9:
             case ColumnConstants.GPI_1_Q10:
-                return Cell.CELL_TYPE_NUMERIC;
+                return CellType.NUMERIC;
             default:
                 return super.getCellType(columnName);
         }

@@ -12,6 +12,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellType;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
@@ -146,7 +147,7 @@ public class PlainTrailCellsXLS extends TrailCellsXLS {
     
     private void createCell(String text){
         HSSFCell cell2=this.getCell(this.getHierarchyOtherStyle());
-        cell2.setCellType(HSSFCell.CELL_TYPE_STRING);
+        cell2.setCellType(CellType.STRING);
         cell2.setCellValue(text);
         colId.inc();
     }

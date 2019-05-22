@@ -17,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -198,16 +199,16 @@ public class AuditLoggerManager extends MultiAction {
         HSSFFont titlefont = wb.createFont();
 
         titlefont.setFontHeightInPoints((short)10);
-        titlefont.setBoldweight(titlefont.BOLDWEIGHT_BOLD);
+        titlefont.setBold(true);
         
         HSSFFont font = wb.createFont();
         font.setFontName("Arial");
         font.setFontHeightInPoints((short)8);
-        font.setBoldweight(font.BOLDWEIGHT_NORMAL);
+        font.setBold(true);
         HSSFCellStyle style = wb.createCellStyle();
         HSSFCellStyle tstyle = wb.createCellStyle();
         tstyle.setFont(titlefont);
-        tstyle.setAlignment(style.ALIGN_CENTER);
+        tstyle.setAlignment(HorizontalAlignment.CENTER);
         
         String[] columnNames = {"Name", "Object Type", "Team Name", "Author Name", "Creation Date", "Editor Name", "Change Date", "Action", "Details"};
         int numberOfColumns = columnNames.length;

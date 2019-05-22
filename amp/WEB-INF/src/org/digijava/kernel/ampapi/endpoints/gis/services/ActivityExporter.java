@@ -14,6 +14,7 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
@@ -191,16 +192,16 @@ public abstract class ActivityExporter {
         HSSFFont titlefont = wb.createFont();
 
         titlefont.setFontHeightInPoints((short) 10);
-        titlefont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        titlefont.setBold(true);
         
         HSSFFont font = wb.createFont();
         font.setFontName("Arial");
         font.setFontHeightInPoints((short) 8);
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        font.setBold(true);
         HSSFCellStyle style = wb.createCellStyle();
         HSSFCellStyle tstyle = wb.createCellStyle();
         tstyle.setFont(titlefont);
-        tstyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        tstyle.setAlignment(HorizontalAlignment.CENTER);
         
         for (int i = 0; i < columnNames.size(); i++) {
             HSSFCell cell = row.createCell(i);

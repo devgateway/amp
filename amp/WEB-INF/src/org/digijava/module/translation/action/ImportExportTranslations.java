@@ -28,6 +28,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -142,28 +143,31 @@ public class ImportExportTranslations extends Action {
                 HSSFSheet sheet = wb.createSheet();
                 
                 // used for storing the max column widths
-                Map<Integer, Integer> currentColumnMaxWidths = new HashMap<Integer, Integer>();
+                Map<Integer, Integer> currColumnMaxWidths = new HashMap<Integer, Integer>();
                 
                 int rownum=0;
                 HSSFRow row=sheet.createRow(rownum++);
                 IntWrapper columnIdx = new IntWrapper();
-                createCell(row, columnIdx.intValue(), HSSFCell.CELL_TYPE_BLANK, TranslatorWorker.translateText("Key"), currentColumnMaxWidths);
-                createCell(row, columnIdx.inc().intValue(), HSSFCell.CELL_TYPE_BLANK, "en", currentColumnMaxWidths);
-                createCell(row, columnIdx.inc().intValue(), HSSFCell.CELL_TYPE_BLANK, targetLang, currentColumnMaxWidths);
-                createCell(row, columnIdx.inc().intValue(), HSSFCell.CELL_TYPE_BLANK, TranslatorWorker.translateText("Date of creation (en) "), currentColumnMaxWidths);
-                createCell(row, columnIdx.inc().intValue(), HSSFCell.CELL_TYPE_BLANK, TranslatorWorker.translateText("Date of creation ("+targetLang+") "), currentColumnMaxWidths);
+                createCell(row, columnIdx.intValue(), CellType.BLANK,
+                        TranslatorWorker.translateText("Key"), currColumnMaxWidths);
+                createCell(row, columnIdx.inc().intValue(), CellType.BLANK, "en", currColumnMaxWidths);
+                createCell(row, columnIdx.inc().intValue(), CellType.BLANK, targetLang, currColumnMaxWidths);
+                createCell(row, columnIdx.inc().intValue(), CellType.BLANK,
+                        TranslatorWorker.translateText("Date of creation (en) "), currColumnMaxWidths);
+                createCell(row, columnIdx.inc().intValue(), CellType.BLANK,
+                        TranslatorWorker.translateText("Date of creation (" + targetLang + ") "), currColumnMaxWidths);
                 if( messageGroups!=null) {
                     for(MessageGroup messageGrp:  messageGroups){
                         columnIdx.reset();
                         
                         if(rownum==65536){
-                            adjustColumnWidths(sheet, currentColumnMaxWidths);
+                            adjustColumnWidths(sheet, currColumnMaxWidths);
                             sheet = wb.createSheet();
                             rownum=0;
                         }
                         
                         row=sheet.createRow(rownum++);
-                        createCell(row, columnIdx.intValue(), HSSFCell.CELL_TYPE_BLANK, messageGrp.getKey(), currentColumnMaxWidths);
+                        createCell(row, columnIdx.intValue(), CellType.BLANK, messageGrp.getKey(), currColumnMaxWidths);
                         
                         String englishText=null;
                         String targetText=null;
@@ -193,24 +197,26 @@ public class ImportExportTranslations extends Action {
                             logger.error("Can not export key because text is too long: " + messageGrp.getKey());
                             continue;
                         }
-                        createCell(row, columnIdx.inc().intValue(), HSSFCell.CELL_TYPE_BLANK, englishText, currentColumnMaxWidths);
-                        createCell(row, columnIdx.inc().intValue(), HSSFCell.CELL_TYPE_BLANK, targetText, currentColumnMaxWidths);
+                        createCell(row, columnIdx.inc().intValue(), CellType.BLANK, englishText, currColumnMaxWidths);
+                        createCell(row, columnIdx.inc().intValue(), CellType.BLANK, targetText, currColumnMaxWidths);
                         
                         if (englishCreationDate != null){
                             String formattedEnglishCreationDate = LocalizationUtil.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.ENGLISH).
                                     format(englishCreationDate);
-                            createCell(row, columnIdx.inc().intValue(), HSSFCell.CELL_TYPE_BLANK, formattedEnglishCreationDate, currentColumnMaxWidths);
+                            createCell(row, columnIdx.inc().intValue(), CellType.BLANK,
+                                    formattedEnglishCreationDate, currColumnMaxWidths);
                         }
                         
                         if (targetCreationDate != null) {
                             String formattedTargetCreationDate = LocalizationUtil.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.ENGLISH).
                                     format(targetCreationDate);
-                            createCell(row, columnIdx.inc().intValue(), HSSFCell.CELL_TYPE_BLANK, formattedTargetCreationDate, currentColumnMaxWidths);
+                            createCell(row, columnIdx.inc().intValue(), CellType.BLANK,
+                                    formattedTargetCreationDate, currColumnMaxWidths);
                         }
                     }
                 }
                 
-                adjustColumnWidths(sheet, currentColumnMaxWidths);
+                adjustColumnWidths(sheet, currColumnMaxWidths);
 
                 wb.write(response.getOutputStream());
                 return null;
@@ -227,7 +233,8 @@ public class ImportExportTranslations extends Action {
         }
     }
     
-    private void createCell(HSSFRow row, int column, int cellType, String value, Map<Integer, Integer> currentColumnMaxWidths) {
+    private void createCell(HSSFRow row, int column, CellType cellType, String value,
+                            Map<Integer, Integer> currentColumnMaxWidths) {
         HSSFCell cell = row.createCell(column, cellType);
         
         if (StringUtils.isNotEmpty(value)) {

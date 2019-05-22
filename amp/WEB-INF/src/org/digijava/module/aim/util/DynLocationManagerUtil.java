@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -1134,7 +1135,7 @@ public class DynLocationManagerUtil {
 
     private static String getValue(Cell cell) {
         if (cell != null) {
-            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+            if (cell.getCellType() == CellType.NUMERIC) {
                 return "" + cell.getNumericCellValue();
             }
             return cell.getStringCellValue();

@@ -6,7 +6,6 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
-import java.math.BigDecimal;
 import java.util.Iterator;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -14,14 +13,12 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellType;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
-import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -110,7 +107,7 @@ public class TrailCellsXLS extends XLSExporter {
                     element.invokeExporter(this);
                 }else if (!metadata.getHideActivities()){
                     HSSFCell cell2=this.getCell(hierarchyStyle);
-                    cell2.setCellType(HSSFCell.CELL_TYPE_STRING);
+                    cell2.setCellType(CellType.STRING);
                     cell2.setCellValue("");
                     colId.inc();
                 }

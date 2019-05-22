@@ -3,11 +3,14 @@ package org.dgfoundation.amp.gpi.reports.export.excel;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
@@ -46,8 +49,6 @@ public class GPIReportExcelTemplate {
     }
     /**
      * Define all styles used in the report workbook.
-     * 
-     * @param wb
      */
     private void initWorkbookStyles() {
         
@@ -59,7 +60,7 @@ public class GPIReportExcelTemplate {
         fontHeaderAndTotal.setFontHeightInPoints((short)10);
         
         Font fontBold = wb.createFont();
-        fontBold.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        fontBold.setBold(true);
         fontBold.setFontHeightInPoints((short)10);
         
         Font fontSummary = wb.createFont();
@@ -67,62 +68,61 @@ public class GPIReportExcelTemplate {
         fontSummary.setFontHeightInPoints((short)10);
 
         headerCellStyle = wb.createCellStyle();
-        headerCellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
-        //headerCellStyle.setFillForegroundColor(new XSSFColor(Color.decode("#4F81BD")).getIndexed());
+        headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         headerCellStyle.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
-        headerCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
-        headerCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
+        headerCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         headerCellStyle.setWrapText(true);
         
-        headerCellStyle.setBorderTop(CellStyle.BORDER_THIN);
-        headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
-        headerCellStyle.setBorderRight(CellStyle.BORDER_THIN);
-        headerCellStyle.setBorderLeft(CellStyle.BORDER_THIN);
+        headerCellStyle.setBorderTop(BorderStyle.THIN);
+        headerCellStyle.setBorderBottom(BorderStyle.THIN);
+        headerCellStyle.setBorderRight(BorderStyle.THIN);
+        headerCellStyle.setBorderLeft(BorderStyle.THIN);
         headerCellStyle.setFont(fontHeaderAndTotal);
         
         summaryCellStyle = wb.createCellStyle();
-        summaryCellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        summaryCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         summaryCellStyle.setFillForegroundColor(IndexedColors.LIGHT_ORANGE.getIndex());
-        summaryCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
-        summaryCellStyle.setVerticalAlignment(CellStyle.VERTICAL_TOP);
+        summaryCellStyle.setAlignment(HorizontalAlignment.CENTER);
+        summaryCellStyle.setVerticalAlignment(VerticalAlignment.TOP);
         summaryCellStyle.setWrapText(true);
-        summaryCellStyle.setBorderTop(CellStyle.BORDER_THIN);
-        summaryCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
-        summaryCellStyle.setBorderRight(CellStyle.BORDER_THIN);
-        summaryCellStyle.setBorderLeft(CellStyle.BORDER_THIN);
+        summaryCellStyle.setBorderTop(BorderStyle.THIN);
+        summaryCellStyle.setBorderBottom(BorderStyle.THIN);
+        summaryCellStyle.setBorderRight(BorderStyle.THIN);
+        summaryCellStyle.setBorderLeft(BorderStyle.THIN);
         summaryCellStyle.setFont(fontSummary);
 
         headerCleanStyle = wb.createCellStyle();
-        headerCleanStyle.setAlignment(CellStyle.ALIGN_CENTER);
+        headerCleanStyle.setAlignment(HorizontalAlignment.CENTER);
         headerCleanStyle.setWrapText(true);
         headerCleanStyle.setFont(fontHeaderAndTotal);
 
         hierarchyStyle = wb.createCellStyle();
-        hierarchyStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        hierarchyStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        hierarchyStyle.setAlignment(HorizontalAlignment.CENTER);
+        hierarchyStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         hierarchyStyle.setFont(fontDefault);
 
         numberStyle = wb.createCellStyle();
-        numberStyle.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-        numberStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        numberStyle.setAlignment(HorizontalAlignment.RIGHT);
+        numberStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         numberStyle.setFont(fontDefault);
         
         centerStyle = wb.createCellStyle();
-        centerStyle.setAlignment(CellStyle.ALIGN_CENTER);
-        centerStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        centerStyle.setAlignment(HorizontalAlignment.CENTER);
+        centerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         centerStyle.setFont(fontDefault);
         
         wrappedStyle = wb.createCellStyle();
-        wrappedStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        wrappedStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         wrappedStyle.setWrapText(true);
         wrappedStyle.setFont(fontDefault);
         
         defaultStyle = wb.createCellStyle();
-        defaultStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        defaultStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         defaultStyle.setFont(fontDefault);
 
         settingsOptionStyle = wb.createCellStyle();
-        settingsOptionStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        settingsOptionStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         settingsOptionStyle.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
         settingsOptionStyle.setFont(fontBold);
 
@@ -187,10 +187,10 @@ public class GPIReportExcelTemplate {
     }
     
     
-    public static void fillHeaderRegionWithBorder(Workbook workbook, Sheet sheet, CellRangeAddress headerRegion) {
-        RegionUtil.setBorderTop((int) CellStyle.BORDER_THIN, headerRegion, sheet, workbook);
-        RegionUtil.setBorderLeft((int) CellStyle.BORDER_THIN, headerRegion, sheet, workbook);
-        RegionUtil.setBorderRight((int) CellStyle.BORDER_THIN, headerRegion, sheet, workbook);
-        RegionUtil.setBorderBottom((int) CellStyle.BORDER_THIN, headerRegion, sheet, workbook);
+    public static void fillHeaderRegionWithBorder(Sheet sheet, CellRangeAddress headerRegion) {
+        RegionUtil.setBorderTop(BorderStyle.THIN, headerRegion, sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, headerRegion, sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, headerRegion, sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, headerRegion, sheet);
     }
 }

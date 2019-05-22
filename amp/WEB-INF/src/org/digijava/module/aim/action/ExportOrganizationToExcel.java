@@ -1,5 +1,8 @@
 package org.digijava.module.aim.action;
 
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BLACK;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BLUE;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +19,8 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -71,29 +76,29 @@ public class ExportOrganizationToExcel extends DispatchAction {
         HSSFFont fontHeader = wb.createFont();
         fontHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontHeader.setFontHeightInPoints((short) 14);
-        fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        fontHeader.setBold(true);
 
 
         HSSFCellStyle subHeaderCS = wb.createCellStyle();
         subHeaderCS.setWrapText(true);
-        subHeaderCS.setFillForegroundColor(HSSFColor.BLACK.index);
+        subHeaderCS.setFillForegroundColor(BLACK.getIndex());
         HSSFFont fontSubHeader = wb.createFont();
         fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontSubHeader.setFontHeightInPoints((short) 10);
-        fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        fontSubHeader.setBold(true);
         subHeaderCS.setFont(fontSubHeader);
-        subHeaderCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        subHeaderCS.setVerticalAlignment(VerticalAlignment.TOP);
 
         HSSFCellStyle regularCS = wb.createCellStyle();
         regularCS.setWrapText(true);
-        regularCS.setFillForegroundColor(HSSFColor.BLACK.index);
+        regularCS.setFillForegroundColor(BLACK.getIndex());
         HSSFFont font = wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
         font.setFontHeightInPoints((short) 10);
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        font.setBold(true);
         regularCS.setFont(font);
-        regularCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
-        regularCS.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        regularCS.setVerticalAlignment(VerticalAlignment.TOP);
+        regularCS.setAlignment(HorizontalAlignment.LEFT);
         
         HSSFCellStyle style= wb.createCellStyle();
         style.setWrapText(true);
@@ -141,28 +146,28 @@ public class ExportOrganizationToExcel extends DispatchAction {
         HSSFFont fontHeader = wb.createFont();
         fontHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontHeader.setFontHeightInPoints((short) 14);
-        fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        fontHeader.setBold(true);
 
         HSSFCellStyle subHeaderCS = wb.createCellStyle();
         subHeaderCS.setWrapText(true);
-        subHeaderCS.setFillForegroundColor(HSSFColor.BLACK.index);
+        subHeaderCS.setFillForegroundColor(BLACK.getIndex());
         HSSFFont fontSubHeader = wb.createFont();
         fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontSubHeader.setFontHeightInPoints((short) 10);
-        fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        fontSubHeader.setBold(true);
         subHeaderCS.setFont(fontSubHeader);
-        subHeaderCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        subHeaderCS.setVerticalAlignment(VerticalAlignment.TOP);
 
         HSSFCellStyle regularCS = wb.createCellStyle();
         regularCS.setWrapText(true);
-        regularCS.setFillForegroundColor(HSSFColor.BLACK.index);
+        regularCS.setFillForegroundColor(BLACK.getIndex());
         HSSFFont font = wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
         font.setFontHeightInPoints((short) 10);
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        font.setBold(true);
         regularCS.setFont(font);
-        regularCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
-        regularCS.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        regularCS.setVerticalAlignment(VerticalAlignment.TOP);
+        regularCS.setAlignment(HorizontalAlignment.LEFT);
 
         HSSFCellStyle style= wb.createCellStyle();
         style.setWrapText(true);
@@ -204,28 +209,28 @@ public class ExportOrganizationToExcel extends DispatchAction {
         HSSFFont fontHeader = wb.createFont();
         fontHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontHeader.setFontHeightInPoints((short) 14);
-        fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        fontHeader.setBold(true);
 
         HSSFCellStyle subHeaderCS = wb.createCellStyle();
         subHeaderCS.setWrapText(true);
-        subHeaderCS.setFillForegroundColor(HSSFColor.BLACK.index);
+        subHeaderCS.setFillForegroundColor(BLACK.getIndex());
         HSSFFont fontSubHeader = wb.createFont();
         fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontSubHeader.setFontHeightInPoints((short) 10);
-        fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        fontSubHeader.setBold(true);
         subHeaderCS.setFont(fontSubHeader);
-        subHeaderCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        subHeaderCS.setVerticalAlignment(VerticalAlignment.TOP);
 
         HSSFCellStyle regularCS = wb.createCellStyle();
         regularCS.setWrapText(true);
-        regularCS.setFillForegroundColor(HSSFColor.BLACK.index);
+        regularCS.setFillForegroundColor(BLACK.getIndex());
         HSSFFont font = wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
         font.setFontHeightInPoints((short) 10);
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        font.setBold(true);
         regularCS.setFont(font);
-        regularCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
-        regularCS.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        regularCS.setVerticalAlignment(VerticalAlignment.TOP);
+        regularCS.setAlignment(HorizontalAlignment.LEFT);
 
         // setting width of columns
         sheet.setColumnWidth((short) 0, TITLE_WIDTH);
@@ -281,29 +286,29 @@ public class ExportOrganizationToExcel extends DispatchAction {
         HSSFFont fontHeader = wb.createFont();
         fontHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontHeader.setFontHeightInPoints((short) 14);
-        fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        fontHeader.setBold(true);
 
 
         HSSFCellStyle subHeaderCS = wb.createCellStyle();
         subHeaderCS.setWrapText(true);
-        subHeaderCS.setFillForegroundColor(HSSFColor.BLACK.index);
+        subHeaderCS.setFillForegroundColor(BLACK.getIndex());
         HSSFFont fontSubHeader = wb.createFont();
         fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontSubHeader.setFontHeightInPoints((short) 10);
-        fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        fontSubHeader.setBold(true);
         subHeaderCS.setFont(fontSubHeader);
-        subHeaderCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+        subHeaderCS.setVerticalAlignment(VerticalAlignment.TOP);
 
         HSSFCellStyle regularCS = wb.createCellStyle();
         regularCS.setWrapText(true);
-        regularCS.setFillForegroundColor(HSSFColor.BLACK.index);
+        regularCS.setFillForegroundColor(BLACK.getIndex());
         HSSFFont font = wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
         font.setFontHeightInPoints((short) 10);
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        font.setBold(true);
         regularCS.setFont(font);
-        regularCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
-        regularCS.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        regularCS.setVerticalAlignment(VerticalAlignment.TOP);
+        regularCS.setAlignment(HorizontalAlignment.LEFT);
 
 
         short rowNum = 0;
@@ -333,40 +338,38 @@ public class ExportOrganizationToExcel extends DispatchAction {
          
          
          HSSFWorkbook wb = new HSSFWorkbook();
-//       String name = editForm.getName();
          String sheetName = getSheetName("NGO Form");
          HSSFSheet sheet = wb.createSheet(sheetName);
          
          HSSFCellStyle headerCS = wb.createCellStyle();
          headerCS.setWrapText(true);
-         //headerCS.setFillForegroundColor(HSSFColor.BLUE.index);
          HSSFFont fontHeader = wb.createFont();
          fontHeader.setFontName(HSSFFont.FONT_ARIAL);
          fontHeader.setFontHeightInPoints((short) 14);
-         fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-         fontHeader.setColor( HSSFColor.BLUE.index );
-         headerCS.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-         headerCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+         fontHeader.setBold(true);
+         fontHeader.setColor(BLUE.getIndex());
+         headerCS.setAlignment(HorizontalAlignment.LEFT);
+         headerCS.setVerticalAlignment(VerticalAlignment.TOP);
          headerCS.setFont(fontHeader);
 
          HSSFCellStyle subHeaderCS = wb.createCellStyle();
          subHeaderCS.setWrapText(true);
-         subHeaderCS.setFillForegroundColor(HSSFColor.BLACK.index);
+         subHeaderCS.setFillForegroundColor(BLACK.getIndex());
          HSSFFont fontSubHeader = wb.createFont();
          fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
          fontSubHeader.setFontHeightInPoints((short) 10);
-         fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-         subHeaderCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+         fontSubHeader.setBold(true);
+         subHeaderCS.setVerticalAlignment(VerticalAlignment.TOP);
          subHeaderCS.setFont(fontSubHeader);
 
          HSSFCellStyle regularCS = wb.createCellStyle();
          regularCS.setWrapText(true);
-         regularCS.setFillForegroundColor(HSSFColor.BLACK.index);
+         regularCS.setFillForegroundColor(BLACK.getIndex());
          HSSFFont font = wb.createFont();
          font.setFontName(HSSFFont.FONT_ARIAL);
          font.setFontHeightInPoints((short) 10);
-         font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
-         regularCS.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+         font.setBold(true);
+         regularCS.setVerticalAlignment(VerticalAlignment.TOP);
          regularCS.setFont(font);
          
          int rowNum = 0;

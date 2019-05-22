@@ -1,5 +1,7 @@
 package org.digijava.module.aim.action;
 
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BROWN;
+
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.*;
@@ -9,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -20,7 +21,6 @@ import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.view.xls.XLSExporter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
 
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
@@ -87,19 +87,19 @@ public class ExportIndicators2XSLAction extends Action {
 
         
         HSSFCellStyle csHeader = wb.createCellStyle();
-        csHeader.setFillBackgroundColor(HSSFColor.BROWN.index);
+        csHeader.setFillBackgroundColor(BROWN.getIndex());
         HSSFFont font = wb.createFont();
         font.setFontName(HSSFFont.FONT_ARIAL);
         font.setFontHeightInPoints((short)12);          
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        font.setBold(true);
         csHeader.setFont(font);             
 
         HSSFCellStyle csSubHeader = wb.createCellStyle();
-        csSubHeader.setFillBackgroundColor(HSSFColor.BROWN.index);
+        csSubHeader.setFillBackgroundColor(BROWN.getIndex());
         HSSFFont fontSubHeader = wb.createFont();
         fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
         //fontSubHeader.setFontHeightInPoints((short)12);           
-        fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        fontSubHeader.setBold(true);
         csSubHeader.setFont(fontSubHeader);             
 
         

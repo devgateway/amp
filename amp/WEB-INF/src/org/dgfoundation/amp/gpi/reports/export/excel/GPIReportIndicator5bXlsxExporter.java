@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -31,7 +32,7 @@ public class GPIReportIndicator5bXlsxExporter extends GPIReportXlsxExporter {
      * @param report
      */
     protected void renderReportTableHeader(Workbook wb, Sheet sheet, GPIReport report) {
-        Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
+        Set<CellRangeAddress> mergedCells = new HashSet<>();
 
         Row row = sheet.createRow(initHeaderRowOffset);
         for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
@@ -49,7 +50,7 @@ public class GPIReportIndicator5bXlsxExporter extends GPIReportXlsxExporter {
         }
 
         for (CellRangeAddress ca : mergedCells) {
-            GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
+            GPIReportExcelTemplate.fillHeaderRegionWithBorder(sheet, ca);
         }
     }
     
@@ -59,7 +60,7 @@ public class GPIReportIndicator5bXlsxExporter extends GPIReportXlsxExporter {
      * @param report
      */
     protected void renderReportTableSummary(Workbook wb, Sheet sheet, GPIReport report) {
-        Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
+        Set<CellRangeAddress> mergedCells = new HashSet<>();
         
         Row summaryRow = sheet.createRow(initSummaryRowOffset);
         for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
@@ -81,7 +82,7 @@ public class GPIReportIndicator5bXlsxExporter extends GPIReportXlsxExporter {
         }
         
         for (CellRangeAddress ca : mergedCells) {
-            GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
+            GPIReportExcelTemplate.fillHeaderRegionWithBorder(sheet, ca);
         }
     }
 
@@ -101,11 +102,11 @@ public class GPIReportIndicator5bXlsxExporter extends GPIReportXlsxExporter {
     }
     
     @Override
-    public int getCellType(String columnName) {
+    public CellType getCellType(String columnName) {
         switch(columnName) {
             case MeasureConstants.PLANNED_DISBURSEMENTS:
             case GPIReportConstants.COLUMN_ANNUAL_GOV_BUDGET:
-                return Cell.CELL_TYPE_NUMERIC;
+                return CellType.NUMERIC;
             default:
                 return super.getCellType(columnName);
         }

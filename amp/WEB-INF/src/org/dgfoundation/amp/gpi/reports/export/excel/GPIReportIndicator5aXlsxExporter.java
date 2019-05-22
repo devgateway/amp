@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -30,12 +31,11 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
     }
 
     /**
-     * @param wb
      * @param sheet
      * @param report
      */
-    protected void renderReportTableHeader(Workbook wb, Sheet sheet, GPIReport report) {
-        Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
+    protected void renderReportTableHeader(Sheet sheet, GPIReport report) {
+        Set<CellRangeAddress> mergedCells = new HashSet<>();
 
         Row row = sheet.createRow(initHeaderRowOffset);
         for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
@@ -53,7 +53,7 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
         }
 
         for (CellRangeAddress ca : mergedCells) {
-            GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
+            GPIReportExcelTemplate.fillHeaderRegionWithBorder(sheet, ca);
         }
     }
 
@@ -63,7 +63,7 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
      * @param report
      */
     protected void renderReportTableSummary(Workbook wb, Sheet sheet, GPIReport report) {
-        Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
+        Set<CellRangeAddress> mergedCells = new HashSet<>();
 
         Map<String, GPIReportOutputColumn> columns = report.getSummary().keySet().stream()
                 .collect(Collectors.toMap(GPIReportOutputColumn::getOriginalColumnName, Function.identity()));
@@ -89,7 +89,7 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
         }
 
         for (CellRangeAddress ca : mergedCells) {
-            GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
+            GPIReportExcelTemplate.fillHeaderRegionWithBorder(sheet, ca);
         }
     }
 
@@ -114,13 +114,13 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
     }
 
     @Override
-    public int getCellType(String columnName) {
+    public CellType getCellType(String columnName) {
         switch (columnName) {
         case MeasureConstants.ACTUAL_DISBURSEMENTS:
         case MeasureConstants.PLANNED_DISBURSEMENTS:
         case GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS:
         case GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS:
-            return Cell.CELL_TYPE_NUMERIC;
+            return CellType.NUMERIC;
         default:
             return super.getCellType(columnName);
         }

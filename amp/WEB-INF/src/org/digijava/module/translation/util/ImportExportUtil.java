@@ -31,10 +31,10 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -542,7 +542,7 @@ public class ImportExportUtil {
             
             for (int i = 1; i < physicalNumberOfRows; i++) {
                 Row hssfRow = hssfSheet.getRow(i);
-                hssfRow.getCell(COL_KEY).setCellType(HSSFCell.CELL_TYPE_STRING);
+                hssfRow.getCell(COL_KEY).setCellType(CellType.STRING);
                 String key = hssfRow.getCell(COL_KEY).getStringCellValue();
                 // We need to discard those keys that are not numbers or the whole process will fail when trying to make insert
                 // in table amp_etl_changelog(entity_name, entity_id).
@@ -554,13 +554,13 @@ public class ImportExportUtil {
                     continue;
                 }
 
-                hssfRow.getCell(COL_ENGLISH_TEXT).setCellType(HSSFCell.CELL_TYPE_STRING);
+                hssfRow.getCell(COL_ENGLISH_TEXT).setCellType(CellType.STRING);
                 String englishText = (hssfRow.getCell(COL_ENGLISH_TEXT) == null) ? ""
                         : hssfRow.getCell(COL_ENGLISH_TEXT).getStringCellValue();
                 //for AMP-16681 when the cell content is #N/A on third column you are getting an erro if getStringCellValue is called
                 //so if its an error cell the target text is "" as if the cell would be empty
                 String targetText = (hssfRow.getCell(COL_TARGET_TEXT) == null
-                        || hssfRow.getCell(COL_TARGET_TEXT).getCellType() == HSSFCell.CELL_TYPE_ERROR) ? ""
+                        || hssfRow.getCell(COL_TARGET_TEXT).getCellType() == CellType.ERROR) ? ""
                         : hssfRow.getCell(COL_TARGET_TEXT).getStringCellValue();
                 
                 Date englishDate = getDate(hssfRow, COL_ENGLISH_DATE);
@@ -610,7 +610,7 @@ public class ImportExportUtil {
 
     private static Date getDate(Row hssfRow, int col) throws ParseException {
         if (hssfRow.getCell(col) != null) {
-            if (hssfRow.getCell(col).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+            if (hssfRow.getCell(col).getCellType() == CellType.NUMERIC) {
                 return hssfRow.getCell(col).getDateCellValue();
             } else if (StringUtils.isNotEmpty(hssfRow.getCell(col).getStringCellValue())) {
                 return LocalizationUtil.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.ENGLISH)

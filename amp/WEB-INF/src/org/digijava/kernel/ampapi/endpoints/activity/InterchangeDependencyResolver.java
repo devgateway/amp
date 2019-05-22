@@ -8,7 +8,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
-import org.digijava.kernel.ampapi.endpoints.activity.validators.ComponentFundingOrgsValidator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.FundingPledgesValidator;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
@@ -52,7 +51,6 @@ public class InterchangeDependencyResolver {
     public final static String AGREEMENT_CODE_PRESENT_KEY = "agreement_code_required";
     public final static String AGREEMENT_TITLE_PRESENT_KEY = "agreement_title_required";
     public static final String TRANSACTION_PRESENT_KEY = "transaction_present";
-    public static final String ORGANIZATION_PRESENT_KEY = "organization_present";
     public static final String FUNDING_ORGANIZATION_VALID_PRESENT_KEY = "funding_organization_group_valid";
     
     public static final String RESOURCE_TYPE_FILE_VALID_KEY = "resource_type_file_valid_key";
@@ -153,9 +151,7 @@ public class InterchangeDependencyResolver {
         case AGREEMENT_TITLE_PRESENT_KEY : return checkFieldValuePresent(value, AGREEMENT_TITLE_PATH);
         case IMPLEMENTATION_LEVEL_VALID_KEY: return checkImplementationLevel(value, incomingActivity);
         case IMPLEMENTATION_LOCATION_VALID_KEY: return checkImplementationLocation(value, incomingActivity);
-        case ORGANIZATION_PRESENT_KEY:
-            return checkComponentFundingOrg(value, incomingActivity);
-        case FUNDING_ORGANIZATION_VALID_PRESENT_KEY: 
+        case FUNDING_ORGANIZATION_VALID_PRESENT_KEY:
             return checkFundingPledgesOrgGroup(importer, value);
         case ON_BUDGET_KEY:
         case TRANSACTION_PRESENT_KEY:
@@ -301,23 +297,6 @@ public class InterchangeDependencyResolver {
         return 0;
     }
 
-    /**
-     * Performs a check on component funding org id corresponding to AmpOrganization objects -- 
-     * whether those are included in the related organizations
-     * @param e
-     * @param incomingActivity
-     * @return
-     */
-        
-    private static DependencyCheckResult checkComponentFundingOrg(Object e, JsonBean incomingActivity) {
-        ComponentFundingOrgsValidator validator = new ComponentFundingOrgsValidator();
-        if (validator.isValid(incomingActivity, e)) {
-            return DependencyCheckResult.VALID; 
-        }
-        
-        return DependencyCheckResult.INVALID_NOT_CONFIGURABLE;
-    }
-    
     /**
      * Performs a check on funding pledges org gropu id corresponding to org group of donor organization object -- 
      * whether those is present in the parent funding

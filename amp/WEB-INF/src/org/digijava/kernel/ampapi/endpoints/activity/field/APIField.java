@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,12 +8,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.validation.ConstraintDescriptors;
 
 /**
  * @author Octavian Ciubotaru
@@ -33,7 +34,7 @@ public class APIField {
 
     @JsonUnwrapped
     private APIType apiType;
-    
+
     @JsonProperty(ActivityEPConstants.FIELD_LABEL)
     private JsonBean fieldLabel;
 
@@ -72,7 +73,7 @@ public class APIField {
     private APIField idChild;
 
     @JsonProperty(ActivityEPConstants.CHILDREN)
-    private List<APIField> children = new ArrayList<>();
+    private Fields children;
 
     @JsonProperty(ActivityEPConstants.DEPENDENCIES)
     private List<String> dependencies;
@@ -109,6 +110,36 @@ public class APIField {
 
     @JsonIgnore
     private boolean isCollection;
+
+    @JsonIgnore
+    private ConstraintDescriptors beanConstraints;
+
+    @JsonIgnore
+    private ConstraintDescriptors fieldConstraints;
+
+    public ConstraintDescriptors getFieldConstraints() {
+        return fieldConstraints;
+    }
+
+    public void setFieldConstraints(ConstraintDescriptors fieldConstraints) {
+        this.fieldConstraints = fieldConstraints;
+    }
+
+    public ConstraintDescriptors getBeanConstraints() {
+        return beanConstraints;
+    }
+
+    public void setBeanConstraints(ConstraintDescriptors beanConstraints) {
+        this.beanConstraints = beanConstraints;
+    }
+
+    public APIField getField(String fieldName) {
+        return children.getField(fieldName);
+    }
+
+    public List<APIField> getFieldsForFieldNameInternal(String fieldNameInternal) {
+        return children.getFieldsForFieldNameInternal(fieldNameInternal);
+    }
 
     public void setFieldAccessor(FieldAccessor fieldAccessor) {
         this.fieldAccessor = fieldAccessor;
@@ -257,11 +288,15 @@ public class APIField {
     }
 
     public List<APIField> getChildren() {
-        return children;
+        if (children != null) {
+            return children.getList();
+        } else {
+            return ImmutableList.of();
+        }
     }
 
-    public void setChildren(List<APIField> children) {
-        this.children = children;
+    public void setChildren(List<APIField> list) {
+        children = new Fields(list);
     }
 
     public List<String> getDependencies() {

@@ -33,14 +33,7 @@ public class FMVisibility {
     private final static Map<String, Boolean> visibilityMap = new HashMap<String, Boolean>();
     private static Date lastTreeVisibilityUpdate;
 
-    /**
-     * FIXME refactor without using the annotation?
-     *
-     * Checks if a given FM path is enabled 
-     * @param fmPath, the String with the FM path
-     * @return true if is enabled, false otherwise
-     */
-    public static boolean isFmPathEnabled(String fmPath, Deque<Interchangeable> intchStack) {
+    public static String handleParentFMPath(String fmPath, Deque<Interchangeable> intchStack) {
         // pre-process
         if (intchStack != null) {
             Iterator<Interchangeable> iter = intchStack.iterator();
@@ -57,7 +50,15 @@ public class FMVisibility {
                 }
             }
         }
-        
+        return fmPath;
+    }
+
+    /**
+     * Checks if a given FM path is enabled
+     * @param fmPath, the String with the FM path
+     * @return true if is enabled, false otherwise
+     */
+    public static boolean isFmPathEnabled(String fmPath) {
         if (fmPath.startsWith(ANY_FM)) {
             for(String anyFMOption : fmPath.substring(ANY_FM.length()).split("\\|")) {
                 if (StringUtils.isNotBlank(anyFMOption) && isFinalFmPathEnabled(anyFMOption)) {
@@ -116,16 +117,16 @@ public class FMVisibility {
      * @param field the field to determine its visibility
      * @return true if the field is visible, false otherwise
      */
-    public static boolean isVisible(String fmPath, Deque<Interchangeable> intchStack) {
+    public static boolean isVisible(String fmPath) {
         if (fmPath == null)
             return true;
         HttpSession session = TLSUtils.getRequest().getSession();
         checkTreeVisibilityUpdate(session);
-        boolean isVisible = false;
+        boolean isVisible;
         if (fmPath.equals(FMVisibility.ALWAYS_VISIBLE_FM) || fmPath.equals("")) {
             isVisible = true;
         } else {
-            isVisible = isFmPathEnabled(fmPath, intchStack);
+            isVisible = isFmPathEnabled(fmPath);
         }
 
         return isVisible && isFieldVisibleInPublicView(fmPath);

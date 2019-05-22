@@ -434,7 +434,7 @@ public class ObjectImporterTest {
 
         FieldsEnumerator fe =
                 new FieldsEnumerator(provider, fmService, translatorService, s -> true);
-        List<APIField> apiFields = fe.getAllAvailableFields(Parent.class);
+        APIField apiField = fe.getMetaModel(Parent.class);
 
         InputValidatorProcessor formatValidator = new InputValidatorProcessor(Collections.emptyList());
         InputValidatorProcessor businessRulesValidator = new InputValidatorProcessor(Collections.emptyList());
@@ -443,7 +443,7 @@ public class ObjectImporterTest {
 
         TranslationSettings plainEnglish = new TranslationSettings("en", Collections.singleton("en"), false);
 
-        importer = new ObjectImporter(formatValidator, businessRulesValidator, plainEnglish, apiFields, valueConverter);
+        importer = new ObjectImporter(formatValidator, businessRulesValidator, plainEnglish, apiField, valueConverter);
     }
 
     private void readJsonExamples() throws IOException {

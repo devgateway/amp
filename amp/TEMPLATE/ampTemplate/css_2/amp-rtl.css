@@ -953,3 +953,7 @@ td.inside ul {
 .tick text {
     direction: rtl !important;
 }
+
+.footerText {
+    direction: rtl;
+}

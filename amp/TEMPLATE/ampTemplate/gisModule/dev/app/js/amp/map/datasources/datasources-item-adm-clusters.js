@@ -4,7 +4,6 @@ var chartUtils = require('../../../libs/local/chart-util');
 var Backbone = require('backbone');
 var Template = fs.readFileSync(__dirname + '/datasources-item-adm-clusters.html', 'utf8');
 
-
 module.exports = Backbone.View.extend({
   tagName: 'tbody',
 
@@ -15,16 +14,19 @@ module.exports = Backbone.View.extend({
     _.bindAll(this, 'render');
   },
 
-
   render: function() {
-	  var self = this;	  
-	  $.when(self.app.data.generalSettings.loaded, self.collection.load()).then(function() {		 	  
+	  var self = this;
+	  $.when(self.app.data.generalSettings.loaded, self.collection.load()).then(function() {
 			  //TODO: inefficient to constantly redraw (if already on page), put in temp obj first.
 			  // then only append once.
+              var isRtl = app.data.generalSettings.get('rtl-direction');
+              var language = app.data.generalSettings.get('language');
+              var region = app.data.generalSettings.get('region');
+              var zeroSign = convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "0");
+
 			  self.collection.each(function(project) {
 				  // it joins on activity init, but for some reason it was being overridden...
-				  // temp dirty force rejoin for now, otherwise use: getJoinedVersion          
-				  var ampFormatter = new chartUtils.DecimalFormat(self.app.data.generalSettings.get('number-format'));          
+				  // temp dirty force rejoin for now, otherwise use: getJoinedVersion
 				  // dec 31st, 2014 tried getjoinedversion INSTEAD OF tempDirtyForceJoin, but still doesn't work
 				  project.tempDirtyForceJoin().then(function() {
 
@@ -47,9 +49,11 @@ module.exports = Backbone.View.extend({
                           orgColumn = 'donorNames';
                       }
 
+
 					  // Format values.
-					  var formattedColumnName1 = ampFormatter.format(project.attributes[columnName1]);
-					  var formattedColumnName2 = ampFormatter.format(project.attributes[columnName2]);
+					  var columnName1Value = project.attributes[columnName1] ? project.attributes[columnName1] : zeroSign;
+					  var columnName2Value = project.attributes[columnName2] ? project.attributes[columnName2] : zeroSign;
+
 					  var currencyCode = self.app.data.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
 
                       var activity = project.toJSON()
@@ -59,16 +63,16 @@ module.exports = Backbone.View.extend({
 					  self.$el.append(self.template({
 						  activity: activity,
                           orgColumnName: orgColumnName ? orgColumnName : '',
-                          formattedColumnName1: [formattedColumnName1 ? formattedColumnName1 : 0, ' ', currencyCode].join(''),
-                          formattedColumnName2: [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join('')
+                          formattedColumnName1: [columnName1Value, ' ', currencyCode].join(''),
+                          formattedColumnName2: [columnName2Value,' ', currencyCode].join('')
 					  }));
-				 
+
 			  });
 
 		  });
 	  });
-	  
-	  
+
+
 	  return this;
   }
 

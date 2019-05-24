@@ -101,7 +101,7 @@ public class DateTimeUtil {
     
     public static Date parseDate(String date) throws Exception {
         // TODO This should be in some other Utility class, FormatUtil may be, or just Util
-        String pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+        String pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
         if (pattern == null) {
             pattern = Constants.CALENDAR_DATE_FORMAT;
         }

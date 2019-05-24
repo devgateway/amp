@@ -136,7 +136,7 @@ public class ActivityService {
                 //Filters should be grouped together.
                 
                 if (columnsToProvide.contains(reportOutputColumn.originalColumnName)) {
-                    activity.set(reportOutputColumn.originalColumnName, row.get(reportOutputColumn).value);
+                    activity.set(reportOutputColumn.originalColumnName, row.get(reportOutputColumn).displayedValue);
                     if (reportOutputColumn.originalColumnName.equals(ColumnConstants.AMP_ID)) {
                         long activityId = ((IdentifiedReportCell) row.get(reportOutputColumn)).entityId;
                         activity.set(ColumnConstants.ACTIVITY_ID, activityId);

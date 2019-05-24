@@ -6,14 +6,14 @@
           <%= (activityJSON["Project Title"].length > 35 ? activityJSON["Project Title"].substring(0, 33)+'...': activityJSON["Project Title"]) %>
         </a>
       </td>
-      <td class="text-right">
+      <td class="text-right" nowrap>
         <% if(activityJSON["formattedColumnName1"]){ %>
             <%= activityJSON["formattedColumnName1"] %>
         <% } else { %>
           -
         <% }%>
       </td>
-      <td class="text-right">
+      <td class="text-right" nowrap>
         <% if(activityJSON["formattedColumnName2"]){ %>
             <%= activityJSON["formattedColumnName2"] %>
         <% } else { %>

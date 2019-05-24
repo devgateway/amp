@@ -41,7 +41,13 @@ module.exports = Backbone.View.extend({
       return feature.properties.admName === popup._source._clusterId;
     });
 
-    this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();    
+    this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
+    var activityCount = "" + this.cluster.properties.activityid.length;
+    var isRtl = app.data.generalSettings.get('rtl-direction');
+    var language = app.data.generalSettings.get('language');
+    var region = app.data.generalSettings.get('region');
+    var activityCount = convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + this.cluster.properties.activityid.length);
+    this.cluster.activityCount = activityCount;
     // get appropriate cluster model:
     if (this.cluster) {
       popup.setContent(this.template(this.cluster));
@@ -231,7 +237,6 @@ module.exports = Backbone.View.extend({
 	  return this.app.data.activities.getActivitiesforLocation(activityIDs, cluster.properties.admLevel, cluster.properties.admId).then(function(activityCollection) {        
 		  self.tempDOM.find('#projects-pane .loading').remove();
 		  /* Format the numerical columns */
-		  var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));
 		  var currencyCode = self.app.data.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
 		  var fundingType = 'Actual';
 		  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
@@ -249,13 +254,18 @@ module.exports = Backbone.View.extend({
               columnName2 = fundingType + ' Disbursements';
           }
 
-		  var activityFormatted = _.map(activityCollection, function(activity) {             
-			  var formattedColumnName1 = ampFormatter.format(activity.get(columnName1));
-			  var formattedColumnName2 = ampFormatter.format(activity.get(columnName2));
+          var isRtl = app.data.generalSettings.get('rtl-direction');
+          var language = app.data.generalSettings.get('language');
+          var region = app.data.generalSettings.get('region');
+          var zeroSign = convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "0");
+
+		  var activityFormatted = _.map(activityCollection, function(activity) {
+              var columnName1Value = activity.get(columnName1) ? activity.get(columnName1) : zeroSign;
+              var columnName2Value = activity.get(columnName2) ? activity.get(columnName2) : zeroSign;
 
 			  //TODO: should be done elsewhere, for example in toJSON or parse.
-			  activity.set('formattedColumnName1', [formattedColumnName1 ? formattedColumnName1 : 0, ' ', currencyCode].join(''));
-			  activity.set('formattedColumnName2', [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join(''));
+			  activity.set('formattedColumnName1', [columnName1Value, ' ', currencyCode].join(''));
+			  activity.set('formattedColumnName2', [columnName2Value, ' ', currencyCode].join(''));
 			  return activity;
 		  });
 

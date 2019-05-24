@@ -17,6 +17,8 @@ var url = new URLService();
 var state = new State({ url: url, saved: data.savedMaps, autoinit: true, prefix: ['saved/', 'report/']});
 var constants = new Constants();
 
+$.getScript("/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
+
 var app = new App({
 	  url: url,
 	  data: data,

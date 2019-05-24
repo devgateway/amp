@@ -46,7 +46,7 @@ module.exports = Backbone.View.extend({
     var isRtl = app.data.generalSettings.get('rtl-direction');
     var language = app.data.generalSettings.get('language');
     var region = app.data.generalSettings.get('region');
-    var activityCount = convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + this.cluster.properties.activityid.length);
+    var activityCount = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + this.cluster.properties.activityid.length);
     this.cluster.activityCount = activityCount;
     // get appropriate cluster model:
     if (this.cluster) {
@@ -257,7 +257,7 @@ module.exports = Backbone.View.extend({
           var isRtl = app.data.generalSettings.get('rtl-direction');
           var language = app.data.generalSettings.get('language');
           var region = app.data.generalSettings.get('region');
-          var zeroSign = convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "0");
+          var zeroSign = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "0");
 
 		  var activityFormatted = _.map(activityCollection, function(activity) {
               var columnName1Value = activity.get(columnName1) ? activity.get(columnName1) : zeroSign;

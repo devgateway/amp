@@ -163,7 +163,7 @@ module.exports = Backbone.View.extend({
       var isRtl = app.data.generalSettings.get('rtl-direction');
       var language = app.data.generalSettings.get('language');
       var region = app.data.generalSettings.get('region');
-      var activitiesLength = convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + activities.length);
+      var activitiesLength = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + activities.length);
 
       layer.bindPopup(feature.properties.admName +
         ' has ' +  activitiesLength +

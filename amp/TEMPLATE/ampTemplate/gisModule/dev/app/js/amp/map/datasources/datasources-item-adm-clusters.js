@@ -22,7 +22,7 @@ module.exports = Backbone.View.extend({
               var isRtl = app.data.generalSettings.get('rtl-direction');
               var language = app.data.generalSettings.get('language');
               var region = app.data.generalSettings.get('region');
-              var zeroSign = convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "0");
+              var zeroSign = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "0");
 
 			  self.collection.each(function(project) {
 				  // it joins on activity init, but for some reason it was being overridden...

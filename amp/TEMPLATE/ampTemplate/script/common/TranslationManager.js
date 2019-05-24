@@ -61,7 +61,7 @@ TranslationManager.convertNumbersToEasternArabic = function(input) {
 
 TranslationManager.convertNumbersToEasternArabicIfNeeded = function(isRtl, language, region, input) {
     if (isRtl && language === "ar" && region === "EG") {
-        return convertNumbersToEasternArabic(input);
+        return TranslationManager.convertNumbersToEasternArabic(input);
     }
 
     return input;

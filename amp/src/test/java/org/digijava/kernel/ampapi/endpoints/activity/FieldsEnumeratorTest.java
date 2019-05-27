@@ -898,6 +898,7 @@ public class FieldsEnumeratorTest {
     private APIField newAPIField() {
         APIField field = new APIField();
         field.setFieldName("field");
+        field.setFieldNameInternal("field");
         field.setRequired(FIELD_NOT_REQUIRED);
         field.setImportable(false);
         field.setFieldLabel(fieldLabelFor("field"));

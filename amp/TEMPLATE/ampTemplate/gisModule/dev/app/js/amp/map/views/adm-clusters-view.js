@@ -23,7 +23,6 @@ module.exports = Backbone.View.extend({
     this.listenTo(this.app.data.admClusters, 'show', this.showLayer);
     this.listenTo(this.app.data.admClusters, 'hide', this.hideLayer);
     this.listenTo(this.app.data.admClusters, 'sync', this.refreshLayer);
-
   },
 
   render: function() {
@@ -105,10 +104,15 @@ module.exports = Backbone.View.extend({
   },
 
   getNewADMLayer: function(admLayer) {
-    var self = this;
+      var self = this;
+      var isRtl = this.app.data.generalSettings.get('rtl-direction');
+      var language = this.app.data.generalSettings.get('language');
+      var region = this.app.data.generalSettings.get('region');
 
-    return new L.geoJson(admLayer.get('features'), {
+      return new L.geoJson(admLayer.get('features'), {
       pointToLayer: function(feature, latlng) {
+        feature.properties.activityCount = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region,
+            "" + feature.properties.activityid.length);
         var htmlString = self.admTemplate(feature);
         var myIcon = L.divIcon({
           className: 'map-adm-icon',
@@ -160,13 +164,13 @@ module.exports = Backbone.View.extend({
       layer._clusterId = feature.properties.admName;
       feature.properties.admLevel = admLayer.get('title');
       // temp. will be template.
-      var isRtl = app.data.generalSettings.get('rtl-direction');
-      var language = app.data.generalSettings.get('language');
-      var region = app.data.generalSettings.get('region');
-      var activitiesLength = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + activities.length);
+      var isRtl = this.app.data.generalSettings.get('rtl-direction');
+      var language = this.app.data.generalSettings.get('language');
+      var region = this.app.data.generalSettings.get('region');
+      activityCount = TranslationManager.convertNumbersToEasternArabicIfNeeded(this.isRtl, this.language, this.region, "" + activities.length);
 
       layer.bindPopup(feature.properties.admName +
-        ' has ' +  activitiesLength +
+        ' has ' +  activityCount +
         ' projects. <br><img src="img/loading-icon.gif" />',
         {maxWidth: 500, offset: new L.Point(0, -16)}
         );

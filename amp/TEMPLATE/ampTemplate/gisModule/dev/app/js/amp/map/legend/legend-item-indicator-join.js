@@ -39,7 +39,14 @@ module.exports = Backbone.View.extend({
 			  values.min = chartUtils.formatKMB()(bucket.get('value')[0]);
 			  values.max = chartUtils.formatKMB()(bucket.get('value')[1]);
 		  }
-	  } 
+	  }
+
+      var isRtl = app.data.generalSettings.get('rtl-direction');
+      var language = app.data.generalSettings.get('language');
+      var region = app.data.generalSettings.get('region');
+      values.min = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + values.min);
+      values.max = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + values.max);
+
 	  return values;
   },  
   render: function() {

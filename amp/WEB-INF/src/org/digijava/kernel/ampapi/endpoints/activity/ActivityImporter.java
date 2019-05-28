@@ -6,7 +6,6 @@ import static org.digijava.module.aim.util.ActivityUtil.loadActivity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -777,16 +776,17 @@ public class ActivityImporter extends ObjectImporter {
             result.set(EPConstants.ERROR, ApiError.toError(errors.values()).getErrors());
             result.set(ActivityEPConstants.ACTIVITY, newJson);
         } else {
-            List<JsonBean> activities = null;
+            Map<String, Object> activity = null;
             if (newActivity != null && newActivity.getAmpActivityId() != null) {
                 // editable, viewable, since was just created/updated
-                activities = Arrays.asList(ProjectList.getActivityInProjectListFormat(newActivity, true, true));
+                activity = ProjectList.getActivityInProjectListFormat(newActivity, true, true);
             }
-            if (activities == null || activities.size() == 0) {
+            if (activity == null) {
                 result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
                 result.set(ActivityEPConstants.ACTIVITY, newJson);
             } else {
-                result = activities.get(0);
+                result = new JsonBean();
+                result.any().putAll(activity);
             }
         }
         if (warnings.size() > 0) {

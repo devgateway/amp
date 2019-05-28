@@ -1,4 +1,4 @@
-package org.digijava.kernel.validation.activity;
+package org.digijava.kernel.validators.activity;
 
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 

@@ -17,7 +17,6 @@ import static org.digijava.module.aim.annotations.interchange.ActivityFieldsCons
 import java.io.Serializable;
 import java.util.Date;
 
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;

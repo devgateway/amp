@@ -67,4 +67,11 @@ public class APIType {
         return this.itemType != null && !this.itemType.isObject();
     }
 
+    public boolean isAnObject() {
+        return fieldType.isObject();
+    }
+
+    public boolean isAListOfObjects() {
+        return fieldType.isList() && itemType.isObject();
+    }
 }

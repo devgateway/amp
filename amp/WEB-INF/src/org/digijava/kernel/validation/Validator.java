@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 
 /**
@@ -91,7 +90,7 @@ public class Validator {
      */
     private void cascadeValidationForObjects(APIField type, Object value, Set<Class<?>> groups,
             ValidationContext validationContext, PathImpl path) {
-        if (isAnObject(type.getApiType())) {
+        if (type.getApiType().isAnObject()) {
 
             // TODO remove this after refactor to DiscriminatedFieldAccessor
             if (type.isDiscriminatedObject()) {
@@ -106,7 +105,7 @@ public class Validator {
             if (value != null) { // TODO remove this condition after refactor to DiscriminatedFieldAccessor
                 validate(type, value, groups, validationContext, path);
             }
-        } else if (isAListOfObjects(type.getApiType())) {
+        } else if (type.getApiType().isAListOfObjects()) {
             Collection subFieldValueList = (Collection) value;
             for (Object el : subFieldValueList) {
                 if (el != null) {
@@ -114,15 +113,6 @@ public class Validator {
                 }
             }
         }
-    }
-
-    private boolean isAnObject(APIType type) {
-        return type.getFieldType() == FieldType.OBJECT;
-    }
-
-    private boolean isAListOfObjects(APIType type) {
-        return type.getFieldType() == FieldType.LIST
-                && type.getItemType() == FieldType.OBJECT;
     }
 
     /**

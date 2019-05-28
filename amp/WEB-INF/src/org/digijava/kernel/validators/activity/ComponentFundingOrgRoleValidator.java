@@ -34,6 +34,10 @@ public class ComponentFundingOrgRoleValidator implements ConstraintValidator {
     private static final String COMPONENTS_FIELD_NAME =
             FieldMap.underscorify(ActivityFieldsConstants.COMPONENTS);
 
+    private static final String ORGROLE_INTERNAL_FIELD_NAME = "orgrole";
+
+    private static final String FUNDING_INTERNAL_FIELD_NAME = "fundings";
+
     @Override
     public void initialize(Map<String, ?> arguments) {
     }
@@ -50,13 +54,13 @@ public class ComponentFundingOrgRoleValidator implements ConstraintValidator {
 
         Set<Long> declaredOrgIds = new HashSet<>();
 
-        for (APIField orgRoleField : type.getFieldsForFieldNameInternal("orgrole")) {
+        for (APIField orgRoleField : type.getFieldsForFieldNameInternal(ORGROLE_INTERNAL_FIELD_NAME)) {
             List<AmpOrgRole> orgRoles = APIFieldUtil.readFieldValueOrDefault(orgRoleField, value, emptyList());
             orgRoles.forEach(orgRole -> declaredOrgIds.add(orgRole.getOrganisation().getAmpOrgId()));
         }
 
         Collection<AmpComponent> components = componentsField.getFieldAccessor().get(value);
-        List<APIField> fundingFields = componentsField.getFieldsForFieldNameInternal("fundings");
+        List<APIField> fundingFields = componentsField.getFieldsForFieldNameInternal(FUNDING_INTERNAL_FIELD_NAME);
 
         boolean valid = true;
 

@@ -65,6 +65,7 @@ import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.QueryModel;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.SaikuBasedQuery;
@@ -113,7 +114,7 @@ public class Reports implements ErrorReportingEndpoint {
     public final JSONResult getReport(@PathParam("report_id") Long reportId) {
         AmpReports ampReport = DbUtil.getAmpReport(reportId);
         if (ampReport == null) {
-            ApiErrorResponse.reportError(BAD_REQUEST, ReportErrors.REPORT_NOT_FOUND);
+            ApiErrorResponseService.reportError(BAD_REQUEST, ReportErrors.REPORT_NOT_FOUND);
         }
         JSONResult report = getReport(ampReport);
         report.getReportMetadata().setReportType(SAVED);
@@ -305,7 +306,7 @@ public class Reports implements ErrorReportingEndpoint {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "successful operation",
             response = PagedReportResult.class))
     public final Response getCustomReport(ReportFormParameters formParams) {
-        JsonBean result = ReportsUtil.validateReportConfig(formParams, true);
+        ApiErrorResponse result = ReportsUtil.validateReportConfig(formParams, true);
         if (result != null) {
             return Response.ok(result).build(); // FIXME return bad request
         }

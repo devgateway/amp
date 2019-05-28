@@ -33,10 +33,8 @@ public class InputValidatorProcessor {
                 new UniqueValidator(),
                 new TreeCollectionValidator(),
                 new DependencyValidator(),
-                new PrimaryContactValidator(),
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),
-                new FundingOrgRolesValidator(),
                 new RegexPatternValidator(),
                 new UUIDValidator());
     }

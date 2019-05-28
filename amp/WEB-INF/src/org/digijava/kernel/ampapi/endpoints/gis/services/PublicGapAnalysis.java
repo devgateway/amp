@@ -51,7 +51,7 @@ public class PublicGapAnalysis {
         if (errors.isEmpty()) {
             Long id = indicator.getId();
             indicator.setId(null);
-            AmpIndicatorLayer ampIndicator = IndicatorService.getIndicatorLayer(indicator, errors, null);
+            AmpIndicatorLayer ampIndicator = IndicatorService.getIndicatorLayer(indicator, errors, null, false);
             if (errors.isEmpty()) {
                 Indicator processedIndicator = IndicatorUtils.doGapAnalysis(ampIndicator, input);
                 processedIndicator.setId(id);

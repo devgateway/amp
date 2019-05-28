@@ -1,7 +1,9 @@
 package org.digijava.module.aim.validator;
 
-import static org.digijava.module.aim.validator.ConstraintMatchers.iterableNode;
+import static org.digijava.module.aim.validator.ConstraintMatchers.inIterableNode;
+import static org.digijava.module.aim.validator.ConstraintMatchers.inIterableNodeAtKey;
 import static org.digijava.module.aim.validator.ConstraintMatchers.nodeAtKey;
+import static org.digijava.module.aim.validator.ConstraintMatchers.propertyNode;
 import static org.digijava.module.aim.validator.ConstraintMatchers.violationWithPath;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -150,7 +152,7 @@ extends AbstractActivityValidatorTest<ProgramTotalPercentageValidator> {
      */
     private Matcher<ConstraintViolation> programPercentageViolation(AmpActivityProgramSettings primaryProgram) {
         return violationWithPath(ProgramTotalPercentage.class,
-                ImmutableList.of(iterableNode("actPrograms"), nodeAtKey("programPercentage", primaryProgram)));
+                ImmutableList.of(propertyNode("actPrograms"), inIterableNodeAtKey("programPercentage", primaryProgram)));
     }
 
     private AmpActivityProgramSettings newActProgramSettings(String name) {

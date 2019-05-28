@@ -169,11 +169,10 @@ public class TranslationSettings {
     /**
      * Provides 
      * @param field
-     * @param multilingual
      * @return
      */
     public TranslationType getTranslatableType(Field field) {
-        if (multilingual && field.isAnnotationPresent(TranslatableField.class) 
+        if (multilingual && field.isAnnotationPresent(TranslatableField.class)
                 && field.getDeclaringClass().isAnnotationPresent(TranslatableClass.class)) {
             return TranslationType.STRING;
         }

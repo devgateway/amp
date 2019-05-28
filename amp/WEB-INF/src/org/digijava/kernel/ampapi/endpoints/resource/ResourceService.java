@@ -22,7 +22,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -52,11 +52,11 @@ public class ResourceService {
 
     public JsonBean getImportResult(AmpResource resource, JsonBean json, List<ApiErrorMessage> errors,
                                     Collection<ApiErrorMessage> warnings) {
-        JsonBean result;
+        JsonBean result = new JsonBean();
         if (errors.size() == 0 && resource == null) {
-            result = ApiError.toError(ApiError.UNKOWN_ERROR);
+            result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
         } else if (errors.size() > 0) {
-            result = ApiError.toError(errors);
+            result.set(EPConstants.ERROR, ApiError.toError(errors).getErrors());
             result.set(ResourceEPConstants.RESOURCE, json);
         } else {
             result = new JsonBean();
@@ -96,7 +96,7 @@ public class ResourceService {
         Node readNode = DocumentManagerUtil.getReadNode(uuid, TLSUtils.getRequest());
 
         if (readNode == null) {
-            ApiErrorResponse.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_FOUND);
+            ApiErrorResponseService.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_FOUND);
         }
 
         NodeWrapper nodeWrapper = new NodeWrapper(readNode);
@@ -137,7 +137,9 @@ public class ResourceService {
                 resource.setTeam(Long.valueOf(folderNode.getName()));
             }
         } catch (RepositoryException e) {
-            return ApiError.toError(ResourceErrors.RESOURCE_ERROR, e);
+            JsonBean result = new JsonBean();
+            result.set(EPConstants.ERROR, ApiError.toError(ResourceErrors.RESOURCE_ERROR, e).getErrors());
+            return result;
         }
 
         DocumentManagerUtil.logoutJcrSessions(TLSUtils.getRequest());

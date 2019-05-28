@@ -69,7 +69,7 @@ public class GPIReportIndicator1Output2XlsxExporter extends GPIReportXlsxExporte
         mergedCells.add(mergedHeaderCell);
 
         for (CellRangeAddress ca : mergedCells) {
-            GPIReportExcelTemplate.fillHeaderRegionWithBorder(wb, sheet, ca);
+            GPIReportExcelTemplate.fillHeaderRegionWithBorder(sheet, ca);
         }
     }
     

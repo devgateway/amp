@@ -1,5 +1,7 @@
 package org.digijava.module.aim.action;
 
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BROWN;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -7,7 +9,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -15,7 +16,7 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -25,7 +26,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.form.DynLocationManagerForm;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -62,12 +62,12 @@ public class ExportRegionManager2XSL extends Action {
         HSSFCellStyle titleCS = wb.createCellStyle();
         wb.createCellStyle();
         titleCS.setWrapText(true);
-        titleCS.setFillForegroundColor(HSSFColor.BROWN.index);
+        titleCS.setFillForegroundColor(BROWN.getIndex());
         HSSFFont fontHeader = wb.createFont();
         fontHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontHeader.setFontHeightInPoints((short) 10);
-        fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-        titleCS.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        fontHeader.setBold(true);
+        titleCS.setAlignment(HorizontalAlignment.CENTER);
         titleCS.setFont(fontHeader);
         int rowIndex = 0;
         int cellIndex = 0;

@@ -3,8 +3,8 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BLACK;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.LIGHT_TURQUOISE;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -13,8 +13,11 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
@@ -62,17 +65,17 @@ public class RichColumnReportDataXLS extends ColumnReportDataXLS {
             HSSFCellStyle cs = wb.createCellStyle();
             HSSFFont font= wb.createFont();
             font.setFontName(HSSFFont.FONT_ARIAL);
-            font.setColor( HSSFColor.BLACK.index );
-            cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderRight(HSSFCellStyle.BORDER_NONE);
-            cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
+            font.setColor(BLACK.getIndex());
+            cs.setBorderBottom(BorderStyle.THIN);
+            cs.setBorderLeft(BorderStyle.THIN);
+            cs.setBorderRight(BorderStyle.NONE);
+            cs.setBorderTop(BorderStyle.THIN);
             
-            cs.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-            cs.setAlignment(CellStyle.ALIGN_CENTER);
+            cs.setVerticalAlignment(VerticalAlignment.CENTER);
+            cs.setAlignment(HorizontalAlignment.CENTER);
             
-            cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-            cs.setFillForegroundColor(HSSFColor.LIGHT_TURQUOISE.index);
+            cs.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            cs.setFillForegroundColor(LIGHT_TURQUOISE.getIndex());
 
             HSSFDataFormat df = wb.createDataFormat();
             cs.setDataFormat(df.getFormat("General"));
@@ -89,9 +92,9 @@ public class RichColumnReportDataXLS extends ColumnReportDataXLS {
         if (crdAmountStyle == null){
             crdAmountStyle = wb.createCellStyle();
             crdAmountStyle.cloneStyleFrom(getCRDStyle());
-            crdAmountStyle.setAlignment(CellStyle.ALIGN_RIGHT);
-            crdAmountStyle.setBorderRight(CellStyle.BORDER_NONE);
-            crdAmountStyle.setBorderLeft(CellStyle.BORDER_NONE);
+            crdAmountStyle.setAlignment(HorizontalAlignment.RIGHT);
+            crdAmountStyle.setBorderRight(BorderStyle.NONE);
+            crdAmountStyle.setBorderLeft(BorderStyle.NONE);
         }
         return crdAmountStyle;
     }
@@ -147,12 +150,12 @@ public class RichColumnReportDataXLS extends ColumnReportDataXLS {
         
         HSSFCell cell = this.getCell(getCRDAmountStyle());
         if (amount == null){
-            cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+            cell.setCellType(CellType.STRING);
             cell.setCellValue("");
         }
         else{
             // According to AMP-15607 the Excel export will contain the values formatted as numbers             
-            cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+            cell.setCellType(CellType.NUMERIC);
             cell.setCellValue(Math.floor(amount * 1000) / 1000.0);
         }
         colId.inc();

@@ -8,22 +8,18 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellType;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.Exporter;
-import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.view.xls.TrailCellsXLS;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.budgetexport.util.MappingEncoder;
 
 /**
@@ -98,7 +94,7 @@ public class BudgetTrailCellsXLS extends TrailCellsXLS {
                 element.invokeExporter(this);
             }else if (!metadata.getHideActivities()){
                 HSSFCell cell2=this.getCell(this.getHierarchyOtherStyle());
-                cell2.setCellType(HSSFCell.CELL_TYPE_STRING);
+                cell2.setCellType(CellType.STRING);
                 cell2.setCellValue("");
                 colId.inc();
             }

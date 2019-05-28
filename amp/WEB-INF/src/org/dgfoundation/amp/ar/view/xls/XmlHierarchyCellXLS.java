@@ -3,6 +3,12 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BLUE;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BLUE_GREY;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.DARK_GREEN;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.GREEN;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.VIOLET;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -15,8 +21,6 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
@@ -30,7 +34,8 @@ import org.dgfoundation.amp.ar.helper.HierarchycalItem;
 public class XmlHierarchyCellXLS extends XLSExporter {
 
     private static String[] symbols = {"-","*","+","#","="};
-    private static short[] colors = {HSSFColor.BLUE.index,HSSFColor.DARK_GREEN.index,HSSFColor.GREEN.index,HSSFColor.BLUE_GREY.index, HSSFColor.VIOLET.index};
+    private static short[] colors = { BLUE.getIndex(), DARK_GREEN.getIndex(), GREEN.getIndex(), BLUE_GREY.getIndex(),
+            VIOLET.getIndex()};
     private static ThreadLocal<HashMap<String, HSSFFont>> localFontMap = new ThreadLocal<HashMap<String,HSSFFont>>() {
                                                                 @Override 
                                                                 protected HashMap<String,HSSFFont> initialValue() {
@@ -146,7 +151,7 @@ public class XmlHierarchyCellXLS extends XLSExporter {
             }
             result.setColor(colors[level-1]);
             if ( fontType.contains("TITLE") ) 
-                result.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+                result.setBold(true);
             
             fontMap.put(fontType, result);
         }

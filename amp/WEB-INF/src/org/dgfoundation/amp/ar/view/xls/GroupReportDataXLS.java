@@ -6,6 +6,8 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BROWN;
+
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -26,21 +28,14 @@ import org.apache.poi.hssf.usermodel.HSSFPicture;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.Viewable;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.AdvancedReportForm;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 
@@ -270,11 +265,11 @@ public class GroupReportDataXLS extends XLSExporter{
             cell=row.createCell(colId.shortValue());
             cell.setCellValue(/*translatedReportName+" "+*/this.metadata.getName());
             HSSFCellStyle cs = wb.createCellStyle();
-            cs.setFillBackgroundColor(HSSFColor.BROWN.index);
+            cs.setFillBackgroundColor(BROWN.getIndex());
             HSSFFont font = wb.createFont();
             font.setFontName(HSSFFont.FONT_ARIAL);
             font.setFontHeightInPoints((short)18);          
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            font.setBold(true);
             cs.setFont(font);       
             cell.setCellStyle(cs);
             row.setHeightInPoints(30);

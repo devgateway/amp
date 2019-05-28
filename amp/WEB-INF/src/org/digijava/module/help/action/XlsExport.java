@@ -18,6 +18,7 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -61,10 +62,10 @@ public class XlsExport extends Action {
             List<HelpTopic> helpTopics = GlossaryUtil.getChildTopics(TLSUtils.getSite(), moduleInstance, null);
             //
             HSSFFont font = workbook.createFont();
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            font.setBold(true);
             //
             HSSFCellStyle style = workbook.createCellStyle();
-            style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            style.setAlignment(HorizontalAlignment.CENTER);
             style.setFont(font);
             //
             HSSFRow row = sheet.createRow(r[0].intValue());
@@ -106,7 +107,7 @@ public class XlsExport extends Action {
      * @param c
      * @param helpTopics
      * @param moduleInstance
-     * @param siteId
+     * @param site
      * @param language
      * @param sheet
      */

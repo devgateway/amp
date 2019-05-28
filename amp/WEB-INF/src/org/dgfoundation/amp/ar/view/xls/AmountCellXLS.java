@@ -6,20 +6,15 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.dgfoundation.amp.ar.AmpARFilter;
+import org.apache.poi.ss.usermodel.CellType;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.AmountCell;
-import org.digijava.module.aim.helper.FormatHelper;
 
 /**
  * 
@@ -72,7 +67,7 @@ public class AmountCellXLS extends XLSExporter {
             
         // According to AMP-15607 the Excel export will contain the values formatted as numbers      
         
-        cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+        cell.setCellType(CellType.NUMERIC);
         cell.setCellValue(((long)(tempAm * 1000)) / 1000.0);
 
         colId.inc();

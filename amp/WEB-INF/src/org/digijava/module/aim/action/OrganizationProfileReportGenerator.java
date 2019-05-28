@@ -1,5 +1,7 @@
 package org.digijava.module.aim.action;
 
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BROWN;
+
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -14,7 +16,7 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -127,22 +129,22 @@ public class OrganizationProfileReportGenerator extends DispatchAction {
         // title cells
         HSSFCellStyle titleCS = wb.createCellStyle();
         titleCS.setWrapText(true);
-        titleCS.setFillForegroundColor(HSSFColor.BROWN.index);
+        titleCS.setFillForegroundColor(BROWN.getIndex());
         HSSFFont fontHeader = wb.createFont();
         fontHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontHeader.setFontHeightInPoints((short) 14);
-        fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-        titleCS.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        fontHeader.setBold(true);
+        titleCS.setAlignment(HorizontalAlignment.CENTER);
         titleCS.setFont(fontHeader);
 
         HSSFCellStyle subHeadertitleCS = wb.createCellStyle();
         subHeadertitleCS.setWrapText(true);
-        subHeadertitleCS.setFillForegroundColor(HSSFColor.BROWN.index);
+        subHeadertitleCS.setFillForegroundColor(BROWN.getIndex());
         HSSFFont fontSubHeader = wb.createFont();
         fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
         fontSubHeader.setFontHeightInPoints((short) 10);
-        fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-        subHeadertitleCS.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        fontSubHeader.setBold(true);
+        subHeadertitleCS.setAlignment(HorizontalAlignment.CENTER);
         subHeadertitleCS.setFont(fontSubHeader);
         
         HSSFCellStyle cs = wb.createCellStyle();

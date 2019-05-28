@@ -1,5 +1,7 @@
 package org.digijava.module.aim.action;
 
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BROWN;
+
 import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
@@ -12,7 +14,7 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -53,12 +55,12 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     // title cells
  HSSFCellStyle titleCS = wb.createCellStyle();
  titleCS.setWrapText(true);
- titleCS.setFillForegroundColor(HSSFColor.BROWN.index);
+ titleCS.setFillForegroundColor(BROWN.getIndex());
  HSSFFont fontHeader = wb.createFont();
  fontHeader.setFontName(HSSFFont.FONT_ARIAL);
  fontHeader.setFontHeightInPoints((short) 10);
- fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
- titleCS.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+ fontHeader.setBold(true);
+ titleCS.setAlignment(HorizontalAlignment.CENTER);
  titleCS.setFont(fontHeader);
 
 

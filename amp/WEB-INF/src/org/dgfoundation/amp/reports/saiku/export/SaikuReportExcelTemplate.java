@@ -1,16 +1,25 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
+import static org.apache.poi.ss.usermodel.ReadingOrder.LEFT_TO_RIGHT;
+import static org.apache.poi.ss.usermodel.ReadingOrder.RIGHT_TO_LEFT;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.ReadingOrder;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.digijava.kernel.util.SiteUtils;
 
 /** Class containing the styles for the excel file. See {@link SaikuReportXlsxExporter}
  * @author Viorel Chihai
@@ -18,15 +27,16 @@ import org.apache.poi.ss.util.RegionUtil;
  */
 public class SaikuReportExcelTemplate {
     
-    private CellStyle headerCellStyle = null;
-    private CellStyle totalCellStyle = null;
-    private CellStyle totalNumberStyle = null;
-    private CellStyle hierarchyStyle = null;
-    private CellStyle headerCleanStyle = null;
-    private CellStyle totalCleanStyle = null;
-    private CellStyle numberStyle = null;
-    private CellStyle settingsOptionStyle = null;
-    private CellStyle settingsFilterStyle = null;
+    private XSSFCellStyle headerCellStyle = null;
+    private XSSFCellStyle totalCellStyle = null;
+    private XSSFCellStyle totalNumberStyle = null;
+    private XSSFCellStyle hierarchyStyle = null;
+    private XSSFCellStyle headerCleanStyle = null;
+    private XSSFCellStyle totalCleanStyle = null;
+    private XSSFCellStyle numberStyle = null;
+    private XSSFCellStyle settingsOptionStyle = null;
+    private XSSFCellStyle settingsFilterStyle = null;
+    private XSSFCellStyle readingOrderStyle = null;
     
     private Map<Integer, CellStyle> subTotals = new HashMap<Integer, CellStyle>();
     
@@ -44,84 +54,94 @@ public class SaikuReportExcelTemplate {
     /**
      * Define all styles used in the report workbook.
      * 
-     * @param wb
      */
     private void initWorkbookStyles() {
+    
+        ReadingOrder readingOrder = SiteUtils.isEffectiveLangRTL() ? RIGHT_TO_LEFT : LEFT_TO_RIGHT;
         
         Font fontHeaderAndTotal = wb.createFont();
         fontHeaderAndTotal.setColor(IndexedColors.BLACK.getIndex());
         Font fontBold = wb.createFont();
-        fontBold.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        fontBold.setBold(true);
         
-        headerCellStyle = wb.createCellStyle();
-        headerCellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        headerCellStyle = (XSSFCellStyle) wb.createCellStyle();
+        headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         headerCellStyle.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
-        headerCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+        headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
         headerCellStyle.setWrapText(true);
-        headerCellStyle.setBorderTop(CellStyle.BORDER_THIN);
-        headerCellStyle.setBorderBottom(CellStyle.BORDER_THIN);
-        headerCellStyle.setBorderRight(CellStyle.BORDER_THIN);
-        headerCellStyle.setBorderLeft(CellStyle.BORDER_THIN);
+        headerCellStyle.setBorderTop(BorderStyle.THIN);
+        headerCellStyle.setBorderBottom(BorderStyle.THIN);
+        headerCellStyle.setBorderRight(BorderStyle.THIN);
+        headerCellStyle.setBorderLeft(BorderStyle.THIN);
         headerCellStyle.setFont(fontHeaderAndTotal);
 
-        headerCleanStyle = wb.createCellStyle();
-        headerCleanStyle.setAlignment(CellStyle.ALIGN_CENTER);
+        headerCleanStyle = (XSSFCellStyle) wb.createCellStyle();
+        headerCleanStyle.setAlignment(HorizontalAlignment.CENTER);
         headerCleanStyle.setWrapText(true);
         headerCleanStyle.setFont(fontHeaderAndTotal);
 
-        totalCellStyle = wb.createCellStyle();
-        totalCellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        totalCellStyle = (XSSFCellStyle) wb.createCellStyle();
+        totalCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         totalCellStyle.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
-        totalCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+        totalCellStyle.setAlignment(HorizontalAlignment.CENTER);
         totalCellStyle.setFont(fontHeaderAndTotal);
         totalCellStyle.setWrapText(true);
+        totalCellStyle.setReadingOrder(readingOrder);
         
-        totalNumberStyle = wb.createCellStyle();
+        totalNumberStyle = (XSSFCellStyle) wb.createCellStyle();
         totalNumberStyle.cloneStyleFrom(totalCellStyle);
-        totalNumberStyle.setAlignment(CellStyle.ALIGN_RIGHT);
+        totalNumberStyle.setAlignment(HorizontalAlignment.RIGHT);
+        totalNumberStyle.setReadingOrder(readingOrder);
 
         // Important: DO NOT change this style (is used as a marker for total rows in plain export).
-        totalCleanStyle = wb.createCellStyle();
-        totalCleanStyle.setAlignment(CellStyle.ALIGN_LEFT);
+        totalCleanStyle = (XSSFCellStyle) wb.createCellStyle();
+        totalCleanStyle.setAlignment(HorizontalAlignment.LEFT);
         totalCleanStyle.setFont(fontHeaderAndTotal);
         totalCleanStyle.setWrapText(true);
-
-        CellStyle subTotalLvl1 = wb.createCellStyle();
-        subTotalLvl1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+    
+        XSSFCellStyle subTotalLvl1 = (XSSFCellStyle) wb.createCellStyle();
+        subTotalLvl1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         subTotalLvl1.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
-        subTotalLvl1.setAlignment(CellStyle.ALIGN_RIGHT);
+        subTotalLvl1.setAlignment(HorizontalAlignment.RIGHT);
         subTotalLvl1.setWrapText(true);
         subTotalLvl1.setFont(fontHeaderAndTotal);
+        subTotalLvl1.setReadingOrder(readingOrder);
         subTotals.put(0, subTotalLvl1);
-
-        CellStyle subTotalLvl2 = wb.createCellStyle();
-        subTotalLvl2.setFillPattern(CellStyle.SOLID_FOREGROUND);
+    
+        XSSFCellStyle subTotalLvl2 = (XSSFCellStyle) wb.createCellStyle();
+        subTotalLvl2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         subTotalLvl2.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
-        subTotalLvl2.setAlignment(CellStyle.ALIGN_RIGHT);
+        subTotalLvl2.setAlignment(HorizontalAlignment.RIGHT);
         subTotalLvl2.setWrapText(true);
         subTotalLvl2.setFont(fontHeaderAndTotal);
+        subTotalLvl2.setReadingOrder(readingOrder);
         subTotals.put(1, subTotalLvl2);
-
-        CellStyle subTotalLvl3 = wb.createCellStyle();
-        subTotalLvl3.setFillPattern(CellStyle.SOLID_FOREGROUND);
+    
+        XSSFCellStyle subTotalLvl3 = (XSSFCellStyle) wb.createCellStyle();
+        subTotalLvl3.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         subTotalLvl3.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-        subTotalLvl3.setAlignment(CellStyle.ALIGN_RIGHT);
+        subTotalLvl3.setAlignment(HorizontalAlignment.RIGHT);
         subTotalLvl3.setWrapText(true);
         subTotalLvl3.setFont(fontHeaderAndTotal);
+        subTotalLvl3.setReadingOrder(readingOrder);
         subTotals.put(2, subTotalLvl3);
 
-        hierarchyStyle = wb.createCellStyle();
-        hierarchyStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        hierarchyStyle = (XSSFCellStyle) wb.createCellStyle();
+        hierarchyStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 
-        numberStyle = wb.createCellStyle();
-        numberStyle.setAlignment(CellStyle.ALIGN_RIGHT);
+        numberStyle = (XSSFCellStyle) wb.createCellStyle();
+        numberStyle.setAlignment(HorizontalAlignment.RIGHT);
+        numberStyle.setReadingOrder(readingOrder);
 
-        settingsOptionStyle = wb.createCellStyle();
-        settingsOptionStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        settingsOptionStyle = (XSSFCellStyle) wb.createCellStyle();
+        settingsOptionStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         settingsOptionStyle.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
         settingsOptionStyle.setFont(fontBold);
 
-        settingsFilterStyle = wb.createCellStyle();
+        settingsFilterStyle = (XSSFCellStyle) wb.createCellStyle();
+        
+        readingOrderStyle = (XSSFCellStyle) wb.createCellStyle();
+        readingOrderStyle.setReadingOrder(readingOrder);
     }
     
     public CellStyle getHeaderCellStyle() {
@@ -156,6 +176,10 @@ public class SaikuReportExcelTemplate {
         return settingsOptionStyle;
     }
     
+    public CellStyle getReadingOrderStyle() {
+        return readingOrderStyle;
+    }
+    
     public int getCellHeight() {
         return cellHeight;
     }
@@ -173,10 +197,10 @@ public class SaikuReportExcelTemplate {
     }
     
     
-    public static void fillHeaderRegionWithBorder(Workbook workbook, Sheet sheet, CellRangeAddress headerRegion) {
-        RegionUtil.setBorderTop((int) CellStyle.BORDER_THIN, headerRegion, sheet, workbook);
-        RegionUtil.setBorderLeft((int) CellStyle.BORDER_THIN, headerRegion, sheet, workbook);
-        RegionUtil.setBorderRight((int) CellStyle.BORDER_THIN, headerRegion, sheet, workbook);
-        RegionUtil.setBorderBottom((int) CellStyle.BORDER_THIN, headerRegion, sheet, workbook);
+    public static void fillHeaderRegionWithBorder(Sheet sheet, CellRangeAddress headerRegion) {
+        RegionUtil.setBorderTop(BorderStyle.THIN, headerRegion, sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, headerRegion, sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, headerRegion, sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, headerRegion, sheet);
     }
 }

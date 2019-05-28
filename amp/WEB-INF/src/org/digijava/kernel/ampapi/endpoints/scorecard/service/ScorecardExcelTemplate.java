@@ -1,8 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.scorecard.service;
 
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.util.HSSFColor;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.GREEN;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.GREY_40_PERCENT;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.LIGHT_BLUE;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.RED;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.YELLOW;
+
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ColoredCell.Colors;
 
@@ -30,30 +35,28 @@ public class ScorecardExcelTemplate {
 
     /**
      * Define all styles used in the scorecard workbook.
-     * 
-     * @param wb
      */
     private void initScorecardStyles() {
         
         blueHeaderCellStyle = wb.createCellStyle();
-        blueHeaderCellStyle.setFillForegroundColor(HSSFColor.LIGHT_BLUE.index);
-        blueHeaderCellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        blueHeaderCellStyle.setFillForegroundColor(LIGHT_BLUE.getIndex());
+        blueHeaderCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         
         grayCellStyle = wb.createCellStyle();
-        grayCellStyle.setFillForegroundColor(HSSFColor.GREY_40_PERCENT.index);
-        grayCellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        grayCellStyle.setFillForegroundColor(GREY_40_PERCENT.getIndex());
+        grayCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         
         greenCellStyle = wb.createCellStyle();
-        greenCellStyle.setFillForegroundColor(HSSFColor.GREEN.index);
-        greenCellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        greenCellStyle.setFillForegroundColor(GREEN.getIndex());
+        greenCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         
         redCellStyle = wb.createCellStyle();
-        redCellStyle.setFillForegroundColor(HSSFColor.RED.index);
-        redCellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        redCellStyle.setFillForegroundColor(RED.getIndex());
+        redCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         
         yellowCellStyle = wb.createCellStyle();
-        yellowCellStyle.setFillForegroundColor(HSSFColor.YELLOW.index);
-        yellowCellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        yellowCellStyle.setFillForegroundColor(YELLOW.getIndex());
+        yellowCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         
         wrapTextCellStyle = wb.createCellStyle();
         wrapTextCellStyle.setWrapText(true);

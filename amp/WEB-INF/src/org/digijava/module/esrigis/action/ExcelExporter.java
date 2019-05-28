@@ -13,12 +13,13 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.esrigis.form.DataDispatcherForm;
 
 public class ExcelExporter extends Action {
@@ -108,14 +109,14 @@ public class ExcelExporter extends Action {
         HSSFFont frowheading = wb.createFont();
         frowheading.setFontName("Arial Unicode MS");
         frowheading.setFontHeightInPoints((short) 8);
-        frowheading.setBoldweight(frowheading.BOLDWEIGHT_BOLD);
+        frowheading.setBold(true);
         HSSFCellStyle rowheading = wb.createCellStyle();
         rowheading.setFont(frowheading);
-        rowheading.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        rowheading.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        rowheading.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        rowheading.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        rowheading.setVerticalAlignment(HSSFCellStyle.ALIGN_CENTER);
+        rowheading.setBorderLeft(BorderStyle.THIN);
+        rowheading.setBorderRight(BorderStyle.THIN);
+        rowheading.setBorderTop(BorderStyle.THIN);
+        rowheading.setBorderBottom(BorderStyle.THIN);
+        rowheading.setVerticalAlignment(VerticalAlignment.CENTER);
         return rowheading;
     }
 
@@ -123,14 +124,14 @@ public class ExcelExporter extends Action {
         HSSFFont fdataitem = wb.createFont();
         fdataitem.setFontName("Arial Unicode MS");
         fdataitem.setFontHeightInPoints((short) 8);
-        fdataitem.setBoldweight(fdataitem.BOLDWEIGHT_NORMAL);
+        fdataitem.setBold(false);
         HSSFCellStyle dataitem = wb.createCellStyle();
         dataitem.setFont(fdataitem);
-        dataitem.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        dataitem.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        dataitem.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        dataitem.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        dataitem.setVerticalAlignment(HSSFCellStyle.ALIGN_RIGHT);
+        dataitem.setBorderLeft(BorderStyle.THIN);
+        dataitem.setBorderRight(BorderStyle.THIN);
+        dataitem.setBorderTop(BorderStyle.THIN);
+        dataitem.setBorderBottom(BorderStyle.THIN);
+        dataitem.setVerticalAlignment(VerticalAlignment.JUSTIFY);
         return dataitem;
     }
 

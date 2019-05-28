@@ -3,28 +3,27 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.text.DateFormat;
-import java.util.Date;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BLACK;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.GREY_25_PERCENT;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.GREY_40_PERCENT;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.GREY_50_PERCENT;
+import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.LIGHT_BLUE;
+
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFPicture;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportData;
@@ -94,12 +93,12 @@ public class RichGroupReportDataXLS extends GroupReportDataXLS {
         
         HSSFCell cell = this.getCell(getGRDAmountStyle(depth));
         if (contents == null || (contents instanceof String)){
-            cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+            cell.setCellType(CellType.STRING);
             cell.setCellValue(contents == null ? "" : contents.toString());
         }
         else{
             // According to AMP-15607 the Excel export will contain the values formatted as numbers             
-            cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+            cell.setCellType(CellType.NUMERIC);
             cell.setCellValue(Math.floor((Double) contents * 1000) / 1000.0);
         }
         colId.inc();
@@ -112,26 +111,25 @@ public class RichGroupReportDataXLS extends GroupReportDataXLS {
     
     /**
      * gets the bg-color to fill smth
-     * @param grd
-     * @return
+     *
      */
-    protected void setStyleFor(HSSFCellStyle style, int depth){
+    protected void setStyleFor(HSSFCellStyle style, int depth) {
         switch(depth){
             case 1:
-                style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-                style.setFillForegroundColor(HSSFColor.GREY_40_PERCENT.index);
+                style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                style.setFillForegroundColor(GREY_40_PERCENT.getIndex());
                 return;
             case 2:
-                style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-                style.setFillForegroundColor(HSSFColor.GREY_50_PERCENT.index);
+                style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                style.setFillForegroundColor(GREY_50_PERCENT.getIndex());
                 return;
             case 3:
-                style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-                style.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+                style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                style.setFillForegroundColor(GREY_25_PERCENT.getIndex());
                 return;
             default:
-                style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-                style.setFillForegroundColor(HSSFColor.LIGHT_BLUE.index);
+                style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                style.setFillForegroundColor(LIGHT_BLUE.getIndex());
                 return;
         }
     }
@@ -144,14 +142,14 @@ public class RichGroupReportDataXLS extends GroupReportDataXLS {
             HSSFCellStyle cs = wb.createCellStyle();
             HSSFFont font= wb.createFont();
             font.setFontName(HSSFFont.FONT_ARIAL);
-            font.setColor( HSSFColor.BLACK.index );
-            cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-            cs.setBorderRight(HSSFCellStyle.BORDER_NONE);
-            cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
+            font.setColor(BLACK.getIndex());
+            cs.setBorderBottom(BorderStyle.THIN);
+            cs.setBorderLeft(BorderStyle.THIN);
+            cs.setBorderRight(BorderStyle.NONE);
+            cs.setBorderTop(BorderStyle.THIN);
             
-            cs.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-            cs.setAlignment(CellStyle.ALIGN_CENTER);
+            cs.setVerticalAlignment(VerticalAlignment.CENTER);
+            cs.setAlignment(HorizontalAlignment.CENTER);
             
             setStyleFor(cs, depth);
             cs.setWrapText(true);
@@ -172,9 +170,9 @@ public class RichGroupReportDataXLS extends GroupReportDataXLS {
         if (!grdAmountStyles.containsKey(depth)){
             HSSFCellStyle cs = wb.createCellStyle();
             cs.cloneStyleFrom(getGRDStyle(depth));
-            cs.setAlignment(CellStyle.ALIGN_RIGHT);
-            cs.setBorderRight(CellStyle.BORDER_NONE);
-            cs.setBorderLeft(CellStyle.BORDER_NONE);
+            cs.setAlignment(HorizontalAlignment.RIGHT);
+            cs.setBorderRight(BorderStyle.NONE);
+            cs.setBorderLeft(BorderStyle.NONE);
             grdAmountStyles.put(depth, cs);
         }
         return grdAmountStyles.get(depth);

@@ -10,7 +10,9 @@ import java.util.stream.Stream;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.helper.EasternArabicService;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.springframework.web.util.HtmlUtils;
@@ -226,7 +228,11 @@ public class SaikuReportHtmlRenderer {
 
         tableData.append("<td class='total measure'>");
         tableData.append("<b>").append(TranslatorWorker.translateText("Report Totals"));
-        tableData.append("(").append(report.reportContents.getNrEntities()).append(")</b>");
+        String nrEntities = String.format("%s", report.reportContents.getNrEntities());
+        if (EasternArabicService.getInstance().isLocaleEasternArabic(TLSUtils.getCurrentSystemLocale())) {
+            nrEntities = EasternArabicService.getInstance().convertWesternArabicToEasternArabic(nrEntities);
+        }
+        tableData.append("(").append(nrEntities).append(")</b>");
         tableData.append("</td>");
 
         columns().skip(1).forEach(roc -> {

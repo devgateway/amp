@@ -1462,5 +1462,11 @@
 		<bodycontent>JSP</bodycontent>
 		<info>Special tag that treats report columns in a special way to allow parameterized columns like MTEFs.</info>
 	</tag>
+	<tag>
+		<name>easternArabicNumber</name>
+		<tagclass>org.digijava.kernel.taglib.html.EasternArabicNumberConverterTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<info>Special tag that converts the number symbols if the locale uses eastern arabic numerals.</info>
+	</tag>
 	
 </taglib>

@@ -242,25 +242,25 @@ body {
 						<ul class="yui-nav" style="width: 70%; position: static;">
 							<div class="tab selected" id="rtab">
 								<div class="tab_cont">
-									<span class="step_num">1</span>
+									<span class="step_num"><digi:easternArabicNumber>1</digi:easternArabicNumber></span>
 									<a href="#type_step_div" ><c:out escapeXml="false" value="${detailsStepName}"/></a>
 								</div>
 							</div>
 							<div class="tab" id="rtab">
 								<div class="tab_cont">
-									<span class="step_num">2</span>
+									<span class="step_num"><digi:easternArabicNumber>2</digi:easternArabicNumber></span>
 									<a href="#columns_step_div" ><digi:trn>Columns</digi:trn></a>
 								</div>
 							</div>
 							<div class="tab" id="rtab">
 								<div class="tab_cont">
-									<span class="step_num">3</span>
+									<span class="step_num"><digi:easternArabicNumber>3</digi:easternArabicNumber></span>
 									<a href="#hierarchies_step_div" ><digi:trn>Hierarchies</digi:trn></a>
 								</div>
 							</div>
 							<div class="tab" id="rtab">
 								<div class="tab_cont">
-									<span class="step_num">4</span>
+									<span class="step_num"><digi:easternArabicNumber>4</digi:easternArabicNumber></span>
 									<a href="#measures_step_div" ><digi:trn>Measures</digi:trn></a>
 								</div>
 							</div>

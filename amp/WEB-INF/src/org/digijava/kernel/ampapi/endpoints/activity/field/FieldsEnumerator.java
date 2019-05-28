@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
@@ -27,15 +28,19 @@ import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolv
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldAccessor;
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.validation.ConstraintDescriptor;
+import org.digijava.kernel.validation.ConstraintDescriptors;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -188,10 +193,33 @@ public class FieldsEnumerator {
             }
             apiField.setIdChild(idFields.get(0));
         }
-        
-        
+
+        ConstraintDescriptors beanConstraints = findBeanConstraints(apiField.getApiType().getType());
+        apiField.setBeanConstraints(beanConstraints);
+
+        ConstraintDescriptors fieldConstraints = findFieldConstraints(interchangeable.interValidators());
+        apiField.setFieldConstraints(fieldConstraints);
 
         return apiField;
+    }
+
+    private ConstraintDescriptors findBeanConstraints(Class<?> type) {
+        InterchangeableValidator[] validators = type.getAnnotationsByType(InterchangeableValidator.class);
+        return getConstraintDescriptors(validators, ConstraintDescriptor.ConstraintTarget.TYPE);
+    }
+
+    private ConstraintDescriptors findFieldConstraints(InterchangeableValidator[] validators) {
+        return getConstraintDescriptors(validators, ConstraintDescriptor.ConstraintTarget.FIELD);
+    }
+
+    private ConstraintDescriptors getConstraintDescriptors(InterchangeableValidator[] validators,
+            ConstraintDescriptor.ConstraintTarget constraintTarget) {
+        List<ConstraintDescriptor> descriptors = new ArrayList<>();
+        for (InterchangeableValidator validator : validators) {
+            ImmutableSet<Class<?>> groups = ImmutableSet.copyOf(validator.groups());
+            descriptors.add(new ConstraintDescriptor(validator.value(), groups, constraintTarget));
+        }
+        return new ConstraintDescriptors(descriptors);
     }
 
     private boolean hasPossibleValues(Field field, Interchangeable interchangeable) {
@@ -230,6 +258,14 @@ public class FieldsEnumerator {
             label = interchangeable.label();
         }
         return label;
+    }
+
+    public APIField getMetaModel(Class<?> clazz) {
+        APIField root = new APIField();
+        root.setApiType(new APIType(clazz));
+        root.setChildren(getAllAvailableFields(clazz));
+        root.setBeanConstraints(findBeanConstraints(clazz));
+        return root;
     }
 
     public List<APIField> getAllAvailableFields(Class<?> clazz) {
@@ -511,14 +547,14 @@ public class FieldsEnumerator {
 
     protected boolean isRequiredVisible(String fmPath, FEContext context) {
         Interchangeable peek = context.getIntchStack().pop();
-        boolean isVisible = fmService.isVisible(fmPath, context.getIntchStack());
+        boolean isVisible = fmService.isVisible(FMVisibility.handleParentFMPath(fmPath, context.getIntchStack()));
         context.getIntchStack().push(peek);
 
         return isVisible;
     }
 
     protected boolean isVisible(String fmPath, FEContext context) {
-        return fmService.isVisible(fmPath, context.getIntchStack());
+        return fmService.isVisible(FMVisibility.handleParentFMPath(fmPath, context.getIntchStack()));
     }
     
     private boolean isFieldIatiIdentifier(String fieldName) {

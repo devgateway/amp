@@ -125,6 +125,11 @@ public @interface Interchangeable {
     
     Validators validators() default @Validators;
 
+    /**
+     * List of constraint validators that apply to the current field.
+     */
+    InterchangeableValidator[] interValidators() default {};
+
     /** regex pattern used for validation (mail, phone, fax) */
     String regexPattern() default "";
     

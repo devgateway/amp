@@ -266,7 +266,7 @@ public class FieldsEnumeratorTest {
     public void testInvisibleField() {
         FMService invisibleFmService = mock(FMService.class);
 
-        when(invisibleFmService.isVisible(any(), any())).thenReturn(false);
+        when(invisibleFmService.isVisible(any())).thenReturn(false);
 
         List<APIField> actual =
                 new FieldsEnumerator(provider, invisibleFmService, translatorService, name -> true)
@@ -898,6 +898,7 @@ public class FieldsEnumeratorTest {
     private APIField newAPIField() {
         APIField field = new APIField();
         field.setFieldName("field");
+        field.setFieldNameInternal("field");
         field.setRequired(FIELD_NOT_REQUIRED);
         field.setImportable(false);
         field.setFieldLabel(fieldLabelFor("field"));

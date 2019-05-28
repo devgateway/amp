@@ -5,7 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
@@ -17,7 +21,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  */
 public class ActivityBuilder {
 
-    private AmpActivityVersion activity;
+    AmpActivityVersion activity;
 
     public ActivityBuilder() {
         activity = new AmpActivityVersion();
@@ -81,5 +85,20 @@ public class ActivityBuilder {
 
     public AmpActivityVersion getActivity() {
         return activity;
+    }
+
+    public ComponentBuilder buildComponent() {
+        AmpComponent component = new AmpComponent();
+        component.setActivity(activity);
+        return new ComponentBuilder(this, component);
+    }
+
+    public ActivityBuilder addOrgRole(AmpRole role, AmpOrganisation organisation) {
+        AmpOrgRole orgRole = new AmpOrgRole();
+        orgRole.setRole(role);
+        orgRole.setOrganisation(organisation);
+        orgRole.setActivity(activity);
+        activity.getOrgrole().add(orgRole);
+        return this;
     }
 }

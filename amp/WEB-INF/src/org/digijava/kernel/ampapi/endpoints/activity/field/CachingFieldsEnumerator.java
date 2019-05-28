@@ -24,8 +24,8 @@ public class CachingFieldsEnumerator {
 
     private FieldsEnumerator fieldsEnumerator;
 
-    private Map<Class, List<APIField>> cache = new ConcurrentHashMap<>();
-    private Map<Class, List<APIField>> iatiImporterCache = new ConcurrentHashMap<>();
+    private Map<Class, APIField> cache = new ConcurrentHashMap<>();
+    private Map<Class, APIField> iatiImporterCache = new ConcurrentHashMap<>();
 
     private Timestamp cachedUpToDate;
 
@@ -35,31 +35,42 @@ public class CachingFieldsEnumerator {
     }
 
     public List<APIField> getContactFields() {
+        return getContactField().getChildren();
+    }
+
+    public APIField getContactField() {
         return getAllAvailableFields(AmpContact.class);
     }
 
     public List<APIField> getActivityFields() {
+        return getActivityField().getChildren();
+    }
+
+    public APIField getActivityField() {
         return getAllAvailableFields(AmpActivityFields.class, AmpClientModeHolder.isIatiImporterClient());
     }
 
     public List<APIField> getResourceFields() {
+        return getResourceField().getChildren();
+    }
+
+    public APIField getResourceField() {
         return getAllAvailableFields(AmpResource.class);
     }
 
     public List<APIField> getCommonSettingsFields() {
-        return getAllAvailableFields(CommonSettings.class);
+        return getAllAvailableFields(CommonSettings.class).getChildren();
     }
 
     /**
      * Cached version of {@link FieldsEnumerator#getAllAvailableFields(Class)}
      */
-
-    private List<APIField> getAllAvailableFields(Class<?> clazz) {
+    private APIField getAllAvailableFields(Class<?> clazz) {
         return getAllAvailableFields(clazz, false);
     }
     
-    private List<APIField> getAllAvailableFields(Class<?> clazz, boolean useIatiImporterCache) {
-        Map<Class, List<APIField>> actualCache = useIatiImporterCache ? iatiImporterCache : cache;
+    private APIField getAllAvailableFields(Class<?> clazz, boolean useIatiImporterCache) {
+        Map<Class, APIField> actualCache = useIatiImporterCache ? iatiImporterCache : cache;
         Timestamp lastModificationDate = syncDAO.getLastModificationDateForFieldDefinitions();
         if (cachedUpToDate == null) {
             cachedUpToDate = lastModificationDate;
@@ -69,7 +80,7 @@ public class CachingFieldsEnumerator {
             iatiImporterCache.clear();
         }
         cachedUpToDate = lastModificationDate;
-        return actualCache.computeIfAbsent(clazz, key -> fieldsEnumerator.getAllAvailableFields(clazz));
+        return actualCache.computeIfAbsent(clazz, key -> fieldsEnumerator.getMetaModel(clazz));
     }
 
     public List<String> findActivityFieldPaths(Predicate<APIField> fieldFilter) {

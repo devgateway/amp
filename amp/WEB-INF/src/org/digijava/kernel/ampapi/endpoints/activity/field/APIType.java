@@ -67,4 +67,13 @@ public class APIType {
         return this.itemType != null && !this.itemType.isObject();
     }
 
+    @JsonIgnore
+    public boolean isAnObject() {
+        return fieldType.isObject();
+    }
+
+    @JsonIgnore
+    public boolean isAListOfObjects() {
+        return fieldType.isList() && itemType.isObject();
+    }
 }

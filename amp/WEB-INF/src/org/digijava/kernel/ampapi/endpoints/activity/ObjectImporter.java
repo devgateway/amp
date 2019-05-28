@@ -59,7 +59,7 @@ public class ObjectImporter {
     protected JsonBean newJson;
     protected TranslationSettings trnSettings;
 
-    private List<APIField> apiFields;
+    private APIField apiField;
 
     private PossibleValuesCache possibleValuesCached;
 
@@ -77,19 +77,21 @@ public class ObjectImporter {
 
     private Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper = new DefaultErrorsMapper();
 
+    private ImporterInterchangeValidator importerInterchangeValidator = new ImporterInterchangeValidator(errors);
+
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
-            List<APIField> apiFields) {
-        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiFields,
+            APIField apiField) {
+        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiField,
                 new ValueConverter());
     }
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
-            TranslationSettings trnSettings, List<APIField> apiFields, ValueConverter valueConverter) {
+            TranslationSettings trnSettings, APIField apiField, ValueConverter valueConverter) {
         this.formatValidator = formatValidator;
         this.businessRulesValidator = businessRulesValidator;
         this.trnSettings = trnSettings;
-        this.apiFields = apiFields;
-        this.possibleValuesCached = new PossibleValuesCache(PossibleValuesEnumerator.INSTANCE, apiFields);
+        this.apiField = apiField;
+        this.possibleValuesCached = new PossibleValuesCache(PossibleValuesEnumerator.INSTANCE, apiField.getChildren());
         this.valueConverter = valueConverter;
 
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
@@ -101,7 +103,7 @@ public class ObjectImporter {
     }
 
     public List<APIField> getApiFields() {
-        return apiFields;
+        return apiField.getChildren();
     }
 
     protected void beforeViolationsCheck() {
@@ -127,14 +129,29 @@ public class ObjectImporter {
      * @return
      */
     public boolean validateAndImport(Object root, Map<String, Object> json, boolean validateFormatOnly) {
-        boolean isFormatValid = validateAndImport(root, apiFields, json, null);
+        boolean isFormatValid = validateAndImport(root, apiField.getChildren(), json, null);
         if (isFormatValid && !validateFormatOnly) {
             beforeViolationsCheck();
             processViolationsForTypes(json, root);
+            processInterViolationsForTypes(json, root);
         }
         return isFormatValid;
     }
 
+    /**
+     * Invokes interchangeable validation and then integrates all constraint violations directly into json object.
+     * @param json json representation of the object
+     * @param root internal representation of the object
+     */
+    private void processInterViolationsForTypes(Map<String, Object> json, Object root) {
+        importerInterchangeValidator.validate(json, apiField, root);
+    }
+
+    /**
+     * Invokes bean validation and then integrates all constraint violations directly into json object.
+     * @param json json representation of the object
+     * @param obj internal representation of the object
+     */
     private void processViolationsForTypes(Map<String, Object> json, Object obj) {
         Set<ConstraintViolation<Object>> violations = beanValidator.validate(obj, API.class, Default.class);
         JsonErrorIntegrator jsonErrorIntegrator = new JsonErrorIntegrator(jsonErrorMapper);

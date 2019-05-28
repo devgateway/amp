@@ -70,7 +70,7 @@ public class PerformanceRuleAttributeOption {
     
     public boolean isVisible() {
         if (!StringUtils.isBlank(fmPath)) {
-            return FMVisibility.isVisible(fmPath, null);
+            return FMVisibility.isVisible(fmPath);
         }
         
         return true;

@@ -81,7 +81,7 @@ public class PossibleValuesEnumeratorTest {
         });
         when(provider.isTranslatable(any())).thenReturn(false);
 
-        when(fmService.isVisible(any(), any())).thenReturn(true);
+        when(fmService.isVisible(any())).thenReturn(true);
 
         when(translatorService.getAllTranslationOfBody(any(), any())).thenAnswer(invocation -> {
             String s = (String) invocation.getArguments()[0];

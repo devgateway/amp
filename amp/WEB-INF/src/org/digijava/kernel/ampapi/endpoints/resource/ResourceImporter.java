@@ -50,7 +50,7 @@ public class ResourceImporter extends ObjectImporter {
     public ResourceImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getResourceFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getResourceBusinessRulesValidators()),
-                AmpFieldsEnumerator.getEnumerator().getResourceFields());
+                AmpFieldsEnumerator.getEnumerator().getResourceField());
     }
 
     /**

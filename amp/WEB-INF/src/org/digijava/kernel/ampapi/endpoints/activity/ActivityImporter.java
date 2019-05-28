@@ -105,10 +105,10 @@ public class ActivityImporter extends ObjectImporter {
     
     private ResourceService resourceService = new ResourceService();
 
-    public ActivityImporter(List<APIField> apiFields, ActivityImportRules rules) {
+    public ActivityImporter(APIField apiField, ActivityImportRules rules) {
         super(new InputValidatorProcessor(InputValidatorProcessor.getActivityFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getActivityBusinessRulesValidators()),
-                apiFields);
+                apiField);
         setJsonErrorMapper(new ActivityErrorsMapper());
         this.rules = rules;
         this.saveContext = SaveContext.api(!rules.isProcessApprovalFields());
@@ -133,7 +133,7 @@ public class ActivityImporter extends ObjectImporter {
             input.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS));
         }
         this.newJson = newJson;
-        this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH, null);
+        this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH);
         this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
         this.endpointContextPath = endpointContextPath;
         initRequestedSaveMode();
@@ -635,7 +635,8 @@ public class ActivityImporter extends ObjectImporter {
      * Updates Proposed Project Cost amount depending on configuration (annual budget)
      */
     protected void updatePPCAmount() {
-        boolean isAnnualBudget = FMVisibility.isVisible("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost", null);
+        boolean isAnnualBudget = FMVisibility.isVisible(
+                "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost");
 
         if (isAnnualBudget && newActivity.getAnnualProjectBudgets() != null) {
             AmpFundingAmount ppc = newActivity.getProjectCostByType(AmpFundingAmount.FundingType.PROPOSED);
@@ -654,7 +655,8 @@ public class ActivityImporter extends ObjectImporter {
      */
 
     protected void updateRoleFundings() {
-        boolean isSourceRoleEnalbed = FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Source Role", null);
+        boolean isSourceRoleEnalbed = FMVisibility.isVisible(
+                "/Activity Form/Funding/Funding Group/Funding Item/Source Role");
 
         if (!isSourceRoleEnalbed) {
             AmpRole role = org.digijava.module.aim.util.DbUtil.getAmpRole(Constants.FUNDING_AGENCY);

@@ -68,8 +68,8 @@ public final class ActivityInterchangeUtils {
      */
     public static JsonBean importActivity(JsonBean newJson, boolean update, ActivityImportRules rules,
             String endpointContextPath) {
-        List<APIField> activityFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
-        ActivityImporter importer = new ActivityImporter(activityFields, rules);
+        APIField activityField = AmpFieldsEnumerator.getEnumerator().getActivityField();
+        ActivityImporter importer = new ActivityImporter(activityField, rules);
         List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update, endpointContextPath);
 
         return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors, importer.getWarnings());

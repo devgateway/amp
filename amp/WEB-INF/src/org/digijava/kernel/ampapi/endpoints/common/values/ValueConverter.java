@@ -70,19 +70,15 @@ public class ValueConverter {
     }
 
     /**
-     * Generates an instance of the type of the field
-     * @param parent
-     * @param field
+     * Generates an instance of a type
+     * @param concreteType
      * @return
      */
-    public Object getNewInstance(Object parent, Field field) {
+    public Object getNewInstance(Class<?> concreteType) {
         try {
-            Class<?> concreteType = findConcreteType(field.getType());
-            Object fieldValue = instantiate(concreteType);
-            field.set(parent, fieldValue);
-            return fieldValue;
-        } catch (IllegalArgumentException | IllegalAccessException e) {
-            logger.error(e.getMessage());
+            return instantiate(findConcreteType(concreteType));
+        } catch (IllegalArgumentException e) {
+            logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }

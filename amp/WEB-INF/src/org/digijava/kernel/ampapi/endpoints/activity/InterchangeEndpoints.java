@@ -281,7 +281,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             boolean isProcessApprovalFields,
             @ApiParam("use created_by and modified_by from input instead of user session") @QueryParam("track-editors")
             @DefaultValue("false") boolean isTrackEditors,
-            @ApiParam("activity configuration") JsonBean newJson) {
+            @ApiParam("activity configuration") Map<String, Object> newJson) {
 
         ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
                 isTrackEditors);
@@ -330,7 +330,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
                 isTrackEditors);
 
-        return ActivityInterchangeUtils.importActivity(newJson, true, rules, uri.getBaseUri() + "activity");
+        return ActivityInterchangeUtils.importActivity(newJson.any(), true, rules, uri.getBaseUri() + "activity");
     }
 
     @GET

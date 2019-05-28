@@ -16,6 +16,7 @@ import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
@@ -60,10 +61,10 @@ public class ResourceImporter extends ObjectImporter {
      * @param newJson json description of the resource
      * @return errors if any
      */
-    public ResourceImporter createResource(JsonBean newJson) {
+    public ResourceImporter createResource(Map<String, Object> newJson) {
         return createResource(newJson, null);
     }
-    
+
     /**
      * Create a web link or document resource.
      *
@@ -71,10 +72,10 @@ public class ResourceImporter extends ObjectImporter {
      * @param formFile file for document resource, may be null for web link resources
      * @return ResourceImporter instance
      */
-    public ResourceImporter createResource(JsonBean newJson, FormFile formFile) {
+    public ResourceImporter createResource(Map<String, Object> newJson, FormFile formFile) {
         this.newJson = newJson;
 
-        String privateAttr = newJson.getString(ResourceEPConstants.PRIVATE);
+        String privateAttr = String.valueOf(newJson.get(ResourceEPConstants.PRIVATE));
 
         if (StringUtils.isBlank(privateAttr)) {
             addError(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.PRIVATE));
@@ -94,7 +95,7 @@ public class ResourceImporter extends ObjectImporter {
                 return this;
             }
 
-            String creatorEmail = newJson.getString(ResourceEPConstants.CREATOR_EMAIL);
+            String creatorEmail = String.valueOf(newJson.get(ResourceEPConstants.CREATOR_EMAIL));
             Long teamId = getLongOrNull(newJson.get(ResourceEPConstants.TEAM));
             AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(creatorEmail, teamId);
             teamMemberCreator = TeamMemberUtil.getTeamMember(teamMember.getAmpTeamMemId());
@@ -128,7 +129,7 @@ public class ResourceImporter extends ObjectImporter {
 
         try {
             resource = new AmpResource();
-            validateAndImport(resource, newJson.any());
+            validateAndImport(resource, newJson);
 
             if (errors.isEmpty()) {
                 if (ResourceType.LINK.equals(resource.getResourceType())) {
@@ -194,6 +195,7 @@ public class ResourceImporter extends ObjectImporter {
         return resource;
     }
 
+    @Override
     protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
         return extractTranslationsOrSimpleValue(apiField, parentObj, jsonValue);
     }
@@ -246,7 +248,7 @@ public class ResourceImporter extends ObjectImporter {
      * @param newJson
      * @return ApiErrorMessage
      */
-    private ApiErrorMessage validateCreatorEmailTeam(JsonBean newJson) {
+    private ApiErrorMessage validateCreatorEmailTeam(Map<String, Object> newJson) {
 
         Object creatorEmail = newJson.get(ResourceEPConstants.CREATOR_EMAIL);
         if (creatorEmail == null || StringUtils.isBlank(creatorEmail.toString())) {
@@ -283,7 +285,7 @@ public class ResourceImporter extends ObjectImporter {
 
         return null;
     }
-    
+
     /**
      * Get the result of import/update resource in JsonBean format
      *
@@ -308,7 +310,7 @@ public class ResourceImporter extends ObjectImporter {
                 result.set(ResourceEPConstants.DESCRIPTION, resource.getDescription());
                 result.set(ResourceEPConstants.NOTE, resource.getNote());
             }
-            
+
             if (resource.getType() != null) {
                 result.set(ResourceEPConstants.TYPE, resource.getType().getId());
             }
@@ -322,11 +324,11 @@ public class ResourceImporter extends ObjectImporter {
                     DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(resource.getAddingDate()));
             result.set(ResourceEPConstants.TEAM, resource.getTeam());
         }
-        
+
         if (!warnings.isEmpty()) {
             result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings.values()));
         }
-        
+
         return result;
     }
 

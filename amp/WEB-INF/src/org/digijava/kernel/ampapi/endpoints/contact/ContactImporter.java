@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.contact;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
@@ -28,15 +28,15 @@ public class ContactImporter extends ObjectImporter {
                 AmpFieldsEnumerator.getEnumerator().getContactFields());
     }
 
-    public ContactImporter createContact(JsonBean newJson) {
+    public ContactImporter createContact(Map<String, Object> newJson) {
         return importContact(null, newJson);
     }
 
-    public ContactImporter updateContact(Long contactId, JsonBean newJson) {
+    public ContactImporter updateContact(Long contactId, Map<String, Object> newJson) {
         return importContact(contactId, newJson);
     }
 
-    private ContactImporter importContact(Long contactId, JsonBean newJson) {
+    private ContactImporter importContact(Long contactId, Map<String, Object> newJson) {
         this.newJson = newJson;
 
         Object contactJsonId = newJson.get(ContactEPConstants.ID);
@@ -80,7 +80,7 @@ public class ContactImporter extends ObjectImporter {
                 }
             }
 
-            validateAndImport(contact, newJson.any());
+            validateAndImport(contact, newJson);
 
             if (errors.isEmpty()) {
                 setupBeforeSave(contact, createdBy);
@@ -116,7 +116,7 @@ public class ContactImporter extends ObjectImporter {
     public AmpContact getContact() {
         return contact;
     }
-    
+
     /**
      * Get the result of import/update contact in JsonBean format
      *
@@ -138,7 +138,7 @@ public class ContactImporter extends ObjectImporter {
         if (!warnings.isEmpty()) {
             result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings.values()));
         }
-        
+
         return result;
     }
 

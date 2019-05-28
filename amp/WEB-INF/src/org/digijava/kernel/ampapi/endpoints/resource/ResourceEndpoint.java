@@ -29,7 +29,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
@@ -51,9 +50,9 @@ import io.swagger.annotations.ApiParam;
 public class ResourceEndpoint implements ErrorReportingEndpoint {
 
     private static final Logger logger = LoggerFactory.getLogger(ResourceEndpoint.class);
-    
+
     private static ResourceService resourceService = new ResourceService();
-    
+
     @GET
     @Path("fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -154,7 +153,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                     + "}\n"
                     + "</pre>")
 
-    public JsonBean createResource(JsonBean resource) {
+    public JsonBean createResource(Map<String, Object> resource) {
         return new ResourceImporter().createResource(resource).getResult();
     }
 
@@ -173,7 +172,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                     + "}\n"
                     + "</pre>")
     public JsonBean createDocResource(
-            @FormDataParam("resource") JsonBean resource,
+            @FormDataParam("resource") Map<String, Object> resource,
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail) {
 

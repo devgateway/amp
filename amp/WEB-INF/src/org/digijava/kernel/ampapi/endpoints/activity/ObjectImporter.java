@@ -56,7 +56,7 @@ public class ObjectImporter {
     protected Map<Integer, ApiErrorMessage> warnings = new HashMap<>();
     protected ValueConverter valueConverter;
 
-    protected JsonBean newJson;
+    protected Map<String, Object> newJson;
     protected TranslationSettings trnSettings;
 
     private List<APIField> apiFields;
@@ -215,7 +215,7 @@ public class ObjectImporter {
             if (isValidFormat) {
                 businessRulesValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
             }
-            
+
             if (fieldDef.isImportable()) {
                 Object jsonValue = newJsonParent.get(fieldName);
                 Object newValue = getNewValue(fieldDef, newParent, jsonValue);
@@ -232,18 +232,18 @@ public class ObjectImporter {
         if (jsonValue != null && JsonBean.class.isAssignableFrom(jsonValue.getClass())) {
             jsonValue = ((JsonBean) jsonValue).get(ActivityEPConstants.INPUT);
         }
-        
+
         if (jsonValue == null && !isCollection) {
             return null;
         }
-        
+
         FieldType fieldType = apiField.getApiType().getFieldType();
         boolean idOnly = apiField.isIdOnly();
         // this field has possible values
         if (!isCollection && idOnly) {
             return valueConverter.getObjectById(apiField.getApiType().getType(), jsonValue);
         }
-        
+
         try {
             if (isCollection) {
                 Collection collection = (Collection) apiField.getFieldAccessor().get(parentObj);
@@ -267,10 +267,10 @@ public class ObjectImporter {
             logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
-        
+
         return null;
     }
-    
+
     protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
         return (String) jsonValue;
     }
@@ -307,14 +307,14 @@ public class ObjectImporter {
         if (isList || childrenFields.size() > 0) {
             Class<?> subElementClass = fieldDef.getApiType().getType();
             Object newFieldValue = fieldDef.getFieldAccessor().get(newParent);
-            
+
             if (newFieldValue == null) {
                 if (isList) {
                     newFieldValue = new ArrayList<>();
                 } else {
                     newFieldValue = valueConverter.getNewInstance(fieldDef.getApiType().getType());
                 }
-                
+
                 fieldDef.getFieldAccessor().set(newParent, newFieldValue);
             }
 
@@ -531,7 +531,7 @@ public class ObjectImporter {
     /**
      * @return the newJson
      */
-    public JsonBean getNewJson() {
+    public Map<String, Object> getNewJson() {
         return newJson;
     }
 
@@ -545,7 +545,7 @@ public class ObjectImporter {
     public Map<String, Object> getBranchJsonVisitor() {
         return branchJsonVisitor;
     }
-    
+
     public void addError(ApiErrorMessage error) {
         errors.put(error.id, error);
     }

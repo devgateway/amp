@@ -104,7 +104,7 @@ public class ActivityImporter extends ObjectImporter {
     private String endpointContextPath;
     // latest activity id in case there was attempt to update older version of an activity
     private Long latestActivityId;
-    
+
     private ResourceService resourceService = new ResourceService();
 
     public ActivityImporter(List<APIField> apiFields, ActivityImportRules rules) {
@@ -116,23 +116,22 @@ public class ActivityImporter extends ObjectImporter {
         this.saveContext = SaveContext.api(!rules.isProcessApprovalFields());
     }
 
-    private void init(JsonBean newJson, boolean update, String endpointContextPath) {
-        Map<String, Object> input = newJson.any();
+    private void init(Map<String, Object> newJson, boolean update, String endpointContextPath) {
         this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
         this.update = update;
         this.currentUser = TeamUtil.getCurrentUser();
         if (rules.isTrackEditors()) {
-            modifiedBy = TeamMemberUtil.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson.any()));
+            modifiedBy = TeamMemberUtil.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson));
         } else {
             modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
             Long mId = modifiedBy == null ? null : modifiedBy.getAmpTeamMemId();
-            newJson.set(FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY), mId);
-            input.remove(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY));
+            newJson.put(FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY), mId);
+            newJson.remove(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY));
         }
         if (!rules.isProcessApprovalFields()) {
-            input.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY));
-            input.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE));
-            input.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS));
+            newJson.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY));
+            newJson.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE));
+            newJson.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS));
         }
         this.newJson = newJson;
         this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH, null);
@@ -148,7 +147,7 @@ public class ActivityImporter extends ObjectImporter {
      * @param update  flags whether this is an import or an update request
      * @return ActivityImporter instance
      */
-    public ActivityImporter importOrUpdate(JsonBean newJson, boolean update, String endpointContextPath) {
+    public ActivityImporter importOrUpdate(Map<String, Object> newJson, boolean update, String endpointContextPath) {
         init(newJson, update, endpointContextPath);
 
         // retrieve fields definition for internal use
@@ -169,7 +168,7 @@ public class ActivityImporter extends ObjectImporter {
         }
 
         checkPermissions(update, ampActivityId, modifiedBy);
-        
+
         if (!errors.isEmpty()) {
             return this;
         }
@@ -192,7 +191,7 @@ public class ActivityImporter extends ObjectImporter {
 
         String activityId = ampActivityId == null ? null : ampActivityId.toString();
         String key = null;
-        
+
         Long currentVersion = null;
 
         try {
@@ -223,24 +222,22 @@ public class ActivityImporter extends ObjectImporter {
                 // TODO AMP-28993: remove explicitly resetting createdBy since it is cleared during init
                 if (!rules.isTrackEditors()) {
                     Long createdById = oldActivity.getActivityCreator().getAmpTeamMemId();
-                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY), createdById);
+                    newJson.put(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY), createdById);
                 }
                 // TODO AMP-28993: remove explicitly resetting approval fields since they are cleared during init
                 if (!rules.isProcessApprovalFields()) {
-                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY),
+                    newJson.put(FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY),
                             oldActivity.getApprovedBy() == null ? null : oldActivity.getApprovedBy().getAmpTeamMemId());
-                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE),
+                    newJson.put(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE),
                             DateTimeUtil.formatISO8601Timestamp(oldActivity.getApprovalDate()));
-                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS),
+                    newJson.put(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS),
                             oldActivity.getApprovalStatus().getId());
                 }
             } else if (!update) {
                 newActivity = new AmpActivityVersion();
             }
 
-            Map<String, Object> newJsonParent = newJson.any();
-
-            validateAndImport(newActivity, newJsonParent);
+            validateAndImport(newActivity, newJson);
             if (errors.isEmpty()) {
                 prepareToSave();
                 boolean draftChange = ActivityUtil.detectDraftChange(newActivity, oldActivityDraft);
@@ -525,7 +522,7 @@ public class ActivityImporter extends ObjectImporter {
         } else if (AmpClientModeHolder.isIatiImporterClient()) {
             return ChangeType.IATI_IMPORTER;
         }
-        
+
         return ChangeType.IMPORT;
     }
 
@@ -754,7 +751,7 @@ public class ActivityImporter extends ObjectImporter {
     public void downgradeToDraftSave() {
         this.downgradedToDraftSave = true;
     }
-    
+
     public ResourceService getResourceService() {
         return this.resourceService;
     }
@@ -765,7 +762,7 @@ public class ActivityImporter extends ObjectImporter {
     public void setLatestActivityId(Long latestActivityId) {
         this.latestActivityId = latestActivityId;
     }
-    
+
     /**
      * Get the result of import/update activity in JsonBean format
      *
@@ -795,7 +792,7 @@ public class ActivityImporter extends ObjectImporter {
         if (warnings.size() > 0) {
             result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings.values()));
         }
-        
+
         return result;
     }
 

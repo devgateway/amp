@@ -106,7 +106,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "createContact", ui = false)
     @ApiOperation("Create new contact")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "brief representation of contact"))
-    public JsonBean createContact(JsonBean contact) {
+    public JsonBean createContact(Map<String, Object> contact) {
         return new ContactImporter().createContact(contact).getResult();
     }
 
@@ -116,7 +116,8 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "updateContact", ui = false)
     @ApiOperation("Update an existing contact")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "brief representation of contact"))
-    public JsonBean updateContact(@ApiParam("id of the existing contact") @PathParam("id") Long id, JsonBean contact) {
+    public JsonBean updateContact(@ApiParam("id of the existing contact") @PathParam("id") Long id,
+            Map<String, Object> contact) {
         return new ContactImporter().updateContact(id, contact).getResult();
     }
 

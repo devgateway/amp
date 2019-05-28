@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,7 +20,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
@@ -64,10 +62,10 @@ public final class ActivityInterchangeUtils {
      *
      * @return latest project overview or an error if invalid configuration is received
      */
-    public static JsonBean importActivity(JsonBean newJson, boolean update, ActivityImportRules rules,
+    public static JsonBean importActivity(Map<String, Object> newJson, boolean update, ActivityImportRules rules,
             String endpointContextPath) {
         List<APIField> activityFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
-        
+
         return new ActivityImporter(activityFields, rules)
                 .importOrUpdate(newJson, update, endpointContextPath)
                 .getResult();
@@ -321,15 +319,16 @@ public final class ActivityInterchangeUtils {
      * @return null if the path abruptly stops before reaching the end, or the value itself,
      * if the end of the path is reached
      */
-    public static Object getFieldValuesFromJsonActivity(JsonBean activity, String path) {
+    public static Object getFieldValuesFromJsonActivity(Map<String, Object> activity, String path) {
         String fieldPath = path;
 
-        JsonBean currentBranch = activity;
+        Map<String, Object> currentBranch = activity;
         while (fieldPath.contains("~")) {
             String pathSegment = fieldPath.substring(0, fieldPath.indexOf('~'));
             Object obj = currentBranch.get(pathSegment);
-            if (obj != null && JsonBean.class.isAssignableFrom(obj.getClass())) {
-                currentBranch = (JsonBean) obj;
+            // TODO fix the access bug since 2.11 (we are lucky we need only 1st path so far, 2nd level can be a List)
+            if (obj != null && Map.class.isAssignableFrom(obj.getClass())) {
+                currentBranch = (Map) obj;
             } else {
                 return null;
             }

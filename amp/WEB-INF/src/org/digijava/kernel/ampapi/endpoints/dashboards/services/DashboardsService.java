@@ -328,6 +328,7 @@ public class DashboardsService {
 
     public static FundingTypeChartData getFundingTypeChartData(SettingsAndFiltersParameters filter) {
         ReportSpecificationImpl spec = getFundingTypeChartReportSpec(filter);
+        AmountsUnits unitsOption = spec.getSettings().getUnitsOption();
 
         GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
 
@@ -339,7 +340,8 @@ public class DashboardsService {
         FundingTypeChartData retlist = new FundingTypeChartData();
 
         retlist.setTotal(totals.extractValue());
-        retlist.setSumarizedTotal(calculateSumarizedTotals(totals.extractValue().doubleValue(), spec));
+        retlist.setSumarizedTotal(calculateSumarizedTotals(
+                totals.extractValue().doubleValue() / unitsOption.divider, spec));
 
         String currcode = null;
         currcode = spec.getSettings().getCurrencyCode();

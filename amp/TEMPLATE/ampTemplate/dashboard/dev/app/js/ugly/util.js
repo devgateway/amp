@@ -2,13 +2,15 @@
 
 var d3 = require('d3');
 
+$.getScript("/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
+
 
 var formatKMB = function(precision, decimalSeparator) {
   var app = window.app;
   var formatSI = d3.format('.' + (precision || 3) + 's');
   decimalSeparator = decimalSeparator || '.';
   return function(value) {
-    return formatSI(value)
+    var valueFormatted = formatSI(value)
       .replace('k', app.translator.translateSync('amp.dashboard:chart-thousand'))
       .replace('M', app.translator.translateSync('amp.dashboard:chart-million'))
       .replace('G', app.translator.translateSync('amp.dashboard:chart-billion'))  // now just need to convert G Gigia -> B Billion
@@ -16,6 +18,7 @@ var formatKMB = function(precision, decimalSeparator) {
       .replace('P', app.translator.translateSync('amp.dashboard:chart-peta'))
       .replace('E', app.translator.translateSync('amp.dashboard:chart-exa'))
       .replace('.', decimalSeparator);
+    return convertToEasternArabicNumerals(valueFormatted);
   };
 };
 
@@ -28,6 +31,15 @@ var translateLanguage = function(value) {
     .replace('T', app.translator.translateSync('amp.dashboard:chart-trillion'))
     .replace('P', app.translator.translateSync('amp.dashboard:chart-peta'))
     .replace('E', app.translator.translateSync('amp.dashboard:chart-exa'));
+};
+
+var convertToEasternArabicNumerals = function(value) {
+    var app = window.app;
+    var isRtl = app.generalSettings.attributes['rtl-direction'];
+    var language = app.generalSettings.attributes['language'];
+    var region = app.generalSettings.attributes['region'];
+
+    return TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, value);
 };
 
 var formatShortText = function(maxWidth) {
@@ -45,7 +57,7 @@ var formatOfTotal = function(dividend, divisor,ofTotal) {
     if (dividend > 0) {
         var number = d3.format('f')(dividend / divisor * 100);
         if (isRtl) {
-            ofTotal = ofTotal + ' &nbsp<span>' + '<b>% ' + number + '</b>';
+            ofTotal = '<span>' + ofTotal + '</span> &nbsp<span>' + '<b>% ' + convertToEasternArabicNumerals(number) + '</b></span>';
         } else {
             ofTotal = '<b>' + number + ' %' + '</b>&nbsp<span>' + ofTotal;
         }
@@ -188,5 +200,6 @@ module.exports = {
     transformArgs: transformArgs,
     data: data,
     calculateChartHeight: calculateChartHeight,
-    formatOfTotal: formatOfTotal
+    formatOfTotal: formatOfTotal,
+    convertToEasternArabicNumerals : convertToEasternArabicNumerals
 };

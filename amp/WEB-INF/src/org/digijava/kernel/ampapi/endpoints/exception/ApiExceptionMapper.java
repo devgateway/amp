@@ -13,7 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 
 /**
@@ -25,7 +25,7 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     private static final Logger logger = Logger.getLogger(ApiExceptionMapper.class);
     private static final int MAX_EXCEPTION_NESTED = 2;
     public static final ApiErrorMessage INTERNAL_ERROR = new ApiErrorMessage(ApiError.GENERIC_UNHANDLED_ERROR_CODE, 
-            ApiErrorResponse.INTERNAL_ERROR);
+            ApiErrorResponseService.INTERNAL_ERROR);
     
     @Context
     private HttpServletRequest httpRequest;
@@ -62,13 +62,14 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
         if (e instanceof ApiRuntimeException) {
             ApiRuntimeException apiException = (ApiRuntimeException) e;
 
-            return ApiErrorResponse.buildGenericError(apiException.getResponseStatus(), apiException.getError(),
+            return ApiErrorResponseService.buildGenericError(apiException.getResponseStatus(), apiException.getError(),
                     mediaType);
         }
 
         ApiErrorMessage apiErrorMessage = getApiErrorMessageFromException(e);
        
-        return ApiErrorResponse.buildGenericError(Response.Status.INTERNAL_SERVER_ERROR, apiErrorMessage, mediaType);
+        return ApiErrorResponseService.buildGenericError(
+                Response.Status.INTERNAL_SERVER_ERROR, apiErrorMessage, mediaType);
     }
     
     /**
@@ -84,7 +85,7 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     private String extractMessageFromException(Throwable e) {
         StringBuilder accumulatedMessage = new StringBuilder(e.getMessage() == null ? "" : e.getMessage());
         String message = extractMessageFromException(e, 0, accumulatedMessage);
-        message = StringUtils.isBlank(message) ? ApiErrorResponse.UNKNOWN_ERROR : message;
+        message = StringUtils.isBlank(message) ? ApiErrorResponseService.UNKNOWN_ERROR : message;
         
         return message;
     }

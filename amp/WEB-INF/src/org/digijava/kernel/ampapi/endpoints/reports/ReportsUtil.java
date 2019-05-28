@@ -55,6 +55,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.publicportal.PublicReportFormParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.QueryModel;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.QuerySettings;
@@ -64,7 +65,6 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.ampapi.endpoints.util.ReportConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -638,8 +638,7 @@ public class ReportsUtil {
      * @param formParams input parameters used 
      * @return JsonBean with errors or null if no error
      */
-    public static final JsonBean validateReportConfig(ReportFormParameters formParams,
-            boolean isCustom) {
+    public static final ApiErrorResponse validateReportConfig(ReportFormParameters formParams, boolean isCustom) {
         List<ApiErrorMessage> errors = new ArrayList<ApiErrorMessage>();
         // validate the name
         if (isCustom && StringUtils.isBlank(formParams.getReportName())) {
@@ -676,7 +675,7 @@ public class ReportsUtil {
         }
     }
 
-    public static JsonBean validateReportConfig(PublicReportFormParameters formParams) {
+    public static ApiErrorResponse validateReportConfig(PublicReportFormParameters formParams) {
         List<ApiErrorMessage> errors = new ArrayList<ApiErrorMessage>();
 
         // validate the project types

@@ -290,11 +290,11 @@ public class ResourceImporter extends ObjectImporter {
      * @return JsonBean the result of the import or update action
      */
     public JsonBean getResult() {
-        JsonBean result;
+        JsonBean result = new JsonBean();
         if (errors.size() == 0 && resource == null) {
-            result = ApiError.toError(ApiError.UNKOWN_ERROR);
+            result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
         } else if (errors.size() > 0) {
-            result = ApiError.toError(errors.values());
+            result.set(EPConstants.ERROR, ApiError.toError(errors.values()).getErrors());
             result.set(ResourceEPConstants.RESOURCE, getNewJson());
         } else {
             result = new JsonBean();

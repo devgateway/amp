@@ -16,8 +16,10 @@ import com.google.common.cache.CacheBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -51,7 +53,7 @@ public class ResourceService {
         Node readNode = DocumentManagerUtil.getReadNode(uuid, TLSUtils.getRequest());
 
         if (readNode == null) {
-            ApiErrorResponse.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_FOUND);
+            ApiErrorResponseService.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_FOUND);
         }
 
         NodeWrapper nodeWrapper = new NodeWrapper(readNode);
@@ -92,7 +94,9 @@ public class ResourceService {
                 resource.setTeam(Long.valueOf(folderNode.getName()));
             }
         } catch (RepositoryException e) {
-            return ApiError.toError(ResourceErrors.RESOURCE_ERROR, e);
+            JsonBean result = new JsonBean();
+            result.set(EPConstants.ERROR, ApiError.toError(ResourceErrors.RESOURCE_ERROR, e).getErrors());
+            return result;
         }
 
         DocumentManagerUtil.logoutJcrSessions(TLSUtils.getRequest());

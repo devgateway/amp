@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -14,8 +13,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -41,11 +39,12 @@ public final class ContactUtil {
             List<Long> currentIds = ids.subList(fromIndex, end);
             List<AmpContact> contacts = ContactInfoUtil.getContacts(currentIds);
             contacts.forEach(contact -> {
-                JsonBean result;
+                JsonBean result = new JsonBean();
                 try {
                     result = exporter.export(contact);
                 } catch (Exception e) {
-                    result = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage()));
+                    result.set(EPConstants.ERROR, ApiError.toError(
+                            ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage())).getErrors());
                     result.set(ContactEPConstants.ID, contact.getId());
                 } finally {
                     PersistenceManager.getSession().evict(contact);
@@ -63,7 +62,7 @@ public final class ContactUtil {
         AmpContact contact = (AmpContact) PersistenceManager.getSession().get(AmpContact.class, id);
 
         if (contact == null) {
-            ApiErrorResponse.reportResourceNotFound(ContactErrors.CONTACT_NOT_FOUND);
+            ApiErrorResponseService.reportResourceNotFound(ContactErrors.CONTACT_NOT_FOUND);
         }
 
         return new ContactExporter().export(contact);

@@ -775,12 +775,12 @@ public class ActivityImporter extends ObjectImporter {
      * @return JsonBean the result of the import or update action
      */
     public JsonBean getResult() {
-        JsonBean result = null;
+        JsonBean result = new JsonBean();
         if (errors.size() == 0 && newActivity == null) {
             // no new activity, but also errors are missing -> unknown error
-            result = ApiError.toError(ApiError.UNKOWN_ERROR);
+            result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
         } else if (errors.size() > 0) {
-            result = ApiError.toError(errors.values());
+            result.set(EPConstants.ERROR, ApiError.toError(errors.values()).getErrors());
             result.set(ActivityEPConstants.ACTIVITY, newJson);
         } else {
             List<JsonBean> activities = null;
@@ -789,7 +789,7 @@ public class ActivityImporter extends ObjectImporter {
                 activities = Arrays.asList(ProjectList.getActivityInProjectListFormat(newActivity, true, true));
             }
             if (activities == null || activities.size() == 0) {
-                result = ApiError.toError(ApiError.UNKOWN_ERROR);
+                result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
                 result.set(ActivityEPConstants.ACTIVITY, newJson);
             } else {
                 result = activities.get(0);

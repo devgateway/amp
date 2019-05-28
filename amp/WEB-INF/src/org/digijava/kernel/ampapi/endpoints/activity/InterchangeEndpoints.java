@@ -31,6 +31,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewWorkspace;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -274,7 +275,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         @ApiResponse(code = HttpServletResponse.SC_OK, message = "the latest project short overview"),
         @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
         message = "error if invalid configuration is received")})
-    public JsonBean addProject(
+    public JsonApiResponse addProject(
             @ApiParam("can downgrade to draft") @QueryParam("can-downgrade-to-draft") @DefaultValue("false")
             boolean canDowngradeToDraft,
             @ApiParam("process approval fields") @QueryParam("process-approval-fields") @DefaultValue("false")
@@ -306,7 +307,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         @ApiResponse(code = HttpServletResponse.SC_OK, message = "latest project overview"),
         @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
         message = "error if invalid configuration is received")})
-    public JsonBean updateProject(
+    public JsonApiResponse updateProject(
             @ApiParam("the id of the activity which should be updated") @PathParam("projectId") Long projectId,
             @ApiParam("can downgrade to draft") @QueryParam("can-downgrade-to-draft") @DefaultValue("false")
             boolean canDowngradeToDraft,

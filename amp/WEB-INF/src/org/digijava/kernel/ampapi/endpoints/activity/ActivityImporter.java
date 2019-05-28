@@ -31,15 +31,14 @@ import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.ActivityErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.common.CommonErrors;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceService;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -767,33 +766,21 @@ public class ActivityImporter extends ObjectImporter {
      *
      * @return JsonBean the result of the import or update action
      */
-    public JsonBean getResult() {
-        JsonBean result = new JsonBean();
-        if (errors.size() == 0 && newActivity == null) {
-            // no new activity, but also errors are missing -> unknown error
-            result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
-        } else if (errors.size() > 0) {
-            result.set(EPConstants.ERROR, ApiError.toError(errors.values()).getErrors());
-            result.set(ActivityEPConstants.ACTIVITY, newJson);
-        } else {
-            Map<String, Object> activity = null;
-            if (newActivity != null && newActivity.getAmpActivityId() != null) {
-                // editable, viewable, since was just created/updated
-                activity = ProjectList.getActivityInProjectListFormat(newActivity, true, true);
-            }
-            if (activity == null) {
-                result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
-                result.set(ActivityEPConstants.ACTIVITY, newJson);
-            } else {
-                result = new JsonBean();
-                result.any().putAll(activity);
+    public JsonApiResponse getResult() {
+        Map<String, Object> details = null;
+        if (errors.isEmpty() && newActivity != null && newActivity.getAmpActivityId() != null) {
+            // editable, viewable, since was just created/updated
+            details = ProjectList.getActivityInProjectListFormat(newActivity, true, true);
+        }
+        if (details == null) {
+            details = new HashMap<String, Object>() {{
+                put(ActivityEPConstants.ACTIVITY, newJson);
+            }};
+            if (errors.isEmpty()) {
+                addError(CommonErrors.UNKOWN_ERROR);
             }
         }
-        if (warnings.size() > 0) {
-            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings.values()));
-        }
-
-        return result;
+        return buildResponse(details);
     }
 
 }

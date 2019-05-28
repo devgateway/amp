@@ -33,9 +33,11 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.DefaultErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.common.values.BadInput;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.dbentity.AmpAgreement;
@@ -552,6 +554,13 @@ public class ObjectImporter {
 
     public Collection<ApiErrorMessage> getWarnings() {
         return warnings.values();
+    }
+
+    protected JsonApiResponse buildResponse(Map<String, Object> details) {
+        return new JsonApiResponse(
+                ApiError.formatNoWrap(errors.values()),
+                ApiError.formatNoWrap(warnings.values()),
+                details);
     }
 
 }

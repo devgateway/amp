@@ -19,6 +19,7 @@ import org.dgfoundation.amp.Util;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
@@ -62,7 +63,7 @@ public final class ActivityInterchangeUtils {
      *
      * @return latest project overview or an error if invalid configuration is received
      */
-    public static JsonBean importActivity(Map<String, Object> newJson, boolean update, ActivityImportRules rules,
+    public static JsonApiResponse importActivity(Map<String, Object> newJson, boolean update, ActivityImportRules rules,
             String endpointContextPath) {
         List<APIField> activityFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
 

@@ -56,6 +56,11 @@ public class ConstraintDescriptor {
         return arguments;
     }
 
+    /**
+     * Validation groups for which this constraint applies to. If empty then constraint applies to the default group.
+     *
+     * @return validation groups
+     */
     public Set<Class<?>> getGroups() {
         return groups;
     }

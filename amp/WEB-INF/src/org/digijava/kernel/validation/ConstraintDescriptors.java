@@ -19,6 +19,12 @@ public class ConstraintDescriptors {
         this.descriptors = descriptors;
     }
 
+    /**
+     * Returns constraint descriptors matching provided validation groups.
+     *
+     * @param groups validation groups, empty set represents the default group
+     * @return constraint descriptors matching the provided groups
+     */
     public List<ConstraintDescriptor> getDescriptorsFor(Set<Class<?>> groups) {
         ArrayList<ConstraintDescriptor> result = new ArrayList<>();
         for (ConstraintDescriptor descriptor : descriptors) {

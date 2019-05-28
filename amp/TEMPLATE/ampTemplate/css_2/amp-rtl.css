@@ -947,7 +947,7 @@ td.inside ul {
     direction: rtl !important;
 }
 .nv-pieLabels .nv-label text{
-    direction: rtl !important;
+    direction: ltr !important;
 }
 
 .tick text {

@@ -27,18 +27,21 @@ module.exports = Backbone.View.extend({
   },
   prepareDateFilters: function(filters){
 	  var dates = [];
-	  if(filters && filters.date){
+	  if(filters && filters.date) {
+          var isRtl =  app.data.generalSettings.get("rtl-direction");
+          var language = app.data.generalSettings.get("language");
+          var region =  app.data.generalSettings.get("region");
 		  filters.date.start = filters.date.start || "";
 		  filters.date.end = filters.date.end || "";		  
 		  if(filters.date.start.length > 0){
 			  var startDatePrefix = (filters.date.end.length === 0) ? this.app.translator.translateSync("amp.gis:date-from", "From ")  : "";
 			  filters.date.start =  startDatePrefix  + " " + this.app.data.filter.formatDate(filters.date.start);
-			  dates.push(filters.date.start);  
+			  dates.push(TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, filters.date.start));
 		  }
 		  if(filters.date.end.length > 0){
 			  var endDatePrefix = (filters.date.start.length === 0) ? this.app.translator.translateSync("amp.gis:date-until", "Until ")  : "";			  
 			  filters.date.end =  endDatePrefix + " " + this.app.data.filter.formatDate(filters.date.end);			  
-			  dates.push(filters.date.end);
+			  dates.push(TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, filters.date.end));
 		  }
 	  }
 	  return dates	 

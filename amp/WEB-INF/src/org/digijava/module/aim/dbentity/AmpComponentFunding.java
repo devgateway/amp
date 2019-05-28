@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
@@ -51,7 +52,8 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     private Double transactionAmount;
 
     @Interchangeable(fieldTitle = COMPONENT_ORGANIZATION, importable = true, pickIdOnly = true,
-            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_ORGANIZATION)
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_ORGANIZATION,
+            dependencies = {ComponentFundingOrgRoleValidator.ORGANIZATION_PRESENT_KEY})
     private AmpOrganisation reportingOrganization;
 
     //@Interchangeable(fieldTitle = COMPONENT_SECOND_REPORTING_ORGANIZATION, importable = true, pickIdOnly = true)

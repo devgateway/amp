@@ -28,6 +28,8 @@ public class ComponentFundingOrgRoleValidator implements ConstraintValidator {
 
     public static final String ATTR_ORG_ID = "orgId";
 
+    public static final String ORGANIZATION_PRESENT_KEY = "organization_present";
+
     private static final String COMPONENT_ORGANIZATION_FIELD_NAME =
             FieldMap.underscorify(ActivityFieldsConstants.COMPONENT_ORGANIZATION);
 

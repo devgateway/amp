@@ -1,13 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.contact;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.common.CommonErrors;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -122,24 +122,19 @@ public class ContactImporter extends ObjectImporter {
      *
      * @return JsonBean the result of the import or update action
      */
-    public JsonBean getResult() {
-        JsonBean result = new JsonBean();
-        if (errors.size() == 0 && contact == null) {
-            result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
-        } else if (errors.size() > 0) {
-            result.set(EPConstants.ERROR, ApiError.toError(errors.values()).getErrors());
-            result.set(ContactEPConstants.CONTACT, newJson);
+    public JsonApiResponse getResult() {
+        Map<String, Object> details = new LinkedHashMap<>();
+        if (errors.size() == 0 && contact != null) {
+            details.put(ContactEPConstants.ID, contact.getId());
+            details.put(ContactEPConstants.NAME, contact.getName());
+            details.put(ContactEPConstants.LAST_NAME, contact.getLastname());
         } else {
-            result = new JsonBean();
-            result.set(ContactEPConstants.ID, contact.getId());
-            result.set(ContactEPConstants.NAME, contact.getName());
-            result.set(ContactEPConstants.LAST_NAME, contact.getLastname());
+            details.put(ContactEPConstants.CONTACT, newJson);
+            if (errors.isEmpty()) {
+                addError(CommonErrors.UNKOWN_ERROR);
+            }
         }
-        if (!warnings.isEmpty()) {
-            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings.values()));
-        }
-
-        return result;
+        return buildResponse(details);
     }
 
 }

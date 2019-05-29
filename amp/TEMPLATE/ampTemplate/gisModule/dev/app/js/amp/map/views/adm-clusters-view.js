@@ -160,8 +160,13 @@ module.exports = Backbone.View.extend({
       layer._clusterId = feature.properties.admName;
       feature.properties.admLevel = admLayer.get('title');
       // temp. will be template.
+      var isRtl = app.data.generalSettings.get('rtl-direction');
+      var language = app.data.generalSettings.get('language');
+      var region = app.data.generalSettings.get('region');
+      var activitiesLength = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + activities.length);
+
       layer.bindPopup(feature.properties.admName +
-        ' has ' +  activities.length +
+        ' has ' +  activitiesLength +
         ' projects. <br><img src="img/loading-icon.gif" />',
         {maxWidth: 500, offset: new L.Point(0, -16)}
         );

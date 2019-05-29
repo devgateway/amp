@@ -59,6 +59,14 @@ TranslationManager.convertNumbersToEasternArabic = function(input) {
     }).replace(/,/g, '،');
 }
 
+TranslationManager.convertNumbersToEasternArabicIfNeeded = function(isRtl, language, region, input) {
+    if (isRtl && language === "ar" && region === "EG") {
+        return TranslationManager.convertNumbersToEasternArabic(input);
+    }
+
+    return input;
+}
+
 
 TranslationManager.getAvailableLanguages = function () {
 	var deferred = $.Deferred();

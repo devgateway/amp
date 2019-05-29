@@ -26,6 +26,26 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
         return direction;
 	}
 
+	function getCurrentLanguage() {
+		return app.TabsApp.generalSettings.get("language");
+	}
+
+    function getCurrentRegion() {
+        return app.TabsApp.generalSettings.get("region");
+    }
+
+    function convertNumbersToEasternArabic(input) {
+        if (getCurrentLanguage() === "ar" && getCurrentRegion() === 'EG') {
+        	if (isNaN(input)) {
+                return TranslationManager.convertNumbersToEasternArabic(input)
+			}
+
+            return TranslationManager.convertNumbersToEasternArabic(input.toString())
+        }
+
+        return input;
+    }
+
 	function getURL(id) {
 		return '/rest/data/report/' + id + '/result/jqGrid';
 	}
@@ -158,10 +178,10 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 						forceFit : false,
 						viewrecords : true,
 						loadtext : "<span data-i18n='tabs.common:loading'>Loading...</span>",
-                        recordtext: "<div class='tabs-grid-pager-info'><span data-i18n='tabs.common:view'>View</span></div> {0} - {1}" +
-						" <div class='tabs-grid-pager-info'><span data-i18n='tabs.common:of'>of</span></div> {2}",
+                        recordtext: "<div class='tabs-grid-pager-info'><span data-i18n='tabs.common:view'>View</span></div><span class='number-to-convert'> {0} - {1} </span>" +
+						" <div class='tabs-grid-pager-info'><span data-i18n='tabs.common:of'>of</span></div><span class='number-to-convert'> {2} </span>",
                         pgtext : "<div class='tabs-grid-pager-info'><span" +
-						" data-i18n='tabs.common:page'>Page</span></div> {0} <div class='tabs-grid-pager-info'><span data-i18n='tabs.common:of'>of</span></div> {1}",
+						" data-i18n='tabs.common:page'>Page</span></div> {0} <div class='tabs-grid-pager-info'><span data-i18n='tabs.common:of'>of</span></div><span class='number-to-convert'> {1}</span>",
 						headertitles : true,
 						gridview : true,
 						rownumbers : false,
@@ -426,15 +446,27 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										jQuery(auxTD).html("<span><b>" + content + "</b></span>");
 										jQuery(item).append(auxTD);
 
+										var currentActCount = partialTotals[i].currentActivitiesCount;
+										var totalActCount = partialTotals[i].totalActivitiesCount;
+										if (getDirection() === "rtl") {
+                                            currentActCount = convertNumbersToEasternArabic(partialTotals[i].totalActivitiesCount);
+											totalActCount = convertNumbersToEasternArabic(partialTotals[i].currentActivitiesCount);
+										}
+
 										var firstColumnHtml = jQuery(item.firstChild).html();
-										firstColumnHtml = firstColumnHtml.replace("@@currentActivitiesCount@@",
-												partialTotals[i].currentActivitiesCount);
-										firstColumnHtml = firstColumnHtml.replace("@@totalActivitiesCount@@",
-												partialTotals[i].totalActivitiesCount);
+
+										firstColumnHtml = firstColumnHtml.replace("@@currentActivitiesCount@@", currentActCount);
+										firstColumnHtml = firstColumnHtml.replace("@@totalActivitiesCount@@", totalActCount);
 										jQuery(item.firstChild).html(firstColumnHtml);
 									});
 								});
 							}
+                            if (getDirection() === "rtl") {
+                                $('.ui-pg-input')[0].value = convertNumbersToEasternArabic($('.ui-pg-input')[0].value);
+                                $('.number-to-convert').each(function() {
+                                	this.innerText = convertNumbersToEasternArabic(this.innerText);
+                                });
+                            }
 						}
 					});
 			app.TabsApp.currentGrid = jQuery(grid);

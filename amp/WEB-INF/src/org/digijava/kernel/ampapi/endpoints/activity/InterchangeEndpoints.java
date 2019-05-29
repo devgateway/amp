@@ -172,7 +172,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                             + "returned.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
     message = "list of JsonBean with all the projects on the system"))
-    public Collection<JsonBean> getProjects(
+    public Collection<Map<String, Object>> getProjects(
             @ApiParam("Current pagination request reference (random id). It acts as a key for a LRU caching "
                     + "mechanism that holds the full list of projects for the current user. If it is not "
                     + "provided no caching is used")
@@ -181,7 +181,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             @ApiParam("Number of projects to skip") @QueryParam("offset") Integer offset,
             @ApiParam("Number of projects to return") @QueryParam("count") Integer count) {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-        Collection<JsonBean> activityCollection = ProjectList.getActivityList(pid, tm);
+        Collection<Map<String, Object>> activityCollection = ProjectList.getActivityList(pid, tm);
         int start = 0;
         int end = activityCollection.size() - 1;
         if (offset != null && count != null && offset < activityCollection.size()) {

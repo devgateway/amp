@@ -16,11 +16,9 @@ import com.google.common.cache.CacheBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -47,7 +45,7 @@ public class ResourceService {
 
     public static final String PRIVATE_PATH_ITEM = "private";
 
-    public JsonBean getResource(String uuid) {
+    public JsonApiResponse getResource(String uuid) {
 
         AmpResource resource = new AmpResource();
         Node readNode = DocumentManagerUtil.getReadNode(uuid, TLSUtils.getRequest());
@@ -94,14 +92,12 @@ public class ResourceService {
                 resource.setTeam(Long.valueOf(folderNode.getName()));
             }
         } catch (RepositoryException e) {
-            JsonBean result = new JsonBean();
-            result.set(EPConstants.ERROR, ApiError.toError(ResourceErrors.RESOURCE_ERROR, e).getErrors());
-            return result;
+            return new JsonApiResponse(ApiError.toError(ResourceErrors.RESOURCE_ERROR, e));
         }
 
         DocumentManagerUtil.logoutJcrSessions(TLSUtils.getRequest());
 
-        return new ResourceExporter().export(resource);
+        return new JsonApiResponse(null, null, new ResourceExporter().export(resource));
     }
 
     private boolean isPrivate(NodeWrapper nodeWrapper) throws RepositoryException {
@@ -113,8 +109,8 @@ public class ResourceService {
      *
      * @return
      */
-    public List<JsonBean> getAllResources() {
-        List<JsonBean> resources = new ArrayList<>();
+    public List<JsonApiResponse> getAllResources() {
+        List<JsonApiResponse> resources = new ArrayList<>();
         List<String> resourceUuids = getAllNodeUuids();
 
         for (String uuid : resourceUuids) {
@@ -130,8 +126,8 @@ public class ResourceService {
      * @param uuids the list of uuids
      * @return
      */
-    public List<JsonBean> getAllResources(List<String> uuids) {
-        List<JsonBean> resources = new ArrayList<>();
+    public List<JsonApiResponse> getAllResources(List<String> uuids) {
+        List<JsonApiResponse> resources = new ArrayList<>();
 
         for (String uuid : uuids) {
             resources.add(getResource(uuid));

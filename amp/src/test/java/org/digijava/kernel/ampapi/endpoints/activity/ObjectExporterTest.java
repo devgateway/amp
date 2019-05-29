@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
+
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
@@ -185,7 +186,7 @@ public class ObjectExporterTest {
         Dummy dummy = new Dummy();
         dummy.simpleValue = 123;
 
-        Map<String, Object> jsonObj = exporter.export(dummy).any();
+        Map<String, Object> jsonObj = exporter.export(dummy);
 
         assertThat(jsonObj, hasEntry("simple_value", 123));
     }
@@ -198,7 +199,7 @@ public class ObjectExporterTest {
         Dummy dummy = new Dummy();
         dummy.dummyRef = otherDummy;
 
-        Map<String, Object> jsonObj = exporter.export(dummy).any();
+        Map<String, Object> jsonObj = exporter.export(dummy);
 
         assertThat(jsonObj, hasEntry("dummy_ref", 512L));
     }
@@ -208,7 +209,7 @@ public class ObjectExporterTest {
         Dummy dummy = new Dummy();
         dummy.approvalStatus = ApprovalStatus.STARTED;
 
-        Map<String, Object> jsonObj = exporter.export(dummy).any();
+        Map<String, Object> jsonObj = exporter.export(dummy);
 
         assertThat(jsonObj, hasEntry("approval_status", ApprovalStatus.STARTED.getId()));
     }
@@ -219,7 +220,7 @@ public class ObjectExporterTest {
         Dummy dummy = new Dummy();
         dummy.listOfIntegers = ImmutableList.of(1, 4, 8);
 
-        Map<String, Object> jsonObj = exporter.export(dummy).any();
+        Map<String, Object> jsonObj = exporter.export(dummy);
 
         assertThat(jsonObj, (Matcher) hasEntry(
                 equalTo("list_of_integers"),
@@ -234,7 +235,7 @@ public class ObjectExporterTest {
         Dummy dummy = new Dummy();
         dummy.simpleValueWithPV = 1L;
 
-        Map<String, Object> jsonObj = exporter.export(dummy).any();
+        Map<String, Object> jsonObj = exporter.export(dummy);
 
         assertThat(jsonObj, hasEntry("simple_value_with_pv", 1L));
     }
@@ -248,7 +249,7 @@ public class ObjectExporterTest {
         Dummy dummy = new Dummy();
         dummy.activityGroup = group;
 
-        Map<String, Object> jsonObj = exporter.export(dummy).any();
+        Map<String, Object> jsonObj = exporter.export(dummy);
 
         assertThat(jsonObj, (Matcher) hasEntry(
                 equalTo("activity_group"),
@@ -262,7 +263,7 @@ public class ObjectExporterTest {
                 new DummyCategory(1L, "A"),
                 new DummyCategory(2L, "B"));
 
-        Map<String, Object> jsonObj = exporter.export(dummy).any();
+        Map<String, Object> jsonObj = exporter.export(dummy);
 
         assertThat(jsonObj,
                 allOf(
@@ -288,7 +289,7 @@ public class ObjectExporterTest {
                 new DummySub("A", "First Sub"),
                 new DummySub("B", "Second Sub"));
 
-        Map<String, Object> jsonObj = exporter.export(dummy).any();
+        Map<String, Object> jsonObj = exporter.export(dummy);
 
         assertThat(jsonObj, (Matcher) hasEntry(equalTo("sub_a"), hasEntry("sub_name", "First Sub")));
         assertThat(jsonObj, (Matcher) hasEntry(equalTo("sub_b"), contains(hasEntry("sub_name", "Second Sub"))));
@@ -302,7 +303,7 @@ public class ObjectExporterTest {
                 new DummySub("A", "Second Sub"),
                 new DummySub("B", "Third Sub"));
 
-        exporter.export(dummy).any();
+        exporter.export(dummy);
     }
 
     @Test
@@ -312,7 +313,7 @@ public class ObjectExporterTest {
 
         String formattedDate = DateTimeUtil.formatISO8601Date(dummy.dateValue);
 
-        Map<String, Object> jsonObj = exporter.export(dummy).any();
+        Map<String, Object> jsonObj = exporter.export(dummy);
 
         assertThat(jsonObj, hasEntry("date_value", formattedDate));
     }
@@ -322,7 +323,7 @@ public class ObjectExporterTest {
         Dummy dummy = new Dummy();
         dummy.translated = "yes";
 
-        Map<String, Object> jsonObj = exporter.export(dummy).any();
+        Map<String, Object> jsonObj = exporter.export(dummy);
 
         assertThat(jsonObj, hasEntry("translated", "trn yes"));
     }

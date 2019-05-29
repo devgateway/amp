@@ -18,6 +18,10 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class JsonApiResponse extends ApiErrorResponse {
 
+    public JsonApiResponse(ApiErrorResponse apiErrorResponse) {
+        this(apiErrorResponse.getErrors(), null, null);
+    }
+
     public JsonApiResponse(Map<String, Collection<Object>> errors, Map<String, Collection<Object>> warnings,
             Map<String, Object> details) {
         super(errors);

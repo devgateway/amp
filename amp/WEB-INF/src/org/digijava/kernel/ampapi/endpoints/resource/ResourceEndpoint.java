@@ -28,6 +28,7 @@ import org.apache.commons.io.FileUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
@@ -118,7 +119,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                     + "    \"team_member\": 14\n"
                     + " }\n"
                     + " </pre>")
-    public JsonBean getResource(@PathParam("uuid") String uuid) {
+    public JsonApiResponse getResource(@PathParam("uuid") String uuid) {
         return resourceService.getResource(uuid);
     }
 
@@ -126,7 +127,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getAllResources", ui = false)
     @ApiOperation("Retrieve all resources from AMP.")
-    public List<JsonBean> getAllResources() {
+    public List<JsonApiResponse> getAllResources() {
         return resourceService.getAllResources();
     }
 
@@ -134,7 +135,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getAllResourcesByIds", ui = false)
     @ApiOperation("Retrieve resources from AMP.")
-    public List<JsonBean> getAllResources(List<String> uuids) {
+    public List<JsonApiResponse> getAllResources(List<String> uuids) {
         return resourceService.getAllResources(uuids);
     }
 

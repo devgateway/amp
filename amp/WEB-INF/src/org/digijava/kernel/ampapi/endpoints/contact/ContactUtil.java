@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.contact;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -15,7 +16,6 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.util.ContactInfoUtil;
@@ -28,8 +28,8 @@ public final class ContactUtil {
     private ContactUtil() {
     }
 
-    public static Collection<JsonBean> getContacts(List<Long> ids) {
-        Map<Long, JsonBean> jsonContacts = new TreeMap<>();
+    public static Collection<Map<String, Object>> getContacts(List<Long> ids) {
+        Map<Long, Map<String, Object>> jsonContacts = new TreeMap<>();
         ids = new ArrayList<>(new TreeSet<>(ids));
         ContactExporter exporter = new ContactExporter();
 
@@ -39,13 +39,13 @@ public final class ContactUtil {
             List<Long> currentIds = ids.subList(fromIndex, end);
             List<AmpContact> contacts = ContactInfoUtil.getContacts(currentIds);
             contacts.forEach(contact -> {
-                JsonBean result = new JsonBean();
+                Map<String, Object> result = new LinkedHashMap<>();
                 try {
                     result = exporter.export(contact);
                 } catch (Exception e) {
-                    result.set(EPConstants.ERROR, ApiError.toError(
+                    result.put(EPConstants.ERROR, ApiError.toError(
                             ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage())).getErrors());
-                    result.set(ContactEPConstants.ID, contact.getId());
+                    result.put(ContactEPConstants.ID, contact.getId());
                 } finally {
                     PersistenceManager.getSession().evict(contact);
                 }
@@ -58,7 +58,7 @@ public final class ContactUtil {
         return jsonContacts.values();
     }
 
-    public static JsonBean getContact(Long id) {
+    public static Map<String, Object> getContact(Long id) {
         AmpContact contact = (AmpContact) PersistenceManager.getSession().get(AmpContact.class, id);
 
         if (contact == null) {

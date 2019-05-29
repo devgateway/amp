@@ -762,9 +762,9 @@ public class ActivityImporter extends ObjectImporter {
     }
 
     /**
-     * Get the result of import/update activity in JsonBean format
+     * Get the result of import/update activity
      *
-     * @return JsonBean the result of the import or update action
+     * @return JsonApiResponse the result of the import or update action
      */
     public JsonApiResponse getResult() {
         Map<String, Object> details = null;

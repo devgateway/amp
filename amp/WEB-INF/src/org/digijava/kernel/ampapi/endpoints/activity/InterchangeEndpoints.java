@@ -200,7 +200,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiOperation("Provides full project information")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
     message = "project with full set of configured fields and their values"))
-    public JsonBean getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
+    public Map<String, Object> getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
         return ActivityInterchangeUtils.getActivity(projectId);
     }
 
@@ -211,9 +211,9 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiOperation("Provides full project information")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
     message = "project with full set of configured fields and their values"))
-    public JsonBean getProject(
+    public Map<String, Object> getProject(
             @ApiParam("project id") @PathParam("projectId") Long projectId,
-            @ApiParam("jsonBean with a list of fields that will be displayed") JsonBean filter) {
+            @ApiParam("jsonBean with a list of fields that will be displayed") Map<String, Object> filter) {
         return ActivityInterchangeUtils.getActivity(projectId, filter);
     }
 
@@ -234,7 +234,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiOperation("Retrieve project by AMP Id.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
     message = "project with full set of configured fields and their values"))
-    public JsonBean getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
+    public Map<String, Object> getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
         return ActivityInterchangeUtils.getActivityByAmpId(ampId);
     }
 
@@ -257,7 +257,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                             )
             })
             ))
-    public Collection<JsonBean> getProjectsByAmpIds(@ApiParam(value = "List of amp-id", required = true)
+    public Collection<Map<String, Object>> getProjectsByAmpIds(@ApiParam(value = "List of amp-id", required = true)
     List<String> ampIds) {
         return ActivityInterchangeUtils.getActivitiesByAmpIds(ampIds);
     }

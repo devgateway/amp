@@ -25,7 +25,6 @@ import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 
 import io.swagger.annotations.Api;
@@ -89,7 +88,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
     @ApiOperation("Retrieve contact")
-    public JsonBean getContact(@ApiParam("contact id") @PathParam("id") Long id) {
+    public Map<String, Object> getContact(@ApiParam("contact id") @PathParam("id") Long id) {
         return ContactUtil.getContact(id);
     }
 
@@ -98,7 +97,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
     @ApiOperation("Retrieve contacts")
-    public Collection<JsonBean> getContact(List<Long> ids) {
+    public Collection<Map<String, Object>> getContact(List<Long> ids) {
         return ContactUtil.getContacts(ids);
     }
 

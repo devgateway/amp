@@ -40,8 +40,11 @@ import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.helper.EasternArabicService;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -215,13 +218,21 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                 PropertyModel<Date> dateModel = new PropertyModel<Date>(item.getModel(), "date.time");
                 String pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
                 pattern = pattern.replace('m', 'M');
-                SimpleDateFormat formater = new SimpleDateFormat(pattern);
+                SimpleDateFormat formater = new SimpleDateFormat(pattern, TLSUtils.getCurrentSystemLocale());
                 String formatedDate = formater.format(dateModel.getObject());
+    
+                PropertyModel<String> yearModel = new PropertyModel<>(item.getModel(), "year");
+                String year = EasternArabicService.getInstance()
+                        .convertToEasternArabicBasedOnCurrentLocale(yearModel.getObject());
+    
+                PropertyModel<Double> fileSizeModel = new PropertyModel<>(item.getModel(), "fileSize");
+                String fileSize = FormatHelper.formatNumber(fileSizeModel.getObject());
         
-                item.add(new AmpLabelFieldPanel<String>("date", new Model<String>(formatedDate), "Document Date", true));
-                item.add(new AmpLabelFieldPanel<String>("year", new PropertyModel<String>(item.getModel(), "year"), "Document Year", true));
-                item.add(new AmpLabelFieldPanel<Double>("size", new PropertyModel<Double>(item.getModel(), "fileSize"), "Document Size", true));
-                item.add(new AmpLabelFieldPanel<String>("docType", new PropertyModel<String>(item.getModel(), "type.label"), "Document Type", true));
+                item.add(new AmpLabelFieldPanel<>("date", new Model<>(formatedDate), "Document Date", true));
+                item.add(new AmpLabelFieldPanel<>("year", new Model<>(year), "Document Year", true));
+                item.add(new AmpLabelFieldPanel<>("size", new Model<>(fileSize), "Document Size", true));
+                item.add(new AmpLabelFieldPanel<String>("docType", new PropertyModel<>(item.getModel(), "type.label"),
+                        "Document Type", true));
                 
                 final DownloadResourceStream drs;
                 if (item.getModelObject().isExisting())

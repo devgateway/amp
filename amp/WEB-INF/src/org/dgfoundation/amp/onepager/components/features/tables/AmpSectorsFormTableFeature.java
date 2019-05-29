@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -125,12 +126,14 @@ public class AmpSectorsFormTableFeature extends
                 for(AmpActivitySector a:listModel.getObject())
                     if (a.getSectorPercentage() != null)
                         total += a.getSectorPercentage();
-                return Double.toString(total);
+                
+                    DecimalFormat decimalFormat = FormatHelper.getPercentageDefaultFormat(true);
+                return decimalFormat.format(total);
             }
         });
         totalLabel.setOutputMarkupId(true);
         add(totalLabel);
-        
+    
         percentageValidationField.setIndicatorAppender(iValidator);
         add(percentageValidationField);
 

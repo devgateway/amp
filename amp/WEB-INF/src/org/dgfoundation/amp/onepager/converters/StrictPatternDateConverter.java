@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.util.convert.ConversionException;
+import org.digijava.module.aim.helper.EasternArabicService;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -28,7 +29,8 @@ public class StrictPatternDateConverter extends PatternDateConverter {
     private ConversionException getOutOfRangeDateException(String type, int year) {
         ConversionException conv = new ConversionException(type);
         conv.setResourceKey(type);
-        conv.setVariable("year", String.valueOf(year));
+        conv.setVariable("year",
+                EasternArabicService.getInstance().convertToEasternArabicBasedOnCurrentLocale(String.valueOf(year)));
         return conv;
     }
     

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang.StringUtils;
+import org.digijava.kernel.request.TLSUtils;
 
 public final class EasternArabicService {
     
@@ -46,7 +47,7 @@ public final class EasternArabicService {
         return text;
     }
     
-    public String convertEasternArabicToWasternArabic(String text) {
+    public String convertEasternArabicToWesternArabic(String text) {
         for (Map.Entry<Character, Character> entry : ARABIC_NUMERALS.entrySet()) {
             text = text.replace(entry.getValue(), entry.getKey());
         }
@@ -59,4 +60,11 @@ public final class EasternArabicService {
                 && StringUtils.equals(locale.getExtension(Locale.UNICODE_LOCALE_EXTENSION), NUMERIC_ARABIC_EXTENSION);
     }
     
+    public String convertToEasternArabicBasedOnCurrentLocale(String text) {
+        if (isLocaleEasternArabic(TLSUtils.getCurrentSystemLocale())) {
+            return convertWesternArabicToEasternArabic(text);
+        }
+        
+        return text;
+    }
 }

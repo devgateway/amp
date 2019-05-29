@@ -8,7 +8,7 @@
     <entry key="not_unique">يجب أن يكون البريد الإلكتروني فريد النوع.</entry>
 	<entry key="AmpMinSizeCollectionValidator">يرجى أضافة ${minimum} بند/بنود على الاقل هنا.</entry>
     <entry key="AmpMaxSizeCollectionValidator">يرجى عدم اضافة اكثر من ${maximum} بند/بنود هنا.</entry>
-	<entry key="AmpPercentageCollectionValidator">مجموع جميع النسب هو ${label}، يجب أن يكون 100.</entry>
+	<entry key="AmpPercentageCollectionValidator">مجموع جميع النسب هو ${label}، يجب أن يكون ١٠٠.</entry>
 	<entry key="AmpUniqueCollectionValidator">تم تكرار البنود التالية مرة على الاقل: ${label}.</entry>
 	<entry key="AmpTreeCollectionValidator">بند الوالدين و بند الطفل موجودة: ${label}.</entry>
 	<entry key="AmpUniqueActivityTitleValidator">يوجد نشاط بهذا العنوان داخل مساحة العمل'${workspace}'.</entry>
@@ -29,5 +29,5 @@
 	<entry key="AmpFreezingEventTransactionDateValidatorNoEnd">بسبب حادث التجمد الحالي، يمكنك فقط اضافة عملية بتاريخ اعلى من ${openPeriodFrom}.</entry>
 	<entry key="RangeValidator.range">قيمة '${label}' يجب أن يكون بين ${minimum} و ${maximum}.</entry>
 	<entry key="RangeValidator.minimum">قيمة '${label}' ان تكون على الاقل ${minimum}.</entry>
-	
+
 </properties>

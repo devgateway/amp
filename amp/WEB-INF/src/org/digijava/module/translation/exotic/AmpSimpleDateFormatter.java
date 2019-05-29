@@ -30,7 +30,7 @@ public class AmpSimpleDateFormatter extends AmpDateFormatter {
     @Override
     public LocalDate parseDate(String in) {
         if (EasternArabicService.getInstance().isLocaleEasternArabic(TLSUtils.getCurrentSystemLocale())) {
-            return dtf.parse(EasternArabicService.getInstance().convertEasternArabicToWasternArabic(in),
+            return dtf.parse(EasternArabicService.getInstance().convertEasternArabicToWesternArabic(in),
                     LocalDate::from);
         }
         

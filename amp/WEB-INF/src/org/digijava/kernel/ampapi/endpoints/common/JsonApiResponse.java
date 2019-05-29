@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -49,6 +50,18 @@ public class JsonApiResponse extends ApiErrorResponse {
 
     public void setDetails(Map<String, Object> details) {
         this.details = details;
+    }
+
+    private Map<String, Object> getAndInitDetails() {
+        if (details == null) {
+            details = new LinkedHashMap<>();
+        }
+        return details;
+    }
+
+    public JsonApiResponse addDetail(String key, Object value) {
+        getAndInitDetails().put(key, value);
+        return this;
     }
 
     @Override

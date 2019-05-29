@@ -30,12 +30,11 @@ import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityServ
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewWorkspace;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.helper.Constants;
@@ -315,7 +314,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             boolean isProcessApprovalFields,
             @ApiParam("use created_by and modified_by from input instead of user session") @QueryParam("track-editors")
             @DefaultValue("false") boolean isTrackEditors,
-            @ApiParam("activity configuration") JsonBean newJson) {
+            @ApiParam("activity configuration") Map<String, Object> newJson) {
         /*
          * Originally it was defined as PUT to avoid these type of issues checked here.
          * But it is more common to use it as POST, so let's then validate
@@ -325,13 +324,14 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             // invalidating
             String details = "url project_id = " + projectId + ", json " + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME +
                     " = " + internalId;
-            EndpointUtils.addGeneralError(newJson, ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details));
+            return new JsonApiResponse(ApiError.toError(ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details)))
+                    .addDetail(ActivityEPConstants.ACTIVITY, newJson);
         }
 
         ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
                 isTrackEditors);
 
-        return ActivityInterchangeUtils.importActivity(newJson.any(), true, rules, uri.getBaseUri() + "activity");
+        return ActivityInterchangeUtils.importActivity(newJson, true, rules, uri.getBaseUri() + "activity");
     }
 
     @GET

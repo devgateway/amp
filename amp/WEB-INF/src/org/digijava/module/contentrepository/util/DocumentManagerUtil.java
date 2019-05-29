@@ -129,7 +129,7 @@ public class DocumentManagerUtil {
         return ph.getApplicationPath();
     }
     
-    public static String calendarToString(Calendar cal,boolean yearofPublication) {
+    public static String calendarToString(Calendar cal, boolean yearofPublication) {
         String retVal=null;
 //      String [] monthNames    = {"", "January", "February", "March", "April", "May", "June",
 //                                  "July", "August", "September", "October", "November", "December"};

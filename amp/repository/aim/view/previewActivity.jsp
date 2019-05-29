@@ -417,7 +417,7 @@ function collapseAll() {
 		         </c:if>
 		         <c:if test="${empty aimEditActivityForm.funding.totalCommitments}">
 			         <b>
-			         0
+					 <digi:easternArabicNumber>0</digi:easternArabicNumber>
 			            ${aimEditActivityForm.currCode}
 	                 </b>
 		         </c:if>
@@ -433,7 +433,7 @@ function collapseAll() {
                 </c:if>
                 <c:if test="${empty aimEditActivityForm.funding.totalPlannedCommitments}">
                 	<b>
-			         0
+					<digi:easternArabicNumber>0</digi:easternArabicNumber>
 			         ${aimEditActivityForm.currCode}
 	           
 			         </b>
@@ -454,7 +454,7 @@ function collapseAll() {
 		         </c:if>
 		         <c:if test="${empty aimEditActivityForm.funding.totalDisbursements}">
 			         <b>
-			         0
+					 <digi:easternArabicNumber>0</digi:easternArabicNumber>
                      ${aimEditActivityForm.currCode}
 	                 </b>
 		         </c:if>
@@ -470,7 +470,7 @@ function collapseAll() {
 		         </c:if>
 		         <c:if test="${empty aimEditActivityForm.funding.totalPlannedDisbursements}">
 			         <b>
-			         0
+					 <digi:easternArabicNumber>0</digi:easternArabicNumber>
 			         ${aimEditActivityForm.currCode}
 			         </b>
 		         </c:if>
@@ -489,7 +489,7 @@ function collapseAll() {
 			</c:if>
 			<c:if test="${empty aimEditActivityForm.funding.totalExpenditures}">
 				<b>
-					0
+					<digi:easternArabicNumber>0</digi:easternArabicNumber>
 					${aimEditActivityForm.currCode}
 				</b>
 			</c:if>
@@ -505,7 +505,7 @@ function collapseAll() {
 		         </c:if>
 		          <c:if test="${empty aimEditActivityForm.funding.unDisbursementsBalance}">
 			         <b>
-			         0
+					 <digi:easternArabicNumber>0</digi:easternArabicNumber>
 			         ${aimEditActivityForm.currCode}
 			         </b>
 		         </c:if>
@@ -521,7 +521,7 @@ function collapseAll() {
 		         </c:if>
 		         <c:if test="${empty aimEditActivityForm.funding.totalPlannedExpenditures}">
 			         <b>
-			         0
+			         <digi:easternArabicNumber>0</digi:easternArabicNumber>
 			         ${aimEditActivityForm.currCode}
 			         </b>
 		         </c:if>
@@ -642,7 +642,8 @@ function collapseAll() {
 				<hr />
 			</module:display>
 			
-			<digi:trn key="aim:ampId">AMP ID</digi:trn>:&nbsp;<br /><b><c:out value="${aimEditActivityForm.identification.ampId}"/></b> <br>
+			<digi:trn key="aim:ampId">AMP ID</digi:trn>:&nbsp;<br />
+			<b><digi:easternArabicNumber><c:out value="${aimEditActivityForm.identification.ampId}"/></digi:easternArabicNumber></b> <br>
 			<hr />	
 
 			<module:display name="/Activity Form/Identification/Activity Status" parentModule="/Activity Form/Identification">

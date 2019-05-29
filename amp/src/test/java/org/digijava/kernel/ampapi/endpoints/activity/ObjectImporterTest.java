@@ -45,6 +45,9 @@ public class ObjectImporterTest {
 
         @Interchangeable(fieldTitle = "Children", importable = true)
         private List<Child> children = new ArrayList<>();
+    
+        @Interchangeable(fieldTitle = "Adopted Children", importable = true)
+        private Set<Child> adoptedChildren = new HashSet<>();
 
         @Interchangeable(fieldTitle = "Name", importable = true)
         private String name;
@@ -149,7 +152,19 @@ public class ObjectImporterTest {
         void addPhone(Phone phone) {
             phones.add(phone);
         }
+    
+        public Set<Child> getAdoptedChildren() {
+            return adoptedChildren;
+        }
+    
+        public void setAdoptedChildren(Set<Child> adoptedChildren) {
+            this.adoptedChildren = adoptedChildren;
+        }
         
+        void addAdoptedChild(Child child) {
+            adoptedChildren.add(child);
+        }
+    
         void addAttribute(PersonAttribute attribute) {
             attributes.add(attribute);
         }
@@ -496,6 +511,25 @@ public class ObjectImporterTest {
 
         importer.validateAndImport(parent, json);
 
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, parentWithChildren("Wise Leonidas", 45,
+                containsInAnyOrder(
+                        child(1L, "Young Alexios", "Defender"),
+                        child(null, "Pericles", null),
+                        child(2L, "Prominent Herodotus", "Historian"))));
+    }
+    
+    @Test
+    public void testNoOverwriteInSet() {
+        Map<String, Object> json = (Map<String, Object>) examples.get("no-overwrite-in-set");
+        
+        Parent parent = new Parent("Leonidas", 45);
+        parent.addChild(new Child(1L, "Alexios", "Defender"));
+        parent.addChild(new Child(2L, "Herodotus", "Historian"));
+        parent.addChild(new Child(null, "Persian", null));
+        
+        importer.validateAndImport(parent, json);
+        
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, parentWithChildren("Wise Leonidas", 45,
                 containsInAnyOrder(

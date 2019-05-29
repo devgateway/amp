@@ -20,6 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
@@ -221,7 +222,7 @@ public class ResourceImporter extends ObjectImporter {
 
     private String extractResourceTranslation(APIField apiField, Object parentObj, Map<String, Object> jsonValue) {
         try {
-            Field field = parentObj.getClass().getField(apiField.getFieldNameInternal());
+            Field field = ReflectionUtil.getField(parentObj, apiField.getFieldNameInternal());
             String translatedMapFieldName = field.getAnnotation(ResourceTextField.class).translationsField();
             Field translatedMapField = parentObj.getClass().getDeclaredField(translatedMapFieldName);
             translatedMapField.setAccessible(true);

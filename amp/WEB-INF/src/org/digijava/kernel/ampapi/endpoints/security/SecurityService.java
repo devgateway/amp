@@ -42,6 +42,7 @@ import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.EasternArabicService;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -142,11 +143,12 @@ public class SecurityService {
         String trackingUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.TRACKING_SITE_URL);
     
         LayoutInformation layout = new LayoutInformation();
-        layout.setBuildDate(releaseDate);
+        layout.setBuildDate(EasternArabicService.getInstance().convertToEasternArabicBasedOnCurrentLocale(releaseDate));
         layout.setAmpVersion(ampVersion);
         layout.setTrackingEnabled(trackingEnabled);
         layout.setSiteId(siteId);
         layout.setTrackingUrl(trackingUrl);
+        layout.setBuildWord(TranslatorWorker.translateText("build"));
         layout.setFooterText(TranslatorWorker.translateText("Developed in partnership with OECD, UNDP, "
                 + "WB, Government of Ethiopia and DG"));
         

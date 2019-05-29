@@ -22,6 +22,9 @@ public class LayoutInformation {
     @ApiModelProperty(example = "https://stats.ampsite.net/")
     private String trackingUrl;
     
+    @ApiModelProperty(example = "build")
+    private String buildWord;
+    
     private String footerText;
     
     private List<LayoutAdminLink> adminLinks;
@@ -85,6 +88,14 @@ public class LayoutInformation {
     
     public void setTrackingUrl(String trackingUrl) {
         this.trackingUrl = trackingUrl;
+    }
+    
+    public String getBuildWord() {
+        return buildWord;
+    }
+    
+    public void setBuildWord(String buildWord) {
+        this.buildWord = buildWord;
     }
     
     public String getFooterText() {

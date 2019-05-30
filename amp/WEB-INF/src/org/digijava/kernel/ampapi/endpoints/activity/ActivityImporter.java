@@ -453,7 +453,7 @@ public class ActivityImporter extends ObjectImporter {
             key = (String) apiField.getFieldAccessor().get(parentObj);
         }
         if (key == null) { // init it in any case
-            key = getEditorKey(apiField.getFieldNameInternal());
+            key = AIHelper.getEditorKey(apiField.getFieldNameInternal());
         }
         for (Entry<String, Object> trn : trnJson.entrySet()) {
             String langCode = trn.getKey();
@@ -484,17 +484,12 @@ public class ActivityImporter extends ObjectImporter {
         }
         return key;
     }
-
-    private String getEditorKey(String fieldName) {
-        // must start with "aim-" since it is expected by AF like this...
-        return "aim-import-" + fieldName + "-" + System.currentTimeMillis();
-    }
-
+    
     protected void initEditor(Field field) {
         try {
             String currentValue = (String) field.get(newActivity);
             if (currentValue == null) {
-                currentValue = getEditorKey(field.getName());
+                currentValue = AIHelper.getEditorKey(field.getName());
                 field.setAccessible(true);
                 field.set(newActivity, currentValue);
             }

@@ -38,31 +38,41 @@ public class PaginationTests extends ReportingTestCase {
             "ptc activity 1", "ptc activity 2", "Pure MTEF Project", "SSC Project 1", "SSC Project 2",
             "SubNational no percentages", "TAC_activity_1", "TAC_activity_2", "Test MTEF directed",
             "third activity with agreements", "Unvalidated activity", "with weird currencies");
-
+    
+    final ReportSpecification theFlatSpec;
+    final ReportSpecification theSingleHierSpec;
+    final ReportSpecification theDoubleHierSpec;
+    
+    final PaginatedReport initFlatReport;
+    final PaginatedReport initHierReport;
+    final PaginatedReport initDoubleHierReport;
+    
     public PaginationTests() {
         inTransactionRule = null;
+        
+        setLocale("en");
+        
+        this.theFlatSpec = ReportSpecificationImpl.buildFor("initReport",
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), null,
+                GroupingCriteria.GROUPING_YEARLY);
+        this.theSingleHierSpec = ReportSpecificationImpl.buildFor("initReport",
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+                Arrays.asList(ColumnConstants.REGION), GroupingCriteria.GROUPING_YEARLY);
+        this.theDoubleHierSpec = ReportSpecificationImpl.buildFor("initReport",
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR),
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+                Arrays.asList(ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR), GroupingCriteria.GROUPING_YEARLY);
+    
+        this.initFlatReport = new PaginatedReport(
+                getNiExecutor(acts).executeReport(theFlatSpec, new ReportModelGenerator()).body);
+        this.initHierReport = new PaginatedReport(
+                getNiExecutor(acts).executeReport(theSingleHierSpec, new ReportModelGenerator()).body);
+        this.initDoubleHierReport = new PaginatedReport(
+                getNiExecutor(acts).executeReport(theDoubleHierSpec, new ReportModelGenerator()).body);
     }
-
-    final ReportSpecification theFlatSpec = ReportSpecificationImpl.buildFor("initReport",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), null,
-            GroupingCriteria.GROUPING_YEARLY);
-    final ReportSpecification theSingleHierSpec = ReportSpecificationImpl.buildFor("initReport",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-            Arrays.asList(ColumnConstants.REGION), GroupingCriteria.GROUPING_YEARLY);
-    final ReportSpecification theDoubleHierSpec = ReportSpecificationImpl.buildFor("initReport",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-            Arrays.asList(ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR), GroupingCriteria.GROUPING_YEARLY);
-
-    final PaginatedReport initFlatReport = new PaginatedReport(
-            getNiExecutor(acts).executeReport(theFlatSpec, new ReportModelGenerator()).body);
-    final PaginatedReport initHierReport = new PaginatedReport(
-            getNiExecutor(acts).executeReport(theSingleHierSpec, new ReportModelGenerator()).body);
-    final PaginatedReport initDoubleHierReport = new PaginatedReport(
-            getNiExecutor(acts).executeReport(theDoubleHierSpec, new ReportModelGenerator()).body);
-
+    
     @Test
     public void testFullFlat() {
         PaginatedReportAreaForTests cor =  new PaginatedReportAreaForTests(null).withCounts(44, 44)

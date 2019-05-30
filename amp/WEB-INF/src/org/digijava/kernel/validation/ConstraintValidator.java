@@ -22,12 +22,14 @@ public interface ConstraintValidator {
      *
      * @param arguments arguments for the constraint validator
      */
-    void initialize(Map<String, ?> arguments);
+    void initialize(Map<String, String> arguments);
 
     /**
      * Validate the value and return true if the object is valid. Otherwise return false. If validator has to report
      * multiple constraint violations at once, context parameter can be used to override default constraint violation
      * creation mechanism.
+     *
+     * Constraint validator defined at class level will always be invoked with a non-null value.
      *
      * Note: Because the meta model is represented just as list of fields, here
      * validator accepts the field in order to have access to type information.

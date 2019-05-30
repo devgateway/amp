@@ -4,9 +4,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableSet;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -39,8 +42,18 @@ public class ActivityBuilder {
         return this;
     }
 
-    public ActivityBuilder withCategories(Set<AmpCategoryValue> ampActivityCategories) {
-        activity.setCategories(ampActivityCategories);
+    public ActivityBuilder withCategories(AmpCategoryValue... ampActivityCategories) {
+        activity.setCategories(ImmutableSet.copyOf(ampActivityCategories));
+
+        return this;
+    }
+
+    public ActivityBuilder addLocation(AmpLocation location, Float percentage) {
+        AmpActivityLocation activityLocation = new AmpActivityLocation();
+        activityLocation.setActivity(activity);
+        activityLocation.setLocation(location);
+        activityLocation.setLocationPercentage(percentage);
+        activity.getLocations().add(activityLocation);
 
         return this;
     }
@@ -52,10 +65,6 @@ public class ActivityBuilder {
     }
 
     public ActivityBuilder addFunding(AmpFunding funding) {
-        if (activity.getFunding() == null) {
-            activity.setFunding(new HashSet<>());
-        }
-
         activity.getFunding().add(funding);
 
         return this;

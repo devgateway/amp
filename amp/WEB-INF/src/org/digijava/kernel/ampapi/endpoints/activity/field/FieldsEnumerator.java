@@ -15,6 +15,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -24,7 +27,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.DiscriminatedFieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.FEContext;
 import org.digijava.kernel.ampapi.endpoints.activity.FMService;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldAccessor;
@@ -37,6 +39,7 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.validation.ConstraintDescriptor;
 import org.digijava.kernel.validation.ConstraintDescriptors;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
+import org.digijava.module.aim.annotations.interchange.Independent;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
@@ -60,8 +63,6 @@ public class FieldsEnumerator {
 
     private TranslatorService translatorService;
 
-    private InterchangeDependencyResolver interchangeDependencyResolver;
-
     private Function<String, Boolean> allowMultiplePrograms;
 
     /**
@@ -72,7 +73,6 @@ public class FieldsEnumerator {
         this.fieldInfoProvider = fieldInfoProvider;
         this.fmService = fmService;
         this.translatorService = translatorService;
-        interchangeDependencyResolver = new InterchangeDependencyResolver(fmService);
         this.allowMultiplePrograms = allowMultiplePrograms;
     }
 
@@ -124,14 +124,19 @@ public class FieldsEnumerator {
 
         String label = getLabelOf(interchangeable);
         apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
-        apiField.setRequired(getRequiredValue(context, fieldTitle));
+
+        apiField.setUnconditionalRequired(getUnconditionalRequiredValue(context, fieldTitle));
+        apiField.setDependencyRequired(getDependencyRequiredValue(context));
+        apiField.setRequired(getRequiredValue(context,
+                apiField.getDependencyRequired(),
+                apiField.getUnconditionalRequired()));
+
         apiField.setImportable(getImportableValue(context, fieldTitle, interchangeable));
 
         if (interchangeable.percentageConstraint()) {
             apiField.setPercentage(true);
         }
-        List<String> actualDependencies =
-                interchangeDependencyResolver.getActualDependencies(interchangeable.dependencies());
+        List<String> actualDependencies = getActualDependencies(interchangeable);
         if (actualDependencies != null) {
             apiField.setDependencies(actualDependencies);
         }
@@ -179,6 +184,8 @@ public class FieldsEnumerator {
             apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
         }
 
+        apiField.setIndependent(field.isAnnotationPresent(Independent.class));
+
         if (apiField.getApiType().getFieldType() == FieldType.LIST
                 && apiField.getApiType().getItemType() == FieldType.OBJECT) {
             List<APIField> idFields = apiField.getChildren().stream()
@@ -217,9 +224,22 @@ public class FieldsEnumerator {
         List<ConstraintDescriptor> descriptors = new ArrayList<>();
         for (InterchangeableValidator validator : validators) {
             ImmutableSet<Class<?>> groups = ImmutableSet.copyOf(validator.groups());
-            descriptors.add(new ConstraintDescriptor(validator.value(), groups, constraintTarget));
+            Map<String, String> attributes = parseAttributes(validator);
+            descriptors.add(new ConstraintDescriptor(validator.value(), attributes, groups, constraintTarget));
         }
         return new ConstraintDescriptors(descriptors);
+    }
+
+    private Map<String, String> parseAttributes(InterchangeableValidator validator) {
+        Map<String, String> attributes;
+        if (validator.attributes().isEmpty()) {
+            attributes = ImmutableMap.of();
+        } else {
+            attributes = Splitter.on('&')
+                    .withKeyValueSeparator('=')
+                    .split(validator.attributes());
+        }
+        return attributes;
     }
 
     private boolean hasPossibleValues(Field field, Interchangeable interchangeable) {
@@ -403,6 +423,37 @@ public class FieldsEnumerator {
         return paths;
     }
 
+    private String getRequiredValue(FEContext context, String dependencyRequired, String unconditionalRequired) {
+
+        Interchangeable fieldIntch = context.getIntchStack().peek();
+
+        if (fieldIntch.requiredDependencies().length > 0) {
+            return dependencyRequired;
+        } else {
+            return unconditionalRequired;
+        }
+    }
+
+    private String getDependencyRequiredValue(FEContext context) {
+        Interchangeable fieldIntch = context.getIntchStack().peek();
+
+        if (fieldIntch.requiredDependencies().length > 0) {
+            if (fieldIntch.dependencyRequired() == NONE) {
+                throw new IllegalStateException("Interchangeable.dependencyRequired is incorrect! Field: "
+                        + context.getIntchStack().peek().fieldTitle());
+            }
+
+            String fmPath = fieldIntch.dependencyRequiredFMPath();
+            if (fmPath.isEmpty() || isVisible(fmPath, context)) {
+                return fieldIntch.dependencyRequired() == SUBMIT
+                        ? ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED
+                        : ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
+            }
+        }
+
+        return ActivityEPConstants.FIELD_NOT_REQUIRED;
+    }
+
     /**
      * Gets the field required value.
      *
@@ -411,20 +462,22 @@ public class FieldsEnumerator {
      * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false,
      * N (no) = not required. .
      */
-    private String getRequiredValue(FEContext context, String fieldTitle) {
+    private String getUnconditionalRequiredValue(FEContext context, String fieldTitle) {
         if (isFieldIatiIdentifier(fieldTitle) && AmpClientModeHolder.isIatiImporterClient()) {
             return ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
         }
-        
+
         Interchangeable fieldIntch = context.getIntchStack().peek();
 
         ActivityEPConstants.RequiredValidation required = fieldIntch.required();
         String requiredFmPath = fieldIntch.requiredFmPath();
 
         if (StringUtils.isNotBlank(requiredFmPath)) {
-            if (isRequiredVisible(requiredFmPath, context)) {
-                required = required == NONE ? SUBMIT : required;
-            } else {
+            if (required == NONE) {
+                throw new IllegalStateException("Interchangeable.required is incorrect! Field: "
+                        + context.getIntchStack().peek().fieldTitle());
+            }
+            if (!isRequiredVisible(requiredFmPath, context)) {
                 required = NONE;
             }
         }
@@ -561,4 +614,16 @@ public class FieldsEnumerator {
         return StringUtils.equals(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER), fieldName);
     }
 
+    /**
+     * Verifies each configures dependency for any additional checks
+     * and builds up the final (actual) list of dependencies
+     * @param interchangeable for dependency info
+     * @return actual dependencies list or null if no dependency
+     */
+    private List<String> getActualDependencies(Interchangeable interchangeable) {
+        return new ImmutableList.Builder<String>()
+                .add(interchangeable.dependencies())
+                .add(interchangeable.requiredDependencies())
+                .build();
+    }
 }

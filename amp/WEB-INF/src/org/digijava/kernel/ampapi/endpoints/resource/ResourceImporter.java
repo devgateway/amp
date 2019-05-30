@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
@@ -76,8 +77,6 @@ public class ResourceImporter extends ObjectImporter {
 
     private List<ApiErrorMessage> importResource(JsonBean newJson, FormFile formFile) {
         this.newJson = newJson;
-
-        List<APIField> fieldsDef = getApiFields();
 
         String privateAttr = newJson.getString(ResourceEPConstants.PRIVATE);
 
@@ -220,7 +219,7 @@ public class ResourceImporter extends ObjectImporter {
 
     private String extractResourceTranslation(APIField apiField, Object parentObj, Map<String, Object> jsonValue) {
         try {
-            Field field = parentObj.getClass().getField(apiField.getFieldNameInternal());
+            Field field = FieldUtils.getField(parentObj.getClass(), apiField.getFieldNameInternal(), true);
             String translatedMapFieldName = field.getAnnotation(ResourceTextField.class).translationsField();
             Field translatedMapField = parentObj.getClass().getDeclaredField(translatedMapFieldName);
             translatedMapField.setAccessible(true);

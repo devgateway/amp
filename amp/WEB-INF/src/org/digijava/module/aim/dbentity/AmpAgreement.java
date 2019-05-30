@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -17,10 +18,16 @@ public class AmpAgreement implements Serializable, Versionable {
     @Interchangeable(fieldTitle = "Agreement ID")
     private Long id;
 
-    @Interchangeable(fieldTitle = "Code", fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Code", importable = true)
+    @Interchangeable(fieldTitle = "Code",
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Code",
+            importable = true,
+            required = ActivityEPConstants.RequiredValidation.ALWAYS)
     private String code;
 
-    @Interchangeable(fieldTitle = "Title", fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Title", importable = true)
+    @Interchangeable(fieldTitle = "Title",
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Title",
+            importable = true,
+            required = ActivityEPConstants.RequiredValidation.ALWAYS)
     @TranslatableField
     private String title;
 

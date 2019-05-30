@@ -343,32 +343,6 @@ public final class ActivityInterchangeUtils {
     }
 
     /**
-     * Gets the value at the specified path from the JSON description of the activity.
-     *
-     * @param activity a JsonBean description of the activity
-     * @param path path to the field
-     * @return null if the path abruptly stops before reaching the end, or the value itself,
-     * if the end of the path is reached
-     */
-    public static Object getFieldValuesFromJsonActivity(JsonBean activity, String path) {
-        String fieldPath = path;
-
-        JsonBean currentBranch = activity;
-        while (fieldPath.contains("~")) {
-            String pathSegment = fieldPath.substring(0, fieldPath.indexOf('~'));
-            Object obj = currentBranch.get(pathSegment);
-            if (obj != null && JsonBean.class.isAssignableFrom(obj.getClass())) {
-                currentBranch = (JsonBean) obj;
-            } else {
-                return null;
-            }
-            fieldPath = path.substring(fieldPath.indexOf('~') + 1);
-        }
-        //path is complete, object is set to proper value
-        return currentBranch.get(fieldPath);
-    }
-
-    /**
      * @param apb AmpAnnualProject budget having amount, currency and date
      * @parm toCurrCode target currency code to which apb amount would be calculated
      * @return double the amount in toCurrCode

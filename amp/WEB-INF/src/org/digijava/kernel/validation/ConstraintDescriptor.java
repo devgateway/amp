@@ -17,7 +17,7 @@ public class ConstraintDescriptor {
 
     private final Class<? extends ConstraintValidator> constraintValidatorClass;
 
-    private final Map<String, ?> arguments;
+    private final Map<String, String> arguments;
 
     private final Set<Class<?>> groups;
 
@@ -35,13 +35,8 @@ public class ConstraintDescriptor {
         FIELD
     }
 
-    public ConstraintDescriptor(Class<? extends ConstraintValidator> constraintValidatorClass, Set<Class<?>> groups,
-            ConstraintTarget target) {
-        this(constraintValidatorClass, ImmutableMap.of(), groups, target);
-    }
-
     public ConstraintDescriptor(Class<? extends ConstraintValidator> constraintValidatorClass,
-            Map<String, ?> arguments, Set<Class<?>> groups, ConstraintTarget target) {
+            Map<String, String> arguments, Set<Class<?>> groups, ConstraintTarget target) {
         this.constraintValidatorClass = constraintValidatorClass;
         this.arguments = ImmutableMap.copyOf(arguments);
         this.groups = ImmutableSet.copyOf(groups);
@@ -52,7 +47,7 @@ public class ConstraintDescriptor {
         return constraintValidatorClass;
     }
 
-    public Map<String, ?> getArguments() {
+    public Map<String, String> getArguments() {
         return arguments;
     }
 

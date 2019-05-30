@@ -19,6 +19,7 @@ public class Fields {
 
     private Map<String, APIField> fieldByName;
     private ListMultimap<String, APIField> fieldsByInternalName;
+    private ListMultimap<String, APIField> fieldsByDependency;
 
     public Fields(List<APIField> list) {
         this.list = ImmutableList.copyOf(list);
@@ -28,11 +29,26 @@ public class Fields {
             fieldByName.put(field.getFieldName(), field);
         }
 
+        fieldsByInternalName = getFieldsByInternalName(list);
+        fieldsByDependency = getFieldsByDependency(list);
+    }
+
+    private ListMultimap<String, APIField> getFieldsByInternalName(List<APIField> list) {
         ImmutableListMultimap.Builder<String, APIField> builder = ImmutableListMultimap.builder();
         for (APIField field : list) {
             builder.put(field.getFieldNameInternal(), field);
         }
-        fieldsByInternalName = builder.build();
+        return builder.build();
+    }
+
+    private ListMultimap<String, APIField> getFieldsByDependency(List<APIField> list) {
+        ImmutableListMultimap.Builder<String, APIField> builder = ImmutableListMultimap.builder();
+        for (APIField field : list) {
+            for (String dep : field.getDependencies()) {
+                builder.put(dep, field);
+            }
+        }
+        return builder.build();
     }
 
     public APIField getField(String fieldName) {
@@ -41,6 +57,10 @@ public class Fields {
 
     public List<APIField> getFieldsForFieldNameInternal(String fieldNameInternal) {
         return fieldsByInternalName.get(fieldNameInternal);
+    }
+
+    public List<APIField> getFieldsWithDependency(String dependency) {
+        return fieldsByDependency.get(dependency);
     }
 
     public List<APIField> getList() {

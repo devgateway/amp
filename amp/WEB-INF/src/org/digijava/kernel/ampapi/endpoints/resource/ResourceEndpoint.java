@@ -34,7 +34,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -154,7 +153,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                     + "}\n"
                     + "</pre>")
 
-    public JsonBean createResource(Map<String, Object> resource) {
+    public JsonApiResponse createResource(Map<String, Object> resource) {
         return new ResourceImporter().createResource(resource).getResult();
     }
 
@@ -172,7 +171,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                     + "  \"note\": \"Resource note\"\n"
                     + "}\n"
                     + "</pre>")
-    public JsonBean createDocResource(
+    public JsonApiResponse createDocResource(
             @FormDataParam("resource") Map<String, Object> resource,
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail) {

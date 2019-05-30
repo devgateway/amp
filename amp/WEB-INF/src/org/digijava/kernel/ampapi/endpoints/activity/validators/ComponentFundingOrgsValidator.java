@@ -5,13 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
-import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * @author Octavian Ciubotaru
@@ -34,19 +34,19 @@ public class ComponentFundingOrgsValidator extends InputValidator {
         return true;
     }
 
-    public boolean isValid(JsonBean activityJson, Object value) {
+    public boolean isValid(Map<String, Object> activityJson, Object value) {
         if (orgIds == null) {
             orgIds = getOrgIds(activityJson);
         }
         Long orgId = getLong(value);
-        
+
         return orgId == null || orgIds.contains(orgId);
     }
 
     /**
      * Get defined organizations for activity.
      */
-    private Set<Long> getOrgIds(JsonBean activity) {
+    private Set<Long> getOrgIds(Map<String, Object> activity) {
         Set<Long> orgIds = new HashSet<>();
 
         List<String> orgRoleFields = FieldMap.getDiscriminatedFieldTitlesByFieldName().get("orgrole");

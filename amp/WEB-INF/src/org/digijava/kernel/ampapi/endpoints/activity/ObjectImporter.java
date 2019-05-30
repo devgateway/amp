@@ -33,10 +33,12 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.DefaultErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.common.values.BadInput;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.validator.groups.API;
@@ -56,7 +58,7 @@ public class ObjectImporter {
     protected Map<Integer, ApiErrorMessage> warnings = new HashMap<>();
     protected ValueConverter valueConverter;
 
-    protected JsonBean newJson;
+    protected Map<String, Object> newJson;
     protected TranslationSettings trnSettings;
 
     private List<APIField> apiFields;
@@ -198,7 +200,7 @@ public class ObjectImporter {
     /**
      * Validates and imports (if valid) a single element (and its subelements)
      * @param newParent parent object containing the field
-     * @param fieldDef JsonBean holding the description of the field (obtained from the Fields Enumerator EP)
+     * @param fieldDef APIField holding the description of the field (obtained from the Fields Enumerator EP)
      * @param newJsonParent JSON as imported
      * @param fieldPath underscorified path to the field
      * @return true if valid format. Check errors to see also any business rules validation errors.
@@ -215,7 +217,7 @@ public class ObjectImporter {
             if (isValidFormat) {
                 businessRulesValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
             }
-            
+
             if (fieldDef.isImportable()) {
                 Object jsonValue = newJsonParent.get(fieldName);
                 Object newValue = getNewValue(fieldDef, newParent, jsonValue);
@@ -229,21 +231,21 @@ public class ObjectImporter {
     private Object getNewValue(APIField apiField, Object parentObj, Object jsonValue) {
         boolean isCollection = apiField.isCollection();
         // on a business rule validation error we configure the input to progress with further validation
-        if (jsonValue != null && JsonBean.class.isAssignableFrom(jsonValue.getClass())) {
-            jsonValue = ((JsonBean) jsonValue).get(ActivityEPConstants.INPUT);
+        if (jsonValue != null && BadInput.class.isAssignableFrom(jsonValue.getClass())) {
+            jsonValue = ((BadInput) jsonValue).getInput();
         }
-        
+
         if (jsonValue == null && !isCollection) {
             return null;
         }
-        
+
         FieldType fieldType = apiField.getApiType().getFieldType();
         boolean idOnly = apiField.isIdOnly();
         // this field has possible values
         if (!isCollection && idOnly) {
             return valueConverter.getObjectById(apiField.getApiType().getType(), jsonValue);
         }
-        
+
         try {
             if (isCollection) {
                 Collection collection = (Collection) apiField.getFieldAccessor().get(parentObj);
@@ -267,10 +269,10 @@ public class ObjectImporter {
             logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
-        
+
         return null;
     }
-    
+
     protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
         return (String) jsonValue;
     }
@@ -307,14 +309,14 @@ public class ObjectImporter {
         if (isList || childrenFields.size() > 0) {
             Class<?> subElementClass = fieldDef.getApiType().getType();
             Object newFieldValue = fieldDef.getFieldAccessor().get(newParent);
-            
+
             if (newFieldValue == null) {
                 if (isList) {
                     newFieldValue = new ArrayList<>();
                 } else {
                     newFieldValue = valueConverter.getNewInstance(fieldDef.getApiType().getType());
                 }
-                
+
                 fieldDef.getFieldAccessor().set(newParent, newFieldValue);
             }
 
@@ -531,7 +533,7 @@ public class ObjectImporter {
     /**
      * @return the newJson
      */
-    public JsonBean getNewJson() {
+    public Map<String, Object> getNewJson() {
         return newJson;
     }
 
@@ -545,13 +547,20 @@ public class ObjectImporter {
     public Map<String, Object> getBranchJsonVisitor() {
         return branchJsonVisitor;
     }
-    
+
     public void addError(ApiErrorMessage error) {
         errors.put(error.id, error);
     }
 
     public Collection<ApiErrorMessage> getWarnings() {
         return warnings.values();
+    }
+
+    protected JsonApiResponse buildResponse(Map<String, Object> details) {
+        return new JsonApiResponse(
+                ApiError.formatNoWrap(errors.values()),
+                ApiError.formatNoWrap(warnings.values()),
+                details);
     }
 
 }

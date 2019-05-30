@@ -1,13 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.common.values.BadInput;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * @author Octavian Ciubotaru
@@ -36,22 +33,17 @@ public final class ErrorDecorator {
 
     private static void addErrorInJson(Map<String, Object> newParent, String fieldName, ApiErrorMessage error) {
         String errorCode = ApiError.getErrorCode(error);
-        JsonBean newField = new JsonBean();
         Object newFieldValue = newParent.get(fieldName);
-        // if some errors where already reported, use new field storage
-        if (newFieldValue instanceof JsonBean && ((JsonBean) newFieldValue).get(ActivityEPConstants.INVALID) != null) {
-            newField = (JsonBean) newFieldValue;
+        BadInput newField;
+
+        if (newFieldValue instanceof BadInput) {
+            newField = (BadInput) newFieldValue;
         } else {
-            // store original input
-            newField.set(ActivityEPConstants.INPUT, newFieldValue);
-            // and initialize fields errors list
-            newField.set(ActivityEPConstants.INVALID, new HashSet<String>());
-            // record new wrapped field value
+            newField = new BadInput(newFieldValue);
             newParent.put(fieldName, newField);
         }
 
-        // register field level invalid errors
-        ((Set<String>) newField.get(ActivityEPConstants.INVALID)).add(errorCode);
+        newField.addErrorCode(errorCode);
     }
 
     private static void addError(String fieldPath, ApiErrorMessage error, Map<Integer, ApiErrorMessage> errors) {

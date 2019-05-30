@@ -9,12 +9,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.common.dto.UnwrappedTranslations;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author Octavian Ciubotaru
@@ -33,9 +36,10 @@ public class APIField {
 
     @JsonUnwrapped
     private APIType apiType;
-    
+
     @JsonProperty(ActivityEPConstants.FIELD_LABEL)
-    private JsonBean fieldLabel;
+    @ApiModelProperty(example = UnwrappedTranslations.EXAMPLE)
+    private UnwrappedTranslations fieldLabel;
 
     @JsonIgnore
     private String fieldNameInternal;
@@ -76,13 +80,13 @@ public class APIField {
 
     @JsonProperty(ActivityEPConstants.DEPENDENCIES)
     private List<String> dependencies;
-    
+
     @JsonProperty(ActivityEPConstants.REGEX_PATTERN)
     private String regexPattern;
-    
+
     @JsonProperty(ActivityEPConstants.PERCENTAGE)
     private Boolean percentage;
-    
+
     @JsonProperty(ActivityEPConstants.SIZE_LIMIT)
     private Integer sizeLimit;
 
@@ -103,7 +107,7 @@ public class APIField {
 
     @JsonProperty(ActivityEPConstants.COMMON_POSSIBLE_VALUES)
     private String commonPossibleValuesPath;
-    
+
     @JsonIgnore
     private TranslationSettings.TranslationType translationType;
 
@@ -151,11 +155,11 @@ public class APIField {
         this.idChild = idChild;
     }
 
-    public JsonBean getFieldLabel() {
+    public UnwrappedTranslations getFieldLabel() {
         return fieldLabel;
     }
 
-    public void setFieldLabel(JsonBean fieldLabel) {
+    public void setFieldLabel(UnwrappedTranslations fieldLabel) {
         this.fieldLabel = fieldLabel;
     }
 
@@ -247,7 +251,7 @@ public class APIField {
     public void setFieldLength(Integer fieldLength) {
         this.fieldLength = fieldLength;
     }
-    
+
     public Integer getSizeLimit() {
         return sizeLimit;
     }
@@ -271,7 +275,7 @@ public class APIField {
     public void setDependencies(List<String> dependencies) {
         this.dependencies = dependencies;
     }
-    
+
     public String getRegexPattern() {
         return regexPattern;
     }
@@ -279,7 +283,7 @@ public class APIField {
     public void setRegexPattern(String regexPattern) {
         this.regexPattern = regexPattern;
     }
-    
+
     public Boolean getPercentage() {
         return percentage;
     }
@@ -323,27 +327,27 @@ public class APIField {
 
     @JsonIgnore
     public boolean isDiscriminatedObject() {
-        return apiType.getFieldType().isObject() && discriminationConfigurer != null; 
+        return apiType.getFieldType().isObject() && discriminationConfigurer != null;
     }
-    
+
     @JsonIgnore
     public boolean isCollection() {
         return isCollection;
     }
-    
+
     public void setIsCollection(boolean isCollection) {
         this.isCollection = isCollection;
     }
-    
+
     @JsonIgnore
     public TranslationSettings.TranslationType getTranslationType() {
         return translationType;
     }
-    
+
     public void setTranslationType(TranslationSettings.TranslationType translationType) {
         this.translationType = translationType;
     }
-    
+
     @Override
     public String toString() {
         return "APIField{" + "fieldName='" + fieldName + '\'' + ", fieldType='" + this.apiType.getFieldType() + '\''
@@ -354,7 +358,7 @@ public class APIField {
                 + ", uniqueConstraint='" + uniqueConstraint + '\'' + ", percentageConstraint='" + percentageConstraint
                 + '\'' + ", treeCollectionConstraint=" + treeCollectionConstraint + ", fieldLength=" + fieldLength
                 + ", common-possible-values='" + commonPossibleValuesPath + "'"
-                + ", children=" + children + ", dependencies=" + dependencies + ", percentage=" + percentage 
+                + ", children=" + children + ", dependencies=" + dependencies + ", percentage=" + percentage
                 + ", regex_pattern=" + regexPattern + "}";
     }
 }

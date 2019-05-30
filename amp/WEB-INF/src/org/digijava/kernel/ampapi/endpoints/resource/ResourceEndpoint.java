@@ -28,13 +28,12 @@ import org.apache.commons.io.FileUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,9 +50,9 @@ import io.swagger.annotations.ApiParam;
 public class ResourceEndpoint implements ErrorReportingEndpoint {
 
     private static final Logger logger = LoggerFactory.getLogger(ResourceEndpoint.class);
-    
+
     private static ResourceService resourceService = new ResourceService();
-    
+
     @GET
     @Path("fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -119,7 +118,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                     + "    \"team_member\": 14\n"
                     + " }\n"
                     + " </pre>")
-    public JsonBean getResource(@PathParam("uuid") String uuid) {
+    public JsonApiResponse getResource(@PathParam("uuid") String uuid) {
         return resourceService.getResource(uuid);
     }
 
@@ -127,7 +126,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getAllResources", ui = false)
     @ApiOperation("Retrieve all resources from AMP.")
-    public List<JsonBean> getAllResources() {
+    public List<JsonApiResponse> getAllResources() {
         return resourceService.getAllResources();
     }
 
@@ -135,7 +134,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getAllResourcesByIds", ui = false)
     @ApiOperation("Retrieve resources from AMP.")
-    public List<JsonBean> getAllResources(List<String> uuids) {
+    public List<JsonApiResponse> getAllResources(List<String> uuids) {
         return resourceService.getAllResources(uuids);
     }
 
@@ -154,7 +153,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                     + "}\n"
                     + "</pre>")
 
-    public JsonBean createResource(JsonBean resource) {
+    public JsonApiResponse createResource(Map<String, Object> resource) {
         return new ResourceImporter().createResource(resource).getResult();
     }
 
@@ -172,8 +171,8 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                     + "  \"note\": \"Resource note\"\n"
                     + "}\n"
                     + "</pre>")
-    public JsonBean createDocResource(
-            @FormDataParam("resource") JsonBean resource,
+    public JsonApiResponse createDocResource(
+            @FormDataParam("resource") Map<String, Object> resource,
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail) {
 

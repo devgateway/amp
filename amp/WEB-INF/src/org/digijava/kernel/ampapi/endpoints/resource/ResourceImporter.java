@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,11 +19,10 @@ import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.common.CommonErrors;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -62,10 +62,10 @@ public class ResourceImporter extends ObjectImporter {
      * @param newJson json description of the resource
      * @return errors if any
      */
-    public ResourceImporter createResource(JsonBean newJson) {
+    public ResourceImporter createResource(Map<String, Object> newJson) {
         return createResource(newJson, null);
     }
-    
+
     /**
      * Create a web link or document resource.
      *
@@ -73,10 +73,10 @@ public class ResourceImporter extends ObjectImporter {
      * @param formFile file for document resource, may be null for web link resources
      * @return ResourceImporter instance
      */
-    public ResourceImporter createResource(JsonBean newJson, FormFile formFile) {
+    public ResourceImporter createResource(Map<String, Object> newJson, FormFile formFile) {
         this.newJson = newJson;
 
-        String privateAttr = newJson.getString(ResourceEPConstants.PRIVATE);
+        String privateAttr = String.valueOf(newJson.get(ResourceEPConstants.PRIVATE));
 
         if (StringUtils.isBlank(privateAttr)) {
             addError(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.PRIVATE));
@@ -96,7 +96,7 @@ public class ResourceImporter extends ObjectImporter {
                 return this;
             }
 
-            String creatorEmail = newJson.getString(ResourceEPConstants.CREATOR_EMAIL);
+            String creatorEmail = String.valueOf(newJson.get(ResourceEPConstants.CREATOR_EMAIL));
             Long teamId = getLongOrNull(newJson.get(ResourceEPConstants.TEAM));
             AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(creatorEmail, teamId);
             teamMemberCreator = TeamMemberUtil.getTeamMember(teamMember.getAmpTeamMemId());
@@ -130,7 +130,7 @@ public class ResourceImporter extends ObjectImporter {
 
         try {
             resource = new AmpResource();
-            validateAndImport(resource, newJson.any());
+            validateAndImport(resource, newJson);
 
             if (errors.isEmpty()) {
                 if (ResourceType.LINK.equals(resource.getResourceType())) {
@@ -196,6 +196,7 @@ public class ResourceImporter extends ObjectImporter {
         return resource;
     }
 
+    @Override
     protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
         return extractTranslationsOrSimpleValue(apiField, parentObj, jsonValue);
     }
@@ -248,7 +249,7 @@ public class ResourceImporter extends ObjectImporter {
      * @param newJson
      * @return ApiErrorMessage
      */
-    private ApiErrorMessage validateCreatorEmailTeam(JsonBean newJson) {
+    private ApiErrorMessage validateCreatorEmailTeam(Map<String, Object> newJson) {
 
         Object creatorEmail = newJson.get(ResourceEPConstants.CREATOR_EMAIL);
         if (creatorEmail == null || StringUtils.isBlank(creatorEmail.toString())) {
@@ -285,51 +286,51 @@ public class ResourceImporter extends ObjectImporter {
 
         return null;
     }
-    
+
     /**
-     * Get the result of import/update resource in JsonBean format
+     * Get the result of import/update resource
      *
-     * @return JsonBean the result of the import or update action
+     * @return JsonApiResponse the result of the import or update action
      */
-    public JsonBean getResult() {
-        JsonBean result = new JsonBean();
-        if (errors.size() == 0 && resource == null) {
-            result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
-        } else if (errors.size() > 0) {
-            result.set(EPConstants.ERROR, ApiError.toError(errors.values()).getErrors());
-            result.set(ResourceEPConstants.RESOURCE, getNewJson());
-        } else {
-            result = new JsonBean();
-            result.set(ResourceEPConstants.UUID, resource.getUuid());
+    public JsonApiResponse getResult() {
+        Map<String, Object> result = null;
+        if (errors.isEmpty() && resource != null) {
+            result = new LinkedHashMap<>();
+            result.put(ResourceEPConstants.UUID, resource.getUuid());
             if (TranslationSettings.getCurrent().isMultilingual()) {
-                result.set(ResourceEPConstants.TITLE, resource.getTranslatedTitles());
-                result.set(ResourceEPConstants.DESCRIPTION, resource.getTranslatedDescriptions());
-                result.set(ResourceEPConstants.NOTE, resource.getTranslatedNotes());
+                result.put(ResourceEPConstants.TITLE, resource.getTranslatedTitles());
+                result.put(ResourceEPConstants.DESCRIPTION, resource.getTranslatedDescriptions());
+                result.put(ResourceEPConstants.NOTE, resource.getTranslatedNotes());
             } else {
-                result.set(ResourceEPConstants.TITLE, resource.getTitle());
-                result.set(ResourceEPConstants.DESCRIPTION, resource.getDescription());
-                result.set(ResourceEPConstants.NOTE, resource.getNote());
+                result.put(ResourceEPConstants.TITLE, resource.getTitle());
+                result.put(ResourceEPConstants.DESCRIPTION, resource.getDescription());
+                result.put(ResourceEPConstants.NOTE, resource.getNote());
             }
-            
+
             if (resource.getType() != null) {
-                result.set(ResourceEPConstants.TYPE, resource.getType().getId());
+                result.put(ResourceEPConstants.TYPE, resource.getType().getId());
             }
             if (ResourceType.LINK.equals(resource.getResourceType())) {
-                result.set(ResourceEPConstants.WEB_LINK, resource.getWebLink());
+                result.put(ResourceEPConstants.WEB_LINK, resource.getWebLink());
             } else {
-                result.set(ResourceEPConstants.FILE_NAME, resource.getFileName());
+                result.put(ResourceEPConstants.FILE_NAME, resource.getFileName());
             }
-            result.set(ResourceEPConstants.RESOURCE_TYPE, resource.getResourceType().getId());
-            result.set(ResourceEPConstants.ADDING_DATE,
+            result.put(ResourceEPConstants.RESOURCE_TYPE, resource.getResourceType().getId());
+            result.put(ResourceEPConstants.ADDING_DATE,
                     DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(resource.getAddingDate()));
-            result.set(ResourceEPConstants.TEAM, resource.getTeam());
+            result.put(ResourceEPConstants.TEAM, resource.getTeam());
         }
-        
-        if (!warnings.isEmpty()) {
-            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings.values()));
+
+        if (result == null) {
+            result = new HashMap<String, Object>() {{
+                put(ResourceEPConstants.RESOURCE, getNewJson());
+            }};
+            if (errors.isEmpty()) {
+                addError(CommonErrors.UNKOWN_ERROR);
+            }
         }
-        
-        return result;
+
+        return buildResponse(result);
     }
 
 }

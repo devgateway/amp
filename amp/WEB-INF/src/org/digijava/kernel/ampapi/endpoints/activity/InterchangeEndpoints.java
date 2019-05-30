@@ -30,11 +30,11 @@ import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityServ
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewWorkspace;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.helper.Constants;
@@ -171,7 +171,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                             + "returned.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
     message = "list of JsonBean with all the projects on the system"))
-    public Collection<JsonBean> getProjects(
+    public Collection<Map<String, Object>> getProjects(
             @ApiParam("Current pagination request reference (random id). It acts as a key for a LRU caching "
                     + "mechanism that holds the full list of projects for the current user. If it is not "
                     + "provided no caching is used")
@@ -180,7 +180,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             @ApiParam("Number of projects to skip") @QueryParam("offset") Integer offset,
             @ApiParam("Number of projects to return") @QueryParam("count") Integer count) {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-        Collection<JsonBean> activityCollection = ProjectList.getActivityList(pid, tm);
+        Collection<Map<String, Object>> activityCollection = ProjectList.getActivityList(pid, tm);
         int start = 0;
         int end = activityCollection.size() - 1;
         if (offset != null && count != null && offset < activityCollection.size()) {
@@ -199,7 +199,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiOperation("Provides full project information")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
     message = "project with full set of configured fields and their values"))
-    public JsonBean getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
+    public Map<String, Object> getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
         return ActivityInterchangeUtils.getActivity(projectId);
     }
 
@@ -210,9 +210,9 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiOperation("Provides full project information")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
     message = "project with full set of configured fields and their values"))
-    public JsonBean getProject(
+    public Map<String, Object> getProject(
             @ApiParam("project id") @PathParam("projectId") Long projectId,
-            @ApiParam("jsonBean with a list of fields that will be displayed") JsonBean filter) {
+            @ApiParam("jsonBean with a list of fields that will be displayed") Map<String, Object> filter) {
         return ActivityInterchangeUtils.getActivity(projectId, filter);
     }
 
@@ -233,7 +233,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiOperation("Retrieve project by AMP Id.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
     message = "project with full set of configured fields and their values"))
-    public JsonBean getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
+    public Map<String, Object> getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
         return ActivityInterchangeUtils.getActivityByAmpId(ampId);
     }
 
@@ -256,7 +256,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                             )
             })
             ))
-    public Collection<JsonBean> getProjectsByAmpIds(@ApiParam(value = "List of amp-id", required = true)
+    public Collection<Map<String, Object>> getProjectsByAmpIds(@ApiParam(value = "List of amp-id", required = true)
     List<String> ampIds) {
         return ActivityInterchangeUtils.getActivitiesByAmpIds(ampIds);
     }
@@ -274,14 +274,14 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         @ApiResponse(code = HttpServletResponse.SC_OK, message = "the latest project short overview"),
         @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
         message = "error if invalid configuration is received")})
-    public JsonBean addProject(
+    public JsonApiResponse addProject(
             @ApiParam("can downgrade to draft") @QueryParam("can-downgrade-to-draft") @DefaultValue("false")
             boolean canDowngradeToDraft,
             @ApiParam("process approval fields") @QueryParam("process-approval-fields") @DefaultValue("false")
             boolean isProcessApprovalFields,
             @ApiParam("use created_by and modified_by from input instead of user session") @QueryParam("track-editors")
             @DefaultValue("false") boolean isTrackEditors,
-            @ApiParam("activity configuration") JsonBean newJson) {
+            @ApiParam("activity configuration") Map<String, Object> newJson) {
 
         ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
                 isTrackEditors);
@@ -306,7 +306,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         @ApiResponse(code = HttpServletResponse.SC_OK, message = "latest project overview"),
         @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
         message = "error if invalid configuration is received")})
-    public JsonBean updateProject(
+    public JsonApiResponse updateProject(
             @ApiParam("the id of the activity which should be updated") @PathParam("projectId") Long projectId,
             @ApiParam("can downgrade to draft") @QueryParam("can-downgrade-to-draft") @DefaultValue("false")
             boolean canDowngradeToDraft,
@@ -314,7 +314,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             boolean isProcessApprovalFields,
             @ApiParam("use created_by and modified_by from input instead of user session") @QueryParam("track-editors")
             @DefaultValue("false") boolean isTrackEditors,
-            @ApiParam("activity configuration") JsonBean newJson) {
+            @ApiParam("activity configuration") Map<String, Object> newJson) {
         /*
          * Originally it was defined as PUT to avoid these type of issues checked here.
          * But it is more common to use it as POST, so let's then validate
@@ -324,7 +324,8 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             // invalidating
             String details = "url project_id = " + projectId + ", json " + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME +
                     " = " + internalId;
-            EndpointUtils.addGeneralError(newJson, ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details));
+            return new JsonApiResponse(ApiError.toError(ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details)))
+                    .addDetail(ActivityEPConstants.ACTIVITY, newJson);
         }
 
         ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,

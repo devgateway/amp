@@ -21,10 +21,10 @@ import javax.ws.rs.core.MediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 
 import io.swagger.annotations.Api;
@@ -88,7 +88,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
     @ApiOperation("Retrieve contact")
-    public JsonBean getContact(@ApiParam("contact id") @PathParam("id") Long id) {
+    public Map<String, Object> getContact(@ApiParam("contact id") @PathParam("id") Long id) {
         return ContactUtil.getContact(id);
     }
 
@@ -97,7 +97,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
     @ApiOperation("Retrieve contacts")
-    public Collection<JsonBean> getContact(List<Long> ids) {
+    public Collection<Map<String, Object>> getContact(List<Long> ids) {
         return ContactUtil.getContacts(ids);
     }
 
@@ -106,7 +106,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "createContact", ui = false)
     @ApiOperation("Create new contact")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "brief representation of contact"))
-    public JsonBean createContact(JsonBean contact) {
+    public JsonApiResponse createContact(Map<String, Object> contact) {
         return new ContactImporter().createContact(contact).getResult();
     }
 
@@ -116,7 +116,8 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "updateContact", ui = false)
     @ApiOperation("Update an existing contact")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "brief representation of contact"))
-    public JsonBean updateContact(@ApiParam("id of the existing contact") @PathParam("id") Long id, JsonBean contact) {
+    public JsonApiResponse updateContact(@ApiParam("id of the existing contact") @PathParam("id") Long id,
+            Map<String, Object> contact) {
         return new ContactImporter().updateContact(id, contact).getResult();
     }
 

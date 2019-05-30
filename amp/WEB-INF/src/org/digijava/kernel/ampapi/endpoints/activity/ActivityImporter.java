@@ -6,7 +6,7 @@ import static org.digijava.module.aim.util.ActivityUtil.loadActivity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,8 +32,10 @@ import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.ActivityErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceService;
@@ -144,9 +146,9 @@ public class ActivityImporter extends ObjectImporter {
      *
      * @param newJson new activity configuration
      * @param update  flags whether this is an import or an update request
-     * @return a list of API errors, that is empty if no error detected
+     * @return ActivityImporter instance
      */
-    public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update, String endpointContextPath) {
+    public ActivityImporter importOrUpdate(JsonBean newJson, boolean update, String endpointContextPath) {
         init(newJson, update, endpointContextPath);
 
         // retrieve fields definition for internal use
@@ -156,19 +158,20 @@ public class ActivityImporter extends ObjectImporter {
         boolean oldActivityDraft = false;
 
         if (modifiedBy == null) {
-            return Collections.singletonList(
-                    SecurityErrors.INVALID_TEAM.withDetails("Invalid team member in modified_by field."));
+            addError(SecurityErrors.INVALID_TEAM.withDetails("Invalid team member in modified_by field."));
+            return this;
         }
 
         Long activityGroupVersion = AIHelper.getActivityGroupVersionOrNull(newJson);
         if (ActivityUtil.isActivityStale(ampActivityId, activityGroupVersion)) {
-            return Collections.singletonList(
-                    ActivityErrors.ACTIVITY_IS_STALE.withDetails("Activity is not the latest version."));
+            addError(ActivityErrors.ACTIVITY_IS_STALE.withDetails("Activity is not the latest version."));
+            return this;
         }
 
-        List<ApiErrorMessage> messages = checkPermissions(update, ampActivityId, modifiedBy);
-        if (!messages.isEmpty()) {
-            return messages;
+        checkPermissions(update, ampActivityId, modifiedBy);
+        
+        if (!errors.isEmpty()) {
+            return this;
         }
 
         // check if any error were already detected in upper layers
@@ -189,7 +192,7 @@ public class ActivityImporter extends ObjectImporter {
 
         String activityId = ampActivityId == null ? null : ampActivityId.toString();
         String key = null;
-
+        
         Long currentVersion = null;
 
         try {
@@ -275,7 +278,7 @@ public class ActivityImporter extends ObjectImporter {
             ActivityValidationContext.set(null);
         }
 
-        return new ArrayList<ApiErrorMessage>(errors.values());
+        return this;
     }
 
     @Override
@@ -318,45 +321,41 @@ public class ActivityImporter extends ObjectImporter {
      * @param update true for edit, false for add
      * @param ampActivityId activity id to check, used only for edit case
      * @param teamMember team member to check
-     * @return list of errors, in case of success list will be empty
+     *
      */
-    private List<ApiErrorMessage> checkPermissions(boolean update, Long ampActivityId, AmpTeamMember teamMember) {
+    private void checkPermissions(boolean update, Long ampActivityId, AmpTeamMember teamMember) {
         if (update) {
-            return checkEditPermissions(teamMember, ampActivityId);
+            checkEditPermissions(teamMember, ampActivityId);
         } else {
-            return checkAddPermissions(teamMember);
+            checkAddPermissions(teamMember);
         }
     }
 
     /**
      * Check if team member can add activities.
      */
-    private List<ApiErrorMessage> checkAddPermissions(AmpTeamMember teamMember) {
+    private void checkAddPermissions(AmpTeamMember teamMember) {
         if (!ActivityInterchangeUtils.addActivityAllowed(new TeamMember(teamMember))) {
-            return Collections.singletonList(SecurityErrors.NOT_ALLOWED.withDetails("Adding activity is not allowed"));
-        } else {
-            return Collections.emptyList();
+            addError(SecurityErrors.NOT_ALLOWED.withDetails("Adding activity is not allowed"));
         }
     }
 
     /**
      * Check if team member can edit the activity.
      */
-    private List<ApiErrorMessage> checkEditPermissions(AmpTeamMember ampTeamMember, Long activityId) {
+    private void checkEditPermissions(AmpTeamMember ampTeamMember, Long activityId) {
         if (!ActivityInterchangeUtils.isEditableActivity(new TeamMember(ampTeamMember), activityId)) {
-            return Collections.singletonList(SecurityErrors.NOT_ALLOWED.withDetails("No right to edit this activity"));
-        } else {
-            return Collections.emptyList();
+            addError(SecurityErrors.NOT_ALLOWED.withDetails("No right to edit this activity"));
         }
     }
 
     @Override
-    protected String extractString(Field field, Object parentObj, Object jsonValue) {
-        return extractTranslationsOrSimpleValue(field, parentObj, jsonValue);
+    protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
+        return extractTranslationsOrSimpleValue(apiField, parentObj, jsonValue);
     }
 
-    protected String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
-        TranslationType trnType = trnSettings.getTranslatableType(field);
+    protected String extractTranslationsOrSimpleValue(APIField apiField, Object parentObj, Object jsonValue) {
+        TranslationType trnType = apiField.getTranslationType();
         // no translation expected
         if (TranslationType.NONE == trnType) {
             return (String) jsonValue;
@@ -364,7 +363,7 @@ public class ActivityImporter extends ObjectImporter {
         // base table value
         String value = null;
         if (TranslationType.STRING == trnType) {
-            value = extractContentTranslation(field, parentObj, (Map<String, Object>) jsonValue);
+            value = extractContentTranslation(apiField, parentObj, (Map<String, Object>) jsonValue);
         } else {
             Map<String, Object> editorText = null;
             if (trnSettings.isMultilingual()) {
@@ -374,7 +373,7 @@ public class ActivityImporter extends ObjectImporter {
                 editorText = new HashMap<String, Object>();
                 editorText.put(trnSettings.getDefaultLangCode(), jsonValue);
             }
-            value = extractTextTranslations(field, parentObj, editorText);
+            value = extractTextTranslations(apiField, parentObj, editorText);
         }
         return value;
     }
@@ -382,19 +381,20 @@ public class ActivityImporter extends ObjectImporter {
     /**
      * Stores all provided translations
      *
-     * @param field the field to translate
+     * @param apiField the api field
      * @param parentObj the object the field is part of
      * @param trnJson <lang, value> map of translations for each language
      * @return value to be stored in the base table
      */
-    protected String extractContentTranslation(Field field, Object parentObj, Map<String, Object> trnJson) {
+    protected String extractContentTranslation(APIField apiField, Object parentObj, Map<String, Object> trnJson) {
         String value = null;
         String currentLangValue = null;
         String anyLangValue = null;
 
         String objectClass = parentObj.getClass().getName();
         Long objId = (Long) ((Identifiable) parentObj).getIdentifier();
-        List<AmpContentTranslation> trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId, field.getName());
+        List<AmpContentTranslation> trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId,
+                apiField.getFieldNameInternal());
         if (objId == null) {
             objId = (long) System.identityHashCode(parentObj);
         }
@@ -413,7 +413,8 @@ public class ActivityImporter extends ObjectImporter {
             if (translation == null) {
                 trnList.remove(act);
             } else if (act == null) {
-                act = new AmpContentTranslation(objectClass, objId, field.getName(), langCode, translation);
+                String fieldName = apiField.getFieldNameInternal();
+                act = new AmpContentTranslation(objectClass, objId, fieldName, langCode, translation);
                 trnList.add(act);
             } else {
                 act.setTranslation(translation);
@@ -441,23 +442,18 @@ public class ActivityImporter extends ObjectImporter {
     /**
      * Stores Rich Text Editor entries
      *
-     * @param field reference field for the key
+     * @param apiField reference api field for the key
      * @param parentObj the object the field is part of
      * @param trnJson <lang, value> map of translations for each language
      * @return dg_editor key reference to be stored in the base table
      */
-    protected String extractTextTranslations(Field field, Object parentObj, Map<String, Object> trnJson) {
+    protected String extractTextTranslations(APIField apiField, Object parentObj, Map<String, Object> trnJson) {
         String key = null;
         if (update) { // all editor keys must exist before
-            try {
-                key = (String) field.get(parentObj);
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                logger.error(e.getMessage());
-                throw new RuntimeException(e);
-            }
+            key = (String) apiField.getFieldAccessor().get(parentObj);
         }
         if (key == null) { // init it in any case
-            key = AIHelper.getEditorKey(field.getName());
+            key = AIHelper.getEditorKey(apiField.getFieldNameInternal());
         }
         for (Entry<String, Object> trn : trnJson.entrySet()) {
             String langCode = trn.getKey();
@@ -763,6 +759,39 @@ public class ActivityImporter extends ObjectImporter {
      */
     public void setLatestActivityId(Long latestActivityId) {
         this.latestActivityId = latestActivityId;
+    }
+    
+    /**
+     * Get the result of import/update activity in JsonBean format
+     *
+     * @return JsonBean the result of the import or update action
+     */
+    public JsonBean getResult() {
+        JsonBean result = new JsonBean();
+        if (errors.size() == 0 && newActivity == null) {
+            // no new activity, but also errors are missing -> unknown error
+            result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
+        } else if (errors.size() > 0) {
+            result.set(EPConstants.ERROR, ApiError.toError(errors.values()).getErrors());
+            result.set(ActivityEPConstants.ACTIVITY, newJson);
+        } else {
+            List<JsonBean> activities = null;
+            if (newActivity != null && newActivity.getAmpActivityId() != null) {
+                // editable, viewable, since was just created/updated
+                activities = Arrays.asList(ProjectList.getActivityInProjectListFormat(newActivity, true, true));
+            }
+            if (activities == null || activities.size() == 0) {
+                result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
+                result.set(ActivityEPConstants.ACTIVITY, newJson);
+            } else {
+                result = activities.get(0);
+            }
+        }
+        if (warnings.size() > 0) {
+            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings.values()));
+        }
+        
+        return result;
     }
 
 }

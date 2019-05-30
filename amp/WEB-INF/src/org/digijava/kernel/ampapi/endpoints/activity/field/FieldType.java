@@ -42,8 +42,16 @@ public enum FieldType {
         return FieldType.OBJECT.equals(this);
     }
     
-    public boolean isTimestamp() {
+    public boolean isTimestampType() {
         return FieldType.TIMESTAMP.equals(this);
+    }
+    
+    public boolean isDateType() {
+        return FieldType.DATE.equals(this);
+    }
+    
+    public boolean isStringType() {
+        return FieldType.STRING.equals(this);
     }
 
     @Override

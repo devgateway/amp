@@ -21,7 +21,6 @@ import javax.ws.rs.core.MediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -108,10 +107,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @ApiOperation("Create new contact")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "brief representation of contact"))
     public JsonBean createContact(JsonBean contact) {
-        ContactImporter importer = new ContactImporter();
-        List<ApiErrorMessage> errors = importer.createContact(contact);
-        return ContactUtil.getImportResult(importer.getContact(), importer.getNewJson(), errors,
-                importer.getWarnings());
+        return new ContactImporter().createContact(contact).getResult();
     }
 
     @POST
@@ -121,10 +117,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @ApiOperation("Update an existing contact")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "brief representation of contact"))
     public JsonBean updateContact(@ApiParam("id of the existing contact") @PathParam("id") Long id, JsonBean contact) {
-        ContactImporter importer = new ContactImporter();
-        List<ApiErrorMessage> errors = importer.updateContact(id, contact);
-        return ContactUtil.getImportResult(importer.getContact(), importer.getNewJson(), errors,
-                importer.getWarnings());
+        return new ContactImporter().updateContact(id, contact).getResult();
     }
 
     @Override

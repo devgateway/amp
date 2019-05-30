@@ -1,6 +1,6 @@
 package org.digijava.module.aim.validator;
 
-import static org.digijava.module.aim.validator.ConstraintMatchers.iterableNode;
+import static org.digijava.module.aim.validator.ConstraintMatchers.inIterableNode;
 import static org.digijava.module.aim.validator.ConstraintMatchers.propertyNode;
 import static org.digijava.module.aim.validator.ConstraintMatchers.violationWithPath;
 import static org.hamcrest.Matchers.contains;
@@ -115,7 +115,7 @@ extends AbstractActivityValidatorTest<LocationTotalPercentageValidator> {
      */
     private Matcher<ConstraintViolation> locationPercentageViolation() {
         return violationWithPath(LocationTotalPercentage.class,
-                ImmutableList.of(iterableNode("locations"), propertyNode("locationPercentage")));
+                ImmutableList.of(propertyNode("locations"), inIterableNode("locationPercentage")));
     }
 
     private AmpActivityLocation newActivityLocation(Float percentage) {

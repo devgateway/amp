@@ -26,4 +26,9 @@ public class TestFieldInfoProvider implements FieldInfoProvider {
     public boolean isTranslatable(Field field) {
         return false;
     }
+    
+    @Override
+    public TranslationSettings.TranslationType getTranslatableType(Field field) {
+        return TranslationSettings.TranslationType.NONE;
+    }
 }

@@ -51,5 +51,11 @@ public abstract class AbstractActivityValidatorTest<T extends ConstraintValidato
         activity.setDraft(true);
         return activity;
     }
+    
+    public void setActivityInContext(AmpActivity activity) {
+        ActivityValidationContext avc = new ActivityValidationContext();
+        avc.setNewActivity(activity);
+        ActivityValidationContext.set(avc);
+    }
 
 }

@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
@@ -18,6 +20,8 @@ import org.digijava.kernel.validation.ConstraintValidatorContext;
  * Validator is active only when {@link ConditionalRequiredValidator#isActive(APIField, Object)} returns true.
  *
  * Dependency name used to mark required fields must be specified via constructor.
+ *
+ * Translatable fields are not supported yet.
  *
  * Note: will validate only the fields of the validated object. This validator does not recurse.
  *
@@ -53,14 +57,20 @@ public abstract class ConditionalRequiredValidator implements ConstraintValidato
         context.disableDefaultConstraintViolation();
 
         for (APIField field : type.getFieldsWithDependency(requiredFieldDependency)) {
-            if (requiredStatus.equals(field.getDependencyRequired())
-                    && isEmptyValue(field.getFieldAccessor().get(value))) {
+            if (requiredStatus.equals(field.getDependencyRequired())) {
 
-                context.buildConstraintViolation(ActivityErrors.FIELD_REQUIRED)
-                        .addPropertyNode(field.getFieldName())
-                        .addConstraintViolation();
+                if (field.getApiType().getFieldType() == FieldType.STRING
+                        && field.getTranslationType() != TranslationSettings.TranslationType.NONE) {
+                    throw new RuntimeException("Translatable fields are not supported yet.");
+                }
 
-                valid = false;
+                if (isEmptyValue(field.getFieldAccessor().get(value))) {
+                    context.buildConstraintViolation(ActivityErrors.FIELD_REQUIRED)
+                            .addPropertyNode(field.getFieldName())
+                            .addConstraintViolation();
+
+                    valid = false;
+                }
             }
         }
 

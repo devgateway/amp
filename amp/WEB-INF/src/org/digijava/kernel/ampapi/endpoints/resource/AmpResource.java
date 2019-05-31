@@ -10,6 +10,7 @@ import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.ResourceFieldsConstants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -28,12 +29,12 @@ public class AmpResource {
     @ResourceTextField(fieldTitle = "Title", translationsField = "translatedTitles")
     private String title;
 
-    @Interchangeable(fieldTitle = "File Name", importable = true,
+    @Interchangeable(fieldTitle = ResourceFieldsConstants.FILE_NAME, importable = true,
             requiredDependencies = ResourceRequiredValidator.RESOURCE_TYPE_FILE_VALID_KEY,
             dependencyRequired = ALWAYS)
     private String fileName;
 
-    @Interchangeable(fieldTitle = "Web Link", importable = true,
+    @Interchangeable(fieldTitle = ResourceFieldsConstants.WEB_LINK, importable = true,
             requiredDependencies = ResourceRequiredValidator.RESOURCE_TYPE_LINK_VALID_KEY,
             dependencyRequired = ALWAYS)
     private String webLink;

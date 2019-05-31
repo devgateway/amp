@@ -11,6 +11,7 @@ import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -23,7 +24,8 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
  */
 public class PledgeOrgValidator implements ConstraintValidator {
 
-    private static final String PLEDGE_FIELD_NAME = FieldMap.underscorify("Pledge");
+    private static final String PLEDGE_FIELD_NAME =
+            FieldMap.underscorify(ActivityFieldsConstants.Funding.Details.PLEDGE);
 
     public static final String DONOR_ORG_GROUP_ID = "donorOrgGrpId";
     public static final String FUNDING_PLEDGE_ID = "fundingPledgeId";

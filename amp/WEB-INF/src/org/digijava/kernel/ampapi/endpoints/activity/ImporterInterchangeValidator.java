@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.intToLong;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -111,14 +113,6 @@ public class ImporterInterchangeValidator {
         }
 
         return leafFilter;
-    }
-
-    private Long intToLong(Object obj) {
-        if (obj instanceof Integer) {
-            return ((Integer) obj).longValue();
-        } else {
-            return (Long) obj;
-        }
     }
 
     /**

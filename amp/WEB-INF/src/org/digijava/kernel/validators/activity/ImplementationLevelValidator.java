@@ -38,10 +38,17 @@ public class ImplementationLevelValidator implements ConstraintValidator {
     public static final String IMPLEMENTATION_LEVEL_VALID_KEY = "implementation_level_valid";
     public static final String IMPLEMENTATION_LOCATION_VALID_KEY = "implementation_location_valid";
 
-    private static final String IMPL_LEVEL_FIELD_NAME = FieldMap.underscorify("Implementation Level");
-    private static final String IMPL_LOC_FIELD_NAME = FieldMap.underscorify("Implementation Location");
-    private static final String LOCATIONS_FIELD_NAME = FieldMap.underscorify(ActivityFieldsConstants.LOCATIONS);
-    private static final String LOCATION_FIELD_NAME = FieldMap.underscorify("Location");
+    private static final String IMPL_LEVEL_FIELD_NAME =
+            FieldMap.underscorify(ActivityFieldsConstants.IMPLEMENTATION_LEVEL);
+
+    private static final String IMPL_LOC_FIELD_NAME =
+            FieldMap.underscorify(ActivityFieldsConstants.IMPLEMENTATION_LOCATION);
+
+    private static final String LOCATIONS_FIELD_NAME =
+            FieldMap.underscorify(ActivityFieldsConstants.LOCATIONS);
+
+    private static final String LOCATION_FIELD_NAME =
+            FieldMap.underscorify(ActivityFieldsConstants.Locations.LOCATION);
 
     @Override
     public void initialize(Map<String, String> arguments) {

@@ -780,7 +780,7 @@ public class ActivityImporter extends ObjectImporter {
         Set<ConstraintViolation> violations;
         if (requestedSaveMode == SUBMIT && !downgradedToDraftSave) {
             violations = getImporterInterchangeValidator().validate(getApiField(), root, SUBMIT_VALIDATION_GROUPS);
-            if (!violations.isEmpty() && isDraftFMEnabled) {
+            if (!violations.isEmpty() && isDraftFMEnabled && getImportRules().isCanDowngradeToDraft()) {
                 downgradeToDraftSave();
                 newActivity.setDraft(true);
                 violations = getImporterInterchangeValidator().validate(getApiField(), root, DRAFT_VALIDATION_GROUPS);

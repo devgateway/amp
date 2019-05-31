@@ -946,9 +946,6 @@ td.inside ul {
 .nv-group .nv-bar text{
     direction: rtl !important;
 }
-.nv-pieLabels .nv-label text{
-    direction: ltr !important;
-}
 
 .tick text {
     direction: rtl !important;

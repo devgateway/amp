@@ -212,7 +212,8 @@ function formatNumber(number) {
 	Numeral.language('amp');
 	// Apply the format.
 	var stringNumber = new Numeral(number).format(format);
-	return stringNumber;
+
+	return util.convertToEasternArabicNumerals(stringNumber);
 }
 
 var ampLang =

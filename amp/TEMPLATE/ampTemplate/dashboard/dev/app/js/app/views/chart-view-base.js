@@ -304,7 +304,7 @@ module.exports = BackboneDash.View.extend({
 
   renderNumbers: function() {
     if (this.model.get('total')) {
-    	this.$('.chart-total').html(util.translateLanguage(this.model.get('sumarizedTotal'))); // this shall use the format from the server and translate it in the front end
+    	this.$('.chart-total').html(util.convertToEasternArabicNumerals(util.translateLanguage(this.model.get('sumarizedTotal')))); // this shall use the format from the server and translate it in the front end
     }
     var self = this;
    var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;    	

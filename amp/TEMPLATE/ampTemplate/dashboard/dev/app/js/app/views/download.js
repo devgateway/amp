@@ -144,7 +144,7 @@ module.exports = BackboneDash.View.extend({
         }
         if (self.isRtl) {
             moneyContext = currencyName + ' ' + ( this.model.get('sumarizedTotal') !== undefined ?
-                util.translateLanguage(this.model.get('sumarizedTotal')) +' : ' +  ' ': ' ')  ;
+                util.convertToEasternArabicNumerals(util.translateLanguage(this.model.get('sumarizedTotal'))) +' : ' +  ' ': ' ')  ;
             moneyContext = moneyContext + trnAdjType ;
         }else{
             moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': '

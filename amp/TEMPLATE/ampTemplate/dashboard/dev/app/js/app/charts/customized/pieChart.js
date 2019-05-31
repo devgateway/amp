@@ -1,3 +1,4 @@
+var util = require('../../../ugly/util');
 
 nv.models.customizedPieChart = function() {
     "use strict";
@@ -164,7 +165,7 @@ nv.models.customizedPieChart = function() {
             if(rtl) {
                 wrap.select('.nv-pieLabels').selectAll('text')[0].forEach(function (element) {
                     if (element.textContent.length > 0 && element.textContent.lastIndexOf("%")) {
-                        element.textContent = "%" + element.textContent.substring(0, element.textContent.length - 1);
+                        element.textContent = '%' + util.convertToEasternArabicNumerals(element.textContent.substring(0, element.textContent.length - 1));
                     }
                 });
             }

@@ -1,7 +1,9 @@
 package org.digijava.module.aim.validator;
 
-import static org.digijava.module.aim.validator.ConstraintMatchers.iterableNode;
+import static org.digijava.module.aim.validator.ConstraintMatchers.inIterableNode;
+import static org.digijava.module.aim.validator.ConstraintMatchers.inIterableNodeAtKey;
 import static org.digijava.module.aim.validator.ConstraintMatchers.nodeAtKey;
+import static org.digijava.module.aim.validator.ConstraintMatchers.propertyNode;
 import static org.digijava.module.aim.validator.ConstraintMatchers.violationWithPath;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -166,7 +168,7 @@ extends AbstractActivityValidatorTest<OrgRoleTotalPercentageValidator> {
      */
     private Matcher<ConstraintViolation> orgRolePercentageViolation(AmpRole implementingAgencyRole) {
         return violationWithPath(OrgRoleTotalPercentage.class,
-                ImmutableList.of(iterableNode("orgrole"), nodeAtKey("percentage", implementingAgencyRole)));
+                ImmutableList.of(propertyNode("orgrole"), inIterableNodeAtKey("percentage", implementingAgencyRole)));
     }
 
     private AmpRole newRole(Long id, String code, String name) {

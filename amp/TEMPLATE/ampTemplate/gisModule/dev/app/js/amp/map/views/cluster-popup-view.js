@@ -126,7 +126,12 @@ module.exports = Backbone.View.extend({
           var region =  app.data.generalSettings.get("region");
           if (raw.value > 0) {
               percentage = d3.format('f')(raw.value / model.total * 100);
-              percentage = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, percentage) + '%';
+
+              if (isRtl) {
+                  percentage = '% ' +  TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, percentage);
+              } else {
+                  percentage = percentage + ' %';
+              }
           }
           return topsTooltipTemplate({
           label: raw.point.label,

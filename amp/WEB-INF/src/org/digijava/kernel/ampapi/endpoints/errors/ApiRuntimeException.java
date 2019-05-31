@@ -3,9 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.errors;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-
 /**
  * Defines API Error Exception. Stores @Response.Status and JsonBean with error messages
  *
@@ -16,17 +13,17 @@ public class ApiRuntimeException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     private Status responseStatus;
-    private JsonBean error;
+    private ApiErrorResponse error;
 
-    public ApiRuntimeException(JsonBean error) {
+    public ApiRuntimeException(ApiErrorResponse error) {
         this(Response.Status.BAD_REQUEST, error);
     }
 
-    public ApiRuntimeException(Status status, JsonBean error) {
+    public ApiRuntimeException(Status status, ApiErrorResponse error) {
         this(status, error, null);
     }
 
-    public ApiRuntimeException(Status status, JsonBean error, Throwable cause) {
+    public ApiRuntimeException(Status status, ApiErrorResponse error, Throwable cause) {
         super(cause);
         this.responseStatus = status;
         this.error = error;
@@ -36,11 +33,11 @@ public class ApiRuntimeException extends RuntimeException {
         return responseStatus;
     }
 
-    public JsonBean getError() {
+    public ApiErrorResponse getError() {
         return error;
     }
 
     public Object getUnwrappedError() {
-        return error.get(EPConstants.ERROR);
+        return error.getErrors();
     }
 }

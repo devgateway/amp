@@ -7,7 +7,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,7 +33,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.DefaultErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
-import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -207,7 +205,7 @@ public class ObjectImporter {
      */
     private boolean validateAndImport(Object newParent, APIField fieldDef,
             Map<String, Object> newJsonParent, String fieldPath) {
-        String fieldName = getFieldName(fieldDef, newJsonParent);
+        String fieldName = fieldDef.getFieldName();
         String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
         Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
 
@@ -217,105 +215,64 @@ public class ObjectImporter {
             if (isValidFormat) {
                 businessRulesValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
             }
-            setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
+            
+            if (fieldDef.isImportable()) {
+                Object jsonValue = newJsonParent.get(fieldName);
+                Object newValue = getNewValue(fieldDef, newParent, jsonValue);
+                fieldDef.getFieldAccessor().set(newParent, newValue);
+            }
         }
         return isValidFormat;
     }
 
-    /**
-     * Configures new value with assumption that it was already validated before
-     */
-    private void setNewField(Object newParent, APIField fieldDef, Map<String, Object> newJsonParent, String fieldPath) {
-        boolean importable = fieldDef.isImportable();
-        String fieldName = fieldDef.getFieldName();
-        String actualFieldName = fieldDef.getFieldNameInternal();
-        Object fieldValue = newJsonParent.get(fieldName);
-        Field objField = ReflectionUtil.getField(newParent, actualFieldName);
-        if (objField == null) {
-            String error = "Actual Field not found: " + actualFieldName + ", fieldPath: " + fieldPath;
-            logger.error(error);
-            throw new RuntimeException(error);
-        }
-
-        if (importable) {
-            Object newValue = getNewValue(objField, newParent, fieldValue, fieldDef);
-            fieldDef.getFieldAccessor().set(newParent, newValue);
-        }
-    }
-
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private Object getNewValue(Field field, Object parentObj, Object jsonValue, APIField fieldDef) {
-        boolean isCollection = InterchangeUtils.isCollection(field);
+    private Object getNewValue(APIField apiField, Object parentObj, Object jsonValue) {
+        boolean isCollection = apiField.isCollection();
         // on a business rule validation error we configure the input to progress with further validation
         if (jsonValue != null && JsonBean.class.isAssignableFrom(jsonValue.getClass())) {
             jsonValue = ((JsonBean) jsonValue).get(ActivityEPConstants.INPUT);
         }
+        
         if (jsonValue == null && !isCollection) {
             return null;
         }
-
-        FieldType fieldType = fieldDef.getApiType().getFieldType();
-        boolean idOnly = fieldDef.isIdOnly();
+        
+        FieldType fieldType = apiField.getApiType().getFieldType();
+        boolean idOnly = apiField.isIdOnly();
         // this field has possible values
         if (!isCollection && idOnly) {
-            return valueConverter.getObjectById(field.getType(), jsonValue);
+            return valueConverter.getObjectById(apiField.getApiType().getType(), jsonValue);
         }
-
-        Object value = null;
-
+        
         try {
             if (isCollection) {
-                value = fieldDef.getFieldAccessor().get(parentObj);
-                Collection col = (Collection) value;
-
-                if (col == null) {
-                    col = (Collection) valueConverter.getNewInstance(parentObj, field);
+                Collection collection = (Collection) apiField.getFieldAccessor().get(parentObj);
+                if (idOnly && jsonValue != null && !apiField.getApiType().isSimpleItemType()) {
+                    collection.clear();
+                    collection.add(valueConverter.getObjectById(apiField.getApiType().getType(), jsonValue));
                 }
-
-                if (idOnly && jsonValue != null && !fieldDef.getApiType().isSimpleItemType()) {
-                    Object res = valueConverter.getObjectById(fieldDef.getApiType().getType(), jsonValue);
-                    col.clear();
-                    col.add(res);
-                }
+                return collection;
             } else if (fieldType.isSimpleType()) {
-                if (Date.class.equals(field.getType())) {
-                    boolean isTimestampField = InterchangeUtils.isTimestampField(field);
-                    value = DateTimeUtil.parseISO8601DateTimestamp((String) jsonValue, isTimestampField);
-                } else if (String.class.equals(field.getType())) {
-                    value = extractString(field, parentObj, jsonValue);
+                if (fieldType.isDateType() || fieldType.isTimestampType()) {
+                    return DateTimeUtil.parseISO8601DateTimestamp((String) jsonValue, fieldType.isTimestampType());
+                } else if (fieldType.isStringType()) {
+                    return extractString(apiField, parentObj, jsonValue);
                 } else {
-                    Method valueOf = field.getType().getDeclaredMethod("valueOf", String.class);
-                    value = valueOf.invoke(field.getType(), String.valueOf(jsonValue));
+                    Method valueOf = apiField.getApiType().getType().getDeclaredMethod("valueOf", String.class);
+                    return valueOf.invoke(apiField.getApiType().getType(), String.valueOf(jsonValue));
                 }
             }
         } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException
                 | InvocationTargetException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
-
-        return value;
-    }
-
-    protected String extractString(Field field, Object parentObj, Object jsonValue) {
-        return (String) jsonValue;
-    }
-
-    /**
-     * Obtains the field name
-     * @param fieldDef
-     * @param newJsonParent
-     * @return
-     */
-    protected String getFieldName(APIField fieldDef, Map<String, Object> newJsonParent) {
-        if (fieldDef == null) {
-            if (newJsonParent != null && newJsonParent.keySet().size() == 1) {
-                return newJsonParent.keySet().iterator().next();
-            }
-        } else {
-            return fieldDef.getFieldName();
-        }
+        
         return null;
+    }
+    
+    protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
+        return (String) jsonValue;
     }
 
     /**
@@ -328,7 +285,6 @@ public class ObjectImporter {
      */
     private boolean validateSubElements(APIField fieldDef, Object newParent, Object newJsonValue, String fieldPath) {
         boolean isFormatValid = true;
-        fieldDef = fieldDef == null ? new APIField() : fieldDef; // FIXME fieldDef must always be present!
         FieldType fieldType = fieldDef.getApiType().getFieldType();
         /*
          * Sub-elements by default are valid when not provided.
@@ -349,12 +305,17 @@ public class ObjectImporter {
 
         // validate children, even if it is not a list -> to notify wrong entries
         if (isList || childrenFields.size() > 0) {
-            String actualFieldName = fieldDef.getFieldNameInternal();
-            Field newField = ReflectionUtil.getField(newParent, actualFieldName);
-            Class<?> subElementClass = fieldDef.getApiType().getElementType();
+            Class<?> subElementClass = fieldDef.getApiType().getType();
             Object newFieldValue = fieldDef.getFieldAccessor().get(newParent);
+            
             if (newFieldValue == null) {
-                newFieldValue = valueConverter.getNewInstance(newParent, newField);
+                if (isList) {
+                    newFieldValue = new ArrayList<>();
+                } else {
+                    newFieldValue = valueConverter.getNewInstance(fieldDef.getApiType().getType());
+                }
+                
+                fieldDef.getFieldAccessor().set(newParent, newFieldValue);
             }
 
             if (isList && fieldDef.getApiType().isSimpleItemType()) {
@@ -466,7 +427,7 @@ public class ObjectImporter {
     private Map<Object, Object> groupById(APIField idField, Collection collection) {
         Map<Object, Object> groupedById = new HashMap<>();
         for (Object v : collection) {
-            Object id = readField(v, idField.getFieldNameInternal());
+            Object id = idField.getFieldAccessor().get(v);
             if (id != null) {
                 Object old = groupedById.put(id, v);
                 if (old != null) {
@@ -484,7 +445,7 @@ public class ObjectImporter {
         Iterator iterator = collection.iterator();
         while (iterator.hasNext()) {
             Object element = iterator.next();
-            Object id = readField(element, idField.getFieldNameInternal());
+            Object id = idField.getFieldAccessor().get(element);
             if (id != null && !exceptIds.contains(id)) {
                 iterator.remove();
             }
@@ -495,7 +456,7 @@ public class ObjectImporter {
         Iterator iterator = newFieldValueCollection.iterator();
         while (iterator.hasNext()) {
             Object element = iterator.next();
-            Object id = readField(element, idField.getFieldNameInternal());
+            Object id = idField.getFieldAccessor().get(element);
             if (id == null) {
                 iterator.remove();
             }
@@ -520,14 +481,6 @@ public class ObjectImporter {
             throw new RuntimeException("Cannot convert " + value + " to " + requiredType);
         }
         return value;
-    }
-
-    private Object readField(Object target, String fieldName) {
-        try {
-            return FieldUtils.readField(target, fieldName, true);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException("Failed to read field.", e);
-        }
     }
 
     /**

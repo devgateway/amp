@@ -8,7 +8,7 @@ import java.util.List;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
@@ -74,7 +74,7 @@ public class ContactImporter extends ObjectImporter {
                 contact = (AmpContact) PersistenceManager.getSession().get(AmpContact.class, contactId);
 
                 if (contact == null) {
-                    ApiErrorResponse.reportResourceNotFound(ContactErrors.CONTACT_NOT_FOUND);
+                    ApiErrorResponseService.reportResourceNotFound(ContactErrors.CONTACT_NOT_FOUND);
                 }
             }
 

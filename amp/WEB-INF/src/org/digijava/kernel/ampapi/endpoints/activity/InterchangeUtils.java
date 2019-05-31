@@ -22,6 +22,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.InterchangeableClassMapper;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -237,7 +238,7 @@ public class InterchangeUtils {
         if (e instanceof ApiRuntimeException) {
             return (ApiRuntimeException) e;
         }
-        JsonBean error = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR
+        ApiErrorResponse error = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR
                 .withDetails(message));
         return new ApiRuntimeException(Response.Status.INTERNAL_SERVER_ERROR, error, e);
     }

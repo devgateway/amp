@@ -27,7 +27,7 @@ public class AmpIssues implements Serializable, Versionable, Cloneable {
     private AmpActivityVersion activity;
 
     @Interchangeable(fieldTitle = "Measures", importable = true, fmPath = "/Activity Form/Issues Section/Issue/Measure")
-    private Set<AmpMeasure> measures;
+    private Set<AmpMeasure> measures = new HashSet<>();
 
     @Interchangeable(fieldTitle = "Issue Date", importable = true, fmPath = "/Activity Form/Issues Section/Issue/Date")
     private Date issueDate;
@@ -164,15 +164,15 @@ public class AmpIssues implements Serializable, Versionable, Cloneable {
         AmpIssues aux = (AmpIssues) clone();
         aux.activity = newActivity;
         aux.ampIssueId = null;
+        Set<AmpMeasure> setMeasures = new HashSet<>();
         if (aux.measures != null && aux.measures.size() > 0) {
-            Set<AmpMeasure> setMeasures = new HashSet<AmpMeasure>();
             Iterator<AmpMeasure> i = aux.measures.iterator();
             while (i.hasNext()) {
                 AmpMeasure newMeasure = (AmpMeasure) i.next().clone();
                 newMeasure.setAmpMeasureId(null);
                 newMeasure.setIssue(aux);
+                Set<AmpActor> setActors = new HashSet<>();
                 if (newMeasure.getActors() != null && newMeasure.getActors().size() > 0) {
-                    Set<AmpActor> setActors = new HashSet<AmpActor>();
                     Iterator<AmpActor> j = newMeasure.getActors().iterator();
                     while (j.hasNext()) {
                         AmpActor newActor = (AmpActor) j.next().clone();
@@ -181,15 +181,12 @@ public class AmpIssues implements Serializable, Versionable, Cloneable {
                         setActors.add(newActor);
                     }
                     newMeasure.setActors(setActors);
-                } else {
-                    newMeasure.setActors(null);
                 }
+                newMeasure.setActors(setActors);
                 setMeasures.add(newMeasure);
             }
-            aux.measures = setMeasures;
-        } else {
-            aux.measures = null;
         }
+        aux.measures = setMeasures;
         return aux;
     }
     

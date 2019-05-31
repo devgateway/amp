@@ -27,6 +27,7 @@ import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.upload.FormFile;
@@ -636,8 +637,9 @@ public class ActivityUtil {
      * @param isNewActivity
      * @return
      */
-    public static boolean canReject(AmpTeamMember atm, boolean isDraft, boolean isNewActivity) {
-        return !isNewActivity && !isDraft && isProjectValidationOn(getValidationSetting(atm)) && isApprover(atm);
+    public static boolean canReject(AmpTeamMember atm, Boolean isDraft, Boolean isNewActivity) {
+        return BooleanUtils.isFalse(isNewActivity) && BooleanUtils.isFalse(isDraft)
+                && isProjectValidationOn(getValidationSetting(atm)) && isApprover(atm);
     }
     
     /**

@@ -71,7 +71,7 @@ public class ValueValidatorTest {
         fyFieldDescription.setFieldName(FY_FIELD);
         fyFieldDescription.setImportable(true);
         fyFieldDescription.setIdOnly(true);
-        fyFieldDescription.setApiType(new APIType(Collection.class, FieldType.LIST, Long.class));
+        fyFieldDescription.setApiType(new APIType(Long.class, FieldType.LIST));
 
         List<APIField> apiFields = Arrays.asList(sectorFieldDescription, fyFieldDescription);
         

@@ -351,12 +351,12 @@ public class ActivityImporter extends ObjectImporter {
     }
 
     @Override
-    protected String extractString(Field field, Object parentObj, Object jsonValue) {
-        return extractTranslationsOrSimpleValue(field, parentObj, jsonValue);
+    protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
+        return extractTranslationsOrSimpleValue(apiField, parentObj, jsonValue);
     }
 
-    protected String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
-        TranslationType trnType = trnSettings.getTranslatableType(field);
+    protected String extractTranslationsOrSimpleValue(APIField apiField, Object parentObj, Object jsonValue) {
+        TranslationType trnType = apiField.getTranslationType();
         // no translation expected
         if (TranslationType.NONE == trnType) {
             return (String) jsonValue;
@@ -364,7 +364,7 @@ public class ActivityImporter extends ObjectImporter {
         // base table value
         String value = null;
         if (TranslationType.STRING == trnType) {
-            value = extractContentTranslation(field, parentObj, (Map<String, Object>) jsonValue);
+            value = extractContentTranslation(apiField, parentObj, (Map<String, Object>) jsonValue);
         } else {
             Map<String, Object> editorText = null;
             if (trnSettings.isMultilingual()) {
@@ -374,7 +374,7 @@ public class ActivityImporter extends ObjectImporter {
                 editorText = new HashMap<String, Object>();
                 editorText.put(trnSettings.getDefaultLangCode(), jsonValue);
             }
-            value = extractTextTranslations(field, parentObj, editorText);
+            value = extractTextTranslations(apiField, parentObj, editorText);
         }
         return value;
     }
@@ -382,19 +382,20 @@ public class ActivityImporter extends ObjectImporter {
     /**
      * Stores all provided translations
      *
-     * @param field the field to translate
+     * @param apiField the api field
      * @param parentObj the object the field is part of
      * @param trnJson <lang, value> map of translations for each language
      * @return value to be stored in the base table
      */
-    protected String extractContentTranslation(Field field, Object parentObj, Map<String, Object> trnJson) {
+    protected String extractContentTranslation(APIField apiField, Object parentObj, Map<String, Object> trnJson) {
         String value = null;
         String currentLangValue = null;
         String anyLangValue = null;
 
         String objectClass = parentObj.getClass().getName();
         Long objId = (Long) ((Identifiable) parentObj).getIdentifier();
-        List<AmpContentTranslation> trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId, field.getName());
+        List<AmpContentTranslation> trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId,
+                apiField.getFieldNameInternal());
         if (objId == null) {
             objId = (long) System.identityHashCode(parentObj);
         }
@@ -413,7 +414,8 @@ public class ActivityImporter extends ObjectImporter {
             if (translation == null) {
                 trnList.remove(act);
             } else if (act == null) {
-                act = new AmpContentTranslation(objectClass, objId, field.getName(), langCode, translation);
+                String fieldName = apiField.getFieldNameInternal();
+                act = new AmpContentTranslation(objectClass, objId, fieldName, langCode, translation);
                 trnList.add(act);
             } else {
                 act.setTranslation(translation);
@@ -441,23 +443,18 @@ public class ActivityImporter extends ObjectImporter {
     /**
      * Stores Rich Text Editor entries
      *
-     * @param field reference field for the key
+     * @param apiField reference api field for the key
      * @param parentObj the object the field is part of
      * @param trnJson <lang, value> map of translations for each language
      * @return dg_editor key reference to be stored in the base table
      */
-    protected String extractTextTranslations(Field field, Object parentObj, Map<String, Object> trnJson) {
+    protected String extractTextTranslations(APIField apiField, Object parentObj, Map<String, Object> trnJson) {
         String key = null;
         if (update) { // all editor keys must exist before
-            try {
-                key = (String) field.get(parentObj);
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                logger.error(e.getMessage());
-                throw new RuntimeException(e);
-            }
+            key = (String) apiField.getFieldAccessor().get(parentObj);
         }
         if (key == null) { // init it in any case
-            key = getEditorKey(field.getName());
+            key = getEditorKey(apiField.getFieldNameInternal());
         }
         for (Entry<String, Object> trn : trnJson.entrySet()) {
             String langCode = trn.getKey();

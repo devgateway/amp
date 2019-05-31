@@ -15,7 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -32,11 +32,11 @@ public final class ContactUtil {
 
     public static JsonBean getImportResult(AmpContact contact, JsonBean json, List<ApiErrorMessage> errors,
             Collection<ApiErrorMessage> warnings) {
-        JsonBean result;
+        JsonBean result = new JsonBean();
         if (errors.size() == 0 && contact == null) {
-            result = ApiError.toError(ApiError.UNKOWN_ERROR);
+            result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
         } else if (errors.size() > 0) {
-            result = ApiError.toError(errors);
+            result.set(EPConstants.ERROR, ApiError.toError(errors).getErrors());
             result.set(ContactEPConstants.CONTACT, json);
         } else {
             result = new JsonBean();
@@ -61,11 +61,12 @@ public final class ContactUtil {
             List<Long> currentIds = ids.subList(fromIndex, end);
             List<AmpContact> contacts = ContactInfoUtil.getContacts(currentIds);
             contacts.forEach(contact -> {
-                JsonBean result;
+                JsonBean result = new JsonBean();
                 try {
                     result = exporter.export(contact);
                 } catch (Exception e) {
-                    result = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage()));
+                    result.set(EPConstants.ERROR, ApiError.toError(
+                            ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage())).getErrors());
                     result.set(ContactEPConstants.ID, contact.getId());
                 } finally {
                     PersistenceManager.getSession().evict(contact);
@@ -83,7 +84,8 @@ public final class ContactUtil {
         if (jsonContacts.size() != ids.size()) {
             ids.removeAll(jsonContacts.keySet());
             ids.forEach(id -> {
-                JsonBean notFoundJson = ApiError.toError(ContactErrors.CONTACT_NOT_FOUND);
+                JsonBean notFoundJson = new JsonBean();
+                notFoundJson.set(EPConstants.ERROR, ApiError.toError(ContactErrors.CONTACT_NOT_FOUND).getErrors());
                 notFoundJson.set(ContactEPConstants.ID, id);
                 jsonContacts.put(id, notFoundJson);
             });
@@ -94,7 +96,7 @@ public final class ContactUtil {
         AmpContact contact = (AmpContact) PersistenceManager.getSession().get(AmpContact.class, id);
 
         if (contact == null) {
-            ApiErrorResponse.reportResourceNotFound(ContactErrors.CONTACT_NOT_FOUND);
+            ApiErrorResponseService.reportResourceNotFound(ContactErrors.CONTACT_NOT_FOUND);
         }
 
         return new ContactExporter().export(contact);

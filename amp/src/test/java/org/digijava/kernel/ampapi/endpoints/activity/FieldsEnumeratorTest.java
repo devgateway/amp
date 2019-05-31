@@ -19,6 +19,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,6 +41,7 @@ import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
+import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
@@ -83,6 +85,8 @@ public class FieldsEnumeratorTest {
 
     private FieldsEnumerator fieldsEnumerator;
     private PossibleValuesEnumerator pvEnumerator;
+    
+    private ValueConverter valueConverter;
 
     @Before
     public void setUp() throws Exception {
@@ -96,6 +100,7 @@ public class FieldsEnumeratorTest {
 
         fieldsEnumerator = new FieldsEnumerator(provider, fmService, translatorService, name -> true);
         pvEnumerator = new PossibleValuesEnumerator(possibleValuesDAO, translatorService);
+        valueConverter = new ValueConverter();
     }
 
     @Test
@@ -170,12 +175,12 @@ public class FieldsEnumeratorTest {
         APIField dateField = newListField();
         dateField.setFieldName("date-field");
         dateField.setFieldLabel(fieldLabelFor("date-field"));
-        dateField.setApiType(new APIType(Date.class, FieldType.DATE, null));
+        dateField.setApiType(new APIType(Date.class, FieldType.DATE));
     
         APIField timestampField = newListField();
         timestampField.setFieldName("timestamp-field");
         timestampField.setFieldLabel(fieldLabelFor("timestamp-field"));
-        timestampField.setApiType(new APIType(Date.class, FieldType.TIMESTAMP, null));
+        timestampField.setApiType(new APIType(Date.class, FieldType.TIMESTAMP));
     
         assertEqualsDigest(Arrays.asList(dateField, timestampField), actual);
     }
@@ -833,10 +838,34 @@ public class FieldsEnumeratorTest {
     public void testTwoIdsNotAllowed() {
         fieldsEnumerator.getAllAvailableFields(ObjWithCollectionWithTwoIds.class);
     }
+    
+    
+    @Test
+    public void testAPIFieldActivityFields() {
+        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(AmpActivityVersion.class,
+                fieldsFor(AmpActivityFields.class));
+        assertEquals(nullableAPIFields, Collections.emptyList());
+    }
+    
+    private List<APIField> getAPIFieldWithNullCollections(Class<?> type, List<APIField> apiFields) {
+        List<APIField> nullableAPIFields = new ArrayList<>();
+        Object object = valueConverter.getNewInstance(type);
+        for (APIField apiField : apiFields) {
+            if (apiField.isCollection() && apiField.getFieldAccessor().get(object) == null) {
+                nullableAPIFields.add(apiField);
+            }
+            if (apiField.isCollection() && !InterchangeUtils.isSimpleType(apiField.getApiType().getType())) {
+                nullableAPIFields.addAll(
+                        getAPIFieldWithNullCollections(apiField.getApiType().getType(), apiField.getChildren()));
+            }
+        }
+        
+        return nullableAPIFields;
+    }
 
     private APIField newListField() {
         APIField field = newAPIField();
-        field.setApiType(new APIType(Collection.class, FieldType.LIST, Object.class));
+        field.setApiType(new APIType(Object.class, FieldType.LIST));
         return field;
     }
 
@@ -848,7 +877,7 @@ public class FieldsEnumeratorTest {
 
     private APIField newListOfLongField() {
         APIField field = newAPIField();
-        field.setApiType(new APIType(Collection.class, FieldType.LIST, Long.class));
+        field.setApiType(new APIType(Long.class, FieldType.LIST));
         return field;
     }
 

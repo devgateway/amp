@@ -131,14 +131,14 @@ public class ApiFieldStructuralServiceTest {
     private APIField newListField(String fieldName) {
         APIField field = new APIField();
         field.setFieldName(fieldName);
-        field.setApiType(new APIType(Collection.class, FieldType.LIST, Object.class));
+        field.setApiType(new APIType(Object.class, FieldType.LIST));
         return field;
     }
     
-    private APIField newListPrimitiveField(String fieldName, Class<?> elementType) {
+    private APIField newListPrimitiveField(String fieldName, Class<?> type) {
         APIField field = new APIField();
         field.setFieldName(fieldName);
-        field.setApiType(new APIType(Collection.class, FieldType.LIST, elementType));
+        field.setApiType(new APIType(type, FieldType.LIST));
         return field;
     }
     

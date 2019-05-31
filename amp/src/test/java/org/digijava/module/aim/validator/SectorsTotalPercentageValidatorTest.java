@@ -1,7 +1,9 @@
 package org.digijava.module.aim.validator;
 
-import static org.digijava.module.aim.validator.ConstraintMatchers.iterableNode;
+import static org.digijava.module.aim.validator.ConstraintMatchers.inIterableNode;
+import static org.digijava.module.aim.validator.ConstraintMatchers.inIterableNodeAtKey;
 import static org.digijava.module.aim.validator.ConstraintMatchers.nodeAtKey;
+import static org.digijava.module.aim.validator.ConstraintMatchers.propertyNode;
 import static org.digijava.module.aim.validator.ConstraintMatchers.violationWithPath;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -143,7 +145,7 @@ extends AbstractActivityValidatorTest<SectorsTotalPercentageValidator> {
      */
     private Matcher<ConstraintViolation> sectorPercentageViolation(AmpClassificationConfiguration config) {
         return violationWithPath(SectorsTotalPercentage.class,
-                ImmutableList.of(iterableNode("sectors"), nodeAtKey("sectorPercentage", config)));
+                ImmutableList.of(propertyNode("sectors"), inIterableNodeAtKey("sectorPercentage", config)));
     }
 
     private AmpActivitySector newActivitySector(AmpClassificationConfiguration config, Float percentage) {

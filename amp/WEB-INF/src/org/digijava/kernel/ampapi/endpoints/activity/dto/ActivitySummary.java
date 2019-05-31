@@ -1,9 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.activity.dto;
 
 import java.util.Date;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
@@ -18,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Nadejda Mandrescu
  */
 @JsonPropertyOrder({ "internal_id", "amp_id", "project_title", "iati_identifier", "creation_date", "update_date",
-    "activity_group", ActivityEPConstants.EDIT, ActivityEPConstants.VIEW })
+    "activity_group", "workspaces_edit", ActivityEPConstants.EDIT, ActivityEPConstants.VIEW })
 @ApiModel(description =
         "Provides a brief summary of the activity and clarifies if the user from session can view or edit it.")
 public class ActivitySummary {
@@ -49,6 +51,7 @@ public class ActivitySummary {
     private Date updatedDate;
 
     @JsonProperty("activity_group")
+    @JsonView(ImportView.class)
     private AmpActivityGroup ampActivityGroup;
 
     @JsonProperty(ActivityEPConstants.EDIT)
@@ -56,6 +59,10 @@ public class ActivitySummary {
 
     @JsonProperty(ActivityEPConstants.VIEW)
     private boolean viewable;
+
+    @JsonProperty("workspaces_edit")
+    @JsonView(ListView.class)
+    private Set<Long> workspaces;
 
     public Object getAmpActivityId() {
         return ampActivityId;
@@ -111,6 +118,14 @@ public class ActivitySummary {
 
     public void setAmpActivityGroup(AmpActivityGroup ampActivityGroup) {
         this.ampActivityGroup = ampActivityGroup;
+    }
+
+    public Set<Long> getWorkspaces() {
+        return workspaces;
+    }
+
+    public void setWorkspaces(Set<Long> workspaces) {
+        this.workspaces = workspaces;
     }
 
     public boolean isEditable() {

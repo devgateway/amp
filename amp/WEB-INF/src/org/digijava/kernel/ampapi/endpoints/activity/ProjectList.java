@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,20 +17,17 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
-import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.LongType;
 
@@ -53,8 +49,8 @@ public class ProjectList {
      * @param tm TeamMember, current logged user
      * @return the Collection <JsonBean> with the list of activities for the user
      */
-    public static Collection<Map<String, Object>> getActivityList(String pid, TeamMember tm) {
-        Collection<Map<String, Object>> projectList = null;
+    public static Collection<ActivitySummary> getActivityList(String pid, TeamMember tm) {
+        Collection<ActivitySummary> projectList = null;
         if (pid != null) {
             projectList = cacher.getCachedProjectList(pid);
         }
@@ -72,11 +68,11 @@ public class ProjectList {
      * @param tm the team member
      * @return the list with a short JSON description for each activity
      */
-    public static Collection<Map<String, Object>> getActivityList(TeamMember tm) {
+    public static Collection<ActivitySummary> getActivityList(TeamMember tm) {
 
-        Map<String, Map<String, Object>> activityMap = new HashMap<String, Map<String, Object>>();
-        List<Map<String, Object>> viewableActivities = new ArrayList<Map<String, Object>>();
-        List<Map<String, Object>> editableActivities = new ArrayList<Map<String, Object>>();
+        Map<String, ActivitySummary> activityMap = new HashMap<String, ActivitySummary>();
+        List<ActivitySummary> viewableActivities = new ArrayList<ActivitySummary>();
+        List<ActivitySummary> editableActivities = new ArrayList<ActivitySummary>();
 
         final List<Long> viewableIds = getViewableActivityIds(tm);
         List<Long> editableIds = ActivityUtil.getEditableActivityIdsNoSession(tm);
@@ -84,7 +80,7 @@ public class ProjectList {
         // get list of the workspaces where the user is member of and can edit each activity
         Map<Long, Set<Long>> activitiesWs = getEditableWorkspacesForActivities(tm);
 
-        List<Map<String, Object>> notViewableActivities =
+        List<ActivitySummary> notViewableActivities =
                 getActivitiesByIds(viewableIds, activitiesWs, tm, false, false);
 
         if (viewableIds.size() > 0) {
@@ -122,19 +118,25 @@ public class ProjectList {
 
 
 
-    private static void populateActivityMap(Map<String, Map<String, Object>> activityMap,
-            List<Map<String, Object>> activities) {
-        String ampIdFieldName = FieldMap.underscorify(ActivityFieldsConstants.AMP_ID);
-        String activityIdFieldName = FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
-        for (Map<String, Object> activity : activities) {
-            Map<String, Object> activityOnMap = activityMap.get((String) activity.get(ampIdFieldName));
+    private static void populateActivityMap(Map<String, ActivitySummary> activityMap,
+            List<ActivitySummary> activities) {
+
+        for (ActivitySummary activity : activities) {
+            ActivitySummary activityOnMap = activityMap.get(activity.getAmpId());
             // if it is not on the map, or activity is a newer
             // version than the one already on the Map then we put it on the Map
-            if (activityOnMap == null
-                    || (Long) activity.get(activityIdFieldName) > (Long) activityOnMap.get(activityIdFieldName)) {
-                activityMap.put((String) activity.get(ampIdFieldName), activity);
+            if (activityOnMap == null || compareTo(activity, activityOnMap) > 0) {
+                activityMap.put(activity.getAmpId(), activity);
             }
         }
+    }
+
+    private static int compareTo(ActivitySummary a1, ActivitySummary a2) {
+        int r = ((Long) a1.getAmpActivityId()).compareTo((Long) a2.getAmpActivityId());
+        if (r == 0) {
+            r = a1.getAmpActivityGroup().getVersion().compareTo(a2.getAmpActivityGroup().getVersion());
+        }
+        return r;
     }
 
     /**
@@ -173,10 +175,10 @@ public class ProjectList {
      * @param viewable whether the list of activities is viewable or not
      * @return List <JsonBean> of the activities generated from including/excluding the List<Long> of activityIds
      */
-    public static List<Map<String, Object>> getActivitiesByIds(final List<Long> activityIds,
+    public static List<ActivitySummary> getActivitiesByIds(final List<Long> activityIds,
             final Map<Long, Set<Long>> activitiesWs, final TeamMember tm,
             final boolean include, final boolean viewable) {
-        final List<Map<String, Object>> activitiesList = new ArrayList<Map<String, Object>>();
+        final List<ActivitySummary> activitiesList = new ArrayList<ActivitySummary>();
 
         PersistenceManager.getSession().doWork(new Work() {
             @Override
@@ -201,21 +203,18 @@ public class ProjectList {
                         Set<Long> workspaces = activitiesWs.containsKey(actId) ? activitiesWs.get(actId) : null;
                         boolean editable = workspaces != null ? workspaces.contains(tm.getTeamId()) : false;
 
-                        Map<String, Object> bean = new LinkedHashMap<>();
-                        bean.put(FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), actId);
-                        bean.put(FieldMap.underscorify(ActivityFieldsConstants.CREATED_DATE),
-                                DateTimeUtil.formatISO8601Timestamp(rs.getTimestamp("date_created")));
-                        bean.put(FieldMap.underscorify(ActivityFieldsConstants.PROJECT_TITLE),
-                                getTranslatableFieldValue("name", rs.getString("name"), actId));
-                        bean.put(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER),
-                                rs.getString("iati_identifier"));
-                        bean.put(FieldMap.underscorify(ActivityFieldsConstants.UPDATE_DATE),
-                                DateTimeUtil.formatISO8601Timestamp(rs.getTimestamp("date_updated")));
-                        bean.put(FieldMap.underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
-                        bean.put(FieldMap.underscorify(ActivityFieldsConstants.WORKSPACES_EDIT), workspaces);
-                        bean.put(ActivityEPConstants.EDIT, editable);
-                        bean.put(ActivityEPConstants.VIEW, viewable);
-                        activitiesList.add(bean);
+                        ActivitySummary as = new ActivitySummary();
+                        as.setAmpActivityId(actId);
+                        as.setCreatedDate(rs.getTimestamp("date_created"));
+                        as.setName(getTranslatableFieldValue("name", rs.getString("name"), actId));
+                        as.setIatiIdentifier(rs.getString("iati_identifier"));
+                        as.setUpdatedDate(rs.getTimestamp("date_updated"));
+                        as.setAmpId(rs.getString("amp_id"));
+                        as.setWorkspaces(workspaces);
+                        as.setEditable(editable);
+                        as.setViewable(viewable);
+
+                        activitiesList.add(as);
                     }
                     rs.close();
                 }

@@ -518,6 +518,10 @@ public class ObjectImporter {
         return trnSettings;
     }
 
+    public void addError(ApiErrorMessage error) {
+        errors.put(error.id, error);
+    }
+
     public Collection<ApiErrorMessage> getWarnings() {
         return warnings.values();
     }

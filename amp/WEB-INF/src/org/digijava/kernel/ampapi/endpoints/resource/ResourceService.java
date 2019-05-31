@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -16,13 +15,11 @@ import javax.jcr.query.QueryManager;
 import com.google.common.cache.CacheBuilder;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -50,53 +47,13 @@ public class ResourceService {
 
     public static final String PRIVATE_PATH_ITEM = "private";
 
-    public JsonBean getImportResult(AmpResource resource, JsonBean json, List<ApiErrorMessage> errors,
-                                    Collection<ApiErrorMessage> warnings) {
-        JsonBean result;
-        if (errors.size() == 0 && resource == null) {
-            result = ApiError.toError(ApiError.UNKOWN_ERROR);
-        } else if (errors.size() > 0) {
-            result = ApiError.toError(errors);
-            result.set(ResourceEPConstants.RESOURCE, json);
-        } else {
-            result = new JsonBean();
-            result.set(ResourceEPConstants.UUID, resource.getUuid());
-            if (TranslationSettings.getCurrent().isMultilingual()) {
-                result.set(ResourceEPConstants.TITLE, resource.getTranslatedTitles());
-                result.set(ResourceEPConstants.DESCRIPTION, resource.getTranslatedDescriptions());
-                result.set(ResourceEPConstants.NOTE, resource.getTranslatedNotes());
-            } else {
-                result.set(ResourceEPConstants.TITLE, resource.getTitle());
-                result.set(ResourceEPConstants.DESCRIPTION, resource.getDescription());
-                result.set(ResourceEPConstants.NOTE, resource.getNote());
-            }
-
-            if (resource.getType() != null) {
-                result.set(ResourceEPConstants.TYPE, resource.getType().getId());
-            }
-            if (ResourceType.LINK.equals(resource.getResourceType())) {
-                result.set(ResourceEPConstants.WEB_LINK, resource.getWebLink());
-            } else {
-                result.set(ResourceEPConstants.FILE_NAME, resource.getFileName());
-            }
-            result.set(ResourceEPConstants.RESOURCE_TYPE, resource.getResourceType().getId());
-            result.set(ResourceEPConstants.ADDING_DATE,
-                    DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(resource.getAddingDate()));
-            result.set(ResourceEPConstants.TEAM, resource.getTeam());
-        }
-        if (!warnings.isEmpty()) {
-            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings));
-        }
-        return result;
-    }
-
     public JsonBean getResource(String uuid) {
-        
+
         AmpResource resource = new AmpResource();
         Node readNode = DocumentManagerUtil.getReadNode(uuid, TLSUtils.getRequest());
 
         if (readNode == null) {
-            ApiErrorResponse.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_FOUND);
+            ApiErrorResponseService.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_FOUND);
         }
 
         NodeWrapper nodeWrapper = new NodeWrapper(readNode);
@@ -137,7 +94,9 @@ public class ResourceService {
                 resource.setTeam(Long.valueOf(folderNode.getName()));
             }
         } catch (RepositoryException e) {
-            return ApiError.toError(ResourceErrors.RESOURCE_ERROR, e);
+            JsonBean result = new JsonBean();
+            result.set(EPConstants.ERROR, ApiError.toError(ResourceErrors.RESOURCE_ERROR, e).getErrors());
+            return result;
         }
 
         DocumentManagerUtil.logoutJcrSessions(TLSUtils.getRequest());

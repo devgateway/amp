@@ -4,6 +4,7 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -75,7 +76,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     
     @Interchangeable(fieldTitle = "Organisation Contacts", importable = true, 
             validators = @Validators(unique = FMVisibility.ALWAYS_VISIBLE_FM))
-    private Set<AmpOrganisationContact> organizationContacts;
+    private Set<AmpOrganisationContact> organizationContacts = new HashSet<>();
 
     @InterchangeableDiscriminator(discriminatorField = "name", settings = {
             @Interchangeable(fieldTitle = ContactEPConstants.EMAIL, 

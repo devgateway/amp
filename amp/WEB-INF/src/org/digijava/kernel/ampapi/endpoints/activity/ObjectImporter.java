@@ -545,6 +545,10 @@ public class ObjectImporter {
     public Map<String, Object> getBranchJsonVisitor() {
         return branchJsonVisitor;
     }
+    
+    public void addError(ApiErrorMessage error) {
+        errors.put(error.id, error);
+    }
 
     public Collection<ApiErrorMessage> getWarnings() {
         return warnings.values();

@@ -59,9 +59,7 @@ public final class ActivityInterchangeUtils {
      * Imports or Updates an activity
      * @param newJson new activity configuration
      * @param update flags whether this is an import or an update request
-     * @param canDowngradeToDraft if allowed to downgrade to draft when some submit required field values are missing
-     * @param isProcessApprovalFields if to enforce approval fields from input. Otherwise the AF save workflow
-     * will be used to configure them
+     * @param rules activity import rules
      * @param endpointContextPath full API method path where this method has been called
      *
      * @return latest project overview or an error if invalid configuration is received
@@ -69,38 +67,10 @@ public final class ActivityInterchangeUtils {
     public static JsonBean importActivity(JsonBean newJson, boolean update, ActivityImportRules rules,
             String endpointContextPath) {
         List<APIField> activityFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
-        ActivityImporter importer = new ActivityImporter(activityFields, rules);
-        List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update, endpointContextPath);
-
-        return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors, importer.getWarnings());
-    }
-
-    private static JsonBean getImportResult(AmpActivityVersion newActivity, JsonBean newJson,
-            List<ApiErrorMessage> errors, Collection<ApiErrorMessage> warnings) {
-        JsonBean result = new JsonBean();
-        if (errors.size() == 0 && newActivity == null) {
-            // no new activity, but also errors are missing -> unknown error
-            result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
-        } else if (errors.size() > 0) {
-            result.set(EPConstants.ERROR, ApiError.toError(errors).getErrors());
-            result.set(ActivityEPConstants.ACTIVITY, newJson);
-        } else {
-            List<JsonBean> activities = null;
-            if (newActivity != null && newActivity.getAmpActivityId() != null) {
-                // editable, viewable, since was just created/updated
-                activities = Arrays.asList(ProjectList.getActivityInProjectListFormat(newActivity, true, true));
-            }
-            if (activities == null || activities.size() == 0) {
-                result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
-                result.set(ActivityEPConstants.ACTIVITY, newJson);
-            } else {
-                result = activities.get(0);
-            }
-        }
-        if (warnings.size() > 0) {
-            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings));
-        }
-        return result;
+        
+        return new ActivityImporter(activityFields, rules)
+                .importOrUpdate(newJson, update, endpointContextPath)
+                .getResult();
     }
 
     @SuppressWarnings("unchecked")

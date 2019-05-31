@@ -122,19 +122,20 @@ module.exports = Backbone.View.extend({
       chart.tooltipContent(function(a, y, raw) {
           var isRtl = app.data.generalSettings.get("rtl-direction");
           var percentage = "";
-
-          if ( raw.value> 0) {
-
+          var language = app.data.generalSettings.get("language");
+          var region =  app.data.generalSettings.get("region");
+          if (raw.value > 0) {
               percentage = d3.format('f')(raw.value / model.total * 100);
+
               if (isRtl) {
-                  percentage = '% ' +  percentage;
+                  percentage = '% ' +  TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, percentage);
               } else {
                   percentage = percentage + ' %';
               }
           }
           return topsTooltipTemplate({
           label: raw.point.label,
-          value: d3.format(',')(Math.round(raw.value)),
+          value: TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, d3.format(',')(Math.round(raw.value))),
           currency: model.currency,
           percent: percentage,
           totalLegend: app.translator.translateSync('amp.gis.cluster.tooltip-of-total', 'of total')
@@ -146,9 +147,12 @@ module.exports = Backbone.View.extend({
           .transition().duration(350)
           .call(chart);
       	if(app.data.generalSettings.get("rtl-direction")) {
+      	    var language = app.data.generalSettings.get("language");
+      	    var region =  app.data.generalSettings.get("region");
       		d3.select(selector).select('.nv-pieLabels').selectAll('text')[0].forEach(function (element) {
       			if (element.textContent.length > 0 && element.textContent.lastIndexOf("%")) {
-      				element.textContent = "%" + element.textContent.substring(0, element.textContent.length - 1);
+      			    var content = element.textContent.substring(0, element.textContent.length - 1);
+      				element.textContent = "%" + TranslationManager.convertNumbersToEasternArabicIfNeeded(true, language, region, content);
       			}
       		});
       	}

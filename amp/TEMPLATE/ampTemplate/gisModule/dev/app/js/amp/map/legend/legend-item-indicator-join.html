@@ -14,7 +14,7 @@
         <% var values = getLegendValues(model, bucket) %>        
          <%= values.min %>
          <%if(values.min !==values.max ){%>
-            &mdash;<%= values.max %> 
+            &mdash; <%= values.max %>
          <%}%>
          <%if(!values.isPercent){%>        
             <%= unit %>

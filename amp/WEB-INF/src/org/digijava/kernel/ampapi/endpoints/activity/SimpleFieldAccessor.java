@@ -10,6 +10,9 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 /**
  * TODO rename to Reflective
  *
+ * FIXME optimize! searching java.lang.reflect.Field involves involves throwing exceptions which are exceptionally slow
+ *       if we keep reference to Field then get/set is 36 times faster
+ *
  * @author Octavian Ciubotaru
  */
 public class SimpleFieldAccessor implements FieldAccessor {

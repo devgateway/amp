@@ -6,6 +6,7 @@ import java.util.HashSet;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * 
@@ -28,6 +29,18 @@ public class FundingBuilder {
     
     public FundingBuilder withDonor(AmpOrganisation organisation) {
         funding.setAmpDonorOrgId(organisation);
+
+        return this;
+    }
+
+    public FundingBuilder withTypeOfAssistance(AmpCategoryValue typeOfAssistance) {
+        funding.setTypeOfAssistance(typeOfAssistance);
+
+        return this;
+    }
+
+    public FundingBuilder withFinancingInstrument(AmpCategoryValue financingInstrument) {
+        funding.setFinancingInstrument(financingInstrument);
 
         return this;
     }

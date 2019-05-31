@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
+import org.digijava.kernel.ampapi.endpoints.activity.DiscriminatedFieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 
@@ -94,12 +95,7 @@ public class Validator {
 
             // TODO remove this after refactor to DiscriminatedFieldAccessor
             if (type.isDiscriminatedObject()) {
-                Collection wrapper = (Collection) value;
-                if (wrapper.isEmpty()) {
-                    value = null;
-                } else {
-                    value = wrapper.iterator().next();
-                }
+                value = DiscriminatedFieldAccessor.unwrapSingleElement((Collection) value);
             }
 
             if (value != null) { // TODO remove this condition after refactor to DiscriminatedFieldAccessor

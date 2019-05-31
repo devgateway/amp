@@ -41,7 +41,7 @@ public class ComponentFundingOrgRoleValidator implements ConstraintValidator {
     private static final String FUNDING_INTERNAL_FIELD_NAME = "fundings";
 
     @Override
-    public void initialize(Map<String, ?> arguments) {
+    public void initialize(Map<String, String> arguments) {
     }
 
     @Override

@@ -1,31 +1,20 @@
 package org.digijava.kernel.validators.activity;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
+import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.emptyIterable;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasToString;
-import static org.hamcrest.Matchers.isA;
 import static org.junit.Assert.assertThat;
 
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
-import org.digijava.kernel.ampapi.endpoints.activity.FMService;
-import org.digijava.kernel.ampapi.endpoints.activity.TestFMService;
-import org.digijava.kernel.ampapi.endpoints.activity.TestFieldInfoProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
-import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.validation.ConstraintViolation;
-import org.digijava.kernel.validation.Path;
 import org.digijava.kernel.validation.Validator;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
@@ -38,18 +27,21 @@ import org.junit.Test;
  */
 public class ComponentFundingOrgRoleValidatorTest {
 
-    private static APIField defaultMetaModel;
+    private static final String COMM_FIELD_PATH = "components~commitments~component_organization";
+    private static final String DISB_FIELD_PATH = "components~disbursements~component_organization";
+
+    private static APIField activityField;
 
     @BeforeClass
-    public static void setup() {
-        defaultMetaModel = getMetaModel(new TestFMService());
+    public static void setUp() {
+        activityField = ValidatorUtil.getMetaData();
     }
 
     @Test
     public void testNothingToValidate() {
         AmpActivityVersion activity = new AmpActivityVersion();
 
-        assertThat(getViolations(defaultMetaModel, activity), emptyIterable());
+        assertThat(getViolations(activityField, activity), emptyIterable());
     }
 
     @Test
@@ -57,7 +49,7 @@ public class ComponentFundingOrgRoleValidatorTest {
         HardcodedOrgs orgs = new HardcodedOrgs();
         AmpActivityVersion activity = activityWithOneUndeclaredOrg(orgs.getWorldBank());
 
-        assertThat(getViolations(defaultMetaModel, activity), contains(violationFor(1L)));
+        assertThat(getViolations(activityField, activity), contains(violationFor(COMM_FIELD_PATH, 1L)));
     }
 
     @Test
@@ -71,8 +63,8 @@ public class ComponentFundingOrgRoleValidatorTest {
                         .addComponent()
                 .getActivity();
 
-        Set<ConstraintViolation> violations = getViolations(defaultMetaModel, activity);
-        assertThat(violations, contains(violationFor(1L)));
+        Set<ConstraintViolation> violations = getViolations(activityField, activity);
+        assertThat(violations, contains(violationFor(COMM_FIELD_PATH, 1L)));
     }
 
     @Test
@@ -86,14 +78,10 @@ public class ComponentFundingOrgRoleValidatorTest {
                 .addComponent()
                 .getActivity();
 
-        Set<ConstraintViolation> violations = getViolations(defaultMetaModel, activity);
+        Set<ConstraintViolation> violations = getViolations(activityField, activity);
         assertThat(violations, containsInAnyOrder(
-                violationFor(1L, path("components~commitments~component_organization")),
-                violationFor(1L, path("components~disbursements~component_organization"))));
-    }
-
-    private Matcher<Path> path(String path) {
-        return hasToString(path);
+                violationFor(COMM_FIELD_PATH, 1L),
+                violationFor(DISB_FIELD_PATH, 1L)));
     }
 
     @Test
@@ -107,10 +95,10 @@ public class ComponentFundingOrgRoleValidatorTest {
                         .addComponent()
                 .getActivity();
 
-        Set<ConstraintViolation> violations = getViolations(defaultMetaModel, activity);
+        Set<ConstraintViolation> violations = getViolations(activityField, activity);
         assertThat(violations, containsInAnyOrder(
-                violationFor(1L),
-                violationFor(3L)));
+                violationFor(COMM_FIELD_PATH, 1L),
+                violationFor(DISB_FIELD_PATH, 3L)));
     }
 
     @Test
@@ -125,7 +113,7 @@ public class ComponentFundingOrgRoleValidatorTest {
                         .addComponent()
                 .getActivity();
 
-        assertThat(getViolations(defaultMetaModel, activity), emptyIterable());
+        assertThat(getViolations(activityField, activity), emptyIterable());
     }
 
     @Test
@@ -133,8 +121,7 @@ public class ComponentFundingOrgRoleValidatorTest {
         HardcodedOrgs orgs = new HardcodedOrgs();
         AmpActivityVersion activity = activityWithOneUndeclaredOrg(orgs.getWorldBank());
 
-        TestFMService fmService = new TestFMService(ImmutableSet.of("/Activity Form/Components"));
-        APIField activityField = getMetaModel(fmService);
+        APIField activityField = ValidatorUtil.getMetaData(ImmutableSet.of("/Activity Form/Components"));
 
         assertThat(getViolations(activityField, activity), emptyIterable());
     }
@@ -144,10 +131,8 @@ public class ComponentFundingOrgRoleValidatorTest {
         HardcodedOrgs orgs = new HardcodedOrgs();
         AmpActivityVersion activity = activityWithOneUndeclaredOrg(orgs.getWorldBank());
 
-        TestFMService fmService = new TestFMService(
+        APIField activityField = ValidatorUtil.getMetaData(
                 ImmutableSet.of("/Activity Form/Components/Component/Components Commitments/Commitment Table"));
-
-        APIField activityField = getMetaModel(fmService);
 
         assertThat(getViolations(activityField, activity), emptyIterable());
     }
@@ -157,10 +142,8 @@ public class ComponentFundingOrgRoleValidatorTest {
         HardcodedOrgs orgs = new HardcodedOrgs();
         AmpActivityVersion activity = activityWithOneUndeclaredOrg(orgs.getWorldBank());
 
-        TestFMService fmService = new TestFMService(ImmutableSet.of(
+        APIField activityField = ValidatorUtil.getMetaData(ImmutableSet.of(
                 "/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization"));
-
-        APIField activityField = getMetaModel(fmService);
 
         assertThat(getViolations(activityField, activity), emptyIterable());
     }
@@ -181,7 +164,7 @@ public class ComponentFundingOrgRoleValidatorTest {
                         .addComponent()
                 .getActivity();
 
-        assertThat(getViolations(defaultMetaModel, activity), emptyIterable());
+        assertThat(getViolations(activityField, activity), emptyIterable());
     }
 
     private AmpActivityVersion activityWithOneUndeclaredOrg(AmpOrganisation org) {
@@ -193,40 +176,21 @@ public class ComponentFundingOrgRoleValidatorTest {
     }
 
     /**
-     * Matches constraint violations generated by {@link ComponentFundingOrgRoleValidator}. Path is not verified.
-     * @param orgId offending organization id
-     * @return
-     */
-    private Matcher<ConstraintViolation> violationFor(Long orgId) {
-        return violationFor(orgId, anything());
-    }
-
-    /**
      * Matches constraint violations generated by {@link ComponentFundingOrgRoleValidator}.
+     *
+     * @param path field path
      * @param orgId offending organization id
-     * @param pathMatcher matcher for path
      * @return constraint violation matcher
      */
-    private Matcher<ConstraintViolation> violationFor(Long orgId, Matcher pathMatcher) {
-        return allOf(
-                isA(ConstraintViolation.class),
-                hasProperty("constraintDescriptor",
-                        hasProperty("constraintValidatorClass", equalTo(ComponentFundingOrgRoleValidator.class))),
-                hasProperty("attributes", hasEntry(ComponentFundingOrgRoleValidator.ATTR_ORG_ID, orgId)),
-                hasProperty("path", pathMatcher));
+    private Matcher<ConstraintViolation> violationFor(String path, Long orgId) {
+        return ValidatorMatchers.violationFor(ComponentFundingOrgRoleValidator.class,
+                path,
+                hasEntry(ComponentFundingOrgRoleValidator.ATTR_ORG_ID, orgId),
+                ActivityErrors.ORGANIZATION_NOT_DECLARED);
     }
 
     private Set<ConstraintViolation> getViolations(APIField activityField, AmpActivityVersion activity) {
         Validator validator = new Validator();
         return validator.validate(activityField, activity);
-    }
-
-    private static APIField getMetaModel(FMService fmService) {
-        TestTranslatorService translatorService = new TestTranslatorService();
-        TestFieldInfoProvider provider = new TestFieldInfoProvider();
-
-        FieldsEnumerator fieldsEnumerator = new FieldsEnumerator(provider, fmService, translatorService, name -> true);
-
-        return fieldsEnumerator.getMetaModel(AmpActivityFields.class);
     }
 }

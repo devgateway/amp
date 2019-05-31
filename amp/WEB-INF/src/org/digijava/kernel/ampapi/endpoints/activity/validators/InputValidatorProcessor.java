@@ -32,7 +32,6 @@ public class InputValidatorProcessor {
                 new MultipleEntriesValidator(),
                 new UniqueValidator(),
                 new TreeCollectionValidator(),
-                new DependencyValidator(),
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),
                 new RegexPatternValidator(),

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +47,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -66,6 +68,8 @@ import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.validator.ActivityValidationContext;
+import org.digijava.module.aim.validator.groups.API;
+import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.editor.dbentity.Editor;
@@ -80,11 +84,15 @@ import org.hibernate.StaleStateException;
  * @author Nadejda Mandrescu
  */
 public class ActivityImporter extends ObjectImporter {
+
     private static final Logger logger = Logger.getLogger(ActivityImporter.class);
     /**
      * FM path for the "Save as Draft" feature being enabled
      */
     private static final String SAVE_AS_DRAFT_PATH = "/Activity Form/Save as Draft";
+
+    private static final Class<?>[] DRAFT_VALIDATION_GROUPS = {API.class};
+    private static final Class<?>[] SUBMIT_VALIDATION_GROUPS = {API.class, Submit.class};
 
     private AmpActivityVersion newActivity = null;
     private AmpActivityVersion oldActivity = null;
@@ -149,8 +157,6 @@ public class ActivityImporter extends ObjectImporter {
     public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update, String endpointContextPath) {
         init(newJson, update, endpointContextPath);
 
-        // retrieve fields definition for internal use
-        List<APIField> fieldsDef = getApiFields();
         // get existing activity if this is an update request
         Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
         boolean oldActivityDraft = false;
@@ -769,4 +775,19 @@ public class ActivityImporter extends ObjectImporter {
         this.latestActivityId = latestActivityId;
     }
 
+    @Override
+    public void processInterViolationsForTypes(Map<String, Object> json, Object root) {
+        Set<ConstraintViolation> violations;
+        if (requestedSaveMode == SUBMIT && !downgradedToDraftSave) {
+            violations = getImporterInterchangeValidator().validate(getApiField(), root, SUBMIT_VALIDATION_GROUPS);
+            if (!violations.isEmpty() && isDraftFMEnabled && getImportRules().isCanDowngradeToDraft()) {
+                downgradeToDraftSave();
+                newActivity.setDraft(true);
+                violations = getImporterInterchangeValidator().validate(getApiField(), root, DRAFT_VALIDATION_GROUPS);
+            }
+        } else {
+            violations = getImporterInterchangeValidator().validate(getApiField(), root, DRAFT_VALIDATION_GROUPS);
+        }
+        getImporterInterchangeValidator().integrateErrorsIntoResult(violations, json);
+    }
 }

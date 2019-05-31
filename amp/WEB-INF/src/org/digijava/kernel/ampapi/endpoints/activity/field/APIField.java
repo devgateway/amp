@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,8 +42,29 @@ public class APIField {
     @JsonIgnore
     private String fieldNameInternal;
 
+    /**
+     * Can be Y/N/ND. If this field has dependencies then this value is {@link #dependencyRequired}, otherwise it is
+     * {@link #unconditionalRequired}.
+     */
     @JsonProperty(ActivityEPConstants.REQUIRED)
     private String required;
+
+    /**
+     * Used internally. Can be Y/N/ND as for {@link #required}. Used only for fields without dependency.
+     * Validation happens unconditionally.
+     */
+    @JsonIgnore
+    private String unconditionalRequired;
+
+    /**
+     * Used internally. Can be Y/N/ND. Used only when field has a dependency.
+     *
+     * <p>Examples of dependencies:
+     * <ul><li>field is sometimes invisible</li>
+     * <li>field is always visible but it is required only when another field has a specific value</li></ul></p>
+     */
+    @JsonIgnore
+    private String dependencyRequired;
 
     @JsonProperty(ActivityEPConstants.ID_ONLY)
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
@@ -72,11 +94,14 @@ public class APIField {
     @JsonIgnore
     private APIField idChild;
 
+    @JsonIgnore
+    private boolean independent;
+
     @JsonProperty(ActivityEPConstants.CHILDREN)
     private Fields children;
 
     @JsonProperty(ActivityEPConstants.DEPENDENCIES)
-    private List<String> dependencies;
+    private List<String> dependencies = new ArrayList<>();
     
     @JsonProperty(ActivityEPConstants.REGEX_PATTERN)
     private String regexPattern;
@@ -141,6 +166,10 @@ public class APIField {
         return children.getFieldsForFieldNameInternal(fieldNameInternal);
     }
 
+    public List<APIField> getFieldsWithDependency(String dependency) {
+        return children.getFieldsWithDependency(dependency);
+    }
+
     public void setFieldAccessor(FieldAccessor fieldAccessor) {
         this.fieldAccessor = fieldAccessor;
     }
@@ -180,6 +209,14 @@ public class APIField {
 
     public void setIdChild(APIField idChild) {
         this.idChild = idChild;
+    }
+
+    public boolean isIndependent() {
+        return independent;
+    }
+
+    public void setIndependent(boolean independent) {
+        this.independent = independent;
     }
 
     public JsonBean getFieldLabel() {
@@ -378,7 +415,23 @@ public class APIField {
     public void setTranslationType(TranslationSettings.TranslationType translationType) {
         this.translationType = translationType;
     }
-    
+
+    public String getDependencyRequired() {
+        return dependencyRequired;
+    }
+
+    public void setDependencyRequired(String dependencyRequired) {
+        this.dependencyRequired = dependencyRequired;
+    }
+
+    public String getUnconditionalRequired() {
+        return unconditionalRequired;
+    }
+
+    public void setUnconditionalRequired(String unconditionalRequired) {
+        this.unconditionalRequired = unconditionalRequired;
+    }
+
     @Override
     public String toString() {
         return "APIField{" + "fieldName='" + fieldName + '\'' + ", fieldType='" + this.apiType.getFieldType() + '\''

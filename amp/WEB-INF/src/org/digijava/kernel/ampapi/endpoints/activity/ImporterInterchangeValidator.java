@@ -1,8 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.intToLong;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -16,7 +19,9 @@ import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validation.Path;
 import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
-import org.digijava.module.aim.validator.groups.API;
+import org.digijava.kernel.validators.activity.FundingWithTransactionsValidator;
+import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
+import org.digijava.kernel.validators.activity.PledgeOrgValidator;
 
 /**
  * Acts as a bridge between importer and interchangeable validation.
@@ -45,13 +50,21 @@ public class ImporterInterchangeValidator {
      * Validation is recursive and will reveal constraint violations for root object and also for objects deep into
      * the object tree.
      *
-     * @param json json representation of the object
      * @param type type information for the object
      * @param root internal representation of the object
+     * @param groups validation groups
+     * @return all found constraint violations
      */
-    public void validate(Map<String, Object> json, APIField type, Object root) {
-        Set<ConstraintViolation> violations = validator.validate(type, root, API.class);
+    public Set<ConstraintViolation> validate(APIField type, Object root, Class<?>... groups) {
+        return validator.validate(type, root, groups);
+    }
 
+    /**
+     *
+     * @param violations constraint violation to integrate into json
+     * @param json json representation of the object
+     */
+    public void integrateErrorsIntoResult(Set<ConstraintViolation> violations, Map<String, Object> json) {
         for (ConstraintViolation violation : violations) {
             if (isViolationForType(violation)) {
                 List<Path.Node> nodes = ImmutableList.copyOf(violation.getPath().iterator());
@@ -84,7 +97,17 @@ public class ImporterInterchangeValidator {
 
         if (validatorClass.equals(ComponentFundingOrgRoleValidator.class)) {
             Long orgId = (Long) violation.getAttributes().get(ComponentFundingOrgRoleValidator.ATTR_ORG_ID);
-            leafFilter = orgId::equals;
+            leafFilter = value -> orgId.equals(intToLong(value));
+        } else if (validatorClass.equals(ImplementationLevelValidator.class)) {
+            Long locId = (Long) violation.getAttributes().get(ImplementationLevelValidator.ATTR_LOC_ID);
+            leafFilter = value -> locId == null || locId.equals(intToLong(value));
+        } else if (validatorClass.equals(FundingWithTransactionsValidator.class)) {
+            // this condition is not sufficient, will match funding items what do not have transactions at all
+            leafFilter = Objects::isNull;
+        } else if (validatorClass.equals(PledgeOrgValidator.class)) {
+            // this condition is not sufficient, will match funding items with correct pledge
+            Long orgId = (Long) violation.getAttributes().get(PledgeOrgValidator.FUNDING_PLEDGE_ID);
+            leafFilter = value -> orgId.equals(intToLong(value));
         } else {
             leafFilter = o -> true;
         }
@@ -96,6 +119,8 @@ public class ImporterInterchangeValidator {
      * Walk the original json and inject errors at the appropriate locations as specified by nodes. If there are
      * multiple leaf nodes where error can be injected, then it will be injected in all places for which leafFilter
      * returns true.
+     *
+     * If the last node is not present in json, then it will be created.
      *
      * @param json original json
      * @param nodes location where to inject the errors
@@ -109,22 +134,20 @@ public class ImporterInterchangeValidator {
         boolean errorsAdded = false;
         String fieldName = nodes.get(0).getName();
         Object value = json.get(fieldName);
-        if (value != null) {
-            if (nodes.size() == 1) { // leaf case
-                if (leafFilter.test(value)) {
-                    errorsAdded = true;
-                    ErrorDecorator.addError(json, fieldName, fieldPath, message, errors);
+        if (nodes.size() == 1) { // leaf case
+            if (leafFilter.test(value)) {
+                errorsAdded = true;
+                ErrorDecorator.addError(json, fieldName, fieldPath, message, errors);
+            }
+        } else if (value != null) {
+            List<Path.Node> subNodes = nodes.subList(1, nodes.size());
+            if (value instanceof Collection) {
+                Collection collection = (Collection) value;
+                for (Object element : collection) {
+                    errorsAdded |= walk((Map) element, subNodes, fieldPath, message, leafFilter);
                 }
             } else {
-                List<Path.Node> subNodes = nodes.subList(1, nodes.size());
-                if (value instanceof Collection) {
-                    Collection collection = (Collection) value;
-                    for (Object element : collection) {
-                        errorsAdded |= walk((Map) element, subNodes, fieldPath, message, leafFilter);
-                    }
-                } else {
-                    errorsAdded = walk((Map) value, subNodes, fieldPath, message, leafFilter);
-                }
+                errorsAdded = walk((Map) value, subNodes, fieldPath, message, leafFilter);
             }
         }
         return errorsAdded;

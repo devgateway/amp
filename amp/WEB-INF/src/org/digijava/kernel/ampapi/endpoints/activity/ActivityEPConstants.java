@@ -123,15 +123,6 @@ public class ActivityEPConstants {
     public static final String DONOR_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Donor Project Code";
     public static final String BUDGET_EXTRAS_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Budget Extras/Project Code";
 
-    public static final Set<String> TRANSACTION_FIELD_NAMES = ImmutableSet.of(
-            ArConstants.COMMITMENT,
-            ArConstants.DISBURSEMENT,
-            ArConstants.EXPENDITURE,
-            ArConstants.RELEASE_OF_FUNDS,
-            ArConstants.ESTIMATED_DISBURSEMENTS,
-            ArConstants.ARREARS,
-            ArConstants.DISBURSEMENT_ORDERS);
-
     public static final String CONTACTS_PATH = "/Activity Form/Contacts";
     
     public static final String REGEX_PATTERN_EMAIL = 

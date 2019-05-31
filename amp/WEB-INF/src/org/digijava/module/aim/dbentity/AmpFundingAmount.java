@@ -3,6 +3,8 @@
  */
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,7 +47,8 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
     
     @Interchangeable(fieldTitle = "Amount", importable = true,
             fmPath = FMVisibility.PARENT_FM + "/" + CategoryConstants.PROJECT_AMOUNT_NAME,
-            requiredFmPath = FMVisibility.PARENT_FM + "/Required Validator for Cost Amount")
+            requiredFmPath = FMVisibility.PARENT_FM + "/Required Validator for Cost Amount",
+            required = SUBMIT)
     @VersionableFieldSimple(fieldTitle = "Fun Amount")
     protected Double funAmount;
     

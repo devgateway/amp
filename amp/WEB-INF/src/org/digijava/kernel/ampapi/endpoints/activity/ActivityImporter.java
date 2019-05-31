@@ -26,6 +26,7 @@ import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
@@ -766,13 +767,14 @@ public class ActivityImporter extends ObjectImporter {
      *
      * @return JsonApiResponse the result of the import or update action
      */
-    public JsonApiResponse getResult() {
+    public JsonApiResponse<ActivitySummary> getResult() {
         Map<String, Object> details = null;
+        ActivitySummary content = null;
         if (errors.isEmpty() && newActivity != null && newActivity.getAmpActivityId() != null) {
             // editable, viewable, since was just created/updated
-            details = ProjectList.getActivityInProjectListFormat(newActivity, true, true);
+            content = ProjectList.getActivityInProjectListFormat(newActivity, true, true);
         }
-        if (details == null) {
+        if (content == null) {
             details = new HashMap<String, Object>() {{
                 put(ActivityEPConstants.ACTIVITY, newJson);
             }};
@@ -780,7 +782,7 @@ public class ActivityImporter extends ObjectImporter {
                 addError(CommonErrors.UNKOWN_ERROR);
             }
         }
-        return buildResponse(details);
+        return (JsonApiResponse<ActivitySummary>) buildResponse(details, content);
     }
 
 }

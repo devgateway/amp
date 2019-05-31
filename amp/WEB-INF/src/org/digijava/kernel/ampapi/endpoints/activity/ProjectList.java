@@ -17,7 +17,9 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
+import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
@@ -229,40 +231,43 @@ public class ProjectList {
      * @param viewable  true if it can be viewed from any user workspace
      * @return JsonBean representation of the activity in Project List format
      */
-    public static Map<String, Object> getActivityInProjectListFormat(AmpActivityVersion a, boolean editable,
+    public static ActivitySummary getActivityInProjectListFormat(AmpActivityVersion a, boolean editable,
             boolean viewable) {
-        Map<String, Object> bean = new LinkedHashMap<>();
-        bean.put(FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), a.getIdentifier());
-        bean.put(FieldMap.underscorify(ActivityFieldsConstants.CREATED_DATE),
-                DateTimeUtil.formatISO8601Timestamp(a.getCreatedDate()));
-        bean.put(FieldMap.underscorify(ActivityFieldsConstants.PROJECT_TITLE),
-                getTranslatableFieldValue("name", a.getName(), (Long) a.getIdentifier()));
-        bean.put(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER), a.getIatiIdentifier());
-        bean.put(FieldMap.underscorify(ActivityFieldsConstants.UPDATE_DATE),
-                DateTimeUtil.formatISO8601Timestamp(a.getUpdatedDate()));
-        bean.put(FieldMap.underscorify(ActivityFieldsConstants.AMP_ID), a.getAmpId());
-        bean.put(ActivityFieldsConstants.ACTIVITY_GROUP, a.getAmpActivityGroup());
-        bean.put(ActivityEPConstants.EDIT, true);
-        bean.put(ActivityEPConstants.VIEW, true);
-        return bean;
+        ActivitySummary as = new ActivitySummary();
+        as.setAmpActivityId(a.getIdentifier());
+        as.setCreatedDate(a.getCreatedDate());
+        as.setName(getTranslatableFieldValue("name", a.getName(), (Long) a.getIdentifier()));
+        as.setIatiIdentifier(a.getIatiIdentifier());
+        as.setUpdatedDate(a.getUpdatedDate());
+        as.setAmpId(a.getAmpId());
+        as.setAmpActivityGroup(a.getAmpActivityGroup());
+        as.setEditable(editable);
+        as.setViewable(viewable);
+        return as;
     }
 
     /**
      * Gets a object containing the values for requested languages.
-     * In fact the method returns a Map<String, String>, where the key is the code of the language and the value in that language
-     * The keys (languages) is a reunion of language codes containing the default_locale, language parameter and translations parameter
+     * In fact the method returns a Map<String, String>, where the key is the code of the language and
+     * the value in that language.
+     * The keys (languages) is a reunion of language codes containing the default_locale, language parameter and
+     * translations parameter.
      *
      * @param fieldName name of the field
      * @param fieldValue value of the object
      * @param parentObjectId the object id of the activity
-     * @return Object with translated values
+     * @return MultilingualContent with translated values
      */
-    public static Object getTranslatableFieldValue(String fieldName, String fieldValue, Long parentObjectId) {
+    public static MultilingualContent getTranslatableFieldValue(String fieldName, String fieldValue,
+            Long parentObjectId) {
+
         try {
             Field field = AmpActivityFields.class.getDeclaredField(fieldName);
+            boolean isMultilingual = TranslationSettings.getCurrent().isMultilingual();
 
-            return ActivityTranslationUtils.getTranslationValues(field, AmpActivityVersion.class, fieldValue,
+            Object content = ActivityTranslationUtils.getTranslationValues(field, AmpActivityVersion.class, fieldValue,
                     parentObjectId);
+            return new MultilingualContent(content, isMultilingual);
         } catch (Exception e) {
             LOGGER.error("Couldn't translate the field value", e);
             throw new RuntimeException(e);

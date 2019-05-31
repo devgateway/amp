@@ -556,11 +556,11 @@ public class ObjectImporter {
         return warnings.values();
     }
 
-    protected JsonApiResponse buildResponse(Map<String, Object> details) {
-        return new JsonApiResponse(
+    protected JsonApiResponse buildResponse(Map<String, Object> details, Object content) {
+        return new JsonApiResponse<>(
                 ApiError.formatNoWrap(errors.values()),
                 ApiError.formatNoWrap(warnings.values()),
-                details);
+                details, content);
     }
 
 }

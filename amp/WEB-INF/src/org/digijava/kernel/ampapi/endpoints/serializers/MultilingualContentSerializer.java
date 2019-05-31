@@ -35,7 +35,7 @@ public class MultilingualContentSerializer extends JsonSerializer<MultilingualCo
         model.setName("MultilingualContent");
         model.setDescription("If multilingual content is enabled, then stores a Map of <langCode, langTransaltion> "
                 + "pairs. Otherwise is a simple String.");
-        model.setExample("String or Map[String,String]");
+        model.setExample("String or Map<String, String>");
         // TODO use oneOf property once OpenAPI3
         return model;
     }

@@ -24,6 +24,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityFunding;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityService;
@@ -271,10 +272,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                     + "When is_draft is false, but some required fields for submit are invalid/missing, then activity "
                     + "will be saved as draft if can-downgrade-to-draft is true. Otherwise will be rejected.\n\n")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, message = "the latest project short overview"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
+        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary",
+                message = "the latest project short overview"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
         message = "error if invalid configuration is received")})
-    public JsonApiResponse addProject(
+    public JsonApiResponse<ActivitySummary> addProject(
             @ApiParam("can downgrade to draft") @QueryParam("can-downgrade-to-draft") @DefaultValue("false")
             boolean canDowngradeToDraft,
             @ApiParam("process approval fields") @QueryParam("process-approval-fields") @DefaultValue("false")
@@ -303,10 +305,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                     + "If activity was updated in meantime then version will be different and subsequent updates "
                     + "will fail with appropriate message.")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, message = "latest project overview"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
+        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary",
+                message = "latest project overview"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
         message = "error if invalid configuration is received")})
-    public JsonApiResponse updateProject(
+    public JsonApiResponse<ActivitySummary> updateProject(
             @ApiParam("the id of the activity which should be updated") @PathParam("projectId") Long projectId,
             @ApiParam("can downgrade to draft") @QueryParam("can-downgrade-to-draft") @DefaultValue("false")
             boolean canDowngradeToDraft,
@@ -322,9 +325,10 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         Object internalId = newJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME);
         if (!projectId.toString().equals(String.valueOf(internalId))) {
             // invalidating
-            String details = "url project_id = " + projectId + ", json " + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME +
-                    " = " + internalId;
-            return new JsonApiResponse(ApiError.toError(ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details)))
+            String details = "url project_id = " + projectId + ", json "
+                    + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME + " = " + internalId;
+            return new JsonApiResponse<ActivitySummary>(
+                    ApiError.toError(ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details)))
                     .addDetail(ActivityEPConstants.ACTIVITY, newJson);
         }
 

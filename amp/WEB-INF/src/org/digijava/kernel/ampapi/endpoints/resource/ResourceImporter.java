@@ -330,7 +330,7 @@ public class ResourceImporter extends ObjectImporter {
             }
         }
 
-        return buildResponse(result);
+        return buildResponse(result, null);
     }
 
 }

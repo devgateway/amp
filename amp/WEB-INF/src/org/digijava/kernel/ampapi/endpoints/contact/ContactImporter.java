@@ -134,7 +134,7 @@ public class ContactImporter extends ObjectImporter {
                 addError(CommonErrors.UNKOWN_ERROR);
             }
         }
-        return buildResponse(details);
+        return buildResponse(details, null);
     }
 
 }

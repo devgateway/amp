@@ -15,7 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
-import org.digijava.kernel.ampapi.endpoints.common.dto.UnwrappedTranslations;
+import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslations;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -38,7 +38,7 @@ public class APIField {
     private APIType apiType;
 
     @JsonProperty(ActivityEPConstants.FIELD_LABEL)
-    @ApiModelProperty(example = UnwrappedTranslations.EXAMPLE)
+    @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.MultilingualLabelPH")
     private UnwrappedTranslations fieldLabel;
 
     @JsonIgnore

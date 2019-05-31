@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.gis;
+package org.digijava.kernel.ampapi.swagger.types;
 
 /**
  * Placeholder class for API documentation purposes of multilingual fields.

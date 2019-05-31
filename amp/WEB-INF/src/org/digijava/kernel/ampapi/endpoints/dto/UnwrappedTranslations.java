@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.common.dto;
+package org.digijava.kernel.ampapi.endpoints.dto;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,9 +14,8 @@ import io.swagger.annotations.ApiModel;
  *
  * @author Nadejda Mandrescu
  */
-@ApiModel(description = "Map of { language code: translation } pairs", reference = "java.util.Map[String,String]")
+@ApiModel(description = "Map of { language code: translation } pairs")
 public class UnwrappedTranslations {
-    public static final String EXAMPLE = "{ 'en': 'English text'}";
 
     private Map<String, String> translations;
 

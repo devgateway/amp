@@ -8,9 +8,14 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.HIDDEN_FM_PATH;
 import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.VISIBLE_FM_PATH;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -48,6 +53,7 @@ import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.services.sync.model.SyncConstants;
+import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
@@ -491,6 +497,9 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "4", validators = @Validators(unique = "uniqueFmName"))
         private Collection<UniqueConstrained> field4;
 
+        @Interchangeable(fieldTitle = "8", validators = @Validators(unique = "uniqueFmName"), uniqueConstraint = true)
+        private Collection<Integer> field8;
+
         @Interchangeable(fieldTitle = "5", validators = @Validators(treeCollection = "treeCollectionFmName"))
         private Collection<ObjWithId> field5;
 
@@ -561,6 +570,12 @@ public class FieldsEnumeratorTest {
         expected4.setChildren(Arrays.asList(expected4child, idField));
         expected4.setMultipleValues(true);
 
+        APIField expected8 = newListField(Integer.class);
+        expected8.setFieldName("8");
+        expected8.setFieldLabel(fieldLabelFor("8"));
+        expected8.setUniqueConstraint("8");
+        expected8.setMultipleValues(true);
+
         APIField expected5 = newListField();
         expected5.setFieldName("5");
         expected5.setFieldLabel(fieldLabelFor("5"));
@@ -581,8 +596,8 @@ public class FieldsEnumeratorTest {
         expected7.setSizeLimit(SIZE_LIMIT);
         expected7.setChildren(Arrays.asList(idField));
 
-        assertEqualsDigest(Arrays.asList(expected1, expected2, expected3, expected4, expected5, expected6, expected7),
-                actual);
+        assertEqualsDigest(Arrays.asList(expected1, expected2, expected3, expected4, expected8, expected5,
+                expected6, expected7), actual);
     }
 
     @Test
@@ -849,9 +864,40 @@ public class FieldsEnumeratorTest {
         return nullableAPIFields;
     }
 
+    @Test
+    public void testTreeValidatorVisibleAndUniqueValidatorHidden() {
+        APIField apiField = ValidatorUtil.getMetaData(AmpActivityFields.class,
+                ImmutableSet.of("/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator"));
+
+        assertThat(apiField.getChildren(), hasItem(allOf(
+                        hasProperty("fieldName", equalTo("primary_sectors")),
+                        hasProperty("uniqueConstraint", equalTo("sector")),
+                        hasProperty("treeCollectionConstraint", equalTo(true))
+                )));
+    }
+
+    @Test
+    public void testTreeValidatorAndUniqueValidatorHidden() {
+        APIField apiField = ValidatorUtil.getMetaData(AmpActivityFields.class,
+                ImmutableSet.of("/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator",
+                        "/Activity Form/Sectors/Primary Sectors/treeSectorsValidator"));
+
+        assertThat(apiField.getChildren(), hasItem(allOf(
+                hasProperty("fieldName", equalTo("primary_sectors")),
+                hasProperty("uniqueConstraint", nullValue()),
+                hasProperty("treeCollectionConstraint", nullValue())
+        )));
+    }
+
     private APIField newListField() {
         APIField field = newAPIField();
         field.setApiType(new APIType(Object.class, FieldType.LIST));
+        return field;
+    }
+
+    private APIField newListField(Class<?> type) {
+        APIField field = newAPIField();
+        field.setApiType(new APIType(type, FieldType.LIST));
         return field;
     }
 
@@ -914,7 +960,7 @@ public class FieldsEnumeratorTest {
 
     private <T> String digest(T obj) {
         try {
-            return new ObjectMapper().writeValueAsString(obj);
+            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj);
         } catch (IOException e) {
             throw new RuntimeException("Failed to create digest for " + obj, e);
         }

@@ -276,7 +276,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                     + "When is_draft is false, but some required fields for submit are invalid/missing, then activity "
                     + "will be saved as draft if can-downgrade-to-draft is true. Otherwise will be rejected.\n\n")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary",
+        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_ImportView",
                 message = "the latest project short overview"),
         @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
         message = "error if invalid configuration is received")})
@@ -310,7 +310,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                     + "If activity was updated in meantime then version will be different and subsequent updates "
                     + "will fail with appropriate message.")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary",
+        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_ImportView",
                 message = "latest project overview"),
         @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
         message = "error if invalid configuration is received")})

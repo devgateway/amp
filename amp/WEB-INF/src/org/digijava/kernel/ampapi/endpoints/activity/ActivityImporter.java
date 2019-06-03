@@ -49,6 +49,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.validation.ConstraintDescriptor;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
@@ -815,6 +816,7 @@ public class ActivityImporter extends ObjectImporter {
         } else {
             violations = getImporterInterchangeValidator().validate(getApiField(), root, DRAFT_VALIDATION_GROUPS);
         }
-        getImporterInterchangeValidator().integrateErrorsIntoResult(violations, json);
+        getImporterInterchangeValidator().integrateErrorsIntoResult(violations, json,
+                ConstraintDescriptor.ConstraintTarget.TYPE);
     }
 }

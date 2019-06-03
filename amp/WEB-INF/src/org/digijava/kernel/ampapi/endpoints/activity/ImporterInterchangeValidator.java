@@ -60,13 +60,27 @@ public class ImporterInterchangeValidator {
     }
 
     /**
+     * Validate only constraints targeting the current field.
+     *
+     * @param field the field to validate
+     * @param value the value of the field
+     * @param groups validation groups
+     * @return all found constraint violations
+     */
+    public Set<ConstraintViolation> validateField(APIField field, Object value, Class<?>... groups) {
+        return validator.validateField(field, value, groups);
+    }
+
+    /**
      *
      * @param violations constraint violation to integrate into json
      * @param json json representation of the object
+     * @param constraintTarget integrate only errors for specific violations
      */
-    public void integrateErrorsIntoResult(Set<ConstraintViolation> violations, Map<String, Object> json) {
+    public void integrateErrorsIntoResult(Set<ConstraintViolation> violations, Map<String, Object> json,
+            ConstraintDescriptor.ConstraintTarget constraintTarget) {
         for (ConstraintViolation violation : violations) {
-            if (isViolationForType(violation)) {
+            if (violation.getConstraintDescriptor().getTarget() == constraintTarget) {
                 List<Path.Node> nodes = ImmutableList.copyOf(violation.getPath().iterator());
 
                 Predicate<Object> leafFilter = getLeafFilter(violation);
@@ -151,15 +165,5 @@ public class ImporterInterchangeValidator {
             }
         }
         return errorsAdded;
-    }
-
-    /**
-     * Is this violation coming from a validator defined at class level?
-     *
-     * @param violation violation to check
-     * @return true if the validator was defined on the class
-     */
-    private boolean isViolationForType(ConstraintViolation violation) {
-        return violation.getConstraintDescriptor().getTarget() == ConstraintDescriptor.ConstraintTarget.TYPE;
     }
 }

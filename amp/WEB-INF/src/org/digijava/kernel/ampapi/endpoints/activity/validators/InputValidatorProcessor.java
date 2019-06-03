@@ -30,7 +30,6 @@ public class InputValidatorProcessor {
                 new ActivityTitleValidator(),
                 new AmpActivityIdValidator(),
                 new MultipleEntriesValidator(),
-                new UniqueValidator(),
                 new TreeCollectionValidator(),
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),
@@ -49,7 +48,6 @@ public class InputValidatorProcessor {
         return Arrays.asList(
                 new RequiredValidator(),
                 new MultipleEntriesValidator(),
-                new UniqueValidator(),
                 new PrimaryOrganisationContactValidator(),
                 new RegexPatternValidator());
     }

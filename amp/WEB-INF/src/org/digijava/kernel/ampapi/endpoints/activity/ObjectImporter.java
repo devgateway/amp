@@ -36,6 +36,7 @@ import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.validation.ConstraintDescriptor;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -135,7 +136,8 @@ public class ObjectImporter {
      */
     public void processInterViolationsForTypes(Map<String, Object> json, Object root) {
         importerInterchangeValidator.integrateErrorsIntoResult(
-                importerInterchangeValidator.validate(apiField, root), json);
+                importerInterchangeValidator.validate(apiField, root), json,
+                ConstraintDescriptor.ConstraintTarget.TYPE);
     }
 
     public ImporterInterchangeValidator getImporterInterchangeValidator() {
@@ -233,8 +235,22 @@ public class ObjectImporter {
                 Object newValue = getNewValue(fieldDef, newParent, jsonValue);
                 fieldDef.getFieldAccessor().set(newParent, newValue);
             }
+
+            validateField(fieldDef, newParent, newJsonParent);
         }
         return isValidFormat;
+    }
+
+    protected void validateField(APIField field, Object parentObject, Map<String, Object> parentJson) {
+        Object fieldValue = field.getFieldAccessor().get(parentObject);
+
+        Set<org.digijava.kernel.validation.ConstraintViolation> violations =
+                importerInterchangeValidator.validateField(field, fieldValue);
+
+        if (!violations.isEmpty()) {
+            importerInterchangeValidator.integrateErrorsIntoResult(violations, parentJson,
+                    ConstraintDescriptor.ConstraintTarget.FIELD);
+        }
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

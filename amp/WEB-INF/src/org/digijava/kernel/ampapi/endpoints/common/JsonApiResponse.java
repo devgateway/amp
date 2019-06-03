@@ -11,6 +11,9 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * A generic EP Response that can be used to store commonly reported errors and warnings in the same format by all
  * AMP EPs, as well as any additional generic details or concrete class with response content.
@@ -20,9 +23,11 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
  * @author Nadejda Mandrescu
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@ApiModel(description = "Reports any errors and warnings found, with posible other extra details like original input")
 public class JsonApiResponse<T> extends ApiErrorResponse {
 
     @JsonProperty(EPConstants.WARNINGS)
+    @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.ErrorOrWarningPH")
     private Map<String, Collection<Object>> warnings;
 
     @JsonUnwrapped

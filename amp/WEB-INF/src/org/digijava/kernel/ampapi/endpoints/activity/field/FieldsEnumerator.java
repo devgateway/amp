@@ -39,6 +39,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.validation.ConstraintDescriptor;
 import org.digijava.kernel.validation.ConstraintDescriptors;
+import org.digijava.kernel.validators.common.RegexValidator;
 import org.digijava.kernel.validators.activity.UniqueValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Independent;
@@ -188,9 +189,6 @@ public class FieldsEnumerator {
         if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldInfoProvider.getType(field))) {
             apiField.setFieldLength(fieldInfoProvider.getMaxLength(field));
         }
-        if (StringUtils.isNotBlank(interchangeable.regexPattern())) {
-            apiField.setRegexPattern(interchangeable.regexPattern());
-        }
         if (StringUtils.isNotEmpty(interchangeable.discriminatorOption())) {
             apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
         }
@@ -219,7 +217,17 @@ public class FieldsEnumerator {
         fieldConstraintDescriptors.addAll(findFieldConstraints(interchangeable.interValidators(), context));
         apiField.setFieldConstraints(new ConstraintDescriptors(fieldConstraintDescriptors));
 
+        apiField.setRegexPattern(findRegexPattern(fieldConstraintDescriptors));
+
         return apiField;
+    }
+
+    private String findRegexPattern(List<ConstraintDescriptor> descriptors) {
+        return descriptors.stream()
+                .filter(d -> d.getConstraintValidatorClass().equals(RegexValidator.class))
+                .map(d -> d.getArguments().get("regex"))
+                .findAny()
+                .orElse(null);
     }
 
     private List<ConstraintDescriptor> findBeanConstraints(Class<?> type, FEContext context) {

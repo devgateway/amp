@@ -33,7 +33,6 @@ public class InputValidatorProcessor {
                 new TreeCollectionValidator(),
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),
-                new RegexPatternValidator(),
                 new UUIDValidator());
     }
 
@@ -48,8 +47,7 @@ public class InputValidatorProcessor {
         return Arrays.asList(
                 new RequiredValidator(),
                 new MultipleEntriesValidator(),
-                new PrimaryOrganisationContactValidator(),
-                new RegexPatternValidator());
+                new PrimaryOrganisationContactValidator());
     }
 
     public static List<InputValidator> getResourceFormatValidators() {

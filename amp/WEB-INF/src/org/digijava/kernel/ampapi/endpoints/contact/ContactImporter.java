@@ -1,12 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.contact;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
-import org.digijava.kernel.ampapi.endpoints.common.CommonErrors;
-import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
@@ -18,7 +15,7 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 /**
  * @author Octavian Ciubotaru
  */
-public class ContactImporter extends ObjectImporter {
+public class ContactImporter extends ObjectImporter<AmpContact> {
 
     private AmpContact contact;
 
@@ -113,25 +110,14 @@ public class ContactImporter extends ObjectImporter {
         contact.getOrganizationContacts().forEach(o -> o.setContact(contact));
     }
 
-    public AmpContact getContact() {
+    @Override
+    public AmpContact getImportResult() {
         return contact;
     }
 
-    /**
-     * Get the result of import/update contact in JsonBean format
-     *
-     * @return JsonBean the result of the import or update action
-     */
-    public JsonApiResponse<AmpContact> getResult() {
-        Map<String, Object> details = new LinkedHashMap<>();
-        AmpContact content = errors.isEmpty() ? contact : null;
-        if (content == null) {
-            details.put(ContactEPConstants.CONTACT, newJson);
-            if (errors.isEmpty()) {
-                addError(CommonErrors.UNKOWN_ERROR);
-            }
-        }
-        return buildResponse(details, content);
+    @Override
+    protected String getInvalidInputFieldName() {
+        return ContactEPConstants.CONTACT;
     }
 
 }

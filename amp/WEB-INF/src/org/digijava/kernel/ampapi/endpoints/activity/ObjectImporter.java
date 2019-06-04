@@ -33,6 +33,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.DefaultErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
+import org.digijava.kernel.ampapi.endpoints.common.CommonErrors;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.common.values.BadInput;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
@@ -47,7 +48,7 @@ import org.digijava.module.common.util.DateTimeUtil;
 /**
  * @author Octavian Ciubotaru
  */
-public class ObjectImporter {
+public abstract class ObjectImporter<T> {
 
     private static final Logger logger = Logger.getLogger(ObjectImporter.class);
 
@@ -556,7 +557,35 @@ public class ObjectImporter {
         return warnings.values();
     }
 
-    protected JsonApiResponse buildResponse(Map<String, Object> details, Object content) {
+    public abstract T getImportResult();
+
+    protected String getInvalidInputFieldName() {
+        return null;
+    }
+
+    /**
+     * Provides import/update result
+     *
+     * @return JsonApiResponse the result of the import or update action
+     */
+    public JsonApiResponse<T> getResult() {
+        Map<String, Object> details = null;
+        T content = errors.isEmpty() ? getImportResult() : null;
+
+        if (content == null) {
+            String invalidInput = getInvalidInputFieldName();
+            if (invalidInput != null) {
+                details = new HashMap<String, Object>();
+                details.put(invalidInput, getNewJson());
+            }
+            if (errors.isEmpty()) {
+                addError(CommonErrors.UNKOWN_ERROR);
+            }
+        }
+        return buildResponse(details, content);
+    }
+
+    protected JsonApiResponse<T> buildResponse(Map<String, Object> details, T content) {
         return new JsonApiResponse<>(
                 ApiError.formatNoWrap(errors.values()),
                 ApiError.formatNoWrap(warnings.values()),

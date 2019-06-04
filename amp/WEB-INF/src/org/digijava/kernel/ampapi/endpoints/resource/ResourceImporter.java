@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.resource;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +14,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
-import org.digijava.kernel.ampapi.endpoints.common.CommonErrors;
-import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
@@ -40,7 +37,7 @@ import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 /**
  * @author Viorel Chihai
  */
-public class ResourceImporter extends ObjectImporter {
+public class ResourceImporter extends ObjectImporter<AmpResource> {
 
     private static final Logger logger = Logger.getLogger(ResourceImporter.class);
 
@@ -188,10 +185,6 @@ public class ResourceImporter extends ObjectImporter {
         return tdd;
     }
 
-    public AmpResource getResource() {
-        return resource;
-    }
-
     @Override
     protected Object extractString(APIField apiField, Object parentObj, Object jsonValue) {
         return extractTranslationsOrSimpleValue(apiField, parentObj, jsonValue);
@@ -267,28 +260,14 @@ public class ResourceImporter extends ObjectImporter {
         return null;
     }
 
-    /**
-     * Get the result of import/update resource
-     *
-     * @return JsonApiResponse the result of the import or update action
-     */
-    public JsonApiResponse<AmpResource> getResult() {
-        Map<String, Object> result = null;
-        Object content = null;
-        if (errors.isEmpty() && resource != null) {
-            content = resource;
-        }
+    @Override
+    public AmpResource getImportResult() {
+        return resource;
+    }
 
-        if (content == null) {
-            result = new HashMap<String, Object>() {{
-                put(ResourceEPConstants.RESOURCE, getNewJson());
-            }};
-            if (errors.isEmpty()) {
-                addError(CommonErrors.UNKOWN_ERROR);
-            }
-        }
-
-        return buildResponse(result, content);
+    @Override
+    protected String getInvalidInputFieldName() {
+        return ResourceEPConstants.RESOURCE;
     }
 
 }

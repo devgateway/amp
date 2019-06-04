@@ -32,9 +32,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.ActivityErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
-import org.digijava.kernel.ampapi.endpoints.common.CommonErrors;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
@@ -80,7 +78,7 @@ import org.hibernate.StaleStateException;
  *
  * @author Nadejda Mandrescu
  */
-public class ActivityImporter extends ObjectImporter {
+public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     private static final Logger logger = Logger.getLogger(ActivityImporter.class);
     /**
      * FM path for the "Save as Draft" feature being enabled
@@ -762,27 +760,18 @@ public class ActivityImporter extends ObjectImporter {
         this.latestActivityId = latestActivityId;
     }
 
-    /**
-     * Get the result of import/update activity
-     *
-     * @return JsonApiResponse the result of the import or update action
-     */
-    public JsonApiResponse<ActivitySummary> getResult() {
-        Map<String, Object> details = null;
-        ActivitySummary content = null;
-        if (errors.isEmpty() && newActivity != null && newActivity.getAmpActivityId() != null) {
+    @Override
+    public ActivitySummary getImportResult() {
+        if (newActivity != null && newActivity.getAmpActivityId() != null) {
             // editable, viewable, since was just created/updated
-            content = ProjectList.getActivityInProjectListFormat(newActivity, true, true);
+            return ProjectList.getActivityInProjectListFormat(newActivity, true, true);
         }
-        if (content == null) {
-            details = new HashMap<String, Object>() {{
-                put(ActivityEPConstants.ACTIVITY, newJson);
-            }};
-            if (errors.isEmpty()) {
-                addError(CommonErrors.UNKOWN_ERROR);
-            }
-        }
-        return (JsonApiResponse<ActivitySummary>) buildResponse(details, content);
+        return null;
+    }
+
+    @Override
+    protected String getInvalidInputFieldName() {
+        return ActivityEPConstants.ACTIVITY;
     }
 
 }

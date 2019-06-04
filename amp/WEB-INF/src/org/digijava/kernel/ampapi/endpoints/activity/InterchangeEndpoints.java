@@ -278,7 +278,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiResponses({
         @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_ImportView",
                 message = "the latest project short overview"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_ImportView",
         message = "error if invalid configuration is received")})
     @JsonView(ImportView.class)
     public JsonApiResponse<ActivitySummary> addProject(
@@ -312,7 +312,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiResponses({
         @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_ImportView",
                 message = "latest project overview"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_ImportView",
         message = "error if invalid configuration is received")})
     @JsonView(ImportView.class)
     public JsonApiResponse<ActivitySummary> updateProject(

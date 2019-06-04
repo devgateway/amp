@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.resource;
+package org.digijava.kernel.ampapi.endpoints.resource.dto;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 
@@ -11,6 +11,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601TimeStampSerializer;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;

@@ -44,7 +44,7 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslations;
-import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.kernel.persistence.WorkerException;

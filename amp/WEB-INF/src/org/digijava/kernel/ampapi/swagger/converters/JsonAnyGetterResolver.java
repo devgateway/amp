@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JavaType;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 
 import io.swagger.converter.ModelConverter;
 import io.swagger.converter.ModelConverterContext;
@@ -51,13 +52,22 @@ public class JsonAnyGetterResolver extends AbstractModelConverter {
     private boolean customAnyGetter(Class<?> rawType, ModelConverterContext context, Map<String, Property> properties) {
         if (context.getJsonView() != null) {
             for (Class<?> jsonView : context.getJsonView().value()) {
-                if (org.digijava.kernel.ampapi.endpoints.activity.dto.ImportView.class.isAssignableFrom(jsonView)
-                        && rawType.isAssignableFrom(JsonApiResponse.class)) {
-                    ObjectProperty activityProp = new ObjectProperty();
-                    activityProp.setDescription("the activity that was provided as an input");
-                    properties.put(ActivityEPConstants.ACTIVITY, activityProp);
-                    return true;
+                if (rawType.isAssignableFrom(JsonApiResponse.class)) {
+                    if (org.digijava.kernel.ampapi.endpoints.activity.dto.ImportView.class.isAssignableFrom(jsonView)) {
+                        ObjectProperty activityProp = new ObjectProperty();
+                        activityProp.setDescription("the activity that was provided as an input");
+                        properties.put(ActivityEPConstants.ACTIVITY, activityProp);
+                        return true;
+                    }
+                    if (org.digijava.kernel.ampapi.endpoints.contact.dto.ContactView.Summary.class
+                            .isAssignableFrom(jsonView)) {
+                        ObjectProperty contactProp = new ObjectProperty();
+                        contactProp.setDescription("the contact that was provided as an input");
+                        properties.put(ContactEPConstants.CONTACT, contactProp);
+                        return true;
+                    }
                 }
+
             }
         }
         return false;

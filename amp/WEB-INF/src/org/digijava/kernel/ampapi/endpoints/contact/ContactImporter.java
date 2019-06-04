@@ -122,19 +122,16 @@ public class ContactImporter extends ObjectImporter {
      *
      * @return JsonBean the result of the import or update action
      */
-    public JsonApiResponse getResult() {
+    public JsonApiResponse<AmpContact> getResult() {
         Map<String, Object> details = new LinkedHashMap<>();
-        if (errors.size() == 0 && contact != null) {
-            details.put(ContactEPConstants.ID, contact.getId());
-            details.put(ContactEPConstants.NAME, contact.getName());
-            details.put(ContactEPConstants.LAST_NAME, contact.getLastname());
-        } else {
+        AmpContact content = errors.isEmpty() ? contact : null;
+        if (content == null) {
             details.put(ContactEPConstants.CONTACT, newJson);
             if (errors.isEmpty()) {
                 addError(CommonErrors.UNKOWN_ERROR);
             }
         }
-        return buildResponse(details, null);
+        return buildResponse(details, content);
     }
 
 }

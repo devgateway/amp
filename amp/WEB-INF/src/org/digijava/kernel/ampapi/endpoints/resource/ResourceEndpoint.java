@@ -161,7 +161,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @ApiResponses({
         @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
                 message = "the brief representationresource"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_ResourceView",
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Link",
                 message = "error if invalid configuration is received")})
     @JsonView(ResourceView.Link.class)
     public JsonApiResponse<AmpResource> createResource(Map<String, Object> resource) {
@@ -185,7 +185,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @ApiResponses({
         @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
                 message = "the brief representationresource"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_ResourceView",
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_File",
                 message = "error if invalid configuration is received")})
     @JsonView({ ResourceView.File.class, ResourceView.Link.class })
     public JsonApiResponse<AmpResource> createDocResource(

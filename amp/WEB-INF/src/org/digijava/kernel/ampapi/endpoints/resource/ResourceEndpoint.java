@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -21,6 +22,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
@@ -32,6 +34,8 @@ import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.ResourceView;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
@@ -41,6 +45,8 @@ import org.slf4j.LoggerFactory;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * @author Viorel Chihai
@@ -152,8 +158,13 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                     + "  \"web_link\": \"https://sample.resource.com/\"\n"
                     + "}\n"
                     + "</pre>")
-
-    public JsonApiResponse createResource(Map<String, Object> resource) {
+    @ApiResponses({
+        @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
+                message = "the brief representationresource"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_ResourceView",
+                message = "error if invalid configuration is received")})
+    @JsonView(ResourceView.Link.class)
+    public JsonApiResponse<AmpResource> createResource(Map<String, Object> resource) {
         return new ResourceImporter().createResource(resource).getResult();
     }
 
@@ -171,7 +182,13 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                     + "  \"note\": \"Resource note\"\n"
                     + "}\n"
                     + "</pre>")
-    public JsonApiResponse createDocResource(
+    @ApiResponses({
+        @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
+                message = "the brief representationresource"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_ResourceView",
+                message = "error if invalid configuration is received")})
+    @JsonView({ ResourceView.File.class, ResourceView.Link.class })
+    public JsonApiResponse<AmpResource> createDocResource(
             @FormDataParam("resource") Map<String, Object> resource,
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail) {

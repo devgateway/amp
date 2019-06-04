@@ -5,8 +5,8 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Viorel Chihai
  *
  */
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonView(ResourceView.Common.class)
 public class AmpResource {
 
     @Interchangeable(fieldTitle = "UUID")
@@ -41,11 +41,13 @@ public class AmpResource {
     @Interchangeable(fieldTitle = "File Name", importable = true, required = ALWAYS,
             dependencies = InterchangeDependencyResolver.RESOURCE_TYPE_FILE_VALID_KEY)
     @JsonProperty(ResourceEPConstants.FILE_NAME)
+    @JsonView(ResourceView.File.class)
     private String fileName;
 
     @Interchangeable(fieldTitle = "Web Link", importable = true, required = ALWAYS,
             dependencies = InterchangeDependencyResolver.RESOURCE_TYPE_LINK_VALID_KEY)
     @JsonProperty(ResourceEPConstants.WEB_LINK)
+    @JsonView(ResourceView.Link.class)
     private String webLink;
 
     @Interchangeable(fieldTitle = "Description", importable = true)
@@ -76,14 +78,13 @@ public class AmpResource {
     private Date addingDate;
 
     @Interchangeable(fieldTitle = "File Size")
+    @JsonIgnore
     private Double fileSize;
 
     @Interchangeable(fieldTitle = "Public")
-    @JsonIgnore
     private Boolean isPublic;
 
     @Interchangeable(fieldTitle = "Private", importable = true, required = ALWAYS)
-    @JsonIgnore
     private Boolean isPrivate;
 
     @Interchangeable(fieldTitle = "Creator Email", importable = true, required = ALWAYS)
@@ -192,6 +193,7 @@ public class AmpResource {
         this.yearOfPublication = yearOfPublication;
     }
 
+    @JsonIgnore
     public Boolean isPublic() {
         return isPublic;
     }
@@ -208,6 +210,7 @@ public class AmpResource {
         this.creatorEmail = creatorEmail;
     }
 
+    @JsonIgnore
     public Boolean isPrivate() {
         return isPrivate;
     }

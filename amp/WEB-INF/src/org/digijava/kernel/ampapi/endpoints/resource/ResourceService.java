@@ -17,6 +17,7 @@ import com.google.common.cache.CacheBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -54,11 +55,17 @@ public class ResourceService {
             ApiErrorResponseService.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_FOUND);
         }
 
+        boolean isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
+
         NodeWrapper nodeWrapper = new NodeWrapper(readNode);
+
         resource.setUuid(nodeWrapper.getUuid());
-        resource.setTitle(nodeWrapper.getTitle());
-        resource.setDescription(nodeWrapper.getDescription());
-        resource.setNote(nodeWrapper.getNotes());
+        resource.setTitle(MultilingualContent.build(isMultilingual, nodeWrapper.getTitle(),
+                nodeWrapper.getTranslatedTitle()));
+        resource.setDescription(MultilingualContent.build(isMultilingual, nodeWrapper.getDescription(),
+                nodeWrapper.getTranslatedDescription()));
+        resource.setNote(MultilingualContent.build(isMultilingual, nodeWrapper.getNotes(),
+                nodeWrapper.getTranslatedNote()));
         resource.setType(CategoryManagerUtil.getAmpCategoryValueFromDb(nodeWrapper.getCmDocTypeId()));
         resource.setAddingDate(nodeWrapper.getCalendarDate() == null ? null : nodeWrapper.getCalendarDate().getTime());
         resource.setUrl("/contentrepository/downloadFile.do?uuid=" + uuid);
@@ -73,12 +80,6 @@ public class ResourceService {
             resource.setFileName(nodeWrapper.getName());
             resource.setFileSize(nodeWrapper.getFileSizeInMegabytes());
             resource.setResourceType(ResourceType.FILE);
-        }
-
-        if (ContentTranslationUtil.multilingualIsEnabled()) {
-            resource.setTranslatedTitles(nodeWrapper.getTranslatedTitle());
-            resource.setTranslatedDescriptions(nodeWrapper.getTranslatedDescription());
-            resource.setTranslatedNotes(nodeWrapper.getTranslatedNote());
         }
 
         try {

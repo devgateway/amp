@@ -25,6 +25,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolv
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldAccessor;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslations;
@@ -158,8 +159,7 @@ public class FieldsEnumerator {
             }
         }
 
-        // only String fields should clarify if they are translatable or not
-        if (java.lang.String.class.equals(field.getType())) {
+        if (TranslationSettings.canBeTranslatable(field.getType())) {
             apiField.setTranslatable(fieldInfoProvider.isTranslatable(field));
             apiField.setTranslationType(fieldInfoProvider.getTranslatableType(field));
         }

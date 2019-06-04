@@ -346,7 +346,7 @@ public class ActivityImporter extends ObjectImporter {
     }
 
     @Override
-    protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
+    protected Object extractString(APIField apiField, Object parentObj, Object jsonValue) {
         return extractTranslationsOrSimpleValue(apiField, parentObj, jsonValue);
     }
 

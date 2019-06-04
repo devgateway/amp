@@ -1,9 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.serializers.MultilingualContentSerializer;
 
 /**
@@ -43,12 +45,41 @@ public class MultilingualContent {
         return translations;
     }
 
+    /**
+     * @return if multilingual is enabled, then actual translations are provided; otherwise a simulated translations map
+     */
+    public Map<String, String> getOrBuildTranslations() {
+        if (isMultilingual) {
+            return this.translations.getTranslations();
+        }
+        Map<String, String> ts = new HashMap<>();
+        ts.put(TranslationSettings.getCurrent().getDefaultLangCode(), text);
+        return ts;
+    }
+
     public String getText() {
+        return text;
+    }
+
+    /**
+     * @return if multilingual is disabled, then actual text is provided; otherwise the default language translation
+     */
+    public String getOrBuildText() {
+        if (isMultilingual) {
+            return translations.get(TranslationSettings.getCurrent().getDefaultLangCode());
+        }
         return text;
     }
 
     public boolean isMultilingual() {
         return isMultilingual;
+    }
+
+    public static MultilingualContent build(boolean isMultilingual, String text, Map<String, String> translations) {
+        if (isMultilingual) {
+            return new MultilingualContent(translations);
+        }
+        return new MultilingualContent(text);
     }
 
 }

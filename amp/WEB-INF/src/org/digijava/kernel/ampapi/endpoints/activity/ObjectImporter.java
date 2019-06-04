@@ -273,8 +273,8 @@ public class ObjectImporter {
         return null;
     }
 
-    protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
-        return (String) jsonValue;
+    protected Object extractString(APIField apiField, Object parentObj, Object jsonValue) {
+        return jsonValue;
     }
 
     /**

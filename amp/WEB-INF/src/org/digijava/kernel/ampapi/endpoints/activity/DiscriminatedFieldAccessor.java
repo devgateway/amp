@@ -17,6 +17,9 @@ import org.apache.commons.beanutils.PropertyUtils;
  * On write will replace all items that satisfy discrimination condition from underlying collection with provided
  * items. The other items will stay untouched.
  *
+ * TODO this accessor works with lists even when field does not accept multiple values,
+ *      refactor to return actual value instead of a list with one single item
+ *
  * @author Octavian Ciubotaru
  */
 public class DiscriminatedFieldAccessor implements FieldAccessor {
@@ -91,5 +94,14 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
         }
 
         return discriminatorObj.toString();
+    }
+
+    public static <T> T unwrapSingleElement(Collection collection) {
+        Iterator iterator = collection.iterator();
+        if (iterator.hasNext()) {
+            return (T) iterator.next();
+        } else {
+            return null;
+        }
     }
 }

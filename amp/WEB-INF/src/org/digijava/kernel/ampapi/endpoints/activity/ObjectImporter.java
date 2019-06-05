@@ -23,7 +23,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -38,7 +37,6 @@ import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
-import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.common.util.DateTimeUtil;
 
@@ -59,17 +57,9 @@ public class ObjectImporter {
     protected JsonBean newJson;
     protected TranslationSettings trnSettings;
 
-    private List<APIField> apiFields;
+    private APIField apiField;
 
     private PossibleValuesCache possibleValuesCached;
-
-    /**
-     * This field is used for storing the current json values during field validation
-     * E.g: validate the pledge field (present in funding_details)
-     * fundings - will contain the json values of the parent of funding_details
-     * fundings~funding_details - will contain the json values of the parent of pledge
-     */
-    private Map<String, Object> branchJsonVisitor = new HashMap<>();
 
     private Deque<Object> backReferenceStack = new ArrayDeque<>();
 
@@ -77,19 +67,21 @@ public class ObjectImporter {
 
     private Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper = new DefaultErrorsMapper();
 
+    private ImporterInterchangeValidator importerInterchangeValidator = new ImporterInterchangeValidator(errors);
+
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
-            List<APIField> apiFields) {
-        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiFields,
+            APIField apiField) {
+        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiField,
                 new ValueConverter());
     }
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
-            TranslationSettings trnSettings, List<APIField> apiFields, ValueConverter valueConverter) {
+            TranslationSettings trnSettings, APIField apiField, ValueConverter valueConverter) {
         this.formatValidator = formatValidator;
         this.businessRulesValidator = businessRulesValidator;
         this.trnSettings = trnSettings;
-        this.apiFields = apiFields;
-        this.possibleValuesCached = new PossibleValuesCache(PossibleValuesEnumerator.INSTANCE, apiFields);
+        this.apiField = apiField;
+        this.possibleValuesCached = new PossibleValuesCache(PossibleValuesEnumerator.INSTANCE, apiField.getChildren());
         this.valueConverter = valueConverter;
 
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
@@ -100,8 +92,8 @@ public class ObjectImporter {
         this.jsonErrorMapper = jsonErrorMapper;
     }
 
-    public List<APIField> getApiFields() {
-        return apiFields;
+    public APIField getApiField() {
+        return apiField;
     }
 
     protected void beforeViolationsCheck() {
@@ -127,14 +119,34 @@ public class ObjectImporter {
      * @return
      */
     public boolean validateAndImport(Object root, Map<String, Object> json, boolean validateFormatOnly) {
-        boolean isFormatValid = validateAndImport(root, apiFields, json, null);
+        boolean isFormatValid = validateAndImport(root, apiField.getChildren(), json, null);
         if (isFormatValid && !validateFormatOnly) {
             beforeViolationsCheck();
             processViolationsForTypes(json, root);
+            processInterViolationsForTypes(json, root);
         }
         return isFormatValid;
     }
 
+    /**
+     * Invokes interchangeable validation and then integrates all constraint violations directly into json object.
+     * @param json json representation of the object
+     * @param root internal representation of the object
+     */
+    public void processInterViolationsForTypes(Map<String, Object> json, Object root) {
+        importerInterchangeValidator.integrateErrorsIntoResult(
+                importerInterchangeValidator.validate(apiField, root), json);
+    }
+
+    public ImporterInterchangeValidator getImporterInterchangeValidator() {
+        return importerInterchangeValidator;
+    }
+
+    /**
+     * Invokes bean validation and then integrates all constraint violations directly into json object.
+     * @param json json representation of the object
+     * @param obj internal representation of the object
+     */
     private void processViolationsForTypes(Map<String, Object> json, Object obj) {
         Set<ConstraintViolation<Object>> violations = beanValidator.validate(obj, API.class, Default.class);
         JsonErrorIntegrator jsonErrorIntegrator = new JsonErrorIntegrator(jsonErrorMapper);
@@ -207,7 +219,7 @@ public class ObjectImporter {
             Map<String, Object> newJsonParent, String fieldPath) {
         String fieldName = fieldDef.getFieldName();
         String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
-        Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
+        Object newJsonValue = newJsonParent.get(fieldName);
 
         boolean isValidFormat = formatValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
         if (isValidFormat) {
@@ -261,6 +273,8 @@ public class ObjectImporter {
                     Method valueOf = apiField.getApiType().getType().getDeclaredMethod("valueOf", String.class);
                     return valueOf.invoke(apiField.getApiType().getType(), String.valueOf(jsonValue));
                 }
+            } else if (fieldType.isObject()) {
+                return apiField.getFieldAccessor().get(parentObj);
             }
         } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException
                 | InvocationTargetException e) {
@@ -323,21 +337,6 @@ public class ObjectImporter {
                         .map(v -> valueConverter.toSimpleTypeValue(v, subElementClass)).collect(Collectors.toList());
                 ((Collection) newFieldValue).addAll(nvs);
             } else {
-                // FIXME remove custom handling for agreements
-                if (AmpAgreement.class.isAssignableFrom(newFieldValue.getClass())
-                        && childrenNewValues.size() == 1) {
-                    Map<String, Object> agreementMap = childrenNewValues.get(0);
-                    childrenNewValues.clear();
-                    for (String key : agreementMap.keySet()) {
-                        HashMap<String, Object> kv = new HashMap<String, Object>();
-                        Object val = agreementMap.get(key);
-                        if (val instanceof String) {
-                            val = StringUtils.trim((String) val);
-                        }
-                        kv.put(key, val);
-                        childrenNewValues.add(kv);
-                    }
-                }
 
                 // process children
                 if (isList) {
@@ -361,7 +360,6 @@ public class ObjectImporter {
                             element = valueConverter.instantiate(subElementClass);
                             notYetAdded = true;
                         }
-                        branchJsonVisitor.put(fieldPath, newChild);
                         isFormatValid = validateAndImport(element, childrenFields, newChild, fieldPath)
                                 && isFormatValid;
                         if (isFormatValid) {
@@ -390,7 +388,6 @@ public class ObjectImporter {
                         } else {
                             element = newFieldValueCollection.iterator().next();
                         }
-                        branchJsonVisitor.put(fieldPath, newChild);
                         isFormatValid = validateAndImport(element, childrenFields, newChild, fieldPath)
                                 && isFormatValid;
                         if (isFormatValid) {
@@ -401,14 +398,15 @@ public class ObjectImporter {
                         }
                     }
                 } else {
-                    Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
-                    while (iterNew.hasNext()) {
-                        Map<String, Object> newChild = iterNew.next();
-                        branchJsonVisitor.put(fieldPath, newChild);
+                    if (newJsonValue != null) {
+                        Map<String, Object> newJsonObjValue = (Map<String, Object>) newJsonValue;
 
-                        APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
-                        isFormatValid = validateAndImport(newFieldValue, childFieldDef, newChild, fieldPath)
-                                && isFormatValid;
+                        if (fieldDef.isIndependent()) {
+                            newFieldValue = valueConverter.getNewInstance(fieldDef.getApiType().getType());
+                        }
+
+                        isFormatValid = validateAndImport(newFieldValue, fieldDef.getChildren(),
+                                newJsonObjValue, fieldPath) && isFormatValid;
                     }
                 }
                 // TODO: we also need to validate other children, some can be mandatory
@@ -502,28 +500,6 @@ public class ObjectImporter {
         return Collections.emptyList();
     }
 
-    private APIField getMatchedFieldDef(Map<String, Object> newValue, List<APIField> fieldDefs) {
-        if (fieldDefs.size() > 0) {
-            // if we have only 1 child element, then this is a list of elements and only this definition is expected
-            // or new value is empty, but we expect something
-            if (fieldDefs.size() == 1 || newValue == null || newValue.isEmpty()) {
-                return fieldDefs.get(0);
-            } else {
-                // this is a complex type => simple maps like { field_name : new_value_obj } are expected
-                // TODO: if more than 1 value
-                String fieldName = newValue.keySet().iterator().next();
-                if (StringUtils.isNotBlank(fieldName)) {
-                    for (APIField childDef : fieldDefs) {
-                        if (fieldName.equals(childDef.getFieldName())) {
-                            return childDef;
-                        }
-                    }
-                }
-            }
-        }
-        return null; // why this happens? is throwing an error a better option?
-    }
-
     public PossibleValuesCache getPossibleValuesCache() {
         return this.possibleValuesCached;
     }
@@ -542,10 +518,6 @@ public class ObjectImporter {
         return trnSettings;
     }
 
-    public Map<String, Object> getBranchJsonVisitor() {
-        return branchJsonVisitor;
-    }
-    
     public void addError(ApiErrorMessage error) {
         errors.put(error.id, error);
     }

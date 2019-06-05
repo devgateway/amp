@@ -266,7 +266,7 @@ public class FieldsEnumeratorTest {
     public void testInvisibleField() {
         FMService invisibleFmService = mock(FMService.class);
 
-        when(invisibleFmService.isVisible(any(), any())).thenReturn(false);
+        when(invisibleFmService.isVisible(any())).thenReturn(false);
 
         List<APIField> actual =
                 new FieldsEnumerator(provider, invisibleFmService, translatorService, name -> true)
@@ -312,18 +312,6 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "field_required_non_draft", required = SUBMIT)
         private String fieldRequiredNonDraft;
 
-        @Interchangeable(fieldTitle = "field_required_fm_visible", requiredFmPath = VISIBLE_FM_PATH)
-        private String fieldRequiredFmEntryVisible;
-
-        @Interchangeable(fieldTitle = "field_required_fm_hidden", requiredFmPath = HIDDEN_FM_PATH)
-        private String fieldRequiredFmEntryHidden;
-
-        @Interchangeable(fieldTitle = "field_required_implicit_fm_path_visible", requiredFmPath = VISIBLE_FM_PATH)
-        private String fieldRequiredFmPathVisibleImplicit;
-
-        @Interchangeable(fieldTitle = "field_required_implicit_fm_path_hidden", requiredFmPath = HIDDEN_FM_PATH)
-        private String fieldRequiredFmPathHiddenImplicit;
-
         @Interchangeable(fieldTitle = "field_required_submit_fm_path_visible", requiredFmPath = VISIBLE_FM_PATH,
                 required = SUBMIT)
         private String fieldRequiredSubmitFmPathVisible;
@@ -349,10 +337,12 @@ public class FieldsEnumeratorTest {
         private String fieldRequiredMinSizeOff;
 
         @Interchangeable(fieldTitle = "field_required_and_min_size_on", requiredFmPath = HIDDEN_FM_PATH,
+                required = SUBMIT,
                 validators = @Validators(minSize = VISIBLE_FM_PATH))
         private String fieldRequiredFmEntryAndMinSizeValidatorOn;
 
         @Interchangeable(fieldTitle = "field_required_and_min_size_off", requiredFmPath = HIDDEN_FM_PATH,
+                required = SUBMIT,
                 validators = @Validators(minSize = HIDDEN_FM_PATH))
         private String fieldRequiredFmEntryAndMinSizeValidatorOff;
     }
@@ -366,10 +356,6 @@ public class FieldsEnumeratorTest {
                 newRequiredField("field_not_required_explicit", FIELD_NOT_REQUIRED),
                 newRequiredField("field_required_always", FIELD_ALWAYS_REQUIRED),
                 newRequiredField("field_required_non_draft", FIELD_NON_DRAFT_REQUIRED),
-                newRequiredField("field_required_fm_visible", FIELD_NON_DRAFT_REQUIRED),
-                newRequiredField("field_required_fm_hidden", FIELD_NOT_REQUIRED),
-                newRequiredField("field_required_implicit_fm_path_visible", FIELD_NON_DRAFT_REQUIRED),
-                newRequiredField("field_required_implicit_fm_path_hidden", FIELD_NOT_REQUIRED),
                 newRequiredField("field_required_submit_fm_path_visible", FIELD_NON_DRAFT_REQUIRED),
                 newRequiredField("field_required_submit_fm_path_hidden", FIELD_NOT_REQUIRED),
                 newRequiredField("field_required_always_fm_path_visible", FIELD_ALWAYS_REQUIRED),
@@ -898,6 +884,7 @@ public class FieldsEnumeratorTest {
     private APIField newAPIField() {
         APIField field = new APIField();
         field.setFieldName("field");
+        field.setFieldNameInternal("field");
         field.setRequired(FIELD_NOT_REQUIRED);
         field.setImportable(false);
         field.setFieldLabel(fieldLabelFor("field"));

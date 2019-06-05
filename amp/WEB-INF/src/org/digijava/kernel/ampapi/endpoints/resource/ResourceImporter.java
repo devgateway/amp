@@ -53,7 +53,7 @@ public class ResourceImporter extends ObjectImporter {
     public ResourceImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getResourceFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getResourceBusinessRulesValidators()),
-                AmpFieldsEnumerator.getEnumerator().getResourceFields());
+                AmpFieldsEnumerator.getEnumerator().getResourceField());
     }
 
     /**
@@ -65,7 +65,7 @@ public class ResourceImporter extends ObjectImporter {
     public ResourceImporter createResource(JsonBean newJson) {
         return createResource(newJson, null);
     }
-    
+
     /**
      * Create a web link or document resource.
      *
@@ -285,7 +285,7 @@ public class ResourceImporter extends ObjectImporter {
 
         return null;
     }
-    
+
     /**
      * Get the result of import/update resource in JsonBean format
      *
@@ -310,7 +310,7 @@ public class ResourceImporter extends ObjectImporter {
                 result.set(ResourceEPConstants.DESCRIPTION, resource.getDescription());
                 result.set(ResourceEPConstants.NOTE, resource.getNote());
             }
-            
+
             if (resource.getType() != null) {
                 result.set(ResourceEPConstants.TYPE, resource.getType().getId());
             }
@@ -324,11 +324,11 @@ public class ResourceImporter extends ObjectImporter {
                     DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(resource.getAddingDate()));
             result.set(ResourceEPConstants.TEAM, resource.getTeam());
         }
-        
+
         if (!warnings.isEmpty()) {
             result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings.values()));
         }
-        
+
         return result;
     }
 

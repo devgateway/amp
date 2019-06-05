@@ -37,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.GlobalSettingsForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.module.aim.helper.EasternArabicService;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.services.auditcleaner.AuditCleaner;
@@ -103,7 +104,8 @@ public class GlobalSettings extends Action {
                 String element = URLDecoder.decode(token.nextToken(), "UTF-8");
                 String[] nameValue = element.split("=");                
                 Long id = getLongOrNull(nameValue[0]);
-                String newValue = nameValue.length < 2 ? "" : nameValue[1];
+                String newValue = nameValue.length < 2 ? "" : EasternArabicService.getInstance()
+                        .convertToWesternArabicBasedOnCurrentLocale(nameValue[1]);
                 if (projectValidationSetting.getGlobalId().equals(id) && !newValue.equals(projectValidationSetting.getGlobalSettingsValue())) {
                     resetWorkspaceValidationSettings(newValue);
                 }

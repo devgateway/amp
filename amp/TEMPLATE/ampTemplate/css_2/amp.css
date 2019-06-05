@@ -1428,3 +1428,7 @@ div.footer {
     padding: 2px;
     width: 50%;
 }
+
+.gs-setting-label {
+    text-align: right;
+}

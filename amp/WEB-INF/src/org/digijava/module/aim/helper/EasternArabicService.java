@@ -67,4 +67,12 @@ public final class EasternArabicService {
         
         return text;
     }
+    
+    public String convertToWesternArabicBasedOnCurrentLocale(String text) {
+        if (isLocaleEasternArabic(TLSUtils.getCurrentSystemLocale())) {
+            return convertEasternArabicToWesternArabic(text);
+        }
+        
+        return text;
+    }
 }

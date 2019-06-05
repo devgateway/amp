@@ -51,7 +51,7 @@ public class ActivitySummary {
     private Date updatedDate;
 
     @JsonProperty("activity_group")
-    @JsonView(ImportView.class)
+    @JsonView(ActivityView.Import.class)
     private AmpActivityGroup ampActivityGroup;
 
     @JsonProperty(ActivityEPConstants.EDIT)
@@ -61,7 +61,7 @@ public class ActivitySummary {
     private boolean viewable;
 
     @JsonProperty("workspaces_edit")
-    @JsonView(ListView.class)
+    @JsonView(ActivityView.List.class)
     private Set<Long> workspaces;
 
     public Object getAmpActivityId() {

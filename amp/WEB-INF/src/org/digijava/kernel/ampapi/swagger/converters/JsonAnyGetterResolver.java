@@ -54,7 +54,8 @@ public class JsonAnyGetterResolver extends AbstractModelConverter {
         if (context.getJsonView() != null) {
             for (Class<?> jsonView : context.getJsonView().value()) {
                 if (rawType.isAssignableFrom(JsonApiResponse.class)) {
-                    if (org.digijava.kernel.ampapi.endpoints.activity.dto.ImportView.class.isAssignableFrom(jsonView)) {
+                    if (org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityView.Import.class
+                            .isAssignableFrom(jsonView)) {
                         addObjectProperty(
                                 props, ActivityEPConstants.ACTIVITY, "the activity that was provided as an input");
                         return true;

@@ -13,8 +13,10 @@ import java.util.TreeSet;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactFieldsConstants;
+import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -81,15 +83,24 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     @InterchangeableDiscriminator(discriminatorField = "name", settings = {
             @Interchangeable(fieldTitle = ContactEPConstants.EMAIL, 
                     discriminatorOption = Constants.CONTACT_PROPERTY_NAME_EMAIL,
-                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true,
+                    interValidators = @InterchangeableValidator(
+                            value = SizeValidator.class,
+                            attributes = "max=" + ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE),
+                    importable = true,
                     type = AmpContactEmailProperty.class),
             @Interchangeable(fieldTitle = ContactEPConstants.PHONE, 
                     discriminatorOption = Constants.CONTACT_PROPERTY_NAME_PHONE,
-                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true,
+                    interValidators = @InterchangeableValidator(
+                            value = SizeValidator.class,
+                            attributes = "max=" + ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE),
+                    importable = true,
                     type = AmpContactPhoneProperty.class),
             @Interchangeable(fieldTitle = ContactEPConstants.FAX, 
                     discriminatorOption = Constants.CONTACT_PROPERTY_NAME_FAX,
-                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true,
+                    interValidators = @InterchangeableValidator(
+                            value = SizeValidator.class,
+                            attributes = "max=" + ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE),
+                    importable = true,
                     type = AmpContactFaxProperty.class)})
     private SortedSet<AmpContactProperty> properties = new TreeSet<>();
 

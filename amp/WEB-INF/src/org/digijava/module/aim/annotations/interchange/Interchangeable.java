@@ -161,8 +161,6 @@ public @interface Interchangeable {
      */
     boolean percentageConstraint() default false;
 
-    int sizeLimit() default 1;
-
     /**
      * If type property is set to this class then type will be determined via reflection.
      */

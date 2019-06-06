@@ -225,7 +225,10 @@ public class ObjectImporter {
 
         boolean isValidFormat = formatValidator.isValid(this, newParent, newJsonParent, fieldDef, currentFieldPath);
         if (isValidFormat) {
-            isValidFormat = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
+            if (newJsonParent.containsKey(fieldName)) {
+                isValidFormat = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
+            }
+        
             if (isValidFormat) {
                 businessRulesValidator.isValid(this, newParent, newJsonParent, fieldDef, currentFieldPath);
             }
@@ -307,7 +310,7 @@ public class ObjectImporter {
          * Current field will be verified below and reported as invalid if sub-elements are mandatory and are
          * not provided.
          */
-
+        
         // skip children validation immediately if only ID is expected
         boolean idOnly = fieldDef.isIdOnly();
         boolean isList = fieldType.isList();

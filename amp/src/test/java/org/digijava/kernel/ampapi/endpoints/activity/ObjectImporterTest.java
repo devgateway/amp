@@ -619,6 +619,25 @@ public class ObjectImporterTest {
     }
     
     @Test
+    public void testNoOverwriteCollection() {
+        Map<String, Object> json = (Map<String, Object>) examples.get("no-overwrite");
+        
+        Parent parent = new Parent("Leonidas", 45);
+        parent.addChild(new Child(1L, "Alexios", "Defender"));
+        parent.addChild(new Child(2L, "Herodotus", "Historian"));
+        parent.addChild(new Child(null, "Persian", null));
+        
+        importer.validateAndImport(parent, json);
+        
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, parentWithChildren("Wise Leonidas", 45,
+                containsInAnyOrder(
+                        child(1L, "Alexios", "Defender"),
+                        child(null, "Persian", null),
+                        child(2L, "Herodotus", "Historian"))));
+    }
+    
+    @Test
     public void testNoOverwriteInSet() {
         Map<String, Object> json = (Map<String, Object>) examples.get("no-overwrite-in-set");
         
@@ -809,7 +828,7 @@ public class ObjectImporterTest {
         importer.validateAndImport(parent, json);
 
         assertThat(importer.errors.size(), is(0));
-        assertThat(parent, parentWithAddresses(null, null, emptyIterable()));
+        assertThat(parent, parentWithAddresses(null, null, contains(address(1L, "H", "Home", "123"))));
     }
 
     // no longer possible
@@ -847,6 +866,34 @@ public class ObjectImporterTest {
 
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, hasProperty("agreement", agreement(1L, "x")));
+    }
+    
+    @Test
+    public void testDiscriminatorMissing() {
+        Parent parent = new Parent();
+        parent.addPhone(new Phone("H", "123", "no soliciting"));
+        parent.addPhone(new Phone("W", "678", "9-16 only"));
+    
+        importer.validateAndImport(parent, new HashMap<>());
+    
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, parentWithPhones(null, null, containsInAnyOrder(
+                phone("H", "123", "no soliciting"),
+                phone("W", "678", "9-16 only"))));
+    }
+    
+    @Test
+    public void testDiscriminatorIdOnly() {
+        Parent parent = new Parent();
+        parent.addAttribute(new PersonAttribute("1", "Hair", "Blond"));
+        parent.addAttribute(new PersonAttribute("2", "Height", "Tall"));
+    
+        importer.validateAndImport(parent, new HashMap<>());
+    
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, parentWithAttributes(null, null, containsInAnyOrder(
+                attribute("Hair", "1", "Blond"),
+                attribute("Height", "2", "Tall"))));
     }
 
     @Test

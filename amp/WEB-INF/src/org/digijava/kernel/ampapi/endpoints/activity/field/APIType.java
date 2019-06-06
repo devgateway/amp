@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,22 +20,18 @@ public class APIType {
 
     @JsonProperty(ActivityEPConstants.ITEM_TYPE)
     private final FieldType itemType;
-
-    /**
-     * Meaningful only when fieldType is list.
-     */
-    @JsonIgnore
-    private final Class<?> elementType;
+    
+    @JsonCreator
+    public APIType(@JsonProperty(ActivityEPConstants.FIELD_TYPE) String fieldType) {
+        this(FieldType.valueOf(fieldType.toUpperCase()) == FieldType.LIST ? Object.class : null,
+                FieldType.valueOf(fieldType.toUpperCase()));
+    }
 
     public APIType(Class<?> type) {
-        this(type, null, null);
+        this(type, null);
     }
 
-    public APIType(Class<?> type, Class<?> elementType) {
-        this(type, null, elementType);
-    }
-
-    public APIType(Class<?> type, FieldType fieldType, Class<?> elementType) {
+    public APIType(Class<?> type, FieldType fieldType) {
         this.type = type;
         if (fieldType == null) {
             if (InterchangeableClassMapper.containsSimpleClass(type)) {
@@ -44,19 +41,13 @@ public class APIType {
             }
         }
         if (fieldType.isList()) {
-            if (elementType == null) {
-                throw new RuntimeException("A list type must clarify the elementType"); 
-            }
-            this.itemType = InterchangeableClassMapper.containsSimpleClass(elementType)
-                    ? InterchangeableClassMapper.getCustomMapping(elementType) : FieldType.OBJECT;
+            this.itemType = InterchangeableClassMapper.containsSimpleClass(type)
+                    ? InterchangeableClassMapper.getCustomMapping(type) : FieldType.OBJECT;
              
-        } else if (elementType != null && !fieldType.isObject()) {
-            throw new RuntimeException("Only a list type or discriminated object can specify an elementType");
         } else {
             this.itemType = null;
         }
         this.fieldType = fieldType;
-        this.elementType = elementType;
     }
 
     public FieldType getFieldType() {
@@ -71,13 +62,18 @@ public class APIType {
         return itemType;
     }
 
-    public Class<?> getElementType() {
-        return elementType;
-    }
-
     @JsonIgnore
     public boolean isSimpleItemType() {
         return this.itemType != null && !this.itemType.isObject();
     }
 
+    @JsonIgnore
+    public boolean isAnObject() {
+        return fieldType.isObject();
+    }
+
+    @JsonIgnore
+    public boolean isAListOfObjects() {
+        return fieldType.isList() && itemType.isObject();
+    }
 }

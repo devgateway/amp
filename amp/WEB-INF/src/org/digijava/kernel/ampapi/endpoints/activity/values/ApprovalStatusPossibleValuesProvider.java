@@ -10,7 +10,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 
-public class ApprovalStatusPossibleValuesProvider extends PossibleValuesProvider {
+public class ApprovalStatusPossibleValuesProvider implements PossibleValuesProvider {
 
     @Override
     public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
@@ -19,5 +19,10 @@ public class ApprovalStatusPossibleValuesProvider extends PossibleValuesProvider
             values.add(new PossibleValue(status.getId().longValue(), status.getDbName(), ImmutableMap.of()));
         }
         return values;
+    }
+
+    @Override
+    public boolean isAllowed(Long id) {
+        return id != null && ApprovalStatus.isValid(id.intValue());
     }
 }

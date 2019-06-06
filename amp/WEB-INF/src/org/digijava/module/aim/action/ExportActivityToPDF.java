@@ -613,6 +613,11 @@ public class ExportActivityToPDF extends Action {
                 columnName=TranslatorWorker.translateText("Cris Number");
                 createGeneralInfoRow(mainLayout,columnName,activity.getCrisNumber());
             }
+    
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/IATI Identifier")) {
+                columnName = TranslatorWorker.translateText("IATI Identifier");
+                createGeneralInfoRow(mainLayout, columnName, activity.getIatiIdentifier());
+            }
 
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Procurement System")){
                 columnName=TranslatorWorker.translateText("Procurement System");

@@ -31,4 +31,5 @@ public class AmpActivitySectorDiscriminationConfigurer implements Discrimination
         AmpActivitySector sector = (AmpActivitySector) obj;
         sector.setClassificationConfig(map.get().get(discriminationValue));
     }
+
 }

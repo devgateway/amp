@@ -29,14 +29,14 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.filetype.MimeUtil;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.kernel.request.TLSUtils;
@@ -98,12 +98,13 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
 
     public static AmpOfflineRelease detectClientRelease() {
         AmpOfflineRelease release = null;
-        if (AmpOfflineModeHolder.isAmpOfflineMode()) {
+        if (AmpClientModeHolder.isOfflineClient()) {
             try {
                 String userAgent = TLSUtils.getRequest().getHeader("User-Agent");
                 release = AmpOfflineRelease.fromUserAgent(userAgent);
             } catch (IllegalArgumentException e) {
-                JsonBean error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails(e.getMessage()));
+                ApiErrorResponse error = ApiError.toError(
+                        AmpConfigurationErrors.INVALID_INPUT.withDetails(e.getMessage()));
                 throw new ApiRuntimeException(error);
             }
         }
@@ -171,7 +172,7 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
         try {
             return ampVersionService.addCompatibleVersionRange(versionRange);
         } catch (IllegalArgumentException e) {
-            JsonBean error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails(e.getMessage()));
+            ApiErrorResponse error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails(e.getMessage()));
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, error);
         }
     }
@@ -187,7 +188,7 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
             versionRange.setId(id);
             return ampVersionService.updateCompatibleVersionRange(versionRange);
         } catch (IllegalArgumentException e) {
-            JsonBean error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails(e.getMessage()));
+            ApiErrorResponse error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails(e.getMessage()));
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, error);
         }
     }
@@ -238,7 +239,7 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
                 return Response.ok(yml).build();
             } catch (IOException e) {
                 logger.error("Failed to compute hash for release file.", e);
-                JsonBean error = ApiError.toError("Failed to compute hash for release file.");
+                ApiErrorResponse error = ApiError.toError("Failed to compute hash for release file.");
                 throw new ApiRuntimeException(Response.Status.INTERNAL_SERVER_ERROR, error);
             }
         } else {
@@ -270,7 +271,8 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
 
     private void requireValidArch(String arch) {
         if (!"32".equals(arch) && !"64".equals(arch)) {
-            JsonBean error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails("Invalid architecture"));
+            ApiErrorResponse error = ApiError.toError(
+                    AmpConfigurationErrors.INVALID_INPUT.withDetails("Invalid architecture"));
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, error);
         }
     }

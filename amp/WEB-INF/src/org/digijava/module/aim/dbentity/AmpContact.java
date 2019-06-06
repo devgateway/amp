@@ -4,6 +4,7 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -12,10 +13,8 @@ import java.util.TreeSet;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactFieldsConstants;
-import org.digijava.kernel.ampapi.endpoints.contact.ContactTitlePossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -23,6 +22,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * holds contact user's information
@@ -41,8 +41,8 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     @Interchangeable(fieldTitle = "Last Name", importable = true, required = ALWAYS)
     private String lastname;
 
-    @PossibleValues(ContactTitlePossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Title", importable = true, pickIdOnly = true)
+    @Interchangeable(fieldTitle = "Title", importable = true, pickIdOnly = true,
+        discriminatorOption = CategoryConstants.CONTACT_TITLE_KEY)
     private AmpCategoryValue title;
 
     @TranslatableField
@@ -76,7 +76,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     
     @Interchangeable(fieldTitle = "Organisation Contacts", importable = true, 
             validators = @Validators(unique = FMVisibility.ALWAYS_VISIBLE_FM))
-    private Set<AmpOrganisationContact> organizationContacts;
+    private Set<AmpOrganisationContact> organizationContacts = new HashSet<>();
 
     @InterchangeableDiscriminator(discriminatorField = "name", settings = {
             @Interchangeable(fieldTitle = ContactEPConstants.EMAIL, 

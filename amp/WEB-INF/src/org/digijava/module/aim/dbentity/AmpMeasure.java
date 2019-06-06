@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -27,7 +28,7 @@ public class AmpMeasure  implements Serializable, Cloneable {
 
     @Interchangeable(fieldTitle = "Actors", importable = true,
             fmPath = "/Activity Form/Issues Section/Issue/Measure/Actor")
-    private Set<AmpActor> actors;
+    private Set<AmpActor> actors = new HashSet<>();
 
     @Interchangeable(fieldTitle = "Measure Date", importable = true,
             fmPath = "/Activity Form/Issues Section/Issue/Measure/Date")
@@ -72,5 +73,5 @@ public class AmpMeasure  implements Serializable, Cloneable {
         // TODO Auto-generated method stub
         return super.clone();
     }
-    
+
 }

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.security.ApiAuthentication;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.request.TLSUtils;
@@ -198,7 +198,7 @@ public class SecurityUtil {
         }
         if(error!=null){
             logger.debug(error.description);
-            ApiErrorResponse.reportUnauthorisedAccess(error);
+            ApiErrorResponseService.reportUnauthorisedAccess(error);
         }
     }
 

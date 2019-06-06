@@ -10,7 +10,7 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 
 import com.google.common.collect.ImmutableMap;
 
-public class FiscalYearPossibleValuesProvider extends PossibleValuesProvider {
+public class FiscalYearPossibleValuesProvider implements PossibleValuesProvider {
 
     @Override
     public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
@@ -21,5 +21,10 @@ public class FiscalYearPossibleValuesProvider extends PossibleValuesProvider {
         }
         
         return values;
+    }
+
+    @Override
+    public boolean isAllowed(Long id) {
+        return id != null && ActivityUtil.isFiscalYearInRange(id.intValue());
     }
 }

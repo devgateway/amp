@@ -12,7 +12,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -24,6 +23,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.junit.Before;
 import org.junit.Rule;
@@ -248,14 +248,14 @@ public class RequiredValidatorTest {
         APIField fd = new APIField();
         fd.setFieldName(SAMPLE_FIELD);
         fd.setImportable(true);
-        fd.setRequired(required);
+        fd.setUnconditionalRequired(required);
         fd.setApiType(new APIType(String.class));
         return fd;
     }
 
     private APIField fdList(String required) {
-        APIField fd = fd(FIELD_ALWAYS_REQUIRED);
-        fd.setApiType(new APIType(Collection.class, String.class));
+        APIField fd = fd(required);
+        fd.setApiType(new APIType(String.class, FieldType.LIST));
         return fd;
     }
     

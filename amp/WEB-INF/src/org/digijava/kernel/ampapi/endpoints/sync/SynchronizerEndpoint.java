@@ -18,7 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
@@ -51,7 +51,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     public SystemDiff computeSync(SyncRequest syncRequest) {
 
         if (syncRequest.getUserIds() == null || syncRequest.getUserIds().isEmpty()) {
-            ApiErrorResponse.reportError(BAD_REQUEST, SynchronizerErrors.NO_USERS_ARE_SPECIFIED);
+            ApiErrorResponseService.reportError(BAD_REQUEST, SynchronizerErrors.NO_USERS_ARE_SPECIFIED);
         }
 
         return syncService.diff(syncRequest);

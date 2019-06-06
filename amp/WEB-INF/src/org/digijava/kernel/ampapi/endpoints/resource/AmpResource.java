@@ -5,80 +5,85 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 import java.util.Date;
 import java.util.Map;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.validators.resource.ResourceRequiredValidator;
 import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.ResourceFieldsConstants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
- * 
+ *
  * @author Viorel Chihai
  *
  */
+@InterchangeableValidator(ResourceRequiredValidator.class)
 public class AmpResource {
-    
+
     @Interchangeable(fieldTitle = "UUID")
     private String uuid;
-    
+
     @Interchangeable(fieldTitle = "Title", importable = true, required = ALWAYS)
     @ResourceTextField(fieldTitle = "Title", translationsField = "translatedTitles")
     private String title;
-    
-    @Interchangeable(fieldTitle = "File Name", importable = true, required = ALWAYS,
-            dependencies = InterchangeDependencyResolver.RESOURCE_TYPE_FILE_VALID_KEY)
+
+    @Interchangeable(fieldTitle = ResourceFieldsConstants.FILE_NAME, importable = true,
+            requiredDependencies = ResourceRequiredValidator.RESOURCE_TYPE_FILE_VALID_KEY,
+            dependencyRequired = ALWAYS)
     private String fileName;
-    
-    @Interchangeable(fieldTitle = "Web Link", importable = true, required = ALWAYS,
-            dependencies = InterchangeDependencyResolver.RESOURCE_TYPE_LINK_VALID_KEY)
+
+    @Interchangeable(fieldTitle = ResourceFieldsConstants.WEB_LINK, importable = true,
+            requiredDependencies = ResourceRequiredValidator.RESOURCE_TYPE_LINK_VALID_KEY,
+            dependencyRequired = ALWAYS)
     private String webLink;
-    
+
     @Interchangeable(fieldTitle = "Description", importable = true)
     @ResourceTextField(fieldTitle = "Description", translationsField = "translatedDescriptions")
     private String description;
-    
+
     @Interchangeable(fieldTitle = "Note", importable = true)
     @ResourceTextField(fieldTitle = "Note", translationsField = "translatedNotes")
     private String note;
-    
-    @PossibleValues(DocumentTypePossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Type", importable = true, pickIdOnly = true)
+
+    @Interchangeable(fieldTitle = "Type", importable = true, pickIdOnly = true,
+            discriminatorOption = CategoryConstants.DOCUMENT_TYPE_KEY)
     private AmpCategoryValue type;
-    
+
     @Interchangeable(fieldTitle = "URL")
     private String url;
-    
+
     @Interchangeable(fieldTitle = "Year Of Publication")
     private String yearOfPublication;
-    
+
     @Interchangeable(fieldTitle = "Adding Date")
     private Date addingDate;
-    
+
     @Interchangeable(fieldTitle = "File Size")
     private Double fileSize;
-    
+
     @Interchangeable(fieldTitle = "Public")
     private Boolean isPublic;
-    
+
     @Interchangeable(fieldTitle = "Private", importable = true, required = ALWAYS)
     private Boolean isPrivate;
-    
+
     @Interchangeable(fieldTitle = "Creator Email", importable = true, required = ALWAYS)
     private String creatorEmail;
-    
+
     @Interchangeable(fieldTitle = "Team", importable = true, required = ALWAYS)
     private Long team;
-    
+
     @PossibleValues(ResourceTypePossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Resource Type", importable = true, pickIdOnly = true,
             required = ALWAYS)
     private ResourceType resourceType;
-    
+
     private Map<String, String> translatedTitles;
     private Map<String, String> translatedDescriptions;
     private Map<String, String> translatedNotes;
-    
+
     public String getUuid() {
         return uuid;
     }
@@ -158,7 +163,7 @@ public class AmpResource {
     public void setFileSize(Double fileSize) {
         this.fileSize = fileSize;
     }
-    
+
     public String getYearOfPublication() {
         return yearOfPublication;
     }
@@ -198,7 +203,7 @@ public class AmpResource {
     public void setTeam(Long team) {
         this.team = team;
     }
-    
+
     public ResourceType getResourceType() {
         return resourceType;
     }
@@ -230,5 +235,5 @@ public class AmpResource {
     public void setTranslatedNotes(Map<String, String> translatedNotes) {
         this.translatedNotes = translatedNotes;
     }
-    
+
 }

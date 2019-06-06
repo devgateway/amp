@@ -22,7 +22,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -59,48 +59,18 @@ public final class ActivityInterchangeUtils {
      * Imports or Updates an activity
      * @param newJson new activity configuration
      * @param update flags whether this is an import or an update request
-     * @param canDowngradeToDraft if allowed to downgrade to draft when some submit required field values are missing
-     * @param isProcessApprovalFields if to enforce approval fields from input. Otherwise the AF save workflow
-     * will be used to configure them
+     * @param rules activity import rules
      * @param endpointContextPath full API method path where this method has been called
      *
      * @return latest project overview or an error if invalid configuration is received
      */
     public static JsonBean importActivity(JsonBean newJson, boolean update, ActivityImportRules rules,
             String endpointContextPath) {
-        List<APIField> activityFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
-        ActivityImporter importer = new ActivityImporter(activityFields, rules);
-        List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update, endpointContextPath);
+        APIField activityField = AmpFieldsEnumerator.getEnumerator().getActivityField();
 
-        return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors, importer.getWarnings());
-    }
-
-    private static JsonBean getImportResult(AmpActivityVersion newActivity, JsonBean newJson,
-            List<ApiErrorMessage> errors, Collection<ApiErrorMessage> warnings) {
-        JsonBean result = null;
-        if (errors.size() == 0 && newActivity == null) {
-            // no new activity, but also errors are missing -> unknown error
-            result = ApiError.toError(ApiError.UNKOWN_ERROR);
-        } else if (errors.size() > 0) {
-            result = ApiError.toError(errors);
-            result.set(ActivityEPConstants.ACTIVITY, newJson);
-        } else {
-            List<JsonBean> activities = null;
-            if (newActivity != null && newActivity.getAmpActivityId() != null) {
-                // editable, viewable, since was just created/updated
-                activities = Arrays.asList(ProjectList.getActivityInProjectListFormat(newActivity, true, true));
-            }
-            if (activities == null || activities.size() == 0) {
-                result = ApiError.toError(ApiError.UNKOWN_ERROR);
-                result.set(ActivityEPConstants.ACTIVITY, newJson);
-            } else {
-                result = activities.get(0);
-            }
-        }
-        if (warnings.size() > 0) {
-            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings));
-        }
-        return result;
+        return new ActivityImporter(activityField, rules)
+                .importOrUpdate(newJson, update, endpointContextPath)
+                .getResult();
     }
 
     @SuppressWarnings("unchecked")
@@ -139,8 +109,7 @@ public final class ActivityInterchangeUtils {
         String message = "Invalid filter. The usage should be {\"" + ActivityEPConstants.FILTER_FIELDS
                 + "\" : [\"field1\", \"field2\", ..., \"fieldn\"]}";
 
-        JsonBean errorBean = ApiError.toError(message);
-        result.set(EPConstants.ERROR, errorBean.get(EPConstants.ERROR));
+        result.set(EPConstants.ERROR, ApiError.toError(message).getErrors());
     }
 
     /**
@@ -252,12 +221,13 @@ public final class ActivityInterchangeUtils {
             List<AmpActivityVersion> activities = ActivityUtil.getActivitiesByAmpIds(currentAmpIds);
             activities.forEach(activity -> {
                 String ampId = activity.getAmpId();
-                JsonBean result;
+                JsonBean result = new JsonBean();
                 try {
                     ActivityUtil.initializeForApi(activity);
                     result = exporter.export(activity);
                 } catch (Exception e) {
-                    result = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage()));
+                    result.set(EPConstants.ERROR, ApiError.toError(
+                            ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage())).getErrors());
                     result.set(ActivityEPConstants.AMP_ID_FIELD_NAME, ampId);
                 } finally {
                     PersistenceManager.getSession().evict(activity);
@@ -276,7 +246,8 @@ public final class ActivityInterchangeUtils {
         if (processedActivities.size() != ampIds.size()) {
             ampIds.removeAll(processedActivities.keySet());
             ampIds.forEach(ampId -> {
-                JsonBean notFoundJson = ApiError.toError(ActivityErrors.ACTIVITY_NOT_FOUND);
+                JsonBean notFoundJson = new JsonBean();
+                notFoundJson.set(EPConstants.ERROR, ApiError.toError(ActivityErrors.ACTIVITY_NOT_FOUND).getErrors());
                 notFoundJson.set(ActivityEPConstants.AMP_ID_FIELD_NAME, ampId);
                 processedActivities.put(ampId, notFoundJson);
             });
@@ -305,7 +276,7 @@ public final class ActivityInterchangeUtils {
             if (activity == null) {
                 //so far project will never be null since an exception will be thrown
                 //I leave the code prepared to throw the appropriate response code
-                ApiErrorResponse.reportResourceNotFound(ActivityErrors.ACTIVITY_NOT_FOUND);
+                ApiErrorResponseService.reportResourceNotFound(ActivityErrors.ACTIVITY_NOT_FOUND);
             }
         } catch (DgException e) {
             throw new RuntimeException(e);
@@ -340,32 +311,6 @@ public final class ActivityInterchangeUtils {
             logger.error("Error in loading activity. " + e.getMessage());
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Gets the value at the specified path from the JSON description of the activity.
-     *
-     * @param activity a JsonBean description of the activity
-     * @param path path to the field
-     * @return null if the path abruptly stops before reaching the end, or the value itself,
-     * if the end of the path is reached
-     */
-    public static Object getFieldValuesFromJsonActivity(JsonBean activity, String path) {
-        String fieldPath = path;
-
-        JsonBean currentBranch = activity;
-        while (fieldPath.contains("~")) {
-            String pathSegment = fieldPath.substring(0, fieldPath.indexOf('~'));
-            Object obj = currentBranch.get(pathSegment);
-            if (obj != null && JsonBean.class.isAssignableFrom(obj.getClass())) {
-                currentBranch = (JsonBean) obj;
-            } else {
-                return null;
-            }
-            fieldPath = path.substring(fieldPath.indexOf('~') + 1);
-        }
-        //path is complete, object is set to proper value
-        return currentBranch.get(fieldPath);
     }
 
     /**

@@ -27,6 +27,11 @@ public final class ConstraintMatchers {
     private ConstraintMatchers() {
     }
 
+    static Matcher<ConstraintViolation> hasViolation(Class<? extends Annotation> constraintAnnotation) {
+        return hasProperty("constraintDescriptor",
+                hasProperty("annotation", is(instanceOf(constraintAnnotation))));
+    }
+
     /**
      * Matches a constraint violation with property path matching all node matchers in the specified order.
      */
@@ -41,7 +46,7 @@ public final class ConstraintMatchers {
     /**
      * Matches a node that is an iterable field.
      */
-    static Matcher<Path.Node> iterableNode(String name) {
+    static Matcher<Path.Node> inIterableNode(String name) {
         return describedAs(name, node(name, true, nullValue()));
     }
 
@@ -58,11 +63,18 @@ public final class ConstraintMatchers {
     static Matcher<Path.Node> nodeAtKey(String name, Object key) {
         return describedAs(name + "[" + key + "]", node(name, false, sameInstance(key)));
     }
+    
+    /**
+     * Matches a node that is part of iterable at specified key.
+     */
+    static Matcher<Path.Node> inIterableNodeAtKey(String name, Object key) {
+        return describedAs(name + "[" + key + "]", node(name, true, sameInstance(key)));
+    }
 
-    private static Matcher<Path.Node> node(String name, boolean iterable, Matcher<Object> keyMatcher) {
+    private static Matcher<Path.Node> node(String name, boolean inIterable, Matcher<Object> keyMatcher) {
         return allOf(
                 hasProperty("name", is(name)),
-                hasProperty("iterable", is(iterable)),
+                hasProperty("inIterable", is(inIterable)),
                 hasProperty("index", nullValue()),
                 hasProperty("key", keyMatcher));
     }

@@ -18,12 +18,18 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.validator.approval.ApprovalStatus;
+import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
+import org.digijava.module.aim.validator.approval.AllowedApprover;
+import org.digijava.module.aim.validator.contact.PrimaryContact;
+import org.digijava.module.aim.validator.fundings.TransactionOrgRole;
+import org.digijava.module.aim.validator.fundings.FundingOrgRole;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
 import org.digijava.module.aim.validator.percentage.ProgramTotalPercentage;
 import org.digijava.module.aim.validator.percentage.SectorsTotalPercentage;
+import org.digijava.module.aim.validator.user.MatchExistingCreator;
 
 /**
  * Map activity errors onto json structure.
@@ -58,6 +64,18 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
                     FieldMap.underscorify(ActivityFieldsConstants.NATIONAL_PLAN_OBJECTIVE))
             .build();
 
+    
+    private Map<String, String> contactToJsonPath = ImmutableMap.<String, String>builder()
+            .put(Constants.DONOR_CONTACT, FieldMap.underscorify(ActivityFieldsConstants.DONOR_CONTACT))
+            .put(Constants.MOFED_CONTACT, FieldMap.underscorify(ActivityFieldsConstants.MOFED_CONTACT))
+            .put(Constants.PROJECT_COORDINATOR_CONTACT,
+                    FieldMap.underscorify(ActivityFieldsConstants.PROJECT_COORDINATOR_CONTACT))
+            .put(Constants.SECTOR_MINISTRY_CONTACT,
+                    FieldMap.underscorify(ActivityFieldsConstants.SECTOR_MINISTRY_CONTACT))
+            .put(Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT,
+                    FieldMap.underscorify(ActivityFieldsConstants.IMPL_EXECUTING_AGENCY_CONTACT))
+            .build();
+
     private Map<String, String> sectorToJsonPath = ImmutableMap.<String, String>builder()
             .put(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME,
                     FieldMap.underscorify(ActivityFieldsConstants.PRIMARY_SECTORS))
@@ -68,10 +86,28 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
             .put(AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,
                     FieldMap.underscorify(ActivityFieldsConstants.TAG_SECTORS))
             .build();
-
+    
     private Map<Class<?>, Class<?>> constraintToViolation = ImmutableMap.<Class<?>, Class<?>>builder()
-            .put(ApprovalStatus.class, ApprovalStatusViolationBuilder.class)
+            // customize if anything extra needed or use some common default below
+            // e.g. .put(AllowedApprovalStatus.class, ApprovalStatusViolationBuilder.class)
+            .put(FundingOrgRole.class, OrgRoleViolationBuilder.class)
+            .put(TransactionOrgRole.class, OrgRoleViolationBuilder.class)
             .build();
+
+    private Map<Class<?>, String> violationsWithGenericInvalidFieldBuilder = ImmutableMap.<Class<?>, String>builder()
+            .put(AllowedApprovalStatus.class, FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS))
+            .put(AllowedApprover.class, FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY))
+            .put(MatchExistingCreator.class, FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY))
+            .build();
+
+    private ConstraintViolationBuilder getViolationBuilder(ConstraintViolation v) {
+        Class<? extends Annotation> aClass = v.getConstraintDescriptor().getAnnotation().annotationType();
+        String fieldPath = violationsWithGenericInvalidFieldBuilder.get(aClass);
+        if (fieldPath != null) {
+            return new InvalidFieldViolationBuilder(fieldPath);
+        }
+        return null;
+    }
 
     @Override
     public JsonConstraintViolation apply(ConstraintViolation v) {
@@ -113,7 +149,17 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
             return new JsonConstraintViolation(FieldMap.underscorify(ActivityFieldsConstants.LOCATIONS),
                     ActivityErrors.FIELD_PERCENTAGE_SUM_BAD);
         }
-
+        
+        if (isPrimaryContactConstraint(v)) {
+            String contactType = getContactType(v);
+            String jsonPath = contactToJsonPath.get(contactType);
+            if (jsonPath == null) {
+                throw new RuntimeException("Cannot find json path for activity contact " + contactType);
+            }
+            
+            return new JsonConstraintViolation(jsonPath, ActivityErrors.UNIQUE_PRIMARY_CONTACT);
+        }
+    
         Class<?> cvbc = constraintToViolation.get(v.getConstraintDescriptor().getAnnotation().annotationType());
         if (cvbc != null) {
             try {
@@ -122,6 +168,10 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
             } catch (InstantiationException | IllegalAccessException e) {
                 throw new RuntimeException("Could not generate the contraint violation json object");
             }
+        }
+        ConstraintViolationBuilder cvb = getViolationBuilder(v);
+        if (cvb != null) {
+            return cvb.build(v);
         }
 
         throw new RuntimeException("Cannot map constraint violation onto json object. Violation: " + v);
@@ -138,14 +188,18 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
     private AmpClassificationConfiguration getSectorSettings(ConstraintViolation v) {
         return (AmpClassificationConfiguration) getSecondNodeKey(v);
     }
-
+    
+    private String getContactType(ConstraintViolation v) {
+        return (String) getSecondNodeKey(v);
+    }
+    
     private Object getSecondNodeKey(ConstraintViolation v) {
         Iterator<Path.Node> iterator = v.getPropertyPath().iterator();
         iterator.next();
         Path.Node percentageNode = iterator.next();
         return percentageNode.getKey();
     }
-
+    
     private boolean isOrgRolePercentageConstraint(ConstraintViolation violation) {
         return violation.getConstraintDescriptor().getAnnotation() instanceof OrgRoleTotalPercentage;
     }
@@ -160,5 +214,9 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
 
     private boolean isLocationPercentageConstraint(ConstraintViolation violation) {
         return violation.getConstraintDescriptor().getAnnotation() instanceof LocationTotalPercentage;
+    }
+    
+    private boolean isPrimaryContactConstraint(ConstraintViolation violation) {
+        return violation.getConstraintDescriptor().getAnnotation() instanceof PrimaryContact;
     }
 }

@@ -4,10 +4,13 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 
 import java.io.Serializable;
 
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.ampapi.endpoints.common.values.providers.LocationPossibleValuesProvider;
+import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.util.Output;
 
@@ -25,12 +28,14 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
 
     @InterchangeableBackReference
     private AmpActivityVersion activity;
-    @Interchangeable(fieldTitle = "Location", pickIdOnly = true, importable = true, uniqueConstraint = true,
-            required = ALWAYS,
+
+    @PossibleValues(LocationPossibleValuesProvider.class)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.Locations.LOCATION, pickIdOnly = true, importable = true,
+            uniqueConstraint = true, required = ALWAYS,
             dependencies={
-                            InterchangeDependencyResolver.IMPLEMENTATION_LEVEL_PRESENT_KEY,
-                            InterchangeDependencyResolver.IMPLEMENTATION_LEVEL_VALID_KEY,
-                            InterchangeDependencyResolver.IMPLEMENTATION_LOCATION_PRESENT_KEY
+                    ImplementationLevelValidator.IMPLEMENTATION_LEVEL_PRESENT_KEY,
+                    ImplementationLevelValidator.IMPLEMENTATION_LEVEL_VALID_KEY,
+                    ImplementationLevelValidator.IMPLEMENTATION_LOCATION_PRESENT_KEY
             })
     private AmpLocation location;
     @Interchangeable(fieldTitle = "Location Percentage", required = ALWAYS,

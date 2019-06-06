@@ -380,13 +380,6 @@ public class EndpointUtils {
     }
 
     /**
-     * Returns HTTP Response status attribute from the request or null if none has been set
-     */
-    public static Integer getResponseStatusMarker() {
-        return (Integer) TLSUtils.getRequest().getAttribute(EPConstants.RESPONSE_STATUS);
-    }
-
-    /**
      * Returns Map of markers from request to be set as response headers in ApiResponseFilter
      * before sending to client
      * Returns null if headers marker has not been set into request
@@ -403,7 +396,7 @@ public class EndpointUtils {
             return null;
         }
     }
-
+    
     /**
      * Adds the request attribute marker to be used by ApiResponseFilter
      * to add the response header before sending to client
@@ -418,6 +411,13 @@ public class EndpointUtils {
             TLSUtils.getRequest().setAttribute(EPConstants.RESPONSE_HEADERS_MAP, responseHeadersMap);
         }
         responseHeadersMap.put(headerName, headerValue);
+    }
+    
+    /**
+     * Returns HTTP Response status attribute from the request or null if none has been set
+     */
+    public static Integer getResponseStatusMarker() {
+        return (Integer) TLSUtils.getRequest().getAttribute(EPConstants.RESPONSE_STATUS);
     }
 
     /**

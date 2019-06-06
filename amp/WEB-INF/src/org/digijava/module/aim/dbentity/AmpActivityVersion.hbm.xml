@@ -11,6 +11,8 @@
 		<property name="budgetdepartment" column="budget_department" type="java.lang.Long"/>
 		<property name="budgetprogram" column="budget_program" type="java.lang.Long"/>
 		<property name="budget" column="budget" type="java.lang.Integer" />
+
+		<property name="iatiIdentifier" column="iati_identifier" type="java.lang.String" />
 		
 		<property name="description" column="description" type="text"  index="amp_activity_version_description_idx" />
 		<property name="lessonsLearned" column="lessons_learned" type="text"  index="amp_activity_version_lessons_learned_idx" />
@@ -156,15 +158,6 @@
 			<key column="activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.IPAContract" />
 		</set>
-
-		<!--
-		DEPRECATED
-		<set name="activityPrograms" table="AMP_ACTIVITY_THEME" cascade="none">
-			<cache usage="read-write" />
-			<key column="amp_activity_id" />
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpTheme" column="amp_theme_id" />
-		</set>
-		-->
 
 		<set name="locations" cascade="all-delete-orphan" inverse="true">
 			<cache usage="read-write"/>

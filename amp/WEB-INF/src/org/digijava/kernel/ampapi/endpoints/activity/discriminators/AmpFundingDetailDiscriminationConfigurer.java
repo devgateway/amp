@@ -13,4 +13,5 @@ public class AmpFundingDetailDiscriminationConfigurer implements DiscriminationC
         AmpFundingDetail transaction = (AmpFundingDetail) obj;
         transaction.setTransactionType(Integer.valueOf(discriminationValue));
     }
+
 }

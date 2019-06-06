@@ -9,7 +9,7 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 
 import com.google.common.collect.ImmutableMap;
 
-public class ResourceTypePossibleValuesProvider extends PossibleValuesProvider {
+public class ResourceTypePossibleValuesProvider implements PossibleValuesProvider {
 
     @Override
     public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
@@ -18,5 +18,10 @@ public class ResourceTypePossibleValuesProvider extends PossibleValuesProvider {
             values.add(new PossibleValue(type.getId().longValue(), type.getName(), ImmutableMap.of()));
         }
         return values;
+    }
+
+    @Override
+    public boolean isAllowed(Long id) {
+        return ResourceType.isValid(id.intValue());
     }
 }

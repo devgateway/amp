@@ -123,6 +123,7 @@ public class ColumnConstants {
     public static final String GRAND_TOTAL_COST = "Grand Total Cost";
     public static final String GRACE_PERIOD = "Loan Grace Period";
     public static final String HAS_EXECUTING_AGENCY = "Has Executing Agency";
+    public static final String IATI_IDENTIFIER = "IATI Identifier";
     public static final String IMPLEMENTATION_LEVEL = "Implementation Level";
     public static final String IMPLEMENTATION_LOCATION = "Implementation Location";
     public static final String IMPLEMENTING_AGENCY = "Implementing Agency";

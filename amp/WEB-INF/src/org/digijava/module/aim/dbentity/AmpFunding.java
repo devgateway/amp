@@ -2,6 +2,7 @@
 package org.digijava.module.aim.dbentity;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,22 +16,30 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpFundingDetailDiscriminationConfigurer;
+import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.validators.activity.FundingWithTransactionsValidator;
+import org.digijava.kernel.validators.activity.PledgeOrgValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
+import org.digijava.module.aim.annotations.interchange.Independent;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.aim.validator.fundings.TransactionOrgRole;
+import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 @TranslatableClass(displayName = "Funding")
+@InterchangeableValidator(value = FundingWithTransactionsValidator.class, attributes = "required=Y")
+@InterchangeableValidator(PledgeOrgValidator.class)
 public class AmpFunding implements Serializable, Versionable, Cloneable {
     //IATI-check: not ignored!
     private static final long serialVersionUID = 1L;
@@ -39,8 +48,10 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     @Interchangeable(fieldTitle = "Funding ID")
     private Long ampFundingId;
 
-    @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true, required = ALWAYS,
+            commonPV = CommonFieldsConstants.COMMON_ORGANIZATION)
     private AmpOrganisation ampDonorOrgId;
+
     @InterchangeableBackReference
     private AmpActivityVersion ampActivityId;
     private Long crsTransactionNo;
@@ -56,7 +67,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     
     @Interchangeable(fieldTitle = "Original Completion Date", importable = true,
             fmPath = "/Activity Form/Planning/Original Completion Date",
-            requiredFmPath = "/Activity Form/Planning/Required Validator for Original Completion Date")
+            requiredFmPath = "/Activity Form/Planning/Required Validator for Original Completion Date",
+            required = SUBMIT)
     private Date originalCompDate;
     
     private Date lastAuditDate;
@@ -76,6 +88,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     private String comments;
     private Date signatureDate;
     
+    @TransactionOrgRole(groups = API.class)
     @InterchangeableDiscriminator(discriminatorField = "transactionType",
         configurer = AmpFundingDetailDiscriminationConfigurer.class,
         settings = {
@@ -108,7 +121,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     
     @Interchangeable(fieldTitle = ActivityFieldsConstants.MTEF_PROJECTIONS, importable = true,
             fmPath = "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections")
-    private Set<AmpFundingMTEFProjection> mtefProjections;
+    private Set<AmpFundingMTEFProjection> mtefProjections = new HashSet<>();
     
     @Interchangeable(fieldTitle="Active",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Active", importable = true)
     private Boolean active;
@@ -119,17 +132,18 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 
     // private AmpModality modalityId;
     
-    @Interchangeable(fieldTitle = "Type of Assistance", required = ALWAYS,
+    @Interchangeable(fieldTitle = "Type of Assistance",
             fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", 
-                     discriminatorOption = CategoryConstants.TYPE_OF_ASSISTENCE_KEY, importable = true,
-                     pickIdOnly = true, 
-                     dependencies = {InterchangeDependencyResolver.TRANSACTION_PRESENT_KEY})
+            discriminatorOption = CategoryConstants.TYPE_OF_ASSISTENCE_KEY, importable = true,
+            pickIdOnly = true, requiredDependencies = {FundingWithTransactionsValidator.TRANSACTION_PRESENT_KEY},
+            dependencyRequired = ALWAYS)
     private AmpCategoryValue typeOfAssistance;
     
-    @Interchangeable(fieldTitle = "Financing Instrument", required = ALWAYS,
+    @Interchangeable(fieldTitle = "Financing Instrument",
             fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument", 
-                     discriminatorOption = CategoryConstants.FINANCING_INSTRUMENT_KEY, importable = true,
-                     pickIdOnly = true, dependencies = {InterchangeDependencyResolver.TRANSACTION_PRESENT_KEY})
+            discriminatorOption = CategoryConstants.FINANCING_INSTRUMENT_KEY, importable = true,
+            pickIdOnly = true, requiredDependencies = {FundingWithTransactionsValidator.TRANSACTION_PRESENT_KEY},
+            dependencyRequired = ALWAYS)
     private AmpCategoryValue financingInstrument;
     
     @Interchangeable(fieldTitle="Funding Status", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status", 
@@ -149,10 +163,11 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     @Interchangeable(fieldTitle="Group Versioned Funding", importable=true)
     private Long groupVersionedFunding;
     private Float capitalSpendingPercentage;
-    
-    @Interchangeable(fieldTitle="Agreement",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement", importable=true, dependencies = {
-            InterchangeDependencyResolver.AGREEMENT_CODE_PRESENT_KEY,
-            InterchangeDependencyResolver.AGREEMENT_TITLE_PRESENT_KEY})
+
+    @Interchangeable(fieldTitle = "Agreement",
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement",
+            importable = true)
+    @Independent
     private AmpAgreement agreement;
 
     @Interchangeable(fieldTitle = "Source Role", importable = true, pickIdOnly = true, required = ALWAYS)

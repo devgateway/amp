@@ -4,7 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -35,6 +35,14 @@ public @interface Interchangeable {
     String fmPath() default "";
     
     /**
+     * Path to the common possible values that will be checked for values to avoid rebuilding the same list of options
+     * for fields that depend on the same possible values like organization lists.
+     * Note: initial usage in activity import validation. Later can use for export and values EP in AMP-25943 
+     * @return the alias for common possible values
+     */
+    String commonPV() default "";
+
+    /**
      * Whether the collection field in AF supports several values. It will be used just for collection fields
      * (like: one activity might have several sectors assigned, or only one)
      */
@@ -58,6 +66,11 @@ public @interface Interchangeable {
     String requiredFmPath() default "";
     
     /**
+     * The field is read only or not based on fm path. If readOnlyFmPath is visible, read only is true
+     */
+    String readOnlyFmPath() default "";
+    
+    /**
      * Used during serialization to replace an object with id. The object must implement {@link Identifiable}.
      * <p>Example:
      * <pre>{@code
@@ -73,19 +86,41 @@ public @interface Interchangeable {
      * </pre>
      *
      * <p>During deserialization, id from json will be converted back using
-     * {@link ValueConverter#getObjectById(java.lang.Class, java.lang.Long)}.
+     * {@link ValueConverter#getObjectById(java.lang.Class, java.lang.Object)}.
      */
     boolean pickIdOnly() default false;
 
     Class<?> type() default DefaultType.class;
 
     /**
-     * Specifies the dependencies used for later checking in DependencyValidator. 
-     * Dependencies (path and value) are encoded via {@link InterchangeDependencyMapper} public static strings,
-     * like {@link InterchangeDependencyMapper#ON_BUDGET_CODE}. 
-     * @return
+     * <p>Mark field whose value depends on some external condition. For example implementation location depends
+     * on implementation level. Or organization group used in pledge must match the group of the organization used in
+     * donor funding.</p>
+     *
+     * <p>To make a field required under certain conditions see {@link #requiredDependencies()}.</p>
+     *
+     * @return list of dependencies
      */
     String[] dependencies() default {};
+
+    /**
+     * Mark field as required only under some conditions. For example field becomes visible as in case
+     * of on budget fields. Or fields were visible but not required as in case of type of assistance and
+     * financing instrument.
+     *
+     * @return list of required dependencies
+     */
+    String[] requiredDependencies() default {};
+
+    /**
+     * Same as {@link #requiredFmPath()} but only for fields with dependencies.
+     */
+    String dependencyRequiredFMPath() default "";
+
+    /**
+     * Same as {@link #required()} but only for fields with dependencies.
+     */
+    ActivityEPConstants.RequiredValidation dependencyRequired() default ActivityEPConstants.RequiredValidation.NONE;
     
     /**
      * <p>Filter objects by specified discriminator value.
@@ -110,6 +145,11 @@ public @interface Interchangeable {
     String discriminatorOption() default "";
     
     Validators validators() default @Validators;
+
+    /**
+     * List of constraint validators that apply to the current field.
+     */
+    InterchangeableValidator[] interValidators() default {};
 
     /** regex pattern used for validation (mail, phone, fax) */
     String regexPattern() default "";

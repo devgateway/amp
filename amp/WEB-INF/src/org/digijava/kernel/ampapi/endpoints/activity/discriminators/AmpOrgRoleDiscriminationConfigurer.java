@@ -29,4 +29,5 @@ public class AmpOrgRoleDiscriminationConfigurer implements DiscriminationConfigu
         AmpOrgRole role = (AmpOrgRole) obj;
         role.setRole(rolesByCode.get().get(discriminationValue));
     }
+
 }

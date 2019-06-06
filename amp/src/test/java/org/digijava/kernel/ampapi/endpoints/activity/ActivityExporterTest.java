@@ -43,8 +43,7 @@ public class ActivityExporterTest {
                 new TestFieldInfoProvider(),
                 new TestFMService(),
                 translatorService,
-                program -> false,
-                "project_code");
+                program -> false);
 
         ActivityTranslationUtils.setTranslatorService(translatorService);
 

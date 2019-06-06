@@ -19,7 +19,7 @@ import org.dgfoundation.amp.menu.MenuConstants;
 import org.dgfoundation.amp.menu.MenuItem;
 import org.dgfoundation.amp.menu.MenuUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIEPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.dto.AuthenticationRequest;
 import org.digijava.kernel.ampapi.endpoints.security.dto.LayoutInformation;
@@ -208,25 +208,25 @@ public class SecurityService {
         Long workspaceId = (workspaceIdInt == null) ? null : workspaceIdInt.longValue();
     
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-            ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_USER_PASSWORD);
+            ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.INVALID_USER_PASSWORD);
         }
     
         try {
             User user = UserUtils.getUserByEmail(username);
             if (user == null || !user.getPassword().equals(password)) {
-                ApiErrorResponse.reportForbiddenAccess(SecurityErrors.INVALID_USER_PASSWORD);
+                ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.INVALID_USER_PASSWORD);
             }
         
             ApiErrorMessage result = ApiAuthentication.login(user, TLSUtils.getRequest());
             if (result != null) {
-                ApiErrorResponse.reportForbiddenAccess(result);
+                ApiErrorResponseService.reportForbiddenAccess(result);
             }
         
             invalidateExistingSession();
         
             AmpTeamMember teamMember = getAmpTeamMember(username, workspaceId);
             if (workspaceId != null && teamMember == null) {
-                ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_TEAM);
+                ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.INVALID_TEAM);
             }
         
             storeInSession(username, password, teamMember, user);
@@ -237,7 +237,7 @@ public class SecurityService {
                     user.isGlobalAdmin(), ampApiToken, user, ampTeamName, true);
         } catch (DgException e) {
             logger.error("Error trying to login the user", e);
-            ApiErrorResponse.reportError(INTERNAL_SERVER_ERROR, SecurityErrors.INVALID_REQUEST);
+            ApiErrorResponseService.reportError(INTERNAL_SERVER_ERROR, SecurityErrors.INVALID_REQUEST);
         }
         return null;
     }

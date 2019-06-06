@@ -19,4 +19,5 @@ public class StringDiscriminatorConfigurer implements DiscriminationConfigurer {
             throw new RuntimeException(msg, e);
         }
     }
+
 }

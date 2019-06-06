@@ -993,6 +993,14 @@ function collapseAll() {
 					</span>
 					<hr />
 			</module:display>
+
+			<module:display name="/Activity Form/Identification/IATI Identifier" parentModule="/Activity Form/Identification">
+				<digi:trn>IATI Identifier</digi:trn>:&nbsp;<br />
+				<span class="word_break bold">
+						<c:out value="${aimEditActivityForm.identification.iatiIdentifier}"/>
+					</span>
+				<hr />
+			</module:display>
 					
 			<module:display name="/Activity Form/Identification/Procurement System" parentModule="/Activity Form/Identification">
 				<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">

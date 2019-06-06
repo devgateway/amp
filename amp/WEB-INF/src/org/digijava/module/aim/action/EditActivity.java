@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.action;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -911,7 +912,7 @@ public class EditActivity extends Action {
 
           if (activity.getCrisNumber() != null)
               eaForm.getIdentification().setCrisNumber(activity.getCrisNumber().trim());
-
+    
 
           if (activity.getDescription() != null)
             eaForm.getIdentification().setDescription(activity.getDescription().trim());
@@ -946,7 +947,10 @@ public class EditActivity extends Action {
         eaForm.getIdentification().setActivitySummary(activity.getActivitySummary());
 
         eaForm.getIdentification().setConditionality(activity.getConditionality());
-
+    
+        if (StringUtils.isNotBlank(activity.getIatiIdentifier())) {
+            eaForm.getIdentification().setIatiIdentifier(activity.getIatiIdentifier());
+        }
 
         eaForm.getIdentification().setProjectManagement(activity.getProjectManagement());
 
@@ -978,10 +982,10 @@ public class EditActivity extends Action {
                                     trim());
           }
           eaForm.getIdentification().setAmpId(activity.getAmpId());
-
+          
            if (activity.getStatusReason() != null)
               eaForm.getIdentification().setStatusReason(activity.getStatusReason());
-
+    
             List gpiSurveys = new ArrayList();
             if (activity.getGpiSurvey() != null) {
                 eaForm.setGpiSurvey(activity.getGpiSurvey());

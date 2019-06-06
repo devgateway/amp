@@ -21,7 +21,7 @@ import org.digijava.kernel.ampapi.endpoints.dto.SaveResult;
 import org.digijava.kernel.ampapi.endpoints.dto.YearWithRange;
 import org.digijava.kernel.ampapi.endpoints.dto.YearsForCalendar;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -57,7 +57,7 @@ import org.joda.time.DateTime;
 public class GPIDataService {
     public static AmpGPINiAidOnBudget getAidOnBudgetById(Long id) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
         return GPIUtils.getAidOnBudgetById(id);
@@ -67,7 +67,7 @@ public class GPIDataService {
             Integer offset, Integer count, String orderBy, String sort) {
 
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
         Integer total = GPIUtils.getAidOnBudgetCount();
@@ -77,7 +77,7 @@ public class GPIDataService {
 
     public static SaveResult<AmpGPINiAidOnBudget> saveAidOnBudget(AmpGPINiAidOnBudget data) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
         List<JsonBean> validationErrors = validateAidOnBudget(data);
@@ -91,7 +91,7 @@ public class GPIDataService {
 
     public static List<SaveResult<AmpGPINiAidOnBudget>> saveAidOnBudget(List<AmpGPINiAidOnBudget> aidOnBudgetList) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
         List<SaveResult<AmpGPINiAidOnBudget>> results = new ArrayList<>();
@@ -120,7 +120,7 @@ public class GPIDataService {
 
     public static void deleteAidOnBudgetById(Long id) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
         GPIUtils.deleteAidOnBudget(id);
@@ -128,7 +128,7 @@ public class GPIDataService {
 
     public static SaveResult<AmpGPINiDonorNotes> saveDonorNotes(AmpGPINiDonorNotes note) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
         List<JsonBean> validationErrors = validateDonorNotes(note);
@@ -147,7 +147,7 @@ public class GPIDataService {
 
     public static List<SaveResult<AmpGPINiDonorNotes>> saveDonorNotes(List<AmpGPINiDonorNotes> notes) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
         List<SaveResult<AmpGPINiDonorNotes>> results = new ArrayList<>();
@@ -177,7 +177,7 @@ public class GPIDataService {
             Integer offset, Integer count, String orderBy, String sort, String indicatorCode) {
 
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
         Integer total = GPIUtils.getDonorNotesCount(indicatorCode);
@@ -189,7 +189,7 @@ public class GPIDataService {
 
     public static void deleteDonorNotesById(Long id) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
         GPIUtils.deleteDonorNotes(id);
@@ -203,7 +203,7 @@ public class GPIDataService {
 
     public static List<Org> getUsersVerifiedOrganizations() {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
         TeamMember tm = TeamUtil.getCurrentMember();

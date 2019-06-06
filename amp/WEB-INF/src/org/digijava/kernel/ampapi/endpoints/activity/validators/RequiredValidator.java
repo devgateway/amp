@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.SaveMode;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -42,7 +41,7 @@ public class RequiredValidator extends InputValidator {
             APIField fieldDescription, String fieldPath) {
         String fieldName = fieldDescription.getFieldName();
         Object fieldValue = newFieldParent.get(fieldName);
-        String requiredStatus = fieldDescription.getRequired();
+        String requiredStatus = fieldDescription.getUnconditionalRequired();
         boolean importable = fieldDescription.isImportable();
     
         if (!newFieldParent.containsKey(fieldName) && importer.isUpdate()) {
@@ -51,32 +50,27 @@ public class RequiredValidator extends InputValidator {
         
         // don't care if value has something
         if (importable && isEmpty(fieldValue)) {
-    
-            boolean dependencyFulfilled = InterchangeDependencyResolver
-                    .checkRequiredDependencyFulfilled(fieldValue, importer, fieldDescription, newFieldParent);
 
-            if (dependencyFulfilled) {
-                if (ActivityEPConstants.FIELD_ALWAYS_REQUIRED.equals(requiredStatus)) {
-                    // field is always required -> can't save it even as a draft
-                    return false;
-                } else if (ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED.equals(requiredStatus)) {
-                    if (!(importer instanceof ActivityImporter)) {
-                        throw new RuntimeException("Draft save not supported for " + importer.getClass());
-                    }
-                    ActivityImporter activityImporter = (ActivityImporter) importer;
-                    // field required for submitted activities, but we can save it as a draft
-                    // unless it's disabled in FM
-                    if (activityImporter.getRequestedSaveMode() != SaveMode.DRAFT) {
-                        if (activityImporter.getImportRules().isCanDowngradeToDraft()) {
-                            if (activityImporter.isDraftFMEnabled()) {
-                                activityImporter.downgradeToDraftSave();
-                            } else {
-                                this.draftDisabled = true;
-                                return false;
-                            }
+            if (ActivityEPConstants.FIELD_ALWAYS_REQUIRED.equals(requiredStatus)) {
+                // field is always required -> can't save it even as a draft
+                return false;
+            } else if (ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED.equals(requiredStatus)) {
+                if (!(importer instanceof ActivityImporter)) {
+                    throw new RuntimeException("Draft save not supported for " + importer.getClass());
+                }
+                ActivityImporter activityImporter = (ActivityImporter) importer;
+                // field required for submitted activities, but we can save it as a draft
+                // unless it's disabled in FM
+                if (activityImporter.getRequestedSaveMode() != SaveMode.DRAFT) {
+                    if (activityImporter.getImportRules().isCanDowngradeToDraft()) {
+                        if (activityImporter.isDraftFMEnabled()) {
+                            activityImporter.downgradeToDraftSave();
                         } else {
+                            this.draftDisabled = true;
                             return false;
                         }
+                    } else {
+                        return false;
                     }
                 }
             }

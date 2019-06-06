@@ -12,23 +12,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivityProgramDiscriminatorConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpFundingAmountDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpOrgRoleDiscriminationConfigurer;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivitySectorDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.values.ApprovalStatusPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.values.FiscalYearPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
+import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
+import org.digijava.kernel.validators.activity.OnBudgetValidator;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.TimestampField;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
@@ -37,11 +42,17 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
+import org.digijava.module.aim.validator.approval.AllowedApprover;
+import org.digijava.module.aim.validator.contact.PrimaryContact;
+import org.digijava.module.aim.validator.fundings.FundingOrgRole;
 import org.digijava.module.aim.validator.groups.API;
+import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.aim.validator.percentage.LocationTotalPercentage;
 import org.digijava.module.aim.validator.percentage.OrgRoleTotalPercentage;
 import org.digijava.module.aim.validator.percentage.ProgramTotalPercentage;
 import org.digijava.module.aim.validator.percentage.SectorsTotalPercentage;
+import org.digijava.module.aim.validator.user.MatchExistingCreator;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -54,7 +65,9 @@ import org.hibernate.Session;
 @LocationTotalPercentage(groups = API.class)
 @SectorsTotalPercentage(groups = API.class)
 @ProgramTotalPercentage(groups = API.class)
-@org.digijava.module.aim.validator.approval.ApprovalStatus(groups = API.class)
+@InterchangeableValidator(ComponentFundingOrgRoleValidator.class)
+@InterchangeableValidator(ImplementationLevelValidator.class)
+@InterchangeableValidator(value = OnBudgetValidator.class, groups = Submit.class, attributes = "required=ND")
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
 LoggerIdentifiable, Cloneable {
 
@@ -135,7 +148,8 @@ LoggerIdentifiable, Cloneable {
     
     @Interchangeable(fieldTitle = "Description", importable = true,
             fmPath = "/Activity Form/Identification/Description",
-            requiredFmPath = "/Activity Form/Identification/Required Validator for Description")
+            requiredFmPath = "/Activity Form/Identification/Required Validator for Description",
+            required = SUBMIT)
     @VersionableFieldTextEditor(fieldTitle = "Description")
     protected String description ;
 
@@ -148,7 +162,8 @@ LoggerIdentifiable, Cloneable {
     protected String lessonsLearned;
     
     @Interchangeable(fieldTitle = "Objective", importable = true, fmPath = "/Activity Form/Identification/Objective",
-            requiredFmPath = "/Activity Form/Identification/Required Validator for Objective")
+            requiredFmPath = "/Activity Form/Identification/Required Validator for Objective",
+            required = SUBMIT)
     @VersionableFieldTextEditor(fieldTitle = "Objective")
     protected String objective ;
     
@@ -163,6 +178,12 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "Document Space", importable = true)
     @VersionableFieldSimple(fieldTitle = "Document Space")
     protected String documentSpace;
+
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.IATI_IDENTIFIER, importable = true,
+            fmPath = "/Activity Form/Identification/IATI Identifier",
+            readOnlyFmPath = "/Activity Form/Identification/IATI Identifier Read Only")
+    @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.IATI_IDENTIFIER)
+    protected String iatiIdentifier;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.IS_DRAFT, required = ALWAYS, importable = true)
     @VersionableFieldSimple(fieldTitle = "Is Draft?", blockSingleChange = true)
@@ -197,7 +218,8 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = "Original Completion Date", importable = true,
             fmPath = "/Activity Form/Planning/Original Completion Date",
-            requiredFmPath = "/Activity Form/Planning/Required Validator for Original Completion Date")
+            requiredFmPath = "/Activity Form/Planning/Required Validator for Original Completion Date",
+            required = SUBMIT)
     @VersionableFieldSimple(fieldTitle = "Original Completion Date")
     protected Date originalCompDate;
     
@@ -244,9 +266,10 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = ActivityFieldsConstants.LOCATIONS, importable = true,
             fmPath = "/Activity Form/Location",
             requiredFmPath = "/Activity Form/Location/Locations/Location required validator",
+            required = SUBMIT,
                     validators = @Validators (unique = "/Activity Form/Location/Locations/uniqueLocationsValidator", treeCollection = "/Activity Form/Location/Locations/Tree Validator"))
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.LOCATIONS)
-    protected Set<AmpActivityLocation> locations ;
+    protected Set<AmpActivityLocation> locations = new HashSet<>();
     
     @VersionableCollection(fieldTitle = "Org. Role")
     @InterchangeableDiscriminator(discriminatorField = "role.roleCode",
@@ -280,11 +303,14 @@ LoggerIdentifiable, Cloneable {
     
     @Interchangeable(fieldTitle = "Activity Internal IDs", importable = true, fmPath = "/Activity Form/Activity Internal IDs")
     @VersionableCollection(fieldTitle = "Activity Internal IDs")
-    protected Set<AmpActivityInternalId> internalIds ;
+    protected Set<AmpActivityInternalId> internalIds = new HashSet<>();
     
-    @Interchangeable(fieldTitle = "Fundings", importable = true, fmPath = "/Activity Form/Funding")
-    @VersionableCollection(fieldTitle = "Fundings")
-    protected Set<AmpFunding> funding;
+    @Valid
+    @FundingOrgRole(groups = API.class)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.FUNDINGS, importable = true,
+            fmPath = "/Activity Form/Funding")
+    @VersionableCollection(fieldTitle = ActivityFieldsConstants.FUNDINGS)
+    protected Set<AmpFunding> funding = new HashSet<>();
     
     //TODO show this field?
     //TODO-reply: we should first figure out what it is
@@ -302,7 +328,7 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = "Issues", importable = true, fmPath = "/Activity Form/Issues Section")
     @VersionableCollection(fieldTitle = "Issues")
-    protected Set<AmpIssues> issues;
+    protected Set<AmpIssues> issues = new HashSet<>();
 
 //  @Interchangeable(fieldTitle = "Regional Observations", importable = true, fmPath = "/Activity Form/Regional Observations")
     @VersionableCollection(fieldTitle = "Regional Observations")
@@ -348,12 +374,6 @@ LoggerIdentifiable, Cloneable {
      */
     @Deprecated
     protected Set referenceDocs;
-
-    /*
-    @Deprecated
-    @VersionableCollection(fieldTitle = "Activity Programs")
-    protected Set activityPrograms;
-     */
 
     // use contFirstName and contLastName instead.
     // The field is defunct
@@ -422,7 +442,8 @@ LoggerIdentifiable, Cloneable {
     protected String secMiCntPhoneNumber;
 //  @Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Fax")
     protected String secMiCntFaxNumber;
-
+    
+    @PrimaryContact(groups = API.class)
     @VersionableCollection(fieldTitle = "Activity Contacts")
     @InterchangeableDiscriminator(discriminatorField = "contactType", settings = {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.DONOR_CONTACT, importable = true, discriminatorOption = Constants.DONOR_CONTACT, 
@@ -450,11 +471,11 @@ LoggerIdentifiable, Cloneable {
     
     @Interchangeable(fieldTitle = "Components", importable = true, fmPath = "/Activity Form/Components")
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.COMPONENTS)
-    protected Set<AmpComponent> components;
+    protected Set<AmpComponent> components = new HashSet<>();
 
     @Interchangeable(fieldTitle = "Structures", importable = true, fmPath = "/Activity Form/Structures")
     @VersionableCollection(fieldTitle = "Structures")
-    protected Set<AmpStructure> structures;
+    protected Set<AmpStructure> structures = new HashSet<>();
 
 //  @Interchangeable(fieldTitle = "Component Fundings", importable = true, fmPath = "/Activity Form/Components")
 //  @VersionableCollection(fieldTitle = "Component Fundings")
@@ -462,7 +483,8 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = "Proposed Start Date", importable = true,
             fmPath = "/Activity Form/Planning/Proposed Start Date",
-            requiredFmPath = "/Activity Form/Planning/Required Validator for Proposed Start Date")
+            requiredFmPath = "/Activity Form/Planning/Required Validator for Proposed Start Date",
+            required = SUBMIT)
     @VersionableFieldSimple(fieldTitle = "Proposed Start Date")
     protected Date proposedStartDate;
 
@@ -486,8 +508,7 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Proposed Completion Date")
     protected Date proposedCompletionDate;
 
-
-
+    @MatchExistingCreator(groups = API.class)
     @Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_BY, pickIdOnly = true, label = "Activity created by",
             importable = true)
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.CREATED_BY, blockSingleChange = true)
@@ -509,6 +530,7 @@ LoggerIdentifiable, Cloneable {
     @TimestampField
     protected Date iatiLastUpdatedDate;
 
+    @AllowedApprover(groups = API.class)
     @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVED_BY, pickIdOnly = true, importable = true)
     protected AmpTeamMember approvedBy;
     
@@ -520,6 +542,7 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = "Regional Fundings")
     protected Set <AmpRegionalFunding> regionalFundings;
 
+    @AllowedApprovalStatus(groups = API.class)
     @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS, pickIdOnly = true, importable = true)
     @PossibleValues(ApprovalStatusPossibleValuesProvider.class)
     @VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
@@ -567,7 +590,7 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = "Activity Documents", fmPath = "/Activity Form/Related Documents", importable = true)
     @VersionableCollection(fieldTitle = "Activity Documents")
-    protected Set<AmpActivityDocument> activityDocuments = null;
+    protected Set<AmpActivityDocument> activityDocuments = new HashSet<>();
     
     /* Categories */
     @InterchangeableDiscriminator(discriminatorField = "ampCategoryClass.keyName",
@@ -596,6 +619,7 @@ LoggerIdentifiable, Cloneable {
                 discriminatorOption = CategoryConstants.ACCHAPTER_KEY, fmPath="/Activity Form/Identification/A.C. Chapter", pickIdOnly=true), 
         @Interchangeable(fieldTitle = "Activity Budget", importable = true, multipleValues = false,
                 requiredFmPath = "/Activity Form/Identification/Required Validator for Activity Budget",
+                required = SUBMIT,
                 discriminatorOption = CategoryConstants.ACTIVITY_BUDGET_KEY, fmPath="/Activity Form/Identification/Activity Budget", pickIdOnly=true), 
         @Interchangeable(fieldTitle = "Procurement System", importable=true, multipleValues=false, 
                 discriminatorOption = CategoryConstants.PROCUREMENT_SYSTEM_KEY, fmPath="/Activity Form/Identification/Procurement System", pickIdOnly=true),
@@ -613,9 +637,10 @@ LoggerIdentifiable, Cloneable {
                 discriminatorOption = CategoryConstants.PROJECT_CATEGORY_KEY, fmPath="/Activity Form/Identification/Project Category", pickIdOnly=true),
         @Interchangeable(fieldTitle = "Implementation Level", importable=true, multipleValues=false, 
                 discriminatorOption = CategoryConstants.IMPLEMENTATION_LEVEL_KEY, fmPath="/Activity Form/Location/Implementation Level", pickIdOnly=true),
-        @Interchangeable(fieldTitle = "Implementation Location", importable=true, multipleValues=false, 
-                discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY, fmPath="/Activity Form/Location/Implementation Location", 
-                dependencies = {InterchangeDependencyResolver.IMPLEMENTATION_LOCATION_VALID_KEY}, pickIdOnly=true),
+        @Interchangeable(fieldTitle = "Implementation Location", importable = true, multipleValues = false,
+                discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
+                dependencies = {ImplementationLevelValidator.IMPLEMENTATION_LOCATION_VALID_KEY},
+                fmPath = "/Activity Form/Location/Implementation Location", pickIdOnly = true),
         @Interchangeable(fieldTitle = "Financial Instrument", importable=true, multipleValues=true, 
                 discriminatorOption = CategoryConstants.FINANCIAL_INSTRUMENT_KEY, fmPath="/Activity Form/Identification/Financial Instrument", pickIdOnly=true)
     })
@@ -644,41 +669,48 @@ LoggerIdentifiable, Cloneable {
     /*
      * This field is used for API only. The values are stored in database as a string using FY field
      */
-    @Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", 
-            requiredFmPath = "/Activity Form/Identification/Budget Extras/Required Validator for fy",
-            dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY}, uniqueConstraint = true,
+    @Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY",
+            dependencyRequiredFMPath = "/Activity Form/Identification/Budget Extras/Required Validator for fy",
+            requiredDependencies = OnBudgetValidator.ON_BUDGET_KEY,
+            dependencyRequired = SUBMIT,
+            uniqueConstraint = true,
             validators = @Validators (unique = "/Activity Form/Identification/Budget Extras/FY"))
     @PossibleValues(FiscalYearPossibleValuesProvider.class)
-    protected Set<Long> fiscalYears;
+    protected Set<Long> fiscalYears = new HashSet<>();
     
-    @Interchangeable(fieldTitle = "Vote", importable = true, required = SUBMIT,
+    @Interchangeable(fieldTitle = "Vote", importable = true,
             fmPath = "/Activity Form/Identification/Budget Extras/Vote",
-            dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
+            requiredDependencies = OnBudgetValidator.ON_BUDGET_KEY,
+            dependencyRequired = SUBMIT)
     @VersionableFieldSimple(fieldTitle = "Vote")
     protected String vote;
     
-    @Interchangeable(fieldTitle = "Sub Vote", label = "Sub-Vote", importable = true, required = SUBMIT,
+    @Interchangeable(fieldTitle = "Sub Vote", label = "Sub-Vote", importable = true,
             fmPath = "/Activity Form/Identification/Budget Extras/Sub-Vote",
-            dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
+            requiredDependencies = OnBudgetValidator.ON_BUDGET_KEY,
+            dependencyRequired = SUBMIT)
     @VersionableFieldSimple(fieldTitle = "Sub Vote")
     protected String subVote;
     
-    @Interchangeable(fieldTitle = "Sub Program", label = "Sub-Program", importable = true, required = SUBMIT,
+    @Interchangeable(fieldTitle = "Sub Program", label = "Sub-Program", importable = true,
             fmPath = "/Activity Form/Identification/Budget Extras/Sub-Program",
-            dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
+            requiredDependencies = OnBudgetValidator.ON_BUDGET_KEY,
+            dependencyRequired = SUBMIT)
     @VersionableFieldSimple(fieldTitle = "Sub Program")
     protected String subProgram;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE, importable = true, required = SUBMIT,
-            dependencies = InterchangeDependencyResolver.ON_BUDGET_KEY,
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE, importable = true,
+            requiredDependencies = OnBudgetValidator.ON_BUDGET_KEY,
+            dependencyRequired = SUBMIT,
             fmPath = FMVisibility.ANY_FM + ActivityEPConstants.DONOR_PROJECT_CODE_FM_PATH
                     + "|" + ActivityEPConstants.BUDGET_EXTRAS_PROJECT_CODE_FM_PATH)
     @VersionableFieldSimple(fieldTitle = "Project Code")
     protected String projectCode;
 
-    @Interchangeable(fieldTitle = "Ministry Code", importable = true, required = SUBMIT,
+    @Interchangeable(fieldTitle = "Ministry Code", importable = true,
             fmPath = "/Activity Form/Identification/Budget Extras/Ministry Code",
-            dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
+            requiredDependencies = OnBudgetValidator.ON_BUDGET_KEY,
+            dependencyRequired = SUBMIT)
     @VersionableFieldSimple(fieldTitle = "Ministry Code")
     protected String ministryCode;
 
@@ -698,7 +730,8 @@ LoggerIdentifiable, Cloneable {
     
     @Interchangeable(fieldTitle = "Humanitarian Aid", importable = true,
             fmPath = "/Activity Form/Identification/Humanitarian Aid",
-            requiredFmPath = "/Activity Form/Identification/Required Validator for Humanitarian Aid")
+            requiredFmPath = "/Activity Form/Identification/Required Validator for Humanitarian Aid",
+            required = SUBMIT)
     @VersionableFieldSimple(fieldTitle = "Humanitarian Aid")
     protected Boolean humanitarianAid;
 
@@ -772,8 +805,9 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "PPC Annual Budgets")
-    protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
-    
+
+    protected Set<AmpAnnualProjectBudget> annualProjectBudgets = new HashSet<>();
+
         public Boolean getMergedActivity() {
             return mergedActivity;
         }
@@ -2215,5 +2249,14 @@ LoggerIdentifiable, Cloneable {
         public void setCostAmounts(Set<AmpFundingAmount> costAmounts) {
             this.costAmounts = costAmounts;
         }
+    
+    public String getIatiIdentifier() {
+        return iatiIdentifier;
+    }
+    
+    public void setIatiIdentifier(String iatiIdentifier) {
+        this.iatiIdentifier = iatiIdentifier;
+    }
+    
 }
 

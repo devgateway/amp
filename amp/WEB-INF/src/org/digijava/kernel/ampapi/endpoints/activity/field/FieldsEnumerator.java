@@ -15,6 +15,10 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
@@ -23,17 +27,23 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.DiscriminatedFieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.FEContext;
 import org.digijava.kernel.ampapi.endpoints.activity.FMService;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldAccessor;
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
-import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.validation.ConstraintDescriptor;
+import org.digijava.kernel.validation.ConstraintDescriptors;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
+import org.digijava.module.aim.annotations.interchange.Independent;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -47,15 +57,11 @@ public class FieldsEnumerator {
 
     private static final Logger LOGGER = Logger.getLogger(FieldsEnumerator.class);
 
-    private String iatiIdentifierField;
-
     private FieldInfoProvider fieldInfoProvider;
 
     private FMService fmService;
 
     private TranslatorService translatorService;
-
-    private InterchangeDependencyResolver interchangeDependencyResolver;
 
     private Function<String, Boolean> allowMultiplePrograms;
 
@@ -63,23 +69,11 @@ public class FieldsEnumerator {
      * Fields Enumerator
      */
     public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-            TranslatorService translatorService,
-            Function<String, Boolean> allowMultiplePrograms) {
-        this(fieldInfoProvider, fmService, translatorService, allowMultiplePrograms, null);
-    }
-
-    /**
-     * Fields Enumerator
-     */
-    public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-            TranslatorService translatorService,
-            Function<String, Boolean> allowMultiplePrograms, String iatiIdentifierField) {
+            TranslatorService translatorService, Function<String, Boolean> allowMultiplePrograms) {
         this.fieldInfoProvider = fieldInfoProvider;
         this.fmService = fmService;
         this.translatorService = translatorService;
-        interchangeDependencyResolver = new InterchangeDependencyResolver(fmService);
         this.allowMultiplePrograms = allowMultiplePrograms;
-        this.iatiIdentifierField = iatiIdentifierField;
     }
 
     /**
@@ -102,42 +96,47 @@ public class FieldsEnumerator {
         // for discriminated case we can override the type here
         Class<?> type = InterchangeUtils.getClassOfField(field);
         FieldType fieldType = null;
-        Class<?> elementType = null;
+        apiField.setIsCollection(Collection.class.isAssignableFrom(field.getType()));
         if (interchangeable.pickIdOnly()) {
             fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
         } else if (InterchangeUtils.isCollection(field)) {
-            elementType = getType(field, context);
+            type = getType(field, context);
             if (interchangeable.multipleValues()) {
                 fieldType = FieldType.LIST;
-                if (InterchangeUtils.isSimpleType(elementType)) {
-                    type = field.getClass();
-                }
             }
         } else if (field.getType().equals(java.util.Date.class)) {
             fieldType = InterchangeUtils.isTimestampField(field) ? FieldType.TIMESTAMP : FieldType.DATE;
         }
 
-        APIType apiType = new APIType(type, fieldType, elementType);
+        APIType apiType = new APIType(type, fieldType);
         apiField.setApiType(apiType);
-        boolean isCollection = apiType.getFieldType().isList();
+        
+        boolean isList = apiType.getFieldType().isList();
 
         if (apiField.isId()
                 && (apiType.getFieldType() == FieldType.OBJECT || apiType.getFieldType() == FieldType.LIST)) {
             throw new RuntimeException("Id must use primitive data type.");
         }
 
-        apiField.setPossibleValuesProviderClass(InterchangeUtils.getPossibleValuesProvider(field));
+        apiField.setPossibleValuesProviderClass(getPossibleValuesProvider(field));
+        String cPVPath = StringUtils.isBlank(interchangeable.commonPV()) ? null : interchangeable.commonPV();
+        apiField.setCommonPossibleValuesPath(cPVPath); 
 
         String label = getLabelOf(interchangeable);
         apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
-        apiField.setRequired(getRequiredValue(context, fieldTitle));
-        apiField.setImportable(interchangeable.importable());
+
+        apiField.setUnconditionalRequired(getUnconditionalRequiredValue(context, fieldTitle));
+        apiField.setDependencyRequired(getDependencyRequiredValue(context));
+        apiField.setRequired(getRequiredValue(context,
+                apiField.getDependencyRequired(),
+                apiField.getUnconditionalRequired()));
+
+        apiField.setImportable(getImportableValue(context, fieldTitle, interchangeable));
 
         if (interchangeable.percentageConstraint()) {
             apiField.setPercentage(true);
         }
-        List<String> actualDependencies =
-                interchangeDependencyResolver.getActualDependencies(interchangeable.dependencies());
+        List<String> actualDependencies = getActualDependencies(interchangeable);
         if (actualDependencies != null) {
             apiField.setDependencies(actualDependencies);
         }
@@ -150,10 +149,9 @@ public class FieldsEnumerator {
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             if (!interchangeable.pickIdOnly()) {
-                Class<?> clazz = isCollection ? elementType : type;
-                apiField.setChildren(getAllAvailableFields(clazz, context));
+                apiField.setChildren(getAllAvailableFields(type, context));
             }
-            if (isCollection) {
+            if (isList) {
                 apiField.setMultipleValues(!hasMaxSizeValidatorEnabled(field, context));
                 if (interchangeable.sizeLimit() > 1) {
                     apiField.setSizeLimit(interchangeable.sizeLimit());
@@ -174,6 +172,7 @@ public class FieldsEnumerator {
         // only String fields should clarify if they are translatable or not
         if (java.lang.String.class.equals(field.getType())) {
             apiField.setTranslatable(fieldInfoProvider.isTranslatable(field));
+            apiField.setTranslationType(fieldInfoProvider.getTranslatableType(field));
         }
         if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldInfoProvider.getType(field))) {
             apiField.setFieldLength(fieldInfoProvider.getMaxLength(field));
@@ -185,10 +184,7 @@ public class FieldsEnumerator {
             apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
         }
 
-        if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
-            apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
-            apiField.setImportable(true);
-        }
+        apiField.setIndependent(field.isAnnotationPresent(Independent.class));
 
         if (apiField.getApiType().getFieldType() == FieldType.LIST
                 && apiField.getApiType().getItemType() == FieldType.OBJECT) {
@@ -205,11 +201,62 @@ public class FieldsEnumerator {
             apiField.setIdChild(idFields.get(0));
         }
 
+        ConstraintDescriptors beanConstraints = findBeanConstraints(apiField.getApiType().getType());
+        apiField.setBeanConstraints(beanConstraints);
+
+        ConstraintDescriptors fieldConstraints = findFieldConstraints(interchangeable.interValidators());
+        apiField.setFieldConstraints(fieldConstraints);
+
         return apiField;
+    }
+
+    private ConstraintDescriptors findBeanConstraints(Class<?> type) {
+        InterchangeableValidator[] validators = type.getAnnotationsByType(InterchangeableValidator.class);
+        return getConstraintDescriptors(validators, ConstraintDescriptor.ConstraintTarget.TYPE);
+    }
+
+    private ConstraintDescriptors findFieldConstraints(InterchangeableValidator[] validators) {
+        return getConstraintDescriptors(validators, ConstraintDescriptor.ConstraintTarget.FIELD);
+    }
+
+    private ConstraintDescriptors getConstraintDescriptors(InterchangeableValidator[] validators,
+            ConstraintDescriptor.ConstraintTarget constraintTarget) {
+        List<ConstraintDescriptor> descriptors = new ArrayList<>();
+        for (InterchangeableValidator validator : validators) {
+            ImmutableSet<Class<?>> groups = ImmutableSet.copyOf(validator.groups());
+            Map<String, String> attributes = parseAttributes(validator);
+            descriptors.add(new ConstraintDescriptor(validator.value(), attributes, groups, constraintTarget));
+        }
+        return new ConstraintDescriptors(descriptors);
+    }
+
+    private Map<String, String> parseAttributes(InterchangeableValidator validator) {
+        Map<String, String> attributes;
+        if (validator.attributes().isEmpty()) {
+            attributes = ImmutableMap.of();
+        } else {
+            attributes = Splitter.on('&')
+                    .withKeyValueSeparator('=')
+                    .split(validator.attributes());
+        }
+        return attributes;
     }
 
     private boolean hasPossibleValues(Field field, Interchangeable interchangeable) {
         return interchangeable.pickIdOnly() || field.isAnnotationPresent(PossibleValues.class);
+    }
+
+    /**
+     * Obtains the possible values provider class of the field, if it has one
+     * @param field
+     * @return null if the field doesn't have a provider class attached, otherwise -- the class
+     */
+    public Class<? extends PossibleValuesProvider> getPossibleValuesProvider(Field field) {
+        PossibleValues ant = field.getAnnotation(PossibleValues.class);
+        if (ant != null) {
+            return ant.value();
+        }
+        return null;
     }
 
     private Class<?> getType(Field field, FEContext context) {
@@ -231,6 +278,14 @@ public class FieldsEnumerator {
             label = interchangeable.label();
         }
         return label;
+    }
+
+    public APIField getMetaModel(Class<?> clazz) {
+        APIField root = new APIField();
+        root.setApiType(new APIType(clazz));
+        root.setChildren(getAllAvailableFields(clazz));
+        root.setBeanConstraints(findBeanConstraints(clazz));
+        return root;
     }
 
     public List<APIField> getAllAvailableFields(Class<?> clazz) {
@@ -368,6 +423,37 @@ public class FieldsEnumerator {
         return paths;
     }
 
+    private String getRequiredValue(FEContext context, String dependencyRequired, String unconditionalRequired) {
+
+        Interchangeable fieldIntch = context.getIntchStack().peek();
+
+        if (fieldIntch.requiredDependencies().length > 0) {
+            return dependencyRequired;
+        } else {
+            return unconditionalRequired;
+        }
+    }
+
+    private String getDependencyRequiredValue(FEContext context) {
+        Interchangeable fieldIntch = context.getIntchStack().peek();
+
+        if (fieldIntch.requiredDependencies().length > 0) {
+            if (fieldIntch.dependencyRequired() == NONE) {
+                throw new IllegalStateException("Interchangeable.dependencyRequired is incorrect! Field: "
+                        + context.getIntchStack().peek().fieldTitle());
+            }
+
+            String fmPath = fieldIntch.dependencyRequiredFMPath();
+            if (fmPath.isEmpty() || isVisible(fmPath, context)) {
+                return fieldIntch.dependencyRequired() == SUBMIT
+                        ? ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED
+                        : ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
+            }
+        }
+
+        return ActivityEPConstants.FIELD_NOT_REQUIRED;
+    }
+
     /**
      * Gets the field required value.
      *
@@ -376,16 +462,22 @@ public class FieldsEnumerator {
      * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false,
      * N (no) = not required. .
      */
-    private String getRequiredValue(FEContext context, String fieldTitle) {
+    private String getUnconditionalRequiredValue(FEContext context, String fieldTitle) {
+        if (isFieldIatiIdentifier(fieldTitle) && AmpClientModeHolder.isIatiImporterClient()) {
+            return ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
+        }
+
         Interchangeable fieldIntch = context.getIntchStack().peek();
 
         ActivityEPConstants.RequiredValidation required = fieldIntch.required();
         String requiredFmPath = fieldIntch.requiredFmPath();
 
         if (StringUtils.isNotBlank(requiredFmPath)) {
-            if (isRequiredVisible(requiredFmPath, context)) {
-                required = required == NONE ? SUBMIT : required;
-            } else {
+            if (required == NONE) {
+                throw new IllegalStateException("Interchangeable.required is incorrect! Field: "
+                        + context.getIntchStack().peek().fieldTitle());
+            }
+            if (!isRequiredVisible(requiredFmPath, context)) {
                 required = NONE;
             }
         }
@@ -397,6 +489,20 @@ public class FieldsEnumerator {
         }
 
         return ActivityEPConstants.FIELD_NOT_REQUIRED;
+    }
+    
+    private boolean getImportableValue(FEContext context, String fieldTitle, Interchangeable interchangeable) {
+        if (isFieldIatiIdentifier(fieldTitle) && AmpClientModeHolder.isIatiImporterClient()) {
+            return true;
+        }
+        
+        boolean importable = interchangeable.importable();
+        
+        if (StringUtils.isNotBlank(interchangeable.readOnlyFmPath())) {
+            return importable && !isVisible(interchangeable.readOnlyFmPath(), context);
+        }
+        
+        return importable;
     }
 
     /**
@@ -489,37 +595,35 @@ public class FieldsEnumerator {
 
     private boolean isFieldVisible(FEContext context) {
         Interchangeable interchangeable = context.getIntchStack().peek();
-
         return isVisible(interchangeable.fmPath(), context);
     }
 
     protected boolean isRequiredVisible(String fmPath, FEContext context) {
         Interchangeable peek = context.getIntchStack().pop();
-        boolean isVisible = fmService.isVisible(fmPath, context.getIntchStack());
+        boolean isVisible = fmService.isVisible(FMVisibility.handleParentFMPath(fmPath, context.getIntchStack()));
         context.getIntchStack().push(peek);
 
         return isVisible;
     }
 
-    /**
-     * Decides whether a field stores iati-identifier value
-     *
-     * @param fieldName
-     * @return true if is iati-identifier
-     */
-    private boolean isFieldIatiIdentifier(String fieldName) {
-        return StringUtils.equals(this.iatiIdentifierField, fieldName);
-    }
-
     protected boolean isVisible(String fmPath, FEContext context) {
-        Interchangeable interchangeable = context.getIntchStack().peek();
-        String fieldTitle = FieldMap.underscorify(interchangeable.fieldTitle());
-
-        if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
-            return true;
-        } else {
-            return fmService.isVisible(fmPath, context.getIntchStack());
-        }
+        return fmService.isVisible(FMVisibility.handleParentFMPath(fmPath, context.getIntchStack()));
+    }
+    
+    private boolean isFieldIatiIdentifier(String fieldName) {
+        return StringUtils.equals(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER), fieldName);
     }
 
+    /**
+     * Verifies each configures dependency for any additional checks
+     * and builds up the final (actual) list of dependencies
+     * @param interchangeable for dependency info
+     * @return actual dependencies list or null if no dependency
+     */
+    private List<String> getActualDependencies(Interchangeable interchangeable) {
+        return new ImmutableList.Builder<String>()
+                .add(interchangeable.dependencies())
+                .add(interchangeable.requiredDependencies())
+                .build();
+    }
 }

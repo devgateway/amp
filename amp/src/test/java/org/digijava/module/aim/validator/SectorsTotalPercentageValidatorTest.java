@@ -1,12 +1,14 @@
 package org.digijava.module.aim.validator;
 
-import static org.digijava.module.aim.validator.ConstraintMatchers.iterableNode;
+import static org.digijava.module.aim.validator.ConstraintMatchers.inIterableNode;
+import static org.digijava.module.aim.validator.ConstraintMatchers.inIterableNodeAtKey;
 import static org.digijava.module.aim.validator.ConstraintMatchers.nodeAtKey;
+import static org.digijava.module.aim.validator.ConstraintMatchers.propertyNode;
 import static org.digijava.module.aim.validator.ConstraintMatchers.violationWithPath;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import java.util.Set;
 
@@ -14,17 +16,20 @@ import javax.validation.ConstraintViolation;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.validator.percentage.SectorsTotalPercentage;
+import org.digijava.module.aim.validator.percentage.SectorsTotalPercentageValidator;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class SectorsTotalPercentageValidatorTest extends AbstractTotalPercentageValidatorTest {
+public class SectorsTotalPercentageValidatorTest
+extends AbstractActivityValidatorTest<SectorsTotalPercentageValidator> {
 
     private AmpClassificationConfiguration primarySectors =
             newConfig(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME);
@@ -140,7 +145,7 @@ public class SectorsTotalPercentageValidatorTest extends AbstractTotalPercentage
      */
     private Matcher<ConstraintViolation> sectorPercentageViolation(AmpClassificationConfiguration config) {
         return violationWithPath(SectorsTotalPercentage.class,
-                ImmutableList.of(iterableNode("sectors"), nodeAtKey("sectorPercentage", config)));
+                ImmutableList.of(propertyNode("sectors"), inIterableNodeAtKey("sectorPercentage", config)));
     }
 
     private AmpActivitySector newActivitySector(AmpClassificationConfiguration config, Float percentage) {

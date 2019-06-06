@@ -29,17 +29,13 @@ public class InputValidatorProcessor {
                 new RequiredValidator(),
                 new ActivityTitleValidator(),
                 new AmpActivityIdValidator(),
-                new CreatedByValidator(),
-                new ApprovedByValidator(),
                 new MultipleEntriesValidator(),
                 new UniqueValidator(),
                 new TreeCollectionValidator(),
-                new DependencyValidator(),
-                new PrimaryContactValidator(),
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),
-                new FundingOrgRolesValidator(),
-                new RegexPatternValidator());
+                new RegexPatternValidator(),
+                new UUIDValidator());
     }
 
     public static List<InputValidator> getContactFormatValidators() {

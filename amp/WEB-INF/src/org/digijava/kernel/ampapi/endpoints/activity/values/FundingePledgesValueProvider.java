@@ -16,7 +16,7 @@ import com.google.common.collect.ImmutableMap;
 /**
  * @author Viorel Chihai
  */
-public class FundingePledgesValueProvider extends PossibleValuesProvider {
+public class FundingePledgesValueProvider implements PossibleValuesProvider {
 
     @Override
     public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
@@ -31,5 +31,10 @@ public class FundingePledgesValueProvider extends PossibleValuesProvider {
                     ImmutableMap.of(), extraInfo));
         }
         return values;
+    }
+
+    @Override
+    public boolean isAllowed(Long id) {
+        return PledgesEntityHelper.isExistingPledge(id);
     }
 }

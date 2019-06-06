@@ -1,7 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
-import static java.util.Collections.singletonList;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,15 +10,20 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
@@ -50,7 +53,7 @@ public class ResourceImporter extends ObjectImporter {
     public ResourceImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getResourceFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getResourceBusinessRulesValidators()),
-                AmpFieldsEnumerator.getEnumerator().getResourceFields());
+                AmpFieldsEnumerator.getEnumerator().getResourceField());
     }
 
     /**
@@ -59,8 +62,8 @@ public class ResourceImporter extends ObjectImporter {
      * @param newJson json description of the resource
      * @return errors if any
      */
-    public List<ApiErrorMessage> createResource(JsonBean newJson) {
-        return importResource(newJson, null);
+    public ResourceImporter createResource(JsonBean newJson) {
+        return createResource(newJson, null);
     }
 
     /**
@@ -68,33 +71,29 @@ public class ResourceImporter extends ObjectImporter {
      *
      * @param newJson json description of the resource
      * @param formFile file for document resource, may be null for web link resources
-     * @return errors if any
+     * @return ResourceImporter instance
      */
-    public List<ApiErrorMessage> createResource(JsonBean newJson, FormFile formFile) {
-        return importResource(newJson, formFile);
-    }
-
-    private List<ApiErrorMessage> importResource(JsonBean newJson, FormFile formFile) {
+    public ResourceImporter createResource(JsonBean newJson, FormFile formFile) {
         this.newJson = newJson;
-
-        List<APIField> fieldsDef = getApiFields();
 
         String privateAttr = newJson.getString(ResourceEPConstants.PRIVATE);
 
         if (StringUtils.isBlank(privateAttr)) {
-            return singletonList(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.PRIVATE));
+            addError(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.PRIVATE));
+            return this;
         }
 
         if (!Boolean.parseBoolean(privateAttr)) {
-            return singletonList(ResourceErrors.PRIVATE_RESOURCE_SUPPORTED_ONLY
-                    .withDetails(ResourceEPConstants.PRIVATE));
+            addError(ResourceErrors.PRIVATE_RESOURCE_SUPPORTED_ONLY.withDetails(ResourceEPConstants.PRIVATE));
+            return this;
         }
 
         TeamMember teamMemberCreator = null;
-        if (AmpOfflineModeHolder.isAmpOfflineMode()) {
-            List<ApiErrorMessage> errorMessages = validateCreatorEmailTeam(newJson);
-            if (errorMessages != null) {
-                return errorMessages;
+        if (AmpClientModeHolder.isOfflineClient()) {
+            ApiErrorMessage errorMessage = validateCreatorEmailTeam(newJson);
+            if (errorMessage != null) {
+                addError(errorMessage);
+                return this;
             }
 
             String creatorEmail = newJson.getString(ResourceEPConstants.CREATOR_EMAIL);
@@ -106,7 +105,8 @@ public class ResourceImporter extends ObjectImporter {
         }
 
         if (formFile == null && ResourceType.FILE.getId().equals(newJson.get(ResourceEPConstants.RESOURCE_TYPE))) {
-            return singletonList(ResourceErrors.FILE_NOT_FOUND);
+            addError(ResourceErrors.FILE_NOT_FOUND);
+            return this;
         }
 
         if (formFile != null) {
@@ -114,7 +114,7 @@ public class ResourceImporter extends ObjectImporter {
                 String details = String.format("%s '%s'. %s '%s'", TranslatorWorker.translateText("Resource type is"),
                         ResourceType.LINK.getId(), TranslatorWorker.translateText("Resource type should be"),
                         ResourceType.FILE.getId());
-                return singletonList(ResourceErrors.RESOURCE_TYPE_INVALID.withDetails(details));
+                addError(ResourceErrors.RESOURCE_TYPE_INVALID.withDetails(details));
             }
 
             long maxSizeInMB = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
@@ -123,7 +123,8 @@ public class ResourceImporter extends ObjectImporter {
                 long fileSizeInMB = formFile.getFileSize() / FileUtils.ONE_MB;
                 String errorMessage = String.format("%s %sMB. %s %sMB", TranslatorWorker.translateText("File size is"),
                         fileSizeInMB, TranslatorWorker.translateText("Max size allowed is"), maxSizeInMB);
-                return singletonList(ResourceErrors.FILE_SIZE_INVALID.withDetails(errorMessage));
+                addError(ResourceErrors.FILE_SIZE_INVALID.withDetails(errorMessage));
+                return this;
             }
         }
 
@@ -157,7 +158,7 @@ public class ResourceImporter extends ObjectImporter {
             }
         }
 
-        return new ArrayList<>(errors.values());
+        return this;
     }
 
     private TemporaryDocumentData getTemporaryDocumentData(AmpResource resource, FormFile formFile) {
@@ -195,13 +196,12 @@ public class ResourceImporter extends ObjectImporter {
         return resource;
     }
 
-    @Override
-    protected String extractString(Field field, Object parentObj, Object jsonValue) {
-        return extractTranslationsOrSimpleValue(field, parentObj, jsonValue);
+    protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
+        return extractTranslationsOrSimpleValue(apiField, parentObj, jsonValue);
     }
 
-    private String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
-        TranslationType trnType = trnSettings.getTranslatableType(field);
+    private String extractTranslationsOrSimpleValue(APIField apiField, Object parentObj, Object jsonValue) {
+        TranslationType trnType = apiField.getTranslationType();
         String value = null;
         if (TranslationType.NONE == trnType) {
             value = (String) jsonValue;
@@ -210,18 +210,19 @@ public class ResourceImporter extends ObjectImporter {
             if (trnSettings.isMultilingual()) {
                 resourceText = (Map<String, Object>) jsonValue;
             } else {
-                resourceText = new HashMap<String, Object>();
+                resourceText = new HashMap<>();
                 resourceText.put(trnSettings.getDefaultLangCode(), jsonValue);
             }
-            value = extractResourceTranslation(field, parentObj, resourceText);
+            value = extractResourceTranslation(apiField, parentObj, resourceText);
         }
 
         return value;
     }
 
-    private String extractResourceTranslation(Field field, Object parentObj, Map<String, Object> jsonValue) {
-        String translatedMapFieldName = field.getAnnotation(ResourceTextField.class).translationsField();
+    private String extractResourceTranslation(APIField apiField, Object parentObj, Map<String, Object> jsonValue) {
         try {
+            Field field = ReflectionUtil.getField(parentObj, apiField.getFieldNameInternal());
+            String translatedMapFieldName = field.getAnnotation(ResourceTextField.class).translationsField();
             Field translatedMapField = parentObj.getClass().getDeclaredField(translatedMapFieldName);
             translatedMapField.setAccessible(true);
             translatedMapField.set(parentObj, jsonValue);
@@ -245,30 +246,30 @@ public class ResourceImporter extends ObjectImporter {
      * validates creator email and team
      *
      * @param newJson
-     * @return
+     * @return ApiErrorMessage
      */
-    private List<ApiErrorMessage> validateCreatorEmailTeam(JsonBean newJson) {
+    private ApiErrorMessage validateCreatorEmailTeam(JsonBean newJson) {
 
         Object creatorEmail = newJson.get(ResourceEPConstants.CREATOR_EMAIL);
         if (creatorEmail == null || StringUtils.isBlank(creatorEmail.toString())) {
-            return singletonList(ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.CREATOR_EMAIL));
+            return ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.CREATOR_EMAIL);
         }
 
         Object team = newJson.get(ResourceEPConstants.TEAM);
         if (team == null || getLongOrNull(team) == null) {
-            return singletonList(ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.TEAM));
+            return ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.TEAM);
         }
 
         User creatorUser = creatorEmail != null ? UserUtils.getUserByEmailAddress(creatorEmail.toString()) : null;
         if (creatorUser == null) {
-            return singletonList(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.CREATOR_EMAIL));
+            return ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.CREATOR_EMAIL);
         }
 
         Long teamId = getLongOrNull(team);
         AmpTeam ampTeam = TeamUtil.getAmpTeam(teamId);
 
         if (ampTeam == null) {
-            return singletonList(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.TEAM));
+            return ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.TEAM);
         }
 
         AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(creatorUser.getEmail(),
@@ -279,10 +280,56 @@ public class ResourceImporter extends ObjectImporter {
             errorDetails.add(ResourceEPConstants.CREATOR_EMAIL);
             errorDetails.add(ResourceEPConstants.TEAM);
 
-            return singletonList(ResourceErrors.INVALID_TEAM_MEMBER.withDetails(errorDetails));
+            return ResourceErrors.INVALID_TEAM_MEMBER.withDetails(errorDetails);
         }
 
         return null;
+    }
+
+    /**
+     * Get the result of import/update resource in JsonBean format
+     *
+     * @return JsonBean the result of the import or update action
+     */
+    public JsonBean getResult() {
+        JsonBean result = new JsonBean();
+        if (errors.size() == 0 && resource == null) {
+            result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
+        } else if (errors.size() > 0) {
+            result.set(EPConstants.ERROR, ApiError.toError(errors.values()).getErrors());
+            result.set(ResourceEPConstants.RESOURCE, getNewJson());
+        } else {
+            result = new JsonBean();
+            result.set(ResourceEPConstants.UUID, resource.getUuid());
+            if (TranslationSettings.getCurrent().isMultilingual()) {
+                result.set(ResourceEPConstants.TITLE, resource.getTranslatedTitles());
+                result.set(ResourceEPConstants.DESCRIPTION, resource.getTranslatedDescriptions());
+                result.set(ResourceEPConstants.NOTE, resource.getTranslatedNotes());
+            } else {
+                result.set(ResourceEPConstants.TITLE, resource.getTitle());
+                result.set(ResourceEPConstants.DESCRIPTION, resource.getDescription());
+                result.set(ResourceEPConstants.NOTE, resource.getNote());
+            }
+
+            if (resource.getType() != null) {
+                result.set(ResourceEPConstants.TYPE, resource.getType().getId());
+            }
+            if (ResourceType.LINK.equals(resource.getResourceType())) {
+                result.set(ResourceEPConstants.WEB_LINK, resource.getWebLink());
+            } else {
+                result.set(ResourceEPConstants.FILE_NAME, resource.getFileName());
+            }
+            result.set(ResourceEPConstants.RESOURCE_TYPE, resource.getResourceType().getId());
+            result.set(ResourceEPConstants.ADDING_DATE,
+                    DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(resource.getAddingDate()));
+            result.set(ResourceEPConstants.TEAM, resource.getTeam());
+        }
+
+        if (!warnings.isEmpty()) {
+            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings.values()));
+        }
+
+        return result;
     }
 
 }

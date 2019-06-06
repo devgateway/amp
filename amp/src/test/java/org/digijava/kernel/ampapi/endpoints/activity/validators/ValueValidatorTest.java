@@ -15,6 +15,7 @@ import java.util.Map;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.SaveMode;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
@@ -55,16 +56,11 @@ public class ValueValidatorTest {
     private APIField sectorFieldDescription;
     private APIField fyFieldDescription;
     private APIField draftFieldDescription;
+    private PossibleValuesEnumerator pvEnumerator;
     private PossibleValuesCache possibleValuesCached;
 
     @Before
     public void setUp() throws Exception {
-        importer = mock(ActivityImporter.class);
-        possibleValuesCached = mock(PossibleValuesCache.class);
-        when(importer.getPossibleValuesCache()).thenReturn(possibleValuesCached);
-        when(possibleValuesCached.getPossibleValues(SECTOR_FIELD)).thenReturn(SECTOR_POSSIBLE_VALUES);
-        when(possibleValuesCached.getPossibleValues(FY_FIELD)).thenReturn(FY_POSSIBLE_VALUES);
-
         sectorFieldDescription = new APIField();
         sectorFieldDescription.setFieldName(SECTOR_FIELD);
         sectorFieldDescription.setImportable(true);
@@ -75,12 +71,23 @@ public class ValueValidatorTest {
         fyFieldDescription.setFieldName(FY_FIELD);
         fyFieldDescription.setImportable(true);
         fyFieldDescription.setIdOnly(true);
-        fyFieldDescription.setApiType(new APIType(Collection.class, FieldType.LIST, Long.class));
+        fyFieldDescription.setApiType(new APIType(Long.class, FieldType.LIST));
 
+        List<APIField> apiFields = Arrays.asList(sectorFieldDescription, fyFieldDescription);
+        
         draftFieldDescription = new APIField();
         draftFieldDescription.setFieldName(DRAFT_FIELD);
         draftFieldDescription.setImportable(true);
         draftFieldDescription.setApiType(new APIType(Boolean.class));
+
+        pvEnumerator = mock(PossibleValuesEnumerator.class);
+        when(pvEnumerator.getPossibleValuesForField(SECTOR_FIELD, apiFields)).thenReturn(SECTOR_POSSIBLE_VALUES);
+        when(pvEnumerator.getPossibleValuesForField(FY_FIELD, apiFields)).thenReturn(FY_POSSIBLE_VALUES);
+
+        possibleValuesCached = new PossibleValuesCache(pvEnumerator, apiFields);
+
+        importer = mock(ActivityImporter.class);
+        when(importer.getPossibleValuesCache()).thenReturn(possibleValuesCached);
     }
 
     @Test

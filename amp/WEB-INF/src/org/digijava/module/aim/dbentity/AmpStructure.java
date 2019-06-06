@@ -64,7 +64,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     private Set<AmpStructureImg> images;
     
     @Interchangeable(fieldTitle = "Coordinates", importable = true, fmPath = "/Activity Form/Structures/Map")
-    private List<AmpStructureCoordinate> coordinates;
+    private List<AmpStructureCoordinate> coordinates = new ArrayList<>();
     
     private String coords;
 

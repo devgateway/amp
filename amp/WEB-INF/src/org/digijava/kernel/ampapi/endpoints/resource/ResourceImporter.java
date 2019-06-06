@@ -157,13 +157,19 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
     private TemporaryDocumentData getTemporaryDocumentData(AmpResource resource, FormFile formFile) {
         TemporaryDocumentData tdd = new TemporaryDocumentData();
 
-        tdd.setTitle(resource.getTitle().getOrBuildText());
         tdd.setName(resource.getFileName());
-        tdd.setDescription(resource.getDescription().getOrBuildText());
-        tdd.setNotes(resource.getNote().getOrBuildText());
-        tdd.setTranslatedTitles(resource.getTitle().getOrBuildTranslations());
-        tdd.setTranslatedNotes(resource.getNote().getOrBuildTranslations());
-        tdd.setTranslatedDescriptions(resource.getDescription().getOrBuildTranslations());
+        if (resource.getTitle() != null) {
+            tdd.setTitle(resource.getTitle().getOrBuildText());
+            tdd.setTranslatedTitles(resource.getTitle().getOrBuildTranslations());
+        }
+        if (resource.getDescription() != null) {
+            tdd.setDescription(resource.getDescription().getOrBuildText());
+            tdd.setTranslatedDescriptions(resource.getDescription().getOrBuildTranslations());
+        }
+        if (resource.getNote() != null) {
+            tdd.setNotes(resource.getNote().getOrBuildText());
+            tdd.setTranslatedNotes(resource.getNote().getOrBuildTranslations());
+        }
 
         if (resource.getType() != null) {
             tdd.setCmDocTypeId(resource.getType().getId());

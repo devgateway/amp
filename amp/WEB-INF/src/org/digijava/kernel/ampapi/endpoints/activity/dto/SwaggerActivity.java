@@ -22,6 +22,10 @@ import io.swagger.annotations.ApiModel;
         + "[/activity/project](#/activity/getProjectByAmpId) EP.")
 public class SwaggerActivity extends SwaggerMapWrapper<String, Object> {
 
+    public SwaggerActivity() {
+        super();
+    }
+
     public SwaggerActivity(Map<String, Object> map) {
         super(map);
     }

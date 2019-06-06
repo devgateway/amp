@@ -14,4 +14,7 @@ public class ResourceView {
     public static class Link extends Common {
     }
 
+    public static class Full extends Common {
+    }
+
 }

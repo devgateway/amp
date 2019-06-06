@@ -14,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.dto.SwaggerContact;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerResource;
 
 import io.swagger.converter.ModelConverter;
 import io.swagger.converter.ModelConverterContext;
@@ -71,7 +72,7 @@ public class JsonAnyGetterResolver extends AbstractModelConverter {
                     if (org.digijava.kernel.ampapi.endpoints.resource.dto.ResourceView.Common.class
                             .isAssignableFrom(jsonView)) {
                         addObjectProperty(props, ResourceEPConstants.RESOURCE,
-                                "the resource that was provided as an input", null);
+                                "the resource that was provided as an input", SwaggerResource.getExample());
                         return true;
                     }
                 }

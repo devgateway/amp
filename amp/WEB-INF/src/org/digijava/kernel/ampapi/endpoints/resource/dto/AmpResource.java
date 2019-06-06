@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -21,17 +22,25 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty.AccessMode;
 
 /**
  *
  * @author Viorel Chihai
  *
  */
-@JsonView(ResourceView.Common.class)
+@JsonPropertyOrder({ ResourceEPConstants.UUID, ResourceEPConstants.TITLE, ResourceEPConstants.FILE_NAME,
+    ResourceEPConstants.WEB_LINK, ResourceEPConstants.DESCRIPTION, ResourceEPConstants.NOTE,
+    ResourceEPConstants.TYPE, ResourceEPConstants.LINK, ResourceEPConstants.YEAR_OF_PUBLICATION,
+    ResourceEPConstants.ADDING_DATE, ResourceEPConstants.FILE_SIZE, ResourceEPConstants.PUBLIC,
+    ResourceEPConstants.PRIVATE, ResourceEPConstants.CREATOR_EMAIL, ResourceEPConstants.TEAM,
+    ResourceEPConstants.RESOURCE_TYPE
+})
 public class AmpResource {
 
     @Interchangeable(fieldTitle = "UUID")
     @JsonProperty(ResourceEPConstants.UUID)
+    @ApiModelProperty(example = "05a2f2d4-58f5-4198-8a05-cf42a758ce85")
     private String uuid;
 
     @Interchangeable(fieldTitle = "Title", importable = true, required = ALWAYS)
@@ -47,6 +56,7 @@ public class AmpResource {
     @Interchangeable(fieldTitle = "Web Link", importable = true, required = ALWAYS,
             dependencies = InterchangeDependencyResolver.RESOURCE_TYPE_LINK_VALID_KEY)
     @JsonProperty(ResourceEPConstants.WEB_LINK)
+    @ApiModelProperty(example = "https://www.postgresql.org/docs/9.2/static/sql-createcast.html")
     @JsonView(ResourceView.Link.class)
     private String webLink;
 
@@ -60,15 +70,20 @@ public class AmpResource {
 
     @Interchangeable(fieldTitle = "Type", importable = true, pickIdOnly = true,
             discriminatorOption = CategoryConstants.DOCUMENT_TYPE_KEY)
-    @JsonIgnore
+    @JsonProperty(ResourceEPConstants.TYPE)
+    @JsonView(ResourceView.Full.class)
+    @ApiModelProperty(example = "50", dataType = "java.lang.Long")
     private AmpCategoryValue type;
 
     @Interchangeable(fieldTitle = "URL")
-    @JsonIgnore
+    @ApiModelProperty(example = "/contentrepository/downloadFile.do?uuid=05a2f2d4-58f5-4198-8a05-cf42a758ce85")
+    @JsonView(ResourceView.Full.class)
     private String url;
 
     @Interchangeable(fieldTitle = "Year Of Publication")
-    @JsonIgnore
+    @JsonProperty(ResourceEPConstants.YEAR_OF_PUBLICATION)
+    @ApiModelProperty(example = "2002")
+    @JsonView(ResourceView.Full.class)
     private String yearOfPublication;
 
     @Interchangeable(fieldTitle = "Adding Date")
@@ -78,7 +93,8 @@ public class AmpResource {
     private Date addingDate;
 
     @Interchangeable(fieldTitle = "File Size")
-    @JsonIgnore
+    @JsonProperty(ResourceEPConstants.FILE_SIZE)
+    @JsonView(ResourceView.Full.class)
     private Double fileSize;
 
     @Interchangeable(fieldTitle = "Public")
@@ -88,7 +104,9 @@ public class AmpResource {
     private Boolean isPrivate;
 
     @Interchangeable(fieldTitle = "Creator Email", importable = true, required = ALWAYS)
-    @JsonIgnore
+    @ApiModelProperty(example = "john.smith@amp.org")
+    @JsonProperty(ResourceEPConstants.CREATOR_EMAIL)
+    @JsonView(ResourceView.Full.class)
     private String creatorEmail;
 
     @Interchangeable(fieldTitle = "Team", importable = true, required = ALWAYS)
@@ -228,6 +246,7 @@ public class AmpResource {
     }
 
     @JsonProperty(ResourceEPConstants.RESOURCE_TYPE)
+    @ApiModelProperty(accessMode = AccessMode.READ_WRITE)
     public Integer getResourceTypeId() {
         return resourceType.getId();
     }

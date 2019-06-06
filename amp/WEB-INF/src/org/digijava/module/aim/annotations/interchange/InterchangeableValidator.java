@@ -40,4 +40,10 @@ public @interface InterchangeableValidator {
      * default group.
      */
     Class<?>[] groups() default {};
+
+
+    /**
+     * Validator is active only when corresponding FM entry is enabled.
+     */
+    String fmPath() default "";
 }

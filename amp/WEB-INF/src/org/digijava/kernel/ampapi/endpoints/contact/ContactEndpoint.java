@@ -93,8 +93,9 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
     @ApiOperation("Retrieve contact")
-    public Map<String, Object> getContact(@ApiParam("contact id") @PathParam("id") Long id) {
-        return ContactUtil.getContact(id);
+    public SwaggerContact getContact(@ApiParam("contact id") @PathParam("id") Long id) {
+        Map<String, Object> contact = ContactUtil.getContact(id);
+        return new SwaggerContact(contact);
     }
 
     @POST

@@ -13,9 +13,15 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
  * @author Nadejda Mandrescu
  */
 public class SwaggerMapWrapper<K, V> {
-
     @JsonAnySetter
     private Map<K, V> map = new LinkedHashMap<>();
+
+    public SwaggerMapWrapper() {
+    }
+
+    public SwaggerMapWrapper(Map<K, V> map) {
+        this.map = map;
+    }
 
     public void setMap(Map<K, V> map) {
         this.map = map;

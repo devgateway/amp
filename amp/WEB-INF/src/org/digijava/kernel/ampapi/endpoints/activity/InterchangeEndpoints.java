@@ -202,10 +202,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getProject", ui = false)
     @ApiOperation("Provides full project information")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
     message = "project with full set of configured fields and their values"))
-    public Map<String, Object> getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
-        return ActivityInterchangeUtils.getActivity(projectId);
+    public SwaggerActivity getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
+        Map<String, Object> activity = ActivityInterchangeUtils.getActivity(projectId);
+        return new SwaggerActivity(activity);
     }
 
     @POST
@@ -236,10 +237,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectByAmpId", ui = false)
     @ApiOperation("Retrieve project by AMP Id.")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
     message = "project with full set of configured fields and their values"))
-    public Map<String, Object> getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
-        return ActivityInterchangeUtils.getActivityByAmpId(ampId);
+    public SwaggerActivity getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
+        Map<String, Object> activity = ActivityInterchangeUtils.getActivityByAmpId(ampId);
+        return new SwaggerActivity(activity);
     }
 
     @POST

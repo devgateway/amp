@@ -11,9 +11,12 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
@@ -21,10 +24,12 @@ import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,15 +43,16 @@ import org.mockito.junit.MockitoRule;
 public class RequiredValidatorTest {
 
     private static final String SAMPLE_FIELD = "field";
+    private static final String SAMPLE_LIST_FIELD = "list";
     private static final String SAMPLE_VALUE = "value";
     private static final String EMPTY_VALUE = "";
 
     private static final Map<String, Object> EMPTY_BEAN = ImmutableMap.of();
     private static final Map<String, Object> SAMPLE_BEAN = ImmutableMap.of(SAMPLE_FIELD, SAMPLE_VALUE);
-    private static final Map<String, Object> LIST_BEAN = ImmutableMap.of(SAMPLE_FIELD, Arrays.asList(SAMPLE_VALUE));
+    private static final Map<String, Object> LIST_BEAN = ImmutableMap.of(SAMPLE_LIST_FIELD, Arrays.asList(SAMPLE_VALUE));
     private static final Map<String, Object> EMPTY_VALUE_BEAN = ImmutableMap.of(SAMPLE_FIELD, EMPTY_VALUE);
-    private static final Map<String, Object> EMPTY_LIST_BEAN = ImmutableMap.of(SAMPLE_FIELD, Collections.EMPTY_LIST);
-
+    private static final Map<String, Object> EMPTY_LIST_BEAN = ImmutableMap.of(SAMPLE_LIST_FIELD, Collections.EMPTY_LIST);
+    
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
@@ -54,6 +60,42 @@ public class RequiredValidatorTest {
     private ActivityImporter importer = mock(ActivityImporter.class);
     @Mock
     private ActivityImportRules importRules = mock(ActivityImportRules.class);
+    
+    public static class SampleObject {
+        
+        @Interchangeable(fieldTitle = SAMPLE_FIELD)
+        private String field;
+    
+        @Interchangeable(fieldTitle = SAMPLE_LIST_FIELD)
+        private List<String> list = new ArrayList<>();
+    
+        public SampleObject(String field) {
+            this.field = field;
+        }
+    
+        public SampleObject(List<String> list) {
+            this.list = list;
+        }
+    
+        public SampleObject() {
+        }
+    
+        public String getField() {
+            return field;
+        }
+    
+        public void setField(String field) {
+            this.field = field;
+        }
+    
+        public List<String> getList() {
+            return list;
+        }
+    
+        public void setList(List<String> list) {
+            this.list = list;
+        }
+    }
 
     @Before
     public void setUp() {
@@ -73,7 +115,7 @@ public class RequiredValidatorTest {
 
     @Test
     public void testNotRequiredCollectionEmpty() {
-        assertValidator(EMPTY_LIST_BEAN, fd(FIELD_NOT_REQUIRED), null, false);
+        assertValidator(EMPTY_LIST_BEAN, fdList(FIELD_NOT_REQUIRED), null, false);
     }
 
     @Test
@@ -201,7 +243,7 @@ public class RequiredValidatorTest {
     public void testAlwaysRequiredFieldNotPresentInJsonPresentInObject() {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
         
-        assertValidator(EMPTY_BEAN, null, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
+        assertValidator(EMPTY_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
     
     @Test
@@ -209,7 +251,7 @@ public class RequiredValidatorTest {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
         when(importer.isUpdate()).thenReturn(true);
         
-        assertValidator(EMPTY_BEAN, "test", fd(FIELD_ALWAYS_REQUIRED), null, false);
+        assertValidator(EMPTY_BEAN, new SampleObject("test"), fd(FIELD_ALWAYS_REQUIRED), null, false);
     }
     
     @Test
@@ -217,7 +259,7 @@ public class RequiredValidatorTest {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
         when(importer.isUpdate()).thenReturn(true);
         
-        assertValidator(EMPTY_BEAN, Stream.of("test"), fd(FIELD_ALWAYS_REQUIRED), null, false);
+        assertValidator(EMPTY_BEAN, new SampleObject(Stream.of("test").collect(Collectors.toList())), fdList(FIELD_ALWAYS_REQUIRED), null, false);
     }
     
     @Test
@@ -225,7 +267,7 @@ public class RequiredValidatorTest {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
         when(importer.isUpdate()).thenReturn(true);
         
-        assertValidator(EMPTY_BEAN, null, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
+        assertValidator(EMPTY_BEAN, new SampleObject(), fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
     
     @Test
@@ -233,7 +275,7 @@ public class RequiredValidatorTest {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
         when(importer.isUpdate()).thenReturn(true);
         
-        assertValidator(EMPTY_BEAN, "", fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
+        assertValidator(EMPTY_BEAN, new SampleObject(), fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
     
     @Test
@@ -241,7 +283,7 @@ public class RequiredValidatorTest {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
         when(importer.isUpdate()).thenReturn(true);
         
-        assertValidator(EMPTY_BEAN, Collections.emptyList(), fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
+        assertValidator(EMPTY_BEAN, new SampleObject(), fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     private APIField fd(String required) {
@@ -250,18 +292,21 @@ public class RequiredValidatorTest {
         fd.setImportable(true);
         fd.setUnconditionalRequired(required);
         fd.setApiType(new APIType(String.class));
+        fd.setFieldAccessor(new SimpleFieldAccessor(SAMPLE_FIELD));
         return fd;
     }
 
     private APIField fdList(String required) {
         APIField fd = fd(required);
+        fd.setFieldName(SAMPLE_LIST_FIELD);
+        fd.setFieldAccessor(new SimpleFieldAccessor(SAMPLE_LIST_FIELD));
         fd.setApiType(new APIType(String.class, FieldType.LIST));
         return fd;
     }
     
     private void assertValidator(Map<String, Object> bean, APIField fieldDescription,
                                  ApiErrorMessage expectedErrorMessage, boolean downgradeExpected) {
-        assertValidator(bean, null, fieldDescription, expectedErrorMessage, downgradeExpected);
+        assertValidator(bean, new SampleObject(), fieldDescription, expectedErrorMessage, downgradeExpected);
     }
 
     private void assertValidator(Map<String, Object> bean, Object currentValue, APIField fieldDescription,

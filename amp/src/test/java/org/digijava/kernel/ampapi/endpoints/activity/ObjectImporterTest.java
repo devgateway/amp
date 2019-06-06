@@ -56,7 +56,7 @@ public class ObjectImporterTest {
 
         @Interchangeable(fieldTitle = "Name", importable = true)
         private String name;
-
+    
         private Integer age;
 
         @Interchangeable(fieldTitle = "Gender")
@@ -678,7 +678,7 @@ public class ObjectImporterTest {
     }
 
     @Test
-    public void testImportableFieldsAreClearedIfMissingInJson() {
+    public void testImportableFieldsAreNotClearedIfMissingInJson() {
         Map<String, Object> json = new HashMap<>();
 
         Parent parent = new Parent("Name", 13);
@@ -686,7 +686,7 @@ public class ObjectImporterTest {
         importer.validateAndImport(parent, json);
 
         assertThat(importer.errors.size(), is(0));
-        assertThat(parent, parent(null, 13));
+        assertThat(parent, parent("Name", 13));
     }
 
     @Test
@@ -702,7 +702,7 @@ public class ObjectImporterTest {
         importer.validateAndImport(parent, json);
 
         assertThat(importer.errors.size(), is(0));
-        assertThat(parent, parentWithAddresses(null, 45, containsInAnyOrder(
+        assertThat(parent, parentWithAddresses("Leonidas", 45, containsInAnyOrder(
                 address(1L, "W", "Washington DC - floor 1", "123"),
                 address(null, "W", "Washington DC - floor 2", "124"),
                 address(2L, "H", "home address", "home phone"),
@@ -846,7 +846,7 @@ public class ObjectImporterTest {
         importer.validateAndImport(parent, new HashMap<>());
 
         assertThat(importer.errors.size(), is(0));
-        assertThat(parent, hasProperty("agreement", nullValue()));
+        assertThat(parent, hasProperty("agreement", agreement(1L, "x")));
     }
 
     @Test

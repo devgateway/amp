@@ -6,6 +6,7 @@ import java.util.Iterator;
 import com.fasterxml.jackson.databind.JavaType;
 
 import org.digijava.kernel.ampapi.endpoints.activity.dto.SwaggerActivity;
+import org.digijava.kernel.ampapi.endpoints.contact.dto.SwaggerContact;
 import org.digijava.kernel.ampapi.endpoints.dto.SwaggerMapWrapper;
 
 import io.swagger.converter.ModelConverter;
@@ -41,7 +42,12 @@ public class SwaggerMapWrapperResolver extends AbstractModelConverter {
     private Model build(Type type, Class<?> rawType, ModelConverterContext context, Iterator<ModelConverter> chain) {
         if (SwaggerActivity.class.isAssignableFrom(rawType)) {
             Model model = super.resolve(type, context, chain);
-            model.setExample(SwaggerActivity.getInputExample());
+            model.setExample(SwaggerActivity.getExample());
+            return model;
+        }
+        if (SwaggerContact.class.isAssignableFrom(rawType)) {
+            Model model = super.resolve(type, context, chain);
+            model.setExample(SwaggerContact.getExample());
             return model;
         }
         return null;

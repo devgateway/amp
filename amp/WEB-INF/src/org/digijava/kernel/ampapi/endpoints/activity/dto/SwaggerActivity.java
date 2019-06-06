@@ -26,14 +26,14 @@ public class SwaggerActivity extends SwaggerMapWrapper<String, Object> {
         super(map);
     }
 
-    public static FullActivity getInputExample() {
+    public static FullActivity getExample() {
         FullActivity a = new FullActivity();
-        a.setAmpId("123456789");
+        a.setAmpId("4532580543");
         a.setAmpActivityId(0);
         a.setIatiIdentifier("AA-AAA-123456789");
         a.setCreatedDate(new Date());
         a.setUpdatedDate(new Date());
-        a.setName(new MultilingualContent("Construction works"));
+        a.setName(new MultilingualContent("String or Map<String, String>"));
         a.getProperties().put("is_draft", true);
         a.getProperties().put("...", new Object());
         return a;

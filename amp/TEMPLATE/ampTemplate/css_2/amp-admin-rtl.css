@@ -53,3 +53,21 @@ span.geostyle{
 .gs-setting-label {
     text-align: left !important;
 }
+
+table.inside {
+    border-width: 0 1px 1px 0 !important;
+}
+
+.visibility-import-button {
+    float: right !important;
+    padding-right: 10px;
+}
+
+.visibility-file-input {
+    float: right !important;
+}
+
+.visibility-file-input .fakefile .fakefile2 {
+    right: 217px;
+    left: 0px !important;
+}

@@ -44,16 +44,7 @@ div.fakefile input {
 	margin-left: 0;
 	width: 217px;
 }
-div.fakefile2 {
-	position: absolute;
-	top: 0px;
-	left: 217px;
-	width: auto;
-	padding: 0;
-	margin: 0;
-	z-index: 1;
-	line-height: 90%;
-}
+
 div.fakefile2 input{
 	width: 83px;
 }
@@ -160,11 +151,11 @@ div.fakefile2 input{
 		<td colspan=2 class="inside">	
 			
 			<div style="width: 600px;">
-				<div class="fileinputs" style="float: left;">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+				<div class="fileinputs visibility-file-input" style="float: left;">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 					<!-- CSS content must be put in a separated file and a class must be generated -->
 					<input id="uploadFile" name="uploadFile" type="file" class="inputx"  style="margin-top:7px;">
 				</div>
-				<div id="importButton" style="float: left;padding-left: 10px;">
+				<div id="importButton" class="visibility-import-button">
 					<c:set var="translation">
 						<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>
 					</c:set>

@@ -958,3 +958,13 @@ td.inside ul {
 .footerText {
     direction: rtl;
 }
+
+
+.corner-right {
+    transform: scaleX(-1);
+}
+
+.list-item-arrow {
+    transform: scaleX(-1);
+    float: right !important;
+}

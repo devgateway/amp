@@ -42,7 +42,6 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
             fmPath = "/Activity Form/Location/Locations/Location Item/locationPercentage",
             requiredFmPath = "/Activity Form/Location/Locations/Location percentage required",
             percentageConstraint = true, importable = true)
-    @Validators (percentage = "/Activity Form/Location/Locations/locationPercentageTotal" )
     private Float locationPercentage;
     @Interchangeable(fieldTitle = "Latitude", fmPath = "/Activity Form/Location/Locations/Location Item/Latitude", importable = true)
     private String latitude;

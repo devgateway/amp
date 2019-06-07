@@ -39,6 +39,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.validation.ConstraintDescriptor;
 import org.digijava.kernel.validation.ConstraintDescriptors;
+import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.kernel.validators.common.RegexValidator;
 import org.digijava.kernel.validators.activity.UniqueValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
@@ -156,9 +157,6 @@ public class FieldsEnumerator {
                 apiField.setChildren(getAllAvailableFields(type, context));
             }
             if (isList) {
-                if (hasPercentageValidatorEnabled(context)) {
-                    apiField.setPercentageConstraint(getPercentageConstraint(field, context));
-                }
                 String uniqueConstraint = getUniqueConstraint(apiField, field, context);
                 if (hasTreeCollectionValidatorEnabled(context)) {
                     apiField.setTreeCollectionConstraint(true);
@@ -219,8 +217,16 @@ public class FieldsEnumerator {
         apiField.setRegexPattern(findRegexPattern(fieldConstraintDescriptors));
         apiField.setMultipleValues(isMultipleValues(apiType, fieldConstraintDescriptors));
         apiField.setSizeLimit(findSizeLimit(fieldConstraintDescriptors));
+        if (hasTotalPercentageConstraint(fieldConstraintDescriptors) && apiField.getPercentageField() != null) {
+            apiField.setPercentageConstraint(apiField.getPercentageField().getFieldName());
+        }
 
         return apiField;
+    }
+
+    private boolean hasTotalPercentageConstraint(List<ConstraintDescriptor> descriptors) {
+        return descriptors.stream()
+                .anyMatch(d -> d.getConstraintValidatorClass().equals(TotalPercentageValidator.class));
     }
 
     /**
@@ -413,26 +419,6 @@ public class FieldsEnumerator {
     }
 
     /**
-     * Find nested field with a percentage constraint.
-     *
-     * @param field field to check
-     * @param context current context
-     * @return name of the field with percentage constraint
-     */
-    private String getPercentageConstraint(Field field, FEContext context) {
-        Class<?> genericClass = InterchangeUtils.getGenericClass(field);
-        Field[] fields = FieldUtils.getFieldsWithAnnotation(genericClass, Interchangeable.class);
-        for (Field f : fields) {
-            Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-            if (isVisible(interchangeable.fmPath(), context) && interchangeable.percentageConstraint()) {
-                return FieldMap.underscorify(interchangeable.fieldTitle());
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Describes each @Interchangeable field of a class
      */
     private String getUniqueConstraint(APIField apiField, Field field, FEContext context) {
@@ -596,16 +582,6 @@ public class FieldsEnumerator {
     }
 
     /**
-     * Determine if the field contains percentage validator
-     *
-     * @param context current context
-     * @return boolean if the field contains percentage validator
-     */
-    private boolean hasPercentageValidatorEnabled(FEContext context) {
-        return hasValidatorEnabled(context, ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME);
-    }
-
-    /**
      * Determine if the field contains a certain validator
      *
      * @param context current context
@@ -621,8 +597,6 @@ public class FieldsEnumerator {
 
         if (ActivityEPConstants.UNIQUE_VALIDATOR_NAME.equals(validatorName)) {
             validatorFmPath = validators.unique();
-        } else if (ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME.equals(validatorName)) {
-            validatorFmPath = validators.percentage();
         } else if (ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME.equals(validatorName)) {
             validatorFmPath = validators.treeCollection();
         }

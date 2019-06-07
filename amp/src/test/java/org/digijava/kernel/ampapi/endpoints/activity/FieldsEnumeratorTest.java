@@ -54,6 +54,7 @@ import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.services.sync.model.SyncConstants;
 import org.digijava.kernel.validators.ValidatorUtil;
+import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -65,7 +66,6 @@ import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -474,7 +474,8 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "2")
         private Collection<ObjWithId> field2;
 
-        @Interchangeable(fieldTitle = "3", validators = @Validators(percentage = "percentageFmName"))
+        @Interchangeable(fieldTitle = "3", interValidators = @InterchangeableValidator(
+                value = TotalPercentageValidator.class, fmPath = "percentageFmName"))
         private Collection<PercentageConstrained> field3;
 
         @Interchangeable(fieldTitle = "4", validators = @Validators(unique = "uniqueFmName"))
@@ -486,9 +487,11 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "5", validators = @Validators(treeCollection = "treeCollectionFmName"))
         private Collection<ObjWithId> field5;
 
-        @Interchangeable(fieldTitle = "6", validators =
-                @Validators(percentage = "percentageFmName", unique = "uniqueFmName"))
-        private Collection<ObjWithId> field6;
+        @Interchangeable(fieldTitle = "6",
+                interValidators = @InterchangeableValidator(
+                        value = TotalPercentageValidator.class, fmPath = "percentageFmName"),
+                validators = @Validators(unique = "uniqueFmName"))
+        private Collection<PercentageConstrained> field6;
         
         @Interchangeable(fieldTitle = "7",
                 interValidators = @InterchangeableValidator(
@@ -537,14 +540,14 @@ public class FieldsEnumeratorTest {
         expected2.setMultipleValues(true);
         expected2.setChildren(Arrays.asList(idField));
 
-        APIField expected3child = newLongField();
-        expected3child.setPercentage(true);
+        APIField percentageField = newLongField();
+        percentageField.setPercentage(true);
 
         APIField expected3 = newListField();
         expected3.setFieldName("3");
         expected3.setFieldLabel(fieldLabelFor("3"));
         expected3.setPercentageConstraint("field");
-        expected3.setChildren(Arrays.asList(expected3child, idField));
+        expected3.setChildren(Arrays.asList(percentageField, idField));
         expected3.setMultipleValues(true);
 
         APIField expected4child = newLongField();
@@ -573,7 +576,8 @@ public class FieldsEnumeratorTest {
         expected6.setFieldName("6");
         expected6.setFieldLabel(fieldLabelFor("6"));
         expected6.setMultipleValues(true);
-        expected6.setChildren(Arrays.asList(idField));
+        expected6.setPercentageConstraint("field");
+        expected6.setChildren(Arrays.asList(percentageField, idField));
         
         APIField expected7 = newListField();
         expected7.setFieldName("7");

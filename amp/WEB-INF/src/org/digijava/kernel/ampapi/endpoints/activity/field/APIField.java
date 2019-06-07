@@ -170,6 +170,11 @@ public class APIField {
         return children.getFieldsWithDependency(dependency);
     }
 
+    @JsonIgnore
+    public APIField getPercentageField() {
+        return children.getPercentageField();
+    }
+
     public void setFieldAccessor(FieldAccessor fieldAccessor) {
         this.fieldAccessor = fieldAccessor;
     }

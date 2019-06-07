@@ -80,7 +80,6 @@ public class ActivityEPConstants {
     
     // validator names constants
     public static final String UNIQUE_VALIDATOR_NAME = "unique";
-    public static final String PERCENTAGE_VALIDATOR_NAME = "percentage";
     public static final String TREE_COLLECTION_VALIDATOR_NAME = "treeCollection";
     
     // floating comparison constant

@@ -20,6 +20,7 @@ public class Fields {
     private Map<String, APIField> fieldByName;
     private ListMultimap<String, APIField> fieldsByInternalName;
     private ListMultimap<String, APIField> fieldsByDependency;
+    private APIField percentageField;
 
     public Fields(List<APIField> list) {
         this.list = ImmutableList.copyOf(list);
@@ -27,6 +28,9 @@ public class Fields {
         fieldByName = new HashMap<>();
         for (APIField field : list) {
             fieldByName.put(field.getFieldName(), field);
+            if (field.getPercentage() != null && field.getPercentage()) {
+                percentageField = field;
+            }
         }
 
         fieldsByInternalName = getFieldsByInternalName(list);
@@ -65,5 +69,9 @@ public class Fields {
 
     public List<APIField> getList() {
         return list;
+    }
+
+    public APIField getPercentageField() {
+        return percentageField;
     }
 }

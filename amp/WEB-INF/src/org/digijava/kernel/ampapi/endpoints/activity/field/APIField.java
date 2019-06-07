@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.ImmutableList;
 
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
@@ -16,6 +17,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.FieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslations;
+import org.digijava.kernel.validation.ConstraintDescriptors;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -44,8 +46,29 @@ public class APIField {
     @JsonIgnore
     private String fieldNameInternal;
 
+    /**
+     * Can be Y/N/ND. If this field has dependencies then this value is {@link #dependencyRequired}, otherwise it is
+     * {@link #unconditionalRequired}.
+     */
     @JsonProperty(ActivityEPConstants.REQUIRED)
     private String required;
+
+    /**
+     * Used internally. Can be Y/N/ND as for {@link #required}. Used only for fields without dependency.
+     * Validation happens unconditionally.
+     */
+    @JsonIgnore
+    private String unconditionalRequired;
+
+    /**
+     * Used internally. Can be Y/N/ND. Used only when field has a dependency.
+     *
+     * <p>Examples of dependencies:
+     * <ul><li>field is sometimes invisible</li>
+     * <li>field is always visible but it is required only when another field has a specific value</li></ul></p>
+     */
+    @JsonIgnore
+    private String dependencyRequired;
 
     @JsonProperty(ActivityEPConstants.ID_ONLY)
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
@@ -75,11 +98,14 @@ public class APIField {
     @JsonIgnore
     private APIField idChild;
 
+    @JsonIgnore
+    private boolean independent;
+
     @JsonProperty(ActivityEPConstants.CHILDREN)
-    private List<APIField> children = new ArrayList<>();
+    private Fields children;
 
     @JsonProperty(ActivityEPConstants.DEPENDENCIES)
-    private List<String> dependencies;
+    private List<String> dependencies = new ArrayList<>();
 
     @JsonProperty(ActivityEPConstants.REGEX_PATTERN)
     private String regexPattern;
@@ -113,6 +139,40 @@ public class APIField {
 
     @JsonIgnore
     private boolean isCollection;
+
+    @JsonIgnore
+    private ConstraintDescriptors beanConstraints;
+
+    @JsonIgnore
+    private ConstraintDescriptors fieldConstraints;
+
+    public ConstraintDescriptors getFieldConstraints() {
+        return fieldConstraints;
+    }
+
+    public void setFieldConstraints(ConstraintDescriptors fieldConstraints) {
+        this.fieldConstraints = fieldConstraints;
+    }
+
+    public ConstraintDescriptors getBeanConstraints() {
+        return beanConstraints;
+    }
+
+    public void setBeanConstraints(ConstraintDescriptors beanConstraints) {
+        this.beanConstraints = beanConstraints;
+    }
+
+    public APIField getField(String fieldName) {
+        return children.getField(fieldName);
+    }
+
+    public List<APIField> getFieldsForFieldNameInternal(String fieldNameInternal) {
+        return children.getFieldsForFieldNameInternal(fieldNameInternal);
+    }
+
+    public List<APIField> getFieldsWithDependency(String dependency) {
+        return children.getFieldsWithDependency(dependency);
+    }
 
     public void setFieldAccessor(FieldAccessor fieldAccessor) {
         this.fieldAccessor = fieldAccessor;
@@ -153,6 +213,14 @@ public class APIField {
 
     public void setIdChild(APIField idChild) {
         this.idChild = idChild;
+    }
+
+    public boolean isIndependent() {
+        return independent;
+    }
+
+    public void setIndependent(boolean independent) {
+        this.independent = independent;
     }
 
     public UnwrappedTranslations getFieldLabel() {
@@ -261,11 +329,15 @@ public class APIField {
     }
 
     public List<APIField> getChildren() {
-        return children;
+        if (children != null) {
+            return children.getList();
+        } else {
+            return ImmutableList.of();
+        }
     }
 
-    public void setChildren(List<APIField> children) {
-        this.children = children;
+    public void setChildren(List<APIField> list) {
+        children = new Fields(list);
     }
 
     public List<String> getDependencies() {
@@ -346,6 +418,22 @@ public class APIField {
 
     public void setTranslationType(TranslationSettings.TranslationType translationType) {
         this.translationType = translationType;
+    }
+
+    public String getDependencyRequired() {
+        return dependencyRequired;
+    }
+
+    public void setDependencyRequired(String dependencyRequired) {
+        this.dependencyRequired = dependencyRequired;
+    }
+
+    public String getUnconditionalRequired() {
+        return unconditionalRequired;
+    }
+
+    public void setUnconditionalRequired(String unconditionalRequired) {
+        this.unconditionalRequired = unconditionalRequired;
     }
 
     @Override

@@ -22,7 +22,7 @@ public class ContactImporter extends ObjectImporter<AmpContact> {
     public ContactImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getContactFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getContactBusinessRulesValidators()),
-                AmpFieldsEnumerator.getEnumerator().getContactFields());
+                AmpFieldsEnumerator.getEnumerator().getContactField());
     }
 
     public ContactImporter createContact(Map<String, Object> newJson) {

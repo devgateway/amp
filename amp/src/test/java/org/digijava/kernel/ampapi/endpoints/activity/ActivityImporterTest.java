@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
@@ -61,7 +62,8 @@ public class ActivityImporterTest {
     private ActivityImporter validateAndRetrieveImporter(Map<String, Object> json) {
         AmpActivityVersion activity = new AmpActivityVersion();
         activity.setApprovalStatus(ApprovalStatus.STARTED);
-        ActivityImporter importer = new ActivityImporter(Collections.emptyList(), new ActivityImportRules(true, false,
+        APIField activityField = new APIField();
+        ActivityImporter importer = new ActivityImporter(activityField, new ActivityImportRules(true, false,
                 false));
         importer.validateAndImport(activity, json, true);
         return importer;

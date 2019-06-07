@@ -5,7 +5,7 @@ package org.digijava.kernel.ampapi.endpoints.activity;
  */
 public interface FieldAccessor {
 
-    Object get(Object targetObject);
+    <T> T get(Object targetObject);
 
     void set(Object targetObject, Object value);
 }

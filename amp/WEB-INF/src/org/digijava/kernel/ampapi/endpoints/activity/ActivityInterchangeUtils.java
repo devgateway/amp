@@ -67,9 +67,9 @@ public final class ActivityInterchangeUtils {
      */
     public static JsonApiResponse<ActivitySummary> importActivity(Map<String, Object> newJson, boolean update,
             ActivityImportRules rules, String endpointContextPath) {
-        List<APIField> activityFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
+        APIField activityField = AmpFieldsEnumerator.getEnumerator().getActivityField();
 
-        return new ActivityImporter(activityFields, rules)
+        return new ActivityImporter(activityField, rules)
                 .importOrUpdate(newJson, update, endpointContextPath)
                 .getResult();
     }
@@ -312,33 +312,6 @@ public final class ActivityInterchangeUtils {
             logger.error("Error in loading activity. " + e.getMessage());
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Gets the value at the specified path from the JSON description of the activity.
-     *
-     * @param activity a JSON description of the activity
-     * @param path path to the field
-     * @return null if the path abruptly stops before reaching the end, or the value itself,
-     * if the end of the path is reached
-     */
-    public static Object getFieldValuesFromJsonActivity(Map<String, Object> activity, String path) {
-        String fieldPath = path;
-
-        Map<String, Object> currentBranch = activity;
-        while (fieldPath.contains("~")) {
-            String pathSegment = fieldPath.substring(0, fieldPath.indexOf('~'));
-            Object obj = currentBranch.get(pathSegment);
-            // TODO fix the access bug since 2.11 (we are lucky we need only 1st path so far, 2nd level can be a List)
-            if (obj != null && Map.class.isAssignableFrom(obj.getClass())) {
-                currentBranch = (Map) obj;
-            } else {
-                return null;
-            }
-            fieldPath = path.substring(fieldPath.indexOf('~') + 1);
-        }
-        //path is complete, object is set to proper value
-        return currentBranch.get(fieldPath);
     }
 
     /**

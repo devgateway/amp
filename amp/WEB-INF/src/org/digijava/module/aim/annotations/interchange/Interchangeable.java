@@ -4,7 +4,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -94,12 +93,34 @@ public @interface Interchangeable {
     Class<?> type() default DefaultType.class;
 
     /**
-     * Specifies the dependencies used for later checking in DependencyValidator. 
-     * Dependencies (path and value) are encoded via {@link InterchangeDependencyResolver} public static strings,
-     * like {@link InterchangeDependencyResolver#ON_BUDGET_KEY}.
-     * @return
+     * <p>Mark field whose value depends on some external condition. For example implementation location depends
+     * on implementation level. Or organization group used in pledge must match the group of the organization used in
+     * donor funding.</p>
+     *
+     * <p>To make a field required under certain conditions see {@link #requiredDependencies()}.</p>
+     *
+     * @return list of dependencies
      */
     String[] dependencies() default {};
+
+    /**
+     * Mark field as required only under some conditions. For example field becomes visible as in case
+     * of on budget fields. Or fields were visible but not required as in case of type of assistance and
+     * financing instrument.
+     *
+     * @return list of required dependencies
+     */
+    String[] requiredDependencies() default {};
+
+    /**
+     * Same as {@link #requiredFmPath()} but only for fields with dependencies.
+     */
+    String dependencyRequiredFMPath() default "";
+
+    /**
+     * Same as {@link #required()} but only for fields with dependencies.
+     */
+    ActivityEPConstants.RequiredValidation dependencyRequired() default ActivityEPConstants.RequiredValidation.NONE;
     
     /**
      * <p>Filter objects by specified discriminator value.
@@ -124,6 +145,11 @@ public @interface Interchangeable {
     String discriminatorOption() default "";
     
     Validators validators() default @Validators;
+
+    /**
+     * List of constraint validators that apply to the current field.
+     */
+    InterchangeableValidator[] interValidators() default {};
 
     /** regex pattern used for validation (mail, phone, fax) */
     String regexPattern() default "";

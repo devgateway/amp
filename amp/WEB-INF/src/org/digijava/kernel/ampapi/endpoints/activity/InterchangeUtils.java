@@ -223,4 +223,18 @@ public class InterchangeUtils {
         return new ApiRuntimeException(Response.Status.INTERNAL_SERVER_ERROR, error, e);
     }
 
+    /**
+     * If object is an Integer then it is converted to long. Otherwise object is cast to Long. If the object is not
+     * either Integer or Long, a ClassCastException will be raised.
+     *
+     * @param obj object to transform to long
+     * @return long value
+     */
+    public static Long intToLong(Object obj) {
+        if (obj instanceof Integer) {
+            return ((Integer) obj).longValue();
+        } else {
+            return (Long) obj;
+        }
+    }
 }

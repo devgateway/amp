@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +46,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -65,6 +67,8 @@ import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.validator.ActivityValidationContext;
+import org.digijava.module.aim.validator.groups.API;
+import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.editor.dbentity.Editor;
@@ -79,11 +83,15 @@ import org.hibernate.StaleStateException;
  * @author Nadejda Mandrescu
  */
 public class ActivityImporter extends ObjectImporter<ActivitySummary> {
+
     private static final Logger logger = Logger.getLogger(ActivityImporter.class);
     /**
      * FM path for the "Save as Draft" feature being enabled
      */
     private static final String SAVE_AS_DRAFT_PATH = "/Activity Form/Save as Draft";
+
+    private static final Class<?>[] DRAFT_VALIDATION_GROUPS = {API.class};
+    private static final Class<?>[] SUBMIT_VALIDATION_GROUPS = {API.class, Submit.class};
 
     private AmpActivityVersion newActivity = null;
     private AmpActivityVersion oldActivity = null;
@@ -104,10 +112,10 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
 
     private ResourceService resourceService = new ResourceService();
 
-    public ActivityImporter(List<APIField> apiFields, ActivityImportRules rules) {
+    public ActivityImporter(APIField apiField, ActivityImportRules rules) {
         super(new InputValidatorProcessor(InputValidatorProcessor.getActivityFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getActivityBusinessRulesValidators()),
-                apiFields);
+                apiField);
         setJsonErrorMapper(new ActivityErrorsMapper());
         this.rules = rules;
         this.saveContext = SaveContext.api(!rules.isProcessApprovalFields());
@@ -131,7 +139,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             newJson.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS));
         }
         this.newJson = newJson;
-        this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH, null);
+        this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH);
         this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
         this.endpointContextPath = endpointContextPath;
         initRequestedSaveMode();
@@ -147,8 +155,6 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     public ActivityImporter importOrUpdate(Map<String, Object> newJson, boolean update, String endpointContextPath) {
         init(newJson, update, endpointContextPath);
 
-        // retrieve fields definition for internal use
-        List<APIField> fieldsDef = getApiFields();
         // get existing activity if this is an update request
         Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
         boolean oldActivityDraft = false;
@@ -447,7 +453,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             key = (String) apiField.getFieldAccessor().get(parentObj);
         }
         if (key == null) { // init it in any case
-            key = getEditorKey(apiField.getFieldNameInternal());
+            key = AIHelper.getEditorKey(apiField.getFieldNameInternal());
         }
         for (Entry<String, Object> trn : trnJson.entrySet()) {
             String langCode = trn.getKey();
@@ -478,17 +484,12 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         }
         return key;
     }
-
-    private String getEditorKey(String fieldName) {
-        // must start with "aim-" since it is expected by AF like this...
-        return "aim-import-" + fieldName + "-" + System.currentTimeMillis();
-    }
-
+    
     protected void initEditor(Field field) {
         try {
             String currentValue = (String) field.get(newActivity);
             if (currentValue == null) {
-                currentValue = getEditorKey(field.getName());
+                currentValue = AIHelper.getEditorKey(field.getName());
                 field.setAccessible(true);
                 field.set(newActivity, currentValue);
             }
@@ -628,7 +629,8 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
      * Updates Proposed Project Cost amount depending on configuration (annual budget)
      */
     protected void updatePPCAmount() {
-        boolean isAnnualBudget = FMVisibility.isVisible("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost", null);
+        boolean isAnnualBudget = FMVisibility.isVisible(
+                "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost");
 
         if (isAnnualBudget && newActivity.getAnnualProjectBudgets() != null) {
             AmpFundingAmount ppc = newActivity.getProjectCostByType(AmpFundingAmount.FundingType.PROPOSED);
@@ -647,7 +649,8 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
      */
 
     protected void updateRoleFundings() {
-        boolean isSourceRoleEnalbed = FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Source Role", null);
+        boolean isSourceRoleEnalbed = FMVisibility.isVisible(
+                "/Activity Form/Funding/Funding Group/Funding Item/Source Role");
 
         if (!isSourceRoleEnalbed) {
             AmpRole role = org.digijava.module.aim.util.DbUtil.getAmpRole(Constants.FUNDING_AGENCY);
@@ -774,4 +777,19 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         return ActivityEPConstants.ACTIVITY;
     }
 
+    @Override
+    public void processInterViolationsForTypes(Map<String, Object> json, Object root) {
+        Set<ConstraintViolation> violations;
+        if (requestedSaveMode == SUBMIT && !downgradedToDraftSave) {
+            violations = getImporterInterchangeValidator().validate(getApiField(), root, SUBMIT_VALIDATION_GROUPS);
+            if (!violations.isEmpty() && isDraftFMEnabled && getImportRules().isCanDowngradeToDraft()) {
+                downgradeToDraftSave();
+                newActivity.setDraft(true);
+                violations = getImporterInterchangeValidator().validate(getApiField(), root, DRAFT_VALIDATION_GROUPS);
+            }
+        } else {
+            violations = getImporterInterchangeValidator().validate(getApiField(), root, DRAFT_VALIDATION_GROUPS);
+        }
+        getImporterInterchangeValidator().integrateErrorsIntoResult(violations, json);
+    }
 }

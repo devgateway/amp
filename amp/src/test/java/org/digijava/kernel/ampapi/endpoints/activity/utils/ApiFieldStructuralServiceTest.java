@@ -4,9 +4,9 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
@@ -31,7 +31,7 @@ public class ApiFieldStructuralServiceTest {
         List<APIField> clientFields = new ArrayList<>();
     
         APIField listFields = newListField("list");
-        listFields.getChildren().add(newLongField("id"));
+        listFields.setChildren(ImmutableList.of(newLongField("id")));
     
         clientFields.add(newLongField("id"));
         clientFields.add(listFields);
@@ -44,7 +44,7 @@ public class ApiFieldStructuralServiceTest {
         List<APIField> clientFields = new ArrayList<>();
     
         APIField listFields = newListField("list");
-        listFields.getChildren().add(newLongField("id"));
+        listFields.setChildren(ImmutableList.of(newLongField("id")));
     
         clientFields.add(newLongField("id"));
         clientFields.add(newStringField("title"));
@@ -60,7 +60,7 @@ public class ApiFieldStructuralServiceTest {
         List<APIField> clientFields = new ArrayList<>();
     
         APIField listFields = newListField("list");
-        listFields.getChildren().add(newLongField("id"));
+        listFields.setChildren(ImmutableList.of(newLongField("id")));
     
         clientFields.add(newStringField("id"));
         clientFields.add(newStringField("title"));
@@ -74,7 +74,7 @@ public class ApiFieldStructuralServiceTest {
         List<APIField> clientFields = new ArrayList<>();
         
         APIField listFields = newListField("list");
-        listFields.getChildren().add(newStringField("id"));
+        listFields.setChildren(ImmutableList.of(newStringField("id")));
         
         clientFields.add(newLongField("id"));
         clientFields.add(newStringField("title"));
@@ -88,7 +88,7 @@ public class ApiFieldStructuralServiceTest {
         List<APIField> clientFields = new ArrayList<>();
     
         APIField listFields = newListField("list");
-        listFields.getChildren().add(newLongField("id"));
+        listFields.setChildren(ImmutableList.of(newLongField("id")));
     
         clientFields.add(newLongField("id"));
         clientFields.add(newStringField("title"));
@@ -103,7 +103,7 @@ public class ApiFieldStructuralServiceTest {
         List<APIField> clientFields = new ArrayList<>();
         
         APIField listFields = newListField("list");
-        listFields.getChildren().add(newLongField("id"));
+        listFields.setChildren(ImmutableList.of(newLongField("id")));
         
         clientFields.add(newLongField("id"));
         clientFields.add(newStringField("title"));
@@ -117,7 +117,7 @@ public class ApiFieldStructuralServiceTest {
         List<APIField> fields = new ArrayList<>();
         
         APIField listFields = newListField("list");
-        listFields.getChildren().add(newLongField("id"));
+        listFields.setChildren(ImmutableList.of(newLongField("id")));
     
         fields.add(newLongField("id"));
         fields.add(newStringField("title"));

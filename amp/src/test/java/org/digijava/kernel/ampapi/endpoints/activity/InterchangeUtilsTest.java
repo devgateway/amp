@@ -139,35 +139,6 @@ public class InterchangeUtilsTest {
     }
 
     @Test
-    public void testGetFieldValueFromJsonSimple() throws Exception {
-        Map<String, Object> activity = new HashMap<>();
-        activity.put("name", "Activity Name");
-        assertEquals("Activity Name", ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, "name"));
-    }
-
-    @Test
-    public void testGetFieldValueFromJsonNested() throws Exception {
-        Map<String, Object> activity = new HashMap<>();
-        Map<String, Object> nestedObj = new HashMap<>();
-        nestedObj.put("field", "Nested Value");
-        activity.put("nested", nestedObj);
-        assertEquals("Nested Value", ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
-    }
-
-    @Test
-    public void testGetFieldValueFromJsonNestedMissing() throws Exception {
-        Map<String, Object> activity = new HashMap<>();
-        assertEquals(null, ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
-    }
-
-    @Test
-    public void testGetFieldValueFromJsonNestedWrongType() throws Exception {
-        Map<String, Object> activity = new HashMap<>();
-        activity.put("nested", new Object());
-        assertEquals(null, ActivityInterchangeUtils.getFieldValuesFromJsonActivity(activity, "nested~field"));
-    }
-
-    @Test
     public void testFormatTimestamp() throws Exception {
         assertEquals("1973-11-26T00:52:03.123+0000", DateTimeUtil.formatISO8601Timestamp(new Date(123123123123L)));
     }

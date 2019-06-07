@@ -10,14 +10,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.validators.resource.ResourceRequiredValidator;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601TimeStampSerializer;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.ResourceFieldsConstants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -29,6 +31,7 @@ import io.swagger.annotations.ApiModelProperty.AccessMode;
  * @author Viorel Chihai
  *
  */
+@InterchangeableValidator(ResourceRequiredValidator.class)
 @JsonPropertyOrder({ ResourceEPConstants.UUID, ResourceEPConstants.TITLE, ResourceEPConstants.FILE_NAME,
     ResourceEPConstants.WEB_LINK, ResourceEPConstants.DESCRIPTION, ResourceEPConstants.NOTE,
     ResourceEPConstants.TYPE, ResourceEPConstants.LINK, ResourceEPConstants.YEAR_OF_PUBLICATION,
@@ -47,14 +50,16 @@ public class AmpResource {
     @JsonProperty(ResourceEPConstants.TITLE)
     private MultilingualContent title;
 
-    @Interchangeable(fieldTitle = "File Name", importable = true, required = ALWAYS,
-            dependencies = InterchangeDependencyResolver.RESOURCE_TYPE_FILE_VALID_KEY)
+    @Interchangeable(fieldTitle = ResourceFieldsConstants.FILE_NAME, importable = true,
+            requiredDependencies = ResourceRequiredValidator.RESOURCE_TYPE_FILE_VALID_KEY,
+            dependencyRequired = ALWAYS)
     @JsonProperty(ResourceEPConstants.FILE_NAME)
     @JsonView(ResourceView.File.class)
     private String fileName;
 
-    @Interchangeable(fieldTitle = "Web Link", importable = true, required = ALWAYS,
-            dependencies = InterchangeDependencyResolver.RESOURCE_TYPE_LINK_VALID_KEY)
+    @Interchangeable(fieldTitle = ResourceFieldsConstants.WEB_LINK, importable = true,
+            requiredDependencies = ResourceRequiredValidator.RESOURCE_TYPE_LINK_VALID_KEY,
+            dependencyRequired = ALWAYS)
     @JsonProperty(ResourceEPConstants.WEB_LINK)
     @ApiModelProperty(example = "https://www.postgresql.org/docs/9.2/static/sql-createcast.html")
     @JsonView(ResourceView.Link.class)

@@ -4,8 +4,12 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.emptyIterable;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -29,6 +33,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.common.ObjectImporterAnyType;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.module.aim.annotations.interchange.Independent;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
@@ -79,6 +84,13 @@ public class ObjectImporterTest {
                 @Interchangeable(fieldTitle = "Height", discriminatorOption = "Height", importable = true,
                         multipleValues = false, pickIdOnly = true)})
         private Set<PersonAttribute> attributes = new HashSet<>();
+
+        @Independent
+        @Interchangeable(fieldTitle = "Agreement", importable = true)
+        private Agreement agreement;
+
+        @Interchangeable(fieldTitle = "Details", importable = true)
+        private ParentDetails details;
 
         public Parent() {
         }
@@ -170,6 +182,90 @@ public class ObjectImporterTest {
 
         void addAttribute(PersonAttribute attribute) {
             attributes.add(attribute);
+        }
+
+        public Agreement getAgreement() {
+            return agreement;
+        }
+
+        public void setAgreement(Agreement agreement) {
+            this.agreement = agreement;
+        }
+
+        public ParentDetails getDetails() {
+            return details;
+        }
+
+        public void setDetails(ParentDetails details) {
+            this.details = details;
+        }
+    }
+
+    public static class ParentDetails {
+
+        @InterchangeableId
+        @Interchangeable(fieldTitle = "Id")
+        private Long id;
+
+        @Interchangeable(fieldTitle = "Detail", importable = true)
+        private String detail;
+
+        public ParentDetails(Long id, String detail) {
+            this.id = id;
+            this.detail = detail;
+        }
+
+        public ParentDetails() {
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public String getDetail() {
+            return detail;
+        }
+
+        public void setDetail(String detail) {
+            this.detail = detail;
+        }
+    }
+
+    public static class Agreement {
+
+        @InterchangeableId
+        @Interchangeable(fieldTitle = "Id")
+        private Long id;
+
+        @Interchangeable(fieldTitle = "Description", importable = true)
+        private String description;
+
+        public Agreement(Long id, String description) {
+            this.id = id;
+            this.description = description;
+        }
+
+        public Agreement() {
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
         }
     }
 
@@ -437,6 +533,9 @@ public class ObjectImporterTest {
 
     private ObjectImporter importer;
 
+    /**
+     * Examples might be modified during import. It is important to recreate them before each test.
+     */
     private Map examples;
 
     @Before
@@ -452,7 +551,7 @@ public class ObjectImporterTest {
 
         FieldsEnumerator fe =
                 new FieldsEnumerator(provider, fmService, translatorService, s -> true);
-        List<APIField> apiFields = fe.getAllAvailableFields(Parent.class);
+        APIField apiField = fe.getMetaModel(Parent.class);
 
         InputValidatorProcessor formatValidator = new InputValidatorProcessor(Collections.emptyList());
         InputValidatorProcessor businessRulesValidator = new InputValidatorProcessor(Collections.emptyList());
@@ -461,7 +560,7 @@ public class ObjectImporterTest {
 
         TranslationSettings plainEnglish = new TranslationSettings("en", Collections.singleton("en"), false);
 
-        importer = new ObjectImporterAnyType(formatValidator, businessRulesValidator, plainEnglish, apiFields,
+        importer = new ObjectImporterAnyType(formatValidator, businessRulesValidator, plainEnglish, apiField,
                 valueConverter);
     }
 
@@ -677,7 +776,35 @@ public class ObjectImporterTest {
     }
 
     @Test
-    public void testRemoveElementInCollection() {
+    public void testRemoveElementInCollectionOnNullValue() {
+        Map<String, Object> json = new HashMap<>();
+        json.put("home", null);
+
+        Parent parent = new Parent();
+        parent.addAddress(new Address(1L, "H", "Home", "123"));
+
+        importer.validateAndImport(parent, json);
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, parentWithAddresses(null, null, emptyIterable()));
+    }
+
+    @Test
+    public void testRemoveElementInCollectionOnEmptyValue() {
+        Map<String, Object> json = new HashMap<>();
+        json.put("home", new ArrayList<>());
+
+        Parent parent = new Parent();
+        parent.addAddress(new Address(1L, "H", "Home", "123"));
+
+        importer.validateAndImport(parent, json);
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, parentWithAddresses(null, null, emptyIterable()));
+    }
+
+    @Test
+    public void testMissingFieldForDiscriminatedCollection() {
         Map<String, Object> json = new HashMap<>();
 
         Parent parent = new Parent();
@@ -687,6 +814,132 @@ public class ObjectImporterTest {
 
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, parentWithAddresses(null, null, emptyIterable()));
+    }
+
+    // no longer possible
+    @Test
+    public void testAgreementUpdate() {
+        Parent parent = new Parent();
+        Agreement origAgreement = new Agreement(1L, "x");
+        parent.setAgreement(origAgreement);
+
+        importer.validateAndImport(parent, (Map<String, Object>) examples.get("agreement-update"));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, hasProperty("agreement", allOf(
+                agreement(null, "Desc 1"),
+                not(sameInstance(origAgreement)))));
+    }
+
+    @Test
+    public void testAgreementWasNull() {
+        Parent parent = new Parent();
+        parent.setAgreement(new Agreement(1L, "x"));
+
+        importer.validateAndImport(parent, (Map<String, Object>) examples.get("agreement-null"));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, hasProperty("agreement", nullValue()));
+    }
+
+    @Test
+    public void testAgreementMissing() {
+        Parent parent = new Parent();
+        parent.setAgreement(new Agreement(1L, "x"));
+
+        importer.validateAndImport(parent, new HashMap<>());
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, hasProperty("agreement", nullValue()));
+    }
+
+    @Test
+    public void testAgreementEmpty() {
+        Parent parent = new Parent();
+        parent.setAgreement(new Agreement(1L, "x"));
+
+        importer.validateAndImport(parent, (Map<String, Object>) examples.get("agreement-empty"));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, hasProperty("agreement", agreement(null, null)));
+    }
+
+    @Test
+    public void testAgreementInsert() {
+        Parent parent = new Parent();
+
+        importer.validateAndImport(parent, (Map<String, Object>) examples.get("agreement-insert"));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, hasProperty("agreement", agreement(null, "Desc")));
+    }
+
+    @Test
+    public void testAgreementOverwriteMissingId() {
+        Parent parent = new Parent();
+        parent.setAgreement(new Agreement(1L, "x"));
+
+        importer.validateAndImport(parent, (Map<String, Object>) examples.get("agreement-insert"));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, hasProperty("agreement", agreement(null, "Desc")));
+    }
+
+    @Test
+    public void testAgreementOverwriteNullId() {
+        Parent parent = new Parent();
+        parent.setAgreement(new Agreement(2L, "x"));
+
+        importer.validateAndImport(parent, (Map<String, Object>) examples.get("agreement-null-id"));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, hasProperty("agreement", agreement(null, "Desc 1")));
+    }
+
+    @Test
+    public void testAgreementIdMismatch() {
+        Parent parent = new Parent();
+        parent.setAgreement(new Agreement(2L, "x"));
+
+        importer.validateAndImport(parent, (Map<String, Object>) examples.get("agreement-update"));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, hasProperty("agreement", agreement(null, "Desc 1")));
+    }
+
+    @Test
+    public void testDetailUpdated() {
+        Parent parent = new Parent();
+        ParentDetails originalDetails = new ParentDetails(2L, "draft details");
+        parent.setDetails(originalDetails);
+
+        importer.validateAndImport(parent, (Map<String, Object>) examples.get("details-full"));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, hasProperty("details",
+                allOf(
+                        detail(2L, "Detail A"),
+                        sameInstance(originalDetails))));
+    }
+
+    @Test
+    public void testDetailInserted() {
+        Parent parent = new Parent();
+
+        importer.validateAndImport(parent, (Map<String, Object>) examples.get("details-full"));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, hasProperty("details", detail(null, "Detail A")));
+    }
+
+    private Matcher<Agreement> agreement(Long id, String desc) {
+        return allOf(hasProperty("id", equalTo(id)),
+                hasProperty("description", equalTo(desc)));
+    }
+
+    private Matcher<ParentDetails> detail(Long id, String detail) {
+        return allOf(hasProperty("id", equalTo(id)),
+                hasProperty("detail", equalTo(detail)));
     }
 
     private Matcher<Parent> parent(String name, Integer age) {

@@ -816,7 +816,6 @@ public class ActivityImporter extends ObjectImporter {
         } else {
             violations = getImporterInterchangeValidator().validate(getApiField(), root, DRAFT_VALIDATION_GROUPS);
         }
-        getImporterInterchangeValidator().integrateErrorsIntoResult(violations, json,
-                ConstraintDescriptor.ConstraintTarget.TYPE);
+        getImporterInterchangeValidator().integrateTypeErrorsIntoResult(violations, json);
     }
 }

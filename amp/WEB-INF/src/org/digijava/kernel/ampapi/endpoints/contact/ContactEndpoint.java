@@ -25,6 +25,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.contact.dto.ContactView;
+import org.digijava.kernel.ampapi.endpoints.contact.dto.SwaggerContact;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -92,8 +93,9 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
     @ApiOperation("Retrieve contact")
-    public Map<String, Object> getContact(@ApiParam("contact id") @PathParam("id") Long id) {
-        return ContactUtil.getContact(id);
+    public SwaggerContact getContact(@ApiParam("contact id") @PathParam("id") Long id) {
+        Map<String, Object> contact = ContactUtil.getContact(id);
+        return new SwaggerContact(contact);
     }
 
     @POST
@@ -116,8 +118,8 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
             message = "error if invalid contact received")
     })
     @JsonView(ContactView.Summary.class)
-    public JsonApiResponse<AmpContact> createContact(Map<String, Object> contact) {
-        return new ContactImporter().createContact(contact).getResult();
+    public JsonApiResponse<AmpContact> createContact(SwaggerContact contact) {
+        return new ContactImporter().createContact(contact.getMap()).getResult();
     }
 
     @POST
@@ -133,8 +135,8 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     })
     @JsonView(ContactView.Summary.class)
     public JsonApiResponse<AmpContact> updateContact(@ApiParam("id of the existing contact") @PathParam("id") Long id,
-            Map<String, Object> contact) {
-        return new ContactImporter().updateContact(id, contact).getResult();
+            SwaggerContact contact) {
+        return new ContactImporter().updateContact(id, contact.getMap()).getResult();
     }
 
     @Override

@@ -36,7 +36,7 @@ public final class ActivityTranslationUtils {
         return field.getAnnotation(VersionableFieldTextEditor.class) != null;
     }
 
-    private static boolean isMultilignaulContentField(Field field) {
+    private static boolean isMultilingualContentField(Field field) {
         return MultilingualContent.class.isAssignableFrom(field.getType());
     }
 
@@ -66,7 +66,7 @@ public final class ActivityTranslationUtils {
         // check if this is translatable field
         boolean isTranslatable = translationSettings.isTranslatable(field);
         boolean isEditor = isVersionableTextField(field);
-        boolean isMultilingualContent = isMultilignaulContentField(field);
+        boolean isMultilingualContent = isMultilingualContentField(field);
 
         // provide map for translatable fields
         if (isTranslatable) {

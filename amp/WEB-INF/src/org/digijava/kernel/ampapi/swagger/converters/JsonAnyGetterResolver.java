@@ -9,9 +9,12 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.databind.JavaType;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.SwaggerActivity;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
+import org.digijava.kernel.ampapi.endpoints.contact.dto.SwaggerContact;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerResource;
 
 import io.swagger.converter.ModelConverter;
 import io.swagger.converter.ModelConverterContext;
@@ -54,21 +57,22 @@ public class JsonAnyGetterResolver extends AbstractModelConverter {
         if (context.getJsonView() != null) {
             for (Class<?> jsonView : context.getJsonView().value()) {
                 if (rawType.isAssignableFrom(JsonApiResponse.class)) {
-                    if (org.digijava.kernel.ampapi.endpoints.activity.dto.ImportView.class.isAssignableFrom(jsonView)) {
-                        addObjectProperty(
-                                props, ActivityEPConstants.ACTIVITY, "the activity that was provided as an input");
+                    if (org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityView.Import.class
+                            .isAssignableFrom(jsonView)) {
+                        addObjectProperty(props, ActivityEPConstants.ACTIVITY,
+                                "the activity that was provided as an input", SwaggerActivity.getExample());
                         return true;
                     }
                     if (org.digijava.kernel.ampapi.endpoints.contact.dto.ContactView.Summary.class
                             .isAssignableFrom(jsonView)) {
-                        addObjectProperty(
-                                props, ContactEPConstants.CONTACT, "the contact that was provided as an input");
+                        addObjectProperty(props, ContactEPConstants.CONTACT,
+                                "the contact that was provided as an input", SwaggerContact.getExample());
                         return true;
                     }
                     if (org.digijava.kernel.ampapi.endpoints.resource.dto.ResourceView.Common.class
                             .isAssignableFrom(jsonView)) {
-                        addObjectProperty(
-                                props, ResourceEPConstants.RESOURCE, "the resource that was provided as an input");
+                        addObjectProperty(props, ResourceEPConstants.RESOURCE,
+                                "the resource that was provided as an input", SwaggerResource.getExample());
                         return true;
                     }
                 }
@@ -78,8 +82,9 @@ public class JsonAnyGetterResolver extends AbstractModelConverter {
         return false;
     }
 
-    private void addObjectProperty(Map<String, Property> properties, String name, String description) {
+    private void addObjectProperty(Map<String, Property> properties, String name, String description, Object example) {
         ObjectProperty prop = new ObjectProperty();
+        prop.example(example);
         prop.setDescription(description);
         properties.put(name, prop);
     }

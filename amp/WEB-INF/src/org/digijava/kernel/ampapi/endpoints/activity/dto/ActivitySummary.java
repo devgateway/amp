@@ -51,17 +51,17 @@ public class ActivitySummary {
     private Date updatedDate;
 
     @JsonProperty("activity_group")
-    @JsonView(ImportView.class)
+    @JsonView(ActivityView.Import.class)
     private AmpActivityGroup ampActivityGroup;
 
     @JsonProperty(ActivityEPConstants.EDIT)
-    private boolean editable;
+    private Boolean editable;
 
     @JsonProperty(ActivityEPConstants.VIEW)
-    private boolean viewable;
+    private Boolean viewable;
 
     @JsonProperty("workspaces_edit")
-    @JsonView(ListView.class)
+    @JsonView(ActivityView.List.class)
     private Set<Long> workspaces;
 
     public Object getAmpActivityId() {
@@ -128,7 +128,7 @@ public class ActivitySummary {
         this.workspaces = workspaces;
     }
 
-    public boolean isEditable() {
+    public Boolean isEditable() {
         return editable;
     }
 
@@ -136,7 +136,7 @@ public class ActivitySummary {
         this.editable = editable;
     }
 
-    public boolean isViewable() {
+    public Boolean isViewable() {
         return viewable;
     }
 

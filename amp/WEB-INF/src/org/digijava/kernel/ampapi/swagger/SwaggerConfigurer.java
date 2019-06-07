@@ -6,6 +6,7 @@ import org.digijava.kernel.ampapi.swagger.converters.JAXBElementUnwrapper;
 import org.digijava.kernel.ampapi.swagger.converters.JsonAnyGetterResolver;
 import org.digijava.kernel.ampapi.swagger.converters.JsonSerializeUsingResolver;
 import org.digijava.kernel.ampapi.swagger.converters.ReportTypesResolver;
+import org.digijava.kernel.ampapi.swagger.converters.SwaggerMapWrapperResolver;
 import org.digijava.kernel.ampapi.swagger.types.FiltersPH;
 import org.digijava.kernel.ampapi.swagger.types.PublicHeadersPH;
 import org.digijava.kernel.ampapi.swagger.types.PublicTopDataPH;
@@ -33,6 +34,8 @@ public class SwaggerConfigurer {
         ModelConverters.getInstance().addConverter(new ReportTypesResolver());
 
         ModelConverters.getInstance().addConverter(new JsonAnyGetterResolver());
+
+        ModelConverters.getInstance().addConverter(new SwaggerMapWrapperResolver());
 
         ModelConverters.getInstance().read(FiltersPH.class);
         ModelConverters.getInstance().read(SettingsPH.class);

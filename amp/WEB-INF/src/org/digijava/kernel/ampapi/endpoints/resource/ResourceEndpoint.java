@@ -36,6 +36,8 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.ResourceView;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerListResource;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerResource;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
@@ -102,36 +104,26 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @Path("{uuid}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getResource", ui = false)
-    @ApiOperation(
-            value = "Retrieve resource by uuid.",
-            notes = "<h3>Sample response:</h3><pre>\n"
-                    + " {\n"
-                    + "    \"uuid\": \"05a2f2d4-58f5-4198-8a05-cf42a758ce85\",\n"
-                    + "    \"title\": \"fda\",\n"
-                    + "    \"file_name\": null,\n"
-                    + "    \"web_link\": \"https://www.postgresql.org/docs/9.2/static/sql-createcast.html\",\n"
-                    + "    \"description\": \"fdas\",\n"
-                    + "    \"note\": \"fda\",\n"
-                    + "    \"type\": 50,\n"
-                    + "    \"url\": \"/contentrepository/downloadFile.do?uuid=05a2f2d4-58f5-4198-8a05-cf42a758ce85\",\n"
-                    + "    \"year_of_publication\": \"2002\",\n"
-                    + "    \"adding_date\": \"2018-05-03T15:03:40.607+0300\",\n"
-                    + "    \"file_size\": 0,\n"
-                    + "    \"public\": false,\n"
-                    + "    \"private\": true,\n"
-                    + "    \"creator_email\": \"atl@amp.org\",\n"
-                    + "    \"team\": null,\n"
-                    + "    \"team_member\": 14\n"
-                    + " }\n"
-                    + " </pre>")
-    public JsonApiResponse getResource(@PathParam("uuid") String uuid) {
+    @ApiOperation("Retrieve resource by uuid")
+    @ApiResponses({
+        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "AmpResource_Full",
+                message = "resource with all fields"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
+                message = "error if invalid configuration is received")})
+    @JsonView(ResourceView.Full.class)
+    public JsonApiResponse<AmpResource> getResource(@PathParam("uuid") String uuid) {
         return resourceService.getResource(uuid);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getAllResources", ui = false)
-    @ApiOperation("Retrieve all resources from AMP.")
+    @ApiOperation(value = "Retrieve all resources from AMP.")
+    @ApiResponses({
+        @ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerListResource.class,
+                message = "list of resources with full information"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
+                message = "error if a probel encountered")})
     public List<JsonApiResponse> getAllResources() {
         return resourceService.getAllResources();
     }
@@ -140,6 +132,11 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getAllResourcesByIds", ui = false)
     @ApiOperation("Retrieve resources from AMP.")
+    @ApiResponses({
+        @ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerListResource.class,
+                message = "list of resources with full information"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
+                message = "error if a probel encountered")})
     public List<JsonApiResponse> getAllResources(List<String> uuids) {
         return resourceService.getAllResources(uuids);
     }
@@ -164,8 +161,8 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
         @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Link",
                 message = "error if invalid configuration is received")})
     @JsonView(ResourceView.Link.class)
-    public JsonApiResponse<AmpResource> createResource(Map<String, Object> resource) {
-        return new ResourceImporter().createResource(resource).getResult();
+    public JsonApiResponse<AmpResource> createResource(@ApiParam("resource configuration") SwaggerResource resource) {
+        return new ResourceImporter().createResource(resource.getMap()).getResult();
     }
 
     @PUT
@@ -185,11 +182,12 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @ApiResponses({
         @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
                 message = "the brief representationresource"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_File",
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_File-or-Link",
                 message = "error if invalid configuration is received")})
     @JsonView({ ResourceView.File.class, ResourceView.Link.class })
     public JsonApiResponse<AmpResource> createDocResource(
-            @FormDataParam("resource") Map<String, Object> resource,
+            @FormDataParam("resource") @ApiParam(value = "resource configuration", type = "SwaggerResource")
+            SwaggerResource resource,
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail) {
 
@@ -206,7 +204,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                 FileUtils.copyInputStreamToFile(uploadedInputStream, file);
                 formFile = new JerseyFileAdapter(fileDetail, file);
             }
-            return new ResourceImporter().createResource(resource, formFile).getResult();
+            return new ResourceImporter().createResource(resource.getMap(), formFile).getResult();
         } catch (IOException e) {
             logger.error("Failed to process file.", e);
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST,

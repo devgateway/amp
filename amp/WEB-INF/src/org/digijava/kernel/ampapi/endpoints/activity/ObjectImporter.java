@@ -67,8 +67,6 @@ public class ObjectImporter {
 
     private Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper = new DefaultErrorsMapper();
     
-    protected boolean update = false;
-
     private ImporterInterchangeValidator importerInterchangeValidator = new ImporterInterchangeValidator(errors);
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
@@ -529,10 +527,6 @@ public class ObjectImporter {
     
     public Map<Integer, ApiErrorMessage> getErrors() {
         return errors;
-    }
-    
-    public boolean isUpdate() {
-        return update;
     }
     
     public Collection<ApiErrorMessage> getWarnings() {

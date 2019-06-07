@@ -35,10 +35,10 @@ public class UUIDValidator extends InputValidator {
         
         if (fieldDescription.getFieldName().equals(FieldMap.underscorify(ActivityFieldsConstants.UUID))) {
             String uuid = null;
-            if (!newFieldParent.containsKey(fieldDescription.getFieldName()) && importer.isUpdate()) {
-                uuid = fieldDescription.getFieldAccessor().get(currentObject);
-            } else {
+            if (newFieldParent.containsKey(fieldDescription.getFieldName())) {
                 uuid = StringUtils.trim((String) newFieldParent.get(fieldDescription.getFieldName()));
+            } else {
+                uuid = fieldDescription.getFieldAccessor().get(currentObject);
             }
             return ((ActivityImporter) importer).getResourceService().getPrivateUuids().contains(uuid);
         }

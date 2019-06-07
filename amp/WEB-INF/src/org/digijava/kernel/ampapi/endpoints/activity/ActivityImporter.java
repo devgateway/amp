@@ -113,6 +113,8 @@ public class ActivityImporter extends ObjectImporter {
     // latest activity id in case there was attempt to update older version of an activity
     private Long latestActivityId;
     
+    protected boolean update = false;
+    
     private ResourceService resourceService = new ResourceService();
 
     public ActivityImporter(APIField apiField, ActivityImportRules rules) {

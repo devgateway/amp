@@ -249,7 +249,6 @@ public class RequiredValidatorTest {
     @Test
     public void testAlwaysRequiredFieldNotPresentInJsonPresentInObjectOnUpdate() {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
-        when(importer.isUpdate()).thenReturn(true);
         
         assertValidator(EMPTY_BEAN, new SampleObject("test"), fd(FIELD_ALWAYS_REQUIRED), null, false);
     }
@@ -257,7 +256,6 @@ public class RequiredValidatorTest {
     @Test
     public void testAlwaysRequiredFieldNotPresentInJsonPresentInObjectCollectionOnUpdate() {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
-        when(importer.isUpdate()).thenReturn(true);
         
         assertValidator(EMPTY_BEAN, new SampleObject(Stream.of("test").collect(Collectors.toList())), fdList(FIELD_ALWAYS_REQUIRED), null, false);
     }
@@ -265,7 +263,6 @@ public class RequiredValidatorTest {
     @Test
     public void testAlwaysRequiredFieldNotPresentInJsonNotPresentInObjectOnUpdate() {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
-        when(importer.isUpdate()).thenReturn(true);
         
         assertValidator(EMPTY_BEAN, new SampleObject(), fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
@@ -273,7 +270,6 @@ public class RequiredValidatorTest {
     @Test
     public void testAlwaysRequiredFieldNotPresentInJsonNotPresentInObjectEmptyOnUpdate() {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
-        when(importer.isUpdate()).thenReturn(true);
         
         assertValidator(EMPTY_BEAN, new SampleObject(), fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
@@ -281,7 +277,6 @@ public class RequiredValidatorTest {
     @Test
     public void testAlwaysRequiredFieldNotPresentInJsonNotPresentInObjectEmptyCollectionOnUpdate() {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
-        when(importer.isUpdate()).thenReturn(true);
         
         assertValidator(EMPTY_BEAN, new SampleObject(), fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }

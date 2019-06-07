@@ -44,7 +44,7 @@ public class RequiredValidator extends InputValidator {
         String requiredStatus = fieldDescription.getUnconditionalRequired();
         boolean importable = fieldDescription.isImportable();
     
-        if (!newFieldParent.containsKey(fieldName) && importer.isUpdate()) {
+        if (!newFieldParent.containsKey(fieldName)) {
             fieldValue = fieldDescription.getFieldAccessor().get(currentObject);
         }
         

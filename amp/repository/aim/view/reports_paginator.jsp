@@ -59,7 +59,7 @@ pageContext.setAttribute("actualPage", new Integer(aimTeamReportsForm.getPage())
         <c:set target="${urlParamsPagination}" property="page" value="${pageidx - 1}"/>
         <c:if test="${(pageidx - 1) eq actualPage}">
 						                                							<span style="background-color: #FF6000; margin-left:2px; margin-right:2px; color: white; padding: 1px 3px; font-weight: bold; border: 1px solid #CCCCCC;">
-						                                								<bean:write name="pageidx"/>
+						                                								<digi:easternArabicNumber><bean:write name="pageidx"/></digi:easternArabicNumber>
 						                                							</span>
         </c:if>
         <c:if test="${(pageidx - 1) ne actualPage}">
@@ -67,7 +67,7 @@ pageContext.setAttribute("actualPage", new Integer(aimTeamReportsForm.getPage())
                 <c:set target="${urlParamsPagination}" property="tabs" value="true"/>
             </c:if>
             <digi:link href="/viewTeamReports.do"  name="urlParamsPagination" >
-                <bean:write name="pageidx"/>
+                <digi:easternArabicNumber><bean:write name="pageidx"/></digi:easternArabicNumber>
             </digi:link>
         </c:if>
         <c:if test="${(pageidx - 1) ne actualPage or actualPage != maxpages - 1}">&nbsp;|&nbsp;</c:if>

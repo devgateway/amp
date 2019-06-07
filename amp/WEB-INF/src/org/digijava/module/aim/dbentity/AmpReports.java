@@ -153,7 +153,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
     public String getFormatedUpdatedDate() {
         String result = null;
         if (this.updatedDate != null) {
-            result = DateTimeUtil.formatDate(this.updatedDate);
+            result = DateTimeUtil.formatDateLocalized(this.updatedDate);
         }
         return result;
     }
@@ -161,7 +161,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
     public String getFormatedPublishedDate() {
         String result = null;
         if (this.publishedDate != null) {
-            result = DateTimeUtil.formatDate(this.publishedDate);
+            result = DateTimeUtil.formatDateLocalized(this.publishedDate);
         }
         return result;
     }

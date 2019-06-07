@@ -135,9 +135,8 @@ public class ObjectImporter {
      * @param root internal representation of the object
      */
     public void processInterViolationsForTypes(Map<String, Object> json, Object root) {
-        importerInterchangeValidator.integrateErrorsIntoResult(
-                importerInterchangeValidator.validate(apiField, root), json,
-                ConstraintDescriptor.ConstraintTarget.TYPE);
+        importerInterchangeValidator.integrateTypeErrorsIntoResult(
+                importerInterchangeValidator.validate(apiField, root), json);
     }
 
     public ImporterInterchangeValidator getImporterInterchangeValidator() {
@@ -236,20 +235,20 @@ public class ObjectImporter {
                 fieldDef.getFieldAccessor().set(newParent, newValue);
             }
 
-            validateField(fieldDef, newParent, newJsonParent);
+            validateField(fieldDef, newParent, newJsonParent, fieldPath);
         }
         return isValidFormat;
     }
 
-    protected void validateField(APIField field, Object parentObject, Map<String, Object> parentJson) {
+    protected void validateField(APIField field, Object parentObject, Map<String, Object> parentJson,
+            String fieldPath) {
         Object fieldValue = field.getFieldAccessor().get(parentObject);
 
         Set<org.digijava.kernel.validation.ConstraintViolation> violations =
                 importerInterchangeValidator.validateField(field, fieldValue);
 
         if (!violations.isEmpty()) {
-            importerInterchangeValidator.integrateErrorsIntoResult(violations, parentJson,
-                    ConstraintDescriptor.ConstraintTarget.FIELD);
+            importerInterchangeValidator.integrateFieldErrorsIntoResult(violations, parentJson, fieldPath);
         }
     }
 

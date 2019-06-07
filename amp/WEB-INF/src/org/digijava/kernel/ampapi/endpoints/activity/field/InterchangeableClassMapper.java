@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
-import com.google.common.collect.ImmutableMap;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+
+import com.google.common.collect.ImmutableMap;
+
+import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 
 /**
  * Stores different mapping between internal constants, classes, types and their JSON representation, etc
@@ -19,19 +19,20 @@ public final class InterchangeableClassMapper {
         .put(java.lang.Long.class, FieldType.LONG)
         .put(java.lang.Float.class, FieldType.FLOAT)
         .put(java.lang.Enum.class, FieldType.STRING)
+        .put(MultilingualContent.class, FieldType.STRING)
         .build();
 
     private InterchangeableClassMapper() {
     }
-    
+
     public static FieldType getCustomMapping(Class<?> clazz) {
         return CLASS_TO_TYPE.get(adjust(clazz));
     }
-    
+
     public static boolean containsSimpleClass(Class<?> clazz) {
         return CLASS_TO_TYPE.containsKey(adjust(clazz));
     }
-    
+
     private static Class<?> adjust(Class<?> clazz) {
         if (Enum.class.isAssignableFrom(clazz)) {
             clazz = Enum.class;

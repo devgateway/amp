@@ -1,7 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import java.util.List;
-
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.TestValueConverter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
@@ -16,9 +14,9 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 public class ObjectImporterAnyType extends ObjectImporter<Object> {
 
     public ObjectImporterAnyType(InputValidatorProcessor formatValidator,
-            InputValidatorProcessor businessRulesValidator, TranslationSettings plainEnglish, List<APIField> apiFields,
+            InputValidatorProcessor businessRulesValidator, TranslationSettings plainEnglish, APIField apiField,
             TestValueConverter valueConverter) {
-        super(formatValidator, businessRulesValidator, plainEnglish, apiFields, valueConverter);
+        super(formatValidator, businessRulesValidator, plainEnglish, apiField, valueConverter);
     }
 
     @Override

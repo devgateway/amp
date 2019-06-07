@@ -9,6 +9,7 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.digijava.module.aim.helper.EasternArabicService;
 
 import java.util.List;
 
@@ -45,8 +46,10 @@ public class FileUploadResourceReference extends ResourceReference
                         fileJson.put("size", fileItem.getSize());
                         fileJson.put("uploadTxt", TranslatorUtil.getTranslatedText("File") + " '"
                                 + fileItem.getName() + "' " +  TranslatorUtil.
-                                getTranslatedText("was uploaded, with size") + " '" + fileItem.getSize()
-                                + "'" + TranslatorUtil.getTranslatedText("bytes"));
+                                getTranslatedText("was uploaded, with size") + " '"
+                                + EasternArabicService.getInstance()
+                                    .convertToEasternArabicBasedOnCurrentLocale(Long.toString(fileItem.getSize()))
+                                + "' " + TranslatorUtil.getTranslatedText("bytes"));
 
                     } catch (JSONException e) {
                         try {

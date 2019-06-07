@@ -18,14 +18,18 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.contact.dto.ContactView;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
+import org.digijava.module.aim.dbentity.AmpContact;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -105,8 +109,14 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "createContact", ui = false)
     @ApiOperation("Create new contact")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "brief representation of contact"))
-    public JsonApiResponse createContact(Map<String, Object> contact) {
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpServletResponse.SC_OK, reference = "AmpContact_Summary",
+                    message = "brief representation of contact"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Summary",
+            message = "error if invalid contact received")
+    })
+    @JsonView(ContactView.Summary.class)
+    public JsonApiResponse<AmpContact> createContact(Map<String, Object> contact) {
         return new ContactImporter().createContact(contact).getResult();
     }
 
@@ -115,8 +125,14 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "updateContact", ui = false)
     @ApiOperation("Update an existing contact")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "brief representation of contact"))
-    public JsonApiResponse updateContact(@ApiParam("id of the existing contact") @PathParam("id") Long id,
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpServletResponse.SC_OK, reference = "AmpContact_Summary",
+                    message = "brief representation of contact"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Summary",
+            message = "error if invalid contact received")
+    })
+    @JsonView(ContactView.Summary.class)
+    public JsonApiResponse<AmpContact> updateContact(@ApiParam("id of the existing contact") @PathParam("id") Long id,
             Map<String, Object> contact) {
         return new ContactImporter().updateContact(id, contact).getResult();
     }

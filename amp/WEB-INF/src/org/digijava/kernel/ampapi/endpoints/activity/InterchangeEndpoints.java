@@ -23,7 +23,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.ImportView;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.ListView;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityFunding;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityService;
@@ -162,16 +167,16 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getProjectList", ui = false)
     @ApiOperation(
-            value = "Returns a JSON object with the list of all projects on the system, including its view and edit "
-                    + "status for the current logged user.",
+            value = "Returns a list of all projects summary on the system, including their view and edit rights "
+                    + "based on the status for the currently logged in user.",
                     notes = "If the user can view the project, the 'view' property of the project is set to true. "
                             + "False otherwise. If the user can edit the project, the 'edit' property of the project "
                             + "on the JSON is set to true. False otherwise. Pagination can be used if the parameters "
                             + "are sent on the request. If not parameters are sent, the full list of projects is "
-                            + "returned.")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
-    message = "list of JsonBean with all the projects on the system"))
-    public Collection<Map<String, Object>> getProjects(
+                            + "returned.",
+                            code = HttpServletResponse.SC_OK)
+    @JsonView(ListView.class)
+    public Collection<ActivitySummary> getProjects(
             @ApiParam("Current pagination request reference (random id). It acts as a key for a LRU caching "
                     + "mechanism that holds the full list of projects for the current user. If it is not "
                     + "provided no caching is used")
@@ -180,7 +185,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             @ApiParam("Number of projects to skip") @QueryParam("offset") Integer offset,
             @ApiParam("Number of projects to return") @QueryParam("count") Integer count) {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-        Collection<Map<String, Object>> activityCollection = ProjectList.getActivityList(pid, tm);
+        Collection<ActivitySummary> activityCollection = ProjectList.getActivityList(pid, tm);
         int start = 0;
         int end = activityCollection.size() - 1;
         if (offset != null && count != null && offset < activityCollection.size()) {
@@ -189,7 +194,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                 end = offset + count;
             }
         }
-        return new ArrayList(activityCollection).subList(start, end);
+        return new ArrayList<>(activityCollection).subList(start, end);
     }
 
     @GET
@@ -271,10 +276,12 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                     + "When is_draft is false, but some required fields for submit are invalid/missing, then activity "
                     + "will be saved as draft if can-downgrade-to-draft is true. Otherwise will be rejected.\n\n")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, message = "the latest project short overview"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
+        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_ImportView",
+                message = "the latest project short overview"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_ImportView",
         message = "error if invalid configuration is received")})
-    public JsonApiResponse addProject(
+    @JsonView(ImportView.class)
+    public JsonApiResponse<ActivitySummary> addProject(
             @ApiParam("can downgrade to draft") @QueryParam("can-downgrade-to-draft") @DefaultValue("false")
             boolean canDowngradeToDraft,
             @ApiParam("process approval fields") @QueryParam("process-approval-fields") @DefaultValue("false")
@@ -303,10 +310,12 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                     + "If activity was updated in meantime then version will be different and subsequent updates "
                     + "will fail with appropriate message.")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, message = "latest project overview"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
+        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_ImportView",
+                message = "latest project overview"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_ImportView",
         message = "error if invalid configuration is received")})
-    public JsonApiResponse updateProject(
+    @JsonView(ImportView.class)
+    public JsonApiResponse<ActivitySummary> updateProject(
             @ApiParam("the id of the activity which should be updated") @PathParam("projectId") Long projectId,
             @ApiParam("can downgrade to draft") @QueryParam("can-downgrade-to-draft") @DefaultValue("false")
             boolean canDowngradeToDraft,
@@ -322,9 +331,10 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         Object internalId = newJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME);
         if (!projectId.toString().equals(String.valueOf(internalId))) {
             // invalidating
-            String details = "url project_id = " + projectId + ", json " + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME +
-                    " = " + internalId;
-            return new JsonApiResponse(ApiError.toError(ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details)))
+            String details = "url project_id = " + projectId + ", json "
+                    + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME + " = " + internalId;
+            return new JsonApiResponse<ActivitySummary>(
+                    ApiError.toError(ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details)))
                     .addDetail(ActivityEPConstants.ACTIVITY, newJson);
         }
 

@@ -1,61 +1,84 @@
-package org.digijava.kernel.ampapi.endpoints.resource;
+package org.digijava.kernel.ampapi.endpoints.resource.dto;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 
 import java.util.Date;
-import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
-import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
+import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceTypePossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601TimeStampSerializer;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  *
  * @author Viorel Chihai
  *
  */
+@JsonView(ResourceView.Common.class)
 public class AmpResource {
 
     @Interchangeable(fieldTitle = "UUID")
+    @JsonProperty(ResourceEPConstants.UUID)
     private String uuid;
 
     @Interchangeable(fieldTitle = "Title", importable = true, required = ALWAYS)
-    @ResourceTextField(fieldTitle = "Title", translationsField = "translatedTitles")
-    private String title;
+    @JsonProperty(ResourceEPConstants.TITLE)
+    private MultilingualContent title;
 
     @Interchangeable(fieldTitle = "File Name", importable = true, required = ALWAYS,
             dependencies = InterchangeDependencyResolver.RESOURCE_TYPE_FILE_VALID_KEY)
+    @JsonProperty(ResourceEPConstants.FILE_NAME)
+    @JsonView(ResourceView.File.class)
     private String fileName;
 
     @Interchangeable(fieldTitle = "Web Link", importable = true, required = ALWAYS,
             dependencies = InterchangeDependencyResolver.RESOURCE_TYPE_LINK_VALID_KEY)
+    @JsonProperty(ResourceEPConstants.WEB_LINK)
+    @JsonView(ResourceView.Link.class)
     private String webLink;
 
     @Interchangeable(fieldTitle = "Description", importable = true)
-    @ResourceTextField(fieldTitle = "Description", translationsField = "translatedDescriptions")
-    private String description;
+    @JsonProperty(ResourceEPConstants.DESCRIPTION)
+    private MultilingualContent description;
 
     @Interchangeable(fieldTitle = "Note", importable = true)
-    @ResourceTextField(fieldTitle = "Note", translationsField = "translatedNotes")
-    private String note;
+    @JsonProperty(ResourceEPConstants.NOTE)
+    private MultilingualContent note;
 
     @Interchangeable(fieldTitle = "Type", importable = true, pickIdOnly = true,
             discriminatorOption = CategoryConstants.DOCUMENT_TYPE_KEY)
+    @JsonIgnore
     private AmpCategoryValue type;
 
     @Interchangeable(fieldTitle = "URL")
+    @JsonIgnore
     private String url;
 
     @Interchangeable(fieldTitle = "Year Of Publication")
+    @JsonIgnore
     private String yearOfPublication;
 
     @Interchangeable(fieldTitle = "Adding Date")
+    @ApiModelProperty(example = "2019-04-12T09:32:38.922+0000")
+    @JsonSerialize(using = ISO8601TimeStampSerializer.class)
+    @JsonProperty(ResourceEPConstants.ADDING_DATE)
     private Date addingDate;
 
     @Interchangeable(fieldTitle = "File Size")
+    @JsonIgnore
     private Double fileSize;
 
     @Interchangeable(fieldTitle = "Public")
@@ -65,19 +88,17 @@ public class AmpResource {
     private Boolean isPrivate;
 
     @Interchangeable(fieldTitle = "Creator Email", importable = true, required = ALWAYS)
+    @JsonIgnore
     private String creatorEmail;
 
     @Interchangeable(fieldTitle = "Team", importable = true, required = ALWAYS)
+    @JsonProperty(ResourceEPConstants.TEAM)
     private Long team;
 
     @PossibleValues(ResourceTypePossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Resource Type", importable = true, pickIdOnly = true,
-            required = ALWAYS)
+    @Interchangeable(fieldTitle = "Resource Type", importable = true, pickIdOnly = true, required = ALWAYS)
+    @JsonIgnore
     private ResourceType resourceType;
-
-    private Map<String, String> translatedTitles;
-    private Map<String, String> translatedDescriptions;
-    private Map<String, String> translatedNotes;
 
     public String getUuid() {
         return uuid;
@@ -87,28 +108,33 @@ public class AmpResource {
         this.uuid = uuid;
     }
 
-    public String getTitle() {
+    public MultilingualContent getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(MultilingualContent title) {
         this.title = title;
     }
 
-    public String getDescription() {
+    public MultilingualContent getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(MultilingualContent description) {
         this.description = description;
     }
 
-    public String getNote() {
+    public MultilingualContent getNote() {
         return note;
     }
 
-    public void setNote(String note) {
+    public void setNote(MultilingualContent note) {
         this.note = note;
+    }
+
+    @JsonProperty(ResourceEPConstants.TYPE)
+    public Long getTypeId() {
+        return type == null ? null : type.getId();
     }
 
     public AmpCategoryValue getType() {
@@ -167,6 +193,7 @@ public class AmpResource {
         this.yearOfPublication = yearOfPublication;
     }
 
+    @JsonIgnore
     public Boolean isPublic() {
         return isPublic;
     }
@@ -183,6 +210,7 @@ public class AmpResource {
         this.creatorEmail = creatorEmail;
     }
 
+    @JsonIgnore
     public Boolean isPrivate() {
         return isPrivate;
     }
@@ -199,36 +227,17 @@ public class AmpResource {
         this.team = team;
     }
 
+    @JsonProperty(ResourceEPConstants.RESOURCE_TYPE)
+    public Integer getResourceTypeId() {
+        return resourceType.getId();
+    }
+
     public ResourceType getResourceType() {
         return resourceType;
     }
 
     public void setResourceType(ResourceType resourceType) {
         this.resourceType = resourceType;
-    }
-
-    public Map<String, String> getTranslatedTitles() {
-        return translatedTitles;
-    }
-
-    public void setTranslatedTitles(Map<String, String> translatedTitles) {
-        this.translatedTitles = translatedTitles;
-    }
-
-    public Map<String, String> getTranslatedDescriptions() {
-        return translatedDescriptions;
-    }
-
-    public void setTranslatedDescriptions(Map<String, String> translatedDescriptions) {
-        this.translatedDescriptions = translatedDescriptions;
-    }
-
-    public Map<String, String> getTranslatedNotes() {
-        return translatedNotes;
-    }
-
-    public void setTranslatedNotes(Map<String, String> translatedNotes) {
-        this.translatedNotes = translatedNotes;
     }
 
 }

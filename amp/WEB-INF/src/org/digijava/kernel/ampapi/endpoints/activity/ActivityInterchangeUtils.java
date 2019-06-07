@@ -17,6 +17,7 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -64,8 +65,8 @@ public final class ActivityInterchangeUtils {
      *
      * @return latest project overview or an error if invalid configuration is received
      */
-    public static JsonApiResponse importActivity(Map<String, Object> newJson, boolean update, ActivityImportRules rules,
-            String endpointContextPath) {
+    public static JsonApiResponse<ActivitySummary> importActivity(Map<String, Object> newJson, boolean update,
+            ActivityImportRules rules, String endpointContextPath) {
         List<APIField> activityFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
 
         return new ActivityImporter(activityFields, rules)

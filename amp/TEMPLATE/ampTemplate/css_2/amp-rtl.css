@@ -947,6 +947,10 @@ td.inside ul {
     direction: rtl !important;
 }
 
+.ui-pg-table td[id^='tab_grid_pager_'] {
+    width: unset !important;
+}
+
 .tick text {
     direction: rtl !important;
 }

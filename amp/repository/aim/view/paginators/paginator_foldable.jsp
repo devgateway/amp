@@ -50,7 +50,7 @@
 				</c:otherwise>
 			</c:choose>	
 			<b ${i == generatedReport.startRow ? 'class="paging_sel"' : ''}>
-				<fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/>
+				<digi:easternArabicNumber><fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/></digi:easternArabicNumber>
 			</b>										
 			</a>  
 			&nbsp;|&nbsp;

@@ -32,7 +32,7 @@ pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
 		<c:forEach var="i" begin="${startPageRow}" end="${endPageRow}" step="${recordsPerPage}">
 			<a class="l_sm" style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=${viewFormat}~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
 				<b ${i == generatedReport.startRow ? 'class="paging_sel"' : ''}>
-					<fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/>
+					<digi:easternArabicNumber><fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/></digi:easternArabicNumber>
 				</b>										
 			</a>
 			&nbsp;|&nbsp;

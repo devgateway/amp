@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
 /**
@@ -59,7 +58,7 @@ public class AIHelper {
      * @param root
      * @return Long representation or null if invalid or missing
      */
-    public static Long getActivityIdOrNull(JsonBean root) {
+    public static Long getActivityIdOrNull(Map<String, Object> root) {
         return longOrNull(root.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME));
     }
 
@@ -77,10 +76,10 @@ public class AIHelper {
      * @param root
      * @return Long representation or null if invalid or missing
      */
-    public static Long getActivityGroupVersionOrNull(JsonBean root) {
+    public static Long getActivityGroupVersionOrNull(Map<String, Object> root) {
         Object activityGroup = root.get(FieldMap.underscorify(ActivityFieldsConstants.ACTIVITY_GROUP));
         if (activityGroup instanceof Map) {
-            return longOrNull(((Map) activityGroup).get(ActivityEPConstants.VERSION_FIELD_NAME));
+            return longOrNull(((Map<?, ?>) activityGroup).get(ActivityEPConstants.VERSION_FIELD_NAME));
         }
         return null;
     }

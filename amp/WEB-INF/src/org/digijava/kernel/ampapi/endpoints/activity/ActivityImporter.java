@@ -6,7 +6,6 @@ import static org.digijava.module.aim.util.ActivityUtil.loadActivity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,20 +27,18 @@ import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.ActivityErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceService;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -85,7 +82,7 @@ import org.hibernate.StaleStateException;
  *
  * @author Nadejda Mandrescu
  */
-public class ActivityImporter extends ObjectImporter {
+public class ActivityImporter extends ObjectImporter<ActivitySummary> {
 
     private static final Logger logger = Logger.getLogger(ActivityImporter.class);
     /**
@@ -98,7 +95,7 @@ public class ActivityImporter extends ObjectImporter {
 
     private AmpActivityVersion newActivity = null;
     private AmpActivityVersion oldActivity = null;
-    
+    private boolean update = false;
     private ActivityImportRules rules;
     private SaveContext saveContext;
     private SaveMode requestedSaveMode;
@@ -112,9 +109,7 @@ public class ActivityImporter extends ObjectImporter {
     private String endpointContextPath;
     // latest activity id in case there was attempt to update older version of an activity
     private Long latestActivityId;
-    
-    protected boolean update = false;
-    
+
     private ResourceService resourceService = new ResourceService();
 
     public ActivityImporter(APIField apiField, ActivityImportRules rules) {
@@ -126,23 +121,22 @@ public class ActivityImporter extends ObjectImporter {
         this.saveContext = SaveContext.api(!rules.isProcessApprovalFields());
     }
 
-    private void init(JsonBean newJson, boolean update, String endpointContextPath) {
-        Map<String, Object> input = newJson.any();
+    private void init(Map<String, Object> newJson, boolean update, String endpointContextPath) {
         this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
         this.update = update;
         this.currentUser = TeamUtil.getCurrentUser();
         if (rules.isTrackEditors()) {
-            modifiedBy = TeamMemberUtil.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson.any()));
+            modifiedBy = TeamMemberUtil.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson));
         } else {
             modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
             Long mId = modifiedBy == null ? null : modifiedBy.getAmpTeamMemId();
-            newJson.set(FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY), mId);
-            input.remove(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY));
+            newJson.put(FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY), mId);
+            newJson.remove(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY));
         }
         if (!rules.isProcessApprovalFields()) {
-            input.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY));
-            input.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE));
-            input.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS));
+            newJson.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY));
+            newJson.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE));
+            newJson.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS));
         }
         this.newJson = newJson;
         this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH);
@@ -158,7 +152,7 @@ public class ActivityImporter extends ObjectImporter {
      * @param update  flags whether this is an import or an update request
      * @return ActivityImporter instance
      */
-    public ActivityImporter importOrUpdate(JsonBean newJson, boolean update, String endpointContextPath) {
+    public ActivityImporter importOrUpdate(Map<String, Object> newJson, boolean update, String endpointContextPath) {
         init(newJson, update, endpointContextPath);
 
         // get existing activity if this is an update request
@@ -177,7 +171,7 @@ public class ActivityImporter extends ObjectImporter {
         }
 
         checkPermissions(update, ampActivityId, modifiedBy);
-        
+
         if (!errors.isEmpty()) {
             return this;
         }
@@ -200,7 +194,7 @@ public class ActivityImporter extends ObjectImporter {
 
         String activityId = ampActivityId == null ? null : ampActivityId.toString();
         String key = null;
-        
+
         Long currentVersion = null;
 
         try {
@@ -231,24 +225,22 @@ public class ActivityImporter extends ObjectImporter {
                 // TODO AMP-28993: remove explicitly resetting createdBy since it is cleared during init
                 if (!rules.isTrackEditors()) {
                     Long createdById = oldActivity.getActivityCreator().getAmpTeamMemId();
-                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY), createdById);
+                    newJson.put(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY), createdById);
                 }
                 // TODO AMP-28993: remove explicitly resetting approval fields since they are cleared during init
                 if (!rules.isProcessApprovalFields()) {
-                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY),
+                    newJson.put(FieldMap.underscorify(ActivityFieldsConstants.APPROVED_BY),
                             oldActivity.getApprovedBy() == null ? null : oldActivity.getApprovedBy().getAmpTeamMemId());
-                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE),
+                    newJson.put(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_DATE),
                             DateTimeUtil.formatISO8601Timestamp(oldActivity.getApprovalDate()));
-                    newJson.set(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS),
+                    newJson.put(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS),
                             oldActivity.getApprovalStatus().getId());
                 }
             } else if (!update) {
                 newActivity = new AmpActivityVersion();
             }
 
-            Map<String, Object> newJsonParent = newJson.any();
-
-            validateAndImport(newActivity, newJsonParent);
+            validateAndImport(newActivity, newJson);
             if (errors.isEmpty()) {
                 prepareToSave();
                 boolean draftChange = ActivityUtil.detectDraftChange(newActivity, oldActivityDraft);
@@ -358,7 +350,7 @@ public class ActivityImporter extends ObjectImporter {
     }
 
     @Override
-    protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
+    protected Object extractString(APIField apiField, Object parentObj, Object jsonValue) {
         return extractTranslationsOrSimpleValue(apiField, parentObj, jsonValue);
     }
 
@@ -528,7 +520,7 @@ public class ActivityImporter extends ObjectImporter {
         } else if (AmpClientModeHolder.isIatiImporterClient()) {
             return ChangeType.IATI_IMPORTER;
         }
-        
+
         return ChangeType.IMPORT;
     }
 
@@ -759,7 +751,7 @@ public class ActivityImporter extends ObjectImporter {
     public void downgradeToDraftSave() {
         this.downgradedToDraftSave = true;
     }
-    
+
     public ResourceService getResourceService() {
         return this.resourceService;
     }
@@ -770,38 +762,19 @@ public class ActivityImporter extends ObjectImporter {
     public void setLatestActivityId(Long latestActivityId) {
         this.latestActivityId = latestActivityId;
     }
-    
-    /**
-     * Get the result of import/update activity in JsonBean format
-     *
-     * @return JsonBean the result of the import or update action
-     */
-    public JsonBean getResult() {
-        JsonBean result = new JsonBean();
-        if (errors.size() == 0 && newActivity == null) {
-            // no new activity, but also errors are missing -> unknown error
-            result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
-        } else if (errors.size() > 0) {
-            result.set(EPConstants.ERROR, ApiError.toError(errors.values()).getErrors());
-            result.set(ActivityEPConstants.ACTIVITY, newJson);
-        } else {
-            List<JsonBean> activities = null;
-            if (newActivity != null && newActivity.getAmpActivityId() != null) {
-                // editable, viewable, since was just created/updated
-                activities = Arrays.asList(ProjectList.getActivityInProjectListFormat(newActivity, true, true));
-            }
-            if (activities == null || activities.size() == 0) {
-                result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
-                result.set(ActivityEPConstants.ACTIVITY, newJson);
-            } else {
-                result = activities.get(0);
-            }
+
+    @Override
+    public ActivitySummary getImportResult() {
+        if (newActivity != null && newActivity.getAmpActivityId() != null) {
+            // editable, viewable, since was just created/updated
+            return ProjectList.getActivityInProjectListFormat(newActivity, true, true);
         }
-        if (warnings.size() > 0) {
-            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings.values()));
-        }
-        
-        return result;
+        return null;
+    }
+
+    @Override
+    protected String getInvalidInputFieldName() {
+        return ActivityEPConstants.ACTIVITY;
     }
 
     @Override

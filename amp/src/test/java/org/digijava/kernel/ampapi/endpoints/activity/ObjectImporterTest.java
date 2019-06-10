@@ -10,7 +10,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,10 +25,12 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
+import org.digijava.kernel.ampapi.endpoints.common.ObjectImporterAnyType;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.module.aim.annotations.interchange.Independent;
@@ -50,7 +53,7 @@ public class ObjectImporterTest {
 
         @Interchangeable(fieldTitle = "Children", importable = true)
         private List<Child> children = new ArrayList<>();
-    
+
         @Interchangeable(fieldTitle = "Adopted Children", importable = true)
         private Set<Child> adoptedChildren = new HashSet<>();
 
@@ -74,7 +77,7 @@ public class ObjectImporterTest {
                 @Interchangeable(fieldTitle = "Work Phone", importable = true, discriminatorOption = "W",
                         multipleValues = false)})
         private Set<Phone> phones = new HashSet<>();
-    
+
         @InterchangeableDiscriminator(discriminatorField = "type", settings = {
                 @Interchangeable(fieldTitle = "Hair Color", discriminatorOption = "Hair", importable = true,
                         multipleValues = false, pickIdOnly = true),
@@ -152,31 +155,31 @@ public class ObjectImporterTest {
         public void setPhones(Set<Phone> phones) {
             this.phones = phones;
         }
-    
+
         public Set<PersonAttribute> getAttributes() {
             return attributes;
         }
-    
+
         public void setAttributes(Set<PersonAttribute> attributes) {
             this.attributes = attributes;
         }
-    
+
         void addPhone(Phone phone) {
             phones.add(phone);
         }
-    
+
         public Set<Child> getAdoptedChildren() {
             return adoptedChildren;
         }
-    
+
         public void setAdoptedChildren(Set<Child> adoptedChildren) {
             this.adoptedChildren = adoptedChildren;
         }
-        
+
         void addAdoptedChild(Child child) {
             adoptedChildren.add(child);
         }
-    
+
         void addAttribute(PersonAttribute attribute) {
             attributes.add(attribute);
         }
@@ -474,50 +477,50 @@ public class ObjectImporterTest {
             this.internalPayload = internalPayload;
         }
     }
-    
+
     public static class PersonAttribute {
-        
+
         @PossibleValueId
         private String id;
-    
+
         private String type; // Hair, Height
-    
+
         @PossibleValueValue
         private String value;
-    
+
         public PersonAttribute() {
         }
-    
+
         public PersonAttribute(String id, String type, String value) {
             this.id = id;
             this.type = type;
             this.value = value;
         }
-    
+
         public String getId() {
             return id;
         }
-    
+
         public void setId(String id) {
             this.id = id;
         }
-    
+
         public String getType() {
             return type;
         }
-    
+
         public void setType(String type) {
             this.type = type;
         }
-    
+
         public String getValue() {
             return value;
         }
-    
+
         public void setValue(String value) {
             this.value = value;
         }
-    
+
         @Override
         public String toString() {
             return "PersonAttribute{" +
@@ -552,12 +555,13 @@ public class ObjectImporterTest {
 
         InputValidatorProcessor formatValidator = new InputValidatorProcessor(Collections.emptyList());
         InputValidatorProcessor businessRulesValidator = new InputValidatorProcessor(Collections.emptyList());
-    
+
         TestValueConverter valueConverter = new TestValueConverter();
 
         TranslationSettings plainEnglish = new TranslationSettings("en", Collections.singleton("en"), false);
 
-        importer = new ObjectImporter(formatValidator, businessRulesValidator, plainEnglish, apiField, valueConverter);
+        importer = new ObjectImporterAnyType(formatValidator, businessRulesValidator, plainEnglish, apiField,
+                valueConverter);
     }
 
     private void readJsonExamples() throws IOException {
@@ -617,7 +621,7 @@ public class ObjectImporterTest {
                         child(null, "Pericles", null),
                         child(2L, "Prominent Herodotus", "Historian"))));
     }
-    
+
     @Test
     public void testNoOverwriteCollection() {
         Map<String, Object> json = (Map<String, Object>) examples.get("no-overwrite");
@@ -640,14 +644,14 @@ public class ObjectImporterTest {
     @Test
     public void testNoOverwriteInSet() {
         Map<String, Object> json = (Map<String, Object>) examples.get("no-overwrite-in-set");
-        
+
         Parent parent = new Parent("Leonidas", 45);
         parent.addChild(new Child(1L, "Alexios", "Defender"));
         parent.addChild(new Child(2L, "Herodotus", "Historian"));
         parent.addChild(new Child(null, "Persian", null));
-        
+
         importer.validateAndImport(parent, json);
-        
+
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, parentWithChildren("Wise Leonidas", 45,
                 containsInAnyOrder(
@@ -759,17 +763,17 @@ public class ObjectImporterTest {
                 phone("H", "123-1", "no soliciting"),
                 phone("W", "123-2", "9-16 only"))));
     }
-    
+
     @Test
     public void testMatchingDiscriminatedButNotRepeatableIdOnly() {
         Map<String, Object> json = (Map<String, Object>) examples.get("match-discriminated-id-only");
-        
+
         Parent parent = new Parent();
         parent.addAttribute(new PersonAttribute("1", "Hair", "Blond"));
         parent.addAttribute(new PersonAttribute("2", "Height", "Tall"));
-        
+
         importer.validateAndImport(parent, json);
-        
+
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, parentWithAttributes(null, null, containsInAnyOrder(
                 attribute("Hair", "1", "Blond"),
@@ -1003,9 +1007,9 @@ public class ObjectImporterTest {
             Matcher<Iterable<? extends Phone>> phones) {
         return parent(name, age, emptyIterable(), emptyIterable(), phones);
     }
-    
+
     private Matcher<Parent> parentWithAttributes(String name, Integer age,
-                                             Matcher<Iterable<? extends PersonAttribute>> attributes) {
+            Matcher<Iterable<? extends PersonAttribute>> attributes) {
         return parent(name, age, emptyIterable(), emptyIterable(), emptyIterable(), attributes);
     }
 
@@ -1021,12 +1025,12 @@ public class ObjectImporterTest {
                 hasProperty("addresses", addresses),
                 hasProperty("phones", phones));
     }
-    
+
     private Matcher<Parent> parent(String name, Integer age,
-                                   Matcher<Iterable<? extends Child>> children,
-                                   Matcher<Iterable<? extends Address>> addresses,
-                                   Matcher<Iterable<? extends Phone>> phones,
-                                   Matcher<Iterable<? extends PersonAttribute>> attributes) {
+            Matcher<Iterable<? extends Child>> children,
+            Matcher<Iterable<? extends Address>> addresses,
+            Matcher<Iterable<? extends Phone>> phones,
+            Matcher<Iterable<? extends PersonAttribute>> attributes) {
         return allOf(
                 hasProperty("name", is(name)),
                 hasProperty("age", is(age)),
@@ -1071,12 +1075,12 @@ public class ObjectImporterTest {
                 hasProperty("type", is(type)),
                 hasProperty("extraInfo", is(extraInfo)));
     }
-    
+
     private Matcher<PersonAttribute> attribute(String type, String id, String value) {
         return allOf(
                 hasProperty("id", is(id)),
                 hasProperty("type", is(type)),
                 hasProperty("value", is(value)));
     }
-    
+
 }

@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
+
 import java.io.Serializable;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -16,7 +18,7 @@ public class AmpActor  implements Serializable, Cloneable {
     @Interchangeable(fieldTitle = "Id")
     private Long ampActorId;
 
-    @Interchangeable(fieldTitle = "Name", label = "Actor", importable = true)
+    @Interchangeable(fieldTitle = "Name", label = "Actor", importable = true, required = SUBMIT)
     @TranslatableField
     private String name;
 

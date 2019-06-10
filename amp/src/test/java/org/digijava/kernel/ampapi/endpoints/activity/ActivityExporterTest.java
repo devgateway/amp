@@ -8,17 +8,18 @@ import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
+
 import org.dgfoundation.amp.reports.converters.HardcodedThemes;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -55,7 +56,7 @@ public class ActivityExporterTest {
         AmpActivityVersion activity = new AmpActivityVersion();
         activity.setName("test");
 
-        Map<String, Object> jsonActivity = createExporter().export(activity).any();
+        Map<String, Object> jsonActivity = createExporter().export(activity);
 
         assertThat(jsonActivity, hasEntry("project_title", "test"));// fixme there are 100+ fields with null values!
     }
@@ -91,7 +92,7 @@ public class ActivityExporterTest {
         AmpActivityVersion activity = new AmpActivityVersion();
         activity.setActPrograms(programs);
 
-        Map<String, Object> jsonActivity = createExporter().export(activity).any();
+        Map<String, Object> jsonActivity = createExporter().export(activity);
 
         assertThat(jsonActivity,
                 (Matcher) allOf(
@@ -120,7 +121,7 @@ public class ActivityExporterTest {
 
         ActivityExporter exporter = createExporter(ImmutableList.of("description"));
 
-        Map<String, Object> jsonActivity = exporter.export(activity).any();
+        Map<String, Object> jsonActivity = exporter.export(activity);
 
         assertThat(jsonActivity,
                 allOf(
@@ -133,8 +134,8 @@ public class ActivityExporterTest {
     }
 
     private ActivityExporter createExporter(List<String> filterFields) {
-        JsonBean filter = new JsonBean();
-        filter.set(ActivityEPConstants.FILTER_FIELDS, filterFields);
+        Map<String, Object> filter = new HashMap<>();
+        filter.put(ActivityEPConstants.FILTER_FIELDS, filterFields);
 
         return new ActivityExporter(new NoTranslatedFieldReader(), fields, filter);
     }

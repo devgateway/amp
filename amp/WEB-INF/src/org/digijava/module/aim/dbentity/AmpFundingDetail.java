@@ -8,10 +8,11 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.values.FundingePledgesValueProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
+import org.digijava.kernel.validators.activity.PledgeOrgValidator;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
@@ -200,9 +201,9 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
             fmPath = FMVisibility.PARENT_FM + "/Rejected")
     private Boolean disbursementOrderRejected;
     
-    @Interchangeable(fieldTitle = "Pledge", importable = true, pickIdOnly = true,
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.Funding.Details.PLEDGE, importable = true, pickIdOnly = true,
             fmPath = FMVisibility.PARENT_FM + "/Pledges",
-            dependencies = {InterchangeDependencyResolver.FUNDING_ORGANIZATION_VALID_PRESENT_KEY})
+            dependencies = {PledgeOrgValidator.FUNDING_ORGANIZATION_VALID_PRESENT_KEY})
     @PossibleValues(FundingePledgesValueProvider.class)
     private FundingPledges pledgeid;
     

@@ -32,8 +32,8 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
     private Set<AmpActivityVersion> activities;
     //private Long fieldType;
     
-    private Set<AmpCategoryValue> usedValues;
-    private Set<AmpCategoryValue> usedByValues;
+    private Set<AmpCategoryValue> usedValues = new HashSet<>();
+    private Set<AmpCategoryValue> usedByValues = new HashSet<>();
 
     private boolean translateable   = true;
 

@@ -23,7 +23,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -33,19 +32,21 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.DefaultErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
+import org.digijava.kernel.ampapi.endpoints.common.CommonErrors;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.common.values.BadInput;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
-import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class ObjectImporter {
+public abstract class ObjectImporter<T> {
 
     private static final Logger logger = Logger.getLogger(ObjectImporter.class);
 
@@ -56,20 +57,12 @@ public class ObjectImporter {
     protected Map<Integer, ApiErrorMessage> warnings = new HashMap<>();
     protected ValueConverter valueConverter;
 
-    protected JsonBean newJson;
+    protected Map<String, Object> newJson;
     protected TranslationSettings trnSettings;
 
-    private List<APIField> apiFields;
+    private APIField apiField;
 
     private PossibleValuesCache possibleValuesCached;
-
-    /**
-     * This field is used for storing the current json values during field validation
-     * E.g: validate the pledge field (present in funding_details)
-     * fundings - will contain the json values of the parent of funding_details
-     * fundings~funding_details - will contain the json values of the parent of pledge
-     */
-    private Map<String, Object> branchJsonVisitor = new HashMap<>();
 
     private Deque<Object> backReferenceStack = new ArrayDeque<>();
 
@@ -77,19 +70,21 @@ public class ObjectImporter {
 
     private Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper = new DefaultErrorsMapper();
 
+    private ImporterInterchangeValidator importerInterchangeValidator = new ImporterInterchangeValidator(errors);
+
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
-            List<APIField> apiFields) {
-        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiFields,
+            APIField apiField) {
+        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiField,
                 new ValueConverter());
     }
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
-            TranslationSettings trnSettings, List<APIField> apiFields, ValueConverter valueConverter) {
+            TranslationSettings trnSettings, APIField apiField, ValueConverter valueConverter) {
         this.formatValidator = formatValidator;
         this.businessRulesValidator = businessRulesValidator;
         this.trnSettings = trnSettings;
-        this.apiFields = apiFields;
-        this.possibleValuesCached = new PossibleValuesCache(PossibleValuesEnumerator.INSTANCE, apiFields);
+        this.apiField = apiField;
+        this.possibleValuesCached = new PossibleValuesCache(PossibleValuesEnumerator.INSTANCE, apiField.getChildren());
         this.valueConverter = valueConverter;
 
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
@@ -100,8 +95,8 @@ public class ObjectImporter {
         this.jsonErrorMapper = jsonErrorMapper;
     }
 
-    public List<APIField> getApiFields() {
-        return apiFields;
+    public APIField getApiField() {
+        return apiField;
     }
 
     protected void beforeViolationsCheck() {
@@ -127,14 +122,34 @@ public class ObjectImporter {
      * @return
      */
     public boolean validateAndImport(Object root, Map<String, Object> json, boolean validateFormatOnly) {
-        boolean isFormatValid = validateAndImport(root, apiFields, json, null);
+        boolean isFormatValid = validateAndImport(root, apiField.getChildren(), json, null);
         if (isFormatValid && !validateFormatOnly) {
             beforeViolationsCheck();
             processViolationsForTypes(json, root);
+            processInterViolationsForTypes(json, root);
         }
         return isFormatValid;
     }
 
+    /**
+     * Invokes interchangeable validation and then integrates all constraint violations directly into json object.
+     * @param json json representation of the object
+     * @param root internal representation of the object
+     */
+    public void processInterViolationsForTypes(Map<String, Object> json, Object root) {
+        importerInterchangeValidator.integrateErrorsIntoResult(
+                importerInterchangeValidator.validate(apiField, root), json);
+    }
+
+    public ImporterInterchangeValidator getImporterInterchangeValidator() {
+        return importerInterchangeValidator;
+    }
+
+    /**
+     * Invokes bean validation and then integrates all constraint violations directly into json object.
+     * @param json json representation of the object
+     * @param obj internal representation of the object
+     */
     private void processViolationsForTypes(Map<String, Object> json, Object obj) {
         Set<ConstraintViolation<Object>> violations = beanValidator.validate(obj, API.class, Default.class);
         JsonErrorIntegrator jsonErrorIntegrator = new JsonErrorIntegrator(jsonErrorMapper);
@@ -198,7 +213,7 @@ public class ObjectImporter {
     /**
      * Validates and imports (if valid) a single element (and its subelements)
      * @param newParent parent object containing the field
-     * @param fieldDef JsonBean holding the description of the field (obtained from the Fields Enumerator EP)
+     * @param fieldDef APIField holding the description of the field (obtained from the Fields Enumerator EP)
      * @param newJsonParent JSON as imported
      * @param fieldPath underscorified path to the field
      * @return true if valid format. Check errors to see also any business rules validation errors.
@@ -207,7 +222,7 @@ public class ObjectImporter {
             Map<String, Object> newJsonParent, String fieldPath) {
         String fieldName = fieldDef.getFieldName();
         String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
-        Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
+        Object newJsonValue = newJsonParent.get(fieldName);
 
         boolean isValidFormat = formatValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
         if (isValidFormat) {
@@ -215,7 +230,7 @@ public class ObjectImporter {
             if (isValidFormat) {
                 businessRulesValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
             }
-            
+
             if (fieldDef.isImportable()) {
                 Object jsonValue = newJsonParent.get(fieldName);
                 Object newValue = getNewValue(fieldDef, newParent, jsonValue);
@@ -229,21 +244,21 @@ public class ObjectImporter {
     private Object getNewValue(APIField apiField, Object parentObj, Object jsonValue) {
         boolean isCollection = apiField.isCollection();
         // on a business rule validation error we configure the input to progress with further validation
-        if (jsonValue != null && JsonBean.class.isAssignableFrom(jsonValue.getClass())) {
-            jsonValue = ((JsonBean) jsonValue).get(ActivityEPConstants.INPUT);
+        if (jsonValue != null && BadInput.class.isAssignableFrom(jsonValue.getClass())) {
+            jsonValue = ((BadInput) jsonValue).getInput();
         }
-        
+
         if (jsonValue == null && !isCollection) {
             return null;
         }
-        
+
         FieldType fieldType = apiField.getApiType().getFieldType();
         boolean idOnly = apiField.isIdOnly();
         // this field has possible values
         if (!isCollection && idOnly) {
             return valueConverter.getObjectById(apiField.getApiType().getType(), jsonValue);
         }
-        
+
         try {
             if (isCollection) {
                 Collection collection = (Collection) apiField.getFieldAccessor().get(parentObj);
@@ -261,18 +276,20 @@ public class ObjectImporter {
                     Method valueOf = apiField.getApiType().getType().getDeclaredMethod("valueOf", String.class);
                     return valueOf.invoke(apiField.getApiType().getType(), String.valueOf(jsonValue));
                 }
+            } else if (fieldType.isObject()) {
+                return apiField.getFieldAccessor().get(parentObj);
             }
         } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException
                 | InvocationTargetException e) {
             logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
-        
+
         return null;
     }
-    
-    protected String extractString(APIField apiField, Object parentObj, Object jsonValue) {
-        return (String) jsonValue;
+
+    protected Object extractString(APIField apiField, Object parentObj, Object jsonValue) {
+        return jsonValue;
     }
 
     /**
@@ -307,14 +324,14 @@ public class ObjectImporter {
         if (isList || childrenFields.size() > 0) {
             Class<?> subElementClass = fieldDef.getApiType().getType();
             Object newFieldValue = fieldDef.getFieldAccessor().get(newParent);
-            
+
             if (newFieldValue == null) {
                 if (isList) {
                     newFieldValue = new ArrayList<>();
                 } else {
                     newFieldValue = valueConverter.getNewInstance(fieldDef.getApiType().getType());
                 }
-                
+
                 fieldDef.getFieldAccessor().set(newParent, newFieldValue);
             }
 
@@ -323,21 +340,6 @@ public class ObjectImporter {
                         .map(v -> valueConverter.toSimpleTypeValue(v, subElementClass)).collect(Collectors.toList());
                 ((Collection) newFieldValue).addAll(nvs);
             } else {
-                // FIXME remove custom handling for agreements
-                if (AmpAgreement.class.isAssignableFrom(newFieldValue.getClass())
-                        && childrenNewValues.size() == 1) {
-                    Map<String, Object> agreementMap = childrenNewValues.get(0);
-                    childrenNewValues.clear();
-                    for (String key : agreementMap.keySet()) {
-                        HashMap<String, Object> kv = new HashMap<String, Object>();
-                        Object val = agreementMap.get(key);
-                        if (val instanceof String) {
-                            val = StringUtils.trim((String) val);
-                        }
-                        kv.put(key, val);
-                        childrenNewValues.add(kv);
-                    }
-                }
 
                 // process children
                 if (isList) {
@@ -361,7 +363,6 @@ public class ObjectImporter {
                             element = valueConverter.instantiate(subElementClass);
                             notYetAdded = true;
                         }
-                        branchJsonVisitor.put(fieldPath, newChild);
                         isFormatValid = validateAndImport(element, childrenFields, newChild, fieldPath)
                                 && isFormatValid;
                         if (isFormatValid) {
@@ -390,7 +391,6 @@ public class ObjectImporter {
                         } else {
                             element = newFieldValueCollection.iterator().next();
                         }
-                        branchJsonVisitor.put(fieldPath, newChild);
                         isFormatValid = validateAndImport(element, childrenFields, newChild, fieldPath)
                                 && isFormatValid;
                         if (isFormatValid) {
@@ -401,14 +401,15 @@ public class ObjectImporter {
                         }
                     }
                 } else {
-                    Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
-                    while (iterNew.hasNext()) {
-                        Map<String, Object> newChild = iterNew.next();
-                        branchJsonVisitor.put(fieldPath, newChild);
+                    if (newJsonValue != null) {
+                        Map<String, Object> newJsonObjValue = (Map<String, Object>) newJsonValue;
 
-                        APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
-                        isFormatValid = validateAndImport(newFieldValue, childFieldDef, newChild, fieldPath)
-                                && isFormatValid;
+                        if (fieldDef.isIndependent()) {
+                            newFieldValue = valueConverter.getNewInstance(fieldDef.getApiType().getType());
+                        }
+
+                        isFormatValid = validateAndImport(newFieldValue, fieldDef.getChildren(),
+                                newJsonObjValue, fieldPath) && isFormatValid;
                     }
                 }
                 // TODO: we also need to validate other children, some can be mandatory
@@ -502,28 +503,6 @@ public class ObjectImporter {
         return Collections.emptyList();
     }
 
-    private APIField getMatchedFieldDef(Map<String, Object> newValue, List<APIField> fieldDefs) {
-        if (fieldDefs.size() > 0) {
-            // if we have only 1 child element, then this is a list of elements and only this definition is expected
-            // or new value is empty, but we expect something
-            if (fieldDefs.size() == 1 || newValue == null || newValue.isEmpty()) {
-                return fieldDefs.get(0);
-            } else {
-                // this is a complex type => simple maps like { field_name : new_value_obj } are expected
-                // TODO: if more than 1 value
-                String fieldName = newValue.keySet().iterator().next();
-                if (StringUtils.isNotBlank(fieldName)) {
-                    for (APIField childDef : fieldDefs) {
-                        if (fieldName.equals(childDef.getFieldName())) {
-                            return childDef;
-                        }
-                    }
-                }
-            }
-        }
-        return null; // why this happens? is throwing an error a better option?
-    }
-
     public PossibleValuesCache getPossibleValuesCache() {
         return this.possibleValuesCached;
     }
@@ -531,7 +510,7 @@ public class ObjectImporter {
     /**
      * @return the newJson
      */
-    public JsonBean getNewJson() {
+    public Map<String, Object> getNewJson() {
         return newJson;
     }
 
@@ -542,12 +521,47 @@ public class ObjectImporter {
         return trnSettings;
     }
 
-    public Map<String, Object> getBranchJsonVisitor() {
-        return branchJsonVisitor;
+    public void addError(ApiErrorMessage error) {
+        errors.put(error.id, error);
     }
 
     public Collection<ApiErrorMessage> getWarnings() {
         return warnings.values();
+    }
+
+    public abstract T getImportResult();
+
+    protected String getInvalidInputFieldName() {
+        return null;
+    }
+
+    /**
+     * Provides import/update result
+     *
+     * @return JsonApiResponse the result of the import or update action
+     */
+    public JsonApiResponse<T> getResult() {
+        Map<String, Object> details = null;
+        T content = errors.isEmpty() ? getImportResult() : null;
+
+        if (content == null) {
+            String invalidInput = getInvalidInputFieldName();
+            if (invalidInput != null) {
+                details = new HashMap<String, Object>();
+                details.put(invalidInput, getNewJson());
+            }
+            if (errors.isEmpty()) {
+                addError(CommonErrors.UNKOWN_ERROR);
+            }
+        }
+        return buildResponse(details, content);
+    }
+
+    protected JsonApiResponse<T> buildResponse(Map<String, Object> details, T content) {
+        return new JsonApiResponse<>(
+                ApiError.formatNoWrap(errors.values()),
+                ApiError.formatNoWrap(warnings.values()),
+                details, content);
     }
 
 }

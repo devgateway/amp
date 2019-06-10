@@ -1,15 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.contact;
 
-import static java.util.Collections.singletonList;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -20,25 +15,25 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 /**
  * @author Octavian Ciubotaru
  */
-public class ContactImporter extends ObjectImporter {
+public class ContactImporter extends ObjectImporter<AmpContact> {
 
     private AmpContact contact;
 
     public ContactImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getContactFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getContactBusinessRulesValidators()),
-                AmpFieldsEnumerator.getEnumerator().getContactFields());
+                AmpFieldsEnumerator.getEnumerator().getContactField());
     }
 
-    public List<ApiErrorMessage> createContact(JsonBean newJson) {
+    public ContactImporter createContact(Map<String, Object> newJson) {
         return importContact(null, newJson);
     }
 
-    public List<ApiErrorMessage> updateContact(Long contactId, JsonBean newJson) {
+    public ContactImporter updateContact(Long contactId, Map<String, Object> newJson) {
         return importContact(contactId, newJson);
     }
 
-    private List<ApiErrorMessage> importContact(Long contactId, JsonBean newJson) {
+    private ContactImporter importContact(Long contactId, Map<String, Object> newJson) {
         this.newJson = newJson;
 
         Object contactJsonId = newJson.get(ContactEPConstants.ID);
@@ -46,24 +41,28 @@ public class ContactImporter extends ObjectImporter {
         if (contactJsonId != null) {
             if (contactId != null) {
                 if (!contactId.equals(getLongOrNull(contactJsonId))) {
-                    return singletonList(ContactErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.ID));
+                    addError(ContactErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.ID));
+                    return this;
                 }
             } else {
-                return singletonList(ContactErrors.FIELD_READ_ONLY.withDetails(ContactEPConstants.ID));
+                addError(ContactErrors.FIELD_READ_ONLY.withDetails(ContactEPConstants.ID));
+                return this;
             }
         }
 
         Object createdById = newJson.get(ContactEPConstants.CREATED_BY);
         AmpTeamMember createdBy = TeamMemberUtil.getAmpTeamMember(getLongOrNull(createdById));
         if (createdById != null && createdBy == null) {
-            return singletonList(ContactErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.CREATED_BY));
+            addError(ContactErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.CREATED_BY));
+            return this;
         }
         if (contactId == null && createdBy == null) {
             TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
             if (teamMember != null) {
                 createdBy = TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId());
             } else {
-                return singletonList(ContactErrors.FIELD_REQUIRED.withDetails(ContactEPConstants.CREATED_BY));
+                addError(ContactErrors.FIELD_REQUIRED.withDetails(ContactEPConstants.CREATED_BY));
+                return this;
             }
         }
 
@@ -78,7 +77,7 @@ public class ContactImporter extends ObjectImporter {
                 }
             }
 
-            validateAndImport(contact, newJson.any());
+            validateAndImport(contact, newJson);
 
             if (errors.isEmpty()) {
                 setupBeforeSave(contact, createdBy);
@@ -92,7 +91,7 @@ public class ContactImporter extends ObjectImporter {
             throw new RuntimeException("Failed to import contact", e);
         }
 
-        return new ArrayList<>(errors.values());
+        return this;
     }
 
     private Long getLongOrNull(Object obj) {
@@ -111,8 +110,14 @@ public class ContactImporter extends ObjectImporter {
         contact.getOrganizationContacts().forEach(o -> o.setContact(contact));
     }
 
-    public AmpContact getContact() {
+    @Override
+    public AmpContact getImportResult() {
         return contact;
+    }
+
+    @Override
+    protected String getInvalidInputFieldName() {
+        return ContactEPConstants.CONTACT;
     }
 
 }

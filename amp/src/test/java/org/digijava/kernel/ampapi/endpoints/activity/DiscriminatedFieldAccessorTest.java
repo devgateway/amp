@@ -8,7 +8,9 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 import org.hamcrest.Matcher;
@@ -23,6 +25,8 @@ public class DiscriminatedFieldAccessorTest {
     private static class Obj {
 
         private List<Category> categories = new ArrayList<>();
+    
+        private Set<Category> attributes = new HashSet<>();
     }
 
     public static class Category {
@@ -55,6 +59,20 @@ public class DiscriminatedFieldAccessorTest {
         FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor("categories"), "kind", "A");
         Collection<Category> o = (Collection) accessor.get(obj);
 
+        assertThat(o, containsInAnyOrder(cat("A", "1"), cat("A", "3")));
+    }
+    
+    @Test
+    public void testDiscriminatedReadSet() {
+        Obj obj = new Obj();
+        obj.attributes.add(new Category("A", "1"));
+        obj.attributes.add(new Category("B", "2"));
+        obj.attributes.add(new Category("A", "3"));
+        obj.attributes.add(new Category("B", "4"));
+        
+        FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor("attributes"), "kind", "A");
+        Collection<Category> o = (Collection) accessor.get(obj);
+        
         assertThat(o, containsInAnyOrder(cat("A", "1"), cat("A", "3")));
     }
 

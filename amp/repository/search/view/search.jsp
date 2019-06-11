@@ -197,7 +197,7 @@
 							<div class="search_results">
 							<c:if test="${searchform.queryType==-1||searchform.queryType==0}">
 								<div class="${search_results_block_class}"><span
-									class="button_green default_cursor">${fn:length(resultActivities)}</span>
+									class="button_green default_cursor"><digi:easternArabicNumber>${fn:length(resultActivities)}</digi:easternArabicNumber></span>
 								 ${resultFound}
 									<div class="button_green_group">
 									<span class="button_green default_cursor"><digi:trn>Activities</digi:trn></span>
@@ -236,7 +236,7 @@
 							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==2}">
 								<div class="${search_results_block_class}"><span
-									class="button_green default_cursor">${fn:length(resultTabs)}</span> ${resultFound}
+									class="button_green default_cursor"><digi:easternArabicNumber>${fn:length(resultTabs)}</digi:easternArabicNumber></span> ${resultFound}
 									<div class="button_green_group">
 										<span class="button_green default_cursor"><digi:trn>Tabs</digi:trn></span>
 									</div>
@@ -253,7 +253,7 @@
 							<module:display name="Pledges" parentModule="Project Management">
 								<c:if test="${searchform.queryType==-1||searchform.queryType==7}">
 									<div class="${search_results_block_class}">
-										<span class="button_green default_cursor">${fn:length(resultPledges)}</span> 
+										<span class="button_green default_cursor"><digi:easternArabicNumber>${fn:length(resultPledges)}</digi:easternArabicNumber></span>
 										${resultFound}
 										<div class="button_green_group">
 											<span class="button_green default_cursor"><digi:trn>Pledges</digi:trn></span>
@@ -271,7 +271,7 @@
 							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==1}">
 								<div class="${search_results_block_class}"><span
-									class="button_green default_cursor">${fn:length(resultReports)}</span> ${resultFound}
+									class="button_green default_cursor"><digi:easternArabicNumber>${fn:length(resultReports)}</digi:easternArabicNumber></span> ${resultFound}
 									<div class="button_green_group">
 										<span class="button_green default_cursor"><digi:trn>Reports</digi:trn></span>
 									</div>
@@ -290,7 +290,7 @@
 							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==3}">
 								<div class="search_results_block_last"><span
-									class="button_green default_cursor">${fn:length(resultResources)}</span>
+									class="button_green default_cursor"><digi:easternArabicNumber>${fn:length(resultResources)}</digi:easternArabicNumber></span>
 								${resultFound}
 									<div class="button_green_group">
 										<span class="button_green default_cursor"><digi:trn>Resources</digi:trn></span>

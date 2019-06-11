@@ -131,7 +131,6 @@ public class ApiFieldStructuralServiceTest {
     private APIField newListField(String fieldName) {
         APIField field = new APIField();
         field.setFieldName(fieldName);
-        field.setFieldNameInternal(fieldName);
         field.setApiType(new APIType(Object.class, FieldType.LIST));
         return field;
     }
@@ -139,7 +138,6 @@ public class ApiFieldStructuralServiceTest {
     private APIField newListPrimitiveField(String fieldName, Class<?> type) {
         APIField field = new APIField();
         field.setFieldName(fieldName);
-        field.setFieldNameInternal(fieldName);
         field.setApiType(new APIType(type, FieldType.LIST));
         return field;
     }
@@ -147,7 +145,6 @@ public class ApiFieldStructuralServiceTest {
     private APIField newStringField(String fieldName) {
         APIField field = new APIField();
         field.setFieldName(fieldName);
-        field.setFieldNameInternal(fieldName);
         field.setApiType(new APIType(String.class));
         return field;
     }
@@ -155,7 +152,6 @@ public class ApiFieldStructuralServiceTest {
     private APIField newLongField(String fieldName) {
         APIField field = new APIField();
         field.setFieldName(fieldName);
-        field.setFieldNameInternal(fieldName);
         field.setApiType(new APIType(Long.class));
         return field;
     }

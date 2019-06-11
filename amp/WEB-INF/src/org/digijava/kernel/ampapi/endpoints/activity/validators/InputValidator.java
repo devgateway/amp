@@ -26,6 +26,11 @@ public abstract class InputValidator {
     public abstract boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
             APIField fieldDescription, String fieldPath);
     
+    public boolean isValid(ObjectImporter importer, Object currentObject, Map<String, Object> newFieldParent,
+                                    APIField fieldDescription, String fieldPath) {
+        return isValid(importer, newFieldParent, fieldDescription, fieldPath);
+    }
+    
     /**
      * @return this validator specific Error message
      */

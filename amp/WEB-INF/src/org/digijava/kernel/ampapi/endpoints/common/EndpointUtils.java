@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.digijava.kernel.ampapi.endpoints.common;
 
@@ -22,6 +22,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.api.NotFoundException;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -38,7 +39,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -65,7 +65,7 @@ public class EndpointUtils {
     protected static final Logger logger = Logger.getLogger(EndpointUtils.class);
 
     /**
-     * @return current user application settings 
+     * @return current user application settings
      */
     public static AmpApplicationSettings getAppSettings() {
         HttpServletRequest request = TLSUtils.getRequest();
@@ -77,7 +77,7 @@ public class EndpointUtils {
         }
         return null;
     }
-    
+
     /**
      * @return default currency code for public or logged in user
      */
@@ -112,7 +112,7 @@ public class EndpointUtils {
             return String.valueOf(appSettings.getFiscalCalendar().getIdentifier());
         return String.valueOf(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR));
     }
-    
+
     /**
      * @return report default START year selection
      */
@@ -139,7 +139,7 @@ public class EndpointUtils {
         Long yearTo = yearFrom + countYear;
         return yearTo.toString();
     }
-    
+
     /**
      * @return report default END year selection
      */
@@ -149,10 +149,10 @@ public class EndpointUtils {
             return String.valueOf(appSettings.getReportEndYear());
         return FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
     }
-    
+
     /**
      * Retrieves a common specification configuration based on the incoming json request
-     * 
+     *
      * @param reportType
      * @return report specification
      */
@@ -163,23 +163,23 @@ public class EndpointUtils {
         if (reportTypeId == null) {
             reportTypeId = ArConstants.DONOR_TYPE;
         }
-        
+
         return new ReportSpecificationImpl(reportName, reportTypeId);
     }
-    
+
     /**
      * Generates a report based on a given specification
-     * 
+     *
      * @param spec - report specification
      * @return GeneratedReport that stores all report info and report output
      */
     public static GeneratedReport runReport(ReportSpecification spec) {
         return runReport(spec, ReportAreaImpl.class, null);
     }
-    
+
     /**
      * Generates report based on specification with additional output settings (if any)
-     * 
+     *
      * @param spec report specification
      * @param outputSettings optional output settings
      * @return GeneratedReport that stores all report info and report output
@@ -187,15 +187,15 @@ public class EndpointUtils {
     public static GeneratedReport runReport(ReportSpecification spec, OutputSettings outputSettings) {
         return runReport(spec, ReportAreaImpl.class, null);
     }
-    
+
     /**
      * Generates a report based on a given specification and wraps the output into the specified class
-     * 
+     *
      * @param spec report specification
      * @param clazz any class that extends {@link ReportAreaImpl}
      * @return GeneratedReport that stores all report info and report output
      */
-    public static GeneratedReport runReport(ReportSpecification spec, Class<? extends ReportAreaImpl> clazz, 
+    public static GeneratedReport runReport(ReportSpecification spec, Class<? extends ReportAreaImpl> clazz,
             OutputSettings outputSettings) {
         ReportExecutor generator = new NiReportsGenerator(AmpReportsSchema.getInstance(), true, outputSettings);
         GeneratedReport report = null;
@@ -207,12 +207,12 @@ public class EndpointUtils {
         }
         return report;
     }
-    
+
     public static <T> T getSingleValue(T value, T defaultValue) {
         return value != null ? value : defaultValue;
     }
 
-    
+
     public static List<AmpApiState> getApiStateList(ApiStateType type) {
         return QueryUtil.getApiStatesByType(type);
     }
@@ -229,8 +229,8 @@ public class EndpointUtils {
             throw new NotFoundException();
         }
     }
-    
-        public static AmpApiState saveApiState(AmpApiState map, ApiStateType type) {
+
+    public static AmpApiState saveApiState(AmpApiState map, ApiStateType type) {
         Date creationDate = new Date();
 
         map.setCreatedDate(creationDate);
@@ -246,11 +246,11 @@ public class EndpointUtils {
             throw new WebApplicationException(e);
         }
     }
-    
+
     public static List<AvailableMethod> getAvailableMethods(String className) {
         return getAvailableMethods(className, false);
     }
-    
+
     public static String getEndpointMethod(Method method) {
         if (method.getAnnotation(javax.ws.rs.POST.class) != null) {
             return "POST";
@@ -259,38 +259,38 @@ public class EndpointUtils {
         if (method.getAnnotation(javax.ws.rs.GET.class) != null) {
             return "GET";
         }
-        
+
         if (method.getAnnotation(javax.ws.rs.PUT.class) != null) {
             return "PUT";
         }
-        
+
         if (method.getAnnotation(javax.ws.rs.DELETE.class) != null) {
             return "DELETE";
         }
-        
+
         throw new RuntimeException("method " + method.getName() + " of class " + method.getDeclaringClass().getName() + " does not have a POST/GET/PUT/DELETE annotation!");
     }
-    
+
     /**
-     * 
+     *
      * @param className
      * @return
      */
     public static List<AvailableMethod> getAvailableMethods(String className, boolean includeColumn){
-        List<AvailableMethod> availableFilters = new ArrayList<AvailableMethod>(); 
+        List<AvailableMethod> availableFilters = new ArrayList<AvailableMethod>();
         try {
             Set<String> visibleColumns = ColumnsVisibility.getVisibleColumnsWithFakeOnes();
             Class<?> c = Class.forName(className);
-            
+
             javax.ws.rs.Path p = c.getAnnotation(javax.ws.rs.Path.class);
             Method[] methods = c.getMethods();
             for (Method method : methods) {
                 ApiMethod apiAnnotation = method.getAnnotation(ApiMethod.class);
                 if (apiAnnotation != null) {
                     final String[] columns = apiAnnotation.columns();
-                    
-                    boolean isVisibleColumn = false; 
-                    for(String column:columns){ 
+
+                    boolean isVisibleColumn = false;
+                    for (String column:columns) {
                         if (EPConstants.NA.equals(column) || visibleColumns.contains(column)) {
                             isVisibleColumn=true;
                             break;
@@ -304,9 +304,9 @@ public class EndpointUtils {
                         if (apiAnnotation.name() != null && !apiAnnotation.name().equals("")){
                             filter.setName(TranslatorWorker.translateText(apiAnnotation.name()));
                         }
-                        
+
                         String endpoint = "/rest/" + p.value();
-                        
+
                         if (methodPath != null){
                             endpoint += methodPath.value();
                         }
@@ -328,7 +328,7 @@ public class EndpointUtils {
                             try {
                                 Method shouldAddApiMethod = c.getMethod(apiAnnotation.visibilityCheck(), null);
                                 shouldAddApiMethod.setAccessible(true);
-                                 result =(Boolean) shouldAddApiMethod.invoke(c.newInstance(), null);
+                                result = (Boolean) shouldAddApiMethod.invoke(c.newInstance(), null);
                             } catch (NoSuchMethodException | SecurityException | IllegalAccessException
                                     | IllegalArgumentException | InvocationTargetException e) {
                             } catch (InstantiationException e) {
@@ -352,18 +352,13 @@ public class EndpointUtils {
         }
         return availableFilters;
     }
-    
-    
+
+
     /**
      * Used to set locale to US in order to avoid number formatting issues
      * Now issues don't seem to appear, whichever the locale is, so picks the format that's in the settings
      * @return
      */
-//  public static DecimalFormat getDecimalFormat(){
-//      DecimalFormat defaultFormat = FormatHelper.getDecimalFormat();
-//      return defaultFormat;
-//  }
-
     public static DecimalFormat getDecimalSymbols(){
         DecimalFormat defaultFormat = FormatHelper.getDecimalFormat();
         return defaultFormat;
@@ -396,7 +391,7 @@ public class EndpointUtils {
             return null;
         }
     }
-    
+
     /**
      * Adds the request attribute marker to be used by ApiResponseFilter
      * to add the response header before sending to client
@@ -412,7 +407,7 @@ public class EndpointUtils {
         }
         responseHeadersMap.put(headerName, headerValue);
     }
-    
+
     /**
      * Returns HTTP Response status attribute from the request or null if none has been set
      */
@@ -427,18 +422,18 @@ public class EndpointUtils {
         TLSUtils.getRequest().removeAttribute(EPConstants.RESPONSE_STATUS);
         TLSUtils.getRequest().removeAttribute(EPConstants.RESPONSE_HEADERS_MAP);
     }
-    
+
     /**
      * Adds a general error to any JSON result
      * @param output    the output to be provided
      * @param error     error to be attached to the output
      */
-    public static void addGeneralError(JsonBean output, ApiErrorMessage error) { 
-        Map<Integer, ApiErrorMessage> generalErrors = (Map<Integer, ApiErrorMessage>) 
+    public static void addGeneralError(Map<String, Object> output, ApiErrorMessage error) {
+        Map<Integer, ApiErrorMessage> generalErrors = (Map<Integer, ApiErrorMessage>)
                 output.get(ActivityEPConstants.INVALID);
         if (generalErrors == null) {
             generalErrors = new TreeMap<Integer, ApiErrorMessage>();
-            output.set(ActivityEPConstants.INVALID, generalErrors);
+            output.put(ActivityEPConstants.INVALID, generalErrors);
         }
         ApiErrorMessage existing = generalErrors.get(error.id);
         if (existing != null) {
@@ -446,10 +441,10 @@ public class EndpointUtils {
         }
         generalErrors.put(error.id, error);
     }
-    
+
     /**
      * Dynamic configuration of fields to filter out from Beans annotated with @JsonFilter('jsonFilterName')
-     * 
+     *
      * @param jsonFilterName the @JsonFilter id
      * @param fields fields to filter out
      */
@@ -465,7 +460,7 @@ public class EndpointUtils {
         existingFields.addAll(Arrays.asList(fields));
         filtersDef.put(jsonFilterName, existingFields);
     }
-    
+
     /**
      * @return requested JsonFilters and clears their reference from request
      */
@@ -474,7 +469,7 @@ public class EndpointUtils {
         TLSUtils.getRequest().removeAttribute(EPConstants.JSON_FILTERS);
         return filtersDef;
     }
-    
+
     public static MediaType getMediaType(String type) {
         return AMPReportExportConstants.MEDIA_TYPES.getOrDefault(type, MediaType.APPLICATION_OCTET_STREAM_TYPE);
     }

@@ -36,7 +36,9 @@ public class Fields {
     private ListMultimap<String, APIField> getFieldsByInternalName(List<APIField> list) {
         ImmutableListMultimap.Builder<String, APIField> builder = ImmutableListMultimap.builder();
         for (APIField field : list) {
-            builder.put(field.getFieldNameInternal(), field);
+            if (field.getFieldNameInternal() != null) {
+                builder.put(field.getFieldNameInternal(), field);
+            }
         }
         return builder.build();
     }

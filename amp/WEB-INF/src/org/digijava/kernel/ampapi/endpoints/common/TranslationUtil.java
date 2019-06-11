@@ -3,22 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.common;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 
-import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.services.sync.model.Translation;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
-import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
-import org.digijava.module.aim.annotations.translation.TranslatableClass;
-import org.digijava.module.aim.annotations.translation.TranslatableField;
-import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
-import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.digijava.module.translation.util.FieldTranslationPack;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,9 +13,25 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
+import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.sync.model.Translation;
+import org.digijava.kernel.util.DgUtil;
+import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
+import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.digijava.module.translation.util.FieldTranslationPack;
+
 /**
  * Content Translator
- * 
+ *
  */
 public class TranslationUtil {
     protected static final Logger logger = Logger.getLogger(TranslationUtil.class);
@@ -39,7 +39,7 @@ public class TranslationUtil {
     private static final TranslationSettings trnSettings = TranslationSettings.getCurrent();
 
     public TranslationUtil() {
-       this.translations = new ArrayList<AmpContentTranslation>();
+        this.translations = new ArrayList<AmpContentTranslation>();
     }
 
     public List<AmpContentTranslation> getTranslations() {
@@ -149,14 +149,14 @@ public class TranslationUtil {
         if (field.isAnnotationPresent(VersionableFieldTextEditor.class)) {
             return TranslationSettings.TranslationType.TEXT;
         }
-        if (field.isAnnotationPresent(ResourceTextField.class)) {
-            return TranslationSettings.TranslationType.RESOURCE;
+        if (MultilingualContent.class.isAssignableFrom(field.getType())) {
+            return TranslationSettings.TranslationType.MULTILINGUAL;
         }
         return TranslationSettings.TranslationType.NONE;
     }
-    
+
     /**
-     * Retrieves translation or a simple String value 
+     * Retrieves translation or a simple String value
      * @param fieldName
      * @param parentObj
      * @param jsonValue

@@ -9,7 +9,6 @@ import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +19,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
@@ -31,9 +31,11 @@ import org.digijava.kernel.ampapi.endpoints.activity.FMService;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldAccessor;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
+import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslations;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
@@ -114,7 +116,7 @@ public class FieldsEnumerator {
 
         APIType apiType = new APIType(type, fieldType);
         apiField.setApiType(apiType);
-        
+
         boolean isList = apiType.getFieldType().isList();
 
         if (apiField.isId()
@@ -124,10 +126,10 @@ public class FieldsEnumerator {
 
         apiField.setPossibleValuesProviderClass(getPossibleValuesProvider(field));
         String cPVPath = StringUtils.isBlank(interchangeable.commonPV()) ? null : interchangeable.commonPV();
-        apiField.setCommonPossibleValuesPath(cPVPath); 
+        apiField.setCommonPossibleValuesPath(cPVPath);
 
         String label = getLabelOf(interchangeable);
-        apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
+        apiField.setFieldLabel(getTranslationsForLabel(label));
 
         apiField.setUnconditionalRequired(getUnconditionalRequiredValue(context, fieldTitle));
         apiField.setDependencyRequired(getDependencyRequiredValue(context));
@@ -180,8 +182,7 @@ public class FieldsEnumerator {
                     UniqueValidator.class, args, groups, ConstraintDescriptor.ConstraintTarget.FIELD));
         }
 
-        // only String fields should clarify if they are translatable or not
-        if (java.lang.String.class.equals(field.getType())) {
+        if (TranslationSettings.canBeTranslatable(field.getType())) {
             apiField.setTranslatable(fieldInfoProvider.isTranslatable(field));
             apiField.setTranslationType(fieldInfoProvider.getTranslatableType(field));
         }
@@ -395,15 +396,15 @@ public class FieldsEnumerator {
      * @param label the label to be translated
      * @return a map from the ISO2 code -> translation in said text
      */
-    private Map<String, String> getTranslationsForLabel(String label) {
-        Map<String, String> translations = new HashMap<>();
+    private UnwrappedTranslations getTranslationsForLabel(String label) {
+        UnwrappedTranslations translations = new UnwrappedTranslations();
         try {
             Collection<Message> messages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);
             for (Message m : messages) {
-                translations.put(m.getLocale(), m.getMessage());
+                translations.set(m.getLocale(), m.getMessage());
             }
             if (translations.isEmpty()) {
-                translations.put("EN", label);
+                translations.set("EN", label);
             }
         } catch (WorkerException e) {
             LOGGER.error(e.getMessage());
@@ -537,18 +538,18 @@ public class FieldsEnumerator {
             return ActivityEPConstants.FIELD_NOT_REQUIRED;
         }
     }
-    
+
     private boolean getImportableValue(FEContext context, String fieldTitle, Interchangeable interchangeable) {
         if (isFieldIatiIdentifier(fieldTitle) && AmpClientModeHolder.isIatiImporterClient()) {
             return true;
         }
-        
+
         boolean importable = interchangeable.importable();
-        
+
         if (StringUtils.isNotBlank(interchangeable.readOnlyFmPath())) {
             return importable && !isVisible(interchangeable.readOnlyFmPath(), context);
         }
-        
+
         return importable;
     }
 
@@ -650,7 +651,7 @@ public class FieldsEnumerator {
     protected boolean isVisible(String fmPath, FEContext context) {
         return fmService.isVisible(FMVisibility.handleParentFMPath(fmPath, context.getIntchStack()));
     }
-    
+
     private boolean isFieldIatiIdentifier(String fieldName) {
         return StringUtils.equals(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER), fieldName);
     }

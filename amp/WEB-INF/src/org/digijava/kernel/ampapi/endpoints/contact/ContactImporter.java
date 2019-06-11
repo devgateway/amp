@@ -1,13 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.contact;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -18,7 +15,7 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 /**
  * @author Octavian Ciubotaru
  */
-public class ContactImporter extends ObjectImporter {
+public class ContactImporter extends ObjectImporter<AmpContact> {
 
     private AmpContact contact;
 
@@ -28,15 +25,15 @@ public class ContactImporter extends ObjectImporter {
                 AmpFieldsEnumerator.getEnumerator().getContactField());
     }
 
-    public ContactImporter createContact(JsonBean newJson) {
+    public ContactImporter createContact(Map<String, Object> newJson) {
         return importContact(null, newJson);
     }
 
-    public ContactImporter updateContact(Long contactId, JsonBean newJson) {
+    public ContactImporter updateContact(Long contactId, Map<String, Object> newJson) {
         return importContact(contactId, newJson);
     }
 
-    private ContactImporter importContact(Long contactId, JsonBean newJson) {
+    private ContactImporter importContact(Long contactId, Map<String, Object> newJson) {
         this.newJson = newJson;
 
         Object contactJsonId = newJson.get(ContactEPConstants.ID);
@@ -80,7 +77,7 @@ public class ContactImporter extends ObjectImporter {
                 }
             }
 
-            validateAndImport(contact, newJson.any());
+            validateAndImport(contact, newJson);
 
             if (errors.isEmpty()) {
                 setupBeforeSave(contact, createdBy);
@@ -113,33 +110,14 @@ public class ContactImporter extends ObjectImporter {
         contact.getOrganizationContacts().forEach(o -> o.setContact(contact));
     }
 
-    public AmpContact getContact() {
+    @Override
+    public AmpContact getImportResult() {
         return contact;
     }
-    
-    /**
-     * Get the result of import/update contact in JsonBean format
-     *
-     * @return JsonBean the result of the import or update action
-     */
-    public JsonBean getResult() {
-        JsonBean result = new JsonBean();
-        if (errors.size() == 0 && contact == null) {
-            result.set(EPConstants.ERROR, ApiError.toError(ApiError.UNKOWN_ERROR).getErrors());
-        } else if (errors.size() > 0) {
-            result.set(EPConstants.ERROR, ApiError.toError(errors.values()).getErrors());
-            result.set(ContactEPConstants.CONTACT, newJson);
-        } else {
-            result = new JsonBean();
-            result.set(ContactEPConstants.ID, contact.getId());
-            result.set(ContactEPConstants.NAME, contact.getName());
-            result.set(ContactEPConstants.LAST_NAME, contact.getLastname());
-        }
-        if (!warnings.isEmpty()) {
-            result.set(EPConstants.WARNINGS, ApiError.formatNoWrap(warnings.values()));
-        }
-        
-        return result;
+
+    @Override
+    protected String getInvalidInputFieldName() {
+        return ContactEPConstants.CONTACT;
     }
 
 }

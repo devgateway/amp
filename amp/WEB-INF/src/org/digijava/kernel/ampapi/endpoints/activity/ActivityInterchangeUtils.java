@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,15 +17,16 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -64,8 +65,8 @@ public final class ActivityInterchangeUtils {
      *
      * @return latest project overview or an error if invalid configuration is received
      */
-    public static JsonBean importActivity(JsonBean newJson, boolean update, ActivityImportRules rules,
-            String endpointContextPath) {
+    public static JsonApiResponse<ActivitySummary> importActivity(Map<String, Object> newJson, boolean update,
+            ActivityImportRules rules, String endpointContextPath) {
         APIField activityField = AmpFieldsEnumerator.getEnumerator().getActivityField();
 
         return new ActivityImporter(activityField, rules)
@@ -73,23 +74,24 @@ public final class ActivityInterchangeUtils {
                 .getResult();
     }
 
-    @SuppressWarnings("unchecked")
-    public static boolean validateFilterActivityFields(JsonBean filterJson, JsonBean result, List<APIField> fields) {
+    /**
+     * Validates fields filter
+     * @param filterJson
+     * @param fields
+     * @return ApiErrorResponse if error detected or null
+     */
+    public static ApiErrorResponse validateFilterActivityFields(Map<String, Object> filterJson, List<APIField> fields) {
         List<String> filteredItems = new ArrayList<String>();
 
         if (filterJson != null) {
             try {
                 filteredItems = (List<String>) filterJson.get(ActivityEPConstants.FILTER_FIELDS);
                 if (filteredItems == null) {
-                    addFilterValidationErrorToResult(result);
-
-                    return false;
+                    return getFilterValidationError();
                 }
             } catch (Exception e) {
                 logger.warn("Error in validating fields of the filter attribute. " + e.getMessage());
-                addFilterValidationErrorToResult(result);
-
-                return false;
+                return getFilterValidationError();
             }
         }
 
@@ -98,18 +100,16 @@ public final class ActivityInterchangeUtils {
                 PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(field, fields);
             }
         } catch (ApiRuntimeException e) {
-            result.set(EPConstants.ERROR, e.getUnwrappedError());
-            return false;
+            return ApiError.toError(e.getUnwrappedError().toString());
         }
 
-        return true;
+        return null;
     }
 
-    private static void addFilterValidationErrorToResult(JsonBean result) {
+    private static ApiErrorResponse getFilterValidationError() {
         String message = "Invalid filter. The usage should be {\"" + ActivityEPConstants.FILTER_FIELDS
                 + "\" : [\"field1\", \"field2\", ..., \"fieldn\"]}";
-
-        result.set(EPConstants.ERROR, ApiError.toError(message).getErrors());
+        return ApiError.toError(message);
     }
 
     /**
@@ -205,8 +205,8 @@ public final class ActivityInterchangeUtils {
      * @param ampIds
      * @return
      */
-    public static Collection<JsonBean> getActivitiesByAmpIds(List<String> ampIds) {
-        Map<String, JsonBean> jsonActivities = new HashMap<>();
+    public static Collection<Map<String, Object>> getActivitiesByAmpIds(List<String> ampIds) {
+        Map<String, Map<String, Object>> jsonActivities = new HashMap<>();
         ActivityExporter exporter = new ActivityExporter(null);
         // TODO report duplicate/empty amp-ids?
         Set<String> uniqueAmpIds = new HashSet(ampIds);
@@ -221,14 +221,14 @@ public final class ActivityInterchangeUtils {
             List<AmpActivityVersion> activities = ActivityUtil.getActivitiesByAmpIds(currentAmpIds);
             activities.forEach(activity -> {
                 String ampId = activity.getAmpId();
-                JsonBean result = new JsonBean();
+                Map<String, Object> result = new LinkedHashMap<>();
                 try {
                     ActivityUtil.initializeForApi(activity);
                     result = exporter.export(activity);
                 } catch (Exception e) {
-                    result.set(EPConstants.ERROR, ApiError.toError(
+                    result.put(EPConstants.ERROR, ApiError.toError(
                             ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage())).getErrors());
-                    result.set(ActivityEPConstants.AMP_ID_FIELD_NAME, ampId);
+                    result.put(ActivityEPConstants.AMP_ID_FIELD_NAME, ampId);
                 } finally {
                     PersistenceManager.getSession().evict(activity);
                 }
@@ -242,19 +242,20 @@ public final class ActivityInterchangeUtils {
         return jsonActivities.values();
     }
 
-    private static void reportActivitiesNotFound(Set<String> ampIds, Map<String, JsonBean> processedActivities) {
+    private static void reportActivitiesNotFound(Set<String> ampIds,
+            Map<String, Map<String, Object>> processedActivities) {
         if (processedActivities.size() != ampIds.size()) {
             ampIds.removeAll(processedActivities.keySet());
             ampIds.forEach(ampId -> {
-                JsonBean notFoundJson = new JsonBean();
-                notFoundJson.set(EPConstants.ERROR, ApiError.toError(ActivityErrors.ACTIVITY_NOT_FOUND).getErrors());
-                notFoundJson.set(ActivityEPConstants.AMP_ID_FIELD_NAME, ampId);
+                Map<String, Object> notFoundJson = new LinkedHashMap<>();
+                notFoundJson.put(EPConstants.ERROR, ApiError.toError(ActivityErrors.ACTIVITY_NOT_FOUND).getErrors());
+                notFoundJson.put(ActivityEPConstants.AMP_ID_FIELD_NAME, ampId);
                 processedActivities.put(ampId, notFoundJson);
             });
         }
     }
 
-    public static JsonBean getActivityByAmpId(String ampId) {
+    public static Map<String, Object> getActivityByAmpId(String ampId) {
         Long activityId = ActivityUtil.findActivityIdByAmpId(ampId);
         return getActivity(activityId);
     }
@@ -265,7 +266,7 @@ public final class ActivityInterchangeUtils {
      * @param projectId is amp_activity_id
      * @return
      */
-    public static JsonBean getActivity(Long projectId) {
+    public static Map<String, Object> getActivity(Long projectId) {
         return getActivity(projectId, null);
     }
 
@@ -291,7 +292,7 @@ public final class ActivityInterchangeUtils {
      * @param filter is the JSON with a list of fields
      * @return
      */
-    public static JsonBean getActivity(Long projectId, JsonBean filter) {
+    public static Map<String, Object> getActivity(Long projectId, Map<String, Object> filter) {
         return getActivity(loadActivity(projectId), filter);
     }
 
@@ -302,7 +303,7 @@ public final class ActivityInterchangeUtils {
      * @param filter is the JSON with a list of fields
      * @return Json Activity
      */
-    public static JsonBean getActivity(AmpActivityVersion activity, JsonBean filter) {
+    public static Map<String, Object> getActivity(AmpActivityVersion activity, Map<String, Object> filter) {
         try {
             ActivityExporter exporter = new ActivityExporter(filter);
 

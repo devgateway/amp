@@ -2,11 +2,22 @@ package org.digijava.kernel.ampapi.swagger.converters;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.google.common.collect.ImmutableMap;
+
+import org.dgfoundation.amp.newreports.ReportFilters;
+import org.digijava.kernel.ampapi.swagger.types.ErrorOrWarningPH;
+import org.digijava.kernel.ampapi.swagger.types.FiltersPH;
+import org.digijava.kernel.ampapi.swagger.types.MultilingualLabelPH;
+import org.digijava.kernel.ampapi.swagger.types.PublicHeadersPH;
+import org.digijava.kernel.ampapi.swagger.types.PublicTopDataPH;
+import org.digijava.kernel.ampapi.swagger.types.PublicTopTotalsPH;
+import org.digijava.kernel.ampapi.swagger.types.SettingsPH;
+
 import io.swagger.converter.ModelConverter;
 import io.swagger.converter.ModelConverterContext;
 import io.swagger.jackson.AbstractModelConverter;
@@ -15,13 +26,6 @@ import io.swagger.models.ModelImpl;
 import io.swagger.models.properties.ObjectProperty;
 import io.swagger.models.properties.RefProperty;
 import io.swagger.util.Json;
-import org.dgfoundation.amp.newreports.ReportFilters;
-import org.digijava.kernel.ampapi.endpoints.gis.MultilingualLabelPH;
-import org.digijava.kernel.ampapi.swagger.types.FiltersPH;
-import org.digijava.kernel.ampapi.swagger.types.PublicHeadersPH;
-import org.digijava.kernel.ampapi.swagger.types.PublicTopDataPH;
-import org.digijava.kernel.ampapi.swagger.types.PublicTopTotalsPH;
-import org.digijava.kernel.ampapi.swagger.types.SettingsPH;
 
 /**
  * @author Octavian Ciubotaru
@@ -88,7 +92,7 @@ public class ReportTypesResolver extends AbstractModelConverter {
             model.example(example);
             return model;
         }
-        
+
         if (javaType.getRawClass().isAssignableFrom(PublicHeadersPH.class)) {
             ModelImpl model = new ModelImpl();
             model.name("HeadersPH");
@@ -100,7 +104,7 @@ public class ReportTypesResolver extends AbstractModelConverter {
             model.example(example);
             return model;
         }
-        
+
         if (javaType.getRawClass().isAssignableFrom(PublicTopTotalsPH.class)) {
             ModelImpl model = new ModelImpl();
             model.name("PublicTopTotalsPH");
@@ -112,7 +116,7 @@ public class ReportTypesResolver extends AbstractModelConverter {
             model.example(example);
             return model;
         }
-        
+
         if (javaType.getRawClass().isAssignableFrom(PublicTopDataPH.class)) {
             ModelImpl model = new ModelImpl();
             model.name("PublicTopDataPH");
@@ -125,7 +129,19 @@ public class ReportTypesResolver extends AbstractModelConverter {
             return model;
         }
 
+        if (javaType.getRawClass().isAssignableFrom(ErrorOrWarningPH.class)) {
+            ModelImpl model = new ModelImpl();
+            model.name("ErrorOrWarningPH");
+            model.description("The list of messages coded by AABB format, where AA is the package id and BB is"
+                    + " the error code inside that package. 00 is the global/generic package.");
+            model.additionalProperties(new ObjectProperty());
+            model.example(Collections.singletonMap(
+                    "0101",
+                    Arrays.asList(Collections.singletonMap("Required field", Arrays.asList("activity_status")))));
+            return model;
+        }
+
         return super.resolve(type, context, chain);
     }
-    
+
 }

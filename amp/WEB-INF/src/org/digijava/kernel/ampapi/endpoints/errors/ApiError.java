@@ -116,7 +116,7 @@ public class ApiError {
         processErrorResponseStatus();
         return format(errorMessages);
     }
-    
+
     /**
      * Returns an ApiErrorResponse object with a single error message. Generic 0 error code with one error in the list.
      * Updates the response status.
@@ -128,12 +128,12 @@ public class ApiError {
         processErrorResponseStatus();
         return format(apiErrorMessage);
     }
-    
+
     public static ApiErrorResponse toError(ApiErrorMessage apiErrorMessage, Throwable e) {
         processErrorResponseStatus();
         return format(apiErrorMessage, e);
     }
-    
+
     public static Map<String, Collection<Object>> formatNoWrap(Collection<?> messages) {
         return format(messages).getErrors();
     }
@@ -149,7 +149,7 @@ public class ApiError {
                 int componentId = getErrorComponentId();
                 for(Object errorMessage : errorMessages) {
                     ApiErrorMessage apiError = (ApiErrorMessage) errorMessage;
-                    String errorId = getErrorId(componentId, apiError.id);
+                    String errorId = getErrorId(apiError.isGeneric ? GENERAL_ERROR_CODE : componentId, apiError.id);
 
                     if (errors.get(errorId) == null) {
                         errors.put(errorId, new ArrayList<>());
@@ -165,7 +165,8 @@ public class ApiError {
 
     public static ApiErrorResponse format(ApiErrorMessage apiErrorMessage, Throwable e) {
         Map<String, Collection<Object>> errors = new HashMap<>();
-        errors.put(getErrorId(getErrorComponentIdFromException(e), apiErrorMessage.id),
+        int componendId = apiErrorMessage.isGeneric ? GENERAL_ERROR_CODE : getErrorComponentIdFromException(e);
+        errors.put(getErrorId(componendId, apiErrorMessage.id),
                 Arrays.asList(getErrorText(apiErrorMessage)));
 
         return new ApiErrorResponse(errors);
@@ -173,16 +174,17 @@ public class ApiError {
 
     private static ApiErrorResponse format(ApiErrorMessage apiErrorMessage) {
         Map<String, Collection<Object>> errors = new HashMap<>();
-        errors.put(getErrorId(getErrorComponentId(), apiErrorMessage.id), Arrays.asList(getErrorText(apiErrorMessage)));
-        
+        int componendId = apiErrorMessage.isGeneric ? GENERAL_ERROR_CODE : getErrorComponentId();
+        errors.put(getErrorId(componendId, apiErrorMessage.id), Arrays.asList(getErrorText(apiErrorMessage)));
+
         return new ApiErrorResponse(errors);
     };
-    
+
     private static ApiErrorResponse format(String errorMessage) {
         Map<String, Collection<Object>> errors = new HashMap<>();
         errors.put(String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE),
                 Arrays.asList(errorMessage));
-        
+
         return new ApiErrorResponse(errors);
     }
 
@@ -287,7 +289,7 @@ public class ApiError {
         if (!StringUtils.isBlank(apiErrorMessage.prefix)) {
             errorText += " " + TranslatorWorker.translateText(apiErrorMessage.prefix);
         }
-    
+
         Map<String, Set<String>> error = new HashMap<>();
         error.put(errorText, apiErrorMessage.values);
         return error;
@@ -321,7 +323,7 @@ public class ApiError {
     public static String toXmlErrorString(ApiErrorResponse errorResponse) {
         Map<String, Collection<Object>> errorResponseMap = errorResponse.getErrors();
         List<Map<String, Object>> errors = new ArrayList<>();
-    
+
         for (String key : errorResponseMap.keySet()) {
             Map<String, Object> err = new HashMap<>();
             Collection<Object> error = errorResponseMap.get(key);
@@ -329,12 +331,12 @@ public class ApiError {
             err.put("value", error);
             errors.add(err);
         }
-    
+
         Map<String, List<Map<String, Object>>> errorsMap = new HashMap<>();
         errorsMap.put("error", errors);
         Map<String, Map<String, List<Map<String, Object>>>> responseErrorBean = new HashMap<>();
         responseErrorBean.put("errors", errorsMap);
-    
+
         try {
             JSONObject o = new JSONObject(new ObjectMapper().writer().writeValueAsString(responseErrorBean));
             return XML.toString(o);

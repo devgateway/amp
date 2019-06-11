@@ -23,18 +23,23 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityView;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.SwaggerActivity;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityFunding;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityService;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewWorkspace;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.helper.Constants;
@@ -162,16 +167,16 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getProjectList", ui = false)
     @ApiOperation(
-            value = "Returns a JSON object with the list of all projects on the system, including its view and edit "
-                    + "status for the current logged user.",
+            value = "Returns a list of all projects summary on the system, including their view and edit rights "
+                    + "based on the status for the currently logged in user.",
                     notes = "If the user can view the project, the 'view' property of the project is set to true. "
                             + "False otherwise. If the user can edit the project, the 'edit' property of the project "
                             + "on the JSON is set to true. False otherwise. Pagination can be used if the parameters "
                             + "are sent on the request. If not parameters are sent, the full list of projects is "
-                            + "returned.")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
-    message = "list of JsonBean with all the projects on the system"))
-    public Collection<JsonBean> getProjects(
+                            + "returned.",
+                            code = HttpServletResponse.SC_OK)
+    @JsonView(ActivityView.List.class)
+    public Collection<ActivitySummary> getProjects(
             @ApiParam("Current pagination request reference (random id). It acts as a key for a LRU caching "
                     + "mechanism that holds the full list of projects for the current user. If it is not "
                     + "provided no caching is used")
@@ -180,7 +185,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             @ApiParam("Number of projects to skip") @QueryParam("offset") Integer offset,
             @ApiParam("Number of projects to return") @QueryParam("count") Integer count) {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-        Collection<JsonBean> activityCollection = ProjectList.getActivityList(pid, tm);
+        Collection<ActivitySummary> activityCollection = ProjectList.getActivityList(pid, tm);
         int start = 0;
         int end = activityCollection.size() - 1;
         if (offset != null && count != null && offset < activityCollection.size()) {
@@ -189,7 +194,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                 end = offset + count;
             }
         }
-        return new ArrayList(activityCollection).subList(start, end);
+        return new ArrayList<>(activityCollection).subList(start, end);
     }
 
     @GET
@@ -197,10 +202,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getProject", ui = false)
     @ApiOperation("Provides full project information")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
     message = "project with full set of configured fields and their values"))
-    public JsonBean getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
-        return ActivityInterchangeUtils.getActivity(projectId);
+    public SwaggerActivity getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
+        Map<String, Object> activity = ActivityInterchangeUtils.getActivity(projectId);
+        return new SwaggerActivity(activity);
     }
 
     @POST
@@ -210,9 +216,9 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiOperation("Provides full project information")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
     message = "project with full set of configured fields and their values"))
-    public JsonBean getProject(
+    public Map<String, Object> getProject(
             @ApiParam("project id") @PathParam("projectId") Long projectId,
-            @ApiParam("jsonBean with a list of fields that will be displayed") JsonBean filter) {
+            @ApiParam("jsonBean with a list of fields that will be displayed") Map<String, Object> filter) {
         return ActivityInterchangeUtils.getActivity(projectId, filter);
     }
 
@@ -231,10 +237,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectByAmpId", ui = false)
     @ApiOperation("Retrieve project by AMP Id.")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
     message = "project with full set of configured fields and their values"))
-    public JsonBean getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
-        return ActivityInterchangeUtils.getActivityByAmpId(ampId);
+    public SwaggerActivity getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
+        Map<String, Object> activity = ActivityInterchangeUtils.getActivityByAmpId(ampId);
+        return new SwaggerActivity(activity);
     }
 
     @POST
@@ -256,7 +263,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                             )
             })
             ))
-    public Collection<JsonBean> getProjectsByAmpIds(@ApiParam(value = "List of amp-id", required = true)
+    public Collection<Map<String, Object>> getProjectsByAmpIds(@ApiParam(value = "List of amp-id", required = true)
     List<String> ampIds) {
         return ActivityInterchangeUtils.getActivitiesByAmpIds(ampIds);
     }
@@ -269,24 +276,27 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             value = "Imports an activity.",
             notes = "Saving as draft will be allowed only if this is also possible in AMP Activity Form. "
                     + "When is_draft is false, but some required fields for submit are invalid/missing, then activity "
-                    + "will be saved as draft if can-downgrade-to-draft is true. Otherwise will be rejected.\n\n")
+                    + "will be saved as draft if can-downgrade-to-draft is true. Otherwise will be rejected.\n\n"
+                    + "Rrequest to process approval fields only if you know how to properly handle them.")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, message = "the latest project short overview"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
+        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_Import",
+                message = "the latest project short overview"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Import",
         message = "error if invalid configuration is received")})
-    public JsonBean addProject(
+    @JsonView(ActivityView.Import.class)
+    public JsonApiResponse<ActivitySummary> addProject(
             @ApiParam("can downgrade to draft") @QueryParam("can-downgrade-to-draft") @DefaultValue("false")
             boolean canDowngradeToDraft,
             @ApiParam("process approval fields") @QueryParam("process-approval-fields") @DefaultValue("false")
             boolean isProcessApprovalFields,
             @ApiParam("use created_by and modified_by from input instead of user session") @QueryParam("track-editors")
             @DefaultValue("false") boolean isTrackEditors,
-            @ApiParam("activity configuration") JsonBean newJson) {
+            @ApiParam("activity configuration") SwaggerActivity newJson) {
 
         ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
                 isTrackEditors);
 
-        return ActivityInterchangeUtils.importActivity(newJson, false, rules, uri.getBaseUri() + "activity");
+        return ActivityInterchangeUtils.importActivity(newJson.getMap(), false, rules, uri.getBaseUri() + "activity");
     }
 
     @POST
@@ -298,15 +308,17 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             notes = "Saving as draft will be allowed only if this is also possible in AMP Activity Form. "
                     + "When is_draft is false, but some required fields for submit are invalid/missing, then activity "
                     + "will be saved as draft if can-downgrade-to-draft is true. Otherwise will be rejected.\n\n"
-                    + "AMP Offline must use optimistic lock in order to update activity. For other clients locking is "
-                    + "optional. Locking is achieved by sending last known value of activity_group.version. "
-                    + "If activity was updated in meantime then version will be different and subsequent updates "
-                    + "will fail with appropriate message.")
+                    + "Rrequest to process approval fields only if you know how to properly handle them.\n"
+                    + "Only the lastest activity version is allowed to be updated. A stale activity is detected based "
+                    + "on activity id and activity_group.version.\n"
+                    + "The activity will be optimistically locked during update process.")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, message = "latest project overview"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
+        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_Import",
+                message = "latest project overview"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Import",
         message = "error if invalid configuration is received")})
-    public JsonBean updateProject(
+    @JsonView(ActivityView.Import.class)
+    public JsonApiResponse<ActivitySummary> updateProject(
             @ApiParam("the id of the activity which should be updated") @PathParam("projectId") Long projectId,
             @ApiParam("can downgrade to draft") @QueryParam("can-downgrade-to-draft") @DefaultValue("false")
             boolean canDowngradeToDraft,
@@ -314,23 +326,25 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             boolean isProcessApprovalFields,
             @ApiParam("use created_by and modified_by from input instead of user session") @QueryParam("track-editors")
             @DefaultValue("false") boolean isTrackEditors,
-            @ApiParam("activity configuration") JsonBean newJson) {
+            @ApiParam("activity configuration") SwaggerActivity newJson) {
         /*
          * Originally it was defined as PUT to avoid these type of issues checked here.
          * But it is more common to use it as POST, so let's then validate
          */
-        Object internalId = newJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME);
+        Object internalId = newJson.getMap().get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME);
         if (!projectId.toString().equals(String.valueOf(internalId))) {
             // invalidating
-            String details = "url project_id = " + projectId + ", json " + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME +
-                    " = " + internalId;
-            EndpointUtils.addGeneralError(newJson, ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details));
+            String details = "url project_id = " + projectId + ", json "
+                    + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME + " = " + internalId;
+            return new JsonApiResponse<ActivitySummary>(
+                    ApiError.toError(ActivityErrors.UPDATE_ID_MISMATCH.withDetails(details)))
+                    .addDetail(ActivityEPConstants.ACTIVITY, newJson);
         }
 
         ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
                 isTrackEditors);
 
-        return ActivityInterchangeUtils.importActivity(newJson, true, rules, uri.getBaseUri() + "activity");
+        return ActivityInterchangeUtils.importActivity(newJson.getMap(), true, rules, uri.getBaseUri() + "activity");
     }
 
     @GET

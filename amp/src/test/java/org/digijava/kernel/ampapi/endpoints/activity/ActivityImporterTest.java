@@ -13,7 +13,6 @@ import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -31,8 +30,8 @@ public class ActivityImporterTest {
 
     @Test
     public void testValidationReportUnknownField() throws Exception {
-        JsonBean json = new JsonBean();
-        json.set("foo", "bar");
+        Map<String, Object> json = new HashMap<>();
+        json.put("foo", "bar");
 
         Collection<ApiErrorMessage> actualErrors = new ArrayList<>(validateAndRetrieveImporter(json).getWarnings());
         Collection<ApiErrorMessage> expectedErrors = Arrays.asList(ActivityErrors.FIELD_INVALID.withDetails("foo"));
@@ -45,8 +44,8 @@ public class ActivityImporterTest {
         try {
             AmpClientModeHolder.setClientMode(ClientMode.AMP_OFFLINE);
 
-            JsonBean json = new JsonBean();
-            json.set("foo", "bar");
+            Map<String, Object> json = new HashMap<>();
+            json.put("foo", "bar");
 
             Map<Integer, ApiErrorMessage> actualErrors = validate(json);
 
@@ -56,17 +55,17 @@ public class ActivityImporterTest {
         }
     }
 
-    private Map<Integer, ApiErrorMessage> validate(JsonBean json) {
+    private Map<Integer, ApiErrorMessage> validate(Map<String, Object> json) {
         return validateAndRetrieveImporter(json).getErrors();
     }
 
-    private ActivityImporter validateAndRetrieveImporter(JsonBean json) {
+    private ActivityImporter validateAndRetrieveImporter(Map<String, Object> json) {
         AmpActivityVersion activity = new AmpActivityVersion();
         activity.setApprovalStatus(ApprovalStatus.STARTED);
         APIField activityField = new APIField();
         ActivityImporter importer = new ActivityImporter(activityField, new ActivityImportRules(true, false,
                 false));
-        importer.validateAndImport(activity, json.any(), true);
+        importer.validateAndImport(activity, json, true);
         return importer;
     }
 

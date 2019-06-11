@@ -16,32 +16,28 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.InterchangeableClassMapper;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.TimestampField;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 
 /**
- * Activity Import/Export Utility methods 
- * 
+ * Activity Import/Export Utility methods
+ *
  */
 public class InterchangeUtils {
 
     /**
      * Decides whether a class is enumerable (may be called in the Possible Values EP)
-     *  
+     *
      * @param clazz
      * @return true if possible values are limited to a set for this field, false if otherwise
      */
@@ -72,31 +68,15 @@ public class InterchangeUtils {
     }
 
     /**
-     * transforms a Map<String,String> to a JsonBean with equal structure
-     * 
-     * @param map the map to be transformed
-     * @return a JsonBean of the structure {"\<code1\>":"\<translation1\>", "\<code2\>":"\<translation2\>", ...}
-     */
-    public static JsonBean mapToBean(Map<String, String> map) {
-        if (map.isEmpty())
-            return null;
-        JsonBean bean = new JsonBean();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            bean.set(entry.getKey(), entry.getValue());
-        }
-        return bean;
-    }
-    
-    /**
      * checks whether a Field is assignable from a Collection
-     * 
+     *
      * @param field a Field
      * @return true/false
      */
     public static boolean isCollection(Field field) {
         return Collection.class.isAssignableFrom(field.getType());
     }
-    
+
     public static boolean isTimestampField(Field field) {
         return field.getAnnotation(TimestampField.class) != null;
     }
@@ -104,7 +84,7 @@ public class InterchangeUtils {
     /**
      * returns the generic class defined within a Collection, e.g.
      * Collection<Class_returned>
-     * 
+     *
      * @param field
      * @return the generic class
      */
@@ -141,11 +121,11 @@ public class InterchangeUtils {
     }
 
     /**
-     * This is a special adjusted Session with FlusMode = Commit so that Hiberante doesn't try to commit intermediate 
+     * This is a special adjusted Session with FlusMode = Commit so that Hiberante doesn't try to commit intermediate
      * changes while we still query some information
      * TODO: AMP-20869: we'll need to give it a more thought during refactoring if either rewrite related queries as JDBC queries
-     * or investigate more for 
-     * 
+     * or investigate more for
+     *
      * @return Session with no AutoFlush mode
      */
     public static Session getSessionWithPendingChanges() {

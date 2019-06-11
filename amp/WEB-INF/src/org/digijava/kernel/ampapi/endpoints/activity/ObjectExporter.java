@@ -12,7 +12,6 @@ import java.util.Map;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -35,10 +34,8 @@ public class ObjectExporter<T> {
         return apiFields;
     }
 
-    public JsonBean export(T object) {
-        JsonBean jb = new JsonBean();
-        jb.any().putAll(getObjectJson(object, apiFields, null));
-        return jb;
+    public Map<String, Object> export(T object) {
+        return getObjectJson(object, apiFields, null);
     }
 
     /**
@@ -84,8 +81,8 @@ public class ObjectExporter<T> {
                 if (col.size() > 1) {
                     throw new RuntimeException("Multiple values found for an object field");
                 }
-                fieldValue = col.size() == 1 ? col.iterator().next() : null; 
-            }   
+                fieldValue = col.size() == 1 ? col.iterator().next() : null;
+            }
             jsonValue = (fieldValue == null) ? null : getObjectJson(fieldValue, field.getChildren(), fieldPath);
         } else if (isList) {
             jsonValue = readCollection(field, fieldPath, (Collection) fieldValue);

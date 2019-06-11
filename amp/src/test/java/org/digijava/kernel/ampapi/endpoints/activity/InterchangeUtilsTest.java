@@ -12,12 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.joda.time.DateTime;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -143,7 +142,7 @@ public class InterchangeUtilsTest {
     public void testFormatTimestamp() throws Exception {
         assertEquals("1973-11-26T00:52:03.123+0000", DateTimeUtil.formatISO8601Timestamp(new Date(123123123123L)));
     }
-    
+
     @Test
     public void testFormatDate() throws Exception {
         Date date = DateTime.now().withDate(1973, 11, 26).withTimeAtStartOfDay().toDate();
@@ -159,7 +158,7 @@ public class InterchangeUtilsTest {
     public void testParseTimestamp() {
         assertEquals(new Date(124124124124L), DateTimeUtil.parseISO8601Timestamp("1973-12-07T17:55:24.124+0300"));
     }
-    
+
     /**
      * We need to assure that the date is saved correctly in DB.
      * The date values are stored in DB with midnight time (00:00:00.000) and JDBC uses the local time zone to store it.
@@ -174,12 +173,12 @@ public class InterchangeUtilsTest {
     public void testParseDateWrongFormat() {
         DateTimeUtil.parseISO8601Date("xyz");
     }
-    
+
     @Test(expected = RuntimeException.class)
     public void testParseDateWrongLength() {
         DateTimeUtil.parseISO8601Date("2019-02-08x");
     }
-    
+
     @Test(expected = RuntimeException.class)
     public void testParseTimestampWrongLength() {
         DateTimeUtil.parseISO8601Timestamp("1973-12-07T17:55:24.124+0300xyz");

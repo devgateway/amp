@@ -22,13 +22,24 @@ public class UUIDValidator extends InputValidator {
     public ApiErrorMessage getErrorMessage() {
         return ActivityErrors.FIELD_INVALID_VALUE;
     }
-
+    
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
+                           APIField fieldDescription, String fieldPath) {
+        return isValid(importer, null, newFieldParent, fieldDescription, fieldPath);
+    }
+
+    @Override
+    public boolean isValid(ObjectImporter importer, Object currentObject, Map<String, Object> newFieldParent,
             APIField fieldDescription, String fieldPath) {
         
         if (fieldDescription.getFieldName().equals(FieldMap.underscorify(ActivityFieldsConstants.UUID))) {
-            String uuid = StringUtils.trim((String) newFieldParent.get(fieldDescription.getFieldName()));
+            String uuid = null;
+            if (newFieldParent.containsKey(fieldDescription.getFieldName())) {
+                uuid = StringUtils.trim((String) newFieldParent.get(fieldDescription.getFieldName()));
+            } else {
+                uuid = fieldDescription.getFieldAccessor().get(currentObject);
+            }
             return ((ActivityImporter) importer).getResourceService().getPrivateUuids().contains(uuid);
         }
 

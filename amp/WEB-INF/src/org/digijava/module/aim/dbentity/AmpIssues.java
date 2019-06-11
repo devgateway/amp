@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +22,7 @@ public class AmpIssues implements Serializable, Versionable, Cloneable {
     @Interchangeable(fieldTitle = "Id")
     private Long ampIssueId;
 
-    @Interchangeable(fieldTitle = "Name", label = "Issue", importable = true)
+    @Interchangeable(fieldTitle = "Name", label = "Issue", importable = true, required = SUBMIT)
     private String name ;
 
     @InterchangeableBackReference

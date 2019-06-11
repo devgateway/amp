@@ -151,9 +151,6 @@ public @interface Interchangeable {
      */
     InterchangeableValidator[] interValidators() default {};
 
-    /** regex pattern used for validation (mail, phone, fax) */
-    String regexPattern() default "";
-    
     /* constraints for multi-level validators */
     boolean uniqueConstraint() default false;
 

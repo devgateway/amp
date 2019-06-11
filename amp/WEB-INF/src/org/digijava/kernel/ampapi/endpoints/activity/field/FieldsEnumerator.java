@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -40,6 +41,8 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.validation.ConstraintDescriptor;
 import org.digijava.kernel.validation.ConstraintDescriptors;
+import org.digijava.kernel.validators.common.RegexValidator;
+import org.digijava.kernel.validators.activity.UniqueValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Independent;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -171,15 +174,21 @@ public class FieldsEnumerator {
             }
         }
 
+        List<ConstraintDescriptor> fieldConstraintDescriptors = new ArrayList<>();
+
+        if (apiField.getUniqueConstraint() != null) {
+            Map<String, String> args = ImmutableMap.of("field", apiField.getUniqueConstraint());
+            Set<Class<?>> groups = ImmutableSet.of();
+            fieldConstraintDescriptors.add(new ConstraintDescriptor(
+                    UniqueValidator.class, args, groups, ConstraintDescriptor.ConstraintTarget.FIELD));
+        }
+
         if (TranslationSettings.canBeTranslatable(field.getType())) {
             apiField.setTranslatable(fieldInfoProvider.isTranslatable(field));
             apiField.setTranslationType(fieldInfoProvider.getTranslatableType(field));
         }
         if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldInfoProvider.getType(field))) {
             apiField.setFieldLength(fieldInfoProvider.getMaxLength(field));
-        }
-        if (StringUtils.isNotBlank(interchangeable.regexPattern())) {
-            apiField.setRegexPattern(interchangeable.regexPattern());
         }
         if (StringUtils.isNotEmpty(interchangeable.discriminatorOption())) {
             apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
@@ -202,33 +211,46 @@ public class FieldsEnumerator {
             apiField.setIdChild(idFields.get(0));
         }
 
-        ConstraintDescriptors beanConstraints = findBeanConstraints(apiField.getApiType().getType());
-        apiField.setBeanConstraints(beanConstraints);
+        List<ConstraintDescriptor> beanConstraintDescriptors =
+                findBeanConstraints(apiField.getApiType().getType(), context);
+        apiField.setBeanConstraints(new ConstraintDescriptors(beanConstraintDescriptors));
 
-        ConstraintDescriptors fieldConstraints = findFieldConstraints(interchangeable.interValidators());
-        apiField.setFieldConstraints(fieldConstraints);
+        fieldConstraintDescriptors.addAll(findFieldConstraints(interchangeable.interValidators(), context));
+        apiField.setFieldConstraints(new ConstraintDescriptors(fieldConstraintDescriptors));
+
+        apiField.setRegexPattern(findRegexPattern(fieldConstraintDescriptors));
 
         return apiField;
     }
 
-    private ConstraintDescriptors findBeanConstraints(Class<?> type) {
+    private String findRegexPattern(List<ConstraintDescriptor> descriptors) {
+        return descriptors.stream()
+                .filter(d -> d.getConstraintValidatorClass().equals(RegexValidator.class))
+                .map(d -> d.getArguments().get("regex"))
+                .findAny()
+                .orElse(null);
+    }
+
+    private List<ConstraintDescriptor> findBeanConstraints(Class<?> type, FEContext context) {
         InterchangeableValidator[] validators = type.getAnnotationsByType(InterchangeableValidator.class);
-        return getConstraintDescriptors(validators, ConstraintDescriptor.ConstraintTarget.TYPE);
+        return getConstraintDescriptors(validators, ConstraintDescriptor.ConstraintTarget.TYPE, context);
     }
 
-    private ConstraintDescriptors findFieldConstraints(InterchangeableValidator[] validators) {
-        return getConstraintDescriptors(validators, ConstraintDescriptor.ConstraintTarget.FIELD);
+    private List<ConstraintDescriptor> findFieldConstraints(InterchangeableValidator[] validators, FEContext context) {
+        return getConstraintDescriptors(validators, ConstraintDescriptor.ConstraintTarget.FIELD, context);
     }
 
-    private ConstraintDescriptors getConstraintDescriptors(InterchangeableValidator[] validators,
-            ConstraintDescriptor.ConstraintTarget constraintTarget) {
+    private List<ConstraintDescriptor> getConstraintDescriptors(InterchangeableValidator[] validators,
+            ConstraintDescriptor.ConstraintTarget constraintTarget, FEContext context) {
         List<ConstraintDescriptor> descriptors = new ArrayList<>();
         for (InterchangeableValidator validator : validators) {
-            ImmutableSet<Class<?>> groups = ImmutableSet.copyOf(validator.groups());
-            Map<String, String> attributes = parseAttributes(validator);
-            descriptors.add(new ConstraintDescriptor(validator.value(), attributes, groups, constraintTarget));
+            if (isVisible(validator.fmPath(), context)) {
+                ImmutableSet<Class<?>> groups = ImmutableSet.copyOf(validator.groups());
+                Map<String, String> attributes = parseAttributes(validator);
+                descriptors.add(new ConstraintDescriptor(validator.value(), attributes, groups, constraintTarget));
+            }
         }
-        return new ConstraintDescriptors(descriptors);
+        return descriptors;
     }
 
     private Map<String, String> parseAttributes(InterchangeableValidator validator) {
@@ -284,8 +306,9 @@ public class FieldsEnumerator {
     public APIField getMetaModel(Class<?> clazz) {
         APIField root = new APIField();
         root.setApiType(new APIType(clazz));
-        root.setChildren(getAllAvailableFields(clazz));
-        root.setBeanConstraints(findBeanConstraints(clazz));
+        FEContext context = new FEContext();
+        root.setChildren(getAllAvailableFields(clazz, context));
+        root.setBeanConstraints(new ConstraintDescriptors(findBeanConstraints(clazz, context)));
         return root;
     }
 

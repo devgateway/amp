@@ -3,7 +3,9 @@ package org.digijava.module.aim.dbentity;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.validators.common.RegexValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 
 /**
  * @author Octavian Ciubotaru
@@ -11,7 +13,9 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 public class AmpContactEmailProperty extends AmpContactProperty {
 
     @Interchangeable(fieldTitle = "Value", required = ALWAYS, importable = true,
-            regexPattern = ActivityEPConstants.REGEX_PATTERN_EMAIL)
+            interValidators = @InterchangeableValidator(
+                    value = RegexValidator.class,
+                    attributes = "regex=" + ActivityEPConstants.REGEX_PATTERN_EMAIL))
     private String value;
 
     @Override

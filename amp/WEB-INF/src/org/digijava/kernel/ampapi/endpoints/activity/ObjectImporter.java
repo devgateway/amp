@@ -69,7 +69,7 @@ public abstract class ObjectImporter<T> {
     private Validator beanValidator;
 
     private Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper = new DefaultErrorsMapper();
-
+    
     private ImporterInterchangeValidator importerInterchangeValidator = new ImporterInterchangeValidator(errors);
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
@@ -224,14 +224,17 @@ public abstract class ObjectImporter<T> {
         String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
         Object newJsonValue = newJsonParent.get(fieldName);
 
-        boolean isValidFormat = formatValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
+        boolean isValidFormat = formatValidator.isValid(this, newParent, newJsonParent, fieldDef, currentFieldPath);
         if (isValidFormat) {
-            isValidFormat = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
-            if (isValidFormat) {
-                businessRulesValidator.isValid(this, newJsonParent, fieldDef, currentFieldPath, errors);
+            if (newJsonParent.containsKey(fieldName)) {
+                isValidFormat = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
             }
-
-            if (fieldDef.isImportable()) {
+        
+            if (isValidFormat) {
+                businessRulesValidator.isValid(this, newParent, newJsonParent, fieldDef, currentFieldPath);
+            }
+            
+            if (fieldDef.isImportable() && newJsonParent.containsKey(fieldName)) {
                 Object jsonValue = newJsonParent.get(fieldName);
                 Object newValue = getNewValue(fieldDef, newParent, jsonValue);
                 fieldDef.getFieldAccessor().set(newParent, newValue);
@@ -308,7 +311,7 @@ public abstract class ObjectImporter<T> {
          * Current field will be verified below and reported as invalid if sub-elements are mandatory and are
          * not provided.
          */
-
+        
         // skip children validation immediately if only ID is expected
         boolean idOnly = fieldDef.isIdOnly();
         boolean isList = fieldType.isList();
@@ -524,7 +527,11 @@ public abstract class ObjectImporter<T> {
     public void addError(ApiErrorMessage error) {
         errors.put(error.id, error);
     }
-
+    
+    public Map<Integer, ApiErrorMessage> getErrors() {
+        return errors;
+    }
+    
     public Collection<ApiErrorMessage> getWarnings() {
         return warnings.values();
     }

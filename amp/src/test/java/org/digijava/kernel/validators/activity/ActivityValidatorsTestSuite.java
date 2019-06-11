@@ -12,7 +12,8 @@ import org.junit.runners.Suite;
         OnBudgetValidatorTest.class,
         FundingWithTransactionsValidatorTest.class,
         ComponentFundingOrgRoleValidatorTest.class,
-        PledgeOrgValidatorTest.class
+        PledgeOrgValidatorTest.class,
+        UniqueValidatorTest.class
 })
 public class ActivityValidatorsTestSuite {
 }

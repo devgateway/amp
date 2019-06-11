@@ -69,7 +69,7 @@ public abstract class ObjectImporter<T> {
     private Validator beanValidator;
 
     private Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper = new DefaultErrorsMapper();
-    
+
     private ImporterInterchangeValidator importerInterchangeValidator = new ImporterInterchangeValidator(errors);
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
@@ -137,7 +137,7 @@ public abstract class ObjectImporter<T> {
      * @param root internal representation of the object
      */
     public void processInterViolationsForTypes(Map<String, Object> json, Object root) {
-        importerInterchangeValidator.integrateErrorsIntoResult(
+        importerInterchangeValidator.integrateTypeErrorsIntoResult(
                 importerInterchangeValidator.validate(apiField, root), json);
     }
 
@@ -229,7 +229,7 @@ public abstract class ObjectImporter<T> {
             if (newJsonParent.containsKey(fieldName)) {
                 isValidFormat = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
             }
-        
+
             if (isValidFormat) {
                 businessRulesValidator.isValid(this, newParent, newJsonParent, fieldDef, currentFieldPath);
             }
@@ -239,8 +239,22 @@ public abstract class ObjectImporter<T> {
                 Object newValue = getNewValue(fieldDef, newParent, jsonValue);
                 fieldDef.getFieldAccessor().set(newParent, newValue);
             }
+
+            validateField(fieldDef, newParent, newJsonParent, fieldPath);
         }
         return isValidFormat;
+    }
+
+    protected void validateField(APIField field, Object parentObject, Map<String, Object> parentJson,
+            String fieldPath) {
+        Object fieldValue = field.getFieldAccessor().get(parentObject);
+
+        Set<org.digijava.kernel.validation.ConstraintViolation> violations =
+                importerInterchangeValidator.validateField(field, fieldValue);
+
+        if (!violations.isEmpty()) {
+            importerInterchangeValidator.integrateFieldErrorsIntoResult(violations, parentJson, fieldPath);
+        }
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -311,7 +325,7 @@ public abstract class ObjectImporter<T> {
          * Current field will be verified below and reported as invalid if sub-elements are mandatory and are
          * not provided.
          */
-        
+
         // skip children validation immediately if only ID is expected
         boolean idOnly = fieldDef.isIdOnly();
         boolean isList = fieldType.isList();
@@ -527,11 +541,11 @@ public abstract class ObjectImporter<T> {
     public void addError(ApiErrorMessage error) {
         errors.put(error.id, error);
     }
-    
+
     public Map<Integer, ApiErrorMessage> getErrors() {
         return errors;
     }
-    
+
     public Collection<ApiErrorMessage> getWarnings() {
         return warnings.values();
     }

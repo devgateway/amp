@@ -76,4 +76,9 @@ public class APIType {
     public boolean isAListOfObjects() {
         return fieldType.isList() && itemType.isObject();
     }
+
+    @JsonIgnore
+    public boolean isAListOfPrimitives() {
+        return fieldType.isList() && itemType.isSimpleType();
+    }
 }

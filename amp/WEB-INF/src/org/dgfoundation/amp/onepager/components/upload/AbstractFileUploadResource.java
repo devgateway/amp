@@ -1,11 +1,12 @@
 package org.dgfoundation.amp.onepager.components.upload;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import org.apache.wicket.protocol.http.servlet.MultipartServletWebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.upload.FileItem;
 import org.apache.wicket.util.upload.FileUploadException;
@@ -43,6 +44,7 @@ public abstract class AbstractFileUploadResource extends AbstractResource
     protected ResourceResponse newResourceResponse(Attributes attributes)
     {
         final ResourceResponse resourceResponse = new ResourceResponse();
+        resourceResponse.setTextEncoding(String.valueOf(UTF_8));
 
         final ServletWebRequest webRequest = (ServletWebRequest) attributes.getRequest();
 

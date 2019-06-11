@@ -544,11 +544,11 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                    															: String.valueOf(k);
 				                                    													if (k == hourNum) {
 				                                    			%>
-				                                    					<option selected="selected" value="<%=k%>"><%=val%></option>
+				                                    					<option selected="selected" value="<%=k%>"><digi:easternArabicNumber><%=val%></digi:easternArabicNumber></option>
 				                                    			<%
 				                                    				} else {
 				                                    			%>
-					                                    				<option  value="<%=k%>"><%=val%></option>
+					                                    				<option  value="<%=k%>"><digi:easternArabicNumber><%=val%></digi:easternArabicNumber></option>
 					                                    		<%
 					                                    			}
 					                                    											}
@@ -562,11 +562,11 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                    															: String.valueOf(k);
 				                                    													if (k == minNum) {
 				                                    			%>
-				                                    					<option value="<%=k%>" selected="selected"><%=val%></option>
+				                                    					<option value="<%=k%>" selected="selected"><digi:easternArabicNumber><%=val%></digi:easternArabicNumber></option>
 				                                    			<%
 				                                    				} else {
 				                                    			%>
-					                                    				<option value="<%=k%>"><%=val%></option>
+					                                    				<option value="<%=k%>"><digi:easternArabicNumber><%=val%></digi:easternArabicNumber></option>
 					                                    		<%
 					                                    			}
 					                                    											}
@@ -579,11 +579,11 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                    													if (ampm[k]
 				                                    															.compareToIgnoreCase(ampmNum) == 0) {
 				                                    			%>
-				                                    					<option value="<%=k%>" selected="selected"><%=ampm[k]%></option>
+																<option value="<%=k%>" selected="selected"><digi:trn><%=ampm[k]%></digi:trn></option>
 				                                    			<%
 				                                    				} else {
 				                                    			%>
-					                                    				<option value="<%=k%>"><%=ampm[k]%></option>
+					                                    				<option value="<%=k%>"><digi:trn><%=ampm[k]%></digi:trn></option>
 					                                    		<%
 					                                    			}
 					                                    											}
@@ -596,11 +596,8 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
  				                                    													"hh:mm:ss a");
  				                                    											String sdate = org.digijava.module.common.util.DateTimeUtil
  				                                    													.formatDate(new java.util.Date());
- 				                                    		%> 
-						                                    <%=sdate
-															+ " "
-															+ formatter
-																	.format(new java.util.Date())%>  
+ 				                                    		%>
+															<digi:easternArabicNumber><%=sdate + " " + formatter.format(new java.util.Date())%></digi:easternArabicNumber>
 				                                    	
 				                                    	</c:when>
 				                                    	<c:when test='${type == "t_timeout_currency_update"}'>
@@ -724,7 +721,8 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 																for (int k = 30; k <= 90; k += 30) {
 																									if (k == selected) {
 															%>
-				                                    					<option value="<%=k%>" selected="selected"><%=k%>
+				                                    					<option value="<%=k%>" selected="selected">
+																			<digi:easternArabicNumber><%=k%></digi:easternArabicNumber>
 				                                    						<digi:trn key="aim:globalSettings:Days"> 
 				                                    							Days
 				                                    						</digi:trn>
@@ -733,7 +731,8 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                    			<%
 				                                    						 				                                    				} else {
 				                                    						 				                                    			%>
-					                                    				<option value="<%=k%>"><%=k%>
+					                                    				<option value="<%=k%>">
+																			<digi:easternArabicNumber><%=k%></digi:easternArabicNumber>
 					                                    					<digi:trn key="aim:globalSettings:Days"> 
 				                                    							Days
 				                                    						</digi:trn>

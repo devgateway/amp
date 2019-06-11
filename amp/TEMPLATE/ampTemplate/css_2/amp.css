@@ -1432,3 +1432,36 @@ div.footer {
 .gs-setting-label {
     text-align: right;
 }
+
+.corner-right {
+    background:url(/TEMPLATE/ampTemplate/module/aim/images/corner-r.gif);
+    width: 17px;
+    height: 17px;
+}
+
+.list-item-arrow {
+    background:url(/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif);
+    width: 15px;
+    height: 10px;
+    float: left;
+}
+
+.visibility-import-button {
+    float: left;
+    padding-left: 10px;
+}
+
+.visibility-file-input {
+    float: left;
+}
+
+.visibility-file-input .fakefile .fakefile2 {
+    position: absolute;
+    top: 0px;
+    width: auto;
+    left: 217px;
+    padding: 0;
+    margin: 0;
+    z-index: 1;
+    line-height: 90%;
+}

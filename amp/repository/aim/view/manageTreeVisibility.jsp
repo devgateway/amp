@@ -30,10 +30,6 @@
 
 <link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
 <link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/context-menu.css" />" />
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/connection-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/element-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/yahoo-min.js"></script>
 
 <script type="text/javascript">
 function openFieldPermissionsPopup(fieldId) {
@@ -75,7 +71,6 @@ function showDescriptionToolbox(id){
 }
 </script>
 
-<script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 <style type="text/css"> 
 	#demo .yui-nav li {

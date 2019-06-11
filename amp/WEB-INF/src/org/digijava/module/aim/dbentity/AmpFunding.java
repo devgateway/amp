@@ -31,6 +31,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.validator.fundings.TransactionOrgRole;
 import org.digijava.module.aim.validator.groups.API;
@@ -40,7 +41,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 @TranslatableClass(displayName = "Funding")
 @InterchangeableValidator(value = FundingWithTransactionsValidator.class, attributes = "required=Y")
 @InterchangeableValidator(PledgeOrgValidator.class)
-public class AmpFunding implements Serializable, Versionable, Cloneable {
+public class AmpFunding implements Serializable, Versionable, Cloneable, Identifiable {
     //IATI-check: not ignored!
     private static final long serialVersionUID = 1L;
 
@@ -930,5 +931,9 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     public AmpCategoryValue getConcessionalityLevel() {
         return this.concessionalityLevel;
     }
-    
+
+    @Override
+    public Object getIdentifier() {
+        return ampFundingId;
+    }
 }

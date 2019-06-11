@@ -8,6 +8,10 @@
     direction: rtl;
 }
 
+#homelayout {
+    direction: rtl;
+}
+
 .flag {
     float: right !important;
     margin-right: -4px !important;

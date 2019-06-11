@@ -29,7 +29,7 @@
                       <table border="0" cellspacing="2" cellpadding="2">
                         <module:display name="Global Settings" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="trnSystemSettings">
                                 <digi:trn invisibleLinks="true">Click here to view System Settings</digi:trn>
@@ -45,7 +45,7 @@
                           <c:set var="gatePermLink">
                             <digi:trn invisibleLinks="true">Click here to manage gate permissions and assignments</digi:trn>
                           </c:set>
-                          <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                          <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                           <td class="admin_box_label">
                             <html:link href="/gateperm/managePermMap.do" title="${gatePermLink}">
                               <digi:trn>Global permission Manager</digi:trn>
@@ -53,7 +53,7 @@
                           </td>
                         </tr>
                         <tr>
-                          <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                          <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                           <td class="admin_box_label">
                             <c:set var="permManagerLink">
                               <digi:trn key="aim:permManagerLinkTitle" invisibleLinks="true">Click here to manage permissions</digi:trn>
@@ -67,7 +67,7 @@
                           <module:display name="Feature Manager" parentModule="ADMINISTRATIVE SECTION">
                         <tr>
                           <td>
-                            <img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif">
+                            <img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif">
                           </td>
                           <td class="admin_box_label">
                             <c:set var="trnFeatureManager">
@@ -81,7 +81,7 @@
                         </module:display>
                         <module:display name="Quartz Job Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="trn">
                                 <digi:trn invisibleLinks="true">Click here to view Job Manager</digi:trn>
@@ -95,7 +95,7 @@
 
                         <module:display name="Flag uploader" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="trnUploadFlags">
                                 <digi:trn invisibleLinks="true">Click here to upload and select flags</digi:trn>
@@ -108,7 +108,7 @@
                         </module:display>
                         <module:display name="Data Freeze Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="trnDataFreezeManager">
                                 <digi:trn invisibleLinks="true">Click here to access Data Freeze Manager</digi:trn>
@@ -123,7 +123,7 @@
                         
                         <module:display name="Project Performance Alerts Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                                 <c:set var="trnProjectPerformanceAlertsManager">
                                     <digi:trn invisibleLinks="true">Click here to access Project Performance Alerts Manager</digi:trn>
@@ -145,7 +145,7 @@
                         <module:display name="Workspace Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td>
-                              <img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif">
+                              <img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif">
                             </td>
                             <td class="admin_box_label">
                               <c:set var="trnWorkspaceManager">
@@ -159,7 +159,7 @@
                         </module:display>
                         <module:display name="User Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view User Manager</digi:trn>
@@ -180,7 +180,7 @@
                       <table border="0" cellspacing="2" cellpadding="2">
                         <module:display name="Category Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Category Manager</digi:trn>
@@ -193,7 +193,7 @@
                         </module:display>
                         <module:display name="Dynamic Region Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Region Manager</digi:trn>
@@ -206,7 +206,7 @@
                         </module:display>
                         <module:display name="Sector Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Sector Manager</digi:trn>
@@ -219,7 +219,7 @@
                         </module:display>
                         <module:display name="Fiscal Calendar Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Fiscal Calendar Manager</digi:trn>
@@ -232,7 +232,7 @@
                         </module:display>
                         <feature:display name="Admin - Component Type" module="Components">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Components Types Manager</digi:trn>
@@ -245,7 +245,7 @@
                         </feature:display>
                         <!-- NO MOUDULE TO CONTROL THIS SECTION -->
                         <tr>
-                          <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                          <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                           <td class="admin_box_label">
                             <c:set var="trnOrganizationManager">
                               <digi:trn invisibleLinks="true">Click here to view Organization Manager</digi:trn>
@@ -257,7 +257,7 @@
                         </tr>
                         <module:display name="Program Managers" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Multi Program Manager</digi:trn>
@@ -268,7 +268,7 @@
                             </td>
                           </tr>
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Multi Program Configuration Page</digi:trn>
@@ -282,7 +282,7 @@
                         <!-- NO MOUDULE TO CONTROL THIS SECTION -->
                         <module:display name="Indicator Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Indicator Manager</digi:trn>
@@ -296,7 +296,7 @@
 
                         <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to manage GIS Structure Types</digi:trn>
@@ -310,7 +310,7 @@
 
                         <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to manage Aid Effectiveness Indicators</digi:trn>
@@ -324,7 +324,7 @@
 
                         <module:display name="Map configuration" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="trnDataExchangeExportTitle">
                                 <digi:trn invisibleLinks="true">Click here to view the map configuration section</digi:trn>
@@ -338,7 +338,7 @@
 
                         <module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                           <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                           <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                            <td>
                              <a href="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/index.html" >
                                 <digi:trn>GIS Layers Manager</digi:trn>
@@ -349,7 +349,7 @@
 
                         <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn key="aim:clickToViewSectorManager" invisibleLinks="true">Click here to view budget manager</digi:trn>
@@ -374,7 +374,7 @@
                       <table border="0" cellspacing="2" cellpadding="2">
                         <module:display name="Currency Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Currency Manager</digi:trn>
@@ -387,7 +387,7 @@
                         </module:display>
                         <module:display name="Currency Rates Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Currency Rates Manager</digi:trn>
@@ -400,7 +400,7 @@
                         </module:display>
                         <module:display name="Currency deflator" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Currency Deflator</digi:trn>
@@ -421,7 +421,7 @@
                       <table border="0" cellspacing="2" cellpadding="2">
                         <module:display name="Structures Importer" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="trnDataExchangeExportTitle">
                                 <digi:trn invisibleLinks="true">Click here to view Structures Importer</digi:trn>
@@ -434,7 +434,7 @@
                         </module:display>
                         <module:display name="Interchange Result" parentModule="ADMINISTRATIVE SECTION">
                         <tr>
-                          <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                          <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                           <td class="admin_box_label">
                             <c:set var="translation">
                               <digi:trn key="aim:clickToViewInterchangeResult" invisibleLinks="true">Click here to view Interchange Result</digi:trn>
@@ -455,7 +455,7 @@
                       <table border="0" cellspacing="2" cellpadding="2">
                         <module:display name="Audit Logger Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Audit Logger Manager</digi:trn>
@@ -468,7 +468,7 @@
                         </module:display>
                         <module:display name="Activity Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="trnActivityManager">
                                 <digi:trn invisibleLinks="true">Click here to view Activity Manager</digi:trn>
@@ -481,7 +481,7 @@
                         </module:display>
                         <module:display name="Scorecard Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="trnScorecardManager">
                                 <digi:trn invisibleLinks="true">Click here to view Scorecard Manager</digi:trn>
@@ -506,7 +506,7 @@
                       <table border="0" cellspacing="2" cellpadding="2">
                         <module:display name="Public View Content" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to edit public view content</digi:trn>
@@ -519,7 +519,7 @@
                         </module:display>
                         <module:display name="Public Filter Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to manage public filters</digi:trn>
@@ -540,7 +540,7 @@
                       <table border="0" cellspacing="2" cellpadding="2">
                         <feature:display name="Applied Patches" module="Applied Patches">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="trnSystemSettings">
                                 <digi:trn invisibleLinks="true">Click here to view the Patches applied</digi:trn>
@@ -553,7 +553,7 @@
                         </feature:display>
                         <feature:display name="Admin Topics Help" module="HELP">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="trn">
                                 <digi:trn key="help:viewSettings" invisibleLinks="true">Click here to view Help Topics Admin</digi:trn>
@@ -566,7 +566,7 @@
                         </feature:display>
                         <module:display name="Admin Translation Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 translation
@@ -590,7 +590,7 @@
                       <table border="0" cellspacing="2" cellpadding="2">
                         <feature:display  name="Paris Indicators Targets Manager" module="Admin Home">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn key="aim:tipViewAhSurveis" invisibleLinks="true">Click here to view Paris Indicator Manager</digi:trn>
@@ -603,7 +603,7 @@
                         </feature:display>
                         <feature:display  name="Global Partnership Indicators Manager" module="Admin Home">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn key="aim:tipManagerGPI" invisibleLinks="true">Click here to setup GPI</digi:trn>
@@ -627,7 +627,7 @@
                       <table border="0" cellspacing="2" cellpadding="2">
                         <feature:display name="Message Manager" module="ADMIN">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="trn">
                                 <digi:trn invisibleLinks="true">Click here to view Message Settings</digi:trn>
@@ -648,7 +648,7 @@
                       <table border="0" cellspacing="2" cellpadding="2">
                         <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to manage resource labels</digi:trn>
@@ -661,7 +661,7 @@
                         </module:display>
                         <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view template document manager</digi:trn>
@@ -675,7 +675,7 @@
                         <module:display name="Resource Manager" parentModule="ADMINISTRATIVE SECTION">
 							<tr>
 								<td><img width="16" align="left"
-									src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+									class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
 								<td class="admin_box_label">
 									<c:set var="translation">
 										<digi:trn invisibleLinks="true">Click here to view Document manager admin</digi:trn>
@@ -696,7 +696,7 @@
                       <table border="0" cellspacing="2" cellpadding="2">
                         <module:display name="Budget Integration" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label"><digi:link module="budgetexport" href="/" title="Budget Integration">
                               <digi:trn>Budget Integration</digi:trn>
                             </digi:link></td>
@@ -704,7 +704,7 @@
                         </module:display>
                         <module:display name="Dashboards Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td><img width="16" align="left" class="list-item-image" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Dashboard Manager</digi:trn>

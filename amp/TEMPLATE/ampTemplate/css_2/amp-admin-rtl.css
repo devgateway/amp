@@ -6,10 +6,6 @@
 	background: url(../images/corner-l.gif) no-repeat !important;
 }
 
-.list-item-image {
-  transform: rotate(180deg);
-}
-
 .form-layout td{
 	padding: 5px;
 }
@@ -44,4 +40,16 @@ span.geostyle{
 
 .exportContactIcon{
  float: left !important;
+}
+
+.admin_box_label {
+    text-align: right !important;
+}
+
+.list-item-image {
+    transform: rotate(180deg);
+}
+
+.gs-setting-label {
+    text-align: left !important;
 }

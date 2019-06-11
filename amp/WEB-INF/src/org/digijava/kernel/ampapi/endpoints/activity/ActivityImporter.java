@@ -19,9 +19,12 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.ChangeType;
@@ -111,6 +114,9 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     // latest activity id in case there was attempt to update older version of an activity
     private Long latestActivityId;
 
+    private EditorStore editorStore = new EditorStore();
+    private Site site;
+
     private ResourceService resourceService = new ResourceService();
 
     public ActivityImporter(APIField apiField, ActivityImportRules rules) {
@@ -120,6 +126,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         setJsonErrorMapper(new ActivityErrorsMapper());
         this.rules = rules;
         this.saveContext = SaveContext.api(!rules.isProcessApprovalFields());
+        this.site = TLSUtils.getSite();
     }
 
     private void init(Map<String, Object> newJson, boolean update, String endpointContextPath) {
@@ -247,7 +254,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 boolean draftChange = ActivityUtil.detectDraftChange(newActivity, oldActivityDraft);
                 newActivity = ActivityUtil.saveActivityNewVersion(newActivity, translations, modifiedBy,
                         Boolean.TRUE.equals(newActivity.getDraft()), draftChange,
-                        PersistenceManager.getSession(), saveContext);
+                        PersistenceManager.getSession(), saveContext, editorStore, site);
 
                 postProcess();
             } else {
@@ -448,45 +455,47 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
      * @param trnJson <lang, value> map of translations for each language
      * @return dg_editor key reference to be stored in the base table
      */
-    protected String extractTextTranslations(APIField apiField, Object parentObj, Map<String, Object> trnJson) {
-        String key = null;
-        if (update) { // all editor keys must exist before
-            key = (String) apiField.getFieldAccessor().get(parentObj);
+    private String extractTextTranslations(APIField apiField, Object parentObj, Map<String, Object> trnJson) {
+        String oldKey = apiField.getFieldAccessor().get(parentObj);
+        String newKey = AIHelper.getEditorKey(apiField.getFieldNameInternal());
+        List<Editor> editorList;
+        if (StringUtils.isNotBlank(oldKey)) {
+            editorList = getEditorList(oldKey);
+            editorStore.getOldKey().put(newKey, oldKey);
+        } else {
+            editorList = ImmutableList.of();
         }
-        if (key == null) { // init it in any case
-            key = AIHelper.getEditorKey(apiField.getFieldNameInternal());
-        }
+
+        Map<String, String> newValues = new TreeMap<>();
+
         for (Entry<String, Object> trn : trnJson.entrySet()) {
             String langCode = trn.getKey();
             // AMP-20884: no cleanup so far DgUtil.cleanHtmlTags((String) trn.getValue());
             String translation = (String) trn.getValue();
-            Editor editor;
-            try {
-                editor = DbUtil.getEditor(key, langCode);
-                if (translation == null) {
-                    // remove existing translations
-                    if (editor != null) {
-                        DbUtil.deleteEditor(editor);
-                    }
-                } else if (editor == null) {
-                    // create new
-                    editor = DbUtil.createEditor(currentUser, langCode, sourceURL, key, null, translation,
-                            "Activities API", TLSUtils.getRequest());
-                    DbUtil.saveEditor(editor);
-                } else if (!editor.getBody().equals(translation)) {
-                    // update existing if needed
-                    editor.setBody(translation);
-                    DbUtil.updateEditor(editor);
-                }
-            } catch (EditorException e) {
-                logger.error(e.getMessage());
-                throw new RuntimeException(e);
+            newValues.put(langCode, translation);
+        }
+
+        // copy old values for languages not specified in json
+        for (Editor editor : editorList) {
+            if (!trnJson.keySet().contains(editor.getLanguage())) {
+                newValues.put(editor.getLanguage(), editor.getBody());
             }
         }
-        return key;
+
+        editorStore.getValues().put(newKey, newValues);
+
+        return newKey;
+    }
+
+    private List<Editor> getEditorList(String key) {
+        try {
+            return DbUtil.getEditorList(key, site);
+        } catch (EditorException e) {
+            throw new RuntimeException("Failed to load editor for " + key, e);
+        }
     }
     
-    protected void initEditor(Field field) {
+    private void initEditor(Field field) {
         try {
             String currentValue = (String) field.get(newActivity);
             if (currentValue == null) {
@@ -495,7 +504,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 field.set(newActivity, currentValue);
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            logger.error(e.getMessage());
+            logger.error("Failed to initialize editor field " + field, e);
             throw new RuntimeException(e);
         }
     }
@@ -665,7 +674,6 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
 
     protected void postProcess() {
         String rootPath = TLSUtils.getRequest().getServletContext().getRealPath("/");
-        Site site = TLSUtils.getSite();
         Locale lang = Locale.forLanguageTag(trnSettings.getDefaultLangCode());
         LuceneUtil.addUpdateActivity(rootPath, update, site, lang, newActivity, oldActivity, translations);
     }

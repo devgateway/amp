@@ -107,7 +107,7 @@ public class ComponentFundingOrgRoleValidatorTest {
         HardcodedRoles roles = new HardcodedRoles();
 
         AmpActivityVersion activity = new ActivityBuilder()
-                .addOrgRole(roles.getDonorRole(), orgs.getWorldBank())
+                .addOrgRole(roles.getDonorRole(), orgs.getWorldBank(), 100f)
                 .buildComponent()
                         .buildFunding(Constants.COMMITMENT).withOrg(orgs.getWorldBank()).addFunding()
                         .addComponent()
@@ -154,7 +154,7 @@ public class ComponentFundingOrgRoleValidatorTest {
         HardcodedRoles roles = new HardcodedRoles();
 
         AmpActivityVersion activity = new ActivityBuilder()
-                .addOrgRole(roles.getDonorRole(), orgs.getWorldBank())
+                .addOrgRole(roles.getDonorRole(), orgs.getWorldBank(), 100f)
                 .buildComponent()
                         .buildFunding(Constants.COMMITMENT).withOrg(orgs.getWorldBank()).addFunding()
                         .buildFunding(Constants.DISBURSEMENT).withOrg(orgs.getWorldBank()).addFunding()

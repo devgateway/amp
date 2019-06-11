@@ -110,6 +110,7 @@ public class ImplementationLevelValidatorTest {
     public void testLocationAndImplLevelMismatch() {
         AmpActivityLocation haitiUsage = new AmpActivityLocation();
         haitiUsage.setLocation(locations.getAmpLocation("Haiti"));
+        haitiUsage.setLocationPercentage(100f);
 
         AmpCategoryValue regionalImplementationLevel = categoryValues.getImplementationLevels().getRegional();
         AmpCategoryValue regionImplementationLocation = categoryValues.getImplementationLocations().getRegion();
@@ -170,6 +171,7 @@ public class ImplementationLevelValidatorTest {
     @Test
     public void testNullLocation() {
         AmpActivityLocation nullLocation = new AmpActivityLocation();
+        nullLocation.setLocationPercentage(100f);
 
         AmpCategoryValue regionalImplementationLevel = categoryValues.getImplementationLevels().getRegional();
         AmpCategoryValue regionImplementationLocation = categoryValues.getImplementationLocations().getRegion();

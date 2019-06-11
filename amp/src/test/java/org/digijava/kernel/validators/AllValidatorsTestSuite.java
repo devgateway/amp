@@ -1,7 +1,7 @@
 package org.digijava.kernel.validators;
 
 import org.digijava.kernel.validators.activity.ActivityValidatorsTestSuite;
-import org.digijava.kernel.validators.common.RegexValidatorTest;
+import org.digijava.kernel.validators.common.CommonValidatorsTestSuite;
 import org.digijava.kernel.validators.resource.ResourceRequiredValidatorTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -13,7 +13,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         ActivityValidatorsTestSuite.class,
         ResourceRequiredValidatorTest.class,
-        RegexValidatorTest.class
+        CommonValidatorsTestSuite.class
 })
 public class AllValidatorsTestSuite {
 }

@@ -55,10 +55,12 @@ import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.services.sync.model.SyncConstants;
 import org.digijava.kernel.validators.ValidatorUtil;
+import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.TimestampField;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -333,24 +335,6 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "field_required_always_fm_path_hidden", requiredFmPath = HIDDEN_FM_PATH,
                 required = ALWAYS)
         private String fieldRequiredAlwaysFmPathHidden;
-
-        @Interchangeable(fieldTitle = "field_required_min_size_on",
-                validators = @Validators(minSize = VISIBLE_FM_PATH))
-        private String fieldRequiredMinSizeOn;
-
-        @Interchangeable(fieldTitle = "field_required_min_size_off",
-                validators = @Validators(minSize = HIDDEN_FM_PATH))
-        private String fieldRequiredMinSizeOff;
-
-        @Interchangeable(fieldTitle = "field_required_and_min_size_on", requiredFmPath = HIDDEN_FM_PATH,
-                required = SUBMIT,
-                validators = @Validators(minSize = VISIBLE_FM_PATH))
-        private String fieldRequiredFmEntryAndMinSizeValidatorOn;
-
-        @Interchangeable(fieldTitle = "field_required_and_min_size_off", requiredFmPath = HIDDEN_FM_PATH,
-                required = SUBMIT,
-                validators = @Validators(minSize = HIDDEN_FM_PATH))
-        private String fieldRequiredFmEntryAndMinSizeValidatorOff;
     }
 
     @Test
@@ -365,11 +349,7 @@ public class FieldsEnumeratorTest {
                 newRequiredField("field_required_submit_fm_path_visible", FIELD_NON_DRAFT_REQUIRED),
                 newRequiredField("field_required_submit_fm_path_hidden", FIELD_NOT_REQUIRED),
                 newRequiredField("field_required_always_fm_path_visible", FIELD_ALWAYS_REQUIRED),
-                newRequiredField("field_required_always_fm_path_hidden", FIELD_NOT_REQUIRED),
-                newRequiredField("field_required_min_size_on", FIELD_NON_DRAFT_REQUIRED),
-                newRequiredField("field_required_min_size_off", FIELD_NOT_REQUIRED),
-                newRequiredField("field_required_and_min_size_on", FIELD_NON_DRAFT_REQUIRED),
-                newRequiredField("field_required_and_min_size_off", FIELD_NOT_REQUIRED)
+                newRequiredField("field_required_always_fm_path_hidden", FIELD_NOT_REQUIRED)
         );
 
         assertEqualsDigest(expected, actual);
@@ -485,7 +465,10 @@ public class FieldsEnumeratorTest {
 
     private static class InternalConstraints {
 
-        @Interchangeable(fieldTitle = "1", validators = @Validators(maxSize = "maxSizeFmName"))
+        @Interchangeable(fieldTitle = "1",
+                interValidators = @InterchangeableValidator(
+                        value = SizeValidator.class,
+                        attributes = "max=1"))
         private Collection<ObjWithId> field1;
 
         @Interchangeable(fieldTitle = "2")
@@ -507,7 +490,10 @@ public class FieldsEnumeratorTest {
                 @Validators(percentage = "percentageFmName", unique = "uniqueFmName"))
         private Collection<ObjWithId> field6;
 
-        @Interchangeable(fieldTitle = "7", sizeLimit = SIZE_LIMIT)
+        @Interchangeable(fieldTitle = "7",
+                interValidators = @InterchangeableValidator(
+                        value = SizeValidator.class,
+                        attributes = "max=" + SIZE_LIMIT))
         private Collection<ObjWithId> field7;
     }
 

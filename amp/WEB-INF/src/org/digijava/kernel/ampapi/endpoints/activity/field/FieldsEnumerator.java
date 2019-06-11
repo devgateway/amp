@@ -43,6 +43,7 @@ import org.digijava.kernel.validation.ConstraintDescriptor;
 import org.digijava.kernel.validation.ConstraintDescriptors;
 import org.digijava.kernel.validators.common.RegexValidator;
 import org.digijava.kernel.validators.activity.UniqueValidator;
+import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Independent;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -157,10 +158,6 @@ public class FieldsEnumerator {
                 apiField.setChildren(getAllAvailableFields(type, context));
             }
             if (isList) {
-                apiField.setMultipleValues(!hasMaxSizeValidatorEnabled(field, context));
-                if (interchangeable.sizeLimit() > 1) {
-                    apiField.setSizeLimit(interchangeable.sizeLimit());
-                }
                 if (hasPercentageValidatorEnabled(context)) {
                     apiField.setPercentageConstraint(getPercentageConstraint(field, context));
                 }
@@ -175,6 +172,8 @@ public class FieldsEnumerator {
         }
 
         List<ConstraintDescriptor> fieldConstraintDescriptors = new ArrayList<>();
+
+        addProgramConstraints(fieldConstraintDescriptors, apiType, context);
 
         if (apiField.getUniqueConstraint() != null) {
             Map<String, String> args = ImmutableMap.of("field", apiField.getUniqueConstraint());
@@ -219,8 +218,33 @@ public class FieldsEnumerator {
         apiField.setFieldConstraints(new ConstraintDescriptors(fieldConstraintDescriptors));
 
         apiField.setRegexPattern(findRegexPattern(fieldConstraintDescriptors));
+        apiField.setMultipleValues(isMultipleValues(apiType, fieldConstraintDescriptors));
+        apiField.setSizeLimit(findSizeLimit(fieldConstraintDescriptors));
 
         return apiField;
+    }
+
+    /**
+     * Returns size limit only if it is present and greater than 1.
+     */
+    private Integer findSizeLimit(List<ConstraintDescriptor> descriptors) {
+        String max = descriptors.stream()
+                .filter(d -> d.getConstraintValidatorClass().equals(SizeValidator.class))
+                .map(d -> d.getArguments().get("max"))
+                .findAny()
+                .orElse(null);
+        Integer intMax = max != null ? Integer.parseInt(max) : null;
+        return intMax != null && intMax > 1 ? intMax : null;
+    }
+
+    private Boolean isMultipleValues(APIType apiType, List<ConstraintDescriptor> descriptors) {
+        if (apiType.getFieldType().isList()) {
+            return descriptors.stream()
+                    .noneMatch(d -> d.getConstraintValidatorClass().equals(SizeValidator.class)
+                            && "1".equals(d.getArguments().get("max")));
+        } else {
+            return null;
+        }
     }
 
     private String findRegexPattern(List<ConstraintDescriptor> descriptors) {
@@ -508,11 +532,11 @@ public class FieldsEnumerator {
 
         if (required == ALWAYS) {
             return ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
-        } else if (required == SUBMIT || hasRequiredValidatorEnabled(context)) {
+        } else if (required == SUBMIT) {
             return ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
+        } else {
+            return ActivityEPConstants.FIELD_NOT_REQUIRED;
         }
-
-        return ActivityEPConstants.FIELD_NOT_REQUIRED;
     }
 
     private boolean getImportableValue(FEContext context, String fieldTitle, Interchangeable interchangeable) {
@@ -550,28 +574,26 @@ public class FieldsEnumerator {
     }
 
     /**
-     * Determine if the field contains maxsize validator
+     * If current field is for programs and at most one program is allowed then add this constraint to the list.
      *
+     * FIXME This hack can be removed once AMP-29247 is solved.
+     *
+     * @param constraintDescriptors list of constraint descriptors for field
+     * @param apiType type of the current field
      * @param context current context
-     * @return boolean if the field contains maxsize validator
      */
-    private boolean hasMaxSizeValidatorEnabled(Field field, FEContext context) {
-        if (AmpActivityProgram.class.equals(InterchangeUtils.getGenericClass(field))) {
-            return allowMultiplePrograms.apply(context.getIntchStack().peek().discriminatorOption());
-
-        } else {
-            return hasValidatorEnabled(context, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
+    private void addProgramConstraints(List<ConstraintDescriptor> constraintDescriptors,
+            APIType apiType, FEContext context) {
+        if (AmpActivityProgram.class.equals(apiType.getType())) {
+            String programSettingName = context.getIntchStack().peek().discriminatorOption();
+            if (!allowMultiplePrograms.apply(programSettingName)
+                    && isVisible(FMVisibility.PARENT_FM + "/max Size Program Validator", context)) {
+                Map<String, String> args = ImmutableMap.of("max", "1");
+                Set<Class<?>> groups = ImmutableSet.of();
+                constraintDescriptors.add(new ConstraintDescriptor(SizeValidator.class, args, groups,
+                        ConstraintDescriptor.ConstraintTarget.FIELD));
+            }
         }
-    }
-
-    /**
-     * Determine if the field contains required validator
-     *
-     * @param context current context
-     * @return boolean if the field contains required validator
-     */
-    private boolean hasRequiredValidatorEnabled(FEContext context) {
-        return hasValidatorEnabled(context, ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME);
     }
 
     /**
@@ -600,10 +622,6 @@ public class FieldsEnumerator {
 
         if (ActivityEPConstants.UNIQUE_VALIDATOR_NAME.equals(validatorName)) {
             validatorFmPath = validators.unique();
-        } else if (ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME.equals(validatorName)) {
-            validatorFmPath = validators.maxSize();
-        } else if (ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME.equals(validatorName)) {
-            validatorFmPath = validators.minSize();
         } else if (ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME.equals(validatorName)) {
             validatorFmPath = validators.percentage();
         } else if (ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME.equals(validatorName)) {

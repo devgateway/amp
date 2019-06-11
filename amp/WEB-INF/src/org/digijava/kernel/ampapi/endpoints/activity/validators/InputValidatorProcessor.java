@@ -29,7 +29,6 @@ public class InputValidatorProcessor {
                 new RequiredValidator(),
                 new ActivityTitleValidator(),
                 new AmpActivityIdValidator(),
-                new MultipleEntriesValidator(),
                 new TreeCollectionValidator(),
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),
@@ -46,7 +45,6 @@ public class InputValidatorProcessor {
     public static List<InputValidator> getContactBusinessRulesValidators() {
         return Arrays.asList(
                 new RequiredValidator(),
-                new MultipleEntriesValidator(),
                 new PrimaryOrganisationContactValidator());
     }
 

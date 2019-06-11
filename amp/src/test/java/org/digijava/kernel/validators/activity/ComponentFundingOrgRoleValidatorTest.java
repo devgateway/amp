@@ -155,12 +155,10 @@ public class ComponentFundingOrgRoleValidatorTest {
 
         AmpActivityVersion activity = new ActivityBuilder()
                 .addOrgRole(roles.getDonorRole(), orgs.getWorldBank())
-                .addOrgRole(roles.getDonorRole(), orgs.getUsaid())
-                .addOrgRole(roles.getDonorRole(), orgs.getBelgium())
                 .buildComponent()
                         .buildFunding(Constants.COMMITMENT).withOrg(orgs.getWorldBank()).addFunding()
-                        .buildFunding(Constants.DISBURSEMENT).withOrg(orgs.getUsaid()).addFunding()
-                        .buildFunding(Constants.EXPENDITURE).withOrg(orgs.getBelgium()).addFunding()
+                        .buildFunding(Constants.DISBURSEMENT).withOrg(orgs.getWorldBank()).addFunding()
+                        .buildFunding(Constants.EXPENDITURE).withOrg(orgs.getWorldBank()).addFunding()
                         .addComponent()
                 .getActivity();
 

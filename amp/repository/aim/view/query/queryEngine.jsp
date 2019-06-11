@@ -78,7 +78,7 @@ queryValidCbObj	= {
 			},
 			failure: function (o) {
 				var divObj		= document.getElementById("results");
-				divObj.innerHTML	= "There was a problem with getting the results. Please try again";
+				divObj.innerHTML	= '<digi:trn jsFriendly="true">There was a problem with getting the results. Please try again</digi:trn>';
 				
 			}
 		
@@ -130,7 +130,7 @@ function validateSubmitQuery () {
 		var filterForm		= document.getElementsByName(formName)[0];
 		var divObj		= document.getElementById("results");
 		divObj.innerHTML	= 
-		"<div style='text-align: center'>" + "Please wait..." + 
+		"<div style='text-align: center'>" + '<digi:trn jsFriendly="true">Please wait</digi:trn>' +
 		"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
 		YAHOO.util.Connect.setForm(filterForm);
 		var additionalParams	= "&doreset=true&queryEngine=true&reportContextId=" + '<%=ReportContextData.getCurrentReportContextId(request, true)%>';
@@ -141,7 +141,7 @@ function validateSubmitQuery () {
 	function changeStep(url) {
 		var divObj		= document.getElementById("results");
 		divObj.innerHTML	= 
-		"<div style='text-align: center'>" + "Please wait..." + 
+		"<div style='text-align: center'>" + '<digi:trn jsFriendly="true">Please wait</digi:trn>' +
 		"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
 		
 		

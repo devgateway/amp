@@ -46,7 +46,7 @@
 		if (cellColumn instanceof AmountCellColumn)
 		{%>
 		<logic:notEqual name="columnNo" value="0">
-			<div class="desktop_project_count_sel">0</div>
+			<div class="desktop_project_count_sel"><digi:easternArabicNumber>0</digi:easternArabicNumber></div>
 		</logic:notEqual>
 	<%}else{%>
 		<logic:notEqual name="columnNo" value="0">

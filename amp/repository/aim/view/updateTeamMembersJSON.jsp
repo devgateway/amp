@@ -26,9 +26,9 @@
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
 							<tr>
 								<td vAlign="top" width="100%" style="border-bottom:2px solid #ccc;"valign="middle" >
-									<span class=subtitle-blue style="margin:0px 0px 0px 0px;display:block;float:left;width:200px;">
+									<span class="subtitle-blue member-form-title" >
                                     <bean:write name="aimTeamMemberForm" property="teamName" /></span>
-                                    <div class="adminicon" style="float: right;"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/usermanager.jpg"/></div>
+                                    <div class="adminicon"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/usermanager.jpg"/></div>
 								</td>
 							</tr>
 							<tr >
@@ -41,19 +41,19 @@
 									<td bgColor=#ffffff class=box-border colspan="2">
 												<table border=0 cellPadding=5 cellSpacing=1 class=box-border width="100%">
 													<tr>
-														<td align="left" width="40%" style="font-weight:bold;">
+														<td class="left-align" width="40%" style="font-weight:bold;">
 															<digi:trn key="aim:memberName">Name</digi:trn> &nbsp;&nbsp; &nbsp;
 														</td>
-														<td align="left" width="60%">
+														<td class="left-align"" width="60%">
 															<bean:write name="aimTeamMemberForm" property="name" />
 															<html:hidden name="aimTeamMemberForm" property="someError" />
 														</td>
 													</tr>
 													<tr>
-														<td align="left" width="40%" style="font-weight:bold;">
+														<td class="left-align" width="40%" style="font-weight:bold;">
 															<digi:trn key="aim:memberRole">Role</digi:trn>&nbsp;&nbsp; &nbsp;&nbsp;	
 														</td>
-														<td align="left" width="60%">
+														<td class="left-align" width="60%">
 															<html:select property="role">
 																<%@include file="teamMemberRolesDropDown.jsp" %>
 															</html:select>
@@ -64,13 +64,13 @@
 															<logic:equal name="aimTeamMemberForm" property="action" value="delete">
 															<table width="100%" cellspacing="5">
 																<tr>
-																	<td width="50%" align="right">
+																	<td width="50%" class="right-align">
 <!--																		<html:submit styleClass="dr-menu"	property="apply">-->
 <!--																			<digi:trn key="btn:delete">Delete</digi:trn>-->
 <!--																		</html:submit>						-->
 																		<input class="dr-menu" type="button" value="<digi:trn>Delete</digi:trn>" name="apply" onclick="confirmActionMember()"/>
 																	</td>
-																	<td width="50%" align="left">
+																	<td width="50%" class="left-align">
 																		<html:reset  styleClass="dr-menu" property="submitButton" onclick="hideWindow()">
 																			<digi:trn key="btn:cancel">Cancel</digi:trn>
 																		</html:reset>																					</td>
@@ -81,13 +81,13 @@
 															<logic:equal name="aimTeamMemberForm" property="action" value="edit">
 															<table width="100%" cellspacing="5">
 																<tr>
-																	<td width="50%" align="right">
+																	<td width="50%" class="right-align">
 <!--																		<html:submit styleClass="dr-menu" property="apply">-->
 <!--																			<digi:trn key="btn:save">Save</digi:trn>-->
 <!--																		</html:submit>						-->
 																		<input class="dr-menu" type="button" value="<digi:trn>Save</digi:trn>" name="apply" onclick="confirmActionMember()"/>
 																	</td>
-																	<td width="50%" align="left">
+																	<td width="50%" class="left-align"">
 																		<html:reset  styleClass="dr-menu" property="submitButton" onclick="hideWindow()">
 																			<digi:trn key="btn:cancel">Cancel</digi:trn>
 																		</html:reset>

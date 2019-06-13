@@ -71,3 +71,11 @@ table.inside {
     right: 217px;
     left: 0px !important;
 }
+
+div.adminicon {
+    float: left !important;
+}
+
+.member-form-title {
+    float: right !important;
+}

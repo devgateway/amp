@@ -182,12 +182,12 @@
 														<td colspan="2" width="60%">
 															<table width="100%" cellspacing="5">
 																<tr>
-																	<td width="50%" align="right">
+																	<td width="50%" class="right-align">
 																		<html:submit  styleClass="dr-menu" property="submitButton">
 																			<digi:trn key="btn:save">Save</digi:trn> 
 																		</html:submit>
 																	</td>
-																	<td width="50%" align="left">
+																	<td width="50%" class="left-align">
 																		<html:reset  styleClass="dr-menu" property="submitButton"  onclick="javascript:history.go(-1)">
 																			<digi:trn key="btn:cancel">Cancel</digi:trn> 
 																		</html:reset>

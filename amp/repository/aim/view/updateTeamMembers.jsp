@@ -32,8 +32,8 @@ function validate(){
 <jsp:include page="teamPagesHeader.jsp"  />
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg valign="top" width=750>
+		<td class="r-dotted-lg" width=14>&nbsp;</td>
+		<td class="r-dotted-lg left-align" valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td height=33><span class=crumb>
@@ -93,7 +93,7 @@ function validate(){
 							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="95%" border="0">	
+									<table align="center" bgColor=#f4f4f2 cellpadding="0" cellspacing="0" width="95%" border="0">
 										<tr bgColor=#f4f4f2>
 											<td bgColor=#f4f4f2>
 												<table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -114,18 +114,18 @@ function validate(){
 											<td bgColor=#ffffff class=box-border>
 												<table border="0" cellPadding=5 cellspacing="1" class=box-border width="100%">
 	<tr>
-		<td align="right" width="50%">
+		<td class="right-align" width="50%">
 			<digi:trn key="aim:memberName">Name</digi:trn>&nbsp;&nbsp; &nbsp;
 		</td>
-		<td align="left" width="50%">
+		<td class="left-align" width="50%">
 			<bean:write name="aimTeamMemberForm" property="name" />
 		</td>
 	</tr>
 	<tr>
-		<td align="right" width="50%">
+		<td class="right-align" width="50%">
 			<digi:trn key="aim:memberRole">Role</digi:trn>&nbsp;&nbsp; &nbsp;&nbsp;	
 		</td>
-		<td align="left" width="50%">
+		<td class="left-align" width="50%">
 			<html:select property="role">
 				<%@include file="teamMemberRolesDropDown.jsp" %>
 			</html:select>
@@ -136,12 +136,12 @@ function validate(){
 			<logic:equal name="aimTeamMemberForm" property="action" value="delete">
 			<table width="100%" cellspacing="5">
 				<tr>
-					<td width="50%" align="right">
+					<td width="50%" class="right-align">
 						<html:submit styleClass="dr-menu"	property="apply">
 							<digi:trn key="btn:delete">Delete</digi:trn>
 						</html:submit>						
 					</td>
-					<td width="50%" align="left">
+					<td width="50%" class="left-align">
 						<html:reset  styleClass="dr-menu" property="submitButton" onclick="javascript:history.go(-1)">
 							<digi:trn key="btn:cancel">Cancel</digi:trn>
 						</html:reset>																					</td>
@@ -152,12 +152,12 @@ function validate(){
 			<logic:equal name="aimTeamMemberForm" property="action" value="edit">
 			<table width="100%" cellspacing="5">
 				<tr>
-					<td width="50%" align="right">
+					<td width="50%" class="right-align">
 						<html:submit styleClass="dr-menu" property="apply">
 							<digi:trn key="btn:save">Save</digi:trn>
 						</html:submit>						
 					</td>
-					<td width="50%" align="left">
+					<td width="50%" class="left-align">
 						<html:reset  styleClass="dr-menu" property="submitButton" onclick="javascript:history.go(-1)">
 							<digi:trn key="btn:cancel">Cancel</digi:trn>
 						</html:reset>

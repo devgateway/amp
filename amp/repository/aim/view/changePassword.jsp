@@ -56,14 +56,14 @@ function validate(){
 						Change Password
 						</digi:trn></div>
 						
-<table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
+<table width="100%" valign="top" class="left-align" cellpadding="0" cellspacing="0" border="0">
 <tr>
-<td width="100%" valign="top" align="left">
+<td width="100%" valign="top" class="left-align">
 <table bgColor=#ffffff border="0" cellpadding="5" cellspacing="1" width="100%">
 	<tr>
 		<td width="5%">&nbsp;
 		</td>
-		<td align=left valign="top" width="60%">
+		<td class="left-align" valign="top" width="60%">
 			<digi:errors/>
 			<jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
 		</td>
@@ -71,7 +71,7 @@ function validate(){
 	<tr>
 		<td width="5%">&nbsp;
 		</td>
-		<td align=left valign="top" width="60%"><br>
+		<td class="left-align" valign="top" width="60%"><br>
 			<table border="0" cellPadding=5 cellspacing="0" width="80%">
 				
 				<tr>
@@ -83,7 +83,7 @@ function validate(){
 							UserId
 						</digi:trn>
 					</td>
-					<td align="left" style="padding-bottom:10px;">
+					<td class="left-align" style="padding-bottom:10px;">
 						<html:text property="userId" styleClass="pwd_username" size="20" /><br>
 						<font color="red" style="font-size:11px;">
 						<digi:trn key="aim:userIdExample1">
@@ -98,7 +98,7 @@ function validate(){
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<span style="color:#FF0000;">*</span> <digi:trn key="aim:oldPassword">Old Password</digi:trn>
 					</td>
-					<td align="left" style="padding-bottom:10px;">
+					<td class="left-align" style="padding-bottom:10px;">
 						<html:password property="oldPassword" size="20" />
 					</td>
 				</tr>
@@ -108,7 +108,7 @@ function validate(){
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<span style="color:#FF0000;">*</span> <digi:trn key="aim:newPassword">New Password</digi:trn>
 					</td>
-					<td align="left" style="padding-bottom:10px;">
+					<td class="left-align" style="padding-bottom:10px;">
 							<html:password property="newPassword" size="20" />
 						<div style="display: none" class="pwd_container" id="pwd_container">
 							<span class="pwstrength_viewport_verdict">&nbsp;</span>
@@ -123,7 +123,7 @@ function validate(){
 						<span style="color:#FF0000;">*</span> <digi:trn key="aim:confirmNewPassword">Confirm new
 						Password</digi:trn>
 					</td>
-					<td align="left" style="padding-bottom:10px;">
+					<td class="left-align" style="padding-bottom:10px;">
 						<html:password property="confirmNewPassword" maxlength="16" size="20" />
 					</td>
 				</tr>
@@ -131,7 +131,7 @@ function validate(){
 				<tr>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
-					<td align="left">
+					<td class="left-align">
 
 						<html:submit styleClass="buttonx"><digi:trn key="btn:submit">Submit</digi:trn></html:submit>
 					</td>

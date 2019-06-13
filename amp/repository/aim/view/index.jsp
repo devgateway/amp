@@ -131,7 +131,7 @@
 	        		     official business. You have been granted the right to access these        
     	      		 	 applications and the information contained in them to facilitate        
         	   			 your official business. Your accounts and passwords are your        
-						 responsibility. Do not share them with anyone.        
+						 responsibility. Do not share them with anyone.
 						 </digi:trn>
 						<BR><BR>
           		</td>

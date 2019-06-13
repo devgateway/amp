@@ -58,7 +58,7 @@
             	<c:otherwise>
                 	<bean:write name="reportData" property="name"/>
             	</c:otherwise>
-        	</c:choose>&nbsp;(<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;feature/AMP-29139/eastern-arabic-numerals
+        	</c:choose>&nbsp;(<digi:easternArabicNumber><bean:write name="reportData" property="totalUniqueRows"/></digi:easternArabicNumber>)&nbsp;
         </b>
     <% } %> 
 </td>

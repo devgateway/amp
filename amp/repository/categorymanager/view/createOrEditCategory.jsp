@@ -9,6 +9,8 @@
 <%@ page import="java.util.List"%>
 
 <%@page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
+<%@ page import="org.digijava.module.aim.helper.EasternArabicService" %>
+<%@ page import="org.digijava.kernel.request.TLSUtils" %>
 
 <digi:instance property="cmCategoryManagerForm" />
 <bean:define id="myForm" name="cmCategoryManagerForm" toScope="session" type="org.digijava.module.categorymanager.form.CategoryManagerForm" />
@@ -55,6 +57,9 @@
 
 <script type="text/javascript">
 	labelPanels					= new Array();
+    var isRtl = <%=TLSUtils.getCurrentLocale().getLeftToRight() == false%>;
+    var language = '<%=TLSUtils.getCurrentLocale().getCode()%>';
+    var region = '<%=TLSUtils.getCurrentLocale().getRegion()%>';
 	
 	function addLabelCategory() {
 		var subForm				= document.forms["cmCategoryManagerForm"];
@@ -84,7 +89,7 @@
     function addNewValue(position) {
     	var subForm				= document.forms["cmCategoryManagerForm"];
     	var fieldNumStr			= subForm.numOfAdditionalFields.value;
-    	var fieldNum			= parseInt(fieldNumStr);
+    	var fieldNum			= parseInt(TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + fieldNumStr));
     	if ( isNaN(fieldNumStr) || fieldNum < 1 || fieldNum > 30 ) {
     		alert("${translation6}");
     		return false;
@@ -309,7 +314,7 @@
 				Add More Fields
 			</digi:trn>:
 		
-			<html:text property="numOfAdditionalFields" size="4" value="1"/>
+			<html:text property="numOfAdditionalFields" size="4" value='<%=EasternArabicService.getInstance().convertToEasternArabicBasedOnCurrentLocale("1")%>'/>
 			<table cellpadding="5px" cellspacing="5px" border="0px" style="margin-top:7px; margin-bottom:7px; font-size:12px;" class="inside">
 				<tr>
 					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;" bgcolor=#F2F2F2 class="inside"><digi:trn key="aim:categoryValueKey">Category Value Key</digi:trn></td>

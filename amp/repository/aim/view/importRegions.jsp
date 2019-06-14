@@ -201,8 +201,7 @@ div.fakefile2 input {
 													Other links
 													</digi:trn>
 											</b></td>
-											<td class="header-corner" height="17"
-												width=17></td>
+											<td class="corner-right"></td>
 										</tr>
 									</table>
 								</td>

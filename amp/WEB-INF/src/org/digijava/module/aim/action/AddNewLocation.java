@@ -18,6 +18,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.exception.dynlocation.DuplicateLocationCodeException;
 import org.digijava.module.aim.form.NewAddLocationForm;
+import org.digijava.module.aim.helper.EasternArabicService;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
@@ -131,14 +132,14 @@ public class AddNewLocation extends Action {
                 } else {
                     location = LocationUtil.getAmpCategoryValueLocationById(addRegForm.getEditedId());
                 }
-                location.setCode(addRegForm.getCode());
-                location.setGeoCode(addRegForm.getGeoCode());
+                location.setCode(convertToWesternNumbers(addRegForm.getCode()));
+                location.setGeoCode(convertToWesternNumbers(addRegForm.getGeoCode()));
                 location.setName(addRegForm.getName());
                 location.setIso(addRegForm.getIso());
                 location.setIso3(addRegForm.getIso3());
                 location.setDescription(addRegForm.getDescription());
-                location.setGsLat(addRegForm.getGsLat());
-                location.setGsLong(addRegForm.getGsLong());
+                location.setGsLat(convertToWesternNumbers(addRegForm.getGsLat()));
+                location.setGsLong(convertToWesternNumbers(addRegForm.getGsLong()));
                 location.setDeleted(false);
 
                 try {
@@ -164,6 +165,10 @@ public class AddNewLocation extends Action {
 
                 return mapping.findForward("added");
         }
+    }
+    
+    private String convertToWesternNumbers(String value) {
+        return EasternArabicService.getInstance().convertToWesternArabicBasedOnCurrentLocale(value);
     }
     
     private Collection <AmpLocationIndicatorValue> getIndicatorValuesListForCategory (Long id,AmpCategoryValueLocations location) {

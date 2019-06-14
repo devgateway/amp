@@ -89,7 +89,7 @@
     function addNewValue(position) {
     	var subForm				= document.forms["cmCategoryManagerForm"];
     	var fieldNumStr			= subForm.numOfAdditionalFields.value;
-    	var fieldNum			= parseInt(TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + fieldNumStr));
+    	var fieldNum			= parseInt(TranslationManager.convertNumbersToWesternArabicIfNeeded(isRtl, language, region, "" + fieldNumStr));
     	if ( isNaN(fieldNumStr) || fieldNum < 1 || fieldNum > 30 ) {
     		alert("${translation6}");
     		return false;

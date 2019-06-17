@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.filetype;
 
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -18,7 +17,6 @@ import org.dgfoundation.amp.error.AMPException;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpFileType;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -84,19 +82,17 @@ public class ResourceManager {
                     + "    }\n"
                     + "}\n"
                     + "```\n")
-    @SuppressWarnings("unchecked")
-    public Response saveSettings(JsonBean settings) throws AMPException {
-        List<String> allowedFileType = (List<String>) settings.get("allowedFileType");
-        Map<String, Object> map = (Map<String, Object>) settings.get("resourceSettings");
+    public Response saveSettings(ResourceManagerSettings settings) throws AMPException {
         
-        for (String settingKey : map.keySet()) {
-            String value = map.get(settingKey).toString();
+        for (String settingKey : settings.getResourceSettings().keySet()) {
+            String value = settings.getResourceSettings().get(settingKey).toString();
             DbUtil.updateGlobalSetting(SettingsConstants.ID_NAME_MAP.get(settingKey), value);
         }
+        
         // after updating we rebuild global settings cache
         FeaturesUtil.buildGlobalSettingsCache(FeaturesUtil.getGlobalSettings());
         FileTypeManager fileTypeManager = FileTypeManager.getInstance();
-        fileTypeManager.updateFileTypesConfig(new LinkedHashSet<String>(allowedFileType));
+        fileTypeManager.updateFileTypesConfig(new LinkedHashSet<>(settings.getAllowedFileType()));
         
         return Response.ok().build();
     }

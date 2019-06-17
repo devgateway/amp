@@ -268,6 +268,10 @@ module.exports = BackboneDash.View.extend({
       var self = this;
       var keys = _(data).pluck('key');
 
+      var language = app.generalSettings.get("language");
+      var region =  app.generalSettings.get("region");
+      var isRtl = app.generalSettings.get("rtl-direction");
+
       if (self.model.get('chartType') !== 'fragmentation') {
           // table of all the data
           csvTransformed = _(data)
@@ -276,7 +280,7 @@ module.exports = BackboneDash.View.extend({
               .transpose()
               .map(function (row) {
                   return _(row).reduce(function (csvRow, cell) {
-                      csvRow.push(cell.y);
+                      csvRow.push(TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + cell.y));
                       return csvRow;
                   }, [row[0].x]);
               })

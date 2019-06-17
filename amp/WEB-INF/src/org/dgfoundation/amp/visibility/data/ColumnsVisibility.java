@@ -282,7 +282,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
     
     @SuppressWarnings("serial")
     protected static final Map<String, String> featuresToColumnsMap = new HashMap<String, String>() {{
-        put("Computed Columns Filters", ColumnConstants.COMPUTED_YEAR);
+        put("Computed Year", ColumnConstants.COMPUTED_YEAR);
     }};
     
     @SuppressWarnings("serial")
@@ -327,7 +327,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Line Ministry Observations Actors", ColumnConstants.LINE_MINISTRY_OBSERVATIONS_ACTORS);
             put("Line Ministry Observations Date", ColumnConstants.LINE_MINISTRY_OBSERVATIONS_DATE);
             put("Line Ministry Observations Measures", ColumnConstants.LINE_MINISTRY_OBSERVATIONS_MEASURES);
-            put("Actors", ColumnConstants.ACTORS);
             put("Measures Taken", ColumnConstants.MEASURES_TAKEN);
             put("Ministry Of Finance Contact Organization", ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_ORGANIZATION);
             put("Multi Donor", ColumnConstants.MULTI_DONOR);

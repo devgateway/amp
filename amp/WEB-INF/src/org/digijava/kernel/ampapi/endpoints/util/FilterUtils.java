@@ -59,7 +59,6 @@ public class FilterUtils {
 
         mapSimpleColumn(FiltersConstants.ACTIVITY_ID, ColumnConstants.ACTIVITY_ID);
         mapSimpleColumn(FiltersConstants.APPROVAL_STATUS, ColumnConstants.APPROVAL_STATUS);
-        mapSimpleColumn(FiltersConstants.ARCHIVED, ColumnConstants.ARCHIVED);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY, ColumnConstants.BENEFICIARY_AGENCY);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_GROUP, ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_TYPE, ColumnConstants.BENEFICIARY_AGENCY_TYPE);

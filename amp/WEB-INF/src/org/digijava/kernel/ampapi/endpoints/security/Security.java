@@ -159,7 +159,7 @@ public class Security implements ErrorReportingEndpoint {
     @Path("/ampTeam/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Get AmpTeam specification")
-    @ApiMethod(ui=false, id = "ampTeam", authTypes = AuthRule.IN_ADMIN)
+    @ApiMethod(id = "ampTeam", authTypes = AuthRule.IN_ADMIN)
     public final AmpTeam getWorkspace(@PathParam("id") Long id) {
         return TeamUtil.getAmpTeam(id);
     }

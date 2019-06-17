@@ -91,7 +91,7 @@
 <feature:display name="Pledges Default Reports" module="Pledge Reports"></feature:display>
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display>
-<module:display name="Filter Section" parentModule="REPORTING"></module:display> 
+<module:display name="Filter Widget" parentModule="REPORTING"></module:display>
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
 <module:display name="Tab Generator" parentModule="REPORTING"></module:display>
@@ -141,8 +141,7 @@
 <field:display name="Resource Category" feature="Resource Columns"></field:display>
 <field:display name="Resource Organisations" feature="Resource Columns"></field:display>
 
-<feature:display name="Archived" module="Filter Section"></feature:display>
-<feature:display module="Activity Costing" name="Costing"></feature:display> 
+<feature:display module="Activity Costing" name="Costing"></feature:display>
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
 <feature:display module="Contracting" name="Contracting"></feature:display> 
 <feature:display module="Funding" name="Activity Pledges"></feature:display>
@@ -193,7 +192,7 @@
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Approval Tab" module="Messages"></feature:display>
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display>
-<feature:display name="Computed Columns Filters" module="Filter Section"></feature:display> 
+<feature:display name="Computed Year" module="Filter Widget"></feature:display>
 <feature:display name="Component Report" module="Report Types"></feature:display> 
 <feature:display name="Components" module="Components"></feature:display> 
 
@@ -1093,8 +1092,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Show Change Summary" feature="Version History"></field:display>
 
 <module:display name="Show Editable Export Formats" parentModule="PUBLIC VIEW"></module:display>
-<module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>
-<feature:display name="Filters" module="Public Reports and Tabs"></feature:display>
 <!-- AMP-9437 -->
 <module:display name="Public Site" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Documents" parentModule="PUBLIC VIEW"></module:display>

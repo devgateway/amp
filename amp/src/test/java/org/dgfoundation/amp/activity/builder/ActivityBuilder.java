@@ -108,11 +108,15 @@ public class ActivityBuilder {
     }
 
     public ActivityBuilder addOrgRole(AmpRole role, AmpOrganisation organisation) {
+        return addOrgRole(role, organisation, 100f);
+    }
+
+    public ActivityBuilder addOrgRole(AmpRole role, AmpOrganisation organisation, Float percentage) {
         AmpOrgRole orgRole = new AmpOrgRole();
         orgRole.setRole(role);
         orgRole.setOrganisation(organisation);
         orgRole.setActivity(activity);
-        orgRole.setPercentage(100f);
+        orgRole.setPercentage(percentage);
         activity.getOrgrole().add(orgRole);
         return this;
     }

@@ -10,6 +10,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         RegexValidatorTest.class,
         SizeValidatorTest.class,
+        TotalPercentageValidatorTest.class,
         RequiredValidatorTest.class
 })
 public class CommonValidatorsTestSuite {

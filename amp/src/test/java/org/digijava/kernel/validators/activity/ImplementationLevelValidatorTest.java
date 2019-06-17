@@ -173,6 +173,7 @@ public class ImplementationLevelValidatorTest {
     @Test
     public void testNullLocation() {
         AmpActivityLocation nullLocation = new AmpActivityLocation();
+        nullLocation.setLocationPercentage(100f);
 
         AmpCategoryValue regionalImplementationLevel = categoryValues.getImplementationLevels().getRegional();
         AmpCategoryValue regionImplementationLocation = categoryValues.getImplementationLocations().getRegion();

@@ -1,13 +1,13 @@
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 
@@ -25,7 +25,8 @@ public class AmpActivityDocument extends ObjectReferringDocument implements Seri
     @InterchangeableBackReference
     private AmpActivityVersion ampActivity;
 
-    @Interchangeable(fieldTitle = "Document Type", importable = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Document Type", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String documentType;
     
     public String getDocumentType() {

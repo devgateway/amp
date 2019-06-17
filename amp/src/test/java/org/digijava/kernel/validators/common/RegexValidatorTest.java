@@ -1,5 +1,6 @@
 package org.digijava.kernel.validators.common;
 
+import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
@@ -70,6 +71,6 @@ public class RegexValidatorTest {
 
     private Set<ConstraintViolation> getConstraintViolations(Object object) {
         Validator validator = new Validator();
-        return validator.validate(objField, object);
+        return validator.validate(objField, object, getDefaultTranslationContext());
     }
 }

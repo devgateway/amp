@@ -1,6 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 
 import java.io.Serializable;
@@ -27,6 +26,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
 import org.digijava.kernel.validators.activity.OnBudgetValidator;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -140,8 +140,9 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "AMP Id", blockSingleChange = true)
     protected String ampId ;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_TITLE, importable = true, required = ALWAYS,
-            fmPath = "/Activity Form/Identification/Project Title")
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_TITLE, importable = true,
+            fmPath = "/Activity Form/Identification/Project Title",
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
     @VersionableFieldSimple(fieldTitle = "Name", mandatoryForSingleChange = true)
     @TranslatableField
@@ -149,8 +150,8 @@ LoggerIdentifiable, Cloneable {
     
     @Interchangeable(fieldTitle = "Description", importable = true,
             fmPath = "/Activity Form/Identification/Description",
-            requiredFmPath = "/Activity Form/Identification/Required Validator for Description",
-            required = SUBMIT)
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = "/Activity Form/Identification/Required Validator for Description"))
     @VersionableFieldTextEditor(fieldTitle = "Description")
     protected String description ;
 
@@ -163,8 +164,10 @@ LoggerIdentifiable, Cloneable {
     protected String lessonsLearned;
     
     @Interchangeable(fieldTitle = "Objective", importable = true, fmPath = "/Activity Form/Identification/Objective",
-            requiredFmPath = "/Activity Form/Identification/Required Validator for Objective",
-            required = SUBMIT)
+            interValidators = @InterchangeableValidator(
+                    value = RequiredValidator.class,
+                    fmPath = "/Activity Form/Identification/Required Validator for Objective",
+                    groups = Submit.class))
     @VersionableFieldTextEditor(fieldTitle = "Objective")
     protected String objective ;
     
@@ -186,7 +189,8 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.IATI_IDENTIFIER)
     protected String iatiIdentifier;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.IS_DRAFT, required = ALWAYS, importable = true)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.IS_DRAFT,
+            interValidators = @InterchangeableValidator(RequiredValidator.class), importable = true)
     @VersionableFieldSimple(fieldTitle = "Is Draft?", blockSingleChange = true)
     protected Boolean draft;
 
@@ -219,8 +223,8 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = "Original Completion Date", importable = true,
             fmPath = "/Activity Form/Planning/Original Completion Date",
-            requiredFmPath = "/Activity Form/Planning/Required Validator for Original Completion Date",
-            required = SUBMIT)
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = "/Activity Form/Planning/Required Validator for Original Completion Date"))
     @VersionableFieldSimple(fieldTitle = "Original Completion Date")
     protected Date originalCompDate;
     
@@ -239,8 +243,8 @@ LoggerIdentifiable, Cloneable {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.PRIMARY_SECTORS,
                     discriminatorOption = "Primary", importable = true,
                     fmPath = "/Activity Form/Sectors/Primary Sectors",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Sectors/Primary Sectors/minSizeSectorsValidator",
+                    interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                            fmPath = "/Activity Form/Sectors/Primary Sectors/minSizeSectorsValidator"),
                     validators = @Validators(
                             percentage = "/Activity Form/Sectors/Primary Sectors/sectorPercentageTotal",
                             unique = "/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator",
@@ -248,8 +252,8 @@ LoggerIdentifiable, Cloneable {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.SECONDARY_SECTORS,
                     discriminatorOption = "Secondary", importable = true,
                     fmPath = "/Activity Form/Sectors/Secondary Sectors",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Sectors/Secondary Sectors/minSizeSectorsValidator",
+                    interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                            fmPath = "/Activity Form/Sectors/Secondary Sectors/minSizeSectorsValidator"),
                     validators = @Validators(
                             percentage = "/Activity Form/Sectors/Secondary Sectors/sectorPercentageTotal",
                             unique = "/Activity Form/Sectors/Secondary Sectors/uniqueSectorsValidator",
@@ -257,8 +261,8 @@ LoggerIdentifiable, Cloneable {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.TERTIARY_SECTORS,
                     discriminatorOption = "Tertiary", importable = true,
                     fmPath = "/Activity Form/Sectors/Tertiary Sectors",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Sectors/Tertiary Sectors/minSizeSectorsValidator",
+                    interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                            fmPath = "/Activity Form/Sectors/Tertiary Sectors/minSizeSectorsValidator"),
                     validators = @Validators(
                             percentage = "/Activity Form/Sectors/Tertiary Sectors/sectorPercentageTotal",
                             unique = "/Activity Form/Sectors/Tertiary Sectors/uniqueSectorsValidator",
@@ -266,8 +270,8 @@ LoggerIdentifiable, Cloneable {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.TAG_SECTORS,
                     discriminatorOption = "Tag", importable = true,
                     fmPath = "/Activity Form/Sectors/Tag Sectors",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Sectors/Tag Sectors/minSizeSectorsValidator",
+                    interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                            fmPath = "/Activity Form/Sectors/Tag Sectors/minSizeSectorsValidator"),
                     validators = @Validators(
                             percentage = "/Activity Form/Sectors/Tag Sectors/sectorPercentageTotal",
                             unique = "/Activity Form/Sectors/Tag Sectors/uniqueSectorsValidator",
@@ -282,9 +286,11 @@ LoggerIdentifiable, Cloneable {
     //TTIL
     @Interchangeable(fieldTitle = ActivityFieldsConstants.LOCATIONS, importable = true,
             fmPath = "/Activity Form/Location",
-            requiredFmPath = "/Activity Form/Location/Locations/Location required validator",
-            required = SUBMIT,
-                    validators = @Validators (unique = "/Activity Form/Location/Locations/uniqueLocationsValidator", treeCollection = "/Activity Form/Location/Locations/Tree Validator"))
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = "/Activity Form/Location/Locations/Location required validator"),
+            validators = @Validators(
+                    unique = "/Activity Form/Location/Locations/uniqueLocationsValidator",
+                    treeCollection = "/Activity Form/Location/Locations/Tree Validator"))
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.LOCATIONS)
     protected Set<AmpActivityLocation> locations = new HashSet<>();
     
@@ -296,11 +302,12 @@ LoggerIdentifiable, Cloneable {
                     discriminatorOption = Constants.FUNDING_AGENCY,
                     fmPath = FMVisibility.ANY_FM + "/Activity Form/Organizations/Donor Organization"
                             + "|/Activity Form/Funding/Search Funding Organizations/Search Organizations",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Organizations/Donor Organization/Required Validator",
-                    interValidators = @InterchangeableValidator(value = SizeValidator.class,
-                            attributes = "max=1",
-                            fmPath = "/Activity Form/Organizations/Donor Organization/Max Size Validator"),
+                    interValidators = {
+                            @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                                    fmPath = "/Activity Form/Organizations/Donor Organization/Required Validator"),
+                            @InterchangeableValidator(value = SizeValidator.class,
+                                    attributes = "max=1",
+                                    fmPath = "/Activity Form/Organizations/Donor Organization/Max Size Validator")},
                     validators = @Validators(
                             unique = "/Activity Form/Organizations/Donor Organization/Unique Orgs Validator",
                             percentage = "/Activity Form/Organizations/Donor Organization/relOrgPercentageTotal")),
@@ -308,11 +315,12 @@ LoggerIdentifiable, Cloneable {
                     importable = true,
                     discriminatorOption = Constants.RESPONSIBLE_ORGANISATION,
                     fmPath = "/Activity Form/Organizations/Responsible Organization",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Organizations/Responsible Organization/Required Validator",
-                    interValidators = @InterchangeableValidator(value = SizeValidator.class,
-                            attributes = "max=1",
-                            fmPath = FMVisibility.PARENT_FM + "/Max Size Validator"),
+                    interValidators = {
+                            @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/Required Validator"),
+                            @InterchangeableValidator(value = SizeValidator.class,
+                                    attributes = "max=1",
+                                    fmPath = FMVisibility.PARENT_FM + "/Max Size Validator")},
                     validators = @Validators(
                             unique = FMVisibility.PARENT_FM + "/Unique Orgs Validator",
                             percentage = FMVisibility.PARENT_FM + "/relOrgPercentageTotal")),
@@ -320,11 +328,12 @@ LoggerIdentifiable, Cloneable {
                     importable = true,
                     discriminatorOption = Constants.EXECUTING_AGENCY,
                     fmPath = "/Activity Form/Organizations/Executing Agency",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Organizations/Executing Agency/Required Validator",
-                    interValidators = @InterchangeableValidator(value = SizeValidator.class,
-                            attributes = "max=1",
-                            fmPath = FMVisibility.PARENT_FM + "/Max Size Validator"),
+                    interValidators = {
+                            @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                                    fmPath = "/Activity Form/Organizations/Executing Agency/Required Validator"),
+                            @InterchangeableValidator(value = SizeValidator.class,
+                                    attributes = "max=1",
+                                    fmPath = FMVisibility.PARENT_FM + "/Max Size Validator")},
                     validators = @Validators(
                             unique = FMVisibility.PARENT_FM + "/Unique Orgs Validator",
                             percentage = FMVisibility.PARENT_FM + "/relOrgPercentageTotal")),
@@ -332,11 +341,12 @@ LoggerIdentifiable, Cloneable {
                     importable = true,
                     discriminatorOption = Constants.IMPLEMENTING_AGENCY,
                     fmPath = "/Activity Form/Organizations/Implementing Agency",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Organizations/Implementing Agency/Required Validator",
-                    interValidators = @InterchangeableValidator(value = SizeValidator.class,
-                            attributes = "max=1",
-                            fmPath = FMVisibility.PARENT_FM + "/Max Size Validator"),
+                    interValidators = {
+                            @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                                    fmPath = "/Activity Form/Organizations/Implementing Agency/Required Validator"),
+                            @InterchangeableValidator(value = SizeValidator.class,
+                                    attributes = "max=1",
+                                    fmPath = FMVisibility.PARENT_FM + "/Max Size Validator")},
                     validators = @Validators(
                             unique = FMVisibility.PARENT_FM + "/Unique Orgs Validator",
                             percentage = FMVisibility.PARENT_FM + "/relOrgPercentageTotal")),
@@ -344,11 +354,12 @@ LoggerIdentifiable, Cloneable {
                     importable = true,
                     discriminatorOption = Constants.BENEFICIARY_AGENCY,
                     fmPath = "/Activity Form/Organizations/Beneficiary Agency",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Organizations/Beneficiary Agency/Required Validator",
-                    interValidators = @InterchangeableValidator(value = SizeValidator.class,
-                            attributes = "max=1",
-                            fmPath = FMVisibility.PARENT_FM + "/Max Size Validator"),
+                    interValidators = {
+                            @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                                    fmPath = "/Activity Form/Organizations/Beneficiary Agency/Required Validator"),
+                            @InterchangeableValidator(value = SizeValidator.class,
+                                    attributes = "max=1",
+                                    fmPath = FMVisibility.PARENT_FM + "/Max Size Validator")},
                     validators = @Validators(
                             unique = FMVisibility.PARENT_FM + "/Unique Orgs Validator",
                             percentage = FMVisibility.PARENT_FM + "/relOrgPercentageTotal")),
@@ -356,11 +367,12 @@ LoggerIdentifiable, Cloneable {
                     importable = true,
                     discriminatorOption = Constants.CONTRACTING_AGENCY,
                     fmPath = "/Activity Form/Organizations/Contracting Agency",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Organizations/Contracting Agency/Required Validator",
-                    interValidators = @InterchangeableValidator(value = SizeValidator.class,
-                            attributes = "max=1",
-                            fmPath = FMVisibility.PARENT_FM + "/Max Size Validator"),
+                    interValidators = {
+                            @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                                    fmPath = "/Activity Form/Organizations/Contracting Agency/Required Validator"),
+                            @InterchangeableValidator(value = SizeValidator.class,
+                                    attributes = "max=1",
+                                    fmPath = FMVisibility.PARENT_FM + "/Max Size Validator")},
                     validators = @Validators(
                             unique = FMVisibility.PARENT_FM + "/Unique Orgs Validator",
                             percentage = FMVisibility.PARENT_FM + "/relOrgPercentageTotal")),
@@ -368,11 +380,12 @@ LoggerIdentifiable, Cloneable {
                     importable = true,
                     discriminatorOption = Constants.REGIONAL_GROUP,
                     fmPath = "/Activity Form/Organizations/Regional Group",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Organizations/Regional Group/Required Validator",
-                    interValidators = @InterchangeableValidator(value = SizeValidator.class,
-                            attributes = "max=1",
-                            fmPath = FMVisibility.PARENT_FM + "/Max Size Validator"),
+                    interValidators = {
+                            @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                                    fmPath = "/Activity Form/Organizations/Regional Group/Required Validator"),
+                            @InterchangeableValidator(value = SizeValidator.class,
+                                    attributes = "max=1",
+                                    fmPath = FMVisibility.PARENT_FM + "/Max Size Validator")},
                     validators = @Validators(
                             unique = FMVisibility.PARENT_FM + "/Unique Orgs Validator",
                             percentage = FMVisibility.PARENT_FM + "/relOrgPercentageTotal")),
@@ -380,11 +393,12 @@ LoggerIdentifiable, Cloneable {
                     importable = true,
                     discriminatorOption = Constants.SECTOR_GROUP,
                     fmPath = "/Activity Form/Organizations/Sector Group",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Organizations/Sector Group/Required Validator",
-                    interValidators = @InterchangeableValidator(value = SizeValidator.class,
-                            attributes = "max=1",
-                            fmPath = FMVisibility.PARENT_FM + "/Max Size Validator"),
+                    interValidators = {
+                            @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                                    fmPath = "/Activity Form/Organizations/Sector Group/Required Validator"),
+                            @InterchangeableValidator(value = SizeValidator.class,
+                                    attributes = "max=1",
+                                    fmPath = FMVisibility.PARENT_FM + "/Max Size Validator")},
                     validators = @Validators(
                             unique = FMVisibility.PARENT_FM + "/Unique Orgs Validator",
                             percentage = FMVisibility.PARENT_FM + "/relOrgPercentageTotal"))
@@ -573,8 +587,8 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = "Proposed Start Date", importable = true,
             fmPath = "/Activity Form/Planning/Proposed Start Date",
-            requiredFmPath = "/Activity Form/Planning/Required Validator for Proposed Start Date",
-            required = SUBMIT)
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = "/Activity Form/Planning/Required Validator for Proposed Start Date"))
     @VersionableFieldSimple(fieldTitle = "Proposed Start Date")
     protected Date proposedStartDate;
 
@@ -685,7 +699,8 @@ LoggerIdentifiable, Cloneable {
     /* Categories */
     @InterchangeableDiscriminator(discriminatorField = "ampCategoryClass.keyName",
     settings = {
-        @Interchangeable(fieldTitle = "Activity Status", importable = true, multipleValues = false, required = ALWAYS,
+        @Interchangeable(fieldTitle = "Activity Status", importable = true, multipleValues = false,
+                interValidators = @InterchangeableValidator(RequiredValidator.class),
                 discriminatorOption = CategoryConstants.ACTIVITY_STATUS_KEY, fmPath="/Activity Form/Identification/Activity Status", pickIdOnly=true),
         @Interchangeable(fieldTitle = "Type of Cooperation", importable=true,  multipleValues = false,
                 /* "/Activity Form/Identification/Type of Cooperation" is used for SSC Type of Cooperation in preview display,
@@ -708,8 +723,8 @@ LoggerIdentifiable, Cloneable {
         @Interchangeable(fieldTitle = "A C Chapter", label = "A.C. Chapter", importable = true, multipleValues = false,
                 discriminatorOption = CategoryConstants.ACCHAPTER_KEY, fmPath="/Activity Form/Identification/A.C. Chapter", pickIdOnly=true), 
         @Interchangeable(fieldTitle = "Activity Budget", importable = true, multipleValues = false,
-                requiredFmPath = "/Activity Form/Identification/Required Validator for Activity Budget",
-                required = SUBMIT,
+                interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                        fmPath = "/Activity Form/Identification/Required Validator for Activity Budget"),
                 discriminatorOption = CategoryConstants.ACTIVITY_BUDGET_KEY, fmPath="/Activity Form/Identification/Activity Budget", pickIdOnly=true), 
         @Interchangeable(fieldTitle = "Procurement System", importable=true, multipleValues=false, 
                 discriminatorOption = CategoryConstants.PROCUREMENT_SYSTEM_KEY, fmPath="/Activity Form/Identification/Procurement System", pickIdOnly=true),
@@ -820,8 +835,8 @@ LoggerIdentifiable, Cloneable {
     
     @Interchangeable(fieldTitle = "Humanitarian Aid", importable = true,
             fmPath = "/Activity Form/Identification/Humanitarian Aid",
-            requiredFmPath = "/Activity Form/Identification/Required Validator for Humanitarian Aid",
-            required = SUBMIT)
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = "/Activity Form/Identification/Required Validator for Humanitarian Aid"))
     @VersionableFieldSimple(fieldTitle = "Humanitarian Aid")
     protected Boolean humanitarianAid;
 
@@ -832,8 +847,8 @@ LoggerIdentifiable, Cloneable {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.NATIONAL_PLAN_OBJECTIVE,
                     discriminatorOption = "National Plan Objective", importable = true,
                     fmPath = "/Activity Form/Program/National Plan Objective",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Program/National Plan Objective/minSizeProgramValidator",
+                    interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                            fmPath = "/Activity Form/Program/National Plan Objective/minSizeProgramValidator"),
                     validators = @Validators(
                             unique = "/Activity Form/Program/National Plan Objective/uniqueProgramsValidator",
                             percentage = "/Activity Form/Program/National Plan Objective/programPercentageTotal",
@@ -841,8 +856,8 @@ LoggerIdentifiable, Cloneable {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.PRIMARY_PROGRAMS,
                     discriminatorOption = "Primary Program", importable = true,
                     fmPath = "/Activity Form/Program/Primary Programs",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Program/Primary Programs/minSizeProgramValidator",
+                    interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                            fmPath = "/Activity Form/Program/Primary Programs/minSizeProgramValidator"),
                     validators = @Validators(
                             unique = "/Activity Form/Program/Primary Programs/uniqueProgramsValidator",
                             percentage = "/Activity Form/Program/Primary Programs/programPercentageTotal",
@@ -850,8 +865,8 @@ LoggerIdentifiable, Cloneable {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.SECONDARY_PROGRAMS,
                     discriminatorOption = "Secondary Program", importable = true,
                     fmPath = "/Activity Form/Program/Secondary Programs",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Program/Secondary Programs/minSizeProgramValidator",
+                    interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                            fmPath = "/Activity Form/Program/Secondary Programs/minSizeProgramValidator"),
                     validators = @Validators(
                             unique = "/Activity Form/Program/Secondary Programs/uniqueProgramsValidator",
                             percentage = "/Activity Form/Program/Secondary Programs/programPercentageTotal",
@@ -859,14 +874,14 @@ LoggerIdentifiable, Cloneable {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.TERTIARY_PROGRAMS,
                     discriminatorOption = "Tertiary Program", importable = true,
                     fmPath = "/Activity Form/Program/Tertiary Programs",
-                    required = SUBMIT,
-                    requiredFmPath = "/Activity Form/Program/Tertiary Programs/minSizeProgramValidator",
+                    interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                            fmPath = "/Activity Form/Program/Tertiary Programs/minSizeProgramValidator"),
                     validators = @Validators(
                             unique = "/Activity Form/Program/Tertiary Programs/uniqueProgramsValidator",
                             percentage = "/Activity Form/Program/Tertiary Programs/programPercentageTotal",
                             treeCollection = "/Activity Form/Program/Tertiary Programs/Tree Validator"))})
     protected Set<AmpActivityProgram> actPrograms = new HashSet<>();
-    
+
     @VersionableCollection(fieldTitle = "Act. Budget Structure")
     protected Set <AmpActivityBudgetStructure> actBudgetStructure;
 

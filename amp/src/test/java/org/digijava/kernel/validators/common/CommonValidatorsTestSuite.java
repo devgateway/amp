@@ -9,7 +9,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         RegexValidatorTest.class,
-        SizeValidatorTest.class
+        SizeValidatorTest.class,
+        RequiredValidatorTest.class
 })
 public class CommonValidatorsTestSuite {
 }

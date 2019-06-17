@@ -1,7 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactFieldsConstants;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.kernel.ampapi.endpoints.contact.dto.ContactView;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -44,12 +43,14 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     @JsonView(ContactView.Summary.class)
     private Long id;
 
-    @Interchangeable(fieldTitle = "Name", importable = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Name", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     @JsonProperty(ContactEPConstants.NAME)
     @JsonView(ContactView.Summary.class)
     private String name;
 
-    @Interchangeable(fieldTitle = "Last Name", importable = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Last Name", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     @JsonProperty(ContactEPConstants.LAST_NAME)
     @JsonView(ContactView.Summary.class)
     private String lastname;

@@ -1,5 +1,7 @@
 package org.digijava.kernel.validators.activity;
 
+import static org.digijava.kernel.validators.ValidatorUtil.filter;
+import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
@@ -18,7 +20,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.helper.Constants;
@@ -51,10 +52,9 @@ public class PledgeOrgValidatorTest {
 
     @Test
     public void testNullDonor() {
-        AmpFunding funding = new AmpFunding();
-
-        AmpActivity activity = new AmpActivity();
-        activity.setFunding(ImmutableSet.of(funding));
+        AmpActivityVersion activity = new ActivityBuilder()
+                .addFunding(new AmpFunding())
+                .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
@@ -179,10 +179,9 @@ public class PledgeOrgValidatorTest {
                         .getFunding())
                 .getActivity();
 
-        Validator validator = new Validator();
         Set<String> hiddenFm = ImmutableSet.of(
                 "/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Pledges");
-        Set<ConstraintViolation> violations = validator.validate(ValidatorUtil.getMetaData(hiddenFm), activity);
+        Set<ConstraintViolation> violations = getConstraintViolations(ValidatorUtil.getMetaData(hiddenFm), activity);
 
         assertThat(violations, emptyIterable());
     }
@@ -199,7 +198,12 @@ public class PledgeOrgValidatorTest {
     }
 
     private Set<ConstraintViolation> getConstraintViolations(AmpActivityVersion activity) {
+        return getConstraintViolations(activityField, activity);
+    }
+
+    private Set<ConstraintViolation> getConstraintViolations(APIField type, AmpActivityVersion activity) {
         Validator validator = new Validator();
-        return validator.validate(activityField, activity);
+        Set<ConstraintViolation> violations = validator.validate(type, activity, getDefaultTranslationContext());
+        return filter(violations, PledgeOrgValidator.class);
     }
 }

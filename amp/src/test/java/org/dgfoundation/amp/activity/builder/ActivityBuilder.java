@@ -50,9 +50,14 @@ public class ActivityBuilder {
 
     public ActivityBuilder addLocation(AmpLocation location, Float percentage) {
         AmpActivityLocation activityLocation = new AmpActivityLocation();
-        activityLocation.setActivity(activity);
         activityLocation.setLocation(location);
         activityLocation.setLocationPercentage(percentage);
+
+        return addLocation(activityLocation);
+    }
+
+    public ActivityBuilder addLocation(AmpActivityLocation activityLocation) {
+        activityLocation.setActivity(activity);
         activity.getLocations().add(activityLocation);
 
         return this;
@@ -107,7 +112,13 @@ public class ActivityBuilder {
         orgRole.setRole(role);
         orgRole.setOrganisation(organisation);
         orgRole.setActivity(activity);
+        orgRole.setPercentage(100f);
         activity.getOrgrole().add(orgRole);
+        return this;
+    }
+
+    public ActivityBuilder withDraft(boolean draft) {
+        activity.setDraft(draft);
         return this;
     }
 }

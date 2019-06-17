@@ -6,13 +6,14 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.SerializableComparator;
 
@@ -27,13 +28,14 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     private AmpActivityVersion activity;
     
     @Interchangeable(fieldTitle = "Organization", importable = true, pickIdOnly = true, uniqueConstraint = true,
-            required = ActivityEPConstants.RequiredValidation.ALWAYS,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
             commonPV = CommonFieldsConstants.COMMON_ORGANIZATION)
     private AmpOrganisation organisation;
     
     private AmpRole role;
     @Interchangeable(fieldTitle = "Percentage", importable = true, percentageConstraint = true,
-            fmPath = FMVisibility.PARENT_FM + "/percentage", required = ActivityEPConstants.RequiredValidation.ALWAYS)
+            fmPath = FMVisibility.PARENT_FM + "/percentage",
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Float   percentage;
     @Interchangeable(fieldTitle = "Budgets", importable = true, fmPath = FMVisibility.PARENT_FM + "/Budget Code")
     private Set<AmpOrgRoleBudget> budgets = new HashSet<>();

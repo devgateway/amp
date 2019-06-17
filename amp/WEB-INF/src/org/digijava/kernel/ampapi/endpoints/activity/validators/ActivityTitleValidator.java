@@ -40,7 +40,7 @@ public class ActivityTitleValidator extends InputValidator {
         if (FieldMap.underscorify(ActivityFieldsConstants.PROJECT_TITLE).equals(fieldName)) {
             // replicating current AF functionality to validate the default language title value
             String lang = importer.getTrnSettings().getDefaultLangCode();
-            // it's always required & type is validated earlier
+            // it'  s always required & type is validated earlier
             String activityTitle = null;
             if (Boolean.TRUE.equals(fieldDescription.isTranslatable())) {
                 activityTitle = (String) ((Map<String, Object>) newFieldParent.get(fieldName)).get(lang);

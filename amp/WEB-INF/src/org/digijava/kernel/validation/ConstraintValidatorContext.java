@@ -10,6 +10,11 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 public interface ConstraintValidatorContext {
 
     /**
+     * If applicable, allows to access translated values.
+     */
+    TranslatedValueContext getTranslatedValueContext();
+
+    /**
      * Disables the default constraint violation.
      *
      * For the custom violations to be reported, constraint validator must mark the value as invalid.

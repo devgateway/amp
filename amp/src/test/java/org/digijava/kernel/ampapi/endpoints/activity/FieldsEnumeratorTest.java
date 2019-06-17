@@ -3,9 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NOT_REQUIRED;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.NONE;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.HIDDEN_FM_PATH;
 import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.VISIBLE_FM_PATH;
 import static org.hamcrest.Matchers.allOf;
@@ -55,6 +52,7 @@ import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.services.sync.model.SyncConstants;
 import org.digijava.kernel.validators.ValidatorUtil;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -66,6 +64,7 @@ import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.validator.groups.Submit;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -308,32 +307,33 @@ public class FieldsEnumeratorTest {
 
     private static class RequiredFieldClass {
 
-        @Interchangeable(fieldTitle = "field_not_required_implicit")
-        private String fieldNotRequiredImplicit;
+        @Interchangeable(fieldTitle = "field_not_required")
+        private String fieldNotRequired;
 
-        @Interchangeable(fieldTitle = "field_not_required_explicit", required = NONE)
-        private String fieldNotRequiredExplicit;
-
-        @Interchangeable(fieldTitle = "field_required_always", required = ALWAYS)
+        @Interchangeable(fieldTitle = "field_required_always",
+                interValidators = @InterchangeableValidator(RequiredValidator.class))
         private String fieldRequiredAlways;
 
-        @Interchangeable(fieldTitle = "field_required_non_draft", required = SUBMIT)
+        @Interchangeable(fieldTitle = "field_required_non_draft",
+                interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class))
         private String fieldRequiredNonDraft;
 
-        @Interchangeable(fieldTitle = "field_required_submit_fm_path_visible", requiredFmPath = VISIBLE_FM_PATH,
-                required = SUBMIT)
+        @Interchangeable(fieldTitle = "field_required_submit_fm_path_visible",
+                interValidators = @InterchangeableValidator(value = RequiredValidator.class,
+                        groups = Submit.class, fmPath = VISIBLE_FM_PATH))
         private String fieldRequiredSubmitFmPathVisible;
 
-        @Interchangeable(fieldTitle = "field_required_submit_fm_path_hidden", requiredFmPath = HIDDEN_FM_PATH,
-                required = SUBMIT)
+        @Interchangeable(fieldTitle = "field_required_submit_fm_path_hidden",
+                interValidators = @InterchangeableValidator(value = RequiredValidator.class,
+                        groups = Submit.class, fmPath = HIDDEN_FM_PATH))
         private String fieldRequiredSubmitFmPathHidden;
 
-        @Interchangeable(fieldTitle = "field_required_always_fm_path_visible", requiredFmPath = VISIBLE_FM_PATH,
-                required = ALWAYS)
+        @Interchangeable(fieldTitle = "field_required_always_fm_path_visible",
+                interValidators = @InterchangeableValidator(value = RequiredValidator.class, fmPath = VISIBLE_FM_PATH))
         private String fieldRequiredAlwaysFmPathVisible;
 
-        @Interchangeable(fieldTitle = "field_required_always_fm_path_hidden", requiredFmPath = HIDDEN_FM_PATH,
-                required = ALWAYS)
+        @Interchangeable(fieldTitle = "field_required_always_fm_path_hidden",
+                interValidators = @InterchangeableValidator(value = RequiredValidator.class, fmPath = HIDDEN_FM_PATH))
         private String fieldRequiredAlwaysFmPathHidden;
     }
 
@@ -342,8 +342,7 @@ public class FieldsEnumeratorTest {
         List<APIField> actual = fieldsFor(RequiredFieldClass.class);
 
         List<APIField> expected = Arrays.asList(
-                newRequiredField("field_not_required_implicit", FIELD_NOT_REQUIRED),
-                newRequiredField("field_not_required_explicit", FIELD_NOT_REQUIRED),
+                newRequiredField("field_not_required", FIELD_NOT_REQUIRED),
                 newRequiredField("field_required_always", FIELD_ALWAYS_REQUIRED),
                 newRequiredField("field_required_non_draft", FIELD_NON_DRAFT_REQUIRED),
                 newRequiredField("field_required_submit_fm_path_visible", FIELD_NON_DRAFT_REQUIRED),

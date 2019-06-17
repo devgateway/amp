@@ -16,7 +16,9 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintDescriptor;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintViolation;
+import org.digijava.kernel.validation.TranslatedValueContext;
 import org.digijava.kernel.validation.Path;
+import org.digijava.kernel.validation.TranslationContext;
 import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.FundingWithTransactionsValidator;
@@ -52,11 +54,13 @@ public class ImporterInterchangeValidator {
      *
      * @param type type information for the object
      * @param root internal representation of the object
+     * @param translationContext for accessing translated values
      * @param groups validation groups
      * @return all found constraint violations
      */
-    public Set<ConstraintViolation> validate(APIField type, Object root, Class<?>... groups) {
-        return validator.validate(type, root, groups);
+    public Set<ConstraintViolation> validate(APIField type, Object root, TranslationContext translationContext,
+            Class<?>... groups) {
+        return validator.validate(type, root, translationContext, groups);
     }
 
     /**
@@ -64,11 +68,13 @@ public class ImporterInterchangeValidator {
      *
      * @param field the field to validate
      * @param value the value of the field
+     * @param translatedValueContext for accessing translated values
      * @param groups validation groups
      * @return all found constraint violations
      */
-    public Set<ConstraintViolation> validateField(APIField field, Object value, Class<?>... groups) {
-        return validator.validateField(field, value, groups);
+    public Set<ConstraintViolation> validateField(APIField field, Object value,
+            TranslatedValueContext translatedValueContext, Class<?>... groups) {
+        return validator.validateField(field, value, translatedValueContext, groups);
     }
 
     /**

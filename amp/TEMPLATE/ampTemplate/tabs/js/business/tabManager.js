@@ -18,15 +18,17 @@ define([ 'marionette', 'text!views/html/saveTabDialogTemplate.html', 'models/tab
 		TranslationManager.getAvailableLanguages().done (function (languages){
 			var trnTitle = TranslationManager.getTranslated("Please enter a title for this tab:");
 			var translatedNames = {};
-			for(var i=0; i < app.TabsApp.currentTab.get('translatedNames').length; i++){
-				var name = app.TabsApp.currentTab.get('translatedNames')[i];
-				var language = _.keys(name)[0];
-				translatedNames[language] = name [language];
+
+			for(var i=0; i < _.keys(app.TabsApp.currentTab.get('translatedNames')).length; i++){
+				var language = _.keys(app.TabsApp.currentTab.get('translatedNames'))[i];
+				translatedNames[language] = app.TabsApp.currentTab.get('translatedNames')[language]
 			}
+
 			var renderOptions = {
-		    languages: languages,
-		    translatedNames:translatedNames 
+		    	languages: languages,
+		    	translatedNames:translatedNames
 		    };
+
 			var SaveTabDialogView = Marionette.ItemView.extend({
 				template : _.template(saveTabDialogTemplate,renderOptions),
 				events: {

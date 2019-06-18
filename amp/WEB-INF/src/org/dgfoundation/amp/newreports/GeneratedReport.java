@@ -59,7 +59,7 @@ public class GeneratedReport {
      */
     public final SortedMap<Long, SortedSet<ReportWarning>> reportWarnings;
     
-    public final Map<String, Object> mapTimings;
+    private final Map<String, Object> mapTimings;
     
     public final boolean isEmpty;
 
@@ -91,7 +91,10 @@ public class GeneratedReport {
     public boolean hasTotals() {
         return hasTotals;
     }
-
+    
+    public Map<String, Object> getMapTimings() {
+        return mapTimings;
+    }
 }
 
     

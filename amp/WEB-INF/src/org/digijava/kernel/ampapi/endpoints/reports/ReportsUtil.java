@@ -212,7 +212,7 @@ public class ReportsUtil {
             } else if (EPConstants.WARNINGS.equalsIgnoreCase(infoToAdd)) {
                 result.setWarnings(report.reportWarnings);
             } else if (EPConstants.STATS.equalsIgnoreCase(infoToAdd)) {
-                result.setStats(report.mapTimings);
+                result.setStats(report.getMapTimings());
             }
         }
     }

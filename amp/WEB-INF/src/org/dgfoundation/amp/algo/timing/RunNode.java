@@ -65,8 +65,7 @@ public interface RunNode {
     default String getDetailsAsString() {
         try {
             return new ObjectMapper().writer().writeValueAsString(asMap());
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             throw AlgoUtils.translateException(e);
         }
     }

@@ -2,7 +2,6 @@
 package org.digijava.module.aim.dbentity;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.validators.activity.FundingWithTransactionsValidator;
 import org.digijava.kernel.validators.activity.PledgeOrgValidator;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Independent;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -35,6 +35,7 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.validator.fundings.TransactionOrgRole;
 import org.digijava.module.aim.validator.groups.API;
+import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -49,7 +50,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     @Interchangeable(fieldTitle = "Funding ID")
     private Long ampFundingId;
 
-    @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true, required = ALWAYS,
+    @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
             commonPV = CommonFieldsConstants.COMMON_ORGANIZATION)
     private AmpOrganisation ampDonorOrgId;
 
@@ -68,8 +70,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     
     @Interchangeable(fieldTitle = "Original Completion Date", importable = true,
             fmPath = "/Activity Form/Planning/Original Completion Date",
-            requiredFmPath = "/Activity Form/Planning/Required Validator for Original Completion Date",
-            required = SUBMIT)
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = "/Activity Form/Planning/Required Validator for Original Completion Date"))
     private Date originalCompDate;
     
     private Date lastAuditDate;
@@ -171,7 +173,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     @Independent
     private AmpAgreement agreement;
 
-    @Interchangeable(fieldTitle = "Source Role", importable = true, pickIdOnly = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Source Role", importable = true, pickIdOnly = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private AmpRole sourceRole;
     @Interchangeable(fieldTitle="Funding Classification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date", importable=true)
     private Date fundingClassificationDate;

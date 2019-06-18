@@ -87,7 +87,13 @@ public class TranslationSettings {
     }
 
     public TranslationSettings(String currentLangCode, Set<String> trnLocaleCodes, boolean multilingual) {
+        this(currentLangCode, null, trnLocaleCodes, multilingual);
+    }
+
+    public TranslationSettings(String currentLangCode, String defaultLangCode, Set<String> trnLocaleCodes,
+            boolean multilingual) {
         this.currentLangCode = currentLangCode;
+        this.defaultLangCode = defaultLangCode;
         this.trnLocaleCodes = trnLocaleCodes;
         init(multilingual);
     }

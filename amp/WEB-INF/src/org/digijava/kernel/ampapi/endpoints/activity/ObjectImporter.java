@@ -25,6 +25,7 @@ import javax.validation.groups.Default;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ErrorDecorator;
@@ -39,9 +40,17 @@ import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.validation.TranslatedValueContext;
+import org.digijava.kernel.validation.TranslationContext;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.editor.dbentity.Editor;
+import org.digijava.module.editor.exception.EditorException;
+import org.digijava.module.editor.util.DbUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * @author Octavian Ciubotaru
@@ -72,23 +81,32 @@ public abstract class ObjectImporter<T> {
 
     private ImporterInterchangeValidator importerInterchangeValidator = new ImporterInterchangeValidator(errors);
 
+    private List<AmpContentTranslation> translations = new ArrayList<>();
+    private EditorStore editorStore = new EditorStore();
+    private Site site;
+    private TranslationContext translationContext;
+
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
-            APIField apiField) {
-        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiField,
+            APIField apiField, Site site) {
+        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiField, site,
                 new ValueConverter());
     }
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
-            TranslationSettings trnSettings, APIField apiField, ValueConverter valueConverter) {
+            TranslationSettings trnSettings, APIField apiField, Site site, ValueConverter valueConverter) {
         this.formatValidator = formatValidator;
         this.businessRulesValidator = businessRulesValidator;
         this.trnSettings = trnSettings;
         this.apiField = apiField;
         this.possibleValuesCached = new PossibleValuesCache(PossibleValuesEnumerator.INSTANCE, apiField.getChildren());
         this.valueConverter = valueConverter;
+        this.site = site;
 
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         beanValidator = validatorFactory.getValidator();
+
+        translationContext = new TranslationContext(trnSettings.getCurrentLangCode(), trnSettings.getDefaultLangCode(),
+                editorStore, translations, this::getEditor, this::getContentTranslation);
     }
 
     public void setJsonErrorMapper(Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper) {
@@ -138,7 +156,7 @@ public abstract class ObjectImporter<T> {
      */
     public void processInterViolationsForTypes(Map<String, Object> json, Object root) {
         importerInterchangeValidator.integrateTypeErrorsIntoResult(
-                importerInterchangeValidator.validate(apiField, root), json);
+                importerInterchangeValidator.validate(apiField, root, getTranslationContext()), json);
     }
 
     public ImporterInterchangeValidator getImporterInterchangeValidator() {
@@ -240,21 +258,28 @@ public abstract class ObjectImporter<T> {
                 fieldDef.getFieldAccessor().set(newParent, newValue);
             }
 
-            validateField(fieldDef, newParent, newJsonParent, fieldPath);
+            processInterViolationsForField(fieldDef, newParent, newJsonParent, fieldPath);
         }
         return isValidFormat;
     }
 
-    protected void validateField(APIField field, Object parentObject, Map<String, Object> parentJson,
+    private void processInterViolationsForField(APIField field, Object parentObject, Map<String, Object> parentJson,
             String fieldPath) {
         Object fieldValue = field.getFieldAccessor().get(parentObject);
 
-        Set<org.digijava.kernel.validation.ConstraintViolation> violations =
-                importerInterchangeValidator.validateField(field, fieldValue);
+        TranslatedValueContext translatedValueContext = getTranslationContext().getValueTranslationContextForField(
+                field, fieldValue, parentObject);
 
-        if (!violations.isEmpty()) {
-            importerInterchangeValidator.integrateFieldErrorsIntoResult(violations, parentJson, fieldPath);
-        }
+        processInterViolationsForField(field, parentJson, fieldPath, fieldValue, translatedValueContext);
+    }
+
+    public void processInterViolationsForField(APIField type, Map<String, Object> parentJson, String fieldPath,
+            Object fieldValue, TranslatedValueContext translatedValueContext) {
+
+        Set<org.digijava.kernel.validation.ConstraintViolation> violations =
+                importerInterchangeValidator.validateField(type, fieldValue, translatedValueContext);
+
+        importerInterchangeValidator.integrateFieldErrorsIntoResult(violations, parentJson, fieldPath);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -425,7 +450,7 @@ public abstract class ObjectImporter<T> {
                             newFieldValue = valueConverter.getNewInstance(fieldDef.getApiType().getType());
                         }
 
-                        isFormatValid = validateAndImport(newFieldValue, fieldDef.getChildren(),
+                        isFormatValid = validateAndImport(newFieldValue, childrenFields,
                                 newJsonObjValue, fieldPath) && isFormatValid;
                     }
                 }
@@ -585,4 +610,31 @@ public abstract class ObjectImporter<T> {
                 details, content);
     }
 
+    public EditorStore getEditorStore() {
+        return editorStore;
+    }
+
+    public List<AmpContentTranslation> getTranslations() {
+        return translations;
+    }
+
+    public TranslationContext getTranslationContext() {
+        return translationContext;
+    }
+
+    protected List<Editor> getEditor(String editorKey) {
+        try {
+            return DbUtil.getEditorList(editorKey, site);
+        } catch (EditorException e) {
+            throw new RuntimeException("Failed to load editor from db", e);
+        }
+    }
+
+    protected List<AmpContentTranslation> getContentTranslation(String objectClass, Long objectId, String fieldName) {
+        return ContentTranslationUtil.loadFieldTranslations(objectClass, objectId, fieldName);
+    }
+
+    public Site getSite() {
+        return site;
+    }
 }

@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
 import static java.util.stream.Collectors.toList;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.NONE;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
@@ -44,6 +43,7 @@ import org.digijava.kernel.validation.ConstraintDescriptors;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.kernel.validators.common.RegexValidator;
 import org.digijava.kernel.validators.activity.UniqueValidator;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Independent;
@@ -54,6 +54,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.validator.groups.Submit;
 
 /**
  * Enumerate & describe all fields of an object used for import / export in API.
@@ -131,13 +132,6 @@ public class FieldsEnumerator {
 
         String label = getLabelOf(interchangeable);
         apiField.setFieldLabel(getTranslationsForLabel(label));
-
-        apiField.setUnconditionalRequired(getUnconditionalRequiredValue(context, fieldTitle));
-        apiField.setDependencyRequired(getDependencyRequiredValue(context));
-        apiField.setRequired(getRequiredValue(context,
-                apiField.getDependencyRequired(),
-                apiField.getUnconditionalRequired()));
-
         apiField.setImportable(getImportableValue(context, fieldTitle, interchangeable));
 
         if (interchangeable.percentageConstraint()) {
@@ -170,6 +164,13 @@ public class FieldsEnumerator {
         }
 
         List<ConstraintDescriptor> fieldConstraintDescriptors = new ArrayList<>();
+
+        if (isFieldIatiIdentifier(fieldTitle) && AmpClientModeHolder.isIatiImporterClient()) {
+            Map<String, String> args = ImmutableMap.of();
+            Set<Class<?>> groups = ImmutableSet.of();
+            fieldConstraintDescriptors.add(new ConstraintDescriptor(
+                    RequiredValidator.class, args, groups, ConstraintDescriptor.ConstraintTarget.FIELD));
+        }
 
         addProgramConstraints(fieldConstraintDescriptors, apiType, context);
 
@@ -221,6 +222,12 @@ public class FieldsEnumerator {
         if (hasTotalPercentageConstraint(fieldConstraintDescriptors) && apiField.getPercentageField() != null) {
             apiField.setPercentageConstraint(apiField.getPercentageField().getFieldName());
         }
+
+        apiField.setUnconditionalRequired(getUnconditionalRequiredValue(fieldConstraintDescriptors));
+        apiField.setDependencyRequired(getDependencyRequiredValue(context));
+        apiField.setRequired(getRequiredValue(context,
+                apiField.getDependencyRequired(),
+                apiField.getUnconditionalRequired()));
 
         return apiField;
     }
@@ -491,38 +498,18 @@ public class FieldsEnumerator {
     /**
      * Gets the field required value.
      *
-     * @param context current context
-     * @param fieldTitle the field to get its required value
+     * @param fieldConstraintDescriptors constraint descriptors for field
      * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false,
-     * N (no) = not required. .
+     *         N (no) = not required.
      */
-    private String getUnconditionalRequiredValue(FEContext context, String fieldTitle) {
-        if (isFieldIatiIdentifier(fieldTitle) && AmpClientModeHolder.isIatiImporterClient()) {
-            return ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
-        }
-
-        Interchangeable fieldIntch = context.getIntchStack().peek();
-
-        ActivityEPConstants.RequiredValidation required = fieldIntch.required();
-        String requiredFmPath = fieldIntch.requiredFmPath();
-
-        if (StringUtils.isNotBlank(requiredFmPath)) {
-            if (required == NONE) {
-                throw new IllegalStateException("Interchangeable.required is incorrect! Field: "
-                        + context.getIntchStack().peek().fieldTitle());
-            }
-            if (!isRequiredVisible(requiredFmPath, context)) {
-                required = NONE;
-            }
-        }
-
-        if (required == ALWAYS) {
-            return ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
-        } else if (required == SUBMIT) {
-            return ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
-        } else {
-            return ActivityEPConstants.FIELD_NOT_REQUIRED;
-        }
+    private String getUnconditionalRequiredValue(List<ConstraintDescriptor> fieldConstraintDescriptors) {
+        return fieldConstraintDescriptors.stream()
+                .filter(cd -> cd.getConstraintValidatorClass().equals(RequiredValidator.class))
+                .map(cd -> cd.getGroups().contains(Submit.class)
+                        ? ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED
+                        : ActivityEPConstants.FIELD_ALWAYS_REQUIRED)
+                .findFirst()
+                .orElse(ActivityEPConstants.FIELD_NOT_REQUIRED);
     }
 
     private boolean getImportableValue(FEContext context, String fieldTitle, Interchangeable interchangeable) {

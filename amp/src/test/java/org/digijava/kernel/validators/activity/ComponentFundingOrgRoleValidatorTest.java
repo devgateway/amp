@@ -1,5 +1,7 @@
 package org.digijava.kernel.validators.activity;
 
+import static org.digijava.kernel.validators.ValidatorUtil.filter;
+import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
@@ -39,7 +41,7 @@ public class ComponentFundingOrgRoleValidatorTest {
 
     @Test
     public void testNothingToValidate() {
-        AmpActivityVersion activity = new AmpActivityVersion();
+        AmpActivityVersion activity = new ActivityBuilder().getActivity();
 
         assertThat(getViolations(activityField, activity), emptyIterable());
     }
@@ -189,6 +191,7 @@ public class ComponentFundingOrgRoleValidatorTest {
 
     private Set<ConstraintViolation> getViolations(APIField activityField, AmpActivityVersion activity) {
         Validator validator = new Validator();
-        return validator.validate(activityField, activity);
+        Set<ConstraintViolation> violations = validator.validate(activityField, activity, getDefaultTranslationContext());
+        return filter(violations, ComponentFundingOrgRoleValidator.class);
     }
 }

@@ -1,12 +1,12 @@
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
-
 import java.io.Serializable;
 
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 
 
 public class AmpOrgRoleBudget implements Serializable, Comparable<AmpOrgRoleBudget>, Cloneable {
@@ -15,7 +15,8 @@ public class AmpOrgRoleBudget implements Serializable, Comparable<AmpOrgRoleBudg
     @Interchangeable(fieldTitle = "Id")
     private Long ampOrgRoleBudgetId;
     
-    @Interchangeable(fieldTitle = "Budget Code", importable = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Budget Code", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String budgetCode;
 
     @InterchangeableBackReference

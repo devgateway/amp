@@ -1,5 +1,7 @@
 package org.digijava.kernel.validators.resource;
 
+import static org.digijava.kernel.validators.ValidatorUtil.filter;
+import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
@@ -89,6 +91,7 @@ public class ResourceRequiredValidatorTest {
 
     private Set<ConstraintViolation> getConstraintViolations(AmpResource resource) {
         Validator validator = new Validator();
-        return validator.validate(resourceField, resource);
+        Set<ConstraintViolation> violations = validator.validate(resourceField, resource, getDefaultTranslationContext());
+        return filter(violations, ResourceRequiredValidator.class);
     }
 }

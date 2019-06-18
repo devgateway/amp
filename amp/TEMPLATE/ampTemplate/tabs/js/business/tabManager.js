@@ -17,12 +17,7 @@ define([ 'marionette', 'text!views/html/saveTabDialogTemplate.html', 'models/tab
 	TabManager.openSaveTabDialog = function(id, name) {
 		TranslationManager.getAvailableLanguages().done (function (languages){
 			var trnTitle = TranslationManager.getTranslated("Please enter a title for this tab:");
-			var translatedNames = {};
-
-			for(var i=0; i < _.keys(app.TabsApp.currentTab.get('translatedNames')).length; i++){
-				var language = _.keys(app.TabsApp.currentTab.get('translatedNames'))[i];
-				translatedNames[language] = app.TabsApp.currentTab.get('translatedNames')[language]
-			}
+			var translatedNames = app.TabsApp.currentTab.get('translatedNames');
 
 			var renderOptions = {
 		    	languages: languages,

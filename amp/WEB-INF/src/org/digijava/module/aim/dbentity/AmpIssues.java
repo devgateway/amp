@@ -1,7 +1,5 @@
 package org.digijava.module.aim.dbentity ;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,10 +7,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.aim.validator.groups.Submit;
 
 public class AmpIssues implements Serializable, Versionable, Cloneable {
 
@@ -22,7 +23,8 @@ public class AmpIssues implements Serializable, Versionable, Cloneable {
     @Interchangeable(fieldTitle = "Id")
     private Long ampIssueId;
 
-    @Interchangeable(fieldTitle = "Name", label = "Issue", importable = true, required = SUBMIT)
+    @Interchangeable(fieldTitle = "Name", label = "Issue", importable = true,
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class))
     private String name ;
 
     @InterchangeableBackReference

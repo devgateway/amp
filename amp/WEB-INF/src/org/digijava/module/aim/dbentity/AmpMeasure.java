@@ -7,11 +7,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.validator.groups.Submit;
 
 @TranslatableClass (displayName = "Measure")
 public class AmpMeasure  implements Serializable, Cloneable {
@@ -22,7 +25,8 @@ public class AmpMeasure  implements Serializable, Cloneable {
     private Long ampMeasureId;
 
     @TranslatableField
-    @Interchangeable(fieldTitle = "Name", label = "Measure", importable = true, required = SUBMIT)
+    @Interchangeable(fieldTitle = "Name", label = "Measure", importable = true,
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class))
     private String name ;
 
     @InterchangeableBackReference

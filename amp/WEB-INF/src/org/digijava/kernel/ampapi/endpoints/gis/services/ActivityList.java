@@ -3,7 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.gis.services;
 import java.util.List;
 
 import io.swagger.annotations.ApiModelProperty;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.dto.GisActivity;
 
 /**
  * @author Octavian Ciubotaru
@@ -12,11 +12,10 @@ public class ActivityList {
 
     private Integer count;
 
-    @ApiModelProperty("key = column name, value = column value"
-            + "\n'matchesFilters' property explains why activity was included")
-    private List<JsonBean> activities;
+    @ApiModelProperty("List of activities")
+    private List<GisActivity> activities;
 
-    public ActivityList(Integer count, List<JsonBean> activities) {
+    public ActivityList(Integer count, List<GisActivity> activities) {
         this.count = count;
         this.activities = activities;
     }
@@ -25,7 +24,7 @@ public class ActivityList {
         return count;
     }
 
-    public List<JsonBean> getActivities() {
+    public List<GisActivity> getActivities() {
         return activities;
     }
 }

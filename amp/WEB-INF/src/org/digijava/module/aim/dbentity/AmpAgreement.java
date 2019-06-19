@@ -10,10 +10,11 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 
 @TranslatableClass(displayName = "Agreement")
-public class AmpAgreement implements Serializable, Versionable {
+public class AmpAgreement implements Serializable, Versionable, Identifiable {
     private static final long serialVersionUID = 1L;
 
     @Interchangeable(fieldTitle = "Agreement ID")
@@ -151,5 +152,10 @@ public class AmpAgreement implements Serializable, Versionable {
 
     public void setParlimentaryApprovalDate(Date parlimentaryApprovalDate) {
         this.parlimentaryApprovalDate = parlimentaryApprovalDate;
+    }
+
+    @Override
+    public Object getIdentifier() {
+        return id;
     }
 }

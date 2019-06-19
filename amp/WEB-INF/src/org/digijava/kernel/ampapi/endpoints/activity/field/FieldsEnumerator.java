@@ -54,6 +54,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.validator.groups.Submit;
 
 /**
@@ -185,6 +186,12 @@ public class FieldsEnumerator {
             apiField.setTranslatable(fieldInfoProvider.isTranslatable(field));
             apiField.setTranslationType(fieldInfoProvider.getTranslatableType(field));
         }
+
+        if (apiField.getTranslationType() == TranslationSettings.TranslationType.STRING
+                && !Identifiable.class.isAssignableFrom(field.getDeclaringClass())) {
+            throw new RuntimeException(field.getDeclaringClass() + " must implement " + Identifiable.class);
+        }
+
         if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldInfoProvider.getType(field))) {
             apiField.setFieldLength(fieldInfoProvider.getMaxLength(field));
         }

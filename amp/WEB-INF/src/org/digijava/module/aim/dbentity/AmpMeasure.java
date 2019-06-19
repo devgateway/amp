@@ -14,10 +14,11 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.validator.groups.Submit;
 
 @TranslatableClass (displayName = "Measure")
-public class AmpMeasure  implements Serializable, Cloneable {
+public class AmpMeasure  implements Serializable, Cloneable, Identifiable {
     //IATI-check: seems used only in issues -- commenting out (to be ignored).
 
     @InterchangeableId
@@ -80,4 +81,8 @@ public class AmpMeasure  implements Serializable, Cloneable {
         return super.clone();
     }
 
+    @Override
+    public Object getIdentifier() {
+        return ampMeasureId;
+    }
 }

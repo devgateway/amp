@@ -18,8 +18,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintViolation;
-import org.digijava.kernel.validation.TranslationContext;
-import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -234,9 +232,7 @@ public class ImplementationLevelValidatorTest {
     }
 
     private Set<ConstraintViolation> getConstraintViolations(AmpActivityVersion activity) {
-        Validator validator = new Validator();
-        TranslationContext translationContext = getDefaultTranslationContext();
-        Set<ConstraintViolation> violations = validator.validate(activityField, activity, translationContext);
+        Set<ConstraintViolation> violations = ActivityValidatorUtil.validate(activityField, activity);
         return filter(violations, ImplementationLevelValidator.class);
     }
 

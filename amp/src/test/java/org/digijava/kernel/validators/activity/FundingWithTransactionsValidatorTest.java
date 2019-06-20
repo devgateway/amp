@@ -1,7 +1,6 @@
 package org.digijava.kernel.validators.activity;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
-import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.contains;
@@ -17,7 +16,6 @@ import org.dgfoundation.amp.activity.builder.TransactionBuilder;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.validation.ConstraintViolation;
-import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.Constants;
@@ -106,8 +104,7 @@ public class FundingWithTransactionsValidatorTest {
     }
 
     private Set<ConstraintViolation> getConstraintViolations(APIField type, AmpActivityVersion activity) {
-        Validator validator = new Validator();
-        Set<ConstraintViolation> violations = validator.validate(type, activity, getDefaultTranslationContext());
+        Set<ConstraintViolation> violations = ActivityValidatorUtil.validate(type, activity);
         return filter(violations, FundingWithTransactionsValidator.class);
     }
 

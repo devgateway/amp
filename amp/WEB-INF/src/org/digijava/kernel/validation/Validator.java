@@ -65,10 +65,12 @@ public class Validator {
     private void validate(APIField type, Object value, TranslationContext translationContext,
             Set<Class<?>> groups, ValidationContext validationContext, PathImpl path) {
 
+        NotTranslatedValueContext beanTranslatedValueContext = new NotTranslatedValueContext(translationContext);
+
         List<ConstraintDescriptor> constraintDescriptors = type.getBeanConstraints().getDescriptorsFor(groups);
         for (ConstraintDescriptor constraintDescriptor : constraintDescriptors) {
             invokeConstraintValidator(type, value, validationContext, constraintDescriptor, path,
-                    new NotTranslatedValueContext());
+                    beanTranslatedValueContext);
         }
 
         for (APIField field : type.getChildren()) {
@@ -76,8 +78,7 @@ public class Validator {
 
             Object fieldValue = field.getFieldAccessor().get(value);
 
-            TranslatedValueContext translatedValueContext = translationContext.getValueTranslationContextForField(
-                    field, fieldValue, value);
+            TranslatedValueContext translatedValueContext = beanTranslatedValueContext.forField(value, field);
 
             validateField(field, fieldValue, translatedValueContext, groups, validationContext, fieldPath);
 

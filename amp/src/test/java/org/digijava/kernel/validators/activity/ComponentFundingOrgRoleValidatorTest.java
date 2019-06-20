@@ -1,7 +1,6 @@
 package org.digijava.kernel.validators.activity;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
-import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
@@ -15,7 +14,6 @@ import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.validation.ConstraintViolation;
-import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -190,8 +188,7 @@ public class ComponentFundingOrgRoleValidatorTest {
     }
 
     private Set<ConstraintViolation> getViolations(APIField activityField, AmpActivityVersion activity) {
-        Validator validator = new Validator();
-        Set<ConstraintViolation> violations = validator.validate(activityField, activity, getDefaultTranslationContext());
+        Set<ConstraintViolation> violations = ActivityValidatorUtil.validate(activityField, activity);
         return filter(violations, ComponentFundingOrgRoleValidator.class);
     }
 }

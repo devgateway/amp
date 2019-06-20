@@ -18,7 +18,6 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Org;
 import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -266,8 +265,6 @@ public class GPIUtils {
                     ResultSet rs = rsi.rs;
 
                     while (rs.next()) {
-                        JsonBean org = new JsonBean();
-                        org.set("id", rs.getLong("orgId"));
                         String name;
                         if (ContentTranslationUtil.multilingualIsEnabled()) {
                             name = organisationsNames.get(rs.getLong("orgId"));

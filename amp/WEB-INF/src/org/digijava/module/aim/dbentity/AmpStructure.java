@@ -14,6 +14,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -23,7 +24,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * @author fferreyra
  */
 @TranslatableClass (displayName = "Structure")
-public class AmpStructure implements Serializable, Comparable<Object>, Versionable, Cloneable {
+public class AmpStructure implements Serializable, Comparable<Object>, Versionable, Cloneable, Identifiable {
 
     private static final long serialVersionUID = 1L;
 
@@ -308,5 +309,9 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     public static String sqlStringForDescription(String idSource) {
         return InternationalizedModelDescription.getForProperty(AmpStructure.class, "description").getSQLFunctionCall(idSource);
     }
-    
+
+    @Override
+    public Object getIdentifier() {
+        return ampStructureId;
+    }
 }

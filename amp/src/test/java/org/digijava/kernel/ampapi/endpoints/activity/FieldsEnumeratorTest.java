@@ -879,6 +879,11 @@ public class FieldsEnumeratorTest {
         )));
     }
 
+    @Test
+    public void testMultilingualOnEnumerationDoesNotFail() {
+        ValidatorUtil.getMetaData(AmpActivityFields.class, ImmutableSet.of(), new TestFieldInfoProvider(true));
+    }
+
     private APIField newListField() {
         APIField field = newAPIField();
         field.setApiType(new APIType(Object.class, FieldType.LIST));

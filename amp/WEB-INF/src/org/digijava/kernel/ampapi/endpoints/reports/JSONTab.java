@@ -1,18 +1,18 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 
 public class JSONTab {
+    
     private long id;
     private String name;
     private Boolean visible;
-    private List<JsonBean> translatedNames = new ArrayList <JsonBean> ();
+    private Map<String, String> translatedNames = new HashMap<>();
     
     public JSONTab(Long ampReportId, boolean visible) {
         this.id = ampReportId;
@@ -25,12 +25,7 @@ public class JSONTab {
     public JSONTab() {}
     
     private void populateNames () {
-        MultilingualInputFieldValues inputValues = new MultilingualInputFieldValues(AmpReports.class, id, "name", null, null);
-        for (String language: inputValues.getTranslations().keySet()) {
-            JsonBean translatedName = new JsonBean();
-            translatedName.set(language, inputValues.getTranslations().get(language));
-            translatedNames.add(translatedName);
-        }
+        translatedNames = new MultilingualInputFieldValues(AmpReports.class, id, "name", null, null).getTranslations();
     }
     
     public long getId() {
@@ -57,11 +52,11 @@ public class JSONTab {
         this.visible = visible;
     }
 
-    public List<JsonBean> getTranslatedNames() {
+    public Map<String, String> getTranslatedNames() {
         return translatedNames;
     }
 
-    public void setTranslatedNames(List<JsonBean> translatedNames) {
+    public void setTranslatedNames(Map<String, String> translatedNames) {
         this.translatedNames = translatedNames;
     }
 }

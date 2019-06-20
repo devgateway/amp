@@ -9,10 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
-import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
-import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.dbentity.Editor;
 
 /**

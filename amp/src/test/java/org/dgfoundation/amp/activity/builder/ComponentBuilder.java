@@ -28,4 +28,9 @@ public class ComponentBuilder {
         activityBuilder.activity.getComponents().add(component);
         return activityBuilder;
     }
+
+    public ComponentBuilder withTitle(String title) {
+        component.setTitle(title);
+        return this;
+    }
 }

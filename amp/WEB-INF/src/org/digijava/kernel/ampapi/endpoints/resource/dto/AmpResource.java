@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.resource.ResourceRequiredValidator;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceEPConstants;
@@ -46,7 +47,8 @@ public class AmpResource {
     @ApiModelProperty(example = "05a2f2d4-58f5-4198-8a05-cf42a758ce85")
     private String uuid;
 
-    @Interchangeable(fieldTitle = "Title", importable = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Title", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     @JsonProperty(ResourceEPConstants.TITLE)
     private MultilingualContent title;
 
@@ -105,21 +107,25 @@ public class AmpResource {
     @Interchangeable(fieldTitle = "Public")
     private Boolean isPublic;
 
-    @Interchangeable(fieldTitle = "Private", importable = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Private", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Boolean isPrivate;
 
-    @Interchangeable(fieldTitle = "Creator Email", importable = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Creator Email", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     @ApiModelProperty(example = "john.smith@amp.org")
     @JsonProperty(ResourceEPConstants.CREATOR_EMAIL)
     @JsonView(ResourceView.Full.class)
     private String creatorEmail;
 
-    @Interchangeable(fieldTitle = "Team", importable = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Team", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     @JsonProperty(ResourceEPConstants.TEAM)
     private Long team;
 
     @PossibleValues(ResourceTypePossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Resource Type", importable = true, pickIdOnly = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Resource Type", importable = true, pickIdOnly = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     @JsonIgnore
     private ResourceType resourceType;
 

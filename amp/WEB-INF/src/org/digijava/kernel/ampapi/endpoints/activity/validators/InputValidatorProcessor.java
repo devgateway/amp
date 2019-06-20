@@ -7,7 +7,6 @@ import java.util.Map;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.contact.validators.PrimaryOrganisationContactValidator;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
  * Defines input validation chain and executes it
@@ -26,15 +25,9 @@ public class InputValidatorProcessor {
 
     public static List<InputValidator> getActivityBusinessRulesValidators() {
         return Arrays.asList(
-                new RequiredValidator(),
-                new ActivityTitleValidator(),
-                new AmpActivityIdValidator(),
-                new MultipleEntriesValidator(),
-                new UniqueValidator(),
                 new TreeCollectionValidator(),
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),
-                new RegexPatternValidator(),
                 new UUIDValidator());
     }
 
@@ -47,11 +40,7 @@ public class InputValidatorProcessor {
 
     public static List<InputValidator> getContactBusinessRulesValidators() {
         return Arrays.asList(
-                new RequiredValidator(),
-                new MultipleEntriesValidator(),
-                new UniqueValidator(),
-                new PrimaryOrganisationContactValidator(),
-                new RegexPatternValidator());
+                new PrimaryOrganisationContactValidator());
     }
 
     public static List<InputValidator> getResourceFormatValidators() {
@@ -62,8 +51,7 @@ public class InputValidatorProcessor {
     }
 
     public static List<InputValidator> getResourceBusinessRulesValidators() {
-        return Arrays.asList(
-                new RequiredValidator());
+        return Arrays.asList();
     }
 
     private final List<InputValidator> validators;

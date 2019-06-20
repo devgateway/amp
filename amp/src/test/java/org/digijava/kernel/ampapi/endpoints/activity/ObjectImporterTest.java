@@ -558,7 +558,7 @@ public class ObjectImporterTest {
 
         TestValueConverter valueConverter = new TestValueConverter();
 
-        TranslationSettings plainEnglish = new TranslationSettings("en", Collections.singleton("en"), false);
+        TranslationSettings plainEnglish = new TranslationSettings("en", "en", Collections.singleton("en"), false);
 
         importer = new ObjectImporterAnyType(formatValidator, businessRulesValidator, plainEnglish, apiField,
                 valueConverter);

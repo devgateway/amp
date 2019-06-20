@@ -1,5 +1,7 @@
 package org.digijava.kernel.validators.activity;
 
+import static org.digijava.kernel.validators.ValidatorUtil.filter;
+import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
@@ -11,15 +13,12 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Set;
 
-import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintViolation;
-import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -50,8 +49,9 @@ public class ImplementationLevelValidatorTest {
         AmpCategoryValue regionalImplementationLevel = categoryValues.getImplementationLevels().getRegional();
         AmpCategoryValue regionImplementationLocation = categoryValues.getImplementationLocations().getRegion();
 
-        AmpActivity activity = new AmpActivity();
-        activity.setCategories(ImmutableSet.of(regionalImplementationLevel, regionImplementationLocation));
+        AmpActivityVersion activity = new ActivityBuilder()
+                .withCategories(regionalImplementationLevel, regionImplementationLocation)
+                .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
@@ -63,8 +63,9 @@ public class ImplementationLevelValidatorTest {
         AmpCategoryValue centralImplLevel = categoryValues.getImplementationLevels().getCentral();
         AmpCategoryValue zoneImplLocation = categoryValues.getImplementationLocations().getZone();
 
-        AmpActivity activity = new AmpActivity();
-        activity.setCategories(ImmutableSet.of(centralImplLevel, zoneImplLocation));
+        AmpActivityVersion activity = new ActivityBuilder()
+                .withCategories(centralImplLevel, zoneImplLocation)
+                .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
@@ -75,8 +76,9 @@ public class ImplementationLevelValidatorTest {
     public void testMissingImplementationLocation() {
         AmpCategoryValue centralImplLevel = categoryValues.getImplementationLevels().getCentral();
 
-        AmpActivity activity = new AmpActivity();
-        activity.setCategories(ImmutableSet.of(centralImplLevel));
+        AmpActivityVersion activity = new ActivityBuilder()
+                .withCategories(centralImplLevel)
+                .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
@@ -87,8 +89,9 @@ public class ImplementationLevelValidatorTest {
     public void testMissingImplementationLevel() {
         AmpCategoryValue zoneImplLocation = categoryValues.getImplementationLocations().getZone();
 
-        AmpActivity activity = new AmpActivity();
-        activity.setCategories(ImmutableSet.of(zoneImplLocation));
+        AmpActivityVersion activity = new ActivityBuilder()
+                .withCategories(zoneImplLocation)
+                .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
@@ -97,7 +100,7 @@ public class ImplementationLevelValidatorTest {
 
     @Test
     public void testMissingImplementationLevelAndLocation() {
-        AmpActivity activity = new AmpActivity();
+        AmpActivityVersion activity = new ActivityBuilder().getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
@@ -108,15 +111,13 @@ public class ImplementationLevelValidatorTest {
 
     @Test
     public void testLocationAndImplLevelMismatch() {
-        AmpActivityLocation haitiUsage = new AmpActivityLocation();
-        haitiUsage.setLocation(locations.getAmpLocation("Haiti"));
-
         AmpCategoryValue regionalImplementationLevel = categoryValues.getImplementationLevels().getRegional();
         AmpCategoryValue regionImplementationLocation = categoryValues.getImplementationLocations().getRegion();
 
-        AmpActivity activity = new AmpActivity();
-        activity.setLocations(ImmutableSet.of(haitiUsage));
-        activity.setCategories(ImmutableSet.of(regionalImplementationLevel, regionImplementationLocation));
+        AmpActivityVersion activity = new ActivityBuilder()
+                .addLocation(locations.getAmpLocation("Haiti"), 100f)
+                .withCategories(regionalImplementationLevel, regionImplementationLocation)
+                .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
@@ -170,13 +171,15 @@ public class ImplementationLevelValidatorTest {
     @Test
     public void testNullLocation() {
         AmpActivityLocation nullLocation = new AmpActivityLocation();
+        nullLocation.setLocationPercentage(100f);
 
         AmpCategoryValue regionalImplementationLevel = categoryValues.getImplementationLevels().getRegional();
         AmpCategoryValue regionImplementationLocation = categoryValues.getImplementationLocations().getRegion();
 
-        AmpActivity activity = new AmpActivity();
-        activity.setLocations(ImmutableSet.of(nullLocation));
-        activity.setCategories(ImmutableSet.of(regionalImplementationLevel, regionImplementationLocation));
+        AmpActivityVersion activity = new ActivityBuilder()
+                .addLocation(nullLocation)
+                .withCategories(regionalImplementationLevel, regionImplementationLocation)
+                .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
@@ -229,8 +232,8 @@ public class ImplementationLevelValidatorTest {
     }
 
     private Set<ConstraintViolation> getConstraintViolations(AmpActivityVersion activity) {
-        Validator validator = new Validator();
-        return validator.validate(activityField, activity);
+        Set<ConstraintViolation> violations = ActivityValidatorUtil.validate(activityField, activity);
+        return filter(violations, ImplementationLevelValidator.class);
     }
 
     private Matcher<ConstraintViolation> implLocViolation(ApiErrorMessage message) {

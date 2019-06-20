@@ -3,8 +3,6 @@
  */
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,10 +10,13 @@ import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
@@ -47,8 +48,8 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
     
     @Interchangeable(fieldTitle = "Amount", importable = true,
             fmPath = FMVisibility.PARENT_FM + "/" + CategoryConstants.PROJECT_AMOUNT_NAME,
-            requiredFmPath = FMVisibility.PARENT_FM + "/Required Validator for Cost Amount",
-            required = SUBMIT)
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = FMVisibility.PARENT_FM + "/Required Validator for Cost Amount"))
     @VersionableFieldSimple(fieldTitle = "Fun Amount")
     protected Double funAmount;
     

@@ -89,14 +89,10 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.IdWithValueShim;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Conjunction;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
@@ -737,7 +733,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
    * excluding the activity group of the current activity
    * @param name title of the activity
    * @param g activity group of the activity in question
-   * @return
+   * @return null if no collisions found or IdWithValueShim with amp_activity_id and team name in case of collision
    */
   public static IdWithValueShim getActivityCollisions(final String name, final AmpActivityGroup g) {
       final IdWithValueShim result = new IdWithValueShim(-1l, "");
@@ -780,25 +776,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
   
   }
       
-
-  
-  
-  
-  
-  public static AmpActivity getActivityByNameExcludingGroup(String name , AmpActivityGroup g) {
-      
-      Session session = PersistenceManager.getSession();        
-      Criteria crit = session.createCriteria(AmpActivity.class);
-      Conjunction conjunction = Restrictions.conjunction();
-      String locale = TLSUtils.getLangCode();
-      conjunction.add(SQLUtils.getUnaccentILikeExpression("name", name, locale, MatchMode.EXACT));
-      if(g!=null) conjunction.add(Restrictions.not(Restrictions.eq("ampActivityGroup",g)));
-      crit.add(conjunction);  
-      List ret = crit.list();
-      if(ret.size()>0) return (AmpActivity) ret.get(0);             
-      return null;
-  }
-
     public static List<AmpActivityVersion> getSortedActivitiesByDonors (List<AmpActivityVersion> acts, boolean acs) {
         List<AmpActivityVersion> retVal = new ArrayList<AmpActivityVersion>();
 

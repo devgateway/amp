@@ -1,14 +1,14 @@
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.ThemePossibleValuesProvider;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -20,12 +20,12 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
     private Long ampActivityProgramId;
 
         @Interchangeable(fieldTitle = "Program Percentage", importable = true, percentageConstraint = true,
-                required = ALWAYS)
+                interValidators = @InterchangeableValidator(RequiredValidator.class))
         private Float programPercentage;
 
         @PossibleValues(ThemePossibleValuesProvider.class)
         @Interchangeable(fieldTitle = "Program", importable = true, pickIdOnly = true, uniqueConstraint = true,
-                required = ALWAYS)
+                interValidators = @InterchangeableValidator(RequiredValidator.class))
         private AmpTheme program;
         @InterchangeableBackReference
         private AmpActivityVersion activity;

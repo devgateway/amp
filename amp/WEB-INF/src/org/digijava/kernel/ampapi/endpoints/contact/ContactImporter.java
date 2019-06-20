@@ -6,6 +6,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -22,7 +23,8 @@ public class ContactImporter extends ObjectImporter<AmpContact> {
     public ContactImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getContactFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getContactBusinessRulesValidators()),
-                AmpFieldsEnumerator.getEnumerator().getContactField());
+                AmpFieldsEnumerator.getEnumerator().getContactField(),
+                TLSUtils.getSite());
     }
 
     public ContactImporter createContact(Map<String, Object> newJson) {

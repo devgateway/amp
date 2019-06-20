@@ -19,9 +19,18 @@ public class ConstraintValidatorContextImpl implements ConstraintValidatorContex
 
     private PathImpl path;
 
-    public ConstraintValidatorContextImpl(ConstraintDescriptor constraintDescriptor, PathImpl path) {
+    private TranslatedValueContext translatedValueContext;
+
+    public ConstraintValidatorContextImpl(ConstraintDescriptor constraintDescriptor, PathImpl path,
+            TranslatedValueContext translatedValueContext) {
         this.constraintDescriptor = constraintDescriptor;
         this.path = path;
+        this.translatedValueContext = translatedValueContext;
+    }
+
+    @Override
+    public TranslatedValueContext getTranslatedValueContext() {
+        return translatedValueContext;
     }
 
     @Override

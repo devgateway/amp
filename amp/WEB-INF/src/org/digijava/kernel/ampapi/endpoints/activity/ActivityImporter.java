@@ -104,8 +104,6 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     private AmpTeamMember modifiedBy;
     private String sourceURL;
     private String endpointContextPath;
-    // latest activity id in case there was attempt to update older version of an activity
-    private Long latestActivityId;
 
     private ResourceService resourceService = new ResourceService();
 
@@ -187,6 +185,8 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 errors.put(ActivityErrors.ACTIVITY_NOT_LOADED.id, ActivityErrors.ACTIVITY_NOT_LOADED);
             }
         }
+
+        sanityChecks();
 
         String activityId = ampActivityId == null ? null : ampActivityId.toString();
         String key = null;
@@ -275,6 +275,32 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         }
 
         return this;
+    }
+
+    /**
+     * Before proceeding with import, check if user provided correct amp id and activity id fields.
+     */
+    private void sanityChecks() {
+        String ampIdFieldName = ActivityEPConstants.AMP_ID_FIELD_NAME;
+        Object reqAmpIdObj = newJson.get(ampIdFieldName);
+        if (update) {
+            String ampId = oldActivity.getAmpId();
+            String requestedAmpId = reqAmpIdObj instanceof String ? (String) reqAmpIdObj : null;
+            if (!ampId.equals(requestedAmpId)) {
+                // amp id must match amp id of the existing activity
+                addError(ActivityErrors.FIELD_INVALID_VALUE.withDetails(ampIdFieldName));
+            }
+        } else if (reqAmpIdObj != null) {
+            // amp id must be null on insert
+            addError(ActivityErrors.FIELD_INVALID_VALUE.withDetails(ampIdFieldName));
+        }
+
+        // activity id must not be specified on insert
+        String activityIdFieldName = ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME;
+        Object activityId = newJson.get(activityIdFieldName);
+        if (!update && activityId != null) {
+            addError(ActivityErrors.FIELD_INVALID_VALUE.withDetails(activityIdFieldName));
+        }
     }
 
     @Override
@@ -588,10 +614,6 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                  * The 200 status is sent by default
                  */
                 locationUrl += newActivity.getAmpActivityId();
-            } else if (errors.containsKey(ActivityErrors.UPDATE_ID_IS_OLD.id)) {
-                // update http status to SC_CONFLICT (old version was sent for update)
-                EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_CONFLICT);
-                locationUrl += this.latestActivityId;
             } else {
                 // any other error occurred during the update
                 locationUrl = null;
@@ -703,13 +725,6 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         return requestedSaveMode;
     }
 
-    /**
-     * @return the update
-     */
-    public boolean isUpdate() {
-        return update;
-    }
-
     public ActivityImportRules getImportRules() {
         return rules;
     }
@@ -727,13 +742,6 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
 
     public ResourceService getResourceService() {
         return this.resourceService;
-    }
-
-    /**
-     * @param latestActivityId
-     */
-    public void setLatestActivityId(Long latestActivityId) {
-        this.latestActivityId = latestActivityId;
     }
 
     @Override

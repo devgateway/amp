@@ -25,7 +25,6 @@ public class InputValidatorProcessor {
 
     public static List<InputValidator> getActivityBusinessRulesValidators() {
         return Arrays.asList(
-                new AmpActivityIdValidator(),
                 new TreeCollectionValidator(),
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),

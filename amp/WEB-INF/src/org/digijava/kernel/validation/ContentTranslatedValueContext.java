@@ -2,6 +2,9 @@ package org.digijava.kernel.validation;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 
 /**
@@ -9,7 +12,7 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
  *
  * @author Octavian Ciubotaru
  */
-public class ContentTranslatedValueContext implements TranslatedValueContext {
+public class ContentTranslatedValueContext extends TranslatedValueContext {
 
     private TranslationContext translationContext;
 
@@ -19,6 +22,7 @@ public class ContentTranslatedValueContext implements TranslatedValueContext {
 
     ContentTranslatedValueContext(TranslationContext translationContext, String objectClass, Long objectId,
             String fieldName) {
+        super(translationContext);
         this.translationContext = translationContext;
         this.objectClass = requireNonNull(objectClass);
         this.objectId = requireNonNull(objectId);
@@ -37,5 +41,11 @@ public class ContentTranslatedValueContext implements TranslatedValueContext {
                 .map(AmpContentTranslation::getTranslation)
                 .findAny()
                 .orElse(null);
+    }
+
+    @Override
+    public Map<String, String> getValues() {
+        return translationContext.getContentTranslation(objectClass, objectId, fieldName).stream()
+                .collect(Collectors.toMap(AmpContentTranslation::getLocale, AmpContentTranslation::getTranslation));
     }
 }

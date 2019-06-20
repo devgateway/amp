@@ -9,7 +9,7 @@ import org.digijava.module.editor.dbentity.Editor;
  *
  * @author Octavian Ciubotaru
  */
-public class EditorTranslatedValueContext implements TranslatedValueContext {
+public class EditorTranslatedValueContext extends TranslatedValueContext {
 
     private TranslationContext translationContext;
 
@@ -18,6 +18,7 @@ public class EditorTranslatedValueContext implements TranslatedValueContext {
     private String editorKey;
 
     EditorTranslatedValueContext(TranslationContext translationContext, String editorKey, boolean multilingual) {
+        super(translationContext);
         this.translationContext = translationContext;
         this.editorKey = editorKey;
         this.multilingual = multilingual;
@@ -35,5 +36,10 @@ public class EditorTranslatedValueContext implements TranslatedValueContext {
         }
         Map<String, String> translatedValues = translationContext.getEditor(editorKey);
         return translatedValues != null ? translatedValues.get(lang) : null;
+    }
+
+    @Override
+    public Map<String, String> getValues() {
+        return translationContext.getEditor(editorKey);
     }
 }

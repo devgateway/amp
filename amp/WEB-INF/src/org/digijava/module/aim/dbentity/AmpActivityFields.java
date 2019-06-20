@@ -23,6 +23,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.values.FiscalYearPossibleVa
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
@@ -59,6 +60,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 @TranslatableClass (displayName = "Activity Form Field")
+@InterchangeableValidator(UniqueActivityTitleValidator.class)
 @InterchangeableValidator(ComponentFundingOrgRoleValidator.class)
 @InterchangeableValidator(ImplementationLevelValidator.class)
 @InterchangeableValidator(value = OnBudgetValidator.class, groups = Submit.class, attributes = "required=ND")

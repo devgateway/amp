@@ -126,38 +126,4 @@ public class TranslationContext {
                 && ct.getObjectId().equals(objectId)
                 && ct.getFieldName().equals(field);
     }
-
-    /**
-     * Return the context object for a translated field.
-     *
-     * @param field field from which was read
-     * @param fieldValue field value
-     * @param objectValue value of the object containing the translated field
-     * @return translated value context
-     */
-    public TranslatedValueContext getValueTranslationContextForField(APIField field, Object fieldValue,
-            Object objectValue) {
-        TranslatedValueContext translatedValueContext;
-
-        if (field.getTranslationType() == TranslationSettings.TranslationType.TEXT) {
-            boolean multilingual = field.isTranslatable() != null && field.isTranslatable();
-            String editorKey = (String) fieldValue;
-            translatedValueContext = new EditorTranslatedValueContext(this, editorKey, multilingual);
-        } else if (field.isTranslatable() != null && field.isTranslatable()) {
-            if (field.getTranslationType() == TranslationSettings.TranslationType.STRING) {
-                String objectClass = objectValue.getClass().getName();
-                Long objectId = (Long) ((Identifiable) objectValue).getIdentifier();
-                if (objectId == null) {
-                    objectId = (long) System.identityHashCode(objectValue);
-                }
-                translatedValueContext = new ContentTranslatedValueContext(this, objectClass, objectId,
-                        field.getFieldNameInternal());
-            } else {
-                throw new RuntimeException("Unsupported translation type " + field.getTranslationType());
-            }
-        } else {
-            translatedValueContext = new NotTranslatedValueContext();
-        }
-        return translatedValueContext;
-    }
 }

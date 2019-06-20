@@ -20,6 +20,7 @@ import org.digijava.kernel.validation.TranslatedValueContext;
 import org.digijava.kernel.validation.Path;
 import org.digijava.kernel.validation.TranslationContext;
 import org.digijava.kernel.validation.Validator;
+import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.FundingWithTransactionsValidator;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
@@ -60,7 +61,8 @@ public class ImporterInterchangeValidator {
      */
     public Set<ConstraintViolation> validate(APIField type, Object root, TranslationContext translationContext,
             Class<?>... groups) {
-        return validator.validate(type, root, translationContext, groups);
+        return UniqueActivityTitleValidator.withDao(new UniqueActivityTitleValidator.DatabaseBackedEnvironment(),
+                () -> validator.validate(type, root, translationContext, groups));
     }
 
     /**
@@ -74,7 +76,8 @@ public class ImporterInterchangeValidator {
      */
     public Set<ConstraintViolation> validateField(APIField field, Object value,
             TranslatedValueContext translatedValueContext, Class<?>... groups) {
-        return validator.validateField(field, value, translatedValueContext, groups);
+        return UniqueActivityTitleValidator.withDao(new UniqueActivityTitleValidator.DatabaseBackedEnvironment(),
+                () -> validator.validateField(field, value, translatedValueContext, groups));
     }
 
     /**

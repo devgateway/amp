@@ -41,6 +41,7 @@ import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.validation.NotTranslatedValueContext;
 import org.digijava.kernel.validation.TranslatedValueContext;
 import org.digijava.kernel.validation.TranslationContext;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
@@ -85,6 +86,7 @@ public abstract class ObjectImporter<T> {
     private EditorStore editorStore = new EditorStore();
     private Site site;
     private TranslationContext translationContext;
+    private TranslatedValueContext translatedValueContext;
 
     public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
             APIField apiField, Site site) {
@@ -107,6 +109,7 @@ public abstract class ObjectImporter<T> {
 
         translationContext = new TranslationContext(trnSettings.getCurrentLangCode(), trnSettings.getDefaultLangCode(),
                 editorStore, translations, this::getEditor, this::getContentTranslation);
+        translatedValueContext = new NotTranslatedValueContext(translationContext);
     }
 
     public void setJsonErrorMapper(Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper) {
@@ -267,10 +270,9 @@ public abstract class ObjectImporter<T> {
             String fieldPath) {
         Object fieldValue = field.getFieldAccessor().get(parentObject);
 
-        TranslatedValueContext translatedValueContext = getTranslationContext().getValueTranslationContextForField(
-                field, fieldValue, parentObject);
+        TranslatedValueContext fieldTranslatedValueContext = translatedValueContext.forField(parentObject, field);
 
-        processInterViolationsForField(field, parentJson, fieldPath, fieldValue, translatedValueContext);
+        processInterViolationsForField(field, parentJson, fieldPath, fieldValue, fieldTranslatedValueContext);
     }
 
     public void processInterViolationsForField(APIField type, Map<String, Object> parentJson, String fieldPath,

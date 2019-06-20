@@ -1,13 +1,16 @@
 package org.digijava.kernel.validation;
 
+import java.util.Map;
+
 /**
  * Value context when translations are not applicable.
  *
  * @author Octavian Ciubotaru
  */
-public class NotTranslatedValueContext implements TranslatedValueContext {
+public class NotTranslatedValueContext extends TranslatedValueContext {
 
-    NotTranslatedValueContext() {
+    public NotTranslatedValueContext(TranslationContext translationContext) {
+        super(translationContext);
     }
 
     @Override
@@ -17,6 +20,11 @@ public class NotTranslatedValueContext implements TranslatedValueContext {
 
     @Override
     public String getValue(String lang) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Map<String, String> getValues() {
         throw new UnsupportedOperationException();
     }
 }

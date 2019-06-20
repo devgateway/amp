@@ -66,7 +66,7 @@ public class UniqueActivityTitleValidator implements ConstraintValidator {
     @Override
     public boolean isValid(APIField type, Object value, ConstraintValidatorContext context) {
         if (activityTitleDAO == null) {
-            throw new IllegalStateException("No environment specified. See UniqueActivityTitleValidator#withEnv.");
+            throw new IllegalStateException("No environment specified. See UniqueActivityTitleValidator#withDao.");
         }
 
         AmpActivityVersion activity = (AmpActivityVersion) value;

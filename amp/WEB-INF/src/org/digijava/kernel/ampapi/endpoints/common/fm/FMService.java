@@ -22,49 +22,49 @@ import org.digijava.kernel.ampapi.endpoints.common.FMSettingsConfig;
  * @author Nadejda Mandrescu
  */
 public class FMService {
-    protected static final Logger LOGGER = Logger.getLogger(FMService.class);
+    
+    protected static final Logger logger = Logger.getLogger(FMService.class);
     
     /**
-     * 
+     *
      * @param config
-     * @return
+     * @return fm settings
      */
-    public static Map<String, Object> getFMSettings(FMSettingsConfig config) {
-        Map<String, Object> fmSettingsResult = new HashMap<>();
+    public static FMSettings getFMSettings(FMSettingsConfig config) {
+        FMSettings fmSettings = new FMSettings();
         
-        try {
-            if (config.isValid()) {
-                if (config.getReportingFields()) {
-                    fmSettingsResult.put(EPConstants.REPORTING_FIELDS, ColumnsVisibility.getConfigurableColumns());
-                }
-                
-                if (config.getEnabledModules()) {
-                    fmSettingsResult.put(EPConstants.ENABLED_MODULES,
-                            FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES));
-                }
-    
-                provideModulesDetails(fmSettingsResult, config);
-            } else {
-                fmSettingsResult.put(EPConstants.ERROR, "Invalid modules details requested: "
-                        + config.getDetailModules() + ". Allowed are: " + config.getAllowedModules());
+        if (config.isValid()) {
+            if (config.getReportingFields()) {
+                fmSettings.setReportingFields(ColumnsVisibility.getConfigurableColumns());
             }
-        } catch(Exception ex) {
-            LOGGER.error("Unexpected error occurred while generating FM settings", ex);
-            fmSettingsResult.put(EPConstants.ERROR, ex.getMessage());
+            
+            if (config.getEnabledModules()) {
+                fmSettings.setEnabledModules(
+                        FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES));
+            }
+            
+            provideModulesDetails(fmSettings, config);
+        } else {
+            fmSettings.setError(String.format("Invalid modules details requested: %s. Allowed are: %s",
+                    config.getDetailModules(), config.getAllowedModules()));
         }
         
-        return fmSettingsResult;
+        return fmSettings;
     }
     
-    private static void provideModulesDetails(Map<String, Object> fmSettingsResult, FMSettingsConfig config) {
+    private static void provideModulesDetails(FMSettings fmSettings, FMSettingsConfig config) {
         List<String> detailModules = config.getDetailModules();
-        if (detailModules == null || detailModules.size() == 0) {
+        
+        FMSettingsTree settingsTree = new FMSettingsTree();
+        FMSettingsFlat settingsFlat = new FMSettingsFlat();
+        
+        if (detailModules == null || detailModules.isEmpty()) {
             return;
         }
         
         // check if all enabled modules are requested
         if (detailModules.contains(EPConstants.DETAIL_ALL_ENABLED_MODULES)) {
-            detailModules = new ArrayList<String>(FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES));
+            detailModules = new ArrayList<>(FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES));
         }
         
         for (String module : detailModules) {
@@ -73,14 +73,20 @@ public class FMService {
                 Set<String> entries = !supportsFMTree ? FMSettingsMediator.getEnabledSettings(module) :
                     getFmSettingsAsTree(module, config.getRequiredPaths())
                     .toFlattenedTree(config.getFullEnabledPaths());
-                fmSettingsResult.put(module, entries);
+                settingsFlat.getModules().put(module, entries);
             } else {
                 FMTree fmTree = getFmSettingsAsTree(module, config.getRequiredPaths());
-                Map<String, Object> enabledPaths = fmTree.asJson(config.getFullEnabledPaths()).any();
+                Map<String, Object> enabledPaths = fmTree.asMap(config.getFullEnabledPaths());
                 if (enabledPaths != null) {
-                    fmSettingsResult.putAll(enabledPaths);
+                    settingsTree.getModules().putAll(enabledPaths);
                 }
             }
+        }
+    
+        if (config.getDetailsFlat()) {
+            fmSettings.setFmSettings(settingsFlat);
+        } else {
+            fmSettings.setFmSettings(settingsTree);
         }
     }
     

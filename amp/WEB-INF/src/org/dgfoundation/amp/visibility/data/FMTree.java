@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.visibility.data;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -11,7 +12,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * A simple representation of an FM section in a tree structure
@@ -72,9 +72,9 @@ public class FMTree {
     }   
     
     /**
-     * Transforms FM tree to a JSON
+     * Transforms FM tree to a map
      * @param fullEnabledPaths if true, then each level will have at a minimum "__enabled" (true/false) status
-     * @return JSON tree
+     * @return Map<String, Object> tree
      * <pre>
      * "REPORTING": {
      *      "__enabled" : true, // omitted if fullEnabledPaths are requested (same below) 
@@ -89,20 +89,20 @@ public class FMTree {
      *  }
      * </pre>
      */
-    public JsonBean asJson(boolean fullEnabledPaths) {
-        JsonBean json = new JsonBean();
+    public Map<String, Object> asMap(boolean fullEnabledPaths) {
+        Map<String, Object> mapTree = new HashMap<>();
         if (!fullEnabledPaths || this.enabled)
             if (!fullEnabledPaths) {
-                json.set(EPConstants.FM_ENABLED, this.enabled);
+                mapTree.put(EPConstants.FM_ENABLED, this.enabled);
             }
             for (Entry<String, FMTree> entry : entries.entrySet()) {
                 FMTree value = entry.getValue();
                 if (!fullEnabledPaths || value.enabled) {
-                    JsonBean children = value.asJson(fullEnabledPaths);
-                    json.set(entry.getKey(), children);
+                    mapTree.put(entry.getKey(), value.asMap(fullEnabledPaths));
                 }
             }
-        return json;
+            
+        return mapTree;
     }
 
     public boolean isEnabled() {

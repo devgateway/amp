@@ -6,8 +6,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
@@ -55,11 +57,14 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
         oldActivity.setApprovalStatus(newStatus);
         oldActivity.getCategories().remove(CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, oldActivity.getCategories()));
         oldActivity.getCategories().add(CategoryManagerUtil.getAmpCategoryValueFromDb(closedProjectStatusCategoryValue));
-    
+
+        EditorStore editorStore = new EditorStore();
+        Site site = SiteUtils.getDefaultSite();
+
         AmpActivityVersion auxActivity = null;
         try {
             auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(oldActivity, null,
-                    member, oldActivity.getDraft(), session, SaveContext.job());
+                    member, oldActivity.getDraft(), session, SaveContext.job(), editorStore, site);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);

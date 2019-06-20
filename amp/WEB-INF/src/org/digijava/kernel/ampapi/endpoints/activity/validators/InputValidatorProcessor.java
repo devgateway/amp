@@ -7,7 +7,6 @@ import java.util.Map;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.contact.validators.PrimaryOrganisationContactValidator;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
  * Defines input validation chain and executes it
@@ -26,15 +25,9 @@ public class InputValidatorProcessor {
 
     public static List<InputValidator> getActivityBusinessRulesValidators() {
         return Arrays.asList(
-                new RequiredValidator(),
-                new ActivityTitleValidator(),
-                new AmpActivityIdValidator(),
-                new MultipleEntriesValidator(),
-                new UniqueValidator(),
                 new TreeCollectionValidator(),
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),
-                new RegexPatternValidator(),
                 new UUIDValidator());
     }
 
@@ -47,11 +40,7 @@ public class InputValidatorProcessor {
 
     public static List<InputValidator> getContactBusinessRulesValidators() {
         return Arrays.asList(
-                new RequiredValidator(),
-                new MultipleEntriesValidator(),
-                new UniqueValidator(),
-                new PrimaryOrganisationContactValidator(),
-                new RegexPatternValidator());
+                new PrimaryOrganisationContactValidator());
     }
 
     public static List<InputValidator> getResourceFormatValidators() {
@@ -62,8 +51,7 @@ public class InputValidatorProcessor {
     }
 
     public static List<InputValidator> getResourceBusinessRulesValidators() {
-        return Arrays.asList(
-                new RequiredValidator());
+        return Arrays.asList();
     }
 
     private final List<InputValidator> validators;
@@ -78,19 +66,19 @@ public class InputValidatorProcessor {
      * @param importer         Activity Importer instance that holds other import information
      * @param newParent        new field JSON structure
      * @param fieldDef         field description
-     * @param errors           map to store errors
      * @return true if the current field passes the full validation chain
      */
-    public boolean isValid(ObjectImporter importer, Map<String, Object> newParent,
-            APIField fieldDef, String fieldPath, Map<Integer, ApiErrorMessage> errors) {
+    public boolean isValid(ObjectImporter importer, Object newParent, Map<String, Object> newJsonParent,
+                           APIField fieldDef, String fieldPath) {
         boolean valid = true;
         String fieldName = fieldPath.substring(fieldPath.lastIndexOf("~") + 1);
         for (InputValidator current : validators) {
-            boolean currentValid = current.isValid(importer, newParent, fieldDef, fieldPath);
+            boolean currentValid = current.isValid(importer, newParent, newJsonParent, fieldDef, fieldPath);
             valid = currentValid && valid;
-
+            
             if (!currentValid) {
-                ErrorDecorator.addError(newParent, fieldName, fieldPath, current.getErrorMessage(), errors);
+                ErrorDecorator.addError(newJsonParent, fieldName, fieldPath, current.getErrorMessage(),
+                        importer.getErrors());
             }
 
             if (!(currentValid && current.isContinueOnSuccess() || !currentValid && current.isContinueOnError())) {

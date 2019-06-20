@@ -20,6 +20,10 @@ public class HardcodedCategoryValues {
 
     private AmpCategoryClass financingInstrument;
 
+    private AmpCategoryClass adjustmentType;
+
+    private AmpCategoryClass activityStatus;
+
     private ImplementationLevels implementationLevels;
 
     private ImplementationLocations implementationLocations;
@@ -29,6 +33,10 @@ public class HardcodedCategoryValues {
     private TypeOfAssistanceValues typeOfAssistanceValues;
 
     private FinancingInstruments financingInstruments;
+
+    private AdjustmentTypes adjustmentTypes;
+
+    private ActivityStatuses activityStatuses;
 
     public class ImplementationLevels {
 
@@ -145,12 +153,42 @@ public class HardcodedCategoryValues {
         }
     }
 
+    public class AdjustmentTypes {
+
+        private AmpCategoryValue planned;
+        private AmpCategoryValue actual;
+
+        public AmpCategoryValue getPlanned() {
+            return planned;
+        }
+
+        public AmpCategoryValue getActual() {
+            return actual;
+        }
+    }
+
+    public class ActivityStatuses {
+
+        private AmpCategoryValue ongoing;
+        private AmpCategoryValue closed;
+
+        public AmpCategoryValue getOngoing() {
+            return ongoing;
+        }
+
+        public AmpCategoryValue getClosed() {
+            return closed;
+        }
+    }
+
     public HardcodedCategoryValues() {
         implementationLevel = newCategoryClass(7L, "Implementation Level", "implementation_level");
         implementationLocation = newCategoryClass(10L, "Implementation Location", "implementation_location");
         activityBudget = newCategoryClass(42L, "Activity Budget", "activity_budget");
         typeOfAssistance = newCategoryClass(11L, "Type of Assistance", "type_of_assistence");
         financingInstrument = newCategoryClass(12L, "Financing Instrument", "financing_instrument");
+        adjustmentType = newCategoryClass(44L, "Adjustment Type", "adjustment_type");
+        activityStatus = newCategoryClass(6L, "Activity Status", "activity_status");
 
         implementationLevels = new ImplementationLevels();
         implementationLevels.toBeSpecified = newCategory(361L, implementationLevel, "A spécifier");
@@ -198,6 +236,14 @@ public class HardcodedCategoryValues {
         financingInstruments = new FinancingInstruments();
         financingInstruments.programSupport = newCategory(183L, financingInstrument, "Support to project/programme");
         financingInstruments.debtRelief = newCategory(184L, financingInstrument, "Debt relief");
+
+        adjustmentTypes = new AdjustmentTypes();
+        adjustmentTypes.planned = newCategory(326L, adjustmentType, "Planned");
+        adjustmentTypes.actual = newCategory(327L, adjustmentType, "Actual");
+
+        activityStatuses = new ActivityStatuses();
+        activityStatuses.closed = newCategory(264L, activityStatus, "Closed");
+        activityStatuses.ongoing = newCategory(263L, activityStatus, "Ongoing");
     }
 
     private void markUsedBy(AmpCategoryValue cv1, AmpCategoryValue... cv2Array) {
@@ -243,6 +289,14 @@ public class HardcodedCategoryValues {
         return financingInstrument;
     }
 
+    public AmpCategoryClass getAdjustmentType() {
+        return adjustmentType;
+    }
+
+    public AmpCategoryClass getActivityStatus() {
+        return activityStatus;
+    }
+
     public ImplementationLevels getImplementationLevels() {
         return implementationLevels;
     }
@@ -261,5 +315,13 @@ public class HardcodedCategoryValues {
 
     public FinancingInstruments getFinancingInstruments() {
         return financingInstruments;
+    }
+
+    public AdjustmentTypes getAdjustmentTypes() {
+        return adjustmentTypes;
+    }
+
+    public ActivityStatuses getActivityStatuses() {
+        return activityStatuses;
     }
 }

@@ -16,7 +16,7 @@ import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * Verifies that data type matches the one defined in field description
- * 
+ *
  * @author Nadejda Mandrescu
  */
 public class InputTypeValidator extends InputValidator {
@@ -25,24 +25,24 @@ public class InputTypeValidator extends InputValidator {
     public ApiErrorMessage getErrorMessage() {
         return ActivityErrors.FIELD_INVALID_TYPE;
     }
-    
+
     private boolean isStringValid(Object item, boolean translatable, Collection<String> supportedLocaleCodes) {
         if (translatable) {
             if (Map.class.isAssignableFrom(item.getClass())) {
                 return isTranslatableStringValid(item, supportedLocaleCodes);
             }
+            return false;
         }
-        if (String.class.isAssignableFrom(item.getClass()))
-            return true;
-        return false;
+        return String.class.isAssignableFrom(item.getClass());
     }
-    
+
+    // TODO report a better error AMP-29281
     private boolean isTranslatableStringValid(Object item, Collection<String> supportedLocaleCodes) {
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) item;
         for (Map.Entry<String, Object> castedEntry : map.entrySet()) {
             if (!supportedLocaleCodes.contains(castedEntry.getKey()))
-                return false;           
+                return false;
             if (castedEntry.getValue() != null && !String.class.isAssignableFrom(castedEntry.getValue().getClass()))
                 return false;
         }
@@ -55,11 +55,11 @@ public class InputTypeValidator extends InputValidator {
         FieldType fieldType = fieldDescription.getApiType().getFieldType();
         String fieldName = fieldDescription.getFieldName();
         Object item = newFieldParent.get(fieldName);
-        
+
         if (item == null) {
             return true;
         }
-        
+
         return isValidByType(importer, fieldDescription, fieldType, item);
     }
 

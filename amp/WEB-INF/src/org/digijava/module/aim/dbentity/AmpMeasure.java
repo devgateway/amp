@@ -1,18 +1,24 @@
 package org.digijava.module.aim.dbentity ;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.validator.groups.Submit;
 
 @TranslatableClass (displayName = "Measure")
-public class AmpMeasure  implements Serializable, Cloneable {
+public class AmpMeasure  implements Serializable, Cloneable, Identifiable {
     //IATI-check: seems used only in issues -- commenting out (to be ignored).
 
     @InterchangeableId
@@ -20,7 +26,8 @@ public class AmpMeasure  implements Serializable, Cloneable {
     private Long ampMeasureId;
 
     @TranslatableField
-    @Interchangeable(fieldTitle = "Name", label = "Measure", importable = true)
+    @Interchangeable(fieldTitle = "Name", label = "Measure", importable = true,
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class))
     private String name ;
 
     @InterchangeableBackReference
@@ -74,4 +81,8 @@ public class AmpMeasure  implements Serializable, Cloneable {
         return super.clone();
     }
 
+    @Override
+    public Object getIdentifier() {
+        return ampMeasureId;
+    }
 }

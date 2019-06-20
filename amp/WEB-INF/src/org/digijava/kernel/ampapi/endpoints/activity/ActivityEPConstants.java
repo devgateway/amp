@@ -3,10 +3,6 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.Set;
-
-import com.google.common.collect.ImmutableSet;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
@@ -84,9 +80,6 @@ public class ActivityEPConstants {
     
     // validator names constants
     public static final String UNIQUE_VALIDATOR_NAME = "unique";
-    public static final String MAX_SIZE_VALIDATOR_NAME = "maxSize";
-    public static final String MIN_SIZE_VALIDATOR_NAME = "minSize";
-    public static final String PERCENTAGE_VALIDATOR_NAME = "percentage";
     public static final String TREE_COLLECTION_VALIDATOR_NAME = "treeCollection";
     
     // floating comparison constant

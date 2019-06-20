@@ -4,7 +4,6 @@ import java.util.function.Function;
 
 import org.digijava.kernel.ampapi.endpoints.activity.AMPFMService;
 import org.digijava.kernel.ampapi.endpoints.activity.AllowMultipleProgramsPredicate;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.AmpFieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;

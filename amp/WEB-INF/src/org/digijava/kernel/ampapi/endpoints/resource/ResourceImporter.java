@@ -46,7 +46,8 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
     public ResourceImporter() {
         super(new InputValidatorProcessor(InputValidatorProcessor.getResourceFormatValidators()),
                 new InputValidatorProcessor(InputValidatorProcessor.getResourceBusinessRulesValidators()),
-                AmpFieldsEnumerator.getEnumerator().getResourceField());
+                AmpFieldsEnumerator.getEnumerator().getResourceField(),
+                TLSUtils.getSite());
     }
 
     /**

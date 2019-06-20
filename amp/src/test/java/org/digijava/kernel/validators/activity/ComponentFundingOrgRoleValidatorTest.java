@@ -1,5 +1,6 @@
 package org.digijava.kernel.validators.activity;
 
+import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
@@ -13,7 +14,6 @@ import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.validation.ConstraintViolation;
-import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -39,7 +39,7 @@ public class ComponentFundingOrgRoleValidatorTest {
 
     @Test
     public void testNothingToValidate() {
-        AmpActivityVersion activity = new AmpActivityVersion();
+        AmpActivityVersion activity = new ActivityBuilder().getActivity();
 
         assertThat(getViolations(activityField, activity), emptyIterable());
     }
@@ -107,7 +107,7 @@ public class ComponentFundingOrgRoleValidatorTest {
         HardcodedRoles roles = new HardcodedRoles();
 
         AmpActivityVersion activity = new ActivityBuilder()
-                .addOrgRole(roles.getDonorRole(), orgs.getWorldBank())
+                .addOrgRole(roles.getDonorRole(), orgs.getWorldBank(), 100f)
                 .buildComponent()
                         .buildFunding(Constants.COMMITMENT).withOrg(orgs.getWorldBank()).addFunding()
                         .addComponent()
@@ -154,13 +154,11 @@ public class ComponentFundingOrgRoleValidatorTest {
         HardcodedRoles roles = new HardcodedRoles();
 
         AmpActivityVersion activity = new ActivityBuilder()
-                .addOrgRole(roles.getDonorRole(), orgs.getWorldBank())
-                .addOrgRole(roles.getDonorRole(), orgs.getUsaid())
-                .addOrgRole(roles.getDonorRole(), orgs.getBelgium())
+                .addOrgRole(roles.getDonorRole(), orgs.getWorldBank(), 100f)
                 .buildComponent()
                         .buildFunding(Constants.COMMITMENT).withOrg(orgs.getWorldBank()).addFunding()
-                        .buildFunding(Constants.DISBURSEMENT).withOrg(orgs.getUsaid()).addFunding()
-                        .buildFunding(Constants.EXPENDITURE).withOrg(orgs.getBelgium()).addFunding()
+                        .buildFunding(Constants.DISBURSEMENT).withOrg(orgs.getWorldBank()).addFunding()
+                        .buildFunding(Constants.EXPENDITURE).withOrg(orgs.getWorldBank()).addFunding()
                         .addComponent()
                 .getActivity();
 
@@ -190,7 +188,7 @@ public class ComponentFundingOrgRoleValidatorTest {
     }
 
     private Set<ConstraintViolation> getViolations(APIField activityField, AmpActivityVersion activity) {
-        Validator validator = new Validator();
-        return validator.validate(activityField, activity);
+        Set<ConstraintViolation> violations = ActivityValidatorUtil.validate(activityField, activity);
+        return filter(violations, ComponentFundingOrgRoleValidator.class);
     }
 }

@@ -56,16 +56,6 @@ public @interface Interchangeable {
     boolean importable() default false;
     
     /**
-     *Whether the field is always required, required for non-draft saves, or not required. 
-     */
-    ActivityEPConstants.RequiredValidation required() default ActivityEPConstants.RequiredValidation.NONE;
-    
-    /**
-     * The field is required or not based on fm path. By default, if requiredFmPath is visible, the required is SUBMIT
-     */
-    String requiredFmPath() default "";
-    
-    /**
      * The field is read only or not based on fm path. If readOnlyFmPath is visible, read only is true
      */
     String readOnlyFmPath() default "";
@@ -113,12 +103,13 @@ public @interface Interchangeable {
     String[] requiredDependencies() default {};
 
     /**
-     * Same as {@link #requiredFmPath()} but only for fields with dependencies.
+     * FM entry to control dependency required validator.
      */
     String dependencyRequiredFMPath() default "";
 
     /**
-     * Same as {@link #required()} but only for fields with dependencies.
+     * Whether the field is always required, required for non-draft saves, or not required.
+     * Applies only for fields with dependencies.
      */
     ActivityEPConstants.RequiredValidation dependencyRequired() default ActivityEPConstants.RequiredValidation.NONE;
     
@@ -151,9 +142,6 @@ public @interface Interchangeable {
      */
     InterchangeableValidator[] interValidators() default {};
 
-    /** regex pattern used for validation (mail, phone, fax) */
-    String regexPattern() default "";
-    
     /* constraints for multi-level validators */
     boolean uniqueConstraint() default false;
 
@@ -163,8 +151,6 @@ public @interface Interchangeable {
      * this constraint is enabled or not (via FM rules).</p>
      */
     boolean percentageConstraint() default false;
-
-    int sizeLimit() default 1;
 
     /**
      * If type property is set to this class then type will be determined via reflection.

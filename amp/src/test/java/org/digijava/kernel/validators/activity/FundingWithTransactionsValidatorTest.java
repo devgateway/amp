@@ -1,10 +1,11 @@
 package org.digijava.kernel.validators.activity;
 
+import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import java.util.Set;
 
@@ -15,7 +16,6 @@ import org.dgfoundation.amp.activity.builder.TransactionBuilder;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.validation.ConstraintViolation;
-import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.Constants;
@@ -91,17 +91,21 @@ public class FundingWithTransactionsValidatorTest {
                         .getFunding())
                 .getActivity();
 
-        Validator validator = new Validator();
         Set<String> disabledFm = ImmutableSet.of(
                 "/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table");
-        Set<ConstraintViolation> violations = validator.validate(ValidatorUtil.getMetaData(disabledFm), activity);
+        APIField metaData = ValidatorUtil.getMetaData(disabledFm);
+        Set<ConstraintViolation> violations = getConstraintViolations(metaData, activity);
 
         assertThat(violations, emptyIterable());
     }
 
     private Set<ConstraintViolation> getConstraintViolations(AmpActivityVersion activity) {
-        Validator validator = new Validator();
-        return validator.validate(activityField, activity);
+        return getConstraintViolations(activityField, activity);
+    }
+
+    private Set<ConstraintViolation> getConstraintViolations(APIField type, AmpActivityVersion activity) {
+        Set<ConstraintViolation> violations = ActivityValidatorUtil.validate(type, activity);
+        return filter(violations, FundingWithTransactionsValidator.class);
     }
 
     private Matcher<ConstraintViolation> violation(String path) {

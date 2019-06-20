@@ -1,5 +1,6 @@
 package org.digijava.kernel.validators.activity;
 
+import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.emptyIterable;
@@ -9,12 +10,12 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.validation.ConstraintViolation;
-import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.validator.groups.Submit;
 import org.hamcrest.Matcher;
 import org.junit.BeforeClass;
@@ -36,7 +37,7 @@ public class OnBudgetValidatorTest {
 
     @Test
     public void testEmptyActivity() {
-        AmpActivity activity = new AmpActivity();
+        AmpActivityVersion activity = new ActivityBuilder().getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity, Submit.class);
 
@@ -45,8 +46,9 @@ public class OnBudgetValidatorTest {
 
     @Test
     public void testOffBudget() {
-        AmpActivity activity = new AmpActivity();
-        activity.setCategories(ImmutableSet.of(categoryValues.getActivityBudgets().getOffBudget()));
+        AmpActivityVersion activity = new ActivityBuilder()
+                .withCategories(categoryValues.getActivityBudgets().getOffBudget())
+                .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity, Submit.class);
 
@@ -55,8 +57,9 @@ public class OnBudgetValidatorTest {
 
     @Test
     public void testOnBudgetNotRequiredOnDraftSave() {
-        AmpActivity activity = new AmpActivity();
-        activity.setCategories(ImmutableSet.of(categoryValues.getActivityBudgets().getOnBudget()));
+        AmpActivityVersion activity = new ActivityBuilder()
+                .withCategories(categoryValues.getActivityBudgets().getOnBudget())
+                .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
@@ -65,14 +68,14 @@ public class OnBudgetValidatorTest {
 
     @Test
     public void testOnBudgetAllMissingFYNotRequired() {
-        AmpActivity activity = new AmpActivity();
-        activity.setCategories(ImmutableSet.of(categoryValues.getActivityBudgets().getOnBudget()));
+        AmpActivityVersion activity = new ActivityBuilder()
+                .withCategories(categoryValues.getActivityBudgets().getOnBudget())
+                .getActivity();
 
         APIField activityField = ValidatorUtil.getMetaData(ImmutableSet.of(
                 "/Activity Form/Identification/Budget Extras/Required Validator for fy"));
 
-        Validator validator = new Validator();
-        Set<ConstraintViolation> violations = validator.validate(activityField, activity, Submit.class);
+        Set<ConstraintViolation> violations = getConstraintViolations(activityField, activity, Submit.class);
 
         assertThat(violations, containsInAnyOrder(ImmutableList.of(
                 violation("vote"),
@@ -84,8 +87,9 @@ public class OnBudgetValidatorTest {
 
     @Test
     public void testOnBudgetAllMissing() {
-        AmpActivity activity = new AmpActivity();
-        activity.setCategories(ImmutableSet.of(categoryValues.getActivityBudgets().getOnBudget()));
+        AmpActivityVersion activity = new ActivityBuilder()
+                .withCategories(categoryValues.getActivityBudgets().getOnBudget())
+                .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity, Submit.class);
 
@@ -100,8 +104,10 @@ public class OnBudgetValidatorTest {
 
     @Test
     public void testOnBudgetHalfMissing() {
-        AmpActivity activity = new AmpActivity();
-        activity.setCategories(ImmutableSet.of(categoryValues.getActivityBudgets().getOnBudget()));
+        AmpActivityVersion activity = new ActivityBuilder()
+                .withCategories(categoryValues.getActivityBudgets().getOnBudget())
+                .getActivity();
+
         activity.setFiscalYears(ImmutableSet.of(2019L));
         activity.setVote("Yes");
         activity.setSubVote("Yes");
@@ -116,8 +122,10 @@ public class OnBudgetValidatorTest {
 
     @Test
     public void testOnBudgetAllSet() {
-        AmpActivity activity = new AmpActivity();
-        activity.setCategories(ImmutableSet.of(categoryValues.getActivityBudgets().getOnBudget()));
+        AmpActivityVersion activity = new ActivityBuilder()
+                .withCategories(categoryValues.getActivityBudgets().getOnBudget())
+                .getActivity();
+
         activity.setFiscalYears(ImmutableSet.of(2019L));
         activity.setVote("Yes");
         activity.setSubVote("Yes");
@@ -134,8 +142,12 @@ public class OnBudgetValidatorTest {
         return ValidatorMatchers.violationFor(OnBudgetValidator.class, path, anything(), ActivityErrors.FIELD_REQUIRED);
     }
 
-    private Set<ConstraintViolation> getConstraintViolations(AmpActivity activity, Class<?>... groups) {
-        Validator validator = new Validator();
-        return validator.validate(activityField, activity, groups);
+    private Set<ConstraintViolation> getConstraintViolations(Object object, Class<?>... groups) {
+        return getConstraintViolations(activityField, object, groups);
+    }
+
+    private Set<ConstraintViolation> getConstraintViolations(APIField type, Object object, Class<?>... groups) {
+        Set<ConstraintViolation> violations = ActivityValidatorUtil.validate(type, object, groups);
+        return filter(violations, OnBudgetValidator.class);
     }
 }

@@ -250,7 +250,7 @@
 
 	<table bgColor=#ffffff cellPadding=5 cellspacing="1" width=1000>
 		<tr>
-			<td align=left valign="top" width=752>
+			<td class="left-align" valign="top" width=752>
 			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<!-- Start Navigation -->
@@ -294,11 +294,11 @@
 	
 									<tr>
 										
-										<td align=left valign="top" width=520><br>
+										<td class="left-align" valign="top" width=520><br>
 										<table border="0" cellPadding=5 cellspacing="0" width="100%">
 											<tr>
 												
-												<td align=left class=title noWrap colspan="4">
+												<td class="title left-align" noWrap colspan="4">
 												<!-- digi:errors /-->
 												<logic:notEmpty name="umAddUserForm" property="errors">
 													<font color="red">
@@ -329,52 +329,52 @@
                                                 </tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap width="40%">
+												<td class="f-names right-align" noWrap width="40%">
                                                 
 													<FONT color=red>*</FONT> 
 													<digi:trn key="um:firstName">First Name</digi:trn>
 												</td>
-												<td align="left">
+												<td class="left-align">
 													<html:text property="firstNames" size="20" styleClass="inp-text" /></td>
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap width="40%">
+												<td class="f-names right-align" noWrap width="40%">
 													<FONT color=red>*</FONT> 
 													<digi:trn key="um:lastName">Last Name</digi:trn>
 												</td>
-												<td align="left">
+												<td class="left-align">
 													<html:text property="lastName"	size="20" styleClass="inp-text" />
 												</td>
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td class="f-names right-align" noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:emailAddress">E-mail Address</digi:trn></td>
-												<td align="left">
+												<td class="left-align">
 													<html:text  styleId="userEmail" property="email" size="20"
 																styleClass="inp-text pwd_username" />
 												</td>
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td class="f-names right-align" noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:repEmailAddress">Repeat Email Address</digi:trn></td>
-												<td align="left">
+												<td class="left-align">
 													<html:text styleId="userEmailConfirmation" property="emailConfirmation"	size="20" styleClass="inp-text" />
 												</td>
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td valign="top" align=right class=f-names noWrap>
+												<td valign="top" class="f-names right-align" noWrap>
 													<div style="margin-top: 10px;">
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:password">Password</digi:trn>
 													</div>
 												</td>
-												<td align="left">
+												<td class="left-align">
 													<html:password styleId="userPassword"
 																   property="password" size="20" />
 													<div style="padding-left: 2px; margin: 5px">
@@ -388,36 +388,36 @@
 										
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td class="f-names right-align" noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:repPassword">Repeat Password</digi:trn></td>
-												<td align="left">
+												<td class="left-align">
 													<html:password styleId="userPasswordConfirmation" property="passwordConfirmation" size="20" />
 												</td>
 											</tr>
 											<tr>
                                                 <td  width="3%">&nbsp;</td>
-                                                <td align="right" class="formCheckContainer">
+                                                <td class="formCheckContainer right-align">
                                                     <digi:trn>Use different email for email notifications</digi:trn>
                                                 </td>
-                                                <td class=f-names align="left">
+                                                <td class="f-names left-align">
                                                     <html:checkbox property="notificationEmailEnabled" styleClass="inp-text" styleId="notificationEmailEnabled"/>
                                                 </td>
                                             </tr>
 											<tr id="notificationEmailRow">
                                                 <td width="3%">&nbsp;</td>
-                                                <td align=right class=f-names noWrap>
+                                                <td class="f-names right-align" noWrap>
                                                     <font color=red>*</font>
                                                     <digi:trn>Notification Email</digi:trn></td>
-                                                <td align="left">
+                                                <td class="left-align">
                                                     <html:text property="notificationEmail" size="20" styleClass="inp-text" styleId="notificationEmail"/></td>
                                             </tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td class="f-names right-align" noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:countryOfResidence">Country of Residence</digi:trn></td>
-												<td align="left">
+												<td class="left-align"">
 													<html:select property="selectedCountryResidence" styleClass="inp-text">
 														<c:forEach var="cn"	items="${umAddUserForm.countryResidence}">
 															<html:option value="${cn.iso}"><c:out value="${cn.name}"></c:out></html:option>
@@ -427,18 +427,18 @@
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td class="f-names right-align" noWrap>
 													<digi:trn key="um:mailingAddress">Mailing Address</digi:trn></td>
-												<td align="left">
+												<td class="left-align">
 													<html:text property="mailingAddress" size="20" styleClass="inp-text" /></td>
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td class="f-names right-align" noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:organizationType">Organization Type</digi:trn>
 												</td>
-												<td align="left">
+												<td class="left-align">
 													<html:select property="selectedOrgType"	styleClass="inp-text" onchange="optionChanged('otype')">
 														<html:option value="-1">-- <digi:trn key="um:selectType">Select a type</digi:trn> --</html:option>
 														<html:optionsCollection name="umAddUserForm" property="orgTypeColl" value="ampOrgTypeId" label="orgType" />
@@ -446,11 +446,11 @@
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td class="f-names right-align" noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:organizationGroup">Organization Group</digi:trn>
 												</td>
-												<td align="left">
+												<td class="left-align">
 													<html:select property="selectedOrgGroup" styleClass="inp-text" onchange="optionChanged('ogroup')">
 														<html:option value="-1">-- <digi:trn key="um:selectGroup">Select a group</digi:trn> --</html:option>
 														<logic:notEmpty name="umAddUserForm" property="orgGroupColl">
@@ -460,10 +460,10 @@
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td class="f-names right-align" noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:organizationName">Organization Name</digi:trn></td>
-												<td align="left">
+												<td class="left-align">
 													<html:hidden property="organizationName" value="-1" /> 
 													<html:select property="selectedOrganizationId" styleClass="inp-text">
 														<html:option value="-1">-- <digi:trn key="um:selectOrganization">Select an organization</digi:trn> --</html:option>
@@ -475,10 +475,10 @@
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td class="f-names right-align" noWrap>
 													<digi:trn key="um:yourLangSettings">Your language settings</digi:trn>
 												</td>
-												<td align="left">
+												<td class="left-align">
 													<html:select property="selectedLanguage" styleClass="inp-text">
 														<bean:define id="languages" name="umAddUserForm"
 															property="navigationLanguages" type="java.util.Collection" />
@@ -490,8 +490,8 @@
  											<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
 											<tr>
 												<td  width="3%">&nbsp;</td>
-												<td align="right" class="formCheckContainer"><digi:trn key="um:pledgesUser">Pledges User</digi:trn></td>
-												<td class=f-names align="left">
+												<td class="formCheckContainer right-align"><digi:trn key="um:pledgesUser">Pledges User</digi:trn></td>
+												<td class="f-names left-align">
 													<html:checkbox property="pledger" styleClass="inp-text">
 														
 													</html:checkbox></td>
@@ -499,8 +499,8 @@
 											</module:display>
 											<tr>
 												<td  width="3%">&nbsp;</td>
-												<td align="right"  class="formCheckContainer"><digi:trn key="um:sendNotificationEmail">Send notification email</digi:trn></td>
-												<td class=f-names align="left">
+												<td class="formCheckContainer right-align"><digi:trn key="um:sendNotificationEmail">Send notification email</digi:trn></td>
+												<td class="f-names left-align">
 
 												<c:if test="${umAddUserForm.registrationByEmail}">
 													<html:checkbox property="sendEmail"	styleClass="inp-text" >
@@ -513,33 +513,33 @@
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align="right"  class="formCheckContainer"><digi:trn key="um:nationalCoordinator">National Coordinator</digi:trn></td>
-												<td class=f-names align="left">
+												<td class="formCheckContainer right-align"><digi:trn key="um:nationalCoordinator">National Coordinator</digi:trn></td>
+												<td class="f-names left-align">
 													<html:checkbox property="nationalCoordinator" styleClass="inp-text">
 													</html:checkbox></td>
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align="right"  class="formCheckContainer"><digi:trn key="um:assignToWorkspace">Assign to Workspace</digi:trn></td>
-												<td class=f-names align="left">
+												<td class="formCheckContainer right-align"><digi:trn key="um:assignToWorkspace">Assign to Workspace</digi:trn></td>
+												<td class="f-names left-align">
 													<html:checkbox property="addWorkspace" styleClass="inp-text">
 													</html:checkbox></td>
 											</tr>
 											 <tr>
 												<td width="3%">&nbsp;</td>
-												<td align="right"  class="formCheckContainer"><digi:trn key="um:exemptFromDataFreezing">Exempt from activity freezing</digi:trn></td>
-												<td class=f-names align="left">
+												<td class="formCheckContainer right-align"><digi:trn key="um:exemptFromDataFreezing">Exempt from activity freezing</digi:trn></td>
+												<td class="f-names left-align">
 													<html:checkbox property="exemptFromDataFreezing" styleClass="inp-text">
 													</html:checkbox></td>
 											</tr>
 											<tr>
 												<td>&nbsp;</td>
-												<td align="right" class="addUserButContainer">
+												<td class="addUserButContainer right-align">
 													<c:set var="btnSubmit">
 														<digi:trn key="btn:submit">Submit</digi:trn>
 													</c:set> 
 													<html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate()" /></td>
-												<td align="left" class="addUserButContainer">
+												<td class="left-align" class="addUserButContainer">
 													<c:set var="btnCancel">
 														<digi:trn key="btn:cancel">Cancel</digi:trn>
 													</c:set> 

@@ -36,14 +36,14 @@ function checkEmptyEmail(){
 <div class="home_sec_title"><digi:trn key="aim:changePassword">
 						Reset your e-mail address
 						</digi:trn></div>
-<table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
+<table width="100%" valign="top" class="left-align" cellpadding="0" cellspacing="0" border="0">
 
-<tr><td width="100%" valign="top" align="left">
+<tr><td width="100%" valign="top" class="left-align">
 <table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width="100%">
 	<tr>
 		<td width="5%">&nbsp;
 		</td>
-		<td align=left valign="top" width="60%"><br>
+		<td class="left-align" valign="top" width="60%"><br>
 			<table border="0" cellPadding=5 cellspacing="0" width="60%">
 				<tr>
 					<td width="3">&nbsp;</td>
@@ -53,11 +53,11 @@ function checkEmptyEmail(){
 				</tr>
 				<tr>
 					<td width="3">&nbsp;</td>
-					<td align=right class=f-names noWrap valign=top>
+					<td class="right-align" class=f-names noWrap valign=top>
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
-						<digi:trn key="aim:email">Email</digi:trn>
+						<digi:trn key="aim:email">Email</digi:trn>&nbsp;
 					</td>
-					<td align="left">
+					<td class="left-align">
 						<html:text property="email" size="20" />
 						<br /><font color="red" style="font-size:11px;">
 						<digi:trn key="aim:userIdExample1">

@@ -233,11 +233,11 @@ Please do not attempt to use the Notification Email as user login.
     <td width="100%" valign="top" align="left">
     <table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width="100%">
       <tr>
-        <td align=left valign="top" width="65%">
+        <td class="left-align" valign="top" width="65%">
           <table border="0" cellPadding=0 cellspacing="0" width="650">
             <logic:notEmpty name="aimUserRegisterForm" property="errors" >
               <tr>
-                <td align=left class=title noWrap colspan="33"><!-- digi:errors /-->
+                <td class="left-align" class=title noWrap colspan="33"><!-- digi:errors /-->
                   <font color="red">
                   <ul>
                     <logic:iterate id="element"	name="aimUserRegisterForm" property="errors">
@@ -255,7 +255,7 @@ Please do not attempt to use the Notification Email as user login.
             </logic:notEmpty>
 
             <tr>
-              <td align=left class=title noWrap colspan="5"><digi:trn>All fields marked with an</digi:trn><FONT color=red><B> * </B></FONT><digi:trn>are required.</digi:trn>
+              <td class="left-align title" noWrap colspan="5"><digi:trn>All fields marked with an</digi:trn><FONT color=red><B> * </B></FONT><digi:trn>are required.</digi:trn>
                 <digi:trn key="um:userValidEmail"> Please use a valid e-mail address.</digi:trn>              </td>
             </tr>
 			<tr>
@@ -264,21 +264,21 @@ Please do not attempt to use the Notification Email as user login.
             <tr>
               <td class=f-names noWrap width="175" style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:firstName">First Name</digi:trn>              </td>
-              <td align="right" width="145" style="padding-bottom:10px;"><html:text property="firstNames" size="20" styleClass="inp-text"/>              </td>
+              <td class="right-align" width="145" style="padding-bottom:10px;"><html:text property="firstNames" size="20" styleClass="inp-text"/>              </td>
               <td width="10">&nbsp;</td>
               <td class=f-names noWrap width="175" style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:lastName">Last Name</digi:trn>              </td>
-              <td align="right" width="145" style="padding-bottom:10px;"><html:text property="lastName" size="20" styleClass="inp-text"/>              </td>
+              <td class="right-align" width="145" style="padding-bottom:10px;"><html:text property="lastName" size="20" styleClass="inp-text"/>              </td>
             </tr>
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:emailAddress">E-mail Address </digi:trn>              </td>
-              <td align="right" style="padding-bottom:10px;"><html:text property="email" size="20" styleClass="inp-text pwd_username"/>
+              <td class="right-align" style="padding-bottom:10px;"><html:text property="email" size="20" styleClass="inp-text pwd_username"/>
               </td>
               <td>&nbsp;</td>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:repEmailAddress">Repeat Email Address </digi:trn>              </td>
-              <td align="right" style="padding-bottom:10px;"><html:text property="emailConfirmation" size="20" styleClass="inp-text"/>              </td>
+              <td class="right-align" style="padding-bottom:10px;"><html:text property="emailConfirmation" size="20" styleClass="inp-text"/>              </td>
             </tr>
             <tr>
               <td valign="top" class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
@@ -293,7 +293,7 @@ Please do not attempt to use the Notification Email as user login.
               <td>&nbsp;</td>
               <td class=f-names valign="top" noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:repPassword">Repeat Password </digi:trn>              </td>
-              <td align="right" valign="top" style="padding-bottom:10px;"><html:password property="passwordConfirmation" size="20" styleClass="inp-text" />              </td>
+              <td class="right-align" valign="top" style="padding-bottom:10px;"><html:password property="passwordConfirmation" size="20" styleClass="inp-text" />              </td>
             </tr>
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;">
@@ -310,7 +310,7 @@ Please do not attempt to use the Notification Email as user login.
                             <FONT color=red>*</FONT>
                             <digi:trn>Notification Email</digi:trn>
                         </td>
-                        <td align="right" style="padding-bottom:10px;">
+                        <td class="right-align" style="padding-bottom:10px;">
                             <html:text property="notificationEmail" size="20" styleClass="inp-text" styleId="notificationEmail"/>
                         </td>
                     </tr>
@@ -320,19 +320,19 @@ Please do not attempt to use the Notification Email as user login.
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:countryOfResidence">Country of Residence </digi:trn>              </td>
-              <td align="right"  class="orgtype" style="padding-bottom:10px;">
+              <td class="orgtype right-align" style="padding-bottom:10px;">
               	<html:select  property="selectedCountryResidence" styleClass="inp-text" >
                   <html:optionsCollection name="aimUserRegisterForm" property="countryResidence" value="iso" label="name" />
                 </html:select>              
               </td>
               <td>&nbsp;</td>
               <td class=f-names noWrap style="padding-bottom:10px;"><digi:trn key="um:mailingAddress">Mailing Address </digi:trn>              </td>
-              <td align="right" style="padding-bottom:10px;"><html:text property="mailingAddress" size="20" styleClass="inp-text"/>              </td>
+              <td class="right-align" style="padding-bottom:10px;"><html:text property="mailingAddress" size="20" styleClass="inp-text"/>              </td>
             </tr>
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:organizationType">Organization Type </digi:trn>              </td>
-              <td class="orgtype" align="right" style="padding-bottom:10px;"><html:select property="selectedOrgType"  styleClass="inp-text"    onchange="optionChanged('otype')">
+              <td class="orgtype right-align" style="padding-bottom:10px;"><html:select property="selectedOrgType"  styleClass="inp-text"    onchange="optionChanged('otype')">
                   <html:option value="-1">--
                     <digi:trn key="um:selectType">Select a type</digi:trn>
                     --</html:option>
@@ -348,7 +348,7 @@ Please do not attempt to use the Notification Email as user login.
             <tr>
               <td class="f-names orgtype" noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:organizationGroup">Organization Group</digi:trn>              </td>
-              <td align="right" class="orgtype" style="padding-bottom:10px;"><html:select property="selectedOrgGroup" styleClass="inp-text"  onchange="optionChanged('ogroup')">
+              <td class="orgtype right-align" style="padding-bottom:10px;"><html:select property="selectedOrgGroup" styleClass="inp-text"  onchange="optionChanged('ogroup')">
                   <html:option value="-1">--
                     <digi:trn key="um:selectGroup">Select a group</digi:trn>
                     --</html:option>
@@ -365,7 +365,7 @@ Please do not attempt to use the Notification Email as user login.
             <tr>
               <td class="f-names orgtype" noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:organizationName">Organization Name </digi:trn>              </td>
-              <td align="right" class="orgtype" style="padding-bottom:10px;"><html:hidden property="organizationName" value="-1"/>
+              <td class="orgtype right-align" style="padding-bottom:10px;"><html:hidden property="organizationName" value="-1"/>
                 <html:select property="selectedOrganizationId" styleClass="inp-text" >
                   <html:option value="-1">--
                     <digi:trn key="um:selectOrganization">Select an organization</digi:trn>
@@ -399,7 +399,7 @@ Please do not attempt to use the Notification Email as user login.
 				</tr> -->
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><digi:trn key="um:yourLangSettings">Your language settings </digi:trn>              </td>
-              <td align="right"  class="orgtype" style="padding-bottom:10px;"><html:select  property="selectedLanguage" styleClass="inp-text">
+              <td class="orgtype right-align" style="padding-bottom:10px;"><html:select  property="selectedLanguage" styleClass="inp-text">
                   <bean:define id="languages" name="aimUserRegisterForm" property="navigationLanguages"
 
 					 type="java.util.Collection" />
@@ -412,12 +412,12 @@ Please do not attempt to use the Notification Email as user login.
             <tr>
             	<td>&nbsp;</td>
             	<td>&nbsp;</td>
-              <td align="right" style="padding-top:20px;padding-right:10px;" class="reg_butt"><c:set var="btnSubmit">
+              <td class="right-align" style="padding-top:20px;padding-right:10px;" class="reg_butt"><c:set var="btnSubmit">
                 <digi:trn key="btn:submit">Submit</digi:trn>
               </c:set>
                 <html:submit value="${btnSubmit}" styleClass="buttonx" onclick="return validate();" styleId="registerUserBtn"/>
              </td>
-              <td align="left" style="padding-top:20px;padding-left:10px;" class="reg_butt">
+              <td class="left-align" style="padding-top:20px;padding-left:10px;" class="reg_butt">
               <c:set var="btnReset">
                 <digi:trn key="btn:reset">Reset</digi:trn>
               </c:set>

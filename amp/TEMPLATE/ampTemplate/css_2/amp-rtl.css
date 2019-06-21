@@ -1017,3 +1017,7 @@ td.inside ul {
     border-right: 0px !important;
     border-left: 1px solid rgb(208, 208, 208);
 }
+
+.home_sec_title {
+    text-align: right !important;
+}

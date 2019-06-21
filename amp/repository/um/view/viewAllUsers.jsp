@@ -170,10 +170,10 @@ function banUser(txt) {
 						<td width="50px"
 							style="border-top: 1px solid #D0D0D0; border-bottom: 1px solid #D0D0D0;">
 							<html:select property="tempNumResults" styleClass="inp-text">
-								<html:option value="10">10</html:option>
-								<html:option value="20">20</html:option>
-								<html:option value="50">50</html:option>
-								<html:option value="-1">ALL</html:option>
+								<html:option value="10"><digi:easternArabicNumber>10</digi:easternArabicNumber></html:option>
+								<html:option value="20"><digi:easternArabicNumber>20</digi:easternArabicNumber></html:option>
+								<html:option value="50"><digi:easternArabicNumber>50</digi:easternArabicNumber></html:option>
+								<html:option value="-1"><digi:trn>ALL</digi:trn></html:option>
 							</html:select></td>
 						<td width="300px"
 							style="border-top: 1px solid #D0D0D0; border-bottom: 1px solid #D0D0D0; border-right: 1px solid #D0D0D0;">
@@ -391,7 +391,7 @@ function banUser(txt) {
 																						property="orgSelReset" value="false" />
 																					<c:if
 																						test="${umViewAllUsersForm.currentPage == pages}">
-																						<font color="#FF0000"><%=pages%></font>
+																						<font color="#FF0000"><digi:easternArabicNumber><%=pages%></digi:easternArabicNumber></font>
 																					</c:if>
 																					<c:if
 																						test="${umViewAllUsersForm.currentPage != pages}">
@@ -400,7 +400,7 @@ function banUser(txt) {
 																						</c:set>
 																						<digi:link href="/userSearch.do" name="urlParams1"
 																							title="${translation}">
-																							<%=pages%>
+																						<digi:easternArabicNumber><%=pages%></digi:easternArabicNumber>
 																						</digi:link>
 																					</c:if>
 														|&nbsp;
@@ -444,10 +444,10 @@ function banUser(txt) {
 																						title="${translation}">
 															&gt;&gt; 
 														</digi:link>
-																				</c:if> &nbsp; <c:out
-																					value="${umViewAllUsersForm.currentPage}"></c:out>&nbsp;<digi:trn
-																					key="aim:of">of</digi:trn>&nbsp;<c:out
-																					value="${umViewAllUsersForm.pagesSize}"></c:out></td>
+																				</c:if> &nbsp; <digi:easternArabicNumber><c:out
+																					value="${umViewAllUsersForm.currentPage}"></c:out></digi:easternArabicNumber>&nbsp;<digi:trn
+																					key="aim:of">of</digi:trn>&nbsp;<digi:easternArabicNumber><c:out
+																					value="${umViewAllUsersForm.pagesSize}"></c:out></digi:easternArabicNumber></td>
 																		</tr>
 																	</logic:notEmpty>
 
@@ -477,7 +477,7 @@ function banUser(txt) {
 																								<c:if test="${alphaPages != null}">
 																									<c:if
 																										test="${umViewAllUsersForm.currentAlpha == alphaPages}">
-																										<font color="#FF0000"><%=alphaPages %></font>
+																										<font color="#FF0000"><digi:easternArabicNumber><%=alphaPages %></digi:easternArabicNumber></font>
 																									</c:if>
 																									<c:if
 																										test="${umViewAllUsersForm.currentAlpha != alphaPages}">
@@ -486,7 +486,7 @@ function banUser(txt) {
 																										</c:set>
 																										<a
 																											href="javascript:searchAlpha('<%=alphaPages%>')"
-																											title="${translation}"> <%=alphaPages %></a>
+																											title="${translation}"> <digi:easternArabicNumber><%=alphaPages %></digi:easternArabicNumber></a>
 																									</c:if>
 															|&nbsp;
 															</c:if>
@@ -500,7 +500,7 @@ function banUser(txt) {
                                                                                                 <c:if test="${digitPages != null}">
                                                                                                     <c:if
                                                                                                             test="${aimOrgManagerForm.currentAlpha == digitPages}">
-                                                                                                        <font color="#FF0000"><%=digitPages %></font>
+																										<font color="#FF0000"><digi:easternArabicNumber><%=digitPages %></digi:easternArabicNumber></font>
                                                                                                     </c:if>
                                                                                                     <c:if
                                                                                                             test="${aimOrgManagerForm.currentAlpha != digitPages}">
@@ -509,7 +509,7 @@ function banUser(txt) {
                                                                                                         </c:set>
                                                                                                         <a
                                                                                                                 href="javascript:searchAlpha('<%=digitPages%>')"
-                                                                                                                title="${translation}"> <%=digitPages %></a>
+                                                                                                                title="${translation}"> <digi:easternArabicNumber><%=digitPages %></digi:easternArabicNumber></a>
                                                                                                     </c:if>
                                                                                                     |&nbsp;
                                                                                                 </c:if>
@@ -560,8 +560,7 @@ function banUser(txt) {
 																	key="aim:otherLinks">
 																	<b style="font-weight: bold; font-size: 12px; padding-left:5px; color:#000000;"><digi:trn>Other links</digi:trn></b>
 																</digi:trn></td>
-															<td background="module/aim/images/corner-r.gif"
-																height="17" width=17>&nbsp;</td>
+															<td class="corner-right">&nbsp;</td>
 														</tr>
 													</table></td>
 											</tr>
@@ -569,26 +568,26 @@ function banUser(txt) {
 												<td bgColor=#ffffff>
 													<table cellPadding=0 cellspacing="0" width="100%" class="inside">
 														<tr>
-															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <digi:link module="aim" href="/admin.do">
+															<td class="inside">
+																<span class="list-item-arrow"></span>
+																<digi:link module="aim" href="/admin.do">
 																	<digi:trn key="aim:AmpAdminHome">
 																Admin Home
 																</digi:trn>
 																</digi:link></td>
 														</tr>
 														<tr>
-															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <digi:link module="aim" href="/../um/addUser.do">
+															<td class="inside">
+																<span class="list-item-arrow"></span>
+																<digi:link module="aim" href="/../um/addUser.do">
 																	<digi:trn key="aim:addNewUser">
 																Add new user																</digi:trn>
 																</digi:link></td>
 														</tr>
 														<tr>
-															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <digi:link module="aim"
+															<td class="inside">
+																<span class="list-item-arrow"></span>
+																<digi:link module="aim"
 																	href="/workspaceManager.do~page=1">
 																	<digi:trn key="aim:WorkspaceManager">
 																Workspace Manager
@@ -598,9 +597,9 @@ function banUser(txt) {
 														<c:choose>
 															<c:when test="${umViewAllUsersForm.showBanned}">
 																<tr>
-																	<td class="inside"><digi:img
-																			src="module/aim/images/arrow-014E86.gif" width="15"
-																			height="10" /> <digi:link module="aim"
+																	<td class="inside">
+																		<span class="list-item-arrow"></span>
+																		<digi:link module="aim"
 																			href="/../um/viewAllUsers.do~showBanned=false">
 																			<digi:trn key="aim:ViewActiveUsers">
 																	View Active Users
@@ -610,9 +609,9 @@ function banUser(txt) {
 															</c:when>
 															<c:otherwise>
 																<tr>
-																	<td class="inside"><digi:img
-																			src="module/aim/images/arrow-014E86.gif" width="15"
-																			height="10" /> <digi:link module="aim"
+																	<td class="inside">
+																		<span class="list-item-arrow"></span>
+																		<digi:link module="aim"
 																			href="/../um/viewAllUsers.do~showBanned=true">
 																			<digi:trn key="aim:ViewBannedUsers">
 																	View Banned Users
@@ -622,9 +621,9 @@ function banUser(txt) {
 															</c:otherwise>
 														</c:choose>
 														<tr>
-															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <digi:link module="aim"
+															<td class="inside">
+																<span class="list-item-arrow"></span>
+																<digi:link module="aim"
 																	href="/../um/suspendLoginManager.do">
 																	<digi:trn>
 																		Account Suspend Manager

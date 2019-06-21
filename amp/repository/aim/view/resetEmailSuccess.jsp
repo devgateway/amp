@@ -17,11 +17,11 @@
 	<tr>
 		<td width=14>&nbsp;
 		</td>
-		<td align=left valign="top" width=520><br>
+		<td class="left-align" valign="top" width=520><br>
 			<table border="0" cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td width="3%">&nbsp;</td>				
-					<td align="left" valign="top" class="text">
+					<td valign="top" class="text left-align">
 						<digi:trn key="aim:emailSentTo">
 						An e-mail has been sent to</digi:trn> 
 						<b><c:out value="${aimUserEmailForm.email}" /></b>
@@ -29,7 +29,7 @@
 				</tr>
 				<tr>
 					<td width="3%">&nbsp;</td>				
-					<td align="left" valign="top" class="text">
+					<td valign="top" class="text left-align">
 						<digi:trn key="aim:clickOnLinkToCreatePassword">
 						Click on the link included in the e-mail to create a new password
 						</digi:trn>

@@ -70,7 +70,6 @@ public final class ActivityTranslationUtils {
 
         // provide map for translatable fields
         if (isTranslatable) {
-            String fieldText = (String) fieldValue;
             if (isEditor) {
                 Map<String, Object> fieldTrnValues = new HashMap<String, Object>();
                 for (String translation : translationSettings.getTrnLocaleCodes()) {
@@ -78,14 +77,14 @@ public final class ActivityTranslationUtils {
                     //String translatedText = DgUtil.cleanHtmlTags(DbUtil.getEditorBodyEmptyInclude(
                     // SiteUtils.getGlobalSite(), fieldText, translation));
                     String translatedText = translatorService.getEditorBodyEmptyInclude(TLSUtils.getSite(),
-                            fieldText, translation);
+                            (String) fieldValue, translation);
                     fieldTrnValues.put(translation, getJsonStringValue(translatedText));
                 }
                 return fieldTrnValues;
             } else if (isMultilingualContent) {
                 return loadTranslationsForMultilingualField(field, parentObject, translationSettings);
             } else {
-                return loadTranslationsForField(clazz, field.getName(), fieldText, parentObject,
+                return loadTranslationsForField(clazz, field.getName(), (String) fieldValue, parentObject,
                         translationSettings.getTrnLocaleCodes());
             }
         }

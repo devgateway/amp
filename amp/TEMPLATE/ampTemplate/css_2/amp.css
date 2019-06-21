@@ -1465,3 +1465,30 @@ div.footer {
     z-index: 1;
     line-height: 90%;
 }
+
+.right-align {
+    text-align: right;
+}
+
+.left-align {
+    text-align: left;
+}
+
+.left-float {
+    float: left;
+}
+
+.right-float {
+    float: right;
+}
+
+.yui-panel .bd {
+    direction: rtl;
+}
+
+.member-form-title {
+    margin:0px 0px 0px 0px;
+    display:block;
+    float:left;
+    width:200px;
+}

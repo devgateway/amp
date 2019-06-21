@@ -609,9 +609,9 @@ function cancel()
 <jsp:include page="teamPagesHeader.jsp"  />
 </td></tr>
 <tr><td vAlign="top" align="left">
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 vAlign="top" align="left">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 vAlign="top" class="left-align">
 	<tr>
-		<td align=left class=r-dotted-lg valign="top" width=750>
+		<td class="r-dotted-lg left-align" valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<td height=33><span class=crumb>
@@ -684,11 +684,11 @@ function cancel()
 											<td bgColor=#ffffff class=box-border>
 												<table border="0" cellPadding=3 cellspacing="1" width="100%" bgcolor="#dddddd" class="workspace-table">
 													<tr>
-														<td width="150" align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
+														<td width="150" class="right-align" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<font color="red"><b>*</b></font>
 															<digi:trn key="aim:teamName">Team Name</digi:trn>
 														</td>
-														<td align="left" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
+														<td class="left-align" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
 																<b><bean:write name="aimUpdateWorkspaceForm" property="teamName" /></b>
 															</logic:equal>
@@ -704,11 +704,11 @@ function cancel()
 														</td>
 													</tr>
 													<tr>
-														<td width="150" align="right" bgcolor="#f4f4f2">
+														<td width="150" class="right-align" bgcolor="#f4f4f2">
 															<font color="red"><b>*</b></font>
 															<digi:trn key="aim:workspaceGroup">Workspace Group</digi:trn>
 														</td>
-														<td align="left" bgcolor="#f4f4f2">
+														<td class="left-align" bgcolor="#f4f4f2">
 															<c:set var="translation">
 																<digi:trn>Please select from below</digi:trn>
 															</c:set>															
@@ -728,12 +728,12 @@ function cancel()
 													</tr>
 													
 													<tr>
-														<td align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
+														<td class="right-align" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<font color="red"><b>*</b></font>
 															<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>
 														</td>
 														<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
-														<td align="left" bgcolor="#FFFFFF">
+														<td class="left-align" bgcolor="#FFFFFF">
 															<html:select property="workspaceType" styleClass="inp-text" onchange="workspaceChangeType()">
 																<html:option value="-1"><digi:trn key="aim:selectWorkspace">-- Select Workspace --</digi:trn></html:option>
 																<html:option value="Management"><digi:trn key="aim:management">Management</digi:trn></html:option>
@@ -742,7 +742,7 @@ function cancel()
 														</td>
 														</c:if>
 														<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'add'}">
-														<td align="left" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
+														<td class="left-align" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<c:choose>
 																<c:when test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
 																	<c:choose>
@@ -767,10 +767,10 @@ function cancel()
 													</tr>
 													<feature:display name="FM Template" module="Workspace Manager" >   
                                                     <tr>
-                                                        <td width="150" align="right" bgcolor="#f4f4f2">
+                                                        <td width="150" class="right-align" bgcolor="#f4f4f2">
                                                             <digi:trn>FM Template</digi:trn>
                                                         </td>
-                                                        <td align="left" bgcolor="#f4f4f2">
+                                                        <td class="left-align" bgcolor="#f4f4f2">
                                                             <c:set var="translation">
                                                                 <digi:trn>Select, if workspace will use a different FM template</digi:trn>
                                                             </c:set>
@@ -803,10 +803,10 @@ function cancel()
                                                     </feature:display>
 												<feature:display name="Workspace Prefix" module="Workspace Manager" >   
                                                     <tr>
-                                                        <td width="150" align="right" bgcolor="#FFFFFF">
+                                                        <td width="150" class="right-align" bgcolor="#FFFFFF">
                                                             <digi:trn key="aim:workspacePrefix">Workspace Prefix</digi:trn>
                                                         </td>
-                                                        <td align="left" bgcolor="#FFFFFF">
+                                                        <td class="left-align" bgcolor="#FFFFFF">
                                                             <c:set var="translation">
                                                                 <digi:trn>Select, if workspace will use a different translation set or category set</digi:trn>
                                                             </c:set>
@@ -827,10 +827,10 @@ function cancel()
                                                     </feature:display>
 
                                                     <tr>
-														<td align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
+														<td class="right-align" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<digi:trn key="aim:description">Description</digi:trn>
 														</td>
-														<td align="left" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
+														<td class="left-align" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
 																<b><bean:write name="aimUpdateWorkspaceForm" property="description" /></b>
 															</logic:equal>
@@ -911,10 +911,10 @@ function cancel()
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">
 															<tr  id="relTeamRow">
-																<td align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
+																<td class="right-align" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 																	<digi:trn key="aim:relatedTeam">Related Team</digi:trn>
 																</td>
-																<td align="left" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
+																<td class="left-align" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 																	<html:select property="relatedTeam" styleClass="inp-text">
 																		<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag == 'nil'}">
 																			<html:option value="-1">No related team available</html:option>
@@ -950,10 +950,10 @@ function cancel()
 																		<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
 																			<table>
 																			<tr>
-																				<td align="right" width="150" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
+																				<td class="right-align" width="150" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 																					<digi:trn key="aim:childWorkspacesOrTeams">Child Workspaces/Teams</digi:trn>
 																				</td>
-																				<td align="left" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
+																				<td class="left-align" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 																					<c:set var="translation">
 																						<digi:trn key="btn:createWorkspaceAdd">
 																							Add
@@ -971,10 +971,10 @@ function cancel()
 																			class="box-border-nopadding">
 																			<c:forEach var="workspaces" items="${aimUpdateWorkspaceForm.childWorkspaces}">
 																				<tr>
-																					<td align="left">&nbsp;
+																					<td class="left-align">&nbsp;
 																						<c:out value="${workspaces.name}"/>
 																					</td>
-																					<td align="right" width="10">
+																					<td class="right-align" width="10">
 																						<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																						<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
 																					 	<digi:img src="../ampTemplate/images/deleteIcon.gif"
@@ -1040,11 +1040,11 @@ function cancel()
 																			class="box-border-nopadding">
 																			<c:forEach var="org" items="${aimUpdateWorkspaceForm.organizations}">
 																				<tr>
-																					<td align="left">&nbsp;
+																					<td class="left-align">&nbsp;
                                                                                         <input type="hidden" value="${org.ampOrgId}" name="selectedOrgId">
 																						<c:out value="${org.name}"/>
 																					</td>
-																					<td align="right" width="10">
+																					<td class="right-align" width="10">
 																						<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																						<a href="javascript:removeChildOrg(<c:out value="${org.ampOrgId}"/>)">
 																					 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Remove this linked org"/></a>&nbsp;
@@ -1159,7 +1159,7 @@ function cancel()
 												<b style="padding-left:5px;">
 												<digi:trn key="aim:otherLinks">Other links</digi:trn></b>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;</td>
+											<td class="corner-right">&nbsp;</td>
 										</tr>
 									</table>
 								</td>
@@ -1169,7 +1169,7 @@ function cancel()
 									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 										<tr>
 											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<span class="list-item-arrow"></span>
 												<digi:link href="/workspaceManager.do">
 												<digi:trn key="aim:teams">
 												Teams
@@ -1181,7 +1181,7 @@ function cancel()
 										
 										<tr>
 											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<span class="list-item-arrow"></span>
 												<digi:link href="/admin.do">
 												<digi:trn key="aim:AmpAdminHome">
 												Admin Home

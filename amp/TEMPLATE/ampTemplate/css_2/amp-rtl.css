@@ -972,3 +972,48 @@ td.inside ul {
     transform: scaleX(-1);
     float: right !important;
 }
+
+.right-align {
+    text-align: left !important;
+}
+
+.left-align {
+    text-align: right !important;
+}
+
+
+.left-float {
+    float: right !important;
+}
+
+.right-float {
+    float: left !important;
+}
+
+.current-page {
+    margin-left: 5px !important;
+}
+
+.yui-pg-current-page.yui-pg-page {
+    padding-right: unset !important;
+    padding-left: 10px;
+    border-left: 1px solid rgb(208, 208, 208);
+    border-right: 0px !important;
+}
+
+.yui-skin-sam a.yui-pg-page {
+    padding-left: 10px;
+    padding-right: unset !important;
+    border-right: 0px !important;
+    font-size: 11px;
+    border-left: 1px solid rgb(208, 208, 208);
+}
+
+
+.yui-skin-sam a.yui-pg-first {
+    margin-right: 2px;
+    padding-left: 7px;
+    padding-right: unset !important;
+    border-right: 0px !important;
+    border-left: 1px solid rgb(208, 208, 208);
+}

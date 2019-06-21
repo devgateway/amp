@@ -7,10 +7,11 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
+<%@ page import="org.digijava.kernel.request.TLSUtils" %>
+
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css">
-
 
 
 <style>
@@ -163,6 +164,7 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script>
 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
 <digi:instance property="aimWorkspaceForm" />
@@ -317,17 +319,33 @@
                     div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
                 }
             }
+
+            var isRtl = <%=TLSUtils.getCurrentLocale().getLeftToRight() == false%>;
+            var language = '<%=TLSUtils.getCurrentLocale().getCode()%>';
+            var region = '<%=TLSUtils.getCurrentLocale().getRegion()%>';
+
+            function convertNumbers() {
+                $('.number-to-convert').each(function() {
+                    this.innerText = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, this.innerText);
+                });
+            }
+
             // Create the Paginator 
-            
-            myPaginator = new YAHOO.widget.Paginator({ 
+            myPaginator = new YAHOO.widget.Paginator({
             	rowsPerPage:10,
 	        	//totalRecords:document.getElementById("totalResults").value,
 	        	containers : ["dt-pag-nav","dt-pag-nav2"], 
 	        	template : '{CurrentPageReport}&nbsp;<span class="l_sm"><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}<br/>{FirstPageLink}{PageLinks}{LastPageLink}',
-	        	pageReportTemplate		: '<span class="l_sm"><digi:trn>Showing items</digi:trn></span> <span class="txt_sm_b">{startRecord} - {endRecord} <digi:trn>of</digi:trn> {totalRecords}</span>',
-	        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
+                pageReportTemplate		: '<span class="l_sm"><digi:trn>Showing items</digi:trn></span> <span class="txt_sm_b number-to-convert">{startRecord} - {endRecord} <digi:trn>of</digi:trn> {totalRecords}</span>',
+	        	rowsPerPageOptions		: [
+                                            {value:10, text:'<digi:easternArabicNumber>10</digi:easternArabicNumber>'},
+                                            {value:25, text:'<digi:easternArabicNumber>25</digi:easternArabicNumber>'},
+                                            {value:50, text:'<digi:easternArabicNumber>50</digi:easternArabicNumber>'},
+                                            {value:100, text:'<digi:easternArabicNumber>100</digi:easternArabicNumber>'},
+                                            {value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}
+                                          ],
 	        	firstPageLinkLabel : 	'<digi:trn jsFriendly="true">first page</digi:trn>',
-	        	previousPageLinkLabel : '<digi:trn jsFriendly="true">prev</digi:trn>',
+                previousPageLinkLabel : '<digi:trn jsFriendly="true">prev</digi:trn>',
 	        	firstPageLinkClass : "yui-pg-first l_sm",
 	        	lastPageLinkClass: "yui-pg-last l_sm",
 	        	nextPageLinkClass: "yui-pg-next l_sm",
@@ -339,14 +357,15 @@
 	            pageLabelBuilder: function (page,paginator) {
 	                var curr = paginator.getCurrentPage();
 	                if(curr==page){
-	                	return "<span class='current-page'>&nbsp;&nbsp;"+page+"&nbsp;&nbsp;</span>|";
+	                	return "<span class='current-page'>&nbsp;&nbsp;"+TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + page)+"&nbsp;&nbsp;</span><span>|</span>";
 	                }
 	                else{
-	                	return page;
+	                	return TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + page);
 	                }
 	                
 	            }
-            });   
+            });
+
             var myConfigs = {
                 initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data
                 dynamicData: true, // Enables dynamic server-driven data
@@ -365,8 +384,8 @@
                 showTeamDetails(record.getData('ID'), record.getData('name'));
                 hideToolTip();
             });
-        
-            //this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
+
+            //this.myDataTable.selectRow(this.myDataTable.getTrEl(0));
             // Programmatically bring focus to the instance so arrow selection works immediately 
             this.myDataTable.focus(); 
             var second=false;
@@ -392,6 +411,8 @@
             }
             });
             </c:if>
+
+            this.myDataTable.subscribe('postRenderEvent', convertNumbers);
           
 
             // Update totalRecords on the fly with value from server
@@ -784,12 +805,12 @@
         paginator[j++]='<span id="act_page_link_first" style="display:none"><a href="#"  class="yui-pg-page" onclick="return showPageContent(1)"><digi:trn>First Page</digi:trn></a> |</span>';
         for(k=1;k<=pages;k++){
         	if(k!=activityCurrentPage){
-        		paginator[j++]='<span id="act_page_link_navi_'+k+'"><a href="#"  class="yui-pg-page" onclick="return showPageContent('+k+')">'+k+'</a> |</span>';
-        		paginator[j++]='<span id="act_page_link_curr_'+k+'" class="yui-pg-current-page yui-pg-page" style="display:none"><span class="current-page">&nbsp;&nbsp;'+k+'&nbsp;&nbsp;</span>|</span>';
+        		paginator[j++]='<span id="act_page_link_navi_'+k+'"><a href="#"  class="yui-pg-page" onclick="return showPageContent('+k+')">'+ <digi:easternArabicNumber>k</digi:easternArabicNumber> +'</a> |</span>';
+        		paginator[j++]='<span id="act_page_link_curr_'+k+'" class="yui-pg-current-page yui-pg-page" style="display:none"><span class="current-page">&nbsp;&nbsp;' + <digi:easternArabicNumber>k</digi:easternArabicNumber> + '&nbsp;&nbsp;</span>|</span>';
         	}
         	else{
-        		paginator[j++]='<span id="act_page_link_navi_'+k+'" style="display:none" ><a href="#" class="yui-pg-page" onclick="return showPageContent('+k+')" >'+k+'</a> |</span>';
-        		paginator[j++]='<span id="act_page_link_curr_'+k+'" class="yui-pg-current-page yui-pg-page"><span class="current-page">&nbsp;&nbsp;'+k+'&nbsp;&nbsp;</span>|</span>';
+        		paginator[j++]='<span id="act_page_link_navi_'+k+'" style="display:none" ><a href="#" class="yui-pg-page" onclick="return showPageContent('+k+')" >' + <digi:easternArabicNumber>k</digi:easternArabicNumber> + '</a> |</span>';
+        		paginator[j++]='<span id="act_page_link_curr_'+k+'" class="yui-pg-current-page yui-pg-page"><span class="current-page">&nbsp;&nbsp;' + <digi:easternArabicNumber>k</digi:easternArabicNumber> + '&nbsp;&nbsp;</span>|</span>';
         	}
         	
         }
@@ -1074,7 +1095,7 @@
 <script language=javascript>
     function showTeamMemberProfile(email){
         var param = "~edit=true~email="+email;
-        previewWorkspaceframe('/aim/default/userProfile.do',param);
+            previewWorkspaceframe('/aim/default/userProfile.do',param);
 	
     }
     function confirmDelete() {
@@ -1157,7 +1178,7 @@
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=1000 align=center>
 
     <tr>
-        <td align=left vAlign=top width=850>
+        <td class="left-align" vAlign=top width=850>
             <table cellPadding=5 cellSpacing=0 width="100%" border=0>
                  
 				<!--	
@@ -1185,7 +1206,7 @@
                 <digi:errors />
         </td>
     </tr>
-    <tr><td align="left">              
+    <tr><td class="left-align">
 	<jsp:include
 									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
 
@@ -1197,7 +1218,7 @@
                     <table bgColor="#cccccc" cellPadding="1" cellSpacing="1" width="100%" valign="top" class="amp-table">
                         <tr bgColor="#ffffff">
                             <td vAlign="top" width="100%">
-                                <table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left" style="font-size:12px;">
+                                <table width="100%" cellspacing="1" cellpadding="1" valign="top" class="left-align" style="font-size:12px;">
                                     <tr><td bgColor=#c7d4db class=box-title height="25" align="center">
                                             <!-- Table title -->
                                     <b><digi:trn>Teams</digi:trn></b>
@@ -1207,7 +1228,7 @@
                         <tr><td>&nbsp;</td></tr>
 
                         <digi:form action="/workspaceManager.do?page=1" method="post">
-                            <tr><td class="box-title" align="left">
+                            <tr><td class="box-title" class="left-align">
                                     <!-- Table title -->
                                     <table width="100%" class="filter" style="font-size:12px;">
                                         <tr>
@@ -1231,7 +1252,7 @@
 														<c:set var="translationAll"><digi:trn>All</digi:trn></c:set>												
 														<category:showoptions firstLine="${translationAll}" name="aimWorkspaceForm" property="workspaceGroup" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>" styleClass="inp-text" />
 													</td>
-                            <td align="left">
+                            <td class="left-align">
                             <c:set var="translation">
                                 <digi:trn>Show</digi:trn>
                             </c:set>
@@ -1264,7 +1285,7 @@
                     <td width="70%" style="padding-top:15px;"align="center" >
                         <div class='yui-skin-sam'>
                             <div id="dynamicdata" class="report"></div>
-                            <div id="dt-pag-nav" style="text-align: left"></div>
+                            <div id="dt-pag-nav" class="left-align"></div>
                             <div id="errors"></div>
                             <div id="tooltipsCtx"></div>
                         </div>
@@ -1293,11 +1314,11 @@
             </td>
         </tr>
         <tr><td>&nbsp;</td></tr>
-        <tr><td class="box-title" align="left">
+        <tr><td class="box-title left-align">
                 <table width="100%"  class="filter" style="font-size:12px;">
                     <tr>
                         <td>&nbsp;</td>
-                        <td align="right">
+                        <td class="right-align">
                     <digi:trn>Select</digi:trn>:&nbsp;
                     <select id="showdataWs" class="inp-text"> 
                         <option value="0"><digi:trn>Members</digi:trn></option> 
@@ -1311,9 +1332,9 @@
 
         <tr>
             <td>
-                <table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" border="0">
+                <table width="100%" cellspacing="0" cellpadding="0" valign="top" class="left-align" border="0">
                     <tr>
-                        <td id="addNew" align="left" style="padding-bottom:13px;">&nbsp;
+                        <td id="addNew" class="left-align" style="padding-bottom:13px;">&nbsp;
                         </td>
                     </tr>
                 </table>

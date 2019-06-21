@@ -9,6 +9,10 @@
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
+<% if(org.digijava.kernel.util.SiteUtils.isEffectiveLangRTL() == true) {%>
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/amp-rtl.css">
+<% } %>
+
 <script language="JavaScript">
 
 
@@ -142,17 +146,17 @@ function childOrgsAdded() {
 <logic:empty name="aimUpdateWorkspaceForm"  property="actionType">
 	<html:hidden property="teamId" />
 	<html:hidden property="dest" />
-	<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0">
+	<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0" class="admin-content">
 		<tr>
 			<td vAlign="top">
 			<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%"
 				class=box-border-nopadding>
 				<tr>
-					<td align=left valign="top">
+					<td class="left-align" valign="top">
 					<table width="100%" cellPadding=2 cellspacing="1" vAlign="top"
-						align="left" bgcolor="#006699">
+						   class="left-align bgcolor="#006699">
 						<tr>
-							<td width="33%" bgcolor="#ECF3FD" align="right"><digi:trn
+							<td width="33%" bgcolor="#ECF3FD" class="right-align"><digi:trn
 								key="aim:workspaceType">
 
 									Workspace Type
@@ -177,7 +181,7 @@ function childOrgsAdded() {
 								</html:option>
 							</html:select></td>
 							
-							<td width="33%" align="left" bgcolor="#ECF3FD">
+							<td width="33%" class="left-align" bgcolor="#ECF3FD">
 								<c:set var="translation">
 										<digi:trn key="btn:addChildWorkspaceGo">
 											GO
@@ -192,9 +196,9 @@ function childOrgsAdded() {
 				</tr>
 				
 				<tr>
-					<td align=left valign="top">
+					<td class="left-align" valign="top">
 					<table width="100%" cellPadding=2 cellspacing="1" valign="top"
-						align="left" bgcolor="#006699">
+						   class="left-align" bgcolor="#006699">
 						<tr>
 							<td align="center" class="textalb" height="20"><digi:trn
 								key="aim:listOfAllTeams">
@@ -207,14 +211,14 @@ function childOrgsAdded() {
 							<td bgcolor="#ECF3FD"><c:if
 								test="${!empty aimUpdateWorkspaceForm.availChildWorkspaces}">
 								<table width="100%" cellSpacing=2 cellPadding=2 vAlign="top"
-									align="left" border="0">
+									   class="left-align" border="0">
 									<c:forEach var="workspaces"
 										items="${aimUpdateWorkspaceForm.availChildWorkspaces}">
 										<c:if test="${workspaces.isolated == false}">
 											<c:if
 												test="${workspaces.ampTeamId != aimUpdateWorkspaceForm.teamId}">
 												<tr>
-													<td width="3" align="left">
+													<td width="3" class="left-align">
 													<html:multibox property="selChildWorkspaces">
 														<c:out value="${workspaces.ampTeamId}" />
 													</html:multibox>
@@ -276,7 +280,7 @@ function childOrgsAdded() {
 	<tr><td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
-				<td align=left valign="top">
+				<td class="left-align" valign="top">
 					<table bgcolor=#f4f4f2 cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
 						<tr bgcolor="#4A687A">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
@@ -363,7 +367,7 @@ function childOrgsAdded() {
 							</tr>
 								<c:forEach var="org" items="${aimUpdateWorkspaceForm.allOrganizations}">
 											<tr>
-												<td width="3" align="left">
+												<td width="3" class="left-align">
 												<html:multibox property="selChildOrgs">
 													<c:out value="${org.ampOrgId}" />
 												</html:multibox>

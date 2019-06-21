@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%@ page import="org.digijava.kernel.request.TLSUtils" %>
 
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css">
@@ -163,6 +164,9 @@ span.extContactDropdownEmail {
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"></script>
+
 <script language="JavaScript">
 
 YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
@@ -203,13 +207,29 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 	        		div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
 	        	}
 	        }
+
+            var isRtl = <%=TLSUtils.getCurrentLocale().getLeftToRight() == false%>;
+            var language = '<%=TLSUtils.getCurrentLocale().getCode()%>';
+            var region = '<%=TLSUtils.getCurrentLocale().getRegion()%>';
+
+            function convertNumbers() {
+                $('.number-to-convert').each(function() {
+                    this.innerText = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, this.innerText);
+                });
+            }
 	        // Create the Paginator  yui-pg-current-page yui-pg-page
 	        var myPaginator = new YAHOO.widget.Paginator({ 
 	        	rowsPerPage:10,
 	        	containers : ["dt-pag-nav"], 
-	        	template : "{CurrentPageReport}&nbsp;<span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}&nbsp;{FirstPageLink}{PageLinks}{LastPageLink}", 
-	        	pageReportTemplate		: "<span class='l_sm'><digi:trn>Showing items</digi:trn></span> <span class='txt_sm_b'>{startRecord} - {endRecord} <digi:trn>of</digi:trn> {totalRecords}</span>",  
-	        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
+	        	template : "{CurrentPageReport}&nbsp;<span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;<span>{RowsPerPageDropdown}&nbsp;{FirstPageLink}{PageLinks}{LastPageLink}</span>",
+	        	pageReportTemplate		: "<span class='l_sm'><digi:trn>Showing items</digi:trn></span> <span class='txt_sm_b number-to-convert'>{startRecord} - {endRecord} <digi:trn>of</digi:trn> {totalRecords}</span>",
+                rowsPerPageOptions		: [
+                    {value:10, text:'<digi:easternArabicNumber>10</digi:easternArabicNumber>'},
+                    {value:25, text:'<digi:easternArabicNumber>25</digi:easternArabicNumber>'},
+                    {value:50, text:'<digi:easternArabicNumber>50</digi:easternArabicNumber>'},
+                    {value:100, text:'<digi:easternArabicNumber>100</digi:easternArabicNumber>'},
+                    {value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}
+                ],
 	        	firstPageLinkLabel : 	"<digi:trn>first page</digi:trn>", 
 	        	previousPageLinkLabel : "<digi:trn>prev</digi:trn>", 
 	        	firstPageLinkClass : "yui-pg-first l_sm",
@@ -218,8 +238,12 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 	        	previousPageLinkClass: "yui-pg-previous l_sm",
 	        	rowsPerPageDropdownClass:"l_sm",
 	        	nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
-	        	lastPageLinkLabel		: '<digi:trn jsFriendly="true">last page</digi:trn>'
-	        });    
+	        	lastPageLinkLabel		: '<digi:trn jsFriendly="true">last page</digi:trn>',
+                pageLabelBuilder: function (page, paginator) {
+					return TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + page);
+                }
+	        });
+
 	        var myConfigs = {
 	            initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data
 	            dynamicData: true, // Enables dynamic server-driven data
@@ -273,7 +297,9 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 				});*/
 				
 	        });
-	
+
+            this.myDataTable.subscribe('postRenderEvent', convertNumbers);
+
 	        // Update totalRecords on the fly with value from server
 	        this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
 	           oPayload.totalRecords = oResponse.meta.totalRecords;
@@ -422,14 +448,14 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 						<tr>
 							<td>
 								<div>
-									<div style="float: left">
+									<div class="left-float">
 									<digi:trn>Search User</digi:trn>:
 										<html:text property="fullname" styleId="userInput"
 											styleClass="inputx"
 											style="width:320px; Font-size: 10pt; height:22px;" />
 										<div id="userAutoComp"></div>
 									</div>
-									<div style="float: left">
+									<div class="left-float">
 										<input type="button" value="<digi:trn>Clear</digi:trn>"
 											class="buttonx_sm" onClick="clearSearchResults()"/>
 									</div>

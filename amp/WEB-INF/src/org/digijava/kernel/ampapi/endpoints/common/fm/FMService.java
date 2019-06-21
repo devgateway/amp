@@ -30,29 +30,29 @@ public class FMService {
      * @param config
      * @return fm settings
      */
-    public static FMSettings getFMSettings(FMSettingsConfig config) {
-        FMSettings fmSettings = new FMSettings();
+    public static FMSettingsResult getFMSettingsResult(FMSettingsConfig config) {
+        FMSettingsResult fmSettingsResult = new FMSettingsResult();
         
         if (config.isValid()) {
             if (config.getReportingFields()) {
-                fmSettings.setReportingFields(ColumnsVisibility.getConfigurableColumns());
+                fmSettingsResult.setReportingFields(ColumnsVisibility.getConfigurableColumns());
             }
             
             if (config.getEnabledModules()) {
-                fmSettings.setEnabledModules(
+                fmSettingsResult.setEnabledModules(
                         FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES));
             }
             
-            provideModulesDetails(fmSettings, config);
+            provideModulesDetails(fmSettingsResult, config);
         } else {
-            fmSettings.setError(String.format("Invalid modules details requested: %s. Allowed are: %s",
+            fmSettingsResult.setError(String.format("Invalid modules details requested: %s. Allowed are: %s",
                     config.getDetailModules(), config.getAllowedModules()));
         }
         
-        return fmSettings;
+        return fmSettingsResult;
     }
     
-    private static void provideModulesDetails(FMSettings fmSettings, FMSettingsConfig config) {
+    private static void provideModulesDetails(FMSettingsResult fmSettingsResult, FMSettingsConfig config) {
         List<String> detailModules = config.getDetailModules();
         
         FMSettingsTree settingsTree = new FMSettingsTree();
@@ -76,17 +76,14 @@ public class FMService {
                 settingsFlat.getModules().put(module, entries);
             } else {
                 FMTree fmTree = getFmSettingsAsTree(module, config.getRequiredPaths());
-                Map<String, Object> enabledPaths = fmTree.asMap(config.getFullEnabledPaths());
-                if (enabledPaths != null) {
-                    settingsTree.getModules().putAll(enabledPaths);
-                }
+                settingsTree.getModules().putAll(fmTree.asFmSettingsTree(config.getFullEnabledPaths()).getModules());
             }
         }
     
         if (config.getDetailsFlat()) {
-            fmSettings.setFmSettings(settingsFlat);
+            fmSettingsResult.setFmSettings(settingsFlat);
         } else {
-            fmSettings.setFmSettings(settingsTree);
+            fmSettingsResult.setFmSettings(settingsTree);
         }
     }
     

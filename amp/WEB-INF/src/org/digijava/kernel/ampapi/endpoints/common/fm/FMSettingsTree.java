@@ -4,12 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class FMSettingsTree {
     
-    @ApiModelProperty(value = "list of FM settings listed as a tree",
-            example = "Detail tree & fully enabled paths =>\n"
+    @JsonProperty(EPConstants.FM_ENABLED)
+    @ApiModelProperty(value = "if the fm path is enabled")
+    private Boolean enabled;
+    
+    @ApiModelProperty(value = "list of FM settings in tree format",
+            example = "Fully enabled paths =>\n"
                     + "    ```\n"
                     + "    \"REPORTING\": {\n"
                     + "         \"Measures\": {\n"
@@ -17,10 +25,10 @@ public class FMSettingsTree {
                     + "             ...\n"
                     + "    ```\n"
                     + "\n"
-                    + "Detail tree & fully enabled paths =>\n"
+                    + "Partial enabled paths =>\n"
                     + "    ```\n"
                     + "    \"REPORTING\": {\n"
-                    + "         \"__enabled\" : true, // omitted if fullEnabledPaths are requested (same below)\n"
+                    + "         \"__enabled\" : true,\n"
                     + "         \"Measures\": {\n"
                     + "             \"__enabled\" : true,\n"
                     + "             \"Actual Disbursements\": {\n"
@@ -28,14 +36,22 @@ public class FMSettingsTree {
                     + "             },\n"
                     + "             ...\n"
                     + "    ```\n")
-    private Map<String, Object> modules = new HashMap<>();
+    private Map<String, FMSettingsTree> modules = new HashMap<>();
+    
+    public Boolean getEnabled() {
+        return enabled;
+    }
+    
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
     @JsonAnyGetter
-    public Map<String, Object> getModules() {
+    public Map<String, FMSettingsTree> getModules() {
         return modules;
     }
     
-    public void setModules(Map<String, Object> modules) {
+    public void setModules(Map<String, FMSettingsTree> modules) {
         this.modules = modules;
     }
 }

@@ -9,11 +9,11 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class FMSettingsFlat {
     
-    @ApiModelProperty(value = "list of FM settings",
+    @ApiModelProperty(value = "list of FM settings in flat format",
             example = "### Use cases\n"
-                    + "1. Detail flat & fully enabled paths => /Activity Form/Organiation/Donor Organization\n"
+                    + "1. Fully enabled paths => /Activity Form/Organiation/Donor Organization\n"
                     + "\n"
-                    + "2. Detail flat & partial enabled paths => "
+                    + "2. Partial enabled paths => "
                     + "/Activity Form[true]/Organiation[false]/Donor Organization[true]\n")
     private Map<String, Set<String>> modules = new HashMap<>();
     

@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class FMSettings<T> {
+public class FMSettingsResult<T> {
     
     @JsonProperty(EPConstants.REPORTING_FIELDS)
     @ApiModelProperty(value = "list of reporting fields", example = "[\"Project Title\", \"Primary Sector\", ...]")

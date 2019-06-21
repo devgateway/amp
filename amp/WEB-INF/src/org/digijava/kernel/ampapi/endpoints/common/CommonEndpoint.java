@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,10 +16,8 @@ import javax.ws.rs.core.MediaType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
-import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettings;
+import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsResult;
 import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsFlat;
 import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsTree;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
@@ -45,9 +42,9 @@ public class CommonEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiMethod(ui = false, name = "fm", id = "")
     @ApiOperation(value = "Provides FM (Feature Manager) settings for the requested options as a tree.")
-    public FMSettings<FMSettingsTree> getFMSettings(
+    public FMSettingsResult<FMSettingsTree> getFMSettings(
             @ApiParam("FM Settings with requested options") FMSettingsConfig config) {
-        return FMService.getFMSettings(config);
+        return FMService.getFMSettingsResult(config);
     }
     
     @POST
@@ -55,10 +52,10 @@ public class CommonEndpoint implements AmpEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiMethod(ui = false, name = "fm", id = "")
     @ApiOperation(value = "Provides FM (Feature Manager) settings for the requested options in flat mode.")
-    public FMSettings<FMSettingsFlat> getFMSettingsFlat(
+    public FMSettingsResult<FMSettingsFlat> getFMSettingsFlat(
             @ApiParam("FM Settings with requested options") FMSettingsConfig config) {
         config.setDetailsFlat(true);
-        return FMService.getFMSettings(config);
+        return FMService.getFMSettingsResult(config);
     }
 
     @POST

@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsTree;
 
 /**
  * A simple representation of an FM section in a tree structure
@@ -72,7 +72,7 @@ public class FMTree {
     }   
     
     /**
-     * Transforms FM tree to a map
+     * Transforms FM tree to a FMSettingsTree
      * @param fullEnabledPaths if true, then each level will have at a minimum "__enabled" (true/false) status
      * @return Map<String, Object> tree
      * <pre>
@@ -89,20 +89,23 @@ public class FMTree {
      *  }
      * </pre>
      */
-    public Map<String, Object> asMap(boolean fullEnabledPaths) {
-        Map<String, Object> mapTree = new HashMap<>();
-        if (!fullEnabledPaths || this.enabled)
+    public FMSettingsTree asFmSettingsTree(boolean fullEnabledPaths) {
+        FMSettingsTree fmSettingsTree = new FMSettingsTree();
+        if (!fullEnabledPaths || this.enabled) {
             if (!fullEnabledPaths) {
-                mapTree.put(EPConstants.FM_ENABLED, this.enabled);
+                fmSettingsTree.setEnabled(this.enabled);
             }
+            Map<String, FMSettingsTree> modules = new HashMap<>();
             for (Entry<String, FMTree> entry : entries.entrySet()) {
                 FMTree value = entry.getValue();
                 if (!fullEnabledPaths || value.enabled) {
-                    mapTree.put(entry.getKey(), value.asMap(fullEnabledPaths));
+                    modules.put(entry.getKey(), value.asFmSettingsTree(fullEnabledPaths));
                 }
             }
+            fmSettingsTree.setModules(modules);
+        }
             
-        return mapTree;
+        return fmSettingsTree;
     }
 
     public boolean isEnabled() {

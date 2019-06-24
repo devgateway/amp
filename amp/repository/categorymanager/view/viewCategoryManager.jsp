@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ page import="java.util.List"%>
  
-<%@page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
+<%@ page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
 <%@ page import="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" %>
 <%@ page import="java.util.Collection" %>
 <digi:instance property="cmCategoryManagerForm" />
@@ -38,7 +38,7 @@ function exportXSL(){
 				<tr>
 					<td valign="center" style="padding-top:10px;">
 					
-					<h1 style="text-align:left;" class="admintitle">
+					<h1 class="admintitle left-align">
 						<digi:trn key="aim:categoryManager">Category Manager</digi:trn>
 					</h1>
 					

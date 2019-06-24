@@ -6,11 +6,11 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
-<%@ page import="java.util.List"%>
 
-<%@page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
 <%@ page import="org.digijava.module.aim.helper.EasternArabicService" %>
 <%@ page import="org.digijava.kernel.request.TLSUtils" %>
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"></script>
 
 <digi:instance property="cmCategoryManagerForm" />
 <bean:define id="myForm" name="cmCategoryManagerForm" toScope="session" type="org.digijava.module.categorymanager.form.CategoryManagerForm" />
@@ -88,8 +88,8 @@
       
     function addNewValue(position) {
     	var subForm				= document.forms["cmCategoryManagerForm"];
-    	var fieldNumStr			= subForm.numOfAdditionalFields.value;
-    	var fieldNum			= parseInt(TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + fieldNumStr));
+    	var fieldNumStr			= TranslationManager.convertNumbersToWesternArabicIfNeeded(isRtl, language, region, "" + subForm.numOfAdditionalFields.value);
+    	var fieldNum			= parseInt(fieldNumStr);
     	if ( isNaN(fieldNumStr) || fieldNum < 1 || fieldNum > 30 ) {
     		alert("${translation6}");
     		return false;

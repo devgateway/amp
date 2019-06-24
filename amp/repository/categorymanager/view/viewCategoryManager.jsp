@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ page import="java.util.List"%>
  
-<%@page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
+<%@ page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
 <%@ page import="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" %>
 <%@ page import="java.util.Collection" %>
 <digi:instance property="cmCategoryManagerForm" />
@@ -33,19 +33,19 @@ function exportXSL(){
 <digi:form action="/categoryManager.do" method="post">
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" align=center class="box-border-nopadding">
 	<tr>
-		<td align=left class=r-dotted-lg valign="top" width=750>
+		<td class="r-dotted-lg left-align" valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<td valign="center" style="padding-top:10px;">
 					
-					<h1 style="text-align:left;" class="admintitle">
+					<h1 class="admintitle left-align">
 						<digi:trn key="aim:categoryManager">Category Manager</digi:trn>
 					</h1>
 					
 					</td>
 				</tr>
 				<tr>
-						<td align="left">
+						<td class="left-align">
 						<jsp:include
 									page="/repository/aim/view/adminXSLExportToolbar.jsp" /></td>
 					</tr>
@@ -93,7 +93,7 @@ function exportXSL(){
 								<i><bean:write name="category" property="keyName" /></i>
 								)
 							</td>
-							<td align="left" class="inside">
+							<td class="inside left-align">
 								<logic:notEmpty name="category" property="description">
 									<digi:trn key='<%= CategoryManagerUtil.getTranslationKeyForCategoryDescription( category.getKeyName() ) %>'>
 										<bean:write name="category" property="description" />
@@ -101,7 +101,7 @@ function exportXSL(){
 								</logic:notEmpty>
 								&nbsp;
 							</td>
-							<td align="left" class="inside">
+							<td class="inside left-align">
 								<ul>
 								<%
 									Collection<AmpCategoryValue> orderedPossibleValues = CategoryManagerUtil.getOrderedPossibleValues(category);
@@ -125,7 +125,7 @@ function exportXSL(){
 								</logic:iterate>
 								</ul>
 							</td>
-							<td align="left" class="inside ignore">
+							<td class="inside ignore left-align">
 								<% if (category.isMultiselect()) {%>
 									<img src= "../ampTemplate/images/bullet_green.gif" border="0">
 								<% }
@@ -147,7 +147,7 @@ function exportXSL(){
 								</digi:trn>
 							</td>
 							<!-- this invisible td for export purpose, we export only options that are selected -->
-							<td align="left" style="display:none">
+							<td class="left-align" style="display:none">
 								<ul>
 								<% if (category.isMultiselect()) {%>
 									<li><digi:trn>Multiselect</digi:trn></li>
@@ -159,7 +159,7 @@ function exportXSL(){
 								<% } %>
 								</ul>
 							</td>
-							<td align="left" class="inside ignore">
+							<td class="inside ignore left-align">
 								<ul>
 									<li>
 										<digi:link paramId="edit" paramName="category" paramProperty="id"  href='/categoryManager.do'>

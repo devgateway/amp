@@ -453,7 +453,8 @@ public class AmpReportGenerator extends ReportGenerator {
             //System.out.println(fundingCol.prettyPrint());
         }
         
-        PledgesToActivitiesBridge.BridgeItem correspondingPledgeView = PledgesToActivitiesBridge.activityViewToPledgeView.get(rcol.getColumn().getExtractorView());
+        PledgesToActivitiesBridge.BridgeItem correspondingPledgeView =
+                PledgesToActivitiesBridge.ACTIVITY_VIEW_TO_PLEDGE_VIEW.get(rcol.getColumn().getExtractorView());
         if (correspondingPledgeView != null) {
             Collection<Cell> nameCells = extractPledgeEquivalentColumn(rcol, correspondingPledgeView.pledgeView);
             CellColumn normalCol = (CellColumn) rawColumns.getColumnByName(rcol.getColumn().getColumnName());

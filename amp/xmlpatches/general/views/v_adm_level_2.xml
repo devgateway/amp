@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../doc/xmlpatcher.xsd ">
-	<jira>AMP-28693</jira>
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-14167</jira>
 	<keyword>Views</keyword>
-	<author>Octavian Ciubotaru</author>
+	<author>Alexandru Artimon</author>
 	<description>recreate view, this will always be the last version of the view</description>
 	<trigger type="all">
 		<condition type="custom">
@@ -19,12 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_communal_section;
-			    CREATE OR REPLACE VIEW v_communal_section AS
-					SELECT ra.amp_activity_id, loc.communal_section_name, loc.communal_section_id, sum(ra.location_percentage) AS percentage, COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
-					FROM amp_activity_location ra JOIN ni_all_locations_with_levels loc on loc.amp_location_id = ra.amp_location_id
-					GROUP BY ra.amp_activity_id, loc.communal_section_id, loc.communal_section_name;
-			</lang>
+				DROP VIEW IF EXISTS v_adm_level_2;
+				CREATE OR REPLACE VIEW v_adm_level_2 AS
+			    	SELECT ra.amp_activity_id, loc.adm_level_2_name, loc.adm_level_2_id, sum(ra.location_percentage) AS percentage, COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
+						FROM amp_activity_location ra JOIN ni_all_locations_with_levels loc on loc.amp_location_id = ra.amp_location_id
+						GROUP BY ra.amp_activity_id, loc.adm_level_2_id, loc.adm_level_2_name;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

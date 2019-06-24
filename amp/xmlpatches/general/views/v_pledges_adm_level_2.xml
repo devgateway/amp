@@ -19,12 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_zones;
-				CREATE OR REPLACE VIEW v_zones AS 
-			    	SELECT ra.amp_activity_id, loc.zone_name, loc.zone_id, sum(ra.location_percentage) AS percentage, COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
-						FROM amp_activity_location ra JOIN ni_all_locations_with_levels loc on loc.amp_location_id = ra.amp_location_id
-						GROUP BY ra.amp_activity_id, loc.zone_id, loc.zone_name;
-        	</lang>
+				DROP VIEW IF EXISTS v_pledges_adm_level_2 CASCADE;
+			   	CREATE OR REPLACE VIEW v_pledges_adm_level_2 AS
+					SELECT ra.pledge_id, loc.adm_level_2_name, loc.adm_level_2_id, sum(ra.location_percentage) AS percentage, COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
+						FROM amp_funding_pledges_location ra JOIN ni_all_locations_with_levels loc on loc.acvl_id = ra.location_id
+						GROUP BY ra.pledge_id, loc.adm_level_2_id, loc.adm_level_2_name;
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

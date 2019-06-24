@@ -644,15 +644,15 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, "v_nationalobjectives_level_7", NPO_DIM_USG, LEVEL_7);
         with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, "v_nationalobjectives_level_8", NPO_DIM_USG, LEVEL_8);
 
-        with_percentage(ColumnConstants.COUNTRY, "v_countries", LOC_DIM_USG, LEVEL_COUNTRY);
-        with_percentage(ColumnConstants.REGION, "v_regions", LOC_DIM_USG, LEVEL_REGION);
-        with_percentage(ColumnConstants.ZONE, "v_zones", LOC_DIM_USG, LEVEL_ZONE);
-        with_percentage(ColumnConstants.DISTRICT, "v_districts", LOC_DIM_USG, LEVEL_DISTRICT);
-        with_percentage(ColumnConstants.COMMUNAL_SECTION, "v_communal_section", LOC_DIM_USG, LEVEL_COMMUNAL_SECTION);
+        with_percentage(ColumnConstants.COUNTRY, "v_adm_level_0", LOC_DIM_USG, LEVEL_COUNTRY);
+        with_percentage(ColumnConstants.REGION, "v_adm_level_1", LOC_DIM_USG, LEVEL_REGION);
+        with_percentage(ColumnConstants.ZONE, "v_adm_level_2", LOC_DIM_USG, LEVEL_ZONE);
+        with_percentage(ColumnConstants.DISTRICT, "v_adm_level_3", LOC_DIM_USG, LEVEL_DISTRICT);
+        with_percentage(ColumnConstants.COMMUNAL_SECTION, "v_adm_level_4", LOC_DIM_USG, LEVEL_COMMUNAL_SECTION);
         with_percentage(ColumnConstants.LOCATION, "v_raw_locations", LOC_DIM_USG, LEVEL_RAW);
         with_percentage(ColumnConstants.GEOCODE, "v_geocodes", LOC_DIM_USG, LEVEL_RAW);
         
-        single_dimension(ColumnConstants.REGIONAL_REGION, "v_regions", LOC_DIM_USG.getLevelColumn(LEVEL_REGION));
+        single_dimension(ColumnConstants.REGIONAL_REGION, "v_adm_level_1", LOC_DIM_USG.getLevelColumn(LEVEL_REGION));
 
         single_dimension(ColumnConstants.GRACE_PERIOD, "v_grace_period", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
         date_column(ColumnConstants.MATURITY, "v_maturity", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
@@ -813,11 +813,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         with_percentage(ColumnConstants.PLEDGES_QUINARY_SUBSUBSECTORS, "v_pledges_quinary_sectors_subsubsectors",
                 Q5S_DIM_USG, LEVEL_SUBSUBSECTOR);
 
-        with_percentage(ColumnConstants.PLEDGES_COUNTRIES, "v_pledges_countries", LOC_DIM_USG, LEVEL_COUNTRY);
-        with_percentage(ColumnConstants.PLEDGES_REGIONS, "v_pledges_regions", LOC_DIM_USG, LEVEL_REGION);
-        with_percentage(ColumnConstants.PLEDGES_ZONES, "v_pledges_zones", LOC_DIM_USG, LEVEL_ZONE);
-        with_percentage(ColumnConstants.PLEDGES_DISTRICTS, "v_pledges_districts", LOC_DIM_USG, LEVEL_DISTRICT);
-        with_percentage(ColumnConstants.PLEDGES_COMMUNAL_SECTION, "v_pledges_communal_sections", LOC_DIM_USG,
+        with_percentage(ColumnConstants.PLEDGES_COUNTRIES, "v_pledges_adm_level_0", LOC_DIM_USG, LEVEL_COUNTRY);
+        with_percentage(ColumnConstants.PLEDGES_REGIONS, "v_pledges_adm_level_1", LOC_DIM_USG, LEVEL_REGION);
+        with_percentage(ColumnConstants.PLEDGES_ZONES, "v_pledges_adm_level_2", LOC_DIM_USG, LEVEL_ZONE);
+        with_percentage(ColumnConstants.PLEDGES_DISTRICTS, "v_pledges_adm_level_3", LOC_DIM_USG, LEVEL_DISTRICT);
+        with_percentage(ColumnConstants.PLEDGES_COMMUNAL_SECTION, "v_pledges_adm_level_4", LOC_DIM_USG,
                 LEVEL_COMMUNAL_SECTION);
 
         degenerate_dimension(ColumnConstants.PLEDGES_AID_MODALITY, "v_pledges_aid_modality", catsDimension);

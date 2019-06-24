@@ -19,11 +19,11 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_pledges_communal_sections CASCADE;
-		    	CREATE OR REPLACE VIEW v_pledges_communal_sections AS
-		    		SELECT ra.pledge_id, loc.communal_section_name, loc.communal_section_id, sum(ra.location_percentage) AS percentage, COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
+				DROP VIEW IF EXISTS v_pledges_adm_level_4 CASCADE;
+		    	CREATE OR REPLACE VIEW v_pledges_adm_level_4 AS
+		    		SELECT ra.pledge_id, loc.adm_level_4_name, loc.adm_level_4_id, sum(ra.location_percentage) AS percentage, COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
 						FROM amp_funding_pledges_location ra JOIN ni_all_locations_with_levels loc on loc.acvl_id = ra.location_id
-						GROUP BY ra.pledge_id, loc.communal_section_id, loc.communal_section_name;
+						GROUP BY ra.pledge_id, loc.adm_level_4_id, loc.adm_level_4_name;
        		</lang>
 		</script>
 	</apply>

@@ -197,8 +197,8 @@ function showHidePositions(id,selectedPosition) {
 	            	    }
 	            	 }
 	    			if(!skip){
-	    			    label = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + label);
-	    				select.options[index]=new Option(label, currvalue, false, selected);	
+	    			    labelText = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + label);
+	    				select.options[index]=new Option(labelText, currvalue, false, selected);
 		    			index++;
 	    			}
 	    			

@@ -20,6 +20,19 @@ var easternToWesternArabicSymbolMap = {
     '0': '٠'
 }
 
+var westernToEasternArabicSymbolMap = {
+    '١': '1',
+    '٢': '2',
+    '٣': '3',
+    '٤': '4',
+    '٥': '5',
+    '٦': '6',
+    '٧': '7',
+    '٨': '8',
+    '٩': '9',
+    '٠': '0'
+}
+
 function TranslationManager() {
 	if (!(this instanceof TranslationManager)) {
 		throw new TypeError("TranslationManager constructor cannot be called as a function.");
@@ -59,9 +72,23 @@ TranslationManager.convertNumbersToEasternArabic = function(input) {
     }).replace(/,/g, '،');
 }
 
+TranslationManager.convertNumbersToWesternArabic = function(input) {
+    return input.replace(/[٠١٢٣٤٥٦٧٨٩]/g, function (match) {
+        return westernToEasternArabicSymbolMap[match];
+    }).replace(/,/g, '،');
+}
+
 TranslationManager.convertNumbersToEasternArabicIfNeeded = function(isRtl, language, region, input) {
     if (isRtl && language === "ar" && region === "EG") {
         return TranslationManager.convertNumbersToEasternArabic(input);
+    }
+
+    return input;
+}
+
+TranslationManager.convertNumbersToWesternArabicIfNeeded = function(isRtl, language, region, input) {
+    if (isRtl && language === "ar" && region === "EG") {
+        return TranslationManager.convertNumbersToWesternArabic(input);
     }
 
     return input;

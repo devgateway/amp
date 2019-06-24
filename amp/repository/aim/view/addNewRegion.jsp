@@ -1,24 +1,27 @@
 <%@ page pageEncoding="UTF-8" %>
 
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
-
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
-
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
-
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
+<%@ page import="org.digijava.kernel.request.TLSUtils" %>
+
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"></script>
 
 <digi:context name="digiContext" property="context"/>
 
 <digi:instance property="aimNewAddLocationForm" />
 
 <script language="JavaScript">
+    var isRtl = <%=TLSUtils.getCurrentLocale().getLeftToRight() == false%>;
+    var language = '<%=TLSUtils.getCurrentLocale().getCode()%>';
+    var region = '<%=TLSUtils.getCurrentLocale().getRegion()%>';
+
     function validate(string, length) {
         if (string.length > length) {
             return false;
@@ -75,12 +78,16 @@
                 return false;
             }
         } else {
-            if (document.aimNewAddLocationForm.gsLat.value && !checkDecimal(document.aimNewAddLocationForm.gsLat.value)) {
+            var gsLat = TranslationManager.convertNumbersToWesternArabicIfNeeded(isRtl, language, region, document.aimNewAddLocationForm.gsLat.value);
+
+            if (gsLat && !checkDecimal(gsLat)) {
                 alert('Please enter only numerical values into Latitude Field.');
                 document.aimNewAddLocationForm.gsLat.focus();
                 return false;
             }
-            if (document.aimNewAddLocationForm.gsLong.value && !checkDecimal(document.aimNewAddLocationForm.gsLong.value)) {
+
+            var gsLong = TranslationManager.convertNumbersToWesternArabicIfNeeded(isRtl, language, region, "" + document.aimNewAddLocationForm.gsLat.value);
+            if (gsLong && !checkDecimal(gsLong)) {
                 alert('Please enter only numerical values into Longitude Field.');
                 document.aimNewAddLocationForm.gsLong.focus();
                 return false;
@@ -235,23 +242,19 @@ function unload() {
                                                                         <c:otherwise>
                                                                             <tr>
                                                                                 <td class="label-column"><digi:trn key="aim:lcCode">Code</digi:trn></td>
-                                                                                <td class="data-column"><html:text property="code"
-                                                                                                                        size="10" /></td>
+                                                                                <td class="data-column"><digi:easternArabicNumber><html:text property="code" size="10" /></digi:easternArabicNumber></td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="label-column"><digi:trn key="aim:lcLatitude">Latitude</digi:trn></td>
-                                                                                <td class="data-column"><html:text property="gsLat"
-                                                                                                                        size="10" /></td>
+                                                                                <td class="data-column"><digi:easternArabicNumber><html:text property="gsLat" size="10" /></digi:easternArabicNumber></td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="label-column"><digi:trn key="aim:lcLongitude">Longitude</digi:trn></td>
-                                                                                <td class="data-column"><html:text property="gsLong"
-                                                                                                                        size="10" /></td>
+                                                                                <td class="data-column"><digi:easternArabicNumber><html:text property="gsLong" size="10" /></digi:easternArabicNumber></td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="label-column"><digi:trn key="aim:lcGeoCode">Geo Code</digi:trn></td>
-                                                                                <td class="data-column"><html:text
-                                                                                    property="geoCode" size="10" /></td>
+                                                                                <td class="data-column"><digi:easternArabicNumber><html:text property="geoCode" size="10" /></digi:easternArabicNumber></td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="label-column"><digi:trn key="aim:lcDescription">Description</digi:trn></td>
@@ -327,7 +330,7 @@ function unload() {
 												Other links
 												</digi:trn>
 											</td>
-											<td class="header-corner" height="17" width=17>&nbsp;
+											<td class="corner-right">&nbsp;
 												
 											</td>
 										</tr>

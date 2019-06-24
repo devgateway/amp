@@ -1,6 +1,8 @@
 package org.digijava.module.aim.action;
 
 import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.BROWN;
+import static org.apache.poi.ss.usermodel.ReadingOrder.LEFT_TO_RIGHT;
+import static org.apache.poi.ss.usermodel.ReadingOrder.RIGHT_TO_LEFT;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,12 +19,14 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.ReadingOrder;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.form.DynLocationManagerForm;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -57,6 +61,7 @@ public class ExportRegionManager2XSL extends Action {
 
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet("export");
+        sheet.setRightToLeft(SiteUtils.isEffectiveLangRTL());
         
         // title cells
         HSSFCellStyle titleCS = wb.createCellStyle();
@@ -134,6 +139,11 @@ public class ExportRegionManager2XSL extends Action {
 
     private void generateLocationHierarchy(Collection<AmpCategoryValueLocations> locations, Integer[] rowIndex, HSSFSheet sheet,
             boolean hideEmptyCountries,int countryLayerIndex,int lastImpLevelIndex ) {
+    
+        HSSFCellStyle numberStyle = sheet.getWorkbook().createCellStyle();
+        numberStyle.setAlignment(HorizontalAlignment.RIGHT);
+        ReadingOrder readingOrder = SiteUtils.isEffectiveLangRTL() ? RIGHT_TO_LEFT : LEFT_TO_RIGHT;
+        numberStyle.setReadingOrder(readingOrder.getCode());
         
         if (locations != null) {
             for (AmpCategoryValueLocations location : locations) {
@@ -149,6 +159,7 @@ public class ExportRegionManager2XSL extends Action {
                     HSSFRow row = sheet.createRow(rowIndex[0]++);
                     HSSFCell cell = row.createCell(cellIndex++);
                     cell.setCellValue(location.getId());
+                    cell.setCellStyle(numberStyle);
                     
                     List<String> parents = DynLocationManagerUtil.getParents(location);
                     for(String parent : parents){
@@ -159,10 +170,13 @@ public class ExportRegionManager2XSL extends Action {
                     cellIndex=lastImpLevelIndex;
                     cell = row.createCell(cellIndex++);
                     cell.setCellValue(location.getGsLat());
+                    cell.setCellStyle(numberStyle);
                     cell = row.createCell(cellIndex++);
                     cell.setCellValue(location.getGsLong());
+                    cell.setCellStyle(numberStyle);
                     cell = row.createCell(cellIndex++);
                     cell.setCellValue(location.getGeoCode());
+                    cell.setCellStyle(numberStyle);
                     cell = row.createCell(cellIndex++);
                     cell.setCellValue(location.getIso());
                     cell = row.createCell(cellIndex++);

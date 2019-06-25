@@ -40,7 +40,7 @@ table.fixed-layout {table-layout:fixed; width: 100%;}
 .inputx, td input.inp-text, table#addUserContainer tr td input,   td select {border:1px solid #D0D0D0; background-color:#FFFFFF;}
 td select.inp-text-orgType{width:250px;}
 td input#keyWordTextField{height:22px;}
-table#addUserContainer tr td input {border:1px solid #D0D0D0; background-color:#FFFFFF;margin:0px 0px 0px 5px; width:150px;}
+table#addUserContainer tr td input {border:1px solid #D0D0D0; background-color:#FFFFFF;margin:0px 0px 0px 5px;}
 table tr td.f-names{font-weight:bold;}
 .insidex{font-size:11px;color:#000000;padding:2px;margin:5px}
 .dropdwn_sm {border:1px solid #D0D0D0; font-size:11px; background-color:#FFFFFF;}
@@ -1484,6 +1484,14 @@ div.footer {
 
 .yui-panel .bd {
     direction: rtl;
+}
+
+.input-add-user {
+    width:150px;
+}
+
+.padding-5 {
+    padding: 5px;
 }
 
 .member-form-title {

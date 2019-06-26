@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@ page import="org.digijava.kernel.request.TLSUtils" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -28,10 +29,17 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-folder-tree-static.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-context-menu.js"/>"></script>
 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"></script>
+
 <link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
 <link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/context-menu.css" />" />
 
 <script type="text/javascript">
+
+var isRtl = <%=TLSUtils.getCurrentLocale().getLeftToRight() == false%>;
+var language = '<%=TLSUtils.getCurrentLocale().getCode()%>';
+var region = '<%=TLSUtils.getCurrentLocale().getRegion()%>';
+
 function openFieldPermissionsPopup(fieldId) {
 			<digi:context name="assignFieldPermissionsURL" property="context/module/moduleinstance/assignFieldPermissions.do?fieldId=" />
 			openURLinWindow("<%=assignFieldPermissionsURL%>"+fieldId,280, 325);
@@ -345,7 +353,8 @@ function searchFunction()
 		scrollArray[0].style.color = '#EEEEEE';
 		showTree(scrollTreeArray[0]);
 		scrollArray[0].scrollIntoView(true);
-		setSearchMessage( countMatches + " <digi:trn key="fm:search:matchesFound">items found</digi:trn>.");
+		setSearchMessage(TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, countMatches.toString())
+			+ " <digi:trn key="fm:search:matchesFound">items found</digi:trn>.");
 	}
 	else
 	{

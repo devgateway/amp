@@ -22,11 +22,11 @@ public final class LocationsDimension extends SqlSourcedNiDimension {
                 "adm_level_2_id", "adm_level_3_id", "adm_level_4_id"));
     }
     
-    public static final int LEVEL_COUNTRY = 0;
-    public static final int LEVEL_REGION = 1;
-    public static final int LEVEL_ZONE = 2;
-    public static final int LEVEL_DISTRICT = 3;
-    public static final int LEVEL_COMMUNAL_SECTION = 4;
+    public static final int ADM_LEVEL_0 = 0;
+    public static final int ADM_LEVEL_1 = 1;
+    public static final int ADM_LEVEL_2 = 2;
+    public static final int ADM_LEVEL_3 = 3;
+    public static final int ADM_LEVEL_4 = 4;
     public static final int LEVEL_RAW = NiDimension.LEVEL_ALL_IDS;
     
 

@@ -113,9 +113,9 @@ public class ColumnFilterGenerator {
         }});
         
         put("relatedLocations", new ArrayList<String>(){{
-            add("Pledges Regions");
-            add("Pledges Zones");
-            add("Pledges Districts");
+            add("Pledges Administrative Level 1");
+            add("Pledges Administrative Level 2");
+            add("Pledges Administrative Level 3");
         }});
         
         put("relatedPrimaryProgs", new ArrayList<String>(){{

@@ -32,8 +32,8 @@ public final class LocationUtil {
     private LocationUtil() { }
     
     public static final List<String> LOCATIONS_COLUMNS_NAMES = Collections.unmodifiableList( 
-            Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, 
-            ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
+            Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_0, ColumnConstants.LOCATION_ADM_LEVEL_1,
+                ColumnConstants.LOCATION_ADM_LEVEL_2, ColumnConstants.LOCATION_ADM_LEVEL_3, ColumnConstants.LOCATION));
 
     //End Search Location.
     public static AmpLocation getAmpLocationByCVLocation(Long ampCVLocationId) {

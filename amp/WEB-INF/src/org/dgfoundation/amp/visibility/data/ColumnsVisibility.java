@@ -342,19 +342,18 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Pledges Detail Date Range", ColumnConstants.PLEDGES_DETAIL_DATE_RANGE);
             put("Pledges Detail End Date", ColumnConstants.PLEDGES_DETAIL_END_DATE);
             put("Pledges Detail Start Date", ColumnConstants.PLEDGES_DETAIL_START_DATE);
-            put("Pledges Districts", ColumnConstants.PLEDGES_DISTRICTS);
+            put("Pledges Administrative Level 3", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_3);
             put("Pledges Donor Group", ColumnConstants.PLEDGES_DONOR_GROUP);
             put("Pledges National Plan Objectives", ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
             put("Pledges Programs", ColumnConstants.PLEDGES_PROGRAMS);
-            put("Pledges Regions", ColumnConstants.PLEDGES_REGIONS);
+            put("Pledges Administrative Level 1", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1);
             put("Pledges Secondary Programs", ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
             put("Pledges Secondary Sectors", ColumnConstants.PLEDGES_SECONDARY_SECTORS);
-            put("Pledges Sectors", ColumnConstants.PLEDGES_SECTORS);
             put("Pledges Tertiary Programs", ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
             put("Pledges Tertiary Sectors", ColumnConstants.PLEDGES_TERTIARY_SECTORS);
             put("Pledges Type Of Assistance", ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
             put("Pledges Titles", ColumnConstants.PLEDGES_TITLES);
-            put("Pledges Zones", ColumnConstants.PLEDGES_ZONES);
+            put("Pledges Administrative Level 2", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_2);
             put("Primary Sector Code Official", ColumnConstants.PRIMARY_SECTOR_CODE_OFFICIAL);
             put("Project Age Ratio", ColumnConstants.PROJECT_AGE_RATIO);
             put("Project Implementation Delay", ColumnConstants.PROJECT_IMPLEMENTATION_DELAY);
@@ -432,9 +431,13 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
     
     
     protected static final Map<String, Collection<String>> dependencyTypeAll = new HashMap<String, Collection<String>>() {{
-        put(ColumnConstants.COUNTRY, Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_COUNTRY));
-        put(ColumnConstants.REGION, Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_REGION));
-        put(ColumnConstants.ZONE, Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_ZONE));
-        put(ColumnConstants.DISTRICT, Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_DISTRICT));
+        put(ColumnConstants.LOCATION_ADM_LEVEL_0,
+                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_COUNTRY));
+        put(ColumnConstants.LOCATION_ADM_LEVEL_1,
+                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_REGION));
+        put(ColumnConstants.LOCATION_ADM_LEVEL_2,
+                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_ZONE));
+        put(ColumnConstants.LOCATION_ADM_LEVEL_3,
+                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_DISTRICT));
     }};
 }

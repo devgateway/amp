@@ -192,7 +192,7 @@ public class HeatMapConfigService {
 
     private static List<String> getLocationsForHeatMap() {
         List<String> locationColumns = new ArrayList<>(LocationUtil.LOCATIONS_COLUMNS_NAMES);
-        locationColumns.remove(ColumnConstants.COUNTRY);
+        locationColumns.remove(ColumnConstants.LOCATION_ADM_LEVEL_0);
         locationColumns.remove(ColumnConstants.LOCATION);
         return locationColumns;
     }

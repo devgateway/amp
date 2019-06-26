@@ -634,7 +634,9 @@ public class AmpReportGenerator extends ReportGenerator {
             fakeMc.setColumn(c);
             //NEVER apply this for regional reports with regional metaCell:
             if (reportMetadata.getType().equals(ArConstants.REGIONAL_TYPE) &&
-                    (fakeMc.getColumn().getName().equals(ArConstants.REGION) || fakeMc.getColumn().getName().equals(ArConstants.DISTRICT) || fakeMc.getColumn().getName().equals(ArConstants.ZONE) ))
+                    (fakeMc.getColumn().getName().equals(ArConstants.COLUMN_LOC_ADM_LEVEL_1)
+                            || fakeMc.getColumn().getName().equals(ArConstants.COLUMN_LOC_ADM_LEVEL_3)
+                            || fakeMc.getColumn().getName().equals(ArConstants.COLUMN_LOC_ADM_LEVEL_2)))
                 continue;
 
             for(String value:cellValues){

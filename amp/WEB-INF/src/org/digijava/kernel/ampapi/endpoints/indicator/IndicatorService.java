@@ -14,7 +14,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
@@ -68,7 +67,6 @@ public class IndicatorService {
         }
 
         AmpIndicatorLayer indicatorLayer = DynLocationManagerUtil.getIndicatorLayerById(id);
-        JsonBean indicatorJson = null;
         if (indicatorLayer!=null) {
             return IndicatorUtils.buildIndicatorLayerJson(indicatorLayer);
         }

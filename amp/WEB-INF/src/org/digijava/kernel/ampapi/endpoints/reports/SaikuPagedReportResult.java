@@ -5,14 +5,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * @author Octavian Ciubotaru
  */
 public class SaikuPagedReportResult extends PagedReportResult {
 
-    private JsonBean query;
+    private Map<String, List<String>> query;
 
     private List<String> cellset;
 
@@ -24,11 +23,11 @@ public class SaikuPagedReportResult extends PagedReportResult {
 
     private String reportTotalsString;
 
-    public JsonBean getQuery() {
+    public Map<String, List<String>> getQuery() {
         return query;
     }
 
-    public void setQuery(JsonBean query) {
+    public void setQuery(Map<String, List<String>> query) {
         this.query = query;
     }
 

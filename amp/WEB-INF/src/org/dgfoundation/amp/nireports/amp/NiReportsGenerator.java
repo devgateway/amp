@@ -39,8 +39,8 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
     /**
      * constructs an instance
      * @param schema the schema to use
-     * @param reportAreaClazz the ReportArea implementation to be used
      * @param logReport whether to log execution nodes to the DB
+     * @param outputSettings the Output Settings to be used
      */
     public NiReportsGenerator(NiReportsSchema schema, boolean logReport, OutputSettings outputSettings) {
         super(schema);
@@ -67,8 +67,8 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
     protected void writeRunNodeToDatabase(RunNode node, long wallclockTime) {
         PersistenceManager.getSession().doWork(conn -> {
             List<String> columnNames = Arrays.asList("name", "totaltime", "wallclocktime", "data");
-            String json = node.asJsonBean().asJsonString();
-            List<Object> values = Arrays.asList(node.getName(), node.getTotalTime(), wallclockTime, json);
+            String details = node.getDetailsAsString();
+            List<Object> values = Arrays.asList(node.getName(), node.getTotalTime(), wallclockTime, details);
             SQLUtils.insert(conn, "amp_nireports_log", "id", "amp_nireports_log_id_seq", columnNames, Arrays.asList(values));
         });
     }

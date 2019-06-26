@@ -31,11 +31,11 @@ import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.FilterValue;
+import org.digijava.kernel.ampapi.endpoints.dto.GisActivity;
 import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.SectorUtil;
@@ -65,8 +65,8 @@ public class ActivityService {
 
     public static ActivityList getActivities(PerformanceFilterParameters config, List<String> activitIds, Integer page,
             Integer pageSize) {
-        boolean applyFilter=false;
-        List<JsonBean> activities=new ArrayList<JsonBean>();
+        
+         List<GisActivity> activities = new ArrayList<>();
         
         //we check if we have filter by keyword
         LinkedHashMap<String, Object> filters = null;
@@ -79,8 +79,7 @@ public class ActivityService {
         }
         
         
-        String name= "ActivityList";
-        boolean doTotals=true;
+        String name = "ActivityList";
         ReportSpecificationImpl spec = new ReportSpecificationImpl(name, ArConstants.DONOR_TYPE);
 
         spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
@@ -128,24 +127,45 @@ public class ActivityService {
         Integer count=report.reportContents.getChildren().size();
 
         for (ReportArea reportArea : ll) {
-            JsonBean activity = new JsonBean();
-            JsonBean matchesFilters = new JsonBean();
+            GisActivity activity = new GisActivity();
+            Map<String, Object> matchesFilters = new HashMap<>();
             Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
             Set<ReportOutputColumn> col = row.keySet();
             for (ReportOutputColumn reportOutputColumn : col) {
                 //Filters should be grouped together.
-                
+                String columnName = reportOutputColumn.originalColumnName;
                 if (columnsToProvide.contains(reportOutputColumn.originalColumnName)) {
-                    activity.set(reportOutputColumn.originalColumnName, row.get(reportOutputColumn).value);
-                    if (reportOutputColumn.originalColumnName.equals(ColumnConstants.AMP_ID)) {
+                    String value = row.get(reportOutputColumn).value.toString();
+                    if (columnName.equals(ColumnConstants.PROJECT_TITLE)) {
+                        activity.setProjectTitle(value);
+                    } else if (columnName.equals(ColumnConstants.DONOR_AGENCY)) {
+                        activity.setDonorAgency(value);
+                    } else if (columnName.equals(ColumnConstants.EXECUTING_AGENCY)) {
+                        activity.setExecutingAgency(value);
+                    } else if (columnName.equals(ColumnConstants.PRIMARY_SECTOR)) {
+                        activity.setPrimarySector(value);
+                    } else if (columnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)) {
+                        activity.setActualCommitments(new Double(value));
+                    } else if (columnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
+                        activity.setActualDisbursements(new Double(value));
+                    } else if (columnName.equals(MeasureConstants.PLANNED_COMMITMENTS)) {
+                        activity.setPlannedCommitments(new Double(value));
+                    } else if (columnName.equals(MeasureConstants.PLANNED_DISBURSEMENTS)) {
+                        activity.setPlannedDisbursements(new Double(value));
+                    } else if (columnName.equals(MeasureConstants.BILATERAL_SSC_COMMITMENTS)) {
+                        activity.setBilateralSSCCommitments(new Double(value));
+                    } else if (columnName.equals(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS)) {
+                        activity.setTriangularSSCCommitments(new Double(value));
+                    } else if (columnName.equals(ColumnConstants.AMP_ID)) {
+                        activity.setAmpId(value);
                         long activityId = ((IdentifiedReportCell) row.get(reportOutputColumn)).entityId;
-                        activity.set(ColumnConstants.ACTIVITY_ID, activityId);
-                        activity.set("ampUrl", ActivityGatekeeper.buildPreviewUrl(String.valueOf(activityId)));
+                        activity.setId(activityId);
+                        activity.setAmpUrl(ActivityGatekeeper.buildPreviewUrl(String.valueOf(activityId)));
                     }
                 } else {
                     IdentifiedReportCell idReportCell = (IdentifiedReportCell) row.get(reportOutputColumn);
                     Set<Long> ids = idReportCell.entitiesIdsValues == null ? null : idReportCell.entitiesIdsValues.keySet();
-                    if (reportOutputColumn.originalColumnName.equals(ColumnConstants.PRIMARY_SECTOR)) {
+                    if (columnName.equals(ColumnConstants.PRIMARY_SECTOR)) {
                         List<FilterValue> sectors = new ArrayList<>();
                         for (Long id : ids) {
                             AmpSector ampSector = SectorUtil.getAmpSector(id);
@@ -155,13 +175,13 @@ public class ActivityService {
                             sector.setName(ampSector.getName());                        
                             sectors.add(sector);
                         }                       
-                        matchesFilters.set(reportOutputColumn.originalColumnName, sectors);
+                        matchesFilters.put(columnName, sectors);
                     } else {
-                        matchesFilters.set(reportOutputColumn.originalColumnName, ids);
+                        matchesFilters.put(columnName, ids);
                     }
                 }
             }
-            activity.set("matchesFilters", matchesFilters);
+            activity.setMatchesFilters(matchesFilters);
             activities.add(activity);
         }
         return new ActivityList(count, activities);

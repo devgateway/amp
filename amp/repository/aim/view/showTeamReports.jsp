@@ -18,7 +18,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
-<%@ page import="org.dgfoundation.amp.ar.ArConstants" %>
+<%@ page import="org.digijava.kernel.request.TLSUtils" %>
 
 
 <!-- this is for the nice tooltip widgets -->
@@ -27,6 +27,8 @@
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"></script>
 
 <!-- CSS -->
 <link href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css" type="text/css" rel="stylesheet">
@@ -100,6 +102,11 @@
 
 <SCRIPT TYPE="text/javascript">
 <!--
+
+var isRtl = <%=TLSUtils.getCurrentLocale().getLeftToRight() == false%>;
+var language = '<%=TLSUtils.getCurrentLocale().getCode()%>';
+var region = '<%=TLSUtils.getCurrentLocale().getRegion()%>';
+
 function popup(mylink, windowname)
 {
 	if (!window.focus)
@@ -158,7 +165,7 @@ function activate(id){
 	
 	return false;
 }
-function showHidePositions(id,selectedPosition){
+function showHidePositions(id,selectedPosition) {
 	$.ajax({
 	   	url:'/aim/getTakenTabPositions.do',
 	    cache : false,
@@ -190,7 +197,8 @@ function showHidePositions(id,selectedPosition){
 	            	    }
 	            	 }
 	    			if(!skip){
-	    				select.options[index]=new Option(label, currvalue, false, selected);	
+	    			    labelText = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + label);
+	    				select.options[index]=new Option(labelText, currvalue, false, selected);
 		    			index++;
 	    			}
 	    			
@@ -644,7 +652,9 @@ $(document).ready(function() {
 								<select class="savePositionDropDown${report.ampReportId}" onchange="savePosition(${report.ampReportId})">
 									<option value="-1"><digi:trn>none</digi:trn></option>
 									<c:forEach var="i" begin="0" end="4">
-										<option value="${i}" <c:if test="${position==i}">selected</c:if>><c:out value="${i+1}" /></option>
+										<option value="${i}" <c:if test="${position==i}">selected</c:if>>
+											<digi:easternArabicNumber><c:out value="${i+1}" /></digi:easternArabicNumber>
+										</option>
 									</c:forEach>
 								</select>
 								<div class="savePositionStatusInfo${report.ampReportId}" style="font-size:9px;"></div>

@@ -22,7 +22,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
-import org.digijava.kernel.ampapi.endpoints.util.JSONUtils;
+import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
 import org.digijava.kernel.request.TLSUtils;
 import org.junit.Before;
 import org.junit.Rule;
@@ -134,7 +134,8 @@ public class ResourceExporterTest {
         field.setTranslatable(isMultilingual);
 
         ResourceExporter exporter = new ResourceExporter(new NoTranslatedFieldReader(), root.getChildren());
-        return JSONUtils.readValueFromJson(JSONUtils.serialize(exporter.export(resource)), Map.class);
+        return ObjectMapperUtils.readValueFromString(ObjectMapperUtils.valueToString(exporter.export(resource)),
+                Map.class);
     }
 
 }

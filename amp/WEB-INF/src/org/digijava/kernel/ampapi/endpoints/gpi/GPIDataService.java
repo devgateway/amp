@@ -24,7 +24,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -80,7 +79,7 @@ public class GPIDataService {
             ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
-        List<JsonBean> validationErrors = validateAidOnBudget(data);
+        List<Map<String, String>> validationErrors = validateAidOnBudget(data);
         if (validationErrors.size() == 0) {
             GPIUtils.saveAidOnBudget(data);
             return new SaveResult<>(data);
@@ -102,15 +101,15 @@ public class GPIDataService {
         return results;
     }
 
-    private static List<JsonBean> validateAidOnBudget(AmpGPINiAidOnBudget data) {
-        List<JsonBean> validationErrors = new ArrayList<>();
+    private static List<Map<String, String>> validateAidOnBudget(AmpGPINiAidOnBudget data) {
+        List<Map<String, String>> validationErrors = new ArrayList<>();
         Long donorId = data.getDonor().getAmpOrgId();
         Date date = data.getIndicatorDate();
         Long id = data.getAmpGPINiAidOnBudgetId();
 
         if (GPIUtils.checkAidOnBudgetExists(id, donorId, date)) {
-            JsonBean error = new JsonBean();
-            error.set(ApiError.getErrorCode(GPIErrors.AID_ON_BUDGET_DATE_DONOR_COMBINATION_EXISTS),
+            Map<String, String> error = new HashMap<>();
+            error.put(ApiError.getErrorCode(GPIErrors.AID_ON_BUDGET_DATE_DONOR_COMBINATION_EXISTS),
                     GPIErrors.AID_ON_BUDGET_DATE_DONOR_COMBINATION_EXISTS.description);
             validationErrors.add(error);
         }
@@ -131,7 +130,7 @@ public class GPIDataService {
             ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
-        List<JsonBean> validationErrors = validateDonorNotes(note);
+        List<Map<String, String>> validationErrors = validateDonorNotes(note);
         if (validationErrors.isEmpty()) {
 
             Date date = DateTimeUtil.parseDate("2018-11-25", "yyyy-MM-dd");
@@ -157,15 +156,15 @@ public class GPIDataService {
         return results;
     }
 
-    private static List<JsonBean> validateDonorNotes(AmpGPINiDonorNotes data) {
-        List<JsonBean> validationErrors = new ArrayList<>();
+    private static List<Map<String, String>> validateDonorNotes(AmpGPINiDonorNotes data) {
+        List<Map<String, String>> validationErrors = new ArrayList<>();
         Long donorId = data.getDonor().getAmpOrgId();
         Date date = data.getNotesDate();
         Long id = data.getAmpGPINiDonorNotesId();
 
         if (GPIUtils.checkDonorNotesExists(id, donorId, date, data.getIndicatorCode())) {
-            JsonBean error = new JsonBean();
-            error.set(ApiError.getErrorCode(GPIErrors.DONOR_NOTES_DATE_DONOR_COMBINATION_EXISTS),
+            Map<String, String> error = new HashMap<>();
+            error.put(ApiError.getErrorCode(GPIErrors.DONOR_NOTES_DATE_DONOR_COMBINATION_EXISTS),
                     GPIErrors.DONOR_NOTES_DATE_DONOR_COMBINATION_EXISTS.description);
             validationErrors.add(error);
         }

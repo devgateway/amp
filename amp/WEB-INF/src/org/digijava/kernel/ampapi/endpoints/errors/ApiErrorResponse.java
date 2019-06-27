@@ -10,6 +10,7 @@ import org.dgfoundation.amp.algo.AlgoUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
 
 public class ApiErrorResponse {
 
@@ -28,16 +29,12 @@ public class ApiErrorResponse {
     public void setErrors(Map<String, Collection<Object>> errors) {
         this.errors = errors;
     }
-
+    
     /**
      * renders the object as a String
      */
     public String asJsonString() {
-        try {
-            return new ObjectMapper().writer().writeValueAsString(this);
-        } catch (Exception e) {
-            throw AlgoUtils.translateException(e);
-        }
+        return ObjectMapperUtils.valueToString(this);
     }
 
     @Override

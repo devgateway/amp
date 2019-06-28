@@ -388,8 +388,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_dimension(ColumnConstants.ACTIVITY_UPDATED_BY, "v_activity_modified_by");
         no_dimension(ColumnConstants.ACTORS, "v_actors");
 
-        no_dimension(ColumnConstants.ARCHIVED, "v_archived");
-
         single_dimension(ColumnConstants.AGREEMENT_CODE, "v_agreement_code", AGR_LEVEL_COLUMN);
         single_dimension(ColumnConstants.AGREEMENT_TITLE_CODE, "v_agreement_title_code", AGR_LEVEL_COLUMN);
         date_column(ColumnConstants.AGREEMENT_CLOSE_DATE, "v_agreement_close_date", AGR_LEVEL_COLUMN);

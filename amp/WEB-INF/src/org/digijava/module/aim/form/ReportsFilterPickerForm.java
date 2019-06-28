@@ -87,7 +87,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     private Object[] selectedresponsibleorg;
     private Object[] selectedComponentSecondResponsibleOrg;
     private Object[] selectedComponentFundingOrg;
-    private Object[] selectedArchivedStatus = new Object[]{"1"};
     private Object[] selectedHumanitarianAid;
     private Object[] selectedDisasterResponse;
     private Object[] selectedActivitySettings;
@@ -421,11 +420,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public Object[] getSelectedresponsibleorg() {
         return this.selectedresponsibleorg;
-    }
-    
-    @java.lang.SuppressWarnings("all")
-    public Object[] getSelectedArchivedStatus() {
-        return this.selectedArchivedStatus;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -992,11 +986,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public void setSelectedresponsibleorg(final Object[] selectedresponsibleorg) {
         this.selectedresponsibleorg = selectedresponsibleorg;
-    }
-    
-    @java.lang.SuppressWarnings("all")
-    public void setSelectedArchivedStatus(final Object[] selectedArchivedStatus) {
-        this.selectedArchivedStatus = selectedArchivedStatus;
     }
     
     @java.lang.SuppressWarnings("all")

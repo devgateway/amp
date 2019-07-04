@@ -336,11 +336,11 @@ public class AmpARFilterConverter {
             }
         }
 
-        addFilter(countries, ColumnConstants.COUNTRY);
-        addFilter(regions, ColumnConstants.REGION);
-        addFilter(zones, ColumnConstants.ZONE);
-        addFilter(districts, ColumnConstants.DISTRICT);
-        addFilter(communalSections, ColumnConstants.COMMUNAL_SECTION);
+        addFilter(countries, ColumnConstants.LOCATION_ADM_LEVEL_0);
+        addFilter(regions, ColumnConstants.LOCATION_ADM_LEVEL_1);
+        addFilter(zones, ColumnConstants.LOCATION_ADM_LEVEL_2);
+        addFilter(districts, ColumnConstants.LOCATION_ADM_LEVEL_3);
+        addFilter(communalSections, ColumnConstants.LOCATION_ADM_LEVEL_4);
     }
     
     /**

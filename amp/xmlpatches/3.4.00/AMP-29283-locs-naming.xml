@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-29283</jira>
+    <keyword>location naming</keyword>
+    <author>Viorel Chihai</author>
+    <description>
+        Rename the names for location type entities
+    </description>
+    <apply>
+        <script>
+            <lang delimiter="@@@" type="postgres"><![CDATA[
+
+                UPDATE amp_category_value SET category_value = 'Administrative Level 0'
+                WHERE amp_category_class_id = (SELECT id FROM amp_category_class WHERE category_name = 'Implementation Location')
+                AND index_column = 0@@@
+
+                UPDATE amp_category_value SET category_value = 'Administrative Level 1'
+                WHERE amp_category_class_id = (SELECT id FROM amp_category_class WHERE category_name = 'Implementation Location')
+                AND index_column = 1@@@
+
+                UPDATE amp_category_value SET category_value = 'Administrative Level 2'
+                WHERE amp_category_class_id = (SELECT id FROM amp_category_class WHERE category_name = 'Implementation Location')
+                AND index_column = 2@@@
+
+                UPDATE amp_category_value SET category_value = 'Administrative Level 3'
+                WHERE amp_category_class_id = (SELECT id FROM amp_category_class WHERE category_name = 'Implementation Location')
+                AND index_column = 3@@@
+
+                UPDATE amp_category_value SET category_value = 'Administrative Level 4'
+                WHERE amp_category_class_id = (SELECT id FROM amp_category_class WHERE category_name = 'Implementation Location')
+                AND index_column = 4@@@
+
+                DROP VIEW IF EXISTS v_amp_location_cache CASCADE@@@
+
+                CREATE VIEW v_amp_location_cache AS
+                SELECT
+                  l.amp_location_id,
+                  acvl.id AS acvl_id, acvl.location_name AS acvl_name,
+                  acvl.parent_location,
+                  getlocationidbyimplloc(acvl.id, 'Administrative Level 0'::character varying) AS adm_level_0_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Administrative Level 0'::character varying)) as adm_level_0_name,
+                  getlocationidbyimplloc(acvl.id, 'Administrative Level 1'::character varying) AS adm_level_1_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Administrative Level 1'::character varying)) as adm_level_1_name,
+                  getlocationidbyimplloc(acvl.id, 'Administrative Level 2'::character varying) AS adm_level_2_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Administrative Level 2'::character varying)) as adm_level_2_name,
+                  getlocationidbyimplloc(acvl.id, 'Administrative Level 3'::character varying) AS adm_level_3_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Administrative Level 3'::character varying)) as adm_level_3_name,
+                  getlocationidbyimplloc(acvl.id, 'Administrative Level 4'::character varying) AS adm_level_4_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Administrative Level 4'::character varying)) as adm_level_4_name
+                FROM amp_category_value_location acvl LEFT JOIN amp_location l ON l.location_id = acvl.id
+                ORDER BY acvl.id@@@
+
+                CREATE VIEW v_ni_all_locations_with_levels AS
+					SELECT amp_location_id, acvl_id, acvl_name, parent_location, getlocationdepth(acvl_id) AS location_depth,
+						COALESCE(adm_level_0_id, - acvl_id) AS adm_level_0_id, COALESCE(adm_level_0_name, 'Undefined') AS adm_level_0_name,
+						COALESCE(adm_level_1_id, - acvl_id) AS adm_level_1_id, COALESCE(adm_level_1_name, 'Undefined') AS adm_level_1_name,
+						COALESCE(adm_level_2_id, - acvl_id) AS adm_level_2_id, COALESCE(adm_level_2_name, 'Undefined') AS adm_level_2_name,
+						COALESCE(adm_level_3_id, - acvl_id) AS adm_level_3_id, COALESCE(adm_level_3_name, 'Undefined') AS adm_level_3_name,
+						COALESCE(adm_level_4_id, - acvl_id) AS adm_level_4_id, COALESCE(adm_level_4_name, 'Undefined') AS adm_level_4_name
+					FROM v_amp_location_cache@@@
+
+				DROP TABLE IF EXISTS ni_all_locations_with_levels CASCADE@@@
+				CREATE TABLE ni_all_locations_with_levels AS
+					SELECT * FROM v_ni_all_locations_with_levels@@@
+
+				CREATE INDEX ni_alwl_loc_id ON ni_all_locations_with_levels(amp_location_id)@@@
+				CREATE INDEX ni_alwl_acvl_id ON ni_all_locations_with_levels(acvl_id)@@@
+				CREATE INDEX ni_alwl_parent_id ON ni_all_locations_with_levels(parent_location)@@@
+				CREATE INDEX ni_alwl_depth ON ni_all_locations_with_levels(location_depth)@@@
+				CREATE INDEX ni_alwl_adm_level_0_id ON ni_all_locations_with_levels(adm_level_0_id)@@@
+				CREATE INDEX ni_alwl_adm_level_1_id ON ni_all_locations_with_levels(adm_level_1_id)@@@
+				CREATE INDEX ni_alwl_adm_level_2_id ON ni_all_locations_with_levels(adm_level_2_id)@@@
+				CREATE INDEX ni_alwl_adm_level_3_id ON ni_all_locations_with_levels(adm_level_3_id)@@@
+				CREATE INDEX ni_alwl_adm_level_4_id ON ni_all_locations_with_levels(adm_level_4_id)@@@
+
+                CREATE TRIGGER ni_locations_changed
+                    AFTER INSERT OR UPDATE OR DELETE ON ni_all_locations_with_levels
+                    FOR EACH STATEMENT
+                        EXECUTE PROCEDURE dimension_updated_proc()@@@
+
+                CREATE OR REPLACE FUNCTION update_location_level_caches_internal()
+                    RETURNS bigint AS
+                    $BODY$
+                        BEGIN
+                            TRUNCATE ni_all_locations_with_levels;
+                            INSERT INTO ni_all_locations_with_levels
+                                SELECT * FROM v_ni_all_locations_with_levels;
+
+                            RETURN 1;
+                            end;
+                        $BODY$
+                LANGUAGE plpgsql VOLATILE@@@
+
+                CREATE TEMPORARY TABLE DUMMY_TABLE AS
+                SELECT update_location_level_caches_internal() FROM (select 1) AS dual @@@
+
+                DROP TABLE DUMMY_TABLE @@@
+
+                DROP VIEW IF EXISTS v_countries @@@
+                DROP VIEW IF EXISTS v_regions @@@
+                DROP VIEW IF EXISTS v_zones @@@
+                DROP VIEW IF EXISTS v_districts @@@
+                DROP VIEW IF EXISTS v_communal_section @@@
+                DROP VIEW IF EXISTS v_pledges_countries @@@
+                DROP VIEW IF EXISTS v_pledges_regions @@@
+                DROP VIEW IF EXISTS v_pledges_zones @@@
+                DROP VIEW IF EXISTS v_pledges_districts @@@
+                DROP VIEW IF EXISTS v_pledges_communal_section @@@
+
+                UPDATE amp_columns SET extractorview = 'v_adm_level_0' WHERE extractorview = 'v_countries' @@@
+                UPDATE amp_columns SET extractorview = 'v_adm_level_1' WHERE extractorview = 'v_regions' @@@
+                UPDATE amp_columns SET extractorview = 'v_adm_level_2' WHERE extractorview = 'v_zones' @@@
+                UPDATE amp_columns SET extractorview = 'v_adm_level_3' WHERE extractorview = 'v_districts' @@@
+                UPDATE amp_columns SET extractorview = 'v_adm_level_4' WHERE extractorview = 'v_communal_section' @@@
+                UPDATE amp_columns SET extractorview = 'v_pledges_adm_level_0' WHERE extractorview = 'v_pledges_countries' @@@
+                UPDATE amp_columns SET extractorview = 'v_pledges_adm_level_1' WHERE extractorview = 'v_pledges_regions' @@@
+                UPDATE amp_columns SET extractorview = 'v_pledges_adm_level_2' WHERE extractorview = 'v_pledges_zones' @@@
+                UPDATE amp_columns SET extractorview = 'v_pledges_adm_level_3' WHERE extractorview = 'v_pledges_districts' @@@
+                UPDATE amp_columns SET extractorview = 'v_pledges_adm_level_4' WHERE extractorview = 'v_pledges_communal_section' @@@
+
+                UPDATE amp_columns_filters SET view_field_name = 'adm_level_1_id' WHERE view_field_name = 'region_id' @@@
+                UPDATE amp_columns_filters SET view_field_name = 'adm_level_2_id' WHERE view_field_name = 'zone_id' @@@
+                UPDATE amp_columns_filters SET view_field_name = 'adm_level_3_id' WHERE view_field_name = 'district_id' @@@
+
+                UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart' @@@
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

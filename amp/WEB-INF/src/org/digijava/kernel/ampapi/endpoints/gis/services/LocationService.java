@@ -115,7 +115,7 @@ public class LocationService {
             GisUtils.configurePerformanceFilter(config, filterRules);
         }
         Map<Long, String> admLevelToGeoCode;
-        if (admlevel.equals(ColumnConstants.COUNTRY)) {
+        if (admlevel.equals(ColumnConstants.LOCATION_ADM_LEVEL_0)) {
             // If the admin level is country we filter only to show projects at
             // the country of the current installation
             final ValueWrapper<String> countryId = new ValueWrapper<String>("");
@@ -136,7 +136,8 @@ public class LocationService {
                 rsi.close();
             });
 
-            filterRules.addFilterRule(new ReportColumn(ColumnConstants.COUNTRY), new FilterRule(countryId.value, true));
+            filterRules.addFilterRule(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0),
+                    new FilterRule(countryId.value, true));
             
         } 
         
@@ -299,17 +300,17 @@ public class LocationService {
         ReportColumn implementationLevelColumn = null;
         if (adminLevel != null) {
             switch (adminLevel) {
-                case ColumnConstants.COUNTRY:
-                    implementationLevelColumn = new ReportColumn(ColumnConstants.COUNTRY);
+                case ColumnConstants.LOCATION_ADM_LEVEL_0:
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0);
                     break;
-                case ColumnConstants.REGION:
-                    implementationLevelColumn = new ReportColumn(ColumnConstants.REGION);
+                case ColumnConstants.LOCATION_ADM_LEVEL_1:
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_1);
                     break;
-                case ColumnConstants.ZONE:
-                    implementationLevelColumn = new ReportColumn(ColumnConstants.ZONE);
+                case ColumnConstants.LOCATION_ADM_LEVEL_2:
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_2);
                     break;
-                case ColumnConstants.DISTRICT:
-                    implementationLevelColumn = new ReportColumn(ColumnConstants.DISTRICT);
+                case ColumnConstants.LOCATION_ADM_LEVEL_3:
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_3);
                     break;
             }
         }

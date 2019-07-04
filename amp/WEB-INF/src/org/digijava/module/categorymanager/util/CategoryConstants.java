@@ -181,15 +181,15 @@ public class CategoryConstants {
         new CategoryConstants.HardCodedCategoryValue("financing_instrument","Budget Support", false);
     
     public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_COUNTRY  = 
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Country", true);
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 0", true);
     public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_REGION   = 
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Region", true);
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 1", true);
     public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ZONE = 
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Zone", true);
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 2", true);
     public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_DISTRICT = 
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "District", true);
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 3", true);
     public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_COMMUNAL_SECTION =
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Communal section", true);
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 4", true);
     public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ALL  =
             new CategoryConstants.HardCodedCategoryValue("implementation_location", "All", true);
     

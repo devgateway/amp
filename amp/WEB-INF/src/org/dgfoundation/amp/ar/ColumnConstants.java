@@ -67,14 +67,11 @@ public class ColumnConstants {
     public static final String CONTRACTING_AGENCY_DEPARTMENT_DIVISION = "Contracting Agency Department/Division";
     public static final String CONTRACTING_AGENCY_GROUPS = "Contracting Agency Groups";
     public static final String COSTING_DONOR = "Costing Donor";
-    public static final String COUNTRY = "Country";
     public static final String CREDIT_DONATION = "Credit/Donation";
     public static final String CRIS_NUMBER = "Cris Number";
     public static final String CUMULATIVE_EXECUTION_RATE = "Cumulative Execution Rate";
     public static final String CURRENT_COMPLETION_DATE_COMMENTS = "Current Completion Date Comments";
     public static final String DESCRIPTION_OF_COMPONENT_FUNDING = "Description of Component Funding";
-    public static final String DISTRICT = "District";
-    public static final String COMMUNAL_SECTION = "Communal Section";
     public static final String LOCATION = "Location";
     public static final String GEOCODE = "GeoId";
     public static final String DONOR_ACRONYM = "Organization Acronym";
@@ -148,6 +145,11 @@ public class ColumnConstants {
     public static final String LINE_MINISTRY_OBSERVATIONS_ACTORS = "Line Ministry Observations Actors";
     public static final String LINE_MINISTRY_OBSERVATIONS_DATE = "Line Ministry Observations Date";
     public static final String LINE_MINISTRY_OBSERVATIONS_MEASURES = "Line Ministry Observations Measures";
+    public static final String LOCATION_ADM_LEVEL_0 = "Administrative Level 0";
+    public static final String LOCATION_ADM_LEVEL_1 = "Administrative Level 1";
+    public static final String LOCATION_ADM_LEVEL_2 = "Administrative Level 2";
+    public static final String LOCATION_ADM_LEVEL_3 = "Administrative Level 3";
+    public static final String LOCATION_ADM_LEVEL_4 = "Administrative Level 4";
     public static final String MATURITY = "Loan Maturity Date";
     public static final String MEASURES_TAKEN = "Measures Taken";
     public static final String MINISTRY_CODE = "Ministry Code";
@@ -216,11 +218,11 @@ public class ColumnConstants {
     public static final String PLEDGES_PROGRAMS_LEVEL_2 = "Pledges Programs Level 2";
     public static final String PLEDGES_PROGRAMS_LEVEL_3 = "Pledges Programs Level 3";
     
-    public static final String PLEDGES_COUNTRIES = "Pledges Countries";
-    public static final String PLEDGES_REGIONS = "Pledges Regions";
-    public static final String PLEDGES_ZONES = "Pledges Zones";
-    public static final String PLEDGES_DISTRICTS = "Pledges Districts";
-    public static final String PLEDGES_COMMUNAL_SECTION = "Pledges Communal Section";
+    public static final String PLEDGES_LOCATION_ADM_LEVEL_0 = "Pledges Administrative Level 0";
+    public static final String PLEDGES_LOCATION_ADM_LEVEL_1 = "Pledges Administrative Level 1";
+    public static final String PLEDGES_LOCATION_ADM_LEVEL_2 = "Pledges Administrative Level 2";
+    public static final String PLEDGES_LOCATION_ADM_LEVEL_3 = "Pledges Administrative Level 3";
+    public static final String PLEDGES_LOCATION_ADM_LEVEL_4 = "Pledges Administrative Level 4";
 
     public static final String PLEDGES_SECONDARY_PROGRAMS = "Pledges Secondary Programs";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_2 = "Pledges Secondary Programs Level 2";
@@ -293,7 +295,6 @@ public class ColumnConstants {
     public static final String PROPOSED_START_DATE = "Proposed Start Date";
     public static final String PURPOSE = "Purpose";
     public static final String RATIFICATION_DATE = "Loan Ratification Date";
-    public static final String REGION = "Region";
     public static final String REGIONAL_REGION = "Regional Region";
     public static final String REGIONAL_GROUP = "Regional Group";
     public static final String REGIONAL_GROUP_GROUP = "Regional Group Group";   
@@ -365,7 +366,6 @@ public class ColumnConstants {
     public static final String VARIANCE_OF_COMMITMENTS = "Variance Of Commitments";
     public static final String VARIANCE_OF_DISBURSEMENTS = "Variance Of Disbursements";
     public static final String VOTE = "Vote";
-    public static final String ZONE = "Zone";
     public static final String WORKSPACES = "Workspaces";
     public static final String EFFECTIVE_FUNDING_DATE = "Effective Funding Date";
     public static final String FUNDING_CLOSING_DATE = "Funding Closing Date";

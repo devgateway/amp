@@ -123,10 +123,10 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.APPROVAL_STATUS, String.class, "approvalStatusSelected", true);
         
         // Location section.
-        addFilter(ColumnConstants.COUNTRY, AmpCategoryValueLocations.class, "locationSelected", true);
-        addFilter(ColumnConstants.REGION, AmpCategoryValueLocations.class, "locationSelected", false);      
-        addFilter(ColumnConstants.ZONE, AmpCategoryValueLocations.class, "locationSelected", false);
-        addFilter(ColumnConstants.DISTRICT, AmpCategoryValueLocations.class, "locationSelected", false);                
+        addFilter(ColumnConstants.LOCATION_ADM_LEVEL_0, AmpCategoryValueLocations.class, "locationSelected", true);
+        addFilter(ColumnConstants.LOCATION_ADM_LEVEL_1, AmpCategoryValueLocations.class, "locationSelected", false);
+        addFilter(ColumnConstants.LOCATION_ADM_LEVEL_2, AmpCategoryValueLocations.class, "locationSelected", false);
+        addFilter(ColumnConstants.LOCATION_ADM_LEVEL_3, AmpCategoryValueLocations.class, "locationSelected", false);
         
         // Financial section.
         addFilter(ColumnConstants.FINANCING_INSTRUMENT, AmpCategoryValue.class, "financingInstruments", true);

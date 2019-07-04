@@ -66,16 +66,16 @@ public class ColumnFilterGenerator {
             add(new ViewDonorFilteringInfo("amp_sector_id", "tertiarySectorsAndAncestors"));
         }});
                 
-        put("v_pledges_districts", new HashSet<ViewDonorFilteringInfo>(){{
-            add(new ViewDonorFilteringInfo("district_id", "relatedLocations"));
+        put("v_pledges_adm_level_3", new HashSet<ViewDonorFilteringInfo>() {{
+            add(new ViewDonorFilteringInfo("adm_level_3_id", "relatedLocations"));
         }});
     
-        put("v_pledges_regions", new HashSet<ViewDonorFilteringInfo>(){{
-            add(new ViewDonorFilteringInfo("region_id", "relatedLocations"));
+        put("v_pledges_adm_level_1", new HashSet<ViewDonorFilteringInfo>() {{
+            add(new ViewDonorFilteringInfo("adm_level_1_id", "relatedLocations"));
         }});
         
-        put("v_pledges_zones", new HashSet<ViewDonorFilteringInfo>(){{
-            add(new ViewDonorFilteringInfo("zone_id", "relatedLocations"));
+        put("v_pledges_adm_level_2", new HashSet<ViewDonorFilteringInfo>() {{
+            add(new ViewDonorFilteringInfo("adm_level_2_id", "relatedLocations"));
         }});
         
         put("v_pledges_npd_objectives", new HashSet<ViewDonorFilteringInfo>(){{
@@ -113,9 +113,9 @@ public class ColumnFilterGenerator {
         }});
         
         put("relatedLocations", new ArrayList<String>(){{
-            add("Pledges Regions");
-            add("Pledges Zones");
-            add("Pledges Districts");
+            add("Pledges Administrative Level 1");
+            add("Pledges Administrative Level 2");
+            add("Pledges Administrative Level 3");
         }});
         
         put("relatedPrimaryProgs", new ArrayList<String>(){{

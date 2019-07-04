@@ -992,12 +992,11 @@ td.inside ul {
 
 .current-page {
     margin-left: 5px !important;
+    margin-right: unset !important;
 }
 
 .yui-pg-current-page.yui-pg-page {
     padding-right: unset !important;
-    padding-left: 10px;
-    border-left: 1px solid rgb(208, 208, 208);
     border-right: 0px !important;
 }
 
@@ -1020,4 +1019,17 @@ td.inside ul {
 
 .home_sec_title {
     text-align: right !important;
+}
+
+.yui-panel .bd {
+    direction: rtl;
+}
+
+.yui-pg-pages {
+    margin-left: unset !important;
+    margin-right: 7px;
+    border-right:1px solid #CCCCCC;
+    border-left: 0px !important;
+    padding-left: unset !important;
+    padding-right:5px;
 }

@@ -87,7 +87,7 @@ function showDescriptionToolbox(id){
 <div id="loader_background" 
 	style = 'background-color:grey; position:absolute; width:100%; height:2000px; top:81px; left:0;opacity:0.4;z-index:2; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)"; filter: alpha(opacity=40);'>
 	<img style="position:relative;top:300px;opacity:1;z-index:3; margin: 0 auto; display: block;" 
-		src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-white.gif">
+		src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-medium.gif">
 </div>
 <table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
 	<!--<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">-->

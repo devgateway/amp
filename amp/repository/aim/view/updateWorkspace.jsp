@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
+<%@ page import="org.digijava.kernel.request.TLSUtils" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -55,7 +56,6 @@
  </style>
 
 <link rel="stylesheet" type="text/css" href="<digi:file src= '/repository/aim/view/scripts/jquery-ui-1.11.0/jquery-ui.min.css'/>">
-<link rel="stylesheet" type="text/css" href="<digi:file src= 'gisModule/dev/node_modules/jquery-ui/themes/smoothness/jquery-ui.min.css'/>">
 <link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>?version=fantastic_15" ></script>
@@ -84,6 +84,10 @@
 </c:set>
 
 <script type="text/javascript">
+
+    var isRtl = <%=TLSUtils.getCurrentLocale().getLeftToRight() == false%>;
+    var language = '<%=TLSUtils.getCurrentLocale().getCode()%>';
+    var region = '<%=TLSUtils.getCurrentLocale().getRegion()%>';
 	
 	YAHOO.util.Event.onDOMReady(initComputationsFields);
     
@@ -167,6 +171,10 @@
         if (panelStart < 1){
             myPanel.setBody(element);
         }
+        if (document.getElementById('tempNumResults')) {
+            document.getElementById('tempNumResults').value =
+				TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, document.getElementById('tempNumResults').value);
+		}
        // alert(element)
         if (panelStart < 2){
             //document.getElementById("popin").scrollTop=0;

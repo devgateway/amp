@@ -1,6 +1,7 @@
 <%@ page pageEncoding="UTF-8"
 	import="org.digijava.module.aim.dbentity.AmpOrganisation,java.util.*"%>
-<%@page import="org.digijava.kernel.util.SiteUtils"%>
+<%@ page import="org.digijava.kernel.util.SiteUtils"%>
+<%@ page import="org.digijava.kernel.request.TLSUtils" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
@@ -9,6 +10,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="fn"%>
 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"></script>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
@@ -17,11 +19,14 @@
 <% } %>
 
 <script language="JavaScript">
+    var isRtl = <%=TLSUtils.getCurrentLocale().getLeftToRight() == false%>;
+    var language = '<%=TLSUtils.getCurrentLocale().getCode()%>';
+    var region = '<%=TLSUtils.getCurrentLocale().getRegion()%>';
 
-	function checkNumeric(objName,comma,period,hyphen)
+	function checkNumericField(objName,comma,period,hyphen)
 	{
 		var numberfield = objName;
-		if (chkNumeric(objName,comma,period,hyphen) == false)
+		if (checkNumericFieldValue(objName,comma,period,hyphen) == false)
 		{
 			numberfield.select();
 			numberfield.focus();
@@ -33,21 +38,21 @@
 		}
 	}
 
-	function chkNumeric(objName,comma,period,hyphen)
+	function checkNumericFieldValue(objName,comma,period,hyphen)
 	{
 // only allow 0-9 be entered, plus any values passed
 // (can be in any order, and don't have to be comma, period, or hyphen)
 // if all numbers allow commas, periods, hyphens or whatever,
 // just hard code it here and take out the passed parameters
 		var checkOK = "0123456789" + comma + period + hyphen;
-		var checkStr = objName;
+		var checkStr = TranslationManager.convertNumbersToWesternArabicIfNeeded(isRtl, language, region, objName.value);
 		var allValid = true;
 		var decPoints = 0;
 		var allNum = "";
 
-		for (i = 0;  i < checkStr.value.length;  i++)
+		for (i = 0;  i < checkStr.length;  i++)
 		{
-			ch = checkStr.value.charAt(i);
+			ch = checkStr.charAt(i);
 			for (j = 0;  j < checkOK.length;  j++)
 			if (ch == checkOK.charAt(j))
 			break;
@@ -126,7 +131,7 @@
 	function resetForm() {
 		document.aimSelectOrganizationForm.ampOrgTypeId.value=-1;
 		document.aimSelectOrganizationForm.keyword.value="";
-		document.aimSelectOrganizationForm.tempNumResults.value=10;
+		document.aimSelectOrganizationForm.tempNumResults.value = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, '10');
 	
 	}
 
@@ -144,15 +149,17 @@
 	}	
 
 	function searchOrganization() {
-		if(checkNumeric(document.aimSelectOrganizationForm.tempNumResults	,'','','')==true)
+		if(checkNumericField(document.aimSelectOrganizationForm.tempNumResults	,'','','')==true)
 		{
-			if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
+            var convertedResults = TranslationManager.convertNumbersToWesternArabicIfNeeded(isRtl, language, region, document.aimSelectOrganizationForm.tempNumResults.value);
+            if (convertedResults == 0) {
 			    alert ("Invalid value at 'Number of results per page'");
 			    document.aimSelectOrganizationForm.tempNumResults.focus();
 			    return false;
 			} else {
 			    <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganizationComponent.do?edit=true&subAction=search"/>
 			    document.aimSelectOrganizationForm.action = "<%= searchOrg %>";
+                document.aimSelectOrganizationForm.tempNumResults.value = convertedResults;
 			    document.aimSelectOrganizationForm.submit();
 				return true;
 			}
@@ -161,7 +168,8 @@
 	}
 
 	function searchAlpha(val) {
-		if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
+        var convertedResults = TranslationManager.convertNumbersToWesternArabicIfNeeded(isRtl, language, region, document.aimSelectOrganizationForm.tempNumResults.value);
+		if (convertedResults == 0) {
 			  alert ("Invalid value at 'Number of results per page'");
 			  document.aimEditActivityForm.tempNumResults.focus();
 			  return false;
@@ -169,13 +177,15 @@
 			 <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganizationComponent.do"/>
 			 url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false&edit=true&subAction=search";
 		     document.aimSelectOrganizationForm.action = url;
+             document.aimSelectOrganizationForm.tempNumResults.value = convertedResults;
 		     document.aimSelectOrganizationForm.submit();
 			 return true;
 		}
 	}
 		
 	function searchAlphaAll(val) {
-		if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
+        var convertedResults = TranslationManager.convertNumbersToWesternArabicIfNeeded(isRtl, language, region, document.aimSelectOrganizationForm.tempNumResults.value);
+		if (convertedResults == 0) {
 			  alert ("Invalid value at 'Number of results per page'");
 			  document.aimSelectOrganizationForm.tempNumResults.focus();
 			  return false;
@@ -183,8 +193,7 @@
 			 <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganizationComponent.do?edit=true&subAction=search&viewAll=viewAll"/>
 			    document.aimSelectOrganizationForm.action = "<%= searchOrg %>";
 		      var aux= document.aimSelectOrganizationForm.tempNumResults.value;
-		      //Moved to backend
-		      //document.aimSelectOrganizationForm.tempNumResults.value=1000000;
+             document.aimSelectOrganizationForm.tempNumResults.value = convertedResults;
 		     document.aimSelectOrganizationForm.submit();
 		      //document.aimSelectOrganizationForm.tempNumResults.value=aux;
 			  return true;
@@ -417,26 +426,28 @@
 										<table align="center" cellpadding="0" cellspacing="0">
 											<tr>
 												<td height="18" align="center" style="size: 9px; color: #333333">
-                                                    <digi:trn key="aim:pages">Pages</digi:trn>
+													<span><digi:trn key="aim:pages">Pages</digi:trn></span>
                                                     <c:if test="${aimSelectOrganizationForm.currentPage > 1}">
-	
-                                                        <c:set var="translation">
-                                                            <digi:trn key="aim:firstpage">First Page</digi:trn>
-                                                        </c:set>
 
+														<c:set var="translation">
+															<digi:trn key="aim:firstpage">First Page</digi:trn>
+														</c:set>
+														<span>
                                                         <a style="text-decoration: none; color: #333333"
                                                             href="javascript:selectOrganizationPages(1)"
                                                             title="${translation}"> &lt;&lt; </a>
-
+														</span>
                                                         <c:set var="translation">
                                                             <digi:trn key="aim:previouspage">Previous Page</digi:trn>
                                                         </c:set>
                                                         <c:set var="prevPage">
                                                             ${aimSelectOrganizationForm.currentPage -1}
                                                         </c:set>
-                                                        <a style="text-decoration: none; color: #333333"
-                                                            href="javascript:selectOrganizationPages(${prevPage})"
-                                                            title="${translation}"> &lt; </a>
+														<span>
+															<a style="text-decoration: none; color: #333333"
+																href="javascript:selectOrganizationPages(${prevPage})"
+																title="${translation}"> &lt; </a>
+														</span>
                                                     </c:if>
 
                                                     <c:set var="length" value="${aimSelectOrganizationForm.pagesToShow}"></c:set>
@@ -446,14 +457,15 @@
 													property="pages" id="pages" type="java.lang.Integer"
 													offset="start" length="length">
                                                         <c:if test="${aimSelectOrganizationForm.currentPage == pages}">
-                                                            <font color="#FF0000"><%=pages%></font>
+															<span><font color="#FF0000"><digi:easternArabicNumber><%=pages%></digi:easternArabicNumber></font></span>
                                                         </c:if>
                                                         <c:if test="${aimSelectOrganizationForm.currentPage != pages}">
                                                             <c:set var="translation">
                                                                 <digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
                                                             </c:set>
-                                                            <a style="color: #333333; text-decoration: none;"
-                                                                href="javascript:selectOrganizationPages(<%=pages%>);"><%=pages%></a>
+															<span><a style="color: #333333; text-decoration: none;"
+                                                                href="javascript:selectOrganizationPages(<%=pages%>);"><digi:easternArabicNumber><%=pages%></digi:easternArabicNumber></a>
+															</span>
                                                         </c:if>
                                                         |&nbsp;
                                                     </logic:iterate>
@@ -467,23 +479,24 @@
                                                         <c:set var="translation">
                                                             <digi:trn key="aim:nextpage">Next Page</digi:trn>
                                                         </c:set>
-
-                                                        <a style="color: #333333; text-decoration: none;" href="javascript:selectOrganizationPages(${nextPage})" title="${translation}"> &gt; </a>
+														<span>
+                                                        	<a style="color: #333333; text-decoration: none;" href="javascript:selectOrganizationPages(${nextPage})" title="${translation}"> &gt; </a>
+														</span>
                                                         &nbsp;
-
                                                         <c:set var="translation">
                                                             <digi:trn key="aim:lastpage">Last Page</digi:trn>
                                                         </c:set>
-
-                                                        <a style="color: #333333; text-decoration: none;" href="javascript:selectOrganizationPages(${aimSelectOrganizationForm.pagesSize});" title="${translation}">
-                                                            &gt;&gt;
-                                                        </a>
+														<span>
+															<a style="color: #333333; text-decoration: none;" href="javascript:selectOrganizationPages(${aimSelectOrganizationForm.pagesSize});" title="${translation}">
+																&gt;&gt;
+															</a>
                                                         &nbsp;
+														</span>
                                                     </c:if>
 
-                                                    <c:out value="${aimSelectOrganizationForm.currentPage}"></c:out>&nbsp;
-                                                    <digi:trn key="aim:of">of</digi:trn>&nbsp;
-                                                    <c:out value="${aimSelectOrganizationForm.pagesSize}"></c:out>
+													<span><digi:easternArabicNumber><c:out value="${aimSelectOrganizationForm.currentPage}"></c:out></digi:easternArabicNumber>&nbsp;</span>
+													<span><digi:trn key="aim:of">of</digi:trn>&nbsp;</span>
+                                                    <span><digi:easternArabicNumber><c:out value="${aimSelectOrganizationForm.pagesSize}"></c:out></digi:easternArabicNumber></span>
                                                 </td>
 											</tr>
 										</table>

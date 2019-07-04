@@ -169,7 +169,9 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
 <digi:instance property="aimWorkspaceForm" />
 <script type="text/javascript">
-
+    var isRtl = <%=TLSUtils.getCurrentLocale().getLeftToRight() == false%>;
+    var language = '<%=TLSUtils.getCurrentLocale().getCode()%>';
+    var region = '<%=TLSUtils.getCurrentLocale().getRegion()%>';
 
     YAHOO.namespace("YAHOO.amp");
 
@@ -319,10 +321,6 @@
                     div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
                 }
             }
-
-            var isRtl = <%=TLSUtils.getCurrentLocale().getLeftToRight() == false%>;
-            var language = '<%=TLSUtils.getCurrentLocale().getCode()%>';
-            var region = '<%=TLSUtils.getCurrentLocale().getRegion()%>';
 
             function convertNumbers() {
                 $('.number-to-convert').each(function() {
@@ -804,13 +802,14 @@
         var paginator =['<table><tbody style="border:none"><tr><td colspan="2"><span id="yui-pg0-0-pages" class="yui-pg-pages">'];
         paginator[j++]='<span id="act_page_link_first" style="display:none"><a href="#"  class="yui-pg-page" onclick="return showPageContent(1)"><digi:trn>First Page</digi:trn></a> |</span>';
         for(k=1;k<=pages;k++){
+            var numberLabel = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, "" + k);
         	if(k!=activityCurrentPage){
-        		paginator[j++]='<span id="act_page_link_navi_'+k+'"><a href="#"  class="yui-pg-page" onclick="return showPageContent('+k+')">'+ <digi:easternArabicNumber>k</digi:easternArabicNumber> +'</a> |</span>';
-        		paginator[j++]='<span id="act_page_link_curr_'+k+'" class="yui-pg-current-page yui-pg-page" style="display:none"><span class="current-page">&nbsp;&nbsp;' + <digi:easternArabicNumber>k</digi:easternArabicNumber> + '&nbsp;&nbsp;</span>|</span>';
+        		paginator[j++]='<span id="act_page_link_navi_'+k+'"><a href="#"  class="yui-pg-page" onclick="return showPageContent('+k+')">'+ numberLabel +'</a> |</span>';
+        		paginator[j++]='<span id="act_page_link_curr_'+k+'" class="yui-pg-current-page yui-pg-page" style="display:none"><span class="current-page">&nbsp;&nbsp;' + numberLabel + '&nbsp;&nbsp;</span>|</span>';
         	}
         	else{
-        		paginator[j++]='<span id="act_page_link_navi_'+k+'" style="display:none" ><a href="#" class="yui-pg-page" onclick="return showPageContent('+k+')" >' + <digi:easternArabicNumber>k</digi:easternArabicNumber> + '</a> |</span>';
-        		paginator[j++]='<span id="act_page_link_curr_'+k+'" class="yui-pg-current-page yui-pg-page"><span class="current-page">&nbsp;&nbsp;' + <digi:easternArabicNumber>k</digi:easternArabicNumber> + '&nbsp;&nbsp;</span>|</span>';
+        		paginator[j++]='<span id="act_page_link_navi_'+k+'" style="display:none" ><a href="#" class="yui-pg-page" onclick="return showPageContent('+k+')" >' + numberLabel + '</a> |</span>';
+        		paginator[j++]='<span id="act_page_link_curr_'+k+'" class="yui-pg-current-page yui-pg-page"><span class="current-page">&nbsp;&nbsp;' + numberLabel + '&nbsp;&nbsp;</span>|</span>';
         	}
         	
         }
@@ -1212,7 +1211,7 @@
 
 </td></tr>
 <tr>
-    <td noWrap width="100%" vAlign="top">
+    <td width="100%" vAlign="top">
         <table width="100%" cellspacing="1" cellpadding=""="1" border="0">
                <tr><td noWrap width="50%" vAlign="top">
                     <table bgColor="#cccccc" cellPadding="1" cellSpacing="1" width="100%" valign="top" class="amp-table">
@@ -1366,7 +1365,7 @@
                                             </table>
                                         </div>
 
-                                        <div id="paginatorPlace"></div>
+                                        <div id="paginatorPlace" class="yui-pg-container"></div>
 
                                         <table cellspacing="1" cellpadding="2" align="left" width="100%">
                                             <tbody>

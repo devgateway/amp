@@ -121,8 +121,10 @@
         if (field.value.length > maxlimit) // if too long...trim it!
 	        field.value = field.value.substring(0, maxlimit);
 		    // otherwise, update 'characters left' counter
-	    else
-			countfield.value = maxlimit - field.value.length;
+	    else {
+	        var count = (maxlimit - field.value.length).toString();
+			countfield.value = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, count);
+        }
 	}
 
 function getIso(code) {

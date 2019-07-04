@@ -74,7 +74,6 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -476,8 +475,8 @@ public class Reports implements ErrorReportingEndpoint {
         
         // Add data needed on Saiku UI.
         // TODO: Make a mayor refactoring on the js code so it doesnt need these extra parameters to work properly.
-        JsonBean queryProperties = new JsonBean();
-        queryProperties.set("properties", new ArrayList<String>());
+        Map<String, List<String>> queryProperties = new HashMap<>();
+        queryProperties.put("properties", new ArrayList<>());
         saikuResult.setQuery(queryProperties);
         List<String> cellset = new ArrayList<String>();
         cellset.add("dummy");

@@ -58,85 +58,87 @@ module.exports = BackboneDash.View.extend({
             window.location = '/';
         }
 
+        var enabledCharts = enabledChartsFM.models[0].get('fm-settings')['DASHBOARDS'];
+
         var col = [];
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item.indexOf(DO) > -1;
         })) {
             col.push(new TopsChart(
                 {name: 'Top Donor Agencies', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/do'}));
         }
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item === DG;
         })) {
             col.push(new TopsChart(
                 {name: 'Top Donor Groups', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/dg'}));
         }
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item === RE;
         })) {
             col.push(new TopsChart(
                 {name: 'Top Regions', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/re'}));
         }
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item === PS;
         })) {
             col.push(new TopsChart(
                 {name: 'Top Sectors', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/ps'}));
         }
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item === AP;
         })) {
             col.push(new PredictabilityChart(
                 {name: 'Aid Predictability'},
                 {app: this.app, url: '/rest/dashboard/aid-predictability'}));
         }
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item === FTYPE;
         })) {
             col.push(new FundingTypeChart(
                 {name: 'Funding Type'},
                 {app: this.app, url: '/rest/dashboard/ftype'}));
         }
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item === RO;
         })) {
             col.push(new TopsChart(
                 {name: 'Responsible Organizations', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/ro'}));
         }
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item === BA;
         })) {
             col.push(new TopsChart(
                 {name: 'Beneficiary Agencies', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/ba'}));
         }
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item === EA;
         })) {
             col.push(new TopsChart(
                 {name: 'Executing Agencies', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/ea'}));
         }
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item === IA;
         })) {
             col.push(new TopsChart(
                 {name: 'Implementing Agencies', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/ia'}));
         }
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item === NDD;
         })) {
             col.push(new TopsChart(
                 {name: 'Peace-building and State-building Goals', big: true, showCategoriesInfo: true, view: 'pie'},
                 {app: this.app, url: '/rest/dashboard/tops/ndd'}));
         }
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item === SEC;
         })) {
             col.push(new HeatMapChart(

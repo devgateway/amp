@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -32,7 +33,14 @@ public class MultilingualContent {
         this.isMultilingual = isMultilingual;
         try {
             if (isMultilingual) {
-                translations = new UnwrappedTranslations((Map<String, String>) multilingualContent);
+                Map<String, String> trns = new LinkedHashMap<>();
+                for (String locale : TranslationSettings.getCurrent().getTrnLocaleCodes()) {
+                    trns.put(locale, null);
+                }
+                if (multilingualContent != null) {
+                    trns.putAll((Map<String, String>) multilingualContent);
+                }
+                translations = new UnwrappedTranslations(trns);
             } else {
                 text = (String) multilingualContent;
             }

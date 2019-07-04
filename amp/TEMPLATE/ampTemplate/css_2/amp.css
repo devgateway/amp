@@ -1482,10 +1482,6 @@ div.footer {
     float: right;
 }
 
-.yui-panel .bd {
-    direction: rtl;
-}
-
 .member-form-title {
     margin:0px 0px 0px 0px;
     display:block;

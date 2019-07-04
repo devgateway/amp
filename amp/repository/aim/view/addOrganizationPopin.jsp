@@ -1,3 +1,4 @@
+<%@ page import="org.digijava.kernel.request.TLSUtils" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -19,6 +20,10 @@ function selectOrg(params1, params2, params3, params4) {
 	showPanelLoading(msg);
 	YAHOO.util.Connect.asyncRequest("POST", params1, callback);
 }
+
+var isRtl = <%=TLSUtils.getCurrentLocale().getLeftToRight() == false%>;
+var language = '<%=TLSUtils.getCurrentLocale().getCode()%>';
+var region = '<%=TLSUtils.getCurrentLocale().getRegion()%>';
 
 var responseSuccessValidation = function(o){
 	/* Please see the Success Case section for more
@@ -61,10 +66,10 @@ var validationCallback =
 	failure:responseFailureValidation 
 };
 
-	function checkNumeric(objName,comma,period,hyphen)
+	function checkNumericField(objName,comma,period,hyphen)
 	{
 		var numberfield = objName;
-		if (chkNumeric(objName,comma,period,hyphen) == false)
+		if (checkNumericFieldValue(objName,comma,period,hyphen) == false)
 		{
 			numberfield.select();
 			numberfield.focus();
@@ -76,21 +81,21 @@ var validationCallback =
 		}
 	}
 
-	function chkNumeric(objName,comma,period,hyphen)
+	function checkNumericFieldValue(objName, comma, period, hyphen)
 	{
 // only allow 0-9 be entered, plus any values passed
 // (can be in any order, and don't have to be comma, period, or hyphen)
 // if all numbers allow commas, periods, hyphens or whatever,
 // just hard code it here and take out the passed parameters
 		var checkOK = "0123456789" + comma + period + hyphen;
-		var checkStr = objName;
+        var checkStr = TranslationManager.convertNumbersToWesternArabicIfNeeded(isRtl, language, region, objName.value);
 		var allValid = true;
 		var decPoints = 0;
 		var allNum = "";
 
-		for (i = 0;  i < checkStr.value.length;  i++)
+		for (i = 0;  i < checkStr.length;  i++)
 		{
-			ch = checkStr.value.charAt(i);
+			ch = checkStr.charAt(i);
 			for (j = 0;  j < checkOK.length;  j++)
 			if (ch == checkOK.charAt(j))
 			break;
@@ -159,7 +164,7 @@ var validationCallback =
 	function resetForm() {
 		document.aimSelectOrganizationForm.ampOrgTypeId.value=-1;
 		document.aimSelectOrganizationForm.keyword.value="";
-		document.aimSelectOrganizationForm.tempNumResults.value=10;
+		document.aimSelectOrganizationForm.tempNumResults.value = TranslationManager.convertNumbersToEasternArabicIfNeeded(isRtl, language, region, '10');
 	
 	}
 
@@ -189,7 +194,7 @@ var validationCallback =
 		ret+="&selectedOrganisationFromPages="+document.getElementsByName('selectedOrganisationFromPages')[0].value+
 		"&keyword="+document.getElementById('keyword').value +
 		"&ampOrgTypeId="+ document.aimSelectOrganizationForm.ampOrgTypeId.value +
-		"&tempNumResults="+document.getElementById('tempNumResults').value;
+		"&tempNumResults="+TranslationManager.convertNumbersToWesternArabicIfNeeded(isRtl, language, region, document.getElementById('tempNumResults').value);
 		//else if (type==3){//add sectors chosen from the list
 		if(document.getElementsByName("selOrganisations")!=null){
 			var sectors = document.getElementsByName("selOrganisations").length;
@@ -202,11 +207,12 @@ var validationCallback =
 	
 		return ret;
 	}
-	function searchOrganization() {		
-		if(checkNumeric(document.aimSelectOrganizationForm.tempNumResults	,'','','')==true)
+	function searchOrganization() {
+		if(checkNumericField(document.aimSelectOrganizationForm.tempNumResults	,'','','')==true)
 		{
-			if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
-				  alert ("Invalid value at 'Number of results per page'");
+            var convertedResults = TranslationManager.convertNumbersToWesternArabicIfNeeded(isRtl, language, region, document.aimSelectOrganizationForm.tempNumResults.value);
+            if (convertedResults == 0) {
+                alert ("Invalid value at 'Number of results per page'");
 				  document.aimSelectOrganizationForm.tempNumResults.focus();
 				  //return false;
 			} else {
@@ -222,7 +228,8 @@ var validationCallback =
 
 
 	function searchAlpha(val) {
-		if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
+        var convertedResults = TranslationManager.convertNumbersToWesternArabicIfNeeded(isRtl, language, region, document.aimSelectOrganizationForm.tempNumResults.value);
+		if (convertedResults == 0) {
 			  alert ("Invalid value at 'Number of results per page'");
 			  document.aimEditActivityForm.tempNumResults.focus();
 			  //return false;
@@ -246,7 +253,8 @@ var validationCallback =
 	}
 		
 	function searchAlphaAll(val) {
-		if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
+        var convertedResults = TranslationManager.convertNumbersToWesternArabicIfNeeded(isRtl, language, region, document.aimSelectOrganizationForm.tempNumResults.value);
+		if (convertedResults == 0) {
 			  alert ("Invalid value at 'Number of results per page'");
 			  document.aimSelectOrganizationForm.tempNumResults.focus();
 			  //return false;

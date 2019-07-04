@@ -273,12 +273,12 @@ Please do not attempt to use the Notification Email as user login.
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:emailAddress">E-mail Address </digi:trn>              </td>
-              <td class="right-align" style="padding-bottom:10px;"><html:text property="email" size="20" styleClass="inp-text pwd_username"/>
+              <td class="right-align" style="padding-bottom:10px;"><html:text property="email" size="20" styleClass="inp-text pwd_username email-input"/>
               </td>
               <td>&nbsp;</td>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:repEmailAddress">Repeat Email Address </digi:trn>              </td>
-              <td class="right-align" style="padding-bottom:10px;"><html:text property="emailConfirmation" size="20" styleClass="inp-text"/>              </td>
+              <td class="right-align" style="padding-bottom:10px;"><html:text property="emailConfirmation" size="20" styleClass="inp-text email-input"/>              </td>
             </tr>
             <tr>
               <td valign="top" class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
@@ -311,7 +311,7 @@ Please do not attempt to use the Notification Email as user login.
                             <digi:trn>Notification Email</digi:trn>
                         </td>
                         <td class="right-align" style="padding-bottom:10px;">
-                            <html:text property="notificationEmail" size="20" styleClass="inp-text" styleId="notificationEmail"/>
+                            <html:text property="notificationEmail" size="20" styleClass="inp-text email-input" styleId="notificationEmail"/>
                         </td>
                     </tr>
                 </table>

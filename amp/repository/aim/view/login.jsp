@@ -47,7 +47,7 @@
 							</digi:trn>
 					</td>
 					<td align="left">
-						<html:text property="userId" size="20" styleClass="inp-text"/> &nbsp;
+						<html:text property="userId" size="20" styleClass="inp-text email-input"/> &nbsp;
 						<font color="red"><br>
 						<digi:trn key="aim:userIdExample1">
 						e.g. yourname@emailaddress.com

@@ -33,7 +33,7 @@
 </TR>
 <TR>
 <TH align="right">E<digi:trn key="um:email">mail:</digi:trn></TH>
-<TD align="left"><html:text property="username"/></TD>
+<TD align="left"><html:text property="username" styleClass="email-input"/></TD>
 </TR>
 <TR>
 <TH align="right"><digi:trn key="um:password">Password:</digi:trn></TH>

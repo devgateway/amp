@@ -1021,3 +1021,8 @@ td.inside ul {
 .home_sec_title {
     text-align: right !important;
 }
+
+.email-input {
+    text-align: right !important;
+    direction: ltr !important;
+}

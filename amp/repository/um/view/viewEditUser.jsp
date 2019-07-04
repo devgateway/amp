@@ -286,7 +286,7 @@ function validateUserInfo(){
 																		</td>
 																		<td width="190" height="30">
 																           <html:text name="umViewEditUserForm"
-																					  property="email" styleClass="pwd_username" style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="userMail"/>
+																					  property="email" styleClass="pwd_username email-input" style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="userMail"/>
 																		</td>
 																	</tr>
 																	<tr>
@@ -303,7 +303,7 @@ function validateUserInfo(){
 	                                                                            <font color="red">*</font>
 	                                                                        </td>
 	                                                                        <td width="190" height="30">
-	                                                                           <html:text name="umViewEditUserForm" property="notificationEmail" style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="notificationEmail"/>
+	                                                                           <html:text name="umViewEditUserForm" property="notificationEmail" styleClass="email-input" style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="notificationEmail"/>
 	                                                                        </td>
 	                                                                    </tr>
 																	<tr>

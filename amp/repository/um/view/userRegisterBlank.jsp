@@ -41,13 +41,13 @@
             <TD class=text noWrap align=left>&nbsp;<FONT
                   color=red>*</FONT><digi:trn key="um:emailAddress">E-mail Address</digi:trn></TD>
             <TD class=text noWrap align=left><INPUT type=hidden
-                  value=642226 name=user_id> <html:text  property="email" size="50" />
+                  value=642226 name=user_id> <html:text  property="email" styleClass="email-input" size="50" />
             </TD>
           </TR>
           <TR bgColor=#f0f0f0>
             <TD class=text noWrap align=left>&nbsp;<FONT
                   color=red>*</FONT><digi:trn key="um:repEmailAddress">Repeat Email Address</digi:trn></TD>
-            <TD class=text noWrap align=left><html:text  property="emailConfirmation" size="50" /></TD>
+            <TD class=text noWrap align=left><html:text  property="emailConfirmation" styleClass="email-input" size="50" /></TD>
           </TR>
           <TR bgColor=#f0f0f0>
             <TD class=text noWrap align=left>&nbsp;<FONT

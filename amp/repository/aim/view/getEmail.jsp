@@ -58,7 +58,7 @@ function checkEmptyEmail(){
 						<digi:trn key="aim:email">Email</digi:trn>&nbsp;
 					</td>
 					<td class="left-align">
-						<html:text property="email" size="20" />
+						<html:text property="email" styleClass="email-input" size="20" />
 						<br /><font color="red" style="font-size:11px;">
 						<digi:trn key="aim:userIdExample1">
 						e.g. yourname@emailaddress.com

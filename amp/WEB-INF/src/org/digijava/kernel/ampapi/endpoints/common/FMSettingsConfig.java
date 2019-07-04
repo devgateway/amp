@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import org.dgfoundation.amp.visibility.data.FMSettingsMediator;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FMSettingsConfig {
     
     @JsonProperty(EPConstants.FULL_ENABLED_PATHS)
@@ -23,9 +25,8 @@ public class FMSettingsConfig {
     @ApiModelProperty(value = "to list or not enabled modules", example = "false")
     private Boolean enabledModules = false;
     
-    @JsonProperty(EPConstants.DETAILS_FLAT)
-    @ApiModelProperty(value = "if to detail as a flat list or in a tree form", example = "true")
-    private Boolean detailsFlat = true;
+    @JsonIgnore
+    private Boolean detailsFlat = false;
     
     @JsonProperty(EPConstants.DETAIL_MODULES)
     @ApiModelProperty(value = "Option1: [\"all-enabled\"] (if present, other entries are skipped)<br>"

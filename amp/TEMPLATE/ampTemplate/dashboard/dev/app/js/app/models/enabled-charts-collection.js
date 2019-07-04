@@ -5,12 +5,11 @@ var EnabledChartModel = Backbone.Model.extend({});
 
 var EnabledChartsCollection = Backbone.Collection.extend({
     model: EnabledChartModel,
-    url: '/rest/common/fm',
+    url: '/rest/common/fm/flat',
     fetchData: function () {
         var params = {
             'enabled-modules': false,
             'reporting-fields': false,
-            'detail-flat': true,
             'full-enabled-paths': false,
             'detail-modules': ['DASHBOARDS']
         };

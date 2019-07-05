@@ -37,16 +37,18 @@ public class FiltersConstants {
     public static final String APPROVAL_STATUS = "approval-status";
     public static final String ARCHIVED = "archived";
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";
-    public static final String COMMUNAL_SECTION = "communal-section";
     public static final String COMPONENT_FUNDING_ORGANIZATION = "component-funding-organization";
     public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "component-second-responsible-organization";
     public static final String COMPUTED_YEAR = "computed-year";
     public static final String CONCESSIONALITY_LEVEL = "concessionality-level";
     public static final String CONTRACTING_AGENCY = "contracting-agency";
     public static final String CONTRACTING_AGENCY_GROUPS = "contracting-agency-groups";
-    public static final String COUNTRY = "country";
+    public static final String ADMINISTRATIVE_LEVEL_0 = "adm-level-0";
+    public static final String ADMINISTRATIVE_LEVEL_1 = "adm-level-1";
+    public static final String ADMINISTRATIVE_LEVEL_2 = "adm-level-2";
+    public static final String ADMINISTRATIVE_LEVEL_3 = "adm-level-3";
+    public static final String ADMINISTRATIVE_LEVEL_4 = "adm-level-4";
     public static final String DISASTER_RESPONSE_MARKER = "disaster-response-marker";
-    public static final String DISTRICT = "district";
     public static final String DONOR_AGENCY = "donor-agency";
     public static final String DONOR_GROUP = "donor-group";
     public static final String DONOR_TYPE = "donor-type";
@@ -95,7 +97,6 @@ public class FiltersConstants {
     public static final String PRIMARY_SECTOR_SUB_SUB_SECTOR = "primary-sector-sub-sub-sector";
     public static final String PROCUREMENT_SYSTEM = "procurement-system";
     public static final String PROJECT_IMPLEMENTING_UNIT = "project-implementing-unit";
-    public static final String REGION = "region";
     public static final String RESPONSIBLE_ORGANIZATION = "responsible-organization";
     public static final String SECONDARY_PROGRAM_LEVEL_1 = "secondary-program-level-1";
     public static final String SECONDARY_PROGRAM_LEVEL_2 = "secondary-program-level-2";
@@ -130,7 +131,6 @@ public class FiltersConstants {
     public static final String QUINARY_SECTOR_SUB_SUB_SECTOR = "quinary-sector-sub-sub-sector";
     public static final String TYPE_OF_ASSISTANCE = "type-of-assistance";
     public static final String WORKSPACES = "workspaces";
-    public static final String ZONE = "zone";
 
     /** filters IDs to Name mapping */
     public static final Map<String, String> ID_NAME_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{

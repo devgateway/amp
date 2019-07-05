@@ -61,7 +61,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.APPROVAL_STATUS, ColumnConstants.APPROVAL_STATUS);
         mapSimpleColumn(FiltersConstants.ARCHIVED, ColumnConstants.ARCHIVED);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY, ColumnConstants.BENEFICIARY_AGENCY);
-        mapSimpleColumn(FiltersConstants.COMMUNAL_SECTION, ColumnConstants.LOCATION_ADM_LEVEL_4);
+        mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_4, ColumnConstants.LOCATION_ADM_LEVEL_4);
         mapSimpleColumn(FiltersConstants.COMPONENT_FUNDING_ORGANIZATION,
                 ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
         mapSimpleColumn(FiltersConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
@@ -70,9 +70,9 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.CONCESSIONALITY_LEVEL, ColumnConstants.CONCESSIONALITY_LEVEL);
         mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY);
         mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_GROUPS, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
-        mapSimpleColumn(FiltersConstants.COUNTRY, ColumnConstants.LOCATION_ADM_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_0, ColumnConstants.LOCATION_ADM_LEVEL_0);
         mapSimpleColumn(FiltersConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.DISASTER_RESPONSE_MARKER);
-        mapSimpleColumn(FiltersConstants.DISTRICT, ColumnConstants.LOCATION_ADM_LEVEL_3);
+        mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_3, ColumnConstants.LOCATION_ADM_LEVEL_3);
         mapSimpleColumn(FiltersConstants.DONOR_AGENCY, ColumnConstants.DONOR_AGENCY);
         mapSimpleColumn(FiltersConstants.DONOR_GROUP, ColumnConstants.DONOR_GROUP);
         mapSimpleColumn(FiltersConstants.DONOR_TYPE, ColumnConstants.DONOR_TYPE);
@@ -121,7 +121,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR);
         mapSimpleColumn(FiltersConstants.PROCUREMENT_SYSTEM, ColumnConstants.PROCUREMENT_SYSTEM);
         mapSimpleColumn(FiltersConstants.PROJECT_IMPLEMENTING_UNIT, ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
-        mapSimpleColumn(FiltersConstants.REGION, ColumnConstants.LOCATION_ADM_LEVEL_1);
+        mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_1, ColumnConstants.LOCATION_ADM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_1, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_2, ColumnConstants.SECONDARY_PROGRAM_LEVEL_2);
@@ -157,7 +157,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.QUINARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.QUINARY_SECTOR_SUB_SUB_SECTOR);
         mapSimpleColumn(FiltersConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_ASSISTANCE);
         mapSimpleColumn(FiltersConstants.WORKSPACES, ColumnConstants.WORKSPACES);
-        mapSimpleColumn(FiltersConstants.ZONE, ColumnConstants.LOCATION_ADM_LEVEL_2);
+        mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_2, ColumnConstants.LOCATION_ADM_LEVEL_2);
     }
 
     private void mapSimpleColumn(String filterId, String columnName) {

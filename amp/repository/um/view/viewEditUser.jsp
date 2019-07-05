@@ -173,7 +173,7 @@ function validateUserInfo(){
   <table bgColor="#ffffff" cellPadding="5" cellSpacing="1" width="705" >
 	<tr>
 		<td class="r-dotted-lg" width="14">&nbsp;</td>
-		<td align=left class=r-dotted-lg valign="top" width=752>
+		<td class="r-dotted-lg left-align" valign="top" width=752>
         
 			<table cellPadding="5" cellSpacing="0" width="100%">
 				<tr>
@@ -259,7 +259,7 @@ function validateUserInfo(){
 															<td width="100%" id="viewUserEditContainer">
 																<table width="563" border="0"  height="363" >
 																	<tr>
-																		<td width="169" align="right" height="30" style="font-size: 11px;
+																		<td width="169" class="right-align" height="30" style="font-size: 11px;
     font-weight: bold; color:#000;">
 																			<digi:trn key="aim:viewEditUser:firstName">First name</digi:trn>
 																			<font color="red">*</font>
@@ -269,7 +269,7 @@ function validateUserInfo(){
 																	    </td>
 																	</tr>
 																	<tr>
-																		<td width="169" align="right" height="30"style="font-size: 11px;
+																		<td width="169" class="right-align" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
 																			<digi:trn key="aim:viewEditUser:lastName">Last name</digi:trn>
 																			<font color="red">*</font>
@@ -279,7 +279,7 @@ function validateUserInfo(){
 																	    </td>
 																	</tr>
 																	<tr>
-																		<td width="169" align="right" height="30"style="font-size: 11px;
+																		<td width="169" class="right-align" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
 																	        <digi:trn key="aim:viewEditUser:email">Email </digi:trn>
 																	        <font color="red">*</font>
@@ -290,7 +290,7 @@ function validateUserInfo(){
 																		</td>
 																	</tr>
 																	<tr>
-                                                                        <td width="169" align="right" height="30"style="font-size: 11px; font-weight: bold; color:#000;">
+                                                                        <td width="169" class="right-align" height="30"style="font-size: 11px; font-weight: bold; color:#000;">
                                                                              <digi:trn>Use different email for email notifications</digi:trn>
                                                                         </td>
                                                                         <td width="380" height="30" colspan="2">
@@ -298,7 +298,7 @@ function validateUserInfo(){
                                                                         </td>
                                                                     </tr>
 	                                                                    <tr id="notificationEmailRow">
-	                                                                        <td width="169" align="right" height="30"style="font-size: 11px; font-weight: bold; color:#000;">
+	                                                                        <td width="169" class="right-align" height="30" style="font-size: 11px; font-weight: bold; color:#000;">
 	                                                                            <digi:trn>Notification Email</digi:trn>
 	                                                                            <font color="red">*</font>
 	                                                                        </td>
@@ -307,7 +307,7 @@ function validateUserInfo(){
 	                                                                        </td>
 	                                                                    </tr>
 																	<tr>
-																		<td width="169" height="30" align="right"style="font-size: 11px;
+																		<td width="169" height="30" class="right-align" style="font-size: 11px;
     font-weight: bold; color:#000;">
 																			<digi:trn key="aim:viewEditUser:country">Country</digi:trn>
 																			<font color="red">*</font>
@@ -329,7 +329,7 @@ function validateUserInfo(){
 																		</td>
 																	</tr>
                                                           			<tr>
-																		<td width="169" align="right" height="30"style="font-size: 11px;
+																		<td width="169" class="right-align" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
                                                                     		<digi:trn key="aim:viewEditUser:mailingAddress">Mailing address</digi:trn>
 																		</td>
@@ -338,12 +338,12 @@ function validateUserInfo(){
 																		</td>
                                                           			</tr>
                                                           			<tr>
-																		<td width="169" align="right" height="2">&nbsp;
+																		<td width="169" class="right-align" height="2">&nbsp;
                                                                             
 																		</td>																		
 																	</tr>
 																	<tr>
-																		<td width="169" align="right" height="30"style="font-size: 11px;
+																		<td width="169" class="right-align" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
 																	       <digi:trn key="aim:viewEditUser:organizationType">Organization type</digi:trn>
 																		</td>
@@ -362,7 +362,7 @@ function validateUserInfo(){
 																		</td>
 																	</tr>
 																	<tr>
-																		<td width="169" align="right" height="30"style="font-size: 11px;
+																		<td width="169" class="right-align" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
 																	        <digi:trn key="aim:viewEditUser:organizationGroup">Organization group</digi:trn>
 																		</td>
@@ -381,7 +381,7 @@ function validateUserInfo(){
 																		</td>
 																	</tr>
 																	<tr>
-																		<td width="169" align="right" height="30"style="font-size: 11px;
+																		<td width="169" class="right-align" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
                                                                    			<digi:trn key="aim:viewEditUser:organisationName">Organisation name</digi:trn>
 																		</td>
@@ -401,7 +401,7 @@ function validateUserInfo(){
 																	</tr>
 
 																	<tr>
-																		<td width="169" align="right" height="30"style="font-size: 11px;
+																		<td width="169" class="right-align" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
                                                                  			<digi:trn key="aim:viewEditUser:selectOrgVeified">Select Organization To Add as Verified</digi:trn> 
 																		</td>
@@ -421,7 +421,7 @@ function validateUserInfo(){
 																	</tr>
 																	
 																	<tr>
-																		<td width="169" align="right" height="30">&nbsp;</td>
+																		<td width="169" class="right-align" height="30">&nbsp;</td>
 																		<td class="addUserButContainer">
 																		  <bean:define id="addOrganization"><digi:trn>Add Organization</digi:trn></bean:define>
 		 	 	 	 		                                                <input type="button" value="${addOrganization}" onclick="goAction('addOrg');" style="font-family:verdana; font-size:11px; min-width:60px; "/>                                                                                                                                             
@@ -429,10 +429,10 @@ function validateUserInfo(){
 																	</tr>
 																	
 																	<tr>
-																		<td width="169" align="right" height="30"style="font-size: 14px;
+																		<td width="169" class="right-align" height="30"style="font-size: 14px;
     font-weight: bold; color:#000;"><digi:trn key="aim:viewEditUser:verifiedAssignedOrgs">Verified Assigned Organisations</digi:trn></td>
                                                                         <td>
-	                                                                        <table width="80%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
+	                                                                        <table width="80%" cellSpacing="1" cellPadding="1" vAlign="top" class="left-align" bgcolor="#ffffff">
     	                                                                        <logic:iterate id="org" name="umViewEditUserForm" property="assignedOrgs" indexId="ind">
         		                                                                    <tr>
                 	                                                                    <td width="2%">
@@ -440,7 +440,7 @@ function validateUserInfo(){
                                                                                                      <bean:write name="org" property="ampOrgId" scope="page"/>
                                                                                              </html:multibox>
                     	                                                                 </td>
-                        	                                                             <td align="left" width="49%">
+                        	                                                             <td class="left-align" width="49%">
                                                                                              <bean:write name="org" property="name" scope="page"/>
                             	                                                         </td>                                                                                                   
                                 		                                             </tr>
@@ -450,7 +450,7 @@ function validateUserInfo(){
                                                                     </tr>
                                                                     
                                                                     <tr>
-																		<td width="169" align="right" height="30">&nbsp;</td>
+																		<td width="169" class="right-align" height="30">&nbsp;</td>
  	 	 	 															<td class="addUserButContainer">
 																			<logic:notEmpty name="umViewEditUserForm" property="assignedOrgs">
 																			    <bean:define id="removeOrganization"><digi:trn>Remove Organizations</digi:trn></bean:define>
@@ -459,7 +459,7 @@ function validateUserInfo(){
  	 	 	 															</td>
 																	</tr>
                                                           			<tr>
-																		<td width="169" height="30" align="right"style="font-size: 11px; font-weight: bold; color:#000;">
+																		<td width="169" height="30" class="right-align" style="font-size: 11px; font-weight: bold; color:#000;">
 																			<digi:trn>Verified Region</digi:trn>
 																	    </td>
 																	    <td width="190" height="30">
@@ -480,7 +480,7 @@ function validateUserInfo(){
 																	</tr>
                                                                     
 																	<tr>
-																		<td width="169" align="right" height="30"style="font-size: 11px;
+																		<td width="169" class="right-align" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
                                                                      		 <digi:trn key="aim:viewEditUser:languageSettings">Language settings</digi:trn>
 																		</td>
@@ -500,7 +500,7 @@ function validateUserInfo(){
 																	</tr>
 																	<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
 																	<tr>
-																		<td width="169" align="right" height="30"style="font-size: 11px;
+																		<td width="169" class="right-align" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
                                                                      		 <digi:trn key="um:pledgesUser">Pledges User</digi:trn>
 																		</td>
@@ -513,7 +513,7 @@ function validateUserInfo(){
 																		</td>
 																	</tr>
 																		<tr>
-																			<td width="169" align="right" height="30"style="font-size: 11px;
+																			<td width="169" class="right-align" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
 																				<digi:trn key="um:pledgesSuperUser">Pledges Super User</digi:trn>
 																			</td>
@@ -539,7 +539,7 @@ function validateUserInfo(){
 																		</tr>
 																	</module:display>																	
 																		<tr>
-																		<td width="169" align="right" height="30"style="font-size: 11px;font-weight: bold; color:#000;">
+																		<td width="169" class="right-align" height="30"style="font-size: 11px;font-weight: bold; color:#000;">
                                                                      		 <digi:trn key="um:nationalCoordinator">National Coordinator</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
@@ -547,10 +547,10 @@ function validateUserInfo(){
 																		</td>
 																	</tr>																	
 																		<tr>
-																			<td align="right"  class="formCheckContainer">
+																			<td class="formCheckContainer right-align">
 																				<digi:trn>Assign to Workspace</digi:trn>
 																			</td>
-																			<td class="f-names" align="left">
+																			<td class="f-names left-align">
 																				<c:if test="${!umViewEditUserForm.banReadOnly}">
 																					<html:checkbox property="addWorkspace" style="margin: 5px" styleClass="inp-text"></html:checkbox>
 																				</c:if>
@@ -560,7 +560,7 @@ function validateUserInfo(){
 																			</td>
 																		</tr>
 																		<tr>
-																		<td width="169" align="right" height="30"style="font-size: 11px;font-weight: bold; color:#000;">
+																		<td width="169" class="right-align" height="30"style="font-size: 11px;font-weight: bold; color:#000;">
                                                                      		 <digi:trn key="um:exemptFromDataFreezing">Exempt from activity freezing</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
@@ -595,7 +595,7 @@ function validateUserInfo(){
 																		<c:set var="translation">
 															              <digi:trn key="aim:viewEditUser:changePasswordButton">Change password</digi:trn>
 															            </c:set>
-																		<td width="169" valign="top" align="right"
+																		<td width="169" valign="top" class="right-align"
 																			height="30" style="font-size: 11px;
     font-weight: bold; color:#000;">
 																			<div style="margin-top: 10px;">
@@ -615,7 +615,7 @@ function validateUserInfo(){
                                                                			</td>
 																	</tr>
 																	<tr>
-																		<td width="169" align="right" height="30"style="font-size: 11px;
+																		<td width="169" class="right-align" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
                                                                    			<digi:trn key="aim:viewEditUser:confirmPassword">Confirm:</digi:trn>
 																		</td>
@@ -629,10 +629,10 @@ function validateUserInfo(){
 																              Either fields are blank or their values do not match
 																            </digi:trn>
 																        </c:set>
-																	    <td  class="addUserButContainer" width="270" height="30" coslpan="2" align="right">
+																	    <td  class="addUserButContainer right-align" width="270" height="30" coslpan="2">
                                                               				<input type="button" value="${translation}" onclick="validate('${errMsg}','changePassword');" style="font-family:verdana;font-size:11px;"/></td>
 																		</td>
-																		<td   class="addUserButContainer" width="169" height="30" colspan="2" align="left">
+																		<td class="addUserButContainer left-align" width="169" height="30" colspan="2">
 																			<c:set var="translation">
 																                <digi:trn key="aim:viewEditUser:resetPasswordButton" jsFriendly="true">Reset </digi:trn>
 																              </c:set>

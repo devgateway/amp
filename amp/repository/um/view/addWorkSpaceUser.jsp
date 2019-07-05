@@ -145,7 +145,7 @@
 <input type="hidden" name="teamMemberId" />
   <table bgColor=#ffffff cellPadding=5 cellspacing="1" width=1000 align="center">
 	<tr>
-		<td align=left valign="top" width=752>
+		<td class="left-align" valign="top" width=752>
 			<table cellPadding=0 cellspacing="0" width="1000">
 				<tr>
 					<!-- Start Navigation -->
@@ -211,12 +211,12 @@
 					
 							<table border="0" cellpadding="0" cellspacing="0" width=772>
 								<tr>
-									<td align=left valign="top" width=520>
+									<td class="left-align" valign="top" width=520>
 									
 										<table border="0" cellPadding=5 cellspacing="0" width="100%">
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=left noWrap colspan="2">
+												<td class="left-align" noWrap colspan="2">
 													<digi:errors/>
 													<logic:notEmpty name="umAddUserForm" property="errors" >
 							                        <font color="red">
@@ -233,28 +233,28 @@
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap width="40%">
+												<td class="f-names right-align padding-5" noWrap width="40%">
 													<digi:trn key="um:firstName">First Name	</digi:trn>
 												</td>
-												<td align="left">
+												<td class="left-align">
 													<bean:write name="umAddUserForm" property="firstNames"/>
 												</td>
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap width="40%">
+												<td class="f-names right-align padding-5" noWrap width="40%">
 													<digi:trn key="um:lastName">Last Name </digi:trn>
 												</td>
-												<td align="left">
+												<td class="left-align">
 													<bean:write name="umAddUserForm" property="lastName"/>
 												</td>
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap width="40%">
+												<td class="f-names right-align padding-5" noWrap width="40%">
 													<digi:trn key="um:emailAddress">E-mail Address </digi:trn>
 												</td>
-												<td align="left">
+												<td class="left-align">
 													<bean:write name="umAddUserForm" property="email"/>
 												</td>
 											</tr>
@@ -281,10 +281,10 @@
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-													<td align="right" valign="top" width="30%">
+													<td class="right-align padding-5" valign="top" width="30%">
 														<digi:trn key="aim:workspaceId">Workspace Name</digi:trn>&nbsp;
 													</td>
-												<td align="left" width="70%">
+												<td class="left-align" width="70%">
 													<html:select property="teamId"  onchange="hideUnhideApproverRole(this)">
 													<html:option value="-1">-- <digi:trn key="um:selectWorkspace">Select a workspace</digi:trn> --</html:option>
 													<c:forEach items="${umAddUserForm.workspaces}" var="workspaces">
@@ -297,10 +297,10 @@
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align="right" valign="top" width="30%">
+												<td class="right-align padding-5" valign="top" width="30%">
 													<digi:trn key="aim:RoleId">User Role</digi:trn>&nbsp;
 												</td>
-												<td align="left" width="70%">
+												<td class="left-align" width="70%">
 													<html:select property="role" styleId="team_member_roles_drop_down">
 													<html:option value="-1">-- <digi:trn key="um:selectRole">Select a role</digi:trn> --</html:option>
 													
@@ -317,13 +317,13 @@
 								
 											<tr>
 												<td>&nbsp;</td>
-												<td align="right">
+												<td class="right-align padding-5">
 							                        <c:set var="btnSubmit">
 							                              <digi:trn key="btn:submit">Submit</digi:trn>
 							                        </c:set>
 													<html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate()" />
 												</td>
-												<td align="left">
+												<td class="left-align">
 							                        <c:set var="btnDone">
 							                              <digi:trn key="btn:done">Done</digi:trn>
 							                        </c:set>

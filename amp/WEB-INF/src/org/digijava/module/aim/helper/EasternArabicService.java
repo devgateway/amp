@@ -40,16 +40,20 @@ public final class EasternArabicService {
     }
     
     public String convertWesternArabicToEasternArabic(String text) {
-        for (Map.Entry<Character, Character> entry : ARABIC_NUMERALS.entrySet()) {
-            text = text.replace(entry.getKey(), entry.getValue());
+        if (text != null) {
+            for (Map.Entry<Character, Character> entry : ARABIC_NUMERALS.entrySet()) {
+                text = text.replace(entry.getKey(), entry.getValue());
+            }
         }
 
         return text;
     }
     
     public String convertEasternArabicToWesternArabic(String text) {
-        for (Map.Entry<Character, Character> entry : ARABIC_NUMERALS.entrySet()) {
-            text = text.replace(entry.getValue(), entry.getKey());
+        if (text != null) {
+            for (Map.Entry<Character, Character> entry : ARABIC_NUMERALS.entrySet()) {
+                text = text.replace(entry.getValue(), entry.getKey());
+            }
         }
     
         return text;

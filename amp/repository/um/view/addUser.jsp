@@ -335,7 +335,7 @@
 													<digi:trn key="um:firstName">First Name</digi:trn>
 												</td>
 												<td class="left-align">
-													<html:text property="firstNames" size="20" styleClass="inp-text" /></td>
+													<html:text property="firstNames" size="20" styleClass="inp-text input-add-user" /></td>
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
@@ -344,7 +344,7 @@
 													<digi:trn key="um:lastName">Last Name</digi:trn>
 												</td>
 												<td class="left-align">
-													<html:text property="lastName"	size="20" styleClass="inp-text" />
+													<html:text property="lastName"	size="20" styleClass="inp-text input-add-user" />
 												</td>
 											</tr>
 											<tr>
@@ -354,7 +354,7 @@
 													<digi:trn key="um:emailAddress">E-mail Address</digi:trn></td>
 												<td class="left-align">
 													<html:text  styleId="userEmail" property="email" size="20"
-																styleClass="inp-text pwd_username" />
+																styleClass="inp-text pwd_username input-add-user" />
 												</td>
 											</tr>
 											<tr>
@@ -363,7 +363,7 @@
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:repEmailAddress">Repeat Email Address</digi:trn></td>
 												<td class="left-align">
-													<html:text styleId="userEmailConfirmation" property="emailConfirmation"	size="20" styleClass="inp-text" />
+													<html:text styleId="userEmailConfirmation" property="emailConfirmation"	size="20" styleClass="inp-text input-add-user" />
 												</td>
 											</tr>
 											<tr>
@@ -375,7 +375,7 @@
 													</div>
 												</td>
 												<td class="left-align">
-													<html:password styleId="userPassword"
+													<html:password styleId="userPassword" styleClass="input-add-user"
 																   property="password" size="20" />
 													<div style="padding-left: 2px; margin: 5px">
 														<div style="display: none" class="pwd_container" id="pwd_container">
@@ -392,7 +392,7 @@
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:repPassword">Repeat Password</digi:trn></td>
 												<td class="left-align">
-													<html:password styleId="userPasswordConfirmation" property="passwordConfirmation" size="20" />
+													<html:password styleId="userPasswordConfirmation" styleClass="inp-text input-add-user" property="passwordConfirmation" size="20" />
 												</td>
 											</tr>
 											<tr>
@@ -410,7 +410,7 @@
                                                     <font color=red>*</font>
                                                     <digi:trn>Notification Email</digi:trn></td>
                                                 <td class="left-align">
-                                                    <html:text property="notificationEmail" size="20" styleClass="inp-text" styleId="notificationEmail"/></td>
+                                                    <html:text property="notificationEmail" size="20" styleClass="inp-text input-add-user" styleId="notificationEmail"/></td>
                                             </tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
@@ -430,7 +430,7 @@
 												<td class="f-names right-align" noWrap>
 													<digi:trn key="um:mailingAddress">Mailing Address</digi:trn></td>
 												<td class="left-align">
-													<html:text property="mailingAddress" size="20" styleClass="inp-text" /></td>
+													<html:text property="mailingAddress" size="20" styleClass="inp-text input-add-user" /></td>
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
@@ -538,12 +538,12 @@
 													<c:set var="btnSubmit">
 														<digi:trn key="btn:submit">Submit</digi:trn>
 													</c:set> 
-													<html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate()" /></td>
-												<td class="left-align" class="addUserButContainer">
+													<html:submit value="${btnSubmit}" styleClass="dr-menu input-add-user" onclick="return validate()" /></td>
+												<td class="left-align addUserButContainer">
 													<c:set var="btnCancel">
 														<digi:trn key="btn:cancel">Cancel</digi:trn>
 													</c:set> 
-													<html:submit value="${btnCancel}" styleClass="dr-menu" onclick="return cancel()" /></td>
+													<html:submit value="${btnCancel}" styleClass="dr-menu input-add-user" onclick="return cancel()" /></td>
 											</tr>
 											<tr>
 												<td colspan=3>&nbsp;</td>

@@ -56,17 +56,17 @@ public class GisConstants {
     }};
     
     public static final Map<String, HardCodedCategoryValue> ADM_TO_IMPL_CATEGORY_VALUE = new HashMap<String, HardCodedCategoryValue>() {{
-       put(ADM0, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY); 
-       put(ADM1, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-       put(ADM2, CategoryConstants.IMPLEMENTATION_LOCATION_ZONE);
-       put(ADM3, CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT);
+       put(ADM0, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
+       put(ADM1, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
+       put(ADM2, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2);
+       put(ADM3, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3);
     }};
     
     public static final Map<String, String> IMPL_CATEGORY_VALUE_TO_ADM = new HashMap<String, String>() {{
-        put(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey(), ADM0);
-        put(CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey(), ADM1);
-        put(CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.getValueKey(), ADM2);
-        put(CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.getValueKey(), ADM3);
+        put(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey(), ADM0);
+        put(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.getValueKey(), ADM1);
+        put(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2.getValueKey(), ADM2);
+        put(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3.getValueKey(), ADM3);
     }};
     
 }

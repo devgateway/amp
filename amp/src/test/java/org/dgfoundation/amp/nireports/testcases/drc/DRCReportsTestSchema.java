@@ -93,10 +93,10 @@ public class DRCReportsTestSchema extends AbstractReportsSchema {
         addPercentageColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2, new PrimaryProgramLevel2Cells(activityNames, progsDimension.getEntityIds(), PP_DIM_USG.getLevelColumn(LEVEL_PROGRAM_2)));
         
         //one more percentages dimension, independent of those at (2) and (3) (for example, locations)
-        addPercentageColumn(ColumnConstants.LOCATION_ADM_LEVEL_0, new CountryCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(LEVEL_COUNTRY)));
-        addPercentageColumn(ColumnConstants.LOCATION_ADM_LEVEL_1, new RegionCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(LEVEL_REGION)));
-        addPercentageColumn(ColumnConstants.LOCATION_ADM_LEVEL_2, new ZoneCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(LEVEL_ZONE)));
-        addPercentageColumn(ColumnConstants.LOCATION_ADM_LEVEL_3, new DistrictCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(LEVEL_DISTRICT)));
+        addPercentageColumn(ColumnConstants.LOCATION_ADM_LEVEL_0, new CountryCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(ADM_LEVEL_0)));
+        addPercentageColumn(ColumnConstants.LOCATION_ADM_LEVEL_1, new RegionCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(ADM_LEVEL_1)));
+        addPercentageColumn(ColumnConstants.LOCATION_ADM_LEVEL_2, new ZoneCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(ADM_LEVEL_2)));
+        addPercentageColumn(ColumnConstants.LOCATION_ADM_LEVEL_3, new DistrictCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(ADM_LEVEL_3)));
         //one non-percentages dimension (like Project Title)
         addTextColumn(ColumnConstants.PROJECT_TITLE, new ProjectTitleCells(activityNames, activityNames, null));
                 

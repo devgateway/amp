@@ -78,7 +78,8 @@ public class ExportCurrencyManager2XSL extends Action {
        
        
        HSSFCell countryTitleCell = titleRow.createCell(cellIndex++);
-       HSSFRichTextString countryTitle = new HSSFRichTextString(TranslatorWorker.translateText("Country",locale,siteId));
+       HSSFRichTextString countryTitle = new HSSFRichTextString(
+               TranslatorWorker.translateText("Administrative Level 0", locale, siteId));
        countryTitleCell.setCellValue(countryTitle);
        countryTitleCell.setCellStyle(titleCS);
        String active=TranslatorWorker.translateText("Active",locale,siteId);

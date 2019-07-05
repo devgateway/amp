@@ -20,7 +20,6 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * The regionalfunding section of the activity form.
@@ -61,11 +60,12 @@ public class AmpRegionalFundingFormSectionFeature extends
                 Set<AmpCategoryValueLocations> s = new HashSet<AmpCategoryValueLocations>();
                 if (locationModel.getObject() == null)
                     locationModel.setObject(new HashSet());
-                for (AmpActivityLocation location : locationModel.getObject())
-                    if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(location
-                            .getLocation().getLocation()
-                            .getParentCategoryValue()))
+                for (AmpActivityLocation location : locationModel.getObject()) {
+                    if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.equalsCategoryValue(
+                            location.getLocation().getLocation().getParentCategoryValue())) {
                         s.add(location.getLocation().getLocation());
+                    }
+                }
                 return new ArrayList<AmpCategoryValueLocations>(s);
             }
         };

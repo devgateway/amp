@@ -1428,7 +1428,8 @@ public class EditOrganisation extends DispatchAction {
           form.setSectorScheme(SectorUtil.getAllSectorSchemes());
           form.setFiscalCal(DbUtil.getAllFisCalenders());
           form.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
-          Set<AmpCategoryValueLocations> countryLocations = DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+          Set<AmpCategoryValueLocations> countryLocations =
+                  DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
           form.setCountries(countryLocations);
           form.setYears(getYearsBeanList());
           form.setOrgInfoAmount(null);

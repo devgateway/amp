@@ -118,10 +118,10 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
      ***************/
     private static final String DONOR_ORAGNIZATION = "Donor Organization";
     private static final String SEARCH_DONOR_ORAGNIZATION = "Search Donor Organization";
-    private static final String IMPLEMENTATION_LOCATION_COUNTRY = "IMPLEMENTATION_LOCATION_COUNTRY";
-    private static final String IMPLEMENTATION_LOCATION_REGION = "IMPLEMENTATION_LOCATION_REGION";
-    private static final String IMPLEMENTATION_LOCATION_ZONE = "IMPLEMENTATION_LOCATION_ZONE";
-    private static final String IMPLEMENTATION_LOCATION_DISTRICT = "IMPLEMENTATION_LOCATION_DISTRICT";
+    private static final String IMPLEMENTATION_LOCATION_ADM_LEVEL_0 = "IMPLEMENTATION_LOCATION_ADM_LEVEL_0";
+    private static final String IMPLEMENTATION_LOCATION_ADM_LEVEL_1 = "IMPLEMENTATION_LOCATION_ADM_LEVEL_1";
+    private static final String IMPLEMENTATION_LOCATION_ADM_LEVEL_2 = "IMPLEMENTATION_LOCATION_ADM_LEVEL_2";
+    private static final String IMPLEMENTATION_LOCATION_ADM_LEVEL_3 = "IMPLEMENTATION_LOCATION_ADM_LEVEL_3";
     
     //Note: mappings are manually retrieved, because no certain way exists to map them 
     @SuppressWarnings("serial")
@@ -423,21 +423,21 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
      */
     @SuppressWarnings("serial")
     protected static final Map<String, HardCodedCategoryValue> categoryValueDependency = new HashMap<String, HardCodedCategoryValue>() {{
-        put(IMPLEMENTATION_LOCATION_COUNTRY, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
-        put(IMPLEMENTATION_LOCATION_REGION, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-        put(IMPLEMENTATION_LOCATION_ZONE, CategoryConstants.IMPLEMENTATION_LOCATION_ZONE);
-        put(IMPLEMENTATION_LOCATION_DISTRICT, CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT);
+        put(IMPLEMENTATION_LOCATION_ADM_LEVEL_0, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
+        put(IMPLEMENTATION_LOCATION_ADM_LEVEL_1, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
+        put(IMPLEMENTATION_LOCATION_ADM_LEVEL_2, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2);
+        put(IMPLEMENTATION_LOCATION_ADM_LEVEL_3, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3);
     }};
     
     
     protected static final Map<String, Collection<String>> dependencyTypeAll = new HashMap<String, Collection<String>>() {{
         put(ColumnConstants.LOCATION_ADM_LEVEL_0,
-                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_COUNTRY));
+                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_ADM_LEVEL_0));
         put(ColumnConstants.LOCATION_ADM_LEVEL_1,
-                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_REGION));
+                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_ADM_LEVEL_1));
         put(ColumnConstants.LOCATION_ADM_LEVEL_2,
-                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_ZONE));
+                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_ADM_LEVEL_2));
         put(ColumnConstants.LOCATION_ADM_LEVEL_3,
-                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_DISTRICT));
+                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_ADM_LEVEL_3));
     }};
 }

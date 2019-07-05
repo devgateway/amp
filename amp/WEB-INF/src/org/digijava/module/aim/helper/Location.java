@@ -7,7 +7,6 @@ package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -294,8 +293,8 @@ public class Location implements Serializable
     }
 
     public String getRegionName() {
-        AmpCategoryValueLocations ampCVRegion   = 
-            DynLocationManagerUtil.getAncestorByLayer(ampCVLocation, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+        AmpCategoryValueLocations ampCVRegion = DynLocationManagerUtil.getAncestorByLayer(
+                ampCVLocation, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
         
         if ( ampCVRegion != null )
             return ampCVRegion.getName();

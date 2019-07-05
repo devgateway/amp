@@ -331,7 +331,7 @@
 				<table align="center" cellpadding="1" cellspacing="1">
 						<tr bgcolor="#EEEEEE">
 					<td colspan="5" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
-					<b><digi:trn key="rep:filter:RegionTitle">Region </digi:trn></b>
+					<b><digi:trn key="rep:filter:RegionTitle">Administrative Level 1</digi:trn></b>
 					<br>
 					</td>
 				</tr>

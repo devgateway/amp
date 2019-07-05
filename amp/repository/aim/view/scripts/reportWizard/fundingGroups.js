@@ -15,7 +15,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Donor Group'
 				,'Donor Agency'
 				,'Primary Sector'
-				,'Status', 'Region', 'Country', 'District','Zone'
+				,'Status', 'Administrative Level 0', 'Administrative Level 1', 'Administrative Level 2','Administrative Level 3'
 				,'Type Of Assistance'
 				,'Financing Instrument'
 				,'National Planning Objectives Level 1'
@@ -114,7 +114,7 @@ YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
 				'Status','Primary Sector','Primary Sector Sub-Sector','National Planning Objectives Level 1','Regional Region'
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
-				 'Component Type','Region','Status','Primary Sector','National Planning Objectives Level 1','District','Zone','Component Name','Project Title','Component Funding Organization','Component Second Responsible Organization'
+				 'Component Type','Administrative Level 1','Status','Primary Sector','National Planning Objectives Level 1','Administrative Level 3','Administrative Level 2','Component Name','Project Title','Component Funding Organization','Component Second Responsible Organization'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives Level 1', 'Primary Program Level 1', 
@@ -290,9 +290,9 @@ function colIdToName(id) {
 function updateColumnVisibility(reportType) {
     if (reportType === 'regional') {
         ColumnsDragAndDropObject.showObjsByDbId('source_col_div', [colNameToId('Regional Region')]);
-        ColumnsDragAndDropObject.hideObjsByDbId('source_col_div', [colNameToId('Region')]);
+        ColumnsDragAndDropObject.hideObjsByDbId('source_col_div', [colNameToId('Administrative Level 1')]);
     } else {
-        ColumnsDragAndDropObject.showObjsByDbId('source_col_div', [colNameToId('Region')]);
+        ColumnsDragAndDropObject.showObjsByDbId('source_col_div', [colNameToId('Administrative Level 1')]);
         ColumnsDragAndDropObject.hideObjsByDbId('source_col_div', [colNameToId('Regional Region')]);
     }
 }

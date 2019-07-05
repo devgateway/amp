@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({ "field_name", "apiType", "field_label", "required", "importable", "dependencies", "id_only",
     "multiple_values", "percentage_constraint", "unique_constraint", "tree_collection", "translatable", "regex_pattern",
-    "regex_constraint", "field_length", "size_limit", "common-possible-values" })
+    "regex_constraint", "field_length", "size_limit", "common-possible-values", "fieldConstraints", "beanConstraints" })
 public class APIField {
 
     @JsonProperty("id")
@@ -140,10 +140,8 @@ public class APIField {
     @JsonIgnore
     private boolean isCollection;
 
-    @JsonIgnore
     private ConstraintDescriptors beanConstraints;
 
-    @JsonIgnore
     private ConstraintDescriptors fieldConstraints;
 
     public ConstraintDescriptors getFieldConstraints() {

@@ -370,7 +370,7 @@ public class FilterUtils {
      * @return
      */
     public static String getApprovalStatusByNumber(Integer status){
-        for (Entry<String, Integer> entry : AmpARFilter.activityApprovalStatus.entrySet()) {
+        for (Entry<String, Integer> entry : AmpARFilter.VALIDATION_STATUS.entrySet()) {
             if (entry.getValue().equals(status)) {
                 return entry.getKey();
             }

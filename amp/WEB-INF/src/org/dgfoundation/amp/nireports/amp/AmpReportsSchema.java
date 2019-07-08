@@ -45,7 +45,6 @@ import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -468,7 +467,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 true);
         no_dimension(ColumnConstants.APPROVAL_STATUS, "v_approval_status");
         degenerate_dimension(ColumnConstants.CONCESSIONALITY_LEVEL, "v_concessionality_level", catsDimension);
-        no_dimension(ColumnConstants.FILTERED_APPROVAL_STATUS, "v_filtered_approval_status");
+        no_dimension(ColumnConstants.VALIDATION_STATUS, "v_validation_status");
 
         degenerate_dimension(ColumnConstants.FUNDING_ID, "v_funding_id", fundingDimension);
 

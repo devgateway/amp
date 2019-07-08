@@ -31,7 +31,10 @@ module.exports = Backbone.Model.extend({
   joinFilters: function() {
     var self = this;
     var deferred = $.Deferred();
-    this.collection.appData.filter.getAllFilters().then(function(allFilters) {
+
+    var filter = this.appData ? this.appData.filter : this.collection.appData.filter;
+
+    filter.getAllFilters().then(function(allFilters) {
     	var matchesFilters = self.attributes.matchesFilters;       
     	if (allFilters.filters && matchesFilters) {
     		_.each(matchesFilters, function(v, k) {

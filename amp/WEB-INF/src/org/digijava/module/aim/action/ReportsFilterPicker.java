@@ -588,7 +588,7 @@ public class ReportsFilterPicker extends Action {
         boolean showAllCountries = false;
         
         if (currentMember != null && currentMember.getMemberId() != null) {
-            AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
+            AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
 
             if (ampCurrentMember != null) {
                 ampAppSettings = DbUtil.getTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());

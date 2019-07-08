@@ -265,7 +265,7 @@ public class EditActivity extends Action {
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                         Date dateUpdated = format.parse(strDateUpdated);
                         if (tm != null && tm.getMemberId() != null) {
-                            AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberCached(tm.getMemberId());
+                            AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
                             activity.setModifiedBy(teamMember);
                             hsession.update(activity);
                             List<String> details=new ArrayList<String>();
@@ -744,7 +744,7 @@ public class EditActivity extends Action {
                             .isApprover())
                             && tm.getTeamId().equals(
                                     activity.getTeam().getAmpTeamId()) ){
-              AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberCached(tm.getMemberId());
+              AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
               eaForm.getIdentification().setApprovedBy(teamMember);
               eaForm.getIdentification().setApprovalDate(new Date());
               //eaForm.getIdentification().setApprovalStatus(ApprovalStatus.APPROVED);

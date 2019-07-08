@@ -50,10 +50,6 @@ public class ViewEditUser extends Action {
 
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         
-        //Clear users cache
-        TeamMemberUtil.users.clear();
-        TeamMemberUtil.atmUsers.clear();
-        
         ViewEditUserForm uForm = (ViewEditUserForm) form;
         User user = null;
         HttpSession session = request.getSession();

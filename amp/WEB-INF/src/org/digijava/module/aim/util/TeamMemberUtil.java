@@ -49,6 +49,7 @@ import org.digijava.module.contentrepository.helper.TeamMemberMail;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
@@ -66,19 +67,14 @@ public class TeamMemberUtil {
     }
     
     public static AmpTeamMember getAmpTeamMemberByUserId(Long userId) {
-        List<AmpTeamMember> teamMembers = PersistenceManager.getSession()
+        return (AmpTeamMember) PersistenceManager.getSession()
                 .createCriteria(AmpTeamMember.class)
                 .setCacheable(true)
                 .add(Property.forName("userId").eq(userId))
-                .add(Restrictions.or(Restrictions.eq("deleted", false), Restrictions.isNull("deleted")))
+                .add(getNotDeletedTeamMemberRestriction())
                 .addOrder(Order.desc("ampTeamMemId"))
-                .list();
-        
-        if (teamMembers.isEmpty()) {
-            return null;
-        }
-        
-        return teamMembers.get(0);
+                .setMaxResults(1)
+                .uniqueResult();
     }
     
     public static AmpTeamMember getAmpTeamMember(Long id) {
@@ -86,9 +82,14 @@ public class TeamMemberUtil {
                 .createCriteria(AmpTeamMember.class)
                 .setCacheable(true)
                 .add(Property.forName("ampTeamMemId").eq(id))
-                .add(Restrictions.or(Restrictions.eq("deleted", false), Restrictions.isNull("deleted")))
+                .add(getNotDeletedTeamMemberRestriction())
                 .addOrder(Order.desc("ampTeamMemId"))
+                .setMaxResults(1)
                 .uniqueResult();
+    }
+    
+    private static LogicalExpression getNotDeletedTeamMemberRestriction() {
+        return Restrictions.or(Restrictions.eq("deleted", false), Restrictions.isNull("deleted"));
     }
 
     public static AmpTeamMember getMember(String email) {

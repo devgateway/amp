@@ -259,7 +259,8 @@ public class LocationService {
                                 cp = new ClusteredPoints();
                                 cp.setAdmId(rootLocationId);
                                 cp.setAdmin(rs.getString("root_location_description"));
-                                if (usedAdminLevel.equals("Administrative Level 0")) {
+                                if (usedAdminLevel.equals(
+                                        CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey())) {
                                     cp.setLat(countryLatitude.toString());
                                     cp.setLon(countryLongitude.toString());                         
                                 }else{

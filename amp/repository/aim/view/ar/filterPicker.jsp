@@ -337,7 +337,7 @@
 				</tr>
 				
 				<tr bgcolor="#EEEEEE" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
-					<td colspan="5"><digi:trn key="rep:filter:Location">Region</digi:trn></td>
+					<td colspan="5"><digi:trn key="rep:filter:Location">Administrative Level 1</digi:trn></td>
 				</tr>
 				<tr bgcolor="#EEEEEE" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
 					<td colspan="5"><html:select property="regionSelected"

@@ -34,12 +34,4 @@ public class ConstraintDescriptors {
         }
         return result;
     }
-    
-    public List<ConstraintDescriptor> getDescriptors() {
-        return descriptors;
-    }
-    
-    public void setDescriptors(List<ConstraintDescriptor> descriptors) {
-        this.descriptors = descriptors;
-    }
 }

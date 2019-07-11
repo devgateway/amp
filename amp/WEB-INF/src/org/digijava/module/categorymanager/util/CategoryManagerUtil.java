@@ -860,19 +860,19 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
         AmpCategoryValue district = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3.getAmpCategoryValueFromDB();
         
         if (country == null) {
-            errorString += "Administrative Level 0";
+            errorString += CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey();
             separator = ", ";
         }
         if (region == null) {
-            errorString += separator + "Administrative Level 1";
+            errorString += separator + CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.getValueKey();
             separator = ", ";
         }
         if (zone == null) {
-            errorString += separator + "Administrative Level 2";
+            errorString += separator + CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2.getValueKey();
             separator = ", ";
         }
         if (district == null) {
-            errorString += separator + "Administrative Level 3";
+            errorString += separator + CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3.getValueKey();
             separator = ", ";
         }
         if (separator != "") {

@@ -151,7 +151,7 @@ function validateUserInfo(){
     }
 	
 	if(country=='-1'){
-		errorMsg='<digi:trn jsFriendly="true" >Please Select Country</digi:trn>';
+		errorMsg='<digi:trn jsFriendly="true">Please Select Country</digi:trn>';
 		alert(errorMsg);
 		return false;
 	}

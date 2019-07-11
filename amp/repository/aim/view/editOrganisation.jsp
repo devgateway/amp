@@ -1074,8 +1074,7 @@ border-right: 1px solid rgb(208, 208, 208);
 	                                        <td height="30px" width=50%>
 	                                            <html:select property="regionId" >
 	                                                <c:set var="translation">
-	                                                    <digi:trn
-	                                                        key="aim:editOrganisationSelectSpecifyRegion">Specify Region</digi:trn>
+	                                                    <digi:trn>Specify Region</digi:trn>
 	                                                </c:set>
 	                                                <html:option value="-1">-- ${translation} --</html:option>
 	                                                <logic:notEmpty name="aimAddOrgForm"

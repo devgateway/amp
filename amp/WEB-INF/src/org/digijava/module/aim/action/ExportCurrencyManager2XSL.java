@@ -24,6 +24,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.form.CurrencyForm;
 import org.digijava.module.aim.util.AdminXSLExportUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class ExportCurrencyManager2XSL extends Action {
      private static Logger logger = Logger.getLogger(ExportCurrencyManager2XSL.class);
@@ -78,8 +79,8 @@ public class ExportCurrencyManager2XSL extends Action {
        
        
        HSSFCell countryTitleCell = titleRow.createCell(cellIndex++);
-       HSSFRichTextString countryTitle = new HSSFRichTextString(
-               TranslatorWorker.translateText("Administrative Level 0", locale, siteId));
+       HSSFRichTextString countryTitle = new HSSFRichTextString(TranslatorWorker.translateText(
+               CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey(), locale, siteId));
        countryTitleCell.setCellValue(countryTitle);
        countryTitleCell.setCellStyle(titleCS);
        String active=TranslatorWorker.translateText("Active",locale,siteId);

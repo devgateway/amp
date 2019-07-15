@@ -601,7 +601,7 @@ public class ReportsFilterPicker extends Action {
 
         List<LocationSkeleton> filterCountries = new ArrayList<LocationSkeleton>();
         if (showAllCountries) {
-            AmpCategoryValue layer = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
+            AmpCategoryValue layer = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getAmpCategoryValueFromDB();
             if (layer == null) {
                 logger.error("No Country value found in category Implementation Location. Please correct this.");
             } else {

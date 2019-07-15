@@ -158,17 +158,21 @@ public final class LocationUtil {
         if (!editing){
             
             /*  country check for duplicate iso and iso3 codes */
-            boolean isCountry   =  
-                    CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue( loc.getParentCategoryValue());
-            if ( isCountry ) {
-                AmpCategoryValueLocations tempLoc   = 
-                    DynLocationManagerUtil.getLocationByIso(loc.getIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
-                if ( tempLoc != null ) 
-                    throw new DuplicateLocationCodeException("There is already a country with the same iso !", "iso", loc.getParentCategoryValue().getValue() );
-                tempLoc = 
-                    DynLocationManagerUtil.getLocationByIso3(loc.getIso3(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
-                if ( tempLoc != null ) 
-                    throw new DuplicateLocationCodeException("There is already a country with the same iso 3!", "iso3", loc.getParentCategoryValue().getValue() );
+            boolean isCountry = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(
+                    loc.getParentCategoryValue());
+            if (isCountry) {
+                AmpCategoryValueLocations tempLoc = DynLocationManagerUtil.getLocationByIso(
+                        loc.getIso(), CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
+                if (tempLoc != null) {
+                    throw new DuplicateLocationCodeException("There is already a country with the same iso !", "iso",
+                            loc.getParentCategoryValue().getValue());
+                }
+                tempLoc = DynLocationManagerUtil.getLocationByIso3(
+                        loc.getIso3(), CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
+                if (tempLoc != null) {
+                    throw new DuplicateLocationCodeException("There is already a country with the same iso 3!", "iso3",
+                            loc.getParentCategoryValue().getValue());
+                }
                 
             }
             

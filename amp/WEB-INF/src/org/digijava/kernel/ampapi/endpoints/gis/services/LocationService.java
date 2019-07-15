@@ -90,7 +90,7 @@ public class LocationService {
      */
     public AdmLevelTotals getTotals(String admlevel, PerformanceFilterParameters config, AmountsUnits amountUnits) {
         HardCodedCategoryValue admLevelCV = GisConstants.ADM_TO_IMPL_CATEGORY_VALUE.getOrDefault(admlevel,
-                CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
         admlevel = admLevelCV.getValueKey();
         
         ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals", ArConstants.DONOR_TYPE);
@@ -125,7 +125,7 @@ public class LocationService {
                         + "amp_global_settings gs  ,amp_category_value acv "
                         + "where acvl.iso=gs.settingsvalue and gs.settingsname ='%s' "
                         + "and acvl.parent_category_value=acv.id "
-                        + "and acv.category_value = 'Country' ";
+                        + "and acv.category_value = 'Administrative Level 0' ";
                 RsInfo rsi = SQLUtils.rawRunQuery(conn, String.format(countryIdQuery,
                         GlobalSettingsConstants.DEFAULT_COUNTRY),
                         null);
@@ -203,14 +203,14 @@ public class LocationService {
         final Double countryLatitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LATITUDE);
         final Double countryLongitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LONGITUDE);
         final ValueWrapper<String> qry = new ValueWrapper<String>(null);
-        if (adminLevel.equals("Country")) {
+        if (adminLevel.equals("Administrative Level 0")) {
             qry.value = " SELECT al.amp_activity_id, acvl.id root_location_id,acvl.location_name "
                     + "root_location_description,acvl.gs_lat, acvl.gs_long "
                     + " FROM amp_activity_location al   "
                     + " join amp_location loc on al.amp_location_id = loc.amp_location_id  "
                     + " join amp_category_value_location acvl on loc.location_id = acvl.id  "
                     + " join amp_category_value amcv on acvl.parent_category_value =amcv.id "
-                    + " where amcv.category_value ='Country'"
+                    + " where amcv.category_value ='Administrative Level 0'"
                     + " and (acvl.deleted is null or acvl.deleted = false) "
                     + " and al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) "
                     + " and location_name=(select country_name "
@@ -259,7 +259,8 @@ public class LocationService {
                                 cp = new ClusteredPoints();
                                 cp.setAdmId(rootLocationId);
                                 cp.setAdmin(rs.getString("root_location_description"));
-                                if (usedAdminLevel.equals("Country")){
+                                if (usedAdminLevel.equals(
+                                        CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey())) {
                                     cp.setLat(countryLatitude.toString());
                                     cp.setLon(countryLongitude.toString());                         
                                 }else{

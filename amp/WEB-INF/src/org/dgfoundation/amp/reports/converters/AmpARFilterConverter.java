@@ -323,15 +323,15 @@ public class AmpARFilterConverter {
 
         for(AmpCategoryValueLocations loc : filterLocations) {
             AmpCategoryValue parentCatVal = loc.getParentCategoryValue();
-            if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(parentCatVal)) {
+            if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(parentCatVal)) {
                 countries.add(loc);
-            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(parentCatVal)) {
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.equalsCategoryValue(parentCatVal)) {
                 regions.add(loc);
-            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.equalsCategoryValue(parentCatVal)) {
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2.equalsCategoryValue(parentCatVal)) {
                 zones.add(loc);
-            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.equalsCategoryValue(parentCatVal)) {
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3.equalsCategoryValue(parentCatVal)) {
                 districts.add(loc);
-            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_COMMUNAL_SECTION.equalsCategoryValue(parentCatVal)) {
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_4.equalsCategoryValue(parentCatVal)) {
                 communalSections.add(loc);
             }
         }

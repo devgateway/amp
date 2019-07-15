@@ -339,8 +339,8 @@ public class ShowActivityPrintPreview
                             location.setLocationName(loc.getLocation().getName());
                             location.setLocId( loc.getLocation().getId() );
                         }
-                        AmpCategoryValueLocations ampCVRegion   = 
-                            DynLocationManagerUtil.getAncestorByLayer(loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                          AmpCategoryValueLocations ampCVRegion = DynLocationManagerUtil.getAncestorByLayer(
+                                  loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
                         if ( ampCVRegion != null ) {
                             if (eaForm.getFunding().getFundingRegions() == null) {
                               eaForm.getFunding()

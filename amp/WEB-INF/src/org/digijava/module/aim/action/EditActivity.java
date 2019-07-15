@@ -1097,7 +1097,7 @@ public class EditActivity extends Action {
             if ( !"true".equals( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES ) ) &&
                     implLevel!=null && implLocValue!=null &&
                             CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
-                            CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue)
+                            CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocValue)
             ) {
                 setFullPercForDefaultCountry            = true;
             }
@@ -1129,7 +1129,8 @@ public class EditActivity extends Action {
                     location.setLevelIdx(loc.getLocation().getParentCategoryValue().getIndex());
                 }
                 AmpCategoryValueLocations ampCVRegion   =
-                    DynLocationManagerUtil.getAncestorByLayer(loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                    DynLocationManagerUtil.getAncestorByLayer(
+                            loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
 
                 if ( ampCVRegion != null ) {
 //                if (loc.getAmpRegion() != null) {
@@ -1152,13 +1153,14 @@ public class EditActivity extends Action {
                     location.setPercent(strPercentage);
 //                  location.setPercent( strPercentage.replace(",", ".") );
                 }
-
-                if ( setFullPercForDefaultCountry && (actLoc.getLocationPercentage()==null || actLoc.getLocationPercentage() == 0.0) &&
-                        CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getLocation().getParentCategoryValue()) &&
-                                loc.getLocation().getId() != defCountry.getId() )
-                {
-                    location.setPercentageBlocked(true);
-                }
+    
+                  if (setFullPercForDefaultCountry && (actLoc.getLocationPercentage() == null
+                          || actLoc.getLocationPercentage() == 0.0)
+                          && CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(
+                                  loc.getLocation().getParentCategoryValue())
+                          && loc.getLocation().getId() != defCountry.getId()) {
+                      location.setPercentageBlocked(true);
+                  }
 
                 locs.add(location);
               }

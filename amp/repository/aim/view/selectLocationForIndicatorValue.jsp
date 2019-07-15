@@ -130,7 +130,7 @@ function countryChanged() {
 									</tr>
 									<c:if test="${aimThemeForm.locationLevelIndex>=1}">
 										<tr>
-											<td align="right"><digi:trn key="aim:country">Country </digi:trn> </td>
+											<td align="right"><digi:trn key="aim:country">Administrative Level 0</digi:trn> </td>
 											<td align="left"><b><c:out value="${aimThemeForm.country}"></c:out></b></td>
 										</tr>
 									</c:if>

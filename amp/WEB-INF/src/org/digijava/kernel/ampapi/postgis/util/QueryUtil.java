@@ -65,13 +65,6 @@ public class QueryUtil {
     protected static Logger logger = Logger.getLogger(QueryUtil.class);
 
 
-
-    public static List<String> getAdminLevels() {
-        return new ArrayList<String>(Arrays.asList("Country", "Region", "Zone", "District"));
-    }
-
-
-
     public static AmpActivity getActivity(Long ampActivityId) {
         return (AmpActivity) PersistenceManager.getSession().load(AmpActivity.class, ampActivityId);
     }

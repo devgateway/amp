@@ -76,7 +76,7 @@
 									</tr>								
 									<tr>
 										<td>
-											<digi:trn key="aim:country">Country</digi:trn>	
+											<digi:trn key="aim:country">Administrative Level 0</digi:trn>
 										</td>
 										<td>
 											<html:select property="countryId" styleClass="inp-text">

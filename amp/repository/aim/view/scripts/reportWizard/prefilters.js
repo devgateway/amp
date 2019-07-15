@@ -7,6 +7,7 @@ $.getScript("/TEMPLATE/ampTemplate/script/common/TranslationManager.js");
 var REPORT_URL = '/rest/data/report/';
 var TEAM_URL = '/rest/security/ampTeam/';
 var FILTER_OBJECT = 'workspace-filters-widget-format';
+var WORKSPACE_FILTERS = 'workspace-filters';
 
 function Filters(filterPanelName, connectionFailureMessage, filterProblemsMessage, loadingDataMessage,
                  savingDataMessage, cannotSaveFiltersMessage, doReset, settingsPanelName, validationMsgs, embedded) {
@@ -169,7 +170,9 @@ Filters.prototype.loadSavedFilterData = function (id, isReport) {
         url: url + id,
         success: function (data) {
             filters = isReport ? data.reportMetadata.reportSpec.filters : data[FILTER_OBJECT];
-            filters.includeLocationChildren = data.reportMetadata.reportSpec.includeLocationChildren;
+            filters.includeLocationChildren = isReport ?
+                data.reportMetadata.reportSpec.includeLocationChildren :
+                data[WORKSPACE_FILTERS].includeLocationChildren;
             widgetFilter.deserialize({filters: filters}, {silent: true});
             self.showFilterWidget();
         }

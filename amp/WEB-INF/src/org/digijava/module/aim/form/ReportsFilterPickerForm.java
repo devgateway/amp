@@ -117,6 +117,8 @@ public class ReportsFilterPickerForm extends ActionForm {
     private DynamicDateFilter dynamicIssueFilter = new DynamicDateFilter();
     private String fromProposedApprovalDate;
     private String toProposedApprovalDate;
+    private String fromProposedStartDate;
+    private String toProposedStartDate;
     private DynamicDateFilter dynamicProposedApprovalFilter = new DynamicDateFilter();
     private String fromActivityActualCompletionDate;
     private String toActivityActualCompletionDate;
@@ -1663,5 +1665,21 @@ public class ReportsFilterPickerForm extends ActionForm {
     
     public void setIncludeLocationChildren(Boolean includeLocationChildren) {
         this.includeLocationChildren = includeLocationChildren;
+    }
+
+    public String getFromProposedStartDate() {
+        return fromProposedStartDate;
+    }
+
+    public void setFromProposedStartDate(String fromProposedStartDate) {
+        this.fromProposedStartDate = fromProposedStartDate;
+    }
+
+    public String getToProposedStartDate() {
+        return toProposedStartDate;
+    }
+
+    public void setToProposedStartDate(String toProposedStartDate) {
+        this.toProposedStartDate = toProposedStartDate;
     }
 }

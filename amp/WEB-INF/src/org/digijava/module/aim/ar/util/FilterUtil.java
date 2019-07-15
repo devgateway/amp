@@ -229,6 +229,8 @@ public class FilterUtil {
         
         form.setToProposedApprovalDate(convertArFilterToUiDate(filter.getToProposedApprovalDate()));
         form.setFromProposedApprovalDate(convertArFilterToUiDate(filter.getFromProposedApprovalDate()));
+        form.setFromProposedStartDate(convertArFilterToUiDate(filter.getFromProposedStartDate()));
+        form.setToProposedStartDate(convertArFilterToUiDate(filter.getToProposedStartDate()));
         form.getDynamicProposedApprovalFilter().setCurrentPeriod(filter.getDynProposedApprovalFilterCurrentPeriod());
         form.getDynamicProposedApprovalFilter().setAmount(filter.getDynProposedApprovalFilterAmount());
         form.getDynamicProposedApprovalFilter().setOperator(filter.getDynProposedApprovalFilterOperator());

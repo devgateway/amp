@@ -648,6 +648,8 @@ public class ReportsFilterPicker extends Action {
 
         arf.setFromProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromProposedApprovalDate()));
         arf.setToProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToProposedApprovalDate()));
+        arf.setFromProposedStartDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromProposedStartDate()));
+        arf.setToProposedStartDate(FilterUtil.convertUiToArFilterDate(filterForm.getToProposedStartDate()));
         arf.setDynProposedApprovalFilterCurrentPeriod(filterForm.getDynamicProposedApprovalFilter().getCurrentPeriod());
         arf.setDynProposedApprovalFilterAmount(filterForm.getDynamicProposedApprovalFilter().getAmount());
         arf.setDynProposedApprovalFilterOperator(filterForm.getDynamicProposedApprovalFilter().getOperator());

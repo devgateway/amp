@@ -97,6 +97,7 @@ var Query = Backbone.Model.extend({
 
     run_query: function(filters, settings) {
     	Saiku.logger.log("Query.run_query");
+        Saiku.logger.log(filters ? JSON.stringify(filters) : '');
    		this.set({page: 1});
     	this.run(null, null, filters, settings);
     },
@@ -135,7 +136,7 @@ var Query = Backbone.Model.extend({
     	
         var filters;
         if (filtersObject) {
-        	filters = filtersObject.filter;
+        	filters = filtersObject.filters ? filtersObject.filters : filtersObject;
         }
         	
         var self = this;

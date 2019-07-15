@@ -84,7 +84,7 @@ function validate(){
 						</digi:trn>
 					</td>
 					<td class="left-align" style="padding-bottom:10px;">
-						<html:text property="userId" styleClass="pwd_username" size="20" /><br>
+						<html:text property="userId" styleClass="pwd_username email-input" size="20" /><br>
 						<font color="red" style="font-size:11px;">
 						<digi:trn key="aim:userIdExample1">
 						e.g. yourname@emailaddress.com

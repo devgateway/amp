@@ -488,6 +488,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
         var userAutoComp = new YAHOO.widget.AutoComplete("userInput","userAutoComp", userDataSource);
         userAutoComp.queryDelay = 0.5;
         $("#userInput").css("position", "static");
+        $("#userInput").addClass("email-input");
        
 		var myHandler = function(sType, aArgs) {
 					

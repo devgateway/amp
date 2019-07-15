@@ -684,7 +684,7 @@
 											    	<logic:notEmpty name="addressbookForm" property="emails">
 											    	<a href="#" id="emailBtnEmpty" onclick="addNewData('email');return false;" class="l_mid_b" style="display:none">${trnadd}</a>
 														<logic:iterate name="addressbookForm" property="emails" id="foo" indexId="ctr">
-															<div id="div_email_${ctr}"><html:text name="addressbookForm" property="emails[${ctr}].value" size="33" styleClass="inputx insidex" styleId="email_${ctr}" /> <a href="javascript:removeData('email',${ctr})">
+															<div id="div_email_${ctr}"><html:text name="addressbookForm" property="emails[${ctr}].value" size="33" styleClass="inputx insidex email-input" styleId="email_${ctr}" /> <a href="javascript:removeData('email',${ctr})">
 															 	<img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" vspace="2" border="0" /> </a> 
 															 	<c:if test="${ctr==0}">
 																	<c:set var="trnadd"><digi:trn>Add</digi:trn></c:set>

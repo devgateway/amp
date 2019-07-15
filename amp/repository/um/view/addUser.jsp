@@ -354,7 +354,7 @@
 													<digi:trn key="um:emailAddress">E-mail Address</digi:trn></td>
 												<td class="left-align">
 													<html:text  styleId="userEmail" property="email" size="20"
-																styleClass="inp-text pwd_username input-add-user" />
+																styleClass="inp-text pwd_username input-add-user email-input" />
 												</td>
 											</tr>
 											<tr>
@@ -363,7 +363,7 @@
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:repEmailAddress">Repeat Email Address</digi:trn></td>
 												<td class="left-align">
-													<html:text styleId="userEmailConfirmation" property="emailConfirmation"	size="20" styleClass="inp-text input-add-user" />
+													<html:text styleId="userEmailConfirmation" property="emailConfirmation"	size="20" styleClass="inp-text input-add-user email-input" />
 												</td>
 											</tr>
 											<tr>
@@ -410,7 +410,7 @@
                                                     <font color=red>*</font>
                                                     <digi:trn>Notification Email</digi:trn></td>
                                                 <td class="left-align">
-                                                    <html:text property="notificationEmail" size="20" styleClass="inp-text input-add-user" styleId="notificationEmail"/></td>
+                                                    <html:text property="notificationEmail" size="20" styleClass="inp-text input-add-user email-input" styleId="notificationEmail"/></td>
                                             </tr>
 											<tr>
 												<td width="3%">&nbsp;</td>

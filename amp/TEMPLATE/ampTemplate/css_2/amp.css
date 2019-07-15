@@ -1500,3 +1500,7 @@ div.footer {
     float:left;
     width:200px;
 }
+
+.email-input {
+    text-align: left;
+}

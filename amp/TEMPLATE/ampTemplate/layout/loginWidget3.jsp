@@ -53,7 +53,7 @@
 					<c:out escapeXml="true" value="${usernameText}"/>:
 				</label>
 
-				<input name="j_username" type="text" class="inputx" id="j_username">
+				<input name="j_username" type="text" class="inputx email-input" id="j_username">
 
 				<label for="j_password">
 				    <c:set var="passwordText"><digi:trn>Password</digi:trn></c:set>

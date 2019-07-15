@@ -1021,6 +1021,10 @@ td.inside ul {
     text-align: right !important;
 }
 
+.email-input {
+    text-align: right !important;
+    direction: ltr !important;
+
 .yui-panel .bd {
     direction: rtl;
 }

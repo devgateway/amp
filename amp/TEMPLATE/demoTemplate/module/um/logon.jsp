@@ -74,7 +74,7 @@
 		</TR>
 		<TR>
 		<TD align="right">email:</TH>
-		<TD align="left"><html:text styleClass="demo" property="username"/></TD>
+		<TD align="left"><html:text styleClass="demo email-input" property="username"/></TD>
 		</TR>
 		<TR>
 		<TD align="right">Password:</TH>

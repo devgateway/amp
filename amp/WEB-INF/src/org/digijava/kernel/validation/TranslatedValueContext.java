@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.module.aim.util.Identifiable;
 
 /**
@@ -60,6 +61,9 @@ public abstract class TranslatedValueContext {
                 }
                 translatedValueContext = new ContentTranslatedValueContext(translationContext, objectClass, objectId,
                         field.getFieldNameInternal());
+            } else if (field.getTranslationType() == TranslationSettings.TranslationType.MULTILINGUAL) {
+                MultilingualContent fieldValue = field.getFieldAccessor().get(objectValue);
+                translatedValueContext = new MultilingualTranslatedValueContext(translationContext, fieldValue);
             } else {
                 throw new RuntimeException("Unsupported translation type " + field.getTranslationType());
             }

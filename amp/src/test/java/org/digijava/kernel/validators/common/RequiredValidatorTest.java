@@ -7,17 +7,23 @@ import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.TestFieldInfoProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
+import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
@@ -73,6 +79,10 @@ public class RequiredValidatorTest {
         @Interchangeable(fieldTitle = "bar", fmPath = "bar",
                 interValidators = @InterchangeableValidator(RequiredValidator.class))
         private Bar bar;
+    
+        @Interchangeable(fieldTitle = "multilingual_translation", fmPath = "multilingualTranslation",
+                interValidators = @InterchangeableValidator(RequiredValidator.class))
+        private MultilingualContent multilingualTranslation;
 
         @Override
         public Object getIdentifier() {
@@ -96,9 +106,11 @@ public class RequiredValidatorTest {
     private static APIField multilingualEditorField;
     private static APIField ctField;
     private static APIField multilingualCtField;
+    private static APIField multilingualField;
 
     private static final ImmutableSet<String> ALL_FM_PATHS =
-            ImmutableSet.of("title", "editor", "contentTranslation", "toggle", "number", "bars", "bar");
+            ImmutableSet.of("title", "editor", "contentTranslation", "toggle", "number", "bars", "bar",
+                    "multilingualTranslation");
 
     private static Set<String> getAllTestFmPathsExcept(String fmPath) {
         HashSet<String> fmPaths = new HashSet<>(ALL_FM_PATHS);
@@ -117,6 +129,7 @@ public class RequiredValidatorTest {
         multilingualEditorField = getApiField(true, "editor");
         ctField = getApiField(false, "contentTranslation");
         multilingualCtField = getApiField(true, "contentTranslation");
+        multilingualField = getApiField(true, "multilingualTranslation");
     }
 
     private static APIField getApiField(boolean multilingual, String fmPath) {
@@ -531,6 +544,52 @@ public class RequiredValidatorTest {
 
         assertThat(violations, emptyIterable());
     }
+    
+    @Test
+    public void test_ml_blankValue() {
+        Foo foo = new Foo();
+        foo.multilingualTranslation = new MultilingualContent(" ", getMultilingualTranslationSettings());
+    
+        Set<ConstraintViolation> violations = getConstraintViolations(multilingualField, foo);
+        
+        assertThat(violations, contains(violation("multilingual_translation")));
+    }
+    
+    @Test
+    public void test_ml_validValue() {
+        Foo foo = new Foo();
+        foo.multilingualTranslation = new MultilingualContent("title", getMultilingualTranslationSettings());
+        
+        Set<ConstraintViolation> violations = getConstraintViolations(multilingualField, foo);
+        
+        assertThat(violations, emptyIterable());
+    }
+    
+    @Test
+    public void test_ml_invalidValue_lang() {
+        Map<String, String> translations = new HashMap<>();
+        translations.put("fr", "text");
+        
+        Foo foo = new Foo();
+        foo.multilingualTranslation = new MultilingualContent(translations, getMultilingualTranslationSettings());
+        
+        Set<ConstraintViolation> violations = getConstraintViolations(multilingualField, foo);
+        
+        assertThat(violations, contains(violation("multilingual_translation")));
+    }
+    
+    @Test
+    public void test_ml_validValue_lang() {
+        Map<String, String> translations = new HashMap<>();
+        translations.put("en", "text");
+        
+        Foo foo = new Foo();
+        foo.multilingualTranslation = new MultilingualContent(translations, getMultilingualTranslationSettings());
+        
+        Set<ConstraintViolation> violations = getConstraintViolations(multilingualField, foo);
+        
+        assertThat(violations, emptyIterable());
+    }
 
     private Set<ConstraintViolation> getConstraintViolations(APIField objField, Object object) {
         return getConstraintViolations(objField, object, new EditorStore());
@@ -552,5 +611,11 @@ public class RequiredValidatorTest {
         Validator validator = new Validator();
         return validator.validate(objField, object,
                 ValidatorUtil.getDefaultTranslationContext(editorStore, contentTranslations));
+    }
+    
+    private TranslationSettings getMultilingualTranslationSettings() {
+        Set<String> languages = Stream.of("en", "fr").collect(Collectors.toSet());
+        TranslationSettings settings = new TranslationSettings("en", "en", languages, true);
+        return settings;
     }
 }

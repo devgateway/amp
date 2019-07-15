@@ -54,7 +54,7 @@ import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JSONUtils;
+import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
@@ -317,8 +317,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         Map<String, Object> filters = null;
         if (mapId != null) {
             AmpApiState map = EndpointUtils.getApiState(mapId, ApiStateType.G);
-            ReportConfig reportConfig = JSONUtils.readValueFromJson(map.getStateBlob(),
-                    ReportConfig.class);
+            ReportConfig reportConfig = ObjectMapperUtils.readValueFromString(map.getStateBlob(), ReportConfig.class);
             filters = reportConfig.getFilters().getFilters();
         }
 

@@ -27,10 +27,10 @@ import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.ActivityType;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -54,7 +54,7 @@ public class PublicPortalService {
      */
     public static PublicTopData getTopProjects(
             PublicReportFormParameters config, Integer count, Integer months) {
-        JsonBean error = ReportsUtil.validateReportConfig(config);
+        ApiErrorResponse error = ReportsUtil.validateReportConfig(config);
         if (error != null) {
             throw new ApiRuntimeException(error);
         }

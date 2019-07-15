@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,9 +16,10 @@ import javax.ws.rs.core.MediaType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
+import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsResult;
+import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsFlat;
+import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsTree;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
@@ -41,47 +41,21 @@ public class CommonEndpoint implements AmpEndpoint {
     @Path("/fm")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiMethod(ui = false, name = "fm", id = "")
-    @ApiOperation(
-            value = "Provides FM (Feature Manager) settings for the requested options.",
-            notes = "The settings will be taken from the current FM template.\n"
-                    + "### Sample Output\n"
-                    + "```\n"
-                    + "{\n"
-                    + " \"reporting-fields\" : [\"Project Title\", \"Primary Sector\", ...],\n"
-                    + " \"enabled-modules\" : [\"GIS\", \"Dashboards\", ...],\n"
-                    + " \"GIS\" : [\"/gis-enabled-setting1/enabled-childX\", \"/enabled-setting2\", ...],\n"
-                    + " ...\n"
-                    + "}\n"
-                    + "```\n"
-                    + "\n"
-                    + "### Use cases\n"
-                    + "1. Detail flat & fully enabled paths => /Activity Form/Organiation/Donor Organization\n"
-                    + "\n"
-                    + "2. Detail flat & partial enabled paths => "
-                    + "/Activity Form[true]/Organiation[false]/Donor Organization[true]\n"
-                    + "\n"
-                    + "3. Detail tree & fully enabled paths =>\n"
-                    + "    ```\n"
-                    + "    \"REPORTING\": {\n"
-                    + "         \"Measures\": {\n"
-                    + "             \"Actual Disbursements\": {},\n"
-                    + "             ...\n"
-                    + "    ```\n"
-                    + "\n"
-                    + "4. Detail tree & fully enabled paths =>\n"
-                    + "    ```\n"
-                    + "    \"REPORTING\": {\n"
-                    + "         \"__enabled\" : true, // omitted if fullEnabledPaths are requested (same below)\n"
-                    + "         \"Measures\": {\n"
-                    + "             \"__enabled\" : true,\n"
-                    + "             \"Actual Disbursements\": {\n"
-                    + "                 \"__enabled\" : true\n"
-                    + "             },\n"
-                    + "             ...\n"
-                    + "    ```\n")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of FM settings"))
-    public Map<String, Object> getFMSettings(@ApiParam("FM Settings with requested options") FMSettingsConfig config) {
-        return FMService.getFMSettings(config);
+    @ApiOperation(value = "Provides FM (Feature Manager) settings for the requested options as a tree.")
+    public FMSettingsResult<FMSettingsTree> getFMSettings(
+            @ApiParam("FM Settings with requested options") FMSettingsConfig config) {
+        return FMService.getFMSettingsResult(config);
+    }
+    
+    @POST
+    @Path("/fm/flat")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiMethod(ui = false, name = "fm", id = "")
+    @ApiOperation(value = "Provides FM (Feature Manager) settings for the requested options in flat mode.")
+    public FMSettingsResult<FMSettingsFlat> getFMSettingsFlat(
+            @ApiParam("FM Settings with requested options") FMSettingsConfig config) {
+        config.setDetailsFlat(true);
+        return FMService.getFMSettingsResult(config);
     }
 
     @POST

@@ -320,8 +320,8 @@ public class SQLUtils {
                     throw new HibernateException("We do not support multiple identifiers just yet!");
 
                 if ( dialect instanceof PostgreSQLDialect ) {
-                    //AMP-15628 - the replace of "this_." with "" inside the ids and columns was removed
-                    String ret=" "+ids[0]+" = any(contentmatch('"+entityName+"','"+columns[0]+"','"+locale+"', ?)) OR ";
+                    String ret = " " + ids[0] + " = any(contentmatch('" + entityName + "','" + propertyName + "','"
+                            + locale + "', ?)) OR ";
                     ret+=" unaccent(" + columns[0] + ") ilike " +  "unaccent(?)";
                     return ret;
                 } else {

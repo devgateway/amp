@@ -4,7 +4,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -57,16 +56,6 @@ public @interface Interchangeable {
     boolean importable() default false;
     
     /**
-     *Whether the field is always required, required for non-draft saves, or not required. 
-     */
-    ActivityEPConstants.RequiredValidation required() default ActivityEPConstants.RequiredValidation.NONE;
-    
-    /**
-     * The field is required or not based on fm path. By default, if requiredFmPath is visible, the required is SUBMIT
-     */
-    String requiredFmPath() default "";
-    
-    /**
      * The field is read only or not based on fm path. If readOnlyFmPath is visible, read only is true
      */
     String readOnlyFmPath() default "";
@@ -94,12 +83,35 @@ public @interface Interchangeable {
     Class<?> type() default DefaultType.class;
 
     /**
-     * Specifies the dependencies used for later checking in DependencyValidator. 
-     * Dependencies (path and value) are encoded via {@link InterchangeDependencyResolver} public static strings,
-     * like {@link InterchangeDependencyResolver#ON_BUDGET_KEY}.
-     * @return
+     * <p>Mark field whose value depends on some external condition. For example implementation location depends
+     * on implementation level. Or organization group used in pledge must match the group of the organization used in
+     * donor funding.</p>
+     *
+     * <p>To make a field required under certain conditions see {@link #requiredDependencies()}.</p>
+     *
+     * @return list of dependencies
      */
     String[] dependencies() default {};
+
+    /**
+     * Mark field as required only under some conditions. For example field becomes visible as in case
+     * of on budget fields. Or fields were visible but not required as in case of type of assistance and
+     * financing instrument.
+     *
+     * @return list of required dependencies
+     */
+    String[] requiredDependencies() default {};
+
+    /**
+     * FM entry to control dependency required validator.
+     */
+    String dependencyRequiredFMPath() default "";
+
+    /**
+     * Whether the field is always required, required for non-draft saves, or not required.
+     * Applies only for fields with dependencies.
+     */
+    ActivityEPConstants.RequiredValidation dependencyRequired() default ActivityEPConstants.RequiredValidation.NONE;
     
     /**
      * <p>Filter objects by specified discriminator value.
@@ -125,9 +137,11 @@ public @interface Interchangeable {
     
     Validators validators() default @Validators;
 
-    /** regex pattern used for validation (mail, phone, fax) */
-    String regexPattern() default "";
-    
+    /**
+     * List of constraint validators that apply to the current field.
+     */
+    InterchangeableValidator[] interValidators() default {};
+
     /* constraints for multi-level validators */
     boolean uniqueConstraint() default false;
 
@@ -137,8 +151,6 @@ public @interface Interchangeable {
      * this constraint is enabled or not (via FM rules).</p>
      */
     boolean percentageConstraint() default false;
-
-    int sizeLimit() default 1;
 
     /**
      * If type property is set to this class then type will be determined via reflection.

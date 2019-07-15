@@ -79,7 +79,6 @@ public class AmpIssuesFormSectionFeature extends
                 AmpIssues issues = new AmpIssues();
                 issues.setName(new String(""));
                 issues.setIssueDate(new Date());
-                issues.setMeasures(new HashSet());
                 issues.setActivity(am.getObject());
                 list.addItem(issues);
                 target.add(this.getParent());

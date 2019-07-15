@@ -1,14 +1,16 @@
 package org.dgfoundation.amp.algo.timing;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.IntFunction;
 import java.util.function.LongFunction;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.dgfoundation.amp.algo.AlgoUtils;
 
 /**
  * an object returned by InclusiveTimer to represent a read-only identifying view in the runtime tree
@@ -30,33 +32,42 @@ public interface RunNode {
      * @param key if a value with the given key already exists, will throw exception. Also, "name", "subNodes" and "totalTime" are disallowed keys
      * @param value if it is null, then this call does nothing
      */
-    public void putMeta(String key, Object value);
+    void putMeta(String key, Object value);
 
-    public default JsonBean getDetails() {
-        return asJsonBean();
+    default Map<String, Object> getDetails() {
+        return asMap();
     }
 
     /**
      * renders the node as Json-ready bean
      * @return
      */
-    public default JsonBean asJsonBean() {
-        JsonBean result = new JsonBean();
-        result.set("name", getName());
-        result.set("totalTime", getTotalTime());
+    default Map<String, Object> asMap() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("name", getName());
+        result.put("totalTime", getTotalTime());
         for (Map.Entry<String, Object> entry : this.getMeta().entrySet()) {
-            result.set(entry.getKey(), entry.getValue());
+            result.put(entry.getKey(), entry.getValue());
         }
 
-        List<JsonBean> subNodes = new ArrayList<JsonBean>();
+        List<Map<String, Object>> subNodes = new ArrayList<>();
         if (getSubNodes() != null)
             for (RunNode subNode : getSubNodes()) {
-                subNodes.add(subNode.asJsonBean());
+                subNodes.add(subNode.asMap());
             }
+        
         if (subNodes.size() > 0)
-            result.set("subNodes", subNodes);
+            result.put("subNodes", subNodes);
 
         return result;
+    }
+    
+    default String getDetailsAsString() {
+        try {
+            return new ObjectMapper().writer().writeValueAsString(asMap());
+        } catch (Exception e) {
+            throw AlgoUtils.translateException(e);
+        }
     }
 
     public default String asString(IntFunction<String> prefixBuilder, LongFunction<String> numberFormatter, int depth) {

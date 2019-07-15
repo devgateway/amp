@@ -73,23 +73,10 @@ function resetFilter(){
  		resetElement(aimReportsFilterPickerForm.disbursementOrders);
  		resetElement(aimReportsFilterPickerForm.selectedBudgets);
  		resetElement(aimReportsFilterPickerForm.lineMinRanks);
- 		resetElement(aimReportsFilterPickerForm.selectedArchivedStatus);
  		if (document.getElementById("workspace_only")!=null){
  			document.getElementById("workspace_only").checked = false;
  		}
- 		try {
-	 		for (var i=0; i<aimReportsFilterPickerForm.selectedArchivedStatus.length; i++) {
-	 			var inputEl	= aimReportsFilterPickerForm.selectedArchivedStatus[i];
-	 			if (inputEl.value==1)
-	 				inputEl.checked = true;
-	 		}
- 		}
- 		catch(e){
- 			;
- 		}
 
-			
-				
 		if (aimReportsFilterPickerForm.computedYear){
 			aimReportsFilterPickerForm.computedYear.selectedIndex=0;
 		}

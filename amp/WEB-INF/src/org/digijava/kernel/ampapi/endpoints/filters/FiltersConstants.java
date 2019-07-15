@@ -39,7 +39,6 @@ public class FiltersConstants {
 
     public static final String ACTIVITY_ID = "activity-id";
     public static final String APPROVAL_STATUS = "approval-status";
-    public static final String ARCHIVED = "archived";
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";
     public static final String BENEFICIARY_AGENCY_GROUP = "beneficiary-agency-group";
     public static final String BENEFICIARY_AGENCY_TYPE = "beneficiary-agency-type";

@@ -7,7 +7,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
 import org.digijava.module.aim.dbentity.AmpActivityFrozen;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -17,6 +17,7 @@ import org.digijava.module.common.util.DateTimeUtil;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -40,7 +41,7 @@ public final class DataFreezeService {
     }
 
     public static SaveResult<DataFreezeEvent> saveDataFreezeEvent(DataFreezeEvent dataFreezeEvent) {
-        List<JsonBean> validationErrors = validate(dataFreezeEvent);
+        List<Map<String, String>> validationErrors = validate(dataFreezeEvent);
         if (validationErrors.size() == 0) {
             AmpDataFreezeSettings dataFreezeSettings = getOrCreate(dataFreezeEvent);
             updateModel(dataFreezeSettings, dataFreezeEvent);
@@ -55,23 +56,24 @@ public final class DataFreezeService {
         }
     }
 
-    private static List<JsonBean> validate(DataFreezeEvent dataFreezeEvent) {
-        List<JsonBean> errors = new ArrayList<>();
+    private static List<Map<String, String>> validate(DataFreezeEvent dataFreezeEvent) {
+        List<Map<String, String>> errors = new ArrayList<>();
         if (DataFreezeUtil.freezeDateExists(dataFreezeEvent.getId(), dataFreezeEvent.getFreezingDate())) {
-            JsonBean error = new JsonBean();
-            error.set(ApiError.getErrorCode(DataFreezeErrors.FREEZING_DATE_EXISTS),
+            Map<String, String> error = new HashMap<>();
+            error.put(ApiError.getErrorCode(DataFreezeErrors.FREEZING_DATE_EXISTS),
                     DataFreezeErrors.FREEZING_DATE_EXISTS.description);
             errors.add(error);
         }
         
         Date openPeriodStart = dataFreezeEvent.getOpenPeriodStart();
         Date openPeriodEnd = dataFreezeEvent.getOpenPeriodEnd();
-        if(DataFreezeUtil.openPeriodOverlaps(dataFreezeEvent.getId(), openPeriodStart, openPeriodEnd)){
-            JsonBean error = new JsonBean();
-            error.set(ApiError.getErrorCode(DataFreezeErrors.OPEN_PERIOD_OVERLAPS),
+        if (DataFreezeUtil.openPeriodOverlaps(dataFreezeEvent.getId(), openPeriodStart, openPeriodEnd)) {
+            Map<String, String> error = new HashMap<>();
+            error.put(ApiError.getErrorCode(DataFreezeErrors.OPEN_PERIOD_OVERLAPS),
                     DataFreezeErrors.OPEN_PERIOD_OVERLAPS.description);
             errors.add(error); 
         }
+        
         return errors;
     }
 
@@ -171,7 +173,7 @@ public final class DataFreezeService {
 
         if (event.getFilters() != null) {
             // get any filters applied while creating the data freezing event
-            JsonBean config = JsonBean.getJsonBeanFromString(event.getFilters());
+            Map<String, Object> config = ObjectMapperUtils.getMapFromString(event.getFilters());
             filters = (LinkedHashMap<String, Object>) config.get(EPConstants.FILTERS);
         } else {
             filters = new LinkedHashMap<>();

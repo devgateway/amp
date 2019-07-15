@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
-import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.dbentity.AmpActivityFields;

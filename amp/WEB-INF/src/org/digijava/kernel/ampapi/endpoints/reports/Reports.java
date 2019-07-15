@@ -65,6 +65,7 @@ import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.QueryModel;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.SaikuBasedQuery;
@@ -73,7 +74,6 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -113,7 +113,7 @@ public class Reports implements ErrorReportingEndpoint {
     public final JSONResult getReport(@PathParam("report_id") Long reportId) {
         AmpReports ampReport = DbUtil.getAmpReport(reportId);
         if (ampReport == null) {
-            ApiErrorResponse.reportError(BAD_REQUEST, ReportErrors.REPORT_NOT_FOUND);
+            ApiErrorResponseService.reportError(BAD_REQUEST, ReportErrors.REPORT_NOT_FOUND);
         }
         JSONResult report = getReport(ampReport);
         report.getReportMetadata().setReportType(SAVED);
@@ -305,7 +305,7 @@ public class Reports implements ErrorReportingEndpoint {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "successful operation",
             response = PagedReportResult.class))
     public final Response getCustomReport(ReportFormParameters formParams) {
-        JsonBean result = ReportsUtil.validateReportConfig(formParams, true);
+        ApiErrorResponse result = ReportsUtil.validateReportConfig(formParams, true);
         if (result != null) {
             return Response.ok(result).build(); // FIXME return bad request
         }
@@ -475,8 +475,8 @@ public class Reports implements ErrorReportingEndpoint {
         
         // Add data needed on Saiku UI.
         // TODO: Make a mayor refactoring on the js code so it doesnt need these extra parameters to work properly.
-        JsonBean queryProperties = new JsonBean();
-        queryProperties.set("properties", new ArrayList<String>());
+        Map<String, List<String>> queryProperties = new HashMap<>();
+        queryProperties.put("properties", new ArrayList<>());
         saikuResult.setQuery(queryProperties);
         List<String> cellset = new ArrayList<String>();
         cellset.add("dummy");

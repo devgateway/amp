@@ -5,7 +5,6 @@
 
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_DESCRIPTION;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TITLE;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TYPE;
@@ -21,14 +20,17 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpComponentFundingDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.values.providers.ComponentTypePossibleValuesProvider;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 
 /**
@@ -36,7 +38,7 @@ import org.digijava.module.aim.util.Output;
  * @author Priyajith
  */
 @TranslatableClass (displayName = "Component")
-public class AmpComponent implements Serializable, Comparable<AmpComponent>, Versionable, Cloneable {
+public class AmpComponent implements Serializable, Comparable<AmpComponent>, Versionable, Cloneable, Identifiable {
     
     //IATI-check: to be ignored
 
@@ -47,7 +49,8 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     @InterchangeableBackReference
     private AmpActivityVersion activity;
 
-    @Interchangeable(fieldTitle = COMPONENT_TITLE, required = ALWAYS, importable = true,
+    @Interchangeable(fieldTitle = COMPONENT_TITLE,
+            interValidators = @InterchangeableValidator(RequiredValidator.class), importable = true,
             fmPath="/Activity Form/Components/Component/Component Information/Component Title")
     @TranslatableField
     private String title;
@@ -328,5 +331,9 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     public String toString() {
         return title;
     }
-    
+
+    @Override
+    public Object getIdentifier() {
+        return ampComponentId;
+    }
 }

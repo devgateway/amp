@@ -1,8 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.filetype;
 
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.CR_MAX_FILE_SIZE;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD;
+
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -16,9 +19,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.dgfoundation.amp.error.AMPException;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
-import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpFileType;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -58,45 +59,29 @@ public class ResourceManager {
     @Path("save-settings")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "saveSettings", authTypes = AuthRule.IN_ADMIN)
-    @ApiOperation(
-            value = "Save the resource manager settings and file types supported by AMP for file uploading.",
-            notes = "The parameters used for saving file types and settings:\n"
-                    + "\n"
-                    + "Field|Description\n"
-                    + "---|---\n"
-                    + "allowedFileType |the list of allowed file types\n"
-                    + "resourceSettings |the settings of the resource manager\n"
-                    + "resourceSettings.limit-file-to-upload |enable the file type validation\n"
-                    + "resourceSettings.maximum-file-size |the maximum limit of the file size, in MB\n"
-                    + "resourceSettings.sort-column |the column used to sort the items in the resource table. "
-                    + "Possible values: \"resource_title_ASC, resource_title_DESC, type_ASC, type_DESC, "
-                    + "file_name_ASC, file_name_DESC, date_ASC, date_DESC, yearOfPublication_ASC, "
-                    + "yearOfPublication_DESC, size_ASC, size_DESC, cm_doc_type_ASC, cm_doc_type_DESC\"\n"
-                    + "\n"
-                    + "### Sample Request\n"
-                    + "```json\n"
-                    + "{\n"
-                    + "    \"allowedFileType\" : [\"msword\", \"msexcel\", \"csv\"],\n"
-                    + "    \"resourceSettings\" : {\n"
-                    + "        \"limit-file-to-upload\" : \"true\",\n"
-                    + "        \"maximum-file-size\" : \"20\",\n"
-                    + "        \"sort-column\" : \"resource_title_ASC\"\n"
-                    + "    }\n"
-                    + "}\n"
-                    + "```\n")
-    @SuppressWarnings("unchecked")
-    public Response saveSettings(JsonBean settings) throws AMPException {
-        List<String> allowedFileType = (List<String>) settings.get("allowedFileType");
-        Map<String, Object> map = (Map<String, Object>) settings.get("resourceSettings");
-        
-        for (String settingKey : map.keySet()) {
-            String value = map.get(settingKey).toString();
-            DbUtil.updateGlobalSetting(SettingsConstants.ID_NAME_MAP.get(settingKey), value);
+    @ApiOperation(value = "Save the resource manager settings and file types supported by AMP for file uploading.")
+    public Response saveSettings(ResourceManagerSettings settings) throws AMPException {
+        ResourceSettings resourceSettings = settings.getResourceSettings();
+        if (resourceSettings != null) {
+            if (resourceSettings.getLimitFileToUpload() != null) {
+                DbUtil.updateGlobalSetting(LIMIT_FILE_TYPE_FOR_UPLOAD,
+                        Boolean.toString(resourceSettings.getLimitFileToUpload()));
+            }
+            
+            if (resourceSettings.getMaximumFileSize() != null) {
+                DbUtil.updateGlobalSetting(CR_MAX_FILE_SIZE, Long.toString(resourceSettings.getMaximumFileSize()));
+            }
+            
+            if (resourceSettings.getSortColumn() != null) {
+                DbUtil.updateGlobalSetting(DEFAULT_RESOURCES_SORT_COLUMN, resourceSettings.getSortColumn());
+            }
+    
+            // after updating we rebuild global settings cache
+            FeaturesUtil.buildGlobalSettingsCache(FeaturesUtil.getGlobalSettings());
         }
-        // after updating we rebuild global settings cache
-        FeaturesUtil.buildGlobalSettingsCache(FeaturesUtil.getGlobalSettings());
+    
         FileTypeManager fileTypeManager = FileTypeManager.getInstance();
-        fileTypeManager.updateFileTypesConfig(new LinkedHashSet<String>(allowedFileType));
+        fileTypeManager.updateFileTypesConfig(new LinkedHashSet<>(settings.getAllowedFileType()));
         
         return Response.ok().build();
     }

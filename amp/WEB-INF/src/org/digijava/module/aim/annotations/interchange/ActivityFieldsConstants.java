@@ -39,9 +39,12 @@ public class ActivityFieldsConstants {
     public static final String MOFED_CONTACT = "Mofed Contact Information";
     public static final String IMPL_EXECUTING_AGENCY_CONTACT = "Implementing/Executing Agency Contact Information";
     public static final String PRIMARY_CONTACT = "Mark as primary";
+    public static final String FUNDINGS = "Fundings";
     public static final String FUNDING_DETAILS = "Funding Details";
     public static final String MTEF_PROJECTIONS = "MTEF Projections";
     public static final String LOCATIONS = "Locations";
+    public static final String IMPLEMENTATION_LEVEL = "Implementation Level";
+    public static final String IMPLEMENTATION_LOCATION = "Implementation Location";
     public static final String ORG_ROLE = "Org. Role";
     public static final String COMPONENTS = "Components";
     public static final String COMPONENT_TITLE = "Component Title";
@@ -80,6 +83,25 @@ public class ActivityFieldsConstants {
     
     public static final String IATI_IDENTIFIER = "IATI Identifier";
     public static final String UUID = "UUID";
+
+    public static final class Locations {
+        private Locations() {
+        }
+
+        public static final String LOCATION = "Location";
+    }
+
+    public static final class Funding {
+        private Funding() {
+        }
+
+        public static final class Details {
+            private Details() {
+            }
+
+            public static final String PLEDGE = "Pledge";
+        }
+    }
 
     public static final Map<String, String> ORG_ROLE_CODES = new ImmutableMap.Builder<String, String>()
             .put(FieldMap.underscorify(DONOR_ORGANIZATION), Constants.FUNDING_AGENCY)

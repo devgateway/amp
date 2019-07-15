@@ -27,6 +27,7 @@ import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.upload.FormFile;
@@ -158,16 +159,21 @@ public class ActivityUtil {
      */
     public static AmpActivityVersion saveActivity(AmpActivityVersion oldA, Collection<AmpContentTranslation> values, AmpTeamMember ampCurrentMember, Site site, Locale locale, String rootRealPath, boolean draft, SaveContext saveContext) {
         Session session;
+        EditorStore editorStore;
         if (saveContext.getSource() == ActivitySource.ACTIVITY_FORM) {
             session = AmpActivityModel.getHibernateSession();
+
+            editorStore = getSessionEditorStore();
         } else {
             session = PersistenceManager.getSession();
+
+            editorStore = new EditorStore();
         }
 
         boolean newActivity = oldA.getAmpActivityId() == null;
         AmpActivityVersion a = null;
         try {
-            a = saveActivityNewVersion(oldA, values, ampCurrentMember, draft, session, saveContext);
+            a = saveActivityNewVersion(oldA, values, ampCurrentMember, draft, session, saveContext, editorStore, site);
         } catch (Exception exception) {
             logger.error("Error saving activity:", exception); // Log the exception
             throw new RuntimeException("Can't save activity:", exception);
@@ -200,10 +206,11 @@ public class ActivityUtil {
     
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
             Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
-            Session session, SaveContext context) throws Exception {
+            Session session, SaveContext context, EditorStore editorStore, Site site) throws Exception {
         
         boolean draftChange = detectDraftChange(a, draft);
-        return saveActivityNewVersion(a, translations, ampCurrentMember, draft, draftChange, session, context);
+        return saveActivityNewVersion(a, translations, ampCurrentMember, draft, draftChange, session, context,
+                editorStore, site);
     }
 
     /**
@@ -212,7 +219,8 @@ public class ActivityUtil {
      */
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
             Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
-            boolean draftChange, Session session, SaveContext context) throws Exception {
+            boolean draftChange, Session session, SaveContext context,
+            EditorStore editorStore, Site site) throws Exception {
 
         AmpActivityVersion oldA = a;
         boolean newActivity = isNewActivity(a);
@@ -297,9 +305,9 @@ public class ActivityUtil {
 
             saveActivityResources(a, session);
             saveActivityGPINiResources(a, session);
-            saveEditors(session, createNewVersion);
             saveComments(a, session, draft);
         }
+        saveEditors(session, createNewVersion, editorStore, site);
 
         saveAgreements(a, session, isActivityForm);
         saveContacts(a, session, (draft != draftChange), ampCurrentMember);
@@ -636,8 +644,9 @@ public class ActivityUtil {
      * @param isNewActivity
      * @return
      */
-    public static boolean canReject(AmpTeamMember atm, boolean isDraft, boolean isNewActivity) {
-        return !isNewActivity && !isDraft && isProjectValidationOn(getValidationSetting(atm)) && isApprover(atm);
+    public static boolean canReject(AmpTeamMember atm, Boolean isDraft, Boolean isNewActivity) {
+        return BooleanUtils.isFalse(isNewActivity) && BooleanUtils.isFalse(isDraft)
+                && isProjectValidationOn(getValidationSetting(atm)) && isApprover(atm);
     }
     
     /**
@@ -801,21 +810,24 @@ public class ActivityUtil {
         }
     }
 
-    private static void saveEditors(Session session, boolean createNewVersion) {
+    private static EditorStore getSessionEditorStore() {
         AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
-        EditorStore editorStore = s.getMetaData(OnePagerConst.EDITOR_ITEMS);
-        HashMap<String, HashMap<String, String>> editors = editorStore.getValues();
+        return s.getMetaData(OnePagerConst.EDITOR_ITEMS);
+    }
 
-        AmpAuthWebSession wicketSession = ((AmpAuthWebSession)org.apache.wicket.Session.get());
+    private static void saveEditors(Session session, boolean createNewVersion, EditorStore editorStore, Site site) {
+
+        Map<String, Map<String, String>> editors = editorStore.getValues();
 
         //String currentLanguage = TLSUtils.getLangCode();
-        if (editors == null || editors.keySet() == null)
+        if (editors == null) {
             return;
+        }
         Iterator<String> it = editors.keySet().iterator();
         while (it.hasNext()) {
             String key = (String) it.next();
             String oldKey = editorStore.getOldKey().get(key);
-            HashMap<String, String> values = editors.get(key);
+            Map<String, String> values = editors.get(key);
             Set<String> locales = values.keySet();
 
             for (String locale: locales){
@@ -826,7 +838,7 @@ public class ActivityUtil {
 
                 try {
                     boolean editorFound = false;
-                    List<Editor> edList = DbUtil.getEditorList(oldKey, wicketSession.getSite());
+                    List<Editor> edList = DbUtil.getEditorList(oldKey, site);
                     Iterator<Editor> it2 = edList.iterator();
                     while (it2.hasNext()) {
                         Editor editor = (Editor) it2.next();
@@ -855,7 +867,7 @@ public class ActivityUtil {
                         //add new editor
                         Editor editor = new Editor();
                         editor.setBody(value);
-                        editor.setSite(wicketSession.getSite());
+                        editor.setSite(site);
                         editor.setLanguage(locale);
                         editor.setEditorKey(key);
                         session.saveOrUpdate(editor);

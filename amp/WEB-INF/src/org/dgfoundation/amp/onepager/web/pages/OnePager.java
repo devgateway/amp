@@ -344,17 +344,14 @@ public class OnePager extends AmpHeaderFooter {
             String activityName, String latitude, String longitude, String geoId) {
         AmpActivityLocation actLoc = new AmpActivityLocation();
         AmpLocation ampLoc = LocationUtil.getAmpLocationByGeoCode(geoId);
-        // This check is necessary to avoid an exception if the location doesn't
-        // have geoCode
+        // This check is necessary to avoid an exception if the location doesn't have geoCode
         if (ampLoc != null) {
-            Set<AmpActivityLocation> locations = new HashSet<AmpActivityLocation>();
             activity.setName(activityName);
             actLoc.setLatitude(latitude);
             actLoc.setLongitude(longitude);
             actLoc.setLocationPercentage(100f);
             actLoc.setLocation(ampLoc);
-            locations.add(actLoc);
-            activity.setLocations(locations);
+            activity.getLocations().add(actLoc);
         }
 
         //we set the default value for activity budget if configured as a global setting

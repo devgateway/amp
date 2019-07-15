@@ -10,9 +10,8 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
-import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
+import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.util.Identifiable;
@@ -37,8 +36,8 @@ public final class ActivityTranslationUtils {
         return field.getAnnotation(VersionableFieldTextEditor.class) != null;
     }
 
-    private static boolean isResourceTextField(Field field) {
-        return field.getAnnotation(ResourceTextField.class) != null;
+    private static boolean isMultilingualContentField(Field field) {
+        return MultilingualContent.class.isAssignableFrom(field.getType());
     }
 
     public static boolean isTranslatable(Field field, Class<?> clazz) {
@@ -67,11 +66,10 @@ public final class ActivityTranslationUtils {
         // check if this is translatable field
         boolean isTranslatable = translationSettings.isTranslatable(field);
         boolean isEditor = isVersionableTextField(field);
-        boolean isResource = isResourceTextField(field);
+        boolean isMultilingualContent = isMultilingualContentField(field);
 
         // provide map for translatable fields
         if (isTranslatable) {
-            String fieldText = (String) fieldValue;
             if (isEditor) {
                 Map<String, Object> fieldTrnValues = new HashMap<String, Object>();
                 for (String translation : translationSettings.getTrnLocaleCodes()) {
@@ -79,14 +77,14 @@ public final class ActivityTranslationUtils {
                     //String translatedText = DgUtil.cleanHtmlTags(DbUtil.getEditorBodyEmptyInclude(
                     // SiteUtils.getGlobalSite(), fieldText, translation));
                     String translatedText = translatorService.getEditorBodyEmptyInclude(TLSUtils.getSite(),
-                            fieldText, translation);
+                            (String) fieldValue, translation);
                     fieldTrnValues.put(translation, getJsonStringValue(translatedText));
                 }
                 return fieldTrnValues;
-            } else if (isResource) {
-                return loadTranslationsForResourceField(field, parentObject, translationSettings);
+            } else if (isMultilingualContent) {
+                return loadTranslationsForMultilingualField(field, parentObject, translationSettings);
             } else {
-                return loadTranslationsForField(clazz, field.getName(), fieldText, parentObject,
+                return loadTranslationsForField(clazz, field.getName(), (String) fieldValue, parentObject,
                         translationSettings.getTrnLocaleCodes());
             }
         }
@@ -172,18 +170,15 @@ public final class ActivityTranslationUtils {
      * @throws NoSuchFieldException
      * @throws IllegalAccessException
      */
-    private static Map<String, Object> loadTranslationsForResourceField(Field field, Object parentObject,
+    private static Map<String, Object> loadTranslationsForMultilingualField(Field field, Object parentObject,
             TranslationSettings translationSettings) throws NoSuchFieldException, IllegalAccessException {
 
-        Map<String, Object> fieldTrnValues = new HashMap<String, Object>();
-        AmpResource resource = (AmpResource) parentObject;
-        ResourceTextField resourceAnnotation = field.getAnnotation(ResourceTextField.class);
-        Field translationsField = resource.getClass().getDeclaredField(resourceAnnotation.translationsField());
-        translationsField.setAccessible(true);
+        field.setAccessible(true);
+        MultilingualContent multilingualContent = (MultilingualContent) field.get(parentObject);
 
-        Map<String, String> resourceTranslations = (Map<String, String>) translationsField.get(resource);
+        Map<String, Object> fieldTrnValues = new HashMap<String, Object>();
         for (String translation : translationSettings.getTrnLocaleCodes()) {
-            fieldTrnValues.put(translation, resourceTranslations.get(translation));
+            fieldTrnValues.put(translation, multilingualContent.getTranslations().get(translation));
         }
 
         return fieldTrnValues;

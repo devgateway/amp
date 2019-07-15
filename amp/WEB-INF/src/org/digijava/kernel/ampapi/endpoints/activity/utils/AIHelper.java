@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
 /**
@@ -17,9 +16,12 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
  * @author Nadejda Mandrescu
  */
 public class AIHelper {
-
+    
     private static final Logger logger = Logger.getLogger(AIHelper.class);
-    /**
+
+    private static final Integer RANDOM_UPPER_LIMIT = 10000;
+
+    /** 
      * Stores all field paths within AmpActivityVersion tree that back reference the Activity.
      */
     private ActivityImporter activityImporter;
@@ -56,7 +58,7 @@ public class AIHelper {
      * @param root
      * @return Long representation or null if invalid or missing
      */
-    public static Long getActivityIdOrNull(JsonBean root) {
+    public static Long getActivityIdOrNull(Map<String, Object> root) {
         return longOrNull(root.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME));
     }
 
@@ -74,10 +76,10 @@ public class AIHelper {
      * @param root
      * @return Long representation or null if invalid or missing
      */
-    public static Long getActivityGroupVersionOrNull(JsonBean root) {
+    public static Long getActivityGroupVersionOrNull(Map<String, Object> root) {
         Object activityGroup = root.get(FieldMap.underscorify(ActivityFieldsConstants.ACTIVITY_GROUP));
         if (activityGroup instanceof Map) {
-            return longOrNull(((Map) activityGroup).get(ActivityEPConstants.VERSION_FIELD_NAME));
+            return longOrNull(((Map<?, ?>) activityGroup).get(ActivityEPConstants.VERSION_FIELD_NAME));
         }
         return null;
     }
@@ -88,5 +90,18 @@ public class AIHelper {
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+
+    /**
+     * Generate editor key used by importer when adding a new
+     * @param fieldName
+     * @return
+     */
+    public static String getEditorKey(String fieldName) {
+        // must start with "aim-" since it is expected by AF like this...
+        // The activity form to avoid this issue is using team member see EditorWrapperModel.generateEditorKey
+        // to avoid collisions even  under the the same member we add a random number from 0 to RANDOM_UPPER_LIMIT -1
+        return "aim-importer-" + fieldName + "-" + (System.currentTimeMillis()
+                + (int) (Math.random() * RANDOM_UPPER_LIMIT));
     }
 }

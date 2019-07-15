@@ -41,6 +41,11 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
         return TranslationSettings.getCurrent().isTranslatable(field);
     }
     
+    @Override
+    public TranslationSettings.TranslationType getTranslatableType(Field field) {
+        return TranslationSettings.getCurrent().getTranslatableType(field);
+    }
+    
     public String getType(Field field) {
         initializeDeclaringClassOfFieldIfNeeded(field);
         return isFieldInitialized(field) ? getFieldInfo(field).getType() : null;

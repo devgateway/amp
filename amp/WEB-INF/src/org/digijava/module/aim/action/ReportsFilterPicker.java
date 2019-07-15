@@ -705,7 +705,7 @@ public class ReportsFilterPicker extends Action {
         if (filterForm.getComputedYear() != -1) {
             arf.setComputedYear(filterForm.getComputedYear());
         } else {
-            if (FeaturesUtil.isVisibleFeature("Computed Columns Filters")) {
+            if (FeaturesUtil.isVisibleFeature("Computed Year")) {
                 arf.setComputedYear(curYear);
             } else {
                 arf.setComputedYear(null);
@@ -918,16 +918,6 @@ public class ReportsFilterPicker extends Action {
         fillFilterOrganizations(arf, filterForm);
         arf.setProjectCategory(ReportsUtil
                 .processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpCategoryValue.class));
-        if (filterForm.getSelectedArchivedStatus() == null || filterForm.getSelectedArchivedStatus().length != 1) {
-            arf.setShowArchived(null);
-        } else {
-            String selection = (String) filterForm.getSelectedArchivedStatus()[0];
-            if ("1".equals(selection)) {
-                arf.setShowArchived(false);
-            } else {
-                arf.setShowArchived(true);
-            }
-        }
         arf.setHumanitarianAid(buildBooleanField(filterForm.getSelectedHumanitarianAid()));
         arf.setDisasterResponse(buildBooleanField(filterForm.getSelectedDisasterResponse()));
         arf.getUndefinedOptions().clear(); 

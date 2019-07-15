@@ -2,6 +2,8 @@ package org.digijava.kernel.ampapi.endpoints.activity.field;
 
 import java.lang.reflect.Field;
 
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
+
 /**
  * This class provides some basic info about fields from db entities like: type, max length, is translatable?
  *
@@ -29,4 +31,10 @@ public interface FieldInfoProvider {
      * @return true if field value can be translated
      */
     boolean isTranslatable(Field field);
+    
+    /**
+     * @param field field from db entity
+     * @return TranslationType translation type of the field if it is translatable
+     */
+    TranslationSettings.TranslationType getTranslatableType(Field field);
 }

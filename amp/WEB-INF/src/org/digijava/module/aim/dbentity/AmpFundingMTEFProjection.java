@@ -1,14 +1,14 @@
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
-
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -25,16 +25,20 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
     private Long ampFundingMTEFProjectionId;
 
     @Interchangeable(fieldTitle = "Projection", pickIdOnly = true, importable = true, 
-            discriminatorOption = CategoryConstants.MTEF_PROJECTION_KEY, required = ALWAYS)
+            discriminatorOption = CategoryConstants.MTEF_PROJECTION_KEY,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private AmpCategoryValue projection;
 
-    @Interchangeable(fieldTitle = "Amount", importable = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Amount", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Double amount;
 
-    @Interchangeable(fieldTitle = "Currency", pickIdOnly = true, importable = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Currency", pickIdOnly = true, importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private AmpCurrency ampCurrency;
 
-    @Interchangeable(fieldTitle = "Projection Date", importable = true, required = ALWAYS)
+    @Interchangeable(fieldTitle = "Projection Date", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Date projectionDate;
 
     @InterchangeableBackReference

@@ -26,9 +26,21 @@ public class SyncRequest {
     @JsonProperty("last-sync-time")
     private Date lastSyncTime;
     
-    @ApiModelProperty(value = "possible values fields currently known to the client")
+    @ApiModelProperty(value = "activity possible values fields currently known to the client")
     @JsonProperty(value = "activity-possible-values-fields")
     private List<String> activityPossibleValuesFields;
+
+    @ApiModelProperty(value = "contact possible values fields currently known to the client")
+    @JsonProperty(value = "contact-possible-values-fields")
+    private List<String> contactPossibleValuesFields;
+
+    @ApiModelProperty(value = "resource possible values fields currently known to the client")
+    @JsonProperty(value = "resource-possible-values-fields")
+    private List<String> resourcePossibleValuesFields;
+
+    @ApiModelProperty(value = "common possible values fields currently known to the client")
+    @JsonProperty(value = "common-possible-values-fields")
+    private List<String> commonPossibleValuesFields;
     
     @ApiModelProperty(value = "activity fields currently known to the client")
     @JsonProperty(value = "activity-fields")
@@ -73,7 +85,31 @@ public class SyncRequest {
     public void setActivityPossibleValuesFields(List<String> activityPossibleValuesFields) {
         this.activityPossibleValuesFields = activityPossibleValuesFields;
     }
-    
+
+    public List<String> getContactPossibleValuesFields() {
+        return contactPossibleValuesFields;
+    }
+
+    public void setContactPossibleValuesFields(List<String> contactPossibleValuesFields) {
+        this.contactPossibleValuesFields = contactPossibleValuesFields;
+    }
+
+    public List<String> getResourcePossibleValuesFields() {
+        return resourcePossibleValuesFields;
+    }
+
+    public void setResourcePossibleValuesFields(List<String> resourcePossibleValuesFields) {
+        this.resourcePossibleValuesFields = resourcePossibleValuesFields;
+    }
+
+    public List<String> getCommonPossibleValuesFields() {
+        return commonPossibleValuesFields;
+    }
+
+    public void setCommonPossibleValuesFields(List<String> commonPossibleValuesFields) {
+        this.commonPossibleValuesFields = commonPossibleValuesFields;
+    }
+
     public List<APIField> getActivityFields() {
         return activityFields;
     }

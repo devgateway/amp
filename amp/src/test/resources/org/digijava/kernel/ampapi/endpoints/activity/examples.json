@@ -79,6 +79,22 @@
       }
     ]
   },
+  "no-overwrite-in-set": {
+    "name": "Wise Leonidas",
+    "children": [
+      {
+        "id": 1,
+        "name": "Young Alexios"
+      },
+      {
+        "name": "Pericles"
+      },
+      {
+        "id": 2,
+        "name": "Prominent Herodotus"
+      }
+    ]
+  },
   "no-overwrite-in-discriminated-collection": {
     "home": [
       {
@@ -115,5 +131,34 @@
   },
   "match-discriminated-id-only": {
     "height": "10"
+  },
+  "agreement-update": {
+    "agreement": {
+      "id":  1,
+      "description": "Desc 1"
+    }
+  },
+  "agreement-insert": {
+    "agreement": {
+      "description": "Desc"
+    }
+  },
+  "agreement-null": {
+    "agreement": null
+  },
+  "agreement-empty": {
+    "agreement": {}
+  },
+  "agreement-null-id": {
+    "agreement": {
+      "id":  null,
+      "description": "Desc 1"
+    }
+  },
+  "details-full": {
+    "details": {
+      "id": 1,
+      "detail": "Detail A"
+    }
   }
 }

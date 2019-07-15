@@ -180,7 +180,6 @@ public class AmpARFilterConverter {
             addBooleanFilter(arFilter.getGovernmentApprovalProcedures(),
                     ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
             addBooleanFilter(arFilter.getJointCriteria(), ColumnConstants.JOINT_CRITERIA);
-            addBooleanFilter(arFilter.getShowArchived(), ColumnConstants.ARCHIVED);
             addCategoryValueNamesFilter(arFilter.getProjectImplementingUnits(),
                     ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
             addCategoryValueNamesFilter(arFilter.getActivityPledgesTitle(), ColumnConstants.PLEDGES_TITLES);

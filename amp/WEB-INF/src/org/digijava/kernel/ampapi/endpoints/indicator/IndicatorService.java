@@ -12,9 +12,8 @@ import org.dgfoundation.amp.menu.MenuUtils;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
@@ -64,11 +63,10 @@ public class IndicatorService {
     public static Indicator getIndicatorById(long id) {
 
         if (!IndicatorUtils.hasRights(id)) {
-            ApiErrorResponse.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
+            ApiErrorResponseService.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
         }
 
         AmpIndicatorLayer indicatorLayer = DynLocationManagerUtil.getIndicatorLayerById(id);
-        JsonBean indicatorJson = null;
         if (indicatorLayer!=null) {
             return IndicatorUtils.buildIndicatorLayerJson(indicatorLayer);
         }
@@ -83,7 +81,7 @@ public class IndicatorService {
 
     public static IndicatorOperationResult deleteIndicatorById(long id) {
         if (!IndicatorUtils.hasRights(id)) {
-            ApiErrorResponse.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
+            ApiErrorResponseService.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
         }
 
         AmpIndicatorLayer indicatorLayer = DynLocationManagerUtil.getIndicatorLayerById(id);
@@ -136,12 +134,17 @@ public class IndicatorService {
     }
     
     public static AmpIndicatorLayer getIndicatorLayer(Indicator indicator, ApiEMGroup errors,
-            List<AmpContentTranslation> translations) {
+                                                      List<AmpContentTranslation> translations) {
+        return getIndicatorLayer(indicator, errors, translations, true);
+    }
+    
+    public static AmpIndicatorLayer getIndicatorLayer(Indicator indicator, ApiEMGroup errors,
+            List<AmpContentTranslation> translations, boolean saveMode) {
         IndicatorUpdater updater = new IndicatorUpdater(indicator);
         Long indicatorId = updater.getIndicatorId();
         
         if (indicatorId != null && !IndicatorUtils.hasRights(indicatorId)) {
-            ApiErrorResponse.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
+            ApiErrorResponseService.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
         }
         
         AmpIndicatorLayer indLayer = updater.getIndicatorLayer();
@@ -154,7 +157,7 @@ public class IndicatorService {
                 errors.addApiErrorMessage(IndicatorErrors.EXISTING_NAME, indLayer.getName());
             }
             boolean isAuthenticated = MenuUtils.getCurrentView() != AmpView.PUBLIC;
-            if (isAuthenticated && indLayer.getAccessType() == IndicatorAccessType.TEMPORARY) {
+            if (isAuthenticated && indLayer.getAccessType() == IndicatorAccessType.TEMPORARY && saveMode) {
                 errors.addApiErrorMessage(IndicatorErrors.FIELD_INVALID_VALUE, 
                         IndicatorEPConstants.ACCESS_TYPE_ID + " = " + indicator.getAccessTypeId());
             }

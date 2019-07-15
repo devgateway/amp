@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
 import static java.util.stream.Collectors.toList;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.NONE;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
@@ -9,11 +8,16 @@ import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -23,22 +27,35 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.DiscriminatedFieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.FEContext;
 import org.digijava.kernel.ampapi.endpoints.activity.FMService;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldAccessor;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
+import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslations;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.validation.ConstraintDescriptor;
+import org.digijava.kernel.validation.ConstraintDescriptors;
+import org.digijava.kernel.validators.common.TotalPercentageValidator;
+import org.digijava.kernel.validators.common.RegexValidator;
+import org.digijava.kernel.validators.activity.UniqueValidator;
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
+import org.digijava.module.aim.annotations.interchange.Independent;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.validator.groups.Submit;
 
 /**
  * Enumerate & describe all fields of an object used for import / export in API.
@@ -55,8 +72,6 @@ public class FieldsEnumerator {
 
     private TranslatorService translatorService;
 
-    private InterchangeDependencyResolver interchangeDependencyResolver;
-
     private Function<String, Boolean> allowMultiplePrograms;
 
     /**
@@ -67,7 +82,6 @@ public class FieldsEnumerator {
         this.fieldInfoProvider = fieldInfoProvider;
         this.fmService = fmService;
         this.translatorService = translatorService;
-        interchangeDependencyResolver = new InterchangeDependencyResolver(fmService);
         this.allowMultiplePrograms = allowMultiplePrograms;
     }
 
@@ -91,24 +105,22 @@ public class FieldsEnumerator {
         // for discriminated case we can override the type here
         Class<?> type = InterchangeUtils.getClassOfField(field);
         FieldType fieldType = null;
-        Class<?> elementType = null;
+        apiField.setIsCollection(Collection.class.isAssignableFrom(field.getType()));
         if (interchangeable.pickIdOnly()) {
             fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
         } else if (InterchangeUtils.isCollection(field)) {
-            elementType = getType(field, context);
+            type = getType(field, context);
             if (interchangeable.multipleValues()) {
                 fieldType = FieldType.LIST;
-                if (InterchangeUtils.isSimpleType(elementType)) {
-                    type = field.getClass();
-                }
             }
         } else if (field.getType().equals(java.util.Date.class)) {
             fieldType = InterchangeUtils.isTimestampField(field) ? FieldType.TIMESTAMP : FieldType.DATE;
         }
 
-        APIType apiType = new APIType(type, fieldType, elementType);
+        APIType apiType = new APIType(type, fieldType);
         apiField.setApiType(apiType);
-        boolean isCollection = apiType.getFieldType().isList();
+
+        boolean isList = apiType.getFieldType().isList();
 
         if (apiField.isId()
                 && (apiType.getFieldType() == FieldType.OBJECT || apiType.getFieldType() == FieldType.LIST)) {
@@ -117,18 +129,16 @@ public class FieldsEnumerator {
 
         apiField.setPossibleValuesProviderClass(getPossibleValuesProvider(field));
         String cPVPath = StringUtils.isBlank(interchangeable.commonPV()) ? null : interchangeable.commonPV();
-        apiField.setCommonPossibleValuesPath(cPVPath); 
+        apiField.setCommonPossibleValuesPath(cPVPath);
 
         String label = getLabelOf(interchangeable);
-        apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
-        apiField.setRequired(getRequiredValue(context, fieldTitle));
+        apiField.setFieldLabel(getTranslationsForLabel(label));
         apiField.setImportable(getImportableValue(context, fieldTitle, interchangeable));
 
         if (interchangeable.percentageConstraint()) {
             apiField.setPercentage(true);
         }
-        List<String> actualDependencies =
-                interchangeDependencyResolver.getActualDependencies(interchangeable.dependencies());
+        List<String> actualDependencies = getActualDependencies(interchangeable);
         if (actualDependencies != null) {
             apiField.setDependencies(actualDependencies);
         }
@@ -141,17 +151,9 @@ public class FieldsEnumerator {
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             if (!interchangeable.pickIdOnly()) {
-                Class<?> clazz = isCollection ? elementType : type;
-                apiField.setChildren(getAllAvailableFields(clazz, context));
+                apiField.setChildren(getAllAvailableFields(type, context));
             }
-            if (isCollection) {
-                apiField.setMultipleValues(!hasMaxSizeValidatorEnabled(field, context));
-                if (interchangeable.sizeLimit() > 1) {
-                    apiField.setSizeLimit(interchangeable.sizeLimit());
-                }
-                if (hasPercentageValidatorEnabled(context)) {
-                    apiField.setPercentageConstraint(getPercentageConstraint(field, context));
-                }
+            if (isList) {
                 String uniqueConstraint = getUniqueConstraint(apiField, field, context);
                 if (hasTreeCollectionValidatorEnabled(context)) {
                     apiField.setTreeCollectionConstraint(true);
@@ -162,19 +164,42 @@ public class FieldsEnumerator {
             }
         }
 
-        // only String fields should clarify if they are translatable or not
-        if (java.lang.String.class.equals(field.getType())) {
-            apiField.setTranslatable(fieldInfoProvider.isTranslatable(field));
+        List<ConstraintDescriptor> fieldConstraintDescriptors = new ArrayList<>();
+
+        if (isFieldIatiIdentifier(fieldTitle) && AmpClientModeHolder.isIatiImporterClient()) {
+            Map<String, String> args = ImmutableMap.of();
+            Set<Class<?>> groups = ImmutableSet.of();
+            fieldConstraintDescriptors.add(new ConstraintDescriptor(
+                    RequiredValidator.class, args, groups, ConstraintDescriptor.ConstraintTarget.FIELD));
         }
+
+        addProgramConstraints(fieldConstraintDescriptors, apiType, context);
+
+        if (apiField.getUniqueConstraint() != null) {
+            Map<String, String> args = ImmutableMap.of("field", apiField.getUniqueConstraint());
+            Set<Class<?>> groups = ImmutableSet.of();
+            fieldConstraintDescriptors.add(new ConstraintDescriptor(
+                    UniqueValidator.class, args, groups, ConstraintDescriptor.ConstraintTarget.FIELD));
+        }
+
+        if (TranslationSettings.canBeTranslatable(field.getType())) {
+            apiField.setTranslatable(fieldInfoProvider.isTranslatable(field));
+            apiField.setTranslationType(fieldInfoProvider.getTranslatableType(field));
+        }
+
+        if (apiField.getTranslationType() == TranslationSettings.TranslationType.STRING
+                && !Identifiable.class.isAssignableFrom(field.getDeclaringClass())) {
+            throw new RuntimeException(field.getDeclaringClass() + " must implement " + Identifiable.class);
+        }
+
         if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldInfoProvider.getType(field))) {
             apiField.setFieldLength(fieldInfoProvider.getMaxLength(field));
-        }
-        if (StringUtils.isNotBlank(interchangeable.regexPattern())) {
-            apiField.setRegexPattern(interchangeable.regexPattern());
         }
         if (StringUtils.isNotEmpty(interchangeable.discriminatorOption())) {
             apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
         }
+
+        apiField.setIndependent(field.isAnnotationPresent(Independent.class));
 
         if (apiField.getApiType().getFieldType() == FieldType.LIST
                 && apiField.getApiType().getItemType() == FieldType.OBJECT) {
@@ -191,7 +216,97 @@ public class FieldsEnumerator {
             apiField.setIdChild(idFields.get(0));
         }
 
+        List<ConstraintDescriptor> beanConstraintDescriptors =
+                findBeanConstraints(apiField.getApiType().getType(), context);
+        apiField.setBeanConstraints(new ConstraintDescriptors(beanConstraintDescriptors));
+
+        fieldConstraintDescriptors.addAll(findFieldConstraints(interchangeable.interValidators(), context));
+        apiField.setFieldConstraints(new ConstraintDescriptors(fieldConstraintDescriptors));
+
+        apiField.setRegexPattern(findRegexPattern(fieldConstraintDescriptors));
+        apiField.setMultipleValues(isMultipleValues(apiType, fieldConstraintDescriptors));
+        apiField.setSizeLimit(findSizeLimit(fieldConstraintDescriptors));
+        if (hasTotalPercentageConstraint(fieldConstraintDescriptors) && apiField.getPercentageField() != null) {
+            apiField.setPercentageConstraint(apiField.getPercentageField().getFieldName());
+        }
+
+        apiField.setUnconditionalRequired(getUnconditionalRequiredValue(fieldConstraintDescriptors));
+        apiField.setDependencyRequired(getDependencyRequiredValue(context));
+        apiField.setRequired(getRequiredValue(context,
+                apiField.getDependencyRequired(),
+                apiField.getUnconditionalRequired()));
+
         return apiField;
+    }
+
+    private boolean hasTotalPercentageConstraint(List<ConstraintDescriptor> descriptors) {
+        return descriptors.stream()
+                .anyMatch(d -> d.getConstraintValidatorClass().equals(TotalPercentageValidator.class));
+    }
+
+    /**
+     * Returns size limit only if it is present and greater than 1.
+     */
+    private Integer findSizeLimit(List<ConstraintDescriptor> descriptors) {
+        String max = descriptors.stream()
+                .filter(d -> d.getConstraintValidatorClass().equals(SizeValidator.class))
+                .map(d -> d.getArguments().get("max"))
+                .findAny()
+                .orElse(null);
+        Integer intMax = max != null ? Integer.parseInt(max) : null;
+        return intMax != null && intMax > 1 ? intMax : null;
+    }
+
+    private Boolean isMultipleValues(APIType apiType, List<ConstraintDescriptor> descriptors) {
+        if (apiType.getFieldType().isList()) {
+            return descriptors.stream()
+                    .noneMatch(d -> d.getConstraintValidatorClass().equals(SizeValidator.class)
+                            && "1".equals(d.getArguments().get("max")));
+        } else {
+            return null;
+        }
+    }
+
+    private String findRegexPattern(List<ConstraintDescriptor> descriptors) {
+        return descriptors.stream()
+                .filter(d -> d.getConstraintValidatorClass().equals(RegexValidator.class))
+                .map(d -> d.getArguments().get("regex"))
+                .findAny()
+                .orElse(null);
+    }
+
+    private List<ConstraintDescriptor> findBeanConstraints(Class<?> type, FEContext context) {
+        InterchangeableValidator[] validators = type.getAnnotationsByType(InterchangeableValidator.class);
+        return getConstraintDescriptors(validators, ConstraintDescriptor.ConstraintTarget.TYPE, context);
+    }
+
+    private List<ConstraintDescriptor> findFieldConstraints(InterchangeableValidator[] validators, FEContext context) {
+        return getConstraintDescriptors(validators, ConstraintDescriptor.ConstraintTarget.FIELD, context);
+    }
+
+    private List<ConstraintDescriptor> getConstraintDescriptors(InterchangeableValidator[] validators,
+            ConstraintDescriptor.ConstraintTarget constraintTarget, FEContext context) {
+        List<ConstraintDescriptor> descriptors = new ArrayList<>();
+        for (InterchangeableValidator validator : validators) {
+            if (isVisible(validator.fmPath(), context)) {
+                ImmutableSet<Class<?>> groups = ImmutableSet.copyOf(validator.groups());
+                Map<String, String> attributes = parseAttributes(validator);
+                descriptors.add(new ConstraintDescriptor(validator.value(), attributes, groups, constraintTarget));
+            }
+        }
+        return descriptors;
+    }
+
+    private Map<String, String> parseAttributes(InterchangeableValidator validator) {
+        Map<String, String> attributes;
+        if (validator.attributes().isEmpty()) {
+            attributes = ImmutableMap.of();
+        } else {
+            attributes = Splitter.on('&')
+                    .withKeyValueSeparator('=')
+                    .split(validator.attributes());
+        }
+        return attributes;
     }
 
     private boolean hasPossibleValues(Field field, Interchangeable interchangeable) {
@@ -230,6 +345,15 @@ public class FieldsEnumerator {
             label = interchangeable.label();
         }
         return label;
+    }
+
+    public APIField getMetaModel(Class<?> clazz) {
+        APIField root = new APIField();
+        root.setApiType(new APIType(clazz));
+        FEContext context = new FEContext();
+        root.setChildren(getAllAvailableFields(clazz, context));
+        root.setBeanConstraints(new ConstraintDescriptors(findBeanConstraints(clazz, context)));
+        return root;
     }
 
     public List<APIField> getAllAvailableFields(Class<?> clazz) {
@@ -292,41 +416,21 @@ public class FieldsEnumerator {
      * @param label the label to be translated
      * @return a map from the ISO2 code -> translation in said text
      */
-    private Map<String, String> getTranslationsForLabel(String label) {
-        Map<String, String> translations = new HashMap<>();
+    private UnwrappedTranslations getTranslationsForLabel(String label) {
+        UnwrappedTranslations translations = new UnwrappedTranslations();
         try {
             Collection<Message> messages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);
             for (Message m : messages) {
-                translations.put(m.getLocale(), m.getMessage());
+                translations.set(m.getLocale(), m.getMessage());
             }
             if (translations.isEmpty()) {
-                translations.put("EN", label);
+                translations.set("EN", label);
             }
         } catch (WorkerException e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
         return translations;
-    }
-
-    /**
-     * Find nested field with a percentage constraint.
-     *
-     * @param field field to check
-     * @param context current context
-     * @return name of the field with percentage constraint
-     */
-    private String getPercentageConstraint(Field field, FEContext context) {
-        Class<?> genericClass = InterchangeUtils.getGenericClass(field);
-        Field[] fields = FieldUtils.getFieldsWithAnnotation(genericClass, Interchangeable.class);
-        for (Field f : fields) {
-            Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-            if (isVisible(interchangeable.fmPath(), context) && interchangeable.percentageConstraint()) {
-                return FieldMap.underscorify(interchangeable.fieldTitle());
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -367,52 +471,65 @@ public class FieldsEnumerator {
         return paths;
     }
 
-    /**
-     * Gets the field required value.
-     *
-     * @param context current context
-     * @param fieldTitle the field to get its required value
-     * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false,
-     * N (no) = not required. .
-     */
-    private String getRequiredValue(FEContext context, String fieldTitle) {
-        if (isFieldIatiIdentifier(fieldTitle) && AmpClientModeHolder.isIatiImporterClient()) {
-            return ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
-        }
-        
+    private String getRequiredValue(FEContext context, String dependencyRequired, String unconditionalRequired) {
+
         Interchangeable fieldIntch = context.getIntchStack().peek();
 
-        ActivityEPConstants.RequiredValidation required = fieldIntch.required();
-        String requiredFmPath = fieldIntch.requiredFmPath();
-
-        if (StringUtils.isNotBlank(requiredFmPath)) {
-            if (isRequiredVisible(requiredFmPath, context)) {
-                required = required == NONE ? SUBMIT : required;
-            } else {
-                required = NONE;
-            }
+        if (fieldIntch.requiredDependencies().length > 0) {
+            return dependencyRequired;
+        } else {
+            return unconditionalRequired;
         }
+    }
 
-        if (required == ALWAYS) {
-            return ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
-        } else if (required == SUBMIT || hasRequiredValidatorEnabled(context)) {
-            return ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
+    private String getDependencyRequiredValue(FEContext context) {
+        Interchangeable fieldIntch = context.getIntchStack().peek();
+
+        if (fieldIntch.requiredDependencies().length > 0) {
+            if (fieldIntch.dependencyRequired() == NONE) {
+                throw new IllegalStateException("Interchangeable.dependencyRequired is incorrect! Field: "
+                        + context.getIntchStack().peek().fieldTitle());
+            }
+
+            String fmPath = fieldIntch.dependencyRequiredFMPath();
+            if (fmPath.isEmpty() || isVisible(fmPath, context)) {
+                return fieldIntch.dependencyRequired() == SUBMIT
+                        ? ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED
+                        : ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
+            }
         }
 
         return ActivityEPConstants.FIELD_NOT_REQUIRED;
     }
-    
+
+    /**
+     * Gets the field required value.
+     *
+     * @param fieldConstraintDescriptors constraint descriptors for field
+     * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false,
+     *         N (no) = not required.
+     */
+    private String getUnconditionalRequiredValue(List<ConstraintDescriptor> fieldConstraintDescriptors) {
+        return fieldConstraintDescriptors.stream()
+                .filter(cd -> cd.getConstraintValidatorClass().equals(RequiredValidator.class))
+                .map(cd -> cd.getGroups().contains(Submit.class)
+                        ? ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED
+                        : ActivityEPConstants.FIELD_ALWAYS_REQUIRED)
+                .findFirst()
+                .orElse(ActivityEPConstants.FIELD_NOT_REQUIRED);
+    }
+
     private boolean getImportableValue(FEContext context, String fieldTitle, Interchangeable interchangeable) {
         if (isFieldIatiIdentifier(fieldTitle) && AmpClientModeHolder.isIatiImporterClient()) {
             return true;
         }
-        
+
         boolean importable = interchangeable.importable();
-        
+
         if (StringUtils.isNotBlank(interchangeable.readOnlyFmPath())) {
             return importable && !isVisible(interchangeable.readOnlyFmPath(), context);
         }
-        
+
         return importable;
     }
 
@@ -437,38 +554,26 @@ public class FieldsEnumerator {
     }
 
     /**
-     * Determine if the field contains maxsize validator
+     * If current field is for programs and at most one program is allowed then add this constraint to the list.
      *
+     * FIXME This hack can be removed once AMP-29247 is solved.
+     *
+     * @param constraintDescriptors list of constraint descriptors for field
+     * @param apiType type of the current field
      * @param context current context
-     * @return boolean if the field contains maxsize validator
      */
-    private boolean hasMaxSizeValidatorEnabled(Field field, FEContext context) {
-        if (AmpActivityProgram.class.equals(InterchangeUtils.getGenericClass(field))) {
-            return allowMultiplePrograms.apply(context.getIntchStack().peek().discriminatorOption());
-
-        } else {
-            return hasValidatorEnabled(context, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
+    private void addProgramConstraints(List<ConstraintDescriptor> constraintDescriptors,
+            APIType apiType, FEContext context) {
+        if (AmpActivityProgram.class.equals(apiType.getType())) {
+            String programSettingName = context.getIntchStack().peek().discriminatorOption();
+            if (!allowMultiplePrograms.apply(programSettingName)
+                    && isVisible(FMVisibility.PARENT_FM + "/max Size Program Validator", context)) {
+                Map<String, String> args = ImmutableMap.of("max", "1");
+                Set<Class<?>> groups = ImmutableSet.of();
+                constraintDescriptors.add(new ConstraintDescriptor(SizeValidator.class, args, groups,
+                        ConstraintDescriptor.ConstraintTarget.FIELD));
+            }
         }
-    }
-
-    /**
-     * Determine if the field contains required validator
-     *
-     * @param context current context
-     * @return boolean if the field contains required validator
-     */
-    private boolean hasRequiredValidatorEnabled(FEContext context) {
-        return hasValidatorEnabled(context, ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME);
-    }
-
-    /**
-     * Determine if the field contains percentage validator
-     *
-     * @param context current context
-     * @return boolean if the field contains percentage validator
-     */
-    private boolean hasPercentageValidatorEnabled(FEContext context) {
-        return hasValidatorEnabled(context, ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME);
     }
 
     /**
@@ -487,12 +592,6 @@ public class FieldsEnumerator {
 
         if (ActivityEPConstants.UNIQUE_VALIDATOR_NAME.equals(validatorName)) {
             validatorFmPath = validators.unique();
-        } else if (ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME.equals(validatorName)) {
-            validatorFmPath = validators.maxSize();
-        } else if (ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME.equals(validatorName)) {
-            validatorFmPath = validators.minSize();
-        } else if (ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME.equals(validatorName)) {
-            validatorFmPath = validators.percentage();
         } else if (ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME.equals(validatorName)) {
             validatorFmPath = validators.treeCollection();
         }
@@ -511,18 +610,30 @@ public class FieldsEnumerator {
 
     protected boolean isRequiredVisible(String fmPath, FEContext context) {
         Interchangeable peek = context.getIntchStack().pop();
-        boolean isVisible = fmService.isVisible(fmPath, context.getIntchStack());
+        boolean isVisible = fmService.isVisible(FMVisibility.handleParentFMPath(fmPath, context.getIntchStack()));
         context.getIntchStack().push(peek);
 
         return isVisible;
     }
 
     protected boolean isVisible(String fmPath, FEContext context) {
-        return fmService.isVisible(fmPath, context.getIntchStack());
+        return fmService.isVisible(FMVisibility.handleParentFMPath(fmPath, context.getIntchStack()));
     }
-    
+
     private boolean isFieldIatiIdentifier(String fieldName) {
         return StringUtils.equals(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER), fieldName);
     }
 
+    /**
+     * Verifies each configures dependency for any additional checks
+     * and builds up the final (actual) list of dependencies
+     * @param interchangeable for dependency info
+     * @return actual dependencies list or null if no dependency
+     */
+    private List<String> getActualDependencies(Interchangeable interchangeable) {
+        return new ImmutableList.Builder<String>()
+                .add(interchangeable.dependencies())
+                .add(interchangeable.requiredDependencies())
+                .build();
+    }
 }

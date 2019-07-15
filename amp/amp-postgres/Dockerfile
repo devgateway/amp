@@ -11,4 +11,9 @@ RUN apt-get update \
                 postgresql-$PG_MAJOR-postgis-$GIS_MAJOR-scripts \
         && rm -rf /var/lib/apt/lists/*
 
+RUN sed -ri -e "s:#log_directory = 'pg_log':log_directory = '/var/log/postgresql':" \
+                -e 's/#logging_collector = off/logging_collector = on/' \
+                -e 's/#log_file_mode = 0600/log_file_mode = 0644/' \
+                /usr/share/postgresql/postgresql.conf.sample
+
 COPY restore-amp-db.sh /docker-entrypoint-initdb.d/

@@ -111,11 +111,8 @@ public final class AdvancedReportUtil {
     public static List<AmpColumns> getColumnListFiltered()
     {
         List<AmpColumns> columnsOut = new ArrayList<AmpColumns>();
-//      public static Set<String> getConfigurableColumns()
-        Set<String> columnNames = ColumnsVisibility.getConfigurableColumns();
         for (AmpColumns col : CACHED_COLUMNS_LIST) {
-            //if (columnNames.contains(col.getColumnName()) || columnNames.contains(col.getAliasName()))
-                columnsOut.add(col);
+            columnsOut.add(col);
         }
         return columnsOut;
     }

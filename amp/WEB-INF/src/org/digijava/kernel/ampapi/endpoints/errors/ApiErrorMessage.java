@@ -9,14 +9,14 @@ import org.dgfoundation.amp.annotations.checkstyle.IgnoreCanonicalNames;
 
 /**
  * Defines API Error Message template and stores custom value if needed
- * 
+ *
  * @author Nadejda Mandrescu
  */
 public class ApiErrorMessage {
 
     /** Message custom Error Code [0..99] within its component/method */
     public final Integer id;
-    /** 
+    /**
      * General error description (laconic), automatically translated.<br>
      * For custom details per error, you must use: <br>
      * <dl>
@@ -33,26 +33,34 @@ public class ApiErrorMessage {
     @IgnoreCanonicalNames
     public final Set<String> values;
 
+    /** (Optional) Flags if this error should be treated as a generic error under the default 00 package code */
+    @IgnoreCanonicalNames
+    public final boolean isGeneric;
+
     /**
-     * Defines an ApiErrorMessage 
+     * Defines an ApiErrorMessage
      * @param id see {@link #id}
      * @param description see {@link #description}
      * @param prefix see {@link #prefix}
      */
     public ApiErrorMessage(Integer id, String description, String prefix) {
-        this(id, description, prefix, null);
+        this(id, description, prefix, null, false);
     }
 
     /**
-     * Defines an ApiErrorMessahe 
+     * Defines an ApiErrorMessahe
      * @param id see {@link #id id}
      * @param description see {@link #description}
      */
     public ApiErrorMessage(Integer id, String description) {
-        this(id, description, null, null);
+        this(id, description, null, null, false);
     }
 
-    private ApiErrorMessage(int id, String description, String prefix, Set<String> values) {
+    public ApiErrorMessage(Integer id, String description, boolean isGeneric) {
+        this(id, description, null, null, isGeneric);
+    }
+
+    private ApiErrorMessage(int id, String description, String prefix, Set<String> values, boolean isGeneric) {
         if (id <0 || id > 99) {
             throw new RuntimeException(String.format("Invalid id = %d, must be within [0..99] range.", id));
         }
@@ -63,6 +71,7 @@ public class ApiErrorMessage {
         this.description = description;
         this.prefix = prefix;
         this.values = values;
+        this.isGeneric = isGeneric;
     }
 
     /**
@@ -77,7 +86,7 @@ public class ApiErrorMessage {
         if (value != null) {
             newValues.add(value);
         }
-        return new ApiErrorMessage(id, description, prefix, newValues);
+        return new ApiErrorMessage(id, description, prefix, newValues, isGeneric);
     }
 
     /**
@@ -90,13 +99,13 @@ public class ApiErrorMessage {
             newValues.addAll(values);
         }
         newValues.addAll(details);
-        return new ApiErrorMessage(id, description, prefix, newValues);
+        return new ApiErrorMessage(id, description, prefix, newValues, isGeneric);
     }
 
     @Override
     public String toString() {
-        return "[" + id + "] " + 
-                (prefix == null ? "" : "(" + prefix + ") ")
+        return "[" + (isGeneric ? "generic" : "package") + "]" + "[" + id + "] "
+                + (prefix == null ? "" : "(" + prefix + ") ")
                 + description +
                 (values == null ? "" :  " : " + values);
     }
@@ -106,14 +115,15 @@ public class ApiErrorMessage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ApiErrorMessage message = (ApiErrorMessage) o;
-        return Objects.equals(id, message.id) &&
-                Objects.equals(description, message.description) &&
-                Objects.equals(prefix, message.prefix) &&
-                Objects.equals(values, message.values);
+        return Objects.equals(id, message.id)
+                && Objects.equals(description, message.description)
+                && Objects.equals(prefix, message.prefix)
+                && Objects.equals(values, message.values)
+                && isGeneric == message.isGeneric;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, prefix, values);
+        return Objects.hash(id, description, prefix, values, isGeneric);
     }
 }

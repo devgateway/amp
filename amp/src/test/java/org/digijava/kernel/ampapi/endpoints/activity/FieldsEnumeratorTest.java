@@ -3,14 +3,16 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NOT_REQUIRED;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.NONE;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.HIDDEN_FM_PATH;
 import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.VISIBLE_FM_PATH;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -19,6 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,6 +34,7 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
+
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
@@ -40,22 +44,28 @@ import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
-import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
+import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslations;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.services.sync.model.SyncConstants;
+import org.digijava.kernel.validators.ValidatorUtil;
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.kernel.validators.common.SizeValidator;
+import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.TimestampField;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
-import org.junit.Assert;
+import org.digijava.module.aim.validator.groups.Submit;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -84,6 +94,8 @@ public class FieldsEnumeratorTest {
     private FieldsEnumerator fieldsEnumerator;
     private PossibleValuesEnumerator pvEnumerator;
 
+    private ValueConverter valueConverter;
+
     @Before
     public void setUp() throws Exception {
         translatorService = new TestTranslatorService();
@@ -96,6 +108,7 @@ public class FieldsEnumeratorTest {
 
         fieldsEnumerator = new FieldsEnumerator(provider, fmService, translatorService, name -> true);
         pvEnumerator = new PossibleValuesEnumerator(possibleValuesDAO, translatorService);
+        valueConverter = new ValueConverter();
     }
 
     @Test
@@ -120,38 +133,38 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "One Field")
         private String field;
     }
-    
+
     private static class DateTimesatmpFieldClass {
-        
+
         @Interchangeable(fieldTitle = "date-field")
         private Date dateField;
-    
+
         @Interchangeable(fieldTitle = "timestamp-field")
         @TimestampField
         private Date timestampField;
     }
-    
+
     private static class ReadOnlyFieldClass {
-        
+
         @Interchangeable(fieldTitle = "Read Only Empty Field", importable = true)
         private String readOnlyEmpty;
-    
+
         @Interchangeable(fieldTitle = "Read Only Hidden Field", importable = true, readOnlyFmPath = HIDDEN_FM_PATH)
         private String readOnlyHidden;
-    
+
         @Interchangeable(fieldTitle = "Read Only Visible Field", importable = true, readOnlyFmPath = VISIBLE_FM_PATH)
         private String readOnlyVisible;
-    
+
         @Interchangeable(fieldTitle = "Not Importable Read Only Hidden Field", readOnlyFmPath = HIDDEN_FM_PATH)
         private String notImportableReadOnlyHidden;
     }
-    
+
     private static class IatiFieldClass {
         @Interchangeable(fieldTitle = ActivityFieldsConstants.IATI_IDENTIFIER, importable = true,
                 readOnlyFmPath = VISIBLE_FM_PATH)
         private String iatiField;
     }
-    
+
     @Test
     public void testOneField() {
         List<APIField> actual = fieldsFor(OneFieldClass.class);
@@ -162,106 +175,106 @@ public class FieldsEnumeratorTest {
 
         assertEqualsSingle(expected, actual);
     }
-    
+
     @Test
     public void testDateTimesatmpField() {
         List<APIField> actual = fieldsFor(DateTimesatmpFieldClass.class);
-        
+
         APIField dateField = newListField();
         dateField.setFieldName("date-field");
         dateField.setFieldLabel(fieldLabelFor("date-field"));
-        dateField.setApiType(new APIType(Date.class, FieldType.DATE, null));
-    
+        dateField.setApiType(new APIType(Date.class, FieldType.DATE));
+
         APIField timestampField = newListField();
         timestampField.setFieldName("timestamp-field");
         timestampField.setFieldLabel(fieldLabelFor("timestamp-field"));
-        timestampField.setApiType(new APIType(Date.class, FieldType.TIMESTAMP, null));
-    
+        timestampField.setApiType(new APIType(Date.class, FieldType.TIMESTAMP));
+
         assertEqualsDigest(Arrays.asList(dateField, timestampField), actual);
     }
-    
+
     @Test
     public void testReadOnlyField() {
         List<APIField> actual = fieldsFor(ReadOnlyFieldClass.class);
-    
+
         APIField readOnlyEmpty = newStringField();
         readOnlyEmpty.setFieldName("read_only_empty_field");
         readOnlyEmpty.setFieldLabel(fieldLabelFor("Read Only Empty Field"));
         readOnlyEmpty.setImportable(true);
-    
+
         APIField readOnlyHidden = newStringField();
         readOnlyHidden.setFieldName("read_only_hidden_field");
         readOnlyHidden.setFieldLabel(fieldLabelFor("Read Only Hidden Field"));
         readOnlyHidden.setImportable(true);
-    
+
         APIField readOnlyVisible = newStringField();
         readOnlyVisible.setFieldName("read_only_visible_field");
         readOnlyVisible.setFieldLabel(fieldLabelFor("Read Only Visible Field"));
         readOnlyVisible.setImportable(false);
-    
+
         APIField notImportableReadOnlyVisible = newStringField();
         notImportableReadOnlyVisible.setFieldName("not_importable_read_only_hidden_field");
         notImportableReadOnlyVisible.setFieldLabel(fieldLabelFor("Not Importable Read Only Hidden Field"));
         notImportableReadOnlyVisible.setImportable(false);
-    
+
         assertEqualsDigest(
                 Arrays.asList(readOnlyEmpty, readOnlyHidden, readOnlyVisible, notImportableReadOnlyVisible), actual);
     }
-    
+
     @Test
     public void testIatiFieldIatiImporterMode() {
         AmpClientModeHolder.setClientMode(ClientMode.IATI_IMPORTER);
         try {
             List<APIField> actual = fieldsFor(IatiFieldClass.class);
-            
+
             APIField expected = newStringField();
             expected.setFieldName(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER));
             expected.setFieldLabel(fieldLabelFor(ActivityFieldsConstants.IATI_IDENTIFIER));
             expected.setImportable(true);
             expected.setRequired(FIELD_ALWAYS_REQUIRED);
-            
+
             assertEqualsSingle(expected, actual);
         } finally {
             AmpClientModeHolder.setClientMode(null);
         }
     }
-    
+
     @Test
     public void testIatiFieldOfflineMode() {
         AmpClientModeHolder.setClientMode(ClientMode.AMP_OFFLINE);
         try {
             List<APIField> actual = fieldsFor(IatiFieldClass.class);
-    
+
             APIField expected = newStringField();
             expected.setFieldName(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER));
             expected.setFieldLabel(fieldLabelFor(ActivityFieldsConstants.IATI_IDENTIFIER));
             expected.setImportable(false);
             expected.setRequired(FIELD_NOT_REQUIRED);
-    
+
             assertEqualsSingle(expected, actual);
         } finally {
             AmpClientModeHolder.setClientMode(null);
         }
     }
-    
+
     @Test
     public void testIatiFieldDefaultMode() {
         List<APIField> actual = fieldsFor(IatiFieldClass.class);
-        
+
         APIField expected = newStringField();
         expected.setFieldName(FieldMap.underscorify(ActivityFieldsConstants.IATI_IDENTIFIER));
         expected.setFieldLabel(fieldLabelFor(ActivityFieldsConstants.IATI_IDENTIFIER));
         expected.setImportable(false);
         expected.setRequired(FIELD_NOT_REQUIRED);
-        
+
         assertEqualsSingle(expected, actual);
     }
-    
+
     @Test
     public void testInvisibleField() {
         FMService invisibleFmService = mock(FMService.class);
 
-        when(invisibleFmService.isVisible(any(), any())).thenReturn(false);
+        when(invisibleFmService.isVisible(any())).thenReturn(false);
 
         List<APIField> actual =
                 new FieldsEnumerator(provider, invisibleFmService, translatorService, name -> true)
@@ -295,61 +308,34 @@ public class FieldsEnumeratorTest {
 
     private static class RequiredFieldClass {
 
-        @Interchangeable(fieldTitle = "field_not_required_implicit")
-        private String fieldNotRequiredImplicit;
+        @Interchangeable(fieldTitle = "field_not_required")
+        private String fieldNotRequired;
 
-        @Interchangeable(fieldTitle = "field_not_required_explicit", required = NONE)
-        private String fieldNotRequiredExplicit;
-
-        @Interchangeable(fieldTitle = "field_required_always", required = ALWAYS)
+        @Interchangeable(fieldTitle = "field_required_always",
+                interValidators = @InterchangeableValidator(RequiredValidator.class))
         private String fieldRequiredAlways;
 
-        @Interchangeable(fieldTitle = "field_required_non_draft", required = SUBMIT)
+        @Interchangeable(fieldTitle = "field_required_non_draft",
+                interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class))
         private String fieldRequiredNonDraft;
 
-        @Interchangeable(fieldTitle = "field_required_fm_visible", requiredFmPath = VISIBLE_FM_PATH)
-        private String fieldRequiredFmEntryVisible;
-
-        @Interchangeable(fieldTitle = "field_required_fm_hidden", requiredFmPath = HIDDEN_FM_PATH)
-        private String fieldRequiredFmEntryHidden;
-
-        @Interchangeable(fieldTitle = "field_required_implicit_fm_path_visible", requiredFmPath = VISIBLE_FM_PATH)
-        private String fieldRequiredFmPathVisibleImplicit;
-
-        @Interchangeable(fieldTitle = "field_required_implicit_fm_path_hidden", requiredFmPath = HIDDEN_FM_PATH)
-        private String fieldRequiredFmPathHiddenImplicit;
-
-        @Interchangeable(fieldTitle = "field_required_submit_fm_path_visible", requiredFmPath = VISIBLE_FM_PATH,
-                required = SUBMIT)
+        @Interchangeable(fieldTitle = "field_required_submit_fm_path_visible",
+                interValidators = @InterchangeableValidator(value = RequiredValidator.class,
+                        groups = Submit.class, fmPath = VISIBLE_FM_PATH))
         private String fieldRequiredSubmitFmPathVisible;
 
-        @Interchangeable(fieldTitle = "field_required_submit_fm_path_hidden", requiredFmPath = HIDDEN_FM_PATH,
-                required = SUBMIT)
+        @Interchangeable(fieldTitle = "field_required_submit_fm_path_hidden",
+                interValidators = @InterchangeableValidator(value = RequiredValidator.class,
+                        groups = Submit.class, fmPath = HIDDEN_FM_PATH))
         private String fieldRequiredSubmitFmPathHidden;
 
-        @Interchangeable(fieldTitle = "field_required_always_fm_path_visible", requiredFmPath = VISIBLE_FM_PATH,
-                required = ALWAYS)
+        @Interchangeable(fieldTitle = "field_required_always_fm_path_visible",
+                interValidators = @InterchangeableValidator(value = RequiredValidator.class, fmPath = VISIBLE_FM_PATH))
         private String fieldRequiredAlwaysFmPathVisible;
 
-        @Interchangeable(fieldTitle = "field_required_always_fm_path_hidden", requiredFmPath = HIDDEN_FM_PATH,
-                required = ALWAYS)
+        @Interchangeable(fieldTitle = "field_required_always_fm_path_hidden",
+                interValidators = @InterchangeableValidator(value = RequiredValidator.class, fmPath = HIDDEN_FM_PATH))
         private String fieldRequiredAlwaysFmPathHidden;
-    
-        @Interchangeable(fieldTitle = "field_required_min_size_on",
-                validators = @Validators(minSize = VISIBLE_FM_PATH))
-        private String fieldRequiredMinSizeOn;
-
-        @Interchangeable(fieldTitle = "field_required_min_size_off",
-                validators = @Validators(minSize = HIDDEN_FM_PATH))
-        private String fieldRequiredMinSizeOff;
-
-        @Interchangeable(fieldTitle = "field_required_and_min_size_on", requiredFmPath = HIDDEN_FM_PATH,
-                validators = @Validators(minSize = VISIBLE_FM_PATH))
-        private String fieldRequiredFmEntryAndMinSizeValidatorOn;
-
-        @Interchangeable(fieldTitle = "field_required_and_min_size_off", requiredFmPath = HIDDEN_FM_PATH,
-                validators = @Validators(minSize = HIDDEN_FM_PATH))
-        private String fieldRequiredFmEntryAndMinSizeValidatorOff;
     }
 
     @Test
@@ -357,22 +343,13 @@ public class FieldsEnumeratorTest {
         List<APIField> actual = fieldsFor(RequiredFieldClass.class);
 
         List<APIField> expected = Arrays.asList(
-                newRequiredField("field_not_required_implicit", FIELD_NOT_REQUIRED),
-                newRequiredField("field_not_required_explicit", FIELD_NOT_REQUIRED),
+                newRequiredField("field_not_required", FIELD_NOT_REQUIRED),
                 newRequiredField("field_required_always", FIELD_ALWAYS_REQUIRED),
                 newRequiredField("field_required_non_draft", FIELD_NON_DRAFT_REQUIRED),
-                newRequiredField("field_required_fm_visible", FIELD_NON_DRAFT_REQUIRED),
-                newRequiredField("field_required_fm_hidden", FIELD_NOT_REQUIRED),
-                newRequiredField("field_required_implicit_fm_path_visible", FIELD_NON_DRAFT_REQUIRED),
-                newRequiredField("field_required_implicit_fm_path_hidden", FIELD_NOT_REQUIRED),
                 newRequiredField("field_required_submit_fm_path_visible", FIELD_NON_DRAFT_REQUIRED),
                 newRequiredField("field_required_submit_fm_path_hidden", FIELD_NOT_REQUIRED),
                 newRequiredField("field_required_always_fm_path_visible", FIELD_ALWAYS_REQUIRED),
-                newRequiredField("field_required_always_fm_path_hidden", FIELD_NOT_REQUIRED),
-                newRequiredField("field_required_min_size_on", FIELD_NON_DRAFT_REQUIRED),
-                newRequiredField("field_required_min_size_off", FIELD_NOT_REQUIRED),
-                newRequiredField("field_required_and_min_size_on", FIELD_NON_DRAFT_REQUIRED),
-                newRequiredField("field_required_and_min_size_off", FIELD_NOT_REQUIRED)
+                newRequiredField("field_required_always_fm_path_hidden", FIELD_NOT_REQUIRED)
         );
 
         assertEqualsDigest(expected, actual);
@@ -488,26 +465,38 @@ public class FieldsEnumeratorTest {
 
     private static class InternalConstraints {
 
-        @Interchangeable(fieldTitle = "1", validators = @Validators(maxSize = "maxSizeFmName"))
+        @Interchangeable(fieldTitle = "1",
+                interValidators = @InterchangeableValidator(
+                        value = SizeValidator.class,
+                        attributes = "max=1"))
         private Collection<ObjWithId> field1;
 
         @Interchangeable(fieldTitle = "2")
         private Collection<ObjWithId> field2;
 
-        @Interchangeable(fieldTitle = "3", validators = @Validators(percentage = "percentageFmName"))
+        @Interchangeable(fieldTitle = "3", interValidators = @InterchangeableValidator(
+                value = TotalPercentageValidator.class, fmPath = "percentageFmName"))
         private Collection<PercentageConstrained> field3;
 
         @Interchangeable(fieldTitle = "4", validators = @Validators(unique = "uniqueFmName"))
         private Collection<UniqueConstrained> field4;
 
+        @Interchangeable(fieldTitle = "8", validators = @Validators(unique = "uniqueFmName"), uniqueConstraint = true)
+        private Collection<Integer> field8;
+
         @Interchangeable(fieldTitle = "5", validators = @Validators(treeCollection = "treeCollectionFmName"))
         private Collection<ObjWithId> field5;
 
-        @Interchangeable(fieldTitle = "6", validators =
-                @Validators(percentage = "percentageFmName", unique = "uniqueFmName"))
-        private Collection<ObjWithId> field6;
-        
-        @Interchangeable(fieldTitle = "7", sizeLimit = SIZE_LIMIT)
+        @Interchangeable(fieldTitle = "6",
+                interValidators = @InterchangeableValidator(
+                        value = TotalPercentageValidator.class, fmPath = "percentageFmName"),
+                validators = @Validators(unique = "uniqueFmName"))
+        private Collection<PercentageConstrained> field6;
+
+        @Interchangeable(fieldTitle = "7",
+                interValidators = @InterchangeableValidator(
+                        value = SizeValidator.class,
+                        attributes = "max=" + SIZE_LIMIT))
         private Collection<ObjWithId> field7;
     }
 
@@ -551,14 +540,14 @@ public class FieldsEnumeratorTest {
         expected2.setMultipleValues(true);
         expected2.setChildren(Arrays.asList(idField));
 
-        APIField expected3child = newLongField();
-        expected3child.setPercentage(true);
+        APIField percentageField = newLongField();
+        percentageField.setPercentage(true);
 
         APIField expected3 = newListField();
         expected3.setFieldName("3");
         expected3.setFieldLabel(fieldLabelFor("3"));
         expected3.setPercentageConstraint("field");
-        expected3.setChildren(Arrays.asList(expected3child, idField));
+        expected3.setChildren(Arrays.asList(percentageField, idField));
         expected3.setMultipleValues(true);
 
         APIField expected4child = newLongField();
@@ -569,6 +558,12 @@ public class FieldsEnumeratorTest {
         expected4.setUniqueConstraint("field");
         expected4.setChildren(Arrays.asList(expected4child, idField));
         expected4.setMultipleValues(true);
+
+        APIField expected8 = newListField(Integer.class);
+        expected8.setFieldName("8");
+        expected8.setFieldLabel(fieldLabelFor("8"));
+        expected8.setUniqueConstraint("8");
+        expected8.setMultipleValues(true);
 
         APIField expected5 = newListField();
         expected5.setFieldName("5");
@@ -581,8 +576,9 @@ public class FieldsEnumeratorTest {
         expected6.setFieldName("6");
         expected6.setFieldLabel(fieldLabelFor("6"));
         expected6.setMultipleValues(true);
-        expected6.setChildren(Arrays.asList(idField));
-        
+        expected6.setPercentageConstraint("field");
+        expected6.setChildren(Arrays.asList(percentageField, idField));
+
         APIField expected7 = newListField();
         expected7.setFieldName("7");
         expected7.setFieldLabel(fieldLabelFor("7"));
@@ -590,8 +586,8 @@ public class FieldsEnumeratorTest {
         expected7.setSizeLimit(SIZE_LIMIT);
         expected7.setChildren(Arrays.asList(idField));
 
-        assertEqualsDigest(Arrays.asList(expected1, expected2, expected3, expected4, expected5, expected6, expected7),
-                actual);
+        assertEqualsDigest(Arrays.asList(expected1, expected2, expected3, expected4, expected8, expected5,
+                expected6, expected7), actual);
     }
 
     @Test
@@ -647,7 +643,7 @@ public class FieldsEnumeratorTest {
         new FieldsEnumerator(provider, fmService, throwingTranslatorService, name -> true)
                 .getAllAvailableFields(OneFieldClass.class);
     }
-    
+
     @Test
     public void testDefaultTranslation() {
         List<APIField> fields = new FieldsEnumerator(provider, fmService, emptyTranslatorService, name -> true)
@@ -656,7 +652,7 @@ public class FieldsEnumeratorTest {
         assertEquals(1, fields.size());
         assertEquals("One Field", fields.get(0).getFieldLabel().get("EN"));
     }
-    
+
     @Test
     public void testNonEmptyChildren() {
         String originalJson = "[{\"field_name\":\"field\"," +
@@ -682,7 +678,7 @@ public class FieldsEnumeratorTest {
             throw new RuntimeException(e);
         }
     }
-    
+
     @Test
     public void testEmptyChildren() {
         String originalJson = "[{\"field_name\":\"field\"" +
@@ -699,7 +695,7 @@ public class FieldsEnumeratorTest {
             throw new RuntimeException(e);
         }
     }
-    
+
     private static class Dependencies {
 
         @Interchangeable(fieldTitle = "field", dependencies = {"dep1", "dep2"})
@@ -834,9 +830,69 @@ public class FieldsEnumeratorTest {
         fieldsEnumerator.getAllAvailableFields(ObjWithCollectionWithTwoIds.class);
     }
 
+
+    @Test
+    public void testAPIFieldActivityFields() {
+        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(AmpActivityVersion.class,
+                fieldsFor(AmpActivityFields.class));
+        assertEquals(nullableAPIFields, Collections.emptyList());
+    }
+
+    private List<APIField> getAPIFieldWithNullCollections(Class<?> type, List<APIField> apiFields) {
+        List<APIField> nullableAPIFields = new ArrayList<>();
+        Object object = valueConverter.getNewInstance(type);
+        for (APIField apiField : apiFields) {
+            if (apiField.isCollection() && apiField.getFieldAccessor().get(object) == null) {
+                nullableAPIFields.add(apiField);
+            }
+            if (apiField.isCollection() && !InterchangeUtils.isSimpleType(apiField.getApiType().getType())) {
+                nullableAPIFields.addAll(
+                        getAPIFieldWithNullCollections(apiField.getApiType().getType(), apiField.getChildren()));
+            }
+        }
+
+        return nullableAPIFields;
+    }
+
+    @Test
+    public void testTreeValidatorVisibleAndUniqueValidatorHidden() {
+        APIField apiField = ValidatorUtil.getMetaData(AmpActivityFields.class,
+                ImmutableSet.of("/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator"));
+
+        assertThat(apiField.getChildren(), hasItem(allOf(
+                        hasProperty("fieldName", equalTo("primary_sectors")),
+                        hasProperty("uniqueConstraint", equalTo("sector")),
+                        hasProperty("treeCollectionConstraint", equalTo(true))
+                )));
+    }
+
+    @Test
+    public void testTreeValidatorAndUniqueValidatorHidden() {
+        APIField apiField = ValidatorUtil.getMetaData(AmpActivityFields.class,
+                ImmutableSet.of("/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator",
+                        "/Activity Form/Sectors/Primary Sectors/treeSectorsValidator"));
+
+        assertThat(apiField.getChildren(), hasItem(allOf(
+                hasProperty("fieldName", equalTo("primary_sectors")),
+                hasProperty("uniqueConstraint", nullValue()),
+                hasProperty("treeCollectionConstraint", nullValue())
+        )));
+    }
+
+    @Test
+    public void testMultilingualOnEnumerationDoesNotFail() {
+        ValidatorUtil.getMetaData(AmpActivityFields.class, ImmutableSet.of(), new TestFieldInfoProvider(true));
+    }
+
     private APIField newListField() {
         APIField field = newAPIField();
-        field.setApiType(new APIType(Collection.class, FieldType.LIST, Object.class));
+        field.setApiType(new APIType(Object.class, FieldType.LIST));
+        return field;
+    }
+
+    private APIField newListField(Class<?> type) {
+        APIField field = newAPIField();
+        field.setApiType(new APIType(type, FieldType.LIST));
         return field;
     }
 
@@ -848,7 +904,7 @@ public class FieldsEnumeratorTest {
 
     private APIField newListOfLongField() {
         APIField field = newAPIField();
-        field.setApiType(new APIType(Collection.class, FieldType.LIST, Long.class));
+        field.setApiType(new APIType(Long.class, FieldType.LIST));
         return field;
     }
 
@@ -869,6 +925,7 @@ public class FieldsEnumeratorTest {
     private APIField newAPIField() {
         APIField field = new APIField();
         field.setFieldName("field");
+        field.setFieldNameInternal("field");
         field.setRequired(FIELD_NOT_REQUIRED);
         field.setImportable(false);
         field.setFieldLabel(fieldLabelFor("field"));
@@ -889,16 +946,15 @@ public class FieldsEnumeratorTest {
                 actual.stream().map(this::digest).collect(Collectors.toList()));
     }
 
-    private JsonBean fieldLabelFor(String baseText) {
-        JsonBean fieldLabel = new JsonBean();
-        fieldLabel.set("en", baseText + " en");
-        fieldLabel.set("fr", baseText + " fr");
-        return fieldLabel;
+    private UnwrappedTranslations fieldLabelFor(String baseText) {
+        return new UnwrappedTranslations()
+                .set("en", baseText + " en")
+                .set("fr", baseText + " fr");
     }
 
     private <T> String digest(T obj) {
         try {
-            return new ObjectMapper().writeValueAsString(obj);
+            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj);
         } catch (IOException e) {
             throw new RuntimeException("Failed to create digest for " + obj, e);
         }

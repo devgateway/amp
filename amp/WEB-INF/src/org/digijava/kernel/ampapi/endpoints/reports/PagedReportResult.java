@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
@@ -10,7 +11,6 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportWarning;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.Settings;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * @author Octavian Ciubotaru
@@ -35,7 +35,7 @@ public class PagedReportResult {
     private SortedMap<Long, SortedSet<ReportWarning>> warnings;
 
     @JsonProperty(EPConstants.STATS)
-    private JsonBean stats;
+    private Map<String, Object> stats;
 
     private boolean rowTotals;
 
@@ -95,11 +95,11 @@ public class PagedReportResult {
         this.warnings = warnings;
     }
 
-    public JsonBean getStats() {
+    public Map<String, Object> getStats() {
         return stats;
     }
 
-    public void setStats(JsonBean stats) {
+    public void setStats(Map<String, Object> stats) {
         this.stats = stats;
     }
 

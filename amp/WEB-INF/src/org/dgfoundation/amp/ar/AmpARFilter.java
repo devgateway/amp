@@ -884,7 +884,6 @@ public class AmpARFilter extends PropertyListable {
      */
     public void fillWithDefaultsFilter(Long ampReportId)
     {
-        this.setShowArchived(false);
         this.setYearFrom(null);
         this.setYearTo(null);
         this.setFromMonth(null);
@@ -2814,21 +2813,6 @@ public class AmpARFilter extends PropertyListable {
 
     public String getSearchMode() {
         return searchMode;
-    }
-
-    /**
-     * @return the showArchived
-     */
-    public Boolean getShowArchived() {
-        return showArchived;
-    }
-
-    /**
-     * @param showArchived
-     *            the showArchived to set
-     */
-    public void setShowArchived(Boolean showArchived) {
-        this.showArchived = showArchived;
     }
 
     /**

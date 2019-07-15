@@ -5,8 +5,6 @@
 
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
-
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_ADJUSTMENT_TYPE;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_AMOUNT;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_CURRENCY;
@@ -17,11 +15,13 @@ import static org.digijava.module.aim.annotations.interchange.ActivityFieldsCons
 import java.io.Serializable;
 import java.util.Date;
 
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -36,31 +36,35 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     private Integer transactionType;
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_ADJUSTMENT_TYPE, importable = true, pickIdOnly = true,
-            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_ADJUSTMENT_TYPE, required = ALWAYS,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_ADJUSTMENT_TYPE,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
             discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY)
     private AmpCategoryValue adjustmentType;
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_DATE, importable = true,
-            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_TRANSACTION_DATE, required = ALWAYS)
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_TRANSACTION_DATE,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Date transactionDate;
 
     // @Interchangeable(fieldTitle="Reporting Date")
     private Date reportingDate;
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_AMOUNT, importable = true,
-            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_AMOUNT, required = ALWAYS)
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_AMOUNT,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Double transactionAmount;
 
     @Interchangeable(fieldTitle = COMPONENT_ORGANIZATION, importable = true, pickIdOnly = true,
             fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_ORGANIZATION,
-            dependencies = {InterchangeDependencyResolver.ORGANIZATION_PRESENT_KEY})
+            dependencies = {ComponentFundingOrgRoleValidator.ORGANIZATION_PRESENT_KEY})
     private AmpOrganisation reportingOrganization;
 
     //@Interchangeable(fieldTitle = COMPONENT_SECOND_REPORTING_ORGANIZATION, importable = true, pickIdOnly = true)
     private AmpOrganisation componentSecondResponsibleOrganization;
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true,
-            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_CURRENCY, required = ALWAYS)
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_CURRENCY,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private AmpCurrency currency;
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_DESCRIPTION,

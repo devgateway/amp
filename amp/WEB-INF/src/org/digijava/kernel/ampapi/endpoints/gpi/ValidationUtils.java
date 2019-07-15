@@ -10,8 +10,8 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.ws.rs.core.Response;
 
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * @author Octavian Ciubotaru
@@ -30,9 +30,7 @@ public final class ValidationUtils {
     public static void requireValid(Object obj) {
         List<String> violations = validate(obj);
         if (!violations.isEmpty()) {
-            JsonBean jsBean = new JsonBean();
-            jsBean.set("errors", violations);
-            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, jsBean);
+            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(violations));
         }
     }
 

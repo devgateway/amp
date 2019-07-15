@@ -169,10 +169,12 @@ Filters.prototype.loadSavedFilterData = function (id, isReport) {
         type: 'GET',
         url: url + id,
         success: function (data) {
-            filters = isReport ? data.reportMetadata.reportSpec.filters : data[FILTER_OBJECT];
+            var filters = isReport ?
+                data.reportMetadata.reportSpec.filters :
+                (data[FILTER_OBJECT] ? data[FILTER_OBJECT] : {});
             filters.includeLocationChildren = isReport ?
                 data.reportMetadata.reportSpec.includeLocationChildren :
-                data[WORKSPACE_FILTERS] ? data[WORKSPACE_FILTERS].includeLocationChildren : true;
+                (data[WORKSPACE_FILTERS] ? data[WORKSPACE_FILTERS].includeLocationChildren : true);
             widgetFilter.deserialize({filters: filters}, {silent: true});
             self.showFilterWidget();
         }

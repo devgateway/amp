@@ -4,6 +4,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var Template = fs.readFileSync(__dirname + '/legend-item-structures.html', 'utf8');
 var SettingsUtils = require('../../../libs/local/settings-utils.js');
+var Constants = require('../../../libs/local/constants.js'); 
 
 module.exports = Backbone.View.extend({
 
@@ -19,10 +20,27 @@ module.exports = Backbone.View.extend({
 	  var self = this;
 	  //getStructuresWithActivities was null...
 	  self.model.structuresCollection.getStructuresWithActivities().then(function() {
+			  var geoJSON = self.model.structuresCollection.toGeoJSON();
+			var customStructureColors = []
+			geoJSON.features.forEach(function(feature) {
+				if (feature.properties.color && feature.properties.color.indexOf(Constants.STRUCTURE_COLORS_DELIMITER) != -1) {
+					var splits = feature.properties.color.split(Constants.STRUCTURE_COLORS_DELIMITER);
+					if (customStructureColors.find(function(c) {
+						return c.color === splits[0]
+					}) == null) {
+						customStructureColors.push({
+							color : splits[0],
+							label : splits[1]
+						});
+					}
+				}
+			});
+		  
 		  var renderObject = {
 				  status: 'loaded',
 				  colourBuckets: self.model.structuresCollection.palette.colours,
-				  selectedVertical: self.model.get('filterVertical')
+				  selectedVertical: self.model.get('filterVertical'),
+				  customStructureColors: customStructureColors
 		  };
 
 		  //TODO: Move this code to a config class.

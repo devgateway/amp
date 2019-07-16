@@ -25,19 +25,22 @@
 		
 		<many-to-one name="type" column="type" 
 			class="org.digijava.module.aim.dbentity.AmpStructureType" cascade="none" />
+			
+		<many-to-one name="structureColor" column="structure_color" 
+		class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		
-		<set name="images" cascade="all-delete-orphan" lazy="true" inverse="true">
+		<set name="images" cascade="all-delete-orphan" lazy="true">
 			<cache usage="read-write" />
 			<key column="amp_structure_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpStructureImg" />
 		</set>
 		
-		<set name="coordinates" table="AMP_STRUCTURE_COORDINATE" inverse="true"
-			cascade="all-delete-orphan" order-by="ampStructureCoordinateId">
-			<cache usage="read-write" />
-			<key column="amp_structure_id" />
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpStructureCoordinate" />
-		</set>
+        <list name="coordinates" table="AMP_STRUCTURE_COORDINATE" lazy="false" cascade="all-delete-orphan" inverse="true">
+           <cache usage="read-write" />
+           <key column="amp_structure_id" />
+           <list-index column="index" />
+           <one-to-many class="org.digijava.module.aim.dbentity.AmpStructureCoordinate" />
+        </list>
 
 	</class>
 </hibernate-mapping>

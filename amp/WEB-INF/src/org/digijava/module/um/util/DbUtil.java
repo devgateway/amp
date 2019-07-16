@@ -261,6 +261,7 @@ public class DbUtil {
 //beginTransaction();
             iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
             iterUser.setSalt(new Long(newPassword.trim().hashCode()).toString());
+            iterUser.updateLastModified();
             session.save(iterUser);
 
             //tx.commit();
@@ -310,6 +311,8 @@ public class DbUtil {
         try {
             session = PersistenceManager.getSession();
 
+            user.updateLastModified();
+
 //beginTransaction();
             session.update(user);
             //tx.commit();
@@ -339,6 +342,8 @@ public class DbUtil {
         Session session = null;
         try {
             session = PersistenceManager.getSession();
+
+            user.updateLastModified();
 
 //beginTransaction();
             session.update(user);
@@ -403,6 +408,8 @@ public class DbUtil {
 
             if(removeArray.size() > 0)
                 user.getInterests().removeAll(removeArray);
+
+            user.updateLastModified();
 
             session.update(user);
             
@@ -505,6 +512,7 @@ public class DbUtil {
                 user.setActivate(true);
                 user.setBanned(false);
                 user.setEmailVerified(true);
+                user.updateLastModified();
                 session.update(user);
                 verified = true;
             }else{
@@ -973,6 +981,10 @@ public class DbUtil {
             .append(" sl where :USER_ID in elements(sl.users)")
             .append(" and sl.active = true and (sl.expires=false or")
             .append(" (sl.expires=true and sl.suspendTil > current_date()))");
-        return PersistenceManager.getSession().createQuery(qs.toString()).setLong("USER_ID", user.getId()).list();
+        return PersistenceManager.getSession()
+                .createQuery(qs.toString())
+                .setLong("USER_ID", user.getId())
+                .setCacheable(true)
+                .list();
     }
 }

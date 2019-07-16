@@ -31,7 +31,8 @@ public class ApiResponseFilter implements ContainerResponseFilter {
     public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
 
         //clean session if it has been restored by the request filter
-        if("true".equals(TLSUtils.getRequest().getAttribute(SecurityUtil.REMOVE_SESSION))){
+        if ("true".equals(TLSUtils.getRequest().getAttribute(SecurityUtil.REMOVE_SESSION))) {
+            TLSUtils.getRequest().getSession().removeAttribute(Constants.CURRENT_USER);
             TLSUtils.getRequest().getSession().removeAttribute(Constants.CURRENT_MEMBER);
             TLSUtils.getRequest().removeAttribute(SecurityUtil.REMOVE_SESSION);
         }

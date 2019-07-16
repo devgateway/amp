@@ -6,9 +6,8 @@ var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 var StructureClusterMixin = require('./structure-cluster-mixin');
 var SettingsUtils = require('../../../libs/local/settings-utils.js');
-
+var Constants = require('../../../libs/local/constants.js');
 var ProjectSiteTemplate = fs.readFileSync(__dirname + '/../templates/structure-template.html', 'utf8');
-
 
 function breathAfter(func, context) {
   return function(/* arguments */) {
@@ -20,7 +19,6 @@ function breathAfter(func, context) {
     return finished.promise();
   };
 }
-
 
 module.exports = Backbone.View
 .extend(StructureClusterMixin).extend({
@@ -205,10 +203,11 @@ module.exports = Backbone.View
         }
       }
     }
-    
-    var icon = this.structureMenuModel.iconMappings[sectorCode] || this.structureMenuModel.iconMappings[this.structureMenuModel.DEFAULT_ICON_CODE];    
-    var pointIcon = L.icon({
-      iconUrl: 'img/map-icons/' + icon,
+
+    var sectorIconStyleCode = this.structureMenuModel.getSelectedIconStyleCode(sectorCode);
+
+    var pointIcon = L.divIcon({
+      className: 'svg-map-icon ' + sectorIconStyleCode,
       iconSize:     [25, 25], // size of the icon
       iconAnchor:   [12, 25], // point of the icon which will correspond to marker's location
       popupAnchor:  [-3, -6]  // point from which the popup should open relative to the iconAnchor
@@ -239,6 +238,13 @@ module.exports = Backbone.View
   },
 
   _getColors: function(feature){
+	  if (feature.properties.color) {		  
+		  var color = feature.properties.color.substring(0, feature.properties.color.indexOf(Constants.STRUCTURE_COLORS_DELIMITER)); 
+		  if (color.length > 0) {
+			  return [{hex: function() { return color;}}];	
+		  }	  
+	  }
+	  
 	  var colors = this.structureMenuModel.structuresCollection.palette.colours.filter(function(colour) {
 	      return colour.get('test').call(colour, feature.properties.id);
 	    });
@@ -259,7 +265,7 @@ module.exports = Backbone.View
 	  var colors = this._getColors(feature);
 	  var polyline = L.polyline(feature.geometry.coordinates, {color: colors[0].hex()}); 
 	  polyline.feature = feature;
-	  this._bindPopup(polyline, false);
+	  this._bindPopup(polyline, true);
 	  return polyline;
   },
   
@@ -267,7 +273,7 @@ module.exports = Backbone.View
 	  var colors = this._getColors(feature);
 	  var polygon = L.polygon(feature.geometry.coordinates, {color: colors[0].hex()}); 
 	  polygon.feature = feature;
-	  this._bindPopup(polygon, false);
+	  this._bindPopup(polygon, true);
 	  return polygon;
   },
   
@@ -303,7 +309,7 @@ module.exports = Backbone.View
     /* TODO(thadk) switch individual feature to this standard parsed model input*/
     /*var parsedProjectSitesList = this.app.data.structures.model.prototype.parse(feature);*/
 
-    if (feature.properties) {
+    if (feature.properties) {     
       var activityJSON = feature.properties.activity.toJSON();
       shape.bindPopup(self.structureTemplate({
         activityJSON: activityJSON,
@@ -340,15 +346,17 @@ module.exports = Backbone.View
   _hilightProject: function(projectId) {
     this.featureGroup.eachLayer(function(layer) {
       if (layer.feature.properties.activity.id === projectId && layer.setStyle) {
-        layer.setStyle({color: '#222', stroke: true, weight:2});
+    	  layer.setStyle({color: '#222', stroke: true, weight: 4});
       }
     });
   },
 
   _dehilightProject: function(projectId) {
+	var self = this;
     this.featureGroup.eachLayer(function(layer) {
       if (layer.feature.properties.activity.id === projectId && layer.setStyle) {
-        layer.setStyle({stroke:false});
+    	  var colors = self._getColors(layer.feature);      
+          layer.setStyle({stroke:true, color:colors[0].hex()});
       }
     });
   },

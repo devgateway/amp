@@ -15,6 +15,8 @@ public class AmpGlobalSettings implements Serializable {
     private transient String[] listOfValues;
     private Boolean valueTranslatable;
     
+    private Boolean internal;
+    
     public Boolean getValueTranslatable() {
         return valueTranslatable;
     }
@@ -85,4 +87,13 @@ public class AmpGlobalSettings implements Serializable {
     public void setListOfValues(String[] listOfValues) {
         this.listOfValues = listOfValues;
     }
+
+    public Boolean isInternal() {
+        return internal;
+    }
+
+    public void setInternal(Boolean internal) {
+        this.internal = internal;
+    }
+    
 }

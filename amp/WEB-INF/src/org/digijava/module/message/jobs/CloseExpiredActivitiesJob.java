@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
@@ -60,7 +61,7 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
         AmpActivityVersion auxActivity = null;
         try {
             auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(oldActivity, null, 
-                    member, oldActivity.getDraft(), session, false, false);
+                    member, oldActivity.getDraft(), session, SaveContext.job());
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);

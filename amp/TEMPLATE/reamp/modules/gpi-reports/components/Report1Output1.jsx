@@ -22,7 +22,7 @@ export default class Report1Output1 extends Component {
         this.showRemarksModal = this.showRemarksModal.bind(this);
         this.closeRemarksModal = this.closeRemarksModal.bind(this);
         this.downloadExcelFile = this.downloadExcelFile.bind(this);
-        this.downloadPdfFile = this.downloadPdfFile.bind(this);        
+        this.downloadPdfFile = this.downloadPdfFile.bind(this);
     }
 
     componentDidMount() {
@@ -54,25 +54,25 @@ export default class Report1Output1 extends Component {
     }
 
     showSettings() {
-       const settings  = this.settingsWidget.toAPIFormat();
-       const calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
-       this.setState( { calendarId: calendarId });
-       Utils.showSettings(this.refs.settingsPopup, this.settingsWidget, this.onSettingsApply.bind(this), this.onSettingsCancel.bind(this));
+        const settings  = this.settingsWidget.toAPIFormat();
+        const calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
+        this.setState( { calendarId: calendarId });
+        Utils.showSettings(this.refs.settingsPopup, this.settingsWidget, this.onSettingsApply.bind(this), this.onSettingsCancel.bind(this));
     }
 
     onSettingsCancel() {
         $( this.refs.settingsPopup ).hide();
     }
 
-    onSettingsApply(){        
+    onSettingsApply(){
         const settings  = this.settingsWidget.toAPIFormat();
-        const currentCalendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();        
+        const currentCalendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
         //if calendar has changed reset year filter
-        if (currentCalendarId !== this.state.calendarId) {            
-            this.onYearClick(null);            
+        if (currentCalendarId !== this.state.calendarId) {
+            this.onYearClick(null);
         } else {
-            this.fetchReportData(); 
-        }       
+            this.fetchReportData();
+        }
         $( this.refs.settingsPopup ).hide();
     }
 
@@ -94,16 +94,16 @@ export default class Report1Output1 extends Component {
             if (requestData.filters['donor-agency'].indexOf(this.state.selectedDonor) == -1) {
                 requestData.filters['donor-agency'].push(this.state.selectedDonor);
             }
-       }
+        }
 
-       return requestData
+        return requestData
     }
 
     fetchReportData( data ) {
         let requestData = data || this.getRequestData();
         this.setState({waiting:true});
         this.props.actions.fetchReportData( requestData, '1' ).then(function(){
-            this.setState({waiting: false});  
+            this.setState({waiting: false});
         }.bind(this));
     }
 
@@ -119,10 +119,10 @@ export default class Report1Output1 extends Component {
 
     onYearClick( selectedYear ) {
         this.setState( { selectedYear: selectedYear }, function() {
-            const filters = this.filter.serialize().filters;            
+            const filters = this.filter.serialize().filters;
             filters['actual-approval-date'] = {};
             if (this.state.selectedYear) {
-                filters['actual-approval-date'] = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years);                
+                filters['actual-approval-date'] = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years);
             }
             this.filter.deserialize({filters: filters}, {silent : true});
             this.fetchReportData();
@@ -185,7 +185,7 @@ export default class Report1Output1 extends Component {
         return org ? org.name : '';
     }
 
-     downloadExcelFile() {
+    downloadExcelFile() {
         this.props.actions.downloadExcelFile(this.getRequestData(), '1');
     }
 
@@ -193,16 +193,16 @@ export default class Report1Output1 extends Component {
         this.props.actions.downloadPdfFile(this.getRequestData(), '1');
     }
 
-    render() {        
-            let addedGroups = [];                       
-            var years = Utils.getYears(this.settingsWidget, this.props.years);            
-            return (
+    render() {
+        let addedGroups = [];
+        var years = Utils.getYears(this.settingsWidget, this.props.years);
+        return (
+            <div>
+                {this.state.waiting &&
+                <Loading/>
+                }
+                {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&
                 <div>
-                    {this.state.waiting &&                      
-                        <Loading/>                
-                    } 
-                    {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&
-                     <div>                    
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <ToolBar showFilters={this.showFilters} showSettings={this.showSettings}  downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile}/>
@@ -251,78 +251,78 @@ export default class Report1Output1 extends Component {
                             </select>
                         </div>
                         <div className="pull-right currency-label">{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
-                        {(this.props.settings['number-divider'] != 1) &&
-                            <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
-                        }
+                            {(this.props.settings['number-divider'] != 1) &&
+                            <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>
+                            }
                         </div>
                     </div>
-                   
-                        <div className="container-fluid">
-                          <div className="row">
+
+                    <div className="container-fluid">
+                        <div className="row">
                             <h4>{this.props.translations['amp.gpi-reports:indicator1-description']}</h4>
-                          </div>
                         </div>
-                          {this.state.showRemarks &&
-                                <RemarksPopup showRemarks={this.state.showRemarks} closeRemarksModal={this.closeRemarksModal.bind(this)} remarksUrl={this.state.remarksUrl} code="1" settings={this.props.settings} />
-                          }
-                        <div className="section-divider"></div>
-                        {this.props.mainReport.empty == false &&
-                         <div>
-                         <span className="pull-left">{this.getOrgName(this.state.selectedDonor) || this.props.translations['amp.gpi-reports:all-donors']}</span>                         
-                         <span className="remarks pull-left"><img className="table-icon popup-icon" src="images/icon-bubble.svg" onClick={this.showRemarksModal}/><a onClick={this.showRemarksModal} > Remarks</a></span>
-                         </div>
-                         }
-                        <div className="spacer30"></div>
-                        {this.props.mainReport.empty == true  &&
-                            <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
-                        }
-                        { this.props.mainReport.empty == false  &&
-                        <table className="table indicator1-table table-bordered table-striped indicator-table complex-table">
+                    </div>
+                    {this.state.showRemarks &&
+                    <RemarksPopup showRemarks={this.state.showRemarks} closeRemarksModal={this.closeRemarksModal.bind(this)} remarksUrl={this.state.remarksUrl} code="1" settings={this.props.settings} />
+                    }
+                    <div className="section-divider"></div>
+                    {this.props.mainReport.empty == false &&
+                    <div>
+                        <span className="pull-left">{this.getOrgName(this.state.selectedDonor) || this.props.translations['amp.gpi-reports:all-donors']}</span>
+                        <span className="remarks pull-left"><img className="table-icon popup-icon" src="images/icon-bubble.svg" onClick={this.showRemarksModal}/><a onClick={this.showRemarksModal} > Remarks</a></span>
+                    </div>
+                    }
+                    <div className="spacer30"></div>
+                    {this.props.mainReport.empty == true  &&
+                    <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
+                    }
+                    { this.props.mainReport.empty == false  &&
+                    <table className="table indicator1-table table-bordered table-striped indicator-table complex-table">
                         <thead>
                         <tr>
-                          <th className="col-md-2">{this.getLocalizedColumnName(Constants.PROJECT_TITLE)}</th>
-                          <th><HeaderToolTip column={Constants.Q1} headers={this.props.mainReport.page.headers}/>
-                          {this.getLocalizedColumnName(Constants.ACTUAL_COMMITMENTS)}</th>
-                          <th><HeaderToolTip column={Constants.Q2} headers={this.props.mainReport.page.headers}/>
-                               {this.getLocalizedColumnName(Constants.ACTUAL_APPROVAL_DATE)}</th>
-                          <th className="col-md-3"><HeaderToolTip column={Constants.Q3} headers={this.props.mainReport.page.headers}/>
-                               {this.getLocalizedColumnName(Constants.FINANCING_INSTRUMENT)}</th>
-                          <th className="col-md-3"><HeaderToolTip column={Constants.Q4} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.IMPLEMENTING_AGENCY)}</th>
-                          <th className="col-md-3"><HeaderToolTip column={Constants.Q5} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.PRIMARY_SECTOR)}</th>
-                          <th><HeaderToolTip column={Constants.Q6} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.Q6)}</th>
-                          <th><HeaderToolTip column={Constants.Q7} headers={this.props.mainReport.page.headers}/>
-                            <a data-container="body" data-toggle="popover" data-placement="top" data-content="Total number of outcome indicators included in the projects results framework" data-original-title="" title="">
-                          {this.getLocalizedColumnName(Constants.Q7)}
-                            </a>
+                            <th className="col-md-2">{this.getLocalizedColumnName(Constants.PROJECT_TITLE)}</th>
+                            <th><HeaderToolTip column={Constants.Q1} headers={this.props.mainReport.page.headers}/>
+                                {this.getLocalizedColumnName(Constants.ACTUAL_COMMITMENTS)}</th>
+                            <th><HeaderToolTip column={Constants.Q2} headers={this.props.mainReport.page.headers}/>
+                                {this.getLocalizedColumnName(Constants.ACTUAL_APPROVAL_DATE)}</th>
+                            <th className="col-md-3"><HeaderToolTip column={Constants.Q3} headers={this.props.mainReport.page.headers}/>
+                                {this.getLocalizedColumnName(Constants.FINANCING_INSTRUMENT)}</th>
+                            <th className="col-md-3"><HeaderToolTip column={Constants.Q4} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.IMPLEMENTING_AGENCY)}</th>
+                            <th className="col-md-3"><HeaderToolTip column={Constants.Q5} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.PRIMARY_SECTOR)}</th>
+                            <th><HeaderToolTip column={Constants.Q6} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.Q6)}</th>
+                            <th><HeaderToolTip column={Constants.Q7} headers={this.props.mainReport.page.headers}/>
+                                <a data-container="body" data-toggle="popover" data-placement="top" data-content="Total number of outcome indicators included in the projects results framework" data-original-title="" title="">
+                                    {this.getLocalizedColumnName(Constants.Q7)}
+                                </a>
                             </th>
-                          <th><HeaderToolTip column={Constants.Q8} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.Q8)}</th>
-                          <th><HeaderToolTip column={Constants.Q9} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.Q9)}</th>
-                          <th><HeaderToolTip column={Constants.Q10} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.Q10)}</th>
-                          <th><HeaderToolTip column={Constants.RESULT} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.RESULT)}</th>
-                          <th><HeaderToolTip column={Constants.M_E} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.M_E)}</th>
-                          <th>
-                              <img className="table-icon" src="images/icon-download.svg"/>
-                          </th>
+                            <th><HeaderToolTip column={Constants.Q8} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.Q8)}</th>
+                            <th><HeaderToolTip column={Constants.Q9} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.Q9)}</th>
+                            <th><HeaderToolTip column={Constants.Q10} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.Q10)}</th>
+                            <th><HeaderToolTip column={Constants.RESULT} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.RESULT)}</th>
+                            <th><HeaderToolTip column={Constants.M_E} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.M_E)}</th>
+                            <th>
+                                <img className="table-icon" src="images/icon-download.svg"/>
+                            </th>
                         </tr>
-                      </thead>
-                      <tbody>
-                       {this.props.mainReport && this.props.mainReport.page && this.props.mainReport.page.contents.map(( row, i ) =>
-                          <Report1Output1Row key={i} rowData={row} reportData={this.props.mainReport}/>
-                      )}
-                      </tbody>
-                      </table>
-                     }
-                    
+                        </thead>
+                        <tbody>
+                        {this.props.mainReport && this.props.mainReport.page && this.props.mainReport.page.contents.map(( row, i ) =>
+                            <Report1Output1Row key={i} rowData={row} reportData={this.props.mainReport}/>
+                        )}
+                        </tbody>
+                    </table>
+                    }
+
                     <div>
-                         <PagingSection mainReport={this.props.mainReport} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
-               
-                       </div>
-                  </div>        
-               }
+                        <PagingSection mainReport={this.props.mainReport} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
+
+                    </div>
+                </div>
+                }
             </div>
-                
-          );
-        
+
+        );
+
 
     }
 

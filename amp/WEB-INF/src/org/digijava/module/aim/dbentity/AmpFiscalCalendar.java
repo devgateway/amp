@@ -1,7 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -12,7 +11,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.nireports.TranslatedDate;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianBasedWorker;
@@ -21,8 +20,6 @@ import org.digijava.module.aim.helper.fiscalcalendar.GregorianBasedWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.NepaliBasedWorker;
 import org.digijava.module.aim.util.Identifiable;
-
-import java.util.Arrays;
 
 public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfileValue, CalendarConverter {
     
@@ -205,6 +202,17 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
     @Override
     public String getDefaultFiscalYearPrefix() {
         return this.getworker().getDefaultFiscalPrefix();
+    }
+    
+    @Override
+    public int parseYear(String year, String prefix) {
+        return this.getworker().parseYear(year, prefix);
+    }
+    
+    @Override
+    public int parseYear(String year) {
+        String prefix = TranslatorWorker.translateText(this.getworker().getDefaultFiscalPrefix());
+        return this.getworker().parseYear(year, prefix);
     }
 
 }

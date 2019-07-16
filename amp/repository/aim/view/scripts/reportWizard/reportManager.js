@@ -61,8 +61,7 @@ function populateRPS(rpSettings) {
 	rpSettings.hierarchies		= hierArray;
 	rpSettings.measures			= measArray;
 	rpSettings.summary			= getHideActivities();
-	
-	
+	rpSettings.showOriginalCurrency = getShowOriginalCurrency();
 	
 	return rpSettings;
 }

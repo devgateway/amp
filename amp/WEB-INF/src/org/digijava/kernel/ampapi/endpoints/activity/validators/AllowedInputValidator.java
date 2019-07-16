@@ -5,11 +5,10 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Map;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Checks "changed" fields that they are importable
@@ -24,10 +23,8 @@ public class AllowedInputValidator extends InputValidator {
     }
 
     @Override
-    public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-            Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
-        Boolean importable = Boolean.TRUE.equals(fieldDescription.get(ActivityEPConstants.IMPORTABLE));
-        Object newField = newFieldParent.get(fieldDescription.getString(ActivityEPConstants.FIELD_NAME));
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
+                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
         return true;
 //      if (importer.isUpdate()) {
 //          if (fieldDescription.get(ActivityEPConstants.FIELD_NAME).equals(ActivityEPConstants.))

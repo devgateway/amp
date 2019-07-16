@@ -74,6 +74,7 @@ public class ColumnConstants {
     public static final String CURRENT_COMPLETION_DATE_COMMENTS = "Current Completion Date Comments";
     public static final String DESCRIPTION_OF_COMPONENT_FUNDING = "Description of Component Funding";
     public static final String DISTRICT = "District";
+    public static final String COMMUNAL_SECTION = "Communal Section";
     public static final String LOCATION = "Location";
     public static final String GEOCODE = "GeoId";
     public static final String DONOR_ACRONYM = "Organization Acronym";
@@ -142,6 +143,10 @@ public class ColumnConstants {
     public static final String ISSUE_DATE = "Issue Date";
     public static final String ISSUES___MEASURES___ACTORS = "Issues / Measures / Actors";
     public static final String JOINT_CRITERIA = "Joint Criteria";
+    public static final String LINE_MINISTRY_OBSERVATIONS = "Line Ministry Observations";
+    public static final String LINE_MINISTRY_OBSERVATIONS_ACTORS = "Line Ministry Observations Actors";
+    public static final String LINE_MINISTRY_OBSERVATIONS_DATE = "Line Ministry Observations Date";
+    public static final String LINE_MINISTRY_OBSERVATIONS_MEASURES = "Line Ministry Observations Measures";
     public static final String MATURITY = "Loan Maturity Date";
     public static final String MEASURES_TAKEN = "Measures Taken";
     public static final String MINISTRY_CODE = "Ministry Code";
@@ -174,6 +179,7 @@ public class ColumnConstants {
     public static final String OVERAGE_PROJECT = "Overage Project";
     public static final String PAYMENT_CAPITAL___RECURRENT = "Payment Capital - Recurrent";
     public static final String PERFORMANCE_ALERT_LEVEL = "Performance Alert Level";
+    public static final String PERFORMANCE_ALERT_TYPE = "Performance Alert Type";
     public static final String PLEDGE_CONTACT_1___ADDRESS = "Pledge Contact 1 - Address";
     public static final String PLEDGE_CONTACT_1___ALTERNATE_CONTACT = "Pledge Contact 1 - Alternate Contact";
     public static final String PLEDGE_CONTACT_1___ALTERNATE_EMAIL = "Pledge Contact 1 - Alternate Email";
@@ -213,7 +219,8 @@ public class ColumnConstants {
     public static final String PLEDGES_REGIONS = "Pledges Regions";
     public static final String PLEDGES_ZONES = "Pledges Zones";
     public static final String PLEDGES_DISTRICTS = "Pledges Districts";
-    
+    public static final String PLEDGES_COMMUNAL_SECTION = "Pledges Communal Section";
+
     public static final String PLEDGES_SECONDARY_PROGRAMS = "Pledges Secondary Programs";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_2 = "Pledges Secondary Programs Level 2";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_3 = "Pledges Secondary Programs Level 3";
@@ -274,6 +281,7 @@ public class ColumnConstants {
     public static final String PROJECT_DESCRIPTION = "Project Description";
     public static final String PROJECT_IMPACT = "Project Impact";
     public static final String PROJECT_IMPLEMENTING_UNIT = "Project Implementing Unit";
+    public static final String PROJECT_MANAGEMENT = "Project Management";
     public static final String PROJECT_PERIOD = "Project Period";
     public static final String PROJECT_TITLE = "Project Title";
     public static final String PROPOSED_APPROVAL_DATE = "Proposed Approval Date";
@@ -290,6 +298,9 @@ public class ColumnConstants {
     public static final String REGIONAL_GROUP_GROUP = "Regional Group Group";   
     public static final String REGIONAL_GROUP_DEPARTMENT_DIVISION = "Regional Group Department/Division";
     public static final String REGIONAL_OBSERVATIONS = "Regional Observations";
+    public static final String REGIONAL_OBSERVATIONS_ACTORS = "Regional Observations Actors";
+    public static final String REGIONAL_OBSERVATIONS_DATE = "Regional Observations Date";
+    public static final String REGIONAL_OBSERVATIONS_MEASURES = "Regional Observations Measures Taken";
     public static final String RELATED_PLEDGES = "Related Pledges";
     public static final String REPORTING_SYSTEM = "Reporting System";
     public static final String RESPONSIBLE_ORGANIZATION = "Responsible Organization";

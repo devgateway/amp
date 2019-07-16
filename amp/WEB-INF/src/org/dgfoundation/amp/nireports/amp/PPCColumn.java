@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,14 +9,15 @@ import java.util.List;
 import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.newreports.CalendarConverter;
+import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.MonetaryAmount;
+import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.amp.diff.CategAmountCellProto;
 import org.dgfoundation.amp.nireports.behaviours.NumericalColumnBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 
@@ -38,7 +38,12 @@ public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
         
         AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
         AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
-        VivificatingMap<String, AmpCurrency> currencies = new VivificatingMap<String, AmpCurrency>(new HashMap<>(), CurrencyUtil::getAmpcurrency);
+        NiPrecisionSetting precisionSetting = scratchpad.getPrecisionSetting();
+        CachingCalendarConverter calendar = engine.calendar;
+        CurrencyConvertor currencyConvertor = schema.currencyConvertor;
+        
+        VivificatingMap<String, AmpCurrency> currencies = 
+                new VivificatingMap<String, AmpCurrency>(new HashMap<>(), CurrencyUtil::getAmpcurrency);
         
         String query = buildQuery(engine);
         
@@ -48,21 +53,30 @@ public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
                 long ampActivityId = rs.rs.getLong(this.mainColumn);
                 
                 java.sql.Date transactionMoment = rs.rs.getDate("transaction_date");
-                LocalDate transactionDate = transactionMoment.toLocalDate();
                 BigDecimal transactionAmount = rs.rs.getBigDecimal("transaction_amount");
                 
                 String currencyCode = rs.rs.getString("currency_code");
-                AmpCurrency srcCurrency = currencies.getOrCreate(currencyCode);
+                AmpCurrency origCurrency = currencies.getOrCreate(currencyCode);
                 
-                BigDecimal usedExchangeRate = BigDecimal.valueOf(schema.currencyConvertor.getExchangeRate(srcCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), null, transactionDate));
-                MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate), transactionAmount, srcCurrency, transactionDate, scratchpad.getPrecisionSetting());
-                CategAmountCell cell = new CategAmountCell(ampActivityId, amount, MetaInfoSet.empty(), Collections.emptyMap(), engine.calendar.translate(transactionMoment));
-                cells.add(cell);
+                CategAmountCellProto cellProto = new CategAmountCellProto(ampActivityId, transactionAmount, 
+                        origCurrency, transactionMoment, MetaInfoSet.empty(), Collections.emptyMap(), null);
+                
+                cells.add(cellProto.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, false));
+                
+                /* 
+                 * AMP-27571
+                 * if canSplittingStrategyBeAdded is true we need to duplicate cells with original currencies
+                */
+                if (engine.spec.isShowOriginalCurrency()) {
+                    cells.add(cellProto.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, 
+                            true));
+                } 
             }
         }
+        
         return cells;
     }
-
+    
     @Override
     public List<ReportRenderWarning> performCheck() {
         return null;

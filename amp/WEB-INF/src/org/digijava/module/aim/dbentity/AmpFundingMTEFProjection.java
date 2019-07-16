@@ -38,7 +38,7 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
         
     }
     
-//      @Interchangeable(fieldTitle="ID")
+        @Interchangeable(fieldTitle = "Transaction ID")
         private Long ampFundingMTEFProjectionId ;
 //      @Interchangeable(fieldTitle="Projected")
         private AmpCategoryValue projected;

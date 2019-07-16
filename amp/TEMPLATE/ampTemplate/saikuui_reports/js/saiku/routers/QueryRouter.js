@@ -74,6 +74,7 @@ var process_spec = function(data) {
 		columns : data.reportMetadata.reportSpec.columns,
 		report_type : data.reportMetadata.reportSpec.reportType,
 		settings_data: data.reportMetadata.settings,
+		original_currency: data.reportMetadata.reportSpec.showOriginalCurrency,
 		page_timestamp: + new Date()
 	};
 	defaults[report_fieldname] = report_identifier;

@@ -13,6 +13,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -29,7 +30,6 @@ public class OffDbNiReportEngineTests extends BasicSanityChecks {
     
     HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
     public OffDbNiReportEngineTests() {
-        super("NiReportsEngine tests");
         nrRunReports = 0;
     }
     
@@ -100,8 +100,8 @@ public class OffDbNiReportEngineTests extends BasicSanityChecks {
         return getOfflineExecutor(activityNames);
     }
     
-    @Override
-    public void tearDown() {
-        //System.err.format("Sanity checks %s have run %d reports\n", this.getName(), nrRunReports);
+    @BeforeClass
+    public static void setUp() {
+        // this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
     }
 }

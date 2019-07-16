@@ -12,6 +12,7 @@
 	<entry key="AmpUniqueCollectionValidator">تم تكرار البنود التالية مرة على الاقل: ${label}.</entry>
 	<entry key="AmpTreeCollectionValidator">بند الوالدين و بند الطفل موجودة: ${label}.</entry>
 	<entry key="AmpUniqueActivityTitleValidator">يوجد نشاط بهذا العنوان داخل مساحة العمل'${workspace}'.</entry>
+	<entry key="AmpUniqueActivityTitleNoWorkspaceValidator">يوجد نشاط بهذا العنوان ولم يتم تعيينه إلى مساحة عمل.</entry>
 	<entry key="AmpUniqueComponentTitleValidator">يتواجد مكون بهذا العنوان مسبقاً.</entry>
 	<entry key="CoordinatesValidator">الإحداثيات ليست حسب النموذج الصحيح.</entry>
 	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">المصروفات أكبر من مجموع الالتزامات.</entry>

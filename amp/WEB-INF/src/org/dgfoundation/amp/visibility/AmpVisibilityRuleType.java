@@ -14,6 +14,6 @@ public enum AmpVisibilityRuleType implements Serializable {
     ANY,
     /** visible if ALL dependent objects are enabled, e.g. if all dependent FM features are enabled */
     ALL,
-    /** visible if NONE dependent objects are enabled, e.g. if all dependent FM features are enabled */
+    /** visible if NONE dependent objects are enabled, e.g. if all dependent FM features are disabled */
     NONE;
 }

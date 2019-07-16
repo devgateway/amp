@@ -31,6 +31,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.InvalidReportContextException;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -1058,6 +1059,23 @@ public class ReportsFilterPicker extends Action {
                             tree, "selectedPerformanceAlertLevels");
             filterForm.getOtherCriteriaElements().add(groupingElement);
         }
+        
+        if (FeaturesUtil.isVisibleField(ColumnConstants.PERFORMANCE_ALERT_TYPE)) {
+            List<HierarchyListableImplementation> children = new ArrayList<HierarchyListableImplementation>();
+            HierarchyListableImplementation rootPerformanceRuleType = 
+                    new HierarchyListableImplementation("All", "-1", children);
+            
+            PerformanceRuleManager.PERF_ALERT_TYPE_TO_ID.entrySet().forEach(e -> {
+                children.add(new HierarchyListableImplementation(TranslatorWorker.translateText(
+                        PerformanceRuleManager.PERF_ALERT_TYPE_TO_DESCRIPTION.get(e.getKey())), 
+                        String.valueOf(e.getValue())));
+            });
+            
+            GroupingElement<HierarchyListableImplementation> perfGroupingElement =
+                    new GroupingElement<>("Performance Alert Type", "filter_performance_alert_type_div",
+                            rootPerformanceRuleType, "selectedPerformanceAlertTypes");
+            filterForm.getOtherCriteriaElements().add(perfGroupingElement);
+        }
 
         Collection<AmpIndicatorRiskRatings> meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
         for (AmpIndicatorRiskRatings element:meRisks) {
@@ -1338,6 +1356,20 @@ public class ReportsFilterPicker extends Action {
         return result;
     }
     
+    public static Set<String> pumpPerformanceAlertTypeSetFromForm(Object[] ids) {
+        if (ids != null) {
+            Set<String> alertTypes = new HashSet<String>();
+            for (int i = 0; i < ids.length; i++) {
+                String id = ids[i].toString();
+                alertTypes.add(id);
+            }
+            return alertTypes;
+        }
+
+        return null;
+    }
+    
+    
     /**
      * fills an AmpARFilter instance with Filters data from a ReportsFilterPickerForm
      * @param arf
@@ -1528,6 +1560,8 @@ public class ReportsFilterPicker extends Action {
         arf.setExpenditureClass(pumpCategoryValueSetFromForm(filterForm.getSelectedExpenditureClasses()));
 
         arf.setPerformanceAlertLevel(pumpCategoryValueSetFromForm(filterForm.getSelectedPerformanceAlertLevels()));
+        
+        arf.setPerformanceAlertType(pumpPerformanceAlertTypeSetFromForm(filterForm.getSelectedPerformanceAlertTypes()));
 
         if (filterForm.getSelectedWorkspaces() != null && filterForm.getSelectedWorkspaces().length > 0)
             arf.setWorkspaces(new HashSet<AmpTeam>());

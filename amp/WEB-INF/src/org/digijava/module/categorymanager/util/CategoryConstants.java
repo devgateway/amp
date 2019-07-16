@@ -188,6 +188,8 @@ public class CategoryConstants {
         new CategoryConstants.HardCodedCategoryValue("implementation_location", "Zone", true);
     public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_DISTRICT = 
         new CategoryConstants.HardCodedCategoryValue("implementation_location", "District", true);
+    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_COMMUNAL_SECTION =
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Communal section", true);
     public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ALL  =
             new CategoryConstants.HardCodedCategoryValue("implementation_location", "All", true);
     
@@ -275,6 +277,9 @@ public class CategoryConstants {
     
     public static final String EXPENDITURE_CLASS_NAME = "Expenditure Class";
     public static final String EXPENDITURE_CLASS_KEY = "expenditure_class";
+    
+    public static final String GIS_STRUCTURES_COLOR_CODING_NAME = "GIS Structures Color Coding";
+    public static final String GIS_STRUCTURES_COLOR_CODING_KEY = "gis_structures_color_coding";
     
     public static class HardCodedCategoryValue
     {

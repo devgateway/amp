@@ -34,14 +34,17 @@ public class FMEndpoint {
      * <h5>Additions:</h5>
      * <b>detail-flat</b> <dd>true (default)/false - if to detail as a flat list or in a tree form</dd>
      * <b>full-enabled-paths</b> <dd>true (default)/false - if only fully enabled paths to detail</dd>
+     * <b>fm-paths</b> <dd>by default no filtering - an array of FM paths that are required,
+     * applies only to tree structures</dd>
      * </br>
      * <h3>Sample Request:</h3><pre>
      * {
      *    "reporting-fields" : true,
      *    "enabled-modules" : true,
-     *    "detail-modules" : ["GIS","Dashboards", ...]
+     *    "detail-modules" : ["GIS","Dashboards", ...],
      *    "detail-flat" : true,
-     *    "full-enabled-paths" : true
+     *    "full-enabled-paths" : true,
+     *    "fm-paths": ["/PROJECT MANAGEMENT/Funding/Funding Information/Delivery rate"]
      *  }</pre>
      * </br>
      * <h3>Sample Output:</h3><pre>

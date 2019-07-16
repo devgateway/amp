@@ -21,20 +21,30 @@ public class GroupColumn extends Column {
     protected List<Column> subColumns;
     protected boolean mutable;  
     
+    protected boolean isTotal = false;
+    
+    public GroupColumn(String name, LocalizableLabel label, List<Column> subColumns, GroupColumn parent, 
+            NiColSplitCell splitCell) {
+        this(name, label, subColumns, parent, splitCell, parent == null ? false : parent.isTotal());
+    }
+    
     /**
      * constructs a mutable or immutable instance of the class, depending on whether a list of subcolumns has been supplied
      * @param name
      * @param subColumns if null, then instance is mutable, else immutable
      * @param parent
+     * @param isTotal if column is in totals column
      */
-    public GroupColumn(String name, LocalizableLabel label, List<Column> subColumns, GroupColumn parent, NiColSplitCell splitCell) {
+    public GroupColumn(String name, LocalizableLabel label, List<Column> subColumns, GroupColumn parent, 
+            NiColSplitCell splitCell, boolean isTotal) {
+        
         super(name, label, parent, splitCell);
         if (subColumns != null) {
             subColumns.forEach(z -> NiUtils.failIf(z.getParent() != this, String.format("trying to add a foreing child %s to %s", z.getHierName(), this.getHierName())));
         }
         this.mutable = true;
-        this.subColumns = subColumns == null ?
-                new ArrayList<>() : new ArrayList<>(subColumns); 
+        this.subColumns = subColumns == null ? new ArrayList<>() : new ArrayList<>(subColumns);
+        this.isTotal = isTotal;
     }
     
     /** adds a column, if it is not null */
@@ -121,5 +131,9 @@ public class GroupColumn extends Column {
     @Override
     public <K> K accept(ColumnVisitor<K> cv) {
         return cv.visit(this);
+    }
+    
+    public boolean isTotal() {
+        return isTotal;
     }
 }

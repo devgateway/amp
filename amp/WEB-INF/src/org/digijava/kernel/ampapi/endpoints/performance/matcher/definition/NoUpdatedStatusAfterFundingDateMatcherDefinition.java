@@ -20,7 +20,8 @@ public class NoUpdatedStatusAfterFundingDateMatcherDefinition extends Performanc
 
     public NoUpdatedStatusAfterFundingDateMatcherDefinition() {
 
-        super("noUpdatedStatusAfterFundingDate", "No updated status after selected funding date", 
+        super(PerformanceRuleConstants.MATCHER_NO_UPDATED_STATUS, 
+                PerformanceRuleConstants.MATCHER_DESCR_NO_UPDATED_STATUS, 
                 String.format("{%s} {%s} went by after the '{%s}' and the project status was not modified to '{%s}'", 
                         PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT, 
                         PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT, 

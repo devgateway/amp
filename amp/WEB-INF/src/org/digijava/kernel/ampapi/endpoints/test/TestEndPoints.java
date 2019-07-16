@@ -8,7 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
 /**
  * 
@@ -41,7 +42,15 @@ public class TestEndPoints {
                 "AMP API Test End Point - Test JSON Format");
         return jsonobj;
     }
-    
+    @GET
+     @Path("/testjsonauth")
+     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "simpleJsonAuth", ui = false)
+     public final testObj simpleJsonAuth() {
+          testObj jsonobj = new testObj(
+        "AMP API Test End Point Authenticated - Test JSON Format");
+          return jsonobj;
+     }  
     @GET
     @Path ("/testquery")
     @Produces(MediaType.TEXT_PLAIN)

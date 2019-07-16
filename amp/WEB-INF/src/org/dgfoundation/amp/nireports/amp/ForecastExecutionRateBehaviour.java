@@ -134,4 +134,5 @@ public class ForecastExecutionRateBehaviour extends AbstractComputedBehaviour<Ni
     public NiFormulaicAmountCell buildNoValueCell(Map<String, BigDecimal> vals) {
         return new NiFormulaicAmountCell(vals, null, NiPrecisionSetting.IDENTITY_PRECISION_SETTING, isScalableByUnits);
     }
+
 }

@@ -65,7 +65,7 @@ public class Label implements Serializable {
                 this.color              = color.getString();
                 this.backgroundColor    = backgroundColor.getString();
                 this.type               = type.getString();
-                this.uuid               = node.getUUID();
+                this.uuid               = node.getIdentifier();
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

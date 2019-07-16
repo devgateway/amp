@@ -256,6 +256,9 @@ public class FilterUtil {
         
         form.setSelectedExpenditureClasses(FilterUtil.getObjectsIds(filter.getExpenditureClass()));
         form.setSelectedPerformanceAlertLevels(FilterUtil.getObjectsIds(filter.getPerformanceAlertLevel()));
+        if (filter.getPerformanceAlertType() != null) {
+            form.setSelectedPerformanceAlertTypes(filter.getPerformanceAlertType().toArray());
+        }
         form.setSelectedWorkspaces( FilterUtil.getObjectsIds(filter.getNonPrivateWorkspaces()) ) ;
 
         form.setSelectedProjectCategory( FilterUtil.getObjectsIds(filter.getProjectCategory()) );

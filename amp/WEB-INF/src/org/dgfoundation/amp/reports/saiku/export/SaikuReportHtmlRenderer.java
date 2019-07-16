@@ -63,7 +63,14 @@ public class SaikuReportHtmlRenderer {
         
         res.append("<div>AMP Export - ").append(dateFormat.format(date)).append("</div><div>&nbsp;</div>");
         res.append("<div><b>").append(TranslatorWorker.translateText(units)).append("</b></div>");
-        res.append("<div><b>").append(TranslatorWorker.translateText("Currency")).append(": </b>").append(currency).append("</div>");
+        
+        if (!this.report.spec.isShowOriginalCurrency()) {
+            res.append("<div><b>")
+            .append(TranslatorWorker.translateText("Currency"))
+            .append(": </b>")
+            .append(currency)
+            .append("</div>");
+        }       
         
         renderReportTable(res);
     }

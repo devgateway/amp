@@ -2,12 +2,13 @@ package org.digijava.module.aim.helper.fiscalcalendar;
 
 import java.util.Date;
 
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 
 public interface ICalendarWorker  {
-
+    
+    int YEAR_OFFSET_STRING = 5;
+    
     /**
      * The date in the given calendar
      * 
@@ -71,4 +72,7 @@ public interface ICalendarWorker  {
     public default String getDefaultFiscalPrefix() {
         return "Fiscal Year";
     }
+    
+    int parseYear(String year, String prefix);
+    
 }

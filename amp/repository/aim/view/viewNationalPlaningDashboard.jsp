@@ -581,7 +581,7 @@ function doFilter() {
                       <c:forEach var="activity" items="${aimNationalPlaningDashboardForm.activities}">
                         <tr>
                           <td valign="top">
-	                          <digi:link module="aim" target="_blank" href="/viewActivityPreview.do~pageId=2~activityId=${activity.ampActivityId}">${activity.name}</digi:link>
+	                          <digi:link module="aim" target="_blank" href="/viewActivityPreview.do~activityId=${activity.ampActivityId}">${activity.name}</digi:link>
                           </td>
                           <td>
 								<c:if test="${!empty activity.funding}">

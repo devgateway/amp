@@ -30,6 +30,10 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.util.ComponentsUtil;
 
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_DESCRIPTION;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TITLE;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TYPE;
+
 /**
  * @author aartimon@dginternational.org
  * since Oct 28, 2010
@@ -62,7 +66,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpSubsectionFea
                         protected List<AmpComponentType> load() {
                             return new ArrayList(ComponentsUtil.getAmpComponentTypes(true));
                         }
-                    }, "Component Type", false, false, new ChoiceRenderer<AmpComponentType>("name")){
+                    }, COMPONENT_TYPE, false, false, new ChoiceRenderer<AmpComponentType>("name")){
             /**
              * 
              */
@@ -83,7 +87,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpSubsectionFea
         compTypes.getChoiceContainer().add(new AttributeAppender("style", true, new Model("max-width: 300px"), ";"));
         add(compTypes);
         
-        final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(componentModel, "title"), "Component Title");
+        final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(componentModel, "title"), COMPONENT_TITLE);
         name.setTextContainerDefaultMaxSize();
         name.setOutputMarkupId(true);
         name.getTextContainer().setRequired(true);
@@ -96,7 +100,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpSubsectionFea
         name.getTextContainer().add(new AmpUniqueComponentTitleValidator(new PropertyModel<AmpActivityGroup>(activityModel, "ampActivityGroup")));
         add(name);
 
-        AmpTextAreaFieldPanel description = new AmpTextAreaFieldPanel("description", new PropertyModel(componentModel, "description"), "Description", false, false, false);
+        AmpTextAreaFieldPanel description = new AmpTextAreaFieldPanel("description", new PropertyModel(componentModel, "description"), COMPONENT_DESCRIPTION, false, false, false);
         add(description);
 
     }

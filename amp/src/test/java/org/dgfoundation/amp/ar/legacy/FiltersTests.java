@@ -5,24 +5,11 @@ import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.Test;
 
 public class FiltersTests extends ReportsTestCase{
     
-    public FiltersTests(String name)
-    {
-        super(name);
-    }
-    
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite(FiltersTests.class.getName());
-        suite.addTest(new FiltersTests("testDateFiltersTotals"));
-        return suite;
-    }
-    
+    @Test
     public void testDateFiltersTotals()
     {
         GroupReportModel fssc_correct = GroupReportModel.withColumnReports("AMP-15988-test-date-filters", 

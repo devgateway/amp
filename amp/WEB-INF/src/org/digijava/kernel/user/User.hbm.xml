@@ -72,6 +72,8 @@
 		<property name="pledgeSuperUser"  type="boolean" >
 			<column name="PLEDGE_SUPER_USER" default="false"/>
 		</property>
+
+		<property name="passwordChangedAt" column="PASSWORD_CHANGED_AT" type="java.util.Date" />
 		<property name="exemptFromDataFreezing" column="EXEMPT_FROM_DATA_FREEZING" type="boolean" />
 		<property name="notificationEmail" column="notification_email" type="java.lang.String" />
 		<property name="notificationEmailEnabled" type="boolean">

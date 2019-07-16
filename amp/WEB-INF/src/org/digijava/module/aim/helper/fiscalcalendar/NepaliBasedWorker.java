@@ -2,7 +2,6 @@ package org.digijava.module.aim.helper.fiscalcalendar;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.joda.time.Chronology;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.GregorianChronology;
 
 public class NepaliBasedWorker implements ICalendarWorker {
@@ -188,5 +186,16 @@ public class NepaliBasedWorker implements ICalendarWorker {
         default:
             return -1;
         }
+    }
+    
+    @Override
+    public int parseYear(String year, String prefix) {
+        String parsedYear = year;
+        if (this.fiscalCalendar.getIsFiscal()) {
+            parsedYear = year.substring(getFiscalPrefix(prefix).length() + 1, 
+                    getFiscalPrefix(prefix).length() + YEAR_OFFSET_STRING);
+        }
+        
+        return Integer.parseInt(parsedYear);
     }
 }

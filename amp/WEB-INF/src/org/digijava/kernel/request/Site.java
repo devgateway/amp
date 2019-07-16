@@ -52,7 +52,7 @@ extends Entity implements Serializable {
     private HashSet applInstances;
     private Set groups;
     private Locale defaultLanguage;
-    private Set siteDomains;
+    private Set<SiteDomain> siteDomains;
     private java.util.Set<Locale> userLanguages;
     private java.util.Set countries;
     private java.util.Set translationLanguages;
@@ -175,11 +175,11 @@ extends Entity implements Serializable {
          this.groups = groups;
      }
 
-     public Set getSiteDomains() {
+     public Set<SiteDomain> getSiteDomains() {
          return siteDomains;
      }
 
-     public void setSiteDomains(Set siteDomains) {
+     public void setSiteDomains(Set<SiteDomain> siteDomains) {
          this.siteDomains = siteDomains;
      }
 

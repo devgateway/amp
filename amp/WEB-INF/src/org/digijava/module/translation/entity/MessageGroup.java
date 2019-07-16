@@ -22,7 +22,6 @@ import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.ObjectFactory;
 import org.digijava.module.translation.jaxb.Trn;
-import org.digijava.module.translation.util.HashKeyPatch;
 
 /**
  * Group of messages with same translation key.

@@ -14,6 +14,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib prefix="httml" uri="http://struts.apache.org/tags-html" %>
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
 
 <style>
@@ -135,48 +136,49 @@ div.fakefile2 input {
               </tr>
               <tr>
                 <td valign="top" bgcolor="#f4f4f2" align="center">
-				<table border="0" cellpadding="0" cellspacing="0" width=772>
+				<table border="0" cellpadding="0" cellspacing="0" width=772 align="center">
                     <tr>
-                      <td width=14>&nbsp;</td>
-                      <td align=left valign="top" width=520>
-                        <table border="0" cellPadding=5 cellspacing="0" width="100%" style="font-size:12px; margin-bottom:15px;">
+                      <td align=center valign="top" width=100%>
+                        <table border="0" cellPadding=5 cellspacing="5" width="100%" style="font-size:12px;
+                        margin-bottom:15px;">
                           <tr>
-                            <td width="3%">&nbsp;</td>
                             <td align=left class=title noWrap colspan="2">
 								<digi:errors/>                            
 							</td>
                           </tr>
                           <tr>
-                            <td width="3%">&nbsp;</td>
-                            <td align=center class=title noWrap colspan="2"><digi:trn>All fields marked with an</digi:trn><FONT color=red><B> * </B></FONT><digi:trn>are required.</digi:trn>
+                            
+                            <td align=center class=title noWrap colspan="2"><digi:trn>All fields marked with
+                                an</digi:trn><FONT
+                                    color=red><B> * </B></FONT><digi:trn>are required.</digi:trn>
                             </td>
                           </tr>
                           <tr>
-                            <td width="3%">&nbsp;</td>
-                            <td align=right>
+                            
+                            <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>URL</digi:trn>
                             </td>
-                            <td align=left>
+                            <td align=left class="map-configuration-cell">
 	                            <html:text property="url"></html:text>
                             </td>
                           </tr>
                           <tr>
-                            <td width="3%">&nbsp;</td>
-                            <td align=right>
+                            
+                            <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Indicator/Base Map</digi:trn>
                             </td>
-                            <td align=left>
+                            <td align=left class="map-configuration-cell">
                             	<html:select property="mapSubType" styleId="mapSubType" onchange="updateMapSubType()">
                             		<html:optionsCollection property="mapSubTypeList" value="key" label="value"/>
                             	</html:select>
                             </td>
                           </tr>
                           <tr>
-                            <td width="3%">&nbsp;</td>
-                            <td align=right>
+                            
+                            <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Map Type List</digi:trn>
                             </td>
-                            <td align=left>
+                            <td align=left class="map-configuration-cell">
                             	<span id="map_type_list"></span>
                             	<html:select property="mapType" styleId="mapType" onchange="updateMapType()">
                             		<html:optionsCollection property="mapTypeList"  value="key" label="value"/>
@@ -184,47 +186,55 @@ div.fakefile2 input {
                             </td>
                           </tr>
                           <tr id="layer_name">
-                            <td width="3%">&nbsp;</td>
-                            <td align=right>
+                            
+                            <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Layer name</digi:trn>
                             </td>
-                            <td align=left>
+                            <td align=left class="map-configuration-cell">
 	                            <html:text property="configName"></html:text>
                             </td>
                           </tr>
+                            <tr id="legend_notes">
+                                
+                                <td align="right" class="map-configuration-cell">Layer Notes</td>
+                                <td align="left" class="map-configuration-cell">
+                                    <httml:textarea property="legendNotes" style="width: 350px; height: 50px;"
+                                    ></httml:textarea>
+                                </td>
+                            </tr>
                           <tr id="geo_id">
-                            <td width="3%">&nbsp;</td>
-                            <td align=right>
+                            
+                            <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Geo Id</digi:trn>
                             </td>
-                            <td align=left>
+                            <td align=left class="map-configuration-cell">
 	                            <html:text property="geoId"></html:text>
                             </td>
                           </tr>
                           <tr id="count_id">
-                            <td width="3%">&nbsp;</td>
-                            <td align=right>
+                            
+                            <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Count Field</digi:trn>
                             </td>
-                            <td align=left>
+                            <td align=left class="map-configuration-cell">
 	                            <html:text property="count"></html:text>
                             </td>
                           </tr>
                           <tr id="admin_1">
-                            <td width="3%">&nbsp;</td>
-                            <td align=right>
+                            
+                            <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Admin 1</digi:trn>
                             </td>
-                            <td align=left>
+                            <td align=left class="map-configuration-cell">
 	                            <html:text property="admin1"></html:text>
                             </td>
                           </tr>
                           <tr id="admin_2">
-                            <td width="3%">&nbsp;</td>
-                            <td align=right>
+                            
+                            <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Admin 2</digi:trn>
                             </td>
-                            <td align=left>
+                            <td align=left class="map-configuration-cell">
 	                            <html:text property="admin2"></html:text>
                             </td>
                           </tr>
@@ -427,6 +437,7 @@ var updateMapSubType = function(){
 			$("#legend_placeholder").hide();
 			$("#legend_title").hide();
 			$("#layer_name").hide();
+            $("#legend_notes").hide();
 			//Hide mapType
 			$("#mapType").show();
 			$("#map_type_list").text("");
@@ -437,7 +448,9 @@ var updateMapSubType = function(){
 			$("#legend_placeholder").show();
 			$("#legend_title").show();
 			$("#layer_name").show();
-			//Hide mapType
+            $("#legend_notes").show();
+
+            //Hide mapType
 			$("#mapType").hide();
 			$("#mapType").val("10");
 			$("#map_type_list").text("<digi:trn jsFriendly='true'>Indicator</digi:trn>");

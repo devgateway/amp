@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.ws.rs.GET;
@@ -16,7 +17,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -25,9 +25,9 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersBuilder;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -247,8 +247,7 @@ public class FiltersEndpoint {
     @Path("/proposedStartDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_START_DATE, columns = ColumnConstants.PROPOSED_START_DATE,
-            id = FiltersConstants.PROPOSED_START_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.PROPOSED_START_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getProposedStartDate(){
         return new JsonBean();
     }
@@ -257,8 +256,7 @@ public class FiltersEndpoint {
     @Path("/actualStartDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_START_DATE, columns = ColumnConstants.ACTUAL_START_DATE,
-            id = FiltersConstants.ACTUAL_START_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.ACTUAL_START_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getActualStartDate(){
         return new JsonBean();
     }
@@ -267,8 +265,7 @@ public class FiltersEndpoint {
     @Path("/proposedCompletionDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_COMPLETION_DATE, columns = ColumnConstants.PROPOSED_COMPLETION_DATE,
-            id = FiltersConstants.PROPOSED_COMPLETION_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.PROPOSED_COMPLETION_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getProposedCompletionDate(){
         return new JsonBean();
     }
@@ -277,8 +274,7 @@ public class FiltersEndpoint {
     @Path("/actualCompletionDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_COMPLETION_DATE, columns = ColumnConstants.ACTUAL_COMPLETION_DATE,
-            id = FiltersConstants.ACTUAL_COMPLETION_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.ACTUAL_COMPLETION_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getActualCompletionDate(){
         return new JsonBean();
     }
@@ -287,8 +283,7 @@ public class FiltersEndpoint {
     @Path("/finalDateContracting/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING,
-            id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, tab = EPConstants.TAB_OTHER)
     public JsonBean getDateForContracting() {
         return new JsonBean();
     }
@@ -297,8 +292,7 @@ public class FiltersEndpoint {
     @Path("/issueDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.ISSUE_DATE, columns = ColumnConstants.ISSUE_DATE,
-            id = FiltersConstants.ISSUE_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.ISSUE_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getIssueDate() {
         return new JsonBean();
     }
@@ -307,8 +301,7 @@ public class FiltersEndpoint {
     @Path("/proposedApprovalDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_APPROVAL_DATE, columns = ColumnConstants.PROPOSED_APPROVAL_DATE,
-            id = FiltersConstants.PROPOSED_APPROVAL_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.PROPOSED_APPROVAL_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getProposedApprovalDate() {
         return new JsonBean();
     }   
@@ -317,8 +310,7 @@ public class FiltersEndpoint {
     @Path("/actualApprovalDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_APPROVAL_DATE, columns = ColumnConstants.ACTUAL_APPROVAL_DATE,
-            id = FiltersConstants.ACTUAL_APPROVAL_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB, FilterType.GPI_REPORTS }, tab = EPConstants.TAB_OTHER)
+            id = FiltersConstants.ACTUAL_APPROVAL_DATE, tab = EPConstants.TAB_OTHER)
     public JsonBean getActualApprovalDate() {
         return new JsonBean();
     }   
@@ -586,7 +578,7 @@ public class FiltersEndpoint {
     }
 
     /**
-     * Funding status filter information
+     * Performance Alert Level filter
      *
      * @return
      */
@@ -598,6 +590,38 @@ public class FiltersEndpoint {
             tab = EPConstants.TAB_ACTIVITY)
     public JsonBean getPerformanceAlertLevel() {
         return getCategoryValue(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, ColumnConstants.PERFORMANCE_ALERT_LEVEL);
+    }
+    
+    /**
+     * Performance Alert Type filter
+     *
+     * @return
+     */
+    @GET
+    @Path("/performanceAlertType")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = FiltersConstants.PERFORMANCE_ALERT_TYPE,
+            columns = ColumnConstants.PERFORMANCE_ALERT_TYPE, name = ColumnConstants.PERFORMANCE_ALERT_TYPE,
+            tab = EPConstants.TAB_ACTIVITY)
+    public JsonBean getPerformanceAlertType() {
+        JsonBean pt = new JsonBean();
+        
+        List<SimpleJsonBean> performanceAlertTypes = new ArrayList<SimpleJsonBean>();
+        
+        for (Entry<String, Long> entry : PerformanceRuleManager.PERF_ALERT_TYPE_TO_ID.entrySet()) {
+            SimpleJsonBean sjb = new SimpleJsonBean();
+            sjb.setId(entry.getValue());
+            sjb.setName(TranslatorWorker.translateText(
+                    PerformanceRuleManager.PERF_ALERT_TYPE_TO_DESCRIPTION.get(entry.getKey())));
+            performanceAlertTypes.add(sjb);
+        }
+        
+        performanceAlertTypes = orderByProperty(performanceAlertTypes, NAME_PROPERTY);
+        pt.set("filterId", FiltersConstants.PERFORMANCE_ALERT_TYPE);
+        pt.set("name", TranslatorWorker.translateText(ColumnConstants.PERFORMANCE_ALERT_TYPE));
+        pt.set("values", performanceAlertTypes);
+        
+        return pt;
     }
 
     /**
@@ -912,7 +936,7 @@ public class FiltersEndpoint {
     @Path("/computed-year")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.COMPUTED_YEAR, name = "Computed Year",
-        columns = ColumnConstants.COMPUTED_YEAR, filterType = {FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+        columns = ColumnConstants.COMPUTED_YEAR, tab = EPConstants.TAB_OTHER)
     public SettingField getComputedYear() {
         return FiltersBuilder.buildComputedYears();
     }

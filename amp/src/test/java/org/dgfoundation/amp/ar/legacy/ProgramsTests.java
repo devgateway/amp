@@ -1,47 +1,26 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
 import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
-import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.request.TLSUtils;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
-import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 /**
  * Programs-reports tests
  * @author Dolghier Constantin
  *
  */
-public class ProgramsTests extends ReportsTestCase
-{
-    
-    private ProgramsTests(String name)
-    {
-        super(name);        
-    }
-    
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite(ProgramsTests.class.getName());
-        suite.addTest(new ProgramsTests("testProgramsDetails"));
-        suite.addTest(new ProgramsTests("testPrograms"));
-        suite.addTest(new ProgramsTests("testProgramsByTertiary"));
-        suite.addTest(new ProgramsTests("testProgramsBySecondary"));
-        suite.addTest(new ProgramsTests("testProgramsByPrimaryWithPercentages"));
-        return suite;
-    }
-    
+public class ProgramsTests extends ReportsTestCase {
+
+    @Test
     public void testProgramsByPrimaryWithPercentages()
     {
         GroupReportModel fddr_correct = GroupReportModel.withGroupReports("AMP-17190-all-programs-by-primary",
@@ -87,7 +66,9 @@ public class ProgramsTests extends ReportsTestCase
             "(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1))");     
         runReportTest("Hier report with all the Program default columns, by Primary Program, with percentages", "AMP-17190-all-programs-by-primary", new String[] {"Activity Linked With Pledge", "Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program"}, fddr_correct);                  
     }
-    
+
+    @Test
+    @Ignore
     public void testProgramsDetails()
     {
         GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-17190-all-details",
@@ -112,6 +93,7 @@ public class ProgramsTests extends ReportsTestCase
         runReportTest("Flat report with all the 'program details' ", "AMP-17190-all-details", new String[] {"Activity Linked With Pledge", "Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program"}, fddr_correct);             
     }
 
+    @Test
     public void testPrograms()
     {
         GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-17190-all-programs-no-hier",
@@ -135,7 +117,8 @@ public class ProgramsTests extends ReportsTestCase
         
         runReportTest("Flat report with all the Program default columns ", "AMP-17190-all-programs-no-hier", new String[] {"Activity Linked With Pledge", "Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program"}, fddr_correct);              
     }
-    
+
+    @Test
     public void testProgramsByTertiary()
     {
         GroupReportModel fddr_correct = GroupReportModel.withGroupReports("AMP-17190-all-programs-by-tertiary",
@@ -171,7 +154,8 @@ public class ProgramsTests extends ReportsTestCase
         
         runReportTest("Hier report with all the Program default columns, by Tertiary Program", "AMP-17190-all-programs-by-tertiary", new String[] {"Activity Linked With Pledge", "Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program"}, fddr_correct);              
     }
-    
+
+    @Test
     public void testProgramsBySecondary(){
         GroupReportModel fddr_correct = GroupReportModel.withGroupReports("AMP-17190-all-programs-by-secondary",
                 GroupReportModel.withColumnReports("AMP-17190-all-programs-by-secondary",
@@ -195,11 +179,8 @@ public class ProgramsTests extends ReportsTestCase
         runReportTest("Hier report with all the Program default columns, by Secondary Program", "AMP-17190-all-programs-by-secondary", new String[] {"Activity Linked With Pledge", "Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program"}, fddr_correct);                
     }
     
-    @Override
-    protected void setUp() throws Exception
-    {
+    @Before
+    public void setUp() {
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
-        super.setUp();
-        // do nothing now                
     }
 }

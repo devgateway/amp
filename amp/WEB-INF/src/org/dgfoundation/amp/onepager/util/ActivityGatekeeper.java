@@ -60,7 +60,7 @@ public class ActivityGatekeeper {
                 }
             }
             timestamp.put(id, String.valueOf(currentTime));
-            String hash = ShaCrypt.crypt(id + currentTime);;
+            String hash = ShaCrypt.crypt(id + currentTime);
             keycode.put(id, hash);
             userEditing.put(id, userId);
             return hash;
@@ -99,26 +99,27 @@ public class ActivityGatekeeper {
             }
         }
     }
-    
-    private static Long getUserEditing(String id){
+
+    public static Long getUserEditing(String id) {
         return userEditing.get(id);
     }
-    
-    public static String buildRedirectLink(String id, long currentUserId){
+
+    public static String buildRedirectLink(String id, long currentUserId) {
         Long editingUserId = ActivityGatekeeper.getUserEditing(String.valueOf(id));
-        if (editingUserId == null)
-        {
-            logger.error("user editing " + id + " not found in the userEditing list, inserting a dummy value!", new RuntimeException("dummy exception"));
+        if (editingUserId == null) {
+            logger.error("user editing " + id + " not found in the userEditing list, inserting a dummy value!", new
+                    RuntimeException("dummy exception"));
             editingUserId = currentUserId;
         }
-        return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editError=" + editingUserId;
+        return "/aim/viewActivityPreview.do~activityId=" + id + "~editingUserId=" + editingUserId;
     }
-    
-    public static String buildPermissionRedirectLink(String id){
-        return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editPermissionError=1";
+
+    public static String buildPermissionRedirectLink(String id) {
+        return "/aim/viewActivityPreview.do~activityId=" + id + "~editPermissionError=1";
     }
-    public static String buildPreviewUrl(String id){
-        return "/aim/viewActivityPreview.do~public=true~pageId=2~activityId=" + id;
+
+    public static String buildPreviewUrl(String id) {
+        return "/aim/viewActivityPreview.do~activityId=" + id;
     }
     
     /**
@@ -155,5 +156,9 @@ public class ActivityGatekeeper {
             logger.error("error while trying to decide whether allowed to edit activity", e);
             return false;
         }
+    }
+
+    public static String getUserSession() {
+        return TLSUtils.getRequest().getSession().getId();
     }
 }

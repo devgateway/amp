@@ -36,7 +36,7 @@ public class NotApprovedActivityTrigger extends Trigger {
         }
         e.getParameters().put(PARAM_ACTIVIY_CREATOR_TEAM, act.getTeam().getAmpTeamId());
         e.getParameters().put(PARAM_SAVE_DATE, new Date());
-        e.getParameters().put(PARAM_URL,"aim/viewActivityPreview.do~public=true~pageId=2~activityId="+act.getAmpActivityId());
+        e.getParameters().put(PARAM_URL, "aim/viewActivityPreview.do~activityId=" + act.getAmpActivityId());
         e.getParameters().put(PARAM_ACTIVIY_ID,act.getAmpActivityId());
     return e;
     }

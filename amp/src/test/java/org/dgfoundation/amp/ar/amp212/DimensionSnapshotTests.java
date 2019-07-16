@@ -26,10 +26,6 @@ public class DimensionSnapshotTests extends AmpTestCase {
             Arrays.asList(100l, 120l, 121l),
             Arrays.asList(200l, 210l, 211l)));
     
-    public DimensionSnapshotTests() {
-        super("DimensionSnapshot tests");
-    }
-
     @Test
     public void testCornerCases() {
         DimensionSnapshot snapshot = getSnapshot("empty", 3, Collections.emptyList());

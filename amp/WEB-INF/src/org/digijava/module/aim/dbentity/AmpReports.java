@@ -122,6 +122,8 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
     
     private Boolean allowEmptyFundingColumns;
     
+    private Boolean showOriginalCurrency;
+    
     private Boolean budgetExporter = false;
     private Date publishedDate;
     
@@ -785,5 +787,14 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
     {
         return String.format("AmpReports: " + this.getName());
     }
+
+    public Boolean getShowOriginalCurrency() {
+        return showOriginalCurrency;
+    }
+
+    public void setShowOriginalCurrency(Boolean showOriginalCurrency) {
+        this.showOriginalCurrency = showOriginalCurrency;
+    }
+    
 }
 

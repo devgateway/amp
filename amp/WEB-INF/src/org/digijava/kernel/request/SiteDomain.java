@@ -22,13 +22,19 @@
 
 package org.digijava.kernel.request;
 
+import static java.util.Comparator.comparing;
+
 import java.io.Serializable;
+import java.util.Comparator;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.util.SiteUtils;
 
 public class SiteDomain implements Serializable{
+
+    public static final Comparator<SiteDomain> DEFAULTS_FIRST = comparing(SiteDomain::isDefaultDomain).reversed();
+
     private long siteDomainId;
     private Site site;
 
@@ -73,6 +79,12 @@ public class SiteDomain implements Serializable{
      */
     public String getSiteDomain() {
         return SiteUtils.prefixDomainName(this.siteDbDomain);
+    }
+
+    public String toUrl() {
+        String protocol = (enableSecurity != null && enableSecurity) ? "https" : "http";
+        String path = sitePath == null ? "/" : sitePath;
+        return String.format("%s://%s%s", protocol, getSiteDomain(), path);
     }
 
     /**

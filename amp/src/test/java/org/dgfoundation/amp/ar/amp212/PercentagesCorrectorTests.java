@@ -18,10 +18,6 @@ import org.junit.Test;
 public class PercentagesCorrectorTests extends AmpTestCase {
     
     final double EPSI = 0.001;
-    
-    public PercentagesCorrectorTests() {
-        super("PercentagesCorrector tests");
-    }
 
     void testCleanActivity(PercentagesCorrector.Snapshot snapshot) {
         assertEquals(56.0, snapshot.correctPercentage(1l, 56.0, 0), EPSI);

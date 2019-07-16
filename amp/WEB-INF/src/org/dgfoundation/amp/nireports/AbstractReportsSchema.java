@@ -7,6 +7,7 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 
 import org.dgfoundation.amp.nireports.amp.SubDimensions;
+import org.dgfoundation.amp.nireports.behaviours.MeasureDividingBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
@@ -187,7 +188,7 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
      * @return
      */
     public TrivialMeasureBehaviour byMeasureDividingBehaviour(TimeRange tr, String measureName) {
-        return new TrivialMeasureBehaviour(tr, TrivialMeasureBehaviour.buildMeasureTotalDivider(measureName), false);
+        return new MeasureDividingBehaviour(tr, TrivialMeasureBehaviour.buildMeasureTotalDivider(measureName), false);
     }
     
     /**

@@ -20,7 +20,7 @@ abstract class AbstractAmpApiStateUpdater {
      * Updates amp_api_state table to reflect changes to stateblobs.
      */
     public void update() {
-        PersistenceManager.getSession().doWork(connection -> {
+        PersistenceManager.doWorkInTransaction(connection -> {
             Map<Long, String> states = SQLUtils.collectKeyValue(connection, "select id, stateblob from amp_api_state");
             for (Map.Entry<Long, String> state : states.entrySet()) {
                 updateApiState(connection, state.getKey(), state.getValue());

@@ -1,10 +1,19 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toMap;
+
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.sync.model.Translation;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -28,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * Content Translator
@@ -149,6 +159,9 @@ public class TranslationUtil {
         if (field.isAnnotationPresent(VersionableFieldTextEditor.class)) {
             return TranslationSettings.TranslationType.TEXT;
         }
+        if (field.isAnnotationPresent(ResourceTextField.class)) {
+            return TranslationSettings.TranslationType.RESOURCE;
+        }
         return TranslationSettings.TranslationType.NONE;
     }
     
@@ -160,7 +173,7 @@ public class TranslationUtil {
      * @return
      */
     public String extractTranslationsOrSimpleValue(String fieldName, Object parentObj, Object jsonValue) {
-        return extractTranslationsOrSimpleValue(getField(parentObj, fieldName), parentObj, jsonValue);
+        return extractTranslationsOrSimpleValue(ReflectionUtil.getField(parentObj, fieldName), parentObj, jsonValue);
     }
 
     public String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
@@ -303,26 +316,31 @@ public class TranslationUtil {
         return value;
     }
 
-    protected static Field getField(Object parent, String actualFieldName) {
-        if (parent == null) {
-            return null;
-        }
-        Field field = null;
-        try {
-            Class<?> clazz = parent.getClass();
-            while (field == null && !clazz.equals(Object.class)) {
-                try {
-                    field = clazz.getDeclaredField(actualFieldName);
-                    field.setAccessible(true);
-                } catch (NoSuchFieldException ex) {
-                    clazz = clazz.getSuperclass();
-                }
-            }
-        } catch (Exception e) {
-            logger.error(e);
-            throw new RuntimeException(e);
-        }
-        return field;
+    /**
+     * Translates a list of labels in multiple languages and returns them grouped by label and locale.
+     *
+     * @param labels labels to be translated
+     * @return translated labels grouped by label and locale
+     */
+    public static Map<String, Map<String, String>> translateLabels(List<String> labels) {
+        return labels.stream().collect(toMap(Function.identity(), AMPTranslatorService.INSTANCE::translateLabel));
     }
 
+    /**
+     * Group translations by label, then by locale.
+     *
+     * Note: This output is prepared for AMP Offline thus translations are grouped by label instead of key.
+     * There are cases when two different keys have the same label. This leads to a situation when we cannot build
+     * this map because of collisions. In order to deal with this reality we are filtering all translations for which
+     * key does not coincide with hash of label. {@link Translation#labelMatchesKey()}
+     *
+     * @param translations a list of translation to be grouped
+     * @return translated labels grouped by label and locale
+     */
+    public static Map<String, Map<String, String>> groupByLabelAndLocale(List<Translation> translations) {
+        return translations.stream()
+                .filter(Translation::labelMatchesKey)
+                .collect(groupingBy(Translation::getLabel,
+                        toMap(Translation::getLocale, Translation::getTranslatedLabel)));
+    }
 }

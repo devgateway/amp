@@ -9,21 +9,18 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
-import javax.jcr.NamespaceException;
-import javax.jcr.NamespaceRegistry;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
-import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.SimpleCredentials;
-import javax.jcr.Workspace;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
@@ -32,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.jackrabbit.api.JackrabbitRepository;
-import org.apache.jackrabbit.core.TransientRepository;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
@@ -41,6 +37,7 @@ import org.apache.wicket.util.lang.Bytes;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeManager;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationResponse;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationStatus;
+import org.digijava.kernel.content.ContentRepositoryManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
@@ -60,7 +57,6 @@ import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.dbentity.TeamNodePendingVersion;
 import org.digijava.module.contentrepository.dbentity.TeamNodeState;
 import org.digijava.module.contentrepository.exception.CrException;
-import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.exception.NoNodeInVersionNodeException;
 import org.digijava.module.contentrepository.exception.NoVersionsFoundException;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
@@ -74,269 +70,31 @@ import org.hibernate.Query;
 
 
 public class DocumentManagerUtil {
-    private static final String IS_ALREADY_LOCKED_BY_THE_CURRENT_PROCESS = "is already locked by the current process";
     
-    /* Name for jcr sessions stored in http request */  
-    private static final String JCR_READ_SESSION                        = "jcrReadSession";
-    private static final String JCR_WRITE_SESSION                       = "jcrWriteSession";
-
-    private static Logger logger    = Logger.getLogger(DocumentManagerUtil.class);
+    private static Logger logger = Logger.getLogger(DocumentManagerUtil.class);
     
-    private static Object repoLock = new Object();
-    
-    /**
-     * returns null if failed to open repo
-     * @param context
-     * @return
-     */
-    public static Repository getJCRRepository (ServletContext context) 
-    {       
-        if (context == null) {
-            logger.error("The request doesn't contain a ServletContext", new RuntimeException());
-            return null;
-        }
-        synchronized (repoLock) {
-            Repository repository = (Repository) context.getAttribute(CrConstants.JACKRABBIT_REPOSITORY);
-            if (repository == null) {
-                try{
-                    String appPath              = DocumentManagerUtil.getApplicationPath();
-                    String repPath              = appPath + "/jackrabbit";
-                    repository                  = new TransientRepository(repPath + "/repository.xml", repPath);
-                    context.setAttribute(CrConstants.JACKRABBIT_REPOSITORY, repository);
-                } catch (Exception e) {
-                    logger.error("error opening JackRabbit repository", e);
-                    return null; 
-                }
-            }
-            return repository;
-        }
-    }
-    
-    public static void shutdownJCRRepository(ServletContext context)
-    {       
-        if (context == null)
-        {
-            logger.error("The request doesn't contain a ServletContext");
-            return;
-        }
-        synchronized (repoLock)
-        {
-            Repository repository = (Repository)context.getAttribute(CrConstants.JACKRABBIT_REPOSITORY);
-            if (repository != null)
-            {
-                context.removeAttribute(CrConstants.JACKRABBIT_REPOSITORY);
-                ((TransientRepository)repository).shutdown();
-            }
-        }
-    }
-
-    public static String getUUIDByPublicVersionUUID (String publicVersionUUID) {
-        String retVal = null;
-        org.hibernate.Session session = null;
-        try {
-            session = PersistenceManager.getSession();
-            StringBuilder queryStr = new StringBuilder("select obj.uuid from ").
-                    append(CrDocumentNodeAttributes.class.getName()).
-                    append(" obj where obj.publicVersionUUID=:publicVersionUUID");
-            Query query = session.createQuery(queryStr.toString());
-            query.setString("publicVersionUUID", publicVersionUUID);
-            retVal = (String) query.uniqueResult();
-            //session.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return retVal;
-    }
-    
-    /**
-     * to be called before every HttpServletRequest processed
-     * @param request
-     */
-    public static void initJCRSessions(HttpServletRequest request)
-    {
-        //nop
-    }
-
     /**
      * to be called after every HttpServletRequest processed
      * @param request
      */
-    public static void closeJCRSessions(HttpServletRequest request)
-    {
-        logoutJcrSessions(request);
-    }
-    
-    /**
-     * returns null if logging in failed for some reason
-     * @param context
-     * @return
-     */
-    public static Session getSession(ServletContext context, SimpleCredentials creden)
-    {
-        synchronized (repoLock) {           
-            try
-            {
-                Repository rep = getJCRRepository(context);
-                if (rep == null)
-                    return null;
-                if (creden == null)
-                    return rep.login();
-                else
-                    return rep.login(creden);
-            }
-            catch (Exception re) 
-            {
-                if ( re.getMessage().contains(IS_ALREADY_LOCKED_BY_THE_CURRENT_PROCESS) ) 
-                {
-                    logger.error("error trying to login to JCR, trying to recover by shutting down the repo", re);
-                }else{
-                    logger.error("Cannot open JackRabbit session",re);
-                }
-                shutdownJCRRepository(context);
-                return null;
-            }
-        }
-    }
-    
-    /**
-     * closes a JCR session, guaranteed exception- and fat- free
-     * @param sess
-     */
-    public static void closeSession(Session sess)
-    {
-        if (sess == null)
-            return;     
-        try{sess.logout();}
-        catch(Exception e){logger.error("paranoid exception caught while logging out of a JR session", e);}; // just being paranoid
-    }
-    
-    /**
-     * if given Session is null or alive, returns it without touching it. Else, closes it and returns null
-     * @param sess
-     * @return
-     */
-    public static Session annulateSessionIfNotAlive(Session sess)
-    {
-        if (sess == null)
-            return null;
-        
-        if (sess != null && (!sess.isLive()))
-        {
-            closeSession(sess);
-            return null;
-        }
-        return sess;
+    public static void logoutJcrSessions(HttpServletRequest request) {
+        ContentRepositoryManager.closeSessions(request);
     }
     
     public static Session getReadSession(HttpServletRequest request) {
-        synchronized (repoLock)
-        {       
-            Session jcrSession      = annulateSessionIfNotAlive((Session) request.getAttribute(JCR_READ_SESSION));
-            
-            if (jcrSession == null)
-                jcrSession = getSession(request.getSession().getServletContext(), null);
-            
-            if (jcrSession == null)
-            {
-                logger.warn("trying to open a JCR read session for the second time...");
-                jcrSession = getSession(request.getSession().getServletContext(), null);
-            }
-            
-            if (jcrSession == null)
-                throw new RuntimeException("could not open a JCR ReadSession, giving up");
-            
-            request.setAttribute(JCR_READ_SESSION, jcrSession);
-            
-            try {
-                jcrSession.getRootNode().refresh(false);
-            } 
-            catch (Exception e) {
-                logger.error("could not refresh() readSession", e);
-            }
-            
-            return jcrSession;
-        }
+        return ContentRepositoryManager.getReadSession(request);
     }
-    
-    public static void logoutJcrSessions(HttpServletRequest httpRequest) {
-        synchronized (repoLock) {
-            closeSession((Session) httpRequest.getAttribute(JCR_WRITE_SESSION));
-            httpRequest.removeAttribute(JCR_WRITE_SESSION);
-            
-            closeSession((Session) httpRequest.getAttribute(JCR_READ_SESSION));
-            httpRequest.removeAttribute(JCR_READ_SESSION);
-        }
-    }
-    
-    public static Session getWriteSession(HttpServletRequest request)
-    {
-        synchronized (repoLock)
-        {
-            Session jcrSession = annulateSessionIfNotAlive((Session) request.getAttribute(JCR_WRITE_SESSION));              
-            
-            boolean newlyCreatedSession = (jcrSession == null);
-            
-            if (jcrSession == null)
-            {
-                HttpSession session = request.getSession();
 
-                if (session == null)
-                {
-                    throw new RuntimeException("no session found! why?");
-                }
-                
-                TeamMember teamMember = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-                String userName;
-                if (teamMember != null && teamMember.getEmail() != null) {
-                   userName = teamMember.getEmail();
-                } else {
-                   userName = "admin@amp.org";
-                }
-                
-                SimpleCredentials creden    = new SimpleCredentials(userName, userName.toCharArray());
-
-                if (jcrSession == null)
-                    jcrSession = getSession(request.getSession().getServletContext(), creden);
-                
-                if (jcrSession == null)
-                {
-                    logger.warn("trying to open a JCR write session for the second time...");
-                    jcrSession = getSession(request.getSession().getServletContext(), creden);
-                }
-                if (jcrSession == null)
-                    throw new JCRSessionException("could not open a JCR WriteSession");
-            }
-    
-            
-            if (newlyCreatedSession)
-            {
-                try {jcrSession.save();}
-                catch(Exception e){logger.error("error saving JCR WriteSession", e);}
-                registerNamespace(jcrSession, "ampdoc", "http://amp-demo.code.ro/ampdoc");
-                registerNamespace(jcrSession, "amplabel", "http://amp-demo.code.ro/label");
-            }
-            
-            request.setAttribute(JCR_WRITE_SESSION, jcrSession);
-            try {
-                Node rootNode = jcrSession.getRootNode();
-                if (rootNode == null)
-                    throw new RuntimeException("jcr root node is null, how can this be?");              
-                rootNode.refresh(false);
-            }           
-            catch (Exception e) {
-                logger.error("could not refresh() writeSession", e);
-            }
-            
-            return jcrSession;
-        }
+    public static Session getWriteSession(HttpServletRequest request) {
+        return ContentRepositoryManager.getWriteSession(request);
     }
-    
+
     public static NodeWrapper getReadNodeWrapper(String uuid, HttpServletRequest request) {
         Node n = getReadNode(uuid, request);
-        if (n != null) 
-        {
+        if (n != null) {
             return new NodeWrapper(n);
         }
+        
         return null;
     }
 
@@ -347,97 +105,25 @@ public class DocumentManagerUtil {
         catch(Exception e){return false;}       
     }
     
-    /**
-    * DEBUG CODE
-    */
-    public static Set<DocumentData> collectRepository(Node node, Set<DocumentData> bld) throws RepositoryException{
-        DocumentData dd = DocumentData.buildFromNode(node);
-        if ((dd != null) && (dd.getName() != null)){
-            bld.add(dd);
-            
-            if (isVersionable(node)){
-                VersionHistory vh = node.getVersionHistory();
-                NodeIterator niter  = vh.getNodes();
-                while (niter.hasNext()){
-                    Node n = niter.nextNode();
-                    DocumentData docData = DocumentData.buildFromNodeVersion(n, dd);
-                    docData.setName(dd.getName() + " VERSION with uuid = " + docData.getUuid());
-                    bld.add(docData);
-                }
-            }
-        }
-        
-        NodeIterator children = node.getNodes();
-        while(children.hasNext()){
-            collectRepository(children.nextNode(), bld);
-        }
-        return bld;
-    }
-    /**
-     * debug-only function: return blabla
-     * @param session
-     * @param bld
-     * @return
-     */
-    public static Set<DocumentData> collectRepository(Session session, Set<DocumentData> bld){
-        try{
-            collectRepository(session.getRootNode() , bld);
-        }
-        catch(Exception e){
-            e.printStackTrace(); // this is a debug-only function, so it is acceptable
-        }
-        return bld;
-    }
-    
     public static Node getReadNode(String uuid, HttpServletRequest request) {
-        Session session = getReadSession(request);
+        Session session = ContentRepositoryManager.getReadSession(request);
         try {
-            //session.getRootNode().refresh(false);
-            //session.refresh(false);
-            return session.getNodeByUUID(uuid);
+            return session.getNodeByIdentifier(uuid);
         } catch (Exception e) {
-//          e.printStackTrace();  DEBUG CODE - DO NOT DELETE THE COMMENTED CODE BELOW
-//          Set<DocumentData> allDocuments = collectRepository(session, new TreeSet<DocumentData>(DocumentData.COMPARATOR_BY_NAME));
-//          for(DocumentData doc:allDocuments)
-//              logger.error("\t" + doc.toString());
             return null;
         }
     }
 
-    public static Node getWriteNode (String uuid, HttpServletRequest request) {
+    public static Node getWriteNode(String uuid, HttpServletRequest request) {
         Session session = getWriteSession(request);
         try {
-            //session.getRootNode().refresh(false);
-            //session.refresh(false);
             return session.getNodeByIdentifier(uuid);
         } catch (Exception e) {
             e.printStackTrace();
-//          throw new RuntimeException(e);
             return null;
         }
     }
 
-    
-    private static void registerNamespace(Session session, String namespace, String uri) {
-        Workspace workspace                 = session.getWorkspace();
-        NamespaceRegistry namespaceRegistry = null;
-        try {
-            namespaceRegistry   = workspace.getNamespaceRegistry();
-            namespaceRegistry.getURI(namespace);
-        } catch(NamespaceException e) {
-            logger.info("Namespace " + namespace + "not found. Creating it now.");
-            try {
-                namespaceRegistry.registerNamespace(namespace, uri);
-            } catch (RepositoryException e1) {
-                // TODO Auto-generated catch block
-                logger.error("Couldn't create namespace");
-                e1.printStackTrace();
-            }
-        } catch (RepositoryException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    } 
     
     public static String getApplicationPath() {
         PathHelper ph   = new DocumentManagerUtil().new PathHelper();
@@ -489,12 +175,11 @@ public class DocumentManagerUtil {
         for ( int i=versions.size()-1; i>=0; i-- ) {
             Version v           = versions.get(i);
             NodeIterator nIter  = v.getNodes();
-            if ( nIter.hasNext() ) {
-                Node n              = nIter.nextNode();
-                if ( isGivenVersionPendingApproval(n.getUUID()) != null ) 
-                    continue;
-                else
+            if (nIter.hasNext()) {
+                Node n = nIter.nextNode();
+                if (isGivenVersionPendingApproval(n.getIdentifier()) == null) {
                     return n;
+                }
             }
         }
         return null;
@@ -584,7 +269,7 @@ public class DocumentManagerUtil {
         
         return false;
     }
-    
+
     private static boolean deleteDocument(String uuid, HttpServletRequest request) {
         return deleteNode(getWriteSession(request), uuid);
     }
@@ -606,24 +291,26 @@ public class DocumentManagerUtil {
         TeamInformationBeanDM teamInfo  = new TeamInformationBeanDM();
         teamInfo.setMeTeamMember( (TeamMember)session.getAttribute(Constants.CURRENT_MEMBER) );
         
-        TeamMember me   = teamInfo.getMeTeamMember();
+        TeamMember me = teamInfo.getMeTeamMember();
         
         if (me != null) {
-            teamInfo.setIsTeamLeader( me.getTeamHead() );
-            teamInfo.setMyTeamMembers( TeamMemberUtil.getAllTeamMembers(me.getTeamId()) );
+            teamInfo.setIsTeamLeader(me.getTeamHead());
+            teamInfo.setMyTeamMembers(TeamMemberUtil.getAllTeamMembers(me.getTeamId()));
         }
         
         return teamInfo;
     }
     
     public static Collection<DocumentData> createDocumentDataCollectionForActivityPreview(HttpServletRequest request) {
-        Collection<String> UUIDs = SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false);
+        Collection<String> uuids = SelectDocumentDM.getSelectedDocsSet(request, 
+                ActivityDocumentsConstants.RELATED_DOCUMENTS, false);
         ArrayList<DocumentData> ret = new ArrayList<DocumentData>();
-        if ( UUIDs == null )
-            return null;
+        if (uuids == null) {
+            return Collections.emptyList();
+        }
         try {
             ArrayList<Node> documents = new ArrayList<Node>();
-            Iterator<String> iter = UUIDs.iterator();
+            Iterator<String> iter = uuids.iterator();
             while (iter.hasNext()) {
                 String uuid = iter.next();
                 Node documentNode = DocumentManagerUtil.getReadNode(uuid, request);
@@ -643,16 +330,15 @@ public class DocumentManagerUtil {
             Iterator iterator           = documents.iterator();
             while ( iterator.hasNext() ) {
                 Node documentNode   = (Node)iterator.next();
-                //Node baseNode=documentNode; 
-                String documentNodeBaseVersionUUID=documentNode.getUUID();
-                //NodeLastApprovedVersion nlpv  = DocumentManagerUtil.getlastApprovedVersionOfTeamNode(documentNodeBaseVersionUUID);
+                String documentNodeBaseVersionUUID = documentNode.getIdentifier();
                 NodeWrapper nodeWrapper = new NodeWrapper(documentNode);
                 String fileName =  nodeWrapper.getName();
                 if ( fileName == null && nodeWrapper.getWebLink() == null ){
                     continue;
                 }
                 
-                DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, documentNodeBaseVersionUUID, nodeWrapper.getUuid());               
+                DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, documentNodeBaseVersionUUID, 
+                        nodeWrapper.getUuid());               
                 ret.add(documentData);
             }   
             return ret;
@@ -665,21 +351,21 @@ public class DocumentManagerUtil {
     }
     
     
-    public static Collection<DocumentData> createDocumentDataCollectionFromSession(HttpServletRequest request) {
-        Collection<String> UUIDs = SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false);
-        if ( UUIDs == null ) {
-            return null;
-        }   
-        try {
-            DocumentManager dm = new DocumentManager();
-            Collection<DocumentData> ret = dm.getDocuments(UUIDs, request, null, false, true);
-            ret.addAll(TemporaryDocumentData.retrieveTemporaryDocDataList(request));
-            return ret;
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
+    public static List<DocumentData> createDocumentDataCollectionFromSession(HttpServletRequest request) {
+        List<String> uuids = new ArrayList<>();
+        uuids.addAll(SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, true));
+        if (!uuids.isEmpty()) {
+            try {
+                DocumentManager dm = new DocumentManager();
+                List<DocumentData> ret = dm.getDocuments(uuids, request, null, false, true);
+                ret.addAll(DocumentManagerUtil.retrieveTemporaryDocDataList(request));
+                return ret;
+            } catch (Exception e) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
         }
+        
+        return null;
     }
     
     public static boolean checkFileSize(FormFile formFile, ActionMessages errors) {
@@ -827,24 +513,31 @@ public class DocumentManagerUtil {
     }
     
     public static Node getTeamNode(Session jcrWriteSession, Long teamId) {
-        return  DocumentManagerUtil.getNodeByPath(jcrWriteSession, null, "team/"+teamId);
+        return  DocumentManagerUtil.getNodeByPath(jcrWriteSession, "team/" + teamId);
     }
     
     @Deprecated
     //please use getTeamNode(Session jcrWriteSession, Long teamId) instead
     public static Node getTeamNode(Session jcrWriteSession, TeamMember teamMember) {
-        return  DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "team/"+teamMember.getTeamId());
+        return  DocumentManagerUtil.getNodeByPath(jcrWriteSession, "team/" + teamMember.getTeamId());
     }
 
     public static Node getUserPrivateNode(Session jcrSession, TeamMember teamMember) {
         String userName = teamMember.getEmail();
         String teamId = "" + teamMember.getTeamId();
-        return  DocumentManagerUtil.getNodeByPath(jcrSession, teamMember, "private/"+teamId+"/"+userName);
+        return  DocumentManagerUtil.getNodeByPath(jcrSession, "private/" + teamId + "/" + userName);
+    }
+    
+    public static Node createUserPrivateNode(Session jcrSession, TeamMember teamMember) {
+        String userEmail = teamMember.getEmail();
+        String path =  "private/" + teamMember.getTeamId() + "/" + userEmail;
+        
+        return DocumentManagerUtil.createNodeUsingPath(jcrSession, teamMember, path);
     }
     
     public static Node getTeamPendingNode(Session jcrSession, TeamMember teamMember) {
         String teamId = "" + teamMember.getTeamId();
-        return DocumentManagerUtil.getNodeByPath(jcrSession, teamMember, "pending/"+teamId);
+        return DocumentManagerUtil.getNodeByPath(jcrSession, "pending/" + teamId);
     }
 
     public static String getWebLinkByUuid(String uuid, HttpServletRequest request) {
@@ -858,52 +551,51 @@ public class DocumentManagerUtil {
     /**
      * 
      * @param jcrWriteSession
-     * @param teamMember
      * @param path
      */
-    public static Node getNodeByPath(Session jcrWriteSession, TeamMember teamMember, String path) {
-        Node folderNode = null;
-        
+    public static Node getNodeByPath(Session session, String path) {
         try {
-            Node tempNode;
-            
-            folderNode  = jcrWriteSession.getRootNode();
-        
-            String [] elements  = path.split("/");
-            
-            for (int i=0; i<elements.length; i++) {
-                
-                    try{
-                        tempNode    = folderNode.getNode( elements[i] );
-                    }
-                    catch (PathNotFoundException e) {
-                        logger.info("Node '" + elements[i] + "' not created from path '" + path + "'. Trying to create now.");
-                        try {
-                            tempNode    = folderNode.addNode( elements[i] );
-                        }
-                        catch(Exception E) {
-                            logger.error("Cannot create '" + elements[i] + "' node from path '" + path + "'.");
-                            e.printStackTrace();
-                            return null;
-                        }
-                    }
-                    catch (RepositoryException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                        return null;
-                    }
-                    folderNode  = tempNode;
+            Node folderPathNode = session.getRootNode();
+            String[] elements = path.split("/");
+
+            for (int i = 0; i < elements.length; i++) {
+                if (folderPathNode.hasNode(elements[i])) {
+                    folderPathNode = folderPathNode.getNode(elements[i]);
+                } else {
+                    return null;
                 }
-                
-                return folderNode;
-        
+            }
+            
+            return folderPathNode;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
-        catch (Exception e) {
-            e.printStackTrace();
-            return null;
+    }
+    
+    public static Node createNodeUsingPath(Session session, TeamMember teamMember, String path) {
+        boolean toSave = false;
+        try {
+            Node folderPathNode = session.getRootNode();
+            String[] elements = path.split("/");
+
+            for (int i = 0; i < elements.length; i++) {
+                if (folderPathNode.hasNode(elements[i])) {
+                    folderPathNode = folderPathNode.getNode(elements[i]);
+                } else {
+                    folderPathNode.addNode(elements[i]);
+                    folderPathNode = folderPathNode.getNode(elements[i]);
+                    toSave = true;
+                }
+            }
+            
+            if (toSave) {
+                session.save();
+            }
+            
+            return folderPathNode;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
-        
-        
     }
     
     public class PathHelper {
@@ -955,8 +647,8 @@ public class DocumentManagerUtil {
      * @param state
      * @return
      */
-    public static List<String> getSharedNodeUUIDs(Long teamId,Integer state){
-        List<String> retVal=null;
+    public static List<String> getSharedNodeUUIDs(TeamMember team, Integer state) {
+        Long teamId = team.getTeamId();
         org.hibernate.Session session=null;
         Query qry=null;
         String queryString=null;
@@ -969,11 +661,12 @@ public class DocumentManagerUtil {
             }
             
             qry=session.createQuery(queryString);
-            retVal=qry.list();
+            return qry.list();
         } catch (Exception e) {
             logger.error("Couldn't Load Resourcess: " + e.toString());
         }
-        return retVal;
+        
+        return Collections.emptyList();
     }
     
     public static CrSharedDoc getCrSharedDoc(String uuid,Long teamId, Integer state){
@@ -1156,6 +849,21 @@ public class DocumentManagerUtil {
         return retVal;
     }
     
+    public static Map<String, NodeLastApprovedVersion> getLastApprovedVersionsByUUIDMap() {
+        Map<String, NodeLastApprovedVersion> versionsMap = new HashMap<>();
+        for (NodeLastApprovedVersion version : getLastApprovedVersions()) {
+            versionsMap.put(version.getNodeUUID(), version);
+        }
+        
+        return versionsMap;
+    }
+    
+    public static List<NodeLastApprovedVersion> getLastApprovedVersions() {
+        return PersistenceManager.getRequestDBSession()
+                .createCriteria(NodeLastApprovedVersion.class)
+                .list();
+    }
+    
     public static List<TeamNodePendingVersion> getPendingVersionsForResource(String nodeUUID){
         List<TeamNodePendingVersion> retVal=null;
         org.hibernate.Session session=null;
@@ -1283,38 +991,34 @@ public class DocumentManagerUtil {
         logger.info("Jackrabbit repository shutdown succesfully !");
     }
     
-    public static boolean privateDocumentsExist(Session jcrWriteSession, TeamMember teamMember){
-        boolean retVal=false;
-        String userName     = teamMember.getEmail();
-        String teamId       = "" + teamMember.getTeamId();
-        Node node = DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
-        try {
-            NodeIterator iter = node.getNodes();
-            if(iter.hasNext()){
-                retVal=true;
+    public static boolean privateDocumentsExist(Session session, TeamMember teamMember) {
+        String userName = teamMember.getEmail();
+        String teamId = "" + teamMember.getTeamId();
+        Node node = DocumentManagerUtil.getNodeByPath(session, "private/" + teamId + "/" + userName);
+        
+        if (node != null) {
+            try {
+                return node.hasNodes();
+            } catch (RepositoryException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        } catch (RepositoryException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
-        return retVal;
+
+        return false;
     }
     
-    
-    public static boolean teamDocumentsExist(Session jcrWriteSession, TeamMember teamMember){
-        boolean retVal=false;
-        String teamId       = "" + teamMember.getTeamId();
-        Node node = DocumentManagerUtil.getNodeByPath(jcrWriteSession, null, "team/"+teamId);
-        try {
-            NodeIterator iter = node.getNodes();
-            if(iter.hasNext()){
-                retVal=true;
+    public static boolean teamDocumentsExist(Session session, TeamMember teamMember) {
+        Node node = DocumentManagerUtil.getNodeByPath(session, "team/" + teamMember.getTeamId());
+        if (node != null) {
+            try {
+                return node.hasNodes();
+            } catch (RepositoryException e) {
+                throw new RuntimeException(e.getMessage(), e);
             }
-        } catch (RepositoryException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
-        return retVal;
+
+        return false;
     }
     
     
@@ -1356,5 +1060,17 @@ public class DocumentManagerUtil {
         request.setAttribute("maxFileSizeGS", maxFileSizeGS);
         request.setAttribute("uploadMaxFileSize",
                 Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
+    }
+    
+    public static ArrayList<DocumentData> retrieveTemporaryDocDataList(HttpServletRequest request) {
+        HashMap<String, Object> map = SelectDocumentDM.getContentRepositoryHashMap(request);
+        ArrayList<DocumentData> list = (ArrayList<DocumentData>) map
+                .get(ActivityDocumentsConstants.TEMPORARY_DOCUMENTS);
+        if (list == null || (list != null && list.size() == 0)) {
+            list = new ArrayList<DocumentData>();
+            map.put(ActivityDocumentsConstants.TEMPORARY_DOCUMENTS, list);
+        }
+        
+        return list;
     }
 }

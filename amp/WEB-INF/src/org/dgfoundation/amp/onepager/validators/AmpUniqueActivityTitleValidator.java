@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -67,27 +68,30 @@ public class AmpUniqueActivityTitleValidator implements IValidator<String> {
      */
     @Override
     public void validate(IValidatable<String> validatable) {
-            if(validatable.getValue().trim().length()==0) return;
-            IdWithValueShim shim = ActivityUtil.getActivityCollisions(validatable.getValue(), ampActivityGroupModel.getObject());
+        
+        if (StringUtils.isBlank(validatable.getValue())) {
+            return;
+        }
+        
+        IdWithValueShim shim = ActivityUtil.getActivityCollisions(validatable.getValue(),
+                ampActivityGroupModel.getObject());
 
-            if(shim != null)
-            {
-                ValidationError error = new ValidationError();
+        if (shim != null) {
+            ValidationError error = new ValidationError();
+            if (shim.getValue() != null) {
                 error.addKey("AmpUniqueActivityTitleValidator");
-                if(shim.getValue() != null)
-                    error.setVariable("workspace", shim.getValue());
-                else 
-                    error.setVariable("workspace", " ");
-//              error.setVariable("link", "<a href=\"aim/viewActivityPreview.do~public=true~pageId=2~activityId=" + shim.getId() + "\">text</a>");
-                setFlag(validatable);
-                if (AmpTextAreaFieldPanel.class.isAssignableFrom(validatable.getClass())) {
-                    ((AmpTextAreaFieldPanel)validatable).setUniqueTitleValidatorError(true);
-                }
-                validatable.error(error); 
-                
+                error.setVariable("workspace", shim.getValue());
+            } else {
+                error.addKey("AmpUniqueActivityTitleNoWorkspaceValidator");
             }
 
-
+            setFlag(validatable);
+            if (AmpTextAreaFieldPanel.class.isAssignableFrom(validatable.getClass())) {
+                ((AmpTextAreaFieldPanel) validatable).setUniqueTitleValidatorError(true);
+            }
+            
+            validatable.error(error);
+        }
     }
 
 }

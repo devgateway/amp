@@ -20,10 +20,6 @@ import org.junit.Test;
  */
 public class GraphAlgorithmsTests extends AmpTestCase {
     
-    public GraphAlgorithmsTests() {
-        super("graph algorithms tests");
-    }
-    
     public final static Function<String, Collection<String>> NO_DEPENDENCIES = new MapDrivenDepenciesSource(null);
     
     @Test

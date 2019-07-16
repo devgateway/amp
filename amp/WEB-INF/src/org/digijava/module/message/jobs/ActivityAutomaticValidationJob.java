@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
@@ -49,7 +50,7 @@ public class ActivityAutomaticValidationJob extends ConnectionCleaningJob implem
         AmpActivityVersion auxActivity = null;
         try {
             auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivity(oldActivity, null, member, SiteUtils.getDefaultSite(),
-                    new java.util.Locale("en"), AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, oldActivity.getDraft(), false, false);
+                    new java.util.Locale("en"), AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, oldActivity.getDraft(), SaveContext.job());
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);

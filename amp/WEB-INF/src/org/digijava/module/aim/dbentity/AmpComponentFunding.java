@@ -5,55 +5,66 @@
 
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.REQUIRED_ALWAYS;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_ADJUSTMENT_TYPE;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_AMOUNT;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_CURRENCY;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_DESCRIPTION;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_DATE;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_TYPE;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_ORGANIZATION;
+
 import java.io.Serializable;
 import java.util.Date;
 
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.ComponentTransactionTypePossibleValuesProvider;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class AmpComponentFunding implements Cloneable, Serializable {
     // IATI-check: to be ignored
 
-    // @Interchangeable(fieldTitle="ID")
     private Long ampComponentFundingId;
-    // @Interchangeable(fieldTitle="Activity")
-    // private AmpActivityVersion activity;
-    // @Interchangeable(fieldTitle="Transaction Type")
+
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_TYPE, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
+    @PossibleValues(ComponentTransactionTypePossibleValuesProvider.class)
     private Integer transactionType;
-    // @Interchangeable(fieldTitle="Adjustment Type")
+
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_ADJUSTMENT_TYPE, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS,
+            discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY)
     private AmpCategoryValue adjustmentType;
-    // @Interchangeable(fieldTitle="Transaction Date")
+
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_DATE, importable = true, required = REQUIRED_ALWAYS)
     private Date transactionDate;
+
     // @Interchangeable(fieldTitle="Reporting Date")
     private Date reportingDate;
-    // @Interchangeable(fieldTitle="Transaction Amount")
+
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_AMOUNT, importable = true, required = REQUIRED_ALWAYS)
     private Double transactionAmount;
-    // reusing field to store the organisation related to the current component
-    // @Interchangeable(fieldTitle="Reporting Organization")
+
+    @Interchangeable(fieldTitle = COMPONENT_ORGANIZATION, importable = true, pickIdOnly = true,
+            dependencies = {InterchangeDependencyResolver.ORGANIZATION_PRESENT_KEY})
     private AmpOrganisation reportingOrganization;
-    // @Interchangeable(fieldTitle="Component Second Responsible Organization")
+
+    //@Interchangeable(fieldTitle = COMPONENT_SECOND_REPORTING_ORGANIZATION, importable = true, pickIdOnly = true)
     private AmpOrganisation componentSecondResponsibleOrganization;
-    // @Interchangeable(fieldTitle="Currency")
+
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
     private AmpCurrency currency;
-    // @Interchangeable(fieldTitle="Description")
+
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_DESCRIPTION)
     private String description;
+
     // @Interchangeable(fieldTitle="Component")
     private AmpComponent component;
     // @Interchangeable(fieldTitle="Exchange Rate")
     private Float exchangeRate;
 
-    // /**
-    // * @return Returns the activity.
-    // */
-    // public AmpActivityVersion getActivity() {
-    // return activity;
-    // }
-    // /**
-    // * @param activity The activity to set.
-    // */
-    // public void setActivity(AmpActivityVersion activity) {
-    // this.activity = activity;
-    // }
     /**
      * @return Returns the adjustmentType.
      */

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
@@ -18,6 +17,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
+import org.junit.After;
 import org.junit.Test;
 
 /**
@@ -34,10 +34,6 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
             "Eth Water",
             "activity with directed MTEFs"
         );
-    
-    public NiComputedMeasuresTests() {
-        super("NiComputedMeasuresTests");
-    }
     
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
@@ -301,13 +297,8 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
     }
     
     
-    @Override
+    @After
     public void tearDown() {
         AmpReportsScratchpad.forcedNowDate = null;
-    }
-    
-    @Override
-    public void setUp() {
-        AllTests_amp212.setUp();
     }
 }

@@ -19,8 +19,11 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_bolivia_component_code AS SELECT a.amp_activity_id, c.code FROM amp_activity_components a, amp_components c WHERE (a.amp_component_id = c.amp_component_id) ORDER BY a.amp_activity_id;;;
-        		</lang>
+				CREATE OR REPLACE VIEW v_bolivia_component_code AS
+				SELECT c.amp_activity_id, c.code
+				FROM amp_components c
+				ORDER BY c.amp_activity_id
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

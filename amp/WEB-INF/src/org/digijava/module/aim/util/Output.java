@@ -12,6 +12,8 @@ public class Output {
 
     private Boolean translateValue = Boolean.FALSE;
     
+    private boolean deletedValues = false;
+    
     public String[] getTitle() {
         return title;
     }
@@ -100,4 +102,13 @@ public class Output {
         }
         return retVal;
     }
+
+    public boolean hasDeletedValues() {
+        return deletedValues;
+    }
+
+    public void setDeletedValues(boolean deletedValues) {
+        this.deletedValues = deletedValues;
+    }
+    
 }

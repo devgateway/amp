@@ -26,6 +26,7 @@ import org.digijava.module.esrigis.form.StructuresImporterForm;
 import org.digijava.module.esrigis.helpers.DbHelper;
 
 import java.util.Collections;
+import java.util.HashSet;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -68,12 +69,13 @@ public class StructuresImporter extends Action {
                             firstLine = false;
                         }else if(nextLine.length>1){
                             sform.setErrors(errors2);
+                            String ampId = nextLine[0].trim();
                             AmpStructure st = new AmpStructure();
                             st.setTitle(nextLine[1]);
                             st.setLatitude(nextLine[2]);
                             st.setLongitude(nextLine[3]);
                             st.setType(DbHelper.getStructureTypesByName(nextLine[4].trim()));
-                            st.setActivities(DbHelper.getActivityByAmpId(nextLine[0].trim()));
+                            st.setActivities(new HashSet<>(Arrays.asList(DbHelper.getActivityByAmpId(ampId))));
                             st.setDescription(nextLine[5].trim());
                             st.setCreationdate(new Timestamp(System.currentTimeMillis()));
                             if (!"".equalsIgnoreCase(st.getTitle()) && st.getType()!=null && st.getActivities().size()!=0){

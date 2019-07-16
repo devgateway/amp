@@ -3,7 +3,7 @@
 
     <!-- Virtual file system where the repository stores global state -->
     <FileSystem class="org.apache.jackrabbit.core.fs.db.JNDIDatabaseFileSystem">
-        <param name="dataSourceLocation" value="java:comp/env/ampDS" />
+        <param name="dataSourceLocation" value="java:comp/env/jcrDS" />
         <param name="schemaObjectPrefix" value="repfsgs_" />
 	<param name="schema" value="postgresql" />
     </FileSystem>
@@ -30,15 +30,15 @@
     
         <!-- Virtual file system for the workspace -->
         <FileSystem class="org.apache.jackrabbit.core.fs.db.JNDIDatabaseFileSystem">
-            <param name="dataSourceLocation" value="java:comp/env/ampDS" />
+            <param name="dataSourceLocation" value="java:comp/env/jcrDS" />
         	<param name="schemaObjectPrefix" value="repfsws_" />
 		<param name="schema" value="postgresql" />
         </FileSystem>
         
         
         <!-- Persistence Manager for the workspace -->
-        <PersistenceManager class="org.apache.jackrabbit.core.state.db.JNDIDatabasePersistenceManager" >
-        	<param name="dataSourceLocation" value="java:comp/env/ampDS" />
+        <PersistenceManager class="org.apache.jackrabbit.core.persistence.db.JNDIDatabasePersistenceManager" >
+        	<param name="dataSourceLocation" value="java:comp/env/jcrDS" />
         	<param name="schemaObjectPrefix" value="reppm_" />
         	<param name="externalBLOBs" value="false" />
 		<param name="schema" value="postgresql" />
@@ -72,14 +72,14 @@
     
         <!-- Virtual file system for versioning -->
         <FileSystem class="org.apache.jackrabbit.core.fs.db.JNDIDatabaseFileSystem">
-            <param name="dataSourceLocation" value="java:comp/env/ampDS" />
+            <param name="dataSourceLocation" value="java:comp/env/jcrDS" />
         	<param name="schemaObjectPrefix" value="repfsver_" />
 		<param name="schema" value="postgresql" />
         </FileSystem>
         
         <!-- Persistence Manager for versioning -->
-        <PersistenceManager class="org.apache.jackrabbit.core.state.db.JNDIDatabasePersistenceManager" >
-        	<param name="dataSourceLocation" value="java:comp/env/ampDS" />
+        <PersistenceManager class="org.apache.jackrabbit.core.persistence.db.JNDIDatabasePersistenceManager" >
+        	<param name="dataSourceLocation" value="java:comp/env/jcrDS" />
         	<param name="schemaObjectPrefix" value="reppmver_" />
         	<param name="externalBLOBs" value="false" />
 		<param name="schema" value="postgresql" />

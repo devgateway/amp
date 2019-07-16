@@ -33,26 +33,19 @@ import java.security.Policy;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
-import org.digijava.kernel.ampapi.endpoints.security.SecurityService;
 import org.digijava.kernel.config.moduleconfig.ModuleConfig;
 import org.digijava.kernel.exception.IncompatibleEnvironmentException;
 import org.digijava.kernel.mail.scheduler.MailSpoolManager;
@@ -67,10 +60,7 @@ import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.translation.util.HashKeyPatch;
 import org.digijava.module.xmlpatcher.core.SimpleSQLPatcher;
-import org.hibernate.jdbc.Work;
 
 /**
  * Parses digi.xml configuration file,
@@ -143,8 +133,8 @@ public class ConfigLoaderListener
             checkMemoryAllocation( sce.getServletContext().getRealPath("/compat.properties"));
             
             checkOtherVMParameters();
-          
-            SiteCache.getInstance();
+
+            emulateOpenSessionInView(SiteCache::getInstance);
             DigiPolicy policy = new DigiPolicy();
             policy.install();
 
@@ -168,7 +158,6 @@ public class ConfigLoaderListener
             ViewConfigFactory.initialize(sce.getServletContext());
             
             // patches translations to hash code keys if this is not already done. 
-            HashKeyPatch.patchTranslationsIfNecessary();
             tats = new TrnAccesTimeSaver();
             exec = Executors.newSingleThreadExecutor();
             exec.execute(tats);
@@ -190,6 +179,23 @@ public class ConfigLoaderListener
         } catch (Exception e) {
             logger.error("Failed to write error message to startup log: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * We're emulating open session in view as if the code was executed from an http request.
+     * This is done in order to avoid deadlocks.
+     * @param runnable the runnable to execute with open session in view context
+     */
+    private void emulateOpenSessionInView(Runnable runnable) {
+        try {
+            runnable.run();
+        } catch (RuntimeException e) {
+            logger.error("Exception while emulating open session in view.", e);
+            PersistenceManager.rollbackCurrentSessionTx();
+            throw e;
+        } finally {
+            PersistenceManager.endSessionLifecycle();
         }
     }
 

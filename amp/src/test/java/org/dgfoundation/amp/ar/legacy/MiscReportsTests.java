@@ -3,28 +3,14 @@ package org.dgfoundation.amp.ar.legacy;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.MetaInfoSet;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
+import org.junit.Test;
 
-public class MiscReportsTests extends ReportsTestCase
-{
-    public MiscReportsTests(String name)
-    {
-        super(name);
-    }
-    
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite(MiscReportsTests.class.getName());
-        suite.addTest(new MiscReportsTests("testMetaInfoInHashes"));
-        suite.addTest(new MiscReportsTests("testMetaInfoSet"));
-        return suite;
-    }
-    
+public class MiscReportsTests extends ReportsTestCase {
+
+    @Test
     public void testMetaInfoSet()
     {
         MetaInfoSet mis = new MetaInfoSet();
@@ -36,7 +22,8 @@ public class MiscReportsTests extends ReportsTestCase
         assertEquals("value_2", mis.getMetaInfo("cat").getValue());
         assertEquals(1, mis.size());
     }
-    
+
+    @Test
     public void testMetaInfoInHashes()
     {
         MetaInfo<String> mi11 = new MetaInfo<String>("cat_1", "val_1");

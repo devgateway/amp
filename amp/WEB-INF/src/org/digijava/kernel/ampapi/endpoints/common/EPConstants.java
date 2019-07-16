@@ -46,6 +46,7 @@ public class EPConstants {
     public static final String SORTING = "sorting";
     public static final String SHOW_EMPTY_ROWS = "show_empty_rows";
     public static final String SHOW_EMPTY_COLUMNS = "show_empty_cols"; // this is for column groups (quarter, year)
+    public static final String SHOW_ORIGINAL_CURRENCY = "show_original_currency";
     public static final String DO_ROW_TOTALS = "rowTotals";
     public static final String FORCE_HEADERS = "forceHeaders";
     public static final String PROJECT_TYPE = "projectType";
@@ -99,7 +100,8 @@ public class EPConstants {
     public static final String DETAILS_FLAT = "detail-flat";
     public static final String FULL_ENABLED_PATHS = "full-enabled-paths";
     public static final String FM_ENABLED = "__enabled";
-    
+    public static final String FM_PATHS_FILTER = "fm-paths";
+
     // menu constants
     public static final String MENU_NAME = "name"; 
     public static final String MENU_TOOLTIP = "tooltip";
@@ -138,5 +140,7 @@ public class EPConstants {
     public static final String TAB_LOCATIONS = "Location";
     public static final String TAB_OTHER= "Other";
     public static final String TAB_UNASSIGNED= "Unassigned";
-    
+
+    public static final String ISO8601_DATE_AND_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+    public static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd";
 }

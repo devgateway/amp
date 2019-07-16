@@ -31,8 +31,9 @@ public class MapsConfigurationForm extends ActionForm {
 
 
     private boolean reset;
-    
-    
+    private String legendNotes;
+
+
     public FormFile getLegend() {
         return legend;
     }
@@ -132,6 +133,7 @@ public class MapsConfigurationForm extends ActionForm {
             this.legend = null;
             this.configName = null;
             this.count=null;
+            this.legendNotes = null;
         }
     }
     public void setReset(boolean reset) {
@@ -149,4 +151,11 @@ public class MapsConfigurationForm extends ActionForm {
         this.count = count;
     }
 
+    public void setLegendNotes(String legendNotes) {
+        this.legendNotes = legendNotes;
+    }
+
+    public String getLegendNotes() {
+        return legendNotes;
+    }
 }

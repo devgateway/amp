@@ -5,15 +5,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.node.POJONode;
@@ -22,7 +22,6 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.AmountsUnits;
@@ -34,7 +33,6 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -56,6 +54,7 @@ import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -64,6 +63,7 @@ import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.HibernateException;
@@ -123,19 +123,21 @@ public class LocationService {
             // If the admin level is country we filter only to show projects at
             // the country of the current installation
             final ValueWrapper<String> countryId = new ValueWrapper<String>("");
-            final ValueWrapper<String> countryGeoCode = new ValueWrapper<String>("");
-            final ValueWrapper<String> countryName = new ValueWrapper<String>("");
-            PersistenceManager.getSession().doWork(new Work() {
-                public void execute(Connection conn) throws SQLException {
-                    String countryIdQuery = "select acvl.id,acvl.location_name from amp_category_value_location acvl,amp_global_settings gs "
-                            + " where acvl.iso=gs.settingsvalue  " + " and gs.settingsname ='Default Country'";
-                    RsInfo rsi = SQLUtils.rawRunQuery(conn, countryIdQuery, null);
-                    if (rsi.rs.next()) {
-                        countryId.value = rsi.rs.getString(1);
-                        countryName.value = rsi.rs.getString(2);
-                    }
-                    rsi.close();
+            final ValueWrapper<String> countryName = new ValueWrapper<>("");
+            PersistenceManager.getSession().doWork(conn -> {
+                String countryIdQuery = "select acvl.id,acvl.location_name from amp_category_value_location acvl,"
+                        + "amp_global_settings gs  ,amp_category_value acv "
+                        + "where acvl.iso=gs.settingsvalue and gs.settingsname ='%s' "
+                        + "and acvl.parent_category_value=acv.id "
+                        + "and acv.category_value = 'Country' ";
+                RsInfo rsi = SQLUtils.rawRunQuery(conn, String.format(countryIdQuery,
+                        GlobalSettingsConstants.DEFAULT_COUNTRY),
+                        null);
+                if (rsi.rs.next()) {
+                    countryId.value = rsi.rs.getString(1);
+                    countryName.value = rsi.rs.getString(2);
                 }
+                rsi.close();
             });
 
             filterRules.addFilterRule(new ReportColumn(ColumnConstants.COUNTRY), new FilterRule(countryId.value, true));
@@ -393,10 +395,20 @@ public class LocationService {
         try {
             fgj.geometry = getGeometry(structure);
             fgj.id = structure.getAmpStructureId().toString();
-            fgj.properties.put("title", new TextNode(structure.getTitle()));
+
+            fgj.properties.put("title", new TextNode(StringEscapeUtils.escapeHtml(structure.getTitle())));
             if (structure.getDescription() != null && !structure.getDescription().trim().equals("")) {
-                fgj.properties.put("description", new TextNode(structure.getDescription()));
+                fgj.properties.put("description", new TextNode(
+                        StringEscapeUtils.escapeHtml(structure.getDescription())));
             }
+            
+            if (structure.getStructureColor() != null) { 
+                AmpCategoryValue cValue = structure.getStructureColor();
+                if (isValidColor(cValue.getValue())) {
+                    fgj.properties.put("color", new TextNode(TranslatorWorker.translateText(cValue.getValue())));  
+                }                
+            }            
+            
             Set<AmpActivityVersion> av = structure.getActivities();
             List<Long> actIds = new ArrayList<Long>();
 
@@ -409,12 +421,24 @@ public class LocationService {
             logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
                     + structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "
                     + structure.getTitle());
+            
+            return null;
         }
 
         return fgj;
 
     }
 
+    private static boolean isValidColor(String color) {
+        if (!color.contains(GisConstants.GIS_STRUCTURE_COLOR_DELIMITER)) {
+            return false;
+        }
+
+        String hex = color.split(GisConstants.GIS_STRUCTURE_COLOR_DELIMITER)[0];
+        Matcher matcher = GisConstants.HEX_PATTERN.matcher(hex);
+        return matcher.matches();
+    }
+    
     private static GeoJSON getGeometry(AmpStructure structure) {
         String shape = StringUtils.isEmpty(structure.getShape()) ? GisConstants.GIS_STRUCTURE_POINT
                 : structure.getShape();

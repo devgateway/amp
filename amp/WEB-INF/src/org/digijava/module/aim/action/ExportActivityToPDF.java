@@ -75,6 +75,7 @@ import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
@@ -143,6 +144,7 @@ public class ExportActivityToPDF extends Action {
     private static final int AMOUNT_COLUMN_WIDTH = 87;
     private static final float SUBTOTAL_BORDER_TOP_WIDTH = 0.5f;
     private static final int ARRAY_IDX_3 = 3;
+    private static final int SYMBOL_INDENT = 20;
     
     private static Logger logger = Logger.getLogger(ExportActivityToPDF.class);
 
@@ -1286,12 +1288,20 @@ public class ExportActivityToPDF extends Action {
             if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section")){
                 buildIssuesPart(myForm, mainLayout,ampContext,session);
             }
-
+    
             /**
              * related documents
              */
             if(FeaturesUtil.isVisibleModule("/Activity Form/Related Documents")){
                 buildRelatedDocsPart(myForm, mainLayout, event,ampContext);
+            }
+    
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Regional Observations")) {
+                buildRegionalObservationsPart(myForm, mainLayout);
+            }
+    
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Line Ministry Observations")) {
+                buildLineMinistryObservationsPart(myForm, mainLayout);
             }
 
             /**
@@ -1460,7 +1470,7 @@ public class ExportActivityToPDF extends Action {
             /**
              * Activity Last Updated by
              */
-            if (FeaturesUtil.isVisibleField("Activity Last Updated by")) {
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Last Updated by")) {
                 columnName = TranslatorWorker.translateText("Activity last updated by");
                 createGeneralInfoRow(mainLayout, columnName, identification.getModifiedBy().getUser().getFirstNames() + " " + identification.getModifiedBy().getUser().getLastName());
             }
@@ -1468,7 +1478,7 @@ public class ExportActivityToPDF extends Action {
             /**
              * Activity updated on
              */
-            if(FeaturesUtil.isVisibleField("Activity Updated On")){
+            if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Updated On")){
                 columnName=TranslatorWorker.translateText("Activity updated on");
                 createGeneralInfoRow(mainLayout,columnName,identification.getUpdatedDate());
             }
@@ -1914,7 +1924,137 @@ public class ExportActivityToPDF extends Action {
         }
         mainLayout.addCell(issuesCell2);
     }
-
+    
+    private void buildRegionalObservationsPart(EditActivityForm myForm, PdfPTable mainLayout)
+            throws WorkerException {
+        ArrayList<Issues> regObs = myForm.getRegionalObservations().getIssues();
+        if (regObs == null || regObs.isEmpty()) {
+            return;
+        }
+        
+        PdfPCell regObsTitleCell = new PdfPCell();
+        regObsTitleCell.setBackgroundColor(BACKGROUND_COLOR);
+        regObsTitleCell.setBorder(0);
+        
+        Paragraph p1;
+        p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("Regional Observations")), titleFont);
+        p1.setAlignment(Element.ALIGN_RIGHT);
+        
+        regObsTitleCell.addElement(p1);
+        mainLayout.addCell(regObsTitleCell);
+        
+        PdfPCell regObsValuesCell = new PdfPCell();
+        regObsValuesCell.setBackgroundColor(BACKGROUND_COLOR_WHITE);
+        regObsValuesCell.setBorder(0);
+        
+        String regObsModulePath = "/Activity Form/Regional Observations/Observation";
+        String regObsDatePath = regObsModulePath + "/Date";
+        String regObsMeasurePath = regObsModulePath + "/Measure";
+        String regObsActorPath = regObsMeasurePath + "/Actor";
+        
+        for (Issues issue : regObs) {
+            com.lowagie.text.List issuesList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+            issuesList.setListSymbol(new Chunk("\u2022"));
+            String issueName = issue.getName();
+            if (FeaturesUtil.isVisibleModule(regObsDatePath)) {
+                issueName += " \t" + issue.getIssueDate();
+            }
+            
+            ListItem issueItem = new ListItem(new Phrase(issueName, plainFont));
+            issuesList.add(issueItem);
+            if (issue.getMeasures() != null && issue.getMeasures().size() > 0
+                    && FeaturesUtil.isVisibleModule(regObsMeasurePath)) {
+                com.lowagie.text.List measuresSubList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+                measuresSubList.setListSymbol("-");
+                
+                for (Measures measure : issue.getMeasures()) {
+                    ListItem measureItem = new ListItem(new Phrase(measure.getName(), plainFont));
+                    measuresSubList.add(measureItem);
+                    
+                    if (measure.getActors() != null && measure.getActors().size() > 0
+                            && FeaturesUtil.isVisibleModule(regObsActorPath)) {
+                        com.lowagie.text.List actorsSubList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+                        actorsSubList.setListSymbol(new Chunk("\u2022"));
+                        
+                        for (AmpActor actor : measure.getActors()) {
+                            ListItem actorItem = new ListItem(new Phrase(actor.getName(), plainFont));
+                            actorsSubList.add(actorItem);
+                        }
+                        measuresSubList.add(actorsSubList);
+                    }
+                }
+                issuesList.add(measuresSubList);
+            }
+            regObsValuesCell.addElement(issuesList);
+        }
+        mainLayout.addCell(regObsValuesCell);
+    }
+    
+    private void buildLineMinistryObservationsPart(EditActivityForm myForm, PdfPTable mainLayout)
+            throws WorkerException {
+        ArrayList<Issues> lmo = myForm.getLineMinistryObservations().getIssues();
+        if (lmo == null || lmo.isEmpty()) {
+            return;
+        }
+    
+        PdfPCell lmoTitleCell = new PdfPCell();
+        lmoTitleCell.setBackgroundColor(BACKGROUND_COLOR);
+        lmoTitleCell.setBorder(0);
+    
+        Paragraph p1;
+        p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("Line Ministry Observations")), titleFont);
+        p1.setAlignment(Element.ALIGN_RIGHT);
+    
+        lmoTitleCell.addElement(p1);
+        mainLayout.addCell(lmoTitleCell);
+    
+        PdfPCell lmoValuesCell = new PdfPCell();
+        lmoValuesCell.setBackgroundColor(BACKGROUND_COLOR_WHITE);
+        lmoValuesCell.setBorder(0);
+    
+        String lmoModulePath = "/Activity Form/Line Ministry Observations/Observation";
+        String lmoDatePath = lmoModulePath + "/Date";
+        String lmoMeasurePath = lmoModulePath + "/Measure";
+        String lmoActorPath = lmoMeasurePath + "/Actor";
+    
+        for (Issues issue : lmo) {
+            com.lowagie.text.List issuesList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+            issuesList.setListSymbol(new Chunk("\u2022"));
+            String issueName = issue.getName();
+            if (FeaturesUtil.isVisibleModule(lmoDatePath)) {
+                issueName += " \t" + issue.getIssueDate();
+            }
+            
+            ListItem issueItem = new ListItem(new Phrase(issueName, plainFont));
+            issuesList.add(issueItem);
+            if (issue.getMeasures() != null && issue.getMeasures().size() > 0
+                    && FeaturesUtil.isVisibleModule(lmoMeasurePath)) {
+                com.lowagie.text.List measuresSubList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+                measuresSubList.setListSymbol("-");
+                
+                for (Measures measure : issue.getMeasures()) {
+                    ListItem measureItem = new ListItem(new Phrase(measure.getName(), plainFont));
+                    measuresSubList.add(measureItem);
+                    
+                    if (measure.getActors() != null && measure.getActors().size() > 0
+                            && FeaturesUtil.isVisibleModule(lmoActorPath)) {
+                        com.lowagie.text.List actorsSubList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+                        actorsSubList.setListSymbol(new Chunk("\u2022"));
+                        
+                        for (AmpActor actor : measure.getActors()) {
+                            ListItem actorItem = new ListItem(new Phrase(actor.getName(), plainFont));
+                            actorsSubList.add(actorItem);
+                        }
+                        measuresSubList.add(actorsSubList);
+                    }
+                }
+                issuesList.add(measuresSubList);
+            }
+            lmoValuesCell.addElement(issuesList);
+        }
+        mainLayout.addCell(lmoValuesCell);
+    }
+    
     private void buildCostingPart(HttpServletRequest request, Long actId,PdfPTable mainLayout,ServletContext ampContext) throws WorkerException, AimException {
         int fmVisibleFieldsCounter=0;
         String [] costingFmfields={"Costing Activity Name","Costing Total Cost","Costing Total Contribution"};

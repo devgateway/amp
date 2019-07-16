@@ -72,7 +72,6 @@ public class AmpEstimatedDonorDisbursementsFormTableFeature extends
             protected void onPopulateItem(
                     org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
                 item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
-                addFreezingvalidator(item);
                 AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
                 item.add(amountComponent);
                 addFreezingvalidator(item);
@@ -133,7 +132,7 @@ public class AmpEstimatedDonorDisbursementsFormTableFeature extends
                     protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {
                         AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
                         super.onClick(target);
-                        parent.getFundingInfo().checkChoicesRequired(list.getCount());
+                        parent.getFundingInfo().configureRequiredFields();
                         target.add(parent.getFundingInfo());
                         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                         target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

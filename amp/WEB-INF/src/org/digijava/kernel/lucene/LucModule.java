@@ -8,7 +8,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Hit;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.impl.org.LucOrganisationModule;
 import org.digijava.module.help.lucene.LucHelpModule;
@@ -114,9 +113,9 @@ public interface LucModule<E> extends Serializable {
     /**
      * Converts one hit object to one bean of type E.
      * This method knows how to read field values from hit and build from it object of E class.
-     * @param hit lucene search result - one hit.
+     * @param scoreDoc lucene search result - one scoreDoc.
      * @return bean of E
      * @throws IOException
      */
-    E hitToItem(Hit hit) throws IOException;
+    E luceneDocToItem(AmpLuceneDoc luceneDoc) throws IOException;
 }

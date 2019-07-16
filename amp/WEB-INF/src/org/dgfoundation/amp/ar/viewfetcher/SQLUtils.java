@@ -246,6 +246,25 @@ public class SQLUtils {
     }
     
     /**
+     * fetches an ArrayList of Strings
+     * @param connection
+     * @param query
+     * @return
+     */
+    public static List<String> fetchStrings(Connection connection, String query) {
+        List<String> res = new ArrayList<>();
+        try (RsInfo rsi = rawRunQuery(connection, query, null)) {
+            while (rsi.rs.next()) {
+                res.add(rsi.rs.getString(1));
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        
+        return res;
+    }
+    
+    /**
      * runs a query and returns a list of the nth elements in each of the rows
      * @param connection
      * @param query

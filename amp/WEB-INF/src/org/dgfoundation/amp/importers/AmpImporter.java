@@ -63,8 +63,8 @@ public abstract class AmpImporter {
         } catch (Exception e) {
             logger.error("error while running import on " + this.getClass().getName(), e);
         }
-        PersistenceManager.endSessionLifecycle();
         PersistenceManager.closeQuietly(fr);
+        PersistenceManager.endSessionLifecycle();
     }
 
     protected abstract String getFileType();

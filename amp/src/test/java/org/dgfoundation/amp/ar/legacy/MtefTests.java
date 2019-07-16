@@ -1,70 +1,29 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import java.util.HashSet;
-import java.util.List;
-
-import org.apache.axis.handlers.soap.MustUnderstandChecker;
-import org.dgfoundation.amp.ar.AllTests_LegacyReports;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
 import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.*;
-import org.digijava.kernel.persistence.HibernateClassLoader;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.util.DigiConfigManager;
-import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.hibernate.Query;
-
-import org.hibernate.cfg.*;
+import org.junit.Test;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 /**
  * testcase for Directed Disbursements (AMP-15337)
- * this can only be run IFF amp has been started standalone. For this, AllTests.setUp() should have been run previously (typically called by AllTests.suite() as part of the JUnit discovery process)
+ * this can only be run IFF amp has been started standalone. For this, AllTests.initialize() should have been run previously (typically called by AllTests.suite() as part of the JUnit discovery process)
  * @author Dolghier Constantin
  *
  */
-public class MtefTests extends ReportsTestCase
-{
-    public MtefTests(String name) {
-        super(name);
-    }
-        
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite(AllTests_LegacyReports.class.getName());
-        suite.addTest(new MtefTests("testAllMtef"));
-        suite.addTest(new MtefTests("testPlainMtef"));
-        suite.addTest(new MtefTests("testMtefByDonorAgency"));
-        suite.addTest(new MtefTests("testMtefByImplementingAgency"));
-        suite.addTest(new MtefTests("testMtefByExecutingAgency"));
-        
-        suite.addTest(new MtefTests("testPurePlainMtef"));
-        suite.addTest(new MtefTests("testPureMtefByDonorAgency"));
-        suite.addTest(new MtefTests("testPureMtefByImplementingAgency"));
-        suite.addTest(new MtefTests("testPureMtefByExecutingAgency"));
-        
-        suite.addTest(new MtefTests("testPurePlainMtefEUR"));
-        suite.addTest(new MtefTests("testPurePlainMtefEURInThousands"));
-        suite.addTest(new MtefTests("testPurePlainMtefEURInThousandsMoreActivities"));
+public class MtefTests extends ReportsTestCase {
 
-        return suite;
-    }       
-        
-    
     /**
      * a flat report containing RealDisbursements of a single activity
      */
+    @Test
     public void testAllMtef()
     {
         // ========================= one more report ===============================
@@ -85,7 +44,8 @@ public class MtefTests extends ReportsTestCase
         
         runReportTest("all Mtef report", "AMP-15794", new String[] {"Eth Water", "mtef activity 1", "mtef activity 2"}, fddr_correct);
     }
-    
+
+    @Test
     public void testPlainMtef()
     {
         GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16100-flat-mtefs", 
@@ -107,6 +67,7 @@ public class MtefTests extends ReportsTestCase
         runReportTest("all Mtef, implicit filter by Donor", "AMP-16100-flat-mtefs", new String[] {"Test MTEF directed"}, fddr_correct);
     }
 
+    @Test
     public void testMtefByDonorAgency()
     {
         GroupReportModel fddr_correct =
@@ -131,6 +92,7 @@ public class MtefTests extends ReportsTestCase
         runReportTest("all Mtef, by Donor", "AMP-16100-mtef-by-donor-agency", new String[] {"Test MTEF directed"}, fddr_correct);
     }
 
+    @Test
     public void testMtefByImplementingAgency()
     {
         GroupReportModel fddr_correct =
@@ -155,6 +117,7 @@ public class MtefTests extends ReportsTestCase
         runReportTest("all Mtef, by Implementing Agency", "AMP-16100-mtef-projection-by-impl", new String[] {"Test MTEF directed"}, fddr_correct);
     }
 
+    @Test
     public void testMtefByExecutingAgency()
     {
         GroupReportModel fddr_correct =
@@ -179,6 +142,7 @@ public class MtefTests extends ReportsTestCase
         runReportTest("all Mtef, by Executing Agency", "AMP-16100-mtef-projections-by-exec", new String[] {"Test MTEF directed"}, fddr_correct);
     }
 
+    @Test
     public void testPurePlainMtef()
     {
         GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16100-flat-mtefs", 
@@ -200,6 +164,7 @@ public class MtefTests extends ReportsTestCase
         runReportTest("pure Mtef, implicit filter by Donor", "AMP-16100-flat-mtefs", new String[] {"Pure MTEF Project"}, fddr_correct);
     }
 
+    @Test
     public void testPureMtefByDonorAgency()
     {
         GroupReportModel fddr_correct =
@@ -224,6 +189,7 @@ public class MtefTests extends ReportsTestCase
         runReportTest("pure Mtef, by Donor", "AMP-16100-mtef-by-donor-agency", new String[] {"Pure MTEF Project"}, fddr_correct);
     }
 
+    @Test
     public void testPureMtefByImplementingAgency()
     {
         GroupReportModel fddr_correct = GroupReportModel.empty("AMP-16100-mtef-projection-by-impl");
@@ -231,6 +197,7 @@ public class MtefTests extends ReportsTestCase
         runReportTest("pure Mtef, by Implementing Agency", "AMP-16100-mtef-projection-by-impl", new String[] {"Pure MTEF Project"}, fddr_correct);
     }
 
+    @Test
     public void testPureMtefByExecutingAgency()
     {
         GroupReportModel fddr_correct =
@@ -255,6 +222,7 @@ public class MtefTests extends ReportsTestCase
         runReportTest("pure Mtef, by Executing Agency", "AMP-16100-mtef-projections-by-exec", new String[] {"Pure MTEF Project"}, fddr_correct);
     }
 
+    @Test
     public void testPurePlainMtefEUR()
     {
         GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16100-flat-mtefs-eur", 
@@ -276,6 +244,7 @@ public class MtefTests extends ReportsTestCase
         runReportTest("pure Mtef, implicit filter by Donor, EUR", "AMP-16100-flat-mtefs-eur", new String[] {"Pure MTEF Project"}, fddr_correct);
     }
 
+    @Test
     public void testPurePlainMtefEURInThousands()
     {
         GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16100-flat-mtefs-eur", 
@@ -302,7 +271,8 @@ public class MtefTests extends ReportsTestCase
         };
         runReportTest("pure Mtef, implicit filter by Donor, EUR, THOUSANDS", "AMP-16100-flat-mtefs-eur", new String[] {"Pure MTEF Project"}, fddr_correct, modifier, null);
     }
-    
+
+    @Test
     public void testPurePlainMtefEURInThousandsMoreActivities()
     {
         GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16100-flat-mtefs-eur",

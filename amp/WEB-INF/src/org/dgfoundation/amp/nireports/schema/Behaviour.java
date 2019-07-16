@@ -202,4 +202,13 @@ public interface Behaviour<V extends NiOutCell> {
      * @return
      */
     public boolean hasPercentages();
+    
+    /**
+     * whether the column/measure can be split by currency
+     * 
+     * @return
+     */
+    default boolean canBeSplitByCurrency() {
+        return false;
+    }
 }

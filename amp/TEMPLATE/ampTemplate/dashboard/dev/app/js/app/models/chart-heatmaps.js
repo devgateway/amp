@@ -40,6 +40,8 @@ module.exports = ChartModel.extend({
 			// The EP for heatmaps is different than the other charts because it returns an empty object, so we set explicitly some fields to empty value. 
 			data.yDataSet = [];
 			data.xDataSet = [];
+			data.yDataSetIds = [];
+			data.xDataSetIds = [];
 			data.matrix = [];
 			data.xTotals = 0;
 			data.yTotals = 0;
@@ -49,15 +51,19 @@ module.exports = ChartModel.extend({
 			data.yTotalCount = 0;
 		}		
 		self.values.x = data.xDataSet;
+		self.values.xid = data.xDataSetIds;
 		self.values.y = data.yDataSet;
+		self.values.yid = data.yDataSetIds;
 		for (var i = 0; i < data.yDataSet.length; i++) {
 			for (var j = 0; j < data.xDataSet.length; j++) {
 				if (data.matrix[i] !== null) {
 					var value = data.matrix[i][j] !== null ? data.matrix[i][j] : {p: -1, amount: '0'};
-					var row = {y: i + 1, x: j + 1, value: value.p, amount: value.dv/*, yname: data.yDataSet[i], xname: data.xDataSet[i]*/}; //name is for tooltip
+					var row = {y: i + 1, x: j + 1, value: value.p, amount: value.dv, yid: data.yDataSetIds[i], xid: data.xDataSetIds[j]/*, yname:
+					 data.yDataSet[i],
+					 xname: data.xDataSet[i]*/}; //name is for tooltip
 					self.values.push(row);
 				} else {
-					self.values.push({y: i + 1, x: j + 1, value: -1, amount: "0"});
+					self.values.push({y: i + 1, x: j + 1, value: -1, amount: "0", yid: data.yDataSetIds[i], xid: data.xDataSetIds[j]});
 				}
 			}
 		}

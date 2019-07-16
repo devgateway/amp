@@ -74,6 +74,7 @@ public class IndicatorEPConstants {
     public static final String FIELD_UPDATED_ON = "updatedOn";
     public static final String FIELD_CREATED_BY = "email";
     public static final String FIELD_ID = "id";
+    public static final String FIELD_ZERO_CATEGORY_ENABLED = "zeroCategoryEnabled";
 
     public static final String PAGE = "page";
     public static final String DATA = "data";

@@ -1,8 +1,8 @@
 package org.dgfoundation.amp.testutils;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.GroupReportData;
@@ -11,16 +11,15 @@ import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.um.exception.UMException;
+import org.junit.BeforeClass;
 
-import junit.framework.TestCase;
+public abstract class ReportsTestCase extends AmpTestCase {
 
-public abstract class ReportsTestCase extends AmpTestCase
-{
-    public ReportsTestCase(String name) {
-        super(name);
+    @BeforeClass
+    public static void staticSetUp() {
+        StandaloneAMPInitializer.initialize();
     }
-    
+
     /**
      * runs a single report test and compares the result with the expected cor 
      * @param testName - test name to be displayed in case of error

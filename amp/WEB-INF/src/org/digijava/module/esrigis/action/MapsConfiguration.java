@@ -75,6 +75,7 @@ public class MapsConfiguration extends DispatchAction {
             mapForm.setMapType(map.getMapType());
             mapForm.setMapSubType(map.getMapSubType());
             mapForm.setConfigName(map.getConfigName());
+            mapForm.setLegendNotes(map.getLegendNotes());
             // Rules for showing the two lists that define a map: type and subtype
             HashMap<Integer, String> mapTypeList = new HashMap<Integer, String>();
             //Add the currently selected one, plus any other that is not defined, for now, put everyting
@@ -128,6 +129,10 @@ public class MapsConfiguration extends DispatchAction {
         map.setGeoIdField(mapForm.getGeoId());
         map.setMapSubType(mapForm.getMapSubType());
         map.setMapType(mapForm.getMapType());
+        if (mapForm.getMapSubType().equals(MapConstants.MapSubType.INDICATOR)) {
+            //only if map is indicator we save the legend if its indicator
+            map.setLegendNotes(mapForm.getLegendNotes());
+        }
         if (mapForm.getLegend().getFileData().length > 0) map.setLegendImage(mapForm.getLegend().getFileData());
         map.setConfigName(mapForm.getConfigName());
         map.setCountField(mapForm.getCount());

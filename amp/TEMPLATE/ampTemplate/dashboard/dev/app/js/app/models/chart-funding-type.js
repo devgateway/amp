@@ -62,6 +62,7 @@ module.exports = ChartModel.extend({
       .map(function(s) {
         var cleanName = s.replace(/[ :.]/g, '');
         var localizedName = s;
+        var keyId;
         if (self.localizedLookup[chartName + cleanName]) {
           localizedName = self.localizedLookup[chartName + cleanName];
         }
@@ -69,13 +70,15 @@ module.exports = ChartModel.extend({
           key: localizedName,
           values: _(years).map(function(y) {
             var yearValue = _(y.values).findWhere({type: s});
+            keyId = yearValue.id;
             return {
               x: y.Year,
               y: yearValue && yearValue.amount || 0,
               z: yearValue && yearValue.formattedAmount || 0,
             };
           }),
-          disabled: (_.indexOf(self.get('seriesToExclude'),localizedName) != -1)
+          disabled: (_.indexOf(self.get('seriesToExclude'),localizedName) != -1),
+		  keyId: keyId
         };
       })
       .value();

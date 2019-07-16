@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards;
 
+import java.util.List;
+
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -8,18 +10,16 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-
-import net.sf.json.JSONObject;
 
 
 /**
@@ -142,7 +142,73 @@ public class EndPoints implements ErrorReportingEndpoint {
     public JsonBean getAdminLevelsTotals(JsonBean config,
             @PathParam("type") String type,
             @DefaultValue("5") @QueryParam("limit") Integer limit) {
-        return DashboardsService.getTops(type, limit, config);
+        //return DashboardsService.getTops(type, null, limit, config);
+        return new TopsChartService(config, type, limit).buildChartData();
+    }
+
+    /**
+     * Retrieve a list of projects by type query for selected id.
+     * </br>
+     * <dl>
+     * where Type (Chart type) :
+     *    do = Donor
+     *    re = Region
+     *    ps = Primary Sector
+     *    dg = Donor Group
+     * </br>
+     * The JSON object holds information regarding:
+     * <dt><b>totalRecords</b><dd> - number total of projects.
+     * <dt><b>values</b><dd> - array with a list of projects.
+     *     name - name of the project.
+     *     amount - amount of the project.
+     *     formattedAmount - formatted amount of the project.
+     *     id - id of the project.
+     * </dl></br></br>
+     *
+     * <h3>Sample Input:</h3><pre>
+     * {
+     *  "filters": {},
+     *  "settings": {
+     *      "funding-type": ["Actual Commitments","Actual Disbursements"],
+     *      "currency-code": "USD",
+     *      "calendar-id": "123",
+     *      "year-range": {
+     *          "from": "2014",
+     *          "to": "2015"
+     *      }
+     *  }
+     * }</pre>
+     * </br>
+     * <h3>Sample Output:</h3><pre>
+     * {
+     *     "totalRecords": 10,
+     *     "values": [{
+     *         "name": "Alimentation en eau de la ville d'Abidjan à partir de la nappe du Sud Comoé (Bonoua) - Phase I",
+     *         "amount": 104422920.000000000000,
+     *         "formattedAmount": "104 422 920",
+     *         "id": 19003
+     *     },
+     *  .....
+     *  {
+     *         "name": "Construction de l'autoroute Abidjan-Bassam",
+     *         "amount": 114777280.000000000000,
+     *         "formattedAmount": "114 777 280",
+     *         "id": 19111
+     *     }]
+     * }</pre>
+     *
+     * @param config a JSON object with the config
+     * @param type chart type
+     * @param id of the category to query the projects.
+     *
+     * @return a JSON objects with a list of projects
+     */
+    @POST
+    @Path("/tops/{type}/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "topsDataDetail")
+    public JsonBean getChartsDataDetail(JsonBean config, @PathParam("type") String type, @PathParam("id") Long id) {
+        return new TopsChartService(config, type, id).buildChartData();
     }
 
     /**
@@ -223,8 +289,68 @@ public class EndPoints implements ErrorReportingEndpoint {
     @Path("/aid-predictability")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "aidPredictability")
-    public JSONObject getAidPredictability(JsonBean filter) throws Exception {
+    public JsonBean getAidPredictability(JsonBean filter) throws Exception {
         return DashboardsService.getAidPredictability(filter);
+    }
+
+    /**
+     * Retrieve a list of projects by aid predictability year.
+     * </br>
+     * <dl>
+     * The JSON object holds information regarding:
+     * <dt><b>totalRecords</b><dd> - number total of projects.
+     * <dt><b>values</b><dd> - array with a list of projects.
+     *     name - name of the project.
+     *     amount - amount of the project.
+     *     formattedAmount - formatted amount of the project.
+     *     id - id of the project.
+     * </dl></br></br>
+     *
+     * <h3>Sample Input:</h3><pre>
+     * {
+     *  "filters": {},
+     *  "settings": {
+     *      "funding-type": ["Actual Commitments","Actual Disbursements"],
+     *      "currency-code": "USD",
+     *      "calendar-id": "123",
+     *      "year-range": {
+     *          "from": "2014",
+     *          "to": "2015"
+     *      }
+     *  }
+     * }</pre>
+     * </br>
+     * <h3>Sample Output:</h3><pre>
+     * {
+     *     "totalRecords": 10,
+     *     "values": [{
+     *         "name": "Alimentation en eau de la ville d'Abidjan à partir de la nappe du Sud Comoé (Bonoua) - Phase I",
+     *         "amount": 104422920.000000000000,
+     *         "formattedAmount": "104 422 920",
+     *         "id": 19003
+     *     },
+     *  .....
+     *  {
+     *         "name": "Construction de l'autoroute Abidjan-Bassam",
+     *         "amount": 114777280.000000000000,
+     *         "formattedAmount": "114 777 280",
+     *         "id": 19111
+     *     }]
+     * }</pre>
+     *
+     * @param filter a JSON with a filter and the settings
+     * @param year a year to query the projects
+     * @param measure
+     *
+     * @return a JSON objects with the projects list.
+     */
+    @POST
+    @Path("/aid-predictability/{year}/{measure}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "aidPredictabilityDataDetail")
+    public JsonBean getAidPredictabilityDataDetail(JsonBean filter, @PathParam("year") String year,
+            @PathParam("measure") String measure) {
+        return DashboardsService.getAidPredictability(filter, measure, year);
     }
 
     /**
@@ -317,7 +443,71 @@ public class EndPoints implements ErrorReportingEndpoint {
     //TODO: Implement Filters
     public JsonBean getfundingtype(JsonBean config,
             @DefaultValue("ac") @QueryParam("adjtype") String adjtype) {
-        return DashboardsService.fundingtype(adjtype,config);
+        return DashboardsService.getFundingType(adjtype, config);
+    }
+
+    /**
+     * Retrieve a list of projects by funding types year.
+     * </br>
+     * <dl>
+     * The JSON object holds information regarding:
+     * <dt><b>totalRecords</b><dd> - number total of projects.
+     * <dt><b>values</b><dd> - array with a list of projects.
+     *     name - name of the project.
+     *     amount - amount of the project.
+     *     formattedAmount - formatted amount of the project.
+     *     id - id of the project.
+     * </dl></br></br>
+     *
+     * </br>
+     * <h3>Sample Input:</h3><pre>
+     * {
+     *  "filters": {},
+     *  "settings": {
+     *      "funding-type": ["Actual Commitments","Actual Disbursements"],
+     *      "currency-code": "USD",
+     *      "calendar-id": "123",
+     *      "year-range": {
+     *          "from": "2014",
+     *          "to": "2015"
+     *      }
+     *  }
+     * }</pre>
+     * </br>
+     * <h3>Sample Output:</h3><pre>
+     * {
+     *     "totalRecords": 10,
+     *     "values": [{
+     *         "name": "Alimentation en eau de la ville d'Abidjan à partir de la nappe du Sud Comoé (Bonoua) - Phase I",
+     *         "amount": 104422920.000000000000,
+     *         "formattedAmount": "104 422 920",
+     *         "id": 19003
+     *     },
+     *  .....
+     *  {
+     *         "name": "Construction de l'autoroute Abidjan-Bassam",
+     *         "amount": 114777280.000000000000,
+     *         "formattedAmount": "114 777 280",
+     *         "id": 19111
+     *     }]
+     * }</pre>
+     *
+     * @param config a JSON object with the configuration that is going to be used by the report to get the funding-type
+     * @param adjtype a funding type
+     * @param year a year to query the projects
+     * @param id of the funding type
+     *
+     * @return a JSON objects with the projects list.
+     */
+    @POST
+    @Path("/ftype/{year}/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "ftypeDataDetail")
+    //TODO: Implement Filters
+    public JsonBean getfundingtypeDataDetail(JsonBean config,
+                                   @DefaultValue("ac") @QueryParam("adjtype") String adjtype, 
+                                   @PathParam("year") String year, @PathParam("id") Integer id) {
+        return DashboardsService.getFundingType(adjtype, config, year, id);
     }
 
     /**
@@ -531,6 +721,62 @@ public class EndPoints implements ErrorReportingEndpoint {
     public JsonBean getHeatMap(JsonBean config) {
         return new HeatMapService(config).buildHeatMap();
     }
+
+
+    /**
+     * Retrieve a list of projects query by xId and yId of Heat Map.
+     * </br>
+     * <dl>
+     * The JSON object holds information regarding:
+     * <dt><b>totalRecords</b><dd> - number total of projects.
+     * <dt><b>values</b><dd> - array with a list of projects.
+     *     name - name of the project.
+     *     amount - amount of the project.
+     *     formattedAmount - formatted amount of the project.
+     *     id - id of the project.
+     * </dl></br></br>
+     *
+     * <h3>Sample Input:</h3><pre>
+     * {
+     *  “xCount” : 25, // default 25, set -1 to no limit. +1 ("Others") will be added if more than that available
+     *  “yCount” : 10, // default 10, set -1 to no limit. +1 ("Others") will be added if more than that available
+     *  “xColumn” : “Primary Sector”, // must be OrigName
+     *  “yColumn” : “Donor Group”, // must be origName
+     *  “filters”: { ... }, // usual filters input
+     *  “settings” : { ... } // usual settings input, and Dashboard specific with Measure selection
+     * }</pre>
+     * </br>
+     * <h3>Sample Output:</h3><pre>
+     * {
+     *     "totalRecords": 10,
+     *     "values": [{
+     *         "name": "Alimentation en eau de la ville d'Abidjan à partir de la nappe du Sud Comoé (Bonoua) - Phase I",
+     *         "amount": 104422920.000000000000,
+     *         "formattedAmount": "104 422 920",
+     *         "id": 19003
+     *     },
+     *  .....
+     *  {
+     *         "name": "Construction de l'autoroute Abidjan-Bassam",
+     *         "amount": 114777280.000000000000,
+     *         "formattedAmount": "114 777 280",
+     *         "id": 19111
+     *     }]
+     * }</pre>
+     *
+     * @param config a JSON with the config
+     * @param xId id of the x dimention of Heat Map matrix.
+     * @param yId id of the y dimention of Heat Map matrix.
+     *
+     * @return a JSON objects with a list of projects
+     */
+    @POST
+    @Path("/heat-map/{type}/{xId}/{yId}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "heatMapDataDetail")
+    public JsonBean getHeatMapDataDetail(JsonBean config, @PathParam("xId") Long xId, @PathParam("yId") Long yId) {
+        return new HeatMapService(config, xId, yId).buildHeatMapDetail();
+    }
     
     /**
      * Provides possible HeatMap Configurations.
@@ -588,9 +834,9 @@ public class EndPoints implements ErrorReportingEndpoint {
      *     “name” : “Dark Red”
      *     }, …
      *     ]
-     * }</pre>
-     *
-     * @return a JSON object with the structure of HeatMap Administrative Settings
+     * }
+     * @implicitParam X-Auth-Token|string|header
+     * @return JSON structure of HeatMap Administrative Settings
      */
     @GET
     @Path("/heat-map/settings")
@@ -618,11 +864,11 @@ public class EndPoints implements ErrorReportingEndpoint {
      *         “1234” : [“Invalid color threshold”]
      *         ...
      *     }
-     * }</pre>
-     *
-     * @param config a JSON object with the config
-     *
-     * @return a JSON object empty on success, or result with errors
+     * }
+     * @implicitParam X-Auth-Token|string|header
+     * @param config
+     * @return
+     * @throws Exception 
      */
     @POST
     @Path("/heat-map/settings")

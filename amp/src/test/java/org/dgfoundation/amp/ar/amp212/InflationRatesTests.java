@@ -1,20 +1,17 @@
 package org.dgfoundation.amp.ar.amp212;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
-import org.dgfoundation.amp.algo.AlgoUtils;
+import javax.validation.ConstraintViolationException;
+
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.currency.CurrencyInflationUtil;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.currency.inflation.InflationRateGenerator;
 import org.dgfoundation.amp.mondrian.ReportingTestCase;
-import org.dgfoundation.amp.testutils.AmpRunnable;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
@@ -22,7 +19,6 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.calendar.util.CalendarUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.junit.Test;
 
@@ -38,33 +34,30 @@ public class InflationRatesTests extends ReportingTestCase {
     public final static List<String> activities = Arrays.asList(
             "TAC_activity_1", "Test MTEF directed", "Pure MTEF Project", "mtef activity 1", "Activity with both MTEFs and Act.Comms");
     
-    public InflationRatesTests() {
-        super("currency deflator tests");
-    }
-    
-    @Test
-    public void testValidator() {
+    @Test(expected = ConstraintViolationException.class)
+    public void testInvalidYear() {
         AmpCurrency usd = CurrencyUtil.getAmpcurrency("USD");
         AmpInflationRate impossibleYear = new AmpInflationRate(usd, DateTimeUtil.parseDate("1940-01-01", DP), -2.7);
-        shouldFailSaving(impossibleYear);
-        
-        AmpInflationRate impossibleInflation = new AmpInflationRate(usd, DateTimeUtil.parseDate("2010-01-01", DP), -999);
-        shouldFailSaving(impossibleInflation);
-        
-        AmpInflationRate noCurrencyGiven = new AmpInflationRate(null, DateTimeUtil.parseDate("2010-01-01", DP), 3.5);
-        shouldFailSaving(noCurrencyGiven);
+        saveInflation(impossibleYear);
     }
-    
-    @Test
-    public void shouldFailSaving(final AmpInflationRate inflationRate) {
-        // tests that Hibernate does not allow one to save invalid instances of AmpInflationRates
-        shouldFail(new AmpRunnable() {
-            @Override public void run() throws Exception {
-                PersistenceManager.getSession().save(inflationRate);
-                PersistenceManager.getSession().flush();
-            }
-        });
-        PersistenceManager.endSessionLifecycle(); // else the entity remains sticky in the session and unrelated flush()-es will fail
+
+    @Test(expected = ConstraintViolationException.class)
+    public void testImpossibleInflation() throws Exception {
+        AmpCurrency usd = CurrencyUtil.getAmpcurrency("USD");
+        AmpInflationRate impossibleInflation = new AmpInflationRate(usd, DateTimeUtil.parseDate("2010-01-01", DP), -999);
+        saveInflation(impossibleInflation);
+    }
+
+    @Test(expected = ConstraintViolationException.class)
+    public void testNoCurrencyGiven() throws Exception {
+        AmpInflationRate noCurrencyGiven = new AmpInflationRate(null, DateTimeUtil.parseDate("2010-01-01", DP), 3.5);
+        saveInflation(noCurrencyGiven);
+    }
+
+    private void saveInflation(final AmpInflationRate inflationRate) {
+        PersistenceManager.getSession().save(inflationRate);
+        PersistenceManager.getSession().flush();
+        PersistenceManager.endSessionLifecycle();
     }
     
     @Test

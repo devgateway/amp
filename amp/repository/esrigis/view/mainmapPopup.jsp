@@ -18,16 +18,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
     <!--The viewport meta tag is used to improve the presentation and behavior of the samples 
       on iOS devices-->
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
- 
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/> 
     <digi:ref href="/TEMPLATE/ampTemplate/css_2/leaflet.css" type="text/css" rel="stylesheet" />
+    <digi:ref href="/TEMPLATE/ampTemplate/tabs/css/jquery-ui.min.css" type="text/css" rel="stylesheet" />
     <digi:ref href="/TEMPLATE/ampTemplate/css_2/mappopupstyles.css" type="text/css" rel="stylesheet" />
+    <digi:ref href="/TEMPLATE/ampTemplate/css_2/amp-wicket.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"/>"></script>
-    
+    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"/>"></script>    
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/leaflet.js"/>"></script>
-    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/esri-leaflet.js"/>"></script>    
-     
+    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/esri-leaflet.js"/>"></script>      
      <!--Leaflet Draw-->      
      <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/Leaflet.draw.js"></script>
     <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/Leaflet.Draw.Event.js"></script>
@@ -66,6 +65,7 @@
     <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/edit/handler/Edit.Marker.js"></script>
     
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-ui-1.9.2.custom.min.js"/>"></script>
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mainmapPopup.js"/>"></script>
    	    
    	 <script type="text/javascript">
@@ -100,8 +100,25 @@
    <span id="custom-menu-wrapper">
    <ul class='custom-menu'>
 	  <li data-action="select"><digi:trn>Select</digi:trn></li>
-	  <li data-action="remove"><digi:trn>Remove</digi:trn></li>
+	  <li data-action="remove"><digi:trn>Remove</digi:trn></li>	  
 	</ul>
   </span>
+   <div id="locationTitleDialog"> 
+   <div id="errorMsg"></div>
+   
+    <label><digi:trn>Title</digi:trn></label><span class="required"> * </span><input id="locationTitle" type="text"/> </br>
+    <div>
+     
+     <div id="colors-section">
+     <label><digi:trn>Select a color</digi:trn></label>
+     <ul class="colors">	  
+	   
+	 </ul>
+     </div>
+    
+    </div>
+    
+      
+   </div>
   </body>
 </html>

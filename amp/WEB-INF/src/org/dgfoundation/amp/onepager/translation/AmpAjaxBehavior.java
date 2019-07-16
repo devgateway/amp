@@ -102,7 +102,7 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
                 newMsg.setLocale(locale.getLanguage());
                 translatorWorker.save(newMsg);
             }
-        } catch (WorkerException e1) {
+        } catch (Exception e1) {
             logger.error("Can't save translation: ", e1);
             message = message + "(not saved due to error!)";
         }
@@ -117,22 +117,32 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
         target.appendJavaScript(javascript);
     }
     
-    private void switchTranslatorMode(Request request, AjaxRequestTarget target){
-        ((AmpAuthWebSession) Session.get()).switchTranslatorMode();
-        
-        String id = request.getRequestParameters().getParameterValue("activity").toString();
-        ActivityGatekeeper.pageModeChange(id);
-        target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
-    }
+	private void switchTranslatorMode(Request request, AjaxRequestTarget target) {
+		((AmpAuthWebSession) Session.get()).switchTranslatorMode();
 
-    private void switchFMMode(Request request, AjaxRequestTarget target){
-        ((AmpAuthWebSession) Session.get()).switchFMMode();
-        
-        String id = request.getRequestParameters().getParameterValue("activity").toString();
-        ActivityGatekeeper.pageModeChange(id);
-        target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
-    }
-    
+		String id = request.getRequestParameters().getParameterValue("activity").toString();
+		ActivityGatekeeper.pageModeChange(id);
+		target.appendJavaScript(
+				getJsSwitchMode());
+	}
+
+	private void switchFMMode(Request request, AjaxRequestTarget target) {
+		((AmpAuthWebSession) Session.get()).switchFMMode();
+
+		String id = request.getRequestParameters().getParameterValue("activity").toString();
+		ActivityGatekeeper.pageModeChange(id);
+		target.appendJavaScript(
+				getJsSwitchMode());
+	}
+
+	private String getJsSwitchMode() {
+		StringBuffer js = new StringBuffer();
+		js.append("var newLoc=window.location.href;");
+		js.append("newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));");
+		js.append("window.location.replace(newLoc);");
+		return js.toString();
+	}
+
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         super.renderHead(component, response);

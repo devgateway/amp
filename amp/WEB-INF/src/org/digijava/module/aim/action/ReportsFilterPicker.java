@@ -1038,6 +1038,10 @@ public class ReportsFilterPicker extends Action {
         
         addDateFilter("Final Date for Contracting", "ActivityFinalContracting",
                 "Final Date for Contracting", filterForm.getDynamicActivityFinalContractingFilter(), "filter_activity_final_contracting_date_div", filterForm.getOtherCriteriaElements());
+    
+        addDateFilter("Actual Approval Date", "ActualApproval",
+                "Actual Approval Date", filterForm.getDynamicActualApprovalFilter(), "filter_actual_approval_date_div",
+                filterForm.getOtherCriteriaElements());
         
         addDateFilter("Proposed Approval Date", "ProposedApproval",
                 "Proposed Approval Date", filterForm.getDynamicProposedApprovalFilter(), "filter_proposed_approval_date_div", filterForm.getOtherCriteriaElements());
@@ -1408,7 +1412,13 @@ public class ReportsFilterPicker extends Action {
         arf.setDynIssueFilterAmount(filterForm.getDynamicIssueFilter().getAmount());
         arf.setDynIssueFilterOperator(filterForm.getDynamicIssueFilter().getOperator());
         arf.setDynIssueFilterXPeriod(filterForm.getDynamicIssueFilter().getxPeriod());
-
+    
+        arf.setFromActualApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromActualApprovalDate()));
+        arf.setToActualApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToActualApprovalDate()));
+        arf.setDynActualApprovalFilterCurrentPeriod(filterForm.getDynamicActualApprovalFilter().getCurrentPeriod());
+        arf.setDynActualApprovalFilterAmount(filterForm.getDynamicActualApprovalFilter().getAmount());
+        arf.setDynActualApprovalFilterOperator(filterForm.getDynamicActualApprovalFilter().getOperator());
+        arf.setDynActualApprovalFilterXPeriod(filterForm.getDynamicActualApprovalFilter().getxPeriod());
         arf.setFromProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromProposedApprovalDate()));
         arf.setToProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToProposedApprovalDate()));
         arf.setDynProposedApprovalFilterCurrentPeriod(filterForm.getDynamicProposedApprovalFilter().getCurrentPeriod());

@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.apache.struts.mock.MockHttpServletRequest;
+import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -49,14 +51,11 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
+import org.junit.BeforeClass;
 
 public abstract class ReportingTestCase extends AmpTestCase {
     
     static protected int nrRunReports = 0;
-    
-    public ReportingTestCase(String name) {
-        super(name);
-    }
     
     public static<K extends Cell> List<K> nicelySorted(Collection<K> in) {
         return AmpCollections.sorted(in, (a, b) -> {
@@ -70,8 +69,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
     }
     
     public ReportSpecification getReportSpecification(String reportName) {
-        org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
-        TLSUtils.populate(mockRequest);
+        MockHttpServletRequest mockRequest = StandaloneAMPInitializer.populateMockRequest();
 
         AmpReports report = ReportTestingUtils.loadReportByName(reportName);
         mockRequest.getSession().setAttribute(Constants.CURRENT_MEMBER, report.getOwnerId().toTeamMember());
@@ -311,6 +309,10 @@ public abstract class ReportingTestCase extends AmpTestCase {
 //      NiReportExecutor executor = getExecutor(activityNames);
 //      return executor.executeReport(spec, outputBuilder);
 //  }
-    
+
+    @BeforeClass
+    public static void setUp() {
+        StandaloneAMPInitializer.initialize();
+    }
 }
 

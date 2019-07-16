@@ -6,11 +6,15 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -45,6 +49,7 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.OtherInfoBehavior;
 import org.dgfoundation.amp.onepager.validators.AmpUniqueActivityTitleValidator;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
+import org.digijava.kernel.lucene.ActivityLuceneDocument;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -127,32 +132,32 @@ implements AmpRequiredComponentContainer{
                 ServletContext context = ((WebApplication) Application.get())
                         .getServletContext();   
                 logger.info("Searching similar activity name for activity: "+ sTitle);
-                List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
+                List<ActivityLuceneDocument> list = LuceneUtil.findActivitiesMoreLikeThis(
                         context.getRealPath("/") + LuceneUtil.ACTIVITY_INDEX_DIRECTORY, sTitle, langCode, 2);
-                if (! list.isEmpty()) {
+                
+                StringBuilder currentAmpId = new StringBuilder();
+                if (AmpIdentificationFormSectionFeature.this.am.getObject() != null) {
+                    currentAmpId.append(AmpIdentificationFormSectionFeature.this.am.getObject().getAmpId());
+                }
+    
+                Map<String, String> duplicatedAmpIds = list.stream()
+                        .filter(activity -> !StringUtils.equals(currentAmpId.toString(), activity.getAmpActivityId()))
+                        .collect(Collectors.toMap(
+                                ActivityLuceneDocument::getAmpActivityId, ActivityLuceneDocument::getName,
+                                (oldValue, newValue) -> oldValue, HashMap::new));
+                
+                if (!duplicatedAmpIds.isEmpty()) {
                     String ret = TranslatorUtil
                             .getTranslation("Warning! Potential duplicates! The database already contains project(s) with similar title(s):")+"\n";
                     boolean moreThanSelf = false;
                     // avoiding comparison with itself
-                    Long activityId = null;
-                    if (AmpIdentificationFormSectionFeature.this.am.getObject() != null) {
-                        activityId = AmpIdentificationFormSectionFeature.this.am.getObject().getAmpActivityId();
-                    }
-
-                    // the activity has not been saved yet (even as a draft)
-                    /* we should include then all results found
-                    if (activityId == null) {
-                        return null;
-                    }*/
-
-                    for (AmpActivity activity : list)
-                        if (activityId == null || (activity.getAmpId() != null
-                                && activityId.longValue() != Long.valueOf(activity.getAmpId()).longValue())) {
+                    
+                    for (String ampId : duplicatedAmpIds.keySet()) {
                             moreThanSelf = true;
-                            logger.info("There is a similiarity match!. Current activity id: " + activityId
-                                    + " Match activity id " + activity.getAmpId());
-                            ret += " - " + activity.getName() + "\n";
-                        }
+                            logger.info("There is a similiarity match!. Current amp id: " + currentAmpId
+                                    + " Match activity with amp id " + ampId);
+                            ret += " - " + duplicatedAmpIds.get(ampId) + "\n";
+                    }
                     if (moreThanSelf) {
                         return ret;
                     } else {

@@ -19,6 +19,7 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -141,10 +142,11 @@ public class MondrianMapping {
             addColumnDefinition(ColumnConstants.PLEDGES_TERTIARY_SECTORS, new MDXLevel(MoConstants.PLEDGE_TERTIARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 
             final String[][] programConstantsList = {
-                    {ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, MoConstants.NATIONAL_OBJECTIVES, "National Planning Objectives Level "},
-                    {ColumnConstants.PRIMARY_PROGRAM, MoConstants.PRIMARY_PROGRAMS, "Primary Program Level "},
-                    {ColumnConstants.SECONDARY_PROGRAM, MoConstants.SECONDARY_PROGRAMS, "Secondary Program Level "},
-                    {ColumnConstants.TERTIARY_PROGRAM, MoConstants.TERTIARY_PROGRAMS, "Tertiary Program Level "}
+                    {ProgramUtil.NATIONAL_PLANNING_OBJECTIVES, MoConstants.NATIONAL_OBJECTIVES, 
+                        "National Planning Objectives Level "},
+                    {ProgramUtil.PRIMARY_PROGRAM, MoConstants.PRIMARY_PROGRAMS, "Primary Program Level "},
+                    {ProgramUtil.SECONDARY_PROGRAM, MoConstants.SECONDARY_PROGRAMS, "Secondary Program Level "},
+                    {ProgramUtil.TERTIARY_PROGRAM, MoConstants.TERTIARY_PROGRAMS, "Tertiary Program Level "}
                     };
             for (String[] programConstants : programConstantsList) {
                 addColumnDefinition(programConstants[0] + " Detail", new MDXLevel(programConstants[1], "Detail", "Detail Name"));

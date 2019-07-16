@@ -35,8 +35,9 @@ public class AmpMTEFProjectionSubsectionFeature extends AmpSubsectionFeatureFund
      * @param model
      * @throws Exception
      */
-    public AmpMTEFProjectionSubsectionFeature(String id, final IModel<AmpFunding> model, String fmName) throws Exception {
-        super(id, fmName, model, Constants.MTEFPROJECTION);
+    public AmpMTEFProjectionSubsectionFeature(String id, final IModel<AmpFunding> model) throws Exception {
+        super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(Constants.MTEFPROJECTION), model,
+                Constants.MTEFPROJECTION);
         
         mtefTableFeature = new AmpMTEFProjectionFormTableFeature("mtefTableFeature", "MTEF Projections Table", model);
         add(mtefTableFeature);
@@ -72,7 +73,7 @@ public class AmpMTEFProjectionSubsectionFeature extends AmpSubsectionFeatureFund
                 mtefTableFeature.getEditorList().addItem(projection);
                 target.add(mtefTableFeature);
                 AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-                parent.getFundingInfo().checkChoicesRequired(mtefTableFeature.getEditorList().getCount());
+                parent.getFundingInfo().configureRequiredFields();
                 target.add(parent.getFundingInfo());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

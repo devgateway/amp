@@ -89,7 +89,8 @@ public final class DigiExceptionHandler
         }
         //in case an exception happend check if we need to clean the request for token authentication
 
-        if("true".equals(TLSUtils.getRequest().getAttribute(SecurityUtil.REMOVE_SESSION))){
+        if ("true".equals(TLSUtils.getRequest().getAttribute(SecurityUtil.REMOVE_SESSION))) {
+            TLSUtils.getRequest().getSession().removeAttribute(Constants.CURRENT_USER);
             TLSUtils.getRequest().getSession().removeAttribute(Constants.CURRENT_MEMBER);
             TLSUtils.getRequest().removeAttribute(SecurityUtil.REMOVE_SESSION);
         }

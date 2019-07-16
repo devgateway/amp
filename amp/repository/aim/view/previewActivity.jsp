@@ -21,6 +21,7 @@
 
 <jsp:include page="activityHistoryUtil.jsp" flush="true" />
 <%@page import="java.math.BigDecimal"%>
+<%@ page import="org.digijava.module.aim.util.TeamUtil" %>
 <style type="text/css">
 	.legend_label a.trnClass { color:yellow;}
 </style>
@@ -269,18 +270,24 @@ function collapseAll() {
 
 <!-- MAIN CONTENT PART START -->
 <div class="content-dir">
-<logic:present scope="request" parameter="editError">
+<logic:present scope="request" parameter="editingUserId">
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
 	     <tr>
 		     <td align="center">
 		        <font color="red" size="3">
-		                <digi:trn key="aim:activityIsBeeingEdited">Current activity is being edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editError"))).getMemberName() %>
+					<%
+					if (request.getParameter("editingUserId").equals(TeamUtil.getCurrentMember().getMemberId().toString())) {
+					%>
+					<digi:trn key="aim:activityEditLocked">You may only edit one activity at a time.</digi:trn>
+					<%} else {%>
+					<digi:trn key="aim:activityIsBeeingEdited">Current activity is being edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editingUserId"))).getMemberName() %>
+					<%}%>
 		        </font>
 		     </td>
-	     </tr>           
+	     </tr>
 	     <tr>
 	         <td>&nbsp;
-	             
+
 	         </td>
 	     </tr>
 	</table>
@@ -320,7 +327,7 @@ function collapseAll() {
 	</table>
 </logic:present>
 
-<c:if test="${aimEditActivityForm.activityExists=='no'}">
+<c:if test="${aimEditActivityForm.activityExists=='no' && aimEditActivityForm.activityId > 0}">
 	<div class="activity_preview_header" style="font-size: 12px;text-align: center;color:red">
 		<ul style="padding-top: 5px;font-size: 12px">
 			<li><digi:trn>Couldn't find activity! It may have been deleted from the system</digi:trn></li>
@@ -360,7 +367,7 @@ function collapseAll() {
 					</td>
 					<td>
 						<c:set var="showWordSetting" scope="page" value="false"/>
-						<%if(FeaturesUtil.isVisibleModule("Show Editable Export Formats")){ %>
+						<%if(FeaturesUtil.showEditableExportFormats()){ %>
 							<c:set var="showWordSetting" scope="page" value="true"/>
 						<%}%>
 						<c:if test="${(sessionScope.currentMember != null) || (showWordSetting)}">
@@ -557,7 +564,7 @@ function collapseAll() {
 		<digi:trn>Activity created on</digi:trn>:<br/>
 		<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
 		<hr/>
-		<field:display name="Activity Last Updated by" feature="Identification">
+		<module:display name="/Activity Form/Identification/Activity Last Updated by" parentModule="/Activity Form/Identification">
 			<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
 				<digi:trn>Activity last updated by</digi:trn>: <br/>
 				<b>
@@ -565,14 +572,14 @@ function collapseAll() {
 					<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>
 				</b>
 			</logic:notEmpty>
-		</field:display>
+		</module:display>
 		<hr/>
-		<field:display name="Activity Updated On" feature="Identification">
+		<module:display name="/Activity Form/Identification/Activity Updated On" parentModule="/Activity Form/Identification">
 			<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
 				<digi:trn>Activity updated on</digi:trn>: <br/>
 				<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>
 			</logic:notEmpty>
-		</field:display>
+		</module:display>
 		<hr/>
 
 		<digi:trn>Created in workspace</digi:trn>: <br/>
@@ -1091,7 +1098,7 @@ function collapseAll() {
 		</c:if>
 		</module:display>
 			<c:if test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
-				<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification">
+				<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification/Budget Extras">
 					<digi:trn>FY</digi:trn>:&nbsp;
 					<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
 					<br />
@@ -1531,18 +1538,6 @@ function collapseAll() {
 </module:display>
 
 <!-- LOCATIONS SECTION -->
-<module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
-	<c:set var="programs_list" value="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}" />
-	<c:set var="programs_name"></c:set>
-	<fieldset>
-		<legend>
-			<span class="legend_label" style="cursor: pointer;"><digi:trn>National Plan</digi:trn></span>
-		</legend>
-		<div class="toggleDiv">
-		<%@include file="activitypreview/programs.jspf" %>
-		</div>
-	</fieldset>
-</module:display>
 
 <!-- PROGRAM SECTION -->
 <module:display name="/Activity Form/Program" parentModule="/Activity Form">
@@ -1551,6 +1546,11 @@ function collapseAll() {
 		<span class="legend_label" style="cursor: pointer;"><digi:trn>Program</digi:trn></span>
 	</legend>
 	<div class="toggleDiv">
+	    <module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
+            <c:set var="programs_list" value="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}" />
+            <c:set var="programs_name"><digi:trn>National Plan Objective</digi:trn></c:set>
+            <%@include file="activitypreview/programs.jspf" %>
+        </module:display>
 		<module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form">
 			<c:set var="programs_list" value="${aimEditActivityForm.programs.primaryPrograms}" />
 			<c:set var="programs_name"><digi:trn>Primary Programs</digi:trn></c:set>
@@ -2594,6 +2594,8 @@ function collapseAll() {
 	</div>
 </fieldset>
 </module:display>
+
+<jsp:include page="previewActivityRegionalObservations.jsp"></jsp:include>
 
 <jsp:include page="previewActivityLineMinistryObservations.jsp"></jsp:include>
 

@@ -59,12 +59,6 @@ public class AdministrateUser
 
         boolean changed = false;
 
-
-        if (selectedUser.isActivate() == userForm.isAlertable()) {
-            selectedUser.setActive(!userForm.isAlertable());
-            changed = true;
-        }
-
         Subject subject = RequestUtils.getSubject(request);
         boolean isGlobalAdmin = false;
         if (DigiSecurityManager.isGlobalAdminSubject(subject)) {

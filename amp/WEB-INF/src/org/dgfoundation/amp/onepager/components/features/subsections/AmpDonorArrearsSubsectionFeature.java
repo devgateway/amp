@@ -36,8 +36,8 @@ public class AmpDonorArrearsSubsectionFeature extends AmpSubsectionFeatureFundin
      * @throws Exception
      */
     public AmpDonorArrearsSubsectionFeature(String id,
-            final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-        super(id, fmName, model,Constants.ARREARS);
+            final IModel<AmpFunding> model, int transactionType) throws Exception {
+        super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model, transactionType);
         arrearsTableFeature = new AmpDonorArrearsFormTableFeature("arrearsTableFeature", model, "Arrears Table", transactionType);
         add(arrearsTableFeature);
         AmpAjaxLinkField addArrears = new AmpAjaxLinkField("addArrears","Add Arrears Transaction","Add Arrears Transaction") {
@@ -54,7 +54,7 @@ public class AmpDonorArrearsSubsectionFeature extends AmpSubsectionFeatureFundin
                 target.add(arrearsTableFeature);
                 
                 AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-                parent.getFundingInfo().checkChoicesRequired(arrearsTableFeature.getEditorList().getCount());
+                parent.getFundingInfo().configureRequiredFields();
                 target.add(parent.getFundingInfo());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

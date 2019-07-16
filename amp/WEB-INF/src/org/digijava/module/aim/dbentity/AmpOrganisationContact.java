@@ -1,5 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
@@ -16,19 +17,20 @@ public class AmpOrganisationContact implements Serializable,OrgProfileValue {
     private Long id;
     private AmpContact contact;
     
-    @Interchangeable(fieldTitle = "Organisation", pickIdOnly=true)
+    @Interchangeable(fieldTitle = "Organisation", pickIdOnly = true, required = ActivityEPConstants.REQUIRED_ALWAYS,
+            uniqueConstraint = true, importable = true)
     private AmpOrganisation organisation;
     
-    @Interchangeable(fieldTitle = "Primary Contact")
     private Boolean primaryContact;
     
     public AmpOrganisationContact(){
         
     }
     
-    public AmpOrganisationContact(AmpOrganisation organisation, AmpContact contact){
-        this.organisation=organisation;
-        this.contact=contact;
+    public AmpOrganisationContact(AmpOrganisation organisation, AmpContact contact) {
+        this.organisation = organisation;
+        this.contact = contact;
+        this.primaryContact = false;
     }
     
     

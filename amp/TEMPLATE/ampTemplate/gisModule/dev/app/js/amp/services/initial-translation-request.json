@@ -113,5 +113,6 @@
 "amp.gis-layers-manager:tooltip-created-by": "by",
 "amp.gis:date-from": "From",
 "amp.gis:date-until": "Until",
-"amp.gis:title-performance-selector": "Good Performance Projects View"
+"amp.gis:title-performance-selector": "Good Performance Projects View",
+"amp.gis:legend-custom-structure-colors": "Infrastructure Colors"
 }

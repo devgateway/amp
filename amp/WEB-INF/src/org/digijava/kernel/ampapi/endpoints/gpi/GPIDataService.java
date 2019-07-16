@@ -373,7 +373,8 @@ public class GPIDataService {
      * @return
      */
     public static List<GPIRemark> getGPIRemarks(String indicatorCode, List<Long> donorIds, String donorType, Long from,
-            Long to) {        
+            Long to) {
+
         List<GPIRemark> remarks = new ArrayList<>();
         AmpDateFormatter dateFormatter = AmpDateFormatterFactory.getLocalizedFormatter(DateTimeUtil.getGlobalPattern());
         List<AmpGPINiDonorNotes> donorNotes = GPIUtils.getNotesByCode(indicatorCode);
@@ -460,8 +461,8 @@ public class GPIDataService {
             List<AmpGPINiSurveyResponseDocument> filteredDocuments) {
 
         List<GPIDonorActivityDocument> donorActivityDocuments = new ArrayList<>();
-        Map<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>> grouppedDocuments = new HashMap<Long, Map<Long, 
-                List<AmpGPINiSurveyResponseDocument>>>();
+        Map<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>> grouppedDocuments = 
+                new HashMap<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>>();
 
         filteredDocuments.forEach(doc -> {
             AmpOrgRole orgRole = doc.getSurveyResponse().getAmpGPINiSurvey().getAmpOrgRole();
@@ -583,7 +584,6 @@ public class GPIDataService {
 
         return 0;
     }
-    
     public static String getConvertedDate(Long fromCalId, Long toCalId, String dateAsString) {
         
         if (fromCalId == toCalId) {
@@ -620,4 +620,5 @@ public class GPIDataService {
         return GPIUtils.getDonors();
 
     }
+
 }

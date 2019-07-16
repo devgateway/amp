@@ -18,7 +18,8 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceR
 public class DisbursementsAfterActivityDateMatcherDefinition extends PerformanceRuleMatcherDefinition {
     
     public DisbursementsAfterActivityDateMatcherDefinition() {
-        super("disbursementsAfterActivityDate", "Disbursements after selected activity date", 
+        super(PerformanceRuleConstants.MATCHER_DISB_ACTIVITY_DATE, 
+                PerformanceRuleConstants.MATCHER_DESCR_DISB_ACTIVITY_DATE, 
                 String.format("A disbursement happened after the '{%s}'", 
                         PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_DATE));
         

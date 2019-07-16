@@ -178,10 +178,11 @@ public class FactTableFiltering {
             add(ColumnConstants.SECONDARY_SECTOR, new SectorIdsExpander("secondary_sector_id"));
             add(ColumnConstants.TERTIARY_SECTOR, new SectorIdsExpander("tertiary_sector_id"));
         
-            add(ColumnConstants.PRIMARY_PROGRAM, new ProgramIdsExpander("primary_program_id"));
-            add(ColumnConstants.SECONDARY_PROGRAM, new ProgramIdsExpander("secondary_program_id"));
-            add(ColumnConstants.TERTIARY_PROGRAM, new ProgramIdsExpander("tertiary_program_id"));
-            add(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, new ProgramIdsExpander("national_objectives_program_id"));
+            add(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, new ProgramIdsExpander("primary_program_id"));
+            add(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, new ProgramIdsExpander("secondary_program_id"));
+            add(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1, new ProgramIdsExpander("tertiary_program_id"));
+            add(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, 
+                    new ProgramIdsExpander("national_objectives_program_id"));
             
             //add(FiltersGroup.LOCATION_FILTER, new LocationIdsExpander("location_id"));
             

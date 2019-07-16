@@ -5,7 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.dgfoundation.amp.testutils.AmpTestCase;
+import org.dgfoundation.amp.StandaloneAMPInitializer;
+import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -14,45 +15,21 @@ import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
-import org.digijava.module.fundingpledges.form.DocumentShim;
 import org.digijava.module.fundingpledges.form.PledgeForm;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * Pledges Form tests
  * @author Dolghier Constantin
  *
  */
-public class PledgesFormTests extends AmpTestCase
-{
-    
-    private PledgesFormTests(String name)
-    {
-        super(name);        
-    }
-    
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite(PledgesFormTests.class.getName());
-        suite.addTest(new PledgesFormTests("testPledgesEntityHelperSanity"));
-        suite.addTest(new PledgesFormTests("testFetchEntities"));
-        suite.addTest(new PledgesFormTests("testPledgeFundingCalculator"));
-        suite.addTest(new PledgesFormTests("testPledgeFormUtils"));
-        suite.addTest(new PledgesFormTests("testPledgeFormFundingUtils"));
-        suite.addTest(new PledgesFormTests("testPledgeFormDocuments"));
-        //suite.addTest(new MultilingualTests28("testSerializationAllLanguagesFilled"));
-        return suite;
-    }
-    
-    protected void assertShimEquals(DocumentShim doc, String fileName, String title, String uuid, double size){
-        assertEquals(title, doc.getTitle());
-        assertEquals(fileName, doc.getFileName());
-        assertEquals(uuid, doc.getUuid());
-        assertEquals(size, doc.getFileSizeInBytes());
-    }
-    
+public class PledgesFormTests extends ReportsTestCase {
+
+    @Test
+    @Ignore
     public void testPledgeFormDocuments(){
         
         PledgeForm pledgeForm = new PledgeForm();
@@ -62,7 +39,9 @@ public class PledgesFormTests extends AmpTestCase
 //      assertShimEquals(pledgeForm.getSelectedDocsList().get(1), "AMP-17265-amp27.patch", "yahoo", "96e0a2be-53b0-4f16-bb02-a8bc7dc46778", 480000);
 //      assertShimEquals(pledgeForm.getSelectedDocsList().get(2), "SSC Implementation Notes.doc", "some ssc implementation notes", "03b4ed7a-b4d7-4204-8a0b-613131edf9f0", 480000);
     }
-    
+
+    @Test
+    @Ignore
     public void testPledgeFormFundingUtils(){
         PledgeForm pledgeForm = new PledgeForm();
         pledgeForm.importPledgeData(PledgesEntityHelper.getPledgesById(3L));
@@ -70,7 +49,9 @@ public class PledgesFormTests extends AmpTestCase
         assertEquals("[767 676 curr: 96, ToA: 2119, fundingYear: 2006, pledgeTypeId: 2137, 200 000 curr: 95, ToA: 2124, fundingYear: 2020, pledgeTypeId: 2137, 1 curr: 95, ToA: 2119, fundingYear: 2005, pledgeTypeId: 2137]", 
                 pledgeForm.getSelectedFunding().toString());
     }
-    
+
+    @Test
+    @Ignore
     public void testPledgeFormUtils(){
         PledgeForm pledgeForm = new PledgeForm();
         pledgeForm.importPledgeData(PledgesEntityHelper.getPledgesById(3L));
@@ -99,7 +80,9 @@ public class PledgesFormTests extends AmpTestCase
         assertEquals("[enabled: KeyValue: (0, Please select from below), enabled: KeyValue: (9108, Bulboaca), enabled: KeyValue: (9109, Hulboaca), enabled: KeyValue: (9110, Dolboaca), disabled: KeyValue: (9111, Glodeni), disabled: KeyValue: (9112, Raureni), disabled: KeyValue: (9113, Apareni), disabled: KeyValue: (9114, Tiraspol), enabled: KeyValue: (9115, Slobozia), enabled: KeyValue: (9116, Camenca), disabled: KeyValue: (9120, AAA)]", 
                 pledgeForm.getAllValidLocations().toString());      
     }
-    
+
+    @Test
+    @Ignore
     public void testPledgeFundingCalculator(){
         FundingPledges pledge = PledgesEntityHelper.getPledgesById(3L);
         assertEquals("986879.40", String.format("%.2f", pledge.getTotalPledgedAmount("USD")));
@@ -113,7 +96,8 @@ public class PledgesFormTests extends AmpTestCase
         assertEquals("1061513.34", String.format("%.2f", pledge.getTotalPledgedAmount("USD")));  // approximate value
         assertEquals("780000.00", String.format("%.2f", pledge.getTotalPledgedAmount("EUR")));
     }
-    
+
+    @Test
     public void testFetchEntities()
     {
         List<FundingPledges> pledges = PledgesEntityHelper.fetchEntities(FundingPledges.class, "id", 3L);
@@ -157,7 +141,8 @@ public class PledgesFormTests extends AmpTestCase
         
         assertEquals(0, PledgesEntityHelper.fetchEntities(AmpOrganisation.class, "ampOrgId", 12L, "name", "Finland").size());
     }
-    
+
+    @Test
     public void testPledgesEntityHelperSanity()
     {
         FundingPledges pledge = PledgesEntityHelper.getPledgesById(3L);
@@ -182,24 +167,13 @@ public class PledgesFormTests extends AmpTestCase
 
     }
     
-    @Override
-    protected void setUp() throws Exception
-    {
-        org.apache.struts.mock.MockServletContext mockServletContext = new org.apache.struts.mock.MockServletContext();
-        org.apache.struts.mock.MockHttpSession mockSession = new org.apache.struts.mock.MockHttpSession(mockServletContext);
-        org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
-        
-        mockRequest.setHttpSession(mockSession);
-        TLSUtils.populate(mockRequest);
+    @Before
+    public void setUp() {
+        StandaloneAMPInitializer.populateMockRequest();
+
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
 
         FeaturesUtil.overriddenFields.put("Use Free Text", true);
-        super.setUp();
-        // do nothing now                
     }
     
-    @Override
-    protected void tearDown() throws Exception{
-        DocumentManagerUtil.closeJCRSessions(TLSUtils.getRequest());
-    }
 }

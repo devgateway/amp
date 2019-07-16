@@ -268,7 +268,8 @@ border-right: 1px solid rgb(208, 208, 208);
 				apply: "<digi:trn>Apply</digi:trn>",
 			//	reset: "<digi:trn>Reset</digi:trn>",
 				close: "<digi:trn>Close</digi:trn>",
-				none: "<digi:trn>none</digi:trn>"
+				none: "<digi:trn>none</digi:trn>",
+				keywordMode: "<digi:trn>Keyword Mode</digi:trn>"
 		};
 		//set breadcrumb text
 		var breadCrumbObj=$('div.breadcrump_cont').text(breadcrumbName);
@@ -431,12 +432,14 @@ border-right: 1px solid rgb(208, 208, 208);
 
 	
 	
-	function reset(objListStr) {
+	function reset(objListStr, resetFilters) {
         // reset search string
 		document.getElementById(objListStr+'SearchStr').value='';
 		var targetList = eval(objListStr +'ListObj');
         // reset filters and lables
-        targetList.resetFilterData(targetList.fDivId);
+        if (resetFilters) {
+            targetList.resetFilterData(targetList.fDivId);
+        }
         // execute the request with empty data
         targetList.sendRequest();
 	}
@@ -639,22 +642,26 @@ border-right: 1px solid rgb(208, 208, 208);
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 						        	<td>
-							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();fPanel.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);" class="buttonx button_resources"><digi:trn>Add Resource</digi:trn>
+							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();fPanel.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);" class="buttonx"><digi:trn>Add Resource</digi:trn>
 							        		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 							        	</button>
 						        		<input type="text" id="privateSearchStr">
-						        		<button id="privateSearchButtonId" type="button" class="buttonx button_resources">
+						        		<button id="privateSearchButtonId" type="button" class="buttonx">
 							        		<digi:trn>Search</digi:trn>
 							        	</button>
-								    	<button id="filterButtonId" class="buttonx button_resources" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',false);fPanel.hide();menuPanelForUser.hide();">
+							        	<button id="keywordModeButtonId" class="buttonx" type="button" onclick="privateListObj.getKeywordModePanel('keywordModeButtonId','privateKeywordModeDivId');fPanel.hide();menuPanelForUser.hide();">
+                                            <digi:trn>Mode</digi:trn>
+                                            <img src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+                                        </button>
+								    	<button id="filterButtonId" class="buttonx" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId', false);fPanel.hide();menuPanelForUser.hide();">
 								    		<digi:trn>Filters</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
-								    	<button id="labelButtonId" class="buttonx button_resources" type="button" onclick="fPanel.toggleView();menuPanelForUser.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);">
+								    	<button id="labelButtonId" class="buttonx" type="button" onclick="fPanel.toggleView();menuPanelForUser.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);">
 								    		<digi:trn>Labels</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
-									        <button id="privateClearButtonId" type="button" onclick="reset('private');"  class="buttonx">
+									        <button id="privateClearButtonId" type="button" onclick="reset('private', true);"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
 							        	</button>
 								    </td>
@@ -680,7 +687,9 @@ border-right: 1px solid rgb(208, 208, 208);
 								</tr>
 							</table>
 							<bean:define id="filterDivId" value="privateFilterDivId" toScope="request" />
-							<jsp:include page="filters/filters.jsp"/>	        
+							<jsp:include page="filters/filters.jsp"/>	   
+							<bean:define id="keywordModeDivId" value="privateKeywordModeDivId" toScope="request" />
+                            <jsp:include page="keywordMode.jsp"/>     
 				        </div>
 					</feature:display>			    	
 					
@@ -700,6 +709,10 @@ border-right: 1px solid rgb(208, 208, 208);
 						        		<button id="teamSearchButtonId" type="button" class="buttonx">
 							        		<digi:trn>Search</digi:trn>
 							        	</button>
+							        	<button id="teamKeywordModeButtonId" class="buttonx" type="button" onclick="teamListObj.getKeywordModePanel('teamKeywordModeButtonId','teamKeywordModeDivId',false);fPanel.hide();menuPanelForTeam.hide();">
+                                            <digi:trn>Mode</digi:trn>
+                                            <img src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+                                        </button>
 										<button id="teamFilterButtonId" class="buttonx" type="button" onclick="teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId', false);teamFPanel.hide();menuPanelForTeam.hide();">
 								    		<digi:trn>Filters</digi:trn>
 								    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
@@ -708,7 +721,7 @@ border-right: 1px solid rgb(208, 208, 208);
 								    		<digi:trn>Labels</digi:trn>
 								    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
-								    	 <button id="teamClearButtonId" type="button" onclick="reset('team');"  class="buttonx">
+								    	 <button id="teamClearButtonId" type="button" onclick="reset('team', true);"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
 							        	</button>
 									</td>
@@ -735,6 +748,8 @@ border-right: 1px solid rgb(208, 208, 208);
 							</table>	
 							<bean:define id="filterDivId" value="teamFilterDivId" toScope="request" />
 							<jsp:include page="filters/filters.jsp"/>
+							<bean:define id="keywordModeDivId" value="teamKeywordModeDivId" toScope="request" />
+                            <jsp:include page="keywordMode.jsp"/>
 				        </div>
 					</feature:display>					
 					
@@ -748,7 +763,11 @@ border-right: 1px solid rgb(208, 208, 208);
 											<input type="text" id="sharedSearchStr">
 							        		<button id="sharedSearchButtonId" type="button" class="buttonx">
 								        		<digi:trn>Search</digi:trn>
-								        	</button>									
+								        	</button>
+								            <button id="sharedKeywordModeButtonId" class="buttonx" type="button" onclick="sharedListObj.getKeywordModePanel('sharedKeywordModeButtonId','sharedKeywordModeDivId', false);fPanel.hide();sharedFPanel.hide();">
+	                                            <digi:trn>Mode</digi:trn>
+	                                            <img src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+                                            </button>							
 											<button id="sharedFilterButtonId" class="buttonx" type="button" onclick="sharedListObj.getFilterPanel('sharedFilterButtonId','sharedFilterDivId', false);sharedFPanel.hide();">
 									    		<digi:trn>Filters</digi:trn>
 									    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
@@ -757,7 +776,7 @@ border-right: 1px solid rgb(208, 208, 208);
 									    		<digi:trn>Labels</digi:trn>
 									    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 									    	</button>
-									    	<button id="sharedClearButtonId" type="button" onclick="reset('shared');"  class="buttonx">
+									    	<button id="sharedClearButtonId" type="button" onclick="reset('shared', true);"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
 							        	</button>
 										</td>
@@ -775,7 +794,9 @@ border-right: 1px solid rgb(208, 208, 208);
 									</tr>
 								</table>
 								<bean:define id="filterDivId" value="sharedFilterDivId" toScope="request" />
-								<jsp:include page="filters/filters.jsp"/>		        
+								<jsp:include page="filters/filters.jsp"/>
+								<bean:define id="keywordModeDivId" value="sharedKeywordModeDivId" toScope="request" />
+                                <jsp:include page="keywordMode.jsp"/>		        
 					        </div>						
 						</c:if>						
 					</feature:display>
@@ -793,7 +814,11 @@ border-right: 1px solid rgb(208, 208, 208);
 							        		<button id="publicSearchButtonId" type="button" class="buttonx">
 								        		<digi:trn>Search</digi:trn>
 								        	</button>
-											<button id="publicClearButtonId" type="button" onclick="reset('public');"  class="buttonx">
+								        	<button id="publicKeywordModeButtonId" class="buttonx" type="button" onclick="publicListObj.getKeywordModePanel('publicKeywordModeButtonId','publicKeywordModeDivId', false);fPanel.hide();menuPanelForPublic.hide();">
+                                                <digi:trn>Mode</digi:trn>
+                                                <img src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+                                            </button>
+											<button id="publicClearButtonId" type="button" onclick="reset('public', false);"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
 								        	
 								        	
@@ -807,7 +832,9 @@ border-right: 1px solid rgb(208, 208, 208);
 											<br />
 										</td>
 									</tr>
-								</table>	        
+								</table>
+								<bean:define id="keywordModeDivId" value="publicKeywordModeDivId" toScope="request" />
+                                <jsp:include page="keywordMode.jsp"/>	        
 					        </div>
 						</c:if>				        
 			        </feature:display>

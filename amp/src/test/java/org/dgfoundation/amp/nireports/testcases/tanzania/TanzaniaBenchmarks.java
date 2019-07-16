@@ -52,9 +52,9 @@ public class TanzaniaBenchmarks {
             new ImmutablePair<>(
                     ReportSpecificationImpl.buildFor(
                         "bySectorByLocationByProgramQuarterly", 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.REGION, ColumnConstants.PRIMARY_PROGRAM),
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.REGION, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1),
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                        Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.REGION, ColumnConstants.PRIMARY_PROGRAM),
+                        Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.REGION, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1),
                         GroupingCriteria.GROUPING_QUARTERLY),
                     new BenchmarkResult(null, 223, 53, 2426, 21101, null)
                     ),

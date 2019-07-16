@@ -1,15 +1,8 @@
 package org.dgfoundation.amp.ar.amp212;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.TreeSet;
 
 import org.dgfoundation.amp.nireports.amp.AmpPrecisionSetting;
-import org.dgfoundation.amp.nireports.schema.ConstantNiDimension;
-import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
 
@@ -24,9 +17,6 @@ import org.junit.Test;
 public class BigDecimalPrecisionTests extends AmpTestCase {
     
     AmpPrecisionSetting p = new AmpPrecisionSetting();
-    public BigDecimalPrecisionTests() {
-        super("BigDecimal precision tests");
-    }
 
     public String getSequenceOfNumber(int number, int count) {
         StringBuilder bld = new StringBuilder();

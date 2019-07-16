@@ -64,6 +64,7 @@
 		<action login-required="false" pattern="/showRegisterUser" />
 		<action login-required="false" pattern="/viewActivityHistory" />
 		<action login-required="false" pattern="/viewActivityPreview" />
+		<action login-required="false" pattern="/showPrinterFriendlyPage" />
 		<action login-required="false" pattern="/viewNewAdvancedReport" />
 		<action login-required="false" pattern="/viewTeamReports" />
 		<action login-required="false" pattern="/xlsExport" />
@@ -256,6 +257,12 @@
         
         <!-- Allowed MimeTypes -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpFileType</hibernate-class>
+
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineCompatibleVersionRange</hibernate-class>
+
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineRelease</hibernate-class>
+
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineChangelog</hibernate-class>
 
 	</hibernate-classes>
 	<!-- AIM classes End-->

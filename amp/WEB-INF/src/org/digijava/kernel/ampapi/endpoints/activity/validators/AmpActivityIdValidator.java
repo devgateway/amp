@@ -6,12 +6,13 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 import java.util.Map;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 
@@ -32,26 +33,27 @@ public class AmpActivityIdValidator extends InputValidator {
     }
 
     @Override
-    public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-            Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
+                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
         // REFACTOR: let's define a flag (count = 2) once both amp_activity_id and amp_id are verified to immediately skip this validator
         boolean isValid = true;
-        String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
+        String fieldName = fieldDescription.getFieldName();
+        ActivityImporter activityImporter = (ActivityImporter) importer;
         
         // verify amp_activity_id, that is our main reference 
         if (ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME.equals(fieldPath)) {
             String internalId = String.valueOf(newFieldParent.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME));
             Long ampActivityId = NumberUtils.isNumber(internalId) ? Long.valueOf(internalId) : null; 
-            if (importer.isUpdate()) {
+            if (activityImporter.isUpdate()) {
                 Long latestAmpActivityId = ampActivityId == null ? null :  
                         ActivityVersionUtil.getLastVersionForVersion(Long.valueOf(ampActivityId.toString()));
                 // if this is an update and we cannot match the id, then we report it as invalid
-                if (importer.getOldActivity() == null || latestAmpActivityId == null
-                        || !latestAmpActivityId.equals(importer.getOldActivity().getAmpActivityId())) {
+                if (activityImporter.getOldActivity() == null || latestAmpActivityId == null
+                        || !latestAmpActivityId.equals(activityImporter.getOldActivity().getAmpActivityId())) {
                     isValid = false;
-                    isOldActivityId = importer.getOldActivity() != null;
+                    isOldActivityId = activityImporter.getOldActivity() != null;
                     if (isOldActivityId) {
-                        importer.setLatestActivityId(latestAmpActivityId);
+                        activityImporter.setLatestActivityId(latestAmpActivityId);
                     }
                 }
             } else if ((ampActivityId != null)) {
@@ -61,8 +63,9 @@ public class AmpActivityIdValidator extends InputValidator {
         // verify amp_id
         } else if (InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID).equals(fieldName)) {
             String ampId = (String) newFieldParent.get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID));
-            if (importer.isUpdate()) {
-                if (importer.getOldActivity() == null || !importer.getOldActivity().getAmpId().equals(ampId)) {
+            if (activityImporter.isUpdate()) {
+                if (activityImporter.getOldActivity() == null
+                        || !activityImporter.getOldActivity().getAmpId().equals(ampId)) {
                     isValid = false;
                 }
             } else {

@@ -9,7 +9,6 @@ import java.util.Set;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
@@ -21,13 +20,8 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.gateperm.util.PermissionUtil;
-
 
 /**
  * @author aartimon@dginternational.org since Jul 4, 2012
@@ -54,22 +48,12 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
         }
         return max;
     }
-    
+
 
     @Override
     protected void onConfigure() {
-        AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-            FundingOrganization fo = new FundingOrganization();
-            fo.setAmpOrgId(fundingOrgModel.getObject().getAmpOrgId());                                                     
-            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG, fo);
-            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
-        }
         super.onConfigure();
-        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
-            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
-        }
+
     }
 
     public AmpFundingGroupFeaturePanel(String id, String fmName, final IModel<AmpRole> role, 

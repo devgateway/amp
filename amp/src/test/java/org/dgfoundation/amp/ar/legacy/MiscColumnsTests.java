@@ -9,28 +9,13 @@ import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
 import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
+import org.junit.Test;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+public class MiscColumnsTests extends ReportsTestCase {
 
-public class MiscColumnsTests extends ReportsTestCase
-{
-    public MiscColumnsTests(String name)
-    {
-        super(name);
-    }
-    
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite(MiscColumnsTests.class.getName());
-        suite.addTest(new MiscColumnsTests("testSscColumns"));// - these columns removed in AMP 2.7
-        suite.addTest(new MiscColumnsTests("testProjectedProjectCostEUR"));
-        suite.addTest(new MiscColumnsTests("testProjectedProjectCostUSD"));
-        return suite;
-    }
-    
+    @Test
     public void testSscColumns()
     {
         GroupReportModel fssc_correct = GroupReportModel.withColumnReports("AMP-15844-ssc-columns", 
@@ -63,8 +48,8 @@ public class MiscColumnsTests extends ReportsTestCase
         }
         assertEquals("report AMP-15844-ssc-columns should have been deleted and non-existant", true, caughtException);
     }
-    
-    
+
+    @Test
     public void testProjectedProjectCostEUR()
     {
         GroupReportModel prop_cost_eur_correct = GroupReportModel.withColumnReports("Proposed-cost-EUR",
@@ -79,7 +64,8 @@ public class MiscColumnsTests extends ReportsTestCase
         
         runReportTest("Proposed-cost in EUR", "Proposed-cost-EUR", new String[] {"Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR"}, prop_cost_eur_correct);
     }
-    
+
+    @Test
     public void testProjectedProjectCostUSD()
     {
         GroupReportModel prop_cost_usd_correct = GroupReportModel.withColumnReports("Proposed-cost-USD",

@@ -66,5 +66,5 @@ public @interface ApiMethod {
     /**
      * Authorization rules that must be applied to this method. Default is no authorization to be done.
      */
-    AuthRule[] authTypes() default AuthRule.NONE;
+    AuthRule[] authTypes() default {};
 }

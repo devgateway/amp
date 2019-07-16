@@ -40,6 +40,9 @@ import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.StructuresUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class AmpStructuresFormSectionFeature extends
         AmpFormSectionFeaturePanel {
@@ -87,6 +90,13 @@ public class AmpStructuresFormSectionFeature extends
                 if (name.isComponentMultilingual()) {
                     name.getTextContainer().add(new AttributeAppender("style", "margin-bottom:40px;"));
                 }
+                name.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        target.add(name);
+                    }
+                });
+                             
                 item.add(name);
                 
                 final AmpTextAreaFieldPanel description = new AmpTextAreaFieldPanel("description", new PropertyModel<String>(structureModel, "description"),"Structure Description",false, true, true);
@@ -131,9 +141,14 @@ public class AmpStructuresFormSectionFeature extends
                 item.add(latitude);
 
                 final AmpTextFieldPanel<String> shape = new AmpTextFieldPanel<String>("shape", new PropertyModel<String>(structureModel, "shape"),"Structure Shape", true, true);
-                shape.setOutputMarkupId(true);
-                
+                shape.setOutputMarkupId(true);                
                 shape.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
+                shape.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {                        
+                        target.add(shape);
+                    }
+                });
                 item.add(shape);
 
                 ListEditorRemoveButton delbutton = new ListEditorRemoveButton("deleteStructure", "Delete Structure"){
@@ -191,7 +206,23 @@ public class AmpStructuresFormSectionFeature extends
                         target.add(latitude);
                         target.add(longitude);
                         target.add(viewCoords);
-                        target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0]); return false;");
+                        
+                        JsonBean data = new JsonBean();
+                        List<JsonBean> structureColors = new ArrayList<>();
+                        
+                        Collection<AmpCategoryValue> categoryValues = CategoryManagerUtil
+                                .getAmpCategoryValueCollectionByKeyExcludeDeleted(
+                                        CategoryConstants.GIS_STRUCTURES_COLOR_CODING_KEY);
+                        for (AmpCategoryValue v : categoryValues) {
+                            JsonBean value = new JsonBean();
+                            value.set("id", v.getId());
+                            value.set("value", v.getValue());
+                            structureColors.add(value);
+                        }
+                        
+                        data.set("structureColors", structureColors);
+                        target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0], '" + data.asJsonString()
+                                + "'); return false;");
                     }
                 };
                 item.add(openMapPopup);
@@ -206,7 +237,7 @@ public class AmpStructuresFormSectionFeature extends
                             List<Map<String, String>> coordinates = (List<Map<String, String>>) data.get("coordinates");
                             AmpStructure structure = structureModel.getObject();
                             if (structure.getCoordinates() == null) {
-                                structure.setCoordinates(new LinkedHashSet<>());
+                                structure.setCoordinates(new ArrayList<>());
                             } else {
                                 structure.getCoordinates().clear();
                             }
@@ -228,6 +259,36 @@ public class AmpStructuresFormSectionFeature extends
 
                 coords.setOutputMarkupId(true);
                 item.add(coords);
+                
+                final TextField<String> tempId = new TextField<String>("tempId",
+                        new PropertyModel<String>(structureModel, "tempId"));    
+                tempId.setOutputMarkupId(true);                
+                tempId.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        target.add(tempId);
+                    }
+                });                
+                item.add(tempId);
+                
+                final TextField<String> structureColorId = new TextField<String>("structureColorId",
+                        new PropertyModel<String>(structureModel, "structureColorId"));
+                structureColorId.setOutputMarkupId(true);
+                structureColorId.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        AmpStructure structure = structureModel.getObject();
+                        if (structureColorId.getDefaultModelObject() == null) {
+                            structure.setStructureColor(null);
+                        } else {
+                            Long id = Long.parseLong(structureColorId.getDefaultModelObject().toString());
+                            structure.setStructureColor(CategoryManagerUtil.getAmpCategoryValueFromDb(id));
+                        }
+                        target.add(structureColorId);
+                    }
+                });
+                item.add(structureColorId);               
+                
                 latitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
                 longitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
                 viewCoords.getButton().setEnabled(hasCoordinates(structureModel));
@@ -244,12 +305,6 @@ public class AmpStructuresFormSectionFeature extends
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AmpStructure stru = new AmpStructure();
-                if(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE)!=-1){
-                    AmpStructureType s=(AmpStructureType)PersistenceManager.getSession().load(AmpStructureType.class, 
-                            FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE));
-                    stru.setType(s);    
-                }
-                
                 list.addItem(stru);
                 target.add(this.getParent());
                 target.add(containter);
@@ -259,7 +314,9 @@ public class AmpStructuresFormSectionFeature extends
                 pln.setVisible(visible);
             }
         };
-        add(addbutton);
+        
+       addbutton.getButton().add(new AttributeModifier("class", new Model("addStructure button_green_btm")));
+       add(addbutton);
         
         
     }
@@ -268,6 +325,4 @@ public class AmpStructuresFormSectionFeature extends
         return structureModel.getObject().getCoordinates() != null && structureModel.getObject().
                 getCoordinates().size() > 0;
     }
-
-
 }

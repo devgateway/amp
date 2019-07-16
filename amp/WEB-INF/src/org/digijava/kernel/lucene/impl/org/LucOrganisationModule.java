@@ -2,7 +2,6 @@ package org.digijava.kernel.lucene.impl.org;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -10,8 +9,8 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Hit;
-import org.digijava.kernel.exception.DgException;
+import org.apache.lucene.util.Version;
+import org.digijava.kernel.lucene.AmpLuceneDoc;
 import org.digijava.kernel.lucene.LucModule;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.DbUtil;
@@ -34,7 +33,7 @@ public class LucOrganisationModule implements LucModule<AmpOrganisation> {
 
     @Override
     public Analyzer getAnalyzer() {
-        return new StandardAnalyzer();
+        return new StandardAnalyzer(Version.LUCENE_36);
     }
 
     @Override
@@ -65,8 +64,8 @@ public class LucOrganisationModule implements LucModule<AmpOrganisation> {
     @Override
     public Document convertToDocument(AmpOrganisation item) {
         Document doc = new Document();
-        Field orgId = new Field(FIELD_ID,item.getAmpOrgId().toString(), Field.Store.YES, Field.Index.UN_TOKENIZED);
-        Field orgName = new Field(FIELD_NAME,item.getName(), Field.Store.YES, Field.Index.TOKENIZED);
+        Field orgId = new Field(FIELD_ID, item.getAmpOrgId().toString(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+        Field orgName = new Field(FIELD_NAME, item.getName(), Field.Store.YES, Field.Index.ANALYZED);
         doc.add(orgId);
         doc.add(orgName);
         return doc;
@@ -80,13 +79,11 @@ public class LucOrganisationModule implements LucModule<AmpOrganisation> {
 
     @Override
     public String[] getSearchFieldNames() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public AmpOrganisation hitToItem(Hit hit) throws IOException {
-        // TODO Auto-generated method stub
+    public AmpOrganisation luceneDocToItem(AmpLuceneDoc luceneDocument) throws IOException {
         return null;
     }
 

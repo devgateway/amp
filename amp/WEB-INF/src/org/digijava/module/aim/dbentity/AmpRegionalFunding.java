@@ -9,9 +9,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypeDiscriminator;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -22,8 +19,7 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
     private Long ampRegionalFundingId;
 //  @Interchangeable(fieldTitle="Activity", pickIdOnly = true)
     private AmpActivityVersion activity;
-//      @InterchangeableDiscriminator(discriminatorField="transactionType", 
-//          discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypeDiscriminator")
+//  @PossibleValues(TransactionTypePossibleValuesProvider.class)
 //  @Interchangeable(fieldTitle="Transaction type")
     private Integer transactionType;
 //  @Interchangeable(fieldTitle="Adjustment Type")

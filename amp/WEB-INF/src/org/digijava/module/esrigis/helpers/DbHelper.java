@@ -48,6 +48,7 @@ import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 
 public class DbHelper {
@@ -414,23 +415,13 @@ public class DbHelper {
         return stt;
     }
 
-    public static Set<AmpActivity> getActivityByAmpId(String id) {
-        Session session = null;
-        Query q = null;
-        Set<AmpActivity> activities = null;
-        StringBuilder queryString = new StringBuilder("select a from "
-                + AmpActivity.class.getName() + " a ");
-        queryString.append("where a.ampId=:id");
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            q = session.createQuery(queryString.toString());
-            q.setString("id", id);
-            activities = new HashSet<AmpActivity>(q.list());
-
-        } catch (Exception ex) {
-            logger.error("Unable to get Amp Structure Type from database ", ex);
-        }
-        return activities;
+    public static AmpActivity getActivityByAmpId(String id) {
+        AmpActivity act = (AmpActivity) PersistenceManager.getSession()
+                .createCriteria(AmpActivity.class)
+                .add(Restrictions.eq("ampId", id))
+                .uniqueResult();
+        
+        return act;
     }
 
     public static AmpActivityVersion getActivityById(Long id) {

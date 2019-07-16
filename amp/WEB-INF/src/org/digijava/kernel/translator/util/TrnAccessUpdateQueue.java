@@ -17,10 +17,34 @@ import org.digijava.kernel.entity.Message;
 public class TrnAccessUpdateQueue {
     private static TrnAccessUpdateQueue _instance = null;
     private HashMap<Message,Timestamp> map = new HashMap<Message,Timestamp>();
-    private BlockingQueue<Message> queue = new LinkedBlockingQueue<Message>();
+    private BlockingQueue<DelayedMessage> queue = new LinkedBlockingQueue<>();
     private static Logger logger = Logger.getLogger(TrnAccessUpdateQueue.class);
     public static final String ALLOWED_THREAD_NAME = "pool-1-thread-1";
-    
+
+    private static final long DELAY = 1000;
+
+    /**
+     * A delayed message that can be retrieved only after a specified delay.
+     */
+    private static class DelayedMessage {
+
+        private long delayUntil;
+        private Message message;
+
+        DelayedMessage(Message message) {
+            this.message = message;
+            this.delayUntil = System.currentTimeMillis() + DELAY;
+        }
+
+        public Message getMessage() throws InterruptedException {
+            long millisToWait = delayUntil - System.currentTimeMillis();
+            if (millisToWait > 0) {
+                Thread.sleep(millisToWait);
+            }
+            return message;
+        }
+    }
+
     /**
      * Private constructor. use {@link #getQueue()} to get singleton instance.
      */
@@ -50,7 +74,7 @@ public class TrnAccessUpdateQueue {
      */
     public void put(Message message){
             try {
-                queue.put(message);
+                queue.put(new DelayedMessage(message));
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
             }
@@ -65,7 +89,7 @@ public class TrnAccessUpdateQueue {
      * @throws InterruptedException
      */
     public Message get() throws InterruptedException {
-        return queue.take();
+        return queue.take().getMessage();
         //it may be null if notify() was called from other method, not from put(), for example when shutting down saver thread.
         /*if (message != null){
             Timestamp time = map.remove(message);

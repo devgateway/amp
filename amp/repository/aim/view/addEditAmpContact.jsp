@@ -425,7 +425,7 @@
 				newLink.href="#";
 				var label=document.createTextNode("<digi:trn>Add</digi:trn>");
 				newLink.appendChild(label);
-				$("#"+dataName+"Btn").live('click', function() {
+				$("#"+dataName+"Btn").on('click', 'a', function() {
 					addNewData(dataName);
 					return false;
 					}); 

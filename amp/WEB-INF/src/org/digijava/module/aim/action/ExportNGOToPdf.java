@@ -206,7 +206,8 @@ public class ExportNGOToPdf extends Action {
                         currentRecord = property.getValue(); 
                         emails+= BULLETCHAR + currentRecord + ";\n";
                     }else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-                        currentRecord = TranslatorWorker.translateText(property.getPhoneCategory())+property.getActualPhoneNumber(); 
+                        currentRecord =
+                                TranslatorWorker.translateText(property.getPhoneCategory()) + " " + property.getValue();
                         phones+= BULLETCHAR + currentRecord + ";\n";
                     }else{
                         currentRecord = property.getValue(); 

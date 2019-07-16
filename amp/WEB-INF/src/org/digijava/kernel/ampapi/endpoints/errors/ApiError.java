@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeEndpoints;
+import org.digijava.kernel.ampapi.endpoints.common.AmpConfiguration;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactEndpoint;
 import org.digijava.kernel.ampapi.endpoints.currency.Currencies;
 import org.digijava.kernel.ampapi.endpoints.dashboards.EndPoints;
 import org.digijava.kernel.ampapi.endpoints.gis.GisEndPoints;
@@ -46,7 +48,10 @@ public class ApiError {
     
     public final static String UNKOWN_ERROR = "Unknown Error";
     
-    /**  Will store the mapping between the component and it's Id (C). */
+    /**
+     *  Stores the mapping between the component and it's Id (C).
+     *  Component id 0 is reserved for all errors that are not tied to any component.
+     */
     private final static Map<String, Integer> COMPONENT_ID_CLASS_MAP = new HashMap<String, Integer>() {{
         put(InterchangeEndpoints.class.getName(), 1);
         put(Security.class.getName(), 2);
@@ -56,7 +61,9 @@ public class ApiError {
         put(IndicatorEndPoints.class.getName(), 6);
         put(GisEndPoints.class.getName(), 7);
         put(SettingsDefinitionsEndpoint.class.getName(), 8);
-        put(PerformanceRulesEndpoint.class.getName(), 9);
+        put(AmpConfiguration.class.getName(), 9);
+        put(ContactEndpoint.class.getName(), 10);
+        put(PerformanceRulesEndpoint.class.getName(), 11);
     }};
 
     private final static Set<String> COMPONENTS_WITH_NEW_ERROR_FORMAT = new HashSet<>(
@@ -127,12 +134,12 @@ public class ApiError {
         
         return getResultErrorBean(error);
     };
-    
+
     public static JsonBean toError(ApiErrorMessage apiErrorMessage, Throwable e) {
         Map<String, Collection<Object>> error = new HashMap<>();
-        error.put(getErrorId(getErrorComponentIdFromException(e), apiErrorMessage.id), 
+        error.put(getErrorId(getErrorComponentIdFromException(e), apiErrorMessage.id),
                 Arrays.asList(getErrorText(apiErrorMessage)));
-        
+
         return getResultErrorBean(error);
     };
 
@@ -175,7 +182,7 @@ public class ApiError {
      * @return the id of the error
      */
     private static String getErrorId(int componentId, int errorId) {
-        if (componentId != 0) {
+        if (componentId != 0 && errorId < 100) {
             return String.format(API_ERROR_PATTERN, componentId, errorId);
         } else {
             return String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, errorId);
@@ -187,13 +194,13 @@ public class ApiError {
         
         return getErrorComponentIdFromStackTrace(stackTrace);
     }
-    
+
     private static Integer getErrorComponentIdFromException(Throwable e) {
         StackTraceElement[] stackTrace = e.getStackTrace();
-        
+
         return getErrorComponentIdFromStackTrace(stackTrace);
     }
-    
+
     private static Integer getErrorComponentIdFromStackTrace(StackTraceElement[] stackTrace) {
         for (StackTraceElement st : stackTrace) {
             if (COMPONENT_ID_CLASS_MAP.containsKey(st.getClassName())) {

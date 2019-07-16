@@ -11,7 +11,6 @@
 	<script type="text/javascript"> if (!window.console) console = {log: function() {}, warn: function() {}, error: function() {}, info: function(){}}; </script>
 	
 	<script type="text/javascript"> function canExit() {return true;} </script>
-
   </head>
   <body>
 
@@ -26,26 +25,8 @@
     </div>
  	<div id="amp-footer">
     </div>
-    <script src="/TEMPLATE/ampTemplate/js_2/translations/common.js"></script>
     <script src="/TEMPLATE/ampTemplate/commonJs/common.min.js"></script>
-
     <script src="compiled-js/app.js"></script>
-    <script language="JavaScript">
-
-        function processTranslations(data){
-            $("#amp-dashboard").find("h1").text(data['dashboard.common:amp_dashboard']);
-            $("#amp-dashboard").find("h2").text(data['dashboard.common:loading']);
-        }
-        $(document).ready(function() {
-            var originalTranslation=  {
-                'dashboard.common:loading':'Loading...',
-                'dashboard.common:amp_dashboard':'Amp Dashboards'
-            };
-            getTranslations(originalTranslation,processTranslations);
-        });
-
-
-    </script>
+   
   </body>
-
 </html>

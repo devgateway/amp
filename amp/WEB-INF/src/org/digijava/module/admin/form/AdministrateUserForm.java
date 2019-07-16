@@ -43,7 +43,6 @@ public class AdministrateUserForm extends ActionForm {
     private String newPassword;
     private String confirmnewPassword;
 
-    private boolean alertable;
     private boolean ban;
     private boolean globalAdmin;
     private boolean emailVerified;
@@ -53,7 +52,6 @@ public class AdministrateUserForm extends ActionForm {
         newPassword = null;
         confirmnewPassword = null;
 
-        alertable = false;
         ban = false;
         globalAdmin = false;
         emailVerified = false;
@@ -91,14 +89,6 @@ public class AdministrateUserForm extends ActionForm {
 
     public void setSelectedUserId(Long selectedUserId) {
         this.selectedUserId = selectedUserId;
-    }
-
-    public boolean isAlertable() {
-        return alertable;
-    }
-
-    public void setAlertable(boolean alertable) {
-        this.alertable = alertable;
     }
 
     public boolean isBan() {

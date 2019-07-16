@@ -15,6 +15,7 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -31,10 +32,6 @@ public class FormattingTests extends ReportingTestCase {
             "crazy funding 1", "date-filters-activity", "Eth Water",
             "TAC_activity_1", "TAC_activity_2");
 
-    public FormattingTests() {
-        super("Formatting Tests");
-    }
-    
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
         return getOfflineExecutor(activityNames);
@@ -156,5 +153,9 @@ public class FormattingTests extends ReportingTestCase {
 
         runNiTestCase(cor, spec, acts);
     }
-    
+
+    @BeforeClass
+    public static void setUp() {
+        // this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
+    }
 }

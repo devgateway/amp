@@ -25,7 +25,7 @@ public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Ident
     @Interchangeable(fieldTitle="Currency Name")
     @TranslatableField
     private String currencyName;
-    @Interchangeable(fieldTitle="Country Location")
+    
     private AmpCategoryValueLocations countryLocation;
     private Integer activeFlag;
     
@@ -170,6 +170,10 @@ public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Ident
         } catch (Exception ex) {            
             throw new RuntimeException("Error retriving currency exchange rate for "+ currencyCode,ex);
         }
+    }
+
+    public boolean isActive() {
+        return this.getActiveFlag() != 0;
     }
     /**
      * @return the calendar

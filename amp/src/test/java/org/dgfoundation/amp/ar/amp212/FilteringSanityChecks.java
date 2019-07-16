@@ -28,10 +28,6 @@ import org.junit.Test;
  */
 public abstract class FilteringSanityChecks extends ReportingTestCase {
             
-    public FilteringSanityChecks(String name) {
-        super(name);
-    }
-    
     final List<String> acts = Arrays.asList(
             "activity 1 with agreement",
             "Activity 2 with multiple agreements",

@@ -22,7 +22,7 @@ import org.junit.Test;
 public class HierarchiesCollapserTests extends NiTestCase {
         
     public HierarchiesCollapserTests() {
-        super("Report collapsing", HardcodedReportsTestSchema.getInstance());
+        super(HardcodedReportsTestSchema.getInstance());
     }
     
     final LevelColumn PSS = HardcodedReportsTestSchema.PS_DIM_USG.getLevelColumn(1);
@@ -107,7 +107,7 @@ public class HierarchiesCollapserTests extends NiTestCase {
             ReportData collapsed_CRD = rd.accept(new ReportHierarchiesCollapser(strategy, leaves));
             assertEquals(
                     "crd ColumnReportData: Undefined (id: [-1]) {\n" + 
-                            "  Primary Sector Sub-Sector -> {1=[Undefined 11 (id: 1, eid: -11, coos: {secs.Primary=(level: 1, id: -11)}, p: 0.25), Undefined 12 (id: 1, eid: -12, coos: {secs.Primary=(level: 1, id: -12)}, p: 0.25)], 2=[Undefined 12 (id: 2, eid: -12, coos: {secs.Primary=(level: 1, id: -12)}, p: 0.30)]}\n" + 
+                            "  Primary Sector Sub-Sector -> {1=[Undefined 11 (id: 1, eid: -11, coos: {sectors.Primary=(level: 1, id: -11)}, p: 0.25), Undefined 12 (id: 1, eid: -12, coos: {sectors.Primary=(level: 1, id: -12)}, p: 0.25)], 2=[Undefined 12 (id: 2, eid: -12, coos: {sectors.Primary=(level: 1, id: -12)}, p: 0.30)]}\n" + 
                             "  Project Title -> {1=[AAA (id: 1, eid: 1)], 2=[BBB (id: 2, eid: 2)], 3=[CCC (id: 3, eid: 3)]}\n" + 
                             "}",
                 asDebugString(rd));
@@ -125,15 +125,15 @@ public class HierarchiesCollapserTests extends NiTestCase {
         assertEquals(
             "GroupReportData: USAID (id: [99]):\n" + 
             "  crd ColumnReportData: Education (id: [7]) {\n" + 
-            "    Primary Sector Sub-Sector -> {15=[Developers_Education (id: 15, eid: 71, coos: {secs.Primary=(level: 1, id: 71)}, p: 0.30)]}\n" + 
+            "    Primary Sector Sub-Sector -> {15=[Developers_Education (id: 15, eid: 71, coos: {sectors.Primary=(level: 1, id: 71)}, p: 0.30)]}\n" + 
             "    Project Title -> {15=[EEE (id: 15, eid: 15)]}\n" + 
             "  }\n" + 
             "  crd ColumnReportData: Health (id: [3, 4]) {\n" + 
-            "    Primary Sector Sub-Sector -> {2=[Children_Health (id: 2, eid: 31, coos: {secs.Primary=(level: 1, id: 31)}, p: 0.75)], 14=[Dads_Health (id: 14, eid: 41, coos: {secs.Primary=(level: 1, id: 41)}, p: 0.50)]}\n" +
+            "    Primary Sector Sub-Sector -> {2=[Children_Health (id: 2, eid: 31, coos: {sectors.Primary=(level: 1, id: 31)}, p: 0.75)], 14=[Dads_Health (id: 14, eid: 41, coos: {sectors.Primary=(level: 1, id: 41)}, p: 0.50)]}\n" +
             "    Project Title -> {2=[BBB (id: 2, eid: 2)], 14=[DDD (id: 14, eid: 14)]}\n" +
             "  }\n" +
             "  crd ColumnReportData: Undefined (id: [-1, -2]) {\n" +
-            "    Primary Sector Sub-Sector -> {1=[Undefined 11 (id: 1, eid: -11, coos: {secs.Primary=(level: 1, id: -11)}, p: 0.25), Undefined 12 (id: 1, eid: -12, coos: {secs.Primary=(level: 1, id: -12)}, p: 0.25)], 2=[Undefined 12 (id: 2, eid: -12, coos: {secs.Primary=(level: 1, id: -12)}, p: 0.30), Undefined 12 (id: 2, eid: -21, coos: {secs.Primary=(level: 1, id: -21)}, p: 0.75)]}\n" +
+            "    Primary Sector Sub-Sector -> {1=[Undefined 11 (id: 1, eid: -11, coos: {sectors.Primary=(level: 1, id: -11)}, p: 0.25), Undefined 12 (id: 1, eid: -12, coos: {sectors.Primary=(level: 1, id: -12)}, p: 0.25)], 2=[Undefined 12 (id: 2, eid: -12, coos: {sectors.Primary=(level: 1, id: -12)}, p: 0.30), Undefined 12 (id: 2, eid: -21, coos: {sectors.Primary=(level: 1, id: -21)}, p: 0.75)]}\n" +
             "    Project Title -> {1=[AAA (id: 1, eid: 1)], 2=[BBB (id: 2, eid: 2), BBB (id: 2, eid: 2)], 3=[CCC (id: 3, eid: 3)]}\n" + 
             "  }",
             asDebugString(grd.accept(new ReportHierarchiesCollapser(ReportCollapsingStrategy.ALWAYS, leaves))));
@@ -141,19 +141,19 @@ public class HierarchiesCollapserTests extends NiTestCase {
         assertEquals(
                 "GroupReportData: USAID (id: [99]):\n" + 
                 "  crd ColumnReportData: Education (id: [7]) {\n" + 
-                "    Primary Sector Sub-Sector -> {15=[Developers_Education (id: 15, eid: 71, coos: {secs.Primary=(level: 1, id: 71)}, p: 0.30)]}\n" +
+                "    Primary Sector Sub-Sector -> {15=[Developers_Education (id: 15, eid: 71, coos: {sectors.Primary=(level: 1, id: 71)}, p: 0.30)]}\n" +
                 "    Project Title -> {15=[EEE (id: 15, eid: 15)]}\n" +
                 "  }\n" +
                 "  crd ColumnReportData: Health (id: [3]) {\n" +
-                "    Primary Sector Sub-Sector -> {2=[Children_Health (id: 2, eid: 31, coos: {secs.Primary=(level: 1, id: 31)}, p: 0.75)]}\n" +
+                "    Primary Sector Sub-Sector -> {2=[Children_Health (id: 2, eid: 31, coos: {sectors.Primary=(level: 1, id: 31)}, p: 0.75)]}\n" +
                 "    Project Title -> {2=[BBB (id: 2, eid: 2)]}\n" +
                 "  }\n" +
                 "  crd ColumnReportData: Health (id: [4]) {\n" +
-                "    Primary Sector Sub-Sector -> {14=[Dads_Health (id: 14, eid: 41, coos: {secs.Primary=(level: 1, id: 41)}, p: 0.50)]}\n" +
+                "    Primary Sector Sub-Sector -> {14=[Dads_Health (id: 14, eid: 41, coos: {sectors.Primary=(level: 1, id: 41)}, p: 0.50)]}\n" +
                 "    Project Title -> {14=[DDD (id: 14, eid: 14)]}\n" +
                 "  }\n" +
                 "  crd ColumnReportData: Undefined (id: [-1, -2]) {\n" +
-                "    Primary Sector Sub-Sector -> {1=[Undefined 11 (id: 1, eid: -11, coos: {secs.Primary=(level: 1, id: -11)}, p: 0.25), Undefined 12 (id: 1, eid: -12, coos: {secs.Primary=(level: 1, id: -12)}, p: 0.25)], 2=[Undefined 12 (id: 2, eid: -12, coos: {secs.Primary=(level: 1, id: -12)}, p: 0.30), Undefined 12 (id: 2, eid: -21, coos: {secs.Primary=(level: 1, id: -21)}, p: 0.75)]}\n" +
+                "    Primary Sector Sub-Sector -> {1=[Undefined 11 (id: 1, eid: -11, coos: {sectors.Primary=(level: 1, id: -11)}, p: 0.25), Undefined 12 (id: 1, eid: -12, coos: {sectors.Primary=(level: 1, id: -12)}, p: 0.25)], 2=[Undefined 12 (id: 2, eid: -12, coos: {sectors.Primary=(level: 1, id: -12)}, p: 0.30), Undefined 12 (id: 2, eid: -21, coos: {sectors.Primary=(level: 1, id: -21)}, p: 0.75)]}\n" +
                 "    Project Title -> {1=[AAA (id: 1, eid: 1)], 2=[BBB (id: 2, eid: 2), BBB (id: 2, eid: 2)], 3=[CCC (id: 3, eid: 3)]}\n" +
                 "  }",
         asDebugString(grd.accept(new ReportHierarchiesCollapser(ReportCollapsingStrategy.UNKNOWNS, leaves))));  
@@ -169,91 +169,91 @@ public class HierarchiesCollapserTests extends NiTestCase {
             "GroupReportData: Default (id: [38]):\n" + 
             "  GroupReportData: USAID (id: [99]):\n" +
             "    crd ColumnReportData: Undefined (id: [-1]) {\n" +
-            "      Primary Sector Sub-Sector -> {1=[Undefined 11 (id: 1, eid: -11, coos: {secs.Primary=(level: 1, id: -11)}, p: 0.25), Undefined 12 (id: 1, eid: -12, coos: {secs.Primary=(level: 1, id: -12)}, p: 0.25)], 2=[Undefined 12 (id: 2, eid: -12, coos: {secs.Primary=(level: 1, id: -12)}, p: 0.30)]}\n" +
+            "      Primary Sector Sub-Sector -> {1=[Undefined 11 (id: 1, eid: -11, coos: {sectors.Primary=(level: 1, id: -11)}, p: 0.25), Undefined 12 (id: 1, eid: -12, coos: {sectors.Primary=(level: 1, id: -12)}, p: 0.25)], 2=[Undefined 12 (id: 2, eid: -12, coos: {sectors.Primary=(level: 1, id: -12)}, p: 0.30)]}\n" +
             "      Project Title -> {1=[AAA (id: 1, eid: 1)], 2=[BBB (id: 2, eid: 2)], 3=[CCC (id: 3, eid: 3)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Undefined (id: [-2]) {\n" +
-            "      Primary Sector Sub-Sector -> {2=[Undefined 12 (id: 2, eid: -21, coos: {secs.Primary=(level: 1, id: -21)}, p: 0.75)]}\n" +
+            "      Primary Sector Sub-Sector -> {2=[Undefined 12 (id: 2, eid: -21, coos: {sectors.Primary=(level: 1, id: -21)}, p: 0.75)]}\n" +
             "      Project Title -> {2=[BBB (id: 2, eid: 2)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Health (id: [3]) {\n" +
-            "      Primary Sector Sub-Sector -> {2=[Children_Health (id: 2, eid: 31, coos: {secs.Primary=(level: 1, id: 31)}, p: 0.75)]}\n" +
+            "      Primary Sector Sub-Sector -> {2=[Children_Health (id: 2, eid: 31, coos: {sectors.Primary=(level: 1, id: 31)}, p: 0.75)]}\n" +
             "      Project Title -> {2=[BBB (id: 2, eid: 2)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Health (id: [4]) {\n" +
-            "      Primary Sector Sub-Sector -> {14=[Dads_Health (id: 14, eid: 41, coos: {secs.Primary=(level: 1, id: 41)}, p: 0.50)]}\n" +
+            "      Primary Sector Sub-Sector -> {14=[Dads_Health (id: 14, eid: 41, coos: {sectors.Primary=(level: 1, id: 41)}, p: 0.50)]}\n" +
             "      Project Title -> {14=[DDD (id: 14, eid: 14)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Education (id: [7]) {\n" +
-            "      Primary Sector Sub-Sector -> {15=[Developers_Education (id: 15, eid: 71, coos: {secs.Primary=(level: 1, id: 71)}, p: 0.30)]}\n" +
+            "      Primary Sector Sub-Sector -> {15=[Developers_Education (id: 15, eid: 71, coos: {sectors.Primary=(level: 1, id: 71)}, p: 0.30)]}\n" +
             "      Project Title -> {15=[EEE (id: 15, eid: 15)]}\n" +
             "    }\n" +
             "  GroupReportData: Finland (id: [78]):\n" +
             "    crd ColumnReportData: Health (id: [3]) {\n" +
-            "      Primary Sector Sub-Sector -> {17=[Seniors_Health (id: 17, eid: 32, coos: {secs.Primary=(level: 1, id: 32)}, p: 0.72)]}\n" +
+            "      Primary Sector Sub-Sector -> {17=[Seniors_Health (id: 17, eid: 32, coos: {sectors.Primary=(level: 1, id: 32)}, p: 0.72)]}\n" +
             "      Project Title -> {17=[TURA (id: 17, eid: 17)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Unknown (id: [-3]) {\n" +
-            "      Primary Sector Sub-Sector -> {26=[Seniors_Health (id: 26, eid: 32, coos: {secs.Primary=(level: 1, id: 32)}, p: 0.10)]}\n" +
+            "      Primary Sector Sub-Sector -> {26=[Seniors_Health (id: 26, eid: 32, coos: {sectors.Primary=(level: 1, id: 32)}, p: 0.10)]}\n" +
             "      Project Title -> {26=[VAVA (id: 26, eid: 26)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Unknown (id: [-4]) {\n" +
-            "      Primary Sector Sub-Sector -> {27=[Aliens_Health (id: 27, eid: 29, coos: {secs.Primary=(level: 1, id: 29)}, p: 0.23)]}\n" +
+            "      Primary Sector Sub-Sector -> {27=[Aliens_Health (id: 27, eid: 29, coos: {sectors.Primary=(level: 1, id: 29)}, p: 0.23)]}\n" +
             "      Project Title -> {27=[ZUZU (id: 27, eid: 27)]}\n" +
             "    }\n" +         
             "  GroupReportData: Finland (id: [79]):\n" +
             "    crd ColumnReportData: Health (id: [4]) {\n" +
-            "      Primary Sector Sub-Sector -> {13=[Aliens_Health (id: 13, eid: 29, coos: {secs.Primary=(level: 1, id: 29)}, p: 0.19)]}\n" +
+            "      Primary Sector Sub-Sector -> {13=[Aliens_Health (id: 13, eid: 29, coos: {sectors.Primary=(level: 1, id: 29)}, p: 0.19)]}\n" +
             "      Project Title -> {13=[ZURA (id: 13, eid: 13)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Unknown (id: [-3]) {\n" + 
-            "      Primary Sector Sub-Sector -> {28=[Randomness_Health (id: 28, eid: 33, coos: {secs.Primary=(level: 1, id: 33)}, p: 0.15)]}\n" +
+            "      Primary Sector Sub-Sector -> {28=[Randomness_Health (id: 28, eid: 33, coos: {sectors.Primary=(level: 1, id: 33)}, p: 0.15)]}\n" +
             "      Project Title -> {28=[JUJU (id: 28, eid: 28)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Unknown (id: [-5]) {\n" +
-            "      Primary Sector Sub-Sector -> {29=[Ahem_Health (id: 29, eid: 34, coos: {secs.Primary=(level: 1, id: 34)}, p: 0.55)]}\n" +
+            "      Primary Sector Sub-Sector -> {29=[Ahem_Health (id: 29, eid: 34, coos: {sectors.Primary=(level: 1, id: 34)}, p: 0.55)]}\n" +
             "      Project Title -> {29=[LOLA (id: 29, eid: 29)]}\n" +
             "    }\n" +
             "  GroupReportData: Undefined (id: [-11]):\n" +
             "    crd ColumnReportData: Health (id: [3]) {\n" +
-            "      Primary Sector Sub-Sector -> {17=[Seniors_Health (id: 17, eid: 32, coos: {secs.Primary=(level: 1, id: 32)}, p: 0.72)]}\n" +
+            "      Primary Sector Sub-Sector -> {17=[Seniors_Health (id: 17, eid: 32, coos: {sectors.Primary=(level: 1, id: 32)}, p: 0.72)]}\n" +
             "      Project Title -> {17=[TURA (id: 17, eid: 17)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Health (id: [4]) {\n" +
-            "      Primary Sector Sub-Sector -> {21=[Zombies_Health (id: 21, eid: 34, coos: {secs.Primary=(level: 1, id: 34)}, p: 0.32)]}\n" +
+            "      Primary Sector Sub-Sector -> {21=[Zombies_Health (id: 21, eid: 34, coos: {sectors.Primary=(level: 1, id: 34)}, p: 0.32)]}\n" +
             "      Project Title -> {21=[JORA (id: 21, eid: 21)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: some_sector_1 (id: [64]) {\n" +
-            "      Primary Sector Sub-Sector -> {111=[say_something_1 (id: 111, eid: 120, coos: {secs.Primary=(level: 1, id: 120)}, p: 0.50)]}\n" +
+            "      Primary Sector Sub-Sector -> {111=[say_something_1 (id: 111, eid: 120, coos: {sectors.Primary=(level: 1, id: 120)}, p: 0.50)]}\n" +
             "      Project Title -> {111=[some_project_1 (id: 111, eid: 111)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: some_sector_2 (id: [65]) {\n" +
-            "      Primary Sector Sub-Sector -> {112=[say_something_2 (id: 112, eid: 121, coos: {secs.Primary=(level: 1, id: 121)}, p: 0.35)]}\n" +
+            "      Primary Sector Sub-Sector -> {112=[say_something_2 (id: 112, eid: 121, coos: {sectors.Primary=(level: 1, id: 121)}, p: 0.35)]}\n" +
             "      Project Title -> {112=[some_project_2 (id: 112, eid: 112)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Undefined (id: [-7]) {\n" + 
-            "      Primary Sector Sub-Sector -> {116=[say_something_2 (id: 116, eid: 121, coos: {secs.Primary=(level: 1, id: 121)}, p: 0.35)]}\n" +
+            "      Primary Sector Sub-Sector -> {116=[say_something_2 (id: 116, eid: 121, coos: {sectors.Primary=(level: 1, id: 121)}, p: 0.35)]}\n" +
             "      Project Title -> {116=[klara (id: 116, eid: 116)]}\n" +
             "    }\n" +
             "  GroupReportData: Undefined (id: [-12]):\n" +
             "    crd ColumnReportData: Health (id: [3]) {\n" +
-            "      Primary Sector Sub-Sector -> {22=[Seniors_Health (id: 22, eid: 32, coos: {secs.Primary=(level: 1, id: 32)}, p: 0.62)]}\n" +
+            "      Primary Sector Sub-Sector -> {22=[Seniors_Health (id: 22, eid: 32, coos: {sectors.Primary=(level: 1, id: 32)}, p: 0.62)]}\n" +
             "      Project Title -> {22=[HAHA (id: 22, eid: 22)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Health (id: [4]) {\n" +
-            "      Primary Sector Sub-Sector -> {25=[Zombies_Health (id: 25, eid: 34, coos: {secs.Primary=(level: 1, id: 34)}, p: 0.57)]}\n" +
+            "      Primary Sector Sub-Sector -> {25=[Zombies_Health (id: 25, eid: 34, coos: {sectors.Primary=(level: 1, id: 34)}, p: 0.57)]}\n" +
             "      Project Title -> {25=[JAJA (id: 25, eid: 25)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: some_sector_3 (id: [66]) {\n" +
-            "      Primary Sector Sub-Sector -> {113=[say_something_3 (id: 113, eid: 123, coos: {secs.Primary=(level: 1, id: 123)}, p: 0.60)]}\n" +
+            "      Primary Sector Sub-Sector -> {113=[say_something_3 (id: 113, eid: 123, coos: {sectors.Primary=(level: 1, id: 123)}, p: 0.60)]}\n" +
             "      Project Title -> {113=[some_project_3 (id: 113, eid: 113)]}\n" +
             "    }\n" + 
             "    crd ColumnReportData: Undefined (id: [-7]) {\n" + 
-            "      Primary Sector Sub-Sector -> {117=[say_something_4 (id: 117, eid: 124, coos: {secs.Primary=(level: 1, id: 124)}, p: 0.55)]}\n" +
+            "      Primary Sector Sub-Sector -> {117=[say_something_4 (id: 117, eid: 124, coos: {sectors.Primary=(level: 1, id: 124)}, p: 0.55)]}\n" +
             "      Project Title -> {117=[vlara (id: 117, eid: 117)]}\n" +
             "    }\n" + 
             "    crd ColumnReportData: Undefined (id: [-9]) {\n" + 
-            "      Primary Sector Sub-Sector -> {118=[say_something_5 (id: 118, eid: 205, coos: {secs.Primary=(level: 1, id: 205)}, p: 0.34)]}\n" +
+            "      Primary Sector Sub-Sector -> {118=[say_something_5 (id: 118, eid: 205, coos: {sectors.Primary=(level: 1, id: 205)}, p: 0.34)]}\n" +
             "      Project Title -> {118=[zoso (id: 118, eid: 118)]}\n" +
             "    }",
             asDebugString(grd.accept(new ReportHierarchiesCollapser(ReportCollapsingStrategy.NEVER, leaves))));
@@ -263,62 +263,62 @@ public class HierarchiesCollapserTests extends NiTestCase {
             "GroupReportData: Default (id: [38]):\n" + 
             "  GroupReportData: Finland (id: [78]):\n" +
             "    crd ColumnReportData: Health (id: [3]) {\n" +
-            "      Primary Sector Sub-Sector -> {17=[Seniors_Health (id: 17, eid: 32, coos: {secs.Primary=(level: 1, id: 32)}, p: 0.72)]}\n" +
+            "      Primary Sector Sub-Sector -> {17=[Seniors_Health (id: 17, eid: 32, coos: {sectors.Primary=(level: 1, id: 32)}, p: 0.72)]}\n" +
             "      Project Title -> {17=[TURA (id: 17, eid: 17)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Unknown (id: [-3, -4]) {\n" +
-            "      Primary Sector Sub-Sector -> {26=[Seniors_Health (id: 26, eid: 32, coos: {secs.Primary=(level: 1, id: 32)}, p: 0.10)], 27=[Aliens_Health (id: 27, eid: 29, coos: {secs.Primary=(level: 1, id: 29)}, p: 0.23)]}\n" +
+            "      Primary Sector Sub-Sector -> {26=[Seniors_Health (id: 26, eid: 32, coos: {sectors.Primary=(level: 1, id: 32)}, p: 0.10)], 27=[Aliens_Health (id: 27, eid: 29, coos: {sectors.Primary=(level: 1, id: 29)}, p: 0.23)]}\n" +
             "      Project Title -> {26=[VAVA (id: 26, eid: 26)], 27=[ZUZU (id: 27, eid: 27)]}\n" +
             "    }\n" +
             "  GroupReportData: Finland (id: [79]):\n" +
             "    crd ColumnReportData: Health (id: [4]) {\n" +
-            "      Primary Sector Sub-Sector -> {13=[Aliens_Health (id: 13, eid: 29, coos: {secs.Primary=(level: 1, id: 29)}, p: 0.19)]}\n" +
+            "      Primary Sector Sub-Sector -> {13=[Aliens_Health (id: 13, eid: 29, coos: {sectors.Primary=(level: 1, id: 29)}, p: 0.19)]}\n" +
             "      Project Title -> {13=[ZURA (id: 13, eid: 13)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Unknown (id: [-3, -5]) {\n" +
-            "      Primary Sector Sub-Sector -> {28=[Randomness_Health (id: 28, eid: 33, coos: {secs.Primary=(level: 1, id: 33)}, p: 0.15)], 29=[Ahem_Health (id: 29, eid: 34, coos: {secs.Primary=(level: 1, id: 34)}, p: 0.55)]}\n" +
+            "      Primary Sector Sub-Sector -> {28=[Randomness_Health (id: 28, eid: 33, coos: {sectors.Primary=(level: 1, id: 33)}, p: 0.15)], 29=[Ahem_Health (id: 29, eid: 34, coos: {sectors.Primary=(level: 1, id: 34)}, p: 0.55)]}\n" +
             "      Project Title -> {28=[JUJU (id: 28, eid: 28)], 29=[LOLA (id: 29, eid: 29)]}\n" +
             "    }\n" +
             "  GroupReportData: USAID (id: [99]):\n" +
             "    crd ColumnReportData: Education (id: [7]) {\n" +
-            "      Primary Sector Sub-Sector -> {15=[Developers_Education (id: 15, eid: 71, coos: {secs.Primary=(level: 1, id: 71)}, p: 0.30)]}\n" +
+            "      Primary Sector Sub-Sector -> {15=[Developers_Education (id: 15, eid: 71, coos: {sectors.Primary=(level: 1, id: 71)}, p: 0.30)]}\n" +
             "      Project Title -> {15=[EEE (id: 15, eid: 15)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Health (id: [3]) {\n" +
-            "      Primary Sector Sub-Sector -> {2=[Children_Health (id: 2, eid: 31, coos: {secs.Primary=(level: 1, id: 31)}, p: 0.75)]}\n" +
+            "      Primary Sector Sub-Sector -> {2=[Children_Health (id: 2, eid: 31, coos: {sectors.Primary=(level: 1, id: 31)}, p: 0.75)]}\n" +
             "      Project Title -> {2=[BBB (id: 2, eid: 2)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Health (id: [4]) {\n" +
-            "      Primary Sector Sub-Sector -> {14=[Dads_Health (id: 14, eid: 41, coos: {secs.Primary=(level: 1, id: 41)}, p: 0.50)]}\n" +
+            "      Primary Sector Sub-Sector -> {14=[Dads_Health (id: 14, eid: 41, coos: {sectors.Primary=(level: 1, id: 41)}, p: 0.50)]}\n" +
             "      Project Title -> {14=[DDD (id: 14, eid: 14)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Undefined (id: [-1, -2]) {\n" +
-            "      Primary Sector Sub-Sector -> {1=[Undefined 11 (id: 1, eid: -11, coos: {secs.Primary=(level: 1, id: -11)}, p: 0.25), Undefined 12 (id: 1, eid: -12, coos: {secs.Primary=(level: 1, id: -12)}, p: 0.25)], 2=[Undefined 12 (id: 2, eid: -12, coos: {secs.Primary=(level: 1, id: -12)}, p: 0.30), Undefined 12 (id: 2, eid: -21, coos: {secs.Primary=(level: 1, id: -21)}, p: 0.75)]}\n" +
+            "      Primary Sector Sub-Sector -> {1=[Undefined 11 (id: 1, eid: -11, coos: {sectors.Primary=(level: 1, id: -11)}, p: 0.25), Undefined 12 (id: 1, eid: -12, coos: {sectors.Primary=(level: 1, id: -12)}, p: 0.25)], 2=[Undefined 12 (id: 2, eid: -12, coos: {sectors.Primary=(level: 1, id: -12)}, p: 0.30), Undefined 12 (id: 2, eid: -21, coos: {sectors.Primary=(level: 1, id: -21)}, p: 0.75)]}\n" +
             "      Project Title -> {1=[AAA (id: 1, eid: 1)], 2=[BBB (id: 2, eid: 2), BBB (id: 2, eid: 2)], 3=[CCC (id: 3, eid: 3)]}\n" +
             "    }\n" +
             "  GroupReportData: Undefined (id: [-11, -12]):\n" +
             "    crd ColumnReportData: Health (id: [3]) {\n" +
-            "      Primary Sector Sub-Sector -> {17=[Seniors_Health (id: 17, eid: 32, coos: {secs.Primary=(level: 1, id: 32)}, p: 0.72)], 22=[Seniors_Health (id: 22, eid: 32, coos: {secs.Primary=(level: 1, id: 32)}, p: 0.62)]}\n" +
+            "      Primary Sector Sub-Sector -> {17=[Seniors_Health (id: 17, eid: 32, coos: {sectors.Primary=(level: 1, id: 32)}, p: 0.72)], 22=[Seniors_Health (id: 22, eid: 32, coos: {sectors.Primary=(level: 1, id: 32)}, p: 0.62)]}\n" +
             "      Project Title -> {17=[TURA (id: 17, eid: 17)], 22=[HAHA (id: 22, eid: 22)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Health (id: [4]) {\n" +
-            "      Primary Sector Sub-Sector -> {21=[Zombies_Health (id: 21, eid: 34, coos: {secs.Primary=(level: 1, id: 34)}, p: 0.32)], 25=[Zombies_Health (id: 25, eid: 34, coos: {secs.Primary=(level: 1, id: 34)}, p: 0.57)]}\n" +
+            "      Primary Sector Sub-Sector -> {21=[Zombies_Health (id: 21, eid: 34, coos: {sectors.Primary=(level: 1, id: 34)}, p: 0.32)], 25=[Zombies_Health (id: 25, eid: 34, coos: {sectors.Primary=(level: 1, id: 34)}, p: 0.57)]}\n" +
             "      Project Title -> {21=[JORA (id: 21, eid: 21)], 25=[JAJA (id: 25, eid: 25)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: some_sector_1 (id: [64]) {\n" +
-            "      Primary Sector Sub-Sector -> {111=[say_something_1 (id: 111, eid: 120, coos: {secs.Primary=(level: 1, id: 120)}, p: 0.50)]}\n" +
+            "      Primary Sector Sub-Sector -> {111=[say_something_1 (id: 111, eid: 120, coos: {sectors.Primary=(level: 1, id: 120)}, p: 0.50)]}\n" +
             "      Project Title -> {111=[some_project_1 (id: 111, eid: 111)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: some_sector_2 (id: [65]) {\n" + 
-            "      Primary Sector Sub-Sector -> {112=[say_something_2 (id: 112, eid: 121, coos: {secs.Primary=(level: 1, id: 121)}, p: 0.35)]}\n" +
+            "      Primary Sector Sub-Sector -> {112=[say_something_2 (id: 112, eid: 121, coos: {sectors.Primary=(level: 1, id: 121)}, p: 0.35)]}\n" +
             "      Project Title -> {112=[some_project_2 (id: 112, eid: 112)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: some_sector_3 (id: [66]) {\n" +
-            "      Primary Sector Sub-Sector -> {113=[say_something_3 (id: 113, eid: 123, coos: {secs.Primary=(level: 1, id: 123)}, p: 0.60)]}\n" +
+            "      Primary Sector Sub-Sector -> {113=[say_something_3 (id: 113, eid: 123, coos: {sectors.Primary=(level: 1, id: 123)}, p: 0.60)]}\n" +
             "      Project Title -> {113=[some_project_3 (id: 113, eid: 113)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Undefined (id: [-7, -9]) {\n" +
-            "      Primary Sector Sub-Sector -> {116=[say_something_2 (id: 116, eid: 121, coos: {secs.Primary=(level: 1, id: 121)}, p: 0.35)], 117=[say_something_4 (id: 117, eid: 124, coos: {secs.Primary=(level: 1, id: 124)}, p: 0.55)], 118=[say_something_5 (id: 118, eid: 205, coos: {secs.Primary=(level: 1, id: 205)}, p: 0.34)]}\n" +
+            "      Primary Sector Sub-Sector -> {116=[say_something_2 (id: 116, eid: 121, coos: {sectors.Primary=(level: 1, id: 121)}, p: 0.35)], 117=[say_something_4 (id: 117, eid: 124, coos: {sectors.Primary=(level: 1, id: 124)}, p: 0.55)], 118=[say_something_5 (id: 118, eid: 205, coos: {sectors.Primary=(level: 1, id: 205)}, p: 0.34)]}\n" +
             "      Project Title -> {116=[klara (id: 116, eid: 116)], 117=[vlara (id: 117, eid: 117)], 118=[zoso (id: 118, eid: 118)]}\n" +
             "    }",
             asDebugString(grd.accept(new ReportHierarchiesCollapser(ReportCollapsingStrategy.UNKNOWNS, leaves))));
@@ -327,45 +327,45 @@ public class HierarchiesCollapserTests extends NiTestCase {
             "GroupReportData: Default (id: [38]):\n" + 
             "  GroupReportData: Finland (id: [78, 79]):\n" +
             "    crd ColumnReportData: Health (id: [3, 4]) {\n" +
-            "      Primary Sector Sub-Sector -> {17=[Seniors_Health (id: 17, eid: 32, coos: {secs.Primary=(level: 1, id: 32)}, p: 0.72)], 13=[Aliens_Health (id: 13, eid: 29, coos: {secs.Primary=(level: 1, id: 29)}, p: 0.19)]}\n" +
+            "      Primary Sector Sub-Sector -> {17=[Seniors_Health (id: 17, eid: 32, coos: {sectors.Primary=(level: 1, id: 32)}, p: 0.72)], 13=[Aliens_Health (id: 13, eid: 29, coos: {sectors.Primary=(level: 1, id: 29)}, p: 0.19)]}\n" +
             "      Project Title -> {17=[TURA (id: 17, eid: 17)], 13=[ZURA (id: 13, eid: 13)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Unknown (id: [-3, -4, -5]) {\n" +
-            "      Primary Sector Sub-Sector -> {26=[Seniors_Health (id: 26, eid: 32, coos: {secs.Primary=(level: 1, id: 32)}, p: 0.10)], 27=[Aliens_Health (id: 27, eid: 29, coos: {secs.Primary=(level: 1, id: 29)}, p: 0.23)], 28=[Randomness_Health (id: 28, eid: 33, coos: {secs.Primary=(level: 1, id: 33)}, p: 0.15)], 29=[Ahem_Health (id: 29, eid: 34, coos: {secs.Primary=(level: 1, id: 34)}, p: 0.55)]}\n" +
+            "      Primary Sector Sub-Sector -> {26=[Seniors_Health (id: 26, eid: 32, coos: {sectors.Primary=(level: 1, id: 32)}, p: 0.10)], 27=[Aliens_Health (id: 27, eid: 29, coos: {sectors.Primary=(level: 1, id: 29)}, p: 0.23)], 28=[Randomness_Health (id: 28, eid: 33, coos: {sectors.Primary=(level: 1, id: 33)}, p: 0.15)], 29=[Ahem_Health (id: 29, eid: 34, coos: {sectors.Primary=(level: 1, id: 34)}, p: 0.55)]}\n" +
             "      Project Title -> {26=[VAVA (id: 26, eid: 26)], 27=[ZUZU (id: 27, eid: 27)], 28=[JUJU (id: 28, eid: 28)], 29=[LOLA (id: 29, eid: 29)]}\n" +
             "    }\n" +
             "  GroupReportData: USAID (id: [99]):\n" +
             "    crd ColumnReportData: Education (id: [7]) {\n" +
-            "      Primary Sector Sub-Sector -> {15=[Developers_Education (id: 15, eid: 71, coos: {secs.Primary=(level: 1, id: 71)}, p: 0.30)]}\n" +
+            "      Primary Sector Sub-Sector -> {15=[Developers_Education (id: 15, eid: 71, coos: {sectors.Primary=(level: 1, id: 71)}, p: 0.30)]}\n" +
             "      Project Title -> {15=[EEE (id: 15, eid: 15)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Health (id: [3, 4]) {\n" +
-            "      Primary Sector Sub-Sector -> {2=[Children_Health (id: 2, eid: 31, coos: {secs.Primary=(level: 1, id: 31)}, p: 0.75)], 14=[Dads_Health (id: 14, eid: 41, coos: {secs.Primary=(level: 1, id: 41)}, p: 0.50)]}\n" +
+            "      Primary Sector Sub-Sector -> {2=[Children_Health (id: 2, eid: 31, coos: {sectors.Primary=(level: 1, id: 31)}, p: 0.75)], 14=[Dads_Health (id: 14, eid: 41, coos: {sectors.Primary=(level: 1, id: 41)}, p: 0.50)]}\n" +
             "      Project Title -> {2=[BBB (id: 2, eid: 2)], 14=[DDD (id: 14, eid: 14)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Undefined (id: [-1, -2]) {\n" +
-            "      Primary Sector Sub-Sector -> {1=[Undefined 11 (id: 1, eid: -11, coos: {secs.Primary=(level: 1, id: -11)}, p: 0.25), Undefined 12 (id: 1, eid: -12, coos: {secs.Primary=(level: 1, id: -12)}, p: 0.25)], 2=[Undefined 12 (id: 2, eid: -12, coos: {secs.Primary=(level: 1, id: -12)}, p: 0.30), Undefined 12 (id: 2, eid: -21, coos: {secs.Primary=(level: 1, id: -21)}, p: 0.75)]}\n" +
+            "      Primary Sector Sub-Sector -> {1=[Undefined 11 (id: 1, eid: -11, coos: {sectors.Primary=(level: 1, id: -11)}, p: 0.25), Undefined 12 (id: 1, eid: -12, coos: {sectors.Primary=(level: 1, id: -12)}, p: 0.25)], 2=[Undefined 12 (id: 2, eid: -12, coos: {sectors.Primary=(level: 1, id: -12)}, p: 0.30), Undefined 12 (id: 2, eid: -21, coos: {sectors.Primary=(level: 1, id: -21)}, p: 0.75)]}\n" +
             "      Project Title -> {1=[AAA (id: 1, eid: 1)], 2=[BBB (id: 2, eid: 2), BBB (id: 2, eid: 2)], 3=[CCC (id: 3, eid: 3)]}\n" +
             "    }\n" +
             "  GroupReportData: Undefined (id: [-11, -12]):\n" +
             "    crd ColumnReportData: Health (id: [3, 4]) {\n" +
-            "      Primary Sector Sub-Sector -> {17=[Seniors_Health (id: 17, eid: 32, coos: {secs.Primary=(level: 1, id: 32)}, p: 0.72)], 21=[Zombies_Health (id: 21, eid: 34, coos: {secs.Primary=(level: 1, id: 34)}, p: 0.32)], 22=[Seniors_Health (id: 22, eid: 32, coos: {secs.Primary=(level: 1, id: 32)}, p: 0.62)], 25=[Zombies_Health (id: 25, eid: 34, coos: {secs.Primary=(level: 1, id: 34)}, p: 0.57)]}\n" +
+            "      Primary Sector Sub-Sector -> {17=[Seniors_Health (id: 17, eid: 32, coos: {sectors.Primary=(level: 1, id: 32)}, p: 0.72)], 21=[Zombies_Health (id: 21, eid: 34, coos: {sectors.Primary=(level: 1, id: 34)}, p: 0.32)], 22=[Seniors_Health (id: 22, eid: 32, coos: {sectors.Primary=(level: 1, id: 32)}, p: 0.62)], 25=[Zombies_Health (id: 25, eid: 34, coos: {sectors.Primary=(level: 1, id: 34)}, p: 0.57)]}\n" +
             "      Project Title -> {17=[TURA (id: 17, eid: 17)], 21=[JORA (id: 21, eid: 21)], 22=[HAHA (id: 22, eid: 22)], 25=[JAJA (id: 25, eid: 25)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: some_sector_1 (id: [64]) {\n" +
-            "      Primary Sector Sub-Sector -> {111=[say_something_1 (id: 111, eid: 120, coos: {secs.Primary=(level: 1, id: 120)}, p: 0.50)]}\n" +
+            "      Primary Sector Sub-Sector -> {111=[say_something_1 (id: 111, eid: 120, coos: {sectors.Primary=(level: 1, id: 120)}, p: 0.50)]}\n" +
             "      Project Title -> {111=[some_project_1 (id: 111, eid: 111)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: some_sector_2 (id: [65]) {\n" +
-            "      Primary Sector Sub-Sector -> {112=[say_something_2 (id: 112, eid: 121, coos: {secs.Primary=(level: 1, id: 121)}, p: 0.35)]}\n" +
+            "      Primary Sector Sub-Sector -> {112=[say_something_2 (id: 112, eid: 121, coos: {sectors.Primary=(level: 1, id: 121)}, p: 0.35)]}\n" +
             "      Project Title -> {112=[some_project_2 (id: 112, eid: 112)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: some_sector_3 (id: [66]) {\n" +
-            "      Primary Sector Sub-Sector -> {113=[say_something_3 (id: 113, eid: 123, coos: {secs.Primary=(level: 1, id: 123)}, p: 0.60)]}\n" +
+            "      Primary Sector Sub-Sector -> {113=[say_something_3 (id: 113, eid: 123, coos: {sectors.Primary=(level: 1, id: 123)}, p: 0.60)]}\n" +
             "      Project Title -> {113=[some_project_3 (id: 113, eid: 113)]}\n" +
             "    }\n" +
             "    crd ColumnReportData: Undefined (id: [-7, -9]) {\n" +
-            "      Primary Sector Sub-Sector -> {116=[say_something_2 (id: 116, eid: 121, coos: {secs.Primary=(level: 1, id: 121)}, p: 0.35)], 117=[say_something_4 (id: 117, eid: 124, coos: {secs.Primary=(level: 1, id: 124)}, p: 0.55)], 118=[say_something_5 (id: 118, eid: 205, coos: {secs.Primary=(level: 1, id: 205)}, p: 0.34)]}\n" +
+            "      Primary Sector Sub-Sector -> {116=[say_something_2 (id: 116, eid: 121, coos: {sectors.Primary=(level: 1, id: 121)}, p: 0.35)], 117=[say_something_4 (id: 117, eid: 124, coos: {sectors.Primary=(level: 1, id: 124)}, p: 0.55)], 118=[say_something_5 (id: 118, eid: 205, coos: {sectors.Primary=(level: 1, id: 205)}, p: 0.34)]}\n" +
             "      Project Title -> {116=[klara (id: 116, eid: 116)], 117=[vlara (id: 117, eid: 117)], 118=[zoso (id: 118, eid: 118)]}\n" +
             "    }",
                 asDebugString(grd.accept(new ReportHierarchiesCollapser(ReportCollapsingStrategy.ALWAYS, leaves))));

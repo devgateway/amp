@@ -28,7 +28,6 @@ public class CurrencyConvertorTests extends ReportingTestCase {
     final String BASE_CURRENCY = "USD";
     
     public CurrencyConvertorTests() {
-        super("Currency Convertor tests");
         convertor = AmpCurrencyConvertor.getInstance();
     }
 
@@ -60,7 +59,7 @@ public class CurrencyConvertorTests extends ReportingTestCase {
 
             double exchangeRate = convertor.getExchangeRate(BASE_CURRENCY, rate.getKey(), null, date);
 
-            assertEquals(Math.round(rate.getValue().doubleValue() * 1000) / 1000.0, Math.round(exchangeRate * 1000) / 1000.0);
+            assertEquals(Math.round(rate.getValue().doubleValue() * 1000) / 1000.0, Math.round(exchangeRate * 1000) / 1000.0, DELTA_6);
 
         }
     }
@@ -96,7 +95,7 @@ public class CurrencyConvertorTests extends ReportingTestCase {
                 double exchangeRate = convertor.getExchangeRate(fromCurrencyCode, toCurrencyCode, null, date);
                 double exchangeRateInverse = convertor.getExchangeRate(toCurrencyCode, fromCurrencyCode, null, date);
                 
-                assertEquals(exchangeRate, 1 / exchangeRateInverse);
+                assertEquals(exchangeRate, 1 / exchangeRateInverse, DELTA_6);
                 
             }
         }
@@ -123,7 +122,7 @@ public class CurrencyConvertorTests extends ReportingTestCase {
 
             double exchangeRate = convertor.getExchangeRate(BASE_CURRENCY, rate.getKey(), null, date);
 
-            assertEquals(Math.round(rate.getValue().doubleValue() * 1000) / 1000.0, Math.round(exchangeRate * 1000) / 1000.0);
+            assertEquals(Math.round(rate.getValue().doubleValue() * 1000) / 1000.0, Math.round(exchangeRate * 1000) / 1000.0, DELTA_6);
 
         }
 
@@ -138,9 +137,9 @@ public class CurrencyConvertorTests extends ReportingTestCase {
         double exchangeRateMDL = convertor.getExchangeRate("MDL", "MDL", null, date);
         double exchangeRateEUR = convertor.getExchangeRate("EUR", "EUR", null, date);
         
-        assertEquals(1.0, exchangeRateBaseCurrency);
-        assertEquals(1.0, exchangeRateMDL);
-        assertEquals(1.0, exchangeRateEUR);
+        assertEquals(1.0, exchangeRateBaseCurrency, DELTA_6);
+        assertEquals(1.0, exchangeRateMDL, DELTA_6);
+        assertEquals(1.0, exchangeRateEUR, DELTA_6);
 
     }
     
@@ -155,14 +154,14 @@ public class CurrencyConvertorTests extends ReportingTestCase {
         
         double exchangeRateMDLtoEUR = convertor.getExchangeRate("MDL", "EUR", null, date);
         double exchangeRateEURtoMDL = convertor.getExchangeRate("EUR", "MDL", null, date);
+
+        assertEquals(0.04629122272957889, exchangeRateMDLtoEUR, DELTA_6);
+
+        assertEquals(21.602367382726875, exchangeRateEURtoMDL, DELTA_6);
         
-        assertEquals(0.04629122272957889, exchangeRateMDLtoEUR );
+        assertEquals(exchangeRateMDLtoEUR, exchangeRateMDLToBase / exchangeRateEURToBase, DELTA_6);
         
-        assertEquals(21.602367382726875, exchangeRateEURtoMDL );
-        
-        assertEquals(exchangeRateMDLtoEUR, exchangeRateMDLToBase / exchangeRateEURToBase );
-        
-        assertEquals(exchangeRateEURtoMDL, exchangeRateEURToBase / exchangeRateMDLToBase );
+        assertEquals(exchangeRateEURtoMDL, exchangeRateEURToBase / exchangeRateMDLToBase, DELTA_6);
 
     }
 }

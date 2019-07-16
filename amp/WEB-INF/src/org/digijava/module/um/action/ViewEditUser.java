@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +16,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.exception.DgException;
@@ -35,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
+import org.digijava.kernel.Constants;
 import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
@@ -45,6 +44,7 @@ import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
 import org.digijava.kernel.user.Group;
+import org.digijava.kernel.security.PasswordPolicyValidator;
 
 public class ViewEditUser extends Action {
 
@@ -284,10 +284,10 @@ public class ViewEditUser extends Action {
                     if(uForm.getWorkspaces() == null){
                         uForm.setWorkspaces(TeamUtil.getAllTeams());
                     }
-                    uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());      
-                    
+                    uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+
                     uForm.setNationalCoordinator(user.hasNationalCoordinatorGroup());
-                   
+
 //                }
             }
         } else {            
@@ -354,9 +354,9 @@ public class ViewEditUser extends Action {
                         user.setNotificationEmail(null);
                     }
                     
-                    
+
                     if (uForm.getNationalCoordinator()) {
-                        user.getGroups().add(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));                     
+                        user.getGroups().add(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));
                     } else {
                         user.getGroups().remove(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));
                     }
@@ -423,6 +423,13 @@ public class ViewEditUser extends Action {
                 return mapping.findForward("assignWorkspace");
             }else {
                 if (uForm.getEvent().equalsIgnoreCase("changePassword")) {
+                    if (!PasswordPolicyValidator.isValid(uForm.getNewPassword(), uForm.getEmail())) {
+                        errors.add(ActionMessages.GLOBAL_MESSAGE,
+                                new ActionMessage("error.strong.validation"));
+                        saveErrors(request, errors);
+                        request.setAttribute(PasswordPolicyValidator.SHOW_PASSWORD_POLICY_RULES, true);
+                        return mapping.findForward("forward");
+                    }
 
                     String newPassword = uForm.getNewPassword();
                     String confirmNewPassword = uForm.getConfirmNewPassword();

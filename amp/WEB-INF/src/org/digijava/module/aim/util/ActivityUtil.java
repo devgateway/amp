@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,11 +27,13 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.AmpARFilterParams;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -38,6 +41,8 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
+import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.dbentity.AmpAPIFiscalYear;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -45,6 +50,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -106,6 +112,8 @@ import javax.servlet.http.HttpSession;
 public class ActivityUtil {
 
   private static Logger logger = Logger.getLogger(ActivityUtil.class);
+
+  private static final  Integer MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24;
    
   public static List<AmpComponent> getComponents(Long actId) {
     Session session = null;
@@ -119,8 +127,7 @@ public class ActivityUtil {
                   put("description", InternationalizedModelDescription.getForProperty(AmpComponent.class, "description").getSQLFunctionCall("ac.amp_component_id"));
               }});      
       String queryString = "select " + rewrittenColumns + " from amp_components ac " +
-            "inner join amp_activity_components aac on (aac.amp_component_id = ac.amp_component_id) " +
-            "where (aac.amp_activity_id=:actId)";
+            "where (ac.amp_activity_id=:actId)";
       Query qry = session.createSQLQuery(queryString).addEntity(AmpComponent.class);
       qry.setParameter("actId", actId, LongType.INSTANCE);
       col = qry.list();
@@ -448,6 +455,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             Hibernate.initialize(result.getActivityDocuments());
             Hibernate.initialize(result.getComponents());
             Hibernate.initialize(result.getOrgrole());
+            //we need to initialize role from org role
+            if (result.getOrgrole() != null) {
+                for (AmpOrgRole or : result.getOrgrole()) {
+                    Hibernate.initialize(or.getRole());
+                }
+            }
             Hibernate.initialize(result.getIssues());
             Hibernate.initialize(result.getRegionalObservations());
             Hibernate.initialize(result.getStructures());
@@ -456,12 +469,54 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 Hibernate.initialize(str.getType());
                 Hibernate.initialize(str.getCoordinates());
             }
+            
+            // initialize the fiscal year list field. Used in Activity API only
+            initializeFiscalYears(result);
+            
         } catch (ObjectNotFoundException e) {
             logger.debug("AmpActivityVersion with id=" + id + " not found");
         } catch (Exception e) {
             throw new DgException("Cannot load AmpActivityVersion with id " + id, e);
         }
         return result;
+    }
+  
+    /**
+     * Initialize Fiscal Years list object in activity. Used in Activity API only. 
+     * 
+     * @param activity
+     */
+    private static void initializeFiscalYears(AmpActivityVersion activity) {
+        if (activity.getFiscalYears() == null) {
+            List<AmpAPIFiscalYear> fiscalYears = new ArrayList<>();
+            if (StringUtils.isNotBlank(activity.getFY())) {
+                try {
+                    List<String> years = Arrays.asList(activity.getFY().split(","));
+                    for (String year : years) {
+                        fiscalYears.add(new AmpAPIFiscalYear(Long.parseLong(year)));
+                    }
+                    activity.setFiscalYears(new HashSet<>(fiscalYears));
+                } catch (NumberFormatException e) {
+                    logger.error("Error in parsing numbers of FY field - " + activity.getFY(), e);
+                }
+            }
+        }
+    }
+
+    public static Long findActivityIdByAmpId(String ampId) {
+        Session session = PersistenceManager.getRequestDBSession();
+        return (Long) session.createQuery("select ampActivityId from AmpActivity where ampId=:ampId")
+                .setParameter("ampId", ampId)
+                .uniqueResult();
+    }
+
+    public static List<AmpActivityVersion> getActivitiesByAmpIds(List<String> ampIds) {
+        String queryString = "select a from "
+                + AmpActivity.class.getName()
+                + " a where a.ampId in (:ampIds) ";
+        return PersistenceManager.getSession().createQuery(queryString)
+                .setParameterList("ampIds", ampIds)
+                .list();
     }
   
   public static AmpActivityVersion loadAmpActivity(Long id){
@@ -1085,11 +1140,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         //Delete the connection with Team.
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         SQLUtils.executeQuery(con, deleteActivityTeam );
-
-        //Delete the connection with components.
-        String deleteActivityComponent = "DELETE FROM amp_activity_components WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        SQLUtils.executeQuery(con, deleteActivityComponent );
-
     }
     
     public static void removeMergeSources(Long ampActivityId,Session session){
@@ -1177,7 +1227,36 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             }
   }
 
-  /* functions to DELETE an activity by Admin end here.... */
+    public static ValidationStatus getValidationStatus(AmpActivityVersion activity, TeamMember tm) {
+        ValidationStatus vs = ValidationStatus.UNKNOWN;
+        if (!activity.getDraft()) {
+            AmpTeam currentTeam = null;
+            if (tm != null) {
+                currentTeam = TeamUtil.getAmpTeam(tm.getTeamId());
+            }
+            boolean hasTeamLeadOrValidator = false;
+            if (currentTeam != null) {
+                List<AmpTeamMember> valids = TeamMemberUtil.getTeamHeadAndApprovers(currentTeam.getAmpTeamId());
+                if (valids != null && valids.size() > 0) {
+                    hasTeamLeadOrValidator = true;
+                }
+            }
+            if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus())) {
+                if (hasTeamLeadOrValidator) {
+                    if (ActivityUtil.isAutomaticValidationEnabled()) {
+                        return ValidationStatus.AUTOMATIC_VALIDATION;
+                    } else {
+                        return ValidationStatus.AWAITING_VALIDATION;
+                    }
+                } else {
+                    return ValidationStatus.CANNOT_BE_VALIDATED;
+                }
+            }
+        }
+        return vs;
+    }
+
+    /* functions to DELETE an activity by Admin end here.... */
 
 
   public static class ActivityAmounts {
@@ -1625,16 +1704,16 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                         + " AND "; 
             } else {
                 nameSearchQuery = "";
-            }   
+            }
             
-            String dataFreezeQuery = "";
+           String dataFreezeQuery = "";
             if (frozenActivityIds != null && frozenActivityIds.size() > 0) {
                 if (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)) {               
-                    dataFreezeQuery = " and f.ampActivityId in (:frozenActivityIds) ";
+                   dataFreezeQuery = " and f.ampActivityId in (:frozenActivityIds) ";
                 } else if (ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) {
-                    dataFreezeQuery = " and f.ampActivityId not in (:frozenActivityIds) ";
-                }
-            }
+                   dataFreezeQuery = " and f.ampActivityId not in (:frozenActivityIds) ";
+               }
+           }
                 
             String queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup "
                     + "FROM " + AmpActivity.class.getName() 
@@ -1642,9 +1721,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     + nameSearchQuery + " ((f.deleted = false) or (f.deleted is null))" + dataFreezeQuery;
             
             Query qry = session.createQuery(queryString);
-            if(isSearchByName) {
-                qry.setString("searchTerm", "%" + searchTerm + "%");
-            }
+           if (isSearchByName) {
+               qry.setString("searchTerm", "%" + searchTerm + "%");
+           }
             
             if (frozenActivityIds != null && frozenActivityIds.size() > 0
                     && (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)
@@ -1940,7 +2019,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
     /** Get the user first name and last name  who modified (created) the activity.
      * @param actitivity
-     * @param modifiedByInfo
      * @param auditHistory
      * @return
      */
@@ -1965,7 +2043,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     /** Get modified date
      * @param activity
      * @param auditHistory
-     * @param activityHistory
      */
     public static Date getModifiedByDate(AmpActivityVersion activity, ActivityHistory auditHistory) {
         if (activity.getUpdatedDate() != null) {
@@ -1973,7 +2050,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         } else if (activity.getModifiedDate() != null) {
             return activity.getModifiedDate();
         } else if (auditHistory != null) {
-            return FormatHelper.parseDate2(auditHistory.getModifiedDate());
+            return InterchangeUtils.parseISO8601Date(auditHistory.getModifiedDate());
         } else if (activity.getApprovalDate() != null) {
             return activity.getApprovalDate();
         } else if (activity.getCreatedDate() != null) {
@@ -1995,14 +2072,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         for(AmpAuditLogger aal : activityLogObjects) {
             if (StringUtils.isNotEmpty(aal.getEditorName())) {
                 logActivityHistory.setModifiedBy(aal.getEditorName());
-                logActivityHistory.setModifiedDate(FormatHelper.formatDate(aal.getLoggedDate()));
+                logActivityHistory.setModifiedDate(InterchangeUtils.formatISO8601Date(aal.getLoggedDate()));
                 return logActivityHistory;
             } else if (StringUtils.isNotEmpty(aal.getEditorEmail())) {
                 try {
                     User u = UserUtils.getUserByEmail(aal.getEditorEmail());
                     if (u != null) {
                         logActivityHistory.setModifiedBy(String.format("%s %s", u.getFirstNames(), u.getLastName()));
-                        logActivityHistory.setModifiedDate(FormatHelper.formatDate(aal.getLoggedDate()));
+                        logActivityHistory.setModifiedDate(InterchangeUtils.formatISO8601Date(aal.getLoggedDate()));
                         return logActivityHistory;
                     }
                 } catch (DgException e) {
@@ -2025,16 +2102,53 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         return new HashSet<String>(((List<String>) qry.list()));
     }
 
-    public static AmpActivityVersion getPreviousVersion(AmpActivityVersion activity) {
+    public static AmpActivityVersion getPreviousVersion(Long activityId) {
         Session session = PersistenceManager.getRequestDBSession();
+        AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
         Query qry = session.createQuery(String.format("SELECT act FROM " + AmpActivityVersion.class.getName()
                 + " act WHERE approval_status in ( '%s','%s' )  and act.ampActivityGroup.ampActivityGroupId = ? "
                 + " and act.ampActivityId <> ? "
                 + " ORDER BY act.ampActivityId DESC", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS))
                 .setMaxResults(1);
         qry.setParameter(0, activity.getAmpActivityGroup().getAmpActivityGroupId());
-        qry.setParameter(1, activity.getAmpActivityId());
+        qry.setParameter(1, activityId);
         return (qry.list().size() > 0 ? (AmpActivityVersion) qry.list().get(0) : null);
+    }
+
+    public static List<ActivityHistory> getActivityHistories(Long activityId) {
+        Session session = PersistenceManager.getRequestDBSession();
+        AmpActivityVersion currentActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
+
+        Query qry = session.createQuery("SELECT act FROM " + AmpActivityVersion.class.getName()
+                + " act WHERE act.ampActivityGroup.ampActivityGroupId = ? ORDER BY act.ampActivityId DESC")
+                .setMaxResults(ActivityVersionUtil.numberOfVersions());
+        qry.setParameter(0, currentActivity.getAmpActivityGroup().getAmpActivityGroupId());
+        List<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>(qry.list());
+
+        return getActivitiesHistory(activities);
+    }
+
+    private static List<ActivityHistory> getActivitiesHistory(List<AmpActivityVersion> activities) {
+        List<ActivityHistory> activitiesHistory = new ArrayList<>();
+
+        for (AmpActivityVersion activity : activities) {
+            ActivityHistory auditHistory = null;
+
+            if (activity.getModifiedBy() == null || (activity.getUpdatedDate() == null
+                    && activity.getModifiedDate() == null)) {
+                auditHistory = ActivityUtil.getModifiedByInfoFromAuditLogger(activity.getAmpActivityId());
+            }
+
+            ActivityHistory activityHistory = new ActivityHistory();
+            activityHistory.setActivityId(activity.getAmpActivityId());
+            activityHistory.setModifiedBy(ActivityUtil.getModifiedByUserName(activity, auditHistory));
+            activityHistory.setModifiedDate(InterchangeUtils.formatISO8601Date(
+                    ActivityUtil.getModifiedByDate(activity, auditHistory)));
+
+            activitiesHistory.add(activityHistory);
+        }
+
+        return activitiesHistory;
     }
 
     /**
@@ -2085,16 +2199,18 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
     /**
-     * Get the activities ids for the current workspace
-     *
-     * @param session HttpSession
+     * Get list of editable activity ids for the team member.
+     * Useful for cases when you need to check list of editable activities for a team member that is not a principal.
+     * I.e. this team member is not authenticated right now.
      * @return List<Long> with the editable activity Ids
      */
-    public static List<Long> getEditableActivityIds(TeamMember tm) {
-        HttpSession session = TLSUtils.getRequest().getSession();
-        String query = WorkspaceFilter.getWorkspaceFilterQuery(session);
-
-        return getEditableActivityIds(tm, query);
+    public static List<Long> getEditableActivityIdsNoSession(TeamMember tm) {
+        AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+        AmpARFilter ampARFilter = FilterUtil.buildFilterFromSource(ampTeamMember.getAmpTeam(), tm);
+        AmpARFilterParams params = AmpARFilterParams.getParamsForWorkspaceFilter(ampTeamMember.toTeamMember(), null);
+        ampARFilter.generateFilterQuery(params);
+        String query = ampARFilter.getGeneratedFilterQuery();
+        return ActivityUtil.getEditableActivityIds(tm, query);
     }
 
     /**
@@ -2113,5 +2229,66 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 .addScalar("amp_activity_id", LongType.INSTANCE).list();
 
         return result;
+    }
+
+    public static boolean canValidateAcitivty(AmpActivityVersion activity,  TeamMember teamMember) {
+
+        boolean canValidate = false;
+        if (!activity.getDraft()) {
+            AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
+            String validationOption = appSettings != null ? appSettings.getValidation() : null;
+
+
+            Boolean crossteamvalidation =
+                    (appSettings != null && appSettings.getTeam() != null)
+                            ? appSettings.getTeam().getCrossteamvalidation()
+                            : false;
+
+            //Check if cross team validation is enable
+            Boolean crossteamcheck = false;
+            if (crossteamvalidation) {
+                crossteamcheck = true;
+            } else {
+                //check if the activity belongs to the team where the user is logged.
+                if (teamMember != null && teamMember.getTeamId() != null && activity.getTeam() != null
+                        && activity.getTeam().getAmpTeamId() != null) {
+                    crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
+                }
+            }
+            boolean teamLeadFlag = teamMember.getTeamHead() || teamMember.isApprover();
+            if ("alledits".equalsIgnoreCase(validationOption)) {
+                if (teamLeadFlag && activity.getTeam() != null && crossteamcheck
+                        && (Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())
+                        || Constants.EDITED_STATUS.equalsIgnoreCase(activity.getApprovalStatus()))) {
+                    canValidate = true;
+                }
+            } else {
+                //it will display the validate label only if it is just started and was not approved not even once
+                if ("newonly".equalsIgnoreCase(validationOption) && crossteamcheck) {
+                    if (teamLeadFlag && Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())) {
+                        canValidate = true;
+                    }
+                }
+            }
+        }
+        return canValidate;
+    }
+
+    private static int daysBetween(Date d1, Date d2) {
+        return (int) ((d2.getTime() - d1.getTime()) / (MILLISECONDS_IN_A_DAY));
+    }
+
+    public static int daysToValidation(AmpActivityVersion activity) {
+        int result;
+        int daysBetween = daysBetween(activity.getUpdatedDate(), new Date());
+        String daysBeforeValidation = FeaturesUtil.getGlobalSettingValue(
+                GlobalSettingsConstants.NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION);
+        result = (Integer.parseInt(daysBeforeValidation) - daysBetween);
+        return result <= 0 ? 1 : result;
+    }
+
+    public static boolean isAutomaticValidationEnabled() {
+        return (QuartzJobUtils.getJobByClassFullname(Constants.AUTOMATIC_VALIDATION_JOB_CLASS_NAME) == null
+                ? false : true);
     }
 }

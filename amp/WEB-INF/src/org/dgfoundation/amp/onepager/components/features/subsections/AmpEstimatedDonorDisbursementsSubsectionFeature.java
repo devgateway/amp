@@ -44,18 +44,9 @@ public class AmpEstimatedDonorDisbursementsSubsectionFeature extends
     
     @Override
     protected void onConfigure() {
-        AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-            FundingOrganization fo = new FundingOrganization();
-            fo.setAmpOrgId(fundingOrgModel.getObject().getAmpOrgId());
-            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG, fo);
-            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
-        }
+        // If we need to put something in scope for a permission gate we have to put it before the configure and remove
+        // it after its configure so every nested element uses the same scope
         super.onConfigure();
-        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
-            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
-        }
     }
 
 
@@ -66,8 +57,8 @@ public class AmpEstimatedDonorDisbursementsSubsectionFeature extends
      * @throws Exception
      */
     public AmpEstimatedDonorDisbursementsSubsectionFeature(String id,
-            final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-        super(id, fmName, model);
+            final IModel<AmpFunding> model, int transactionType) throws Exception {
+        super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model);
         
         disbursementsTableFeature = new AmpEstimatedDonorDisbursementsFormTableFeature("disbursementsTableFeature", model, "Estimated Disbursements Table", transactionType);
         add(disbursementsTableFeature);
@@ -89,7 +80,7 @@ public class AmpEstimatedDonorDisbursementsSubsectionFeature extends
                 disbursementsTableFeature.getEditorList().updateModel();
                 target.add(disbursementsTableFeature);
                 AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-                parent.getFundingInfo().checkChoicesRequired(disbursementsTableFeature.getEditorList().getCount());
+                parent.getFundingInfo().configureRequiredFields();
                 target.add(parent.getFundingInfo());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

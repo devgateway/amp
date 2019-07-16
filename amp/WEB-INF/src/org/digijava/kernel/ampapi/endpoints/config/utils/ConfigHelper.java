@@ -42,12 +42,13 @@ public class ConfigHelper {
     public static final String T_YEAR_DEFAULT_END = "t_year_default_end";
     public static final String T_STATIC_RANGE = "t_static_range";
     public static final String T_DOUBLE = "t_Double";
+    public static final String T_DOUBLE_0_1 = "t_Double_0_1";
+
     public static final String T_STATIC_YEAR = "t_static_year";
     public static final String T_YEAR = "t_year";
     public static final String T_AUDIT_TRIAL_CLENAUP = "t_audit_trial_clenaup";
     public static final String T_COMPONENTS_SORT = "t_components_sort";
     public static final String T_DAILY_CURRENCY_UPDATE_HOUR = "t_daily_currency_update_hour";
-    public static final String T_SECURE_VALUES = "t_secure_values";
     public static final String T_TIMEOUT_CURRENCY_UPDATE = "t_timeout_currency_update";
     public static final String T_DATE = "t_Date";
 
@@ -99,7 +100,7 @@ public class ConfigHelper {
     
     /**
      * Retrieves JsonBean from AmpGlobalSettings
-     * @param object
+     * @param ampGlobalSetting
      * @return JsonBean
      */
     public static JsonBean getGlobalSettingJson(AmpGlobalSettings ampGlobalSetting) {
@@ -134,9 +135,6 @@ public class ConfigHelper {
         switch (ampGlobalSetting.getGlobalSettingsPossibleValues()) {
             case T_BOOLEAN:
                 isValid = "true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value);
-                break;
-            case T_SECURE_VALUES:
-                isValid = "on".equalsIgnoreCase(value) || "off".equalsIgnoreCase(value);
                 break;
             case T_DATE:
                 try {
@@ -179,6 +177,13 @@ public class ConfigHelper {
                 break;
             case T_DOUBLE:
                 isValid = isValidNumber(Double.class, value);
+                break;
+            case T_DOUBLE_0_1:
+                isValid = isValidNumber(Double.class, value);
+                if (isValid) {
+                    Double number = Double.parseDouble(value);
+                    isValid =  number >= 0D && number < 1;
+                }
                 break;
             case NULL_VALUE:
             case "":

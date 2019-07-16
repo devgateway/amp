@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
@@ -64,6 +65,8 @@ public class GeneratedReport {
     public final JsonBean jsonTimings;
     
     public final boolean isEmpty;
+
+    private final boolean hasTotals;
     
     public GeneratedReport(ReportSpecification spec, int generationTime, TeamMember requestingUser, 
             ReportArea reportContents, List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders, 
@@ -79,10 +82,17 @@ public class GeneratedReport {
         this.generatedHeaders = generatedHeaders;
         this.reportWarnings = reportWarnings;
         this.isEmpty = isEmpty;
+        this.hasTotals = reportContents.getContents().values().stream()
+                .map(rc -> rc.displayedValue)
+                .anyMatch(StringUtils::isNotEmpty);
     }
 
     public boolean hasMeasures() {
         return !spec.getMeasures().isEmpty();
+    }
+
+    public boolean hasTotals() {
+        return hasTotals;
     }
     
 }

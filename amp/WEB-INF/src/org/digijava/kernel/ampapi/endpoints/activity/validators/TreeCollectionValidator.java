@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import clover.org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -31,8 +31,6 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
-
-import clover.org.apache.commons.lang.math.NumberUtils;
 
 /**
  * Validates that both parent and child items are not present in the collection
@@ -49,18 +47,18 @@ public class TreeCollectionValidator extends InputValidator {
     }
 
     @Override
-    public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-            Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
-        String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
-        String treeCollectionField = fieldDescription.getString(ActivityEPConstants.TREE_COLLECTION_CONSTRAINT);
-        String uniqueField = fieldDescription.getString(ActivityEPConstants.UNIQUE_CONSTRAINT);
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
+                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+        String fieldName = fieldDescription.getFieldName();
+        boolean treeCollectionField = Boolean.TRUE.equals(fieldDescription.getTreeCollectionConstraint());
+        String uniqueField = fieldDescription.getUniqueConstraint();
         
-        if (StringUtils.isNotBlank(treeCollectionField)) {
+        if (treeCollectionField) {
             Collection<Map<String, Object>> fieldValue = (Collection<Map<String, Object>>) newFieldParent.get(fieldName);
             Set<Long> idValues = new HashSet<Long>();
             
             if (fieldValue != null && fieldValue.size() > 1) {
-                Field field = InterchangeUtils.getFieldByLongName(fieldName, true);
+                Field field = InterchangeUtils.getFieldByLongName(fieldName);
                 
                 if (StringUtils.isBlank(uniqueField) || field == null) {
                     throw new RuntimeException("The treeCollectionValidator cannot check the field that does not have fields with unique constraint");

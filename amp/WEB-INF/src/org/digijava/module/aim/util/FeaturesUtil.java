@@ -631,11 +631,6 @@ public class FeaturesUtil {
         }
     }
 
-    public static int getEsriMapsRegionsHighlightSelectedColourScheme()
-    {
-        return Integer.valueOf(getGlobalSettingValue(GlobalSettingsConstants.ESRI_REGIONS_HIGHLIGHT_COLOUR_SCHEME));
-    }
-    
     public static AmpGlobalSettings getGlobalSetting(String globalSettingName) {
         
         AmpGlobalSettings ampGlobalSettings = null;
@@ -689,12 +684,21 @@ public class FeaturesUtil {
         String globalValue = getGlobalSettingValue(globalSettingName);
         return (globalValue != null && globalValue.equalsIgnoreCase("true"));
     }
+    
+    public static boolean isAmpOfflineEnabled() {
+        return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.AMP_OFFLINE_ENABLED);
+    }
 
-    /**
-     *
-     * @author dan
-     * made for visibility module
-     */
+    public static boolean showEditableExportFormats() {
+        return TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER) != null
+                || FeaturesUtil.isVisibleModule("Show Editable Export Formats");
+    }
+
+        /**
+         *
+         * @author dan
+         * made for visibility module
+         */
     public static Long getGlobalSettingValueLong(String globalSettingName) {
         String globalValue = getGlobalSettingValue(globalSettingName);
         return globalValue != null ? Long.parseLong(globalValue) : -1l;

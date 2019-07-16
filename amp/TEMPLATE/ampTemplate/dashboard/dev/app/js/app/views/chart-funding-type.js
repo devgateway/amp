@@ -3,6 +3,7 @@ var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
 var util = require('../../ugly/util');
 
+var ProjectsListModalView = require('./chart-detail-info-modal');
 
 module.exports = ChartViewBase.extend({
 
@@ -78,6 +79,9 @@ module.exports = ChartViewBase.extend({
     // clicking on the "others" bar loads five more.
     if (context.data[context.series.index].special === 'others') {
       this.model.set('limit', this.model.get('limit') + 1);
+    } else {
+        this.modalView = new ProjectsListModalView({app: app, context: context, model: this.model});
+        this.openInfoWindow((context.x.fmt || context.x.raw) + ' ' + context.data[context.series.index].key);
     }
   }
 

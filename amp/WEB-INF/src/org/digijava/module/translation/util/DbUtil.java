@@ -222,13 +222,8 @@ public class DbUtil {
      * @throws DgException
      * @deprecated Use TranslatorWorker call directly
      */
-    public static void updateMessage(Message msg) throws DgException {
-        try {
-            TranslatorWorker.getInstance(msg.getKey()).update(msg);
-        }
-        catch (WorkerException ex) {
-            throw new DgException(ex);
-        }
+    public static void updateMessage(Message msg) {
+        TranslatorWorker.getInstance(msg.getKey()).update(msg);
     }
 
     /**

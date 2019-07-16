@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.currencyconvertor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -80,5 +81,22 @@ public class AmpCurrencyConvertor implements CurrencyConvertor {
         long julianCode = DateTimeUtil.toJulianDayNumber(date);
         double res = getCalculator(fromCurrencyCode).getRate(julianCode) / getCalculator(toCurrencyCode).getRate(julianCode);
         return res;
+    }
+    
+    public Double convertAmount(Double originalAmount, String fromCurrencyCode, String toCurrencyCode,
+            LocalDate transactionDate) {
+
+        return convertAmount(originalAmount, fromCurrencyCode, toCurrencyCode, null, transactionDate);
+    }
+
+    public Double convertAmount(Double originalAmount, String fromCurrencyCode, String toCurrencyCode,
+            Double fixedExchangeRate, LocalDate transactionDate) {
+
+        Double exchangeRate = getExchangeRate(fromCurrencyCode, toCurrencyCode, fixedExchangeRate, transactionDate);
+        Double convertedAmount = BigDecimal.valueOf(originalAmount)
+                .multiply(BigDecimal.valueOf(exchangeRate))
+                .doubleValue();
+
+        return convertedAmount;
     }
 }

@@ -45,7 +45,7 @@ public class ActivitySaveTrigger extends Trigger {
     e.getParameters().put(PARAM_NAME,act.getName());
     e.getParameters().put(PARAM_CREATED_DATE, act.getCreatedDate());
     e.getParameters().put(PARAM_CREATED_BY, act.getActivityCreator());
-    e.getParameters().put(PARAM_URL,"aim/viewActivityPreview.do~public=true~pageId=2~activityId="+act.getAmpActivityId());
+    e.getParameters().put(PARAM_URL, "aim/viewActivityPreview.do~activityId=" + act.getAmpActivityId());
     e.getParameters().put(PARAM_ID, act.getAmpActivityId());
     return e;
     }

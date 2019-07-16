@@ -37,14 +37,12 @@ public class SearchUserForm
     private String searchUserInfo;
     private List userList;
     private String targetAction;
-    private boolean hideNonAlertable;
     private boolean hideBanned;
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
         searchUserInfo = null;
         userList = null;
         targetAction = null;
-        hideNonAlertable = false;
         hideBanned = false;
     }
 
@@ -77,20 +75,12 @@ public class SearchUserForm
         return targetAction;
     }
 
-    public boolean isHideNonAlertable() {
-        return hideNonAlertable;
-    }
-
     public boolean isHideBanned() {
         return hideBanned;
     }
 
     public void setTargetAction(String targetAction) {
         this.targetAction = targetAction;
-    }
-
-    public void setHideNonAlertable(boolean hideNonAlertable) {
-        this.hideNonAlertable = hideNonAlertable;
     }
 
     public void setHideBanned(boolean hideBanned) {

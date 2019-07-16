@@ -17,7 +17,6 @@ import org.dgfoundation.amp.onepager.components.fields.AmpComponentField;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ComponentsUtil;
@@ -61,9 +60,7 @@ public class AmpComponentsFormSectionFeature extends
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AmpComponent comp = new AmpComponent();
-                Set<AmpActivityVersion> relatedActivities = new HashSet<AmpActivityVersion>();
-                relatedActivities.add(am.getObject());
-                comp.setActivities(relatedActivities); 
+                comp.setActivity(am.getObject());
                 list.addItem(comp);
                 String gsComponentType = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.COMPONENT_TYPE);
                 AmpComponentType defaultType = null;
@@ -73,8 +70,6 @@ public class AmpComponentsFormSectionFeature extends
                 }
 
                 comp.setType(defaultType);
-                comp.setActivities(new HashSet());
-                comp.getActivities().add(am.getObject());
                 target.add(this.getParent());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
             }

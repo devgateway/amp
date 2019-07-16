@@ -6,12 +6,15 @@
 package org.digijava.module.aim.helper;
 
 
+import java.util.Date;
+
 public class CurrencyRates {
     private Long id;
     private String currencyCode;
     private String currencyName;
     private String fromCurrencyCode;
     private String fromCurrencyName;
+    private Date exchangeRateDateAsDate;
     private String exchangeRateDate;
     private Double exchangeRate;
     
@@ -65,6 +68,15 @@ public class CurrencyRates {
     public void setExchangeRateDate(String exchangeRateDate) {
         this.exchangeRateDate = exchangeRateDate;
     }
+
+    public Date getExchangeRateDateAsDate() {
+        return exchangeRateDateAsDate;
+    }
+
+    public void setExchangeRateDateAsDate(Date exchangeRateDateAsDate) {
+        this.exchangeRateDateAsDate = exchangeRateDateAsDate;
+    }
+
     /**
      * @return Returns the id.
      */

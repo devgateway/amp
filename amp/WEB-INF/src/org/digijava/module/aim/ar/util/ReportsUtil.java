@@ -143,14 +143,12 @@ public class ReportsUtil {
 
             if (Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION.equalsIgnoreCase(roleCode)) {
                 orgIdsSource = "SELECT DISTINCT org.amp_org_id orgId "
-                        + " FROM amp_activity_components aac "
-                        + " JOIN amp_components c ON (c.amp_component_id = aac.amp_component_id) "
-                        + " JOIN amp_component_funding f ON (f.amp_component_id = aac.amp_component_id) "
+                        + " FROM amp_components c "
+                        + " JOIN amp_component_funding f ON (f.amp_component_id = c.amp_component_id) "
                         + " JOIN amp_organisation org ON org.amp_org_id = f.component_second_rep_org_id ";
             } else {
                 orgIdsSource = "SELECT DISTINCT org.amp_org_id orgId "
-                        + " FROM amp_activity_components aac "
-                        + " JOIN amp_components c ON (c.amp_component_id = aac.amp_component_id) "
+                        + " FROM amp_components c "
                         + " JOIN amp_component_funding f ON (f.amp_component_id = c.amp_component_id) "
                         + " JOIN amp_organisation org ON org.amp_org_id = f.rep_organization_id ";
             }
@@ -218,8 +216,21 @@ public class ReportsUtil {
         String errMsg = "";
         
         logger.debug("Database sanity check - in progress...");
-        List<?> res = session.createSQLQuery("select DISTINCT(amp_report_id) from amp_report_column arc WHERE " + 
-                "(SELECT count(*) from amp_report_column arc2 WHERE arc2.amp_report_id = arc.amp_report_id AND arc2.columnid = arc.columnid) > 1").list();
+        
+        List<?> res = session.createSQLQuery("SELECT amp_activity_id FROM amp_activity "
+                + "WHERE amp_id IN (SELECT amp_id FROM (SELECT amp_id, "
+                + "ROW_NUMBER() OVER(PARTITION BY amp_id ORDER BY amp_activity_id asc) AS Row "
+                + "FROM amp_activity) dups WHERE dups.row > 1)")
+                .list();
+        
+        if (!res.isEmpty()) {
+            errMsg += "Duplicate activities are found in amp_activity table: " + Util.toCSString(res) 
+            + System.lineSeparator();
+        }
+        
+        res = session.createSQLQuery("select DISTINCT(amp_report_id) from amp_report_column arc WHERE "
+                + "(SELECT count(*) from amp_report_column arc2 WHERE arc2.amp_report_id = arc.amp_report_id "
+                + "AND arc2.columnid = arc.columnid) > 1").list();
         if (!res.isEmpty())
             errMsg += "The following reports have a column repeated at least twice each: amp_report_id IN (" + Util.toCSString(res) + ")" + System.lineSeparator();
         

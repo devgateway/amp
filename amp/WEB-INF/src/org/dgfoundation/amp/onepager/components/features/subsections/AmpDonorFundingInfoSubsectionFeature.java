@@ -50,15 +50,6 @@ implements AmpRequiredComponentContainer{
     private AmpTextFieldPanel<Integer> gracePeriod;
     private AmpDatePickerFieldPanel ratificationDate;
     private AmpDatePickerFieldPanel maturity;
-    public void checkChoicesRequired(int size) {
-        if (size > 0) {
-            financingInstrument.getChoiceContainer().setRequired(true);
-            typeOfAssistance.getChoiceContainer().setRequired(true);
-        } else {
-            financingInstrument.getChoiceContainer().setRequired(false);
-            typeOfAssistance.getChoiceContainer().setRequired(false);
-        }
-    }
     
     /**
      * @param id
@@ -75,7 +66,7 @@ implements AmpRequiredComponentContainer{
                 CategoryConstants.FINANCING_INSTRUMENT_KEY,
                 new PropertyModel<AmpCategoryValue>(model,
                         "financingInstrument"),
-                CategoryConstants.FINANCING_INSTRUMENT_NAME, true, false);      
+                CategoryConstants.FINANCING_INSTRUMENT_NAME, true, false);     
         add(financingInstrument);
         
         // LoanTerms
@@ -287,12 +278,8 @@ implements AmpRequiredComponentContainer{
         });
         add(fundingClosingDate);
 
-        if (model != null && model.getObject() != null && 
-            model.getObject().getFundingDetails() != null &&
-            model.getObject().getFundingDetails().size() > 0)
-            checkChoicesRequired(model.getObject().getFundingDetails().size());
-        else
-            checkChoicesRequired(0);
+        configureRequiredFields();
+        
         
         add(new AmpAgreementItemPanel("agreement", model, "Agreement"));
         
@@ -400,6 +387,12 @@ implements AmpRequiredComponentContainer{
 
     public void setRequiredFormComponents(List<FormComponent<?>> requiredFormComponents) {
         this.requiredFormComponents = requiredFormComponents;
+    }
+    
+    public void configureRequiredFields() {
+        boolean required = this.getModel().getObject().getFundingDetails().size() > 0;
+        financingInstrument.getChoiceContainer().setRequired(required);
+        typeOfAssistance.getChoiceContainer().setRequired(required);
     }
     
 }

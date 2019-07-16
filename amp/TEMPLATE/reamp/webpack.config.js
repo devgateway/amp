@@ -7,6 +7,8 @@ config.entry["gpi-reports/script"] = "./modules/gpi-reports/script.es6";
 config.entry["admin/resource-manager-admin/script"] = "./modules/admin/resource-manager-admin/script.es6";
 config.entry["admin/data-freeze-manager/script"] = "./modules/admin/data-freeze-manager/script.es6";
 config.entry["admin/performance-alert-manager/script"] = "./modules/admin/performance-alert-manager/script.es6";
+config.entry["ampoffline/download/script"] = "./modules/ampoffline/download/script.es6";
+config.entry["activity-preview/script"] = "./modules/activity-preview/script.es6";
 config.output.filename = "modules/[name].min.js";
 delete config.output.publicPath;
 delete config.devtool;

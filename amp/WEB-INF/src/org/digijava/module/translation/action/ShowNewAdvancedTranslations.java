@@ -14,13 +14,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.search.Hits;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.lucene.AmpLuceneDoc;
+import org.digijava.kernel.lucene.AmpLuceneTopDocs;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -116,35 +117,24 @@ public class ShowNewAdvancedTranslations extends Action{
             ServletContext context = request.getSession().getServletContext();
             
             //get results from Lucene
-            Hits hits = LuceneWorker.search(Message.class, trnForm.getSearchTerm(), context, langCode);
-            logger.debug("Lucen found "+hits.length()+" records");
-            if (hits !=null && hits.length()>0){
+            AmpLuceneTopDocs luceneTopDocs = LuceneWorker.search(Message.class, trnForm.getSearchTerm(), context, 
+                    langCode);
+            logger.debug("Lucen found " + luceneTopDocs.size() + " records");
+            if (luceneTopDocs != null && luceneTopDocs.size() > 0) {
                 
-                
-                //compensate list additions and deletions
-//              List<Message> addedMessages     =  buffer.elements(Operation.ADD);
-//              List<Message> deletedMessages   =  buffer.elements(Operation.DELETE);
-//              if (addedMessages!=null){
-//                  itemsPerPage -= addedMessages.size();
-//              }
-//              if (deletedMessages!=null){
-//                  itemsPerPage += deletedMessages.size();
-//              }
-
-                
-                
-                if(stopItemNo>hits.length()){
-                    stopItemNo=hits.length();
+                if (stopItemNo > luceneTopDocs.size()) {
+                    stopItemNo = luceneTopDocs.size();
                 }
                 
-                totalPages = (int) Math.ceil((hits.length() + groupsList.size()) / itemsPerPage);
+                totalPages = (int) Math.ceil((luceneTopDocs.size() + groupsList.size()) / itemsPerPage);
                 
                 //Store for keys of all found translations.
                 Map<String, Float> scoresByKeys = new HashMap<String, Float>();
 
                 for (int i = startItemNo; i < stopItemNo; i++) {
-                    Document doc = hits.doc(i);
-                    float score = hits.score(i);
+                    AmpLuceneDoc luceneDoc = luceneTopDocs.getDocument(i);
+                    Document doc = luceneDoc.getDocument();
+                    float score = luceneDoc.getScore();
                     String key = doc.get(LucTranslationModule.FIELD_KEY);
                     Float oldScore = scoresByKeys.get(key);
                     //add only higher values

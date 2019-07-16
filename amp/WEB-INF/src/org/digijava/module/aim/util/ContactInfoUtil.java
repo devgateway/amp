@@ -9,13 +9,11 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
 
 public class ContactInfoUtil {
     private static Logger logger = Logger.getLogger(ContactInfoUtil.class);
@@ -31,8 +29,15 @@ public class ContactInfoUtil {
             throw new AimException("update failed",ex);
         }
     }
-    
-    
+
+    @SuppressWarnings("unchecked")
+    public static List<Long> getContactIds() {
+        return PersistenceManager.getRequestDBSession()
+                .createCriteria(AmpContact.class)
+                .setProjection(Projections.property("id"))
+                .list();
+    }
+
     public static void deleteContact(AmpContact contact) throws Exception{
         Session session= null;
         try {
@@ -432,79 +437,15 @@ public class ContactInfoUtil {
         return retVal;
     }
 
-    public static String getFormatedPhoneNum (String phoneNum) {
-        StringBuffer retVal = new StringBuffer();
-        if (phoneNum != null && phoneNum.length() > 0 && phoneNum.indexOf(" ") > -1) {
-            int typeIdSeparatorPos = phoneNum.indexOf(" ");
-            String phoneTypeIdStr = phoneNum.substring(0, typeIdSeparatorPos);
-            String phoneNumberStr = phoneNum.substring(typeIdSeparatorPos, phoneNum.length());
-            Long phoneTypeId = null;
+    public static String getFormattedPhoneNum(AmpCategoryValue type, String value) {
+        StringBuilder retVal = new StringBuilder();
 
-            try {
-                phoneTypeId = Long.parseLong(phoneTypeIdStr);
-                AmpCategoryValue catVal = CategoryManagerUtil.getAmpCategoryValueFromDb(phoneTypeId, false);
-                if(catVal!=null){
-                    retVal.append(catVal.getValue());
-                }                
-            } catch (NumberFormatException ex){
-                //Old style record processing
-                retVal.append(phoneTypeIdStr);
-            }
-            retVal.append(" ");
-            retVal.append(phoneNumberStr);
-
-        } else {
-            retVal.append("Incorrect phone number");
+        if (type != null) {
+            retVal.append(type.getValue()).append(" ");
         }
+
+        retVal.append(value);
 
         return retVal.toString();
-    }
-
-    //these methods are quick workaraound on translation problem
-    public static String getActualPhoneNumber (String phoneNum) {
-        String retVal = null;
-        if (phoneNum != null && phoneNum.length() > 0) {
-            if(phoneNum.indexOf(" ") > -1){
-                int typeIdSeparatorPos = phoneNum.indexOf(" ");
-                String phoneNumberStr = phoneNum.substring(typeIdSeparatorPos, phoneNum.length());
-                retVal=phoneNumberStr;
-            }else if (phoneNum.indexOf(" ") == -1) {
-                retVal=phoneNum;
-            }
-        }
-        return retVal;
-    }
-    //these methods are  workaraound on translation problem
-
-    public static String getPhoneCategory(String phoneNum) {
-        String retVal = null;
-        AmpCategoryValue phoneCategoryValue = getPhoneCategoryValue(phoneNum);
-        if (phoneCategoryValue != null) {
-            retVal = phoneCategoryValue.getValue();
-        } else {
-            retVal = "None";
-        }
-
-
-        return retVal;
-    }
-
-    public static AmpCategoryValue getPhoneCategoryValue(String phoneNum) {
-        AmpCategoryValue phoneCategoryValue = null;
-        if (phoneNum != null && phoneNum.length() > 0 && phoneNum.indexOf(" ") > -1) {
-            int typeIdSeparatorPos = phoneNum.indexOf(" ");
-            String phoneTypeIdStr = phoneNum.substring(0, typeIdSeparatorPos);
-            Long phoneTypeId = null;
-            try {
-                phoneTypeId = Long.parseLong(phoneTypeIdStr);
-                phoneCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(phoneTypeId, false);
-
-            } catch (NumberFormatException ex) {
-                return phoneCategoryValue;
-
-            }
-        }
-
-        return phoneCategoryValue;
     }
 }

@@ -40,23 +40,18 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
         put(ColumnConstants.DONOR_GROUP, ColumnConstants.PLEDGES_DONOR_GROUP);
         put(ColumnConstants.DONOR_TYPE, ColumnConstants.PLEDGES_DONOR_TYPE);
         
-        put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
         put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
         put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2);
         put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3);
         
-        
-        put(ColumnConstants.PRIMARY_PROGRAM, ColumnConstants.PLEDGES_PROGRAMS);
         put(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, ColumnConstants.PLEDGES_PROGRAMS);
         put(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_2);
         put(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_3);
         
-        put(ColumnConstants.SECONDARY_PROGRAM, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
         put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
         put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2);
         put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3);
         
-        put(ColumnConstants.TERTIARY_PROGRAM, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
         put(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
         put(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2);
         put(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_3);

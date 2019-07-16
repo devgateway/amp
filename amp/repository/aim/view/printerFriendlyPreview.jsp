@@ -1191,31 +1191,6 @@ body {background:none;}
 									</module:display>
 
                             </module:display>
-							<module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
-								<c:if test="${not empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
-									<tr>
-										<td class="field_name">
-											<b><digi:trn>National Plan</digi:trn></b>
-										</td>
-										<td>
-											<c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
-												<c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
-													<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;" border="0">
-														<tr>
-															<td width=85%>
-																<span class="word_break bold">${nationalPlanObjectivePrograms.hierarchyNames}</span>
-															</td>
-															<td width=15% align=right valign=top>
-																<span class="word_break
-																bold">${nationalPlanObjectivePrograms.programPercentage} %</span>
-															</td>
-														</tr>
-													</table>
-											</c:forEach>
-										</td>
-									</tr>
-								</c:if>
-							</module:display>
                             <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
 
                                 	<feature:display name="NPD Programs" module="National Planning Dashboard">
@@ -1232,77 +1207,122 @@ body {background:none;}
 													value="${program.programPercentage}"/> %<br/>
                                             </span>
                                              </c:forEach>
-                                      </TD>
-									</TR>
-                                      </field:display>
-									</feature:display>
-                                   </module:display>
-
-                                     <module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form/Program">
-                                     <c:if test="${not empty aimEditActivityForm.programs.primaryPrograms }">
-                                           <TR>
-												<td class="field_name">
-								<b>
-										     <digi:trn key="aim:primary Programs">Primary Programs</digi:trn>
-								</b></td>
-
-						<td bgcolor="#ffffff">
-								<c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
-                                	<c:out value="${program.hierarchyNames}" />&nbsp; <c:out
-										value="${program.programPercentage}"/> %<br/>
-                                </c:forEach>
-                   		</td>
-						</tr>
-						</c:if>
-										</module:display>
-										<module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
-											<c:if test="${not empty  aimEditActivityForm.programs.secondaryPrograms  }">
-                                         	<tr>
-												<td class="field_name" >
-													<b>
-											  <digi:trn key="aim:secondary Programs">Secondary Programs</digi:trn>
-													</b></td>
-											<td bgcolor="#ffffff">
-                                                      <c:forEach var="program" items="${aimEditActivityForm.programs.secondaryPrograms}">
-	                                                      <span class="word_break"><c:out value="${program.hierarchyNames}" /></span>&nbsp; 
-	                                                      <c:out value="${program.programPercentage}"/> %<br/>
-                                                      </c:forEach>
-                                        		</td>
-											</tr>
-											</c:if>
-										</module:display>
-										<module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
-											<c:if test="${not empty aimEditActivityForm.programs.tertiaryPrograms  }">
-                                         	<tr>
-												<td class="field_name" >
-													<b>
-											  <digi:trn key="aim:secondary Programs">Tertiary Programs</digi:trn>
-													</b></TD>
-												<td bgcolor="#ffffff">
-                                                      <c:forEach var="program" items="${aimEditActivityForm.programs.tertiaryPrograms}">
-	                                                      <span class="word_break">
-	                                                      <c:out value="${program.hierarchyNames}" />
-	                                                      </span>&nbsp; <c:out value="${program.programPercentage}"/>
-														  %<br/>
-                                                      </c:forEach>
-                                        		</td>
-											</tr>
-											</c:if>
-										</module:display>
-										<module:display name="/Activity Form/Program/Program Description" parentModule="/Activity Form/Program">
-											<c:if test="${not empty aimEditActivityForm.programs.programDescription}">
-                                         	<TR>
-												<td class="field_name" >
-													<b>
-											  <digi:trn key="aim:secondary Programs">Program Description</digi:trn>
-													</b></TD>
-												<TD bgcolor="#ffffff">
-					  							<c:set var="programDescription" value="${aimEditActivityForm.programs.programDescription}"/>
-														<span class="word_break"><digi:edit key="${programDescription}"/></span>
-                                        		</TD>
-											</TR>
-											</c:if>
-										</module:display>
+		                                   </TD>
+									      </TR>
+                                        </field:display>
+									  </feature:display>
+                                     </module:display>
+                                    
+                                    <!-- PROGRAMS SECTION -->
+                                    <module:display name="/Activity Form/Program" parentModule="/Activity Form">
+                                        <tr>
+                                            <td class="field_name" class="t-name">
+                                                <b>
+                                                    <digi:trn>Program</digi:trn>
+                                                </b>
+                                            </td>
+                                            <td bgcolor="#ffffff">
+                                            <table width="100%" cellSpacing="2" cellPadding="1">
+					                         <module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
+					                                <c:if test="${not empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+					                                    <tr>
+					                                        <td>
+					                                            <b><digi:trn>National Plan Objective</digi:trn></b>
+					                                            <c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+					                                                    <table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;" border="0">
+					                                                        <tr>
+					                                                            <td width="85%">
+					                                                                <span class="word_break">${nationalPlanObjectivePrograms.hierarchyNames}</span>
+					                                                            </td>
+					                                                            <td width="15%" valign="top">
+					                                                                <span class="word_break">${nationalPlanObjectivePrograms.programPercentage} %</span>
+					                                                            </td>
+					                                                        </tr>
+					                                                    </table>
+					                                            </c:forEach>
+					                                        </td>
+					                                    </tr>
+					                                </c:if>
+				                             </module:display>
+				                             <module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form/Program">
+                                                    <c:if test="${not empty aimEditActivityForm.programs.primaryPrograms}">
+                                                        <tr>
+                                                            <td>
+                                                                <b><digi:trn>Primary Programs</digi:trn></b>
+                                                                <c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
+                                                                        <table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;" border="0">
+                                                                            <tr>
+                                                                                <td width="85%">
+                                                                                    <span class="word_break">${program.hierarchyNames}</span>
+                                                                                </td>
+                                                                                <td width="15%" valign="top">
+                                                                                    <span class="word_break">${program.programPercentage} %</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                </c:forEach>
+                                                            </td>
+                                                        </tr>
+                                                    </c:if>
+                                             </module:display>
+                                             <module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
+                                                    <c:if test="${not empty aimEditActivityForm.programs.secondaryPrograms}">
+                                                        <tr>
+                                                            <td>
+                                                                <b><digi:trn>Secondary Programs</digi:trn></b>
+                                                                <c:forEach var="program" items="${aimEditActivityForm.programs.secondaryPrograms}">
+                                                                        <table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;" border="0">
+                                                                            <tr>
+                                                                                <td width="85%">
+                                                                                    <span class="word_break">${program.hierarchyNames}</span>
+                                                                                </td>
+                                                                                <td width="15%" valign="top">
+                                                                                    <span class="word_break">${program.programPercentage} %</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                </c:forEach>
+                                                            </td>
+                                                        </tr>
+                                                    </c:if>
+                                             </module:display>
+		                                     <module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
+                                                    <c:if test="${not empty aimEditActivityForm.programs.tertiaryPrograms}">
+                                                        <tr>
+                                                            <td>
+                                                                <b><digi:trn>Tertiary Programs</digi:trn></b>
+                                                                <c:forEach var="program" items="${aimEditActivityForm.programs.tertiaryPrograms}">
+                                                                        <table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;" border="0">
+                                                                            <tr>
+                                                                                <td width="85%">
+                                                                                    <span class="word_break">${program.hierarchyNames}</span>
+                                                                                </td>
+                                                                                <td width="15%" valign="top">
+                                                                                    <span class="word_break">${program.programPercentage} %</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                </c:forEach>
+                                                            </td>
+                                                        </tr>
+                                                    </c:if>
+                                             </module:display>
+                                             <module:display name="/Activity Form/Program/Program Description" parentModule="/Activity Form/Program">
+                                                    <c:if test="${not empty aimEditActivityForm.programs.programDescription}">
+                                                        <tr>
+                                                            <td>
+                                                                <b><digi:trn>Program Description</digi:trn></b>
+                                                                <c:set var="programDescription" value="${aimEditActivityForm.programs.programDescription}"/>
+                                                                </br>
+                                                                <span class="word_break">${programDescription}</span>
+                                                            </td>
+                                                        </tr>
+                                                    </c:if>
+                                             </module:display>
+											</table>
+										  </td>
+										</tr>
+									</module:display>
 
                                     <!-- SECTORS SECTION -->
                                     <module:display name="/Activity Form/Sectors" parentModule="/Activity Form">
@@ -1905,7 +1925,7 @@ body {background:none;}
 
                         <logic:notEmpty name="aimEditActivityForm" property="funding.deliveryRate">
 							<tr>
-                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn>Delivery Rate</digi:trn>: </td>
+                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn>Delivery rate</digi:trn>: </td>
 								<td nowrap="nowrap" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
                                 	<b>${aimEditActivityForm.funding.deliveryRate}</b>
                                 	&nbsp;
@@ -2705,6 +2725,77 @@ body {background:none;}
 										</td>
 									</tr>
                                  </module:display>
+
+								<module:display name="/Activity Form/Regional Observations" parentModule="/Activity Form">
+									<tr>
+										<td class="field_name">
+											<b><digi:trn>Regional Observations</digi:trn></b>
+										</td>
+										<td>
+											<c:if test="${not empty aimEditActivityForm.regionalObservations.issues}">
+												<logic:iterate name="aimEditActivityForm" id="regionalObs" property="regionalObservations.issues">
+													<table style="width: 98%;">
+														<module:display name="/Activity Form/Regional Observations/Observation" parentModule="/Activity Form/Regional Observations">
+															<tr >
+																<td width="27%;">
+																	<b><digi:trn>Observation</digi:trn>:</b>
+																</td>
+																<td>
+															<span class="word_break">
+																<b><c:out value="${regionalObs.name}"/></b>
+															</span>
+																</td>
+															</tr>
+														</module:display>
+														<module:display name="/Activity Form/Regional Observations/Observation/Date" parentModule="/Activity Form/Regional Observations/Observation">
+															<tr >
+																<td>
+																	<digi:trn>Observation Date</digi:trn>:
+																</td>
+																<td>
+																	<c:out value="${regionalObs.issueDate}"/>
+																</td>
+															</tr>
+														</module:display>
+														<logic:iterate name="regionalObs" id="measure" property="measures">
+															<tr>
+																<td>
+																	<digi:trn>Measure</digi:trn>:
+																</td>
+																<td>
+																<span class="word_break">
+																	<c:out value="${measure.name}"/>
+																</span>
+																</td>
+															</tr>
+															<c:if test="${not empty measure.actors }">
+																<tr>
+																	<td>
+																		<digi:trn>Actors</digi:trn>
+																	</td>
+																	<td>
+																		<table style="border-collapse:collapse" cellpadding="0" cellspacing="0" widht="100%">
+																			<logic:iterate name="measure" id="actor" property="actors">
+																				<tr>
+																					<td>
+																					<span class="word_break">
+																						<c:out value="${actor.name}"/>
+																					</span>
+																					</td>
+																				</tr>
+																			</logic:iterate>
+																		</table>
+																	</td>
+																</tr>
+															</c:if>
+														</logic:iterate>
+													</table>
+												</logic:iterate>
+											</c:if>
+										</td>
+									</tr>
+								</module:display>
+
                                  <module:display name="/Activity Form/Line Ministry Observations" parentModule="/Activity Form">
                                  	<tr>
 										<td class="field_name">
@@ -3423,7 +3514,7 @@ body {background:none;}
 											</logic:notEmpty>
 										</field:display>
 
-										<field:display name="Activity Last Updated by" feature="Identification">
+										<module:display name="/Activity Form/Identification/Activity Last Updated by" parentModule="/Activity Form/Identification">
 											<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
 												<tr>
 													<td class="field_name" >
@@ -3437,9 +3528,9 @@ body {background:none;}
 													</td>
 												</tr>
 											</logic:notEmpty>
-										</field:display>
+										</module:display>
 
-										<field:display name="Activity Updated On" feature="Identification">
+										<module:display name="/Activity Form/Identification/Activity Updated On" parentModule="/Activity Form/Identification">
 											<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
 												<tr>
 													<td class="field_name" >
@@ -3452,7 +3543,7 @@ body {background:none;}
 													</td>
 												</tr>
 											</logic:notEmpty>
-										</field:display>
+										</module:display>
 									<tr>
 										<td class="field_name" >
 											<b>

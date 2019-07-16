@@ -38,8 +38,8 @@ public class AmpDonorCommitmentsSubsectionFeature extends AmpSubsectionFeatureFu
      * @throws Exception
      */
     public AmpDonorCommitmentsSubsectionFeature(String id,
-            final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-        super(id, fmName, model,Constants.COMMITMENT);
+            final IModel<AmpFunding> model, int transactionType) throws Exception {
+        super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model, transactionType);
         commitsTableFeature = new AmpDonorCommitmentsFormTableFeature("commitsTableFeature", model, "Commitments Table", transactionType);
         add(commitsTableFeature);
         
@@ -63,7 +63,7 @@ public class AmpDonorCommitmentsSubsectionFeature extends AmpSubsectionFeatureFu
                 target.add(commitsTableFeature);
                 
                 AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-                parent.getFundingInfo().checkChoicesRequired(commitsTableFeature.getEditorList().getCount());
+                parent.getFundingInfo().configureRequiredFields();
                 target.add(parent.getFundingInfo());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

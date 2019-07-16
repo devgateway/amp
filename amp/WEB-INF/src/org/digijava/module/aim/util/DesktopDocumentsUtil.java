@@ -1,17 +1,24 @@
 package org.digijava.module.aim.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.utils.BoundedList;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
+import org.digijava.kernel.content.ContentRepositoryManager;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
@@ -20,33 +27,29 @@ import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerRights;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.apache.log4j.Logger;
+import org.digijava.module.contentrepository.util.DocumentsNodesAttributeManager;
 
 public class DesktopDocumentsUtil {
 
     protected static final Logger logger = Logger.getLogger(DesktopDocumentsUtil.class);
 
     public Collection<DocumentData> getLatestDesktopLinks(HttpServletRequest request, int top) {
+        
         ArrayList<DocumentData> reducedList = null;
-
-        HttpSession session = request.getSession();
-        TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-
-        Session readSession = DocumentManagerUtil.getReadSession(request);
-
+        Session jcrSession = ContentRepositoryManager.getWriteSession(request);
         DesktopDocumentsUtil desktopDocumentUtils = new DesktopDocumentsUtil();
 
         Node rootNode = null;
         try {
-            rootNode = readSession.getRootNode();
+            rootNode = jcrSession.getRootNode();
         } catch (RepositoryException ex) {
-            logger.warn("Failed to read documents from repository", ex);
+            logger.error("Failed to read documents from repository", ex);
             return Collections.emptyList();
         }
 
         List<DocumentData> allDocuments = new ArrayList<>();
-        List<DocumentData> privateDocs = desktopDocumentUtils.getPrivateDocuments(tm, rootNode, request);
-        List<DocumentData> teamDocs = desktopDocumentUtils.getTeamDocuments(tm, rootNode, request);
+        List<DocumentData> privateDocs = desktopDocumentUtils.getPrivateDocuments(rootNode, request);
+        List<DocumentData> teamDocs = desktopDocumentUtils.getTeamDocuments(rootNode, request);
         BoundedList<DocumentData> downloadedDocs =
                 (BoundedList<DocumentData>)(request.getSession().getAttribute(Constants.MOST_RECENT_RESOURCES));
 
@@ -87,26 +90,35 @@ public class DesktopDocumentsUtil {
         return reducedList;
     }
 
-    public List<DocumentData> getPrivateDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
-        Node userNode;
+    public List<DocumentData> getPrivateDocuments(Node rootNode, HttpServletRequest request) {
         try {
-            userNode = DocumentManagerUtil.getUserPrivateNode(rootNode.getSession(), teamMember);
+            TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
+            Node userNode = DocumentManagerUtil.getUserPrivateNode(rootNode.getSession(), teamMember);
+            
+            if (userNode != null) {
+                return getDocuments(userNode, request);
+            }
         } catch (RepositoryException e) {
-            logger.warn("Failed to read user private documents from the Repository", e);
-            return Collections.emptyList();
+            logger.error("Failed to read user private documents from the Repository", e);
         }
-        return getDocuments(userNode, request);
+        
+        return Collections.emptyList();
     }
 
-    public List<DocumentData> getTeamDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
+    public List<DocumentData> getTeamDocuments(Node rootNode, HttpServletRequest request) {
         Node teamNode;
+        TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
         try {
             teamNode = DocumentManagerUtil.getTeamNode(rootNode.getSession(), teamMember.getTeamId());
+            
+            if (teamNode != null) {
+                return getDocuments(teamNode, request);
+            }
         } catch (RepositoryException e) {
-            logger.warn("Failed to read team documents from the Repository", e);
-            return Collections.emptyList();
+            logger.error("Failed to read team documents from the Repository", e);
         }
-        return getDocuments(teamNode, request);
+        
+        return Collections.emptyList();
     }
 
     private List<DocumentData> getDocuments(Node node, HttpServletRequest request) {
@@ -114,15 +126,19 @@ public class DesktopDocumentsUtil {
             NodeIterator nodeIterator = node.getNodes();
             return getDocuments(nodeIterator, request);
         } catch (RepositoryException e) {
-            logger.warn("Failed to read documents from the Repository", e);
-            return Collections.emptyList();
+            logger.error("Failed to read documents from the Repository", e);
         }
+        
+        return Collections.emptyList();
     }
 
     private List<DocumentData> getDocuments(Iterator nodeIterator, HttpServletRequest request) {
         ArrayList<DocumentData> documents = new ArrayList<DocumentData>();
-        HashMap<String, CrDocumentNodeAttributes> uuidMapOrg = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
-        HashMap<String, CrDocumentNodeAttributes> uuidMapVer = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
+        DocumentsNodesAttributeManager docAttrManager = DocumentsNodesAttributeManager.getInstance();
+        
+        Map<String, CrDocumentNodeAttributes> uuidMapOrg = docAttrManager.getPublicDocumentsMap(false);
+        Map<String, CrDocumentNodeAttributes> uuidMapVer = docAttrManager.getPublicDocumentsMap(true);
+        
         Boolean hasMakePublicRights = DocumentManagerRights.hasMakePublicRights(request);
         
         List<String> gpiSupportiveDocuments = DocumentUtil.getAllSupportiveDocumentsUUID();
@@ -160,7 +176,7 @@ public class DesktopDocumentsUtil {
                 if (fileName == null && nodeWrapper.getWebLink() == null)
                     continue;
 
-                DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, null, null);
+                DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper);
 
                 if (!isPublicVersion) {
                     hasShowVersionsRights = DocumentManagerRights.hasShowVersionsRights(documentNode, request);

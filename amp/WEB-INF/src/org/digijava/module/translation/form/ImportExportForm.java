@@ -31,6 +31,7 @@ public class ImportExportForm extends ActionForm {
     private String skipOrUpdateTrnsWithKeywords;
     private int exportFormat;
     private String[] errors;
+    private boolean exportAmpOfflineTranslationsOnly;
 
     
     public int getExportFormat() {
@@ -87,7 +88,15 @@ public class ImportExportForm extends ActionForm {
     public void setSkipOrUpdateTrnsWithKeywords(String skipOrUpdateTrnsWithKeywords) {
         this.skipOrUpdateTrnsWithKeywords = skipOrUpdateTrnsWithKeywords;
     }
-    
+
+    public boolean isExportAmpOfflineTranslationsOnly() {
+        return exportAmpOfflineTranslationsOnly;
+    }
+
+    public void setExportAmpOfflineTranslationsOnly(boolean exportAmpOfflineTranslationsOnly) {
+        this.exportAmpOfflineTranslationsOnly = exportAmpOfflineTranslationsOnly;
+    }
+
     @Override
     public void reset(ActionMapping mapping, HttpServletRequest request) {
         super.reset(mapping, request);
@@ -99,6 +108,7 @@ public class ImportExportForm extends ActionForm {
         overwriteTrn=null;
         keywords=null;
         skipOrUpdateTrnsWithKeywords=null;
+        exportAmpOfflineTranslationsOnly = false;
     }
     public String[] getErrors() {
         return errors;

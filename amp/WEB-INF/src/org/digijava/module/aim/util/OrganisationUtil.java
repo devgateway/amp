@@ -17,6 +17,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.hibernate.Query;
@@ -130,5 +131,15 @@ public class OrganisationUtil {
             }
             
             return orgIds;
-     }    
+     }
+
+    /**
+     * Gets the {@link AmpOrganisation} {@link AmpRole}S from DB
+     * @return a {@link List} of {@link AmpRole}S
+     */
+    public static List<AmpRole> getOrgRoles() {
+        return PersistenceManager.getRequestDBSession()
+                .createCriteria(AmpRole.class)
+                .list();
+    }
 }

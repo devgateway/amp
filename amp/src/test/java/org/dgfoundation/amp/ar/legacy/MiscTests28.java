@@ -3,14 +3,10 @@ package org.dgfoundation.amp.ar.legacy;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.testutils.AmpTestCase;
+import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -19,33 +15,17 @@ import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.hibernate.jdbc.Work;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Pledges Form tests
  * @author Dolghier Constantin
  *
  */
-public class MiscTests28 extends AmpTestCase
-{
-    
-    private MiscTests28(String name)
-    {
-        super(name);        
-    }
-    
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite(MiscTests28.class.getName());
-        suite.addTest(new MiscTests28("testComparingObjectVisibility"));
-        suite.addTest(new MiscTests28("testComparingObjectVisibilityInterClass"));
-        suite.addTest(new MiscTests28("testProgramLevelsViews"));
-        suite.addTest(new MiscTests28("testProgramLevelsFunctions"));
-        return suite;
-    }
-    
+public class MiscTests28 extends ReportsTestCase {
+
+    @Test
     public void testComparingObjectVisibility()
     {
         AmpFieldsVisibility afv1 = new AmpFieldsVisibility();
@@ -71,7 +51,8 @@ public class MiscTests28 extends AmpTestCase
                 assertEquals(i == j, fields[j].equals(fields[i]));
             }
     }
-    
+
+    @Test
     public void testComparingObjectVisibilityInterClass()
     {
         AmpObjectVisibility[] fields = new AmpObjectVisibility[] {new AmpFieldsVisibility(), new AmpFeaturesVisibility(), new AmpModulesVisibility(), new AmpTemplatesVisibility()};
@@ -87,7 +68,8 @@ public class MiscTests28 extends AmpTestCase
                 assertEquals(j == i, fields[j].equals(fields[i]));
             }
     }
-    
+
+    @Test
     public void testProgramLevelsViews() {
         PersistenceManager.getSession().doWork(new Work() {
 
@@ -128,7 +110,8 @@ public class MiscTests28 extends AmpTestCase
             }           
         });
     }
-    
+
+    @Test
     public void testProgramLevelsFunctions() {
         PersistenceManager.getSession().doWork(new Work() {
 
@@ -164,11 +147,8 @@ public class MiscTests28 extends AmpTestCase
         });
     }
     
-    @Override
-    protected void setUp() throws Exception
-    {
+    @Before
+    public void setUp() {
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
-        super.setUp();
-        // do nothing now                
     }
 }

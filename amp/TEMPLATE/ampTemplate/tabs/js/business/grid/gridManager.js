@@ -30,6 +30,10 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		return '/rest/data/report/' + id + '/result/jqGrid';
 	}
 
+	function getPreviewPageURL(id) {
+		return '/aim/viewActivityPreview.do~activityId=' + id;
+	}
+
 	GridManager.prototype = {
 		constructor : GridManager
 	};
@@ -312,9 +316,10 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								};
 
 								// Assign colors for each row for loggued users.
+								var statusClass = '';
 								var x = getApprovalStatus(draft, approvalStatus);
 								if (x === statusMapping.Approved) {
-									row.className = className + ' status_1';
+									statusClass = ' status_1';
 									// Create link to edit activity.
 									if (teamtype !== app.TabsApp.MANAGER_TYPE) {
 										jQuery(row.cells[0]).html(iconedit + link);
@@ -323,11 +328,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 									}
 
 								} else if (x === statusMapping.Existing_Draft || x === statusMapping.New_Draft) {
-									row.className = className + ' status_2';
+									statusClass = ' status_2';
 									jQuery(row.cells[0]).html(iconedit);
 
 								} else if (x === statusMapping.Existing_Unvalidated || x === statusMapping.New_Unvalidated) {
-									row.className = className + ' status_3';
+									statusClass = ' status_3';
 									// Cross team enable team lead and validators able to validate show icon.
 									if (crossTeamValidation && (teamlead || validator)) {
 										if (teamtype !== app.TabsApp.MANAGER_TYPE) {
@@ -343,6 +348,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										jQuery(row.cells[0]).html(iconedit);
 									}
 								}
+								row.className = className + statusClass;
 
 								// Create link to preview activity on first not grouped column.
 								var colIndex = -1;
@@ -351,8 +357,8 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										colIndex = i;
 									}
 								});
-								var newContent = "<span style='cursor: pointer;' onclick = \x22openPreviewPage(" + id + ")\x22>"
-										+ jQuery(row.cells[colIndex]).html() + "</span>";
+                                var newContent = "<a class='preview-cell" + statusClass + "' href='" + getPreviewPageURL(id) + "'>"
+									+ jQuery(row.cells[colIndex]).html() + "</a>";
 								jQuery(row.cells[colIndex]).html(newContent);
 							}
 							

@@ -35,10 +35,6 @@ import org.junit.Test;
  */
 public abstract class BasicSanityChecks extends ReportingTestCase {
             
-    public BasicSanityChecks(String name) {
-        super(name);
-    }
-    
     final List<String> acts = Arrays.asList(
             "activity 1 with agreement",
             "Activity 2 with multiple agreements",

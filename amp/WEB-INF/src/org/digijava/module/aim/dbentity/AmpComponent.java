@@ -5,6 +5,12 @@
 
 package org.digijava.module.aim.dbentity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.REQUIRED_ALWAYS;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_DESCRIPTION;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TITLE;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TYPE;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,7 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
@@ -27,20 +33,25 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
     
     //IATI-check: to be ignored
     
-    private static Logger logger = Logger.getLogger(AmpComponent.class);
-//  @Interchangeable(fieldTitle="ID", id = true)
     private Long ampComponentId;
-//  @Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Components/Component/Component Information/Component Title", value = true)
+
+    private AmpActivityVersion activity;
+
+    @Interchangeable(fieldTitle = COMPONENT_TITLE, required = REQUIRED_ALWAYS, importable = true,
+            fmPath="/Activity Form/Components/Component/Component Information/Component Title")
     @TranslatableField
     private String title;
-//  @Interchangeable(fieldTitle="Description",fmPath="/Activity Form/Components/Component/Component Information/Description")
+
+    @Interchangeable(fieldTitle = COMPONENT_DESCRIPTION, importable = true,
+            fmPath="/Activity Form/Components/Component/Component Information/Description")
     @TranslatableField
     private String description;
-//  @Interchangeable(fieldTitle="") //I gladly would export this, if I could
+
     private java.sql.Timestamp creationdate;
-//  @Interchangeable(fieldTitle="Code")
+
     private String code;
-    
+
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING, importable = true)
     private Set<AmpComponentFunding> fundings;
     
     public static class AmpComponentComparator implements Comparator<AmpComponent>{
@@ -62,19 +73,21 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
             return ret;
         }
     }
-    
-    //private String type;
+
+    @Interchangeable(fieldTitle = COMPONENT_TYPE, importable = true, pickIdOnly = true,
+            fmPath = "/Activity Form/Components/Component/Component Information/Component Type")
     private AmpComponentType type;
     
-    private Set activities;
     private String Url;
-    
-    public Set getActivities() {
-        return activities;
+
+    public AmpActivityVersion getActivity() {
+        return activity;
     }
-    public void setActivities(Set activities) {
-        this.activities = activities;
+
+    public void setActivity(AmpActivityVersion activity) {
+        this.activity = activity;
     }
+
     public Long getAmpComponentId() {
         return ampComponentId;
     }
@@ -165,11 +178,11 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
         return this.getValue().equals(aux.getValue());
     }
     
-    private transient Comparator<AmpComponentFunding> componentFundingComparator = new Comparator<AmpComponentFunding>() {
+    private static final Comparator<AmpComponentFunding> COMPONENT_FUNDING_COMPARATOR = new Comparator<AmpComponentFunding>() {
         public int compare(AmpComponentFunding o1, AmpComponentFunding o2) {
             AmpComponentFunding aux1 = (AmpComponentFunding) o1;
             AmpComponentFunding aux2 = (AmpComponentFunding) o2;
-            
+
             if (aux1.getTransactionType().equals(aux2.getTransactionType())) {
                 if (aux1.getTransactionAmount().equals(aux2.getTransactionAmount())) {
                     return aux1.getTransactionDate().compareTo(aux2.getTransactionDate());
@@ -206,7 +219,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
         }
         
         List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings); 
-        auxFundings.sort(componentFundingComparator);
+        auxFundings.sort(COMPONENT_FUNDING_COMPARATOR);
         Iterator<AmpComponentFunding> iter = auxFundings.iterator();
         
         while(iter.hasNext()) {
@@ -247,7 +260,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
         ret.append("-" + this.code+ "-" + this.description + "-" + this.Url + "-" + this.creationdate);
         
         List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings); 
-        auxFundings.sort(componentFundingComparator);
+        auxFundings.sort(COMPONENT_FUNDING_COMPARATOR);
         Iterator<AmpComponentFunding> iter = auxFundings.iterator();
         
         while(iter.hasNext()) {
@@ -261,8 +274,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpComponent auxComponent = (AmpComponent) clone();
-        auxComponent.setActivities(new HashSet<AmpActivityVersion>());
-        auxComponent.getActivities().add(newActivity);
+        auxComponent.setActivity(newActivity);
         auxComponent.setAmpComponentId(null);
         
         if (auxComponent.getFundings() != null && auxComponent.getFundings().size() > 0) {

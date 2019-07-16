@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
@@ -78,8 +79,8 @@ public class ComponentsUtil {
 
   
     @SuppressWarnings("unchecked")
-    public static Collection<AmpComponentType> getAmpComponentTypes(Boolean... onlyEnabled) {
-        Collection<AmpComponentType> col = null;
+    public static List<AmpComponentType> getAmpComponentTypes(Boolean... onlyEnabled) {
+        List<AmpComponentType> componentTypes = null;
         String queryString = null;
         Session session = null;
         Query qry = null;
@@ -90,11 +91,11 @@ public class ComponentsUtil {
             else
                 queryString = "select co from " + AmpComponentType.class.getName() + " co ";
             qry = session.createQuery(queryString);
-            col = qry.list();
+            componentTypes = qry.list();
         } catch (Exception ex) {
             logger.error("Unable to get AmpComponentType  from database " + ex.getMessage());
         }
-        return col;
+        return componentTypes;
     }
     
     public static AmpComponentType getAmpComponentTypeByName(String name) {
@@ -419,7 +420,10 @@ public class ComponentsUtil {
             try {
                 session = PersistenceManager.getRequestDBSession();
                 String componentTitle = InternationalizedModelDescription.getForProperty(AmpComponent.class, "title").getSQLFunctionCall("co.ampComponentId");
-                queryString = "select co from " + AmpComponent.class.getName() + " as co inner join co.activities ac inner join ac.ampActivityGroup actGroup where " + componentTitle + "=:title and actGroup.ampActivityGroupId <> :groupId ";
+                queryString = "select co from " + AmpComponent.class.getName() + " as co "
+                        + "inner join co.activity.ampActivityGroup actGroup "
+                        + "where " + componentTitle + "=:title "
+                        + "and actGroup.ampActivityGroupId <> :groupId ";
                 qry = session.createQuery(queryString);
                 qry.setParameter("title", title, StringType.INSTANCE);
                 qry.setParameter("groupId", g.getAmpActivityGroupId(), LongType.INSTANCE);

@@ -3,9 +3,13 @@
  */
 package org.digijava.kernel.ampapi.endpoints.currency;
 
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +31,9 @@ import org.dgfoundation.amp.currency.CurrencyInflationUtil;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.currency.inflation.ds.FredDataSource;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.currency.dto.CurrencyPair;
+import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRate;
+import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -37,6 +44,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.dbentity.AmpInflationSource;
+import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -53,6 +61,8 @@ public class CurrencyService {
     protected static final Logger logger = Logger.getLogger(CurrencyService.class);
     protected static final SimpleDateFormat DATE_FORMATTER = DateTimeUtil.getStrictSimpleDateFormat(
             CurrencyEPConstants.DATE_FORMAT);
+
+    public static final CurrencyService INSTANCE = new CurrencyService();
     
     /**
      * @see Currencies#getCurrencyInflationDataSources()
@@ -396,5 +406,39 @@ public class CurrencyService {
             errors.addApiErrorMessage(CurrencyErrors.INVALID_PERIOD, value);
         }
         return year;
+    }
+
+    /**
+     * Returns exchange rates for all currency pairs.
+     * @return list of rates grouped by currency pairs
+     */
+    public List<ExchangeRatesForPair> getExchangeRatesForPairs() {
+        Collection<CurrencyRates> rates = CurrencyUtil.getAllCurrencyRates();
+        return groupRatesByCurrencyPairs(rates);
+    }
+
+    public List<ExchangeRatesForPair> getExchangeRatesForPairs(List<Date> days) {
+        Collection<CurrencyRates> rates = CurrencyUtil.getCurrencyRates(days, false);
+        return groupRatesByCurrencyPairs(rates);
+    }
+
+    private List<ExchangeRatesForPair> groupRatesByCurrencyPairs(Collection<CurrencyRates> rates) {
+        Map<CurrencyPair, List<CurrencyRates>> groupedRates = rates.stream().collect(groupingBy(this::currencyPair));
+
+        return groupedRates.entrySet().stream()
+                .map(e -> getExchangeRatesForPair(e.getKey(), e.getValue()))
+                .collect(toList());
+    }
+
+    private ExchangeRatesForPair getExchangeRatesForPair(CurrencyPair pair, List<CurrencyRates> rates) {
+        return new ExchangeRatesForPair(pair, rates.stream().map(this::convertRate).collect(toList()));
+    }
+
+    private ExchangeRate convertRate(CurrencyRates r) {
+        return new ExchangeRate(r.getExchangeRateDateAsDate(), r.getExchangeRate());
+    }
+
+    private CurrencyPair currencyPair(CurrencyRates r) {
+        return new CurrencyPair(r.getFromCurrencyCode(), r.getCurrencyCode());
     }
 }

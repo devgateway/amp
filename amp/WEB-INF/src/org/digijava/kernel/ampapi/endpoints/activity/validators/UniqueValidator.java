@@ -9,11 +9,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Validates that unique values are provided when within a list required to have
@@ -29,11 +28,11 @@ public class UniqueValidator extends InputValidator {
     }
 
     @Override
-    public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-            Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
+                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
         boolean isValid = true;
-        String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
-        String uniqueField = fieldDescription.getString(ActivityEPConstants.UNIQUE_CONSTRAINT);
+        String fieldName = fieldDescription.getFieldName();
+        String uniqueField = fieldDescription.getUniqueConstraint();
         if (StringUtils.isNotBlank(uniqueField)) {
             // get Collection with values to be unique
             Collection<Map<String, Object>> fieldValue = (Collection<Map<String, Object>>) newFieldParent.get(fieldName);

@@ -7,6 +7,7 @@ import javax.jcr.Node;
 
 import org.apache.jackrabbit.core.persistence.PersistenceManager;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -19,29 +20,34 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  *
  */
 public class AmpActivityDocument extends ObjectReferringDocument implements Serializable, Versionable, Cloneable {
-//  @Interchangeable(fieldTitle="ID", id = true, value = true, importable = true)
+
     private Long id;
     
     private AmpActivityVersion ampActivity;
-//  @Interchangeable(fieldTitle="Document Type")
+
+    @Interchangeable(fieldTitle = "Document Type", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private String documentType;
-    
     
     public String getDocumentType() {
         return documentType;
     }
+
     public void setDocumentType(String documentType) {
         this.documentType = documentType;
     }
+
     public AmpActivityVersion getAmpActivity() {
         return ampActivity;
     }
+
     public void setAmpActivity(AmpActivityVersion ampActivity) {
         this.ampActivity = ampActivity;
     }
+
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }

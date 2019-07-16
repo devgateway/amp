@@ -11,6 +11,15 @@
 	<!-- * DO NOT ADD ANYTHING BEFORE THIS SEGMENT * -->
 	<!-- ******************************************* -->
 
+	<filter>
+		<filter-name>gzipRequestFilter</filter-name>
+		<filter-class>org.digijava.kernel.web.gzip.GzipRequestFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>gzipRequestFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+
 <!-- Saiku parts -->
 	<filter>
 		<filter-name>org.springframework.security.filterChainProxy</filter-name>
@@ -53,7 +62,18 @@
          <param-value>utf-8</param-value>
       </init-param>
    </filter>
-
+   
+   <filter>
+        <filter-name>populateTLSRequestFilter</filter-name>
+        <filter-class>org.digijava.kernel.request.PopulateTLSRequestFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>populateTLSRequestFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+   
 	<filter>
 		<filter-name>HibernateFilter</filter-name>
 		<filter-class>org.digijava.kernel.startup.HibernateSessionRequestFilter</filter-class>
@@ -111,13 +131,6 @@
 			org.digijava.module.aim.patches.DBPatcher:patchAMPDB
 		</param-value>
 	</context-param>
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>
-			/WEB-INF/spring/application-context.xml
-			/WEB-INF/saiku/context.xml
-		</param-value>
-	</context-param>
 
 
 	<!-- Apache Wicket -->
@@ -149,28 +162,17 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	<!-- Quartz Listener -->
-     <context-param>
-         <param-name>shutdown-on-unload</param-name>
-         <param-value>true</param-value>
-     </context-param>
-     <context-param>
-         <param-name>start-scheduler-on-load</param-name>
-         <param-value>false</param-value>
-     </context-param>
-     <listener>
-         <listener-class>
-             org.quartz.ee.servlet.QuartzInitializerListener
-         </listener-class>
-     </listener>
-	
-	
-
 	<listener>
 		<listener-class>
 			org.digijava.module.aim.startup.AMPStartupListener
 		</listener-class>
 	</listener>
+
+	<!-- Quartz Listener -->
+	<listener>
+		<listener-class>org.digijava.module.aim.startup.QuartzStartupListener</listener-class>
+	</listener>
+
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>
@@ -179,6 +181,24 @@
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class>
 	</listener>
+
+	<filter>
+		<filter-name>ampOfflineClientDetector</filter-name>
+		<filter-class>org.digijava.kernel.ampapi.filters.AmpOfflineClientDetectorFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ampOfflineClientDetector</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>apiCompatFilter</filter-name>
+		<filter-class>org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompatFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>apiCompatFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
 	
 	<!-- Jersey Servlet  -->
 	<servlet>
@@ -206,6 +226,10 @@
     	 <init-param>
 			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
 			<param-value>org.digijava.kernel.ampapi.endpoints.common.ApiResponseFilter</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
+			<param-value>org.digijava.kernel.ampapi.endpoints.security.AuthorizerResourceFilterFactory</param-value>
 		</init-param>
 		 
     	<init-param>

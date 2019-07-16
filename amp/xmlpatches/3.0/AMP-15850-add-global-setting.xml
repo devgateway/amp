@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-15850</jira>
+	<keyword>add global setting strong password</keyword>
+	<author>apicca</author>
+	<description>Adding global setting to allow use strong password validation</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="y">
+				<lang type="sql">select count(*) from amp_global_settings where 
+					settingsname ='Strong password'</lang>
+			</script>
+			<test>y.intValue()==0</test>
+		</condition>
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section)
+				VALUES (nextval('amp_global_settings_seq'), 'Strong password', 'false',
+				't_Boolean', 'Enforce the use of strong passwords', 'user');
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

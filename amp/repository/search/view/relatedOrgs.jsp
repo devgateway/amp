@@ -41,7 +41,7 @@
                         <tr>
                             <td>
                        	<digi:link module="aim"
-											href="/viewActivityPreview.do?pageId=2&activityId=${item.ampActivityId}"><bean:write name="item" property="objectName" /></digi:link><br />
+											href="/viewActivityPreview.do?activityId=${item.ampActivityId}"><bean:write name="item" property="objectName" /></digi:link><br />
                         </td>
                         </tr>
                        </c:forEach> 

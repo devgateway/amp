@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
@@ -21,17 +20,23 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.Hit;
-import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
 import org.digijava.module.aim.util.LuceneUtil;
+
+import clover.org.jfree.util.Log;
 
 /**
  * Lucene worker contains general code for working with Lucene.
@@ -158,9 +163,16 @@ public class LuceneWorker {
      */
     private static boolean checkIndexDirExists(LucModule<?> module, ServletContext context){
         String dir = getModuleDirPath(module, context);
-        boolean exists = IndexReader.indexExists(dir);
+        boolean exists = false;
+        
+        try {
+            exists = IndexReader.indexExists(FSDirectory.open(new File(dir)));
+        } catch (IOException e) {
+            Log.error("Error in opening index directory");
+        }
+        
         if(!exists){
-            logInfo(module,"Index directory missing. Need rebuild.");
+            logInfo(module, "Index directory missing. Need rebuild.");
         }
         return exists;
     }
@@ -263,12 +275,14 @@ public class LuceneWorker {
         try {
             String dir = getModuleDirPath(module, context);
             LuceneUtil.deleteDirectory(dir);
+            Directory directory = FSDirectory.open(new File(dir));
             logInfo(module,"Index directory deleted.");
             Analyzer analyzer = module.getAnalyzer();
             logInfo(module,"Loading items to index...");
             List<E> items = module.getItemsToIndex();
             long startTime = System.currentTimeMillis();
-            IndexWriter writer = new IndexWriter(dir, analyzer, true);
+            IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, analyzer);
+            IndexWriter writer = new IndexWriter(directory, indexWriterConfig);
             if (items!=null && items.size()>0){
                 logInfo(module,"Creating index for "+items.size()+" items. This may take some time...");
                 for (E item : items) {
@@ -435,8 +449,10 @@ public class LuceneWorker {
             try {
                 Document doc = module.convertToDocument(item);
                 String dir = getModuleDirPath(module, context);
+                Directory directory = FSDirectory.open(new File(dir)); 
                 Analyzer analyzer = module.getAnalyzer();
-                IndexWriter writer = new IndexWriter(dir, analyzer, false);
+                IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, analyzer);
+                IndexWriter writer = new IndexWriter(directory, indexWriterConfig);
                 writer.addDocument(doc);
                 writer.close();
             } catch (IOException e) {
@@ -474,7 +490,7 @@ public class LuceneWorker {
         try {
             if (module!=null){
                 String dir = getModuleDirPath(module, context);
-                IndexReader reader = IndexReader.open(dir);
+                IndexReader reader = IndexReader.open(FSDirectory.open(new File(dir)), false);
                 Term term = module.getIdFieldTerm(item);
                 reader.deleteDocuments(term);
                 reader.close();
@@ -491,10 +507,11 @@ public class LuceneWorker {
      * @param clazz
      * @param textToSearch search term.
      * @param context
-     * @return hits in index sorted by relevance
+     * @return docs in index sorted by relevance
      * @throws DgException
      */
-    public static <E> Hits search(Class<E> clazz, String textToSearch, ServletContext context) throws DgException{
+    public static <E> AmpLuceneTopDocs search(Class<E> clazz, String textToSearch, ServletContext context) 
+            throws DgException {
         return search(clazz, textToSearch, context, null);
     }
 
@@ -507,64 +524,77 @@ public class LuceneWorker {
      * @param textToSearch
      * @param context
      * @param classNameSuffix suffix for classes to separate them by some feature in different indexes. 
-     * @return
+     * @return docs
      * @throws DgException
      */
-    public static <E> Hits search(Class<E> clazz, String textToSearch, ServletContext context, String suffix) throws DgException{
-        Hits hits = null;
+    public static <E> AmpLuceneTopDocs search(Class<E> clazz, String textToSearch, ServletContext context, 
+            String suffix) throws DgException {
+        AmpLuceneTopDocs luceneTopDocs = new AmpLuceneTopDocs();
         try {
             LucModule<E> module = getModule(clazz, suffix);
             String dir = getModuleDirPath(module, context);
             String[] searchFieldNames = module.getSearchFieldNames();
             String searchText = textToSearch;
             Analyzer analyzer = module.getAnalyzer();
-            IndexSearcher searcher = new IndexSearcher(dir);
-            MultiFieldQueryParser queryParser = new MultiFieldQueryParser(searchFieldNames, analyzer);
+            IndexSearcher searcher = new IndexSearcher(IndexReader.open(FSDirectory.open(new File(dir))));
+            MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_36, searchFieldNames, 
+                    analyzer);
             String escapedSearchText = QueryParser.escape(searchText);
             Query query = queryParser.parse(escapedSearchText);
-            hits = searcher.search(query);
+            TopDocs topDocs = searcher.search(query, LuceneUtil.MAX_LUCENE_RESULTS);
+            
+            
+            ScoreDoc[] hits = topDocs.scoreDocs;
+            for (int i = 0; i < hits.length; i++) {
+                float score = hits[i].score;
+                Document document = searcher.doc(hits[i].doc);
+                luceneTopDocs.addDocument(new AmpLuceneDoc(document, score));
+            }
+            
+            searcher.close();
         } catch (IOException e1) {
             throw new DgException("Cannot search index",e1);
         } catch (ParseException e2) {
             throw new DgException("Cannot search index",e2);
         }
-        return hits;
+        
+        return luceneTopDocs;
     }
 
     /**
-     * Converts hits to list of beans of specified type.
+     * Converts docs to list of beans of specified type.
      * @param <E> type of beans in result list. Also used to determine module.
-     * @param hits
+     * @param docs
      * @param clazz
      * @return
      * @throws IOException
      */
-    public static <E> List<E> hitsToSortedList(Hits hits, Class<E> clazz) throws IOException{
-        return hitsToSortedList(hits, clazz, null);
+    public static <E> List<E> docsToSortedList(AmpLuceneTopDocs topDocs, Class<E> clazz) throws IOException {
+        return topDocsToSortedList(topDocs, clazz, null);
     }
 
     /**
-     * Converts hits to list of beans of specified type.
+     * Converts docs to list of beans of specified type.
      * @param <E>
-     * @param hits
+     * @param docs
      * @param clazz
      * @param suffix
      * @return
      * @throws IOException
      */
     @SuppressWarnings("unchecked")
-    public static <E> List<E> hitsToSortedList(Hits hits, Class<E> clazz, String suffix) throws IOException{
-        LucModule<E> module = getModule(clazz,suffix);
+    public static <E> List<E> topDocsToSortedList(AmpLuceneTopDocs luceneTopDocs, Class<E> clazz, String suffix) 
+            throws IOException {
+        LucModule<E> module = getModule(clazz, suffix);
         List<E> items = null;
-        if (hits!=null && hits.length()>0){
-            items = new ArrayList<E>(hits.length());
-            Iterator<Hit> iterator = hits.iterator();
-            while (iterator.hasNext()) {
-                Hit hit = iterator.next();
-                E item = module.hitToItem(hit);
+        if (luceneTopDocs != null && luceneTopDocs.size() > 0) {
+            items = new ArrayList<E>(luceneTopDocs.size());
+            for (int i = 0; i < luceneTopDocs.size(); i++) {
+                E item = module.luceneDocToItem(luceneTopDocs.getDocument(i));
                 items.add(item);
             }
         }
+        
         return items;
     }
     

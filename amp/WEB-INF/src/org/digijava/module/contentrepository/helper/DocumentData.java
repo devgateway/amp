@@ -11,7 +11,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.jcrentity.Label;
-import org.digijava.module.contentrepository.util.DocToOrgDAO;
+import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class DocumentData implements Comparable<DocumentData>, Serializable {
@@ -328,7 +328,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
         String extension    = null;
         if ( webLink == null ) {
             int index           = name.lastIndexOf(".");
-            extension           = name.substring(index + 1, name.length()) ;
+            extension           = name.substring(index + 1, name.length()).toLowerCase();
         }
         else 
             extension           = "link";
@@ -500,50 +500,46 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
     /**
      * builds a DocumentData instance off a NodeWrapper. Pay special attention to the way uuid's are juggled here!
      * @param nodeWrapper - the NodeWrapper where all the main info comes
-     * @param fileName - the filename (documentData.name)
      * @param uuid - either the uuid value to be stored in the documentData instance or, if null, nodeWrapper.uuid will be stored
      * @param nodeVersionUUID - documentData.nodeVersionUUID
-     * @param request - may be null
-     * @return
+     * @return documentData
      */
-    public static DocumentData buildFromNodeWrapper(NodeWrapper nodeWrapper, String fileName, String uuid, String nodeVersionUUID)
-    {
-        DocumentData documentData       = new DocumentData();
+    public static DocumentData buildFromNodeWrapper(NodeWrapper nodeWrapper, String uuid, String nodeVersionUUID) {
+        DocumentData documentData = new DocumentData();
         documentData.setName(nodeWrapper.getName());
-        if (fileName != null)
-            documentData.setName(fileName );
-        if (uuid == null)
-            documentData.setUuid(nodeWrapper.getUuid());
-        else
+        if (uuid != null) {
             documentData.setUuid(uuid);
-        if (nodeVersionUUID != null)
-            documentData.setNodeVersionUUID(nodeVersionUUID);
-        documentData.setTitle(nodeWrapper.getTitle());
-        if (documentData.getTitle() == null) {
-            documentData.setTitle(nodeWrapper.getTranslatedTitleByLang(TLSUtils.getSite().getDefaultLanguage().getCode()));
+        } else {
+            documentData.setUuid(nodeWrapper.getUuid());
         }
-        documentData.setDescription( nodeWrapper.getDescription() );
-        documentData.setNotes( nodeWrapper.getNotes() );
-        documentData.setFileSize( nodeWrapper.getFileSizeInMegabytes() );
-        documentData.setCalendar( nodeWrapper.getDate() );
-        documentData.setVersionNumber( nodeWrapper.getVersionNumber() );
-        documentData.setContentType( nodeWrapper.getContentType() );
-        documentData.setWebLink( nodeWrapper.getWebLink() );
-        documentData.setCmDocTypeId( nodeWrapper.getCmDocTypeId() );
+        if (nodeVersionUUID != null) {
+            documentData.setNodeVersionUUID(nodeVersionUUID);
+        }
+        documentData.setNodeVersionUUID(nodeWrapper.getUuid());
+        documentData.setTitle(nodeWrapper.getTitle());
+        documentData.setDescription(nodeWrapper.getDescription());
+        documentData.setNotes(nodeWrapper.getNotes());
+        documentData.setFileSize(nodeWrapper.getFileSizeInMegabytes());
+        documentData.setCalendar(nodeWrapper.getDate());
+        documentData.setVersionNumber(nodeWrapper.getVersionNumber());
+        documentData.setContentType(nodeWrapper.getContentType());
+        documentData.setWebLink(nodeWrapper.getWebLink());
+        documentData.setCmDocTypeId(nodeWrapper.getCmDocTypeId());
         documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
-        documentData.setLabels( nodeWrapper.getLabels() );
-        documentData.setCreatorTeamId( nodeWrapper.getCreatorTeam() );
-        documentData.setCreatorEmail( nodeWrapper.getCreator() );
+        documentData.setLabels(nodeWrapper.getLabels());
+        documentData.setCreatorTeamId(nodeWrapper.getCreatorTeam());
+        documentData.setCreatorEmail(nodeWrapper.getCreator());
         documentData.setIndex(nodeWrapper.getIndex());
         documentData.setCategory(nodeWrapper.getCategory());
-        
-//      if (request != null)
-        {
-            documentData.process();
-            documentData.computeIconPath(true);         
-        }
-        
-        documentData.setOrganisations(DocToOrgDAO.getOrganisationsAsString(documentData.getUuid()));
+        documentData.process();
+        documentData.computeIconPath(true);
+        documentData.setOrganisations(
+                DocumentOrganizationManager.getInstance().getOrganisationsAsStringByUUID(documentData.getUuid()));
+        return documentData;
+    }
+    
+    public static DocumentData buildFromNodeWrapper(NodeWrapper nodeWrapper) {
+        DocumentData documentData = buildFromNodeWrapper(nodeWrapper, null, null);
         
         return documentData;
     }
@@ -555,7 +551,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
      */
     public static DocumentData buildFromUuid(String uuid){
         NodeWrapper nodeWrapper = DocumentManagerUtil.getReadNodeWrapper(uuid, TLSUtils.getRequest());
-        return buildFromNodeWrapper(nodeWrapper, null, null, null);
+        return buildFromNodeWrapper(nodeWrapper);
     }
     
     /**
@@ -569,19 +565,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
         String fileName = nodeWrapper.getName();
         if (fileName == null)
             return null;
-        DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, null, null);
-        return documentData;
-    }
-    
-    /**
-     * debug only code, DO NOT USE IN PRODUCTION CODE
-     * @param node
-     * @param parent
-     * @return
-     */
-    public static DocumentData buildFromNodeVersion(javax.jcr.Node node, DocumentData parent){
-        NodeWrapper nodeWrapper = new NodeWrapper(node);
-        DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, parent.getName(), parent.getUuid(), parent.getUuid());
+        DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper);
         return documentData;
     }
     

@@ -14,12 +14,11 @@ import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
-import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
-import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 
 /**
  * the {@link Behavior} of a Funding Flow entity.
@@ -105,4 +104,10 @@ public class DirectedMeasureBehaviour extends TrivialMeasureBehaviour {
     public boolean shouldDeleteLeafIfEmpty(CellColumn column) {
         return true;
     }
+    
+    @Override
+    public boolean canBeSplitByCurrency() {
+        return true;
+    }
+    
 }

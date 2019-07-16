@@ -694,21 +694,6 @@
                     <div class="admin_landing_page_box_cont">
                       <div class="admin_landing_page_box_title"><digi:trn>Results dashboard tools</digi:trn></div>
                       <table border="0" cellspacing="2" cellpadding="2">
-                        <module:display name="Result Matrix Settings" parentModule="ADMINISTRATIVE SECTION">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <c:set var="translation">
-                                <digi:trn invisibleLinks="true">Click here to view Result Matrix/GIS Settings page</digi:trn>
-                              </c:set>
-                              <digi:link href="/showGisSettings.do" module="gis" title="${translation}" >
-                                <digi:trn>
-                                  Result Matrix/GIS Settings
-                                </digi:trn>
-                              </digi:link>
-                            </td>
-                          </tr>
-                        </module:display>
                         <module:display name="Budget Integration" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>

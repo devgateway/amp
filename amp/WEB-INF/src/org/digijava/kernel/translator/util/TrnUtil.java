@@ -675,7 +675,7 @@ public class TrnUtil {
         }
 
         @Override
-        public void update(Message element) throws WorkerException {
+        public void update(Message element) {
             worker.update(element);
         }
 

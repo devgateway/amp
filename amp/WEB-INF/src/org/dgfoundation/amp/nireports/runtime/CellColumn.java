@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports.runtime;
 
+import static java.util.Collections.emptyList;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,14 +11,12 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
-import static java.util.Collections.emptyList;
-
-import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
+import org.digijava.kernel.translator.LocalizableLabel;
 
 /**
  * a leaf column
@@ -54,10 +54,12 @@ public class CellColumn extends Column {
         if (totalsSubcolumnCategory != null) {
             values.put(totalsSubcolumnCategory, new ArrayList<>());
             this.forEachCell(cell -> values.get(totalsSubcolumnCategory).add(cell));
+        } else if (values.isEmpty() && strategy.getEmptyTotalSubcolumnName() != null) {
+            values.put(strategy.getEmptyTotalSubcolumnName(), new ArrayList<>());
         }
             
         GroupColumn res = this.asGroupColumn(null, newParent);
-        List<ComparableValue<String>> subColumnNames = strategy.getSubcolumnsNames(values.keySet());
+        List<ComparableValue<String>> subColumnNames = strategy.getSubcolumnsNames(values.keySet(), isTotal());
         for(ComparableValue<String> key:subColumnNames) {
             res.addColumn(
                 new CellColumn(key.getValue(),
@@ -104,5 +106,9 @@ public class CellColumn extends Column {
     @Override
     public <K> K accept(ColumnVisitor<K> cv) {
         return cv.visit(this);
+    }
+    
+    public boolean isTotal() {
+        return parent.isTotal();
     }
 }

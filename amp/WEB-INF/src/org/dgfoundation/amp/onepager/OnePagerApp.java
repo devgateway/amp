@@ -194,42 +194,6 @@ public class OnePagerApp extends AuthenticatedWebApplication {
                 };
             }
         });
-        //getStoreSettings().setFileStoreFolder(new File("/mnt/ssd/wicket"));
-        //turn this on in order to view rendering times for wicket pages
-        //getComponentInstantiationListeners().add(new RenderPerformanceListener());
-
-        // Error handling
-         /*
-         getRequestCycleListeners().add(new AbstractRequestCycleListener() {
-
-             @Override  
-              public IRequestHandler onException(RequestCycle cycle, Exception e) {  
-                 logger.error("", e);
-                  return new RenderPageRequestHandler(new PageProvider(new AmpExceptionPage(e)));  
-                    }
-                });
-          */
-
-
-        getRequestCycleListeners().add(
-            new AbstractRequestCycleListener(){
-                public void onBeginRequest(RequestCycle cycle){
-                    if (cycle.getRequest().getContainerRequest() instanceof HttpServletRequest){
-                        HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest().getContainerRequest();
-                        TLSUtils.populate(containerRequest);
-                        DocumentManagerUtil.initJCRSessions(containerRequest);
-                    }
-                };
-                public void onEndRequest(RequestCycle cycle){
-                    if (cycle.getRequest().getContainerRequest() instanceof HttpServletRequest){
-                        HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest().getContainerRequest();
-                        DocumentManagerUtil.closeJCRSessions(containerRequest);
-                        TLSUtils.clean();
-                    }                   
-                }
-            }
-        );
-
     }
 
 

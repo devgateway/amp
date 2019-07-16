@@ -40,12 +40,16 @@ import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
+import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.util.Identifiable;
 
+@InterchangeableValue(UserValueProvider.class)
 public class User
-    extends Entity implements Serializable, Comparable{
+    extends Entity implements Serializable, Comparable, Identifiable {
 
     private Subject subject;
     private String firstNames;
@@ -60,7 +64,6 @@ public class User
     private String passQuestion;
     private String passAnswer;
     private String url;
-    private boolean active;
     private boolean banned;
     private Boolean pledger;
     private Boolean pledgeSuperUser;
@@ -86,11 +89,12 @@ public class User
     private Set contacts;
     private AmpUserExtension userExtension;
     private Boolean exemptFromDataFreezing;
-    
     private Boolean notificationEmailEnabled = false;
     private String notificationEmail;
 
     private Set<AmpOrganisation> assignedOrgs;
+    private Date passwordChangedAt;
+
     public User() {}
 
     public User(String email, String firstNames, String lastName) {
@@ -109,9 +113,13 @@ public class User
         //this.passQuestion = passQuestion;
         //this.passAnswer = passAnswer;
         //this.url = url;
-        this.active = false;
         //this.registeredThrough = Session.site;
 
+    }
+
+    @Override
+    public Object getIdentifier() {
+        return id;
     }
 
     /**
@@ -212,14 +220,6 @@ public class User
         this.url = url;
     }
 
-    public void setActivate(boolean a) {
-        this.active = a;
-    }
-
-    public boolean isActivate() {
-        return this.active;
-    }
-
     public boolean isRegistrationComplete() {
         return false;
     }
@@ -299,14 +299,6 @@ public class User
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public boolean isEmailVerified() {
@@ -470,23 +462,23 @@ public class User
         }
         return false;
     }
-  
+
     /**
      * Checks if user has a verified org and the org is role donor
-     * @return 
+     * @return
      */
     public boolean hasVerifiedDonor(){
         if (this.assignedOrgs.size() == 0) {
             return false;
         }
-        
+
         Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
         while (it.hasNext()) {
             AmpOrganisation currentOrganization = it.next();
             if (org.digijava.module.aim.util.DbUtil.hasDonorRole(currentOrganization.getAmpOrgId()))
                 return true;
         }
-        return false;   
+        return false;
     }
     public boolean hasNationalCoordinatorGroup(){
         boolean result = false;
@@ -505,6 +497,24 @@ public class User
 
     public void setRegion(AmpCategoryValueLocations region) {
         this.region = region;
+    }
+
+    /**
+     * @return the passwordChangedAt
+     */
+    public Date getPasswordChangedAt() {
+        return passwordChangedAt;
+    }
+
+    /**
+     * @param passwordChangedAt the passwordChangedAt to set
+     */
+    public void setPasswordChangedAt(Date passwordChangedAt) {
+        this.passwordChangedAt = passwordChangedAt;
+    }
+
+    public void updateLastModified() {
+        setLastModified(new Date());
     }
 
     public Boolean getExemptFromDataFreezing() {
@@ -545,5 +555,5 @@ public class User
         
         return email;
     }
-    
+
 }

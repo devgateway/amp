@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
@@ -68,11 +67,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
         "Real SSC Activity 1",
         "Real SSC Activity 2"
     );
-    
-    public AmpSchemaSanityTests() {
-        super("AmpReportsSchema sanity tests");
-    }
-    
+
     final static GrandTotalsDigest proposedProjectCostDigester = new GrandTotalsDigest(z -> z.equals("RAW / Proposed Project Amount") || z.startsWith("RAW / Revised Project Amount"));
     final static String correctTotalsPPC = "{RAW / Proposed Project Amount=5096901.715878, RAW / Revised Project Amount=4412539.842263}";
     
@@ -671,7 +666,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 .withBody(      new ReportAreaForTests(null)
                         .withContents("Project Title", "", "Region", "", "AMP ID", "", "Funding-2009-Q1-Actual Commitments", "100,000", "Funding-2009-Q1-Actual Disbursements", "0", "Funding-2009-Q1-Actual Expenditures", "0", "Funding-2009-Total-Actual Commitments", "100,000", "Funding-2009-Total-Actual Disbursements", "0", "Funding-2009-Total-Actual Expenditures", "0", "Funding-2010-Q2-Actual Commitments", "0", "Funding-2010-Q2-Actual Disbursements", "60,000", "Funding-2010-Q2-Actual Expenditures", "0", "Funding-2010-Total-Actual Commitments", "0", "Funding-2010-Total-Actual Disbursements", "60,000", "Funding-2010-Total-Actual Expenditures", "0", "Funding-2012-Q3-Actual Commitments", "25,000", "Funding-2012-Q3-Actual Disbursements", "0", "Funding-2012-Q3-Actual Expenditures", "0", "Funding-2012-Q4-Actual Commitments", "0", "Funding-2012-Q4-Actual Disbursements", "12,000", "Funding-2012-Q4-Actual Expenditures", "0", "Funding-2012-Total-Actual Commitments", "25,000", "Funding-2012-Total-Actual Disbursements", "12,000", "Funding-2012-Total-Actual Expenditures", "0", "Funding-2013-Q4-Actual Commitments", "2,670,000", "Funding-2013-Q4-Actual Disbursements", "0", "Funding-2013-Q4-Actual Expenditures", "0", "Funding-2013-Total-Actual Commitments", "2,670,000", "Funding-2013-Total-Actual Disbursements", "0", "Funding-2013-Total-Actual Expenditures", "0", "Funding-2014-Q2-Actual Commitments", "4,400,000", "Funding-2014-Q2-Actual Disbursements", "450,000", "Funding-2014-Q2-Actual Expenditures", "0", "Funding-2014-Total-Actual Commitments", "4,400,000", "Funding-2014-Total-Actual Disbursements", "450,000", "Funding-2014-Total-Actual Expenditures", "0", "Totals-Actual Commitments", "7,195,000", "Totals-Actual Disbursements", "522,000", "Totals-Actual Expenditures", "0")
                         .withChildren(
-                                new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Region", "", "AMP ID", "872113null", "Funding-2009-Q1-Actual Commitments", "100,000", "Funding-2009-Total-Actual Commitments", "100,000", "Funding-2010-Q2-Actual Disbursements", "60,000", "Funding-2010-Total-Actual Disbursements", "60,000", "Funding-2012-Q3-Actual Commitments", "25,000", "Funding-2012-Q4-Actual Disbursements", "12,000", "Funding-2012-Total-Actual Commitments", "25,000", "Funding-2012-Total-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
+                                new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Region", "", "AMP ID", "87211314", "Funding-2009-Q1-Actual Commitments", "100,000", "Funding-2009-Total-Actual Commitments", "100,000", "Funding-2010-Q2-Actual Disbursements", "60,000", "Funding-2010-Total-Actual Disbursements", "60,000", "Funding-2012-Q3-Actual Commitments", "25,000", "Funding-2012-Q4-Actual Disbursements", "12,000", "Funding-2012-Total-Actual Commitments", "25,000", "Funding-2012-Total-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
                                 new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Region", "Cahul County", "AMP ID", "87211347", "Funding-2013-Q4-Actual Commitments", "2,670,000", "Funding-2013-Total-Actual Commitments", "2,670,000", "Funding-2014-Q2-Actual Commitments", "4,400,000", "Funding-2014-Q2-Actual Disbursements", "450,000", "Funding-2014-Total-Actual Commitments", "4,400,000", "Funding-2014-Total-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")      ));
         
         runNiTestCase(
@@ -3002,10 +2997,5 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 GroupingCriteria.GROUPING_TOTALS_ONLY);
 
         runNiTestCase(spec, "en", indicatorActs, cor);
-    }
-
-    @Override
-    public void setUp() {
-        AllTests_amp212.setUp();
     }
 }

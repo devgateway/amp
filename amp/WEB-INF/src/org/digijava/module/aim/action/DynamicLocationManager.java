@@ -73,7 +73,10 @@ public class DynamicLocationManager extends MultiAction {
             errors.add("title", error);
             myForm.setImportantErrorAppeared(true);
         } else {
-            List<AmpCategoryValue> locationLevels = myForm.getLocationLevels();
+            Collection<AmpCategoryValue> implLocations =
+                 CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY);
+            
+            List<AmpCategoryValue> locationLevels = new ArrayList<>(implLocations);
             
             Collection<AmpCategoryValueLocations> rootLocations = null;
             if (locationLevels.size() == 0) {

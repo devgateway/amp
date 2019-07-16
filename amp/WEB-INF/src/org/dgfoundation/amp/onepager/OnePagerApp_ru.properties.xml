@@ -12,6 +12,7 @@
 	<entry key="AmpUniqueCollectionValidator">Эти элементы повторяются 2 или более раз: ${label}</entry>
 	<entry key="AmpTreeCollectionValidator">Нелизя иметь и родительские и потомочные элементы: ${label}</entry>
 	<entry key="AmpUniqueActivityTitleValidator">Проект с таким названием уже существует в этом раб. столе ( ${workspace} ).</entry>
+	<entry key="AmpUniqueActivityTitleNoWorkspaceValidator">Проект с таким названием уже существует и не присваивается к рабочему столу.</entry>
 	<entry key="AmpUniqueComponentTitleValidator">Подпроект с таким названием уже существует.</entry>
 	<entry key="CoordinatesValidator">Координаты в неправильном формате.</entry>
 	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Выплаты больше, чем сумма обязательств</entry>

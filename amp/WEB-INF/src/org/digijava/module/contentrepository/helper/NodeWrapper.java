@@ -1,6 +1,5 @@
 package org.digijava.module.contentrepository.helper;
 
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -24,10 +23,9 @@ import javax.jcr.Workspace;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
+import javax.jcr.version.VersionManager;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
-import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.PropertyImpl;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
@@ -44,6 +42,7 @@ import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.template.WordOrPdfFileHelper;
 import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * a class wrapping a javax.jcr.Node instance for convenience reasons mainly (nice getters / setters which would otherwise be a soup of hardcoded strings and exception handling) 
@@ -75,8 +74,9 @@ public class NodeWrapper{
             Node newNode = null;
             long docType = 0;
             if (isANewVersion) {
-                Property docTypeProp = parentNode.getProperty(CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
-                docType = docTypeProp.getLong();
+                Property docTypeProp = DocumentManagerUtil.getPropertyFromNode(parentNode,
+                        CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
+                docType = docTypeProp != null ? docTypeProp.getLong() : docType;
                 newNode = parentNode;
                 newNode.checkout();
             } else {
@@ -157,7 +157,7 @@ public class NodeWrapper{
             newNode.addMixin("mix:versionable");
             
             if (isANewVersion){
-                int vernum  = DocumentManagerUtil.getNextVersionNumber( newNode.getUUID(), myRequest);
+                int vernum  = DocumentManagerUtil.getNextVersionNumber(newNode.getIdentifier(), myRequest);
                 newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)vernum);
             }
             else{
@@ -249,22 +249,24 @@ public class NodeWrapper{
             TeamMember teamMember       = (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
             Node newNode    = null;
             String docTitle=originalNode.getProperty(CrConstants.PROPERTY_TITLE).getString();
-            long docType = 0;
+            Property docTypeProp = null;
             
             if (isANewVersion){
-                Property docTypeProp = parentNode.getProperty(CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
-                docType = docTypeProp.getLong();
-                newNode     = parentNode;
+                docTypeProp = DocumentManagerUtil.getPropertyFromNode(parentNode,
+                        CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
+                newNode = parentNode;
                 newNode.checkout();
             }
-            else{               
-                docType = originalNode.getProperty(CrConstants.PROPERTY_CM_DOCUMENT_TYPE).getLong();
+            else {
+                docTypeProp = DocumentManagerUtil.getPropertyFromNode(originalNode,
+                        CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
                 newNode = parentNode.addNode( docTitle );
                 newNode.addMixin("mix:versionable");
-            }           
-            
+            }
+            long docType = docTypeProp != null ? docTypeProp.getLong() : 0;
+
             if (isANewVersion){
-                int vernum  = DocumentManagerUtil.getNextVersionNumber( newNode.getUUID(), myRequest);
+                int vernum  = DocumentManagerUtil.getNextVersionNumber(newNode.getIdentifier(), myRequest);
                 newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)vernum);
             }
             else{
@@ -325,7 +327,8 @@ public class NodeWrapper{
     }   
     
     
-    public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest httpRequest, Node parentNode,boolean isANewVersion, ActionMessages errors) {
+    public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest httpRequest, TeamMember teamMember, 
+            Node parentNode, boolean isANewVersion, ActionMessages errors) {
         
         FormFile formFile       = tempDoc.getFormFile(); 
         
@@ -339,7 +342,7 @@ public class NodeWrapper{
             if (tempDoc.getTitle() == null) 
                 tempDoc.setTitle(tempDoc.getWebLink());
             if (tempDoc.getName() == null) 
-                tempDoc.setTitle(tempDoc.getWebLink());
+                tempDoc.setName(tempDoc.getWebLink());
             
             
             if (tempDoc.getName().indexOf("http://") >= 0){
@@ -352,7 +355,6 @@ public class NodeWrapper{
         }
         
         try {
-            TeamMember teamMember       = (TeamMember)httpRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
             Node newNode    = null;
             if (isANewVersion){
                 newNode     = parentNode;
@@ -383,7 +385,7 @@ public class NodeWrapper{
             }
             
             if (isANewVersion){
-                int vernum  = DocumentManagerUtil.getNextVersionNumber( newNode.getUUID(), httpRequest);
+                int vernum  = DocumentManagerUtil.getNextVersionNumber(newNode.getIdentifier(), httpRequest);
                 newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)vernum);
             }
             else{
@@ -529,16 +531,15 @@ public class NodeWrapper{
         this.node = node;
     }
     
-    public boolean saveNode( Session jcrWriteSession ) {
+    public boolean saveNode(Session jcrWriteSession) {
         try {
             jcrWriteSession.save();
-            node.checkin();
-            logger.error(String.format("CREATED JackRabbit node with uuid = %s, name = %s", this.getUuid(), this.tryGetName()));
+            VersionManager vm = jcrWriteSession.getWorkspace().getVersionManager();
+            vm.checkin(node.getPath());
+            logger.info(String.format("CREATED JackRabbit node with uuid = %s, name = %s", getUuid(), tryGetName()));
             return true;
-        }
-        catch (Exception E) {
-            E.printStackTrace();
-            return false;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
     
@@ -550,17 +551,12 @@ public class NodeWrapper{
         }
     }
     
-    public String getUuid () {
+    public String getUuid() {
         try {
-            return node.getUUID();
-        } catch (UnsupportedRepositoryOperationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            return node.getIdentifier();
         } catch (RepositoryException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage(), e);
         }
-        return null;
     }
 
     public static String decodeUTF8(String str)
@@ -594,20 +590,16 @@ public class NodeWrapper{
         }
     }
     
-    public String getTitle() 
-    {
-        //old way of accessing. Now is a multilingual property
-        //return getStringProperty(CrConstants.PROPERTY_TITLE);
+    public String getTitle() {
         return getTranslatedTitleByLang(TLSUtils.getLangCode());
     }
-    
+
     public String getDescription() {
-        //. Now is a multilingual property
         return getTranslatedDescriptionByLang(TLSUtils.getLangCode());
     }
-    
+
     public String getNotes() {
-        //Now is a multilingual property
+        // Now is a multilingual property
         return getTranslatedNoteByLang(TLSUtils.getLangCode());
     }
     
@@ -652,20 +644,29 @@ public class NodeWrapper{
         }
         return null;
     }
-    
-    
-    public double getFileSizeInMegabytes() {
-        Property fileSize   =  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_FILE_SIZE);
-        if ( fileSize != null ) {
+
+    /**
+     * Return file size for a document or null if file size is unknown.
+     */
+    public Long getFileSize() {
+        Property fileSize = DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_FILE_SIZE);
+        if (fileSize != null) {
             try {
-                double size     = DocumentManagerUtil.bytesToMega( fileSize.getLong() );
-                return size;
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } 
+                return fileSize.getLong();
+            } catch (RepositoryException e) {
+                logger.error("Failed to get file size.", e);
+                return null;
+            }
         }
-        return 0;
+        return null;
+    }
+
+    /**
+     * Return file size for a document in megabytes or 0 if file size is unknown.
+     */
+    public double getFileSizeInMegabytes() {
+        Long fileSize = getFileSize();
+        return fileSize != null ? DocumentManagerUtil.bytesToMega(fileSize) : 0;
     }
     
     public String getContentType() {
@@ -716,19 +717,18 @@ public class NodeWrapper{
         return null;
     }
     
-    public Collection<KeyValue> getObjectsUsingThisDocument () throws Exception {
-        Collection<KeyValue> ret    = new ArrayList<KeyValue>();
-        if ( this.node == null )
-            throw new Exception("Inner node not initialized");
-        
-        Collection<String> names    = ActivityDocumentsUtil.getNamesOfActForDoc( node.getUUID() );
-        
-        ret                         = stringColToKeyValueCol("Activities", names);
-        
+    public Collection<KeyValue> getObjectsUsingThisDocument() throws Exception {
+        Collection<KeyValue> ret = new ArrayList<KeyValue>();
+        if (this.node == null) {
+            throw new RuntimeException("Inner node not initialized");
+        }
+
+        Collection<String> names = ActivityDocumentsUtil.getNamesOfActForDoc(node.getIdentifier());
+
+        ret = stringColToKeyValueCol("Activities", names);
+
         return ret;
-        
-        
-    } 
+    }
     
     public String getCreator() {
         Property creator        =  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_CREATOR);
@@ -754,50 +754,53 @@ public class NodeWrapper{
         }
         return null;
     }
+    
     public List<Label> getLabels() {
-        ArrayList<Label> labels     = new ArrayList<Label>();
+        ArrayList<Label> labels = new ArrayList<Label>();
         try {
-            Node labelContainerNode     = node.getNode( CrConstants.LABEL_CONTAINER_NODE_NAME );
-            Property pVH                = null;
+            Node labelContainerNode = node.getNode(CrConstants.LABEL_CONTAINER_NODE_NAME);
+            Property pVH = null;
             try {
-                if(labelContainerNode.hasProperty("jcr:childVersionHistory")){
+                if (labelContainerNode.hasProperty("jcr:childVersionHistory")) {
                     pVH = labelContainerNode.getProperty("jcr:childVersionHistory");
-                    VersionHistory vh       = (VersionHistory) pVH.getNode();
-                    VersionIterator vIter   = vh.getAllVersions();
-                    Version v               = null;
-                    while ( vIter.hasNext() ) {
-                        v   = vIter.nextVersion();
+                    VersionHistory vh = (VersionHistory) pVH.getNode();
+                    VersionIterator vIter = vh.getAllVersions();
+                    Version v = null;
+                    while (vIter.hasNext()) {
+                        v = vIter.nextVersion();
                     }
-                    if ( v != null ) {
-                        NodeIterator nIter      = v.getNodes();
-                        if (nIter.hasNext() ) 
-                            labelContainerNode      = nIter.nextNode();
+                    if (v != null) {
+                        NodeIterator nIter = v.getNodes();
+                        if (nIter.hasNext()) {
+                            labelContainerNode = nIter.nextNode();
+                        }
                     }
-                }               
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if ( labelContainerNode instanceof VersionHistory ) {
-                VersionHistory vh   = (VersionHistory) labelContainerNode;
-                NodeIterator nIter  = vh.getBaseVersion().getNodes();
-                if ( nIter.hasNext() ) {
-                    labelContainerNode  = nIter.nextNode();
+            if (labelContainerNode instanceof VersionHistory) {
+                VersionHistory vh = (VersionHistory) labelContainerNode;
+                NodeIterator nIter = vh.getBaseVersion().getNodes();
+                if (nIter.hasNext()) {
+                    labelContainerNode = nIter.nextNode();
                 }
             }
-            PropertyIterator pIter      = labelContainerNode.getProperties();
-            while ( pIter.hasNext() ) {
-                Property p          = pIter.nextProperty();
-                if ( p.getName().contains("ampdoc:label") ) {
-                    Node labelNode      = p.getNode();
-                    labels.add( new Label(labelNode) );
+            PropertyIterator pIter = labelContainerNode.getProperties();
+            while (pIter.hasNext()) {
+                Property p = pIter.nextProperty();
+                if (p.getName().contains("ampdoc:label")) {
+                    Node labelNode = p.getNode();
+                    labels.add(new Label(labelNode));
                 }
             }
         } catch (Exception e) {
-            //logger.warn("Document " + this.getName() + " has no label container node");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
+        
         return labels;
     }
+    
     public void addLabel(Node label) {
         try {
             Node labelContainerNode         = null;
@@ -836,9 +839,9 @@ public class NodeWrapper{
             PropertyIterator pIter      = labelContainerNode.getProperties();
             while ( pIter.hasNext() ) {
                 Property p          = pIter.nextProperty();
-                if ( p.getName().contains("ampdoc:label") ) {
-                    Node labelNode      = p.getNode();
-                    if ( labelNode.getUUID().equals(labelUUID) ) {
+                if (p.getName().contains("ampdoc:label")) {
+                    Node labelNode = p.getNode();
+                    if (labelNode.getIdentifier().equals(labelUUID)) {
                         labelContainerNode.checkout();
                         p.remove();
                         break;
@@ -890,7 +893,7 @@ public class NodeWrapper{
     }
     
     public Boolean deleteNode(HttpServletRequest request) throws Exception  {
-        String uuid     = node.getUUID();
+        String uuid     = node.getIdentifier();
         Boolean ret     = DocumentManagerUtil.deleteDocumentWithRightsChecking( uuid, request);
         
         DocumentManagerUtil.deleteObjectsReferringDocument(uuid, CrDocumentNodeAttributes.class.getName() );
@@ -908,7 +911,7 @@ public class NodeWrapper{
     public String getLastVersionUUID(HttpServletRequest request) {
         try {
             Node lv =   DocumentManagerUtil.getNodeOfLastVersion(this.getUuid(), request);
-            return lv.getUUID();
+            return lv.getIdentifier();
         } catch (Exception e) {
             return null;
         }
@@ -943,17 +946,16 @@ public class NodeWrapper{
         if (node == null) {
             if (other.node != null)
                 return false;
-        } else
+        } else {
             try {
-                if (!node.getUUID().equals(other.node.getUUID()))
+                if (!node.getIdentifier().equals(other.node.getIdentifier())) {
                     return false;
-            } catch (UnsupportedRepositoryOperationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                }
             } catch (RepositoryException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
+                return false;
             }
+        }
         return true;
     }
     
@@ -979,42 +981,42 @@ public class NodeWrapper{
     }
     
     public String getTranslatedTitleByLang (String language) {
-        return getTranslatedProperty(CrConstants.PROPERTY_TITLE,language);
+        return getTranslatedProperty(CrConstants.PROPERTY_TITLE, language);
     }
     
     public String getTranslatedNoteByLang (String language) {
-        return getTranslatedProperty(CrConstants.PROPERTY_NOTES,language);
+        return getTranslatedProperty(CrConstants.PROPERTY_NOTES, language);
     }
     
     public String getTranslatedDescriptionByLang (String language) {
-        return getTranslatedProperty(CrConstants.PROPERTY_DESCRIPTION,language);
+        return getTranslatedProperty(CrConstants.PROPERTY_DESCRIPTION, language);
     }
     
     
-    private String getTranslatedProperty (String fieldName,String language) {
+    private String getTranslatedProperty(String fieldName, String language) {
         String value = null;
-        try {
-            Node titleNode = node.getNode(fieldName);
-            if (titleNode != null) {
-                PropertyIterator  iterator = titleNode.getProperties();
-                while (iterator.hasNext()) {
-                    PropertyImpl property = (PropertyImpl)iterator.next();
-                    if (property.getName().equals(language)) {
-                        value = property.getString();
-                        break;
+        if (ContentTranslationUtil.multilingualIsEnabled()) {
+            try {
+                Node titleNode = node.getNode(fieldName);
+                if (titleNode != null) {
+                    PropertyIterator  iterator = titleNode.getProperties();
+                    while (iterator.hasNext()) {
+                        PropertyImpl property = (PropertyImpl) iterator.next();
+                        if (property.getName().equals(language)) {
+                            value = property.getString();
+                            break;
+                        }
                     }
-                        
                 }
+            } catch (PathNotFoundException ex) {
+                value = getStringProperty(fieldName);
+            } catch (RepositoryException e) {
+                logger.error("Exception accesing traslated titles in NodeWrapper", e);
             }
-        }catch (PathNotFoundException ex) {
-        //Some fields were saved as properties before multilingual was enabled for them
-        //like: title,notes, description. Check if contains the value as a property
-            logger.warn("The field "+fieldName + " was not found as a property. Probably old config");
+        } else {
             value = getStringProperty(fieldName);
-        }   
-        catch (RepositoryException e) {
-            logger.error("Exception accesing traslated titles in NodeWrapper",e);
         }
+        
         return value;
     }
     
@@ -1030,9 +1032,13 @@ public class NodeWrapper{
                         
                 }
             }
+        } catch (PathNotFoundException e) {
+            logger.error(e.getMessage(), e);
+            translatedField.put(TLSUtils.getEffectiveLangCode(), getStringProperty(fieldName));
         } catch (RepositoryException e) {
-            logger.error("Exception accesing traslated titles in NodeWrapper",e);
-        }
+            logger.error("Exception accesing traslated titles in NodeWrapper", e);
+        } 
+        
         return translatedField;
     }
     

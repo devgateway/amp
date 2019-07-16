@@ -286,6 +286,7 @@ public class ReportWizardAction extends MultiAction {
         myForm.setBudgetExporter(false);
         myForm.setReportCategory(new Long(0));
         myForm.setAlsoShowPledges(false);
+        myForm.setShowOriginalCurrency(false);
         myForm.setReportBeingEdited(false);
 
         ReportContextData.getFromRequest(true).resetFilters();
@@ -438,6 +439,7 @@ public class ReportWizardAction extends MultiAction {
         myForm.setAllowEmptyFundingColumns( ampReport.getAllowEmptyFundingColumns() );
         myForm.setSplitByFunding(ampReport.getSplitByFunding());
         myForm.setAlsoShowPledges(ampReport.getAlsoShowPledges());
+        myForm.setShowOriginalCurrency(ampReport.getShowOriginalCurrency());
         if(ampReport.getReportCategory() !=null){
             myForm.setReportCategory(ampReport.getReportCategory().getId());
         }
@@ -521,6 +523,7 @@ public class ReportWizardAction extends MultiAction {
         myForm.setWorkspaceLinked(Boolean.valueOf(request.getParameter("workspaceLinked"))); //Struts for some reason ignores this field and I am tired of it
         myForm.setAlsoShowPledges(Boolean.valueOf(request.getParameter("alsoShowPledges")));
         myForm.setSplitByFunding(Boolean.valueOf(request.getParameter("splitByFunding")));
+        myForm.setShowOriginalCurrency(Boolean.valueOf(request.getParameter("showOriginalCurrency")));
 
         TeamMember teamMember       =(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
         
@@ -564,6 +567,7 @@ public class ReportWizardAction extends MultiAction {
         ampReport.setName(newName); // set the default
         ampReport.setWorkspaceLinked(myForm.getWorkspaceLinked());
         ampReport.setAlsoShowPledges(myForm.getAlsoShowPledges());
+        ampReport.setShowOriginalCurrency(myForm.getShowOriginalCurrency());
         ampReport.setOwnerId(myForm.getAmpTeamMember() == null ? ampTeamMember : myForm.getAmpTeamMember());
         if ((!dynamicSaveReport) || createReportFromScratch) {
             ampReport.setHideActivities( myForm.getHideActivities() );

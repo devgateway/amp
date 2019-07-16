@@ -45,18 +45,11 @@ public class ViewActivityHistory extends DispatchAction {
 
         ViewActivityHistoryForm hForm = (ViewActivityHistoryForm) form;
         // Load current activity, get group and retrieve past versions.
-        Session session = PersistenceManager.getRequestDBSession();
-        AmpActivityVersion currentActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, hForm.getActivityId());
+        Long activityId =  hForm.getActivityId();
 
-        // AMP-7706: Filter last 5 versions.
-        Query qry = session.createQuery("SELECT act FROM " + AmpActivityVersion.class.getName() 
-                + " act WHERE act.ampActivityGroup.ampActivityGroupId = ? ORDER BY act.ampActivityId DESC").setMaxResults(ActivityVersionUtil.numberOfVersions());
-        qry.setParameter(0, currentActivity.getAmpActivityGroup().getAmpActivityGroupId());
-        List<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>(qry.list());
-        
-        hForm.setActivities(getActivitiesHistory(activities));
+        hForm.setActivities(ActivityUtil.getActivityHistories(activityId));
 
-        AmpActivityVersion previousActivity = ActivityUtil.getPreviousVersion(currentActivity);
+        AmpActivityVersion previousActivity = ActivityUtil.getPreviousVersion(activityId);
         hForm.setEnableSummaryChange(previousActivity != null);
 
         TeamMember currentMember = (TeamMember)request.getSession().getAttribute("currentMember");
@@ -74,43 +67,22 @@ public class ViewActivityHistory extends DispatchAction {
         
         return mapping.findForward("forward");
     }
-    
-    private List<ActivityHistory> getActivitiesHistory(List<AmpActivityVersion> activities) {
-        List<ActivityHistory> activitiesHistory = new ArrayList<>();
-        
-        for (AmpActivityVersion activity : activities) {
-            ActivityHistory auditHistory = null;
-            
-            if (activity.getModifiedBy() == null || (activity.getUpdatedDate() == null && activity.getModifiedDate() == null)) {
-                auditHistory = ActivityUtil.getModifiedByInfoFromAuditLogger(activity.getAmpActivityId());
-            }
-            
-            ActivityHistory activityHistory = new ActivityHistory();
-            activityHistory.setActivityId(activity.getAmpActivityId());
-            activityHistory.setModifiedBy(ActivityUtil.getModifiedByUserName(activity, auditHistory));
-            activityHistory.setModifiedDate(FormatHelper.formatDate(ActivityUtil.getModifiedByDate(activity, auditHistory)));
-            
-            activitiesHistory.add(activityHistory);
-        }
-        
-        return activitiesHistory;
-    }
 
     public ActionForward changesSummary(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        Session session = PersistenceManager.getRequestDBSession();
         Long activityId = Long.parseLong(request.getParameter("activityId"));
-        AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
-        AmpActivityVersion previousActivity = ActivityUtil.getPreviousVersion(activity);
+        AmpActivityVersion previousActivity = ActivityUtil.getPreviousVersion(activityId);
 
         LinkedHashMap<Long, Long> activitiesIds = new LinkedHashMap<>();
-        activitiesIds.put(activity.getAmpActivityId(), activity.getAmpActivityId());
-        activitiesIds.put(previousActivity.getAmpActivityId(), activity.getAmpActivityId());
+        activitiesIds.put(activityId, activityId);
+        activitiesIds.put(previousActivity.getAmpActivityId(), activityId);
 
         LinkedHashMap<Long, Collection<SummaryChange>> activityList = SummaryChangesService
                 .processActivity(activitiesIds);
 
+        Session session = PersistenceManager.getRequestDBSession();
+        AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
         for (Long id : activityList.keySet()) {
 
             Collection<SummaryChange> changesList = activityList.get(id);

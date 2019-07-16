@@ -339,7 +339,7 @@ export default class Report5b extends Component {
                             </select>
                         </div>                        
                     </div>
-                       <div className="container-fluid">
+                        <div className="container-fluid">
                         <div className="row">
                           <h4>{this.props.translations['amp.gpi-reports:indicator5b-description']}</h4>
                         </div>

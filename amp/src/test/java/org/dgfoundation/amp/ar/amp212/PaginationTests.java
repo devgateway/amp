@@ -14,6 +14,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.ReportModelGenerator;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -40,13 +41,14 @@ public class PaginationTests extends ReportingTestCase {
             "SubNational no percentages", "TAC_activity_1", "TAC_activity_2", "Test MTEF directed",
             "third activity with agreements", "Unvalidated activity", "with weird currencies");
 
-    public PaginationTests() {
-        super("Pagination Tests");
-    }
-
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
         return getOfflineExecutor(activityNames);
+    }
+
+    @BeforeClass
+    public static void setUp() {
+        // this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
     }
 
     final ReportSpecification theFlatSpec = ReportSpecificationImpl.buildFor("initReport",

@@ -1185,7 +1185,8 @@ public class ExportOrganizationToExcel extends DispatchAction {
                         longestEmailRecord = currentRecord;
                     }
                 }else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-                    currentRecord = TranslatorWorker.translateText(property.getPhoneCategory())+property.getActualPhoneNumber(); 
+                    currentRecord = TranslatorWorker.translateText(property.getPhoneCategory()) + " "
+                            + property.getValue();
                     phones+= currentRecord + ";\n";
                     if(currentRecord.length() > longestEmailRecord.length()){
                         longestPhoneRecord = currentRecord;

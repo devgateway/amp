@@ -17,14 +17,16 @@ public final class LocationsDimension extends SqlSourcedNiDimension {
     public final static LocationsDimension instance = new LocationsDimension("locs");
     
     private LocationsDimension(String name) {
-        super(name, "ni_all_locations_with_levels", Arrays.asList("country_id", "region_id", "zone_id", "district_id"));
+        super(name, "ni_all_locations_with_levels",
+                Arrays.asList("country_id", "region_id", "zone_id", "district_id", "communal_section_id"));
     }
     
-    public final static int LEVEL_COUNTRY = 0;
-    public final static int LEVEL_REGION = 1;
-    public final static int LEVEL_ZONE = 2;
-    public final static int LEVEL_DISTRICT = 3;
-    public final static int LEVEL_RAW = NiDimension.LEVEL_ALL_IDS;
+    public static final int LEVEL_COUNTRY = 0;
+    public static final int LEVEL_REGION = 1;
+    public static final int LEVEL_ZONE = 2;
+    public static final int LEVEL_DISTRICT = 3;
+    public static final int LEVEL_COMMUNAL_SECTION = 4;
+    public static final int LEVEL_RAW = NiDimension.LEVEL_ALL_IDS;
     
 
     @Override

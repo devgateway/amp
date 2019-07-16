@@ -150,6 +150,7 @@ public class AmpARFilterConverter {
     
     private void addActivityDatesFilters() {
         addActivityDateFilter(arFilter.buildFromAndToActivityStartDateAsDate(), ColumnConstants.ACTUAL_START_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToActualApprovalDateAsDate(), ColumnConstants.ACTUAL_APPROVAL_DATE);
         addActivityDateFilter(arFilter.buildFromAndToProposedApprovalDateAsDate(), ColumnConstants.PROPOSED_APPROVAL_DATE);
         addActivityDateFilter(arFilter.buildFromAndToProposedStartDateAsDate(), ColumnConstants.PROPOSED_START_DATE);
         addActivityDateFilter(arFilter.buildFromAndToActivityActualCompletionDateAsDate(), ColumnConstants.ACTUAL_COMPLETION_DATE);

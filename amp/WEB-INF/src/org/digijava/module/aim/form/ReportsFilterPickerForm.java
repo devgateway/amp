@@ -105,6 +105,9 @@ public class ReportsFilterPickerForm extends ActionForm {
     private String toIssueDate;
     private DynamicDateFilter dynamicActivityStartFilter = new DynamicDateFilter();
     private DynamicDateFilter dynamicIssueFilter = new DynamicDateFilter();
+    private DynamicDateFilter dynamicActualApprovalFilter = new DynamicDateFilter();
+    private String fromActualApprovalDate;
+    private String toActualApprovalDate;
     private String fromProposedApprovalDate;
     private String toProposedApprovalDate;
     private DynamicDateFilter dynamicProposedApprovalFilter = new DynamicDateFilter();
@@ -479,6 +482,14 @@ public class ReportsFilterPickerForm extends ActionForm {
         return this.dynamicActivityStartFilter;
     }
     
+    public String getFromActualApprovalDate() {
+        return this.fromActualApprovalDate;
+    }
+    
+    public String getToActualApprovalDate() {
+        return this.toActualApprovalDate;
+    }
+    
     @java.lang.SuppressWarnings("all")
     public String getFromProposedApprovalDate() {
         return this.fromProposedApprovalDate;
@@ -487,6 +498,10 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public String getToProposedApprovalDate() {
         return this.toProposedApprovalDate;
+    }
+    
+    public DynamicDateFilter getDynamicActualApprovalFilter() {
+        return this.dynamicActualApprovalFilter;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -1044,6 +1059,14 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public void setDynamicActivityStartFilter(final DynamicDateFilter dynamicActivityStartFilter) {
         this.dynamicActivityStartFilter = dynamicActivityStartFilter;
+    }
+    
+    public void setFromActualApprovalDate(final String fromActualApprovalDate) {
+        this.fromActualApprovalDate = fromActualApprovalDate;
+    }
+    
+    public void setToActualApprovalDate(final String toActualApprovalDate) {
+        this.toActualApprovalDate = toActualApprovalDate;
     }
     
     @java.lang.SuppressWarnings("all")

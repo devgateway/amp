@@ -463,6 +463,12 @@ public class AmpARFilter extends PropertyListable {
     private String dynActivityFinalContractingFilterXPeriod;
 
 
+    private String fromActualApprovalDate;
+    private String toActualApprovalDate;
+    private String dynActualApprovalFilterCurrentPeriod;
+    private Integer dynActualApprovalFilterAmount;
+    private String dynActualApprovalFilterOperator;
+    private String dynActualApprovalFilterXPeriod;
     private String fromProposedApprovalDate;    // view: v_actual_proposed_date, column name: [Proposed Approval Date], translated in Nepal as [Date of Agreement]
     private String toProposedApprovalDate;      // view: v_actual_proposed_date, column name: [Proposed Approval Date], translated in Nepal as [Date of Agreement]
     private String fromProposedStartDate;
@@ -2150,7 +2156,23 @@ public class AmpARFilter extends PropertyListable {
             return calculateDateFiltersAsDate(this.dynProposedApprovalFilterCurrentPeriod, this.dynProposedApprovalFilterAmount, this.dynProposedApprovalFilterOperator, this.dynProposedApprovalFilterXPeriod);
         }
     }
-
+    
+    public String getFromActualApprovalDate() {
+        return fromActualApprovalDate;
+    }
+    
+    public void setFromActualApprovalDate(String fromActualApprovalDate) {
+        this.fromActualApprovalDate = fromActualApprovalDate;
+    }
+    
+    public String getToActualApprovalDate() {
+        return toActualApprovalDate;
+    }
+    
+    public void setToActualApprovalDate(String toActualApprovalDate) {
+        this.toActualApprovalDate = toActualApprovalDate;
+    }
+    
     public void setFromProposedApprovalDate(String fromProposedApprovalDate) {
         this.fromProposedApprovalDate = fromProposedApprovalDate;
     }
@@ -2177,6 +2199,18 @@ public class AmpARFilter extends PropertyListable {
 
     public void setToProposedStartDate(String toProposedStartDate) {
         this.toProposedStartDate = toProposedStartDate;
+    }
+    
+    public Date[] buildFromAndToActualApprovalDateAsDate() {
+        Date[] dateRange = buildFromAndTo(fromActualApprovalDate, toActualApprovalDate);
+        if (dateRange != null) {
+            return dateRange;
+        } else {
+            return calculateDateFiltersAsDate(this.dynActualApprovalFilterCurrentPeriod,
+                    this.dynActualApprovalFilterAmount,
+                    this.dynActualApprovalFilterOperator,
+                    this.dynActualApprovalFilterXPeriod);
+        }
     }
 
     public Date[] buildFromAndToProposedStartDateAsDate() {
@@ -2379,7 +2413,39 @@ public class AmpARFilter extends PropertyListable {
             String dynActivityFinalContractingFilterXPeriod) {
         this.dynActivityFinalContractingFilterXPeriod = dynActivityFinalContractingFilterXPeriod;
     }
-
+    
+    public String getDynActualApprovalFilterCurrentPeriod() {
+        return dynActualApprovalFilterCurrentPeriod;
+    }
+    
+    public void setDynActualApprovalFilterCurrentPeriod(String dynActualApprovalFilterCurrentPeriod) {
+        this.dynActualApprovalFilterCurrentPeriod = dynActualApprovalFilterCurrentPeriod;
+    }
+    
+    public Integer getDynActualApprovalFilterAmount() {
+        return dynActualApprovalFilterAmount;
+    }
+    
+    public void setDynActualApprovalFilterAmount(Integer dynActualApprovalFilterAmount) {
+        this.dynActualApprovalFilterAmount = dynActualApprovalFilterAmount;
+    }
+    
+    public String getDynActualApprovalFilterOperator() {
+        return dynActualApprovalFilterOperator;
+    }
+    
+    public void setDynActualApprovalFilterOperator(String dynActualApprovalFilterOperator) {
+        this.dynActualApprovalFilterOperator = dynActualApprovalFilterOperator;
+    }
+    
+    public String getDynActualApprovalFilterXPeriod() {
+        return dynActualApprovalFilterXPeriod;
+    }
+    
+    public void setDynActualApprovalFilterXPeriod(String dynActualApprovalFilterXPeriod) {
+        this.dynActualApprovalFilterXPeriod = dynActualApprovalFilterXPeriod;
+    }
+    
     public String getDynProposedApprovalFilterCurrentPeriod() {
         return dynProposedApprovalFilterCurrentPeriod;
     }

@@ -24,8 +24,6 @@ public class ActivityErrors {
     public static final ApiErrorMessage WRONG_PROGRAM_TYPE = new ApiErrorMessage(8, "Wrong config value for programs");
     public static final ApiErrorMessage UNIQUE_ACTIVITY_TITLE = new ApiErrorMessage(9, "Activity title should be unique");
     public static final ApiErrorMessage CANNOT_GET_PROPERTIES = new ApiErrorMessage(10, "Cannot get properties for type");
-    public static final ApiErrorMessage DISCRIMINATOR_METHOD_ERROR = new ApiErrorMessage(12, "Error when accessing discriminator method");
-    public static final ApiErrorMessage DISCRIMINATOR_CLASS_METHOD_ERROR = new ApiErrorMessage(13, "Error when accessing a method from the discriminator class");
     public static final ApiErrorMessage SAVE_AS_DRAFT_FM_DISABLED = new ApiErrorMessage(14, "Activity cannot be saved as draft, \"save as draft\" is disabled in FM!");
     public static final ApiErrorMessage TITLE_IN_DEFAULT_LANUGAGE_REQUIRED = new ApiErrorMessage(15, "Title in default language is required");
     public static final ApiErrorMessage UPDATE_ID_MISMATCH = new ApiErrorMessage(16, "Request project ids mismatch");
@@ -33,7 +31,6 @@ public class ActivityErrors {
     public static final ApiErrorMessage UPDATE_ID_IS_OLD = new ApiErrorMessage(18, "Update request for older activity id. Please provide the latest");
     public static final ApiErrorMessage FIELD_PERCENTAGE_SUM_BAD = new ApiErrorMessage(19, "Sum of percentage fields has to be 100");
     public static final ApiErrorMessage FIELD_PARENT_CHILDREN_NOT_ALLOWED = new ApiErrorMessage(20, "Parent and child cannot be in the same collection");
-    public static final ApiErrorMessage DEPENDENCY_NOT_MET = new ApiErrorMessage(21, "Dependency not met");
     public static final ApiErrorMessage UNIQUE_PRIMARY_CONTACT = new ApiErrorMessage(22, "Multiple primary contacts not allowed");
     public static final ApiErrorMessage ACTIVITY_IS_BEING_EDITED =
             new ApiErrorMessage(23, "Current activity is being edited by:");
@@ -50,6 +47,10 @@ public class ActivityErrors {
     public static final ApiErrorMessage FIELD_TOO_MANY_VALUES_NOT_ALLOWED = new ApiErrorMessage(31, "Too many values");
     public static final ApiErrorMessage ACTIVITY_NOT_FOUND = new ApiErrorMessage(32,
             "Activity not found");
+    public static final ApiErrorMessage IMPLEMENTATION_LEVEL_NOT_SPECIFIED = new ApiErrorMessage(33,
+            "Implementation level must be specified");
+    public static final ApiErrorMessage DOESNT_MATCH_IMPLEMENTATION_LEVEL = new ApiErrorMessage(34,
+            "Doesn't match with implementation level");
 
 
 }

@@ -501,7 +501,9 @@ public class LuceneUtil implements Serializable {
                 int chunkStart = chunkNo * CHUNK_SIZE, chunkEnd = (chunkNo + 1) * CHUNK_SIZE;
 
                 Statement st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-                String qryStr = String.format("SELECT vt.* FROM v_titles vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                String qryStr = String.format("SELECT vt.* FROM v_titles vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
 
                 ResultSet rs = st.executeQuery(qryStr);
 
@@ -530,7 +532,9 @@ public class LuceneUtil implements Serializable {
                 }
                 // the correct view is v_amp_id, the view with name v_ampid
                 // is not used
-                qryStr = String.format("SELECT vt.* FROM v_amp_id vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_amp_id vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -545,7 +549,9 @@ public class LuceneUtil implements Serializable {
                     //
                 }
 
-                qryStr = String.format("SELECT vt.* FROM v_description vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_description vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -560,7 +566,9 @@ public class LuceneUtil implements Serializable {
                     //
                 }
 
-                qryStr = String.format("SELECT vt.* FROM v_objectives vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_objectives vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -575,7 +583,9 @@ public class LuceneUtil implements Serializable {
                     //
                 }
 
-                qryStr = String.format("SELECT vt.* FROM v_purposes vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_purposes vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -592,7 +602,9 @@ public class LuceneUtil implements Serializable {
                     //
                 }
 
-                qryStr = String.format("SELECT vt.* FROM v_results vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_results vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -626,7 +638,9 @@ public class LuceneUtil implements Serializable {
 //              }
 
                 // Bolivia component code
-                qryStr = String.format("SELECT vt.* FROM v_bolivia_component_code vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_bolivia_component_code vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 rs = st.executeQuery(qryStr);
                 rs.last();
                 logger.info("Starting iteration of " + rs.getRow() + " v_bolivia_component_code!");
@@ -642,7 +656,8 @@ public class LuceneUtil implements Serializable {
                     isNext = rs.next();
                 }
                 // new budget codes
-                qryStr = "select r.activity,string_agg(r.budget_code, ' ; ' ) as budget_codes from amp_org_role r, v_activity_latest_and_validated a where a.amp_activity_id=r.activity and activity >= "
+                qryStr = "select r.activity, string_agg(r.budget_code, ' ; ' ) as budget_codes "
+                        + "from amp_org_role r, amp_activity a where a.amp_activity_id=r.activity and activity >= "
                         + chunkStart + " and activity < " + chunkEnd + " group by activity";
                 rs = st.executeQuery(qryStr);
                 rs.last();

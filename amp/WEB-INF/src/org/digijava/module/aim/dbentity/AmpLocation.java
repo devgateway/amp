@@ -5,37 +5,24 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.digijava.kernel.dbentity.Country;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 
 public class AmpLocation implements Serializable, Versionable, Cloneable, Identifiable
 {
-    @Interchangeable(fieldTitle="AMP Location ID", id=true)
     private Long ampLocationId ;
-//  @Interchangeable(fieldTitle="ISO3 Code")
     private String iso3Code ;
-//  @Interchangeable(fieldTitle="Name")
     private String name ;
-//  @Interchangeable(fieldTitle="Description")
     private String description ;
-//  @Interchangeable(fieldTitle="GIS Coordinates")
     private String gisCoordinates ;
-//  @Interchangeable(fieldTitle="Language")
     private String language ;
-//  @Interchangeable(fieldTitle="Version")
     private String version ;
-//  @Interchangeable(fieldTitle="Geocode")
     private String geoCode;
     
-//  @Interchangeable(fieldTitle="Activities", recursive=true)
     private Set<AmpActivityVersion> activities;
     
-    @Interchangeable(fieldTitle = "Location")
     private AmpCategoryValueLocations location;
     
-    @Interchangeable(fieldTitle = "Region Location")
     private AmpCategoryValueLocations regionLocation;
     
     public AmpCategoryValueLocations getLocation() {

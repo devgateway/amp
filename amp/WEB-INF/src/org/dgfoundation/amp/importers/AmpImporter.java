@@ -49,7 +49,7 @@ public abstract class AmpImporter {
             fr = new FileReader(importFileName);
             initializeReader(fr);
         } catch (FileNotFoundException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             //e.printStackTrace();
         }
         

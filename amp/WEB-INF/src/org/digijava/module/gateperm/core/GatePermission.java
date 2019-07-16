@@ -103,7 +103,7 @@ public class GatePermission extends Permission {
         if (gate.isOpen())
             return actions;
     } catch (NotBoundGateInputException e) {
-        logger.error(e);
+        logger.error(e.getMessage(), e);
         throw new RuntimeException( "NotBoundGateInputException Exception encountered", e);
     }
     return null;

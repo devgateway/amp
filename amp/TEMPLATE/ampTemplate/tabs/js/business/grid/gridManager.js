@@ -113,7 +113,6 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 					{
                         direction: getDirection(),
 						caption : false,
-						/* url : '/rest/data/report/' + id + '/result/', */
 						url : getURL(id),
 						datatype : 'json',
 						mtype : 'POST',

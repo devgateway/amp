@@ -205,7 +205,7 @@ public class ShowActivityPrintPreview
                 }
                 eaForm.getIdentification().setAmpId(activity.getAmpId());
 
-                eaForm.getIdentification().setStatus(DbUtil.getActivityApprovalStatus(new Long(actId)));
+                eaForm.getIdentification().setStatus(DbUtil.getActivityApprovalStatus(new Long(actId)).getDbName());
 
                 String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 

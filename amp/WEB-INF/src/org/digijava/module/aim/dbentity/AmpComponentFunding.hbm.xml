@@ -17,7 +17,6 @@
 		<property access="field" name="transactionAmount" column="transaction_amount"
 			type="java.lang.Double" />
 		<property name="description" column="description" type="text" />
-		<property name="exchangeRate" column="exchange_rate" type="java.lang.Float" />
 
 		<many-to-one name="reportingOrganization" column="rep_organization_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />

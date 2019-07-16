@@ -25,10 +25,6 @@
 		<xsl:attribute name="url">jdbc:<xsl:value-of select="$dbName"/>://<xsl:value-of select="$jdbc.host"/>:<xsl:value-of select="$jdbc.port"/>/<xsl:value-of select="$jdbc.db"/>?useUnicode=true&amp;characterEncoding=UTF-8&amp;jdbcCompliantTruncation=false</xsl:attribute>
 	</xsl:template>
 	
-	<xsl:template match="@monetUrl">
-		<xsl:attribute name="url">jdbc:monetdb://localhost/<xsl:value-of select="$jdbc.db"/></xsl:attribute>
-	</xsl:template>
-	
 	<xsl:template match="@username">
 		<xsl:attribute name="username"><xsl:value-of select="$jdbc.user"/></xsl:attribute>
 	</xsl:template>
@@ -37,14 +33,6 @@
 		<xsl:attribute name="password"><xsl:value-of select="$jdbc.password"/></xsl:attribute>
 	</xsl:template>
 
-	<xsl:template match="@monetUsername">
-		<xsl:attribute name="username">monetdb</xsl:attribute>
-	</xsl:template>
-	
-	<xsl:template match="@monetPassword">
-		<xsl:attribute name="password">monetdb</xsl:attribute>
-	</xsl:template>
-		
 	<xsl:template match="@prefix">
 		<xsl:attribute name="prefix"><xsl:value-of select="$serverName"/></xsl:attribute>
 	</xsl:template>

@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
@@ -34,18 +33,14 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
     public final OutputSettings outputSettings;
     
     public NiReportsGenerator(NiReportsSchema schema) {
-        this(schema, ReportAreaImpl.class);
-    }
-
-    public NiReportsGenerator(NiReportsSchema schema, Class<? extends ReportAreaImpl> reportAreaClazz) {
         this(schema, true, null);
     }
 
     /**
      * constructs an instance
      * @param schema the schema to use
-     * @param reportAreaClazz the ReportArea implementation to be used
      * @param logReport whether to log execution nodes to the DB
+     * @param outputSettings the Output Settings to be used
      */
     public NiReportsGenerator(NiReportsSchema schema, boolean logReport, OutputSettings outputSettings) {
         super(schema);
@@ -72,8 +67,8 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
     protected void writeRunNodeToDatabase(RunNode node, long wallclockTime) {
         PersistenceManager.getSession().doWork(conn -> {
             List<String> columnNames = Arrays.asList("name", "totaltime", "wallclocktime", "data");
-            String json = node.asJsonBean().asJsonString();
-            List<Object> values = Arrays.asList(node.getName(), node.getTotalTime(), wallclockTime, json);
+            String details = node.getDetailsAsString();
+            List<Object> values = Arrays.asList(node.getName(), node.getTotalTime(), wallclockTime, details);
             SQLUtils.insert(conn, "amp_nireports_log", "id", "amp_nireports_log_id_seq", columnNames, Arrays.asList(values));
         });
     }

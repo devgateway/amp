@@ -12,7 +12,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -29,7 +29,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class NiReportsFetchingTests extends ReportingTestCase {
+public class NiReportsFetchingTests extends AmpReportingTestCase {
 
     @Test
     public void testSpeed() throws AMPException {

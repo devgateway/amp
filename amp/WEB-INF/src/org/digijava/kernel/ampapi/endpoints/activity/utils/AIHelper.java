@@ -1,22 +1,18 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.activity.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-
-import clover.org.apache.commons.lang.math.NumberUtils;
-
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
 /**
  * Helper methods for Activity Import
- * 
+ *
  * @author Nadejda Mandrescu
  */
 public class AIHelper {
@@ -29,15 +25,15 @@ public class AIHelper {
      * Stores all field paths within AmpActivityVersion tree that back reference the Activity.
      */
     private ActivityImporter activityImporter;
-    
+
     /**
-     * 
+     *
      * @param activityImporter
      */
     public AIHelper(ActivityImporter activityImporter) {
         this.activityImporter = activityImporter;
     }
-    
+
     /**
      * Retrieves the class specified as type for Generics
      * @param field
@@ -62,7 +58,7 @@ public class AIHelper {
      * @param root
      * @return Long representation or null if invalid or missing
      */
-    public static Long getActivityIdOrNull(JsonBean root) {
+    public static Long getActivityIdOrNull(Map<String, Object> root) {
         return longOrNull(root.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME));
     }
 
@@ -71,8 +67,21 @@ public class AIHelper {
      * @param root
      * @return Long representation or null if invalid or missing
      */
-    public static Long getModifiedByOrNull(JsonBean root) {
+    public static Long getModifiedByOrNull(Map<String, Object> root) {
         return longOrNull(root.get(ActivityEPConstants.MODIFIED_BY_FIELD_NAME));
+    }
+
+    /**
+     * Retrieves activity_group.version from JSON activity.
+     * @param root
+     * @return Long representation or null if invalid or missing
+     */
+    public static Long getActivityGroupVersionOrNull(Map<String, Object> root) {
+        Object activityGroup = root.get(FieldMap.underscorify(ActivityFieldsConstants.ACTIVITY_GROUP));
+        if (activityGroup instanceof Map) {
+            return longOrNull(((Map<?, ?>) activityGroup).get(ActivityEPConstants.VERSION_FIELD_NAME));
+        }
+        return null;
     }
 
     private static Long longOrNull(Object obj) {

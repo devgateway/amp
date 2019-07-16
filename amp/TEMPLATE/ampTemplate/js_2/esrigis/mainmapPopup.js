@@ -69,41 +69,112 @@ function initMap() {
 }
 
 function loadBaseMap() {
-	map = L.map('map').setView([ latitude, longitude ], 7);
-	// create the tile layer with correct attribution
-	var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-	if (isOsm) {
-		var subdomains = [ 'a', 'b', 'c' ];
-		if (basemapurl !== undefined && basemapurl.indexOf("mqcdn") != -1) {
-			subdomains = [ 'otile1', 'otile2', 'otile3', 'otile4' ];
-		}
-		var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-		tileLayer = new L.TileLayer(osmUrl, {
-			minZoom : 0,
-			maxZoom : 16,
-			attribution : osmAttrib,
-			subdomains : subdomains
-		});
-	} else {
-		tileLayer = L.esri.tiledMapLayer({
-			url : basemapurl,
-			maxZoom : 16
-		});
-	}
+    map = L.map('map').setView([latitude, longitude], 7);
+    // create the tile layer with correct attribution
+    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    if (isOsm) {
+        var subdomains = ['a', 'b', 'c'];
+        if (basemapurl !== undefined && basemapurl.indexOf("mqcdn") != -1) {
+            subdomains = ['otile1', 'otile2', 'otile3', 'otile4'];
+        }
+        var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+        tileLayer = new L.TileLayer(osmUrl, {
+            minZoom: 0,
+            maxZoom: 16,
+            attribution: osmAttrib,
+            subdomains: subdomains
+        });
+    } else {
+        tileLayer = L.esri.tiledMapLayer({
+            url: basemapurl,
+            maxZoom: 16
+        });
+    }
 
-	map.addLayer(tileLayer);
+    map.addLayer(tileLayer);
+    currentZoom = map.getZoom();
 
-	currentZoom = map.getZoom();
+    // attach listener to basemap select to change the map's basemaps
+    var basemaps = $('#basemaps');
 
-	// attach listener to basemap select to change the map's basemaps
-	var basemaps = $('#basemaps');
-	basemaps.on('change', function() {
-		setBasemap(this.value);
-	});
+    basemaps.on('change', function () {
+        setBasemap(this.value);
+    });
+    var drawnItems = L.featureGroup().addTo(map);
 
-	var drawnItems = L.featureGroup().addTo(map);
-	addDrawControls(drawnItems);
+    addDrawControls(drawnItems);
 
+    // draw an existing activity structure
+    if (window.opener.structuresData.structure) {
+        drawStructure(window.opener.structuresData.structure);
+    }
+
+}
+
+function drawStructure(structure) {
+    var structureImage;
+    var labelLatLng;
+
+    if (structure.shape === MapConstants.SHAPE.POINT) {
+        structureImage = generatePointStructureImage(structure);
+        labelLatLng = L.latLng(structure.latitude, structure.longitude);
+    } else {
+        var colorValue = structure["color-value"];
+        if (structure.shape === MapConstants.SHAPE.POLYLINE) {
+            structureImage = generatePolylineStructureImage(structure, colorValue);
+            labelLatLng = structureImage.getBounds().getCenter();
+        } else if (structure.shape == MapConstants.SHAPE.POLYGON) {
+            structureImage = generatePolygonStructureImage(structure, colorValue);
+            labelLatLng = structureImage.getBounds().getCenter();
+        }
+    }
+
+    if (structureImage) {
+        structureImage.on('contextmenu', contextMenu);
+
+        if (!structureImage.tempId) {
+            structureImage.tempId = tempId++;
+        }
+
+        structureImage.addTo(map);
+        drawLabel(structureImage, labelLatLng, structure.title);
+    }
+}
+
+function generatePointStructureImage(structure) {
+    return L.marker([structure.latitude, structure.longitude]);
+}
+
+function generatePolylineStructureImage(structure, colorValue) {
+    return new L.Polyline(getPointList(structure), {color : colorValue});
+}
+
+function generatePolygonStructureImage(structure, colorValue) {
+    return new L.Polygon(getPointList(structure), {color : colorValue});
+}
+
+function getPointList(structure) {
+    var pointList = [];
+
+    structure.coordinates.forEach(function(coordinate) {
+        pointList.push(new L.LatLng(coordinate.latitude, coordinate.longitude));
+    });
+
+    return pointList;
+}
+
+function drawLabel(graphic, latLng, title) {
+    if (latLng) {
+        var label = L.marker(latLng, {
+            icon: L.divIcon({
+                iconSize: null,
+                className: 'label',
+                html: '<div>' + title + '</div>'
+            })
+        }).addTo(map);
+
+        labels[graphic.tempId] = label;
+    }
 }
 
 function onMapClick(e) {
@@ -120,14 +191,16 @@ function onMapClick(e) {
 		fillOpacity : 0.5
 	}).addTo(map);
 
-	circlePoint.on('contextmenu', function(e) {
-		selectedPointEvent = e;
-		isMenuOpen = true;
-		var y = e.originalEvent.clientY;
-		var x = e.originalEvent.clientX;
-		showMenu(y, x);
-	});
+	circlePoint.on('contextmenu', contextMenu);
 
+}
+
+function contextMenu(e) {
+    selectedPointEvent = e;
+    isMenuOpen = true;
+    var y = e.originalEvent.clientY;
+    var x = e.originalEvent.clientX;
+    showMenu(y, x);
 }
 
 function createColorCheckboxes(selectedGraphic) {
@@ -498,7 +571,7 @@ function filterLocation(value) {
 
 function appendColor(categoryValue) {
 	var colorHTML = getColorHTMLTemplate();	
-	colorHTML = colorHTML.replace('{value}', categoryValue.id);	
+	colorHTML = colorHTML.replace('{value}', categoryValue.id);
 	var translatedValue = TranslationManager.getTranslated(categoryValue.value);
 	var splits = translatedValue.split(":");
 	if (splits.length == 2) {

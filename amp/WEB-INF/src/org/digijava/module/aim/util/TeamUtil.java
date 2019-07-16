@@ -26,8 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -382,9 +380,9 @@ public class TeamUtil {
             ampAppSettings.setFiscalCalendar(fiscal);
             ampAppSettings.setLanguage("en");
             if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION).equalsIgnoreCase("off")){
-                ampAppSettings.setValidation("validationOff");
+                ampAppSettings.setValidation(Constants.PROJECT_VALIDATION_OFF);
             }else{
-                ampAppSettings.setValidation("allEdits");
+                ampAppSettings.setValidation(Constants.PROJECT_VALIDATION_FOR_ALL_EDITS);
             }
             session.save(ampAppSettings);
 
@@ -730,8 +728,7 @@ public class TeamUtil {
             session.saveOrUpdate(team);
             //transaction.commit();
         } catch (HibernateException e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
         
@@ -1172,24 +1169,6 @@ public class TeamUtil {
         
     }
     
-    
-    /**
-     * Checks if the team is a computed workspace and in case it is it checks if
-     * it should hide the draft activities
-     *
-     * @param tm the team member
-     * @return true if draft activities should be hidden
-     */
-    public static boolean hideDraft(TeamMember tm) {
-        if (AmpARFilter.isTrue(tm.getComputation())) {
-            Workspace wrksp = TeamUtil.getWorkspace(tm.getTeamId());
-            if (wrksp != null && AmpARFilter.isTrue(wrksp.getHideDraftActivities()))
-                return true;
-        }
-        return false;
-    }
-    
-        
   public static List<AmpActivity> getAllTeamAmpActivities(Long teamId, boolean includedraft, final String keyword)
   {
       final StringBuilder queryString = new StringBuilder("select distinct(amp_activity_id) from amp_activity A WHERE ");
@@ -2036,20 +2015,9 @@ public class TeamUtil {
         tm.setAppSettings(appSettings);
         session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
         session.setAttribute("currentMember", tm);
-        AmpARFilter arFilter = AmpTeam.initializeTeamFiltersSession(member, request, session);
-        initCompleteTeamFilter(session, tm, arFilter);
+        session.setMaxInactiveInterval(
+                FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.MAX_INACTIVE_SESSION_INTERVAL));
         return tm;
-    }
-    
-    public static CompleteWorkspaceFilter initCompleteTeamFilter(HttpSession session, TeamMember tm, AmpARFilter arFilter) {
-        logger.info(String.format("creating a CompleteWorkspaceFilter for user %s", tm));
-        CompleteWorkspaceFilter res = new CompleteWorkspaceFilter(tm, arFilter);
-        if (session != null) {
-            session.setAttribute(Constants.COMPLETE_TEAM_FILTER, res);
-            try {session.setMaxInactiveInterval(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.MAX_INACTIVE_SESSION_INTERVAL).intValue());}
-            catch(UnsupportedOperationException e) {}; // for testcases
-        }
-        return res;
     }
     
     public static void getTeams(AmpTeam team, List<AmpTeam> teams) {

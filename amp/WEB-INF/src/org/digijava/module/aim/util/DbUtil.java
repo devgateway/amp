@@ -19,6 +19,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -74,6 +75,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -93,15 +95,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
-
-import com.tonbeller.wcf.utils.SqlUtils;
-
-import clover.org.apache.commons.lang.StringEscapeUtils;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -517,14 +514,14 @@ public class DbUtil {
         return q.list();
     }
 
-    public static String getActivityApprovalStatus(Long actId) {
+    public static ApprovalStatus getActivityApprovalStatus(Long actId) {
         String qry = "select act.approvalStatus from " + AmpActivityVersion.class.getName()
                 + " act where act.ampActivityId=:actId";
         Query q = PersistenceManager.getSession().createQuery(qry);
         q.setParameter("actId", actId, LongType.INSTANCE);
-        List<String> res = q.list();
+        List res = q.list();
         if (!res.isEmpty())
-            return res.get(0);
+            return (ApprovalStatus) res.get(0);
         return null;
     }
 
@@ -728,33 +725,6 @@ public class DbUtil {
             logger.error("Unable to get TeamAppSettings", e);
         }
         return ampAppSettings;
-    }
-
-    public static boolean isUserTranslator(User u) {
-
-        logger.debug("In isUserTranslator()");
-        User user = (User) PersistenceManager.getSession().get(User.class, u.getId());
-        boolean flag = false;
-        try {
-            Iterator itr = user.getGroups().iterator();
-            if (!itr.hasNext()) {
-                logger.debug("No groups");
-            }
-            while (itr.hasNext()) {
-                Group grp = (Group) itr.next();
-                logger.debug("Group key is " + grp.getKey());
-                if ((grp.getKey() != null) && "TRN".equals(grp.getKey().trim())) {
-                    logger.debug("setting flag as true");
-                    flag = true;
-                    break;
-                } else {
-                    logger.debug("in else");
-                }
-            }
-        } catch (Exception ex) {
-            logger.error("Unable to get team member ", ex);
-        }
-        return flag;
     }
 
     /*
@@ -1279,7 +1249,7 @@ public class DbUtil {
         if (publicView) {
             queryString.append(String.format(
                     " and orgRole.activity.approvalStatus in ('%s', '%s') and orgRole.activity.team.parentTeamId is not null ",
-                    Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
+                    ApprovalStatus.APPROVED.getDbName(), ApprovalStatus.STARTED_APPROVED.getDbName()));
         }
 
         Query query = PersistenceManager.getSession().createQuery(queryString.toString());
@@ -3175,6 +3145,9 @@ public class DbUtil {
         PersistenceManager.getSession().clear();
     }
 
+    /**
+     * get colors ordered by threshold
+     */
     public static List<AmpColorThreshold> getColorThresholds() {
         return PersistenceManager.getSession().createCriteria(AmpColorThreshold.class)
                 .addOrder(org.hibernate.criterion.Order.asc("thresholdStart")).list();

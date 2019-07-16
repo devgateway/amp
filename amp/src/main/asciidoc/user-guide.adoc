@@ -1,0 +1,36 @@
+= AMP REST API User Guide
+
+== About
+
+This is the reference for the AMP REST API. This API is the primary way to interact with AMP remotely, whether you
+are building an app, scripting interactions with AMP or developing any other integration. This page documents the
+REST resources available in AMP, along with expected HTTP response codes and sample requests.
+
+== Authentication
+
+REST API supports two kinds of authentications: cookie-based and token-based.
+
+AMP itself uses cookie-based authentication in the browser, so you can call the REST API from
+link:index.html[Swagger UI^] and rely on the authentication that the browser has established.
+
+Cookie-based authentication is currently the preferred way to communicate with REST API.
+
+[NOTE]
+Token-based authentication was deprecated. If you are developing new client that connects to REST API please
+consider using cookie-based authentication.
+
+== Error handling
+
+Most resources will return a response body in addition to the status code. Usually, the JSON object returned
+has the following structure:
+
+[source,json]
+----
+{
+  "error": {
+    "0000": [
+      "(Title is required)"
+    ]
+  }
+}
+----

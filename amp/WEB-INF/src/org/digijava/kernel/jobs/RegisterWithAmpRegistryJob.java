@@ -36,6 +36,8 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.google.common.hash.Hashing;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Registers this AMP installation in AMP Registry.
@@ -56,6 +58,8 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
 
     private static final int JOB_FIRST_START_DELAY_IN_MIN = 5;
 
+    private final Logger logger = LoggerFactory.getLogger(RegisterWithAmpRegistryJob.class);
+
     private AmpRegistryService ampRegistryService = AmpRegistryService.INSTANCE;
 
     @Override
@@ -74,6 +78,8 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
             
             if (secretToken != null) {
                 ampRegistryService.register(getCurrentInstallation(), secretToken);
+            } else {
+                logger.warn(AMP_REGISTRY_SECRET_TOKEN_ENV_NAME + " environment variable was not setup.");
             }
         }
     }

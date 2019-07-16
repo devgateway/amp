@@ -12,7 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.helper.KeyValue;
@@ -80,49 +79,6 @@ public class ConfigHelper {
         return list;
     }
 
-    /**
-     * Retrieves AmpGlobalSettings from request
-     * @param object
-     * @return AmpGlobalSettings
-     */
-    public static AmpGlobalSettings getGlobalSetting(AmpGlobalSettings set,LinkedHashMap<String, Object> object) {
-        set.setGlobalSettingsName(String.valueOf(object.get(SETTINGS_NAME)));
-        set.setGlobalSettingsPossibleValues(String.valueOf(object.get(POSSIBLE_VALUES)));
-        set.setGlobalSettingsValue(String.valueOf(object.get(SETTINGS_VALUE)));
-        if ("null".equalsIgnoreCase(set.getGlobalSettingsPossibleValues())) {
-            set.setGlobalSettingsPossibleValues("");
-        }
-        set.setGlobalSettingsDescription(String.valueOf(object.get(DESCRIPTION)));
-        set.setSection(String.valueOf(object.get(SECTION)));
-        set.setValueTranslatable(Boolean.valueOf(String.valueOf(object.get(VALUE_TRANSLATABLE))));
-        return set;
-    }
-    
-    /**
-     * Retrieves JsonBean from AmpGlobalSettings
-     * @param ampGlobalSetting
-     * @return JsonBean
-     */
-    public static JsonBean getGlobalSettingJson(AmpGlobalSettings ampGlobalSetting) {
-        JsonBean globalSetting = new JsonBean();
-        List<KeyValue> possiblesValues = ConfigHelper.getPossibleValues(ampGlobalSetting.getGlobalSettingsPossibleValues());
-        JsonBean pValues = new JsonBean();
-        if (possiblesValues!=null) {
-            for (KeyValue value : possiblesValues) {
-                pValues.set(value.getValue(), value.getKey());
-            }
-        }
-        globalSetting.set("settingName", ampGlobalSetting.getGlobalSettingsName());
-        globalSetting.set("settingValue", ampGlobalSetting.getGlobalSettingsValue());
-        globalSetting.set("possibleValues", ampGlobalSetting.getGlobalSettingsPossibleValues()); 
-        globalSetting.set("description", ampGlobalSetting.getGlobalSettingsDescription()); 
-        globalSetting.set("section", ampGlobalSetting.getSection()); 
-        globalSetting.set("valueTranslatable", ampGlobalSetting.getValueTranslatable());
-        globalSetting.set("possibleValuesIds", pValues);
-        
-        return globalSetting;
-    }
-    
     /**
      * Validate settingValue
      * @param ampGlobalSetting

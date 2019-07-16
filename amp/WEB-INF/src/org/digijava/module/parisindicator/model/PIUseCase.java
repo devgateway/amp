@@ -373,8 +373,7 @@ public class PIUseCase {
             // As explained above here we convert a list with duplicated surveys into a Set with no duplicates.
             commonDataUnique = new LinkedHashSet<AmpAhsurvey>(commonData);
         } catch (Exception e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         return commonDataUnique;
     }
@@ -420,7 +419,7 @@ public class PIUseCase {
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return commonData;
     }
@@ -438,7 +437,7 @@ public class PIUseCase {
                 TeamMember auxTeamMember = new TeamMember(iterTeamMembers.next());
                 
                 // Get the main team node for this team member.
-                Node teamNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, auxTeamMember.getTeamId());
+                Node teamNode = DocumentManagerUtil.getOrCreateTeamNode(jcrWriteSession, auxTeamMember.getTeamId());
 
                 // Iterate documents and get organizations.
                 Iterator<Node> iter = teamNode.getNodes();
@@ -486,7 +485,7 @@ public class PIUseCase {
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return commonData;
     }

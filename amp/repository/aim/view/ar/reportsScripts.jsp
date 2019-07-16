@@ -663,7 +663,7 @@ function validateFormat(){
 	window.onload=initScripts;
 
 
-	var msg0="<digi:trn key="rep:pop:pleasewait..." jsFriendly='true'> Please wait...</digi:trn>";
+	var msg0="<digi:trn key="rep:pop:pleasewait..." jsFriendly='true'>Loading...</digi:trn>";
 	
 	var msg1="<digi:trn key="rep:pop:freezeReportHeading" jsFriendly='true'>Freeze Report Heading</digi:trn>";
 	

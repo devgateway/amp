@@ -432,7 +432,7 @@ font-weight : bold;
 </c:set>
 
 <c:set var="trans_wait">
-	<digi:trn>Please wait a moment...</digi:trn>
+	<digi:trn>Loading...</digi:trn>
 </c:set>
 <script type="text/javascript">
 <!--

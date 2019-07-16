@@ -147,18 +147,17 @@ public class ActivityVersionUtil {
                                 markAsDifferent = true;
                                 ret.append("<font color='red'>");
                             }
-                            
-                            if (auxOutput2.getValue()[i] instanceof Timestamp) {
-                                String date = DateConversion.convertDateToString(new Date(((Timestamp) auxOutput2.getValue()[i]).getTime()));
-                                ret.append(date);
-                            } else if (auxOutput2.getValue()[i] instanceof BigDecimal 
-                                    || auxOutput2.getValue()[i] instanceof Double 
-                                    || auxOutput2.getValue()[i] instanceof Float) {
+                            Object value = auxOutput2.getValue()[i];
+                            if (value instanceof Timestamp) {
+                                ret.append(DateConversion.convertDateToString(new Date(((Timestamp) value).getTime())));
+                            } else if (value instanceof BigDecimal
+                                    || value instanceof Double
+                                    || value instanceof Float) {
                                 NumberFormat formatter = FormatHelper.getDecimalFormat();
                                 formatter.setMaximumFractionDigits(0);
-                                ret.append(formatter.format(auxOutput2.getValue()[i]));
+                                ret.append(formatter.format(value));
                             } else {
-                                String text = auxOutput2.getValue()[i].toString();
+                                String text = value != null ? value.toString() : "";
                                 if (auxOutput2.getTranslateValue())
                                     text = TranslatorWorker.translateText(text, langCode, site.getId());                                                                 
                                 ret.append(DbUtil.filter(text));                                                               
@@ -189,7 +188,7 @@ public class ActivityVersionUtil {
             try {
                 aux = Integer.valueOf(gsValue).intValue();
             } catch (NumberFormatException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
             }
         }
         return aux;
@@ -220,11 +219,10 @@ public class ActivityVersionUtil {
      * it and ready to save.
      * 
      * @param in
-     * @param member
      * @return
      * @throws CloneNotSupportedException
      */
-    public static AmpActivityVersion cloneActivity(AmpActivityVersion in, AmpTeamMember member) throws CloneNotSupportedException {
+    public static AmpActivityVersion cloneActivity(AmpActivityVersion in) throws CloneNotSupportedException {
         AmpActivityVersion out = (AmpActivityVersion) in.clone();
         
         Class clazz = AmpActivityFields.class;
@@ -239,7 +237,6 @@ public class ActivityVersionUtil {
         }
 
         out.setAmpActivityGroup(null);
-        out.setModifiedBy(member);
         return out;
     }
     
@@ -281,7 +278,6 @@ public class ActivityVersionUtil {
                 method = clazz.getMethod("set" + setName, Collection.class);
             method.invoke(out, returnSet);
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("Can't init set '"+ setName +"':", e);
         }
     }

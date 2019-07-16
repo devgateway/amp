@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.common.base.Strings;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -122,8 +123,6 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPTableEvent;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.draw.LineSeparator;
-
-import clover.com.google.common.base.Strings;
 
 /**
  * Export Activity to PDF
@@ -265,7 +264,7 @@ public class ExportActivityToPDF extends Action {
             siteId = site.getId();
             locale = navigationLanguage.getCode();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
 
         //building  table
@@ -613,6 +612,11 @@ public class ExportActivityToPDF extends Action {
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Cris Number")){
                 columnName=TranslatorWorker.translateText("Cris Number");
                 createGeneralInfoRow(mainLayout,columnName,activity.getCrisNumber());
+            }
+    
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/IATI Identifier")) {
+                columnName = TranslatorWorker.translateText("IATI Identifier");
+                createGeneralInfoRow(mainLayout, columnName, activity.getIatiIdentifier());
             }
 
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Procurement System")){

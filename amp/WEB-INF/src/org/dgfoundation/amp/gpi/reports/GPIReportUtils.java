@@ -14,7 +14,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -31,17 +30,15 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.dgfoundation.amp.reports.ReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
+import org.digijava.kernel.ampapi.endpoints.gpi.GpiFormParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
@@ -60,7 +57,8 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedRerport {@link GeneratedReport}
      */
-    public static GeneratedReport getGeneratedReportForIndicator(String indicatorCode, JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator(String indicatorCode,
+            GpiFormParameters formParams) {
 
         switch (indicatorCode) {
             case GPIReportConstants.REPORT_1:
@@ -84,8 +82,8 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator1(JsonBean formParams) {
-        if (EndpointUtils.getSingleValue(formParams, "output", 1) == 2) {
+    public static GeneratedReport getGeneratedReportForIndicator1(GpiFormParameters formParams) {
+        if (EndpointUtils.getSingleValue(formParams.getOutput(), 1) == 2) {
             return getGeneratedReportForIndicator1Output2(formParams);
         }
         
@@ -98,7 +96,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator1Output1(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator1Output1(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_1, ArConstants.DONOR_TYPE);
 
@@ -150,7 +148,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator1Output2(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator1Output2(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_1, ArConstants.DONOR_TYPE);
 
@@ -195,7 +193,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator5a(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator5a(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5a,
                 ArConstants.DONOR_TYPE);
@@ -237,7 +235,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator5b(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator5b(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5b,
                 ArConstants.DONOR_TYPE);
@@ -290,7 +288,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator5bActDisb(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator5bActDisb(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5b + " measures",
                 ArConstants.DONOR_TYPE);
@@ -337,7 +335,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator6(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator6(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_6, ArConstants.DONOR_TYPE);
 
@@ -369,7 +367,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator9b(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator9b(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_9b, ArConstants.GPI_TYPE);
 
@@ -398,15 +396,15 @@ public class GPIReportUtils {
         return generatedReport;
     }
 
-    public static String getHierarchyColumn(JsonBean formParams) {
-        if (formParams.get(GPIReportConstants.HIERARCHY_PARAMETER) != null) {
-            return (String) formParams.get(GPIReportConstants.HIERARCHY_PARAMETER);
+    public static String getHierarchyColumn(GpiFormParameters formParams) {
+        if (formParams.getHierarchy() != null) {
+            return formParams.getHierarchy();
         }
 
         return GPIReportConstants.HIERARCHY_DONOR_AGENCY;
     }
     
-    public static boolean isDonorAgency(JsonBean formParams) {
+    public static boolean isDonorAgency(GpiFormParameters formParams) {
         String donorHierarchy = getHierarchyColumn(formParams);
         
         return !GPIReportConstants.HIERARCHY_DONOR_GROUP.equals(donorHierarchy);
@@ -416,9 +414,9 @@ public class GPIReportUtils {
      * @param formParams
      * @param spec
      */
-    public static void applyAppovalStatusFilter(JsonBean formParams, ReportSpecificationImpl spec) {
+    public static void applyAppovalStatusFilter(GpiFormParameters formParams, ReportSpecificationImpl spec) {
         if (formParams != null) {
-            Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+            Map<String, Object> filters = formParams.getFilters();
             
             AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
 
@@ -435,7 +433,7 @@ public class GPIReportUtils {
             spec.setFilters(filterRules);
         }
     }
-    
+
     /**
      * Update date filter in order to retrieve data from the other MTEF years
      * @param spec
@@ -488,12 +486,12 @@ public class GPIReportUtils {
      * @param formParams
      * @param spec
      */
-    public static void applySettings(JsonBean formParams, ReportSpecificationImpl spec) {
-        spec.setSettings(MondrianReportUtils.getCurrentUserDefaultSettings());
+    public static void applySettings(GpiFormParameters formParams, ReportSpecificationImpl spec) {
+        spec.setSettings(ReportUtils.getCurrentUserDefaultSettings());
         spec.getSettings().getCurrencyFormat().setMinimumFractionDigits(0);
         spec.getSettings().getCurrencyFormat().setMinimumIntegerDigits(1);
         
-        SettingsUtils.applySettings(spec, formParams, true);
+        SettingsUtils.applySettings(spec, formParams.getSettings(), true);
     }
 
     /**
@@ -527,14 +525,14 @@ public class GPIReportUtils {
      * @param formParams
      * @return
      */
-    public static Integer getPivotYearFromFormParams(JsonBean formParams) {
+    public static Integer getPivotYearFromFormParams(GpiFormParameters formParams) {
         Integer pivotYear = null;
-        Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+        Map<String, Object> filters = formParams.getFilters();
         if (filters != null) {
             Map<String, Object> date = (Map<String, Object>) filters.get(FiltersConstants.DATE);
             if (date != null) {
                 String start = String.valueOf(date.get("start"));
-                SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
+                SimpleDateFormat sdf = new SimpleDateFormat(FiltersConstants.DATE_FORMAT);
                 try {
                     Date startDate = start == null ? null : sdf.parse(start);
                     pivotYear = FilterUtils.getYearFromDate(startDate);
@@ -583,10 +581,10 @@ public class GPIReportUtils {
         }
     }
     
-    public static FilterRule getFilterRule(JsonBean formParams, String columnName) {
+    public static FilterRule getFilterRule(GpiFormParameters formParams, String columnName) {
         FilterRule filterRule = null;
         if (formParams != null) {
-            Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+            Map<String, Object> filters = formParams.getFilters();
 
             AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
             if (filterRules != null) {
@@ -632,13 +630,13 @@ public class GPIReportUtils {
             return convDate.getYear();
         }
         return FilterUtils.getYearFromDate(date);
-        
+
     }
 
     /**
      * Get GPI Remarks for indicator 5a exports (pdf and xlsx)
      * 
-     * @param report
+     * @param rowData
      * @return remarks as string (joined by '\n')
      */ 
     public static String getRemarksForIndicator5a(Map<GPIReportOutputColumn, String> rowData) {

@@ -11,6 +11,8 @@
 		<property name="budgetdepartment" column="budget_department" type="java.lang.Long"/>
 		<property name="budgetprogram" column="budget_program" type="java.lang.Long"/>
 		<property name="budget" column="budget" type="java.lang.Integer" />
+
+		<property name="iatiIdentifier" column="iati_identifier" type="java.lang.String" />
 		
 		<property name="description" column="description" type="text"  index="amp_activity_version_description_idx" />
 		<property name="lessonsLearned" column="lessons_learned" type="text"  index="amp_activity_version_lessons_learned_idx" />
@@ -101,7 +103,12 @@
 		<many-to-one name="activityCreator" column="activity_creator"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 
-		<property name="approvalStatus" column="approval_status" type="java.lang.String" />
+		<property name="approvalStatus" column="approval_status">
+		    <type name="org.digijava.module.aim.dbentity.NamedEnumType">
+        		<param name="enumClass">org.digijava.module.aim.dbentity.ApprovalStatus</param>
+        		<param name="valueProperty">dbName</param>
+        	</type>
+		</property>
 
         <property name="fundingSourcesNumber" column="funding_sources_number" type="java.lang.Integer" />
 
@@ -186,11 +193,10 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponent" />
 		</set>
 		
-		<set name="structures" table="AMP_ACTIVITY_STRUCTURES" lazy="true" inverse="true" cascade="all-delete-orphan">
+		<set name="structures" cascade="all-delete-orphan" inverse="true" lazy="false">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpStructure"
-				column="amp_structure_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpStructure" />
 		</set>
 				
 		<set name="member" table="AMP_MEMBER_ACTIVITIES" lazy="true">

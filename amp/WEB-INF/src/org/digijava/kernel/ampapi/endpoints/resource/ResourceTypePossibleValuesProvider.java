@@ -9,30 +9,19 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 
 import com.google.common.collect.ImmutableMap;
 
-public class ResourceTypePossibleValuesProvider extends PossibleValuesProvider {
+public class ResourceTypePossibleValuesProvider implements PossibleValuesProvider {
 
     @Override
     public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
         List<PossibleValue> values = new ArrayList<>();
-        for (String type : ResourceEPConstants.RESOURCE_TYPES) {
-            values.add(new PossibleValue(type, type, ImmutableMap.of()));
+        for (ResourceType type : ResourceType.values()) {
+            values.add(new PossibleValue(type.getId().longValue(), type.getName(), ImmutableMap.of()));
         }
         return values;
     }
 
     @Override
-    public Object toJsonOutput(Object object) {
-        return object;
+    public boolean isAllowed(Long id) {
+        return ResourceType.isValid(id.intValue());
     }
-
-    @Override
-    public Long getIdOf(Object value) {
-        return null;
-    }
-
-    @Override
-    public Object toAmpFormat(Object obj) {
-        return obj;
-    }
-
 }

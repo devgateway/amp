@@ -56,14 +56,14 @@ public class AmpContractBasicSubsectionFeature extends
             category = new AmpCategorySelectFieldPanel("category", CategoryConstants.IPA_ACTIVITY_CATEGORY_KEY, new PropertyModel<AmpCategoryValue>(model, "activityCategory"), "Activity Type", true, true);
             add(category);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         
         try {
             AmpCategorySelectFieldPanel type = new AmpCategorySelectFieldPanel("type", CategoryConstants.IPA_TYPE_KEY, new PropertyModel<AmpCategoryValue>(model, "contractType"), "Contract Type", true, true);
             add(type);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
 
         

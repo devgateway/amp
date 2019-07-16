@@ -20,12 +20,7 @@ public enum ReportRenderWarningType {
     /**
      * example: some percentage for primary sector for activity X = NULL, while others have numbers. The Mondrian-based reports do not support it
      */     
-    WARNING_TYPE_ENTRY_MIXES_NULL_AND_NOT_NULL("mixing_nulls_nonnulls"),
-    
-    /**
-     * example: primary sector Z for activity X has >=2 entries in the source table/view
-     */
-    WARNING_TYPE_MULTIPLE_ENTRIES_FOR_SAME_CART_ID("mult_entries");
+    WARNING_TYPE_ENTRY_MIXES_NULL_AND_NOT_NULL("mixing_nulls_nonnulls");
     
     private final String userFriendlyName;
     private ReportRenderWarningType(String ufn) {

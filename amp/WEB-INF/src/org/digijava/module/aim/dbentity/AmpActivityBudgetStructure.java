@@ -3,10 +3,9 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivityBudgetStructure implements Versionable, Serializable, Cloneable{
+public class AmpActivityBudgetStructure implements Versionable, Serializable, Cloneable {
     
     //TODO: not expected to be used in IATI. commenting for now
     private Long ampActivityBudgetStructureId;
@@ -109,7 +108,5 @@ public class AmpActivityBudgetStructure implements Versionable, Serializable, Cl
             return false;
         return true;
     }
-    
-    
 
 }

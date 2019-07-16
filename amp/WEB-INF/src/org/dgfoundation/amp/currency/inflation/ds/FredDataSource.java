@@ -17,7 +17,7 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.currency.IRFrequency;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
 import org.digijava.kernel.restclient.RestClient;
 import org.digijava.kernel.restclient.RestClient.Type;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
@@ -76,7 +76,7 @@ public class FredDataSource {
         String json = rc.requestGET(FRED_OBSERVATIONS_EP_URL, queryParamsGNPDEF);
         SortedMap<String, Double> result = new TreeMap<String, Double>();
         List<Map<String, String>> observations = json == null ? null :  
-                (List<Map<String, String>>) JsonBean.getJsonBeanFromString(json).get("observations");
+                (List<Map<String, String>>) ObjectMapperUtils.getMapFromString(json).get("observations");
         if (observations != null) {
             for (Map<String, String> pair : observations) {
                 String valStr = pair.get("value").trim();

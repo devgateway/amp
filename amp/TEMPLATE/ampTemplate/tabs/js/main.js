@@ -71,7 +71,7 @@ require.config({
 require([ 'jquery', 'text!views/html/regions.html','translationManager' ], function(jQuery, regionsTemplate, TranslationManager) {
 	
 	var data = {};
-	data["tabs.common:loadingTabs"] = "Loading tabs...";
+	data["tabs.common:loadingTabs"] = "Loading...";
 	TranslationManager.postJSON('/rest/translations/label-translations', data,
 			function(data) {
 				// Need to do this here because of some crazy FF errors.

@@ -22,8 +22,7 @@
 			    CREATE OR REPLACE VIEW v_structures AS 
 					SELECT DISTINCT a.amp_activity_id, s.title, s.amp_structure_id
 						FROM amp_activity_version a
-							JOIN amp_activity_structures a_s ON a_s.amp_activity_id = a.amp_activity_id
-							JOIN amp_structure s ON a_s.amp_structure_id = s.amp_structure_id;
+					JOIN amp_structure s ON s.amp_activity_id = a.amp_activity_id;
         	</lang>
 		</script>
 	</apply>

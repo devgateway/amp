@@ -19,6 +19,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.common.collect.ImmutableList;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -32,9 +33,7 @@ import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -60,11 +59,6 @@ import org.hibernate.Transaction;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
-import com.tonbeller.wcf.utils.SqlUtils;
-
-import clover.com.google.common.collect.ImmutableList;
-
-
 public class ProgramUtil {
     private static Logger logger = Logger.getLogger(ProgramUtil.class);
 
@@ -87,7 +81,7 @@ public class ProgramUtil {
         put(TERTIARY_PROGRAM, ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
     }};
     
-    public static final ImmutableList<String> PROGRAM_NAMES = ImmutableList.of(NATIONAL_PLANNING_OBJECTIVES, 
+    public static final ImmutableList<String> PROGRAM_NAMES = ImmutableList.of(NATIONAL_PLANNING_OBJECTIVES,
             PRIMARY_PROGRAM, SECONDARY_PROGRAM, TERTIARY_PROGRAM);
     
 
@@ -121,7 +115,7 @@ public class ProgramUtil {
                 return result;
 
             } catch (Exception e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new AimException("Cannot get programs for activity.",e);
             }
 
@@ -1216,7 +1210,7 @@ public class ProgramUtil {
                     tempTheme.setDeleted(true);
                     sess.saveOrUpdate(tempTheme);
                 } catch (HibernateException e) {
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                     throw new AimException("Cannot delete theme with id "+themeId,e);
                 }
             }

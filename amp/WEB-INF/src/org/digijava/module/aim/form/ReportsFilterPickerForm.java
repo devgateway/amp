@@ -133,7 +133,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     private Long[] selectedBudgets = null;
     private Boolean justSearch = null;
     private Boolean pledged;
-    private Boolean unallocatedLocation = null;
     // to keep the default currency after user changes
     private Long defaultCurrency;
     //private boolean isnewreport;
@@ -618,11 +617,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public Boolean getPledged() {
         return this.pledged;
-    }
-    
-    @java.lang.SuppressWarnings("all")
-    public Boolean getUnallocatedLocation() {
-        return this.unallocatedLocation;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -1200,11 +1194,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     }
     
     @java.lang.SuppressWarnings("all")
-    public void setUnallocatedLocation(final Boolean unallocatedLocation) {
-        this.unallocatedLocation = unallocatedLocation;
-    }
-    
-    @java.lang.SuppressWarnings("all")
     public void setDefaultCurrency(final Long defaultCurrency) {
         this.defaultCurrency = defaultCurrency;
     }
@@ -1487,7 +1476,7 @@ public class ReportsFilterPickerForm extends ActionForm {
     public Long[] getSelectedConcensionalityLevel() {
         return selectedConcensionalityLevel;
     }
-
+    
     public void setSelectedConcensionalityLevel(Long[] selectedConcensionalityLevel) {
         this.selectedConcensionalityLevel = selectedConcensionalityLevel;
     }

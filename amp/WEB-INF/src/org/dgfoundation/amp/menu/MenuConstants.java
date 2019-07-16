@@ -57,7 +57,6 @@ public class MenuConstants {
     public static final String PARIS_INDICATOR  =  "Paris Indicator";
     public static final String PLEDGES_REPORTS = "Pledges Reports";
     public static final String GLOBAL_PARTNERSHIP_INDICATORS = "Global Partnership Indicators";
-    public static final String SAIKU = "Saiku";
     public static final String RESOURCES = "Resources";
     public static final String VIEW_RESOIRCES = "View Resources";
     public static final String CALENDAR = "Calendar";

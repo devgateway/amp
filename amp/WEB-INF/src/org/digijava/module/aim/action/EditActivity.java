@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.action;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -14,11 +15,9 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ARUtil;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.LocalizableLabel;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
@@ -32,7 +31,6 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
@@ -60,10 +58,10 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpContactsWorker;
 import org.digijava.module.aim.helper.BudgetStructure;
@@ -97,7 +95,6 @@ import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -108,9 +105,7 @@ import org.digijava.module.budget.helper.BudgetDbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.helper.DocumentData;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
@@ -119,7 +114,6 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
-import javax.jcr.Node;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -270,8 +264,6 @@ public class EditActivity extends Action {
                         String strDateUpdated = request.getParameter("simulateUpdateDate");
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                         Date dateUpdated = format.parse(strDateUpdated);
-                        activity.setUpdatedDate(dateUpdated);
-                        activity.setModifiedDate(dateUpdated);
                         if (tm != null && tm.getMemberId() != null) {
                             AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberCached(tm.getMemberId());
                             activity.setModifiedBy(teamMember);
@@ -743,7 +735,7 @@ public class EditActivity extends Action {
         /* END - Clearing session information about comments */
 
         // load the activity details
-        String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
+        ApprovalStatus actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
         
         //eaForm.setApprovalStatus(actApprovalStatus);
         if (tm != null && tm.getTeamId()!=null && activity.getTeam() != null && activity.getTeam().getAmpTeamId() != null) {
@@ -755,13 +747,13 @@ public class EditActivity extends Action {
               AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberCached(tm.getMemberId());
               eaForm.getIdentification().setApprovedBy(teamMember);
               eaForm.getIdentification().setApprovalDate(new Date());
-              //eaForm.getIdentification().setApprovalStatus(Constants.APPROVED_STATUS);
-              eaForm.getIdentification().setApprovalStatus(actApprovalStatus);
+              //eaForm.getIdentification().setApprovalStatus(ApprovalStatus.APPROVED);
+              eaForm.getIdentification().setApprovalStatus(actApprovalStatus.getDbName());
               }
 
             else{
-              //eaForm.setApprovalStatus(Constants.STARTED_STATUS);//actApprovalStatus);
-                eaForm.getIdentification().setApprovalStatus(Constants.EDITED_STATUS);
+              //eaForm.setApprovalStatus(ApprovalStatus.STARTED);//actApprovalStatus);
+                eaForm.getIdentification().setApprovalStatus(ApprovalStatus.EDITED.getDbName());
             }
         }
         
@@ -920,7 +912,7 @@ public class EditActivity extends Action {
 
           if (activity.getCrisNumber() != null)
               eaForm.getIdentification().setCrisNumber(activity.getCrisNumber().trim());
-
+    
 
           if (activity.getDescription() != null)
             eaForm.getIdentification().setDescription(activity.getDescription().trim());
@@ -955,7 +947,10 @@ public class EditActivity extends Action {
         eaForm.getIdentification().setActivitySummary(activity.getActivitySummary());
 
         eaForm.getIdentification().setConditionality(activity.getConditionality());
-
+    
+        if (StringUtils.isNotBlank(activity.getIatiIdentifier())) {
+            eaForm.getIdentification().setIatiIdentifier(activity.getIatiIdentifier());
+        }
 
         eaForm.getIdentification().setProjectManagement(activity.getProjectManagement());
 
@@ -987,10 +982,10 @@ public class EditActivity extends Action {
                                     trim());
           }
           eaForm.getIdentification().setAmpId(activity.getAmpId());
-
+          
            if (activity.getStatusReason() != null)
               eaForm.getIdentification().setStatusReason(activity.getStatusReason());
-
+    
             List gpiSurveys = new ArrayList();
             if (activity.getGpiSurvey() != null) {
                 eaForm.setGpiSurvey(activity.getGpiSurvey());
@@ -1619,13 +1614,13 @@ public class EditActivity extends Action {
             //there is another simple way to write these "if"s, but it is more clear like this
             eaForm.setButtonText("edit");
             if(activity!=null && activity.getDraft()!=null && !activity.getDraft())
-                if("Off".toLowerCase().compareTo(globalProjectsValidation.toLowerCase())==0){
+                if (Constants.PROJECT_VALIDATION_OFF.equalsIgnoreCase(globalProjectsValidation.toLowerCase())) {
                     //global validation off
                     eaForm.setButtonText("edit");
                 } else {
                     //global validation is on
                     //only the team leader of the team that owns the activity has rights to validate it if cross team validation is off
-                    if (ActivityUtil.canValidateAcitivty(activity, teamMember)) {
+                    if (ActivityUtil.canValidateActivity(activity, teamMember)) {
                         eaForm.setButtonText("validate");
                     }
                 }
@@ -1739,7 +1734,6 @@ public class EditActivity extends Action {
       for(AmpStructure struc:structures)
       {
           AmpStructure z = (AmpStructure) struc.clone();
-          z.setActivities(new HashSet(z.getActivities()));
           z.setImages(new HashSet(struc.getImages()));
           /*z.setActivities(new HashSet(struc.getActivities()));
           z.setAmpStructureId(struc.getAmpStructureId());
@@ -1955,7 +1949,7 @@ public class EditActivity extends Action {
 
                 java.sql.Date dt = new java.sql.Date(ampCompFund.getTransactionDate().getTime());
 
-                double frmExRt = ampCompFund.getExchangeRate() != null ? ampCompFund.getExchangeRate() : Util.getExchange(ampCompFund.getCurrency().getCurrencyCode(), dt);
+                double frmExRt = Util.getExchange(ampCompFund.getCurrency().getCurrencyCode(), dt);
                 double toExRt = Util.getExchange(toCurrCode, dt);
                 DecimalWraper amt = CurrencyWorker.convertWrapper(ampCompFund.getTransactionAmount(), frmExRt, toExRt, dt);
 

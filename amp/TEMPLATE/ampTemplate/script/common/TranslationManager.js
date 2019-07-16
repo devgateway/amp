@@ -102,7 +102,10 @@ TranslationManager.getTranslated = function (text) {
     initializeGlobalTranslationsCache();
     var translationFromCache = lookForTranslationByKey(prefix + text);
     if (translationFromCache !== null) {
-        return translationFromCache;
+		text = prefix + text;
+		var ret = {};
+		ret[text] = translationFromCache;
+		return ret;
     } else {
         var textObject = {};
         var key = prefix + text;

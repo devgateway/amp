@@ -48,7 +48,7 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 
 	//TODO: move to CommonFilterUtils.js and merge with the same function on Saiku.
 	FilterUtils.extractFilters = function(filtersFromWidgetWithNames) {
-		if(app.TabsApp.filters == undefined){
+		if(app.TabsApp.filters === undefined){
 			app.TabsApp.filters = new Filters();
 		}
 		
@@ -66,25 +66,19 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 					_.each(auxProperty.serializedToModels, function(item, i) {
 						var content = [];
 						if (item.length > 0) {
-							var names = [];
-							_.each(item, function(item2) {
-								names.push(item2.name);
-							});
-							var translatedNames = TranslationManager.getTranslated(names);
 							_.each(item, function(item2, j) {
 								// Items.
-								content.push({id: 0, name: item2.name, trnName: translatedNames[j]});
+								content.push({id: 0, name: item2.name, trnName: item2.name});
 							});
 							// Group title.
-							var name = TranslationManager.getTranslated(item[0].levelName.replace(/-/g, " ")) ||
-								item[0].levelName.replace(/-/g, " ");
+							var name = TranslationManager.getTranslated(item[0].levelName.replace(/-/g, " "));
 							var filter = new Filter({
 								trnName : name,
 								name: item.filterId,
 								values : content
 							});
 							// Item.
-							filter.get('values').push({id: 0, name: item.name, trnName: translatedNames[i]});
+							//filter.get('values').push({id: 0, name: item.name, trnName: translatedNames});
 							app.TabsApp.filters.add(filter);
 						}
 					});		

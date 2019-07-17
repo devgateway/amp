@@ -101,11 +101,8 @@ TranslationManager.searchAndTranslate = function() {
 TranslationManager.getTranslated = function (text) {
     initializeGlobalTranslationsCache();
     var translationFromCache = lookForTranslationByKey(prefix + text);
-    if (translationFromCache !== null) {
-		text = prefix + text;
-		var ret = {};
-		ret[text] = translationFromCache;
-		return ret;
+    if (translationFromCache !== null && translationFromCache !== '') {
+        return translationFromCache;
     } else {
         var textObject = {};
         var key = prefix + text;

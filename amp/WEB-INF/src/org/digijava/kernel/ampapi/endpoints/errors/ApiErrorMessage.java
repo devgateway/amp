@@ -46,7 +46,19 @@ public class ApiErrorMessage {
     public ApiErrorMessage(Integer id, String description, String prefix) {
         this(id, description, prefix, null, false);
     }
-
+    
+    public Integer getId() {
+        return id;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
+    
+    public Set<String> getValues() {
+        return values;
+    }
+    
     /**
      * Defines an ApiErrorMessahe
      * @param id see {@link #id id}

@@ -3,20 +3,43 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import static java.util.Collections.emptyMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.emptyIterable;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.collection.IsMapContaining.hasValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
+import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
+import org.digijava.kernel.persistence.InMemoryTeamManager;
+import org.digijava.kernel.persistence.InMemoryTeamMemberManager;
+import org.digijava.kernel.persistence.InMemoryUserManager;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
+import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -27,9 +50,33 @@ public class ActivityImporterTest {
 
     @Rule
     public AMPRequestRule ampRequestRule = new AMPRequestRule();
-
+    
+    private TestTranslatorService translatorService;
+    private FMService fmService;
+    private TeamMemberService tmService;
+    private FieldsEnumerator enumerator;
+    
+    private InMemoryUserManager userManager;
+    private InMemoryTeamManager teamManager;
+    private InMemoryTeamMemberManager teamMemberManager;
+    
+    @Before
+    public void setUp() {
+        userManager = new InMemoryUserManager();
+        teamManager = new InMemoryTeamManager();
+        teamMemberManager = new InMemoryTeamMemberManager();
+        userManager.init();
+        teamManager.init();
+        teamMemberManager.init(userManager, teamManager);
+        
+        translatorService = new TestTranslatorService();
+        fmService = new TestFMService();
+        tmService = new TestTeamMemberService(teamMemberManager);
+        enumerator = new FieldsEnumerator(new TestFieldInfoProvider(), fmService, translatorService, program -> false);
+    }
+    
     @Test
-    public void testValidationReportUnknownField() throws Exception {
+    public void testValidationReportUnknownField() {
         Map<String, Object> json = new HashMap<>();
         json.put("foo", "bar");
 
@@ -40,7 +87,7 @@ public class ActivityImporterTest {
     }
 
     @Test
-    public void testValidationIgnoreUnknownFieldInAmpOffline() throws Exception {
+    public void testValidationIgnoreUnknownFieldInAmpOffline() {
         try {
             AmpClientModeHolder.setClientMode(ClientMode.AMP_OFFLINE);
 
@@ -54,11 +101,113 @@ public class ActivityImporterTest {
             AmpClientModeHolder.setClientMode(null);
         }
     }
-
+    
+    @Test
+    public void testInsertActivityImporterAddNotAllowed() {
+        Map<String, Object> json = new HashMap<>();
+    
+        TestTeamMemberContext tmContext = getTeamMemberContext(false, false);
+        TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_USER, tmContext.getUser());
+        TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER, tmContext.getTeamMember());
+    
+        APIField activityField = enumerator.getMetaModel(AmpActivityFields.class);
+        ActivityImporter importer = new ActivityImporter(activityField, new ActivityImportRules(true, false,                false));
+        importer.setActivityService(new TestActivityService(false, tmContext));
+        importer.setFmService(fmService);
+        importer.setTeamMemberService(tmService);
+        
+        importer.importOrUpdate(json, false, "/activity", "");
+        
+        Assert.assertThat(importer.errors,
+                hasValue(error(SecurityErrors.NOT_ALLOWED, ActivityErrors.ADD_ACTIVITY_NOT_ALLOWED)));
+    }
+    
+    @Test
+    public void testUpdateActivityImporterEditNotAllowed() {
+        Map<String, Object> json = new HashMap<>();
+        
+        TestTeamMemberContext tmContext = getTeamMemberContext(true, false);
+        TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_USER, tmContext.getUser());
+        TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER, tmContext.getTeamMember());
+        
+        APIField activityField = enumerator.getMetaModel(AmpActivityFields.class);
+        ActivityImporter importer = new ActivityImporter(activityField, new ActivityImportRules(true, false,                false));
+        importer.setActivityService(new TestActivityService(false, tmContext));
+        importer.setFmService(fmService);
+        importer.setTeamMemberService(tmService);
+        
+        importer.importOrUpdate(json, true, "/activity", "");
+        
+        Assert.assertThat(importer.errors,
+                hasValue(error(SecurityErrors.NOT_ALLOWED, ActivityErrors.EDIT_ACTIVITY_NOT_ALLOWED)));
+    }
+    
+    @Test
+    public void testUpdateActivityImporterWrongModifiedBy() {
+        Map<String, Object> json = new HashMap<>();
+        json.put(ActivityEPConstants.MODIFIED_BY_FIELD_NAME, 2L);
+        
+        TestTeamMemberContext tmContext = getTeamMemberContext(true, false);
+        TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_USER, tmContext.getUser());
+        TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER, tmContext.getTeamMember());
+        
+        APIField activityField = enumerator.getMetaModel(AmpActivityFields.class);
+        ActivityImporter importer = new ActivityImporter(activityField, new ActivityImportRules(true, false,                true));
+        importer.setActivityService(new TestActivityService(false, tmContext));
+        importer.setFmService(fmService);
+        importer.setTeamMemberService(tmService);
+        
+        importer.importOrUpdate(json, true, "/activity", "");
+        
+        Assert.assertThat(importer.errors,
+                hasValue(error(SecurityErrors.INVALID_TEAM, ActivityErrors.INVALID_MODIFY_BY_FIELD)));
+    }
+    
+    @Test
+    public void testUpdateActivityImporterStale() {
+        Map<String, Object> json = new HashMap<>();
+        json.put(ActivityEPConstants.MODIFIED_BY_FIELD_NAME, 1L);
+        
+        TestTeamMemberContext tmContext = getTeamMemberContext(true, false);
+        TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_USER, tmContext.getUser());
+        TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER, tmContext.getTeamMember());
+        
+        APIField activityField = enumerator.getMetaModel(AmpActivityFields.class);
+        ActivityImporter importer = new ActivityImporter(activityField, new ActivityImportRules(true, false,                true));
+        importer.setActivityService(new TestActivityService(true, tmContext));
+        importer.setFmService(fmService);
+        importer.setTeamMemberService(tmService);
+        
+        importer.importOrUpdate(json, true, "/activity", "");
+        
+        Assert.assertThat(importer.errors,
+                hasValue(error(ActivityErrors.ACTIVITY_IS_STALE, ActivityErrors.ACTIVITY_NOT_LAST_VERSION)));
+    }
+    
+    @Test
+    public void testUpdateActivityImporter() {
+        Map<String, Object> json = new HashMap<>();
+        json.put(ActivityEPConstants.MODIFIED_BY_FIELD_NAME, 1L);
+        
+        TestTeamMemberContext tmContext = getTeamMemberContext(true, true);
+        TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_USER, tmContext.getUser());
+        TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER, tmContext.getTeamMember());
+        
+        APIField activityField = enumerator.getMetaModel(AmpActivityFields.class);
+        ActivityImporter importer = new ActivityImporter(activityField, new ActivityImportRules(true, false,                true));
+        importer.setActivityService(new TestActivityService(false, tmContext));
+        importer.setFmService(fmService);
+        importer.setTeamMemberService(tmService);
+        
+        importer.importOrUpdate(json, true, "/activity", "");
+        
+        Assert.assertThat(importer.errors.size(), Matchers.is(0));
+    }
+    
     private Map<Integer, ApiErrorMessage> validate(Map<String, Object> json) {
         return validateAndRetrieveImporter(json).getErrors();
     }
-
+    
     private ActivityImporter validateAndRetrieveImporter(Map<String, Object> json) {
         AmpActivityVersion activity = new AmpActivityVersion();
         activity.setApprovalStatus(ApprovalStatus.STARTED);
@@ -68,12 +217,28 @@ public class ActivityImporterTest {
         importer.validateAndImport(activity, json, true);
         return importer;
     }
-
-    private Map<Integer, ApiErrorMessage> errors(ApiErrorMessage... messages) {
-        Map<Integer, ApiErrorMessage> errors = new HashMap<>();
-        for (ApiErrorMessage message : messages) {
-            errors.put(message.id, message);
-        }
-        return errors;
+    
+    private Matcher<ApiErrorMessage> error(ApiErrorMessage errorMessage) {
+        return allOf(hasProperty("id", Matchers.is(errorMessage.id)),
+                hasProperty("description", Matchers.is(errorMessage.description)));
+    }
+    
+    private Matcher<ApiErrorMessage> error(ApiErrorMessage errorMessage, String detailMessage) {
+        return allOf(
+                hasProperty("id", Matchers.is(errorMessage.id)),
+                hasProperty("description", Matchers.is(errorMessage.description)),
+                hasProperty("values", contains(detailMessage))
+        );
+    }
+    
+    @NotNull
+    public TestTeamMemberContext getTeamMemberContext(boolean addActivity, boolean editActivity) {
+        User user = userManager.getUser(InMemoryUserManager.TEST_USER_NAME);
+        AmpTeam team = teamManager.getTeam(InMemoryTeamManager.TEST_TEAM_NAME);
+        AmpTeamMember atm = teamMemberManager.getTeamMember(InMemoryTeamMemberManager.TEST_TEAM_MEMBER_ID);
+        TeamMember teamMember = new TeamMember(user);
+        teamMember.setTeamId(team.getAmpTeamId());
+        
+        return new TestTeamMemberContext(addActivity, editActivity, user, team, atm, teamMember);
     }
 }

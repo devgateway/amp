@@ -24,23 +24,24 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.dgfoundation.amp.onepager.util.SaveContext;
+import org.digijava.kernel.ampapi.endpoints.AMPTeamMemberService;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.ActivityErrorsMapper;
-import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceService;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
+import org.digijava.kernel.ampapi.exception.ActivityLockNotGrantedException;
+import org.digijava.kernel.ampapi.exception.ImportFailedException;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -74,6 +75,7 @@ import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.editor.dbentity.Editor;
+import org.hibernate.Session;
 import org.hibernate.StaleStateException;
 
 /**
@@ -104,6 +106,9 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     private AmpTeamMember modifiedBy;
     private String sourceURL;
     private String endpointContextPath;
+    private FMService fmService;
+    private ActivityService activityService;
+    private TeamMemberService teamMemberService;
 
     private ResourceService resourceService = new ResourceService();
 
@@ -114,16 +119,20 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         setJsonErrorMapper(new ActivityErrorsMapper());
         this.rules = rules;
         this.saveContext = SaveContext.api(!rules.isProcessApprovalFields());
+        this.activityService = new AMPActivityService();
+        this.fmService = new AMPFMService();
+        this.teamMemberService = new AMPTeamMemberService();
     }
 
-    private void init(Map<String, Object> newJson, boolean update, String endpointContextPath) {
-        this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
+    private void init(Map<String, Object> newJson, boolean update, String endpointContextPath, String sourceURL) {
+        this.sourceURL = sourceURL;
         this.update = update;
         this.currentUser = TeamUtil.getCurrentUser();
         if (rules.isTrackEditors()) {
-            modifiedBy = TeamMemberUtil.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson));
+            modifiedBy = teamMemberService.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson));
         } else {
-            modifiedBy = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+            TeamMember currentTeamMember = TeamUtil.getCurrentMember();
+            modifiedBy = teamMemberService.getAmpTeamMember(currentTeamMember.getMemberId());
             Long mId = modifiedBy == null ? null : modifiedBy.getAmpTeamMemId();
             newJson.put(FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY), mId);
             newJson.remove(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY));
@@ -134,7 +143,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             newJson.remove(FieldMap.underscorify(ActivityFieldsConstants.APPROVAL_STATUS));
         }
         this.newJson = newJson;
-        this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH);
+        this.isDraftFMEnabled = fmService.isVisible(SAVE_AS_DRAFT_PATH);
         this.endpointContextPath = endpointContextPath;
         initRequestedSaveMode();
     }
@@ -146,77 +155,92 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
      * @param update  flags whether this is an import or an update request
      * @return ActivityImporter instance
      */
-    public ActivityImporter importOrUpdate(Map<String, Object> newJson, boolean update, String endpointContextPath) {
-        init(newJson, update, endpointContextPath);
+    public ActivityImporter importOrUpdate(Map<String, Object> newJson, boolean update, String endpointContextPath,
+                                           String sourceURL) {
+        init(newJson, update, endpointContextPath, sourceURL);
 
         // get existing activity if this is an update request
-        Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
-        boolean oldActivityDraft = false;
+        Long activityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
 
         if (modifiedBy == null) {
-            addError(SecurityErrors.INVALID_TEAM.withDetails("Invalid team member in modified_by field."));
+            addError(SecurityErrors.INVALID_TEAM.withDetails(ActivityErrors.INVALID_MODIFY_BY_FIELD));
             return this;
         }
 
         Long activityGroupVersion = AIHelper.getActivityGroupVersionOrNull(newJson);
-        if (ActivityUtil.isActivityStale(ampActivityId, activityGroupVersion)) {
-            addError(ActivityErrors.ACTIVITY_IS_STALE.withDetails("Activity is not the latest version."));
+        if (activityService.isActivityStale(activityId, activityGroupVersion)) {
+            addError(ActivityErrors.ACTIVITY_IS_STALE.withDetails(ActivityErrors.ACTIVITY_NOT_LAST_VERSION));
             return this;
         }
 
-        checkPermissions(update, ampActivityId, modifiedBy);
+        checkPermissions(update, activityId, modifiedBy);
 
         if (!errors.isEmpty()) {
             return this;
         }
 
         // check if any error were already detected in upper layers
-        Map<Integer, ApiErrorMessage> existingErrors = (TreeMap<Integer, ApiErrorMessage>) newJson.get(ActivityEPConstants.INVALID);
+        Map<Integer, ApiErrorMessage> existingErrors = (TreeMap<Integer, ApiErrorMessage>)
+                newJson.get(ActivityEPConstants.INVALID);
 
         if (existingErrors != null && existingErrors.size() > 0) {
             errors.putAll(existingErrors);
         }
 
-        if (ampActivityId != null) {
-            try {
-                oldActivity = loadActivity(ampActivityId);
-            } catch (DgException e) {
-                logger.error(e.getMessage());
-                errors.put(ActivityErrors.ACTIVITY_NOT_LOADED.id, ActivityErrors.ACTIVITY_NOT_LOADED);
-            }
-        }
-
-        sanityChecks();
-
-        String activityId = ampActivityId == null ? null : ampActivityId.toString();
-        String key = null;
-
-        Long currentVersion = null;
-
         try {
-            // initialize new activity
-            InterchangeUtils.getSessionWithPendingChanges();
+            activityService.doWithLock(activityId, modifiedBy.getAmpTeamMemId(),
+                    () -> importOrUpdateActivity(activityId));
+        } catch (Throwable e) {
+            // error is not always logged at source; better duplicate it than have none
+            logger.error("Import failed", e);
+            if (e instanceof ActivityLockNotGrantedException) {
+                logger.error("Cannot aquire lock during IATI update for activity " + activityId);
+                Long userId = ((ActivityLockNotGrantedException) e).getUserId();
+                String memberName = TeamMemberUtil.getTeamMember(userId).getMemberName();
+                errors.put(ActivityErrors.ACTIVITY_IS_BEING_EDITED.id,
+                        ActivityErrors.ACTIVITY_IS_BEING_EDITED.withDetails(memberName));
+            } else if (e instanceof StaleStateException) {
+                throw new RuntimeException("Activity updated in meantime without using gatekeeper.", e);
+            } else if (errors.isEmpty()) {
+                throw new RuntimeException(e);
+            } else if (!(e instanceof ImportFailedException)) {
+                addError(new ApiExceptionMapper().getApiErrorMessageFromException(e));
+            }
+        } finally {
+            ActivityValidationContext.set(null);
+        }
+    
+        updateResponse(update);
 
-            if (oldActivity != null) {
-                currentVersion = oldActivity.getAmpActivityGroup().getVersion();
-                oldActivityDraft = oldActivity.getDraft();
-
-                key = ActivityGatekeeper.lockActivity(activityId, modifiedBy.getAmpTeamMemId());
-
-                if (key == null) { //lock not acquired
-                    logger.error("Cannot aquire lock during IATI update for activity " + activityId);
-                    Long editingUserId = ActivityGatekeeper.getUserEditing(activityId);
-                    String memberName = TeamMemberUtil.getTeamMember(editingUserId).getMemberName();
-                    errors.put(ActivityErrors.ACTIVITY_IS_BEING_EDITED.id,
-                            ActivityErrors.ACTIVITY_IS_BEING_EDITED.withDetails(memberName));
+        return this;
+    }
+    
+    /**
+     * Import or updates activity.
+     * @param activityId
+     */
+    private void importOrUpdateActivity(Long activityId) {
+        boolean oldActivityDraft = false;
+        try {
+            if (activityId != null) {
+                try {
+                    oldActivity = loadActivity(activityId);
+                } catch (DgException e) {
+                    logger.error(e.getMessage());
+                    errors.put(ActivityErrors.ACTIVITY_NOT_LOADED.id, ActivityErrors.ACTIVITY_NOT_LOADED);
                 }
-
+            }
+    
+            sanityChecks();
+            
+            if (oldActivity != null) {
+                oldActivityDraft = oldActivity.getDraft();
+            
                 newActivity = oldActivity;
                 oldActivity = ActivityVersionUtil.cloneActivity(oldActivity);
                 oldActivity.setAmpId(newActivity.getAmpId());
                 oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
-
-                PersistenceManager.getSession().evict(newActivity.getAmpActivityGroup());
+            
                 newActivity.getAmpActivityGroup().setVersion(-1L);
                 // TODO AMP-28993: remove explicitly resetting createdBy since it is cleared during init
                 if (!rules.isTrackEditors()) {
@@ -235,46 +259,26 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             } else if (!update) {
                 newActivity = new AmpActivityVersion();
             }
-
+        
             validateAndImport(newActivity, newJson);
+            
             if (errors.isEmpty()) {
                 prepareToSave();
                 boolean draftChange = ActivityUtil.detectDraftChange(newActivity, oldActivityDraft);
+                Session session = PersistenceManager.getSession();
                 newActivity = ActivityUtil.saveActivityNewVersion(newActivity, getTranslations(), modifiedBy,
                         Boolean.TRUE.equals(newActivity.getDraft()), draftChange,
-                        PersistenceManager.getSession(), saveContext, getEditorStore(), getSite());
-
+                        session, saveContext, getEditorStore(), getSite());
+            
                 postProcess();
-            } else {
-                // undo any pending changes
-                PersistenceManager.getSession().clear();
             }
-
-            updateResponse(update);
-
-            PersistenceManager.flushAndCommit(PersistenceManager.getSession());
-        } catch (Throwable e) {
-            // error is not always logged at source; better duplicate it than have none
-            logger.error("Import failed", e);
-            PersistenceManager.rollbackCurrentSessionTx();
-
-            if (e instanceof StaleStateException) {
-                String details = "Latest version is " + currentVersion;
-                ApiErrorMessage error = ActivityErrors.ACTIVITY_IS_STALE.withDetails(details);
-                errors.put(error.id, error);
-            } else if (errors.isEmpty()) {
-                throw new RuntimeException(e);
-            } else {
-                ApiExceptionMapper aem = new ApiExceptionMapper();
-                ApiErrorMessage apiErrorMessageFromException = aem.getApiErrorMessageFromException(e);
-                errors.put(apiErrorMessageFromException.id, apiErrorMessageFromException);
-            }
-        } finally {
-            ActivityGatekeeper.unlockActivity(activityId, key);
-            ActivityValidationContext.set(null);
+        } catch (Exception e) {
+            addError(new ApiExceptionMapper().getApiErrorMessageFromException(e));
         }
-
-        return this;
+        
+        if (!errors.isEmpty()) {
+            throw new ImportFailedException("Trigger rollback");
+        }
     }
 
     /**
@@ -336,29 +340,29 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     public AmpTeamMember getModifiedBy() {
         return modifiedBy;
     }
-
+    
     /**
      * Check if specified team member can add/edit the activity in question.
      *
      * @param update true for edit, false for add
      * @param ampActivityId activity id to check, used only for edit case
-     * @param teamMember team member to check
+     * @param ampTeamMember amp team member to check
      *
      */
-    private void checkPermissions(boolean update, Long ampActivityId, AmpTeamMember teamMember) {
+    private void checkPermissions(boolean update, Long ampActivityId, AmpTeamMember ampTeamMember) {
         if (update) {
-            checkEditPermissions(teamMember, ampActivityId);
+            checkEditPermissions(ampTeamMember, ampActivityId);
         } else {
-            checkAddPermissions(teamMember);
+            checkAddPermissions(ampTeamMember);
         }
     }
 
     /**
      * Check if team member can add activities.
      */
-    private void checkAddPermissions(AmpTeamMember teamMember) {
-        if (!ActivityInterchangeUtils.addActivityAllowed(new TeamMember(teamMember))) {
-            addError(SecurityErrors.NOT_ALLOWED.withDetails("Adding activity is not allowed"));
+    private void checkAddPermissions(AmpTeamMember ampTeamMember) {
+        if (!activityService.addActivityAllowed(ampTeamMember)) {
+            addError(SecurityErrors.NOT_ALLOWED.withDetails(ActivityErrors.ADD_ACTIVITY_NOT_ALLOWED));
         }
     }
 
@@ -366,8 +370,8 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
      * Check if team member can edit the activity.
      */
     private void checkEditPermissions(AmpTeamMember ampTeamMember, Long activityId) {
-        if (!ActivityInterchangeUtils.isEditableActivity(new TeamMember(ampTeamMember), activityId)) {
-            addError(SecurityErrors.NOT_ALLOWED.withDetails("No right to edit this activity"));
+        if (!activityService.isEditableActivity(ampTeamMember, activityId)) {
+            addError(SecurityErrors.NOT_ALLOWED.withDetails(ActivityErrors.EDIT_ACTIVITY_NOT_ALLOWED));
         }
     }
 
@@ -639,7 +643,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
      * Updates Proposed Project Cost amount depending on configuration (annual budget)
      */
     protected void updatePPCAmount() {
-        boolean isAnnualBudget = FMVisibility.isVisible(
+        boolean isAnnualBudget = fmService.isVisible(
                 "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost");
 
         if (isAnnualBudget && newActivity.getAnnualProjectBudgets() != null) {
@@ -659,7 +663,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
      */
 
     protected void updateRoleFundings() {
-        boolean isSourceRoleEnalbed = FMVisibility.isVisible(
+        boolean isSourceRoleEnalbed = fmService.isVisible(
                 "/Activity Form/Funding/Funding Group/Funding Item/Source Role");
 
         if (!isSourceRoleEnalbed) {
@@ -743,7 +747,19 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     public ResourceService getResourceService() {
         return this.resourceService;
     }
-
+    
+    public void setActivityService(ActivityService activityService) {
+        this.activityService = activityService;
+    }
+    
+    public void setFmService(FMService fmService) {
+        this.fmService = fmService;
+    }
+    
+    public void setTeamMemberService(TeamMemberService teamMemberService) {
+        this.teamMemberService = teamMemberService;
+    }
+    
     @Override
     public ActivitySummary getImportResult() {
         if (newActivity != null && newActivity.getAmpActivityId() != null) {

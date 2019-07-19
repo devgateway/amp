@@ -106,7 +106,8 @@ public class RequiredValidatorTest {
     private static APIField multilingualEditorField;
     private static APIField ctField;
     private static APIField multilingualCtField;
-    private static APIField multilingualField;
+    private static APIField mtField;
+    private static APIField multilingualMtField;
 
     private static final ImmutableSet<String> ALL_FM_PATHS =
             ImmutableSet.of("title", "editor", "contentTranslation", "toggle", "number", "bars", "bar",
@@ -129,7 +130,8 @@ public class RequiredValidatorTest {
         multilingualEditorField = getApiField(true, "editor");
         ctField = getApiField(false, "contentTranslation");
         multilingualCtField = getApiField(true, "contentTranslation");
-        multilingualField = getApiField(true, "multilingualTranslation");
+        mtField = getApiField(false, "multilingualTranslation");
+        multilingualMtField = getApiField(true, "multilingualTranslation");
     }
 
     private static APIField getApiField(boolean multilingual, String fmPath) {
@@ -464,7 +466,7 @@ public class RequiredValidatorTest {
         Foo foo = new Foo();
         foo.id = 143L;
 
-        Set<ConstraintViolation> violations = getConstraintViolations(multilingualCtField, foo);
+            Set<ConstraintViolation> violations = getConstraintViolations(multilingualCtField, foo);
 
         assertThat(violations, contains(violation("content_translation")));
     }
@@ -546,47 +548,86 @@ public class RequiredValidatorTest {
     }
     
     @Test
-    public void test_ml_blankValue() {
+    public void test_multilingualTranslation_null() {
         Foo foo = new Foo();
-        foo.multilingualTranslation = new MultilingualContent(" ", getMultilingualTranslationSettings());
-    
-        Set<ConstraintViolation> violations = getConstraintViolations(multilingualField, foo);
+        
+        Set<ConstraintViolation> violations = getConstraintViolations(mtField, foo);
         
         assertThat(violations, contains(violation("multilingual_translation")));
     }
     
     @Test
-    public void test_ml_validValue() {
+    public void test_multilingualTranslation_empty() {
         Foo foo = new Foo();
-        foo.multilingualTranslation = new MultilingualContent("title", getMultilingualTranslationSettings());
+        foo.multilingualTranslation = new MultilingualContent("");
         
-        Set<ConstraintViolation> violations = getConstraintViolations(multilingualField, foo);
+        Set<ConstraintViolation> violations = getConstraintViolations(mtField, foo);
+        
+        assertThat(violations, contains(violation("multilingual_translation")));
+    }
+    
+    @Test
+    public void test_multilingualTranslation_blank() {
+        Foo foo = new Foo();
+        foo.multilingualTranslation = new MultilingualContent(" ");
+        
+        Set<ConstraintViolation> violations = getConstraintViolations(mtField, foo);
+        
+        assertThat(violations, contains(violation("multilingual_translation")));
+    }
+    
+    @Test
+    public void test_multilingualTranslation_valid() {
+        Foo foo = new Foo();
+        foo.multilingualTranslation = new MultilingualContent("Foo Mt");
+        
+        Set<ConstraintViolation> violations = getConstraintViolations(mtField, foo);
         
         assertThat(violations, emptyIterable());
     }
     
     @Test
-    public void test_ml_invalidValue_lang() {
+    public void test_ml_multilingualTranslation_blankValue() {
+        Foo foo = new Foo();
+        foo.multilingualTranslation = new MultilingualContent(" ", getMultilingualTranslationSettings());
+    
+        Set<ConstraintViolation> violations = getConstraintViolations(multilingualMtField, foo);
+        
+        assertThat(violations, contains(violation("multilingual_translation")));
+    }
+    
+    @Test
+    public void test_ml_multilingualTranslation_validValue() {
+        Foo foo = new Foo();
+        foo.multilingualTranslation = new MultilingualContent("title", getMultilingualTranslationSettings());
+        
+        Set<ConstraintViolation> violations = getConstraintViolations(multilingualMtField, foo);
+        
+        assertThat(violations, emptyIterable());
+    }
+    
+    @Test
+    public void test_ml_multilingualTranslation_invalidValue_lang() {
         Map<String, String> translations = new HashMap<>();
         translations.put("fr", "text");
         
         Foo foo = new Foo();
         foo.multilingualTranslation = new MultilingualContent(translations, getMultilingualTranslationSettings());
         
-        Set<ConstraintViolation> violations = getConstraintViolations(multilingualField, foo);
+        Set<ConstraintViolation> violations = getConstraintViolations(multilingualMtField, foo);
         
         assertThat(violations, contains(violation("multilingual_translation")));
     }
     
     @Test
-    public void test_ml_validValue_lang() {
+    public void test_ml_multilingualTranslation_validValue_lang() {
         Map<String, String> translations = new HashMap<>();
         translations.put("en", "text");
         
         Foo foo = new Foo();
         foo.multilingualTranslation = new MultilingualContent(translations, getMultilingualTranslationSettings());
         
-        Set<ConstraintViolation> violations = getConstraintViolations(multilingualField, foo);
+        Set<ConstraintViolation> violations = getConstraintViolations(multilingualMtField, foo);
         
         assertThat(violations, emptyIterable());
     }

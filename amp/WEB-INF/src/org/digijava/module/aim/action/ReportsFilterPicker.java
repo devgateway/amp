@@ -319,6 +319,13 @@ public class ReportsFilterPicker extends Action {
             groupseparators.add(selectedgroupingseparator);
         }
 
+        /*
+        // FROM DEVELOP
+        addDateFilter("Actual Approval Date", "ActualApproval",
+                "Actual Approval Date", filterForm.getDynamicActualApprovalFilter(), "filter_actual_approval_date_div",
+                filterForm.getOtherCriteriaElements());
+         */
+
         groupseparators.add(".");
         groupseparators.add(",");
         //groupseparators.add(TranslatorWorker.translateText("CUSTOM",request));
@@ -645,7 +652,13 @@ public class ReportsFilterPicker extends Action {
         arf.setDynIssueFilterAmount(filterForm.getDynamicIssueFilter().getAmount());
         arf.setDynIssueFilterOperator(filterForm.getDynamicIssueFilter().getOperator());
         arf.setDynIssueFilterXPeriod(filterForm.getDynamicIssueFilter().getxPeriod());
-
+    
+        arf.setFromActualApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromActualApprovalDate()));
+        arf.setToActualApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToActualApprovalDate()));
+        arf.setDynActualApprovalFilterCurrentPeriod(filterForm.getDynamicActualApprovalFilter().getCurrentPeriod());
+        arf.setDynActualApprovalFilterAmount(filterForm.getDynamicActualApprovalFilter().getAmount());
+        arf.setDynActualApprovalFilterOperator(filterForm.getDynamicActualApprovalFilter().getOperator());
+        arf.setDynActualApprovalFilterXPeriod(filterForm.getDynamicActualApprovalFilter().getxPeriod());
         arf.setFromProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromProposedApprovalDate()));
         arf.setToProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToProposedApprovalDate()));
         arf.setDynProposedApprovalFilterCurrentPeriod(filterForm.getDynamicProposedApprovalFilter().getCurrentPeriod());

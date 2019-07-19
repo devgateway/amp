@@ -106,6 +106,9 @@ public class ReportsFilterPickerForm extends ActionForm {
     private String toIssueDate;
     private DynamicDateFilter dynamicActivityStartFilter = new DynamicDateFilter();
     private DynamicDateFilter dynamicIssueFilter = new DynamicDateFilter();
+    private DynamicDateFilter dynamicActualApprovalFilter = new DynamicDateFilter();
+    private String fromActualApprovalDate;
+    private String toActualApprovalDate;
     private String fromProposedApprovalDate;
     private String toProposedApprovalDate;
     private DynamicDateFilter dynamicProposedApprovalFilter = new DynamicDateFilter();
@@ -116,8 +119,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     private String toPledgeDetailStartDate;
     private String fromPledgeDetailEndDate;
     private String toPledgeDetailEndDate;
-    private String fromActualApprovalDate;
-    private String toActualApprovalDate;
     private String fromProposedCompletionDate;
     private String toProposedCompletionDate;
     private String fromActivityFinalContractingDate;
@@ -486,7 +487,7 @@ public class ReportsFilterPickerForm extends ActionForm {
     public DynamicDateFilter getDynamicActivityStartFilter() {
         return this.dynamicActivityStartFilter;
     }
-    
+
     @java.lang.SuppressWarnings("all")
     public String getFromProposedApprovalDate() {
         return this.fromProposedApprovalDate;
@@ -495,6 +496,10 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public String getToProposedApprovalDate() {
         return this.toProposedApprovalDate;
+    }
+    
+    public DynamicDateFilter getDynamicActualApprovalFilter() {
+        return this.dynamicActualApprovalFilter;
     }
     
     @java.lang.SuppressWarnings("all")

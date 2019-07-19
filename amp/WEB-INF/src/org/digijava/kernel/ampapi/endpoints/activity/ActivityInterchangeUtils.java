@@ -257,6 +257,9 @@ public final class ActivityInterchangeUtils {
 
     public static Map<String, Object> getActivityByAmpId(String ampId) {
         Long activityId = ActivityUtil.findActivityIdByAmpId(ampId);
+        if (activityId == null) {
+            ApiErrorResponseService.reportResourceNotFound(ActivityErrors.ACTIVITY_NOT_FOUND.withDetails(ampId));
+        }
         return getActivity(activityId);
     }
 
@@ -270,19 +273,17 @@ public final class ActivityInterchangeUtils {
         return getActivity(projectId, null);
     }
 
-    public static AmpActivityVersion loadActivity(Long projectId) {
-        AmpActivityVersion activity = null;
+    public static AmpActivityVersion loadActivity(Long actId) {
         try {
-            activity = ActivityUtil.loadActivity(projectId);
-            if (activity == null) {
-                //so far project will never be null since an exception will be thrown
-                //I leave the code prepared to throw the appropriate response code
-                ApiErrorResponseService.reportResourceNotFound(ActivityErrors.ACTIVITY_NOT_FOUND);
+            if (PersistenceManager.getSession().get(AmpActivityVersion.class, actId) == null) {
+                ApiErrorResponseService.reportResourceNotFound(
+                        ActivityErrors.ACTIVITY_NOT_FOUND.withDetails(actId.toString()));
             }
+            
+            return ActivityUtil.loadActivity(actId);
         } catch (DgException e) {
             throw new RuntimeException(e);
         }
-        return activity;
     }
 
     /**
@@ -293,6 +294,10 @@ public final class ActivityInterchangeUtils {
      * @return
      */
     public static Map<String, Object> getActivity(Long projectId, Map<String, Object> filter) {
+        if (PersistenceManager.getSession().get(AmpActivityVersion.class, projectId) == null) {
+            ApiErrorResponseService.reportResourceNotFound(
+                    ActivityErrors.ACTIVITY_NOT_FOUND.withDetails(projectId.toString()));
+        }
         return getActivity(loadActivity(projectId), filter);
     }
 

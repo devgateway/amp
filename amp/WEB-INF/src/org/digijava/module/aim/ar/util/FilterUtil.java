@@ -226,7 +226,13 @@ public class FilterUtil {
         form.getDynamicActivityFinalContractingFilter().setAmount(filter.getDynActivityFinalContractingFilterAmount());
         form.getDynamicActivityFinalContractingFilter().setOperator(filter.getDynActivityFinalContractingFilterOperator());
         form.getDynamicActivityFinalContractingFilter().setxPeriod(filter.getDynActivityFinalContractingFilterXPeriod());
-        
+    
+        form.setFromActualApprovalDate(convertArFilterToUiDate(filter.getFromActualApprovalDate()));
+        form.setToActualApprovalDate(convertArFilterToUiDate(filter.getToActualApprovalDate()));
+        form.getDynamicActualApprovalFilter().setCurrentPeriod(filter.getDynActualApprovalFilterCurrentPeriod());
+        form.getDynamicActualApprovalFilter().setAmount(filter.getDynActualApprovalFilterAmount());
+        form.getDynamicActualApprovalFilter().setOperator(filter.getDynActualApprovalFilterOperator());
+        form.getDynamicActualApprovalFilter().setxPeriod(filter.getDynActualApprovalFilterXPeriod());
         form.setToProposedApprovalDate(convertArFilterToUiDate(filter.getToProposedApprovalDate()));
         form.setFromProposedApprovalDate(convertArFilterToUiDate(filter.getFromProposedApprovalDate()));
         form.getDynamicProposedApprovalFilter().setCurrentPeriod(filter.getDynProposedApprovalFilterCurrentPeriod());

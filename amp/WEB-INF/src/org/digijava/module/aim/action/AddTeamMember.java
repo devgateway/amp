@@ -50,7 +50,7 @@ public class AddTeamMember extends Action {
         Collection<AmpTeamMemberRoles> roles=null;
         
         AmpTeam ampTeam = TeamUtil.getAmpTeam(upMemForm.getTeamId());
-        User user = DbUtil.getUser(upMemForm.getEmail());
+        User user = UserUtils.getUserByEmailAddress(upMemForm.getEmail());
 
         /* check if the user have entered an invalid user id */
         if (user == null) {

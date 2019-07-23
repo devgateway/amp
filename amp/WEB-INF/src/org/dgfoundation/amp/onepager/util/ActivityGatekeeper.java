@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.ampapi.exception.ActivityLockNotGrantedException;
-import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.PersistenceTransactionManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.ShaCrypt;
 import org.digijava.module.aim.helper.Constants;
@@ -158,9 +158,11 @@ public class ActivityGatekeeper {
      *
      * @param ampActivityId
      * @param ampTeamMemId
+     * @param ptm
      * @param runnable
      */
-    public static void doWithLock(Long ampActivityId, Long ampTeamMemId, Runnable runnable) {
+    public static void doWithLock(Long ampActivityId, Long ampTeamMemId, PersistenceTransactionManager ptm,
+                                  Runnable runnable) {
         String activityId = ampActivityId == null ? null : ampActivityId.toString();
         String key = null;
         try {
@@ -171,8 +173,7 @@ public class ActivityGatekeeper {
                     throw new ActivityLockNotGrantedException(editingUserId);
                 }
             }
-            
-            PersistenceManager.inTransaction(runnable);
+            ptm.inTransactionWithPendingChanges(runnable);
         } finally {
             if (key != null) {
                 ActivityGatekeeper.unlockActivity(activityId, key);

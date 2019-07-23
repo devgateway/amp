@@ -24,6 +24,7 @@ public class ActivityErrors {
     public static final ApiErrorMessage WRONG_PROGRAM_TYPE = new ApiErrorMessage(8, "Wrong config value for programs");
     public static final ApiErrorMessage UNIQUE_ACTIVITY_TITLE = new ApiErrorMessage(9, "Activity title should be unique");
     public static final ApiErrorMessage CANNOT_GET_PROPERTIES = new ApiErrorMessage(10, "Cannot get properties for type");
+    public static final ApiErrorMessage FIELD_ACTIVITY_ID_NULL = new ApiErrorMessage(11, "Activity id cannot be null");
     public static final ApiErrorMessage SAVE_AS_DRAFT_FM_DISABLED = new ApiErrorMessage(14, "Activity cannot be saved as draft, \"save as draft\" is disabled in FM!");
     public static final ApiErrorMessage TITLE_IN_DEFAULT_LANUGAGE_REQUIRED = new ApiErrorMessage(15, "Title in default language is required");
     public static final ApiErrorMessage UPDATE_ID_MISMATCH = new ApiErrorMessage(16, "Request project ids mismatch");

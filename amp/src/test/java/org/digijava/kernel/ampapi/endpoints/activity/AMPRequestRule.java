@@ -1,8 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -15,11 +12,6 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;

@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -24,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.dgfoundation.amp.onepager.util.SaveContext;
@@ -44,7 +44,8 @@ import org.digijava.kernel.ampapi.exception.ActivityLockNotGrantedException;
 import org.digijava.kernel.ampapi.exception.ImportFailedException;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.DBPersistenceTransactionManager;
+import org.digijava.kernel.persistence.PersistenceTransactionManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
@@ -66,7 +67,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.validator.ActivityValidationContext;
@@ -75,7 +75,6 @@ import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.editor.dbentity.Editor;
-import org.hibernate.Session;
 import org.hibernate.StaleStateException;
 
 /**
@@ -109,6 +108,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     private FMService fmService;
     private ActivityService activityService;
     private TeamMemberService teamMemberService;
+    private PersistenceTransactionManager persistenceTransactionManager;
 
     private ResourceService resourceService = new ResourceService();
 
@@ -122,6 +122,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         this.activityService = new AMPActivityService();
         this.fmService = new AMPFMService();
         this.teamMemberService = new AMPTeamMemberService();
+        this.persistenceTransactionManager = new DBPersistenceTransactionManager();
     }
 
     private void init(Map<String, Object> newJson, boolean update, String endpointContextPath, String sourceURL) {
@@ -161,6 +162,11 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
 
         // get existing activity if this is an update request
         Long activityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
+        
+        if (update && activityId == null) {
+            addError(ActivityErrors.FIELD_ACTIVITY_ID_NULL);
+            return this;
+        }
 
         if (modifiedBy == null) {
             addError(SecurityErrors.INVALID_TEAM.withDetails(ActivityErrors.INVALID_MODIFY_BY_FIELD));
@@ -174,7 +180,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         }
 
         checkPermissions(update, activityId, modifiedBy);
-
+        
         if (!errors.isEmpty()) {
             return this;
         }
@@ -188,7 +194,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         }
 
         try {
-            activityService.doWithLock(activityId, modifiedBy.getAmpTeamMemId(),
+            ActivityGatekeeper.doWithLock(activityId, modifiedBy.getAmpTeamMemId(), persistenceTransactionManager,
                     () -> importOrUpdateActivity(activityId));
         } catch (Throwable e) {
             // error is not always logged at source; better duplicate it than have none
@@ -259,18 +265,18 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             } else if (!update) {
                 newActivity = new AmpActivityVersion();
             }
-        
+    
             validateAndImport(newActivity, newJson);
             
             if (errors.isEmpty()) {
                 prepareToSave();
                 boolean draftChange = ActivityUtil.detectDraftChange(newActivity, oldActivityDraft);
-                Session session = PersistenceManager.getSession();
-                newActivity = ActivityUtil.saveActivityNewVersion(newActivity, getTranslations(), modifiedBy,
-                        Boolean.TRUE.equals(newActivity.getDraft()), draftChange,
-                        session, saveContext, getEditorStore(), getSite());
-            
-                postProcess();
+    
+                newActivity = activityService.saveActivity(newActivity, getTranslations(), modifiedBy, draftChange,
+                        saveContext, getEditorStore(), getSite());
+                
+                activityService.updateLuceneIndex(newActivity, oldActivity, update, trnSettings, getTranslations(),
+                        getSite());
             }
         } catch (Exception e) {
             addError(new ApiExceptionMapper().getApiErrorMessageFromException(e));
@@ -676,12 +682,6 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         }
     }
 
-    protected void postProcess() {
-        String rootPath = TLSUtils.getRequest().getServletContext().getRealPath("/");
-        Locale lang = Locale.forLanguageTag(trnSettings.getDefaultLangCode());
-        LuceneUtil.addUpdateActivity(rootPath, update, getSite(), lang, newActivity, oldActivity, getTranslations());
-    }
-
     /**
      * @return the newActivity
      */
@@ -758,6 +758,10 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     
     public void setTeamMemberService(TeamMemberService teamMemberService) {
         this.teamMemberService = teamMemberService;
+    }
+    
+    public void setPersistenceTransactionManager(PersistenceTransactionManager persistenceTransactionManager) {
+        this.persistenceTransactionManager = persistenceTransactionManager;
     }
     
     @Override

@@ -27,8 +27,7 @@ public class InputValidatorProcessor {
         return Arrays.asList(
                 new TreeCollectionValidator(),
                 new AgreementCodeValidator(),
-                new AgreementTitleValidator(),
-                new UUIDValidator());
+                new AgreementTitleValidator());
     }
 
     public static List<InputValidator> getContactFormatValidators() {

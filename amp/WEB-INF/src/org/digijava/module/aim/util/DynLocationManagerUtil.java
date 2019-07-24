@@ -776,7 +776,7 @@ public class DynLocationManagerUtil {
         }
      }
     
-    public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegionOfDefCountry()
+    public static Set<AmpCategoryValueLocations> getLocationsOfTypeAdmLevel1OfDefCountry()
             throws Exception {
         TreeSet<AmpCategoryValueLocations> returnSet = new TreeSet<AmpCategoryValueLocations>(
                 alphabeticalLocComp);

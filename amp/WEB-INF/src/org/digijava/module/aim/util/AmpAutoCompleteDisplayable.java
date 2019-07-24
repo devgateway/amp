@@ -56,12 +56,12 @@ public interface AmpAutoCompleteDisplayable<C> extends Comparable<C> {
         }
     }
     
-    public AmpAutoCompleteDisplayable<C> getParent();
-    public <T extends AmpAutoCompleteDisplayable> Collection<T> getSiblings();
-    public <T extends AmpAutoCompleteDisplayable> Collection<T> getVisibleSiblings();
-    public String getAutoCompleteLabel();
+    AmpAutoCompleteDisplayable<C> getParent();
+    <T extends AmpAutoCompleteDisplayable> Collection<T> getSiblings();
+    <T extends AmpAutoCompleteDisplayable> Collection<T> getVisibleSiblings();
+    String getAutoCompleteLabel();
     
-    public default <T extends AmpAutoCompleteDisplayable> Collection<T> getNonDeletedChildren() {
+    default <T extends AmpAutoCompleteDisplayable> Collection<T> getNonDeletedChildren() {
         return getSiblings();
     }
 

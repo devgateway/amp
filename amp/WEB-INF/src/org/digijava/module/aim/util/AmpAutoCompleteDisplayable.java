@@ -7,13 +7,14 @@ package org.digijava.module.aim.util;
 import java.text.Collator;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Iterator;
 
 /**
  * Used to display tree like structures in selectors
  * @author mpostelnicu@dgateway.org
  * since Oct 22, 2010
  */
-public interface AmpAutoCompleteDisplayable {
+public interface AmpAutoCompleteDisplayable<C> extends Comparable<C> {
     
     public static class AmpAutoCompleteComparator implements Comparator<AmpAutoCompleteDisplayable> {
         Collator collator;
@@ -29,8 +30,33 @@ public interface AmpAutoCompleteDisplayable {
         }
         
     };
+
+    default Iterable<AmpAutoCompleteDisplayable<C>> ancestors() {
+        return () -> new AncestorIterator<>(getParent());
+    }
+
+    class AncestorIterator<C> implements Iterator<AmpAutoCompleteDisplayable<C>> {
+
+        private AmpAutoCompleteDisplayable<C> node;
+
+        private AncestorIterator(AmpAutoCompleteDisplayable<C> node) {
+            this.node = node;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return node != null;
+        }
+
+        @Override
+        public AmpAutoCompleteDisplayable<C> next() {
+            AmpAutoCompleteDisplayable<C> ret = node;
+            node = node.getParent();
+            return ret;
+        }
+    }
     
-    public AmpAutoCompleteDisplayable getParent();
+    public AmpAutoCompleteDisplayable<C> getParent();
     public <T extends AmpAutoCompleteDisplayable> Collection<T> getSiblings();
     public <T extends AmpAutoCompleteDisplayable> Collection<T> getVisibleSiblings();
     public String getAutoCompleteLabel();

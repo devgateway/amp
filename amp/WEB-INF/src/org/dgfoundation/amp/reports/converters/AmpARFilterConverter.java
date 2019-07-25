@@ -324,8 +324,7 @@ public class AmpARFilterConverter {
             addSectorSchemeFilters(arFilter.getSelectedTagSectors(), "Tag", ColumnConstants.SECTOR_TAG);
         } else {
             addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", ColumnConstants.PLEDGES_SECTORS);
-            addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary",
-                    ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+            addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", ColumnConstants.PLEDGES_SECONDARY_SECTORS);
         }
     }
 
@@ -362,6 +361,9 @@ public class AmpARFilterConverter {
         if (depth == 0) {
             levelColumn = columnName;
         } else {
+            if (arFilter.isPledgeFilter() && !columnName.equals(ColumnConstants.PLEDGES_SECTORS)) {
+               columnName = StringUtils.removeEnd(columnName, " Sectors");
+            }
             levelColumn = columnName + " " + StringUtils.repeat("Sub-", depth) + sufix;
         }
         return levelColumn;

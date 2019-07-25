@@ -6,11 +6,11 @@ import java.io.Serializable;
 /**
  *
  */
-public class AmpSummaryNotificationSettings implements Serializable {
+public class AmpTeamSummaryNotificationSettings implements Serializable {
 
     private static final long serialVersionUID = 1898518611418974995L;
 
-    public AmpSummaryNotificationSettings() {
+    public AmpTeamSummaryNotificationSettings() {
 
     }
     private Long id;

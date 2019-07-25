@@ -42,10 +42,11 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpSummaryNotificationSettings;
+import org.digijava.module.aim.dbentity.AmpTeamSummaryNotificationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
+import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -464,13 +465,19 @@ public class TeamUtil {
                 workspace.setWorkspacePrefix(team.getWorkspacePrefix());
                 workspace.setCrossteamvalidation(team.getCrossteamvalidation());
                 workspace.setIsolated(team.getIsolated());
-                if (team.getSumaryNotificationSettings() == null) {
+    
+                AmpTeamSummaryNotificationSettings notificationSettings =
+                        (AmpTeamSummaryNotificationSettings) session.get(AmpTeamSummaryNotificationSettings.class,
+                                team.getAmpTeamId());
+                if (notificationSettings == null) {
                     workspace.setSendSummaryChangesApprover(false);
                     workspace.setSendSummaryChangesManager(false);
                 } else {
-                    workspace.setSendSummaryChangesApprover(team.getSumaryNotificationSettings().getNotifyApprover());
-                    workspace.setSendSummaryChangesManager(team.getSumaryNotificationSettings().getNotifyManager());
+                    workspace.setSendSummaryChangesApprover(notificationSettings.getNotifyApprover());
+                    workspace.setSendSummaryChangesManager(notificationSettings.getNotifyManager());
                 }
+                
+                
                 if (team.getParentTeamId() != null){
                     workspace.setParentTeamId(team.getParentTeamId().getAmpTeamId());
                     workspace.setParentTeamName(team.getParentTeamId().getName());
@@ -587,18 +594,6 @@ public class TeamUtil {
                 updTeam.setComputation(team.getComputation());
                 updTeam.setCrossteamvalidation(team.getCrossteamvalidation());
                 updTeam.setIsolated(team.getIsolated());
-
-                if (updTeam.getSumaryNotificationSettings() != null) {
-                    updTeam.getSumaryNotificationSettings().setNotifyManager(team.getSumaryNotificationSettings()
-                            .getNotifyManager());
-                    updTeam.getSumaryNotificationSettings().setNotifyApprover(team.getSumaryNotificationSettings()
-                            .getNotifyApprover());
-                } else {
-                    updTeam.setSumaryNotificationSettings(team.getSumaryNotificationSettings());
-                    updTeam.getSumaryNotificationSettings().setAmpTeam(updTeam);
-                }
-
-
                 updTeam.setUseFilter(team.getUseFilter());
                 updTeam.setHideDraftActivities(team.getHideDraftActivities() );
                 updTeam.setWorkspaceGroup(team.getWorkspaceGroup());
@@ -612,7 +607,6 @@ public class TeamUtil {
                     updTeam.getFilterDataSet().addAll(team.getFilterDataSet());
                 }
 
-               // removeAmpSummaryNotificationSettiongs(updTeam.getAmpTeamId());
                 session.saveOrUpdate(updTeam);
 
                 qryStr = "select t from " + AmpTeam.class.getName() + " t "
@@ -817,7 +811,8 @@ public class TeamUtil {
             qry = session.createQuery(qryStr);
             qry.executeUpdate();
 
-            removeAmpSummaryNotificationSettiongs(teamId, session);
+            deleteAmpNPDSettiongs(teamId);
+            deleteAmpSummaryNotificationSettiongs(teamId);
 
             session.delete(team);
             
@@ -844,16 +839,24 @@ public class TeamUtil {
             throw new RuntimeException(ex);
         }
     }
-    private static void removeAmpSummaryNotificationSettiongs(Long teamId) {
-        Session session = PersistenceManager.getRequestDBSession();
 
-        removeAmpSummaryNotificationSettiongs(teamId, null);
+    private static void deleteAmpSummaryNotificationSettiongs(Long teamId) {
+        Session session = PersistenceManager.getSession();
+        AmpTeamSummaryNotificationSettings notificationSettings =
+                (AmpTeamSummaryNotificationSettings) session.get(AmpTeamSummaryNotificationSettings.class, teamId);
+    
+        if (notificationSettings != null) {
+            session.delete(notificationSettings);
+        }
     }
-
-    private static void removeAmpSummaryNotificationSettiongs(Long teamId, Session session) {
-        String qryDeleteSummaryNotificationSettings = "delete from " + AmpSummaryNotificationSettings.class
-                .getName() + " sns where sns.ampTeam.ampTeamId = :teamId";
-        session.createQuery(qryDeleteSummaryNotificationSettings).setParameter("teamId", teamId).executeUpdate();
+    
+    private static void deleteAmpNPDSettiongs(Long teamId) {
+        Session session = PersistenceManager.getSession();
+        NpdSettings npdSettings = (NpdSettings) session.get(NpdSettings.class, teamId);
+        
+        if (npdSettings != null) {
+            session.delete(npdSettings);
+        }
     }
 
     /**

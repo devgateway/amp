@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolation;
@@ -80,7 +81,7 @@ public abstract class ObjectImporter<T> {
 
     private Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper = new DefaultErrorsMapper();
 
-    private ImporterInterchangeValidator importerInterchangeValidator = new ImporterInterchangeValidator(errors);
+    private ImporterInterchangeValidator importerInterchangeValidator;
 
     private List<AmpContentTranslation> translations = new ArrayList<>();
     private EditorStore editorStore = new EditorStore();
@@ -110,6 +111,17 @@ public abstract class ObjectImporter<T> {
         translationContext = new TranslationContext(trnSettings.getCurrentLangCode(), trnSettings.getDefaultLangCode(),
                 editorStore, translations, this::getEditor, this::getContentTranslation);
         translatedValueContext = new NotTranslatedValueContext(translationContext);
+
+        importerInterchangeValidator = new ImporterInterchangeValidator(errors, getExecutor());
+    }
+
+    /**
+     * Builds a function that allows to execute the a supplier in a context. Default implementation is to execute with
+     * any context.
+     */
+    protected Function<Supplier<Set<org.digijava.kernel.validation.ConstraintViolation>>,
+            Set<org.digijava.kernel.validation.ConstraintViolation>> getExecutor() {
+        return Supplier::get;
     }
 
     public void setJsonErrorMapper(Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper) {

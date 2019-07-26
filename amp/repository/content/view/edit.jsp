@@ -435,7 +435,6 @@ div.fakefile2 input {
 
 <script language="javascript">
 $(document).ready( function() {
-    debugger;
 	$('input:radio[name=contentLayout]').each( function(){
 		$(this).click(function () {
 			//When clicking the radio buttons hide every div with layout

@@ -77,10 +77,19 @@ public class ReportsFilterPickerForm extends ActionForm {
     private Long[] selectedConcensionalityLevel;
     private Object[] selectedDonorTypes; // ids of AmpOrgType
     private Object[] selectedDonorGroups; //
+    private Object[] selectedBeneficiaryAgencyTypes;
+    private Object[] selectedBeneficiaryAgencyGroups;
     private Object[] selectedContractingAgencyGroups; //
+    private Object[] selectedContractingAgencyTypes;
+    private Object[] selectedExecutingAgencyTypes;
+    private Object[] selectedExecutingAgencyGroups;
     private Object[] selectedExecutingAgency;
     private Object[] selectedContractingAgency;
     private Object[] selectedImplementingAgency;
+    private Object[] selectedImplementingAgencyTypes;
+    private Object[] selectedImplementingAgencyGroups;
+    private Object[] selectedResponsibleOrgTypes;
+    private Object[] selectedResponsibleOrgGroups;
     private Object[] selectedBeneficiaryAgency;
     private Object[] selectedDonnorAgency;
     private Object[] selectedProjectCategory;
@@ -111,6 +120,8 @@ public class ReportsFilterPickerForm extends ActionForm {
     private String toActualApprovalDate;
     private String fromProposedApprovalDate;
     private String toProposedApprovalDate;
+    private String fromProposedStartDate;
+    private String toProposedStartDate;
     private DynamicDateFilter dynamicProposedApprovalFilter = new DynamicDateFilter();
     private String fromActivityActualCompletionDate;
     private String toActivityActualCompletionDate;
@@ -401,6 +412,38 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public Object[] getSelectedImplementingAgency() {
         return this.selectedImplementingAgency;
+    }
+
+    public Object[] getSelectedImplementingAgencyTypes() {
+        return selectedImplementingAgencyTypes;
+    }
+
+    public void setSelectedImplementingAgencyTypes(Object[] selectedImplementingAgencyTypes) {
+        this.selectedImplementingAgencyTypes = selectedImplementingAgencyTypes;
+    }
+
+    public Object[] getSelectedImplementingAgencyGroups() {
+        return selectedImplementingAgencyGroups;
+    }
+
+    public void setSelectedImplementingAgencyGroups(Object[] selectedImplementingAgencyGroups) {
+        this.selectedImplementingAgencyGroups = selectedImplementingAgencyGroups;
+    }
+
+    public Object[] getSelectedResponsibleOrgTypes() {
+        return selectedResponsibleOrgTypes;
+    }
+
+    public void setSelectedResponsibleOrgTypes(Object[] selectedResponsibleOrgTypes) {
+        this.selectedResponsibleOrgTypes = selectedResponsibleOrgTypes;
+    }
+
+    public Object[] getSelectedResponsibleOrgGroups() {
+        return selectedResponsibleOrgGroups;
+    }
+
+    public void setSelectedResponsibleOrgGroups(Object[] selectedResponsibleOrgGroups) {
+        this.selectedResponsibleOrgGroups = selectedResponsibleOrgGroups;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -947,7 +990,23 @@ public class ReportsFilterPickerForm extends ActionForm {
     public void setSelectedDonorTypes(final Object[] selectedDonorTypes) {
         this.selectedDonorTypes = selectedDonorTypes;
     }
-    
+
+    public Object[] getSelectedBeneficiaryAgencyTypes() {
+        return selectedBeneficiaryAgencyTypes;
+    }
+
+    public void setSelectedBeneficiaryAgencyTypes(Object[] selectedBeneficiaryAgencyTypes) {
+        this.selectedBeneficiaryAgencyTypes = selectedBeneficiaryAgencyTypes;
+    }
+
+    public Object[] getSelectedBeneficiaryAgencyGroups() {
+        return selectedBeneficiaryAgencyGroups;
+    }
+
+    public void setSelectedBeneficiaryAgencyGroups(Object[] selectedBeneficiaryAgencyGroups) {
+        this.selectedBeneficiaryAgencyGroups = selectedBeneficiaryAgencyGroups;
+    }
+
     @java.lang.SuppressWarnings("all")
     public void setSelectedDonorGroups(final Object[] selectedDonorGroups) {
         this.selectedDonorGroups = selectedDonorGroups;
@@ -957,7 +1016,34 @@ public class ReportsFilterPickerForm extends ActionForm {
     public void setSelectedContractingAgencyGroups(final Object[] selectedContractingAgencyGroups) {
         this.selectedContractingAgencyGroups = selectedContractingAgencyGroups;
     }
-    
+
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedContractingAgencyTypes(final Object[] selectedContractingAgencyTypes) {
+        this.selectedContractingAgencyTypes = selectedContractingAgencyTypes;
+    }
+
+    public Object[] getSelectedContractingAgencyTypes() {
+        return selectedContractingAgencyTypes;
+    }
+
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedExecutingAgencyTypes(final Object[] selectedExecutingAgencyTypes) {
+        this.selectedExecutingAgencyTypes = selectedExecutingAgencyTypes;
+    }
+
+    public Object[] getSelectedExecutingAgencyTypes() {
+        return selectedExecutingAgencyTypes;
+    }
+
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedExecutingAgencyGroups(final Object[] selectedExecutingAgencyGroups) {
+        this.selectedExecutingAgencyGroups = selectedExecutingAgencyGroups;
+    }
+
+    public Object[] getSelectedExecutingAgencyGroups() {
+        return selectedExecutingAgencyGroups;
+    }
+
     @java.lang.SuppressWarnings("all")
     public void setSelectedExecutingAgency(final Object[] selectedExecutingAgency) {
         this.selectedExecutingAgency = selectedExecutingAgency;
@@ -1584,5 +1670,21 @@ public class ReportsFilterPickerForm extends ActionForm {
     
     public void setIncludeLocationChildren(Boolean includeLocationChildren) {
         this.includeLocationChildren = includeLocationChildren;
+    }
+
+    public String getFromProposedStartDate() {
+        return fromProposedStartDate;
+    }
+
+    public void setFromProposedStartDate(String fromProposedStartDate) {
+        this.fromProposedStartDate = fromProposedStartDate;
+    }
+
+    public String getToProposedStartDate() {
+        return toProposedStartDate;
+    }
+
+    public void setToProposedStartDate(String toProposedStartDate) {
+        this.toProposedStartDate = toProposedStartDate;
     }
 }

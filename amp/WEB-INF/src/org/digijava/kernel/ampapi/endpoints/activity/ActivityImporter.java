@@ -110,8 +110,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     private String endpointContextPath;
 
     public ActivityImporter(APIField apiField, ActivityImportRules rules) {
-        super(new InputValidatorProcessor(InputValidatorProcessor.getActivityFormatValidators()),
-                new InputValidatorProcessor(InputValidatorProcessor.getActivityBusinessRulesValidators()),
+        super(new InputValidatorProcessor(InputValidatorProcessor.getFormatValidators()),
                 apiField, TLSUtils.getSite());
         setJsonErrorMapper(new ActivityErrorsMapper());
         this.rules = rules;

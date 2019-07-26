@@ -554,14 +554,12 @@ public class ObjectImporterTest {
         APIField apiField = fe.getMetaModel(Parent.class);
 
         InputValidatorProcessor formatValidator = new InputValidatorProcessor(Collections.emptyList());
-        InputValidatorProcessor businessRulesValidator = new InputValidatorProcessor(Collections.emptyList());
 
         TestValueConverter valueConverter = new TestValueConverter();
 
         TranslationSettings plainEnglish = new TranslationSettings("en", "en", Collections.singleton("en"), false);
 
-        importer = new ObjectImporterAnyType(formatValidator, businessRulesValidator, plainEnglish, apiField,
-                valueConverter);
+        importer = new ObjectImporterAnyType(formatValidator, plainEnglish, apiField, valueConverter);
     }
 
     private void readJsonExamples() throws IOException {

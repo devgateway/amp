@@ -177,11 +177,13 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
     }
 
     @Test
-    public void testInvalidApprovedByForUnvalidatedActivityWhenNotMatchingModifiedByAndPastAppDateValidateNewOnly() {
+    public void testInvalidApprovedByForUnvalidatedActivityWhenNotMatchingModifiedByAndPastAppDateValidateNewOnly() throws InterruptedException {
         AmpActivity newActivity = getAmpActivity(notApprover, ampTeamMember, ApprovalStatus.APPROVED);
         AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.APPROVED);
-        oldActivity.setApprovalDate(new Date());
-        newActivity.setApprovalDate(new Date());
+        
+        Date approvalDate = new Date();
+        oldActivity.setApprovalDate(approvalDate);
+        newActivity.setApprovalDate(approvalDate);
 
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, newActivity, oldActivity);
 

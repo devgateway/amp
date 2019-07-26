@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
-import org.digijava.kernel.ampapi.endpoints.contact.validators.PrimaryOrganisationContactValidator;
 
 /**
  * Defines input validation chain and executes it
@@ -24,8 +23,7 @@ public class InputValidatorProcessor {
     }
 
     public static List<InputValidator> getActivityBusinessRulesValidators() {
-        return Arrays.asList(
-                new TreeCollectionValidator());
+        return Arrays.asList();
     }
 
     public static List<InputValidator> getContactFormatValidators() {
@@ -36,8 +34,7 @@ public class InputValidatorProcessor {
     }
 
     public static List<InputValidator> getContactBusinessRulesValidators() {
-        return Arrays.asList(
-                new PrimaryOrganisationContactValidator());
+        return Arrays.asList();
     }
 
     public static List<InputValidator> getResourceFormatValidators() {

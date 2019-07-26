@@ -13,8 +13,8 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
+import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -32,7 +32,7 @@ public class GapAnalysis {
     private Map<String, AmpIndicatorLayer> implLocPopulationLayer = new HashMap<>();
     
     private AmpIndicatorLayer indicator;
-    private JsonBean input;
+    private PerformanceFilterParameters input;
     private boolean canDoGapAnalysis = false;
     
     private Map<String, BigDecimal> admFundings;
@@ -43,7 +43,7 @@ public class GapAnalysis {
     public GapAnalysis() {
     }
     
-    public GapAnalysis(AmpIndicatorLayer indicator, JsonBean input) {
+    public GapAnalysis(AmpIndicatorLayer indicator, PerformanceFilterParameters input) {
         this.indicator = indicator;
         this.input = input;
         initForGapAnalysis();
@@ -58,7 +58,6 @@ public class GapAnalysis {
     }
     
     private void prepareData() {
-        JsonBean admTotals = null;
         String implementationLocation = indicator.getAdmLevel() == null ? null : indicator.getAdmLevel().getValue();
         String admLevel = GisConstants.IMPL_CATEGORY_VALUE_TO_ADM.get(implementationLocation);
         if (admLevel != null) {
@@ -76,9 +75,8 @@ public class GapAnalysis {
             // prepare funding data
             if (canDoGapAnalysis) {
                 LocationService locationService = new LocationService();
-                admTotals = locationService.getTotals(admLevel, input, null);
                 rememberUsedCurrency(locationService.getLastReportSpec());
-                admFundings = convertToMap(admTotals);
+                admFundings = convertToMap(locationService.getTotals(admLevel, input, null));
             }
         } else {
             canDoGapAnalysis = false;
@@ -108,7 +106,7 @@ public class GapAnalysis {
         BigDecimal fundingAmount = admFundings.getOrDefault(geoCode, BigDecimal.ZERO);
         BigDecimal factor = isPopulation ? populationCount.get(geoCode) : BigDecimal.ONE;
         // if no factor found for population, then we report 'No Data'
-        if (amount == null || factor == null || BigDecimal.ZERO.compareTo(amount) == 0) {
+        if (amount == null || factor == null || BigDecimal.ZERO.compareTo(factor.multiply(amount)) == 0) {
             amount = null;
             // for testing only, until GIS is updated to handle "null"s
             // amount = BigDecimal.ZERO;
@@ -125,19 +123,16 @@ public class GapAnalysis {
     /**
      * Converts total fundings to internal map for flexibility
      * @param data
-     * @param locationValues
      * @return
      */
-    private Map<String, BigDecimal> convertToMap(JsonBean data) {
-        List<JsonBean> values = data == null ? null : (List<JsonBean>) data.get("values");
+    private Map<String, BigDecimal> convertToMap(AdmLevelTotals data) {
+        List<AdmLevelTotal> values = data.getValues();
         Map<String, BigDecimal> result = new HashMap<>();
-        if (values != null && !values.isEmpty()) {
-            for (JsonBean admAmount : values) {
-                String admId = admAmount.getString("admID");
-                BigDecimal amount = (BigDecimal) admAmount.get("amount");
-                if (admId != null) {
-                    result.put(admId, amount == null ? BigDecimal.ZERO : amount);
-                }
+        for (AdmLevelTotal admAmount : values) {
+            String admId = admAmount.getAdmId();
+            BigDecimal amount = admAmount.getAmount();
+            if (admId != null) {
+                result.put(admId, amount == null ? BigDecimal.ZERO : amount);
             }
         }
         return result;

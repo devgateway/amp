@@ -62,7 +62,7 @@ module.exports = Backbone.Collection.extend({
 				  async: false, 
 				  data: {indicatorTypeId: localLayer.indicatorTypeId, admLevelId: localLayer.admLevelId} })
 			  .done(function(data) {
-				  localLayer.canDoGapAnalysis = data.canDoGapAnalysis;
+				  localLayer.canDoGapAnalysis = data;
 			  });			  
 			  data.push(localLayer);
 		  });

@@ -12,7 +12,11 @@ import org.digijava.module.aim.helper.Constants;
  * @author Nadejda Mandrescu
  */
 public class FiltersConstants {
-    
+
+    public static final String FILTER_UNDEFINED_MAX = "999999998";
+
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
+
     // filters IDs 
     public static final String CURRENT = "current";
 

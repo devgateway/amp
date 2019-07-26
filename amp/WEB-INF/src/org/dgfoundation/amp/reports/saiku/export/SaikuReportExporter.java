@@ -8,12 +8,6 @@ import org.dgfoundation.amp.newreports.GeneratedReport;
  */
 public interface SaikuReportExporter {
     
-    public static final String PDF = "pdf";
-    public static final String CSV = "csv";
-    public static final String XLSX = "xlsx";
-    public static final String XLSX_PLAIN = "xlsx_plain";
-    public static final String XML = "xml";
-    
     /**
      * @param report
      * @param dualReport

@@ -219,8 +219,7 @@ public class GPIReport5a extends GPIAbstractReport {
                     }
                 }
             } catch (Exception e) {
-                logger.error(e);
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }
         logger.warn("generate report: " + ((Calendar.getInstance().getTimeInMillis() - time) / 1000) + "s");

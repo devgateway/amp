@@ -46,9 +46,9 @@ public abstract class GenericFeedBinder implements Cloneable {
                     Object dobj = bindObject(sobj);
                     dst.add(i, dobj);
                 } catch (JAXBException e) {
-                    logger.info(e);
+                    logger.info(e.getMessage(), e);
                 } catch (ParseException e) {
-                    logger.info(e);
+                    logger.info(e.getMessage(), e);
                 }
             }
             if (++finishedThreads == workers.size())
@@ -121,8 +121,7 @@ public abstract class GenericFeedBinder implements Cloneable {
                 Object dobj = bindObject(sobj);
                 dst.add(dobj);
             } catch (Exception e) {
-                logger.info(e);
-                e.printStackTrace();
+                logger.info(e.getMessage(), e);
             }
         }
         createFinalTree();

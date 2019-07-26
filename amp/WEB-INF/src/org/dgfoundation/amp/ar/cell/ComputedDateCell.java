@@ -53,7 +53,7 @@ public class ComputedDateCell extends TextCell {
                 }       
             }
         } catch (NumberFormatException ex){
-            log.debug(ex);
+            log.debug(ex.getMessage(), ex);
         }
         return retValue;
     }   

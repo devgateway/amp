@@ -13,7 +13,6 @@ import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.ReportExecutor;
-import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.AbstractReportsSchema;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.DateCell;
@@ -177,11 +176,6 @@ public class DRCReportsTestSchema extends AbstractReportsSchema {
         }
         return instance;
     }
-    
-    public static String getRenderedReport(ReportSpecification spec) {
-        NiReportsGenerator niGen = new NiReportsGenerator(getInstance());
-        return niGen.renderReport(spec);
-    }   
     
     @Override
     public NiFilters convertFilters(NiReportsEngine engine) {

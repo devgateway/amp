@@ -29,8 +29,6 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureType;
@@ -290,90 +288,6 @@ public class DbHelper {
         return result;
     }
     
-    public static AmpCategoryValueLocations getTopLevelLocation(AmpCategoryValueLocations location, String level) {
-        if (level.equals("Region"))
-            if (location.getParentLocation() != null && !location.getParentLocation().getParentCategoryValue().getValue().equals("Country")) {
-                location = getTopLevelLocation(location.getParentLocation(), level);
-            }
-        if (level.equals("Zone"))
-            if (location.getParentLocation() != null && !location.getParentLocation().getParentCategoryValue().getValue().equals("Region")) {
-                location = getTopLevelLocation(location.getParentLocation(), level);
-            }
-        return location;
-    }
-    
-    public static List<AmpOrganisation> getDonorOrganisationByGroupId(
-            Long orgGroupId, boolean publicView) {
-        Session session = null;
-        Query q = null;
-        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
-        StringBuilder queryString = new StringBuilder(
-                "select distinct org from "
-                        + AmpOrgRole.class.getName()
-                        + " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
-        if (publicView) {
-            queryString
-                    .append(" inner join orgRole.activity act  inner join act.team tm ");
-        }
-        queryString.append(" where  role.roleCode='DN' ");
-        if (orgGroupId != null && orgGroupId != -1) {
-            queryString.append(" and org.orgGrpId=:orgGroupId ");
-        }
-        if (publicView) {
-            queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus IN ('%s', '%s') and tm.parentTeamId is not null ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
-        }
-
-        queryString.append("order by org.name asc");
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            q = session.createQuery(queryString.toString());
-            if (orgGroupId != null && orgGroupId != -1) {
-                q.setLong("orgGroupId", orgGroupId);
-            }
-            organizations = q.list();
-        } catch (Exception ex) {
-            logger.error("Unable to get Amp organization names from database ",
-                    ex);
-        }
-        return organizations;
-    }
-
-    public static List<AmpOrganisation> getDonorOrganisationByType(
-            Long orgTypeId, boolean publicView) {
-        Session session = null;
-        Query q = null;
-        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
-        StringBuilder queryString = new StringBuilder(
-                "select distinct org from "
-                        + AmpOrgRole.class.getName()
-                        + " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
-        if (publicView) {
-            queryString
-                    .append(" inner join orgRole.activity act  inner join act.team tm ");
-        }
-        queryString.append(" where  role.roleCode='DN' ");
-        if (orgTypeId != null && orgTypeId != -1) {
-            queryString.append(" and org.orgGrpId.orgType=:orgtypeId ");
-        }
-        if (publicView) {
-            queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus in ('%s', '%s') and tm.parentTeamId is not null ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
-        }
-
-        queryString.append("order by org.name asc");
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            q = session.createQuery(queryString.toString());
-            if (orgTypeId != null && orgTypeId != -1) {
-                q.setLong("orgtypeId", orgTypeId);
-            }
-            organizations = q.list();
-        } catch (Exception ex) {
-            logger.error("Unable to get Amp organization names from database ",
-                    ex);
-        }
-        return organizations;
-    }
-
     public static Collection<AmpStructureType> getAllStructureTypes() {
         Session session = null;
         Query q = null;

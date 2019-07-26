@@ -167,7 +167,7 @@ public class CurrencyRatesQuartzJob extends ConnectionCleaningJob {
                     aDate = DateTimeUtil.parseDate(sDate);
                 } catch (Exception e) {
                     //this should never get here
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                 }
                 
                 currRate.setExchangeRateDate(aDate);
@@ -211,7 +211,7 @@ public class CurrencyRatesQuartzJob extends ConnectionCleaningJob {
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         logger.info("There were connection error trying to update currencies");
     }

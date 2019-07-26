@@ -1,6 +1,12 @@
 package org.digijava.module.aim.helper ;
 
 import java.awt.Color;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import com.google.common.collect.ImmutableSet;
+import org.apache.commons.lang3.StringUtils;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 
 public final class Constants {
 
@@ -35,7 +41,7 @@ public final class Constants {
     public static final int ANNUAL_PROPOSED_PROJECT_COST = 15;
     
     /**
-     * only present in v_mondrian_raw_donor_transactions
+     * only present in zz_v_ni_donor_funding.xml
      */
     public static final int PROPOSED_PROJECT_AMOUNT_PER_PROJECT = 11;
     
@@ -180,13 +186,6 @@ public final class Constants {
 
     public static final String ANNUAL = "A" ;
     public static final String QUARTERLY = "Q" ;
-    public static final String STARTED_APPROVED_STATUS  = "startedapproved";
-    public static final String APPROVED_STATUS  = "approved";
-    public static final String STARTED_STATUS   = "started";
-    public static final String EDITED_STATUS    = "edited";
-    public static final String NOT_APPRVED = "not_approved";
-    public static final String REJECTED_STATUS = "rejected";
-    //TODO better to have APPROVAL_APROVED, APPROVAL_NOT_APROVED and something like that
 
     //proudly added by Alex Gartner
     public static final String ACTIVITY_STATUS_PLANNED          = "Planned";
@@ -197,7 +196,15 @@ public final class Constants {
     public static final String ACTIVITY_STATUS_PROPOSED         = "Proposed";
     public static final String ACTIVITY_STATUS_CONSIDERED       = "Considered";
     
-    public static final String ACTIVITY_NEEDS_APPROVAL_STATUS   = "'created', 'started', 'edited', 'rejected'";
+    public static final Set<ApprovalStatus> ACTIVITY_NEEDS_APPROVAL_STATUS_SET = ImmutableSet.of(
+            ApprovalStatus.CREATED,
+            ApprovalStatus.STARTED,
+            ApprovalStatus.EDITED,
+            ApprovalStatus.REJECTED);
+
+    public static final String ACTIVITY_NEEDS_APPROVAL_STATUS = ACTIVITY_NEEDS_APPROVAL_STATUS_SET.stream()
+            .map(z -> StringUtils.wrap(z.getDbName(), "'"))
+            .collect(Collectors.joining(", "));
 
 
 
@@ -208,9 +215,6 @@ public final class Constants {
 
     public static final String TEAM_ID = "TID";
     
-    /**SESSION[this] -> IdsSource */
-    public static final String COMPLETE_TEAM_FILTER = "CompleteTeamFilter";
-
     public static final String TEAM_Lead = "teamLead";
     public static final String TEAM_Head = "teamHead";
 
@@ -392,8 +396,7 @@ public final class Constants {
     //   USE THIS NAME FOR LOOKUPS: java:comp/env/ampDS 
     //   SEE jboss-web.xml
     public static final String UNIFIED_JNDI_ALIAS="java:comp/env/ampDS";
-    //public static final String MONETDB_JNDI_ALIAS="java:comp/env/monetDS";
-    
+
     public static final String JNP_URL="jnp://localhost:1099";
     
     public static final int NUM_OF_CHARS_IMPUTATION = 22;
@@ -450,5 +453,10 @@ public final class Constants {
 
     public static final String AUTOMATIC_VALIDATION_JOB_CLASS_NAME =
             "org.digijava.module.message.jobs.ActivityAutomaticValidationJob";
+
+    public static final String PROJECT_VALIDATION_ON = "On";
+    public static final String PROJECT_VALIDATION_OFF = "validationOff";
+    public static final String PROJECT_VALIDATION_FOR_ALL_EDITS = "allEdits";
+    public static final String PROJECT_VALIDATION_FOR_NEW_ONLY = "newOnly";
 
 }

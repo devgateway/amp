@@ -3,13 +3,17 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.List;
 
+import org.dgfoundation.amp.test.categories.DatabaseTests;
+import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 /**
  * 
@@ -18,6 +22,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
+@Category(DatabaseTests.class)
 public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 
     final List<String> flowsActs = Arrays.asList(
@@ -47,6 +52,11 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
         return getDbExecutor(activityNames);
+    }
+
+    @BeforeClass
+    public static void setUp() {
+        StandaloneAMPInitializer.initialize();
     }
     
     @Test
@@ -419,9 +429,9 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                         new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Approval Status", "4", "Draft", "false", "Filtered Approval Status", "2", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000")      ));
         
         ReportSpecificationImpl spec = buildSpecForFiltering("testPositiveByApprovalStatusNewUnvalidated", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.FILTERED_APPROVAL_STATUS), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.VALIDATION_STATUS),
             null, 
-            ColumnConstants.APPROVAL_STATUS, Arrays.asList(2l), true); // All New Unvalidated. See AmpARFilter.activityApprovalStatus 
+            ColumnConstants.APPROVAL_STATUS, Arrays.asList(2l), true); // All New Unvalidated. See AmpARFilter.VALIDATION_STATUS
         
         runNiTestCase(cor, spec, acts);
     }
@@ -483,7 +493,7 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                     new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Commitments", "3,632,14", "Funding-2015-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "97,562,98")      ));;
     
         ReportSpecificationImpl spec = buildSpecForFiltering("testNegativeByApprovalStatusNewUnvalidated", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.FILTERED_APPROVAL_STATUS), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.VALIDATION_STATUS),
             null, 
             ColumnConstants.APPROVAL_STATUS, Arrays.asList(2l), false); // All but "New Unvalidated"
         
@@ -506,7 +516,7 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                         new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Approval Status", "4", "Draft", "false", "Filtered Approval Status", "2", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000")      ));
 
         ReportSpecificationImpl spec = buildSpecForFiltering("testNegativeByApprovalStatusValidated", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.FILTERED_APPROVAL_STATUS), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.VALIDATION_STATUS),
             null, 
             ColumnConstants.APPROVAL_STATUS, Arrays.asList(4l), false); // All but Validated
         

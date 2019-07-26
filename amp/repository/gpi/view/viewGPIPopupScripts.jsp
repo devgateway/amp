@@ -378,7 +378,7 @@
 	}
 
 	addLoadEvent(initScripts);
-	var msg0 = '<digi:trn key="rep:pop:pleasewait..." jsFriendly="true">Please wait...</digi:trn>';
+	var msg0 = '<digi:trn jsFriendly="true">Loading...</digi:trn>';
 	var msg1 = '<digi:trn key="rep:pop:freezeReportHeading" jsFriendly="true">Freeze Report Heading</digi:trn>';
 	var msg2 = '<digi:trn key="rep:pop:unFreezeReportHeading" jsFriendly="true">Unfreeze Report Heading</digi:trn>';
 	var msg3 = '<digi:trn key="rep:pop:freezingReportHeading" jsFriendly="true">Freezing Report Heading</digi:trn>';

@@ -20,6 +20,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.google.common.base.Strings;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.util.Units;
@@ -121,8 +122,6 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STJc;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
-
-import clover.com.google.common.base.Strings;
 
 /**
  * Created by apicca.
@@ -370,7 +369,7 @@ public class ExportActivityToWordBuilder {
 
             if (FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective")) {
                 if (hasContent(programs.getNationalPlanObjectivePrograms())) {
-                    buildProgramRow(programsTbl, programs.getNationalPlanObjectivePrograms(), 
+                    buildProgramRow(programsTbl, programs.getNationalPlanObjectivePrograms(),
                             "National Plan Objective");
                 }
             }
@@ -392,7 +391,7 @@ public class ExportActivityToWordBuilder {
             }
             if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description")) {
                 String programDescription = null;
-                if (programs.getProgramDescription() != null) { 
+                if (programs.getProgramDescription() != null) {
                     programDescription = processEditTagValue(request, programs.getProgramDescription());
                 }
                 
@@ -430,7 +429,7 @@ public class ExportActivityToWordBuilder {
         XWPFTableRow programsTblTitleRow = programsTbl.createRow();
         XWPFParagraph programTitleParagraphs = programsTblTitleRow.getCell(0).getParagraphs().get(0);
         setOrientation(programTitleParagraphs);
-        setRun(programTitleParagraphs.createRun(), 
+        setRun(programTitleParagraphs.createRun(),
                 new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), programName, false);
     }
 
@@ -475,7 +474,7 @@ public class ExportActivityToWordBuilder {
                                 if (actSect.getSubsectorLevel2Name() != null) {
                                     columnVal += " - " + actSect.getSubsectorLevel2Name();
                                 }
-                                generateOverAllTableRows(sectorsTbl, columnVal, 
+                                generateOverAllTableRows(sectorsTbl, columnVal,
                                         actSect.getSectorPercentage() + NO_BR_SPACE + "%", null);
                             }
                         }
@@ -3459,6 +3458,15 @@ public class ExportActivityToWordBuilder {
             catVal = null;
             if (identification.getCrisNumber() != null) {
                 columnVal = identification.getCrisNumber();
+            }
+            generateOverAllTableRows(identificationSubTable1, columnName, columnVal, null);
+        }
+    
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/IATI Identifier")) {
+            columnName = TranslatorWorker.translateText("IATI Identifier");
+            columnVal = "";
+            if (StringUtils.isNotBlank(identification.getIatiIdentifier())) {
+                columnVal = identification.getIatiIdentifier();
             }
             generateOverAllTableRows(identificationSubTable1, columnName, columnVal, null);
         }

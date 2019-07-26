@@ -55,6 +55,16 @@ public class SettingsConstants {
 
     public static final String REORDER_FUNDING_ITEM_ID = "reorder-funding-item";
     public static final String EFFECTIVE_CURRENCY = "effective-currency";
+    
+    public static final String DASHBOARD_DEFAULT_MAX_YEAR_RANGE = "dashboard-default-max-year-range";
+    public static final String DASHBOARD_DEFAULT_MIN_YEAR_RANGE = "dashboard-default-min-year-range";
+    public static final String DASHBOARD_DEFAULT_MAX_DATE = "dashboard-default-max-date";
+    public static final String DASHBOARD_DEFAULT_MIN_DATE = "dashboard-default-min-date";
+    
+    public static final String GIS_DEFAULT_MAX_YEAR_RANGE = "gis-default-max-year-range";
+    public static final String GIS_DEFAULT_MIN_YEAR_RANGE = "gis-default-min-year-range";
+    public static final String GIS_DEFAULT_MAX_DATE = "gis-default-max-date";
+    public static final String GIS_DEFAULT_MIN_DATE = "gis-default-min-date";
 
 
 
@@ -82,9 +92,9 @@ public class SettingsConstants {
         put(YEAR_FROM, "From:");
         put(YEAR_TO, "To:");
         put(YEAR_ALL, "All");
-        put(SORT_COLUMN,GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN );
+        put(SORT_COLUMN, GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN);
         put(MAXIMUM_FILE_SIZE, GlobalSettingsConstants.CR_MAX_FILE_SIZE );
-        put(LIMIT_FILE_TO_UPLOAD,GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD);
+        put(LIMIT_FILE_TO_UPLOAD, GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD);
     }});
 
     public static final String DOT = "dot";
@@ -135,4 +145,5 @@ public class SettingsConstants {
     public static final Map<String, String> YEAR_MAP = Collections.unmodifiableMap(new LinkedHashMap<String, String>() {{
         put(YEAR_ALL, "-1");
     }});
+    
 }

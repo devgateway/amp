@@ -4,12 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import org.dgfoundation.amp.test.categories.SlowTests;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.ExceptionRunnable;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -24,8 +25,8 @@ import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.TrailCellsDigest;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
-import org.digijava.module.aim.util.DbUtil;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 /**
  * basic sanity checks common between both the offdb schema and the AmpReportsSchema-using one.
@@ -442,6 +443,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     
     
     @Test
+    @Category(SlowTests.class)
     public void testTripleHierarchiesDoNotChangeTotals() {
         if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
             return; // these are too slow if backed by DB
@@ -533,6 +535,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     
     
     @Test
+    @Category(SlowTests.class)
     public void testTripleHierarchiesWithEmptyRowsDoNotChangeTotals() {
         if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
             return; // these are too slow if backed by DB
@@ -835,7 +838,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     
     @Test
     public void test_AMP_18497() {
-        // for running manually: open http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/32 on the AMP 2.10 testcases database
+        // for running manually: open http://localhost:8080/TEMPLATE/ampTemplate/saikuui_reports/index.html#report/open/32 on the AMP 2.10 testcases database
         
         NiReportModel cor = new NiReportModel("AMP-18497")
                 .withHeaders(Arrays.asList(

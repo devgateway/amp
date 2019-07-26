@@ -105,6 +105,9 @@ public class ReportsFilterPickerForm extends ActionForm {
     private String toIssueDate;
     private DynamicDateFilter dynamicActivityStartFilter = new DynamicDateFilter();
     private DynamicDateFilter dynamicIssueFilter = new DynamicDateFilter();
+    private DynamicDateFilter dynamicActualApprovalFilter = new DynamicDateFilter();
+    private String fromActualApprovalDate;
+    private String toActualApprovalDate;
     private String fromProposedApprovalDate;
     private String toProposedApprovalDate;
     private DynamicDateFilter dynamicProposedApprovalFilter = new DynamicDateFilter();
@@ -130,7 +133,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     private Long[] selectedBudgets = null;
     private Boolean justSearch = null;
     private Boolean pledged;
-    private Boolean unallocatedLocation = null;
     // to keep the default currency after user changes
     private Long defaultCurrency;
     //private boolean isnewreport;
@@ -480,6 +482,14 @@ public class ReportsFilterPickerForm extends ActionForm {
         return this.dynamicActivityStartFilter;
     }
     
+    public String getFromActualApprovalDate() {
+        return this.fromActualApprovalDate;
+    }
+    
+    public String getToActualApprovalDate() {
+        return this.toActualApprovalDate;
+    }
+    
     @java.lang.SuppressWarnings("all")
     public String getFromProposedApprovalDate() {
         return this.fromProposedApprovalDate;
@@ -488,6 +498,10 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public String getToProposedApprovalDate() {
         return this.toProposedApprovalDate;
+    }
+    
+    public DynamicDateFilter getDynamicActualApprovalFilter() {
+        return this.dynamicActualApprovalFilter;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -603,11 +617,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public Boolean getPledged() {
         return this.pledged;
-    }
-    
-    @java.lang.SuppressWarnings("all")
-    public Boolean getUnallocatedLocation() {
-        return this.unallocatedLocation;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -1052,6 +1061,14 @@ public class ReportsFilterPickerForm extends ActionForm {
         this.dynamicActivityStartFilter = dynamicActivityStartFilter;
     }
     
+    public void setFromActualApprovalDate(final String fromActualApprovalDate) {
+        this.fromActualApprovalDate = fromActualApprovalDate;
+    }
+    
+    public void setToActualApprovalDate(final String toActualApprovalDate) {
+        this.toActualApprovalDate = toActualApprovalDate;
+    }
+    
     @java.lang.SuppressWarnings("all")
     public void setFromProposedApprovalDate(final String fromProposedApprovalDate) {
         this.fromProposedApprovalDate = fromProposedApprovalDate;
@@ -1174,11 +1191,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public void setPledged(final Boolean pledged) {
         this.pledged = pledged;
-    }
-    
-    @java.lang.SuppressWarnings("all")
-    public void setUnallocatedLocation(final Boolean unallocatedLocation) {
-        this.unallocatedLocation = unallocatedLocation;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -1464,7 +1476,7 @@ public class ReportsFilterPickerForm extends ActionForm {
     public Long[] getSelectedConcensionalityLevel() {
         return selectedConcensionalityLevel;
     }
-
+    
     public void setSelectedConcensionalityLevel(Long[] selectedConcensionalityLevel) {
         this.selectedConcensionalityLevel = selectedConcensionalityLevel;
     }

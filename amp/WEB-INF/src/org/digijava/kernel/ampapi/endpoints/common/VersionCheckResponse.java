@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 
 /**
@@ -8,15 +9,19 @@ import org.digijava.module.aim.dbentity.AmpOfflineRelease;
  */
 public class VersionCheckResponse {
 
+    @ApiModelProperty("Is AMP Offline App compatible with AMP?")
     @JsonProperty("amp-offline-compatible")
     private boolean ampOfflineCompatible;
 
+    @ApiModelProperty("AMP version")
     @JsonProperty("amp-version")
     private String ampVersion;
 
+    @ApiModelProperty("Is AMP Offline enabled?")
     @JsonProperty("amp-offline-enabled")
     private boolean ampOfflineEnabled;
 
+    @ApiModelProperty("Latest AMP Offline release")
     @JsonProperty("latest-amp-offline")
     private AmpOfflineRelease latestAmpOffline;
     

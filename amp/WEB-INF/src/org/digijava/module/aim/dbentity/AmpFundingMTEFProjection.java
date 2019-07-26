@@ -1,39 +1,47 @@
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.REQUIRED_ALWAYS;
-
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
-public class AmpFundingMTEFProjection
-        implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection>, FundingInformationItem {
+public class AmpFundingMTEFProjection implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection>,
+        FundingInformationItem {
 
     private static final long serialVersionUID = -1583797313318079006L;
 
+    @InterchangeableId
     @Interchangeable(fieldTitle = "Transaction ID")
     private Long ampFundingMTEFProjectionId;
 
     @Interchangeable(fieldTitle = "Projection", pickIdOnly = true, importable = true, 
-            discriminatorOption = CategoryConstants.MTEF_PROJECTION_KEY, required = REQUIRED_ALWAYS)
+            discriminatorOption = CategoryConstants.MTEF_PROJECTION_KEY,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private AmpCategoryValue projection;
 
-    @Interchangeable(fieldTitle = "Amount", importable = true, required = REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Amount", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Double amount;
 
-    @Interchangeable(fieldTitle = "Currency", pickIdOnly = true, importable = true, required = REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Currency", pickIdOnly = true, importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private AmpCurrency ampCurrency;
 
-    @Interchangeable(fieldTitle = "Projection Date", importable = true, required = REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Projection Date", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Date projectionDate;
 
+    @InterchangeableBackReference
     private AmpFunding ampFunding;
 
     private Date reportingDate;

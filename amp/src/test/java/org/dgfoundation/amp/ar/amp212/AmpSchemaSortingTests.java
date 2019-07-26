@@ -3,9 +3,11 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.List;
 
+import org.dgfoundation.amp.test.categories.DatabaseTests;
+import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
@@ -13,7 +15,9 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 /**
  * 
@@ -22,28 +26,19 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
+@Category(DatabaseTests.class)
 public class AmpSchemaSortingTests extends SortingSanityChecks {
 
-    final List<String> flowsActs = Arrays.asList(
-        "activity with directed MTEFs",
-        "Activity with both MTEFs and Act.Comms",
-        "mtef activity 1",
-        "mtef activity 2",
-        "Pure MTEF Project",
-        "activity with MTEFs",
-        "activity with many MTEFs",
-        "Test MTEF directed",
-        "activity with pipeline MTEFs and act. disb",
-        "Eth Water",
-        "Activity with Zones",
-        "TAC_activity_2"
-    );
-    
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
         return getDbExecutor(activityNames);
     }
-    
+
+    @BeforeClass
+    public static void setUp() {
+        StandaloneAMPInitializer.initialize();
+    }
+
     @Test
     public void testSortingByPPC() {
         NiReportModel cor = new NiReportModel("sort by ppc")

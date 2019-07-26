@@ -24,7 +24,7 @@ import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.CalendarConverter;
-import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.IReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
@@ -38,7 +38,6 @@ import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.schema.SqlSourcedColumn;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -89,7 +88,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
     /**
      * the non-report-spec params influencing a report run, like workspace filter, locale, default currency
      */
-    public final ReportEnvironment environment;
+    private final IReportEnvironment environment;
     
     /**
      * the counterpart engine
@@ -137,7 +136,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
         catch(Exception e) {throw AlgoUtils.translateException(e);}
         this.usedCurrency = engine.spec.getSettings() == null || engine.spec.getSettings().getCurrencyCode() == null ? AmpARFilter.getDefaultCurrency() : 
             CurrencyUtil.getAmpcurrency(engine.spec.getSettings().getCurrencyCode());
-        this.environment = ReportEnvironment.buildFor(TLSUtils.getRequest());
+        this.environment = engine.getReportEnvironment();
         this.lastEventId = SQLUtils.getLong(this.connection, "SELECT COALESCE(max(event_id), -1) FROM amp_etl_changelog");
         this.verticalSplitByTypeOfAssistance = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE).equalsIgnoreCase("true") &&
             engine.spec.getColumnNames().contains(ColumnConstants.TYPE_OF_ASSISTANCE) &&
@@ -330,5 +329,9 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
     @Override
     public String getTimeRangeSubTotalColumnName(ReportSpecification spec) {
         return spec.isDisplayTimeRangeSubTotals() ? TranslatorWorker.translateText("Total") : null;
+    }
+
+    public IReportEnvironment getEnvironment() {
+        return environment;
     }
 }

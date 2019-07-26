@@ -1032,7 +1032,7 @@ public class SectorUtil {
             // tx.commit();
             // session.flush();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -1210,7 +1210,7 @@ public class SectorUtil {
             qry.setParameter("id", id);
             activities = qry.list();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return activities;
     }

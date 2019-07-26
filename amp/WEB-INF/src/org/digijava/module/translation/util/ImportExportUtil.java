@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -28,6 +29,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -54,7 +56,6 @@ import org.digijava.module.translation.importexport.TranslationSearcher;
 import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.Translations;
 import org.digijava.module.translation.jaxb.Trn;
-import org.h2.util.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.Query;
@@ -208,7 +209,7 @@ public class ImportExportUtil {
                 saveIfNew(message, existingMessage, dbSession, affected);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
     
@@ -336,7 +337,7 @@ public class ImportExportUtil {
             Unmarshaller unmarshaller = getUnmarshaler();
             root = (Translations) unmarshaller.unmarshal(file);
         } catch (JAXBException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return root;
     }
@@ -461,7 +462,7 @@ public class ImportExportUtil {
             Collection<MessageGroup> groups = TrnUtil.groupByKey(messages);
             return new ArrayList<>(groups);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new AimException("Cannot load messages for expot.",e);
         }
     }
@@ -499,11 +500,18 @@ public class ImportExportUtil {
             messages = (List<Message>) query.list();
             
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new AimException("Cannot load messages for expot.",e);
         }
         return messages;
     }
+
+    private static final int COL_KEY = 0;
+    private static final int COL_ENGLISH_TEXT = 1;
+    private static final int COL_TARGET_TEXT = 2;
+    private static final int COL_ENGLISH_DATE = 3;
+    private static final int COL_TARGET_DATE = 4;
+
     /**
      * Used to import translations from xsl file.
      * @param inputStreame 
@@ -534,8 +542,8 @@ public class ImportExportUtil {
             
             for (int i = 1; i < physicalNumberOfRows; i++) {
                 Row hssfRow = hssfSheet.getRow(i);
-                hssfRow.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
-                String key = hssfRow.getCell(0).getStringCellValue();
+                hssfRow.getCell(COL_KEY).setCellType(HSSFCell.CELL_TYPE_STRING);
+                String key = hssfRow.getCell(COL_KEY).getStringCellValue();
                 // We need to discard those keys that are not numbers or the whole process will fail when trying to make insert
                 // in table amp_etl_changelog(entity_name, entity_id).
                 try {
@@ -546,34 +554,18 @@ public class ImportExportUtil {
                     continue;
                 }
 
-                hssfRow.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
-                String englishText = (hssfRow.getCell(1) == null) ? ""
-                        : hssfRow.getCell(1).getStringCellValue();
+                hssfRow.getCell(COL_ENGLISH_TEXT).setCellType(HSSFCell.CELL_TYPE_STRING);
+                String englishText = (hssfRow.getCell(COL_ENGLISH_TEXT) == null) ? ""
+                        : hssfRow.getCell(COL_ENGLISH_TEXT).getStringCellValue();
                 //for AMP-16681 when the cell content is #N/A on third column you are getting an erro if getStringCellValue is called
                 //so if its an error cell the target text is "" as if the cell would be empty
-                String targetText = (hssfRow.getCell(2) == null || hssfRow.getCell(2).getCellType()==HSSFCell.CELL_TYPE_ERROR) ? ""
-                        : hssfRow.getCell(2).getStringCellValue();
+                String targetText = (hssfRow.getCell(COL_TARGET_TEXT) == null
+                        || hssfRow.getCell(COL_TARGET_TEXT).getCellType() == HSSFCell.CELL_TYPE_ERROR) ? ""
+                        : hssfRow.getCell(COL_TARGET_TEXT).getStringCellValue();
                 
-                Date englishDate = null;
-                if (hssfRow.getCell(3) != null) {
-                    if(hssfRow.getCell(3).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
-                        englishDate = hssfRow.getCell(3).getDateCellValue();
-                    } else if (!StringUtils.isNullOrEmpty(hssfRow.getCell(3).getStringCellValue())) {
-                        englishDate = LocalizationUtil.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.ENGLISH)
-                                                        .parse(hssfRow.getCell(3).getStringCellValue());
-                    }
-                }
-                
-                Date targetDate = null;
-                if (hssfRow.getCell(4) != null) {
-                    if(hssfRow.getCell(4).getCellType() == HSSFCell.CELL_TYPE_NUMERIC)  {
-                        targetDate = hssfRow.getCell(4).getDateCellValue();
-                    } else if (!StringUtils.isNullOrEmpty(hssfRow.getCell(4).getStringCellValue())) {
-                        targetDate = LocalizationUtil.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.ENGLISH)
-                                                        .parse(hssfRow.getCell(4).getStringCellValue());
-                    }
-                }
-                
+                Date englishDate = getDate(hssfRow, COL_ENGLISH_DATE);
+                Date targetDate = getDate(hssfRow, COL_TARGET_DATE);
+
                 if(englishDate!=null){
                     Message message = new Message();
                     message.setKey(key);
@@ -610,10 +602,22 @@ public class ImportExportUtil {
             throw new AimException("Cannot import messages",e);
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new AimException("Cannot import messages",e);
         }
         return errors;
+    }
+
+    private static Date getDate(Row hssfRow, int col) throws ParseException {
+        if (hssfRow.getCell(col) != null) {
+            if (hssfRow.getCell(col).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+                return hssfRow.getCell(col).getDateCellValue();
+            } else if (StringUtils.isNotEmpty(hssfRow.getCell(col).getStringCellValue())) {
+                return LocalizationUtil.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.ENGLISH)
+                                                .parse(hssfRow.getCell(col).getStringCellValue());
+            }
+        }
+        return null;
     }
 
     public static void refreshWorker(ImportExportOption option)
@@ -641,7 +645,7 @@ public class ImportExportUtil {
             throw new AimException("Cannot import messages",e);
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new AimException("Cannot import messages",e);
         }
         return fsFileSystem;

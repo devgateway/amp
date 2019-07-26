@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionErrors;
@@ -75,12 +76,13 @@ public class StructuresImporter extends Action {
                             st.setLatitude(nextLine[2]);
                             st.setLongitude(nextLine[3]);
                             st.setType(DbHelper.getStructureTypesByName(nextLine[4].trim()));
-                            st.setActivities(new HashSet<>(Arrays.asList(DbHelper.getActivityByAmpId(ampId))));
+                            st.setActivity(DbHelper.getActivityByAmpId(ampId));
                             st.setDescription(nextLine[5].trim());
                             st.setCreationdate(new Timestamp(System.currentTimeMillis()));
-                            if (!"".equalsIgnoreCase(st.getTitle()) && st.getType()!=null && st.getActivities().size()!=0){
+                            if (StringUtils.isNotBlank(st.getTitle()) && st.getType() != null
+                                    && st.getActivity() != null) {
                                 DbHelper.saveStructure(st);
-                            }else{
+                            } else {
                                 String errorline = ArrayUtils.toString(nextLine).replace("{", "");
                                 errorline = errorline.replace("}","");
                                 if (st.getType()==null) {

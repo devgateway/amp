@@ -39,7 +39,7 @@ public class ColumnConstants {
     public static final String CONSTANT = "Constant";
     
     public static final String APPROVAL_STATUS = "Approval Status";
-    public static final String FILTERED_APPROVAL_STATUS = "Filtered Approval Status";
+    public static final String VALIDATION_STATUS = "Filtered Approval Status";
     public static final String ARCHIVED = "Archived";
     public static final String AUDIT_SYSTEM = "Audit System";
     public static final String AVERAGE_SIZE_OF_DISBURSEMENTS = "Average Size of Disbursements";
@@ -123,6 +123,7 @@ public class ColumnConstants {
     public static final String GRAND_TOTAL_COST = "Grand Total Cost";
     public static final String GRACE_PERIOD = "Loan Grace Period";
     public static final String HAS_EXECUTING_AGENCY = "Has Executing Agency";
+    public static final String IATI_IDENTIFIER = "IATI Identifier";
     public static final String IMPLEMENTATION_LEVEL = "Implementation Level";
     public static final String IMPLEMENTATION_LOCATION = "Implementation Location";
     public static final String IMPLEMENTING_AGENCY = "Implementing Agency";

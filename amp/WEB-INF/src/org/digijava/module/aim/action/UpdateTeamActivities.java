@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -21,6 +22,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -31,8 +33,6 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
-
-import clover.org.apache.commons.lang.StringUtils;
 
 public class UpdateTeamActivities extends Action {
 
@@ -168,21 +168,13 @@ public class UpdateTeamActivities extends Action {
                         //activities are approved!
                         if(atm.getAmpMemberRole().isApprover()){
                         //if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
-                            activity.setApprovalStatus(Constants.APPROVED_STATUS);
-                        }
-                        activity.setActivityCreator(atm);
-                        
-                        if (activity.getActivityCreator() == null) {
-                            AmpTeamMember thisTeamMember    = TeamUtil.getAmpTeamMember(tm.getMemberId());
-                            if (thisTeamMember != null) {
-                                activity.setActivityCreator(thisTeamMember);
-                            }
+                            activity.setApprovalStatus(ApprovalStatus.APPROVED);
                         }
 
                         logger.info("updating " + activity.getName());
                         DbUtil.update(activity);
                         new ActivitySaveTrigger(activity);
-                        if(!activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
+                        if (!activity.getApprovalStatus().equals(ApprovalStatus.APPROVED)) {
                             new NotApprovedActivityTrigger(activity);
                         }
                         
@@ -222,7 +214,7 @@ public class UpdateTeamActivities extends Action {
 
             Collection<AmpActivity> col = null;
             if (session.getAttribute("unassignedActivityList") == null 
-                    || StringUtils.isNotBlank(taForm.getKeyword()) 
+                    || StringUtils.isNotBlank(taForm.getKeyword())
                     || (reset !=null && reset.equalsIgnoreCase("true"))) {
                 
                  List<AmpActivity> temp = new ArrayList<AmpActivity>();

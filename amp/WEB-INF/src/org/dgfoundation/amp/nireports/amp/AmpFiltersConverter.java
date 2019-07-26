@@ -101,8 +101,9 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 
     @Override
     protected void processColumnElement(String columnName, FilterRule rule) {
-        if (columnName.equals(ColumnConstants.ARCHIVED))
+        if (reportIncludesPledges() && columnName.equals(ColumnConstants.ARCHIVED)) {
             return; //TODO: hack so that preexisting testcases are not broken while developing the feature
+        }
         
         if (columnName.equals(ColumnConstants.COMPUTED_YEAR)) {
             return; /** Ignore computed year, the value is processed through {@link AmpReportFilters#computedYear} */
@@ -126,7 +127,7 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
              * The AMP schema implements by filtering on a non-user-visible column which generates the same codes and then filtering out based on their values.
              * Please see v_filtered_activity_status for a definition of this view (and also to understand the meaning of the Filter widget codes)
              */
-            columnName = ColumnConstants.FILTERED_APPROVAL_STATUS; 
+            columnName = ColumnConstants.VALIDATION_STATUS;
         }
         
         columnName = removeIdSuffixIfNeeded(schema, columnName);
@@ -190,10 +191,14 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 
     @Override
     protected boolean shouldIgnoreFilteringColumn(String columnName) {
-        if (spec.isAlsoShowPledges() || spec.getReportType() == ArConstants.PLEDGES_TYPE) {
+        if (reportIncludesPledges()) {
             boolean supported = columnName.startsWith("Pledge") || columnName.equals(ColumnConstants.RELATED_PROJECTS) || DONOR_COLUMNS_TO_PLEDGE_COLUMNS.containsKey(columnName);
             return !supported;
         }
         return false;
+    }
+
+    private boolean reportIncludesPledges() {
+        return spec.isAlsoShowPledges() || spec.getReportType() == ArConstants.PLEDGES_TYPE;
     }
 }

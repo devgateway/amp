@@ -2,6 +2,8 @@
 package org.digijava.module.aim.form.helpers;
 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -275,14 +277,17 @@ public class ActivityFundingDigest {
             this.setTotalTriangularSscCommitments(formatTotals(activityTotalCalculations.getTotTriangularSscComm()));
         }
         // calculate delivery rates
-
+    
         if (activityTotalCalculations.getTotActualComm() != null && activityTotalCalculations.getTotActualComm()
                 .doubleValue() != 0 && activityTotalCalculations.getTotActualDisb() != null
                 && activityTotalCalculations.getTotActualDisb().doubleValue() != 0) {
-            double deliveryRate = activityTotalCalculations.getTotActualDisb().doubleValue()
-                    / activityTotalCalculations.getTotActualComm().doubleValue();
-            NumberFormat formatter = DecimalFormat.getPercentInstance();
-            this.setDeliveryRate(formatter.format(deliveryRate).replace("%", " %"));
+            BigDecimal totalDisb = BigDecimal.valueOf(activityTotalCalculations.getTotActualDisb().doubleValue());
+            BigDecimal totalComm = BigDecimal.valueOf(activityTotalCalculations.getTotActualComm().doubleValue());
+            double deliveryRate = totalDisb.scaleByPowerOfTen(2)
+                    .divide(totalComm, 2, RoundingMode.HALF_UP)
+                    .doubleValue();
+                    
+            this.setDeliveryRate(FormatHelper.formatNumberNotRounded(deliveryRate) + " %");
         }
     }
     

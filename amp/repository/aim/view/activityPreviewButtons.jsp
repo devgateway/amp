@@ -33,6 +33,11 @@
 			<%if(!FeaturesUtil.isVisibleFeature("Version History")){ %> 
 				<c:set var="hideVersionHistoryForPublicUsers" scope="page" value="true"/>
 			<%}%>
+
+			<c:if test="${(sessionScope.currentMember != null)}">
+					<c:set var="trn"><digi:trn>View Workspaces</digi:trn></c:set>
+					<input type="button" class="buttonx_sm" onclick="javascript:viewWorkspaces(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/>
+			</c:if>
 			
 			<c:if test="${(sessionScope.currentMember != null) || (not hideVersionHistoryForPublicUsers)}">
 				<c:set var="trn"><digi:trn>Version History</digi:trn></c:set>		

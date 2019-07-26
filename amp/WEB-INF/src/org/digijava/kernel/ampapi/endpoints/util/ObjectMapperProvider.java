@@ -7,11 +7,12 @@ import java.util.Map.Entry;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig.Feature;
-import org.codehaus.jackson.map.ser.impl.SimpleBeanPropertyFilter;
-import org.codehaus.jackson.map.ser.impl.SimpleFilterProvider;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 
 /**
@@ -22,27 +23,30 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 @Provider
 public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
-    private ObjectMapper defaultMapper = new ObjectMapper();
-    private ObjectMapper jsonBeanMapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper();
 
     public ObjectMapperProvider() {
-        configure(defaultMapper);
-        configure(jsonBeanMapper);
+        // will not force committing of http servlet response
+        mapper.configure(JsonGenerator.Feature.FLUSH_PASSED_TO_STREAM, false);
+
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+        Hibernate4Module hibernateModule = new Hibernate4Module();
+        hibernateModule.enable(Hibernate4Module.Feature.FORCE_LAZY_LOADING);
+
+        mapper.registerModule(hibernateModule);
     }
 
     @Override
     public ObjectMapper getContext(Class<?> type) {
-        if (type.equals(JsonBean.class)) {
-            configureJsonBeanMapperPerCurrentRequest();
-            return jsonBeanMapper;
-        }
-        return defaultMapper;
+        configureMapperPerCurrentRequest();
+        return mapper;
     }
     
-    private void configureJsonBeanMapperPerCurrentRequest() {
+    private void configureMapperPerCurrentRequest() {
         Map<String, Set<String>> jsonFiltersDef = EndpointUtils.getAndClearJsonFilters();
         
-        // configure Json Filters
+        // configure request filters
         SimpleFilterProvider sfp = new SimpleFilterProvider();
         if (jsonFiltersDef != null && !jsonFiltersDef.isEmpty()) {
             for (Entry<String, Set<String>> jsonFilterDef : jsonFiltersDef.entrySet()) {
@@ -52,15 +56,6 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
         }
         // if nothing to filter or invalid filter
         sfp.setFailOnUnknownId(false);
-        jsonBeanMapper.configure(Feature.FAIL_ON_EMPTY_BEANS, false);
-        jsonBeanMapper.setFilters(sfp);
-    }
-
-    /**
-     * Defaults for all Object Mappers.
-     */
-    private void configure(ObjectMapper objectMapper) {
-        // will not force committing of http servlet response
-        objectMapper.configure(JsonGenerator.Feature.FLUSH_PASSED_TO_STREAM, false);
+        mapper.setFilterProvider(sfp);
     }
 }

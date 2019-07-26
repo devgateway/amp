@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 
@@ -9,8 +10,10 @@ import org.codehaus.jackson.annotate.JsonProperty;
  */
 public class Language {
 
+    @ApiModelProperty(example = "en")
     private String id;
 
+    @ApiModelProperty(example = "English")
     private String name;
 
     @JsonProperty("ltr-direction")

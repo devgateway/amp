@@ -100,14 +100,22 @@ public class QuartzJobManagerForm extends ActionForm {
     }
 
     public void reset() {
+        resetJobForm();
+        jobs = null;
+    }
+    
+    public void resetJobForm() {
         name = null;
         startDateTime = null;
+        startH = null;
+        startM = null;
         endDateTime = null;
+        endH = null;
+        endM = null;
         triggerType = 0;
         selectedDay = 1;
         exeTimeH = null;
         exeTimeM = null;
-        jobs = null;
         action = null;
         selectedMonthDay = 1;
         editAction = false;

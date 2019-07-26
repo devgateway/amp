@@ -206,13 +206,14 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
                     v.forEach((x, y) -> {
                         if (MeasureConstants.DISBURSED_AS_SCHEDULED.equals(x)
                                 || MeasureConstants.OVER_DISBURSED.equals(x)) {
-                            BigDecimal percentage = new BigDecimal(((AmountCell) y).extractValue());
+                            BigDecimal percentage = ((AmountCell) y).extractValue();
                             row.put(getColumns().get(x), percentage.setScale(0, RoundingMode.HALF_UP) + "%");
                         } else {
                             row.put(getColumns().get(x), y.displayedValue);
                         }
                         if (YEAR_LEVEL_HIERARCHIES.contains(x)) {
-                            if (y instanceof AmountCell && (((AmountCell) y).extractValue() != 0)) {
+                            if (y instanceof AmountCell
+                                    && ((AmountCell) y).extractValue().compareTo(BigDecimal.ZERO) != 0) {
                                 isRowEmpty.set(false);
                             }
 
@@ -312,14 +313,14 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
                 .flatMap(budgetArea -> budgetArea.getContents().entrySet().stream())
                 .filter(entry -> isTotalMeasureColumn(MeasureConstants.ACTUAL_DISBURSEMENTS, entry.getKey()))
                 .map(entry -> entry.getValue()).filter(rc -> rc != null)
-                .map(rc -> new BigDecimal(((AmountCell) rc).extractValue())).reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(rc -> ((AmountCell) rc).extractValue()).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         // get the sum of planned disbursements for on-budget projects
         BigDecimal planDisbSum = onBudgetAreas.stream()
                 .flatMap(budgetArea -> budgetArea.getContents().entrySet().stream())
                 .filter(entry -> isTotalMeasureColumn(MeasureConstants.PLANNED_DISBURSEMENTS, entry.getKey()))
                 .map(entry -> entry.getValue()).filter(rc -> rc != null)
-                .map(rc -> new BigDecimal(((AmountCell) rc).extractValue())).reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(rc -> ((AmountCell) rc).extractValue()).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         columns.put(new GPIReportOutputColumn(MeasureConstants.DISBURSED_AS_SCHEDULED),
                 formatAmount(generatedReport, calculateDisbursedAsScheduled(actDisbSum, planDisbSum), false) + "%");

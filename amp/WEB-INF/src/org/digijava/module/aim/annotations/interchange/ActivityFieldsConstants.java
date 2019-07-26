@@ -7,7 +7,7 @@ package org.digijava.module.aim.annotations.interchange;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -39,10 +39,12 @@ public class ActivityFieldsConstants {
     public static final String MOFED_CONTACT = "Mofed Contact Information";
     public static final String IMPL_EXECUTING_AGENCY_CONTACT = "Implementing/Executing Agency Contact Information";
     public static final String PRIMARY_CONTACT = "Mark as primary";
-    public static final String TRANSACTION_TYPE = "Transaction Type";
+    public static final String FUNDINGS = "Fundings";
     public static final String FUNDING_DETAILS = "Funding Details";
     public static final String MTEF_PROJECTIONS = "MTEF Projections";
     public static final String LOCATIONS = "Locations";
+    public static final String IMPLEMENTATION_LEVEL = "Implementation Level";
+    public static final String IMPLEMENTATION_LOCATION = "Implementation Location";
     public static final String ORG_ROLE = "Org. Role";
     public static final String COMPONENTS = "Components";
     public static final String COMPONENT_TITLE = "Component Title";
@@ -65,15 +67,50 @@ public class ActivityFieldsConstants {
     public static final String CONTRACTING_AGENCY = "Contracting Agency";
     public static final String REGIONAL_GROUP = "Regional Group";
     public static final String SECTOR_GROUP = "Sector Group";
+    public static final String ACTIVITY_GROUP = "activity_group";
+    public static final String VERSION = "version";
+    public static final String DISASTER_RESPONSE = "Disaster Response";
+
+    public static final String NATIONAL_PLAN_OBJECTIVE = "National Plan Objective";
+    public static final String PRIMARY_PROGRAMS = "Primary Programs";
+    public static final String SECONDARY_PROGRAMS = "Secondary Programs";
+    public static final String TERTIARY_PROGRAMS = "Tertiary Programs";
+
+    public static final String PRIMARY_SECTORS = "Primary Sectors";
+    public static final String SECONDARY_SECTORS = "Secondary Sectors";
+    public static final String TERTIARY_SECTORS = "Tertiary Sectors";
+    public static final String TAG_SECTORS = "Tag Sectors";
+    
+    public static final String IATI_IDENTIFIER = "IATI Identifier";
+    public static final String UUID = "UUID";
+
+    public static final class Locations {
+        private Locations() {
+        }
+
+        public static final String LOCATION = "Location";
+    }
+
+    public static final class Funding {
+        private Funding() {
+        }
+
+        public static final class Details {
+            private Details() {
+            }
+
+            public static final String PLEDGE = "Pledge";
+        }
+    }
 
     public static final Map<String, String> ORG_ROLE_CODES = new ImmutableMap.Builder<String, String>()
-            .put(InterchangeUtils.underscorify(DONOR_ORGANIZATION), Constants.FUNDING_AGENCY)
-            .put(InterchangeUtils.underscorify(RESPONSIBLE_ORGANIZATION), Constants.RESPONSIBLE_ORGANISATION)
-            .put(InterchangeUtils.underscorify(EXECUTING_AGENCY), Constants.EXECUTING_AGENCY)
-            .put(InterchangeUtils.underscorify(IMPLEMENTING_AGENCY), Constants.IMPLEMENTING_AGENCY)
-            .put(InterchangeUtils.underscorify(BENEFICIARY_AGENCY), Constants.BENEFICIARY_AGENCY)
-            .put(InterchangeUtils.underscorify(CONTRACTING_AGENCY), Constants.CONTRACTING_AGENCY)
-            .put(InterchangeUtils.underscorify(REGIONAL_GROUP), Constants.REGIONAL_GROUP)
-            .put(InterchangeUtils.underscorify(SECTOR_GROUP), Constants.SECTOR_GROUP)
+            .put(FieldMap.underscorify(DONOR_ORGANIZATION), Constants.FUNDING_AGENCY)
+            .put(FieldMap.underscorify(RESPONSIBLE_ORGANIZATION), Constants.RESPONSIBLE_ORGANISATION)
+            .put(FieldMap.underscorify(EXECUTING_AGENCY), Constants.EXECUTING_AGENCY)
+            .put(FieldMap.underscorify(IMPLEMENTING_AGENCY), Constants.IMPLEMENTING_AGENCY)
+            .put(FieldMap.underscorify(BENEFICIARY_AGENCY), Constants.BENEFICIARY_AGENCY)
+            .put(FieldMap.underscorify(CONTRACTING_AGENCY), Constants.CONTRACTING_AGENCY)
+            .put(FieldMap.underscorify(REGIONAL_GROUP), Constants.REGIONAL_GROUP)
+            .put(FieldMap.underscorify(SECTOR_GROUP), Constants.SECTOR_GROUP)
             .build();
 }

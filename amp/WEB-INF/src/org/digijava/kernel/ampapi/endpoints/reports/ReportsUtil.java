@@ -1,6 +1,25 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import net.sf.json.JSONObject;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -27,8 +46,8 @@ import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
 import org.dgfoundation.amp.reports.ReportCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
-import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
+import org.dgfoundation.amp.reports.converters.AmpReportsToReportSpecification;
+import org.dgfoundation.amp.reports.converters.MtefConverter;
 import org.dgfoundation.amp.utils.BoundedList;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
@@ -36,11 +55,16 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.publicportal.PublicReportFormParameters;
+import org.digijava.kernel.ampapi.endpoints.reports.saiku.QueryModel;
+import org.digijava.kernel.ampapi.endpoints.reports.saiku.QuerySettings;
+import org.digijava.kernel.ampapi.endpoints.reports.saiku.SaikuBasedQuery;
+import org.digijava.kernel.ampapi.endpoints.reports.saiku.SortParam;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.ampapi.endpoints.util.ReportConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -52,24 +76,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
-
-import javax.servlet.http.HttpSession;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
+import org.digijava.module.esrigis.dbentity.AmpApiState;
 
 /**
  * Reports API utility classes
@@ -91,7 +98,7 @@ public class ReportsUtil {
      *  "recordsPerPage"  : 10,                                                     <br/>
      *  "regenerate"      : true,                                                   <br/>
      *  "filters"         : //see filters format defined in Gis,                    <br/>
-     *  "settings"        : //see {@link EndpointUtils#applySettings}                <br/>
+     *  "settings"        : //see {@link SettingsUtils#applySettings}               <br/>
      *  "sorting"         : [                                                       <br/>
      *        {                                                                     <br/>
      *          "columns" : ["Donor Agency", "Actual Commitments"],                 <br/>
@@ -134,7 +141,6 @@ public class ReportsUtil {
      *   <dt>show_empty_rows</dt> <dd>optional, default false, to show rows with empty measures amounts</dd>
      *   <dt>show_empty_cols</dt> <dd>optional, default false, to show full column groups (by quarter, year) 
      *                              with empty measures amounts</dd>
-     *   <dt>rowTotals</dt>     <dd>optional, flag to request row totals to be build</dd>
      *   <dt>forceHeaders</dt>  <dd>optional, flag, if the report query returns empty response
      *                              the list of column headers is populated from the request. Default is false</dd>
      *   <dt>settings</dt>      <dd>Report settings</dd>
@@ -151,12 +157,12 @@ public class ReportsUtil {
      * </dl>
      * @return JsonBean result for the requested page and pagination information
      */
-    public static final JsonBean getReportResultByPage(Long reportId, JsonBean formParams) {
-        JsonBean result = new JsonBean();
+    public static final PagedReportResult getReportResultByPage(Long reportId, ReportFormParameters formParams) {
+        PagedReportResult result = new PagedReportResult();
         
         // read pagination data
-        int page = (Integer) EndpointUtils.getSingleValue(formParams, "page", 0);
-        int recordsPerPage = EndpointUtils.getSingleValue(formParams, "recordsPerPage", 
+        int page = EndpointUtils.getSingleValue(formParams.getPage(), 0);
+        int recordsPerPage = EndpointUtils.getSingleValue(formParams.getRecordsPerPage(),
                 ReportPaginationUtils.getRecordsNumberPerPage());
         int start = (page - 1) * recordsPerPage;
         
@@ -165,7 +171,7 @@ public class ReportsUtil {
         if (cachedReportData != null) {
             fillReportInfo(cachedReportData.report, result, formParams);
         }
-        
+
         // extract data for the requested page
         ReportArea pageArea = null;
         if (recordsPerPage != -1) {
@@ -177,40 +183,43 @@ public class ReportsUtil {
         int totalPageCount = cachedReportData.paginationInfo.getPageCount(recordsPerPage);
         
         // configure the result
-        result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, cachedReportData.paginationInfo.getRecordsCount()));
-        result.set(EPConstants.SETTINGS, cachedReportData != null ? 
-                SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
+        result.setPage(new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount,
+                cachedReportData.paginationInfo.getRecordsCount()));
+        result.setSettings(cachedReportData != null
+                ? SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
 
         boolean showRowTotals = cachedReportData.report.reportContents.getContents().values().stream()
                 .map(rc -> rc.displayedValue)
                 .anyMatch(StringUtils::isNotEmpty);
 
-        result.set(EPConstants.SHOW_ROW_TOTALS, showRowTotals);
+        result.setRowTotals(showRowTotals);
         
         processRawValues(formParams);
-        result.set("reportWarnings", cachedReportData.report.reportWarnings);
+        result.setReportWarnings(cachedReportData.report.reportWarnings);
         
         return result;
     }
     
-    protected static void fillReportInfo(GeneratedReport report, JsonBean result, JsonBean formParams) {
+    protected static void fillReportInfo(GeneratedReport report, PagedReportResult result,
+            ReportFormParameters formParams) {
         if (report == null) return;
-        result.set("isEmpty", report.isEmpty);
-        result.set("headers", report.leafHeaders);
-        List<String> addInfo = EndpointUtils.getSingleValue(formParams, EPConstants.INFO, Collections.EMPTY_LIST);
+        result.setEmpty(report.isEmpty);
+        result.setHeaders(report.leafHeaders);
+        List<String> addInfo = EndpointUtils.getSingleValue(formParams.getAdditionalInfo(), Collections.emptyList());
         for (String infoToAdd : addInfo) {
             if (EPConstants.GENERATED_HEADERS.equalsIgnoreCase(infoToAdd)) {
-                result.set(EPConstants.GENERATED_HEADERS, report.generatedHeaders);
+                result.setGeneratedHeaders(report.generatedHeaders);
             } else if (EPConstants.WARNINGS.equalsIgnoreCase(infoToAdd)) {
-                result.set(EPConstants.WARNINGS, report.reportWarnings);
+                result.setWarnings(report.reportWarnings);
             } else if (EPConstants.STATS.equalsIgnoreCase(infoToAdd)) {
-                result.set(EPConstants.STATS, report.jsonTimings);
+                result.setStats(report.getMapTimings());
             }
         }
     }
     
-    protected static void processRawValues(JsonBean formParams) {
-        List<String> rawValuesElements = EndpointUtils.getSingleValue(formParams, EPConstants.RAW_VALUES, Collections.emptyList());
+    protected static void processRawValues(ReportFormParameters formParams) {
+        List<String> rawValuesElements =
+                EndpointUtils.getSingleValue(formParams.getRawValues(), Collections.emptyList());
         boolean keepRawValuesForMeasures = false;
         for (String elemType : rawValuesElements) {
             // the only supported for now
@@ -223,48 +232,48 @@ public class ReportsUtil {
         }
     }
     
-    protected static JsonBean convertSaikuParamsToReports(JsonBean original) {
-        JsonBean newParams = new JsonBean();
-        LinkedHashMap queryModel = (LinkedHashMap) original.get("queryModel");
+    protected static ReportFormParameters convertSaikuParamsToReports(SaikuBasedQuery original) {
+        ReportFormParameters newParams = new ReportFormParameters();
+        QueryModel queryModel = original.getQueryModel();
         if (queryModel != null) {
-            if (queryModel.get("page") != null) {
-                newParams.set("page", ((Integer) queryModel.get("page")));
+            if (queryModel.getPage() != null) {
+                newParams.setPage(queryModel.getPage());
             }
-            if (queryModel.get("recordsPerPage") != null) {
-                newParams.set("recordsPerPage", ((Integer) queryModel.get("recordsPerPage")));
+            if (queryModel.getRecordsPerPage() != null) {
+                newParams.setRecordsPerPage(queryModel.getRecordsPerPage());
             }
-            if (queryModel.get("filters") != null) {
-                newParams.set("filters", queryModel.get("filters"));
+            if (queryModel.getFilters() != null) {
+                newParams.setFilters(queryModel.getFilters());
                 //newParams.set("page", new Integer("1"));
             }
-            if (queryModel.get(EPConstants.SETTINGS) != null) {
-                newParams.set(EPConstants.SETTINGS, queryModel.get(EPConstants.SETTINGS));
+            if (queryModel.getSettings() != null) {
+                newParams.setSettings(queryModel.getSettings());
             }
-            if (queryModel.get(EPConstants.SORTING) != null) {
-                newParams.set(EPConstants.SORTING, queryModel.get(EPConstants.SORTING));
+            if (queryModel.getSorting() != null) {
+                newParams.setSorting(queryModel.getSorting());
             }
-            if (original.get(EPConstants.IS_DYNAMIC) != null) {
-                newParams.set(EPConstants.IS_DYNAMIC, true);
+            if (original.getDinamic() != null) {
+                newParams.setDynamic(true);
             }
         }
         
-        if (original.get(EPConstants.ADD_COLUMNS) != null) {
-            newParams.set(EPConstants.ADD_COLUMNS, original.get(EPConstants.ADD_COLUMNS));
+        if (original.getAdditionalColumns() != null) {
+            newParams.setAdditionalColumns(original.getAdditionalColumns());
         }
         
-        if (original.get(EPConstants.MD5_TOKEN) != null) {
-            newParams.set(EPConstants.MD5_TOKEN, original.get(EPConstants.MD5_TOKEN));
+        if (original.getMd5() != null) {
+            newParams.setMd5(original.getMd5());
         }
         
-        Map<String, Object> querySettings = (Map<String, Object>) original.get("querySettings");  
-        if (querySettings != null && !querySettings.isEmpty()) {
-            newParams.any().putAll(querySettings);
+        QuerySettings querySettings = original.getQuerySettings();
+        if (querySettings != null) {
+            newParams.setAdditionalInfo(querySettings.getInfo());
         }
         
         return newParams;
     }
     
-    public static GeneratedReport getGeneratedReport(Long reportId, JsonBean formParams) {
+    public static GeneratedReport getGeneratedReport(Long reportId, ReportFormParameters formParams) {
         CachedReportData cachedReportData = getCachedReportData(reportId, formParams);
         
         if (cachedReportData != null && cachedReportData.report != null) {
@@ -274,9 +283,11 @@ public class ReportsUtil {
         return null;
     }
     
-    private static CachedReportData getCachedReportData(Long reportId, JsonBean formParams) {
-        
-        String reportToken = EndpointUtils.getSingleValue(formParams, EPConstants.MD5_TOKEN, null); // use null in case the frontend has not generated an md5 token (e.g. Tabs as of 15/aug/2016). Using the timestamp is a VERY bad idea since it would pollute the cache at each page cache
+    private static CachedReportData getCachedReportData(Long reportId, ReportFormParameters formParams) {
+
+        // use null in case the frontend has not generated an md5 token (e.g. Tabs as of 15/aug/2016).
+        // Using the timestamp is a VERY bad idea since it would pollute the cache at each page cache
+        String reportToken = formParams.getMd5();
         
         boolean regenerate = ReportCacher.getReportData(reportToken) == null;
         CachedReportData cachedReportData = null;
@@ -284,11 +295,11 @@ public class ReportsUtil {
         // generate the report
         if (regenerate) {
             ReportSpecificationImpl spec = null;
-            if (Boolean.TRUE.equals(formParams.get(EPConstants.IS_CUSTOM))) { 
-                String reportName = formParams.getString(EPConstants.REPORT_NAME);
-                spec = EndpointUtils.getReportSpecification(formParams, reportName);
+            if (Boolean.TRUE.equals(formParams.getCustom())) {
+                String reportName = formParams.getReportName();
+                spec = EndpointUtils.getReportSpecification(formParams.getReportType(), reportName);
             } else {
-                if (Boolean.TRUE.equals(formParams.get(EPConstants.IS_DYNAMIC))) {
+                if (Boolean.TRUE.equals(formParams.getDynamic())) {
                     try {
                         spec = AmpReportsToReportSpecification.convert(ReportsUtil.getAmpReportFromSession(reportId.intValue()));
                     } catch (Exception e) {
@@ -323,7 +334,7 @@ public class ReportsUtil {
             if (ampReport != null)
                 return AmpReportsToReportSpecification.convert(ampReport);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -334,7 +345,7 @@ public class ReportsUtil {
      * @param formParams
      * @return the updated spec
      */
-    public static ReportSpecification update(ReportSpecification spec, JsonBean formParams) {
+    public static ReportSpecification update(ReportSpecification spec, ReportFormParameters formParams) {
         if (spec == null || formParams == null) return spec;
         if (!(spec instanceof ReportSpecificationImpl)) {
             logger.error("Unsupported request for "  + spec.getClass());
@@ -349,12 +360,12 @@ public class ReportsUtil {
         
         // update report data presentation
         AmpFiscalCalendar oldCalendar = specImpl.getSettings() == null ? null : (AmpFiscalCalendar) specImpl.getSettings().getCalendar(); 
-        SettingsUtils.applySettings(specImpl, formParams, false);
-        configureFilters(specImpl, formParams, oldCalendar);
+        SettingsUtils.applySettings(specImpl, formParams.getSettings(), false);
+        configureFilters(specImpl, formParams.getFilters(), oldCalendar);
         configureSorting(specImpl, formParams);
         
         // update report data
-        configureProjectTypes(specImpl, formParams);
+        configureProjectTypes(specImpl, formParams.getProjectType());
         
         // update other settings
         setOtherOptions(specImpl, formParams);
@@ -362,10 +373,10 @@ public class ReportsUtil {
         return spec;
     }
 
-    private static void addColumns(ReportSpecification spec, JsonBean formParams) {
+    private static void addColumns(ReportSpecification spec, ReportFormParameters formParams) {
         //adding new columns if not present
-        if (formParams.get(EPConstants.ADD_COLUMNS) != null) {
-            addColumns(spec, (List<String>) formParams.get(EPConstants.ADD_COLUMNS));
+        if (formParams.getAdditionalColumns() != null) {
+            addColumns(spec, formParams.getAdditionalColumns());
         }
     }
     /**
@@ -406,11 +417,11 @@ public class ReportsUtil {
      * @param formParams
      * @return
      */
-    public static OutputSettings buildOutputSettings(ReportSpecification spec, JsonBean formParams) {
+    public static OutputSettings buildOutputSettings(ReportSpecification spec, ReportFormParameters formParams) {
         Set<String> idsValuesColumns = null;
         
-        if (formParams.get(EPConstants.COLUMNS_WITH_IDS) != null) {
-            idsValuesColumns = new HashSet<String> ((List<String>) formParams.get(EPConstants.COLUMNS_WITH_IDS));
+        if (formParams.getColumnsWithIds() != null) {
+            idsValuesColumns = new HashSet<>(formParams.getColumnsWithIds());
             // fixing the spec if some columns were not configured
             addColumns(spec, idsValuesColumns);
         }
@@ -418,10 +429,10 @@ public class ReportsUtil {
         return new OutputSettings(idsValuesColumns);
     }
     
-    private static void addHierarchies(ReportSpecification spec, JsonBean formParams) {
+    private static void addHierarchies(ReportSpecification spec, ReportFormParameters formParams) {
         //adding new hierarchies if not present
-        if (formParams.get(EPConstants.ADD_HIERARCHIES) != null) {
-            List<String> hierarchies = (List<String>) formParams.get(EPConstants.ADD_HIERARCHIES);
+        if (formParams.getAdditionalHierarchies() != null) {
+            List<String> hierarchies = formParams.getAdditionalHierarchies();
             List<ReportColumn> existingColumns = new ArrayList<ReportColumn>();
             existingColumns.addAll(spec.getColumns());
             for (String columnName : hierarchies) {
@@ -439,10 +450,10 @@ public class ReportsUtil {
         }
     }
     
-    private static void addMeasures(ReportSpecification spec, JsonBean formParams) {
+    private static void addMeasures(ReportSpecification spec, ReportFormParameters formParams) {
         //add new measures if not present
-        if (formParams.get(EPConstants.ADD_MEASURES) != null) {
-            List<String> measures = (List<String>) formParams.get(EPConstants.ADD_MEASURES);
+        if (formParams.getAdditionalMeasures() != null) {
+            List<String> measures = formParams.getAdditionalMeasures();
             for (String measureName : measures) {
                 ReportMeasure measure = new ReportMeasure(measureName);
                 if (!spec.getMeasures().contains(measure)) {
@@ -452,13 +463,12 @@ public class ReportsUtil {
     }
     
     // TODO: refactor once date filters per calendar are  handled
-    public static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams) {
-        configureFilters(spec, formParams, null);
+    public static void configureFilters(ReportSpecificationImpl spec, Map<String, Object> filterMap) {
+        configureFilters(spec, filterMap, null);
     }
     
-    public static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams, 
+    public static void configureFilters(ReportSpecificationImpl spec, Map<String, Object> filterMap,
             AmpFiscalCalendar oldCalendar) {
-        Map<String, Object> filterMap = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
         if (filterMap != null) {
             AmpReportFilters newFilters = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
             if (spec.getFilters() != null) {
@@ -490,9 +500,12 @@ public class ReportsUtil {
         
         AmpReportFilters result = newFilters == null ? new AmpReportFilters() : newFilters;
         
-        boolean somethingAdded = oldFilters.getComputedYear() != null;
-        result.setComputedYear(oldFilters.getComputedYear());
-        
+        boolean somethingAdded = false;
+        if (result.getComputedYear() == null && oldFilters.getComputedYear() != null) {
+            result.setComputedYear(oldFilters.getComputedYear());
+            somethingAdded = true;
+        }
+
         // set filters even if they are empty, that means filters are cleared up
         // copy MTEF-hacky entries from old widget to new widget, since these are supposed to be sticky (not present in the filter form)
         for(Entry<ReportElement, FilterRule> elem: oldFilters.getFilterRules().entrySet()) {
@@ -513,12 +526,12 @@ public class ReportsUtil {
      * If nothing specified, then the default project types are used for the given report type.
      * 
      * @param spec 
-     * @param formParams
+     * @param projectTypeOptions
      */
-    public static void configureProjectTypes(ReportSpecificationImpl spec, JsonBean formParams) {
-        List<String> projectTypeOptions = (List<String>) formParams.get(EPConstants.PROJECT_TYPE);
-        if (projectTypeOptions == null || projectTypeOptions.size() == 0) 
+    public static void configureProjectTypes(ReportSpecificationImpl spec, List<String> projectTypeOptions) {
+        if (projectTypeOptions == null || projectTypeOptions.size() == 0) {
             return;
+        }
         // no validation is done here, use "validateReportConfig" before creating report specification
         boolean hasPledge = projectTypeOptions.contains(ActivityType.PLEDGE.toString());
         boolean hasSSCActivity = projectTypeOptions.contains(ActivityType.SSC_ACTIVITY.toString());
@@ -572,22 +585,22 @@ public class ReportsUtil {
      * @param formParams
      * @return true if sorting configuration changed
      */
-    public static boolean configureSorting(ReportSpecificationImpl spec, JsonBean formParams) {
+    public static boolean configureSorting(ReportSpecificationImpl spec, ReportFormParameters formParams) {
         List<SortingInfo> newSorters = new ArrayList<SortingInfo>();
         
-        if (formParams.get(EPConstants.SORTING) != null) {
-            List<Map<String, Object>> sortingConfig = (List<Map<String, Object>>)formParams.get(EPConstants.SORTING);
+        if (formParams.getSorting() != null) {
+            List<SortParam> sortingConfig = formParams.getSorting();
             logger.info("sortingConfig is: " + sortingConfig);
             
-            for (Map<String, Object> sort : sortingConfig) {
-                List<String> columns = (List<String>)sort.get("columns");
-                Boolean asc = (Boolean)sort.get("asc");
+            for (SortParam sort : sortingConfig) {
+                List<String> columns = sort.getColumns();
+                Boolean asc = sort.isAsc();
                 
                 boolean isTotals;
                 boolean isFunding;
-                if (sort.containsKey("id")) {
+                if (sort.getId() != null) {
                     // SAIKU request
-                    String id = sort.get("id").toString(); // crash if null
+                    String id = sort.getId();
                     isTotals = id.startsWith(String.format("[%s]", NiReportsEngine.TOTALS_COLUMN_NAME));
                     isFunding = id.startsWith(String.format("[%s]", NiReportsEngine.FUNDING_COLUMN_NAME));
                 } else {
@@ -613,7 +626,7 @@ public class ReportsUtil {
         }
         
         // check if sorting config indeed changed
-        boolean sortingChanged = true; /*!MondrianReportUtils.equals(newSorters, spec.getSorters());*/
+        boolean sortingChanged = true;
         if (sortingChanged)
             spec.setSorters(newSorters);
         return sortingChanged;
@@ -625,36 +638,35 @@ public class ReportsUtil {
      * @param formParams input parameters used 
      * @return JsonBean with errors or null if no error
      */
-    public static final JsonBean validateReportConfig(JsonBean formParams,
-            boolean isCustom) {
+    public static final ApiErrorResponse validateReportConfig(ReportFormParameters formParams, boolean isCustom) {
         List<ApiErrorMessage> errors = new ArrayList<ApiErrorMessage>();
         // validate the name
-        if (isCustom && StringUtils.isBlank(formParams.getString(EPConstants.REPORT_NAME))) {
+        if (isCustom && StringUtils.isBlank(formParams.getReportName())) {
             errors.add(ReportErrors.REPORT_NAME_REQUIRED);
         }
         
         // validate the columns
-        ApiErrorMessage err = validateList("columns", (List<String>) formParams.get(EPConstants.ADD_COLUMNS),
+        ApiErrorMessage err = validateList("columns", formParams.getAdditionalColumns(),
                 ColumnsVisibility.getConfigurableColumns(), isCustom);
         if (err != null) errors.add(err);
         
         // validate the measures due to measureless reports a measure is not mandatory anymore
-        err = validateList("measures", (List<String>) formParams.get(EPConstants.ADD_MEASURES),
+        err = validateList("measures", formParams.getAdditionalMeasures(),
                 MeasuresVisibility.getConfigurableMeasures(), false);
         if (err != null) errors.add(err);
         
         // validate the hierarchies
-        err = validateList("hierarchies", (List<String>) formParams.get(EPConstants.ADD_HIERARCHIES),
-                (List<String>) formParams.get(EPConstants.ADD_COLUMNS), false);
+        err = validateList("hierarchies", formParams.getAdditionalHierarchies(),
+                formParams.getAdditionalColumns(), false);
         if (err != null) errors.add(err);
         
         // validate the project types
-        err = validateList("project types", (List<String>) formParams.get(EPConstants.PROJECT_TYPE),
+        err = validateList("project types", formParams.getProjectType(),
                 ActivityType.STR_VALUES, false);
         if (err != null) errors.add(err);
         
         // validate the report type
-        err = validateReportType(formParams);
+        err = validateReportType(formParams.getReportType(), formParams.getProjectType());
         if (err != null) errors.add(err);
         if(errors.size()>0){
             return ApiError.toError(errors);
@@ -662,7 +674,25 @@ public class ReportsUtil {
             return null;
         }
     }
-    
+
+    public static ApiErrorResponse validateReportConfig(PublicReportFormParameters formParams) {
+        List<ApiErrorMessage> errors = new ArrayList<ApiErrorMessage>();
+
+        // validate the project types
+        ApiErrorMessage err = validateList("project types", formParams.getProjectType(),
+                ActivityType.STR_VALUES, false);
+        if (err != null) {
+            errors.add(err);
+        }
+
+        // validate the report type
+        err = validateReportType(formParams.getReportType(), formParams.getProjectType());
+        if (err != null) {
+            errors.add(err);
+        }
+        return errors.size() > 0 ? ApiError.toError(errors) : null;
+    }
+
     private static ApiErrorMessage validateList(String listName, List<String> values,
             Collection<String> allowedValues, boolean isMandatory) {
         if (values == null || values.size() == 0) {
@@ -681,14 +711,12 @@ public class ReportsUtil {
         return null;
     }
     
-    private static ApiErrorMessage validateReportType(JsonBean config) {
-        String reportType = EndpointUtils.getSingleValue(config, 
-                EPConstants.REPORT_TYPE, EPConstants.DEFAULT_REPORT_TYPE);
+    private static ApiErrorMessage validateReportType(String reportType, List<String> activityTypes) {
+        reportType = EndpointUtils.getSingleValue(reportType, EPConstants.DEFAULT_REPORT_TYPE);
         Integer reportTypeId = EPConstants.REPORT_TYPE_ID_MAP.get(reportType);
         if (reportTypeId == null) {
-            return ReportErrors.REPORT_TYPE_INVALID.withDetails(config.getString(EPConstants.REPORT_TYPE));
+            return ReportErrors.REPORT_TYPE_INVALID.withDetails(reportType);
         }
-        List<String> activityTypes = (List<String>) config.get(EPConstants.PROJECT_TYPE);
         if (activityTypes != null) {
             if (activityTypes.size() == 0) {
                 return ReportErrors.REPORT_TYPE_REQUIRED;
@@ -700,40 +728,39 @@ public class ReportsUtil {
         return null;
     }
     
-    private static void setOtherOptions(ReportSpecificationImpl spec, JsonBean formParams) {
+    private static void setOtherOptions(ReportSpecificationImpl spec, ReportFormParameters formParams) {
         
-        Boolean showEmptyRows = (Boolean) formParams.get(EPConstants.SHOW_EMPTY_ROWS);
+        Boolean showEmptyRows = formParams.getShowEmptyRows();
         if (showEmptyRows != null) {
             spec.setDisplayEmptyFundingRows(showEmptyRows);
         }
         
-        Boolean showEmptyColumnGroups = (Boolean) formParams.get(EPConstants.SHOW_EMPTY_COLUMNS);
+        Boolean showEmptyColumnGroups = formParams.getShowEmptyColumnGroups();
         if (showEmptyColumnGroups != null) {
             spec.setDisplayEmptyFundingColumns(showEmptyColumnGroups);
         }
         
-        Boolean forceHeaders = (Boolean) formParams.get(EPConstants.FORCE_HEADERS);
+        Boolean forceHeaders = formParams.getForceHeaders();
         if (forceHeaders != null) {
             spec.setPopulateReportHeadersIfEmpty(forceHeaders);
         }
-        String groupingOption = (String) formParams.get(EPConstants.GROUPING_OPTION);
+        String groupingOption = formParams.getGroupingOption();
         if (groupingOption != null) {
             ReportsUtil.setGroupingCriteria(spec, groupingOption);
         }
         
-        Boolean summary = (Boolean) formParams.get(EPConstants.SUMMARY);
+        Boolean summary = formParams.getSummary();
         if (summary != null) {
-            ReportsUtil.setGroupingCriteria(spec, groupingOption);
             spec.setSummaryReport(summary);
         }
         
-        Boolean showOriginalCurrency = (Boolean) formParams.get(EPConstants.SHOW_ORIGINAL_CURRENCY);
+        Boolean showOriginalCurrency = formParams.getShowOriginalCurrency();
         if (showOriginalCurrency != null) {
             spec.setShowOriginalCurrency(showOriginalCurrency);
         }
         
     }
-    
+
     /**
      * Exports current report configuration to the map
      * 
@@ -741,7 +768,7 @@ public class ReportsUtil {
      * @param reportId
      * @return
      */
-    public static String exportToMap(final JsonBean config, final Long reportId) {
+    public static String exportToMap(final ReportConfig config, final Long reportId) {
         ReportSpecificationImpl spec = getReport(reportId);
         if (spec == null)
             return null;
@@ -768,15 +795,15 @@ public class ReportsUtil {
                 }
             }
         }
-        config.set(EPConstants.API_STATE_LAYERS_VIEW, layersView);
+        config.setLayersView(layersView);
         
         // update the settings based on Measures
-        Map<String, String> settings = (Map<String, String>) config.get(EPConstants.SETTINGS);
+        Map<String, Object> settings = config.getSettings();
         // must be not null! but just in case something gets broken
         if (settings == null) {
             logger.error("No settings are provided - please fix!");
-            settings = new HashMap<String, String>();
-            config.set(EPConstants.SETTINGS, settings);
+            settings = new HashMap<>();
+            config.setSettings(settings);
         }
         
         // set default funding type
@@ -801,14 +828,18 @@ public class ReportsUtil {
         settings.put(SettingsConstants.FUNDING_TYPE_ID, fundingType);
         
         // we need to stringify the final config
-        JSONObject jObject = new JSONObject();
-        jObject.accumulateAll(config.any());
-        
-        // configure api state json 
-        JsonBean apiState = new JsonBean();
-        apiState.set(EPConstants.API_STATE_TITLE, spec.getReportName());
-        apiState.set(EPConstants.API_STATE_DESCRIPTION, EPConstants.API_STATE_REPORT_EXPORT_DESCRIPTION);
-        apiState.set(EPConstants.API_STATE_BLOB, jObject.toString());
+        String configJson;
+        try {
+            configJson = new ObjectMapper().writeValueAsString(config);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert object to json representation.", e);
+        }
+
+        // configure api state json
+        AmpApiState apiState = new AmpApiState();
+        apiState.setTitle(spec.getReportName());
+        apiState.setDescription(EPConstants.API_STATE_REPORT_EXPORT_DESCRIPTION);
+        apiState.setStateBlob(configJson);
         
         // Saving the export to the user session.
         // Will there be any need to keep multiple states for the same report export?
@@ -823,9 +854,9 @@ public class ReportsUtil {
      * @param reportConfigId
      * @return JsonBean with saved Api state
      */
-    public static JsonBean getApiState(String reportConfigId) {
+    public static AmpApiState getApiState(String reportConfigId) {
         // TODO: can we safely remove it from session afterwards? 
-        return (JsonBean) TLSUtils.getRequest().getSession()
+        return (AmpApiState) TLSUtils.getRequest().getSession()
                 .getAttribute(EPConstants.API_STATE_REPORT_EXPORT + reportConfigId);
     }
     

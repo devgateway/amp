@@ -6,11 +6,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public class ReportRenderWarning implements Comparable<ReportRenderWarning> {
     
-    /**
-     * the id which will be put in {@link #fieldId} in case the error pertains to no particular id (For example, mixing null and not null primary sectors
-     */
-    public final static Long UNDEFINED_CART_ENTITY = -1L;
-    
     public final NumberedTypedEntity subject; // entity (e.g. activity) which is in error
     public final String field; // field which is in error. Name = FactTableColumn.columnName
     public final Long fieldId; // id which identifies the cart-entity, e.g. for example "primarySectorId". Might be ALL (e.g. undefined)

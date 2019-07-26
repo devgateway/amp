@@ -3,15 +3,13 @@ package org.dgfoundation.amp.newreports;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 
 /**
  * a @link {@link ReportCell} containing an amount
- * TODO: change to only have BigDecimal as values after Mondrian has been removed from AMP. Change {@link #extractValue()} accordingly 
  * @author Dolghier Constantin, Nadejda Mandrescu
- *
  */
 @JsonIgnoreProperties(value = "")
 @JsonFilter(EPConstants.JSON_FILTER_AMOUNT_CELL)
@@ -21,15 +19,8 @@ public final class AmountCell extends ReportCell {
         super(value, formattedValue);
     }
     
-    // NIREPORTS: remove this when cleaning up Mondrian
-    public AmountCell(Double value, DecimalFormat formatter) {
-        super(value, format(formatter, value));
-    }
-
-    public double extractValue() {
-        if (value instanceof Double)
-            return ((Double) value);
-        return ((BigDecimal) value).doubleValue();
+    public BigDecimal extractValue() {
+        return (BigDecimal) value;
     }
     
     protected static String format(DecimalFormat formatter, Double value) {

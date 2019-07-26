@@ -268,7 +268,7 @@ public class GlossaryUtil {
             deleteTopic(glossaryTopic, dbSession);                  //delete topic, its editor and children
             //tx.commit();                                          //commit changes
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new DgException("Can't remove Glossary items", e);
         }
     }
@@ -325,7 +325,7 @@ public class GlossaryUtil {
             query.setLong("id", topic.getHelpTopicId());
             helpTopics = query.list();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new AimException("Unable to load glossary children", e);
         }
         return helpTopics;

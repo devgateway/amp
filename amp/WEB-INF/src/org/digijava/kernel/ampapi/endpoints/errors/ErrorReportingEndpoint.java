@@ -1,15 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.errors;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
+import io.swagger.annotations.ApiOperation;
+import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Allows any endpoint to report all its possible errors. Implementations must provide a class that holds all errors
@@ -17,7 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  *
  * @author Octavian Ciubotaru
  */
-public interface ErrorReportingEndpoint {
+public interface ErrorReportingEndpoint extends AmpEndpoint {
 
     ApiErrorCollector errorCollector = new ApiErrorCollector();
 
@@ -25,10 +23,9 @@ public interface ErrorReportingEndpoint {
     @Path("errors")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "errors", ui = false)
-    default JsonBean getErrors() {
-        JsonBean jsonBean = ApiError.toError(errorCollector.collect(getErrorsClass()));
-        EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_OK);
-        return jsonBean;
+    @ApiOperation("Errors reported by this endpoint")
+    default ApiErrorResponse getErrors() {
+        return ApiError.format(errorCollector.collect(getErrorsClass()));
     }
 
     /**

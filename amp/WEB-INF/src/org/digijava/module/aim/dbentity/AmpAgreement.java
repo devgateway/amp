@@ -5,22 +5,31 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 
 @TranslatableClass(displayName = "Agreement")
-public class AmpAgreement implements Serializable, Versionable {
+public class AmpAgreement implements Serializable, Versionable, Identifiable {
     private static final long serialVersionUID = 1L;
 
     @Interchangeable(fieldTitle = "Agreement ID")
     private Long id;
 
-    @Interchangeable(fieldTitle = "Code", fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Code", importable = true)
+    @Interchangeable(fieldTitle = "Code",
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Code",
+            importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String code;
 
-    @Interchangeable(fieldTitle = "Title", fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Title", importable = true)
+    @Interchangeable(fieldTitle = "Title",
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Title",
+            importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     @TranslatableField
     private String title;
 
@@ -143,5 +152,10 @@ public class AmpAgreement implements Serializable, Versionable {
 
     public void setParlimentaryApprovalDate(Date parlimentaryApprovalDate) {
         this.parlimentaryApprovalDate = parlimentaryApprovalDate;
+    }
+
+    @Override
+    public Object getIdentifier() {
+        return id;
     }
 }

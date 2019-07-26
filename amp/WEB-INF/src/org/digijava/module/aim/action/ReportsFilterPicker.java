@@ -598,7 +598,7 @@ public class ReportsFilterPicker extends Action {
         } else {
             showAllCountries = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.SHOW_ALL_COUNTRIES);
         }
-        
+
         List<LocationSkeleton> filterCountries = new ArrayList<LocationSkeleton>();
         if (showAllCountries) {
             AmpCategoryValue layer = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
@@ -1034,11 +1034,15 @@ public class ReportsFilterPicker extends Action {
                         .getOtherCriteriaElements());
 
         addDateFilter("Actual Completion Date", "ActivityActualCompletion",
-                "Actual Completion Date", filterForm.getDynamicActivityActualCompletionFilter(), 
+                "Actual Completion Date", filterForm.getDynamicActivityActualCompletionFilter(),
                 "filter_activity_actual_completion_date_div", filterForm.getOtherCriteriaElements());
         
         addDateFilter("Final Date for Contracting", "ActivityFinalContracting",
                 "Final Date for Contracting", filterForm.getDynamicActivityFinalContractingFilter(), "filter_activity_final_contracting_date_div", filterForm.getOtherCriteriaElements());
+    
+        addDateFilter("Actual Approval Date", "ActualApproval",
+                "Actual Approval Date", filterForm.getDynamicActualApprovalFilter(), "filter_actual_approval_date_div",
+                filterForm.getOtherCriteriaElements());
         
         addDateFilter("Proposed Approval Date", "ProposedApproval",
                 "Proposed Approval Date", filterForm.getDynamicProposedApprovalFilter(), "filter_proposed_approval_date_div", filterForm.getOtherCriteriaElements());
@@ -1055,18 +1059,18 @@ public class ReportsFilterPicker extends Action {
                             tree, "selectedPerformanceAlertLevels");
             filterForm.getOtherCriteriaElements().add(groupingElement);
         }
-        
+
         if (FeaturesUtil.isVisibleField(ColumnConstants.PERFORMANCE_ALERT_TYPE)) {
             List<HierarchyListableImplementation> children = new ArrayList<HierarchyListableImplementation>();
-            HierarchyListableImplementation rootPerformanceRuleType = 
+            HierarchyListableImplementation rootPerformanceRuleType =
                     new HierarchyListableImplementation("All", "-1", children);
-            
+
             PerformanceRuleManager.PERF_ALERT_TYPE_TO_ID.entrySet().forEach(e -> {
                 children.add(new HierarchyListableImplementation(TranslatorWorker.translateText(
-                        PerformanceRuleManager.PERF_ALERT_TYPE_TO_DESCRIPTION.get(e.getKey())), 
+                        PerformanceRuleManager.PERF_ALERT_TYPE_TO_DESCRIPTION.get(e.getKey())),
                         String.valueOf(e.getValue())));
             });
-            
+
             GroupingElement<HierarchyListableImplementation> perfGroupingElement =
                     new GroupingElement<>("Performance Alert Type", "filter_performance_alert_type_div",
                             rootPerformanceRuleType, "selectedPerformanceAlertTypes");
@@ -1364,8 +1368,8 @@ public class ReportsFilterPicker extends Action {
 
         return null;
     }
-    
-    
+
+
     /**
      * fills an AmpARFilter instance with Filters data from a ReportsFilterPickerForm
      * @param arf
@@ -1440,7 +1444,13 @@ public class ReportsFilterPicker extends Action {
         arf.setDynIssueFilterAmount(filterForm.getDynamicIssueFilter().getAmount());
         arf.setDynIssueFilterOperator(filterForm.getDynamicIssueFilter().getOperator());
         arf.setDynIssueFilterXPeriod(filterForm.getDynamicIssueFilter().getxPeriod());
-
+    
+        arf.setFromActualApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromActualApprovalDate()));
+        arf.setToActualApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToActualApprovalDate()));
+        arf.setDynActualApprovalFilterCurrentPeriod(filterForm.getDynamicActualApprovalFilter().getCurrentPeriod());
+        arf.setDynActualApprovalFilterAmount(filterForm.getDynamicActualApprovalFilter().getAmount());
+        arf.setDynActualApprovalFilterOperator(filterForm.getDynamicActualApprovalFilter().getOperator());
+        arf.setDynActualApprovalFilterXPeriod(filterForm.getDynamicActualApprovalFilter().getxPeriod());
         arf.setFromProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromProposedApprovalDate()));
         arf.setToProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToProposedApprovalDate()));
         arf.setDynProposedApprovalFilterCurrentPeriod(filterForm.getDynamicProposedApprovalFilter().getCurrentPeriod());
@@ -1550,7 +1560,7 @@ public class ReportsFilterPicker extends Action {
         arf.setExpenditureClass(pumpCategoryValueSetFromForm(filterForm.getSelectedExpenditureClasses()));
 
         arf.setPerformanceAlertLevel(pumpCategoryValueSetFromForm(filterForm.getSelectedPerformanceAlertLevels()));
-        
+
         arf.setPerformanceAlertType(pumpPerformanceAlertTypeSetFromForm(filterForm.getSelectedPerformanceAlertTypes()));
 
         if (filterForm.getSelectedWorkspaces() != null && filterForm.getSelectedWorkspaces().length > 0)
@@ -1650,7 +1660,7 @@ public class ReportsFilterPicker extends Action {
         /*THIS IS USED FOR PLEDGES IN ORDER TO SHOW ONLY PLEDGES ASSOCIATED TO THE ACTIVITIES THAT BELONG TO THE WORKSPACE
          PLEASE DON'T DELETE IT AGAIN*/
         if(arf.isWorkspaceonly()){
-            arf.setAmpTeamsforpledges(WorkspaceFilter.getAmpTeamsSet(arf.getTeamMemberId(), arf.getAccessType(), true, true));
+            arf.setAmpTeamsforpledges(WorkspaceFilter.getAmpTeamsSet(arf.getTeamMemberId()));
         }else{
             arf.setAmpTeamsforpledges(null);
         }

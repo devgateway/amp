@@ -4,10 +4,12 @@ import static java.util.Collections.emptyMap;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -16,158 +18,125 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.contact.dto.ContactView;
+import org.digijava.kernel.ampapi.endpoints.contact.dto.SwaggerContact;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.dbentity.AmpContact;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * @author Octavian Ciubotaru
  */
 @Path("contact")
+@Api("contact")
 public class ContactEndpoint implements ErrorReportingEndpoint {
 
-    /**
-     * Provides full set of available fields and their settings/rules in a hierarchical structure.
-     * @return JSON with fields information
-     * @see <a href="https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration">Fields Enumeration Wiki<a/>
-     */
     @GET
     @Path("fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getFields", ui = false)
+    @ApiOperation(
+            value = "Provides full set of available fields and their settings/rules in a hierarchical structure.",
+            notes = "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration).")
     public List<APIField> getAvailableFields() {
-        return AmpFieldsEnumerator.PUBLIC_CONTACT_ENUMERATOR.getContactFields();
+        return AmpFieldsEnumerator.getEnumerator().getContactFields();
     }
 
-    /**
-     * Returns a list of possible values for each requested field.
-     * <p>If value can be translated then each possible value will contain value-translations element, a map where key
-     * is language code and value is translated value.</p>
-     * <h3>Sample request:</h3><pre>
-     * ["title", "organisation_contacts~organisation", "phone~type"]
-     * </pre>
-     * <h3>Sample response:</h3><pre>
-     * {
-     *   "phone~type": [
-     *     {
-     *       "id": 194,
-     *       "value": "Cell",
-     *       "translated-value": {
-     *         "fr": "Portable"
-     *       }
-     *     },
-     *     {
-     *       "id": 193,
-     *       "value": "Home",
-     *       "translated-value": {
-     *         "fr": "Domicile"
-     *       }
-     *     }
-     *   ],
-     *   "organisation_contacts~organisation": [
-     *     {
-     *       "id": 105,
-     *       "value": "Volet Trésor",
-     *       "translated-value": {
-     *         "fr": "Volet Trésor"
-     *       },
-     *       "extra_info": {
-     *         "acronym": "TRESOR",
-     *         "organization_group": "Etat"
-     *       }
-     *     }
-     *   ],
-     *   "title": [
-     *     {
-     *       "id": 241,
-     *       "value": "Mr",
-     *       "translated-value": {
-     *         "fr": "M."
-     *       }
-     *     },
-     *     {
-     *       "id": 242,
-     *       "value": "Ms",
-     *       "translated-value": {
-     *         "fr": "Melle"
-     *       }
-     *     }
-     *   ]
-     * }
-     * </pre>
-     *
-     * @implicitParam translations|string|query|false|||||false|pipe separated list of language codes
-     * @param fields list of fully qualified contact fields
-     * @return list of possible values grouped by field
-     */
     @POST
     @Path("field/values")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getMultiValues", ui = false)
-    public Map<String, List<PossibleValue>> getValues(List<String> fields) {
+    @ApiOperation(
+            value = "Returns a list of possible values for each requested field.",
+            notes = "If value can be translated then each possible value will contain value-translations element, "
+                    + "a map where key is language code and value is translated value.\n"
+                    + "\n"
+                    + "### Sample request\n"
+                    + "\n"
+                    + "`[\"title\", \"organisation_contacts~organisation\", \"phone~type\"]`")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of possible values grouped by field"))
+    public Map<String, List<PossibleValue>> getValues(
+            @ApiParam("list of fully qualified contact fields") List<String> fields) {
         Map<String, List<PossibleValue>> response;
         if (fields == null) {
             response = emptyMap();
         } else {
+            List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getContactFields();
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
-                    .collect(toMap(identity(), this::possibleValuesFor));
+                    .collect(toMap(identity(), fieldName -> possibleValuesFor(fieldName, apiFields)));
         }
         return response;
     }
 
-    private List<PossibleValue> possibleValuesFor(String fieldName) {
-        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpContact.class, null);
+    private List<PossibleValue> possibleValuesFor(String fieldName, List<APIField> apiFields) {
+        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, apiFields);
     }
 
-    /**
-     * Retrieve contact.
-     * @param id contact id
-     */
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
-    public JsonBean getContact(@PathParam("id") Long id) {
-        return ContactUtil.getContact(id);
+    @ApiOperation("Retrieve contact")
+    public SwaggerContact getContact(@ApiParam("contact id") @PathParam("id") Long id) {
+        Map<String, Object> contact = ContactUtil.getContact(id);
+        return new SwaggerContact(contact);
     }
 
-    /**
-     * Create new contact.
-     * @param contact the contact to create
-     * @return brief representation of contact
-     */
+    @POST
+    @Path("/batch")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
+    @ApiOperation("Retrieve contacts")
+    public Collection<Map<String, Object>> getContact(List<Long> ids) {
+        return ContactUtil.getContacts(ids);
+    }
+
     @PUT
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "createContact", ui = false)
-    public JsonBean createContact(JsonBean contact) {
-        ContactImporter importer = new ContactImporter();
-        List<ApiErrorMessage> errors = importer.createContact(contact);
-        return ContactUtil.getImportResult(importer.getContact(), importer.getNewJson(), errors);
+    @ApiOperation("Create new contact")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpServletResponse.SC_OK, reference = "AmpContact_Summary",
+                    message = "brief representation of contact"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Summary",
+            message = "error if invalid contact received")
+    })
+    @JsonView(ContactView.Summary.class)
+    public JsonApiResponse<AmpContact> createContact(SwaggerContact contact) {
+        return new ContactImporter().createContact(contact.getMap()).getResult();
     }
 
-    /**
-     * Update an existing contact.
-     * @param id id of the existing contact
-     * @param contact updated contact
-     * @return brief representation of contact
-     */
     @POST
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "updateContact", ui = false)
-    public JsonBean updateContact(@PathParam("id") Long id, JsonBean contact) {
-        ContactImporter importer = new ContactImporter();
-        List<ApiErrorMessage> errors = importer.updateContact(id, contact);
-        return ContactUtil.getImportResult(importer.getContact(), importer.getNewJson(), errors);
+    @ApiOperation("Update an existing contact")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpServletResponse.SC_OK, reference = "AmpContact_Summary",
+                    message = "brief representation of contact"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Summary",
+            message = "error if invalid contact received")
+    })
+    @JsonView(ContactView.Summary.class)
+    public JsonApiResponse<AmpContact> updateContact(@ApiParam("id of the existing contact") @PathParam("id") Long id,
+            SwaggerContact contact) {
+        return new ContactImporter().updateContact(id, contact.getMap()).getResult();
     }
 
     @Override

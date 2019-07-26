@@ -964,7 +964,9 @@ public class EditOrganisation extends DispatchAction {
           if(ContentTranslationUtil.multilingualIsEnabled()){
               organization.setName(editForm.getName());  
           }else{
-              String name=MultilingualInputFieldValues.readParameter("AmpOrganisation_name_" + TLSUtils.getSite().getDefaultLanguage().getCode(), "AmpOrganisation_name", request).right;
+              String langCode = TLSUtils.getSite().getDefaultLanguage().getCode();
+              String name = MultilingualInputFieldValues.readParameter(
+                      "AmpOrganisation_name_" + langCode, "AmpOrganisation_name", request).getRight();
               organization.setName(name);
           }
               

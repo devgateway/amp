@@ -44,7 +44,7 @@ import org.hibernate.type.StringType;
 public class AuditLoggerUtil {
 
     private static Logger logger = Logger.getLogger(AuditLoggerUtil.class);
-
+    
     /**
      * Call this method only in http request scope.
      */
@@ -161,7 +161,6 @@ public class AuditLoggerUtil {
             
             session.save(aal);
         }catch (Exception ex) {
-            ex.printStackTrace();
             logger.error("Cannot save audit logger :", ex);
         } 
     }

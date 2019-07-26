@@ -6,8 +6,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Session;
@@ -20,9 +19,9 @@ public final class GisUtils {
 
     }
     
-    public static void configurePerformanceFilter(JsonBean config, AmpReportFilters filterRules) {
-        if (config.get(SettingsConstants.PERFORMANCE_ISSUES) != null) {
-            boolean showActivitiewWithPerformanceIssues = (boolean) config.get(SettingsConstants.PERFORMANCE_ISSUES);
+    public static void configurePerformanceFilter(PerformanceFilterParameters config, AmpReportFilters filterRules) {
+        if (config.getShowActivitiewWithPerformanceIssues() != null) {
+            boolean showActivitiewWithPerformanceIssues = config.getShowActivitiewWithPerformanceIssues();
             List<String> actIds = getActivitiesWithPerformanceIssues();
             filterRules.addFilterRule(new ReportColumn(ColumnConstants.ACTIVITY_ID), 
                     new FilterRule(actIds, showActivitiewWithPerformanceIssues)); 
@@ -44,8 +43,8 @@ public final class GisUtils {
     public static List<AmpLocator> getLocators() {
         Session session = PersistenceManager.getSession();
         List<AmpLocator> locators = session.createCriteria(AmpLocator.class).addOrder(Order.asc("id")).list();
-        
+
         return locators;
     }
-    
+
 }

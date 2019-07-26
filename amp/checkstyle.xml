@@ -68,7 +68,9 @@
     </module>
     <module name="ModifierOrder"/>
     <module name="RedundantModifier"/>
-    <module name="AvoidNestedBlocks"/>
+    <module name="AvoidNestedBlocks">
+    	<property name="allowInSwitchCase" value="true" />
+    </module>
     <module name="EmptyBlock"/>
     <module name="LeftCurly"/>
     <module name="NeedBraces"/>
@@ -100,6 +102,7 @@
     <module name="InterfaceIsType"/>
     <module name="VisibilityModifier">
       <property name="protectedAllowed" value="true"/>
+      <property name="ignoreAnnotationCanonicalNames" value="org.dgfoundation.amp.annotations.checkstyle.IgnoreCanonicalNames"/>
     </module>
     <module name="ArrayTypeStyle"/>
     <module name="TodoComment">

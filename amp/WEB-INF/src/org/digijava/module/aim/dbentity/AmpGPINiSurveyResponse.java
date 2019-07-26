@@ -135,4 +135,5 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
         
         return false;
     }
+    
 }

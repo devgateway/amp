@@ -4,42 +4,36 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
+import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
-import org.digijava.module.categorymanager.util.CategoryConstants;
+
 /**
  * Represents one of the possible values for a certain category
  * @author Alex Gartner
  *
  */
 public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue>, HierarchyListable, Versionable{
-    @Interchangeable(fieldTitle="ID", id = true)
+    @PossibleValueId
     private Long id;
-//  @Interchangeable(fieldTitle="AMP Category Class", pickIdOnly = true)
     private AmpCategoryClass ampCategoryClass;
-    @Interchangeable(fieldTitle="Value", value = true)
+    @PossibleValueValue
     private String value;
-//  @Interchangeable(fieldTitle="Index")
     private Integer index;
-//  @Interchangeable(fieldTitle="Deleted")
     private Boolean deleted = false;
     
-//  @Interchangeable(fieldTitle="Activities", recu)
     private Set<AmpActivityVersion> activities;
     //private Long fieldType;
     
-//  @Interchangeable(fieldTitle="Used Values", pickIdOnly=true)
-    private Set<AmpCategoryValue> usedValues;
-//  @Interchangeable(fieldTitle="Used By Values", pickIdOnly = true)
-    private Set<AmpCategoryValue> usedByValues; 
+    private Set<AmpCategoryValue> usedValues = new HashSet<>();
+    private Set<AmpCategoryValue> usedByValues = new HashSet<>();
 
     private boolean translateable   = true;
 
@@ -98,14 +92,6 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
     public int compareTo(AmpCategoryValue a) {
         // TODO Auto-generated method stub
         return this.getId().compareTo(a.getId());
-    }
-
-    public boolean equals (Object o) {
-        if(!(o instanceof AmpCategoryValue)) return false;
-        AmpCategoryValue a = (AmpCategoryValue) o;
-        if ( a == null )
-            return false;
-        return this.getId().equals( a.getId() );
     }
 
     public Set<AmpCategoryValue> getUsedValues() {
@@ -206,5 +192,18 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
             this.deleted = false;
         else
             this.deleted = deleted;
+    }
+
+    public boolean equals(Object o) {
+        if (!(o instanceof AmpCategoryValue)) {
+            return false;
+        }
+        AmpCategoryValue a = (AmpCategoryValue) o;
+        return this.getId().equals(a.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

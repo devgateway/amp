@@ -3,7 +3,7 @@ package org.dgfoundation.amp.newreports;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * a concrete implementation of {@link ReportFilters}

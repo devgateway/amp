@@ -20,6 +20,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * 
@@ -69,7 +71,15 @@ public class PledgesEntityHelper {
     {
         return fetchEntities(FundingPledges.class);
     }
-    
+
+    public static boolean isExistingPledge(Long id) {
+        Number pledgeCount = (Number) PersistenceManager.getSession().createCriteria(FundingPledges.class)
+                .add(Restrictions.eq("id", id))
+                .setProjection(Projections.count("id"))
+                .uniqueResult();
+        return pledgeCount.intValue() == 1;
+    }
+
     public static List<AmpFundingDetail> getFundingRelatedToPledges(FundingPledges pledge)
     {
         return fetchEntities(AmpFundingDetail.class, "pledgeid", pledge.getId());

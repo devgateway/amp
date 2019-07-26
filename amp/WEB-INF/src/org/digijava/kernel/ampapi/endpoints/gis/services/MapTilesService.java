@@ -79,7 +79,7 @@ public final class MapTilesService {
         for (CrDocumentNodeAttributes publicDocument : publicDocuments) {
             Node node = DocumentManagerUtil.getReadNode(publicDocument.getUuid(), TLSUtils.getRequest());
             NodeWrapper nodeWrapper = new NodeWrapper(node);
-            if (nodeWrapper.getName().equals(FILE_NAME)) {
+            if (nodeWrapper.getNode() != null && nodeWrapper.getName().equals(FILE_NAME)) {
                 mapTilesNodeWrapper = nodeWrapper;
                 break;
             }

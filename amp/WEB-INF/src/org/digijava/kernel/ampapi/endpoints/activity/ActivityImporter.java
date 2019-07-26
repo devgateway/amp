@@ -49,6 +49,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validation.TranslatedValueContext;
+import org.digijava.kernel.validators.activity.AgreementCodeValidator;
 import org.digijava.kernel.validators.activity.PrivateResourceValidator;
 import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -66,6 +67,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -126,7 +128,8 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 new UniqueActivityTitleValidator.DatabaseBackedEnvironment();
         return supplier -> PrivateResourceValidator.withDao(resourceDAO,
                 () -> UniqueActivityTitleValidator.withDao(dbEnv,
-                        supplier));
+                        () -> AgreementCodeValidator.withCounter(DbUtil::countAgreementsByCode,
+                                supplier)));
     }
 
     private void init(Map<String, Object> newJson, boolean update, String endpointContextPath) {

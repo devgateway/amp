@@ -16,7 +16,8 @@ import org.junit.runners.Suite;
         UniqueActivityTitleValidatorTest.class,
         UniqueValidatorTest.class,
         PrivateResourceValidatorTest.class,
-        TreeCollectionValidatorTest.class
+        TreeCollectionValidatorTest.class,
+        AgreementCodeValidatorTest.class
 })
 public class ActivityValidatorsTestSuite {
 }

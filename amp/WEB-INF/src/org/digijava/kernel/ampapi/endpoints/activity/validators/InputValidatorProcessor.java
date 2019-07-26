@@ -23,9 +23,7 @@ public class InputValidatorProcessor {
     }
 
     public static List<InputValidator> getActivityBusinessRulesValidators() {
-        return Arrays.asList(
-                new AgreementCodeValidator(),
-                new AgreementTitleValidator());
+        return Arrays.asList();
     }
 
     public static List<InputValidator> getContactFormatValidators() {

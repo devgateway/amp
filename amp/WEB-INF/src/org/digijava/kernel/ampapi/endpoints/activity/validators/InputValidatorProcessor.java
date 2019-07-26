@@ -14,38 +14,11 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
  */
 public class InputValidatorProcessor {
 
-    public static List<InputValidator> getActivityFormatValidators() {
-        return Arrays.asList(
-                new ValidFieldValidator(),
-                new AllowedInputValidator(),
-                new InputTypeValidator(),
-                new ValueValidator());
-    }
-
-    public static List<InputValidator> getActivityBusinessRulesValidators() {
-        return Arrays.asList();
-    }
-
-    public static List<InputValidator> getContactFormatValidators() {
+    public static List<InputValidator> getFormatValidators() {
         return Arrays.asList(
                 new ValidFieldValidator(),
                 new InputTypeValidator(),
                 new ValueValidator());
-    }
-
-    public static List<InputValidator> getContactBusinessRulesValidators() {
-        return Arrays.asList();
-    }
-
-    public static List<InputValidator> getResourceFormatValidators() {
-        return Arrays.asList(
-                new ValidFieldValidator(),
-                new InputTypeValidator(),
-                new ValueValidator());
-    }
-
-    public static List<InputValidator> getResourceBusinessRulesValidators() {
-        return Arrays.asList();
     }
 
     private final List<InputValidator> validators;

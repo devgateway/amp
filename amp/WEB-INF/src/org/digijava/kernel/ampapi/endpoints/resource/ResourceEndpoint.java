@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -21,209 +22,172 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
+
 import org.apache.commons.io.FileUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.ResourceView;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerListResource;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerResource;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * @author Viorel Chihai
  */
 @Path("resource")
+@Api("resource")
 public class ResourceEndpoint implements ErrorReportingEndpoint {
 
     private static final Logger logger = LoggerFactory.getLogger(ResourceEndpoint.class);
-    
-    /**
-     * Provides full set of available fields and their settings/rules in a hierarchical structure.
-     * @return JSON with fields information
-     * @see <a href="https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration">Fields Enumeration Wiki<a/>
-     */
+
+    private static ResourceService resourceService = new ResourceService();
+
     @GET
     @Path("fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getFields", ui = false)
+    @ApiOperation(
+            value = "Provides full set of available fields and their settings/rules in a hierarchical structure.",
+            notes = "Return JSON with fields information. See "
+                    + "[Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
     public List<APIField> getAvailableFields() {
-        return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getResourceFields();
+        return AmpFieldsEnumerator.getEnumerator().getResourceFields();
     }
-    
-    /**
-     * Returns a list of possible values for each requested field.
-     * <p>If value can be translated then each possible value will contain value-translations element, a map where key
-     * is language code and value is translated value.</p>
-     * <h3>Sample request:</h3><pre>
-     * ["type"]
-     * </pre>
-     * <h3>Sample response:</h3><pre>
-     * {
-     *   "type": [
-     *     {
-     *       "id": 54,
-     *       "value": "Contract",
-     *       "translated-value": {
-     *         "en": "Contract"
-     *       }
-     *     },
-     *     {
-     *       "id": 46,
-     *       "value": "Project Document",
-     *       "translated-value": {
-     *         "en": "Project Document"
-     *       }
-     *     }
-     *   ]
-     * }
-     * </pre>
-     *
-     * @implicitParam translations|string|query|false|||||false|pipe separated list of language codes
-     * @param fields list of fully qualified resource fields
-     * @return list of possible values grouped by field
-     */
+
     @POST
     @Path("field/values")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getResourceMultiValues", ui = false)
-    public Map<String, List<PossibleValue>> getValues(List<String> fields) {
+    @ApiOperation(
+            value = "Returns a list of possible values for each requested field.",
+            notes = "If value can be translated then each possible value will contain value-translations element, "
+                    + "a map where key is language code and value is translated value.")
+    public Map<String, List<PossibleValue>> getValues(
+            @ApiParam("list of fully qualified resource fields") List<String> fields) {
         Map<String, List<PossibleValue>> response;
         if (fields == null) {
             response = emptyMap();
         } else {
+            List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getResourceFields();
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
-                    .collect(toMap(identity(), this::possibleValuesFor));
+                    .collect(toMap(identity(), fieldName -> possibleValuesFor(fieldName, apiFields)));
         }
         return response;
     }
 
-    private List<PossibleValue> possibleValuesFor(String fieldName) {
-        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpResource.class, null);
+    private List<PossibleValue> possibleValuesFor(String fieldName, List<APIField> apiFields) {
+        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, apiFields);
     }
-    
-    /**
-     * Retrieve resource by uuid.
-     * 
-     * <h3>Sample response:</h3><pre>
-     *  {
-     *     "uuid": "05a2f2d4-58f5-4198-8a05-cf42a758ce85",
-     *     "title": "fda",
-     *     "file_name": null,
-     *     "web_link": "https://www.postgresql.org/docs/9.2/static/sql-createcast.html",
-     *     "description": "fdas",
-     *     "note": "fda",
-     *     "type": 50,
-     *     "url": "/contentrepository/downloadFile.do?uuid=05a2f2d4-58f5-4198-8a05-cf42a758ce85",
-     *     "year_of_publication": "2002",
-     *     "adding_date": "2018-05-03T15:03:40.607+0300",
-     *     "file_size": 0,
-     *     "public": false,
-     *     "private": true,
-     *     "creator_email": "atl@amp.org",
-     *     "team": null,
-     *     "team_member": 14
-     *  }
-     *  </pre>
-     * @param uuid resource uuid
-     */
+
     @GET
     @Path("{uuid}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getResource", ui = false)
-    public JsonBean getResource(@PathParam("uuid") String uuid) {
-        return ResourceUtil.getResource(uuid);
+    @ApiOperation("Retrieve resource by uuid")
+    @ApiResponses({
+        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "AmpResource_Full",
+                message = "resource with all fields"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
+                message = "error if invalid configuration is received")})
+    @JsonView(ResourceView.Full.class)
+    public JsonApiResponse<AmpResource> getResource(@PathParam("uuid") String uuid) {
+        return resourceService.getResource(uuid);
     }
-    
-    /**
-     * Retrieve all resources from AMP.
-     * 
-     * @return list of resources
-     */
+
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getAllResources", ui = false)
-    public List<JsonBean> getAllResources() {
-        return ResourceUtil.getAllResources();
+    @ApiOperation(value = "Retrieve all resources from AMP.")
+    @ApiResponses({
+        @ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerListResource.class,
+                message = "list of resources with full information"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
+                message = "error if a probel encountered")})
+    public List<JsonApiResponse> getAllResources() {
+        return resourceService.getAllResources();
     }
-    
-    /**
-     * Retrieve resources from AMP.
-     * 
-     * <h3>Sample request:</h3><pre>
-     *  ["02af826a-d89e-4f7b-a30b-0a79630d2151", 
-     *  "66434e33-d8db-4787-93e6-be09ae828de4", 
-     *  "bb5cfc4a-9399-4afa-bef2-4a0e74c4a728"
-     *  ]
-     * </pre>
-     * 
-     * @param uuids the list of uuids
-     * @return list of resources
-     */
+
     @POST
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getAllResourcesByIds", ui = false)
-    public List<JsonBean> getAllResources(List<String> uuids) {
-        return ResourceUtil.getAllResources(uuids);
+    @ApiOperation("Retrieve resources from AMP.")
+    @ApiResponses({
+        @ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerListResource.class,
+                message = "list of resources with full information"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
+                message = "error if a probel encountered")})
+    public List<JsonApiResponse> getAllResources(List<String> uuids) {
+        return resourceService.getAllResources(uuids);
     }
 
-    /**
-     * Create new web link resource.
-     *
-     * <h3>Sample request body:</h3><pre>
-     * {
-     *   "title": "Resource title",
-     *   "description": "Resource description",
-     *   "note": "Resource note",
-     *   "web_link": "https://sample.resource.com/"
-     * }
-     * </pre>
-     *
-     * @param resource the resource to create
-     * @return brief representation of resource
-     */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "createResource", ui = false)
-    public JsonBean createResource(JsonBean resource) {
-        ResourceImporter importer = new ResourceImporter();
-        List<ApiErrorMessage> errors = importer.createResource(resource);
-        return ResourceUtil.getImportResult(importer.getResource(), importer.getNewJson(), errors);
+    @ApiOperation(value = "Create new web link resource.",
+            notes = "Returns brief representation of resource.\n\n"
+                    + "<h3>Sample request body:</h3><pre>\n"
+                    + "{\n"
+                    + "  \"title\": \"Resource title\",\n"
+                    + "  \"description\": \"Resource description\",\n"
+                    + "  \"note\": \"Resource note\",\n"
+                    + "  \"web_link\": \"https://sample.resource.com/\"\n"
+                    + "}\n"
+                    + "</pre>")
+    @ApiResponses({
+        @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
+                message = "the brief representationresource"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Link",
+                message = "error if invalid configuration is received")})
+    @JsonView(ResourceView.Link.class)
+    public JsonApiResponse<AmpResource> createResource(@ApiParam("resource configuration") SwaggerResource resource) {
+        return new ResourceImporter().createResource(resource.getMap()).getResult();
     }
 
-    /**
-     * Create new web link or document resource.
-     *
-     * <h3>Sample resource parameter:</h3><pre>
-     * {
-     *   "title": "Resource title",
-     *   "description": "Resource description",
-     *   "note": "Resource note"
-     * }
-     * </pre>
-     *
-     * @param resource the resource to create
-     * @param file the associated file
-     * @return brief representation of resource
-     */
     @PUT
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, 
                     id = "createResourceWithDoc", ui = false)
-    public JsonBean createDocResource(
-            @FormDataParam("resource") JsonBean resource,
+    @ApiOperation(value = "Create new web link or document resource.",
+            notes = "Returns brief representation of resource.\n\n"
+                    + "<h3>Sample resource parameter:</h3><pre>\n"
+                    + "{\n"
+                    + "  \"title\": \"Resource title\",\n"
+                    + "  \"description\": \"Resource description\",\n"
+                    + "  \"note\": \"Resource note\"\n"
+                    + "}\n"
+                    + "</pre>")
+    @ApiResponses({
+        @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
+                message = "the brief representationresource"),
+        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_File-or-Link",
+                message = "error if invalid configuration is received")})
+    @JsonView({ ResourceView.File.class, ResourceView.Link.class })
+    public JsonApiResponse<AmpResource> createDocResource(
+            @FormDataParam("resource") @ApiParam(value = "resource configuration", type = "SwaggerResource")
+            SwaggerResource resource,
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail) {
 
@@ -240,10 +204,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
                 FileUtils.copyInputStreamToFile(uploadedInputStream, file);
                 formFile = new JerseyFileAdapter(fileDetail, file);
             }
-
-            ResourceImporter importer = new ResourceImporter();
-            List<ApiErrorMessage> errors = importer.createResource(resource, formFile);
-            return ResourceUtil.getImportResult(importer.getResource(), importer.getNewJson(), errors);
+            return new ResourceImporter().createResource(resource.getMap(), formFile).getResult();
         } catch (IOException e) {
             logger.error("Failed to process file.", e);
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST,
@@ -257,5 +218,5 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     public Class<?> getErrorsClass() {
         return ResourceErrors.class;
     }
-    
+
 }

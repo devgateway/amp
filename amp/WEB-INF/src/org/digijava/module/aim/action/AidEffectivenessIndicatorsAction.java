@@ -148,10 +148,15 @@ public class AidEffectivenessIndicatorsAction extends Action {
                     indicator.setTooltipText(indicatorForm.getTooltipText());  
                     indicator.setAmpIndicatorName(indicatorForm.getAmpIndicatorName());  
                 } else {
-                    String tooltipText = MultilingualInputFieldValues.readParameter("AmpAidEffectivenessIndicator_tooltipText_" + TLSUtils.getSite().getDefaultLanguage().getCode(), "AmpAidEffectivenessIndicator_tooltipText", request).right;
+                    String langCode = TLSUtils.getSite().getDefaultLanguage().getCode();
+                    String tooltipParam = "AmpAidEffectivenessIndicator_tooltipText_" + langCode;
+                    String tooltipText = MultilingualInputFieldValues.readParameter(
+                            tooltipParam, "AmpAidEffectivenessIndicator_tooltipText", request).getRight();
                     indicator.setTooltipText(tooltipText);
-                    
-                    String indicatorName = MultilingualInputFieldValues.readParameter("AmpAidEffectivenessIndicator_ampIndicatorName_" + TLSUtils.getSite().getDefaultLanguage().getCode(), "AmpAidEffectivenessIndicator_ampIndicatorName", request).right;
+
+                    String indicatorNameParam = "AmpAidEffectivenessIndicator_ampIndicatorName_" + langCode;
+                    String indicatorName = MultilingualInputFieldValues.readParameter(
+                            indicatorNameParam, "AmpAidEffectivenessIndicator_ampIndicatorName", request).getRight();
                     indicator.setAmpIndicatorName(indicatorName);
                 }
                 

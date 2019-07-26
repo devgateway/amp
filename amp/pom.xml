@@ -3,21 +3,21 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.devgateway</groupId>
     <artifactId>amp</artifactId>
-    <version>3.3.4</version>
+    <version>3.4-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Aid Management Platform</name>
     <properties>
-        <wicketVersion>6.18.0</wicketVersion>
-        <tomcatVersion>7.0.54</tomcatVersion>
+        <wicketVersion>6.29.0</wicketVersion>
+        <tomcatVersion>7.0.67</tomcatVersion>
         <springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
         <springVersion>3.0.7.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jackrabbit.version>2.16.2</jackrabbit.version>
         <lucene.version>3.6.2</lucene.version>
         <jersey.version>1.19</jersey.version>
-        <saiku.version>3.0-RC2</saiku.version>
-        <saiku3.version>3.0-RC2-DG</saiku3.version>
-        <apidocs>false</apidocs>
+        <jackson.version>2.9.5</jackson.version>
+        <swagger.version>1.5.20</swagger.version>
+        <powermock.version>1.6.6</powermock.version>
         <buildSource></buildSource>
         <buildDate></buildDate>
     </properties>
@@ -52,6 +52,18 @@
     <artifactId>mockito-core</artifactId>
     <version>1.10.19</version>
 </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>antlr</groupId>
             <artifactId>antlr</artifactId>
@@ -95,12 +107,12 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils-bean-collections</artifactId>
-            <version>1.7.0</version>
+            <version>1.8.0</version>
         </dependency>
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.7.0</version>
+            <version>1.8.0</version>
         </dependency>
         <dependency>
             <groupId>commons-chain</groupId>
@@ -249,7 +261,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>4.2.0.Final</version>
+			<version>5.1.1.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.thymeleaf</groupId>
@@ -271,6 +283,11 @@
             <groupId>com.lowagie</groupId>
             <artifactId>itext-rtf</artifactId>
             <version>2.1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.jcr</groupId>
+            <artifactId>jcr</artifactId>
+            <version>2.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
@@ -301,16 +318,6 @@
             <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-text-extractors</artifactId>
             <version>1.6.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.13</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.13</version>
         </dependency>
         <dependency>
             <groupId>jakarta-regexp</groupId>
@@ -389,19 +396,24 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-json</artifactId>
-            <version>${jersey.version}</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey.contribs.jersey-oauth</groupId>
-            <artifactId>oauth-server</artifactId>
-            <version>${jersey.version}</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey.contribs.jersey-oauth</groupId>
-            <artifactId>oauth-signature</artifactId>
-            <version>${jersey.version}</version>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate4</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -468,8 +480,8 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <!-- <scope>test</scope> -->
+            <version>4.12</version>
+             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -553,6 +565,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <version>${springVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${springVersion}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -758,16 +776,6 @@
             <version>1.1</version>
         </dependency>
         <dependency>
-            <groupId>eigenbase</groupId>
-            <artifactId>eigenbase-properties</artifactId>
-            <version>1.1.0.10924</version>
-        </dependency>
-        <dependency>
-            <groupId>eigenbase</groupId>
-            <artifactId>eigenbase-xom</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jsp-api</artifactId>
             <version>${tomcatVersion}</version>
@@ -796,32 +804,6 @@
             <artifactId>ecs</artifactId>
             <version>1.4.2</version>
             <type>jar</type>
-        </dependency>
-
-        <dependency>
-            <groupId>pentaho</groupId>
-            <artifactId>mondrian</artifactId>
-            <version>3.6.1</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>servlet-api</artifactId>
-                    <groupId>javax.servlet</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jsp-api</artifactId>
-                    <groupId>javax.servlet</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>eigenbase-resgen</artifactId>
-                    <groupId>eigenbase</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>eigenbase</groupId>
-            <artifactId>eigenbase-resgen</artifactId>
-            <version>1.3.5</version>
         </dependency>
 
         <dependency>
@@ -878,51 +860,20 @@
         </dependency>
 
         <dependency>
-            <groupId>org.saiku</groupId>
-            <artifactId>saiku-service</artifactId>
-            <version>${saiku.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>hibernate-annotations</artifactId>
-                    <groupId>org.hibernate</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>16.0.2</version>
         </dependency>
         <dependency>
-            <groupId>org.saiku</groupId>
-            <artifactId>saiku-web</artifactId>
-            <version>${saiku.version}</version>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.0</version>
         </dependency>
         <dependency>
-            <groupId>org.saiku</groupId>
-            <artifactId>saiku-olap-util</artifactId>
-            <version>${saiku.version}</version>
+            <groupId>com.itextpdf.tool</groupId>
+            <artifactId>xmlworker</artifactId>
+            <version>5.5.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.olap4j</groupId>
-            <artifactId>olap4j</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.olap4j</groupId>
-            <artifactId>olap4j-xmla</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-        <!--
-        If the Saiku version is upgraded and a new version of this file is required,
-        if the file is still SNAPSHOT, deploy the artifact to our artifactory appending "-DG" (like the current one) and update the version number.
-        If the dependency is not SNAPSHOT anymore, then just put the correct version (which will now be cached by our artifactory
-        -->
-        <dependency>
-            <groupId>org.saiku</groupId>
-            <artifactId>saiku-query</artifactId>
-            <version>0.1-SNAPSHOT-DG</version>
-        </dependency>
-<!--    <dependency>
-            <groupId>nl.cwi</groupId>
-            <artifactId>monetdb-jdbc</artifactId>
-            <version>2.11</version>
-        </dependency>  -->
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
@@ -972,6 +923,11 @@
             <version>${jersey.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
 			<groupId>org.reflections</groupId>
 			<artifactId>reflections</artifactId>
 			<version>0.9.10</version>
@@ -1007,6 +963,27 @@
             <version>1.2.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-core</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-jersey-jaxrs</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.bull.javamelody</groupId>
+            <artifactId>javamelody-core</artifactId>
+            <version>1.75.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -1064,11 +1041,13 @@
                             </includes>
                             <excludes>
                                 <exclude>WEB-INF/src/**</exclude>
+                                <exclude>.idea/**</exclude>
                                 <exclude>.settings/**</exclude>
                                 <exclude>.externalToolBuilders/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/site-config.xml</exclude>
                                 <exclude>TEMPLATE/ampTemplate/gisModule/dev/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/gisModule/dev/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/dashboard/dev/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/dashboard/dev/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/**</exclude>
@@ -1079,6 +1058,10 @@
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-translate/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-translate/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-state/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-state/node_modules/**</exclude>
                                 <exclude>TEMPLATE/reamp/node/**</exclude>
                                 <exclude>TEMPLATE/reamp/node_modules/**</exclude>
                                 <exclude>src/**</exclude>
@@ -1197,6 +1180,18 @@
                         <phase>process-resources</phase>
                         <configuration>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
+                        <id>install node and npm for Dashboards</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <!-- Installing node and npm  for amp-state-->
@@ -1520,54 +1515,63 @@
 <!--                         </configuration> -->
 <!--                     </execution> -->
 
-
-
-<!--                     Installing node and npm for dashboard -->
-<!--                     <execution> -->
-<!--                         <id>install node and npm for dashboard</id> -->
-<!--                         <goals> -->
-<!--                             <goal>install-node-and-npm</goal> -->
-<!--                         </goals> -->
-<!--                         <configuration> -->
-<!--                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-<!--                       Running npm for dashboard -->
-<!--                     <execution> -->
-<!--                         <id>npm install for dashboard</id> -->
-<!--                         <goals> -->
-<!--                             <goal>npm</goal> -->
-<!--                         </goals> -->
-<!--                         <phase>generate-sources</phase> -->
-<!--                         <configuration> -->
-<!--                  		    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-
-<!--                     Running gulp for dashboard -->
-<!--                     <execution> -->
-<!--                         <id>gulp build for dashboard</id> -->
-<!--                         <goals> -->
-<!--                             <goal>gulp</goal> -->
-<!--                         </goals> -->
-<!--                         <phase>generate-sources</phase> -->
-<!--                         <configuration> -->
-<!--                             <arguments>build</arguments> -->
-<!--                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-
-
-
-
+                    <!-- Installing node and npm  for Dashboard-->
+                    <execution>
+                        <id>npm install for Dashboards</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <!-- optional: The default argument is actually  "install", so unless you need to run some other npm command,
+                            you can remove this whole <configuration> section.-->
+                            <arguments>install</arguments>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>gulp build for Dashboards</id>
+                        <goals>
+                            <goal>gulp</goal>
+                        </goals>
+                        <!--                         optional: the default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <!--                             optional: if not specified, it will run gulp's default   -->
+                            <!--                             task (and you can remove this whole <configuration> section.)  -->
+                            <arguments>build</arguments>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
+                        </configuration>
+                    </execution>
                 </executions>
+                </plugin>
 
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0-M2</version>
+                    <configuration>
+                        <includes>
+                            <include>**/Test*.java</include>
+                            <include>**/*Test.java</include>
+                            <include>**/*Testcases.java</include>
+                            <include>**/*Tests*.java</include>
+                        </includes>
+                        <excludes>
+                            <!--suites are running tests twice-->
+                        <exclude>**/*TestSuite.java</exclude>
+                    </excludes>
+                    <excludedGroups>
+                        org.dgfoundation.amp.test.categories.DatabaseTests,
+                        org.dgfoundation.amp.test.categories.SlowTests
+                    </excludedGroups>
+                </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.22.0</version>
                 <configuration>
                     <includes>
                         <include>**/Test*.java</include>
@@ -1576,21 +1580,59 @@
                         <include>**/*Tests*.java</include>
                     </includes>
                     <excludes>
+                        <!--suites are running tests twice-->
                         <exclude>**/*TestSuite.java</exclude>
                     </excludes>
+                    <groups>
+                        org.dgfoundation.amp.test.categories.DatabaseTests,
+                        org.dgfoundation.amp.test.categories.SlowTests
+                    </groups>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>1.5.6</version>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/${project.build.finalName}/api-docs</outputDirectory>
+                    <backend>html</backend>
+                    <attributes>
+                        <toc>left</toc>
+                    </attributes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>html-output</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
 
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.0</version>
                     <configuration>
                         <source>1.8</source>
                         <target>1.8</target>
                         <compilerArgument>-XDignore.symbol.file</compilerArgument>
                         <maxmem>1024m</maxmem>
+                        <useIncrementalCompilation>false</useIncrementalCompilation>
                     </configuration>
                 </plugin>
 
@@ -1663,55 +1705,6 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <profiles>
-        <profile>
-            <id>swagger-api-docs</id>
-
-            <properties>
-                <docBasePath>/api-docs</docBasePath>
-                <apiBasePath>/rest</apiBasePath>
-            </properties>
-
-            <activation>
-                <property>
-                    <name>apidocs</name>
-                    <value>true</value>
-                </property>
-            </activation>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9.1</version>
-                        <executions>
-                            <execution>
-                                <id>generate-service-docs</id>
-                                <phase>generate-resources</phase>
-                                <configuration>
-                                    <doclet>com.carma.swagger.doclet.ServiceDoclet</doclet>
-                                    <docletArtifact>
-                                        <groupId>com.carma</groupId>
-                                        <artifactId>swagger-doclet</artifactId>
-                                        <version>1.0.6</version>
-                                    </docletArtifact>
-                                    <sourcepath>${project.basedir}/WEB-INF/src/org/digijava/kernel/ampapi</sourcepath>
-                                    <reportOutputDirectory>${project.build.outputDirectory}</reportOutputDirectory>
-                                    <useStandardDocletOptions>false</useStandardDocletOptions>
-                                    <additionalparam>-apiVersion 1 -docBasePath ${docBasePath} -apiBasePath ${apiBasePath} -d ${project.basedir}/api-docs -swaggerUiPath ${project.basedir}/swagger-ui-src</additionalparam>
-                                </configuration>
-                                <goals>
-                                    <goal>javadoc</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <organization>
         <name>Development Gateway</name>

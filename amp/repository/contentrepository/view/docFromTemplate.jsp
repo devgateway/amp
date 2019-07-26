@@ -25,7 +25,7 @@
   </tr>
   <tr><td style="text-align: center;" colspan="2">
   	<div id="tempLoadingDiv" style="text-align: center;display: none;">
-		<digi:trn>Please Wait...</digi:trn> <br>
+		<digi:trn>Loading...</digi:trn> <br>
 		<img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' height='20px' align="middle"/>
 	</div>
   </td></tr>

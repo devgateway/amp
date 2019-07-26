@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.DisbursementsAfterActivityDateMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoDisbursementsAfterFundingDateMatcherDefinition;
@@ -50,7 +51,6 @@ import org.springframework.web.util.HtmlUtils;
 import org.thymeleaf.util.StringUtils;
 
 import com.google.common.collect.ImmutableMap;
-
 
 /**
  * 
@@ -239,11 +239,7 @@ public final class PerformanceRuleManager {
         int totalRecords = (int) session.createCriteria(AmpPerformanceRule.class).setProjection(Projections.rowCount())
                 .uniqueResult();
 
-        ResultPage<AmpPerformanceRule> resultPage = new ResultPage<>();
-        resultPage.setItems(pagePerformanceRules);
-        resultPage.setTotalRecords(totalRecords);
-
-        return resultPage;
+        return new ResultPage<>(pagePerformanceRules, totalRecords);
     }
 
     public PerformanceRuleMatcherDefinition getMatcherDefinition(String type) {
@@ -509,7 +505,7 @@ public final class PerformanceRuleManager {
 
     public boolean canActivityContainPerformanceIssues(AmpActivityVersion a) {
         return !a.isCreatedAsDraft() && !Boolean.TRUE.equals(a.getDraft()) && !a.getDeleted() && a.getTeam() != null
-                && AmpARFilter.validatedActivityStatus.contains(a.getApprovalStatus());
+                && AmpARFilter.VALIDATED_ACTIVITY_STATUS.contains(a.getApprovalStatus());
     }
 
     public Set<AmpPerformanceRule> getPerformanceRulesFromIssues(List<PerformanceIssue> issues) {

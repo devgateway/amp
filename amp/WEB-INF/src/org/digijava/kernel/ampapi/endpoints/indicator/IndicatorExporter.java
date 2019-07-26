@@ -17,9 +17,10 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
-import java.io.IOException;
-import java.io.OutputStream;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,9 +34,8 @@ import java.util.Set;
 public class IndicatorExporter {
 
     protected static final Logger logger = Logger.getLogger(IndicatorExporter.class);
-    private int cellIndex;
 
-    public static StreamingOutput download(long admLevelId, String name) {
+    public static Response download(long admLevelId, String name) {
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet("export");
         AmpCategoryValue categoryValue =(AmpCategoryValue) DbUtil.getObject(AmpCategoryValue.class, admLevelId);
@@ -62,18 +62,22 @@ public class IndicatorExporter {
         for (int i = 0; i < cellIndex; i++) {
             sheet.autoSizeColumn(i);
         }
-
-        StreamingOutput streamOutput = new StreamingOutput(){
-            public void write(OutputStream output) throws IOException, WebApplicationException {
-                try {
-                    wb.write(output);
-                } catch (Exception e) {
-                    logger.debug("exportIndicatorById - write: ", e);
-                    throw new WebApplicationException(e);
-                }
+    
+        StreamingOutput streamOutput = output -> {
+            try {
+                wb.write(output);
+            } catch (Exception e) {
+                logger.debug("exportIndicatorById - write: ", e);
+                throw new WebApplicationException(e);
             }
         };
-        return streamOutput;
+        
+        String fileName = String.format("export-indicator-layer-%s.xls", categoryValue.getLabel());
+    
+        Response.ResponseBuilder responseBuilder = Response.ok(streamOutput, new MediaType("application", "xls"))
+                .header("content-disposition", "attachment; filename = " + fileName);
+        
+        return responseBuilder.build();
     }
 
     private static HSSFCell getCell(String title, HSSFCellStyle titleCS, int index, HSSFRow titleRow) {

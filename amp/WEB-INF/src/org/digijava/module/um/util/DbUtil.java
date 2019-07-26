@@ -420,7 +420,6 @@ public class DbUtil {
                 UserUtils.saveUserLangPreferences(user.getUserLangPreferences());
             }
         } catch(Exception ex) {
-            ex.printStackTrace();
             logger.debug("Unable to update user information into database", ex);
 
             throw new UMException(

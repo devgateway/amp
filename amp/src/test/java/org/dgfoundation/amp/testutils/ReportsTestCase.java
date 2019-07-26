@@ -9,11 +9,18 @@ import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
+import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.kernel.request.TLSUtils;
 import org.junit.BeforeClass;
+import org.junit.experimental.categories.Category;
+import org.junit.Rule;
 
+@Category(DatabaseTests.class)
 public abstract class ReportsTestCase extends AmpTestCase {
+
+    @Rule
+    public InTransactionRule inTransactionRule = new InTransactionRule();
 
     @BeforeClass
     public static void staticSetUp() {

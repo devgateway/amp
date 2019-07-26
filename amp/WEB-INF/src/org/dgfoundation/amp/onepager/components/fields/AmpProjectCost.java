@@ -6,13 +6,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -21,9 +21,9 @@ import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.events.ProposedProjectCostUpdateEvent;
-import org.dgfoundation.amp.onepager.models.AmpCurrencyCodeStringListReadOnlyModel;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -64,15 +64,20 @@ public class AmpProjectCost extends AmpComponentPanel<Void> implements AmpRequir
         add(new Label("costName",  new Model<String>(TranslatorWorker.translateText(cName))));
         
         final AmpTextFieldPanel<Double> amount = getAmountField();
-        PropertyModel<String> currencyModel = new PropertyModel<String>(projectCost, "currencyCode");
+        PropertyModel<AmpCurrency> currencyModel = new PropertyModel<>(projectCost, "currency");
 
-        AmpCurrencyCodeStringListReadOnlyModel currencyList = new AmpCurrencyCodeStringListReadOnlyModel();
+        AbstractReadOnlyModel<List<AmpCurrency>> currencyList = new AbstractReadOnlyModel<List<AmpCurrency>>() {
+            @Override
+            public List<AmpCurrency> getObject() {
+                return CurrencyUtil.getActiveAmpCurrencyByCode();
+            }
+        };
 
         if (currencyModel.getObject() == null) {
-            currencyModel.setObject(CurrencyUtil.getWicketWorkspaceCurrency().getCurrencyCode());
+            currencyModel.setObject(CurrencyUtil.getWicketWorkspaceCurrency());
         }
 
-        AmpSelectFieldPanel<String> currency = new AmpSelectFieldPanel<String>("currency", currencyModel,
+        AmpSelectFieldPanel<AmpCurrency> currency = new AmpSelectFieldPanel<AmpCurrency>("currency", currencyModel,
                 currencyList, "Currency", false, false) {
             protected void onAjaxOnUpdate(AjaxRequestTarget target) {
                 if (isPPC)

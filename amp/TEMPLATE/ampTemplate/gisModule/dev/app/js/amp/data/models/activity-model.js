@@ -1,6 +1,7 @@
 var Backbone = require('backbone');
 var $ = require('jquery');
 var _ = require('underscore');
+var Constants = require('../../../libs/local/constants.js');
 
 module.exports = Backbone.Model.extend({
   idAttribute: 'Activity Id',
@@ -30,11 +31,14 @@ module.exports = Backbone.Model.extend({
   joinFilters: function() {
     var self = this;
     var deferred = $.Deferred();
-    this.collection.appData.filter.getAllFilters().then(function(allFilters) {
+
+    var filter = this.appData ? this.appData.filter : this.collection.appData.filter;
+
+    filter.getAllFilters().then(function(allFilters) {
     	var matchesFilters = self.attributes.matchesFilters;       
     	if (allFilters.filters && matchesFilters) {
     		_.each(matchesFilters, function(v, k) {
-    			if (k == 'Primary Sector') {
+    			if (k === Constants.PRIMARY_SECTOR) {
     				_.each(matchesFilters[k], function(sector, index) {    					
     				   if (!(sector instanceof Backbone.Model)) {    					
     					   matchesFilters[k][index] = new Backbone.Model(sector);  
@@ -73,9 +77,9 @@ module.exports = Backbone.Model.extend({
   // Use to hook in before template calls.
   toJSON: function() {
     var json = _.clone(this.attributes);
-    json.donorNames = this._getNames('Donor Agency');
-    json.executingNames = this._getNames('Executing Agency');
-    json.sectorNames = this._getNames('Primary Sector');
+    json.donorNames = this._getNames(Constants.DONOR_AGENCY);
+    json.executingNames = this._getNames(Constants.EXECUTING_AGENCY);
+    json.sectorNames = this._getNames(Constants.PRIMARY_SECTOR);
     return json;
   },
 

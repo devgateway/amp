@@ -53,7 +53,7 @@ TranslationManager.getAvailableLanguages = function () {
     }
 
     return deferred;
-	
+
 }
 function _fetchLanguages (){
 return jQuery.ajax({
@@ -98,22 +98,34 @@ TranslationManager.searchAndTranslate = function() {
 };
 
 
-
-TranslationManager.getTranslated = function(text) {
-	initializeGlobalTranslationsCache();
-	var translationFromCache = lookForTranslationByKey(prefix + text);
-	if (translationFromCache != null) {
-		return translationFromCache;
-	} else {
-		var textObject = {};
-		var key = prefix + text;
-		textObject[key] = text;
-		var response = (TranslationManager.postJSON('/rest/translations/label-translations', textObject, function(data) {
-			//console.log(data);
-		}));
-		putTranslationValueInCache(key, response.responseJSON[key]);
-		return response.responseJSON[key];
-	}
+TranslationManager.getTranslated = function (text) {
+    initializeGlobalTranslationsCache();
+    var translationFromCache = lookForTranslationByKey(prefix + text);
+    if (translationFromCache !== null) {
+        return translationFromCache;
+    } else {
+        var textObject = {};
+        var key = prefix + text;
+        if (text instanceof Array) {
+            $.each(text, function (key, value) {
+                textObject[value] = value;
+            });
+        } else {
+            textObject[key] = text;
+        }
+        var response = (TranslationManager.postJSON('/rest/translations/label-translations',
+                textObject, function (data) {
+                    //console.log(data);
+                }
+            )
+        );
+        putTranslationValueInCache(key, response.responseJSON[key]);
+        if (text instanceof Array) {
+            return response.responseJSON;
+        } else {
+            return response.responseJSON[key];
+        }
+    }
 };
 
 TranslationManager.postJSON = function (url, data, callback) {
@@ -129,4 +141,4 @@ TranslationManager.postJSON = function (url, data, callback) {
 		'dataType' : 'json',
 		'success' : callback
 	});
-}
+};

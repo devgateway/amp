@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.common.print;
 
-import clover.com.google.common.base.Strings;
-import clover.org.apache.commons.codec.binary.Base64;
 import com.google.common.base.Charsets;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.print.phantom.PhantomService;
 
@@ -96,7 +96,7 @@ public class PrintImageService {
     }
 
     private static File createTmpFile(final String content, String extension) throws IOException {
-        if(!Strings.isNullOrEmpty(content)) {
+        if (StringUtils.isNotEmpty(content)) {
             final File file = File.createTempFile(RandomStringUtils.randomAlphabetic(FILE_NAME_LENGTH), extension);
             FileUtils.writeStringToFile(file, content, Charsets.UTF_8.displayName());
             return file;

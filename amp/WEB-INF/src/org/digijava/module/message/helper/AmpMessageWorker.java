@@ -15,11 +15,9 @@ import java.util.stream.Collectors;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeUtil;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.mail.DgEmailManager;
@@ -31,7 +29,6 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.exception.AimException;
@@ -167,7 +164,7 @@ public class AmpMessageWorker {
                     // running (for long time) code we process this particular
                     // case in a separate piece of
                     // code
-                    
+
                     List<AmpAlert> listNewMsg = processActivityLevelEvent(e, newAlert, template,e.getTrigger().equals(ActivityMeassureComparisonTrigger.class));
 
                     for (AmpAlert ampMessage : listNewMsg) {
@@ -817,7 +814,7 @@ public class AmpMessageWorker {
                         alerts.add(createAlertFromTemplate(template, myHashMap, newAlert, tm));
                         AmpMessageUtil.saveOrUpdateMessage(newAlert);
                         //Ideally we should keep in the template a relationship with AmpTeamMember
-                        //I will create a follow up ticket so we don't have to manipulate a 
+                        //I will create a follow up ticket so we don't have to manipulate a
                         //String
                         if(sendAlert){
                             createMsgState(template, newAlert, tm);
@@ -885,7 +882,7 @@ public class AmpMessageWorker {
     }
 
     /**
-     * 
+     *
      * @param string
      * @return
      */
@@ -915,7 +912,7 @@ public class AmpMessageWorker {
 
     /**
      * List of teams that have to be notified
-     * 
+     *
      * @param ampActivityId
      * @param relatedTrigger
      * @return
@@ -984,23 +981,14 @@ public class AmpMessageWorker {
                 TeamMember member = new TeamMember(ampTeamMember);
 
                 TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER, member);
-                AmpARFilter af = FilterUtil.buildFilter(ampTeamMember.getAmpTeam(), null);
-                af.generateFilterQuery(TLSUtils.getRequest(), true);
 
-                CompleteWorkspaceFilter completeWorkspaceFilter = new CompleteWorkspaceFilter(member, af);
-                String wsQuery1 = WorkspaceFilter.generateWorkspaceFilterQuery(completeWorkspaceFilter.tm);
-                String wsQuery2 = completeWorkspaceFilter.workspaceFilter.getGeneratedFilterQuery();
+                String wsQuery = WorkspaceFilter.generateWorkspaceFilterQuery(member);
 
                 if (wsQueries.length() > 0) {
                     wsQueries.append(" UNION ");
                 }
-                wsQueries.append(addTeamIdToQuery(wsQuery1, ampTeamMember.getAmpTeam().getAmpTeamId(),
-                        ampTeamMember.getAmpTeam().getName())).append(" UNION ");
-                wsQueries.append("select amp_activity_id ," + ampTeamMember.getAmpTeam().getAmpTeamId()
-                        + " as  ampTeamId, '" + ampTeamMember.getAmpTeam().getName() + "' as teamName from ( ");
-                wsQueries.append(wsQuery2);
-                wsQueries.append(") as activityTemp ");
-
+                wsQueries.append(addTeamIdToQuery(wsQuery, ampTeamMember.getAmpTeam().getAmpTeamId(),
+                        ampTeamMember.getAmpTeam().getName()));
             }
             // we now turn queries into map, and store it at request level in
             // case its needed again
@@ -1049,8 +1037,8 @@ public class AmpMessageWorker {
      * templating engine for emails, we'll get the template from the alert
      * template and issue one, though it doesn't make much sense to send it (the
      * user has to first log in to get said message).
-     * 
-     * 
+     *
+     *
      * @param newMsg
      * @param e
      * @throws Exception
@@ -1457,7 +1445,7 @@ public class AmpMessageWorker {
     /**
      * Create AmpEmails with receivers that Quartz Job will use to send emails
      * when called
-     * 
+     *
      * @param message
      * @param receiversAddresses
      * @param calendarSaveActionWasCalled
@@ -1507,7 +1495,7 @@ public class AmpMessageWorker {
         }
     }
 
-    private static String addTeamIdToQuery(String wsQuery, Long teamId, String teamName) {
+    public static String addTeamIdToQuery(String wsQuery, Long teamId, String teamName) {
         Integer indexToReplace = StringUtils.indexOf(wsQuery, "FROM amp_activity");
         wsQuery = StringUtils.left(wsQuery, indexToReplace) + " , " + teamId + " as ampTeamId , '" + teamName
                 + "' as teamName " + StringUtils.mid(wsQuery, indexToReplace, wsQuery.length() - 1);

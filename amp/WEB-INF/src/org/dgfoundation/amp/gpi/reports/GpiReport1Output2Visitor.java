@@ -2,19 +2,16 @@ package org.dgfoundation.amp.gpi.reports;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.DateCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportVisitor;
-import org.digijava.module.common.util.DateTimeUtil;
-
-import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * An implementation of ReportVisitor for fetching items used in GPI report 1 output 2

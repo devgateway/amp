@@ -48,7 +48,7 @@ export default class PerformanceRuleRow extends Component {
     
     getLevelName(id) {
         const level = this.props.levelList.filter(level => level.id === id)[0];  
-        return level.name;
+        return level.label;
     }
     
     render() {           

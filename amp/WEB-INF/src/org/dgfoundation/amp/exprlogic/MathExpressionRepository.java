@@ -150,7 +150,7 @@ public class MathExpressionRepository {
             MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
             expresions.put(DISBURSEMENT_RATION, m2);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -163,7 +163,7 @@ public class MathExpressionRepository {
             MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
             expresions.put(PERCENTAGE_OF_DISBURSEMENT, m2);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -176,7 +176,7 @@ public class MathExpressionRepository {
             MathExpression m2 = new MathExpression(MathExpression.Operation.DIVIDE_ROUND_TWO_DECIMALS, m1, ArConstants.TOTAL_ACTUAL_COMMITMENT);
             expresions.put(PERCENTAGE_OF_TOTAL_COMMITMENTS, m2);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }       
     
@@ -189,7 +189,7 @@ public class MathExpressionRepository {
             MathExpression oper = new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.CURRENT_DATE_VALUE, ArConstants.PROPOSED_COMPLETION_DATE_VALUE);
             expresions.put(OVERAGE_PROJECT, oper);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -201,7 +201,7 @@ public class MathExpressionRepository {
             MathExpression oper = new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.CURRENT_DATE_VALUE, ArConstants.ACTUAL_START_DATE_VALUE);
             expresions.put(AGE_OF_PROJECT, oper);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
 
     }
@@ -214,7 +214,7 @@ public class MathExpressionRepository {
             MathExpression oper = new MathExpression(MathExpression.Operation.DATE_DAY_DIFF, ArConstants.ORIGINAL_COMPLETION_DATE_VALUE, ArConstants.PROPOSED_START_DATE_VALUE);
             expresions.put(CALCULATED_PROJECT_LIFE, oper);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }           
     }
 
@@ -229,7 +229,7 @@ public class MathExpressionRepository {
             MathExpression multiResultPannedBy100 = new MathExpression(MathExpression.Operation.MULTIPLY, divideOper1ByPLanned, new BigDecimal(100));
             expresions.put(PREDICTABILITY_OF_FUNDING, multiResultPannedBy100);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -241,7 +241,7 @@ public class MathExpressionRepository {
             MathExpression divide = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.TOTAL_COMMITMENTS, ArConstants.COUNT_PROJECTS);
             expresions.put(AVERAGE_SIZE_OF_PROJECT, divide);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -255,7 +255,7 @@ public class MathExpressionRepository {
             expresions.put(VARIANCE_ACTUAL_COMMITMENTS, variance);
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -269,7 +269,7 @@ public class MathExpressionRepository {
             expresions.put(VARIANCE_ACTUAL_DISBURSEMENTS, variance);
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -282,7 +282,7 @@ public class MathExpressionRepository {
             MathExpression variance = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_COMMITMENT, new BigDecimal(1));
             expresions.put(CUMULATIVE_COMMITMENT, variance);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -295,7 +295,7 @@ public class MathExpressionRepository {
             MathExpression variance = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_DISBURSEMENT, new BigDecimal(1));
             expresions.put(CUMULATIVE_DISBURSEMENT, variance);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -309,7 +309,7 @@ public class MathExpressionRepository {
             MathExpression multiplyBy100 = new MathExpression(MathExpression.Operation.MULTIPLY, divideDisbursementByCommitment, new BigDecimal(100));
             expresions.put(CUMULATIVE_EXECUTION_RATE, multiplyBy100);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -321,7 +321,7 @@ public class MathExpressionRepository {
             MathExpression dateDiff = new MathExpression(MathExpression.Operation.DATE_MONTH_DIFF, ArConstants.PROPOSED_COMPLETION_DATE_VALUE, ArConstants.ACTUAL_START_DATE_VALUE);
             expresions.put(PROJECT_PERIOD, dateDiff);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -333,7 +333,7 @@ public class MathExpressionRepository {
             MathExpression subsract = new MathExpression(MathExpression.Operation.SUBTRACT, expresions.get(AGE_OF_PROJECT), expresions.get(PROJECT_PERIOD));
             expresions.put(OVERAGE, subsract);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -347,7 +347,7 @@ public class MathExpressionRepository {
             MathExpression x2 = new MathExpression(MathExpression.Operation.MULTIPLY, x1, new BigDecimal(100d));
             expresions.put(PERCENTAGE_DISBURSEMENT, x2);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -360,7 +360,7 @@ public class MathExpressionRepository {
             MathExpression x1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_COMMITMENT_COUNT, new BigDecimal(1));
             expresions.put(COUNT_ACTUAL_COMMITMENT, x1);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -374,7 +374,7 @@ public class MathExpressionRepository {
 
             expresions.put(COUNT_PLANNED_COMMITMENT, x1);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -388,7 +388,7 @@ public class MathExpressionRepository {
 
             expresions.put(COUNT_PLANNED_DISBURSEMENT, x1);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -402,7 +402,7 @@ public class MathExpressionRepository {
 
             expresions.put(COUNT_ACTUAL_DISBURSEMENT, x1);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -415,7 +415,7 @@ public class MathExpressionRepository {
             MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT, ArConstants.ACTUAL_DISBURSEMENT_COUNT);
             expresions.put(AVERAGE_SIZE_DISBURSEMENT, x1);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -427,7 +427,7 @@ public class MathExpressionRepository {
             MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, expresions.get(AGE_OF_PROJECT), expresions.get(PROJECT_PERIOD));
             expresions.put(PROJECT_AGE_RATIO, x1);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -442,7 +442,7 @@ public class MathExpressionRepository {
             MathExpression x3 = new MathExpression(MathExpression.Operation.DIVIDE, x2, ArConstants.COUNT_PROJECTS);
             expresions.put(AVERAGE_DISBURSEMENT_RATE, x3);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -455,7 +455,7 @@ public class MathExpressionRepository {
             MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.ACTUAL_COMMITMENT, ArConstants.ACTUAL_DISBURSEMENT);
             expresions.put(UNDISBURSED_CUMULATIVE_BALANCE, m1);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -467,7 +467,7 @@ public class MathExpressionRepository {
             MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.PROPOSED_COST, ArConstants.ACTUAL_COMMITMENT);
             expresions.put(UNCOMMITED_CUMULATIVE_BALANCE, m1);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -481,7 +481,7 @@ public class MathExpressionRepository {
             MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.ACTUAL_COMMITMENT_FILTERED, ArConstants.ACTUAL_DISBURSEMENT_FILTERED);
             expresions.put(UNDISBURSED_BALANCE, m1);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -495,7 +495,7 @@ public class MathExpressionRepository {
             MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.PROPOSED_COST, ArConstants.ACTUAL_COMMITMENT_FILTERED);
             expresions.put(UNCOMMITED_BALANCE, m1);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -507,7 +507,7 @@ public class MathExpressionRepository {
             MathExpression m1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.COUNT_PROJECTS, new BigDecimal(1));
             expresions.put(NUMBER_OF_PROJECTS, m1);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -519,7 +519,7 @@ public class MathExpressionRepository {
             MathExpression m1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.COSTING_GRAND_TOTAL, new BigDecimal(1));
             expresions.put(COSTING_GRAND_TOTAL, m1);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
         
@@ -538,7 +538,7 @@ public class MathExpressionRepository {
             }
             
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -551,7 +551,7 @@ public class MathExpressionRepository {
             MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
             expresions.put(EXECUTION_RATE, m2);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -564,7 +564,7 @@ public class MathExpressionRepository {
             MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PRIOR_ACTUAL_DISBURSEMENT, new BigDecimal(1));
             expresions.put(PRIOR_ACTUAL_DISBURSEMENT, m);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -576,7 +576,7 @@ public class MathExpressionRepository {
             MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH, new BigDecimal(1));
             expresions.put(CURRENT_MONTH_DISBURSEMENT, m);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -590,7 +590,7 @@ public class MathExpressionRepository {
             MathExpression m = new MathExpression(MathExpression.Operation.ADD, ArConstants.TOTAL_PRIOR_ACTUAL_DISBURSEMENT, ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH);
             expresions.put(CUMULATED_DISBURSEMENT, m);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -604,7 +604,7 @@ public class MathExpressionRepository {
             MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
             expresions.put(CONSUMPTION_RATE, m2);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -617,7 +617,7 @@ public class MathExpressionRepository {
             MathExpression m = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR, new BigDecimal(1));
             expresions.put(SELECTED_YEAR_PLANNED_DISBURSEMENT, m);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
     

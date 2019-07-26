@@ -3,8 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.util.List;
 
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpComponentType;
-import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
@@ -32,14 +30,17 @@ public interface PossibleValuesDAO {
 
     List<Object[]> getThemes(String configType);
 
+    boolean isThemeValid(String configType, Long id);
+
     List<Object[]> getSectors(String configType);
+
+    boolean isSectorValid(String configType, Long id);
 
     List<Object[]> getPossibleLocations();
 
-    List<AmpComponentType> getComponentTypes();
-    
-    List<AmpContact> getContacts();
-    
+    boolean isLocationValid(Long id);
+
     List<AmpOrganisation> getOrganisations();
-    
+
+    boolean isOrganizationValid(Long id);
 }

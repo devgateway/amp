@@ -3,15 +3,18 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -21,15 +24,17 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * @author fferreyra
  */
 @TranslatableClass (displayName = "Structure")
-public class AmpStructure implements Serializable, Comparable<Object>, Versionable, Cloneable {
+public class AmpStructure implements Serializable, Comparable<Object>, Versionable, Cloneable, Identifiable {
 
     private static final long serialVersionUID = 1L;
 
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long ampStructureId;
     
     @TranslatableField
-    @Interchangeable(fieldTitle = "Title", importable = true, fmPath = "/Activity Form/Structures/Structure Title", 
-            required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Title", importable = true, fmPath = "/Activity Form/Structures/Structure Title",
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String title;
     
     @TranslatableField
@@ -53,13 +58,14 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     @Interchangeable(fieldTitle = "Type", pickIdOnly = true, importable = true, 
             fmPath = "/Activity Form/Structures/Structure Type")
     private AmpStructureType type;
-    
-    private Set<AmpActivityVersion> activities;
+
+    @InterchangeableBackReference
+    private AmpActivityVersion activity;
     
     private Set<AmpStructureImg> images;
     
     @Interchangeable(fieldTitle = "Coordinates", importable = true, fmPath = "/Activity Form/Structures/Map")
-    private List<AmpStructureCoordinate> coordinates;
+    private List<AmpStructureCoordinate> coordinates = new ArrayList<>();
     
     private String coords;
 
@@ -70,12 +76,12 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     private Long structureColorId;
     private Integer tempId; // client side id used for identifying structures
 
-    public Set<AmpActivityVersion> getActivities() {
-        return activities;
+    public AmpActivityVersion getActivity() {
+        return activity;
     }
 
-    public void setActivities(Set<AmpActivityVersion> activities) {
-        this.activities = activities;
+    public void setActivity(AmpActivityVersion activity) {
+        this.activity = activity;
     }
 
     public Long getAmpStructureId() {
@@ -177,8 +183,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpStructure aux = (AmpStructure) clone();
-        aux.setActivities(new HashSet<AmpActivityVersion>());
-        aux.getActivities().add(newActivity);
+        aux.setActivity(newActivity);
         aux.setAmpStructureId(null);
         
         if (aux.getImages() != null && aux.getImages().size() > 0) {
@@ -304,5 +309,9 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     public static String sqlStringForDescription(String idSource) {
         return InternationalizedModelDescription.getForProperty(AmpStructure.class, "description").getSQLFunctionCall(idSource);
     }
-    
+
+    @Override
+    public Object getIdentifier() {
+        return ampStructureId;
+    }
 }

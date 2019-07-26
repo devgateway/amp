@@ -7,22 +7,31 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.aim.validator.groups.Submit;
 
-public class AmpIssues  implements Serializable, Versionable, Cloneable
-{
+public class AmpIssues implements Serializable, Versionable, Cloneable {
 
     //IATI-check: to be ignored
-    private Long ampIssueId ;
 
-    @Interchangeable(fieldTitle = "Name", label = "Issue", importable = true)
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
+    private Long ampIssueId;
+
+    @Interchangeable(fieldTitle = "Name", label = "Issue", importable = true,
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class))
     private String name ;
 
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
 
     @Interchangeable(fieldTitle = "Measures", importable = true, fmPath = "/Activity Form/Issues Section/Issue/Measure")
-    private Set<AmpMeasure> measures;
+    private Set<AmpMeasure> measures = new HashSet<>();
 
     @Interchangeable(fieldTitle = "Issue Date", importable = true, fmPath = "/Activity Form/Issues Section/Issue/Date")
     private Date issueDate;
@@ -159,15 +168,15 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
         AmpIssues aux = (AmpIssues) clone();
         aux.activity = newActivity;
         aux.ampIssueId = null;
+        Set<AmpMeasure> setMeasures = new HashSet<>();
         if (aux.measures != null && aux.measures.size() > 0) {
-            Set<AmpMeasure> setMeasures = new HashSet<AmpMeasure>();
             Iterator<AmpMeasure> i = aux.measures.iterator();
             while (i.hasNext()) {
                 AmpMeasure newMeasure = (AmpMeasure) i.next().clone();
                 newMeasure.setAmpMeasureId(null);
                 newMeasure.setIssue(aux);
+                Set<AmpActor> setActors = new HashSet<>();
                 if (newMeasure.getActors() != null && newMeasure.getActors().size() > 0) {
-                    Set<AmpActor> setActors = new HashSet<AmpActor>();
                     Iterator<AmpActor> j = newMeasure.getActors().iterator();
                     while (j.hasNext()) {
                         AmpActor newActor = (AmpActor) j.next().clone();
@@ -176,15 +185,12 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
                         setActors.add(newActor);
                     }
                     newMeasure.setActors(setActors);
-                } else {
-                    newMeasure.setActors(null);
                 }
+                newMeasure.setActors(setActors);
                 setMeasures.add(newMeasure);
             }
-            aux.measures = setMeasures;
-        } else {
-            aux.measures = null;
         }
+        aux.measures = setMeasures;
         return aux;
     }
     
@@ -193,4 +199,5 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
         // TODO Auto-generated method stub
         return super.clone();
     }
+    
 }

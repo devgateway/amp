@@ -42,8 +42,8 @@ public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
         CachingCalendarConverter calendar = engine.calendar;
         CurrencyConvertor currencyConvertor = schema.currencyConvertor;
         
-        VivificatingMap<String, AmpCurrency> currencies = 
-                new VivificatingMap<String, AmpCurrency>(new HashMap<>(), CurrencyUtil::getAmpcurrency);
+        VivificatingMap<Long, AmpCurrency> currencies =
+                new VivificatingMap<Long, AmpCurrency>(new HashMap<>(), CurrencyUtil::getAmpcurrency);
         
         String query = buildQuery(engine);
         
@@ -55,8 +55,8 @@ public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
                 java.sql.Date transactionMoment = rs.rs.getDate("transaction_date");
                 BigDecimal transactionAmount = rs.rs.getBigDecimal("transaction_amount");
                 
-                String currencyCode = rs.rs.getString("currency_code");
-                AmpCurrency origCurrency = currencies.getOrCreate(currencyCode);
+                Long currencyId = rs.rs.getLong("currency_id");
+                AmpCurrency origCurrency = currencies.getOrCreate(currencyId);
                 
                 CategAmountCellProto cellProto = new CategAmountCellProto(ampActivityId, transactionAmount, 
                         origCurrency, transactionMoment, MetaInfoSet.empty(), Collections.emptyMap(), null);

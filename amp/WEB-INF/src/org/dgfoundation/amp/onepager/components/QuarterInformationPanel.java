@@ -5,11 +5,6 @@
 package org.dgfoundation.amp.onepager.components;
 
 import org.apache.wicket.Session;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.head.HeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
@@ -19,12 +14,10 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -33,21 +26,10 @@ import java.util.Calendar;
  * @since 04 Feb 2013
  */
 public class QuarterInformationPanel extends AmpFieldPanel {
-    private static final JavaScriptResourceReference JS_FILE = new JavaScriptResourceReference(
+    
+    public static final JavaScriptResourceReference JS_FILE = new JavaScriptResourceReference(
             QuarterInformationPanel.class, "QuarterInformationPanel.js");
 
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        response.render(JavaScriptReferenceHeaderItem.forReference(JS_FILE));
-
-        
-
-        response.render(JavaScriptReferenceHeaderItem.forScript(
-                getJSUpdate(getSession()),
-                "QuarterInformationPanelData"));
-
-    }
-    
     public static String getJSUpdate(Session wsession){
         AmpFiscalCalendar fiscalCalendar = null;
 

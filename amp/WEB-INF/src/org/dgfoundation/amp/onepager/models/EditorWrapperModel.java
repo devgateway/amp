@@ -5,8 +5,9 @@ package org.dgfoundation.amp.onepager.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
@@ -17,9 +18,7 @@ import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ActivityVersionUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
@@ -112,10 +111,10 @@ public class EditorWrapperModel extends LocaleAwareProxyModel<String> {
         if (Session.get().getMetaData(OnePagerConst.EDITOR_ITEMS) == null)
             Session.get().setMetaData(OnePagerConst.EDITOR_ITEMS, new EditorStore());
 
-        HashMap<String, HashMap<String, String>> valuesMap = Session.get().getMetaData(OnePagerConst.EDITOR_ITEMS).getValues();
-        HashMap<String, String> trnSet = valuesMap.get(keyModel.getObject());
-        if (trnSet == null){
-            trnSet = new HashMap<String, String>();
+        Map<String, Map<String, String>> valuesMap = Session.get().getMetaData(OnePagerConst.EDITOR_ITEMS).getValues();
+        Map<String, String> trnSet = valuesMap.get(keyModel.getObject());
+        if (trnSet == null) {
+            trnSet = new TreeMap<>();
             valuesMap.put(keyModel.getObject(), trnSet);
         }
         if (object == null)
@@ -127,10 +126,10 @@ public class EditorWrapperModel extends LocaleAwareProxyModel<String> {
     public String getObject() {
         //first, try and see if we have the object in the editor store
         EditorStore editorStore = Session.get().getMetaData(OnePagerConst.EDITOR_ITEMS);
-        if (editorStore != null){
-            HashMap<String, HashMap<String, String>> valuesMap = editorStore.getValues();
+        if (editorStore != null) {
+            Map<String, Map<String, String>> valuesMap = editorStore.getValues();
             String oldKey = editorStore.getOldKey().get(keyModel.getObject());
-            HashMap<String, String> trnSet = valuesMap.get(keyModel.getObject());
+            Map<String, String> trnSet = valuesMap.get(keyModel.getObject());
             if (trnSet != null){
                 String val = trnSet.get(localeOfLangModel());
                 if (val != null)

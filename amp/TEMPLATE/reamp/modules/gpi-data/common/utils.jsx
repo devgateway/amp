@@ -92,6 +92,17 @@ class Utils {
         
         return str;        
     }
+
+    static getCids(data) {
+        return data.map(el => el.cid);
+    }
+
+    static restoreCids(data, cids) {
+        return data.map((el, idx) => {
+            let cid = cids[idx];
+            return cid ? {cid: cids[idx], ...el} : el;
+        });
+    }
 }
 
 export default Utils;

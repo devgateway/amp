@@ -2,15 +2,15 @@ package org.digijava.module.aim.dbentity;
 
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Stores allowed mimetype
  * 
  * @author Viorel Chihai
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AmpFileType {
 
     Long id;

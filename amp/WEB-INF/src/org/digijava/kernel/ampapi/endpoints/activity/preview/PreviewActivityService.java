@@ -1,31 +1,43 @@
 package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
+import static java.util.stream.Collectors.groupingBy;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.ws.rs.core.Response;
+
+import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.common.util.DateTimeUtil;
-
-import javax.ws.rs.core.Response;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.groupingBy;
+import org.digijava.module.message.helper.AmpMessageWorker;
+import org.digijava.module.message.helper.Team;
 
 /**
  * 
@@ -35,6 +47,7 @@ import static java.util.stream.Collectors.groupingBy;
 public final class PreviewActivityService {
 
     protected static final int PERCENTAGE_MULTIPLIER = 100;
+    private static final int TEAM_NAME_INDEX = 3;
 
     private static PreviewActivityService previewActivityService;
 
@@ -234,8 +247,8 @@ public final class PreviewActivityService {
         PreviewFundingTransaction transaction = new PreviewFundingTransaction();
         transaction.setTransactionId(fd.getDbId());
         transaction.setTransactionAmount(convertedAmount);
-        transaction.setTransactionDate(InterchangeUtils.formatISO8601Date(fd.getTransactionDate()));
-        transaction.setReportingDate(InterchangeUtils.formatISO8601Date(fd.getReportingDate()));
+        transaction.setTransactionDate(DateTimeUtil.formatISO8601Timestamp(fd.getTransactionDate()));
+        transaction.setReportingDate(DateTimeUtil.formatISO8601Timestamp(fd.getReportingDate()));
 
         return transaction;
     }
@@ -292,5 +305,73 @@ public final class PreviewActivityService {
             }
         }
     }
+    
+    public List<PreviewWorkspace> getWorkspaces(Long activityId) {
+        List<PreviewWorkspace> previewWorkspaces = new ArrayList<>();
+    
+        try {
+            AmpActivityVersion activity = ActivityUtil.loadActivity(activityId);
+            AmpTeam ownerTeam = activity.getTeam();
+            String ownerInfo = TranslatorWorker.translateText("Workspace where the activity was created");
+            previewWorkspaces.add(new PreviewWorkspace(ownerTeam.getName(), PreviewWorkspace.Type.TEAM, ownerInfo));
+    
+            AmpTeam parentTeam = ownerTeam.getParentTeamId();
+            String path = ownerTeam.getName();
+            
+            Set<Long> idStack = new HashSet<>();
+            while (parentTeam != null && !idStack.contains(parentTeam.getAmpTeamId())) {
+                path = String.format("%s -> %s", path, parentTeam.getName());
+                previewWorkspaces.add(new PreviewWorkspace(parentTeam.getName(),
+                        PreviewWorkspace.Type.MANAGEMENT, path));
+    
+                idStack.add(parentTeam.getAmpTeamId());
+                parentTeam = parentTeam.getParentTeamId();
+            }
+    
+            List<AmpTeam> computedTeams = TeamUtil.getAllTeams().stream()
+                    .filter(t -> Boolean.TRUE.equals(t.getComputation()) || Boolean.TRUE.equals(t.getUseFilter()))
+                    .filter(t -> t.getAmpTeamId() != ownerTeam.getAmpTeamId())
+                    .collect(Collectors.toList());
+            
+            final StringBuffer wsQueries = new StringBuffer();
+            for (AmpTeam team : computedTeams) {
+                String wsQuery = WorkspaceFilter.generateWorkspaceFilterQueryForTeam(team.getAmpTeamId());
 
+                if (wsQueries.length() > 0) {
+                    wsQueries.append(" UNION ");
+                }
+
+                wsQueries.append(AmpMessageWorker.addTeamIdToQuery(wsQuery, team.getAmpTeamId(), team.getName()));
+            }
+
+            final Map<Long, List<Team>> activityTeams = new HashMap<>();
+
+            PersistenceManager.getSession().doWork(conn -> {
+                RsInfo teamsInActivityQuery = SQLUtils.rawRunQuery(conn, wsQueries.toString(), null);
+                while (teamsInActivityQuery.rs.next()) {
+                    // activityTeams
+                    Long ampActivityId = teamsInActivityQuery.rs.getLong(1);
+                    if (activityTeams.get(ampActivityId) == null) {
+                        activityTeams.put(ampActivityId, new ArrayList<>());
+                    }
+                    activityTeams.get(ampActivityId).add(
+                            new Team(teamsInActivityQuery.rs.getLong(2),
+                                    teamsInActivityQuery.rs.getString(TEAM_NAME_INDEX)));
+                }
+                teamsInActivityQuery.close();
+            });
+            
+            if (activityTeams.containsKey(activityId)) {
+                for (Team team : activityTeams.get(activityId)) {
+                    previewWorkspaces.add(new PreviewWorkspace(team.getTeamName(), PreviewWorkspace.Type.COMPUTED));
+                }
+            }
+            
+        } catch (DgException e) {
+            throw new RuntimeException(e);
+        }
+        
+        return previewWorkspaces;
+    }
+    
 }

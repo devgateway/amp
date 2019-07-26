@@ -21,7 +21,7 @@ import java.util.TreeMap;
  * @author Irakli Kobiashvili
  *
  */
-public class IndicatorActivity extends IndicatorConnection implements Versionable, Cloneable{
+public class IndicatorActivity extends IndicatorConnection implements Versionable, Cloneable {
 
     //IATI-check: to be ignored
     private static final long serialVersionUID = 2L;
@@ -188,4 +188,5 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
 
         return new ArrayList<AmpIndicatorValue>(tree.values());
     }
+    
 }

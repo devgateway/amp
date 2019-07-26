@@ -1,21 +1,38 @@
-/**
- * 
- */
 package org.digijava.module.aim.dbentity;
 
 import java.math.BigDecimal;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModelProperty;
+import org.digijava.module.aim.jackson.TranslatingConverter;
 
 /**
  * Simple Heat Colors and Threshold storage
  * 
  * @author Nadejda Mandrescu
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AmpColorThreshold {
-    
+
+    @JsonProperty("id")
     private Long ampColorThresholdId;
+
+    @JsonProperty("name")
+    @JsonSerialize(converter = TranslatingConverter.class)
+    @ApiModelProperty(example = "Dark Red")
     private String colorName;
+
+    @JsonProperty("color")
+    @ApiModelProperty(example = "#d05151")
     private String colorHash;
+
+    @JsonProperty("amountFrom")
     private BigDecimal thresholdStart;
+
+    @JsonIgnore
     private Integer index;
     
     /**

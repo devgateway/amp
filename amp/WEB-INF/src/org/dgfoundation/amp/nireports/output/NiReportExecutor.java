@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports.output;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.newreports.ReportEnvBuilder;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
@@ -25,13 +26,13 @@ public class NiReportExecutor {
     }
 
     public<K> K executeReport(ReportSpecification spec, NiReportOutputBuilder<K> outputBuilder) {
-        NiReportsEngine engine = new NiReportsEngine(schema, spec);
+        NiReportsEngine engine = new NiReportsEngine(schema, spec, ReportEnvBuilder.forSession());
         NiReportRunResult reportRun = engine.execute();
         consume(reportRun);
         long start = System.currentTimeMillis();
         K res = outputBuilder.buildOutput(spec, reportRun);
         long delta = System.currentTimeMillis() - start;
-        logger.warn(String.format("converting output to external API took %d millies", delta));
+        logger.trace(String.format("converting output to external API took %d millies", delta));
         return res;
     }
 

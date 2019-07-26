@@ -33,6 +33,8 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.DateType;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
@@ -594,6 +596,16 @@ public class CurrencyUtil {
             logger.error("Unable to get currency " + ex);
         }
         return currency;
+    }
+
+    public static boolean isUsableAmpCurrency(Long id) {
+        Number currencyCount = (Number) PersistenceManager.getSession().createCriteria(AmpCurrency.class)
+                .add(Restrictions.and(
+                        Restrictions.eq("ampCurrencyId", id),
+                        Restrictions.neOrIsNotNull("virtual", true)))
+                .setProjection(Projections.count("ampCurrencyId"))
+                .uniqueResult();
+        return currencyCount.intValue() == 1;
     }
 
     public static double getExchangeRate(String currencyCode) {

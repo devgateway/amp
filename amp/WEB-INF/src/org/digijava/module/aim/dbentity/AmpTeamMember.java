@@ -7,33 +7,26 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Set;
 
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.AmpARFilterParams;
-import org.digijava.kernel.persistence.PersistenceManager;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.TeamMemberValueProvider;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
-import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.message.dbentity.AmpMessageState;
 
 @InterchangeableValue(TeamMemberValueProvider.class)
 public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*/ {
 
-    @Interchangeable(fieldTitle="AmpTeamMember ID", id=true)
+    @PossibleValueId
     private Long ampTeamMemId;
 
-    @Interchangeable(fieldTitle = "User")
     private User user;
 
-    @Interchangeable(fieldTitle = "Workspace")
     private AmpTeam ampTeam;
     private AmpTeamMemberRoles ampMemberRole;
     private Set<AmpActivityVersion> activities;
@@ -203,28 +196,10 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
         return new TeamMember(this);
     }
 
-    //uses AmpARFilter and is ridiculously slow
     public boolean isActivityValidatableByUser(Long ampActivityId) {
-        AmpTeam ampTeam = this.getAmpTeam();
-        AmpARFilter af = new AmpARFilter();
-        af.fillWithDefaultsSettings();
-        af.fillWithDefaultsFilter(null);
-        if (ampTeam.getFilterDataSet()!=null && ampTeam.getFilterDataSet().size()>0 ){
-            af = FilterUtil.buildFilter(ampTeam, null);
-        }
-
-        af.generateFilterQuery((AmpARFilterParams.getParamsForWorkspaceFilter(this.toTeamMember(), ampActivityId)));
-        
-        try(Connection conn = PersistenceManager.getJdbcConnection()){
-                
-            ResultSet rs = conn.createStatement().executeQuery(af.getGeneratedFilterQuery());
-            //if there would be many results, we would have a "while rs.next"
-            //but since the filter has been moved to SQL, it's only an if
-            return rs.next();
-        }
-        catch(SQLException exc) {
-            throw new RuntimeException("could not run workspace filter");
-        }
+        String sql = WorkspaceFilter.generateWorkspaceFilterQuery(toTeamMember());
+        Set<Long> ids = ActivityUtil.fetchLongs(sql);
+        return ids.contains(ampActivityId);
     }
 
     @Override

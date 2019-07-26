@@ -5,6 +5,9 @@
     <jira>AMP-27613</jira>
     <author>vchihai</author>
     <description>monitor changes to resources</description>
+    <trigger>
+        <condition type="tableOrViewExists">reppmver_node</condition>
+    </trigger>
     <apply>
         <script>
             <lang delimiter="@@@" type="postgres"><![CDATA[

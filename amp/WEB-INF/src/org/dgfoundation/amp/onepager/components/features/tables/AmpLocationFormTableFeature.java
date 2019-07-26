@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,7 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.text.DecimalFormat;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -22,20 +23,32 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpLocationItemPanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpTreeCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.util.*;
-import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 
 /**
@@ -50,6 +63,8 @@ public class AmpLocationFormTableFeature extends
     public IModel<Set<AmpActivityLocation>> getSetModel() {
         return setModel;
     }
+
+    private AmpPercentageCollectionValidatorField<AmpActivityLocation> percentageValidationField;
 
     /**
      * @param id
@@ -118,7 +133,7 @@ public class AmpLocationFormTableFeature extends
         });
         totalLabel.setOutputMarkupId(true);
         add(totalLabel);
-        final AmpPercentageCollectionValidatorField<AmpActivityLocation> percentageValidationField=
+        percentageValidationField =
             new AmpPercentageCollectionValidatorField<AmpActivityLocation>("locationPercentageTotal",listModel,"locationPercentageTotal") {
                 private static final long serialVersionUID = 1L;
 
@@ -172,8 +187,8 @@ public class AmpLocationFormTableFeature extends
             @Override
             protected void populateItem(final ListItem<AmpActivityLocation> item) {
                 AmpLocationItemPanel li = new AmpLocationItemPanel("locationItem", item.getModel(), "Location Item", 
-                        disablePercentagesForInternational, am, regionalFundingFeature, percentageValidationField, 
-                        uniqueCollectionValidationField, minSizeCollectionValidationField, treeCollectionValidatorField,locationPercentageRequired, setModel, list,totalLabel);
+                        disablePercentagesForInternational, am, regionalFundingFeature,
+                        AmpLocationFormTableFeature.this, locationPercentageRequired, setModel, list, totalLabel);
                 item.add(li);
             }
         };
@@ -274,12 +289,12 @@ public class AmpLocationFormTableFeature extends
                 // toggleHeading(target, setModel.getObject());
                 target.add(list.getParent());
                 regionalFundingFeature.getList().removeAll();
-                target.add(regionalFundingFeature);
-                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
-                percentageValidationField.reloadValidationField(target);
-                uniqueCollectionValidationField.reloadValidationField(target);
-                minSizeCollectionValidationField.reloadValidationField(target);
-                treeCollectionValidatorField.reloadValidationField(target);
+
+                if (regionalFundingFeature.isVisibleInHierarchy()) {
+                    target.add(regionalFundingFeature);
+                    target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
+                }
+                reloadValidationFields(target);
                 list.removeAll();
             }
 
@@ -352,5 +367,16 @@ public class AmpLocationFormTableFeature extends
             }
         }
         set.add(activityLocation);
+    }
+
+    public void reloadValidationFields(AjaxRequestTarget target) {
+        this.visitChildren(AmpCollectionValidatorField.class,
+                (IVisitor<AmpCollectionValidatorField, Void>) (component, visit)
+                        -> component.reloadValidationField(target));
+
+    }
+
+    public AmpPercentageCollectionValidatorField<AmpActivityLocation> getPercentageValidationField() {
+        return percentageValidationField;
     }
 }

@@ -4,16 +4,13 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-import mondrian.util.Pair;
-
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpReports;
 import org.hibernate.Session;
 
 /**
@@ -187,7 +184,7 @@ public class MultilingualInputFieldValues
         if (translation == null || translation.isEmpty())
             return null;  // user did not input anything -> he might have deleted an already-input translation
         
-        Pair<String, String> res = new Pair<String, String>(locale, translation);
+        Pair<String, String> res = Pair.of(locale, translation);
         return res;
     }
     

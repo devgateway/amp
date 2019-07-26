@@ -12,6 +12,21 @@
 	<!-- ******************************************* -->
 
 	<filter>
+		<filter-name>javamelody</filter-name>
+		<filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter-mapping>
+		<filter-name>javamelody</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>ASYNC</dispatcher>
+	</filter-mapping>
+	<listener>
+		<listener-class>net.bull.javamelody.SessionListener</listener-class>
+	</listener>
+
+	<filter>
 		<filter-name>gzipRequestFilter</filter-name>
 		<filter-class>org.digijava.kernel.web.gzip.GzipRequestFilter</filter-class>
 	</filter>
@@ -19,27 +34,6 @@
 		<filter-name>gzipRequestFilter</filter-name>
 		<url-pattern>/rest/*</url-pattern>
 	</filter-mapping>
-
-<!-- Saiku parts -->
-	<filter>
-		<filter-name>org.springframework.security.filterChainProxy</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
-	<filter>
-		<filter-name>http-request-context</filter-name>
-		<filter-class>org.codehaus.enunciate.webapp.HTTPRequestContextFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>org.springframework.security.filterChainProxy</filter-name>
-		<url-pattern>/saiku</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>http-request-context</filter-name>
-		<url-pattern>/saiku</url-pattern>
-		<dispatcher>REQUEST</dispatcher>
-		<dispatcher>FORWARD</dispatcher>
-	</filter-mapping>
-<!-- Saiku parts -->
 
 	<listener>
 		<listener-class>
@@ -183,11 +177,11 @@
 	</listener>
 
 	<filter>
-		<filter-name>ampOfflineClientDetector</filter-name>
-		<filter-class>org.digijava.kernel.ampapi.filters.AmpOfflineClientDetectorFilter</filter-class>
+		<filter-name>ampClientDetector</filter-name>
+		<filter-class>org.digijava.kernel.ampapi.filters.AmpClientDetectorFilter</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>ampOfflineClientDetector</filter-name>
+		<filter-name>ampClientDetector</filter-name>
 		<url-pattern>/rest/*</url-pattern>
 	</filter-mapping>
 
@@ -199,31 +193,33 @@
 		<filter-name>apiCompatFilter</filter-name>
 		<url-pattern>/rest/*</url-pattern>
 	</filter-mapping>
-	
+
+	<filter>
+		<filter-name>hibernateEntityResolverFilter</filter-name>
+		<filter-class>org.digijava.kernel.ampapi.filters.HibernateEntityResolverFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>hibernateEntityResolverFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+
 	<!-- Jersey Servlet  -->
 	<servlet>
 		<servlet-name>AMP API End Points</servlet-name>
-	 	<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-	 	<init-param>
-			<param-name>com.sun.jersey.config.property.packages</param-name>
-			<!--Package where end points are going to be placed-->
-			
-			<param-value>org.digijava.kernel.ampapi.endpoints</param-value>
-	 	</init-param>
-	 	<init-param>
-			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-			<param-value>true</param-value>
-	 	</init-param>
-	 	<!-- Define tracing level Options (OFF (default), ON_DEMAND and ALL) -->
-	 	<init-param>
-        	<param-name>jersey.config.server.provider.classnames</param-name>
-        	<param-value>org.glassfish.jersey.filter.LoggingFilter</param-value>
-    	</init-param>
-    	 <init-param>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+		    <param-name>com.sun.jersey.config.property.packages</param-name>
+		    <param-value>
+                io.swagger.jaxrs.json,
+                io.swagger.jaxrs.listing,
+                org.digijava.kernel.ampapi.endpoints
+            </param-value>
+	    </init-param>
+    	<init-param>
 			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
 			<param-value>org.digijava.kernel.ampapi.authentication.AuthRequestFilter</param-value>
 		</init-param>
-    	 <init-param>
+    	<init-param>
 			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
 			<param-value>org.digijava.kernel.ampapi.endpoints.common.ApiResponseFilter</param-value>
 		</init-param>
@@ -231,70 +227,14 @@
 			<param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
 			<param-value>org.digijava.kernel.ampapi.endpoints.security.AuthorizerResourceFilterFactory</param-value>
 		</init-param>
-		 
-    	<init-param>
-        	<param-name>jersey.config.server.tracing</param-name>
-        	<param-value>ALL</param-value>
-    	</init-param>
 		<load-on-startup>1</load-on-startup>
 	 </servlet>
  	<servlet-mapping>
- 		<servlet-name>AMP API End Points</servlet-name>
+		<servlet-name>AMP API End Points</servlet-name>
  		<url-pattern>/rest/*</url-pattern>
  	</servlet-mapping>
 	<!-- End Jersey  -->
-	
-	<!-- MDX Queries Servlet -->
-	<servlet>
-		<servlet-name>MDXQueryServlet</servlet-name>
-		<servlet-class>
-			mondrian.web.servlet.MDXQueryServlet
-		</servlet-class>
-		<init-param>
-			<param-name>connectString</param-name>
-			<param-value>@mondrian.webapp.connectString@</param-value>
-		</init-param>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>MDXQueryServlet</servlet-name>
-		<url-pattern>/mdxquery</url-pattern>
-	</servlet-mapping>
-	<!-- End MDX -->
-	
-	<!--  Start for Saiku Webapp Support -->
-	<servlet>
-		<servlet-name>spring</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>jersey2</servlet-name>
-		<servlet-class>org.codehaus.enunciate.modules.jersey.EnunciateJerseyServletContainer</servlet-class>
-		<init-param>
-			<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>org.saiku.web</param-value>
-		</init-param>
-		<init-param>
-			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
-			<param-value>com.sun.jersey.api.container.filter.PostReplaceFilter</param-value>
-		</init-param>
-		<init-param>
-			<param-name>org.codehaus.enunciate.modules.jersey.config.ServletPath</param-name>
-			<param-value>/saiku/rest</param-value>
-		</init-param>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>jersey2</servlet-name>
-		<url-pattern>/saiku/rest/saiku/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>jersey2</servlet-name>
-		<url-pattern>/saiku/rest/saiku/session</url-pattern>
-	</servlet-mapping>
-	<!--  End Saiku Webapp Support -->
 
-
-	
 	<servlet>
 		<servlet-name>action</servlet-name>
 		<servlet-class>
@@ -475,17 +415,29 @@
 			<role-name>DigiAdmin</role-name>
 		</auth-constraint>
 	</security-constraint>
-	
+
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>AMP Monitoring</realm-name>
+	</login-config>
+
+	<security-role>
+		<role-name>monitoring</role-name>
+	</security-role>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Monitoring</web-resource-name>
+			<url-pattern>/monitoring</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>monitoring</role-name>
+		</auth-constraint>
+	</security-constraint>
+
 	<resource-ref>
 		<description>Main DB Connection</description>
 		<res-ref-name>ampDS</res-ref-name>
-		<res-type>javax.sql.DataSource</res-type>
-		<res-auth>Container</res-auth>
-	</resource-ref>
-	
-	<resource-ref>
-		<description>MonetDB Connection</description>
-		<res-ref-name>monetDS</res-ref-name>
 		<res-type>javax.sql.DataSource</res-type>
 		<res-auth>Container</res-auth>
 	</resource-ref>

@@ -54,7 +54,7 @@ function ReportPreviewEngine (rpSettings) {
 		url:"/rest/data/report/preview",
 		dataType: "html",
 		headers : {
-			'Accept' : 'application/json',
+			'Accept' : 'text/html',
 			'Content-Type' : 'application/json'
 		},
 		async:true,

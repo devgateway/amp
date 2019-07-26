@@ -1,7 +1,8 @@
 package org.dgfoundation.amp.onepager.helper;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Store for editors to help with propagating the link between old keys and new keys + values for new keys
@@ -9,21 +10,28 @@ import java.util.HashMap;
  *
  * @author aartimon@developmentgateway.org
  */
-public class EditorStore implements Serializable{
-    //map between new editor key and old editor key, in order to be able to copy values in other languages
-    private HashMap<String, String> oldKey;
-    //map between new editor key and editor body from the form
-    private HashMap<String, HashMap<String, String>> values;
+public class EditorStore implements Serializable {
+
+    /**
+     * map between new editor key and old editor key, in order to be able to copy values in other languages
+     */
+    private Map<String, String> oldKey;
+
+    /**
+     * map between new editor key and editor body from the form
+     */
+    private Map<String, Map<String, String>> values;
     
     public EditorStore() {
-        oldKey = new HashMap<String, String>();
-        values = new HashMap<String, HashMap<String, String>>();
+        oldKey = new TreeMap<>();
+        values = new TreeMap<>();
     }
 
-    public HashMap<String, String> getOldKey() {
+    public Map<String, String> getOldKey() {
         return oldKey;
     }
-    public HashMap<String, HashMap<String, String>> getValues() {
+
+    public Map<String, Map<String, String>> getValues() {
         return values;
     }
 }

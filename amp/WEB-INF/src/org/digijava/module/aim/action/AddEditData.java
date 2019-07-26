@@ -158,8 +158,7 @@ public class AddEditData
                 try{
                     IndicatorUtil.updateThemeConnection(connection);
                 }catch(Exception ex){
-                    logger.error(ex);
-                    ex.printStackTrace();
+                    logger.error(ex.getMessage(), ex);
                 }
             }
             //returning null because "delete" is called from already closed popup window.

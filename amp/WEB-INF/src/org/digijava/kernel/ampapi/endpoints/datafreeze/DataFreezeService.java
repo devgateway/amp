@@ -2,22 +2,18 @@ package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.dto.SaveResult;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
 import org.digijava.module.aim.dbentity.AmpActivityFrozen;
-import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AmpDateUtils;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.digijava.module.translation.exotic.AmpDateFormatter;
-import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,83 +40,57 @@ public final class DataFreezeService {
     private DataFreezeService() {
     }
 
-    public static JsonBean saveDataFreezeEvent(DataFreezeEvent dataFreezeEvent) {
-        JsonBean result = new JsonBean();
-        List<JsonBean> validationErrors = validate(dataFreezeEvent);
+    public static SaveResult<DataFreezeEvent> saveDataFreezeEvent(DataFreezeEvent dataFreezeEvent) {
+        List<Map<String, String>> validationErrors = validate(dataFreezeEvent);
         if (validationErrors.size() == 0) {
             AmpDataFreezeSettings dataFreezeSettings = getOrCreate(dataFreezeEvent);
             updateModel(dataFreezeSettings, dataFreezeEvent);
             DataFreezeUtil.saveDataFreezeEvent(dataFreezeSettings);
-            JsonBean saved = modelToJsonBean(dataFreezeSettings);
-            if (dataFreezeEvent.getCid() != null) {
-                saved.set(DataFreezeConstants.FIELD_CID, dataFreezeEvent.getCid());
-            }
-            result.set(DataFreezeConstants.DATA, saved);
-            result.set(DataFreezeConstants.RESULT, DataFreezeConstants.SAVE_SUCCESSFUL);
-        } else {
-            result.set(DataFreezeConstants.DATA, dataFreezeEvent);
-            result.set(DataFreezeConstants.RESULT, DataFreezeConstants.SAVE_FAILED);
-            result.set(DataFreezeConstants.ERRORS, validationErrors);
-        }
+    
+            dataFreezeEvent.setId(dataFreezeSettings.getAmpDataFreezeSettingsId());
+            dataFreezeEvent.setCount(getCountOfFrozenActivities(dataFreezeSettings));
 
-        return result;
+            return new SaveResult(dataFreezeEvent);
+        } else {
+            return new SaveResult(dataFreezeEvent, validationErrors);
+        }
     }
 
-    private static List<JsonBean> validate(DataFreezeEvent dataFreezeEvent) {
-        List<JsonBean> errors = new ArrayList<>();
-        if(DataFreezeUtil.freezeDateExists(dataFreezeEvent.getId(), DateTimeUtil.parseDate(dataFreezeEvent.getFreezingDate(), DataFreezeConstants.DATE_FORMAT))){
-            JsonBean error = new JsonBean();
-            error.set(ApiError.getErrorCode(DataFreezeErrors.FREEZING_DATE_EXISTS),
+    private static List<Map<String, String>> validate(DataFreezeEvent dataFreezeEvent) {
+        List<Map<String, String>> errors = new ArrayList<>();
+        if (DataFreezeUtil.freezeDateExists(dataFreezeEvent.getId(), dataFreezeEvent.getFreezingDate())) {
+            Map<String, String> error = new HashMap<>();
+            error.put(ApiError.getErrorCode(DataFreezeErrors.FREEZING_DATE_EXISTS),
                     DataFreezeErrors.FREEZING_DATE_EXISTS.description);
             errors.add(error);
         }
         
-        Date openPeriodStart = DateTimeUtil.parseDate(dataFreezeEvent.getOpenPeriodStart(), DataFreezeConstants.DATE_FORMAT);
-        Date openPeriodEnd = DateTimeUtil.parseDate(dataFreezeEvent.getOpenPeriodEnd(), DataFreezeConstants.DATE_FORMAT);       
-        if(DataFreezeUtil.openPeriodOverlaps(dataFreezeEvent.getId(), openPeriodStart, openPeriodEnd)){
-            JsonBean error = new JsonBean();
-            error.set(ApiError.getErrorCode(DataFreezeErrors.OPEN_PERIOD_OVERLAPS),
+        Date openPeriodStart = dataFreezeEvent.getOpenPeriodStart();
+        Date openPeriodEnd = dataFreezeEvent.getOpenPeriodEnd();
+        if (DataFreezeUtil.openPeriodOverlaps(dataFreezeEvent.getId(), openPeriodStart, openPeriodEnd)) {
+            Map<String, String> error = new HashMap<>();
+            error.put(ApiError.getErrorCode(DataFreezeErrors.OPEN_PERIOD_OVERLAPS),
                     DataFreezeErrors.OPEN_PERIOD_OVERLAPS.description);
             errors.add(error); 
         }
+        
         return errors;
     }
 
-    private static JsonBean modelToJsonBean(AmpDataFreezeSettings dataFreezeEvent) {
-        JsonBean json = new JsonBean();
-        json.set(DataFreezeConstants.FIELD_ID, dataFreezeEvent.getAmpDataFreezeSettingsId());
-        json.set(DataFreezeConstants.FIELD_ENABLED, dataFreezeEvent.getEnabled());
-        json.set(DataFreezeConstants.FIELD_GRACE_PERIOD, dataFreezeEvent.getGracePeriod());
-        json.set(DataFreezeConstants.FIELD_FREEZING_DATE,
-                DateTimeUtil.formatDate(dataFreezeEvent.getFreezingDate(), DataFreezeConstants.DATE_FORMAT));
-        json.set(DataFreezeConstants.FIELD_OPEN_PERIOD_START,
-                DateTimeUtil.formatDate(dataFreezeEvent.getOpenPeriodStart(), DataFreezeConstants.DATE_FORMAT));
-        json.set(DataFreezeConstants.FIELD_OPEN_PERIOD_END,
-                DateTimeUtil.formatDate(dataFreezeEvent.getOpenPeriodEnd(), DataFreezeConstants.DATE_FORMAT));
-        json.set(DataFreezeConstants.FIELD_FREEZE_OPTION, dataFreezeEvent.getFreezeOption());
-        json.set(DataFreezeConstants.FIELD_FILTERS, dataFreezeEvent.getFilters());
-        json.set(DataFreezeConstants.FIELD_SEND_NOTIFICATION, dataFreezeEvent.getSendNotification());
-        json.set(DataFreezeConstants.FIELD_ENABLED, dataFreezeEvent.getEnabled());
-        json.set(DataFreezeConstants.FIELD_COUNT, getCountOfFrozenActivities(dataFreezeEvent));
-        json.set(DataFreezeConstants.FIELD_NOTIFICATION_DAYS, dataFreezeEvent.getNotificationDays());
-        return json;
-    }
-
     private static AmpDataFreezeSettings updateModel(AmpDataFreezeSettings dataFreezeSettings,
-            DataFreezeEvent dataFreezeEvent) {
+                                                     DataFreezeEvent dataFreezeEvent) {
+        
         dataFreezeSettings.setEnabled(dataFreezeEvent.getEnabled());
         dataFreezeSettings.setGracePeriod(dataFreezeEvent.getGracePeriod());
-        dataFreezeSettings.setFreezingDate(
-                DateTimeUtil.parseDate(dataFreezeEvent.getFreezingDate(), DataFreezeConstants.DATE_FORMAT));
-        dataFreezeSettings.setOpenPeriodStart(
-                DateTimeUtil.parseDate(dataFreezeEvent.getOpenPeriodStart(), DataFreezeConstants.DATE_FORMAT));
-        dataFreezeSettings.setOpenPeriodEnd(
-                DateTimeUtil.parseDate(dataFreezeEvent.getOpenPeriodEnd(), DataFreezeConstants.DATE_FORMAT));
+        dataFreezeSettings.setFreezingDate(dataFreezeEvent.getFreezingDate());
+        dataFreezeSettings.setOpenPeriodStart(dataFreezeEvent.getOpenPeriodStart());
+        dataFreezeSettings.setOpenPeriodEnd(dataFreezeEvent.getOpenPeriodEnd());
         dataFreezeSettings.setFreezeOption(dataFreezeEvent.getFreezeOption());
         dataFreezeSettings.setFilters(dataFreezeEvent.getFilters());
         dataFreezeSettings.setSendNotification(dataFreezeEvent.getSendNotification());
         dataFreezeSettings.setEnabled(dataFreezeEvent.getEnabled());
         dataFreezeSettings.setNotificationDays(dataFreezeEvent.getNotificationDays());
+        
         return dataFreezeSettings;
     }
 
@@ -139,10 +109,8 @@ public final class DataFreezeService {
         DataFreezeUtil.deleteDataFreezeEvent(id);
     }
 
-    public static Page<DataFreezeEvent> fetchDataFreezeEventList(Integer offset, Integer count, String orderBy,
+    public static ResultPage<DataFreezeEvent> fetchDataFreezeEventList(Integer offset, Integer count, String orderBy,
             String sort) {
-        Page<DataFreezeEvent> page = new Page<>();
-        AmpDateFormatter dateFormatter = AmpDateFormatterFactory.getDefaultFormatter(DataFreezeConstants.DATE_FORMAT);
         Integer total = DataFreezeUtil.getFreezeEventsTotalCount();
         List<AmpDataFreezeSettings> fetchedData = DataFreezeUtil.getDataFreeEventsList(offset, count, orderBy, sort,
                 total);
@@ -153,9 +121,9 @@ public final class DataFreezeService {
             dataFreezeEvent.setId(event.getAmpDataFreezeSettingsId());
             dataFreezeEvent.setEnabled(event.getEnabled());
             dataFreezeEvent.setGracePeriod(event.getGracePeriod());
-            dataFreezeEvent.setFreezingDate(dateFormatter.format(event.getFreezingDate()));
-            dataFreezeEvent.setOpenPeriodStart(dateFormatter.format(event.getOpenPeriodStart()));
-            dataFreezeEvent.setOpenPeriodEnd(dateFormatter.format(event.getOpenPeriodEnd()));
+            dataFreezeEvent.setFreezingDate(event.getFreezingDate());
+            dataFreezeEvent.setOpenPeriodStart(event.getOpenPeriodStart());
+            dataFreezeEvent.setOpenPeriodEnd(event.getOpenPeriodEnd());
             dataFreezeEvent.setSendNotification(event.getSendNotification());
             dataFreezeEvent.setFreezeOption(event.getFreezeOption());
             dataFreezeEvent.setFilters(event.getFilters());
@@ -165,10 +133,7 @@ public final class DataFreezeService {
             freezeEvents.add(dataFreezeEvent);
         });
 
-        page.setData(freezeEvents);
-        page.setTotalRecords(total);
-
-        return page;
+        return new ResultPage<>(freezeEvents, total);
     }
 
     private static Integer getCountOfFrozenActivities(AmpDataFreezeSettings event) {
@@ -208,7 +173,7 @@ public final class DataFreezeService {
 
         if (event.getFilters() != null) {
             // get any filters applied while creating the data freezing event
-            JsonBean config = JsonBean.getJsonBeanFromString(event.getFilters());
+            Map<String, Object> config = ObjectMapperUtils.getMapFromString(event.getFilters());
             filters = (LinkedHashMap<String, Object>) config.get(EPConstants.FILTERS);
         } else {
             filters = new LinkedHashMap<>();
@@ -217,7 +182,7 @@ public final class DataFreezeService {
         // add date filter in order to fetch activities before the freezing date
         Map<String, Object> dateFilter = new LinkedHashMap<>();
         dateFilter.put("end", DateTimeUtil.formatDate(AmpDateUtils.getDateBeforeDays(event.getFreezingDate(), 1),
-                DataFreezeConstants.DATE_FORMAT));
+                EPConstants.ISO8601_DATE_FORMAT));
         filters.put(FiltersConstants.DATE, dateFilter);
 
         return filters;
@@ -241,8 +206,8 @@ public final class DataFreezeService {
     /**
      * Check if activity is editable
      * 
-     * @param activityId
-     * @param ampTeamMemberId
+     * @param ampActivityFrozen
+     * @param atm
      * @return
      */
     public static boolean isEditable(AmpActivityFrozen ampActivityFrozen, AmpTeamMember atm) {
@@ -276,8 +241,9 @@ public final class DataFreezeService {
      * Return the freezing configuration with the open period if all funding is
      * editable or the user is exempt we return null
      * 
-     * @param activityId
-     * @param ampTeamMemberId
+     * @param ampActivityFrozen
+     * @param atm
+     * @param transactionDate
      * @return
      * 
      */
@@ -342,21 +308,17 @@ public final class DataFreezeService {
         DataFreezeUtil.unfreezeActivities(activitiesIdToFreeze);
     }
 
-    public static JsonBean getFronzeActivitiesInformation() {
-        String freezingDate = null;
+    public static DataFreezeInformation getFrozenActivitiesInformation() {
+        Date freezingDate = null;
         Integer freezingCount = 0;
         AmpDataFreezeSettings ampDataFreezeSettings = DataFreezeUtil.getLatestFreezingConfiguration();
+        
         if (ampDataFreezeSettings != null) {
             Set<Long> frozenActivities = DataFreezeUtil.getFrozenActivities();
-            String defaultDateFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
-            SimpleDateFormat dateFormatter = new SimpleDateFormat(defaultDateFormat);
-            freezingDate = dateFormatter.format(ampDataFreezeSettings.getFreezingDate());
+            freezingDate = ampDataFreezeSettings.getFreezingDate();
             freezingCount = frozenActivities.size();
         }
-
-        JsonBean freezingInformation = new JsonBean();
-        freezingInformation.set("freezingDate", freezingDate);
-        freezingInformation.set("freezingCount", freezingCount);
-        return freezingInformation;
+    
+        return new DataFreezeInformation(freezingDate, freezingCount);
     }
 }

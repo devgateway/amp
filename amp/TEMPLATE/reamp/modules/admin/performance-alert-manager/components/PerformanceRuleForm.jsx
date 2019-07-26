@@ -192,7 +192,7 @@ export default class PerformanceRuleForm extends Component {
                                 <select className="form-control performance-input" name="level" value={this.props.currentPerformanceRule.level ? this.props.currentPerformanceRule.level.id : ''} onChange={this.onInputChange}>
                                     <option>{this.props.translations['amp.performance-rule:select-level']}</option>
                                     {this.props.levelList && this.props.levelList.map(level => 
-                                    <option value={level.id} key={level.id} >{level.name}</option>
+                                    <option value={level.id} key={level.id} >{level.label}</option>
                                     )}
                                 </select>
                             </td>         

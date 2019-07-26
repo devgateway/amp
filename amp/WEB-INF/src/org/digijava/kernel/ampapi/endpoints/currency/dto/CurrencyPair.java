@@ -2,12 +2,17 @@ package org.digijava.kernel.ampapi.endpoints.currency.dto;
 
 import java.util.Objects;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @author Octavian Ciubotaru
  */
 public class CurrencyPair {
 
+    @ApiModelProperty(example = "EUR")
     private final String from;
+
+    @ApiModelProperty(example = "USD")
     private final String to;
 
     public CurrencyPair(String from, String to) {

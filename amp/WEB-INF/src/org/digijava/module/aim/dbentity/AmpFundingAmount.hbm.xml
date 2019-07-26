@@ -15,7 +15,7 @@
 		
 		<property name="funAmount" column="amount" type="java.lang.Double" />
 		<property name="funDate" column="date" type="java.util.Date" />
-		<property name="currencyCode" column="curr_code" type="java.lang.String" />
+		<many-to-one name="currency" column="amp_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<property name="funType" >
 			<column name="type" not-null="true" default="0" unique-key="activityType" />
 			<type name="org.hibernate.type.EnumType">

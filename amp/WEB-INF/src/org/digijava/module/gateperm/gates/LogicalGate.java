@@ -95,7 +95,7 @@ public class LogicalGate extends Gate {
         return false;
         }
     } catch (NotBoundGateInputException e) {
-        logger.error(e);
+        logger.error(e.getMessage(), e);
         throw new RuntimeException("NotBoundGateInputException Exception encountered", e);
     }
     }

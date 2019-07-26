@@ -1,5 +1,7 @@
 package org.digijava.module.aim.util;
 
+import static org.apache.lucene.store.Lock.LOCK_OBTAIN_WAIT_FOREVER;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -499,7 +501,9 @@ public class LuceneUtil implements Serializable {
                 int chunkStart = chunkNo * CHUNK_SIZE, chunkEnd = (chunkNo + 1) * CHUNK_SIZE;
 
                 Statement st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-                String qryStr = String.format("SELECT vt.* FROM v_titles vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                String qryStr = String.format("SELECT vt.* FROM v_titles vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
 
                 ResultSet rs = st.executeQuery(qryStr);
 
@@ -528,7 +532,9 @@ public class LuceneUtil implements Serializable {
                 }
                 // the correct view is v_amp_id, the view with name v_ampid
                 // is not used
-                qryStr = String.format("SELECT vt.* FROM v_amp_id vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_amp_id vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -543,7 +549,9 @@ public class LuceneUtil implements Serializable {
                     //
                 }
 
-                qryStr = String.format("SELECT vt.* FROM v_description vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_description vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -558,7 +566,9 @@ public class LuceneUtil implements Serializable {
                     //
                 }
 
-                qryStr = String.format("SELECT vt.* FROM v_objectives vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_objectives vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -573,7 +583,9 @@ public class LuceneUtil implements Serializable {
                     //
                 }
 
-                qryStr = String.format("SELECT vt.* FROM v_purposes vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_purposes vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -590,7 +602,9 @@ public class LuceneUtil implements Serializable {
                     //
                 }
 
-                qryStr = String.format("SELECT vt.* FROM v_results vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_results vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -624,7 +638,9 @@ public class LuceneUtil implements Serializable {
 //              }
 
                 // Bolivia component code
-                qryStr = String.format("SELECT vt.* FROM v_bolivia_component_code vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
+                qryStr = String.format("SELECT vt.* FROM v_bolivia_component_code vt JOIN amp_activity lv "
+                        + "ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) "
+                        + "AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 rs = st.executeQuery(qryStr);
                 rs.last();
                 logger.info("Starting iteration of " + rs.getRow() + " v_bolivia_component_code!");
@@ -640,7 +656,8 @@ public class LuceneUtil implements Serializable {
                     isNext = rs.next();
                 }
                 // new budget codes
-                qryStr = "select r.activity,string_agg(r.budget_code, ' ; ' ) as budget_codes from amp_org_role r, v_activity_latest_and_validated a where a.amp_activity_id=r.activity and activity >= "
+                qryStr = "select r.activity, string_agg(r.budget_code, ' ; ' ) as budget_codes "
+                        + "from amp_org_role r, amp_activity a where a.amp_activity_id=r.activity and activity >= "
                         + chunkStart + " and activity < " + chunkEnd + " group by activity";
                 rs = st.executeQuery(qryStr);
                 rs.last();
@@ -726,60 +743,35 @@ public class LuceneUtil implements Serializable {
         return res;
     }
 
-    static void listDocuments(IndexReader indexReader)
-    {
-        try
-        {
-            int nrDocs = indexReader.numDocs();
-            for(int i = 0; i < nrDocs; i++)
-            {
-                Document doc = indexReader.document(i);
-                Map<String, String> document = digestDocument(doc);
-                System.out.format("Document #%d has fields: %s\n", i, document.toString());
+    public static boolean deleteEntry(String idx, String field, String search) {
+        Term term = new Term(field, search);
+        IndexWriter indexWriter = null;
+        try {
+            IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, LuceneUtil.ANALYZER);
+            indexWriterConfig.setWriteLockTimeout(LOCK_OBTAIN_WAIT_FOREVER);
+            Directory directory = FSDirectory.open(new File(idx));
+            indexWriter = new IndexWriter(directory, indexWriterConfig);
+            indexWriter.deleteDocuments(term);
+            return indexWriter.hasDeletions();
+        } catch (Exception e) {
+            logger.error("Error deleting activity from Lucene index", e);
+            return false;
+        } finally {
+            try {
+                if (indexWriter != null) {
+                    indexWriter.close();
+                }
+            } catch (IOException e) {
+                logger.error("Error closing Lucene index writer", e);
             }
         }
-        catch(Exception e)
-        {
-            logger.error("error listing Lucene documents", e);
-        }
     }
 
-    public static int deletePledge(String idx, String field, String search){
-        Term term = new Term(field, search);
-        IndexReader indexReader;
-        try {
-            
-            indexReader = IndexReader.open(FSDirectory.open(new File(idx)), false);
-            //listDocuments(indexReader);
-            int ret = indexReader.deleteDocuments(term);
-            indexReader.close();
-            return ret;
-        } catch (Exception e) {
-            logger.error("error deleting pledge from Lucene index", e);
-            return 0;
-        }
-    }
-
-    public static int deleteEntry(String idx, String field, String search){
-        Term term = new Term(field, search);
-        IndexReader indexReader;
-        try {
-            indexReader = IndexReader.open(FSDirectory.open(new File(idx)), false);
-            //listDocuments(indexReader);
-            int ret = indexReader.deleteDocuments(term);
-            indexReader.close();
-            return ret;
-        } catch (Exception e) {
-            logger.error("error deleting activity from Lucene index", e);
-            return 0;
-        }
-    }
-
-    public static int deletePledge(String rootRealPath, Long pledgeId){
+    public static boolean deletePledge(String rootRealPath, Long pledgeId) {
         return deleteEntry(rootRealPath + PLEDGE_INDEX_DIRECTORY, ID_FIELD, String.valueOf(pledgeId));
     }
 
-    public static int deleteActivity(String rootRealPath, Long activityId){
+    public static boolean deleteActivity(String rootRealPath, Long activityId) {
         return deleteEntry(rootRealPath + ACTIVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(activityId));
     }
 
@@ -996,9 +988,9 @@ public class LuceneUtil implements Serializable {
         try {
 
             if (update/* && false*/) {
-                int nrDeleted = deletePledge(rootRealPath, newfakePledge.getAmpId());
-                if (nrDeleted != 1)
-                    logger.warn("Lucene.addUpdateActivity(): deleted " + nrDeleted + " activities from index, normal value would be: 1");
+                if (!deletePledge(rootRealPath, newfakePledge.getAmpId())) {
+                    logger.warn("Lucene.addUpdatePledge(): didn't delete pledges from index.");
+                }
             }
 
             IndexWriter indexWriter = null;
@@ -1042,16 +1034,14 @@ public class LuceneUtil implements Serializable {
 
         try {
             if (update/* && false*/) {
-                int nrDeleted = deleteActivity(rootRealPath, previousActivity.getAmpActivityId());
-                if (nrDeleted != 1)
-                    logger.warn("Lucene.addUpdateActivity(): deleted " + nrDeleted + " activities from index, normal value would be: 1");
+                if (!deleteActivity(rootRealPath, previousActivity.getAmpActivityId())) {
+                    logger.warn("Lucene.addUpdateActivity(): didn't delete the activity fron index");
+                }
             }
-            IndexWriter indexWriter = null;
             IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, LuceneUtil.ANALYZER);
+            indexWriterConfig.setWriteLockTimeout(LOCK_OBTAIN_WAIT_FOREVER);
             Directory directory = FSDirectory.open(new File(rootRealPath + ACTIVITY_INDEX_DIRECTORY));
-            indexWriter = new IndexWriter(directory, indexWriterConfig);
-            // Util.getEditorBody(site,act.getDescription(),navigationLanguage);
-            Document doc = null;
+            IndexWriter indexWriter = new IndexWriter(directory, indexWriterConfig);
 
             ArrayList<String> componentsCode = new ArrayList<String>();
             if(newActivity.getComponents() != null && Hibernate.isInitialized(newActivity.getComponents())){
@@ -1076,8 +1066,8 @@ public class LuceneUtil implements Serializable {
             actLuceneDoc.setBudgetCodes(LuceneUtil.getBudgetCodesForActivity(newActivity));
             actLuceneDoc.setComponentCodes(componentsCode);
             actLuceneDoc.setTranslations(translations);
-            
-            doc = activityToLuceneDocument(actLuceneDoc);
+    
+            Document doc = activityToLuceneDocument(actLuceneDoc);
 
             if (doc != null) {
                 try {

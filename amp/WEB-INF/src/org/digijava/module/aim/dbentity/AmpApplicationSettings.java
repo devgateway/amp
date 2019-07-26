@@ -8,7 +8,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.digijava.kernel.ampapi.endpoints.security.serializers.AmpApplicationSettingsSerializer;
 
 @SuppressWarnings("serial")

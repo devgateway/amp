@@ -1,8 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher.definition;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -14,8 +15,12 @@ import org.digijava.kernel.translator.TranslatorWorker;
  */
 public class PerformanceRuleAttributeOption {
 
+    @ApiModelProperty(example = "fundingClassificationDate")
     private String name;
+
+    @ApiModelProperty(example = "Funding Classification Date")
     private String label;
+
     private String fmPath;
 
     public PerformanceRuleAttributeOption(String name) {
@@ -45,6 +50,7 @@ public class PerformanceRuleAttributeOption {
     }
     
     @JsonProperty(PerformanceRuleConstants.JSON_ATTRIBUTE_TRANSLATED_LABEL)
+    @ApiModelProperty(example = "Funding Classification Date")
     public String getTranslatedLabel() {
         return TranslatorWorker.translateText(label);
     }
@@ -64,7 +70,7 @@ public class PerformanceRuleAttributeOption {
     
     public boolean isVisible() {
         if (!StringUtils.isBlank(fmPath)) {
-            return FMVisibility.isVisible(fmPath, null);
+            return FMVisibility.isVisible(fmPath);
         }
         
         return true;

@@ -1,14 +1,16 @@
 package org.dgfoundation.amp.algo.timing;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.IntFunction;
 import java.util.function.LongFunction;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.dgfoundation.amp.algo.AlgoUtils;
 
 /**
  * an object returned by InclusiveTimer to represent a read-only identifying view in the runtime tree
@@ -16,46 +18,58 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  *
  */
 public interface RunNode {
+
+    int DEFAULT_INDENT = 3;
+
     public String getName();
     public Set<? extends RunNode> getSubNodes();
     public long getTotalTime();
-    
+
     /** value is either java class (String / Integer / Long / blabla) OR java collection (List, Set, Map) */
     public Map<String, Object> getMeta();
-    
-    /** 
+
+    /**
      * @param key if a value with the given key already exists, will throw exception. Also, "name", "subNodes" and "totalTime" are disallowed keys
      * @param value if it is null, then this call does nothing
      */
-    public void putMeta(String key, Object value);
-    
-    public default JsonBean getDetails() {
-        return asJsonBean();
+    void putMeta(String key, Object value);
+
+    default Map<String, Object> getDetails() {
+        return asMap();
     }
-        
+
     /**
      * renders the node as Json-ready bean
      * @return
      */
-    public default JsonBean asJsonBean() {
-        JsonBean result = new JsonBean();
-        result.set("name", getName());
-        result.set("totalTime", getTotalTime());
+    default Map<String, Object> asMap() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("name", getName());
+        result.put("totalTime", getTotalTime());
         for (Map.Entry<String, Object> entry : this.getMeta().entrySet()) {
-            result.set(entry.getKey(), entry.getValue());
+            result.put(entry.getKey(), entry.getValue());
         }
-        
-        List<JsonBean> subNodes = new ArrayList<JsonBean>();
+
+        List<Map<String, Object>> subNodes = new ArrayList<>();
         if (getSubNodes() != null)
             for (RunNode subNode : getSubNodes()) {
-                subNodes.add(subNode.asJsonBean());
+                subNodes.add(subNode.asMap());
             }
+        
         if (subNodes.size() > 0)
-            result.set("subNodes", subNodes);
+            result.put("subNodes", subNodes);
 
         return result;
     }
     
+    default String getDetailsAsString() {
+        try {
+            return new ObjectMapper().writer().writeValueAsString(asMap());
+        } catch (Exception e) {
+            throw AlgoUtils.translateException(e);
+        }
+    }
+
     public default String asString(IntFunction<String> prefixBuilder, LongFunction<String> numberFormatter, int depth) {
         StringBuilder subnodesString = getSubNodes() == null || getSubNodes().isEmpty() ? null : new StringBuilder(", subNodes: [");
         if (subnodesString != null) {
@@ -79,7 +93,7 @@ public interface RunNode {
         bld.append("}");
         return bld.toString();
     }
-    
+
     /**
      * returns a description of the state in pseudo-json format
      * @param numberFormatter
@@ -88,11 +102,11 @@ public interface RunNode {
     public default String asFastString(LongFunction<String> numberFormatter) {
         return asString(z -> "", numberFormatter, 0);
     }
-    
+
     public default String asUserString(final int blanksPerLevel) {
         return asUserString(blanksPerLevel, duration -> String.format("%d ms", duration));
     }
-    
+
     public default String asUserString(final int blanksPerLevel, LongFunction<String> numberFormatter) {
         return asString(depth -> depth == 0 ? "" : ("\n" + StringUtils.repeat(" ", blanksPerLevel * (depth + 1))), numberFormatter, 0);
     }

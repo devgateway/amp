@@ -6,26 +6,27 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableMap;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateSerializer;
 
 /**
  * @author Octavian Ciubotaru
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AmpOfflineRelease implements Comparable<AmpOfflineRelease>, Cloneable {
 
     public static final String WINDOWS = "windows";
     public static final String MAC_OS = "osx";
 
-    private static final String VER_REGEX = "(?<ver>\\d+\\.\\d+\\.\\d+(?:-\\w+)?)";
-    private static final String OS_REGEX = "(?<os>" + WINDOWS + "|redhat|debian|" + MAC_OS + ")";
-    private static final String ARCH_REGEX = "(?<arch>32|64)";
-    private static final String UA_REGEX = "AMPOffline/" + VER_REGEX + " \\(" + OS_REGEX + "; " + ARCH_REGEX + "\\).*";
+    private static final String VER_REGEX = "\\d+\\.\\d+\\.\\d+(?:-\\w+)?";
+    private static final String OS_REGEX = WINDOWS + "|redhat|debian|" + MAC_OS;
+    private static final String ARCH_REGEX = "32|64";
+    private static final String UA_REGEX = "AMPOffline/(?<ver>" + VER_REGEX + ") \\((?<os>" + OS_REGEX
+            + "); (?<arch>" + ARCH_REGEX + ")\\).*";
     private static final Pattern UA_PATTERN = Pattern.compile(UA_REGEX);
 
     private static final Comparator<AmpOfflineRelease> NATURAL = Comparator.comparing(AmpOfflineRelease::getVersion)

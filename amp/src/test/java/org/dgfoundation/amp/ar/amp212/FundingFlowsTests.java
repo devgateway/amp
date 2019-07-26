@@ -5,11 +5,10 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.junit.Test;
 
@@ -20,7 +19,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class FundingFlowsTests extends ReportingTestCase {
+public class FundingFlowsTests extends AmpReportingTestCase {
 
     final List<String> flowsActs = Arrays.asList(
         "activity with directed MTEFs",
@@ -36,12 +35,7 @@ public class FundingFlowsTests extends ReportingTestCase {
         "Activity with Zones",
         "TAC_activity_2"
     );
-    
-    @Override
-    protected NiReportExecutor getNiExecutor(List<String> activityNames) {
-        return getDbExecutor(activityNames);
-    }
-    
+
     @Test
     public void testComplexHeaderWithSplitColumnsAndMeasures() {
         NiReportModel cor = new NiReportModel("AMP-15337-complex-header")

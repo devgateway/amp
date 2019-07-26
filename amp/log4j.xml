@@ -69,22 +69,6 @@
         <priority value="DEBUG"/>   <!-- SET to DEBUG to see wicket page render times -->
     </category>
 
-    <!--<category name="mondrian.rolap">
-            <priority value="WARN"/>
-        </category>
-
-        <category name="mondrian.gui">
-            <priority value="WARN"/>
-        </category>
-
-        <category name="mondrian.sql">
-            <priority value="INFO"/>
-        </category>
-
-        <category name="mondrian.mdx">
-            <priority value="INFO"/>
-        </category>
-    -->
     <!-- Limit JSF logging to DEBUG.  FINER and FINEST will not be logged -->
     <category name="javax.enterprise.resource.webcontainer.jsf">
         <priority value="INFO" />

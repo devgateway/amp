@@ -24,11 +24,23 @@ module.exports = ChartViewBase.extend({
       var key = $(e.currentTarget).find('.nv-legend-text').text();
 	  var plannedDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-planned-disbursements","Planned Disbursements");
 	  var actualDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-actual-disbursements","Actual Disbursements");
-	  if(key == plannedDisbursementTrn){
-		  this.model.set('showPlannedDisbursements', !this.model.get('showPlannedDisbursements'));	
-	  }else if(key == actualDisbursementTrn){
-		  this.model.set('showActualDisbursements', !this.model.get('showActualDisbursements'));	
+	  var planned = this.model.get('showPlannedDisbursements');
+	  var actual = this.model.get('showActualDisbursements');
+	
+	  if (key === plannedDisbursementTrn) {
+		  planned = !planned; 		 
+	  } else if (key === actualDisbursementTrn) {
+		  actual = !actual;
 	  }	
+	  
+	  if (planned === false && actual === false) {
+		 //re-enable both measures 
+		  this.model.set('showPlannedDisbursements', true);
+		  this.model.set('showActualDisbursements', true);
+	  } else {
+		  this.model.set('showPlannedDisbursements', planned);
+		  this.model.set('showActualDisbursements', actual); 
+	  }	 
   },
   chartViews: [
     'multibar',

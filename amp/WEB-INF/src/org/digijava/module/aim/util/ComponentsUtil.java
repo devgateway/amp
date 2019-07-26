@@ -606,16 +606,12 @@ public class ComponentsUtil {
             double montoProgramado = yearInfo.get("MontoProgramado") != null ? yearInfo.get("MontoProgramado") : 0;
             double montoReprogramado = yearInfo.get("MontoReprogramado") != null ? yearInfo.get("MontoReprogramado") : 0;
             double montoEjecutado = yearInfo.get("MontoEjecutado") != null ? yearInfo.get("MontoEjecutado") : 0;
-            double exchangeRate = 1;
-            if (fundingDetail.getExchangeRate() != null && fundingDetail.getExchangeRate() != 0) {
-                exchangeRate = fundingDetail.getExchangeRate();
-            }
             if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()) ) {
-                montoProgramado += fundingDetail.getTransactionAmount() / exchangeRate;
+                montoProgramado += fundingDetail.getTransactionAmount();
             } else if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-                montoReprogramado += fundingDetail.getTransactionAmount() / exchangeRate;
+                montoReprogramado += fundingDetail.getTransactionAmount();
             } else if (fundingDetail.getTransactionType() == 2 && fundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-                montoEjecutado += fundingDetail.getTransactionAmount() / exchangeRate;
+                montoEjecutado += fundingDetail.getTransactionAmount();
             }
             yearInfo.put("MontoProgramado", montoProgramado);
             yearInfo.put("MontoReprogramado", montoReprogramado);

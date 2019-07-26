@@ -31,13 +31,11 @@ public class EPConstants {
     
     // config update
     public static final String ID = "id";
-    public static final String NAME = "name";
-    public static final String ORIGINAL_NAME = "orig-name";
+    public static final String LABEL = "label";
+    public static final String VALUE = "value";
     public static final String TYPE = "type";
     public static final String REPORT_NAME = "name";
     public static final String IS_CUSTOM = "custom";
-    public static final String IS_DYNAMIC = "dinamic";
-    public static final String REGENERATE = "regenerate";
     public static final String ADD_COLUMNS = "add_columns";
     public static final String COLUMNS_WITH_IDS = "columns_with_ids";
     public static final String ADD_HIERARCHIES = "add_hierarchies";
@@ -47,11 +45,9 @@ public class EPConstants {
     public static final String SHOW_EMPTY_ROWS = "show_empty_rows";
     public static final String SHOW_EMPTY_COLUMNS = "show_empty_cols"; // this is for column groups (quarter, year)
     public static final String SHOW_ORIGINAL_CURRENCY = "show_original_currency";
-    public static final String SHOW_ROW_TOTALS = "rowTotals";
     public static final String FORCE_HEADERS = "forceHeaders";
     public static final String PROJECT_TYPE = "projectType";
     public static final String REPORT_TYPE = "reportType";
-    public static final String NI_REPORT = "nireport";
     public static final String INFO = "info";
     public static final String GENERATED_HEADERS = "generatedHeaders";
     public static final String STATS = "stats";
@@ -85,10 +81,6 @@ public class EPConstants {
     public static final String SETTINGS = "settings";
     
     // map import/export
-    public static final String API_STATE_TITLE = "title";
-    public static final String API_STATE_DESCRIPTION = "description";
-    public static final String API_STATE_BLOB = "stateBlob";
-    public static final String API_STATE_LAYERS_VIEW = "layers-view";
     public static final String API_STATE_REPORT_EXPORT_DESCRIPTION = "Export to Map";
     public static final String API_STATE_REPORT_EXPORT = "reportExportId=";
     
@@ -102,29 +94,6 @@ public class EPConstants {
     public static final String FM_ENABLED = "__enabled";
     public static final String FM_PATHS_FILTER = "fm-paths";
 
-    // menu constants
-    public static final String MENU_NAME = "name"; 
-    public static final String MENU_TOOLTIP = "tooltip";
-    public static final String MENU_URL = "url";
-    public static final String MENU_CHILDREN = "children";
-    public static final String MENU_OPEN_POPUP = "popup";
-    public static final String MENU_OPEN_TAB = "tab";
-    public static final String MENU_POST = "post";
-    public static final String MENU_LANUGAGE = "language";
-    
-    //footer constants
-    public static final String BUILD_DATE = "buildDate";
-    public static final String AMP_VERSION = "ampVersion";
-    public static final String SITE_ID = "siteId";
-    public static final String TRACKING_URL = "trackingUrl";
-    public static final String TRACKING_ENABLED = "trackingEnabled";
-    public static final String ADMIN_LINKS = "adminLinks";
-    public static final String ADMIN_LINK_NAME = "admin";
-    public static final String USERDEV_LINK_NAME = "User/Dev Mode";
-    public static final String FOOTER_TEXT = "footerText";
-    public static final String LINK_NAME = "name";
-    public static final String LINK_URL = "url";
-    
     //tab dependency of each filter
     /*
      * var filterInstancesNames = {donors: 'Funding Organizations', sectors : 'Sector', programs: 'Programs', 
@@ -143,4 +112,15 @@ public class EPConstants {
 
     public static final String ISO8601_DATE_AND_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     public static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd";
+    
+    /**
+     * Map containing the length of date strings used for validation
+     * "2019-02-26T11:08:56.235-0200" - 28 characters
+     * "2019-02-26" - 10 characters
+     */
+    public static final Map<String, Integer> DATE_FORMAT_STRICT_LENGTH = new HashMap<String, Integer>() {{
+        put(ISO8601_DATE_AND_TIME_FORMAT, 28);
+        put(ISO8601_DATE_FORMAT, 10);
+    }};
+    
 }

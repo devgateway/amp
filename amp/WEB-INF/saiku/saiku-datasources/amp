@@ -1,4 +1,0 @@
-type=OLAP
-name=amp
-driver=mondrian.olap4j.MondrianOlap4jDriver
-location=jdbc:mondrian:Datasource=java:comp/env/ampDS;Catalog=res:../saiku/saiku-repository/AMP-dummy.xml;PoolNeeded=false;DynamicSchemaProcessor=org.digijava.kernel.ampapi.mondrian.util.AmpMondrianSchemaProcessor;Standalone=true

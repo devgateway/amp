@@ -324,7 +324,8 @@ public class AmpARFilterConverter {
             addSectorSchemeFilters(arFilter.getSelectedTagSectors(), "Tag", ColumnConstants.SECTOR_TAG);
         } else {
             addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", ColumnConstants.PLEDGES_SECTORS);
-            addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+            addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary",
+                    ColumnConstants.PLEDGES_SECONDARY_SECTORS);
         }
     }
 
@@ -346,7 +347,7 @@ public class AmpARFilterConverter {
         }
     }
 
-    private String findSubSectorColumnName(String columnName, AmpSector sector) {
+    public String findSubSectorColumnName(String columnName, AmpSector sector) {
         AmpSector current = sector;
         String sufix = "Sector";
         if (arFilter.isPledgeFilter()) {

@@ -3420,6 +3420,10 @@ public class AmpARFilter extends PropertyListable {
         this.includeLocationChildren = includeLocationChildren;
     }
     
+    public void setPledgeFilter(boolean pledgeFilter) {
+        this.pledgeFilter = pledgeFilter;
+    }
+    
     /**
      * @return a ['from', 'to'] pair for PledgeDetailStartDate range or [null, null] if none is configured
      */

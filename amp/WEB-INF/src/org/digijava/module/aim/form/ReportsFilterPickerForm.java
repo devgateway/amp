@@ -530,7 +530,7 @@ public class ReportsFilterPickerForm extends ActionForm {
     public DynamicDateFilter getDynamicActivityStartFilter() {
         return this.dynamicActivityStartFilter;
     }
-
+    
     @java.lang.SuppressWarnings("all")
     public String getFromProposedApprovalDate() {
         return this.fromProposedApprovalDate;

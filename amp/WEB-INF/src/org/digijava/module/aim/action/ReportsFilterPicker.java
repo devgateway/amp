@@ -366,6 +366,7 @@ public class ReportsFilterPicker extends Action {
         if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0) {
             fillSettingsFormDropdowns(filterForm, reportFilter);
         }
+    
     }
 
     /**

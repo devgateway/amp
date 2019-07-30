@@ -366,6 +366,7 @@ public class ReportsFilterPicker extends Action {
         if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0) {
             fillSettingsFormDropdowns(filterForm, reportFilter);
         }
+    
     }
 
     /**
@@ -661,6 +662,8 @@ public class ReportsFilterPicker extends Action {
         arf.setDynActualApprovalFilterXPeriod(filterForm.getDynamicActualApprovalFilter().getxPeriod());
         arf.setFromProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromProposedApprovalDate()));
         arf.setToProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToProposedApprovalDate()));
+        arf.setFromProposedStartDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromProposedStartDate()));
+        arf.setToProposedStartDate(FilterUtil.convertUiToArFilterDate(filterForm.getToProposedStartDate()));
         arf.setDynProposedApprovalFilterCurrentPeriod(filterForm.getDynamicProposedApprovalFilter().getCurrentPeriod());
         arf.setDynProposedApprovalFilterAmount(filterForm.getDynamicProposedApprovalFilter().getAmount());
         arf.setDynProposedApprovalFilterOperator(filterForm.getDynamicProposedApprovalFilter().getOperator());
@@ -736,15 +739,41 @@ public class ReportsFilterPicker extends Action {
 
     private static void fillFilterOrganizations(AmpARFilter arf, ReportsFilterPickerForm filterForm) {
         arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency()));
+        arf.setBeneficiaryAgencyTypes(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgencyTypes(),
+                AmpOrgType.class));
+        arf.setBeneficiaryAgencyGroups(ReportsUtil.processSelectedFilters(
+                filterForm.getSelectedBeneficiaryAgencyGroups(), AmpOrgGroup.class));
+
         arf.setDonnorgAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedDonnorAgency()));
+
         arf.setResponsibleorg(ReportsUtil.processSelectedFilters(filterForm.getSelectedresponsibleorg()));
+        arf.setResponsibleOrgTypes(
+                ReportsUtil.processSelectedFilters(filterForm.getSelectedResponsibleOrgTypes(), AmpOrgType.class));
+        arf.setResponsibleOrgGroups(ReportsUtil.processSelectedFilters(
+                filterForm.getSelectedResponsibleOrgGroups(), AmpOrgGroup.class));
+
         arf.setComponentFunding(ReportsUtil.processSelectedFilters(filterForm.getSelectedComponentFundingOrg()));
         arf.setComponentSecondResponsible(ReportsUtil
                 .processSelectedFilters(filterForm.getSelectedComponentSecondResponsibleOrg()));
 
         arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency()));
-        arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency()));
+        arf.setImplementingAgencyTypes(
+                ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgencyTypes(), AmpOrgType.class));
+        arf.setImplementingAgencyGroups(ReportsUtil.processSelectedFilters(
+                filterForm.getSelectedImplementingAgencyGroups(), AmpOrgGroup.class));
+
         arf.setContractingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedContractingAgency()));
+        arf.setContractingAgencyTypes(ReportsUtil.processSelectedFilters(filterForm.getSelectedContractingAgencyTypes(),
+                AmpOrgType.class));
+        arf.setContractingAgencyGroups(ReportsUtil.processSelectedFilters(
+                filterForm.getSelectedContractingAgencyGroups(), AmpOrgGroup.class));
+
+        arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency()));
+        arf.setExecutingAgencyTypes(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgencyTypes(),
+                AmpOrgType.class));
+        arf.setExecutingAgencyGroups(ReportsUtil.processSelectedFilters(
+                filterForm.getSelectedExecutingAgencyGroups(), AmpOrgGroup.class));
+
         if (filterForm.getSelectedDonorTypes() != null && filterForm.getSelectedDonorTypes().length > 0) {
             arf.setDonorTypes(new HashSet<AmpOrgType>());
             for (int i = 0; i < filterForm.getSelectedDonorTypes().length; i++) {
@@ -768,19 +797,6 @@ public class ReportsFilterPicker extends Action {
             }
         } else {
             arf.setDonorGroups(null);
-        }
-        if (filterForm.getSelectedContractingAgencyGroups() != null
-                && filterForm.getSelectedContractingAgencyGroups().length > 0) {
-            arf.setContractingAgencyGroups(new HashSet<AmpOrgGroup>());
-            for (int i = 0; i < filterForm.getSelectedContractingAgencyGroups().length; i++) {
-                Long id = Long.parseLong(filterForm.getSelectedContractingAgencyGroups()[i].toString());
-                AmpOrgGroup grp = DbUtil.getAmpOrgGroup(id);
-                if (grp != null) {
-                    arf.getContractingAgencyGroups().add(grp);
-                }
-            }
-        } else {
-            arf.setContractingAgencyGroups(null);
         }
         if (filterForm.getSelectedMultiDonor() != null && filterForm.getSelectedMultiDonor().length == 1) {
             arf.setMultiDonor((String) filterForm.getSelectedMultiDonor()[0]);

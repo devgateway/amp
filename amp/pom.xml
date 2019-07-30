@@ -1564,7 +1564,8 @@
                     </excludes>
                     <excludedGroups>
                         org.dgfoundation.amp.test.categories.DatabaseTests,
-                        org.dgfoundation.amp.test.categories.SlowTests
+                        org.dgfoundation.amp.test.categories.SlowTests,
+                        org.dgfoundation.amp.test.categories.IgnoreTests
                     </excludedGroups>
                 </configuration>
             </plugin>
@@ -1585,7 +1586,8 @@
                     </excludes>
                     <groups>
                         org.dgfoundation.amp.test.categories.DatabaseTests,
-                        org.dgfoundation.amp.test.categories.SlowTests
+                        org.dgfoundation.amp.test.categories.SlowTests,
+                        org.dgfoundation.amp.test.categories.IgnoreTests
                     </groups>
                 </configuration>
                 <executions>

@@ -136,7 +136,7 @@ public class AmpARFilterConverter {
             String columnName = getColumnName(fieldName);
             
             Optional<ReportElement> repElementOptional = filterRules.getAllFilterRules().keySet().stream()
-                    .filter(el -> el.entity.getEntityName().equals(columnName))
+                    .filter(el -> columnName.equals(el.entity != null ? el.entity.getEntityName() : null))
                     .findAny();
             
             List<String> values = new LinkedList<>();

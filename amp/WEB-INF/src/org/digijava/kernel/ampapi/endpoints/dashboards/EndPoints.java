@@ -33,7 +33,6 @@ import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopChartType;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -48,7 +47,7 @@ import org.digijava.module.esrigis.dbentity.ApiStateType;
 
 @Path("dashboard")
 @Api("dashboard")
-public class EndPoints implements ErrorReportingEndpoint {
+public class EndPoints {
 
     @GET
     @Path("/tops")
@@ -231,11 +230,4 @@ public class EndPoints implements ErrorReportingEndpoint {
         new HeatMapConfigService().saveHeatMapAdminSettings(config);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class getErrorsClass() {
-        return DashboardErrors.class;
-    }
 }

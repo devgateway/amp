@@ -15,6 +15,7 @@ import org.dgfoundation.amp.activity.builder.FundingBuilder;
 import org.dgfoundation.amp.activity.builder.TransactionBuilder;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -110,6 +111,6 @@ public class FundingWithTransactionsValidatorTest {
 
     private Matcher<ConstraintViolation> violation(String path) {
         return ValidatorMatchers.violationFor(
-                FundingWithTransactionsValidator.class, path, anything(), ActivityErrors.FIELD_REQUIRED);
+                FundingWithTransactionsValidator.class, path, anything(), ValidationErrors.FIELD_REQUIRED);
     }
 }

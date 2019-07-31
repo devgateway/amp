@@ -15,6 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
 
 /**
  * Builds the generic response with error code 500 for all unhandled exceptions
@@ -24,8 +25,6 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
 
     private static final Logger logger = Logger.getLogger(ApiExceptionMapper.class);
     private static final int MAX_EXCEPTION_NESTED = 2;
-    public static final ApiErrorMessage INTERNAL_ERROR = new ApiErrorMessage(ApiError.GENERIC_UNHANDLED_ERROR_CODE, 
-            ApiErrorResponseService.INTERNAL_ERROR);
     
     @Context
     private HttpServletRequest httpRequest;
@@ -79,13 +78,13 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
      */
     public ApiErrorMessage getApiErrorMessageFromException(Throwable e) {
         String message = extractMessageFromException(e);
-        return INTERNAL_ERROR.withDetails(message);
+        return GenericErrors.INTERNAL_ERROR.withDetails(message);
     }
 
     private String extractMessageFromException(Throwable e) {
         StringBuilder accumulatedMessage = new StringBuilder(e.getMessage() == null ? "" : e.getMessage());
         String message = extractMessageFromException(e, 0, accumulatedMessage);
-        message = StringUtils.isBlank(message) ? ApiErrorResponseService.UNKNOWN_ERROR : message;
+        message = StringUtils.isBlank(message) ? GenericErrors.UNKNOWN_ERROR.description : message;
         
         return message;
     }

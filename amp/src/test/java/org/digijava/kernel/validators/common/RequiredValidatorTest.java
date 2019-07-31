@@ -18,6 +18,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.TestFieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
@@ -515,7 +516,8 @@ public class RequiredValidatorTest {
     }
 
     private Matcher<ConstraintViolation> violation(String path) {
-        return ValidatorMatchers.violationFor(RequiredValidator.class, path, anything(), ActivityErrors.FIELD_REQUIRED);
+        return ValidatorMatchers.violationFor(RequiredValidator.class, path, anything(),
+                ValidationErrors.FIELD_REQUIRED);
     }
 
     @Test

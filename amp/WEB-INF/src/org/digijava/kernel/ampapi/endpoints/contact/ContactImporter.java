@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -43,11 +44,11 @@ public class ContactImporter extends ObjectImporter<AmpContact> {
         if (contactJsonId != null) {
             if (contactId != null) {
                 if (!contactId.equals(getLongOrNull(contactJsonId))) {
-                    addError(ContactErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.ID));
+                    addError(ValidationErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.ID));
                     return this;
                 }
             } else {
-                addError(ContactErrors.FIELD_READ_ONLY.withDetails(ContactEPConstants.ID));
+                addError(ValidationErrors.FIELD_READ_ONLY.withDetails(ContactEPConstants.ID));
                 return this;
             }
         }
@@ -55,7 +56,7 @@ public class ContactImporter extends ObjectImporter<AmpContact> {
         Object createdById = newJson.get(ContactEPConstants.CREATED_BY);
         AmpTeamMember createdBy = TeamMemberUtil.getAmpTeamMember(getLongOrNull(createdById));
         if (createdById != null && createdBy == null) {
-            addError(ContactErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.CREATED_BY));
+            addError(ValidationErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.CREATED_BY));
             return this;
         }
         if (contactId == null && createdBy == null) {
@@ -63,7 +64,7 @@ public class ContactImporter extends ObjectImporter<AmpContact> {
             if (teamMember != null) {
                 createdBy = TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId());
             } else {
-                addError(ContactErrors.FIELD_REQUIRED.withDetails(ContactEPConstants.CREATED_BY));
+                addError(ValidationErrors.FIELD_REQUIRED.withDetails(ContactEPConstants.CREATED_BY));
                 return this;
             }
         }

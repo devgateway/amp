@@ -32,7 +32,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityList;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
@@ -80,7 +79,7 @@ import org.digijava.module.esrigis.helpers.MapConstants;
  */
 @Path("gis")
 @Api("gis")
-public class GisEndPoints implements ErrorReportingEndpoint {
+public class GisEndPoints {
     private static final Logger logger = Logger.getLogger(GisEndPoints.class);
     
     @GET
@@ -441,11 +440,4 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         return GisUtils.getLocators();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class getErrorsClass() {
-        return GisErrors.class;
-    }
 }

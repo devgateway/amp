@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
@@ -235,7 +236,8 @@ public class IndicatorUtils {
     }
 
     public static final ApiErrorMessage validateField(String field) {
-        return (validFieldList.containsKey(field)? null : new ApiErrorMessage(IndicatorErrors.INVALID_FIELD.id, IndicatorErrors.INVALID_FIELD.description,field));
+        return (validFieldList.containsKey(field) ? null : new ApiErrorMessage(ValidationErrors.FIELD_INVALID.id,
+                ValidationErrors.FIELD_INVALID.description, field));
     }
 
     public static final ApiErrorMessage validateSort(String sort) {
@@ -287,7 +289,7 @@ public class IndicatorUtils {
         AmpIndicatorLayer indicator = DbUtil.getObjectOrNull(AmpIndicatorLayer.class, indicatorId);
         if (indicator == null) {
             ApiErrorResponse error = ApiError.toError(
-                    IndicatorErrors.INVALID_ID.withDetails(String.valueOf(indicatorId)));
+                    ValidationErrors.INVALID_ID.withDetails(String.valueOf(indicatorId)));
             throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, error);
         }
         return indicator;

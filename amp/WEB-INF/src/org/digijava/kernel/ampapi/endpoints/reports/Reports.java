@@ -66,7 +66,6 @@ import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.QueryModel;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.SaikuBasedQuery;
 import org.digijava.kernel.ampapi.endpoints.reports.saiku.SortParam;
@@ -96,7 +95,7 @@ import org.springframework.util.ReflectionUtils;
 
 @Path("data")
 @Api("data")
-public class Reports implements ErrorReportingEndpoint {
+public class Reports {
     
     private static final String IN_MEMORY = "IN_MEMORY";
     private static final String SAVED = "SAVED";
@@ -986,13 +985,5 @@ public class Reports implements ErrorReportingEndpoint {
         for(ReportRenderWarning z:in)
             res.add(new ReportRenderWarningEx(z));
         return res;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class getErrorsClass() {
-        return ReportErrors.class;
     }
 }

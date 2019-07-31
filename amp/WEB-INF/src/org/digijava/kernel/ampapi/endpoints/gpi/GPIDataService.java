@@ -24,6 +24,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
+import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -56,7 +57,7 @@ import org.joda.time.DateTime;
 public class GPIDataService {
     public static AmpGPINiAidOnBudget getAidOnBudgetById(Long id) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
         }
 
         return GPIUtils.getAidOnBudgetById(id);
@@ -66,7 +67,7 @@ public class GPIDataService {
             Integer offset, Integer count, String orderBy, String sort) {
 
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
         }
 
         Integer total = GPIUtils.getAidOnBudgetCount();
@@ -76,7 +77,7 @@ public class GPIDataService {
 
     public static SaveResult<AmpGPINiAidOnBudget> saveAidOnBudget(AmpGPINiAidOnBudget data) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
         }
 
         List<Map<String, String>> validationErrors = validateAidOnBudget(data);
@@ -90,7 +91,7 @@ public class GPIDataService {
 
     public static List<SaveResult<AmpGPINiAidOnBudget>> saveAidOnBudget(List<AmpGPINiAidOnBudget> aidOnBudgetList) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
         }
 
         List<SaveResult<AmpGPINiAidOnBudget>> results = new ArrayList<>();
@@ -109,8 +110,8 @@ public class GPIDataService {
 
         if (GPIUtils.checkAidOnBudgetExists(id, donorId, date)) {
             Map<String, String> error = new HashMap<>();
-            error.put(ApiError.getErrorCode(GPIErrors.AID_ON_BUDGET_DATE_DONOR_COMBINATION_EXISTS),
-                    GPIErrors.AID_ON_BUDGET_DATE_DONOR_COMBINATION_EXISTS.description);
+            error.put(GPIErrors.DATE_DONOR_COMBINATION_EXISTS.getErrorId(),
+                    GPIErrors.DATE_DONOR_COMBINATION_EXISTS.description);
             validationErrors.add(error);
         }
 
@@ -119,7 +120,7 @@ public class GPIDataService {
 
     public static void deleteAidOnBudgetById(Long id) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
         }
 
         GPIUtils.deleteAidOnBudget(id);
@@ -127,7 +128,7 @@ public class GPIDataService {
 
     public static SaveResult<AmpGPINiDonorNotes> saveDonorNotes(AmpGPINiDonorNotes note) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
         }
 
         List<Map<String, String>> validationErrors = validateDonorNotes(note);
@@ -146,7 +147,7 @@ public class GPIDataService {
 
     public static List<SaveResult<AmpGPINiDonorNotes>> saveDonorNotes(List<AmpGPINiDonorNotes> notes) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
         }
 
         List<SaveResult<AmpGPINiDonorNotes>> results = new ArrayList<>();
@@ -164,8 +165,8 @@ public class GPIDataService {
 
         if (GPIUtils.checkDonorNotesExists(id, donorId, date, data.getIndicatorCode())) {
             Map<String, String> error = new HashMap<>();
-            error.put(ApiError.getErrorCode(GPIErrors.DONOR_NOTES_DATE_DONOR_COMBINATION_EXISTS),
-                    GPIErrors.DONOR_NOTES_DATE_DONOR_COMBINATION_EXISTS.description);
+            error.put(GPIErrors.DATE_DONOR_COMBINATION_EXISTS.getErrorId(),
+                    GPIErrors.DATE_DONOR_COMBINATION_EXISTS.description);
             validationErrors.add(error);
         }
 
@@ -176,7 +177,7 @@ public class GPIDataService {
             Integer offset, Integer count, String orderBy, String sort, String indicatorCode) {
 
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
         }
 
         Integer total = GPIUtils.getDonorNotesCount(indicatorCode);
@@ -188,7 +189,7 @@ public class GPIDataService {
 
     public static void deleteDonorNotesById(Long id) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
         }
 
         GPIUtils.deleteDonorNotes(id);
@@ -202,7 +203,7 @@ public class GPIDataService {
 
     public static List<Org> getUsersVerifiedOrganizations() {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
-            ApiErrorResponseService.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
         }
 
         TeamMember tm = TeamUtil.getCurrentMember();

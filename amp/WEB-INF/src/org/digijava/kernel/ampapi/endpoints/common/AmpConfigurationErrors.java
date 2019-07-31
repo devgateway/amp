@@ -10,5 +10,5 @@ public final class AmpConfigurationErrors {
     private AmpConfigurationErrors() {
     }
 
-    public static final ApiErrorMessage INVALID_INPUT = new ApiErrorMessage(0, "Invalid input");
+    public static final ApiErrorMessage INVALID_INPUT = new ApiErrorMessage(10, 0, "Invalid input");
 }

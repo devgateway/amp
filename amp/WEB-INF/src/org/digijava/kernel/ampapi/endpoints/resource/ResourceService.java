@@ -94,7 +94,7 @@ public class ResourceService {
                 resource.setTeam(Long.valueOf(folderNode.getName()));
             }
         } catch (RepositoryException e) {
-            return new JsonApiResponse(ApiError.toError(ResourceErrors.RESOURCE_ERROR, e));
+            return new JsonApiResponse(ApiError.toError(ResourceErrors.RESOURCE_ERROR));
         }
 
         DocumentManagerUtil.logoutJcrSessions(TLSUtils.getRequest());

@@ -1601,6 +1601,27 @@
             </plugin>
 
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>org.dgfoundation.amp.asciidoc.ApiErrorAsciiDocCreator</mainClass>
+                            <arguments>
+                                <argument>${project.basedir}/src/main/asciidoc</argument>
+                                <argument>apierrors.adoc</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
                 <version>1.5.6</version>
@@ -1614,7 +1635,7 @@
                 <executions>
                     <execution>
                         <id>html-output</id>
-                        <phase>generate-resources</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>process-asciidoc</goal>
                         </goals>

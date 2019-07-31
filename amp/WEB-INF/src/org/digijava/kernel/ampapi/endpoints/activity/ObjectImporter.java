@@ -30,16 +30,17 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ErrorDecorator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.DefaultErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
-import org.digijava.kernel.ampapi.endpoints.common.CommonErrors;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.common.values.BadInput;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.validation.NotTranslatedValueContext;
 import org.digijava.kernel.validation.TranslatedValueContext;
@@ -198,8 +199,11 @@ public abstract class ObjectImporter<T> {
             Set<String> fields = new HashSet<String>(newJsonParent.keySet());
             // process all valid definitions
             for (APIField fieldDef : fieldsDef) {
-                isFormatValid = validateAndImport(newParent, fieldDef, newJsonParent, fieldPath) && isFormatValid;
-                fields.remove(fieldDef.getFieldName());
+                if (fieldDef.isImportable()) {
+                    isFormatValid = validateAndImport(newParent, fieldDef, newJsonParent, fieldPath) && isFormatValid;
+                } else {
+                    fields.remove(fieldDef.getFieldName());
+                }
             }
 
             // and warn anything remained
@@ -209,7 +213,7 @@ public abstract class ObjectImporter<T> {
                 for (String invalidField : fields) {
                     // no need to go through deep-first validation flow
                     ErrorDecorator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField,
-                            ActivityErrors.FIELD_INVALID, warnings);
+                            ValidationErrors.FIELD_INVALID, warnings);
                 }
             }
 
@@ -599,7 +603,7 @@ public abstract class ObjectImporter<T> {
                 details.put(invalidInput, getNewJson());
             }
             if (errors.isEmpty()) {
-                addError(CommonErrors.UNKOWN_ERROR);
+                addError(GenericErrors.UNKNOWN_ERROR);
             }
         }
         return buildResponse(details, content);

@@ -199,11 +199,8 @@ public abstract class ObjectImporter<T> {
             Set<String> fields = new HashSet<String>(newJsonParent.keySet());
             // process all valid definitions
             for (APIField fieldDef : fieldsDef) {
-                if (fieldDef.isImportable()) {
-                    isFormatValid = validateAndImport(newParent, fieldDef, newJsonParent, fieldPath) && isFormatValid;
-                } else {
-                    fields.remove(fieldDef.getFieldName());
-                }
+                isFormatValid = validateAndImport(newParent, fieldDef, newJsonParent, fieldPath) && isFormatValid;
+                fields.remove(fieldDef.getFieldName());
             }
 
             // and warn anything remained

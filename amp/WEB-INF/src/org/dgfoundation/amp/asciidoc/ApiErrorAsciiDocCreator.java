@@ -26,6 +26,10 @@ public class ApiErrorAsciiDocCreator {
     }
     
     private void writeToFile(String dir, String fileName) throws IOException {
+        File fileDir = FileUtils.getFile(dir);
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
         File file = FileUtils.getFile(dir, fileName);
         PrintWriter writer = new PrintWriter(new FileWriter(file, false));
     

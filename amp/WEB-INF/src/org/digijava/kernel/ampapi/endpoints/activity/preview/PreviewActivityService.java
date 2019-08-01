@@ -18,6 +18,7 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.exception.DgException;
@@ -69,7 +70,7 @@ public final class PreviewActivityService {
 
             if (activity == null) {
                 throw new ApiRuntimeException(Response.Status.BAD_REQUEST,
-                        ApiError.toError(PreviewActivityErrors.ACTIVITY_NOT_FOUND));
+                        ApiError.toError(ActivityErrors.ACTIVITY_NOT_FOUND));
             }
 
             AmpCurrency currency = null;

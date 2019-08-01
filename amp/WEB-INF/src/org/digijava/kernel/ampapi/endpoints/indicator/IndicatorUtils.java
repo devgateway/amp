@@ -236,12 +236,12 @@ public class IndicatorUtils {
     }
 
     public static final ApiErrorMessage validateField(String field) {
-        return (validFieldList.containsKey(field) ? null : new ApiErrorMessage(ValidationErrors.FIELD_INVALID.id,
-                ValidationErrors.FIELD_INVALID.description, field));
+        return (validFieldList.containsKey(field) ? null : ValidationErrors.FIELD_INVALID.withPrefix(field));
     }
 
     public static final ApiErrorMessage validateSort(String sort) {
-        return ("desc".equalsIgnoreCase(sort) || "asc".equalsIgnoreCase(sort)) ? null : new ApiErrorMessage(IndicatorErrors.INVALID_SORT.id, IndicatorErrors.INVALID_SORT.description,sort);
+        return ("desc".equalsIgnoreCase(sort) || "asc".equalsIgnoreCase(sort)) ? null
+                : IndicatorErrors.INVALID_SORT.withPrefix(sort);
     }
     
     /**

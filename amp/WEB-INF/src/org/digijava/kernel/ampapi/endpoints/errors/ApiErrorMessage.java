@@ -43,44 +43,17 @@ public class ApiErrorMessage {
     public final boolean isGeneric;
     
     /**
-     * Defines an ApiErrorMessage
-     * @param id see {@link #id}
-     * @param description see {@link #description}
-     * @param prefix see {@link #prefix}
+     *
+     * @param typeId - the type of error
+     * @param id
+     * @param description
      */
-    public ApiErrorMessage(int typeId, int id, String description, String prefix) {
-        this(typeId, id, description, prefix, null, false);
-    }
-
-    /**
-     * Defines an ApiErrorMessage
-     * @param id see {@link #id}
-     * @param description see {@link #description}
-     * @param prefix see {@link #prefix}
-     */
-    public ApiErrorMessage(int id, String description, String prefix) {
-        this(0, id, description, prefix, null, false);
-    }
-
-    /**
-     * Defines an ApiErrorMessahe
-     * @param id see {@link #id id}
-     * @param description see {@link #description}
-     */
-    public ApiErrorMessage(int id, String description) {
-        this(0, id, description);
-    }
-    
     public ApiErrorMessage(int typeId, int id, String description) {
         this(typeId, id, description, null);
     }
-
-    public ApiErrorMessage(int id, String description, boolean isGeneric) {
-        this(0, id, description, null, null, isGeneric);
-    }
     
-    private ApiErrorMessage(int id, String description, String prefix, Set<String> values, boolean isGeneric) {
-        this(0, id, description, prefix, values, isGeneric);
+    public ApiErrorMessage(int typeId, int id, String description, String prefix) {
+        this(typeId, id, description, prefix, null, false);
     }
 
     private ApiErrorMessage(int typeId, int id, String description, String prefix, Set<String> values,
@@ -106,7 +79,7 @@ public class ApiErrorMessage {
     }
 
     /**
-     * Configures an {@link #ApiErrorMessage(int, String, String)} with more details
+     * Configures an {@link #ApiErrorMessage(int, int, String)} with more details
      * @param value details, see {@link #values}
      */
     public ApiErrorMessage withDetails(String value) {
@@ -119,9 +92,18 @@ public class ApiErrorMessage {
         }
         return new ApiErrorMessage(typeId, id, description, prefix, newValues, isGeneric);
     }
+    
+    /**
+     * Configures an {@link #ApiErrorMessage(int, int, String)} with prefix
+     * @param prefix
+     * @return
+     */
+    public ApiErrorMessage withPrefix(String prefix) {
+        return new ApiErrorMessage(typeId, id, description, prefix);
+    }
 
     /**
-     * Configures an {@link #ApiErrorMessage(int, String, String)} with more details
+     * Configures an {@link #ApiErrorMessage(int, int, String)} with more details
      * @param details details, see {@link #values}
      */
     public ApiErrorMessage withDetails(Collection<String> details) {
@@ -130,7 +112,7 @@ public class ApiErrorMessage {
             newValues.addAll(values);
         }
         newValues.addAll(details);
-        return new ApiErrorMessage(id, description, prefix, newValues, isGeneric);
+        return new ApiErrorMessage(id, typeId, description, prefix, newValues, isGeneric);
     }
     
     public String getErrorId() {

@@ -1606,6 +1606,7 @@
                 <version>1.1.1</version>
                 <executions>
                     <execution>
+                        <id>Generate API Errors documentation</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>java</goal>
@@ -1613,7 +1614,7 @@
                         <configuration>
                             <mainClass>org.dgfoundation.amp.asciidoc.ApiErrorAsciiDocCreator</mainClass>
                             <arguments>
-                                <argument>${project.basedir}/src/main/asciidoc</argument>
+                                <argument>${project.build.directory}/${project.build.finalName}/api-docs</argument>
                                 <argument>apierrors.adoc</argument>
                             </arguments>
                         </configuration>
@@ -1630,6 +1631,7 @@
                     <backend>html</backend>
                     <attributes>
                         <toc>left</toc>
+                        <outputdir>${project.build.directory}/${project.build.finalName}/api-docs</outputdir>
                     </attributes>
                 </configuration>
                 <executions>

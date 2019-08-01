@@ -22,12 +22,15 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeEndpoints;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.AmpConfigurationErrors;
+import org.digijava.kernel.ampapi.endpoints.common.CommonErrors;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactErrors;
 import org.digijava.kernel.ampapi.endpoints.currency.CurrencyErrors;
 import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardErrors;
+import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeErrors;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIErrors;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorErrors;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRulesErrors;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportErrors;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceErrors;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
@@ -42,6 +45,25 @@ import org.json.XML;
  */
 
 public class ApiError {
+    
+    public static final int ERROR_CLASS_GENERIC_ID = 0;
+    public static final int ERROR_CLASS_VALIDATION_ID = 1;
+    public static final int ERROR_CLASS_ACTIVITY_ID = 2;
+    public static final int ERROR_CLASS_CONTACT_ID = 3;
+    public static final int ERROR_CLASS_RESOURCE_ID = 4;
+    public static final int ERROR_CLASS_SECURITY_ID = 5;
+    public static final int ERROR_CLASS_REPORT_ID = 6;
+    public static final int ERROR_CLASS_CURRENCY_ID = 7;
+    public static final int ERROR_CLASS_DASHBOARD_ID = 8;
+    public static final int ERROR_CLASS_INDICATOR_ID = 9;
+    public static final int ERROR_CLASS_CONFIGURATION_ID = 10;
+    public static final int ERROR_CLASS_GPI_ID = 11;
+    public static final int ERROR_CLASS_SYNCHRONYZER_ID = 12;
+    public static final int ERROR_CLASS_COMMON_ID = 13;
+    public static final int ERROR_CLASS_DATAFREEZE_ID = 14;
+    public static final int ERROR_CLASS_PERFORMANCERULE_ID = 15;
+    
+    public static final int ERROR_CLASS_TEST_ID = 99;
 
     public static final String ERROR_PATTERN = "%02d%02d";
     
@@ -59,6 +81,9 @@ public class ApiError {
         put("Configuration Errors", AmpConfigurationErrors.class);
         put("GPI Errors", GPIErrors.class);
         put("Synchronizer Errors", SynchronizerErrors.class);
+        put("Common Errors", CommonErrors.class);
+        put("Data Freeze Errors", DataFreezeErrors.class);
+        put("Performance Rules Errors", PerformanceRulesErrors.class);
     }};
 
     public static void configureComponentClassToIdMap() {

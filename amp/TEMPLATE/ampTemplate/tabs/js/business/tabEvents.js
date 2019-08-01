@@ -46,7 +46,13 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			// Create collection of Filters used for legends.	
 			app.TabsApp.rawFilters = firstContent.filtersToJSON();
 			app.TabsApp.filtersWidget.loaded.done(function() {
-				app.TabsApp.filtersWidget.deserialize(firstContent.filtersToJSON(), {
+				// includeLocationChildren is not part of the filters but the spec :((( so we add it manually.
+				var filters = firstContent.filtersToJSON();
+				var includeLocationChildren = firstContent.toJSON().reportMetadata.reportSpec.includeLocationChildren;
+				if (filters) {
+					filters.filters.includeLocationChildren = includeLocationChildren;
+				}
+				app.TabsApp.filtersWidget.deserialize(filters, {
 					silent : true
 				});
 				

@@ -156,6 +156,7 @@ public class Reports implements ErrorReportingEndpoint {
         ReportsUtil.configureIncludeLocationChildrenFilters(spec, spec.isIncludeLocationChildren());
 
         metadata.setReportSpec(spec);
+        metadata.setSettings(SettingsUtils.getReportSettings(spec));
         metadata.setName(ampReport.getName());
         metadata.setRecordsPerPage(ReportPaginationUtils.getRecordsNumberPerPage());
         

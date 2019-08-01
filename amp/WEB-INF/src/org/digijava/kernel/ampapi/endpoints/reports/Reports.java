@@ -151,8 +151,11 @@ public class Reports implements ErrorReportingEndpoint {
 
         JSONResult result = new JSONResult();
         ReportMetadata metadata = new ReportMetadata();
+
+        // AMP-29012: We need to change the Location filter according to include-location-children.
+        ReportsUtil.configureIncludeLocationChildrenFilters(spec, spec.isIncludeLocationChildren());
+
         metadata.setReportSpec(spec);
-        metadata.setSettings(SettingsUtils.getReportSettings(spec));
         metadata.setName(ampReport.getName());
         metadata.setRecordsPerPage(ReportPaginationUtils.getRecordsNumberPerPage());
         

@@ -43,7 +43,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 
 			// --------------------------------------------------------------------------------------//
 			// TODO: Move filters section elsewhere.
-			// Create collection of Filters used for legends.	
+			// Create collection of Filters used for legends.
 			app.TabsApp.rawFilters = firstContent.filtersToJSON();
 			app.TabsApp.filtersWidget.loaded.done(function() {
 				// includeLocationChildren is not part of the filters but the spec :((( so we add it manually.
@@ -193,6 +193,8 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 		onActivateTab : function(event, ui) {
 			// Restart app variables defined for the active tab.
 			app.TabsApp.serializedFilters = null;
+			app.TabsApp.filters = null;
+			app.TabsApp.rawFilters = null;
 			app.TabsApp.currentGrid = null;
 			app.TabsApp.currentTab = null;
 			app.TabsApp.numericFormatOptions = null;

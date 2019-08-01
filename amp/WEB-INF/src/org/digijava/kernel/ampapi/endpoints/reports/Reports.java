@@ -142,6 +142,8 @@ public class Reports implements ErrorReportingEndpoint {
         ReportSpecificationImpl spec = null;
         try {
             spec = AmpReportsToReportSpecification.convert(ampReport);
+            // AMP-29012: We need to change the Location filter according to include-location-children.
+            ReportsUtil.configureIncludeLocationChildrenFilters(spec, spec.isIncludeLocationChildren());
         } catch (Exception e1) {
             logger.error("Failed to convert report.", e1);
             JSONResult result = new JSONResult();
@@ -151,9 +153,6 @@ public class Reports implements ErrorReportingEndpoint {
 
         JSONResult result = new JSONResult();
         ReportMetadata metadata = new ReportMetadata();
-
-        // AMP-29012: We need to change the Location filter according to include-location-children.
-        ReportsUtil.configureIncludeLocationChildrenFilters(spec, spec.isIncludeLocationChildren());
 
         metadata.setReportSpec(spec);
         metadata.setSettings(SettingsUtils.getReportSettings(spec));

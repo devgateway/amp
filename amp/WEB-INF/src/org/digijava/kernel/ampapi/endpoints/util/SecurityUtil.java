@@ -212,7 +212,7 @@ public class SecurityUtil {
     private static ApiErrorMessage validateToken(AmpApiToken ampApiToken) {
         String email = ampApiToken.getUser().getEmail();
 
-        User user = UserUtils.getUserByEmailRt(email);
+        User user = UserUtils.getUserByEmailAddress(email);
 
         ApiErrorMessage errorMessage = ApiAuthentication.performSecurityChecks(user, TLSUtils.getRequest());
         if (errorMessage != null) {

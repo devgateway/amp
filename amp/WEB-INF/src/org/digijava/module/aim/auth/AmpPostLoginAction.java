@@ -106,7 +106,7 @@ public class AmpPostLoginAction extends Action {
                 } else {
                     userName = principal.toString();
                 }
-                user = UserUtils.getUserByEmail(userName);
+                user = UserUtils.getUserByEmailAddress(userName);
             }
 
             return user;

@@ -25,6 +25,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.helper.Constants;
@@ -254,7 +255,7 @@ public class AuditLoggerUtil {
                 aal.setAuthorEmail(activity.getActivityCreator().getUser().getEmail());
                 aal.setAuthorName(activity.getActivityCreator().getUser().getName());
                 aal.setLoggedDate(new Timestamp(activity.getCreatedDate().getTime()));
-                aal.setUserid(DbUtil.getUser(tm.getEmail()).getId());
+                aal.setUserid(UserUtils.getUserByEmailAddress(tm.getEmail()).getId());
                 aal.setEditorEmail(tm.getEmail());
                 aal.setEditorName(tm.getMemberName());
                 aal.setAction("update");

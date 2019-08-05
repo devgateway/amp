@@ -832,26 +832,61 @@ public class FieldsEnumeratorTest {
 
 
     @Test
-    public void testAPIFieldActivityFields() {
-        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(AmpActivityVersion.class,
-                fieldsFor(AmpActivityFields.class));
+    public void testActivityCollectionFields() {
+        APIField apiField = fieldsEnumerator.getMetaModel(AmpActivityFields.class);
+        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(new AmpActivityVersion(), apiField);
         assertEquals(nullableAPIFields, Collections.emptyList());
     }
 
-    private List<APIField> getAPIFieldWithNullCollections(Class<?> type, List<APIField> apiFields) {
+    @Test
+    public void testContactCollectionFields() {
+        APIField apiField = fieldsEnumerator.getMetaModel(AmpContact.class);
+        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(new AmpContact(), apiField);
+        assertEquals(nullableAPIFields, Collections.emptyList());
+    }
+
+    @Test
+    public void testResourceCollectionFields() {
+        APIField apiField = fieldsEnumerator.getMetaModel(AmpResource.class);
+        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(new AmpResource(), apiField);
+        assertEquals(nullableAPIFields, Collections.emptyList());
+    }
+
+    private List<APIField> getAPIFieldWithNullCollections(Object object, APIField field) {
         List<APIField> nullableAPIFields = new ArrayList<>();
-        Object object = valueConverter.getNewInstance(type);
-        for (APIField apiField : apiFields) {
-            if (apiField.isCollection() && apiField.getFieldAccessor().get(object) == null) {
-                nullableAPIFields.add(apiField);
+        for (APIField subField : field.getChildren()) {
+            try {
+                // will trigger an exception if underlying collection was not initialized properly
+                subField.getFieldAccessor().get(object);
+            } catch (RuntimeException e) {
+                nullableAPIFields.add(subField);
             }
-            if (apiField.isCollection() && !InterchangeUtils.isSimpleType(apiField.getApiType().getType())) {
+            if (subField.getApiType().getFieldType() == FieldType.OBJECT ||
+                    (subField.getApiType().getFieldType() == FieldType.LIST &&
+                            subField.getApiType().getItemType() == FieldType.OBJECT)) {
                 nullableAPIFields.addAll(
-                        getAPIFieldWithNullCollections(apiField.getApiType().getType(), apiField.getChildren()));
+                        getAPIFieldWithNullCollections(instantiate(subField), subField));
             }
         }
 
         return nullableAPIFields;
+    }
+
+    /**
+     * Copy of {@link ValueConverter#instantiate(APIField)} but without configuring the field by which objects are
+     * being discriminated. This method can be removed once discrimination configurers are made to work without a real
+     * database.
+     *
+     * @param field
+     * @return
+     */
+    private Object instantiate(APIField field) {
+        try {
+            Object newInstance = field.getApiType().getType().newInstance();
+            return newInstance;
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

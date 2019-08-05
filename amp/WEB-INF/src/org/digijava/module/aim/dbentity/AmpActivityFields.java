@@ -765,7 +765,7 @@ LoggerIdentifiable, Cloneable {
                 discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
                 dependencies = {ImplementationLevelValidator.IMPLEMENTATION_LOCATION_VALID_KEY},
                 fmPath = "/Activity Form/Location/Implementation Location", pickIdOnly = true),
-        @Interchangeable(fieldTitle = "Financial Instrument", importable=true, multipleValues=true, 
+        @Interchangeable(fieldTitle = "Financial Instrument", importable = true, multipleValues = false,
                 discriminatorOption = CategoryConstants.FINANCIAL_INSTRUMENT_KEY, fmPath="/Activity Form/Identification/Financial Instrument", pickIdOnly=true)
     })
     @VersionableCollection(fieldTitle = "Categories")

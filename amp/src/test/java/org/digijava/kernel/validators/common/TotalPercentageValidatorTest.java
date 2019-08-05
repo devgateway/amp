@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.junit.Assert.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
@@ -34,7 +35,7 @@ public class TotalPercentageValidatorTest {
                 interValidators = @InterchangeableValidator(
                         value = TotalPercentageValidator.class,
                         fmPath = "/totalPercentageConstraint"))
-        private Set<Item> items;
+        private Set<Item> items = new HashSet<>();
     }
 
     public static class Item {
@@ -60,18 +61,8 @@ public class TotalPercentageValidatorTest {
     }
 
     @Test
-    public void testNull() {
-        Obj obj = new Obj();
-
-        Set<ConstraintViolation> violations = getConstraintViolations(objField, obj);
-
-        assertThat(violations, emptyIterable());
-    }
-
-    @Test
     public void testEmpty() {
         Obj obj = new Obj();
-        obj.items = ImmutableSet.of();
 
         Set<ConstraintViolation> violations = getConstraintViolations(objField, obj);
 

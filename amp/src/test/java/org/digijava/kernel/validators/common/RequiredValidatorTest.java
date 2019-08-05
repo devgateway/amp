@@ -74,7 +74,7 @@ public class RequiredValidatorTest {
 
         @Interchangeable(fieldTitle = "bars", fmPath = "bars",
                 interValidators = @InterchangeableValidator(RequiredValidator.class))
-        private Set<Bar> bars;
+        private Set<Bar> bars = new HashSet<>();
 
         @Interchangeable(fieldTitle = "bar", fmPath = "bar",
                 interValidators = @InterchangeableValidator(RequiredValidator.class))
@@ -217,18 +217,8 @@ public class RequiredValidatorTest {
     }
 
     @Test
-    public void test_bars_null() {
-        Foo foo = new Foo();
-
-        Set<ConstraintViolation> violations = getConstraintViolations(barsField, foo);
-
-        assertThat(violations, contains(violation("bars")));
-    }
-
-    @Test
     public void test_bars_empty() {
         Foo foo = new Foo();
-        foo.bars = ImmutableSet.of();
 
         Set<ConstraintViolation> violations = getConstraintViolations(barsField, foo);
 

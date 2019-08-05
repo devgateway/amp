@@ -139,15 +139,6 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
         return discriminatorObj.toString();
     }
 
-    public static <T> T unwrapSingleElement(Collection collection) {
-        Iterator iterator = collection.iterator();
-        if (iterator.hasNext()) {
-            return (T) iterator.next();
-        } else {
-            return null;
-        }
-    }
-
     @Override
     public String toString() {
         return "Discriminated accessor for " + target.toString() + " where "

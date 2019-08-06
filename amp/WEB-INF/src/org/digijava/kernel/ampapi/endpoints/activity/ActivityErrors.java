@@ -40,4 +40,7 @@ public class ActivityErrors {
     public static final ApiErrorMessage ACTIVITY_NOT_FOUND = new ApiErrorMessage(ERROR_CLASS_ACTIVITY_ID, 8,
             "Activity not found");
     
+    public static final ApiErrorMessage LOCALE_INVALID =
+            new ApiErrorMessage(ERROR_CLASS_ACTIVITY_ID, 9, "Invalid translation language specified");
+    
 }

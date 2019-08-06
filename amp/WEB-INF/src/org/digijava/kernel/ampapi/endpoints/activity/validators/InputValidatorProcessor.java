@@ -20,6 +20,7 @@ public class InputValidatorProcessor {
                 new ValidFieldValidator(),
                 new AllowedInputValidator(),
                 new InputTypeValidator(),
+                new ValidLocaleValidator(),
                 new ValueValidator());
     }
 
@@ -35,6 +36,7 @@ public class InputValidatorProcessor {
         return Arrays.asList(
                 new ValidFieldValidator(),
                 new InputTypeValidator(),
+                new ValidLocaleValidator(),
                 new ValueValidator());
     }
 
@@ -47,6 +49,7 @@ public class InputValidatorProcessor {
         return Arrays.asList(
                 new ValidFieldValidator(),
                 new InputTypeValidator(),
+                new ValidLocaleValidator(),
                 new ValueValidator());
     }
 

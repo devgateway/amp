@@ -26,25 +26,29 @@ public class InputTypeValidator extends InputValidator {
         return ValidationErrors.FIELD_INVALID_TYPE;
     }
 
-    private boolean isStringValid(Object item, boolean translatable, Collection<String> supportedLocaleCodes) {
+    private boolean isStringValid(Object item, boolean translatable) {
         if (translatable) {
             if (Map.class.isAssignableFrom(item.getClass())) {
-                return isTranslatableStringValid(item, supportedLocaleCodes);
+                return isTranslatableStringValid(item);
             }
             return false;
         }
         return String.class.isAssignableFrom(item.getClass());
     }
 
-    // TODO report a better error AMP-29281
-    private boolean isTranslatableStringValid(Object item, Collection<String> supportedLocaleCodes) {
-        @SuppressWarnings("unchecked")
-        Map<String, Object> map = (Map<String, Object>) item;
-        for (Map.Entry<String, Object> castedEntry : map.entrySet()) {
-            if (!supportedLocaleCodes.contains(castedEntry.getKey()))
+    private boolean isTranslatableStringValid(Object item) {
+        Map map = (Map) item;
+        
+        for (Object key : ((Map) item).keySet()) {
+            if (!String.class.isAssignableFrom(key.getClass())) {
                 return false;
-            if (castedEntry.getValue() != null && !String.class.isAssignableFrom(castedEntry.getValue().getClass()))
+            }
+        }
+        
+        for (Map.Entry<String, Object> castedEntry : ((Map<String, Object>) map).entrySet()) {
+            if (castedEntry.getValue() != null && !String.class.isAssignableFrom(castedEntry.getValue().getClass())) {
                 return false;
+            }
         }
         return true;
     }
@@ -65,9 +69,7 @@ public class InputTypeValidator extends InputValidator {
 
     private boolean isValidByType(ObjectImporter importer, APIField fieldDesc, FieldType fieldType, Object item) {
         switch (fieldType) {
-            case STRING:
-                return isStringValid(item, Boolean.TRUE.equals(fieldDesc.isTranslatable()),
-                        importer.getTrnSettings().getAllowedLangCodes());
+            case STRING: return isStringValid(item, Boolean.TRUE.equals(fieldDesc.isTranslatable()));
             case DATE: return isValidDateTime(item, false);
             case TIMESTAMP: return isValidDateTime(item, true);
             case FLOAT: return isValidFloat(item);

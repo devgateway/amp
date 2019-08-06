@@ -372,7 +372,7 @@ public class ReportsUtil {
         configureProjectTypes(specImpl, formParams.getProjectType());
         
         // configure include location children
-        configureIncludeLocationChildrenFilters(specImpl, formParams);
+        configureIncludeLocationChildrenFilters(specImpl, formParams.getIncludeLocationChildren());
         
         // update other settings
         setOtherOptions(specImpl, formParams);
@@ -532,12 +532,12 @@ public class ReportsUtil {
      * Configure to include or not the location children (AMP-27559)
      * 
      * @param specImpl
-     * @param formParams
+     * @param includeLocationChildren
      */
-    private static void configureIncludeLocationChildrenFilters(ReportSpecificationImpl specImpl,
-                                                                ReportFormParameters formParams) {
-        if (formParams.getIncludeLocationChildren() != null) {
-            specImpl.setIncludeLocationChildren(formParams.getIncludeLocationChildren());
+    public static void configureIncludeLocationChildrenFilters(ReportSpecificationImpl specImpl,
+                                                               Boolean includeLocationChildren) {
+        if (includeLocationChildren != null) {
+            specImpl.setIncludeLocationChildren(includeLocationChildren);
         }
     
         if (!specImpl.isIncludeLocationChildren()) {

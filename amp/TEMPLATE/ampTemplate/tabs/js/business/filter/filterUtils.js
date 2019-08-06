@@ -54,7 +54,7 @@ define(['models/filter', 'collections/filters', 'translationManager', 'jquery'],
 
     //TODO: move to CommonFilterUtils.js and merge with the same function on Saiku.
     FilterUtils.extractFilters = function (filtersFromWidgetWithNames) {
-        if (app.TabsApp.filters === undefined) {
+        if (!app.TabsApp.filters) {
             app.TabsApp.filters = new Filters();
         }
         var filters = CommonFilterUtils.humanReadableFilters(filtersFromWidgetWithNames.filters);

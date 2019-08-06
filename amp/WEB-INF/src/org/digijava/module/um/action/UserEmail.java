@@ -89,7 +89,7 @@ public class UserEmail
 
         // First check if user alredy exits in database
         if (DbUtil.isRegisteredEmail(email)) {
-            User u = UserUtils.getUserByEmail(email);
+            User u = UserUtils.getUserByEmailAddress(email);
             // Create and fill Reset object and update into database
             DbUtil.saveResetPassword(u.getId(), code);
             // -----------------------------------------

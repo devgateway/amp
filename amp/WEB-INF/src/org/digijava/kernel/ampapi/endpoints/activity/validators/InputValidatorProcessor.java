@@ -18,6 +18,7 @@ public class InputValidatorProcessor {
         return Arrays.asList(
                 new ValidFieldValidator(),
                 new InputTypeValidator(),
+                new ValidLocaleValidator(),
                 new ValueValidator());
     }
 

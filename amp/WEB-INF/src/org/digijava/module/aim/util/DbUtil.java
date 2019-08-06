@@ -624,27 +624,6 @@ public class DbUtil {
         return (AmpFiscalCalendar) PersistenceManager.getSession().get(AmpFiscalCalendar.class, ampFisCalId);
     }
 
-    public static User getUser(String email) {
-        Session session = null;
-        Query qry = null;
-        User user = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select u from " + User.class.getName() + " u where (u.email=:email)";
-            qry = session.createQuery(queryString);
-            qry.setParameter("email", StringUtils.lowerCase(email), StringType.INSTANCE);
-            Iterator itr = qry.list().iterator();
-            if (itr.hasNext()) {
-                user = (User) itr.next();
-            }
-        } catch (Exception e) {
-            logger.error("Unable to get user");
-            logger.debug("Exceptiion " + e);
-        }
-        return user;
-    }
-
     public static User getUser(Long userId) {
         return (User) PersistenceManager.getSession().get(User.class, userId);
     }

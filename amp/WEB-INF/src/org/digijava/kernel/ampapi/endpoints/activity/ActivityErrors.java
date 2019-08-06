@@ -49,6 +49,8 @@ public class ActivityErrors {
             "Implementation level must be specified");
     public static final ApiErrorMessage DOESNT_MATCH_IMPLEMENTATION_LEVEL = new ApiErrorMessage(34,
             "Doesn't match with implementation level");
+    public static final ApiErrorMessage LOCALE_INVALID =
+            new ApiErrorMessage(35, "Invalid translation language specified");
 
 
 }

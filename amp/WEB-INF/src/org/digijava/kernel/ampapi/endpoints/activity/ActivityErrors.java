@@ -36,9 +36,7 @@ public class ActivityErrors {
             new ApiErrorMessage(23, "Current activity is being edited by:");
     public static final ApiErrorMessage ACTIVITY_NOT_LOADED = new ApiErrorMessage(24, "Cannot load the activity");
     public static final ApiErrorMessage FIELD_INVALID_PERCENTAGE = new ApiErrorMessage(25, "Percentage fields have to be >0, <=100");
-    public static final ApiErrorMessage AGREEMENT_CODE_REQUIRED = new ApiErrorMessage(26, "Agreement code is required");
     public static final ApiErrorMessage AGREEMENT_CODE_UNIQUE = new ApiErrorMessage(27, "Agreement code should be unique");
-    public static final ApiErrorMessage AGREEMENT_TITLE_REQUIRED = new ApiErrorMessage(26, "Agreement title is required");
     public static final ApiErrorMessage ORGANIZATION_ROLE_PAIR_NOT_DECLARED = new ApiErrorMessage(27, "The organization and role pair is not declared");
     public static final ApiErrorMessage ORGANIZATION_NOT_DECLARED = new ApiErrorMessage(28, "The organization is not declared");
     public static final ApiErrorMessage ACTIVITY_IS_STALE = new ApiErrorMessage(29, "The activity is stale");

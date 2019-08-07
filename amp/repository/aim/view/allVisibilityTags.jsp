@@ -834,11 +834,11 @@ deleted 6 fields, do not reinsert
 <field:display name="Proposed Start Date" feature="Planning"></field:display> 
 <field:display name="Purpose" feature="Identification"></field:display> 
 <field:display name="Recievers" feature="Create Message Form"></field:display>
-<field:display name="Country" feature="Location"></field:display>  
-<field:display name="Region" feature="Location"></field:display>
-<field:display name="Zone" feature="Location"></field:display>
-<field:display name="District" feature="Location"></field:display>
-<field:display name="Communal Section" feature="Location"></field:display>
+<field:display name="Administrative Level 0" feature="Location"></field:display>
+<field:display name="Administrative Level 1" feature="Location"></field:display>
+<field:display name="Administrative Level 2" feature="Location"></field:display>
+<field:display name="Administrative Level 3" feature="Location"></field:display>
+<field:display name="Administrative Level 4" feature="Location"></field:display>
 <field:display name="Regional Funding Tab" feature="Regional Funding"></field:display>
 <field:display name="Regional Group" feature="Regional Group"></field:display>
 <field:display name="Regional Percentage" feature="Location"></field:display> 
@@ -1011,11 +1011,11 @@ deleted 6 fields, do not reinsert
 <field:display feature="Pledges Columns" name="Pledges Donor Group"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
 <field:display feature="Pledges Columns" name="Pledge Status"></field:display>
-<field:display feature="Pledges Countries" name="Pledges Countries"></field:display>
-<field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
-<field:display feature="Pledges Columns" name="Pledges Zones"></field:display>
-<field:display feature="Pledges Columns" name="Pledges Districts"></field:display>
-<field:display feature="Pledges Columns" name="Pledges Communal Section"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Administrative Level 0"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Administrative Level 1"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Administrative Level 2"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Administrative Level 3"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Administrative Level 4"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Programs"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Secondary Programs"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Tertiary Programs"></field:display>

@@ -99,10 +99,7 @@
  }
 
  function toggleChildrenVisibility(callerId) {
- //alert("aaa"+callerId);
-
  		caller = document.getElementById(callerId);
- 	//	alert("caller-"+caller);
  		inputs = caller.getElementsByTagName('input');
  		for(i=1 ; i< inputs.length; i++){
  			if(inputs[i].type!="checkbox") continue;
@@ -115,35 +112,34 @@
  			inputs[i].checked=inputs[0].checked;
  		}
 
- }
-
-
- function toggleChildrenMandatory(callerId) {
- 		caller = document.getElementById(callerId);
- 		inputs = caller.getElementsByTagName('input');
- 		var found=0;
- 		for(i=1 ; i< inputs.length; i++){
- 			if(inputs[i].type!="checkbox") continue;
- 			if(inputs[i].id.indexOf("moduleMandatory")==0 ||
- 			inputs[i].id.indexOf("featureMandatory")==0 ||
- 			inputs[i].id.indexOf("fieldMandatory")==0)
- 			{
- 				if(found!=1)
- 				{
- 					found=1;
- 					inputaux=inputs[i];
- 				}
- 			}
-
- 			if(inputs[i].id.indexOf("moduleMandatory")==0 ||
- 			inputs[i].id.indexOf("featureMandatory")==0 ||
- 			inputs[i].id.indexOf("fieldMandatory")==0)
- 			 {
- 			 	inputs[i].checked=inputaux.checked;
- 			 }
- 		}
+ 		if (inputs[0].checked == true) {
+            toggleParentVisibility(caller);
+		}
 
  }
+
+ function toggleParentVisibility(item) {
+     hasParent = true;
+     if (item.parentElement.getAttribute('name') == 'dhtmltreeArray') {
+         parent = item.parentElement.parentElement.parentElement;
+         hasParent = false;
+     } else {
+         parent = item.parentElement.parentElement;
+     }
+
+     var checkboxItem = parent.getElementsByTagName('input')[0];
+     checkboxItem.checked = true;
+
+     if (hasParent) {
+         toggleParentVisibility(parent);
+     }
+ }
+
+ function toggleParentVisibilityOfTheField(itemId) {
+     var item = document.getElementById(itemId);
+     toggleParentVisibility(item.parentElement);
+}
+
 
  function openURLinWindow(url, wndWidth, wndHeight, resizeable)
  {

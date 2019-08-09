@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-27029</jira>
+    <keyword>pgcrypto extension</keyword>
+    <author>vchihai</author>
+    <description>add pgcrypto extension</description>
+    <trigger type="all">
+        <condition type="custom">
+            <script returnVar="val">
+                <lang type="sql">
+                    SELECT exists(SELECT * FROM pg_proc WHERE proname = 'digest');
+                </lang>
+            </script>
+            <test>val == false</test>
+        </condition>
+    </trigger>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+
+                CREATE EXTENSION if not exists pgcrypto;
+
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

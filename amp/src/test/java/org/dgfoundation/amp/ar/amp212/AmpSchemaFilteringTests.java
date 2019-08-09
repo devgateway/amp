@@ -429,9 +429,9 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                         new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Approval Status", "4", "Draft", "false", "Filtered Approval Status", "2", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000")      ));
         
         ReportSpecificationImpl spec = buildSpecForFiltering("testPositiveByApprovalStatusNewUnvalidated", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.FILTERED_APPROVAL_STATUS), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.VALIDATION_STATUS),
             null, 
-            ColumnConstants.APPROVAL_STATUS, Arrays.asList(2l), true); // All New Unvalidated. See AmpARFilter.activityApprovalStatus 
+            ColumnConstants.APPROVAL_STATUS, Arrays.asList(2l), true); // All New Unvalidated. See AmpARFilter.VALIDATION_STATUS
         
         runNiTestCase(cor, spec, acts);
     }
@@ -493,7 +493,7 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                     new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Commitments", "3,632,14", "Funding-2015-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "97,562,98")      ));;
     
         ReportSpecificationImpl spec = buildSpecForFiltering("testNegativeByApprovalStatusNewUnvalidated", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.FILTERED_APPROVAL_STATUS), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.VALIDATION_STATUS),
             null, 
             ColumnConstants.APPROVAL_STATUS, Arrays.asList(2l), false); // All but "New Unvalidated"
         
@@ -516,7 +516,7 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                         new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Approval Status", "4", "Draft", "false", "Filtered Approval Status", "2", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000")      ));
 
         ReportSpecificationImpl spec = buildSpecForFiltering("testNegativeByApprovalStatusValidated", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.FILTERED_APPROVAL_STATUS), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.VALIDATION_STATUS),
             null, 
             ColumnConstants.APPROVAL_STATUS, Arrays.asList(4l), false); // All but Validated
         

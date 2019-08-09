@@ -110,9 +110,9 @@ public class FiltersEndpoint implements AmpEndpoint {
         FilterDescriptor as = new FilterDescriptor();
 
         List<FilterValue> activityStatus = new ArrayList<FilterValue>();
-        for (String key : AmpARFilter.activityApprovalStatus.keySet()) {
+        for (String key : AmpARFilter.VALIDATION_STATUS.keySet()) {
             FilterValue sjb = new FilterValue();
-            sjb.setId(AmpARFilter.activityApprovalStatus.get(key));
+            sjb.setId(AmpARFilter.VALIDATION_STATUS.get(key));
             sjb.setName(TranslatorWorker.translateText(key));
             activityStatus.add(sjb);
         }

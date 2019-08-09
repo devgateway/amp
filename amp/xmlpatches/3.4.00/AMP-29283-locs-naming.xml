@@ -32,6 +32,10 @@
                 WHERE amp_category_class_id = (SELECT id FROM amp_category_class WHERE category_name = 'Implementation Location')
                 AND index_column = 4@@@
 
+                UPDATE amp_category_value SET category_value = 'Administrative Level 5'
+                WHERE amp_category_class_id = (SELECT id FROM amp_category_class WHERE category_name = 'Implementation Location')
+                AND index_column = 5@@@
+
                 DROP VIEW IF EXISTS v_amp_location_cache CASCADE@@@
 
                 CREATE VIEW v_amp_location_cache AS

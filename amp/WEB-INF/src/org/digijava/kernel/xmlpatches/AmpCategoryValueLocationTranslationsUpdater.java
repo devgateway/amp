@@ -34,6 +34,12 @@ public class AmpCategoryValueLocationTranslationsUpdater {
         put("Pledges Communal Section", "4");
     }};
     
+    private static final Map<String, String> FORM_LOCATIONS_TRANSLATIONS_MAP = new HashMap<String, String>() {{
+        put("Select Region", "1");
+        put("Select Zone", "2");
+        put("Select Woreda", "3");
+    }};
+    
     private static final int MESSAGE_COLUMN_KEY_INDEX = 3;
 
     protected Logger logger = LoggerFactory.getLogger(AmpCategoryValueLocationTranslationsUpdater.class);
@@ -43,6 +49,7 @@ public class AmpCategoryValueLocationTranslationsUpdater {
             s.doWork(connection -> {
                 insertAndDeleteCategoryValueLocationTranslations(connection);
                 insertAndDeletePledgesLocationTranslations(connection);
+                insertAndDeleteFormLocationTranslations(connection);
             });
         });
     }
@@ -70,6 +77,12 @@ public class AmpCategoryValueLocationTranslationsUpdater {
     private void insertAndDeletePledgesLocationTranslations(Connection connection) {
         for (Map.Entry<String, String> pledgeLevel : PLEDGES_LEVEL_MAP.entrySet()) {
             insertAndDeleteTranslations(connection, "Pledges ", pledgeLevel.getKey(), pledgeLevel.getValue());
+        }
+    }
+    
+    private void insertAndDeleteFormLocationTranslations(Connection connection) {
+        for (Map.Entry<String, String> trn : FORM_LOCATIONS_TRANSLATIONS_MAP.entrySet()) {
+            insertAndDeleteTranslations(connection, "Select ", trn.getKey(), trn.getValue());
         }
     }
     

@@ -327,11 +327,10 @@ public class ShowActivityPrintPreview
                           ISO = ampG.getGlobalSettingsValue();
                         }
                         
-                        //Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
                         Country cntry = DbUtil.getDgCountry(ISO);
                         location.setCountryId(cntry.getCountryId());
                         location.setCountry(cntry.getCountryName());
-                        location.setNewCountryId(cntry.getIso());
+                        location.setIso(cntry.getIso());
                         
                         location.setAmpCVLocation( loc.getLocation() );
                         if ( loc.getLocation() != null ){

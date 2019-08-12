@@ -261,12 +261,12 @@ function initializeTranslations(){
 															<span><c:out value="${item.mainEntity.name}"/></span> 
 															<br />
 															<ul style="list-style-type: none">
-																<c:forEach items="${item.subordinateEntityList}" var="zone">
+																<c:forEach items="${item.subordinateEntityList}" var="admLevel1Location">
 																	<li><input type="checkbox"
 																		class="zone_check_${item.mainEntity.id}"
-																		name="zone_check" title="${zone.name}"
-																		value="${zone.id}"
-																		 /><span><c:out value="${zone.name}"/></span>
+																		name="zone_check" title="${admLevel1Location.name}"
+																		value="${admLevel1Location.id}"
+																		 /><span><c:out value="${admLevel1Location.name}"/></span>
 																	</li>
 																</c:forEach>
 															</ul></li>

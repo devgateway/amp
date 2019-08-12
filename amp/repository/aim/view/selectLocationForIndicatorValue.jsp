@@ -22,27 +22,27 @@ function selectLocation(){
   var locationLevelIndex=document.aimThemeForm.locationLevelIndex.value;
   var msg="<digi:trn jsFriendly='true'>Please, select value</digi:trn>"
   if(locationLevelIndex==2){
-      var regionLevelValue=document.aimThemeForm.impRegion;
-      if(regionLevelValue.value==-1){
-          regionLevelValue.focus();
+      var admLevel1Value=document.aimThemeForm.impAdmLevel1;
+      if(admLevel1Value.value==-1){
+          admLevel1Value.focus();
           alert(msg);
           return;
       }
   }
   else{
       if(locationLevelIndex==3){
-      var zoneLevelValue=document.aimThemeForm.impZone;
-      if(zoneLevelValue.value==-1){
-          zoneLevelValue.focus();
+      var admLevel2Value=document.aimThemeForm.impAdmLevel2;
+      if(admLevel2Value.value==-1){
+          admLevel2Value.focus();
           alert(msg);
           return;
       }
   }
   else{
        if(locationLevelIndex==4){
-      var woredaLevelValue=document.aimThemeForm.impWoreda;
-      if(woredaLevelValue.value==-1){
-          woredaLevelValue.focus();
+      var admLevel3Value=document.aimThemeForm.impAdmLevel3;
+      if(admLevel3Value.value==-1){
+          admLevel3Value.focus();
           alert(msg);
           return;
       }
@@ -62,29 +62,29 @@ function selectLocation(){
   window.close();
 }
 
-function countryChanged() {
-		  document.aimThemeForm.fill.value = "region";
+function admLevel0Changed() {
+		  document.aimThemeForm.fill.value = "admLevel1Location";
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();
 	}
 
-	function regionChanged() {
-	     document.aimThemeForm.fill.value = "zone";
+	function admLevel1Changed() {
+	     document.aimThemeForm.fill.value = "admLevel2Location";
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();
 	}
 
-	function zoneChanged() {
-		  document.aimThemeForm.fill.value = "woreda";
+	function admLevel2Changed() {
+		  document.aimThemeForm.fill.value = "admLevel3Location";
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();
 	}
 
-	function woredaChanged() {
-		  document.aimThemeForm.fill.value = "woredaSelected";
+	function admLevel3Changed() {
+		  document.aimThemeForm.fill.value = "admLevel3Locationselected";
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();
@@ -123,50 +123,50 @@ function countryChanged() {
 												<html:option value="-1"><digi:trn key="aim:selectFromBelow">Select From Below</digi:trn></html:option>
 												<html:option value="1"><digi:trn key="aim:national">National</digi:trn></html:option>
 												<html:option value="2"><digi:trn key="aim:regional">Regional</digi:trn></html:option>
-                                                <html:option value="3"><digi:trn key="aim:district">Zone</digi:trn></html:option>
-												<html:option value="4"><digi:trn key="aim:district">District</digi:trn></html:option>
+                                                <html:option value="3"><digi:trn>Administrative Level 2</digi:trn></html:option>
+												<html:option value="4"><digi:trn>Administrative Level 3</digi:trn></html:option>
 											</html:select>
 										</td>
 									</tr>
 									<c:if test="${aimThemeForm.locationLevelIndex>=1}">
 										<tr>
-											<td align="right"><digi:trn key="aim:country">Administrative Level 0</digi:trn> </td>
-											<td align="left"><b><c:out value="${aimThemeForm.country}"></c:out></b></td>
+											<td align="right"><digi:trn>Administrative Level 0</digi:trn> </td>
+											<td align="left"><b><c:out value="${aimThemeForm.admLevel0Location}"></c:out></b></td>
 										</tr>
 									</c:if>
-									<c:if test="${aimThemeForm.locationLevelIndex>=2  &&  !empty aimThemeForm.regions}">
+									<c:if test="${aimThemeForm.locationLevelIndex>=2  &&  !empty aimThemeForm.admLevel1Locations}">
 										<tr>
-											<td align="right" width="50%"><digi:trn key="aim:selectRegion">Select Region</digi:trn></td>
+											<td align="right" width="50%"><digi:trn>Select Administrative Level 1</digi:trn></td>
 											<td align="left" width="50%">
-												<html:select name="aimThemeForm" property="impRegion" onchange="regionChanged()">
-													<html:option value="-1">Select Region</html:option>
-													<logic:notEmpty name="aimThemeForm" property="regions">
-														<html:optionsCollection name="aimThemeForm" property="regions" value="id" label="name" />
+												<html:select name="aimThemeForm" property="impAdmLevel1" onchange="admLevel1Changed()">
+													<html:option value="-1">Select Administrative Level 1</html:option>
+													<logic:notEmpty name="aimThemeForm" property="admLevel1Locations">
+														<html:optionsCollection name="aimThemeForm" property="admLevel1Locations" value="id" label="name" />
 													</logic:notEmpty>
 												</html:select>
 											</td>
 										</tr>
 									</c:if>
-									<c:if test="${aimThemeForm.locationLevelIndex>=3 &&  !empty aimThemeForm.zones }">
+									<c:if test="${aimThemeForm.locationLevelIndex>=3 &&  !empty aimThemeForm.admLevel2Locations}">
 										<tr>
-										<td align="right" width="50%"><digi:trn key="aim:selectZone">Select Zone</digi:trn></td>
+										<td align="right" width="50%"><digi:trn>Select Administrative Level 2</digi:trn></td>
 										<td align="left" width="50%">
-											<html:select property="impZone" onchange="zoneChanged()" styleClass="inp-text" >
-												<html:option value="-1">Select Zone</html:option>
-												<logic:notEmpty name="aimThemeForm" property="zones">
-													<html:optionsCollection name="aimThemeForm" property="zones"value="id" label="name" />
+											<html:select property="impAdmLevel2" onchange="admLevel2Changed()" styleClass="inp-text" >
+												<html:option value="-1">Select Administrative Level 2</html:option>
+												<logic:notEmpty name="aimThemeForm" property="admLevel2Locations">
+													<html:optionsCollection name="aimThemeForm" property="admLevel2Locations" value="id" label="name" />
 												</logic:notEmpty>
 											</html:select>
 										</td>
 									</tr>
-									<c:if test="${aimThemeForm.locationLevelIndex>=4 &&  !empty aimThemeForm.woredas }">
+									<c:if test="${aimThemeForm.locationLevelIndex>=4 && !empty aimThemeForm.admLevel3Locations}">
 									<tr>
-										<td align="right" width="50%"><digi:trn key="aim:selectWoreda">Select Woreda</digi:trn></td>
+										<td align="right" width="50%"><digi:trn>Select Administrative Level 3</digi:trn></td>
 										<td align="left" width="50%">
-											<html:select property="impWoreda" onchange="woredaChanged()" styleClass="inp-text" >
-												<html:option value="-1">Select Woreda</html:option>
-												<logic:notEmpty name="aimThemeForm" property="woredas">
-													<html:optionsCollection name="aimThemeForm" property="woredas"value="id" label="name" />
+											<html:select property="impAdmLevel3" onchange="admLevel3Changed()" styleClass="inp-text" >
+												<html:option value="-1">Select Administrative Level 3</html:option>
+												<logic:notEmpty name="aimThemeForm" property="admLevel3Locations">
+													<html:optionsCollection name="aimThemeForm" property="admLevel3Locations" value="id" label="name" />
 												</logic:notEmpty>
 											</html:select>
 										</td>

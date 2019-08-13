@@ -87,7 +87,7 @@ $(document).ready(function () {
 
 var showSpinner = function () {
     loadingreport.setHeader('');
-    loadingreport.setBody("<div align='center'>" + '' + "<br>" + '<img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />' + "</div>");
+    loadingreport.setBody("<div align='center' style='padding-bottom: 15px;'>" + '' + "<br>" + '<img src="/TEMPLATE/ampTemplate/img_2/loading-icon.gif" />' + "</div>");
     loadingreport.render(document.body);
     loadingreport.show();
 };

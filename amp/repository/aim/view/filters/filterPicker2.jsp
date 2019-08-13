@@ -67,7 +67,7 @@ height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right:
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="donorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="donorsPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="donorsTab_search" />
-				<%@include file="bigFilterTable.jsp" %>
+				<jsp:include page="bigFilterTable.jsp"/>
 			</div>
 		</div>
 	<% 
@@ -80,7 +80,7 @@ height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right:
                     	<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="relatedAgenciesElements" />
                     	<bean:define id="reqPropertyObj" toScope="request" value="relAgenciesPropertyObj" />
                     	<bean:define id="reqSearchManagerId" toScope="request" value="relAgenciesTab_search" />
-                    	<%@include file="bigFilterTable.jsp" %>
+						<jsp:include page="bigFilterTable.jsp"/>
                 	</div>
             	</div>
         	</logic:notEmpty>    
@@ -93,7 +93,7 @@ height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right:
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="sectorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="sectorsPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="sectorsTab_search" />
-				<%@include file="bigFilterTable.jsp" %>
+				<jsp:include page="bigFilterTable.jsp"/>
 			</div>
 		</div>
 		<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
@@ -105,7 +105,7 @@ height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right:
 					<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="programElements" />
 					<bean:define id="reqPropertyObj" toScope="request" value="programsPropertyObj" />
 					<bean:define id="reqSearchManagerId" toScope="request" value="programsTab_search" />
-					<%@include file="bigFilterTable.jsp" %>
+					<jsp:include page="bigFilterTable.jsp"/>
 				</div>
 			</div>
 		<% 
@@ -141,7 +141,7 @@ height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right:
 		
 		<logic:notEqual name="aimReportsFilterPickerForm" property="pledgeReport" value="true">
 			<div class="otherCriteriaBigTable">
-				<%@include file="bigFilterTable.jsp" %>
+				<jsp:include page="bigFilterTable.jsp"/>
 			</div>
 		</logic:notEqual>
 		

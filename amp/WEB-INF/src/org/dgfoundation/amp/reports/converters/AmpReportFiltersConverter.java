@@ -196,6 +196,7 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.REGION, AmpCategoryValueLocations.class, "locationSelected", false);
         addFilter(ColumnConstants.ZONE, AmpCategoryValueLocations.class, "locationSelected", false);
         addFilter(ColumnConstants.DISTRICT, AmpCategoryValueLocations.class, "locationSelected", false);
+        addFilter(ColumnConstants.COMMUNAL_SECTION, AmpCategoryValueLocations.class, "locationSelected", false);
 
         addFilter(ColumnConstants.PLEDGES_COUNTRIES, AmpCategoryValueLocations.class, "locationSelected", true);
         addFilter(ColumnConstants.PLEDGES_REGIONS, AmpCategoryValueLocations.class, "locationSelected", false);

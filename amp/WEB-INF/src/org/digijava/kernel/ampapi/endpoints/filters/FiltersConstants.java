@@ -131,7 +131,7 @@ public class FiltersConstants {
     public static final String PLEDGES_TITLES = "pledges-titles";
     public static final String PLEDGES_TYPE_OF_ASSISTANCE = "pledges-type-of-assistance";
     public static final String PLEDGES_ZONES = "pledges-zones";
-    public static final String PLEDGES_COMMUNAL_SECTION = "communal-section";
+    public static final String PLEDGES_COMMUNAL_SECTION = "pledges-communal-section";
     public static final String PRIMARY_PROGRAM_LEVEL_0 = "primary-program-level-0";
     public static final String PRIMARY_PROGRAM_LEVEL_1 = "primary-program-level-1";
     public static final String PRIMARY_PROGRAM_LEVEL_2 = "primary-program-level-2";

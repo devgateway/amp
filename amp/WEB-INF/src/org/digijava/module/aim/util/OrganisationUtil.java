@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
@@ -22,6 +23,10 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Nadejda Mandrescu
@@ -42,6 +47,8 @@ public class OrganisationUtil {
         put(Constants.ROLE_CODE_COMPONENT_FUNDING_ORGANIZATION, ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
         put(Constants.ROLE_CODE_COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
     }};
+    
+    protected static Logger logger = LoggerFactory.getLogger(OrganisationUtil.class);
     
     /**
      * @return a list of role codes (e.g. 'BA', 'DN') that are enabled in Feature Manager
@@ -140,6 +147,34 @@ public class OrganisationUtil {
     public static List<AmpRole> getOrgRoles() {
         return PersistenceManager.getRequestDBSession()
                 .createCriteria(AmpRole.class)
+                .list();
+    }
+    
+    public static void checkOrganisationNamesSanity(Session session) {
+        List<String> orgNamesWithTrailSpaces = OrganisationUtil.getOrganisationNamesWithTrailSpaces(session);
+        List<String> orgNamesWithoutTrailSpaces = OrganisationUtil.getOrganisationNamesWithoutTrailSpaces(session);
+    
+        List<String> duplicatedOrgNames = orgNamesWithTrailSpaces.stream()
+                .filter(name -> orgNamesWithoutTrailSpaces.contains(name.trim()))
+                .collect(Collectors.toList());
+    
+        duplicatedOrgNames.forEach(orgName -> logger.warn(
+                String.format("Found organisations with the same name: '%s' and '%s", orgName, orgName.trim())));
+    }
+    
+    public static List<String> getOrganisationNamesWithTrailSpaces(Session session) {
+        return session.createCriteria(AmpOrganisation.class)
+                .add(Restrictions.sqlRestriction("name <> TRIM(name)"))
+                .add(Restrictions.or(Restrictions.eq("deleted", false), Restrictions.isNull("deleted")))
+                .setProjection(Projections.distinct(Projections.property("name")))
+                .list();
+    }
+    
+    public static List<String> getOrganisationNamesWithoutTrailSpaces(Session session) {
+        return session.createCriteria(AmpOrganisation.class)
+                .add(Restrictions.sqlRestriction("name = TRIM(name)"))
+                .add(Restrictions.or(Restrictions.eq("deleted", false), Restrictions.isNull("deleted")))
+                .setProjection(Projections.distinct(Projections.property("name")))
                 .list();
     }
 }

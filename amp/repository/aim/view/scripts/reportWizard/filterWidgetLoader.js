@@ -3,6 +3,20 @@ var PLEDGE_TYPE = 'P';
 var DONOR_TYPE = 'D';
 
 var widgetFilter = null;
+
+var loadingreport = new YAHOO.widget.Panel("wait",
+    {
+        width: "240px",
+        fixedcenter: true,
+        close: false,
+        draggable: false,
+        zindex: 9999,
+        modal: true,
+        visible: false,
+        underlay: "shadow"
+    }
+);
+
 $(document).ready(function () {
     // Load the filter after we rendered the DOM for perceived speed.
     var container = $('#filter-popup');
@@ -43,6 +57,7 @@ $(document).ready(function () {
         var serializedFilters = widgetFilter.serialize() || {};
         var url = '/aim/reportsFilterPicker.do?apply=true&cacheBuster=';
         if (advancedFilters) {
+            showSpinner();
             url += new Date().getTime() + '&reportContextId=' + widgetFilter.auxId + '&doreset=true&queryEngine=true';
         } else {
             url += new Date().getTime() + '&reportContextId=' + widgetFilter.reportContextId +
@@ -58,7 +73,8 @@ $(document).ready(function () {
                     $('#hasFilters').val(true);
                 } else {
                     $('#queryLabelsDiv').html(data);
-                    document.getElementById('queryLabelsDiv').scrollIntoView();
+                    // document.getElementById('queryLabelsDiv').scrollIntoView();
+                    hideSpinner();
                 }
             }
         });
@@ -68,3 +84,15 @@ $(document).ready(function () {
         }
     });
 });
+
+var showSpinner = function () {
+    loadingreport.setHeader('');
+    loadingreport.setBody("<div align='center' style='padding-bottom: 15px;'>" + '' + "<br>" + '<img src="/TEMPLATE/ampTemplate/img_2/loading-icon.gif" />' + "</div>");
+    loadingreport.render(document.body);
+    loadingreport.show();
+};
+
+var hideSpinner = function () {
+    loadingreport.hide();
+    $('#wait_mask').remove();
+};

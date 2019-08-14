@@ -149,10 +149,12 @@
         }
     );
 
-    loadingreport.setHeader(msgwait0);
-    loadingreport.setBody("<div align='center'>" + msgwait1 + "<br>" + '<img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />' + "</div>");
-    loadingreport.render(document.body);
-    loadingreport.show();
+    if (location.toString().indexOf('queryEngine.do') === -1) {
+        loadingreport.setHeader(msgwait0);
+        loadingreport.setBody("<div align='center'>" + msgwait1 + "<br>" + '<img src="/TEMPLATE/ampTemplate/img_2/loading-icon.gif" />' + "</div>");
+        loadingreport.render(document.body);
+        loadingreport.show();
+    }
 </script>
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>

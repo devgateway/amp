@@ -17,7 +17,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
-<%@ taglib uri="/taglib/globalsettings" prefix="gs"%> 
+<%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <jsp:include page="activityHistoryUtil.jsp" flush="true" />
 <jsp:include page="activityViewWorkspaces.jsp" flush="true" />
@@ -905,7 +906,7 @@ function collapseAll() {
 				<digi:trn key="aim:results">Results</digi:trn>:&nbsp;<br />
 					<c:if test="${aimEditActivityForm.identification.results!=null}">
 						<c:set var="objKey" value="${aimEditActivityForm.identification.results}"/>
-						<span class="word_break bold"><digi:edit key="${objKey}"></digi:edit></b></span>
+						<span class="word_break bold"><digi:edit key="${objKey}"></digi:edit></span>
 						<hr>
 					</c:if> 
 			</module:display>					
@@ -1556,24 +1557,24 @@ function collapseAll() {
 	</legend>
 	<div class="toggleDiv">
 	    <module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
-            <c:set var="programs_list" value="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}" />
-            <c:set var="programs_name"><digi:trn>National Plan Objective</digi:trn></c:set>
-            <%@include file="activitypreview/programs.jspf" %>
+            <c:set var="programs_list" value="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}" scope="request" />
+            <c:set var="programs_name" scope="request"><digi:trn>National Plan Objective</digi:trn></c:set>
+			<jsp:include page="activitypreview/programs.jsp"/>
         </module:display>
 		<module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form">
-			<c:set var="programs_list" value="${aimEditActivityForm.programs.primaryPrograms}" />
-			<c:set var="programs_name"><digi:trn>Primary Programs</digi:trn></c:set>
-			<%@include file="activitypreview/programs.jspf" %>
+			<c:set var="programs_list" value="${aimEditActivityForm.programs.primaryPrograms}" scope="request" />
+			<c:set var="programs_name" scope="request"><digi:trn>Primary Programs</digi:trn></c:set>
+			<jsp:include page="activitypreview/programs.jsp"/>
 		</module:display>
 		<module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
-			<c:set var="programs_list" value="${aimEditActivityForm.programs.secondaryPrograms}" />
-			<c:set var="programs_name"><digi:trn>Secondary Programs</digi:trn></c:set>
-			<%@include file="activitypreview/programs.jspf" %>
+			<c:set var="programs_list" value="${aimEditActivityForm.programs.secondaryPrograms}" scope="request" />
+			<c:set var="programs_name" scope="request"><digi:trn>Secondary Programs</digi:trn></c:set>
+			<jsp:include page="activitypreview/programs.jsp"/>
 		</module:display>
 		<module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
-			<c:set var="programs_list" value="${aimEditActivityForm.programs.tertiaryPrograms}" />
-			<c:set var="programs_name"><digi:trn>Tertiary Programs</digi:trn></c:set>
-			<%@include file="activitypreview/programs.jspf" %>
+			<c:set var="programs_list" value="${aimEditActivityForm.programs.tertiaryPrograms}" scope="request" />
+			<c:set var="programs_name" scope="request"><digi:trn>Tertiary Programs</digi:trn></c:set>
+			<jsp:include page="activitypreview/programs.jsp"/>
 		</module:display>
 		<!-- program description -->
 		<module:display name="/Activity Form/Program/Program Description" parentModule="/Activity Form/Program">
@@ -1744,21 +1745,21 @@ function collapseAll() {
 
 <!-- PROPOSED PROJECT COST -->
 
-<c:set var="costName">Proposed Project Cost</c:set>
-<c:set var="yearBudget">${aimEditActivityForm.funding.proposedAnnualBudgets}</c:set>
-<c:set var="projCost">${aimEditActivityForm.funding.proProjCost}</c:set>
-<c:set var="funAmount">${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.funAmount}</c:set>
-<c:set var="currencyCode">${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.currencyCode}</c:set>
-<c:set var="funDate">${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.funDate}</c:set>
-<%@ include file="projectCost.jspf" %>
+<c:set var="costName" scope="request">Proposed Project Cost</c:set>
+<c:set var="yearBudget" scope="request">${aimEditActivityForm.funding.proposedAnnualBudgets}</c:set>
+<c:set var="projCost" scope="request">${aimEditActivityForm.funding.proProjCost}</c:set>
+<c:set var="funAmount" scope="request">${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.funAmount}</c:set>
+<c:set var="currencyCode" scope="request">${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.currencyCode}</c:set>
+<c:set var="funDate" scope="request">${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.funDate}</c:set>
+<jsp:include page="projectCost.jsp"/>
 
-<c:set var="costName">Revised Project Cost</c:set>
-<c:set var="yearBudget"/>
-<c:set var="projCost">${aimEditActivityForm.funding.revProjCost}</c:set>
-<c:set var="funAmount">${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.funAmount}</c:set>
-<c:set var="currencyCode">${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.currencyCode}</c:set>
-<c:set var="funDate">${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.funDate}</c:set>
-<%@ include file="projectCost.jspf" %>
+<c:set var="costName" scope="request">Revised Project Cost</c:set>
+<c:set var="yearBudget" scope="request"/>
+<c:set var="projCost" scope="request">${aimEditActivityForm.funding.revProjCost}</c:set>
+<c:set var="funAmount" scope="request">${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.funAmount}</c:set>
+<c:set var="currencyCode" scope="request">${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.currencyCode}</c:set>
+<c:set var="funDate" scope="request">${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.funDate}</c:set>
+<jsp:include page="projectCost.jsp"/>
 
 
 <!-- END PROPOSED PROJECT COST -->
@@ -2897,16 +2898,16 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
 						<digi:trn>Donor funding contact information</digi:trn>:&nbsp;
-						<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.donorContacts}" />
-						<%@include file="activitypreview/contactInformation.jspf" %>
+						<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.donorContacts}" scope="request" />
+						<jsp:include page="activitypreview/contactInformation.jsp"/>
 						<hr>
 					</c:if> 
 				</module:display>	
 				<module:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
 						<digi:trn>MOFED contact information</digi:trn>:&nbsp;
-                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.mofedContacts}" />
-                        <%@include file="activitypreview/contactInformation.jspf" %>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.mofedContacts}" scope="request" />
+						<jsp:include page="activitypreview/contactInformation.jsp"/>
 						<hr>
 					</c:if> 
 				</module:display>
@@ -2914,8 +2915,8 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
 						<digi:trn>Project Coordinator Contact Information</digi:trn>:&nbsp;
-                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.projCoordinatorContacts}" />
-                        <%@include file="activitypreview/contactInformation.jspf" %>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.projCoordinatorContacts}" scope="request" />
+						<jsp:include page="activitypreview/contactInformation.jsp"/>
 						<hr>
 					</c:if>
 				</module:display>
@@ -2923,8 +2924,8 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.sectorMinistryContacts}">
 						<digi:trn>Sector Ministry Contact Information</digi:trn>:&nbsp;
-                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.sectorMinistryContacts}" />
-                        <%@include file="activitypreview/contactInformation.jspf" %>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.sectorMinistryContacts}" scope="request" />
+						<jsp:include page="activitypreview/contactInformation.jsp"/>
 						<hr>
 					</c:if> 
 				</module:display>
@@ -2932,8 +2933,8 @@ function collapseAll() {
 				<module:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information"  parentModule="/Activity Form/Contacts">
 					<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
 						<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>:&nbsp;
-                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}" />
-                        <%@include file="activitypreview/contactInformation.jspf" %>
+                        <c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}" scope="request" />
+						<jsp:include page="activitypreview/contactInformation.jsp"/>
 					</c:if>
 				</module:display>
 			</div>
@@ -2955,7 +2956,7 @@ function collapseAll() {
 			<tr>
 				<td>
 					<bean:define id="mode" value="preview" type="java.lang.String" toScope="request"/> 
-					<jsp:include page="viewCostsSummary.jsp" flush="" />				</td>
+					<jsp:include page="viewCostsSummary.jsp" />				</td>
 			</tr>
 		</table>
 	</div>
@@ -3497,7 +3498,7 @@ function collapseAll() {
 		</module:display>
 		<!-- end GPI -->
 
-<%@include file="previewActivityStructures.jsp" %>
+<jsp:include page="previewActivityStructures.jsp"/>
 <br/>
 
 <%  if (! "true".equals(request.getParameter("popupView"))) {%>

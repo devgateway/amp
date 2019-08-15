@@ -959,8 +959,9 @@ public class TeamUtil {
             qryStr = "select tm  from "
                     + AmpTeamMember.class.getName()
                     + " tm inner join tm.ampTeam t "
-                    + " inner join tm.user u where (tm.deleted is null or tm.deleted = false) and u.email=:email "
-                    +" and t.ampTeamId=:teamId";
+                    + " inner join tm.user u where (tm.deleted is null or tm.deleted = false)"
+                    + " and lower(u.email) = :email"
+                    + " and t.ampTeamId=:teamId";
 
             qry = session.createQuery(qryStr);
             qry.setString("email", email);

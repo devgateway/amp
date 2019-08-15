@@ -131,7 +131,7 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
              * The AMP schema implements by filtering on a non-user-visible column which generates the same codes and then filtering out based on their values.
              * Please see v_filtered_activity_status for a definition of this view (and also to understand the meaning of the Filter widget codes)
              */
-            columnName = ColumnConstants.FILTERED_APPROVAL_STATUS; 
+            columnName = ColumnConstants.VALIDATION_STATUS;
         }
         
         columnName = removeIdSuffixIfNeeded(schema, columnName);

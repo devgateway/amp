@@ -56,6 +56,7 @@ public class EPConstants {
     public static final String COUNT = "count";
     public static final String SUMMARY = "summary";
     public static final String GROUPING_OPTION = "groupingOption";
+    public static final String INCLUDE_LOCATION_CHILDREN = "include-location-children";
     
     // report type & activities configurations
     public static final String DEFAULT_REPORT_TYPE = "D";
@@ -104,6 +105,7 @@ public class EPConstants {
     public static final String TAB_SECTORS = "Sector";
     public static final String TAB_PROGRAMS = "Programs";
     public static final String TAB_ACTIVITY = "Activity";
+    public static final String TAB_PLEDGE = "Pledge";
     public static final String TAB_ALL_AGENCIES = "All Agencies";
     public static final String TAB_FINANCIALS = "Financial";
     public static final String TAB_LOCATIONS = "Location";

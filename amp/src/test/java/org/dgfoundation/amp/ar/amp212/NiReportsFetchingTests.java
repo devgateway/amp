@@ -204,12 +204,12 @@ public class NiReportsFetchingTests extends AmpReportingTestCase {
         List<String> acts = Arrays.asList("new activity with contracting",  "Activity with both MTEFs and Act.Comms", "Activity with Zones");
         runInEngineContext(acts, engine -> {
             List<? extends Cell> cells = nicelySorted(engine.schema.getColumns().get(ColumnConstants.REGION).fetch(engine));
-            assertEquals("[Anenii Noi County (id: 33, eid: 9085, coos: {locs.LOCS=(level: 1, id: 9085)}, p: 0.50), Balti County (id: 33, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.50), Balti County (id: 70, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.30), Drochia County (id: 70, eid: 9090, coos: {locs.LOCS=(level: 1, id: 9090)}, p: 0.70)]", 
+            assertEquals("[Anenii Noi County (id: 33, eid: 9085, coos: {locs.LOCS=(level: 1, id: 9085)}, p: 0.50), Balti County (id: 33, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.50),  (id: 53, eid: -999999999, coos: {locs.LOCS=(level: 1, id: -999999999)}, p: 1.00), Balti County (id: 70, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.30), Drochia County (id: 70, eid: 9090, coos: {locs.LOCS=(level: 1, id: 9090)}, p: 0.70)]",
                     cells.toString());
         });
         runInEngineContext(acts, engine -> {
             List<? extends Cell> cellsZone = nicelySorted(engine.schema.getColumns().get(ColumnConstants.ZONE).fetch(engine));
-            assertEquals("[Bulboaca (id: 33, eid: 9108, coos: {locs.LOCS=(level: 2, id: 9108)}, p: 0.50), Glodeni (id: 33, eid: 9111, coos: {locs.LOCS=(level: 2, id: 9111)}, p: 0.50),  (id: 70, eid: -9090, coos: {locs.LOCS=(level: 2, id: -9090)}, p: 0.70),  (id: 70, eid: -9086, coos: {locs.LOCS=(level: 2, id: -9086)}, p: 0.30)]", 
+            assertEquals("[Bulboaca (id: 33, eid: 9108, coos: {locs.LOCS=(level: 2, id: 9108)}, p: 0.50), Glodeni (id: 33, eid: 9111, coos: {locs.LOCS=(level: 2, id: 9111)}, p: 0.50),  (id: 53, eid: -999999999, coos: {locs.LOCS=(level: 2, id: -999999999)}, p: 1.00),  (id: 70, eid: -9090, coos: {locs.LOCS=(level: 2, id: -9090)}, p: 0.70),  (id: 70, eid: -9086, coos: {locs.LOCS=(level: 2, id: -9086)}, p: 0.30)]",
                     cellsZone.toString());
         });
     }

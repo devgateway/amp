@@ -20,13 +20,20 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_pledges_type_of_assistance;
-				
 			    CREATE OR REPLACE VIEW v_pledges_type_of_assistance AS
-			    	SELECT DISTINCT ON (1, 2, 3) p.id AS pledge_id, val.category_value, val.id 
-			    		FROM amp_funding_pledges p 
-			    			JOIN amp_funding_pledges_details fund ON p.id = fund.pledge_id
-			    			JOIN amp_category_value val ON fund.type_of_assistance = val.id
-			    		GROUP BY p.id, val.id;
+			        SELECT 
+                        afp.id AS pledge_id, 
+                        v.category_value, 
+                        COALESCE(v.id, -999999999) AS id
+                    FROM amp_funding_pledges afp
+                    LEFT JOIN (
+				    	SELECT DISTINCT ON (1, 2, 3) p.id AS pledge_id, val.category_value, val.id 
+				    		FROM amp_funding_pledges p 
+				    			JOIN amp_funding_pledges_details fund ON p.id = fund.pledge_id
+				    			JOIN amp_category_value val ON fund.type_of_assistance = val.id
+				    		GROUP BY p.id, val.id
+                    ) v
+                    ON afp.id = v.pledge_id;
         	</lang>
 		</script>
 	</apply>

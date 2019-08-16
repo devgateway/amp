@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../doc/xmlpatcher.xsd ">
 	<jira>AMP-18143</jira>
 	<keyword>Views</keyword>
 	<author>cdolghier</author>
@@ -21,13 +21,23 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_tertiary_sectors;
 			   	CREATE OR REPLACE VIEW v_tertiary_sectors AS
-					SELECT a.amp_activity_id, COALESCE(level.name, '#') AS name, asl.id0 AS amp_sector_id, SUM(a.sector_percentage) as percentage, COUNT(*) - COUNT(a.sector_percentage) AS cnt_nulls
-						FROM amp_activity_sector a	
-							JOIN ni_all_sectors_with_levels asl ON a.amp_sector_id = asl.amp_sector_id
-							LEFT JOIN amp_sector level ON level.amp_sector_id = asl.id0
-							JOIN amp_classification_config acc ON acc.id = a.classification_config_id
-   						WHERE acc.name = 'Tertiary'
-					GROUP BY a.amp_activity_id, asl.id0, level.amp_sector_id;
+			   	    SELECT 
+                        aav.amp_activity_id, 
+                        v.name, 
+                        COALESCE(v.amp_sector_id, -999999999) AS amp_sector_id, 
+                        v.percentage,
+                        COALESCE(cnt_nulls, 0) AS cnt_nulls
+                    FROM amp_activity_version aav
+                    LEFT JOIN (
+						SELECT a.amp_activity_id, COALESCE(level.name, '#') AS name, asl.id0 AS amp_sector_id, SUM(a.sector_percentage) as percentage, COUNT(*) - COUNT(a.sector_percentage) AS cnt_nulls
+							FROM amp_activity_sector a	
+								JOIN ni_all_sectors_with_levels asl ON a.amp_sector_id = asl.amp_sector_id
+								LEFT JOIN amp_sector level ON level.amp_sector_id = asl.id0
+								JOIN amp_classification_config acc ON acc.id = a.classification_config_id
+	   						WHERE acc.name = 'Tertiary'
+						GROUP BY a.amp_activity_id, asl.id0, level.amp_sector_id
+                    ) v
+                    ON aav.amp_activity_id = v.amp_activity_id;
 			</lang>
 		</script>
 	</apply>

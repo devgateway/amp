@@ -87,8 +87,9 @@ module.exports = BackboneDash.View.extend({
       if(filterField.modelType === 'YEAR-SINGLE-VALUE' || filterField.modelType === 'DATE-RANGE-VALUES'){
     	  return self.getAppliedDateObject(filterObject,key);
       } else {
+    	  var name = filter.filterName || key;   	   
     	  return {
-    	        name: filter.filterName || key,
+    	        name: self.translate(name),
     	        id: key.replace(/[^\w]/g, ''), // remove anything non-alphanum
     	        detail: _(filter).map(function(value) {
     	          if (value.attributes !== undefined) {
@@ -113,18 +114,22 @@ module.exports = BackboneDash.View.extend({
 	  var dateRangeText = '';
 	  var filterName = filterField.filterName ? filterField.filterName : filterKey;
 	  if(filterKey === 'date') {
-		  dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
+		  dateRangeText = this.translate("Dates");
 	  } else if(filterKey === 'computed-year') {
-		  dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
-	  } else {
-		  dateRangeText = app.translator.translateSync("amp.dashboard:" + filterName.replace(/[^\w]/g, '-'), filterName);
+		  dateRangeText = this.translate("Computed Year");
+	  } else {		  
+		  dateRangeText = this.translate(filterName);			  		
 	  }
 	  var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
+		
 	  return {
 		  id: filterKey.replace(/[^\w]/g, '-'),
 		  name: dateRangeText,
 		  detail: [detail]
 		};	  
+  },
+  translate: function(name) {
+	 return this.app.translator.translateSync('amp.gis:pane-subfilters-' + name.replace(/ /g,'')  , name.replace(/-/g, " "));	 
   },
   hideFilterDetails: function() {
     this.renderApplied();

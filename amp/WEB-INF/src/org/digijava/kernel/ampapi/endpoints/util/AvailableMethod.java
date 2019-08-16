@@ -26,9 +26,17 @@ public class AvailableMethod {
     private String tab;
 
     @ApiModelProperty("Columns linked to this filter")
-    private String []columns;
-
-    private FilterType [] filterType;
+    private String[] columns;
+  
+    private FilterType[] filterType;
+  
+    private FilterFieldType fieldType;
+  
+    private FilterDataType dataType;
+  
+    private FilterComponentType[] componentType;
+  
+    private boolean multiple;
 
     public String getName() {
         return name;
@@ -74,7 +82,7 @@ public class AvailableMethod {
         return filterType;
     }
 
-    public void setFilterType(FilterType[] filterType) {
+    public void setFilterFieldType(FilterType[] filterType) {
         this.filterType = filterType;
     }
 
@@ -93,6 +101,37 @@ public class AvailableMethod {
     public void setTab(String tab) {
         this.tab = tab;
     }
+
+    public FilterFieldType getFieldType() {
+        return fieldType;
+    }
+
+    public void setFieldType(FilterFieldType fieldType) {
+        this.fieldType = fieldType;
+    }
     
+    public FilterDataType getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(FilterDataType dataType) {
+        this.dataType = dataType;
+    }
+
+    public FilterComponentType[] getComponentType() {
+        return componentType;
+    }
+
+    public void setComponentType(FilterComponentType[] componentType) {
+        this.componentType = componentType;
+    }
+
+    public boolean isMultiple() {
+        return multiple;
+    }
+
+    public void setMultiple(boolean multiple) {
+        this.multiple = multiple;
+    }
 
 }

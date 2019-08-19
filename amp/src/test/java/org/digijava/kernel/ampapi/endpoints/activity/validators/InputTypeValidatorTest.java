@@ -120,7 +120,7 @@ public class InputTypeValidatorTest {
         Map<String, Object> root = new HashMap<>();
         root.put(TRANSLATABLE_FIELD, ImmutableMap.of("ro", "RO text"));
 
-        assertFalse("Only allowed locales must be accepted",
+        assertTrue("Only allowed locales must be accepted",
                 isValid(root, translatableField, TRANSLATABLE_FIELD));
     }
 

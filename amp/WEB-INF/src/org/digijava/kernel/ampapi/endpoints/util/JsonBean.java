@@ -1,13 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -69,7 +67,7 @@ public class JsonBean {
             if (jb == null) {
                 return null;
             }
-            return JSONUtils.readValueFromJson(jb, JsonBean.class);
+            return ObjectMapperUtils.readValueFromString(jb, JsonBean.class);
         } catch (RuntimeException e) {
             logger.error("Failed to read json bean", e);
             return null;

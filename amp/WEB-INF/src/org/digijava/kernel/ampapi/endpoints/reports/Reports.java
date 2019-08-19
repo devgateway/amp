@@ -74,7 +74,6 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -143,6 +142,8 @@ public class Reports implements ErrorReportingEndpoint {
         ReportSpecificationImpl spec = null;
         try {
             spec = AmpReportsToReportSpecification.convert(ampReport);
+            // AMP-29012: We need to change the Location filter according to include-location-children.
+            ReportsUtil.configureIncludeLocationChildrenFilters(spec, spec.isIncludeLocationChildren());
         } catch (Exception e1) {
             logger.error("Failed to convert report.", e1);
             JSONResult result = new JSONResult();
@@ -152,6 +153,7 @@ public class Reports implements ErrorReportingEndpoint {
 
         JSONResult result = new JSONResult();
         ReportMetadata metadata = new ReportMetadata();
+
         metadata.setReportSpec(spec);
         metadata.setSettings(SettingsUtils.getReportSettings(spec));
         metadata.setName(ampReport.getName());
@@ -476,8 +478,8 @@ public class Reports implements ErrorReportingEndpoint {
         
         // Add data needed on Saiku UI.
         // TODO: Make a mayor refactoring on the js code so it doesnt need these extra parameters to work properly.
-        JsonBean queryProperties = new JsonBean();
-        queryProperties.set("properties", new ArrayList<String>());
+        Map<String, List<String>> queryProperties = new HashMap<>();
+        queryProperties.put("properties", new ArrayList<>());
         saikuResult.setQuery(queryProperties);
         List<String> cellset = new ArrayList<String>();
         cellset.add("dummy");
@@ -830,6 +832,10 @@ public class Reports implements ErrorReportingEndpoint {
                     String calendar = formParams.getSettings().get(SettingsConstants.CALENDAR_TYPE_ID).toString();
                     newFilters.setCurrency(CurrencyUtil.getAmpcurrency(currency));
                     newFilters.setCalendarType(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(calendar)));
+                }
+                
+                if (formParams.getIncludeLocationChildren() != null) {
+                    newFilters.setIncludeLocationChildren(formParams.getIncludeLocationChildren());
                 }
 
                 logger.info(newFilters);

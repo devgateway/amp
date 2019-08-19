@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
 import java.util.List;
+import java.util.Map;
 
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIEPConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * @author Octavian Ciubotaru
@@ -19,14 +19,14 @@ public class SaveResult<T> {
     private String result;
 
     @ApiModelProperty("an array of error objects for all the errors that occurred while saving")
-    private List<JsonBean> errors;
+    private List<Map<String, String>> errors;
 
     public SaveResult(T data) {
         this.data = data;
         this.result = GPIEPConstants.SAVED;
     }
 
-    public SaveResult(T data, List<JsonBean> errors) {
+    public SaveResult(T data, List<Map<String, String>> errors) {
         this.data = data;
         this.result = GPIEPConstants.SAVE_FAILED;
         this.errors = errors;
@@ -40,7 +40,7 @@ public class SaveResult<T> {
         return result;
     }
 
-    public List<JsonBean> getErrors() {
+    public List<Map<String, String>> getErrors() {
         return errors;
     }
 }

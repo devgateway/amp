@@ -24,7 +24,7 @@ var EnabledGisModel = Backbone.Model.extend({
 
 var EnabledGisCollection = Backbone.Collection.extend({
 	model : EnabledGisModel,
-	url : '/rest/common/fm',
+	url : '/rest/common/fm/flat',
 	fetchData : function() {
 		var params = {
 			"detail-modules" : [ "GIS" ]
@@ -53,13 +53,12 @@ var enabledGisFM = new EnabledGisCollection();
 enabledGisFM.fetchData();
 
 var EnabledAdminSectionModel = Backbone.Model.extend({
-    url : '/rest/common/fm',
+    url : '/rest/common/fm/flat',
     fetchData : function() {
         var params = {
             'reporting-fields' : false,
             'enabled-modules': true,
             'detail-modules': ['ADMINISTRATIVE SECTION'],
-            'detail-flat': true,
             'full-enabled-paths' : true
         };
         this.fetch({
@@ -500,7 +499,8 @@ var WorkspaceToolbar = Backbone.View.extend({
     // Map icon is enabled if FM "GIS" is enabled or the report type is not pledge
     	return enabledGisFM && 
     	enabledGisFM.models[0].get('error') == undefined && 
-    	enabledGisFM.models[0].get('GIS') !== undefined &&
+    	enabledGisFM.models[0].get('fm-settings') &&
+        enabledGisFM.models[0].get('fm-settings')["GIS"] &&
     	this.workspace.query.attributes.report_type != 5;
     }
 

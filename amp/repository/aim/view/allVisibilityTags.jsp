@@ -91,7 +91,7 @@
 <feature:display name="Pledges Default Reports" module="Pledge Reports"></feature:display>
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display>
-<module:display name="Filter Section" parentModule="REPORTING"></module:display> 
+<module:display name="Filter Widget" parentModule="REPORTING"></module:display>
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
 <module:display name="Tab Generator" parentModule="REPORTING"></module:display>
@@ -141,8 +141,7 @@
 <field:display name="Resource Category" feature="Resource Columns"></field:display>
 <field:display name="Resource Organisations" feature="Resource Columns"></field:display>
 
-<feature:display name="Archived" module="Filter Section"></feature:display>
-<feature:display module="Activity Costing" name="Costing"></feature:display> 
+<feature:display module="Activity Costing" name="Costing"></feature:display>
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
 <feature:display module="Contracting" name="Contracting"></feature:display> 
 <feature:display module="Funding" name="Activity Pledges"></feature:display>
@@ -193,7 +192,7 @@
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Approval Tab" module="Messages"></feature:display>
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display>
-<feature:display name="Computed Columns Filters" module="Filter Section"></feature:display> 
+<feature:display name="Computed Year" module="Filter Widget"></feature:display>
 <feature:display name="Component Report" module="Report Types"></feature:display> 
 <feature:display name="Components" module="Components"></feature:display> 
 
@@ -770,9 +769,9 @@ deleted 6 fields, do not reinsert
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 
 <field:display name="Objectively Verifiable Indicators" feature="Identification"></field:display> 
- <field:display name="On/Off/Treasury Budget" feature="Budget"></field:display>
- <field:display name="Project Code" feature="Budget"></field:display>
- <field:display name="Sub-Program" feature="Budget"></field:display> 
+<field:display name="Activity Budget" feature="Budget"></field:display>
+<field:display name="Project Code" feature="Budget"></field:display>
+<field:display name="Sub-Program" feature="Budget"></field:display>
 <field:display name="Sub-Vote" feature="Budget"></field:display> 
 <field:display name="Vote" feature="Budget"></field:display>
 <field:display name="Validate Mandatory Vote" feature="Budget"></field:display>
@@ -991,11 +990,13 @@ deleted 6 fields, do not reinsert
 
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>
+<field:display name="Beneficiary Agency Type" feature="Beneficiary Agency"></field:display>
 <field:display name="Contracting Agency Department/Division"  feature="Contracting Agency"></field:display>
 <field:display name="Contracting Agency Groups" feature="Contracting Agency"></field:display>
 <field:display name="Contracting Agency Acronym"  feature="Contracting Agency"></field:display>
+<field:display name="Contracting Agency Type"  feature="Contracting Agency"></field:display>
 <field:display name="Executing Agency Groups" feature="Executing Agency"></field:display>
-<field:display name="Executing Agency Type" feature="Executing Agency"></field:display>   
+<field:display name="Executing Agency Type" feature="Executing Agency"></field:display>
 <field:display name="Executing Agency Department/Division" feature="Executing Agency"></field:display>
 <field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display>
 <field:display name="Implementing Agency Type" feature="Implementing Agency"></field:display>  
@@ -1004,6 +1005,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Regional Group Department/Division"  feature="Regional Group"></field:display> 
 <field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Department/Division"  feature="Responsible Organization"></field:display>
+<field:display name="Responsible Organization Type" feature="Responsible Organization"></field:display>
 <field:display name="Sector Group Department/Division"  feature="Sector Group"></field:display>
 
 <feature:display name="Pledges Columns" module="Pledges"></feature:display>
@@ -1090,8 +1092,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Show Change Summary" feature="Version History"></field:display>
 
 <module:display name="Show Editable Export Formats" parentModule="PUBLIC VIEW"></module:display>
-<module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>
-<feature:display name="Filters" module="Public Reports and Tabs"></feature:display>
 <!-- AMP-9437 -->
 <module:display name="Public Site" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Documents" parentModule="PUBLIC VIEW"></module:display>

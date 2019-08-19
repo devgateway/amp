@@ -17,7 +17,6 @@ import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -213,7 +212,7 @@ public class SecurityUtil {
     private static ApiErrorMessage validateToken(AmpApiToken ampApiToken) {
         String email = ampApiToken.getUser().getEmail();
 
-        User user = UserUtils.getUserByEmailRt(email);
+        User user = UserUtils.getUserByEmailAddress(email);
 
         ApiErrorMessage errorMessage = ApiAuthentication.performSecurityChecks(user, TLSUtils.getRequest());
         if (errorMessage != null) {
@@ -246,11 +245,4 @@ public class SecurityUtil {
         return !user.getPassword().equals(ampApiToken.getUser().getPassword());
     }
 
-    public static JsonBean getTeamJsonBean(AmpTeam ws) {
-        JsonBean teamJson = new JsonBean();
-        teamJson.set("id", ws.getAmpTeamId());
-        teamJson.set("name", ws.getName());
-        
-        return teamJson;
-    }
 }

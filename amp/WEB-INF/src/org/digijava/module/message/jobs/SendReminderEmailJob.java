@@ -81,7 +81,7 @@ public class SendReminderEmailJob extends ConnectionCleaningJob implements State
                 logger.info("Enter DG Reminder Email manager");
                 for(int i=0;i<reminderUsers.size();i++){
                     InternetAddress[] emailAddrs =  new InternetAddress[]{new InternetAddress(reminderUsers.get(i))};
-                    User user = UserUtils.getUserByEmail(reminderUsers.get(i));
+                    User user = UserUtils.getUserByEmailAddress(reminderUsers.get(i));
                     from = TranslatorWorker.translateText(MAIL_SENDER, user.getRegisterLanguage().getCode(), 3L);
                     text = TranslatorWorker.translateText(MAIL_SUBJECT, user.getRegisterLanguage().getCode(), 3L);
                     subject = TranslatorWorker.translateText(MAIL_BODY, user.getRegisterLanguage().getCode(), 3L);

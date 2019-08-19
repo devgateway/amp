@@ -138,7 +138,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put("/Activity Form/Cross Cutting Issues/Minorities", ColumnConstants.MINORITIES);
         put("/Activity Form/Identification/A.C. Chapter", ColumnConstants.AC_CHAPTER);
         put("/Activity Form/Identification/Accession Instrument", ColumnConstants.ACCESSION_INSTRUMENT);
-        put("/Activity Form/Identification/Activity Budget", ColumnConstants.ON_OFF_TREASURY_BUDGET);
+        put("/Activity Form/Identification/Activity Budget", ColumnConstants.ACTIVITY_BUDGET);
         put("/Activity Form/Identification/Activity Status", ColumnConstants.STATUS);
         put("/Activity Form/Identification/Audit System", ColumnConstants.AUDIT_SYSTEM);
         put("/Activity Form/Identification/Budget Code Project ID", ColumnConstants.BUDGET_CODE_PROJECT_ID); 
@@ -236,6 +236,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put(ColumnConstants.DONOR_COMMITMENT_DATE, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
         put(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, ColumnConstants.RESPONSIBLE_ORGANIZATION);
+        put(ColumnConstants.RESPONSIBLE_ORGANIZATION_TYPE, ColumnConstants.RESPONSIBLE_ORGANIZATION);
         put(ColumnConstants.EXECUTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.EXECUTING_AGENCY);
         put(ColumnConstants.EXECUTING_AGENCY_GROUPS, ColumnConstants.EXECUTING_AGENCY);
         put(ColumnConstants.EXECUTING_AGENCY_TYPE, ColumnConstants.EXECUTING_AGENCY);
@@ -244,9 +245,11 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put(ColumnConstants.IMPLEMENTING_AGENCY_TYPE, ColumnConstants.IMPLEMENTING_AGENCY);
         put(ColumnConstants.BENEFICIARY_AGENCY__DEPARTMENT_DIVISION, ColumnConstants.BENEFICIARY_AGENCY);
         put(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, ColumnConstants.BENEFICIARY_AGENCY);
+        put(ColumnConstants.BENEFICIARY_AGENCY_TYPE, ColumnConstants.BENEFICIARY_AGENCY);
         put(ColumnConstants.CONTRACTING_AGENCY_ACRONYM, ColumnConstants.CONTRACTING_AGENCY);
         put(ColumnConstants.CONTRACTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.CONTRACTING_AGENCY);
         put(ColumnConstants.CONTRACTING_AGENCY_GROUPS, ColumnConstants.CONTRACTING_AGENCY);
+        put(ColumnConstants.CONTRACTING_AGENCY_TYPE, ColumnConstants.CONTRACTING_AGENCY);
         put(ColumnConstants.SECTOR_GROUP_DEPARTMENT_DIVISION, ColumnConstants.SECTOR_GROUP);
         put(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, ColumnConstants.REGIONAL_GROUP);
         
@@ -279,12 +282,11 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
     
     @SuppressWarnings("serial")
     protected static final Map<String, String> featuresToColumnsMap = new HashMap<String, String>() {{
-        put("Computed Columns Filters", ColumnConstants.COMPUTED_YEAR);
+        put("Computed Year", ColumnConstants.COMPUTED_YEAR);
     }};
     
     @SuppressWarnings("serial")
-    protected static final Map<String, String> FIELDS_TO_COLUMNS_MAP = new HashMap<String, String>() {
-        {
+    protected static final Map<String, String> FIELDS_TO_COLUMNS_MAP = new HashMap<String, String>() {{
             put("AMP ID", ColumnConstants.AMP_ID);
             put("Activity Approved By", ColumnConstants.ACTIVITY_APPROVED_BY);
             put("Activity Created By", ColumnConstants.ACTIVITY_CREATED_BY);
@@ -294,7 +296,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Activity Updated On", ColumnConstants.ACTIVITY_UPDATED_ON);
             put("Actors", ColumnConstants.ACTORS);
             put("Age of Project (Months)", ColumnConstants.AGE_OF_PROJECT_MONTHS);
-            put("Archived", ColumnConstants.ARCHIVED);
             put("Average Size of Disbursements", ColumnConstants.AVERAGE_SIZE_OF_DISBURSEMENTS);
             put("Average Size of Projects", ColumnConstants.AVERAGE_SIZE_OF_PROJECTS);
             put("Budget Department", ColumnConstants.BUDGET_DEPARTMENT);
@@ -325,7 +326,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Line Ministry Observations Actors", ColumnConstants.LINE_MINISTRY_OBSERVATIONS_ACTORS);
             put("Line Ministry Observations Date", ColumnConstants.LINE_MINISTRY_OBSERVATIONS_DATE);
             put("Line Ministry Observations Measures", ColumnConstants.LINE_MINISTRY_OBSERVATIONS_MEASURES);
-            put("Actors", ColumnConstants.ACTORS);
             put("Measures Taken", ColumnConstants.MEASURES_TAKEN);
             put("Ministry Of Finance Contact Organization", ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_ORGANIZATION);
             put("Multi Donor", ColumnConstants.MULTI_DONOR);
@@ -334,26 +334,57 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Payment Capital - Recurrent", ColumnConstants.PAYMENT_CAPITAL___RECURRENT);
             put("Performance Alert Level", ColumnConstants.PERFORMANCE_ALERT_LEVEL);
             put("Performance Alert Type", ColumnConstants.PERFORMANCE_ALERT_TYPE);
-            put("Pledges sectors", ColumnConstants.PLEDGES_SECTORS);
+            put("Pledges Administrative Level 0", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_0);
+            put("Pledges Administrative Level 1", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1);
+            put("Pledges Administrative Level 2", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_2);
+            put("Pledges Administrative Level 3", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_3);
+            put("Pledges Administrative Level 4", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_4);
             put("Pledges Aid Modality", ColumnConstants.PLEDGES_AID_MODALITY);
             put("Pledge Contact 1 - Organization", ColumnConstants.PLEDGE_CONTACT_1___MINISTRY);
             put("Pledge Contact 2 - Organization", ColumnConstants.PLEDGE_CONTACT_2___MINISTRY);
-            put("Pledge Status", ColumnConstants.PLEDGE_STATUS);
             put("Pledges Detail Date Range", ColumnConstants.PLEDGES_DETAIL_DATE_RANGE);
             put("Pledges Detail End Date", ColumnConstants.PLEDGES_DETAIL_END_DATE);
             put("Pledges Detail Start Date", ColumnConstants.PLEDGES_DETAIL_START_DATE);
-            put("Pledges Administrative Level 3", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_3);
             put("Pledges Donor Group", ColumnConstants.PLEDGES_DONOR_GROUP);
+            put("Pledges Donor Type", ColumnConstants.PLEDGES_DONOR_TYPE);
             put("Pledges National Plan Objectives", ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
+            put("Pledges National Plan Objectives Level 0", ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0);
+            put("Pledges National Plan Objectives Level 1", ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1);
+            put("Pledges National Plan Objectives Level 2", ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2);
+            put("Pledges National Plan Objectives Level 3", ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3);
             put("Pledges Programs", ColumnConstants.PLEDGES_PROGRAMS);
-            put("Pledges Administrative Level 1", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1);
+            put("Pledges Programs Level 0", ColumnConstants.PLEDGES_PROGRAMS_LEVEL_0);
+            put("Pledges Programs Level 1", ColumnConstants.PLEDGES_PROGRAMS_LEVEL_1);
+            put("Pledges Programs Level 2", ColumnConstants.PLEDGES_PROGRAMS_LEVEL_2);
+            put("Pledges Programs Level 3", ColumnConstants.PLEDGES_PROGRAMS_LEVEL_3);
             put("Pledges Secondary Programs", ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
-            put("Pledges Secondary Sectors", ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+            put("Pledges Secondary Programs Level 0", ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_0);
+            put("Pledges Secondary Programs Level 1", ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_1);
+            put("Pledges Secondary Programs Level 2", ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2);
+            put("Pledges Secondary Programs Level 3", ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3);
             put("Pledges Tertiary Programs", ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
+            put("Pledges Tertiary Programs Level 0", ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_0);
+            put("Pledges Tertiary Programs Level 1", ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_1);
+            put("Pledges Tertiary Programs Level 2", ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2);
+            put("Pledges Tertiary Programs Level 3", ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_3);
+            put("Pledges Sectors", ColumnConstants.PLEDGES_SECTORS);
+            put("Pledges Sectors Sub-Sectors", ColumnConstants.PLEDGES_SECTORS_SUBSECTORS);
+            put("Pledges Sectors Sub-Sub-Sectors", ColumnConstants.PLEDGES_SECTORS_SUBSUBSECTORS);
+            put("Pledges Secondary Sectors", ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+            put("Pledges Secondary Sub-Sectors", ColumnConstants.PLEDGES_SECONDARY_SUBSECTORS);
+            put("Pledges Secondary Sub-Sub-Sectors", ColumnConstants.PLEDGES_SECONDARY_SUBSUBSECTORS);
             put("Pledges Tertiary Sectors", ColumnConstants.PLEDGES_TERTIARY_SECTORS);
+            put("Pledges Tertiary Sub-Sectors", ColumnConstants.PLEDGES_TERTIARY_SUBSECTORS);
+            put("Pledges Tertiary Sub-Sub-Sectors", ColumnConstants.PLEDGES_TERTIARY_SUBSUBSECTORS);
+            put("Pledges Quaternary Sectors", ColumnConstants.PLEDGES_QUATERNARY_SECTORS);
+            put("Pledges Quaternary Sub-Sectors", ColumnConstants.PLEDGES_QUATERNARY_SUBSECTORS);
+            put("Pledges Quaternary Sub-Sub-Sectors", ColumnConstants.PLEDGES_QUATERNARY_SUBSUBSECTORS);
+            put("Pledges Quinary Sectors", ColumnConstants.PLEDGES_QUINARY_SECTORS);
+            put("Pledges Quinary Sub-Sectors", ColumnConstants.PLEDGES_QUINARY_SUBSECTORS);
+            put("Pledges Quinary Sub-Sub-Sectors", ColumnConstants.PLEDGES_QUINARY_SUBSUBSECTORS);
             put("Pledges Type Of Assistance", ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
+            put("Pledge Status", ColumnConstants.PLEDGE_STATUS);
             put("Pledges Titles", ColumnConstants.PLEDGES_TITLES);
-            put("Pledges Administrative Level 2", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_2);
             put("Primary Sector Code Official", ColumnConstants.PRIMARY_SECTOR_CODE_OFFICIAL);
             put("Project Age Ratio", ColumnConstants.PROJECT_AGE_RATIO);
             put("Project Implementation Delay", ColumnConstants.PROJECT_IMPLEMENTATION_DELAY);
@@ -380,7 +411,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
                 for (int i = 1; i <= PROGRAM_LEVEL_COUNT; i++) {
                     String level = colPrefix + i;
                     put(level, level);
-                }
             }
 
             put(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR);
@@ -393,22 +423,23 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put(ColumnConstants.FUNDING_CLOSING_DATE, ColumnConstants.FUNDING_CLOSING_DATE);
 
             putAll(getMtefColumns());
-        }
-
+        } }
+        
         private Map<String, String> getMtefColumns() {
             String regex = "^(MTEF|Real MTEF"
                     + "|" + MeasureConstants.MTEF_PROJECTIONS
                     + "|" + MeasureConstants.PIPELINE_MTEF_PROJECTIONS
                     + "|" + MeasureConstants.PROJECTION_MTEF_PROJECTIONS
                     + ").*$";
-
+    
             Map<String, String> mtefColumns = AdvancedReportUtil.getColumnList().stream()
                     .filter(col -> col.getColumnName().matches(regex))
                     .collect(Collectors.toMap(AmpColumns::getColumnName, AmpColumns::getColumnName));
-
+    
             return mtefColumns;
         }
     };
+    
     
     protected static final List<String> visibleByDefault = Arrays.asList(
             ColumnConstants.ACTIVITY_COUNT,

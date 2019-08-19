@@ -21,9 +21,17 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_pledges_donor_group CASCADE;
 			   	CREATE OR REPLACE VIEW v_pledges_donor_group AS
-			   		SELECT f.id AS pledge_id, b.org_grp_name AS org_grp_name, b.amp_org_grp_id AS org_grp_id
-			   			FROM amp_funding_pledges f
-			   				JOIN amp_org_group b ON f.amp_org_grp_id = b.amp_org_grp_id;
+			   	    SELECT 
+                        afp.id AS pledge_id, 
+                        v.org_grp_name,
+                        COALESCE(v.org_grp_id, -999999999) AS org_grp_id
+                    FROM amp_funding_pledges afp
+                    LEFT JOIN (
+				   		SELECT f.id AS pledge_id, b.org_grp_name AS org_grp_name, b.amp_org_grp_id AS org_grp_id
+				   			FROM amp_funding_pledges f
+				   				JOIN amp_org_group b ON f.amp_org_grp_id = b.amp_org_grp_id
+                    ) v
+                    ON afp.id = v.pledge_id;
         	</lang>
 		</script>
 	</apply>

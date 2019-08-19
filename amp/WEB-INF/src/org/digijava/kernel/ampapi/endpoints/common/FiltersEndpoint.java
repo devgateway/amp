@@ -26,8 +26,10 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
+import org.digijava.kernel.ampapi.endpoints.filters.FilterList;
 import org.digijava.kernel.ampapi.endpoints.common.model.FilterDescriptor;
 import org.digijava.kernel.ampapi.endpoints.common.model.Location;
 import org.digijava.kernel.ampapi.endpoints.common.model.Org;
@@ -37,6 +39,7 @@ import org.digijava.kernel.ampapi.endpoints.common.model.YearRange;
 import org.digijava.kernel.ampapi.endpoints.dto.FilterValue;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersBuilder;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersManager;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -110,9 +113,9 @@ public class FiltersEndpoint implements AmpEndpoint {
         FilterDescriptor as = new FilterDescriptor();
 
         List<FilterValue> activityStatus = new ArrayList<FilterValue>();
-        for (String key : AmpARFilter.activityApprovalStatus.keySet()) {
+        for (String key : AmpARFilter.VALIDATION_STATUS.keySet()) {
             FilterValue sjb = new FilterValue();
-            sjb.setId(AmpARFilter.activityApprovalStatus.get(key));
+            sjb.setId(AmpARFilter.VALIDATION_STATUS.get(key));
             sjb.setName(TranslatorWorker.translateText(key));
             activityStatus.add(sjb);
         }
@@ -351,6 +354,8 @@ public class FiltersEndpoint implements AmpEndpoint {
         return orgs;
     }
 
+
+
     @GET
     @Path("/org-roles")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -422,11 +427,11 @@ public class FiltersEndpoint implements AmpEndpoint {
     @GET
     @Path("/activityBudget/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.ON_OFF_TREASURY_BUDGET, columns = ColumnConstants.ON_OFF_TREASURY_BUDGET,
+    @ApiMethod(ui = true, id = FiltersConstants.ACTIVITY_BUDGET, columns = ColumnConstants.ACTIVITY_BUDGET,
             name="Activity Budget", tab=EPConstants.TAB_FINANCIALS)
     @ApiOperation("Return Activity Budget")
     public FilterDescriptor getActivityBudget() {
-        return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.ON_OFF_TREASURY_BUDGET);
+        return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.ACTIVITY_BUDGET);
     }   
 
     @GET
@@ -521,6 +526,7 @@ public class FiltersEndpoint implements AmpEndpoint {
         }
         //reorder because after we get the translated name we lose ordering
         fi = orderByProperty (fi,NAME_PROPERTY);
+        fi.add(new FilterValue(ColumnReportData.UNALLOCATED_ID, FiltersConstants.UNDEFINED_NAME));
         return fi;
         
     }
@@ -533,6 +539,19 @@ public class FiltersEndpoint implements AmpEndpoint {
     @ApiOperation("Return locations")
     public Location getLocations() {
         return QueryUtil.getLocationsForFilter();
+    }
+    
+    /**
+     * List the locations tree
+     *
+     * @return tree definitions (filter types) and the tree structure of the locations
+     */
+    @GET
+    @Path("/locationlist")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = "LocationList", name = "LocationList", tab = EPConstants.TAB_LOCATIONS)
+    public FilterList getLocationsList() {
+        return FiltersManager.getInstance().getLocationFilterList();
     }
     
     @GET

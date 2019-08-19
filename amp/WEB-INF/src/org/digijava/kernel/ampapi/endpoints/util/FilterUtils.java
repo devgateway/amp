@@ -59,8 +59,9 @@ public class FilterUtils {
 
         mapSimpleColumn(FiltersConstants.ACTIVITY_ID, ColumnConstants.ACTIVITY_ID);
         mapSimpleColumn(FiltersConstants.APPROVAL_STATUS, ColumnConstants.APPROVAL_STATUS);
-        mapSimpleColumn(FiltersConstants.ARCHIVED, ColumnConstants.ARCHIVED);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY, ColumnConstants.BENEFICIARY_AGENCY);
+        mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_GROUP, ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_TYPE, ColumnConstants.BENEFICIARY_AGENCY_TYPE);
         mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_4, ColumnConstants.LOCATION_ADM_LEVEL_4);
         mapSimpleColumn(FiltersConstants.COMPONENT_FUNDING_ORGANIZATION,
                 ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
@@ -69,7 +70,8 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.COMPUTED_YEAR, ColumnConstants.COMPUTED_YEAR);
         mapSimpleColumn(FiltersConstants.CONCESSIONALITY_LEVEL, ColumnConstants.CONCESSIONALITY_LEVEL);
         mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY);
-        mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_GROUPS, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_GROUP, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_TYPE, ColumnConstants.CONTRACTING_AGENCY_TYPE);
         mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_0, ColumnConstants.LOCATION_ADM_LEVEL_0);
         mapSimpleColumn(FiltersConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.DISASTER_RESPONSE_MARKER);
         mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_3, ColumnConstants.LOCATION_ADM_LEVEL_3);
@@ -77,15 +79,22 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.DONOR_GROUP, ColumnConstants.DONOR_GROUP);
         mapSimpleColumn(FiltersConstants.DONOR_TYPE, ColumnConstants.DONOR_TYPE);
         mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY, ColumnConstants.EXECUTING_AGENCY);
+        mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY_GROUP, ColumnConstants.EXECUTING_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY_TYPE, ColumnConstants.EXECUTING_AGENCY_TYPE);
         mapSimpleColumn(FiltersConstants.EXPENDITURE_CLASS, ColumnConstants.EXPENDITURE_CLASS);
         mapSimpleColumn(FiltersConstants.FINANCING_INSTRUMENT, ColumnConstants.FINANCING_INSTRUMENT);
         mapSimpleColumn(FiltersConstants.FUNDING_STATUS, ColumnConstants.FUNDING_STATUS);
         mapSimpleColumn(FiltersConstants.GOVERNMENT_APPROVAL_PROCEDURES, ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
         mapSimpleColumn(FiltersConstants.HUMANITARIAN_AID, ColumnConstants.HUMANITARIAN_AID);
         mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY, ColumnConstants.IMPLEMENTING_AGENCY);
+        mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY_GROUP, ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY_TYPE, ColumnConstants.IMPLEMENTING_AGENCY_TYPE);
         mapSimpleColumn(FiltersConstants.JOINT_CRITERIA, ColumnConstants.JOINT_CRITERIA);
         mapSimpleColumn(FiltersConstants.LOCATION, ColumnConstants.LOCATION);
+        mapSimpleColumn(FiltersConstants.RAW_LOCATION, ColumnConstants.RAW_LOCATION);
         mapSimpleColumn(FiltersConstants.MODE_OF_PAYMENT, ColumnConstants.MODE_OF_PAYMENT);
+        mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0,
+                ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
@@ -94,20 +103,91 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8);
-        mapSimpleColumn(FiltersConstants.ON_OFF_TREASURY_BUDGET, ColumnConstants.ON_OFF_TREASURY_BUDGET);
+        mapSimpleColumn(FiltersConstants.ACTIVITY_BUDGET, ColumnConstants.ACTIVITY_BUDGET);
         mapSimpleColumn(FiltersConstants.PERFORMANCE_ALERT_LEVEL, ColumnConstants.PERFORMANCE_ALERT_LEVEL);
         mapSimpleColumn(FiltersConstants.PERFORMANCE_ALERT_TYPE, ColumnConstants.PERFORMANCE_ALERT_TYPE);
         mapSimpleColumn(FiltersConstants.PLEDGES_AID_MODALITY, ColumnConstants.PLEDGES_AID_MODALITY);
+        mapSimpleColumn(FiltersConstants.PLEDGES_ADM_LEVEL_0, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_ADM_LEVEL_1, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1);
+        mapSimpleColumn(FiltersConstants.PLEDGES_ADM_LEVEL_2, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_2);
+        mapSimpleColumn(FiltersConstants.PLEDGES_ADM_LEVEL_3, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_3);
+        mapSimpleColumn(FiltersConstants.PLEDGES_ADM_LEVEL_4, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_4);
+        mapDateColumn(FiltersConstants.PLEDGES_DETAIL_START_DATE, ColumnConstants.PLEDGES_DETAIL_START_DATE);
+        mapDateColumn(FiltersConstants.PLEDGES_DETAIL_END_DATE, ColumnConstants.PLEDGES_DETAIL_END_DATE);
         mapSimpleColumn(FiltersConstants.PLEDGES_DONOR_GROUP, ColumnConstants.PLEDGES_DONOR_GROUP);
-        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
+        mapSimpleColumn(FiltersConstants.PLEDGES_DONOR_TYPE, ColumnConstants.PLEDGES_DONOR_TYPE);
+        
+        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES,
+                ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
+        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0,
+                ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1,
+                ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1);
+        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2,
+                ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2);
+        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3,
+                ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3);
+        
         mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS, ColumnConstants.PLEDGES_PROGRAMS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS_LEVEL_0, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS_LEVEL_1, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_1);
+        mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS_LEVEL_2, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_2);
+        mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS_LEVEL_3, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_3);
+        
         mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
-        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_SECTORS, ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_0,
+                ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_1,
+                ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_1);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2,
+                ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3,
+                ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3);
+        
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_0,
+                ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_1,
+                ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_1);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2,
+                ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_3,
+                ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_3);
+        
         mapSimpleColumn(FiltersConstants.PLEDGES_SECTORS, ColumnConstants.PLEDGES_SECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECTORS_SUB_SECTORS, ColumnConstants.PLEDGES_SECTORS_SUBSECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECTORS_SUB_SUB_SECTORS,
+                ColumnConstants.PLEDGES_SECTORS_SUBSUBSECTORS);
+        
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_SECTORS, ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_SECTORS_SUB_SECTORS,
+                ColumnConstants.PLEDGES_SECONDARY_SUBSECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_SECTORS_SUB_SUB_SECTORS,
+                ColumnConstants.PLEDGES_SECONDARY_SUBSUBSECTORS);
+        
         mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS, ColumnConstants.PLEDGES_TERTIARY_SECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS_SUB_SECTORS,
+                ColumnConstants.PLEDGES_TERTIARY_SUBSECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS_SUB_SUB_SECTORS,
+                ColumnConstants.PLEDGES_TERTIARY_SUBSUBSECTORS);
+        
         mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SECTORS, ColumnConstants.PLEDGES_QUATERNARY_SECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SECTORS_SUB_SECTORS,
+                ColumnConstants.PLEDGES_QUATERNARY_SUBSECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SECTORS_SUB_SUB_SECTORS,
+                ColumnConstants.PLEDGES_QUATERNARY_SUBSUBSECTORS);
+        
         mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SECTORS, ColumnConstants.PLEDGES_QUINARY_SECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SECTORS_SUB_SECTORS,
+                ColumnConstants.PLEDGES_QUINARY_SUBSECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SECTORS_SUB_SUB_SECTORS,
+                ColumnConstants.PLEDGES_QUINARY_SUBSUBSECTORS);
+        
+        mapSimpleColumn(FiltersConstants.PLEDGES_STATUS, ColumnConstants.PLEDGE_STATUS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
         mapSimpleColumn(FiltersConstants.PLEDGES_TITLES, ColumnConstants.PLEDGES_TITLES);
+    
+        mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_0, ColumnConstants.PRIMARY_PROGRAM_LEVEL_0);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_1, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_2, ColumnConstants.PRIMARY_PROGRAM_LEVEL_2);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_3, ColumnConstants.PRIMARY_PROGRAM_LEVEL_3);
@@ -123,6 +203,10 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PROJECT_IMPLEMENTING_UNIT, ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
         mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_1, ColumnConstants.LOCATION_ADM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
+        mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION_GROUP,
+                ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
+        mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION_TYPE, ColumnConstants.RESPONSIBLE_ORGANIZATION_TYPE);
+        mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_0, ColumnConstants.SECONDARY_PROGRAM_LEVEL_0);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_1, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_2, ColumnConstants.SECONDARY_PROGRAM_LEVEL_2);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_3, ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
@@ -137,6 +221,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.SECTOR_TAG, ColumnConstants.SECTOR_TAG);
         mapSimpleColumn(FiltersConstants.STATUS, ColumnConstants.STATUS);
         mapSimpleColumn(FiltersConstants.TEAM, ColumnConstants.TEAM);
+        mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_0, ColumnConstants.TERTIARY_PROGRAM_LEVEL_0);
         mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_1, ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_2, ColumnConstants.TERTIARY_PROGRAM_LEVEL_2);
         mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_3, ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
@@ -172,6 +257,10 @@ public class FilterUtils {
 
     public String idFromColumnName(String columnName) {
         return columnNameToId.get(columnName);
+    }
+    
+    public String simpleColumnNameFromFilterId(String filterId) {
+        return idToSimpleColumn.get(filterId);
     }
 
     private static AmpReportFilters getApiDateFilters(Map<String, Object> filter, AmpReportFilters filterRules) {
@@ -370,7 +459,7 @@ public class FilterUtils {
      * @return
      */
     public static String getApprovalStatusByNumber(Integer status){
-        for (Entry<String, Integer> entry : AmpARFilter.activityApprovalStatus.entrySet()) {
+        for (Entry<String, Integer> entry : AmpARFilter.VALIDATION_STATUS.entrySet()) {
             if (entry.getValue().equals(status)) {
                 return entry.getKey();
             }
@@ -391,7 +480,6 @@ public class FilterUtils {
      * filter in Gregorian CAL 2009: "01/01/2009 to 31/12/2009" in ETH Calendar
      * equals to "11/09/2016 to 10/09/2017" in GREG
      *
-     * @param formParams
      * @param spec
      */
     public static void updateAllDateFilters(ReportSpecificationImpl spec) {

@@ -198,11 +198,16 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.LOCATION_ADM_LEVEL_3, AmpCategoryValueLocations.class, "locationSelected", false);
         addFilter(ColumnConstants.LOCATION_ADM_LEVEL_4, AmpCategoryValueLocations.class, "locationSelected", false);
 
-        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_0, AmpCategoryValueLocations.class, "locationSelected", true);
-        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1, AmpCategoryValueLocations.class, "locationSelected", false);
-        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_2, AmpCategoryValueLocations.class, "locationSelected", false);
-        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_3, AmpCategoryValueLocations.class, "locationSelected", false);
-        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_4, AmpCategoryValueLocations.class, "locationSelected", false);
+        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_0, AmpCategoryValueLocations.class,
+                "locationSelected", true);
+        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1, AmpCategoryValueLocations.class,
+                "locationSelected", false);
+        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_2, AmpCategoryValueLocations.class,
+                "locationSelected", false);
+        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_3, AmpCategoryValueLocations.class,
+                "locationSelected", false);
+        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_4, AmpCategoryValueLocations.class,
+                "locationSelected", false);
         
         // Financial section.
         addFilter(ColumnConstants.FINANCING_INSTRUMENT, AmpCategoryValue.class, "financingInstruments", true);

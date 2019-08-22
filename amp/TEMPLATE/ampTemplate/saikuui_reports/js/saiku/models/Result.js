@@ -32,7 +32,9 @@ var Result = Backbone.Model.extend({
     	Saiku.logger.log("Result.parse");
         // Show the UI if hidden
         this.query.workspace.unblock();
-        this.query.workspace.processing.hide();
+        if (this.query.workspace.processing) {
+            this.query.workspace.processing.hide();
+        }
         this.result = response;
         if (!response.error) {
             this.query.model = _.extend({}, response.query);

@@ -52,9 +52,12 @@ public class ActivityErrors {
             "Implementation level must be specified");
     public static final ApiErrorMessage DOESNT_MATCH_IMPLEMENTATION_LEVEL = new ApiErrorMessage(34,
             "Doesn't match with implementation level");
+    public static final ApiErrorMessage LOCALE_INVALID =
+            new ApiErrorMessage(35, "Invalid translation language specified");
     
     public static final String ADD_ACTIVITY_NOT_ALLOWED = "Adding activity is not allowed";
     public static final String EDIT_ACTIVITY_NOT_ALLOWED = "No right to edit this activity";
     public static final String ACTIVITY_NOT_LAST_VERSION = "Activity is not the latest version.";
     public static final String INVALID_MODIFY_BY_FIELD = "Invalid team member in modified_by field.";
+
 }

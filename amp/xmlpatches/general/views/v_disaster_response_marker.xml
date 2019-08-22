@@ -19,30 +19,40 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
-				DROP VIEW IF EXISTS v_disaster_response_marker;
+			    DROP VIEW IF EXISTS v_disaster_response_marker CASCADE;
 				CREATE OR REPLACE VIEW v_disaster_response_marker AS
-				  SELECT DISTINCT aav.amp_activity_id,
-					CASE
-					WHEN fd.disaster_response IS TRUE THEN 'Yes'
-					WHEN fd.disaster_response IS FALSE THEN 'No'
-					ELSE 'Undefined'
-					END AS val,
-					CASE
-					WHEN fd.disaster_response IS TRUE THEN 1
-					WHEN fd.disaster_response IS FALSE THEN 2
-					ELSE 999999999
-					END AS val_id,
-					af.type_of_assistance_category_va as terms_assist_id,
-					af.financing_instr_category_value as financing_instrument_id,
-					af.amp_donor_org_id as donor_org_id,
-					af.mode_of_payment_category_va as mode_of_payment_id,
-					af.funding_status_category_va as funding_status_id,
-					af.agreement as agreement_id,
-					af.amp_funding_id as funding_id
-				  FROM amp_activity_version aav
-					JOIN amp_funding af ON af.amp_activity_id = aav.amp_activity_id
-					JOIN amp_funding_detail fd ON fd.amp_funding_id = af.amp_funding_id AND fd.disaster_response IS NOT NULL
-				  ORDER BY aav.amp_activity_id;
+				    SELECT aav.amp_activity_id, 
+                        v.val,
+                        COALESCE(v.val_id, -999999999) AS val_id,
+                        v.financing_instrument_id,
+                        v.donor_org_id,
+                        v.mode_of_payment_id,
+                        v.funding_status_id,
+                        v.agreement_id,
+                        v.funding_id
+                    FROM amp_activity_version aav
+                    LEFT JOIN (
+					  SELECT DISTINCT aav.amp_activity_id,
+						CASE
+							WHEN fd.disaster_response IS TRUE THEN 'Yes'
+							WHEN fd.disaster_response IS FALSE THEN 'No'
+						END AS val,
+						CASE
+							WHEN fd.disaster_response IS TRUE THEN 1
+							WHEN fd.disaster_response IS FALSE THEN 2
+						END AS val_id,
+						af.type_of_assistance_category_va as terms_assist_id,
+						af.financing_instr_category_value as financing_instrument_id,
+						af.amp_donor_org_id as donor_org_id,
+						af.mode_of_payment_category_va as mode_of_payment_id,
+						af.funding_status_category_va as funding_status_id,
+						af.agreement as agreement_id,
+						af.amp_funding_id as funding_id
+					  FROM amp_activity_version aav
+						JOIN amp_funding af ON af.amp_activity_id = aav.amp_activity_id
+						JOIN amp_funding_detail fd ON fd.amp_funding_id = af.amp_funding_id
+				    ) v
+                    ON aav.amp_activity_id = v.amp_activity_id;
 			]]></lang>
 		</script>
 	</apply>

@@ -66,7 +66,7 @@ public class ViewEditUser extends Action {
         if (userId != null) {
             user = UserUtils.getUser(userId);
         } else if (uForm.getEmail() != null) {
-            user = UserUtils.getUserByEmail(uForm.getEmail());
+            user = UserUtils.getUserByEmailAddress(uForm.getEmail());
         }else{
             return mapping.findForward("forward");
         }

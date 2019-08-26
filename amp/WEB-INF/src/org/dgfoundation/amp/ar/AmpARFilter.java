@@ -127,14 +127,15 @@ public class AmpARFilter extends PropertyListable {
     public static final Set<String> SETTINGS_PROPERTIES = new HashSet<>(Arrays.asList("amountinthousand",
             "calendarType", "customusegroupings", "decimalseparator", "groupingsize", "maximumFractionDigits",
             "renderEndYear", "renderStartYear", "sortByAsc", "sortBy"));
-
-    public final static Map<String, Integer> activityApprovalStatus = Collections.unmodifiableMap(new HashMap<String, Integer>(){{
-        this.put("Existing Unvalidated", 0);
-        this.put("New Draft", 1);
-        this.put("New Unvalidated", 2);
-        this.put("Existing Draft", 3);
-        this.put("Validated Activities", 4);
-    }});
+    
+    public static final Map<String, Integer> VALIDATION_STATUS = Collections.unmodifiableMap(
+            new HashMap<String, Integer>() {{
+                this.put("Existing Unvalidated", 0);
+                this.put("New Draft", 1);
+                this.put("New Unvalidated", 2);
+                this.put("Existing Draft", 3);
+                this.put("Validated Activities", 4);
+            }});
 
     /**
      * list of all legal values of AmpActivity::"approvalStatus". DO NOT CHANGE, make a different set with a subset of these if you need the subset only

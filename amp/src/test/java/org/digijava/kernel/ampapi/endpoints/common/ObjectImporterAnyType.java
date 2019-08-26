@@ -15,9 +15,9 @@ import org.digijava.kernel.request.TLSUtils;
 public class ObjectImporterAnyType extends ObjectImporter<Object> {
 
     public ObjectImporterAnyType(InputValidatorProcessor formatValidator,
-            InputValidatorProcessor businessRulesValidator, TranslationSettings plainEnglish, APIField apiField,
+            TranslationSettings plainEnglish, APIField apiField,
             TestValueConverter valueConverter) {
-        super(formatValidator, businessRulesValidator, plainEnglish, apiField, TLSUtils.getSite(), valueConverter);
+        super(formatValidator, plainEnglish, apiField, TLSUtils.getSite(), valueConverter);
     }
 
     @Override

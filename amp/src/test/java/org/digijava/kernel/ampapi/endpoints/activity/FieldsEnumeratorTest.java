@@ -52,6 +52,7 @@ import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.services.sync.model.SyncConstants;
 import org.digijava.kernel.validators.ValidatorUtil;
+import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
@@ -484,7 +485,7 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "8", validators = @Validators(unique = "uniqueFmName"), uniqueConstraint = true)
         private Collection<Integer> field8;
 
-        @Interchangeable(fieldTitle = "5", validators = @Validators(treeCollection = "treeCollectionFmName"))
+        @Interchangeable(fieldTitle = "5", interValidators = @InterchangeableValidator(TreeCollectionValidator.class))
         private Collection<ObjWithId> field5;
 
         @Interchangeable(fieldTitle = "6",
@@ -875,7 +876,7 @@ public class FieldsEnumeratorTest {
         assertThat(apiField.getChildren(), hasItem(allOf(
                 hasProperty("fieldName", equalTo("primary_sectors")),
                 hasProperty("uniqueConstraint", nullValue()),
-                hasProperty("treeCollectionConstraint", nullValue())
+                hasProperty("treeCollectionConstraint", equalTo(false))
         )));
     }
 

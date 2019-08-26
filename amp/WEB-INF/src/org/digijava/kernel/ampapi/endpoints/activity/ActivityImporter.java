@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,7 +39,6 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
-import org.digijava.kernel.ampapi.endpoints.resource.ResourceService;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.exception.ActivityLockNotGrantedException;
 import org.digijava.kernel.ampapi.exception.ImportFailedException;
@@ -51,6 +51,9 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validation.TranslatedValueContext;
+import org.digijava.kernel.validators.activity.AgreementCodeValidator;
+import org.digijava.kernel.validators.activity.PrivateResourceValidator;
+import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -66,6 +69,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -110,11 +114,8 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     private TeamMemberService teamMemberService;
     private PersistenceTransactionManager persistenceTransactionManager;
 
-    private ResourceService resourceService = new ResourceService();
-
     public ActivityImporter(APIField apiField, ActivityImportRules rules) {
-        super(new InputValidatorProcessor(InputValidatorProcessor.getActivityFormatValidators()),
-                new InputValidatorProcessor(InputValidatorProcessor.getActivityBusinessRulesValidators()),
+        super(new InputValidatorProcessor(InputValidatorProcessor.getFormatValidators()),
                 apiField, TLSUtils.getSite());
         setJsonErrorMapper(new ActivityErrorsMapper());
         this.rules = rules;
@@ -123,6 +124,20 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         this.fmService = new AMPFMService();
         this.teamMemberService = new AMPTeamMemberService();
         this.persistenceTransactionManager = new DBPersistenceTransactionManager();
+    }
+    
+    /**
+     * Returns an executor that is able to validate in the presence of db & services.
+     */
+    @Override
+    protected Function<Supplier<Set<ConstraintViolation>>, Set<ConstraintViolation>> getExecutor() {
+        PrivateResourceValidator.AmpResourceDAO resourceDAO = new PrivateResourceValidator.AmpResourceDAO();
+        UniqueActivityTitleValidator.DatabaseBackedEnvironment dbEnv =
+                new UniqueActivityTitleValidator.DatabaseBackedEnvironment();
+        return supplier -> PrivateResourceValidator.withDao(resourceDAO,
+                () -> UniqueActivityTitleValidator.withDao(dbEnv,
+                        () -> AgreementCodeValidator.withCounter(DbUtil::countAgreementsByCode,
+                                supplier)));
     }
 
     private void init(Map<String, Object> newJson, boolean update, String endpointContextPath, String sourceURL) {
@@ -744,10 +759,6 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         this.downgradedToDraftSave = true;
     }
 
-    public ResourceService getResourceService() {
-        return this.resourceService;
-    }
-    
     public void setActivityService(ActivityService activityService) {
         this.activityService = activityService;
     }

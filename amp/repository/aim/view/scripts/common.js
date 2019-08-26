@@ -99,40 +99,44 @@
  }
 
  function toggleChildrenVisibility(callerId) {
- 		caller = document.getElementById(callerId);
- 		inputs = caller.getElementsByTagName('input');
- 		for(i=1 ; i< inputs.length; i++){
- 			if(inputs[i].type!="checkbox") continue;
- 			if(inputs[i].id.indexOf("moduleEdit")==0 ||
- 			inputs[i].id.indexOf("featureEdit")==0 ||
- 			inputs[i].id.indexOf("fieldEdit")==0 ||
- 			inputs[i].id.indexOf("moduleMandatory")==0 ||
- 			inputs[i].id.indexOf("featureMandatory")==0 ||
- 			inputs[i].id.indexOf("fieldMandatory")==0) continue;
- 			inputs[i].checked=inputs[0].checked;
- 		}
+     caller = document.getElementById(callerId);
+     inputs = caller.getElementsByTagName('input');
+     for (i = 1; i < inputs.length; i++) {
+         if (inputs[i].type == "checkbox") {
+             if (inputs[0].checked || inputs[i].id.indexOf("moduleEdit") == 0 ||
+                 inputs[i].id.indexOf("featureEdit") == 0 ||
+                 inputs[i].id.indexOf("fieldEdit") == 0 ||
+                 inputs[i].id.indexOf("moduleMandatory") == 0 ||
+                 inputs[i].id.indexOf("featureMandatory") == 0 ||
+                 inputs[i].id.indexOf("fieldMandatory") == 0) continue;
+             inputs[i].checked = false;
+         }
+     }
 
- 		if (inputs[0].checked == true) {
-            toggleParentVisibility(caller);
-		}
-
+     if (inputs[0].checked == true) {
+         toggleParentVisibility(caller);
+     }
  }
 
  function toggleParentVisibility(item) {
-     hasParent = true;
+     hasParentCheckbox = true;
      if (item.parentElement.getAttribute('name') == 'dhtmltreeArray') {
          parent = item.parentElement.parentElement.parentElement;
-         hasParent = false;
+         hasParentCheckbox = false;
      } else {
          parent = item.parentElement.parentElement;
      }
 
-     var checkboxItem = parent.getElementsByTagName('input')[0];
-     checkboxItem.checked = true;
+     if (parent) {
+         if (parent.getElementsByTagName('input')) {
+             var checkboxItem = parent.getElementsByTagName('input')[0];
+             checkboxItem.checked = true;
+         }
 
-     if (hasParent) {
-         toggleParentVisibility(parent);
-     }
+         if (parent && hasParentCheckbox) {
+             toggleParentVisibility(parent);
+         }
+ 	}
  }
 
  function toggleParentVisibilityOfTheField(itemId) {

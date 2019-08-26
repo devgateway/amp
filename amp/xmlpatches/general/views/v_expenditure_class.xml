@@ -19,22 +19,36 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
-				DROP VIEW IF EXISTS v_expenditure_class;
+			    DROP VIEW IF EXISTS v_expenditure_class CASCADE;
 				CREATE OR REPLACE VIEW v_expenditure_class AS
-				  SELECT DISTINCT
-					af.amp_activity_id,
-					COALESCE(acv.category_value, 'Expenditure Class Unallocated') AS name,
-					COALESCE(acv.id, 0) AS id,
-					af.type_of_assistance_category_va as terms_assist_id,
-					af.financing_instr_category_value as financing_instrument_id,
-					af.amp_donor_org_id as donor_org_id,
-					af.mode_of_payment_category_va as mode_of_payment_id,
-					af.funding_status_category_va as funding_status_id,
-					af.agreement as agreement_id,
-					af.amp_funding_id as funding_id
-				  FROM amp_funding af
-					JOIN amp_funding_detail afd ON afd.amp_funding_id = af.amp_funding_id
-					LEFT JOIN amp_category_value acv ON acv.id = afd.expenditure_class;
+				  SELECT aav.amp_activity_id,
+				    v.name,
+                    COALESCE(v.id, -999999999) AS id,
+                    v.terms_assist_id,
+                    v.financing_instrument_id,
+                    v.donor_org_id,
+                    v.mode_of_payment_id,
+                    v.funding_status_id,
+                    v.agreement_id,
+                    v.funding_id
+                  FROM amp_activity_version aav
+                  LEFT JOIN (
+					  SELECT DISTINCT
+						af.amp_activity_id,
+						acv.category_value AS name,
+						acv.id,
+						af.type_of_assistance_category_va as terms_assist_id,
+						af.financing_instr_category_value as financing_instrument_id,
+						af.amp_donor_org_id as donor_org_id,
+						af.mode_of_payment_category_va as mode_of_payment_id,
+						af.funding_status_category_va as funding_status_id,
+						af.agreement as agreement_id,
+						af.amp_funding_id as funding_id
+					  FROM amp_funding af
+						JOIN amp_funding_detail afd ON afd.amp_funding_id = af.amp_funding_id
+						LEFT JOIN amp_category_value acv ON acv.id = afd.expenditure_class
+				  ) v
+				  ON aav.amp_activity_id = v.amp_activity_id;
 			]]></lang>
 		</script>
 	</apply>

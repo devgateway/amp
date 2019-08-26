@@ -53,12 +53,15 @@ public class OrganisationUtil {
     /**
      * @return a list of role codes (e.g. 'BA', 'DN') that are enabled in Feature Manager
      */
-    public static final List<String> getVisibleRoles() {
+    public static final List<String> getVisibleRoleCodes() {
         Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
         List<String> roles = new ArrayList<String>();
-        for (Entry<String, String> roleColumn : ROLE_CODE_TO_COLUMN_MAP.entrySet()) 
-            if (visibleColumns.contains(roleColumn.getValue()))
+        for (Entry<String, String> roleColumn : ROLE_CODE_TO_COLUMN_MAP.entrySet()) {
+            if (visibleColumns.contains(roleColumn.getValue())) {
                 roles.add(roleColumn.getKey());
+            }
+        }
+        
         return roles;
     }
     

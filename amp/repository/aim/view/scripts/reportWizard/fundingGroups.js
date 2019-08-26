@@ -77,7 +77,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 ,'Tertiary Sector Sub-Sub-Sector'
                 ,'Government Approval Procedures'
                 ,'Joint Criteria'
-                , 'On/Off/Treasury Budget'
+                , 'Activity Budget'
                 , 'Multi Donor'
                 , 'Capital Expenditure'
                 , 'Sector Tag'

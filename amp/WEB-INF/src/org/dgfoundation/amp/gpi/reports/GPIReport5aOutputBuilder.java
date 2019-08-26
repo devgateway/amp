@@ -152,7 +152,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
                 Set<Integer> concessional = new HashSet<>();
                 for (ReportArea budgetArea : reportArea.getChildren()) {
                     ReportCell rc = budgetArea.getContents()
-                            .get(headersMap.get(ColumnConstants.ON_OFF_TREASURY_BUDGET));
+                            .get(headersMap.get(ColumnConstants.ACTIVITY_BUDGET));
                     if (String.valueOf(rc.value).equals(ACTIVITY_BUDGET_ON)) {
                         concessional.add(1);
                     } else if (String.valueOf(rc.value).equals("Off Budget")) {

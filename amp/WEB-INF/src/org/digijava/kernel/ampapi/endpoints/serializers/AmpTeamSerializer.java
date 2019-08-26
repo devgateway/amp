@@ -21,6 +21,7 @@ import io.swagger.models.properties.UntypedProperty;
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
+import org.dgfoundation.amp.reports.converters.AmpARFilterConverter;
 import org.digijava.kernel.ampapi.swagger.converters.ModelDescriber;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.module.aim.ar.util.FilterUtil;
@@ -80,24 +81,33 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> implements Mod
             AmpARFilter arFilter = FilterUtil.buildFilterFromSource(ampTeam);
             Map<String, Object> filters = new TreeMap<String, Object>();
             for (AmpTeamFilterData filter : ampTeam.getFilterDataSet()) {
-                if (!AmpARFilter.SETTINGS_PROPERTIES.contains(filter.getPropertyName()) 
+                if (!AmpARFilter.SETTINGS_PROPERTIES.contains(filter.getPropertyName())
                         && StringUtils.isNotBlank(filter.getValue())) {
                     Object filterValue = getFilterValue(filter, filters.get(filter.getPropertyName()), arFilter);
                     filters.put(filter.getPropertyName(), filterValue);
                 }
             }
             writeField("workspace-filters", filters);
+            AmpARFilterConverter arFilterTranslator = new AmpARFilterConverter(arFilter);
+            writeField("workspace-filters-widget-format", arFilterTranslator.buildFilters());
         }
     }
     
     private Object getFilterValue(AmpTeamFilterData filter, Object existing, AmpARFilter arFilter) throws IOException {
         try {
-            Class<?> clazz = Class.forName(filter.getPropertyClassName());
+            Class<?> clazz = Class.forName(filter.getPropertyClassName());            
             if (Collection.class.isAssignableFrom(clazz)) {
-                Class<? extends Collection<Long>> collectionClass = (Class<Collection<Long>>) clazz;
-                Collection<Long> set = existing == null ? collectionClass.newInstance() : (Collection) existing;
-                set.add(Long.valueOf(filter.getValue()));
-                return set;
+                if (AmpARFilter.UNDEFINED_OPTIONS.equals(filter.getPropertyName())) {                    
+                    Class<? extends Collection<String>> collectionClass = (Class<Collection<String>>) clazz;
+                    Collection<String> set = existing == null ? collectionClass.newInstance() : (Collection) existing;
+                    set.add(filter.getValue());
+                    return set;                     
+                } else {
+                    Class<? extends Collection<Long>> collectionClass = (Class<Collection<Long>>) clazz;
+                    Collection<Long> set = existing == null ? collectionClass.newInstance() : (Collection) existing;
+                    set.add(Long.valueOf(filter.getValue()));
+                    return set; 
+                }              
             }
             if (AmpARFilter.DATE_PROPERTIES.contains(filter.getPropertyName())) {
                 // no dynamic dates filter conversion, just passing that config further as it is 
@@ -140,6 +150,7 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> implements Mod
         model.addProperty("workspace-prefix", new StringProperty());
         model.addProperty("organizations", new ArrayProperty(new LongProperty()));
         model.addProperty("workspace-filters", new MapProperty());
+        model.addProperty("workspace-filters-widget-format", new MapProperty());
 
         return model;
     }

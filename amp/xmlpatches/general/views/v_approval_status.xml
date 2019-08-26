@@ -30,7 +30,7 @@
 							WHEN aav.approval_status='started' THEN 4 
 							WHEN aav.approval_status='not_approved' THEN 5 
 							WHEN aav.approval_status='rejected' THEN 6 
-							ELSE 999999999 
+							ELSE -999999999 
 						END) AS approval_status,
 						aav.amp_activity_id AS act_id
 					FROM amp_activity_version aav;

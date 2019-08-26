@@ -155,12 +155,19 @@ public class ColumnReportData extends ReportData {
                 if (cc.getBehaviour().isKeepingSubreports() || (isMeasurelessReport && (!isTransactionLevel || cc.entity == schemaColumn)))
                     entitiesWithFunding.addAll(newContents.data.keySet());
             }
-            
+    
             if (keepEmptyFundingRows && catId == UNALLOCATED_ID && isTransactionLevel) {
-                HashSet<Long> keepEntities = new HashSet<Long>(getIds());
+                HashSet<Long> keepEntities = new HashSet<>(getIds());
+    
+                // get the entities that are present in other hierarchies except UNALLOCATED
+                Set<Long> allocatedEntities = wholeColumn.data.entrySet().stream()
+                        .filter(e -> !e.getValue().stream().filter(cell -> cell.undefinedCell).findAny().isPresent())
+                        .map(Map.Entry::getKey)
+                        .collect(Collectors.toSet());
                 
                 // remove the entities with funding in other hierarchies except UNALLOCATED
-                keepEntities.removeAll(wholeColumn.data.keySet());
+                keepEntities.removeAll(allocatedEntities);
+                
                 // keep the entities with UNALLOCATED funding
                 keepEntities.addAll(entitiesWithFunding);
                 

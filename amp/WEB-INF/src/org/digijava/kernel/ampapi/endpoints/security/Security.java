@@ -133,21 +133,6 @@ public class Security implements ErrorReportingEndpoint {
     }
 
     /**
-     * THIS IS FOR DEBUG ONLY. Must be disabled on production.
-     * @param token
-     * @return
-     */
-    /*
-    @GET
-    @Path("/token")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public String echo(@QueryParam("amp_api_token") String token) {
-        token = SecurityUtil.generateToken();
-        return "Token: " + token;
-    }
-    */
-
-    /**
      * {@inheritDoc}
      */
     @Override

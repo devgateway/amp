@@ -755,7 +755,7 @@ body {background:none;}
 										</b>
 										</td>
 										<td bgcolor="#ffffff">
-										<field:display name="On/Off/Treasury Budget" feature="Budget">
+										<field:display name="Activity Budget" feature="Budget">
 											<c:choose>
 												<c:when test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
 												<digi:trn>Activity is On Budget</digi:trn>

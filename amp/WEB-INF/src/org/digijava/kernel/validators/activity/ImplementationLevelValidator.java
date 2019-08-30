@@ -82,10 +82,6 @@ public class ImplementationLevelValidator implements ConstraintValidator {
 
         for (AmpActivityLocation activityLocation : actLocs) {
 
-            if (activityLocation.getLocation() == null) {
-                continue;
-            }
-
             Long implLevelId = implLevel.getId();
 
             boolean found = activityLocation.getLocation()

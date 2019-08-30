@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolation;
@@ -60,7 +61,6 @@ public abstract class ObjectImporter<T> {
     private static final Logger logger = Logger.getLogger(ObjectImporter.class);
 
     private final InputValidatorProcessor formatValidator;
-    private final InputValidatorProcessor businessRulesValidator;
 
     protected Map<Integer, ApiErrorMessage> errors = new HashMap<>();
     protected Map<Integer, ApiErrorMessage> warnings = new HashMap<>();
@@ -79,7 +79,7 @@ public abstract class ObjectImporter<T> {
 
     private Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper = new DefaultErrorsMapper();
 
-    private ImporterInterchangeValidator importerInterchangeValidator = new ImporterInterchangeValidator(errors);
+    private ImporterInterchangeValidator importerInterchangeValidator;
 
     private List<AmpContentTranslation> translations = new ArrayList<>();
     private EditorStore editorStore = new EditorStore();
@@ -87,16 +87,14 @@ public abstract class ObjectImporter<T> {
     private TranslationContext translationContext;
     private TranslatedValueContext translatedValueContext;
 
-    public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
-            APIField apiField, Site site) {
-        this(formatValidator, businessRulesValidator, TranslationSettings.getCurrent(), apiField, site,
+    public ObjectImporter(InputValidatorProcessor formatValidator, APIField apiField, Site site) {
+        this(formatValidator, TranslationSettings.getCurrent(), apiField, site,
                 new ValueConverter());
     }
 
-    public ObjectImporter(InputValidatorProcessor formatValidator, InputValidatorProcessor businessRulesValidator,
+    public ObjectImporter(InputValidatorProcessor formatValidator,
             TranslationSettings trnSettings, APIField apiField, Site site, ValueConverter valueConverter) {
         this.formatValidator = formatValidator;
-        this.businessRulesValidator = businessRulesValidator;
         this.trnSettings = trnSettings;
         this.apiField = apiField;
         this.possibleValuesCached = new PossibleValuesCache(PossibleValuesEnumerator.INSTANCE, apiField.getChildren());
@@ -109,6 +107,17 @@ public abstract class ObjectImporter<T> {
         translationContext = new TranslationContext(trnSettings.getCurrentLangCode(), trnSettings.getDefaultLangCode(),
                 editorStore, translations, this::getEditor, this::getContentTranslation);
         translatedValueContext = new NotTranslatedValueContext(translationContext);
+
+        importerInterchangeValidator = new ImporterInterchangeValidator(errors, getExecutor());
+    }
+
+    /**
+     * Builds a function that allows to execute the a supplier in a context. Default implementation is to execute with
+     * any context.
+     */
+    protected Function<Supplier<Set<org.digijava.kernel.validation.ConstraintViolation>>,
+            Set<org.digijava.kernel.validation.ConstraintViolation>> getExecutor() {
+        return Supplier::get;
     }
 
     public void setJsonErrorMapper(Function<ConstraintViolation, JsonConstraintViolation> jsonErrorMapper) {
@@ -255,10 +264,6 @@ public abstract class ObjectImporter<T> {
                 isValidFormat = deserializeField(fieldDef, newParent, newJsonValue, currentFieldPath);
             }
 
-            if (isValidFormat) {
-                businessRulesValidator.isValid(this, newParent, newJsonParent, fieldDef, currentFieldPath);
-            }
-            
             processInterViolationsForField(fieldDef, newParent, newJsonParent, fieldPath);
         }
         return isValidFormat;

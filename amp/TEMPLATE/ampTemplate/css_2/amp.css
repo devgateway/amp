@@ -1428,3 +1428,8 @@ div.footer {
     padding: 2px;
     width: 50%;
 }
+
+.loading-spinner{
+	display:block;
+    margin:auto;
+}

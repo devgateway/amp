@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../doc/xmlpatcher.xsd ">
 	<jira>AMP-14167</jira>
 	<keyword>Views</keyword>
 	<author>Alexandru Artimon</author>
@@ -21,13 +21,23 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_primaryprogram_level_7;
 				CREATE OR REPLACE VIEW v_primaryprogram_level_7 AS
-					SELECT a.amp_activity_id, COALESCE(level.name, '#') AS name, apl.id7 AS amp_program_id, SUM(a.program_percentage) as percentage, COUNT(*) - COUNT(a.program_percentage) AS cnt_nulls
-						FROM amp_activity_program a	
-							JOIN ni_all_programs_with_levels apl ON a.amp_program_id = apl.amp_theme_id
-							LEFT JOIN amp_theme level ON level.amp_theme_id = apl.id7
-							JOIN amp_program_settings aps ON aps.amp_program_settings_id = a.program_setting
-   						WHERE aps.name = 'Primary Program'
-					GROUP BY a.amp_activity_id, apl.id7, level.amp_theme_id;
+					SELECT
+						aav.amp_activity_id,
+						v.name,
+						COALESCE(v.amp_program_id, -999999999) AS amp_program_id,
+						v.percentage,
+						COALESCE(v.cnt_nulls, 0) AS cnt_nulls
+					FROM amp_activity_version aav
+					LEFT JOIN (
+						SELECT a.amp_activity_id, COALESCE(level.name, '#') AS name, apl.id7 AS amp_program_id, SUM(a.program_percentage) as percentage, COUNT(*) - COUNT(a.program_percentage) AS cnt_nulls
+							FROM amp_activity_program a
+								JOIN ni_all_programs_with_levels apl ON a.amp_program_id = apl.amp_theme_id
+								LEFT JOIN amp_theme level ON level.amp_theme_id = apl.id7
+								JOIN amp_program_settings aps ON aps.amp_program_settings_id = a.program_setting
+							WHERE aps.name = 'Primary Program'
+						GROUP BY a.amp_activity_id, apl.id7, level.amp_theme_id
+					) v
+					ON aav.amp_activity_id = v.amp_activity_id;
  			</lang>
 		</script>
 	</apply>

@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
 
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
@@ -71,7 +70,7 @@ public class APIField {
     private String dependencyRequired;
 
     @JsonProperty(ActivityEPConstants.ID_ONLY)
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean idOnly;
 
     @JsonProperty(ActivityEPConstants.IMPORTABLE)
@@ -90,7 +89,8 @@ public class APIField {
     private String percentageConstraint;
 
     @JsonProperty(ActivityEPConstants.TREE_COLLECTION_CONSTRAINT)
-    private Boolean treeCollectionConstraint;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean treeCollectionConstraint;
 
     @JsonProperty(ActivityEPConstants.FIELD_LENGTH)
     private Integer fieldLength;
@@ -306,11 +306,11 @@ public class APIField {
         this.percentageConstraint = percentageConstraint;
     }
 
-    public Boolean getTreeCollectionConstraint() {
+    public boolean getTreeCollectionConstraint() {
         return treeCollectionConstraint;
     }
 
-    public void setTreeCollectionConstraint(Boolean treeCollectionConstraint) {
+    public void setTreeCollectionConstraint(boolean treeCollectionConstraint) {
         this.treeCollectionConstraint = treeCollectionConstraint;
     }
 

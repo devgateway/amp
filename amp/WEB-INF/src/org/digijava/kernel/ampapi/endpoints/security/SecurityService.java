@@ -268,22 +268,16 @@ public class SecurityService {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         String teamName = null;
         boolean addActivity = false;
-    
-        User user;
+        
+        User user = TeamUtil.getCurrentUser();
     
         // if the user is admin the he doesn't have a workspace assigned
-        if (!isAdmin) {
-            if (tm != null) {
-                AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-                AmpTeam team = ampTeamMember.getAmpTeam();
-                teamName = team.getName();
-                addActivity = FeaturesUtil.isVisibleField("Add Activity Button")
-                        && Boolean.TRUE.equals(team.getAddActivity());
-            }
-        
-            user = UserUtils.getUser(tm.getUserId());
-        } else {
-            user = UserUtils.getUser(tm.getMemberId());
+        if (!isAdmin && tm != null) {
+            AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+            AmpTeam team = ampTeamMember.getAmpTeam();
+            teamName = team.getName();
+            addActivity = FeaturesUtil.isVisibleField("Add Activity Button")
+                    && Boolean.TRUE.equals(team.getAddActivity());
         }
         
         return createUserSessionInformation(isAdmin, user, teamName, addActivity);

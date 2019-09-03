@@ -12,8 +12,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
  */
 public class SecurityErrors {
     
-    /** Invalid token is provided, do not match the one on session */
-    public static final ApiErrorMessage INVALID_TOKEN = new ApiErrorMessage(3, "Invalid Token");
     /** Action exists, but it is not allowed, e.g. to edit an activity that current user has no edit rights for */
     public static final ApiErrorMessage NOT_ALLOWED = new ApiErrorMessage(4, "Not allowed");
     /** Invalid Request */
@@ -26,10 +24,6 @@ public class SecurityErrors {
     public static final ApiErrorMessage INVALID_TEAM = new ApiErrorMessage(10, "Invalid Team");
 
     public static final ApiErrorMessage INVALID_USER_PASSWORD = new ApiErrorMessage(11, "Username or password are invalid");
-
-    public static final ApiErrorMessage INVALID_WORKSPACE = new ApiErrorMessage(12, "Workspace is invalid");
-
-    public static final ApiErrorMessage PASSWORD_CHANGED = new ApiErrorMessage(13, "User password changed");
 
     public static final ApiErrorMessage NOT_AUTHENTICATED = new ApiErrorMessage(14, "Not authenticated");
 

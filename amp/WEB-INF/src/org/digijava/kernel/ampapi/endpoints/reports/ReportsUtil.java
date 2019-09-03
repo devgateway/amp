@@ -75,6 +75,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 
@@ -255,6 +256,9 @@ public class ReportsUtil {
             if (original.getDinamic() != null) {
                 newParams.setDynamic(true);
             }
+            if (queryModel.getIncludeLocationChildren() != null) {
+                newParams.setIncludeLocationChildren(queryModel.getIncludeLocationChildren());
+            }
         }
         
         if (original.getAdditionalColumns() != null) {
@@ -366,6 +370,9 @@ public class ReportsUtil {
         
         // update report data
         configureProjectTypes(specImpl, formParams.getProjectType());
+        
+        // configure include location children
+        configureIncludeLocationChildrenFilters(specImpl, formParams.getIncludeLocationChildren());
         
         // update other settings
         setOtherOptions(specImpl, formParams);
@@ -521,6 +528,50 @@ public class ReportsUtil {
         return result;
     }
     
+    /**
+     * Configure to include or not the location children (AMP-27559)
+     * 
+     * @param specImpl
+     * @param includeLocationChildren
+     */
+    public static void configureIncludeLocationChildrenFilters(ReportSpecificationImpl specImpl,
+                                                               Boolean includeLocationChildren) {
+        if (includeLocationChildren != null) {
+            specImpl.setIncludeLocationChildren(includeLocationChildren);
+        }
+    
+        if (!specImpl.isIncludeLocationChildren()) {
+            List<String> locationIds = new ArrayList<>();
+            AmpReportFilters filterRules = (AmpReportFilters) specImpl.getFilters();
+            for (Entry<ReportElement, FilterRule> filterRule : filterRules.getFilterRules().entrySet()) {
+                if (isFilterLocationType(filterRule)) {
+                    locationIds.addAll(filterRule.getValue().values);
+                }
+            }
+        
+            if (!locationIds.isEmpty()) {
+                filterRules.addFilterRule(new ReportColumn(ColumnConstants.RAW_LOCATION),
+                        new FilterRule(locationIds, true));
+            }
+        }
+    }
+    /**
+ 
+     * Determine if the filter rule is of location type
+     * 
+     * @param filterRule
+     * @return
+     */
+    private static boolean isFilterLocationType(Entry<ReportElement, FilterRule> filterRule) {
+        if (filterRule.getKey() != null && filterRule.getKey().entity != null) {
+            String columnName = filterRule.getKey().entity.getEntityName();
+            
+            return LocationUtil.LOCATIONS_COLUMNS_NAMES.contains(columnName);
+        }
+        
+        return false;
+    }
+
     /**
      * Explicitly configures projects that has to be included into the report. 
      * If nothing specified, then the default project types are used for the given report type.

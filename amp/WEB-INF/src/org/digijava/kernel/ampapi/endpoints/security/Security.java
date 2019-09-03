@@ -6,6 +6,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -25,7 +26,9 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.types.ListOfLongs;
 import org.digijava.kernel.util.SpringUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 /**
  * This class should have all security / permissions related methods
@@ -142,5 +145,14 @@ public class Security {
         return "Token: " + token;
     }
     */
+
+    @GET
+    @Path("/ampTeam/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Get AmpTeam specification")
+    @ApiMethod(id = "ampTeam", authTypes = AuthRule.IN_ADMIN)
+    public final AmpTeam getWorkspace(@PathParam("id") Long id) {
+        return TeamUtil.getAmpTeam(id);
+    }
 
 }

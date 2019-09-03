@@ -19,7 +19,18 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_pledges_aid_modality AS SELECT f.pledge_id, val.category_value AS name, f.aid_modality AS amp_modality_id FROM amp_funding_pledges_details f, amp_category_value val WHERE (f.aid_modality = val.id);;;
+			    	CREATE OR REPLACE VIEW v_pledges_aid_modality AS 
+			    	SELECT 
+			    	    afp.id AS pledge_id, 
+			    	    v.name, 
+			    	    COALESCE(v.amp_modality_id, -999999999) AS amp_modality_id
+			    	FROM amp_funding_pledges afp
+			    	LEFT JOIN (
+				    	SELECT f.pledge_id, val.category_value AS name, f.aid_modality AS amp_modality_id 
+				    	FROM amp_funding_pledges_details f, amp_category_value val 
+				    	WHERE (f.aid_modality = val.id)
+				    ) v
+				    ON afp.id = v.pledge_id;
         		</lang>
 		</script>
 	</apply>

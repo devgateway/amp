@@ -101,7 +101,7 @@ public class ColumnFilterGenerator {
     public final static Map<String, List<String>> PLEDGES_COLUMNS_FILTERS = new HashMap<String, List<String>>(){{
         
         put("sectorsAndAncestors", new ArrayList<String>(){{
-            add("Pledges sectors");
+            add("Pledges Sectors");
         }});
         
         put("secondarySectorsAndAncestors", new ArrayList<String>(){{

@@ -141,6 +141,8 @@ public class Reports {
         ReportSpecificationImpl spec = null;
         try {
             spec = AmpReportsToReportSpecification.convert(ampReport);
+            // AMP-29012: We need to change the Location filter according to include-location-children.
+            ReportsUtil.configureIncludeLocationChildrenFilters(spec, spec.isIncludeLocationChildren());
         } catch (Exception e1) {
             logger.error("Failed to convert report.", e1);
             JSONResult result = new JSONResult();
@@ -150,6 +152,7 @@ public class Reports {
 
         JSONResult result = new JSONResult();
         ReportMetadata metadata = new ReportMetadata();
+
         metadata.setReportSpec(spec);
         metadata.setSettings(SettingsUtils.getReportSettings(spec));
         metadata.setName(ampReport.getName());
@@ -828,6 +831,10 @@ public class Reports {
                     String calendar = formParams.getSettings().get(SettingsConstants.CALENDAR_TYPE_ID).toString();
                     newFilters.setCurrency(CurrencyUtil.getAmpcurrency(currency));
                     newFilters.setCalendarType(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(calendar)));
+                }
+                
+                if (formParams.getIncludeLocationChildren() != null) {
+                    newFilters.setIncludeLocationChildren(formParams.getIncludeLocationChildren());
                 }
 
                 logger.info(newFilters);

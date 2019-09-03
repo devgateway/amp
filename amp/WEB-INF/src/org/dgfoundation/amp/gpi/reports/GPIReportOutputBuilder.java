@@ -179,7 +179,7 @@ public abstract class GPIReportOutputBuilder  {
     protected boolean isOnBudget(ReportArea budgetArea) {
         String activityBudgetOnValue = CategoryConstants.ACTIVITY_BUDGET_ON.getValueKey();
         boolean match = budgetArea.getContents().entrySet().stream()
-                .anyMatch(e -> e.getKey().originalColumnName.equals(ColumnConstants.ON_OFF_TREASURY_BUDGET)
+                .anyMatch(e -> e.getKey().originalColumnName.equals(ColumnConstants.ACTIVITY_BUDGET)
                         && (String.valueOf(e.getValue().value)).equals(activityBudgetOnValue));
 
         return match;

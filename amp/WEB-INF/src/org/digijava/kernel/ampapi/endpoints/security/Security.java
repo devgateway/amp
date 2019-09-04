@@ -66,8 +66,7 @@ public class Security implements ErrorReportingEndpoint {
             notes = "<p>This endpoint is used to authenticate users via API. Mandatory fields are username and "
                     + "password. Password value is a sha1 hash of the actual password. Third parameter is "
                     + "workspaceId which allows to preselect active workspace.</p>\n"
-                    + "Workspace parameter is optional. If specified all with calls issued with the provided token "
-                    + "will be handled for respective workspace.\n")
+                    + "Workspace parameter is optional.\n")
 
     public UserSessionInformation authenticate(@ApiParam(required = true) AuthenticationRequest authRequest) {
         return securityService.authenticate(authRequest);

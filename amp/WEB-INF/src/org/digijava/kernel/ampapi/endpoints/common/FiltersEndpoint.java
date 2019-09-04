@@ -30,10 +30,10 @@ import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
  * @author vchihai@developmentgateway.org
  * 
  */
-@Path("nifilters")
-public class NiFiltersEndpoint {
+@Path("filters")
+public class FiltersEndpoint {
 
-    public NiFiltersEndpoint() { }
+    public FiltersEndpoint() { }
 
     /**
      * Retrieve all filter definitions.
@@ -64,7 +64,7 @@ public class NiFiltersEndpoint {
      *   {
      *     "id": "type-of-assistance",
      *     "name": "Type Of Assistance",
-     *     "endpoint": "/rest/nifilters/typeOfAssistance/",
+     *     "endpoint": "/rest/filters/typeOfAssistance/",
      *     "ui": true,
      *     "method": "GET",
      *     "columns": ["Type Of Assistance"],
@@ -82,7 +82,7 @@ public class NiFiltersEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public List<AvailableMethod> getAvailableFilters(@DefaultValue("D") @QueryParam("report-type") String reportType) {
-        return EndpointUtils.getAvailableFilterMethods(NiFiltersEndpoint.class.getName(), reportType);
+        return EndpointUtils.getAvailableFilterMethods(FiltersEndpoint.class.getName(), reportType);
     }
     
     /**

@@ -18,7 +18,7 @@ require('../styles/less/main.less');
 require('react-date-picker/base.css');
 require('react-date-picker/theme/hackerone.css');
 
-export default class DataFreezeEventEdit extends Component {
+class DataFreezeEventEdit extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -120,9 +120,9 @@ export default class DataFreezeEventEdit extends Component {
         currentRecord.notificationDays = (notificationDays && !isNaN(notificationDays)) ? parseInt(notificationDays) : '';
         this.setState({
             currentRecord: currentRecord
-        }); 
+        });
     }
-    
+
     getDisplayDateFormat() {
         return (this.props.settings && this.props.settings[Constants.DATE_FORMAT_SETTING]) ? this.props.settings[Constants.DATE_FORMAT_SETTING].toUpperCase() : Constants.DEFAULT_UI_DATE_FORMAT;
     }
@@ -189,11 +189,11 @@ export default class DataFreezeEventEdit extends Component {
                 <input type="text" className="form-control" value={this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)} readOnly/>
                 <div className="input-group-addon">
                   <span className="glyphicon glyphicon-calendar" data-field="freezingDate" onClick={this.toggleDatePicker}></span>
-                </div>                       
+                </div>
               </div>
               {this.state.showDatePicker.freezingDate &&
-               <div className="datepicker-outer-wrapper">                      
-                  <div className="datepicker-inner-wrapper">                        
+               <div className="datepicker-outer-wrapper">
+                  <div className="datepicker-inner-wrapper">
                     <DatePicker data-field="freezingDate"  onChange={this.onFreezingDateChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)} dateFormat={this.getDisplayDateFormat()}/>
                   </div>
               </div>
@@ -202,8 +202,8 @@ export default class DataFreezeEventEdit extends Component {
               </td>
                 <td >
                 <div className={this.getErrorsForField('gracePeriod').length > 0 ? 'has-error input-group pull-right': 'input-group pull-right'}>
-                  <input type="text" className="form-control grace-period-input" onChange={this.onGracePeriodChange} value={this.props.dataFreezeEvent.gracePeriod} />        
-                
+                  <input type="text" className="form-control grace-period-input" onChange={this.onGracePeriodChange} value={this.props.dataFreezeEvent.gracePeriod} />
+
                  </div>
                 </td>
                 <td>
@@ -215,12 +215,12 @@ export default class DataFreezeEventEdit extends Component {
                   </div>
                 </div>
                 {this.state.showDatePicker.openPeriodStart &&
-                    <div className="datepicker-outer-wrapper">                      
-                    <div className="datepicker-inner-wrapper">                      
+                    <div className="datepicker-outer-wrapper">
+                    <div className="datepicker-inner-wrapper">
                       <DatePicker onChange={this.onOpenPeriodStartChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)} dateFormat={this.getDisplayDateFormat()}/>
                      </div>
                     </div>
-                }  
+                }
                 </div>
                 </td>
                 <td>
@@ -232,15 +232,15 @@ export default class DataFreezeEventEdit extends Component {
                 </div>
               </div>
               {this.state.showDatePicker.openPeriodEnd &&
-                  <div className="datepicker-outer-wrapper">                      
-                  <div className="datepicker-inner-wrapper">                       
+                  <div className="datepicker-outer-wrapper">
+                  <div className="datepicker-inner-wrapper">
                     <DatePicker data-field="openPeriodEnd" onChange={this.onOpenPeriodEndChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodEnd)} dateFormat={this.getDisplayDateFormat()}/>
                    </div>
                   </div>
               }
                 </div>
                 </td>
-                
+
                 <td>
               <div className={this.getErrorsForField('freezeOption').length > 0 ? 'input-group has-error': 'input-group'}>
               <div className="radio">
@@ -254,7 +254,7 @@ export default class DataFreezeEventEdit extends Component {
             </div>
             <div>
              </div>
-                
+
                 </td>
                 <td>
                   <div className={this.getErrorsForField('sendNotification').length > 0 ? 'input-group has-error': 'input-group'}>
@@ -271,7 +271,7 @@ export default class DataFreezeEventEdit extends Component {
                   <td>
                      <input type="text" className="form-control notification-days-input" value={this.props.dataFreezeEvent.notificationDays} readOnly={this.props.dataFreezeEvent.sendNotification === false} onChange={this.onNotificationDaysChange}/>
                   </td>
-                <td>                  
+                <td>
                   <button className="btn btn-default filter-add" onClick={this.showFilters}>
                   <span className="glyphicon glyphicon-plus-sign"></span>
                  </button>
@@ -279,7 +279,7 @@ export default class DataFreezeEventEdit extends Component {
                 <td>
                       {this.props.dataFreezeEvent.enabled ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}
                  </td>
-                <td className="action-column">                  
+                <td className="action-column">
                       <span className="glyphicon glyphicon-custom glyphicon-ok-circle success-color" onClick={this.save}> </span>
                       <span className="glyphicon glyphicon-custom glyphicon-remove-sign" onClick={this.props.cancel}></span>
                    </td>

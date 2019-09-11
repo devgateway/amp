@@ -23,7 +23,7 @@ import Processing from './common/Processing'
 
 require('../styles/less/main.less');
 
-export default class DataFreezeEventList extends Component {
+class DataFreezeEventList extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {waiting: true};
@@ -44,7 +44,7 @@ export default class DataFreezeEventList extends Component {
         this.loadData = this.loadData.bind(this);
     }
 
-    componentWillMount() {        
+    componentWillMount() {
         this.loadData({
             paging: this.props.paging,
             sorting: this.props.sorting
@@ -65,13 +65,13 @@ export default class DataFreezeEventList extends Component {
     }
 
     addNew() {
-        this.props.actions.getUserInfo().then(function() {         
-            if (this.props.user['is-admin'] == true) {              
+        this.props.actions.getUserInfo().then(function() {
+            if (this.props.user['is-admin'] == true) {
                 this.props.actions.addNewDataFreezeEvent();
             } else {
                 window.location.href = '/';
             }
-          }.bind(this));      
+          }.bind(this));
     }
 
     goToClickedPage(event) {
@@ -123,17 +123,17 @@ export default class DataFreezeEventList extends Component {
             loadParams.sorting = this.props.sorting;
             loadParams.paging.recordsPerPage = parseInt(this.refs.recordsPerPage.value);
             loadParams.paging.currentPageNumber = 1;
-            this.loadData(loadParams);            
+            this.loadData(loadParams);
         }
     }
 
     loadData(params) {
-        this.setState({waiting: true}); 
+        this.setState({waiting: true});
         this.props.actions.loadDataFreezeEventList(params).then(function(){
-            this.setState({waiting: false});  
+            this.setState({waiting: false});
         }.bind(this));
     }
-    
+
     showErrors() {
         const messages = [];
         this.props.errors.forEach((error, index) => {
@@ -208,7 +208,7 @@ export default class DataFreezeEventList extends Component {
                 </OverlayTrigger>
         )
     }
-    
+
     render() {
         const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);
         return (
@@ -217,45 +217,45 @@ export default class DataFreezeEventList extends Component {
                             message={ this.props.translations['amp.data-freezing:loading-message']}/>
                     <Processing show={this.props.saving}
                     message = { this.props.translations['amp.data-freezing:saving-message'] +'...'}/>
-                <div id="filter-popup" ref="filterPopup"> </div>                              
-                <div >                
-                <div className="row">                
-                <br/>  
-                {this.props.context === Constants.DATA_FREEZE_EVENTS &&  
-                <div className="panel panel-default">                 
+                <div id="filter-popup" ref="filterPopup"> </div>
+                <div >
+                <div className="row">
+                <br/>
+                {this.props.context === Constants.DATA_FREEZE_EVENTS &&
+                <div className="panel panel-default">
                 <div className="panel-body custom-panel">
                 <span className="glyphicon glyphicon-plus" onClick={this.addNew}></span>
                 <span  onClick={this.addNew} className="add-new-text">{ this.props.translations['amp.data-freezing:add-new']} </span>
                 <span className="insert-data-text">{this.props.translations['amp.data-freezing:insert-data']}</span>
                 <span> / </span> <span className="glyphicon glyphicon-ok-circle success-color"> </span> <span className="click-save-text" >{this.props.translations['amp.data-freezing:click-save']}</span>
-                <span> / </span><span className="required-fields">{this.props.translations['amp.data-freezing:required-fields']}</span>                        
-                </div>                 
-                </div>  
-                }                
+                <span> / </span><span className="required-fields">{this.props.translations['amp.data-freezing:required-fields']}</span>
+                </div>
+                </div>
+                }
                 {this.showErrors()}
-                {this.showInfoMessages()}          
-                {this.props.dataFreezeEventList.length === 0 &&                  
+                {this.showInfoMessages()}
+                {this.props.dataFreezeEventList.length === 0 &&
                     <div className="container">
                          {this.props.translations['amp.data-freezing:no-records']}
-                    </div>                    
+                    </div>
                  }
-                {this.props.dataFreezeEventList.length > 0 && 
+                {this.props.dataFreezeEventList.length > 0 &&
                     <table className="table table-bordered table-striped data-table">
                       <thead>
                         {this.props.context === Constants.UNFREEZE_ALL &&
                             <tr>
                              <th className="col-md-2">{this.props.translations['amp.data-freezing:data-freeze-date']}</th>
-                             
+
                               <th>{this.props.translations['amp.data-freezing:number-of-activities']}</th>
                             </tr>
                         }
                         {this.props.context === Constants.DATA_FREEZE_EVENTS &&
                           <tr>
-                          <th className="date-column">       
+                          <th className="date-column">
                           {this.showInfoIcon('data-freeze-date')}{this.props.translations['amp.data-freezing:data-freeze-date']}<span className="error-color" >*&nbsp;</span></th>
                           <th>
                           {this.showInfoIcon('grace-period')}{this.props.translations['amp.data-freezing:grace-period']}<br/>
-                          {this.props.translations['amp.data-freezing:days']} 
+                          {this.props.translations['amp.data-freezing:days']}
                           </th>
                           <th className="date-column">{this.showInfoIcon('open-period-start')}{this.props.translations['amp.data-freezing:open-period-start']}</th>
                           <th className="date-column">{this.showInfoIcon('open-period-end')}{this.props.translations['amp.data-freezing:open-period-end']}</th>
@@ -272,12 +272,12 @@ export default class DataFreezeEventList extends Component {
                       <tbody>
                         {this.props.dataFreezeEventList.map((dataFreezeEvent, i) =>
                           <DataFreezeEventRow saving={this.props.saving} dataFreezeEvent={dataFreezeEvent} key={i} filter={this.filter} setFilterElement={this.setFilterElement} showFilterElement={this.showFilterElement} hideFilterElement={this.hideFilterElement} {...this.props}/>
-                        )}                  
-                      
+                        )}
+
                       </tbody>
                     </table>
                  }
-                  </div>               
+                  </div>
                   </div>
                         {pages.length > 1 &&
                           <div >
@@ -285,7 +285,7 @@ export default class DataFreezeEventList extends Component {
                             <div className="col-md-8 pull-right pagination-wrapper">
 
                               <div className="col-md-4">
-                        
+
                             <nav>
                             <ul className="pagination fixed-pagination">
                             <li className={this.props.paging.currentPageNumber == 1 ? 'page-item disabled': 'page-item' }>
@@ -293,9 +293,9 @@ export default class DataFreezeEventList extends Component {
                             <span aria-hidden="true" data-page="-">&laquo;</span>
                         <span className="sr-only">{this.props.translations['amp.gpi-data:button-previous']}</span>
                         </a>
-                        </li>                     
-                        {pages.map(pageNumber => 
-                        <li className={this.props.paging.currentPageNumber == pageNumber ? 'page-item  active': 'page-item' } key={pageNumber} ><a className="page-link pagination-link" data-page={pageNumber} onClick={this.goToClickedPage}>{pageNumber}</a></li>  
+                        </li>
+                        {pages.map(pageNumber =>
+                        <li className={this.props.paging.currentPageNumber == pageNumber ? 'page-item  active': 'page-item' } key={pageNumber} ><a className="page-link pagination-link" data-page={pageNumber} onClick={this.goToClickedPage}>{pageNumber}</a></li>
                         )}
                         <li className={this.props.paging.currentPageNumber == this.props.paging.totalPageCount ? 'page-item disabled': 'page-item' }>
                         <a className="page-link pagination-link"  aria-label="Next" data-page="+" onClick={this.goToNextPage}>

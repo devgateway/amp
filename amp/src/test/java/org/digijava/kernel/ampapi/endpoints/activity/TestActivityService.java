@@ -17,7 +17,7 @@ public class TestActivityService implements ActivityService {
     
     public TestTeamMemberContext tmContext;
     
-    public InMemoryActivityManager activityManager = new InMemoryActivityManager();
+    public InMemoryActivityManager activityManager = InMemoryActivityManager.getInstance();
     
     public TestActivityService(TestTeamMemberContext tmContext) {
         this.tmContext = tmContext;

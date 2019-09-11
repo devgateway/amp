@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.persistence.InMemoryCategoryValuesManager;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -27,12 +28,12 @@ import org.junit.Test;
 public class OnBudgetValidatorTest {
 
     private static APIField activityField;
-    private static HardcodedCategoryValues categoryValues;
+    private static InMemoryCategoryValuesManager categoryValues;
 
     @BeforeClass
     public static void setUp() {
         activityField = ValidatorUtil.getMetaData();
-        categoryValues = new HardcodedCategoryValues();
+        categoryValues = InMemoryCategoryValuesManager.getInstance();
     }
 
     @Test

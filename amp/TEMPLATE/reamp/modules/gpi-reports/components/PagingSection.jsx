@@ -3,20 +3,20 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as startUp from '../actions/StartUpAction';
 import * as commonListsActions from '../actions/CommonListsActions';
-export default class PagingSection extends Component {
+class PagingSection extends Component {
     constructor( props, context ) {
-        super( props, context );     
+        super( props, context );
         this.state = { recordsPerPage: 150};
         this.goToClickedPage = this.goToClickedPage.bind( this );
         this.goToNextPage = this.goToNextPage.bind( this );
         this.goToLastPage = this.goToLastPage.bind( this );
-        this.updateRecordsPerPage = this.updateRecordsPerPage.bind( this );        
+        this.updateRecordsPerPage = this.updateRecordsPerPage.bind( this );
     }
 
-    componentDidMount() { 
-        
-    }    
-    
+    componentDidMount() {
+
+    }
+
     goToClickedPage( event ) {
         const pageNumber = parseInt( event.target.getAttribute( 'data-page' ) );
         this.props.goToPage( pageNumber );
@@ -32,7 +32,7 @@ export default class PagingSection extends Component {
     goToLastPage() {
         this.props.goToPage( this.props.mainReport.page.totalPageCount );
     }
-    
+
     generatePaginationLinks() {
         var paginationLinks = [];
         for ( var i = 1; i <= this.props.mainReport.page.totalPageCount; i++ ) {
@@ -41,7 +41,7 @@ export default class PagingSection extends Component {
         }
         return paginationLinks;
     }
-    
+
     updateRecordsPerPage() {
         if ( this.refs.recordsPerPage && this.refs.recordsPerPage.value ) {
             this.setState( { recordsPerPage: parseInt( this.refs.recordsPerPage.value ) }, function() {
@@ -50,7 +50,7 @@ export default class PagingSection extends Component {
             }.bind( this ) );
         }
     }
-    
+
     displayPagingInfo() {
         var transParams = {};
         transParams.fromRecord = ( ( this.props.mainReport.page.currentPageNumber - 1 ) * this.props.mainReport.page.recordsPerPage ) + 1;
@@ -66,7 +66,7 @@ export default class PagingSection extends Component {
 
     render() {
         if ( this.props.mainReport && this.props.mainReport.page && this.props.mainReport.page.totalPageCount > 1) {
-                   return (               
+                   return (
                         <div className="row">
                             <div className="col-md-8 pull-right pagination-wrapper">
                                 {this.props.mainReport &&
@@ -90,7 +90,7 @@ export default class PagingSection extends Component {
                                 </div>
                                 {this.displayPagingInfo()}
                             </div>
-                        </div>               
+                        </div>
             );
         }
 

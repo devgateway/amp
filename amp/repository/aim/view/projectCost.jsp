@@ -1,3 +1,9 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+
+<digi:instance property="aimEditActivityForm" />
+
 <module:display name="/Activity Form/Funding/Overview Section/${costName}" parentModule="/Activity Form/Funding/Overview Section">
 <fieldset>
 	<legend>
@@ -22,7 +28,7 @@
 					</td>
 				</tr>
 				<tr bgcolor="#f0f0f0">
-					<c:if test="${not emptyfunDate}">
+					<c:if test="${not empty funDate}">
 						<td>
 							<digi:trn>Date</digi:trn>
 						</td>

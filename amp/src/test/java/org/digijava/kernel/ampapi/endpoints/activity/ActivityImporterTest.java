@@ -1,6 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static java.util.Collections.emptyMap;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.VERSION_FIELD_NAME;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors.ACTIVITY_IS_STALE;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.ACTIVITY_GROUP;
 import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_FOR_ALL_EDITS;
 import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_ON;
 import static org.hamcrest.CoreMatchers.is;
@@ -33,6 +37,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
+import org.digijava.kernel.persistence.InMemoryActivityManager;
 import org.digijava.kernel.persistence.InMemoryPossibleValuesDAO;
 import org.digijava.kernel.persistence.InMemoryTeamManager;
 import org.digijava.kernel.persistence.InMemoryTeamMemberManager;
@@ -44,7 +49,6 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.activity.ActivityValidatorUtil;
 import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -152,6 +156,8 @@ public class ActivityImporterTest {
         
         when(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION)).thenReturn(PROJECT_VALIDATION_ON);
         when(DbUtil.getValidationFromTeamAppSettings(org.mockito.Matchers.anyLong())).thenReturn(PROJECT_VALIDATION_FOR_ALL_EDITS);
+    
+        InMemoryActivityManager.getInstance().reset();
     }
     
     @Test
@@ -195,8 +201,8 @@ public class ActivityImporterTest {
     @Test
     public void testUpdateActivityImporterEditNotAllowed() {
         Map<String, Object> json = new HashMap<>();
-        json.put(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME, 2L);
-        json.put(ActivityFieldsConstants.ACTIVITY_GROUP, ImmutableMap.of(ActivityEPConstants.VERSION_FIELD_NAME, 2L));
+        json.put(AMP_ACTIVITY_ID_FIELD_NAME, 2L);
+        json.put(ACTIVITY_GROUP, ImmutableMap.of(VERSION_FIELD_NAME, 2L));
         
         ActivityImporter importer = buildActivityImporter(true, false);
         importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
@@ -208,8 +214,8 @@ public class ActivityImporterTest {
     @Test
     public void testUpdateActivityImporterWrongModifiedBy() {
         Map<String, Object> json = new HashMap<>();
-        json.put(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME, 2L);
-        json.put(ActivityFieldsConstants.ACTIVITY_GROUP, ImmutableMap.of(ActivityEPConstants.VERSION_FIELD_NAME, 2L));
+        json.put(AMP_ACTIVITY_ID_FIELD_NAME, 2L);
+        json.put(ACTIVITY_GROUP, ImmutableMap.of(VERSION_FIELD_NAME, 2L));
     
         ActivityImporter importer = buildActivityImporter(true, true, true);
         importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
@@ -221,25 +227,14 @@ public class ActivityImporterTest {
     @Test
     public void testUpdateActivityImporterStale() {
         Map<String, Object> json = new HashMap<>();
-        json.put(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME, 2L);
+        json.put(AMP_ACTIVITY_ID_FIELD_NAME, 2L);
         json.put(ActivityEPConstants.MODIFIED_BY_FIELD_NAME, 1L);
     
         ActivityImporter importer = buildActivityImporter(true, true);
         importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
         
         Assert.assertThat(importer.errors,
-                hasValue(error(ActivityErrors.ACTIVITY_IS_STALE, ActivityErrors.ACTIVITY_NOT_LAST_VERSION)));
-    }
-    
-    @Test
-    public void testUpdateActivityImporter() {
-        Map<String, Object> json = new HashMap<>();
-        json.put(ActivityEPConstants.MODIFIED_BY_FIELD_NAME, 1L);
-    
-        ActivityImporter importer = buildActivityImporter(true, true);
-        importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
-    
-        Assert.assertThat(importer.errors, hasValue(error(ActivityErrors.FIELD_ACTIVITY_ID_NULL)));
+                hasValue(error(ACTIVITY_IS_STALE, ActivityErrors.ACTIVITY_NOT_LAST_VERSION)));
     }
     
     private Map<Integer, ApiErrorMessage> validate(Map<String, Object> json) {
@@ -379,4 +374,109 @@ public class ActivityImporterTest {
                         hasProperty("objective", startsWith("aim-importer-objective-"))
                 ))));
     }
+    
+    @Test
+    public void testUpdateActivityImporterWithoutId() {
+        Map<String, Object> json = new HashMap<>();
+        json.put(ActivityEPConstants.MODIFIED_BY_FIELD_NAME, 1L);
+        
+        ActivityImporter importer = buildActivityImporter(true, true);
+        importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
+        
+        Assert.assertThat(importer.errors, hasValue(error(ActivityErrors.FIELD_ACTIVITY_ID_NULL)));
+    }
+    
+    @Test
+    public void testUpdateActivityStale() {
+        Map<String, Object> json = new HashMap<>();
+        json.put(AMP_ACTIVITY_ID_FIELD_NAME, 1L);
+        json.put("project_title", "Title");
+        json.put("is_draft", true);
+        json.put("activity_status", 263L);
+        json.put("activity_budget", 260L);
+        
+        ActivityImporter importer = buildActivityImporter(true, true, false, false);
+        importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
+        
+        Assert.assertThat(importer.errors,
+                hasValue(error(ActivityErrors.ACTIVITY_IS_STALE, ActivityErrors.ACTIVITY_NOT_LAST_VERSION)));
+    }
+    
+    @Test
+    public void testUpdateActivityDraftInvalidAmpId() {
+        Map<String, Object> json = new HashMap<>();
+        json.put(AMP_ACTIVITY_ID_FIELD_NAME, 1L);
+        json.put(ACTIVITY_GROUP, ImmutableMap.of(VERSION_FIELD_NAME, 1L));
+        json.put("project_title", "Title");
+        json.put("is_draft", true);
+        json.put("activity_status", 263L);
+        json.put("activity_budget", 260L);
+        
+        ActivityImporter importer = buildActivityImporter(true, true, false, false);
+        importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
+        
+        Assert.assertThat(importer.errors,
+                hasValue(error(ActivityErrors.FIELD_INVALID_VALUE, "amp_id")));
+    }
+    
+    @Test
+    public void testUpdateActivityDraft() {
+        Map<String, Object> json = new HashMap<>();
+        json.put(AMP_ACTIVITY_ID_FIELD_NAME, 1L);
+        json.put(ACTIVITY_GROUP, ImmutableMap.of(VERSION_FIELD_NAME, 1L));
+        json.put("amp_id", "12345678");
+        json.put("project_title", "Title");
+        json.put("is_draft", true);
+        json.put("activity_status", 263L);
+        json.put("activity_budget", 260L);
+        
+        ActivityImporter importer = buildActivityImporter(true, true, false, false);
+        importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
+    
+        Assert.assertThat(importer, allOf(
+                hasProperty("errors", Matchers.is(emptyMap())),
+                hasProperty("oldActivity", allOf(
+                        hasProperty("name", equalTo("Activity 1")),
+                        hasProperty("draft", equalTo(false)),
+                        hasProperty("ampId", equalTo("12345678")),
+                        hasProperty("approvalStatus", equalTo(ApprovalStatus.STARTED_APPROVED))
+                )),
+                hasProperty("newActivity", allOf(
+                        hasProperty("name", equalTo("Title")),
+                        hasProperty("draft", equalTo(true)),
+                        hasProperty("ampId", equalTo("12345678")),
+                        hasProperty("approvalStatus", equalTo(ApprovalStatus.EDITED))
+                ))));
+    }
+    
+    @Test
+    public void testUpdateActivitySubmit() {
+        Map<String, Object> json = new HashMap<>();
+        json.put(AMP_ACTIVITY_ID_FIELD_NAME, 1L);
+        json.put(ACTIVITY_GROUP, ImmutableMap.of(VERSION_FIELD_NAME, 1L));
+        json.put("amp_id", "12345678");
+        json.put("project_title", "Title");
+        json.put("is_draft", false);
+        json.put("activity_status", 263L);
+        json.put("activity_budget", 260L);
+        
+        ActivityImporter importer = buildActivityImporter(true, true, false, false);
+        importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
+        
+        Assert.assertThat(importer, allOf(
+                hasProperty("errors", Matchers.is(emptyMap())),
+                hasProperty("oldActivity", allOf(
+                        hasProperty("name", equalTo("Activity 1")),
+                        hasProperty("draft", equalTo(false)),
+                        hasProperty("ampId", equalTo("12345678")),
+                        hasProperty("approvalStatus", equalTo(ApprovalStatus.STARTED_APPROVED))
+                )),
+                hasProperty("newActivity", allOf(
+                        hasProperty("name", equalTo("Title")),
+                        hasProperty("draft", equalTo(false)),
+                        hasProperty("ampId", equalTo("12345678")),
+                        hasProperty("approvalStatus", equalTo(ApprovalStatus.EDITED))
+                ))));
+    }
+    
 }

@@ -3,9 +3,11 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.function.LongFunction;
 
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
+import org.dgfoundation.amp.test.categories.IgnoreTests;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 
 /**
@@ -14,6 +16,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
+@Category(IgnoreTests.class)
 public class InclusiveRunnerTests extends AmpTestCase {
     
     /**

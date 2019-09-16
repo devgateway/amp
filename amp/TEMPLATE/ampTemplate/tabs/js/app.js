@@ -7,7 +7,7 @@ define(
 		[ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'views/tabItemsView',
 				'views/tabBodyView', 'views/tabBodysView', 'business/tabEvents', 'util/tabUtils',
 				'business/filter/filterManager','business/settings/settingsManager', 'translationManager',
-				'business/widgets/documentsWidgetManager', 'jquery', 'jqueryui' ],
+				'business/widgets/documentsWidgetManager', 'jquery', 'jqueryui','jqueryuii18n'],
 		function(Marionette, Tabs, Tab, TabItemView, TabItemsView, TabBodyView, TabBodysView, TabEvents, TabUtils,
 				FilterManager, SettingsManager, TranslationManager, DocumentsWidgetManager, jQuery, jqueryui) {
 

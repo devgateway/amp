@@ -19,6 +19,8 @@ import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema.NamedElemType;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.LocationUtil;
@@ -59,9 +61,6 @@ public class ExportFilterUtils {
                             if (ColumnConstants.DONOR_ID.equals(columnName))
                                 columnName = ColumnConstants.DONOR_AGENCY;
                             
-                            if (ColumnConstants.ARCHIVED.equals(columnName)) 
-                                break; //TODO: the filter is not yet implemented.
-                            
                             columnName = AmpFiltersConverter.removeIdSuffixIfNeeded(AmpReportsSchema.getInstance(), columnName);
                             
                             extractedFilters.put(TranslatorWorker.translateText(columnName), getEntityValuesNames(filter, columnName));
@@ -96,10 +95,17 @@ public class ExportFilterUtils {
         
         if (ColumnConstants.APPROVAL_STATUS.equals(columnName)) {
             List<String> vals = filter.getValue().values.stream().collect(Collectors.toList());
-            vals.replaceAll(status -> TranslatorWorker.translateText(FilterUtils.getApprovalStatusByNumber(new Integer(status))));
+            vals.replaceAll(status -> {
+                if (Long.toString(ColumnReportData.UNALLOCATED_ID).equals(status)) {
+                    return TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME);
+                } else {
+                    return TranslatorWorker.translateText(FilterUtils.getApprovalStatusByNumber(new Integer(status)));
+                }
+            });
+
             return vals;
-        } 
-        
+        }
+
         if (ColumnConstants.TEAM.equals(columnName)) {
             Set<Long> allIds = filter.getValue().addIds(null).stream().collect(Collectors.toSet());
             Map<Long, String> entities = new HashMap<Long, String>();
@@ -129,6 +135,10 @@ public class ExportFilterUtils {
      */
     private static Map<Long, String> fetchEntities(NamedElemType elemType, String elemName, Set<Long> allIds) {
         Map<Long, String> entities = new HashMap<Long, String>();
+        if (allIds.contains(ColumnReportData.UNALLOCATED_ID)) {
+            entities.put(ColumnReportData.UNALLOCATED_ID,
+                    TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME));
+        }
 
         switch(elemType) {
             case SECTOR: 
@@ -186,11 +196,15 @@ public class ExportFilterUtils {
         List<String> values = new ArrayList<String>();
 
         if (rule.values != null) {
-            if (rule.values.size() > 1) {
-                values.add(TranslatorWorker.translateText("All") + ": " + TranslatorWorker.translateText("Yes") + "/" + TranslatorWorker.translateText("No"));
-            } else {
-                values.add(FilterRule.TRUE_VALUE.equals(rule.values.get(0)) ? TranslatorWorker.translateText("Yes") : TranslatorWorker.translateText("No"));
-            }
+            rule.values.forEach(value -> {
+                if (FilterRule.TRUE_VALUE.equals(value)) {
+                    values.add(TranslatorWorker.translateText("Yes"));
+                } else if (FilterRule.FALSE_VALUE.equals(value)) {
+                    values.add(TranslatorWorker.translateText("No"));
+                } else if (Long.toString(ColumnReportData.UNALLOCATED_ID).equals(value)) {
+                    values.add(TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME));
+                }
+            });
         }
 
         return values;

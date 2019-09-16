@@ -13,6 +13,7 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.output.NiReportFilterResult;
 import org.dgfoundation.amp.reports.converters.AmpARFilterConverter;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.util.LuceneUtil;
 
@@ -56,6 +57,9 @@ public class ActivityFilter {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl("filter", ArConstants.DONOR_TYPE);
         spec.setFilters(filters);
+
+        //AMP-28922: set include-location-children value.
+        ReportsUtil.configureIncludeLocationChildrenFilters(spec, arFilter.isIncludeLocationChildren());
 
         NiReportsEngine engine = new NiReportsEngine(AmpReportsSchema.getInstance(), spec, env);
         NiReportFilterResult result = engine.executeFilter();

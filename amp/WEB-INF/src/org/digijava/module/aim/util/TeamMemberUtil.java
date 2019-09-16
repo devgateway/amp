@@ -30,6 +30,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnalyticalReport;
@@ -94,7 +95,7 @@ public class TeamMemberUtil {
 
     public static AmpTeamMember getMember(String email) {
 
-        User user = DbUtil.getUser(email);
+        User user = UserUtils.getUserByEmailAddress(email);
         if (user == null) {
             return null;
         }
@@ -838,7 +839,7 @@ public class TeamMemberUtil {
     }
 
     public static Collection<AmpTeamMember> getTeamMembers(String email) {
-        User user = org.digijava.module.aim.util.DbUtil.getUser(email);
+        User user = UserUtils.getUserByEmailAddress(email);
         if (user == null) {
             return null;
         }
@@ -1258,7 +1259,7 @@ public class TeamMemberUtil {
 
     public static List<AmpTeam> getAllTeamsForUser(String email) {
 
-        User user = DbUtil.getUser(email);
+        User user = UserUtils.getUserByEmailAddress(email);
         if (user == null) {
             return Collections.emptyList();
         }

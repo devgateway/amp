@@ -24,6 +24,7 @@ public class ActivityErrors {
     public static final ApiErrorMessage WRONG_PROGRAM_TYPE = new ApiErrorMessage(8, "Wrong config value for programs");
     public static final ApiErrorMessage UNIQUE_ACTIVITY_TITLE = new ApiErrorMessage(9, "Activity title should be unique");
     public static final ApiErrorMessage CANNOT_GET_PROPERTIES = new ApiErrorMessage(10, "Cannot get properties for type");
+    public static final ApiErrorMessage FIELD_ACTIVITY_ID_NULL = new ApiErrorMessage(11, "Activity id cannot be null");
     public static final ApiErrorMessage SAVE_AS_DRAFT_FM_DISABLED = new ApiErrorMessage(14, "Activity cannot be saved as draft, \"save as draft\" is disabled in FM!");
     public static final ApiErrorMessage TITLE_IN_DEFAULT_LANUGAGE_REQUIRED = new ApiErrorMessage(15, "Title in default language is required");
     public static final ApiErrorMessage UPDATE_ID_MISMATCH = new ApiErrorMessage(16, "Request project ids mismatch");
@@ -36,9 +37,7 @@ public class ActivityErrors {
             new ApiErrorMessage(23, "Current activity is being edited by:");
     public static final ApiErrorMessage ACTIVITY_NOT_LOADED = new ApiErrorMessage(24, "Cannot load the activity");
     public static final ApiErrorMessage FIELD_INVALID_PERCENTAGE = new ApiErrorMessage(25, "Percentage fields have to be >0, <=100");
-    public static final ApiErrorMessage AGREEMENT_CODE_REQUIRED = new ApiErrorMessage(26, "Agreement code is required");
     public static final ApiErrorMessage AGREEMENT_CODE_UNIQUE = new ApiErrorMessage(27, "Agreement code should be unique");
-    public static final ApiErrorMessage AGREEMENT_TITLE_REQUIRED = new ApiErrorMessage(26, "Agreement title is required");
     public static final ApiErrorMessage ORGANIZATION_ROLE_PAIR_NOT_DECLARED = new ApiErrorMessage(27, "The organization and role pair is not declared");
     public static final ApiErrorMessage ORGANIZATION_NOT_DECLARED = new ApiErrorMessage(28, "The organization is not declared");
     public static final ApiErrorMessage ACTIVITY_IS_STALE = new ApiErrorMessage(29, "The activity is stale");
@@ -51,6 +50,12 @@ public class ActivityErrors {
             "Implementation level must be specified");
     public static final ApiErrorMessage DOESNT_MATCH_IMPLEMENTATION_LEVEL = new ApiErrorMessage(34,
             "Doesn't match with implementation level");
-
+    public static final ApiErrorMessage LOCALE_INVALID =
+            new ApiErrorMessage(35, "Invalid translation language specified");
+    
+    public static final String ADD_ACTIVITY_NOT_ALLOWED = "Adding activity is not allowed";
+    public static final String EDIT_ACTIVITY_NOT_ALLOWED = "No right to edit this activity";
+    public static final String ACTIVITY_NOT_LAST_VERSION = "Activity is not the latest version.";
+    public static final String INVALID_MODIFY_BY_FIELD = "Invalid team member in modified_by field.";
 
 }

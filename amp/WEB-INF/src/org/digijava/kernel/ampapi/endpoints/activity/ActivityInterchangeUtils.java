@@ -68,9 +68,10 @@ public final class ActivityInterchangeUtils {
     public static JsonApiResponse<ActivitySummary> importActivity(Map<String, Object> newJson, boolean update,
             ActivityImportRules rules, String endpointContextPath) {
         APIField activityField = AmpFieldsEnumerator.getEnumerator().getActivityField();
+        StringBuffer sourceURL = TLSUtils.getRequest().getRequestURL();
 
         return new ActivityImporter(activityField, rules)
-                .importOrUpdate(newJson, update, endpointContextPath)
+                .importOrUpdate(newJson, update, endpointContextPath, sourceURL.toString())
                 .getResult();
     }
 
@@ -113,25 +114,6 @@ public final class ActivityInterchangeUtils {
     }
 
     /**
-     * @param teamMember    team member
-     * @param activityId    activity id
-     * @return true if team member can edit the activity
-     */
-    public static boolean isEditableActivity(TeamMember teamMember, Long activityId) {
-        // we reuse the same approach as the one done by Project List EP
-        return activityId != null && ActivityUtil.getEditableActivityIdsNoSession(teamMember).contains(activityId);
-    }
-
-    /**
-     * @return true if add activity is allowed
-     */
-    public static boolean addActivityAllowed(TeamMember tm) {
-        return tm != null && Boolean.TRUE.equals(tm.getAddActivity())
-                && (FeaturesUtil.isVisibleField("Add Activity Button")
-                        || FeaturesUtil.isVisibleField("Add SSC Button"));
-    }
-
-    /**
      * @param containerReq
      * @return true if request is valid to view an activity
      */
@@ -161,7 +143,8 @@ public final class ActivityInterchangeUtils {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         activityInformation.setActivityTeam(project.getTeam());
         if (tm != null) {
-            activityInformation.setEdit(isEditableActivity(tm, projectId));
+            activityInformation.setEdit(new AMPActivityService().isEditableActivity(
+                    TeamMemberUtil.getAmpTeamMember(tm.getMemberId()), projectId));
             if (activityInformation.isEdit()) {
                 activityInformation.setValidate(ActivityUtil.canValidateActivity(project, tm));
             }
@@ -257,6 +240,9 @@ public final class ActivityInterchangeUtils {
 
     public static Map<String, Object> getActivityByAmpId(String ampId) {
         Long activityId = ActivityUtil.findActivityIdByAmpId(ampId);
+        if (activityId == null) {
+            ApiErrorResponseService.reportResourceNotFound(ActivityErrors.ACTIVITY_NOT_FOUND.withDetails(ampId));
+        }
         return getActivity(activityId);
     }
 
@@ -270,19 +256,17 @@ public final class ActivityInterchangeUtils {
         return getActivity(projectId, null);
     }
 
-    public static AmpActivityVersion loadActivity(Long projectId) {
-        AmpActivityVersion activity = null;
+    public static AmpActivityVersion loadActivity(Long actId) {
         try {
-            activity = ActivityUtil.loadActivity(projectId);
-            if (activity == null) {
-                //so far project will never be null since an exception will be thrown
-                //I leave the code prepared to throw the appropriate response code
-                ApiErrorResponseService.reportResourceNotFound(ActivityErrors.ACTIVITY_NOT_FOUND);
+            if (PersistenceManager.getSession().get(AmpActivityVersion.class, actId) == null) {
+                ApiErrorResponseService.reportResourceNotFound(
+                        ActivityErrors.ACTIVITY_NOT_FOUND.withDetails(actId.toString()));
             }
+            
+            return ActivityUtil.loadActivity(actId);
         } catch (DgException e) {
             throw new RuntimeException(e);
         }
-        return activity;
     }
 
     /**
@@ -293,6 +277,10 @@ public final class ActivityInterchangeUtils {
      * @return
      */
     public static Map<String, Object> getActivity(Long projectId, Map<String, Object> filter) {
+        if (PersistenceManager.getSession().get(AmpActivityVersion.class, projectId) == null) {
+            ApiErrorResponseService.reportResourceNotFound(
+                    ActivityErrors.ACTIVITY_NOT_FOUND.withDetails(projectId.toString()));
+        }
         return getActivity(loadActivity(projectId), filter);
     }
 

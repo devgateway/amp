@@ -26,6 +26,7 @@ module.exports = Backbone.View.extend({
 				  // temp dirty force rejoin for now, otherwise use: getJoinedVersion          
 				  var ampFormatter = new chartUtils.DecimalFormat(self.app.data.generalSettings.get('number-format'));          
 				  // dec 31st, 2014 tried getjoinedversion INSTEAD OF tempDirtyForceJoin, but still doesn't work
+                  project.appData = this.app.data;
 				  project.tempDirtyForceJoin().then(function() {
 
 					  // Get actual or planned based on funding type setting

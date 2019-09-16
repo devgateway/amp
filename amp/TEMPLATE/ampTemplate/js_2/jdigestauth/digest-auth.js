@@ -89,7 +89,7 @@ function ajaxLogin() {
 				$("#" + id).show();
 			};
 
-  			digestAuth.setCredentials($('#j_username').val(),$('#j_password').val());
+  			digestAuth.setCredentials($('#j_username').val().trim(),$('#j_password').val());
   			digestAuth.setTokenInformation(getParameterByName('generate-token'),getParameterByName('callback-url'));
    			digestAuth.call('/aim/postLogin.do');
 	}

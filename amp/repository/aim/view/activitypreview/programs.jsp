@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
 	parameter (put in request scope): $programs_list, $programs_name
  --%>

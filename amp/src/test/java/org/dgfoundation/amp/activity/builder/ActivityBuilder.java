@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
+import org.digijava.kernel.persistence.InMemoryActivityManager;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -123,6 +125,11 @@ public class ActivityBuilder {
 
     public ActivityBuilder withDraft(boolean draft) {
         activity.setDraft(draft);
+        return this;
+    }
+    
+    public ActivityBuilder withGroup(AmpActivityGroup group) {
+        activity.setAmpActivityGroup(group);
         return this;
     }
 }

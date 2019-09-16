@@ -40,6 +40,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.validation.ConstraintDescriptor;
 import org.digijava.kernel.validation.ConstraintDescriptors;
+import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.kernel.validators.common.RegexValidator;
 import org.digijava.kernel.validators.activity.UniqueValidator;
@@ -155,10 +156,7 @@ public class FieldsEnumerator {
             }
             if (isList) {
                 String uniqueConstraint = getUniqueConstraint(apiField, field, context);
-                if (hasTreeCollectionValidatorEnabled(context)) {
-                    apiField.setTreeCollectionConstraint(true);
-                    apiField.setUniqueConstraint(uniqueConstraint);
-                } else if (hasUniqueValidatorEnabled(context)) {
+                if (hasUniqueValidatorEnabled(context)) {
                     apiField.setUniqueConstraint(uniqueConstraint);
                 }
             }
@@ -174,6 +172,16 @@ public class FieldsEnumerator {
         }
 
         addProgramConstraints(fieldConstraintDescriptors, apiType, context);
+
+        fieldConstraintDescriptors.addAll(findFieldConstraints(interchangeable.interValidators(), context));
+
+        apiField.setTreeCollectionConstraint(hasTreeValidator(fieldConstraintDescriptors));
+
+        // see AMP-27095 AMP-29028
+        if (apiField.getTreeCollectionConstraint() && apiField.getUniqueConstraint() == null) {
+            String uniqueConstraint = getUniqueConstraint(apiField, field, context);
+            apiField.setUniqueConstraint(uniqueConstraint);
+        }
 
         if (apiField.getUniqueConstraint() != null) {
             Map<String, String> args = ImmutableMap.of("field", apiField.getUniqueConstraint());
@@ -220,7 +228,6 @@ public class FieldsEnumerator {
                 findBeanConstraints(apiField.getApiType().getType(), context);
         apiField.setBeanConstraints(new ConstraintDescriptors(beanConstraintDescriptors));
 
-        fieldConstraintDescriptors.addAll(findFieldConstraints(interchangeable.interValidators(), context));
         apiField.setFieldConstraints(new ConstraintDescriptors(fieldConstraintDescriptors));
 
         apiField.setRegexPattern(findRegexPattern(fieldConstraintDescriptors));
@@ -242,6 +249,11 @@ public class FieldsEnumerator {
     private boolean hasTotalPercentageConstraint(List<ConstraintDescriptor> descriptors) {
         return descriptors.stream()
                 .anyMatch(d -> d.getConstraintValidatorClass().equals(TotalPercentageValidator.class));
+    }
+
+    private boolean hasTreeValidator(List<ConstraintDescriptor> descriptors) {
+        return descriptors.stream()
+                .anyMatch(d -> d.getConstraintValidatorClass().equals(TreeCollectionValidator.class));
     }
 
     /**
@@ -544,16 +556,6 @@ public class FieldsEnumerator {
     }
 
     /**
-     * Determine if the field contains tree collection validator
-     *
-     * @param context current context
-     * @return boolean if the field contains tree collection validator
-     */
-    private boolean hasTreeCollectionValidatorEnabled(FEContext context) {
-        return hasValidatorEnabled(context, ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME);
-    }
-
-    /**
      * If current field is for programs and at most one program is allowed then add this constraint to the list.
      *
      * FIXME This hack can be removed once AMP-29247 is solved.
@@ -592,8 +594,6 @@ public class FieldsEnumerator {
 
         if (ActivityEPConstants.UNIQUE_VALIDATOR_NAME.equals(validatorName)) {
             validatorFmPath = validators.unique();
-        } else if (ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME.equals(validatorName)) {
-            validatorFmPath = validators.treeCollection();
         }
 
         if (StringUtils.isNotBlank(validatorFmPath)) {

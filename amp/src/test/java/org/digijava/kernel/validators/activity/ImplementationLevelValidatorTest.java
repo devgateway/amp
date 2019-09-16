@@ -1,7 +1,6 @@
 package org.digijava.kernel.validators.activity;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
-import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
@@ -19,7 +18,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hamcrest.Matcher;
@@ -161,24 +159,6 @@ public class ImplementationLevelValidatorTest {
         AmpActivityVersion activity = new ActivityBuilder()
                 .withCategories(regionalImplementationLevel, regionImplementationLocation)
                 .addLocation(locations.getAmpLocation("Haiti", "Artibonite", "Dessalines"), 100f)
-                .getActivity();
-
-        Set<ConstraintViolation> violations = getConstraintViolations(activity);
-
-        assertThat(violations, emptyIterable());
-    }
-
-    @Test
-    public void testNullLocation() {
-        AmpActivityLocation nullLocation = new AmpActivityLocation();
-        nullLocation.setLocationPercentage(100f);
-
-        AmpCategoryValue regionalImplementationLevel = categoryValues.getImplementationLevels().getRegional();
-        AmpCategoryValue regionImplementationLocation = categoryValues.getImplementationLocations().getRegion();
-
-        AmpActivityVersion activity = new ActivityBuilder()
-                .addLocation(nullLocation)
-                .withCategories(regionalImplementationLevel, regionImplementationLocation)
                 .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);

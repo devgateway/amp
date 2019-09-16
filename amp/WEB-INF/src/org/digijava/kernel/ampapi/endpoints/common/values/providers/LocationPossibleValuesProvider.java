@@ -6,13 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import org.digijava.kernel.ampapi.endpoints.activity.LocationExtraInfo;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesDAO;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
 
 /**
  * @author Nadejda Mandrescu
@@ -36,7 +35,7 @@ public class LocationPossibleValuesProvider extends AbstractPossibleValuesBasePr
                 locCatToLocId.put(locCatId, locId);
             }
         }
-
+//        Stopwatch timer = Stopwatch.createStarted();
         for (Object[] item : possibleLocations) {
             Long locId = ((Number) item[PossibleValuesDAO.LOC_ID_POS]).longValue();
             String locCatName = ((String) item[PossibleValuesDAO.LOC_CAT_NAME_POS]);
@@ -56,10 +55,12 @@ public class LocationPossibleValuesProvider extends AbstractPossibleValuesBasePr
 
             LocationExtraInfo extraInfo = new LocationExtraInfo(parentLocId, parentLocCatName, categoryValueId,
                     categoryValueName, iso);
-
+    
             Map<String, String> translatedValues = translatorService.translateLabel(locCatName);
+            
             groupedValues.put(parentLocId, new PossibleValue(locId, locCatName, translatedValues, extraInfo));
         }
+//        System.out.println("Grouping Values took " + timer.elapsed(TimeUnit.MILLISECONDS));
         return convertToHierarchical(groupedValues);
     }
 

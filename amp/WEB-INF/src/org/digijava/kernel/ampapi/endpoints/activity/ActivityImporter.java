@@ -294,6 +294,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                         getSite());
             }
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             addError(new ApiExceptionMapper().getApiErrorMessageFromException(e));
         }
         

@@ -296,7 +296,7 @@ public abstract class ObjectImporter<T> {
         if (apiField.isIdOnly()) {
             // this field has possible values
             jsonValue = convert(fieldType, jsonValue);
-            return valueConverter.getObjectById(type, jsonValue);
+            return jsonValue != null ?  valueConverter.getObjectById(type, jsonValue) : null;
         } else if (fieldType.isDateType() || fieldType.isTimestampType()) {
             return DateTimeUtil.parseISO8601DateTimestamp((String) jsonValue, fieldType.isTimestampType());
         } else if (fieldType.isStringType()) {

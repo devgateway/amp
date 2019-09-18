@@ -42,7 +42,7 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
     
         put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0,
                 ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0);
-        put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, 
+        put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1,
                 ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1);
         put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2);
         put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3);
@@ -84,15 +84,15 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 
         put(ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
     
-        put(ColumnConstants.ZONE, ColumnConstants.PLEDGES_ZONES);
-        put(ColumnConstants.REGION, ColumnConstants.PLEDGES_REGIONS);
-        put(ColumnConstants.DISTRICT, ColumnConstants.PLEDGES_DISTRICTS);
-        put(ColumnConstants.COUNTRY, ColumnConstants.PLEDGES_COUNTRIES);
-        put(ColumnConstants.COMMUNAL_SECTION, ColumnConstants.PLEDGES_COMMUNAL_SECTION);
+        put(ColumnConstants.LOCATION_ADM_LEVEL_0, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_0);
+        put(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1);
+        put(ColumnConstants.LOCATION_ADM_LEVEL_2, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_2);
+        put(ColumnConstants.LOCATION_ADM_LEVEL_3, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_3);
+        put(ColumnConstants.LOCATION_ADM_LEVEL_4, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_4);
     }};
 
     public static final Map<String, String> DONOR_TO_REGIONAL_COLUMNS = new ImmutableMap.Builder<String, String>()
-            .put(ColumnConstants.REGION, ColumnConstants.REGIONAL_REGION)
+            .put(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.REGIONAL_REGION)
             .build();
 
     /**
@@ -100,8 +100,6 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
      */
     Set<String> ORED_DIMENSIONS = new HashSet<>(Arrays.asList("locs", "sectors", "progs", "orgs"));
     
-    Set<String> locationColumns = new HashSet<>(Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
-
     public AmpFiltersConverter(NiReportsEngine engine) {
         super(engine);
     }

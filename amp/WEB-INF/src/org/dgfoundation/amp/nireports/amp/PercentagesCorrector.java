@@ -27,7 +27,8 @@ import org.dgfoundation.amp.nireports.NiUtils;
  * 2. use that snapshot in {@link NormalizedPercentagesColumn#extractCell(org.dgfoundation.amp.nireports.NiReportsEngine, java.sql.ResultSet, Snapshot)} <br />
  * 
  * Please note that this class does not operate on the AMP column view; instead it operates on the "basic view". The basic view is the natural-data table which generates the column-views
- * via JOINs (for example, v_regions is a result of joining amp_activity_location with ni_all_locations_with_levels). Since joining with a dimension definition table does
+ * via JOINs (e.g:, v_adm_level_1 is a result of joining amp_activity_location with ni_all_locations_with_levels).
+ * Since joining with a dimension definition table does
  * not change percentages' sums, computing the sums for the basic view is enough to be able to correct the percentages for any derived view.
  * @author Dolghier Constantin
  *

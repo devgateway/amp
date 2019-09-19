@@ -15,7 +15,7 @@ public class AllowedInputValidator extends InputValidator {
 
     @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.FIELD_READ_ONLY;
+        return ValidationErrors.FIELD_READ_ONLY;
     }
 
     @Override

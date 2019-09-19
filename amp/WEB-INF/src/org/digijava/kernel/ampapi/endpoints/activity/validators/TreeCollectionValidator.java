@@ -39,7 +39,7 @@ public class TreeCollectionValidator extends InputValidator {
 
     @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.FIELD_PARENT_CHILDREN_NOT_ALLOWED;
+        return ValidationErrors.FIELD_PARENT_CHILDREN_NOT_ALLOWED;
     }
 
     @Override

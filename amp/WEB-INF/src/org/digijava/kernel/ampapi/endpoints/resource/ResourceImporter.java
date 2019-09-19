@@ -14,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
@@ -73,7 +74,7 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
         String privateAttr = String.valueOf(newJson.get(ResourceEPConstants.PRIVATE));
 
         if (StringUtils.isBlank(privateAttr)) {
-            addError(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.PRIVATE));
+            addError(ValidationErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.PRIVATE));
             return this;
         }
 
@@ -233,24 +234,24 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
 
         Object creatorEmail = newJson.get(ResourceEPConstants.CREATOR_EMAIL);
         if (creatorEmail == null || StringUtils.isBlank(creatorEmail.toString())) {
-            return ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.CREATOR_EMAIL);
+            return ValidationErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.CREATOR_EMAIL);
         }
 
         Object team = newJson.get(ResourceEPConstants.TEAM);
         if (team == null || getLongOrNull(team) == null) {
-            return ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.TEAM);
+            return ValidationErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.TEAM);
         }
 
         User creatorUser = creatorEmail != null ? UserUtils.getUserByEmailAddress(creatorEmail.toString()) : null;
         if (creatorUser == null) {
-            return ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.CREATOR_EMAIL);
+            return ValidationErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.CREATOR_EMAIL);
         }
 
         Long teamId = getLongOrNull(team);
         AmpTeam ampTeam = TeamUtil.getAmpTeam(teamId);
 
         if (ampTeam == null) {
-            return ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.TEAM);
+            return ValidationErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.TEAM);
         }
 
         AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(creatorUser.getEmail(),

@@ -20,7 +20,7 @@ public class UUIDValidator extends InputValidator {
 
     @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.FIELD_INVALID_VALUE;
+        return ValidationErrors.FIELD_INVALID_VALUE;
     }
     
     @Override

@@ -16,6 +16,7 @@ import java.util.Set;
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
@@ -69,7 +70,7 @@ public class ImplementationLevelValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        assertThat(violations, contains(implLocViolation(ActivityErrors.DOESNT_MATCH_IMPLEMENTATION_LEVEL)));
+        assertThat(violations, contains(implLocViolation(ValidationErrors.DOESNT_MATCH_IMPLEMENTATION_LEVEL)));
     }
 
     @Test
@@ -95,7 +96,7 @@ public class ImplementationLevelValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        assertThat(violations, contains(implLocViolation(ActivityErrors.IMPLEMENTATION_LEVEL_NOT_SPECIFIED)));
+        assertThat(violations, contains(implLocViolation(ValidationErrors.IMPLEMENTATION_LEVEL_NOT_SPECIFIED)));
     }
 
     @Test
@@ -227,7 +228,7 @@ public class ImplementationLevelValidatorTest {
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
         assertThat(violations, containsInAnyOrder(
-                implLocViolation(ActivityErrors.DOESNT_MATCH_IMPLEMENTATION_LEVEL),
+                implLocViolation(ValidationErrors.DOESNT_MATCH_IMPLEMENTATION_LEVEL),
                 locViolation(1901L)));
     }
 
@@ -241,12 +242,12 @@ public class ImplementationLevelValidatorTest {
     }
 
     private Matcher<ConstraintViolation> locsViolation() {
-        return violation("locations", ActivityErrors.IMPLEMENTATION_LEVEL_NOT_SPECIFIED);
+        return violation("locations", ValidationErrors.IMPLEMENTATION_LEVEL_NOT_SPECIFIED);
     }
 
     private Matcher<ConstraintViolation> locViolation(Long locId) {
         return allOf(
-                violation("locations~location", ActivityErrors.DOESNT_MATCH_IMPLEMENTATION_LEVEL),
+                violation("locations~location", ValidationErrors.DOESNT_MATCH_IMPLEMENTATION_LEVEL),
                 hasProperty("attributes", hasEntry(ImplementationLevelValidator.ATTR_LOC_ID, locId)));
     }
 

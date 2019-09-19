@@ -22,6 +22,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.InterchangeableClassM
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
@@ -218,8 +219,7 @@ public class InterchangeUtils {
         if (e instanceof ApiRuntimeException) {
             return (ApiRuntimeException) e;
         }
-        ApiErrorResponse error = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR
-                .withDetails(message));
+        ApiErrorResponse error = ApiError.toError(GenericErrors.INTERNAL_ERROR.withDetails(message));
         return new ApiRuntimeException(Response.Status.INTERNAL_SERVER_ERROR, error, e);
     }
 

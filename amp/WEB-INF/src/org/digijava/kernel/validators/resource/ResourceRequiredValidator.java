@@ -4,9 +4,9 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.resource.ResourceErrors;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.validation.ConstraintValidator;
@@ -52,7 +52,7 @@ public class ResourceRequiredValidator implements ConstraintValidator {
 
         if (StringUtils.isBlank(fieldValue)) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolation(ResourceErrors.FIELD_REQUIRED)
+            context.buildConstraintViolation(ValidationErrors.FIELD_REQUIRED)
                     .addPropertyNode(requiredFieldName)
                     .addConstraintViolation();
             return false;

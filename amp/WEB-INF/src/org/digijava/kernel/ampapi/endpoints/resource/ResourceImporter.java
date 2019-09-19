@@ -148,14 +148,11 @@ public class ResourceImporter extends ObjectImporter {
             resource.setAddingDate(new Date());
             
             if (errors.isEmpty()) {
-                ActionMessages messages = new ActionMessages();
                 TemporaryDocumentData tdd = getTemporaryDocumentData(resource, formFile);
-                NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), teamMemberCreator, messages);
+                NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), teamMemberCreator);
     
                 if (node != null) {
                     resource.setUuid(node.getUuid());
-                } else {
-                    reportErrors(messages);
                 }
             }
         } catch (ObjectConversionException | RuntimeException e) {
@@ -165,20 +162,6 @@ public class ResourceImporter extends ObjectImporter {
         }
 
         return new ArrayList<>(errors.values());
-    }
-
-    /**
-     * Copies struts messages to API error messages. If struts messages are empty will report a single API error
-     * message 'Failed without specifying a reason.'.
-     * @param messages struts messages to copy to API error messages
-     */
-    private void reportErrors(ActionMessages messages) {
-        if (messages.isEmpty()) {
-            errors.put(0, new ApiErrorMessage(0, "Failed without specifying a reason."));
-        } else {
-            StreamUtils.asStream((Iterator<Object>) messages.get())
-                    .forEach(m -> errors.put(0, new ApiErrorMessage(0, m.toString())));
-        }
     }
 
     private TemporaryDocumentData getTemporaryDocumentData(AmpResource resource, FormFile formFile) {

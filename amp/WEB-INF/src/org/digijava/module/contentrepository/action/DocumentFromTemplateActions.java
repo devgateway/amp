@@ -182,12 +182,13 @@ public class DocumentFromTemplateActions extends DispatchAction {
              //create jcr node
              Session jcrWriteSession        = DocumentManagerUtil.getWriteSession(request); 
              Node userOrTeamHomeNode = null;
-             if(documentOwnerType.equals("team")){
-                 userOrTeamHomeNode=DocumentManagerUtil.getTeamNode(jcrWriteSession, getCurrentTeamMember(request).getTeamId());
-             }else if (documentOwnerType.equals("private")){
-                 userOrTeamHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
+             TeamMember tm = getCurrentTeamMember(request);
+             if (documentOwnerType.equals("team")) {
+                 userOrTeamHomeNode = DocumentManagerUtil.getOrCreateTeamNode(jcrWriteSession, tm.getTeamId());
+             } else if (documentOwnerType.equals("private")) {
+                 userOrTeamHomeNode = DocumentManagerUtil.getOrCreateUserPrivateNode(jcrWriteSession, tm);
              }
-             //Node userHomeNode            = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
+
              NodeWrapper nodeWrapper        = new NodeWrapper(pdfHelper, request, userOrTeamHomeNode, false, new ActionErrors());
              if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ){
                     nodeWrapper.saveNode(jcrWriteSession);
@@ -224,14 +225,15 @@ public class DocumentFromTemplateActions extends DispatchAction {
             String contentType="application/msword";
             WordDocumentHelper wordDocHelper=new WordDocumentHelper(docName, contentType, documentType,  docbody);
             //create jcr node
-             Session jcrWriteSession        = DocumentManagerUtil.getWriteSession(request); 
+             Session jcrWriteSession        = DocumentManagerUtil.getWriteSession(request);
              Node userOrTeamHomeNode = null;
-             if(documentOwnerType.equals("team")){
-                 userOrTeamHomeNode=DocumentManagerUtil.getTeamNode(jcrWriteSession, getCurrentTeamMember(request).getTeamId());
-             }else if (documentOwnerType.equals("private")){
-                 userOrTeamHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
+             TeamMember tm = getCurrentTeamMember(request);
+             if (documentOwnerType.equals("team")) {
+                 userOrTeamHomeNode = DocumentManagerUtil.getOrCreateTeamNode(jcrWriteSession, tm.getTeamId());
+             } else if (documentOwnerType.equals("private")) {
+                 userOrTeamHomeNode = DocumentManagerUtil.getOrCreateUserPrivateNode(jcrWriteSession, tm);
              }
-            // Node userHomeNode            = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
+
              NodeWrapper nodeWrapper        = new NodeWrapper(wordDocHelper, request, userOrTeamHomeNode, false, new ActionErrors());
              if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ){
                     nodeWrapper.saveNode(jcrWriteSession);

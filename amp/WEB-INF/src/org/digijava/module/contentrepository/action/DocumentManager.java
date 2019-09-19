@@ -297,10 +297,8 @@ public class DocumentManager extends Action {
                         
             if (myForm.getType() != null && myForm.getType().equals(TYPE_PRIVATE)) {
                 if (myForm.getFileData() != null || myForm.getWebLink() != null) {
-                    Node userHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
-                    if (userHomeNode == null) {
-                        userHomeNode = DocumentManagerUtil.createUserPrivateNode(jcrWriteSession, teamMember);
-                    }
+                    Node userHomeNode = DocumentManagerUtil.getOrCreateUserPrivateNode(jcrWriteSession, teamMember);
+                    
                     NodeWrapper nodeWrapper = new NodeWrapper(myForm, request, userHomeNode, false, errors);
                     if (nodeWrapper != null && !nodeWrapper.isErrorAppeared()) {
                         nodeWrapper.saveNode(jcrWriteSession);
@@ -311,7 +309,8 @@ public class DocumentManager extends Action {
                     && DocumentManagerRights.hasAddResourceToTeamResourcesRights(request)) {
                 
                 if (myForm.getFileData() != null || myForm.getWebLink() != null) {
-                    Node teamHomeNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember.getTeamId());
+                    Node teamHomeNode = DocumentManagerUtil.getOrCreateTeamNode(jcrWriteSession,
+                            teamMember.getTeamId());
                     NodeWrapper nodeWrapper = new NodeWrapper(myForm, request, teamHomeNode, false, errors);
                     if (nodeWrapper != null && !nodeWrapper.isErrorAppeared()) {
                         nodeWrapper.saveNode(jcrWriteSession);

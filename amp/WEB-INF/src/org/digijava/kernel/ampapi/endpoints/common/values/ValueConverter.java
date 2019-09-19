@@ -86,9 +86,9 @@ public class ValueConverter {
             throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
         }
         if (ApprovalStatus.class.isAssignableFrom(entityClass)) {
-            return ApprovalStatus.fromId((Integer) id);
+            return ApprovalStatus.fromId(Integer.valueOf(id.toString()));
         } else if (ResourceType.class.isAssignableFrom(entityClass)) {
-            return ResourceType.fromId((Integer) id);
+            return ResourceType.fromId(Integer.valueOf(id.toString()));
         } else if (InterchangeUtils.isSimpleType(entityClass)) {
             return ConvertUtils.convert(id, entityClass);
         } else {

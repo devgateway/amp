@@ -53,6 +53,8 @@ public class ActivityErrors {
             "Doesn't match with implementation level");
     public static final ApiErrorMessage LOCALE_INVALID =
             new ApiErrorMessage(35, "Invalid translation language specified");
+    public static final ApiErrorMessage BULK_TO_BIG =
+            new ApiErrorMessage(36, "Too many activities found in the request");
 
 
 }

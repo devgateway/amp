@@ -84,6 +84,8 @@ public class ActivityEPConstants {
     
     // floating comparison constant
     public static final Double EPSILON = 0.0001;
+    
+    public static final Integer MAX_BULK_ACTIVITIES_ALLOWED = 20;
 
     /* 
      * Based on local stats, 7 is the minimum DB query batch size with best outcome. 6-5 is pretty close, but going 

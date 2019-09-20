@@ -51,7 +51,6 @@ import org.digijava.kernel.ampapi.endpoints.async.AsyncStatus;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.request.TLSUtils;
@@ -68,7 +67,7 @@ import org.springframework.security.web.util.UrlUtils;
  */
 @Path("activity")
 @Api("activity")
-public class InterchangeEndpoints implements ErrorReportingEndpoint {
+public class InterchangeEndpoints {
 
     @Context
     private UriInfo uri;
@@ -381,6 +380,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             @PathParam("project-id") Long projectId) {
         return PreviewActivityService.getInstance().getWorkspaces(projectId);
     }
+
     
     @POST
     @Path("/async/bulk")
@@ -456,12 +456,5 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         
         return responseBuilder.entity(asyncResult.getResults()).build();
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class getErrorsClass() {
-        return ActivityErrors.class;
-    }
+
 }

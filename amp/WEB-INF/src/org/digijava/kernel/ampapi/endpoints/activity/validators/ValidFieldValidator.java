@@ -15,7 +15,7 @@ public class ValidFieldValidator extends InputValidator {
 
     @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.FIELD_INVALID;
+        return ValidationErrors.FIELD_INVALID;
     }
 
     @Override

@@ -12,6 +12,7 @@ import javax.validation.Path;
 import com.google.common.collect.ImmutableMap;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.helper.Constants;
@@ -81,7 +82,7 @@ public class ActivityErrorsMapper implements Function<ConstraintViolation, JsonC
                 throw new RuntimeException("Cannot find json path for activity contact " + contactType);
             }
             
-            return new JsonConstraintViolation(jsonPath, ActivityErrors.UNIQUE_PRIMARY_CONTACT);
+            return new JsonConstraintViolation(jsonPath, ValidationErrors.UNIQUE_PRIMARY_CONTACT);
         }
     
         Class<?> cvbc = constraintToViolation.get(v.getConstraintDescriptor().getAnnotation().annotationType());

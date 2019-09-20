@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
@@ -34,7 +35,7 @@ public class ActivityImporterTest {
         json.put("foo", "bar");
 
         Collection<ApiErrorMessage> actualErrors = new ArrayList<>(validateAndRetrieveImporter(json).getWarnings());
-        Collection<ApiErrorMessage> expectedErrors = Arrays.asList(ActivityErrors.FIELD_INVALID.withDetails("foo"));
+        Collection<ApiErrorMessage> expectedErrors = Arrays.asList(ValidationErrors.FIELD_INVALID.withDetails("foo"));
 
         assertThat(actualErrors, is(expectedErrors));
     }

@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
@@ -30,37 +31,39 @@ import org.digijava.module.aim.util.SectorUtil;
 /**
  * HeatMap Configurations
  * Note: if will be ever managed through Admin, then can be defined in DB, now here for simplicity
- * 
+ *
  * @author Nadejda Mandrescu
  */
 public class HeatMapConfigService {
-
+    
     private static final Logger LOGGER = Logger.getLogger(HeatMapConfigService.class);
-            
-    /** HeatMap Dashboards Configurations */
+    
+    /**
+     * HeatMap Dashboards Configurations
+     */
     public static final List<HeatMapConfig> CONFIGS = new ArrayList<HeatMapConfig>() {{
-       add(new HeatMapConfig(
-               "HeatMap by Sector and Donor Group",
-               HeatMapConfig.Type.SECTOR,
-               SectorUtil.getAllSectorColumnNames(),
-               Arrays.asList(ColumnConstants.DONOR_GROUP)
-               ));
-       add(new HeatMapConfig(
-               "HeatMap by Program and Donor Group",
-               HeatMapConfig.Type.PROGRAM,
-               ProgramUtil.getAllProgramColumnNames(),
-               Arrays.asList(ColumnConstants.DONOR_GROUP)
-               ));
-       add(new HeatMapConfig(
-               "HeatMap by Location and Donor Group",
-               HeatMapConfig.Type.LOCATION,
-               getLocationsForHeatMap(),
-               Arrays.asList(ColumnConstants.DONOR_GROUP)
-               ));
+        add(new HeatMapConfig(
+                "HeatMap by Sector and Donor Group",
+                HeatMapConfig.Type.SECTOR,
+                SectorUtil.getAllSectorColumnNames(),
+                Arrays.asList(ColumnConstants.DONOR_GROUP)
+        ));
+        add(new HeatMapConfig(
+                "HeatMap by Program and Donor Group",
+                HeatMapConfig.Type.PROGRAM,
+                ProgramUtil.getAllProgramColumnNames(),
+                Arrays.asList(ColumnConstants.DONOR_GROUP)
+        ));
+        add(new HeatMapConfig(
+                "HeatMap by Location and Donor Group",
+                HeatMapConfig.Type.LOCATION,
+                getLocationsForHeatMap(),
+                Arrays.asList(ColumnConstants.DONOR_GROUP)
+        ));
     }};
-
+    
     private static final int DEFAULT_SCALE = 6;
-
+    
     private ApiEMGroup errors = new ApiEMGroup();
     
     private Set<String> visibleColumns;
@@ -69,7 +72,7 @@ public class HeatMapConfigService {
     
     public HeatMapConfigService() {
         visibleColumns = ColumnsVisibility.getVisibleColumns();
-    
+        
         for (HeatMapConfig heatMapConfig : CONFIGS) {
             processHeatMapConfigColumns(heatMapConfig.xColumns);
             processHeatMapConfigColumns(heatMapConfig.yColumns);
@@ -132,14 +135,15 @@ public class HeatMapConfigService {
         result.setAmountColors(DbUtil.getColorThresholds());
         return result;
     }
-
+    
     /**
      * Updates HeatMapSettings with new configuration
+     *
      * @param config new thresholds
      */
     public void saveHeatMapAdminSettings(AmpColorThresholdWrapper config) {
         LOGGER.info("Save HeatMap Admin Settings");
-
+        
         updateColorThresholds(config);
         if (!errors.isEmpty()) {
             throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, errors);
@@ -152,14 +156,14 @@ public class HeatMapConfigService {
         
         for (AmpColorThreshold threshold : newThresholds) {
             AmpColorThreshold ampColorThreshold = findAmpColorThreshold(threshold);
-            BigDecimal amountFrom = getNewAmountFrom(threshold); 
+            BigDecimal amountFrom = getNewAmountFrom(threshold);
             if (ampColorThreshold == null) {
                 // so far not saving new, so if not found, report an error
-                errors.addApiErrorMessage(DashboardErrors.INVALID_ID,
+                errors.addApiErrorMessage(ValidationErrors.INVALID_ID,
                         String.valueOf(threshold.getAmpColorThresholdId()));
             }
             if (amountFrom == null) {
-                errors.addApiErrorMessage(DashboardErrors.INVALID_THRESHOLD, 
+                errors.addApiErrorMessage(DashboardErrors.INVALID_THRESHOLD,
                         String.valueOf(threshold.getThresholdStart()));
             } else if (testUnique.containsKey(amountFrom)) {
                 AmpColorThreshold existing = testUnique.get(amountFrom);
@@ -189,7 +193,7 @@ public class HeatMapConfigService {
         BigDecimal from = threshold.getThresholdStart();
         return from == null ? null : from.setScale(DEFAULT_SCALE, RoundingMode.HALF_EVEN);
     }
-
+    
     private static List<String> getLocationsForHeatMap() {
         List<String> locationColumns = new ArrayList<>(LocationUtil.LOCATIONS_COLUMNS_NAMES);
         locationColumns.remove(ColumnConstants.COUNTRY);

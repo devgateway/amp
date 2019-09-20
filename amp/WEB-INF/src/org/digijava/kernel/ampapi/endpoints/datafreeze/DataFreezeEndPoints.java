@@ -14,7 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.dto.SaveResult;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -22,7 +21,7 @@ import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 
 @Path("data-freeze")
 @Api("data-freeze")
-public class DataFreezeEndPoints implements ErrorReportingEndpoint {
+public class DataFreezeEndPoints {
 
     @POST
     @Path("event")
@@ -87,13 +86,5 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
     public void unfreezeAll() {
         DataFreezeService.unfreezeAll();
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class getErrorsClass() {
-        return DataFreezeEndPoints.class;
-    }
-
+    
 }

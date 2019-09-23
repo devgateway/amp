@@ -26,7 +26,7 @@
 			<many-to-many column="used_value_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 		</set>
 		<set name="usedByValues" table="AMP_CATEGORY_VALUES_USED" inverse="true" lazy="true">
-			<cache usage="read-write" />
+			<cache usage="read-write"/>
 			<key column="used_value_id"/>
 			<many-to-many column="value_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 		</set>

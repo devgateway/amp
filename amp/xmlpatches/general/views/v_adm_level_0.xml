@@ -19,27 +19,21 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_pledges_zones CASCADE;
-			   	CREATE OR REPLACE VIEW v_pledges_zones AS
+				DROP VIEW IF EXISTS v_adm_level_0;
+			    CREATE OR REPLACE VIEW v_adm_level_0 AS
 					SELECT
-						afp.id AS pledge_id,
-						v.zone_name,
-						COALESCE(v.zone_id, -999999999) AS zone_id,
-						percentage,
+						aav.amp_activity_id,
+						v.adm_level_0_name,
+						COALESCE(v.adm_level_0_id, -999999999) AS adm_level_0_id,
+						v.percentage,
 						COALESCE(v.cnt_nulls, 0) AS cnt_nulls
-						FROM amp_funding_pledges afp
+					FROM amp_activity_version aav
 					LEFT JOIN (
-					SELECT
-						ra.pledge_id,
-						loc.zone_name,
-						loc.zone_id,
-						sum(ra.location_percentage) AS percentage,
-						COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
-						FROM amp_funding_pledges_location ra JOIN ni_all_locations_with_levels loc on loc.acvl_id = ra.location_id
-						GROUP BY ra.pledge_id, loc.zone_id, loc.zone_name
+						SELECT ra.amp_activity_id, loc.adm_level_0_name, loc.adm_level_0_id, sum(ra.location_percentage) AS percentage, COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
+							FROM amp_activity_location ra JOIN ni_all_locations_with_levels loc on loc.amp_location_id = ra.amp_location_id
+							GROUP BY ra.amp_activity_id, loc.adm_level_0_id, loc.adm_level_0_name
 					) v
-					ON afp.id = v.pledge_id;
-
+					ON aav.amp_activity_id = v.amp_activity_id;
 			</lang>
 		</script>
 	</apply>

@@ -80,7 +80,7 @@ public class AmpARFilterConverter {
                 put("selectedSecondaryPrograms", ColumnConstants.SECONDARY_PROGRAM_LEVEL_0);
                 put("selectedTertiaryPrograms", ColumnConstants.TERTIARY_PROGRAM_LEVEL_0);
                 put("approvalStatusSelected", ColumnConstants.APPROVAL_STATUS);
-                put("locationSelected", ColumnConstants.COUNTRY);
+                put("locationSelected", ColumnConstants.LOCATION_ADM_LEVEL_0);
                 put("financingInstruments", ColumnConstants.FINANCING_INSTRUMENT);
                 put("typeOfAssistance", ColumnConstants.TYPE_OF_ASSISTANCE);
                 put("budget", ColumnConstants.ACTIVITY_BUDGET);
@@ -155,7 +155,7 @@ public class AmpARFilterConverter {
                     values.add(Long.toString(ColumnReportData.UNALLOCATED_ID));
                     names.add(FiltersConstants.UNDEFINED_NAME);
                     addFilterRule(columnName, new FilterRule(names, values, true));
-                }            
+                }
             }
         }
     }
@@ -438,30 +438,31 @@ public class AmpARFilterConverter {
 
         for(AmpCategoryValueLocations loc : filterLocations) {
             AmpCategoryValue parentCatVal = loc.getParentCategoryValue();
-            if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(parentCatVal)) {
+            if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(parentCatVal)) {
                 countries.add(loc);
-            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(parentCatVal)) {
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.equalsCategoryValue(parentCatVal)) {
                 regions.add(loc);
-            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.equalsCategoryValue(parentCatVal)) {
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2.equalsCategoryValue(parentCatVal)) {
                 zones.add(loc);
-            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.equalsCategoryValue(parentCatVal)) {
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3.equalsCategoryValue(parentCatVal)) {
                 districts.add(loc);
-            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_COMMUNAL_SECTION.equalsCategoryValue(parentCatVal)) {
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_4.equalsCategoryValue(parentCatVal)) {
                 communalSections.add(loc);
             }
         }
+
         if (!arFilter.isPledgeFilter()) {
-            addFilter(countries, ColumnConstants.COUNTRY);
-            addFilter(regions, ColumnConstants.REGION);
-            addFilter(zones, ColumnConstants.ZONE);
-            addFilter(districts, ColumnConstants.DISTRICT);
-            addFilter(communalSections, ColumnConstants.COMMUNAL_SECTION);
+            addFilter(countries, ColumnConstants.LOCATION_ADM_LEVEL_0);
+            addFilter(regions, ColumnConstants.LOCATION_ADM_LEVEL_1);
+            addFilter(zones, ColumnConstants.LOCATION_ADM_LEVEL_2);
+            addFilter(districts, ColumnConstants.LOCATION_ADM_LEVEL_3);
+            addFilter(communalSections, ColumnConstants.LOCATION_ADM_LEVEL_4);
         } else {
-            addFilter(countries, ColumnConstants.PLEDGES_COUNTRIES);
-            addFilter(regions, ColumnConstants.PLEDGES_REGIONS);
-            addFilter(zones, ColumnConstants.PLEDGES_ZONES);
-            addFilter(districts, ColumnConstants.PLEDGES_DISTRICTS);
-            addFilter(communalSections, ColumnConstants.PLEDGES_COMMUNAL_SECTION);
+            addFilter(countries, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_0);
+            addFilter(regions, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1);
+            addFilter(zones, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_2);
+            addFilter(districts, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_3);
+            addFilter(communalSections, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_4);
         }
     }
     

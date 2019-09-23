@@ -826,8 +826,10 @@ public class ReportsUtil {
         
         // detect layers view as a highest hierarchy from location columns
         String layersView = null;
-        Set<String> orderedLocations = new LinkedHashSet<String>(
-                Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
+        Set<String> orderedLocations = new LinkedHashSet<>(
+                Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_0, ColumnConstants.LOCATION_ADM_LEVEL_1,
+                        ColumnConstants.LOCATION_ADM_LEVEL_2, ColumnConstants.LOCATION_ADM_LEVEL_3,
+                        ColumnConstants.LOCATION));
         for (ReportColumn column : spec.getHierarchies()) {
             if (orderedLocations.contains(column.getColumnName())) {
                 layersView = column.getColumnName();
@@ -837,7 +839,7 @@ public class ReportsUtil {
         
         if (layersView == null) {
             // configure the default, that is the 1st sub-national level, e.g. Region if it is visible
-            orderedLocations.remove(ColumnConstants.COUNTRY);
+            orderedLocations.remove(ColumnConstants.LOCATION_ADM_LEVEL_0);
             Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
             for (String defaultOption : orderedLocations) {
                 if (visibleColumns.contains(defaultOption)) {

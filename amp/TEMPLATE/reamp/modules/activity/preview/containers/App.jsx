@@ -47,7 +47,6 @@ class App extends Component {
             Logger);
         const activityFundingTotals = new ActivityFundingTotals(null, null, null, null);
         console.log(NumberUtils.getAmountsInThousandsMessage);
-        debugger;
         return {
             activityFieldsManager,
             Logger,

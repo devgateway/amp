@@ -15,13 +15,11 @@ class Home extends Component {
 
 
     render() {
-    debugger;
         console.log('hola');
         return (
             <div>
                 <div className="title-bar">
-                    <h2>HOLA que tal como andas ds</h2>
-                    <h2>HOLA que tal como andas d</h2>
+                    <h2>TEMP</h2>
                 </div>
             </div>
 

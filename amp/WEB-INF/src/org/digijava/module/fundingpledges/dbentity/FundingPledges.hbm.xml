@@ -2,6 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="org.digijava.module.fundingpledges.dbentity.FundingPledges" table="AMP_FUNDING_PLEDGES">
+		<cache usage="read-write" />
 		<id name="Id" column="id" type="java.lang.Long"
 			unsaved-value="null">
 			<generator class="native">
@@ -64,7 +65,7 @@
 			<key column="pledge_id"/>
 			<one-to-many class="org.digijava.module.fundingpledges.dbentity.FundingPledgesDocument" />
 		</set>		
-		<set name="fundingPledgesDetails" cascade="all-delete-orphan" table="AMP_FUNDING_PLEDGES_DETAILS">
+		<set name="fundingPledgesDetails" lazy="true" cascade="all-delete-orphan" table="AMP_FUNDING_PLEDGES_DETAILS">
 			<cache usage="read-write" />
 			<key column="pledge_id" />
 			<one-to-many class="org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails" />

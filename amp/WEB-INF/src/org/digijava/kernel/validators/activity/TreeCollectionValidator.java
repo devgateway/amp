@@ -31,7 +31,9 @@ public class TreeCollectionValidator implements ConstraintValidator {
         Collection col = (Collection) value;
         for (Object item : col) {
             AmpAutoCompleteDisplayable<?> treeNode = ((TreeNodeAware) item).getTreeNode();
-            treeNodes.add(treeNode);
+            if (treeNode != null) {
+                treeNodes.add(treeNode);
+            }
         }
 
         for (AmpAutoCompleteDisplayable<?> node : treeNodes) {

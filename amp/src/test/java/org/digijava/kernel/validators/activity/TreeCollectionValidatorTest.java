@@ -14,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpLocation;
 import org.hamcrest.Matcher;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -65,6 +66,19 @@ public class TreeCollectionValidatorTest {
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
         assertThat(violations, contains(violation()));
+    }
+    
+    @Test
+    public void testObjectWithNullEntityInCollection() {
+        AmpLocation loc = new AmpLocation();
+        AmpActivityVersion activity = new ActivityBuilder()
+                .addLocation(loc, 50f)
+                .addLocation(locations.getAmpLocation("Haiti"), 50f)
+                .getActivity();
+        
+        Set<ConstraintViolation> violations = getConstraintViolations(activity);
+    
+        assertThat(violations, emptyIterable());
     }
 
     @Test

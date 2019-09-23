@@ -1,0 +1,311 @@
+{
+  "PROJECT MANAGEMENT": {
+    "__enabled": true,
+    "Funding": {
+      "__enabled": true,
+      "Funding Information": {
+        "__enabled": true,
+        "Delivery rate": {
+          "__enabled": true
+        }
+      }
+    },
+    "Project ID and Planning": {
+      "__enabled": true,
+      "Identification": {
+        "__enabled": true,
+        "Data Team Leader": {
+          "__enabled": true
+        }
+      },
+      "Planning": {
+        "__enabled": true,
+        "Duration of Project": {
+          "__enabled": true
+        }
+      }
+    }
+  },
+  "Activity Form": {
+    "__enabled": true,
+    "Program": {
+      "__enabled": true
+    },
+    "Contacts": {
+      "__enabled": true
+    },
+    "Funding": {
+      "__enabled": true,
+      "Search Funding Organizations": {
+        "__enabled": true,
+        "Search Organizations": {
+          "__enabled": true
+        },
+        "Select Organization Type": {
+          "__enabled": true
+        }
+      },
+      "Funding Group": {
+        "__enabled": true,
+        "Funding Item": {
+          "__enabled": true,
+          "MTEF Projections": {
+            "__enabled": true,
+            "MTEF Projections Table": {
+              "__enabled": true,
+              "MTEF Projection": {
+                "__enabled": true
+              },
+              "Projection Date": {
+                "__enabled": true
+              },
+              "Amount": {
+                "__enabled": true
+              },
+              "Currency": {
+                "__enabled": true
+              }
+            }
+          },
+          "Disbursements": {
+            "__enabled": true,
+            "Disbursements Table": {
+              "__enabled": true,
+              "Funding Flows OrgRole Selector": {
+                "__enabled": true,
+                "Add Executing Agency": {
+                  "__enabled": false
+                },
+                "Add Beneficiary Agency": {
+                  "__enabled": false
+                },
+                "Add Sector Group": {
+                  "__enabled": false
+                },
+                "Add Contracting Agency": {
+                  "__enabled": false
+                },
+                "Add Implementing Agency": {
+                  "__enabled": false
+                },
+                "Add Regional Group": {
+                  "__enabled": false
+                },
+                "Add Responsible Organization": {
+                  "__enabled": false
+                },
+                "Add Donor Organization": {
+                  "__enabled": false
+                }
+              }
+            }
+          },
+          "Commitments": {
+            "__enabled": true,
+            "Commitments Table": {
+              "__enabled": true,
+              "Funding Flows OrgRole Selector": {
+                "__enabled": true,
+                "Add Executing Agency": {
+                  "__enabled": false
+                },
+                "Add Beneficiary Agency": {
+                  "__enabled": false
+                },
+                "Add Sector Group": {
+                  "__enabled": false
+                },
+                "Add Contracting Agency": {
+                  "__enabled": false
+                },
+                "Add Implementing Agency": {
+                  "__enabled": false
+                },
+                "Add Regional Group": {
+                  "__enabled": false
+                },
+                "Add Responsible Organization": {
+                  "__enabled": false
+                },
+                "Add Donor Organization": {
+                  "__enabled": false
+                }
+              }
+            }
+          },
+          "Expenditures": {
+            "Expenditures Table": {
+              "Funding Flows OrgRole Selector": {
+                "Add Implementing Agency": {
+                  "__enabled": false
+                },
+                "Add Contracting Agency": {
+                  "__enabled": false
+                },
+                "Add Beneficiary Agency": {
+                  "__enabled": false
+                },
+                "Add Donor Organization": {
+                  "__enabled": false
+                },
+                "Add Executing Agency": {
+                  "__enabled": false
+                },
+                "Add Regional Group": {
+                  "__enabled": false
+                },
+                "Add Responsible Organization": {
+                  "__enabled": false
+                },
+                "Add Sector Group": {
+                  "__enabled": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Sectors": {
+      "__enabled": true,
+      "Secondary Sectors": {
+        "__enabled": true
+      },
+      "Primary Sectors": {
+        "__enabled": true
+      }
+    },
+    "Organizations": {
+      "__enabled": true,
+      "Regional Group": {
+        "__enabled": false,
+        "Add Funding Item Automatically": {
+          "__enabled": false
+        }
+      },
+      "Donor Organization": {
+        "__enabled": true,
+        "Add Funding Item Automatically": {
+          "__enabled": false
+        }
+      },
+      "Beneficiary Agency": {
+        "__enabled": false,
+        "Add Funding Item Automatically": {
+          "__enabled": false
+        }
+      },
+      "Implementing Agency": {
+        "__enabled": true,
+        "Add Funding Item Automatically": {
+          "__enabled": false
+        }
+      },
+      "Executing Agency": {
+        "__enabled": true,
+        "Add Funding Item Automatically": {
+          "__enabled": false
+        }
+      },
+      "Sector Group": {
+        "__enabled": false,
+        "Add Funding Item Automatically": {
+          "__enabled": false
+        }
+      },
+      "Contracting Agency": {
+        "__enabled": false,
+        "Add Funding Item Automatically": {
+          "__enabled": false
+        }
+      },
+      "Related Government Organization": {
+        "__enabled": false,
+        "Add Funding Item Automatically": {
+          "__enabled": false
+        }
+      }
+    },
+    "Identification": {
+      "__enabled": true,
+      "Activity Updated On": {
+        "__enabled": true
+      },
+      "Activity Last Updated by": {
+        "__enabled": false
+      }
+    },
+    "Structures": {
+      "__enabled": true,
+      "Add Structure": {
+        "__enabled": true
+      }
+    },
+    "Planning": {
+      "__enabled": true,
+      "Actual Approval Date": {
+        "__enabled": false,
+        "Same As Proposed Approval Date": {
+          "__enabled": true
+        }
+      },
+      "Actual Start Date": {
+        "__enabled": true,
+        "Same As Proposed Start Date": {
+          "__enabled": true
+        }
+      }
+    },
+    "Related Documents": {
+      "__enabled": true,
+      "Add New Web Link": {
+        "__enabled": true
+      },
+      "Add New Document": {
+        "__enabled": true
+      }
+    },
+    "Issues Section": {
+      "__enabled": true,
+      "Add Issue": {
+        "__enabled": true
+      },
+      "Issue": {
+        "__enabled": true,
+        "Add Item": {
+          "__enabled": true
+        },
+        "Delete Item": {
+          "__enabled": true
+        },
+        "Measure": {
+          "__enabled": true,
+          "Add Item": {
+            "__enabled": true
+          },
+          "Actor": {
+            "__enabled": true,
+            "Delete Item": {
+              "__enabled": true
+            }
+          },
+          "Delete Item": {
+            "__enabled": true
+          }
+        }
+      }
+    }
+  },
+  "PUBLIC VIEW": {
+    "__enabled": true,
+    "Login - User Management": {
+      "__enabled": true,
+      "Change Password": {
+        "__enabled": true
+      },
+      "Trouble signing in": {
+        "__enabled": false
+      }
+    }
+  }
+}

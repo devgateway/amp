@@ -68,7 +68,8 @@ public class SelectDocumentDM extends Action {
             javax.servlet.http.HttpServletResponse response)
             throws java.lang.Exception 
     {
-
+    
+        DocumentManagerUtil.setMaxFileSizeAttribute(request);
         SelectDocumentForm selectDocumentForm   = (SelectDocumentForm) form;
         
         if (request.getParameter("selectedDocs") != null) {

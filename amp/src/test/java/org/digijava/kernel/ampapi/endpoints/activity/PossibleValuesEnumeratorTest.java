@@ -107,7 +107,7 @@ public class PossibleValuesEnumeratorTest {
             possibleValuesFor("");
             fail();
         } catch (ApiRuntimeException e) {
-            assertErrorJsonEquals(e.getError(), "{\"error\":{\"0007\":[\"(Invalid field) \"]}}");
+            assertErrorJsonEquals(e.getError(), "{\"error\":{\"0105\":[\"(Invalid field) \"]}}");
         }
     }
 
@@ -117,7 +117,7 @@ public class PossibleValuesEnumeratorTest {
             possibleValuesFor("no_such_field");
             fail();
         } catch (ApiRuntimeException e) {
-            assertErrorJsonEquals(e.getError(), "{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}");
+            assertErrorJsonEquals(e.getError(), "{\"error\":{\"0105\":[\"(Invalid field) no_such_field\"]}}");
         }
     }
 
@@ -147,7 +147,7 @@ public class PossibleValuesEnumeratorTest {
             possibleValuesFor("no_such_field~id");
             fail();
         } catch (ApiRuntimeException e) {
-            assertErrorJsonEquals(e.getError(), "{\"error\":{\"0007\":[\"(Invalid field) no_such_field\"]}}");
+            assertErrorJsonEquals(e.getError(), "{\"error\":{\"0105\":[\"(Invalid field) no_such_field\"]}}");
         }
     }
 

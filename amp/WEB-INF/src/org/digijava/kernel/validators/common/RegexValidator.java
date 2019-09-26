@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
@@ -37,6 +38,6 @@ public class RegexValidator implements ConstraintValidator {
 
     @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.FIELD_INVALID_VALUE;
+        return ValidationErrors.FIELD_INVALID_VALUE;
     }
 }

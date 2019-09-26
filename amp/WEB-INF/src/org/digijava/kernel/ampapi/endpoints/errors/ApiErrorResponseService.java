@@ -21,9 +21,6 @@ public final class ApiErrorResponseService {
     
     protected static final Logger logger = Logger.getLogger(ApiErrorResponseService.class);
     
-    public static final String UNKNOWN_ERROR = "Unknown Error";
-    public static final String INTERNAL_ERROR = "Internal Error";
-    
     private ApiErrorResponseService() {
     
     }
@@ -66,7 +63,7 @@ public final class ApiErrorResponseService {
      * Reports forbidden access with unknown reason
      */
     public static void reportForbiddenAccess() {
-        reportError(Response.Status.FORBIDDEN, ApiError.toError(TranslatorWorker.translateText(UNKNOWN_ERROR)));
+        reportError(Response.Status.FORBIDDEN, GenericErrors.UNKNOWN_ERROR);
     }
     
     /**

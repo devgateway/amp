@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
 import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -138,13 +139,13 @@ public class IndicatorImporter {
             }
 
         } catch (NullPointerException e) {
-            errors.addApiErrorMessage(IndicatorErrors.UNKNOWN_ERROR, " Cannot import indicator values ");
+            errors.addApiErrorMessage(GenericErrors.UNKNOWN_ERROR, " Cannot import indicator values ");
         } catch (IllegalStateException e) {
             errors.addApiErrorMessage(IndicatorErrors.INCORRECT_CONTENT, " File is not ok ");
         } catch (IOException e) {
             errors.addApiErrorMessage(IndicatorErrors.INCORRECT_CONTENT, " File is not ok ");
         } catch (Exception e) {
-            errors.addApiErrorMessage(IndicatorErrors.UNKNOWN_ERROR, " Cannot import indicator values ");
+            errors.addApiErrorMessage(GenericErrors.UNKNOWN_ERROR, " Cannot import indicator values ");
         }
         if (geoIdsWithProblems.size() > 0) {
             errors.addApiErrorMessage(IndicatorErrors.LOCATION_NOT_FOUND, geoIdsWithProblems.toString());

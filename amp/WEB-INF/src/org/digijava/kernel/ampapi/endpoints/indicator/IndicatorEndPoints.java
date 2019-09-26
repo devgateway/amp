@@ -26,7 +26,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.common.CategoryValueLabel;
 import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.Boundary;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
@@ -39,7 +38,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 @Path("indicator")
 @Api("indicator")
-public class IndicatorEndPoints implements ErrorReportingEndpoint {
+public class IndicatorEndPoints {
 
     @GET
     @Path("/indicator-layer")
@@ -235,11 +234,4 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
         return new PopulationLayerDesignator().getAllowedPopulationLayersOptions();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class getErrorsClass() {
-        return IndicatorErrors.class;
-    }
 }

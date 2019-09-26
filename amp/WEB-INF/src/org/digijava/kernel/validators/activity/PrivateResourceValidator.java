@@ -5,8 +5,8 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.content.ContentRepositoryManager;
 import org.digijava.kernel.validation.ConstraintValidator;
@@ -75,6 +75,6 @@ public class PrivateResourceValidator implements ConstraintValidator {
 
     @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.FIELD_INVALID_VALUE;
+        return ValidationErrors.FIELD_INVALID_VALUE;
     }
 }

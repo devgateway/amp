@@ -68,7 +68,8 @@ public final class ApiAuthentication {
             for (SuspendLogin suObject : su) {
                 suReasons.add(suObject.getReasonText());
             }
-            return new ApiErrorMessage(10, suReasons.toString());
+            
+            return SecurityErrors.USER_SUSPENDED.withDetails(suReasons);
         }
 
         return null;

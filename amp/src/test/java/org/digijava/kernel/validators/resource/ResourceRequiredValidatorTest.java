@@ -10,6 +10,7 @@ import static org.junit.Assert.assertThat;
 import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceErrors;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
@@ -86,7 +87,7 @@ public class ResourceRequiredValidatorTest {
 
     private Matcher<ConstraintViolation> constraint(String path) {
         return ValidatorMatchers.violationFor(ResourceRequiredValidator.class, path, anything(),
-                ResourceErrors.FIELD_REQUIRED);
+                ValidationErrors.FIELD_REQUIRED);
     }
 
     private Set<ConstraintViolation> getConstraintViolations(AmpResource resource) {

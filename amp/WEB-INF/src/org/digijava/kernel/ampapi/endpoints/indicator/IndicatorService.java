@@ -9,10 +9,12 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.menu.AmpView;
 import org.dgfoundation.amp.menu.MenuUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
+import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
 import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
@@ -63,7 +65,7 @@ public class IndicatorService {
     public static Indicator getIndicatorById(long id) {
 
         if (!IndicatorUtils.hasRights(id)) {
-            ApiErrorResponseService.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
         }
 
         AmpIndicatorLayer indicatorLayer = DynLocationManagerUtil.getIndicatorLayerById(id);
@@ -71,7 +73,8 @@ public class IndicatorService {
             return IndicatorUtils.buildIndicatorLayerJson(indicatorLayer);
         }
     
-        throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, ApiError.toError(IndicatorErrors.INVALID_ID));
+        throw new AmpWebApplicationException(Response.Status.BAD_REQUEST,
+                ApiError.toError(ValidationErrors.INVALID_ID));
     }
 
     public static CheckNameResult checkName(String name) {
@@ -81,7 +84,7 @@ public class IndicatorService {
 
     public static IndicatorOperationResult deleteIndicatorById(long id) {
         if (!IndicatorUtils.hasRights(id)) {
-            ApiErrorResponseService.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
         }
 
         AmpIndicatorLayer indicatorLayer = DynLocationManagerUtil.getIndicatorLayerById(id);
@@ -89,7 +92,7 @@ public class IndicatorService {
             DbUtil.delete(indicatorLayer);
         } else {
             throw new AmpWebApplicationException(Response.Status.BAD_REQUEST,
-                    ApiError.toError(IndicatorErrors.INVALID_ID));
+                    ApiError.toError(ValidationErrors.INVALID_ID));
         }
 
         return new IndicatorOperationResult(IndicatorOperationResult.ResultOptions.DELETED);
@@ -144,7 +147,7 @@ public class IndicatorService {
         Long indicatorId = updater.getIndicatorId();
         
         if (indicatorId != null && !IndicatorUtils.hasRights(indicatorId)) {
-            ApiErrorResponseService.reportForbiddenAccess(IndicatorErrors.UNAUTHORIZED);
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
         }
         
         AmpIndicatorLayer indLayer = updater.getIndicatorLayer();
@@ -158,7 +161,7 @@ public class IndicatorService {
             }
             boolean isAuthenticated = MenuUtils.getCurrentView() != AmpView.PUBLIC;
             if (isAuthenticated && indLayer.getAccessType() == IndicatorAccessType.TEMPORARY && saveMode) {
-                errors.addApiErrorMessage(IndicatorErrors.FIELD_INVALID_VALUE, 
+                errors.addApiErrorMessage(ValidationErrors.FIELD_INVALID_VALUE,
                         IndicatorEPConstants.ACCESS_TYPE_ID + " = " + indicator.getAccessTypeId());
             }
             if (translations != null) {

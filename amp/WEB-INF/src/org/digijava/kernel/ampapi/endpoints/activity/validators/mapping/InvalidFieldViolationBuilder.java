@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators.mapping;
 import javax.validation.ConstraintViolation;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 
 /**
  * @author Nadejda Mandrescu
@@ -17,7 +18,7 @@ public class InvalidFieldViolationBuilder implements ConstraintViolationBuilder 
 
     @Override
     public JsonConstraintViolation build(ConstraintViolation v) {
-        return new JsonConstraintViolation(fieldPath, ActivityErrors.FIELD_INVALID_VALUE);
+        return new JsonConstraintViolation(fieldPath, ValidationErrors.FIELD_INVALID_VALUE);
     }
 
 }

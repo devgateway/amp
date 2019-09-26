@@ -9,8 +9,8 @@ import static org.junit.Assert.*;
 import java.util.Set;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -95,7 +95,7 @@ public class TreeCollectionValidatorTest {
 
     private Matcher<ConstraintViolation> violation() {
         return ValidatorMatchers.violationFor(TreeCollectionValidator.class, "locations", anything(),
-                ActivityErrors.FIELD_PARENT_CHILDREN_NOT_ALLOWED);
+                ValidationErrors.FIELD_PARENT_CHILDREN_NOT_ALLOWED);
     }
 
     private Set<ConstraintViolation> getConstraintViolations(AmpActivityVersion activity) {

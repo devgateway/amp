@@ -2,14 +2,14 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as startUp from '../actions/StartUpAction.jsx';
-export default class ToolBar extends Component {
+class ToolBar extends Component {
     constructor( props, context ) {
-        super( props, context );                 
+        super( props, context );
     }
 
-    componentDidMount() {        
-    } 
-    render() {                       
+    componentDidMount() {
+    }
+    render() {
             return (<div className="container-fluid indicator-nav no-padding">
             <div className="col-md-6 no-padding">
             </div>
@@ -27,9 +27,9 @@ export default class ToolBar extends Component {
                     <button type="button" className="btn btn-action" onClick={this.props.showSettings}>{this.props.translations['amp.gpi-reports:settings-button']}</button>
                 </div>
             </div>
-        </div>          
+        </div>
           );
-        
+
     }
 
 }

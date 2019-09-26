@@ -17,17 +17,20 @@
 
 
 		<list name="possibleValues" lazy="false" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write"/>
 			<key column="amp_category_class_id" />
 			<index column="index_column" />
 			<one-to-many class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 		</list>
 		
 		<list name="usedCategories" table="AMP_CATEGORIES_USED" lazy="true">
+			<cache usage="read-write"/>
 			<key column="category_id"/>
 			<list-index column="categories_index"/>
 			<many-to-many column="used_category_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" />
 		</list>
 		<set name="usedByCategories" table="AMP_CATEGORIES_USED" inverse="true" lazy="true">
+			<cache usage="read-write"/>
 			<key column="used_category_id"/>
 			<many-to-many column="category_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" />
 		</set>

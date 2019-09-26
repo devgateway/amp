@@ -24,10 +24,10 @@ public class AgreementCodeValidator extends InputValidator {
     @Override
     public ApiErrorMessage getErrorMessage() {
         if (missingCode) {
-            return ActivityErrors.AGREEMENT_CODE_REQUIRED;
+            return ValidationErrors.AGREEMENT_CODE_REQUIRED;
         }
         
-        return ActivityErrors.AGREEMENT_CODE_UNIQUE;
+        return ValidationErrors.AGREEMENT_CODE_UNIQUE;
     }
 
     @Override

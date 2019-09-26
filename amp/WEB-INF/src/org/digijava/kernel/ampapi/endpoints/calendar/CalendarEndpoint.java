@@ -10,7 +10,6 @@ import javax.ws.rs.core.MediaType;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
@@ -21,7 +20,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
  */
 @Path("calendar")
 @Api("calendar")
-public class CalendarEndpoint implements ErrorReportingEndpoint {
+public class CalendarEndpoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -31,9 +30,4 @@ public class CalendarEndpoint implements ErrorReportingEndpoint {
         return CalendarUtil.getCalendars(id);
     }
 
-    @Override
-    public Class getErrorsClass() {
-        return CalendarEndpoint.class;
-    }
-    
 }

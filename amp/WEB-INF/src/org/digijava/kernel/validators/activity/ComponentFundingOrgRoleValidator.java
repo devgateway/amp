@@ -11,6 +11,7 @@ import java.util.Set;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIFieldUtil;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintValidator;
@@ -75,7 +76,7 @@ public class ComponentFundingOrgRoleValidator implements ConstraintValidator {
                     AmpOrganisation org = APIFieldUtil.readFieldValueOrDefault(orgField, funding, null);
                     if (org != null && !declaredOrgIds.contains(org.getAmpOrgId())) {
 
-                        context.buildConstraintViolation(ActivityErrors.ORGANIZATION_NOT_DECLARED)
+                        context.buildConstraintViolation(ValidationErrors.ORGANIZATION_NOT_DECLARED)
                                 .addPropertyNode(componentsField.getFieldName())
                                 .addPropertyNode(fundingField.getFieldName())
                                 .addPropertyNode(orgField.getFieldName())
@@ -93,6 +94,6 @@ public class ComponentFundingOrgRoleValidator implements ConstraintValidator {
 
     @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.ORGANIZATION_NOT_DECLARED;
+        return ValidationErrors.ORGANIZATION_NOT_DECLARED;
     }
 }

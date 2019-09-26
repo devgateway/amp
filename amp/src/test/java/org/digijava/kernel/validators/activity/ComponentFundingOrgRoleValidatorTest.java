@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -184,7 +185,7 @@ public class ComponentFundingOrgRoleValidatorTest {
         return ValidatorMatchers.violationFor(ComponentFundingOrgRoleValidator.class,
                 path,
                 hasEntry(ComponentFundingOrgRoleValidator.ATTR_ORG_ID, orgId),
-                ActivityErrors.ORGANIZATION_NOT_DECLARED);
+                ValidationErrors.ORGANIZATION_NOT_DECLARED);
     }
 
     private Set<ConstraintViolation> getViolations(APIField activityField, AmpActivityVersion activity) {

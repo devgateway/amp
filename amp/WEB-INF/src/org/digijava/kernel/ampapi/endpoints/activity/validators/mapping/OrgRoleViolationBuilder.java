@@ -7,6 +7,7 @@ import javax.validation.ConstraintViolation;
 import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.helper.Constants;
@@ -31,7 +32,7 @@ public class OrgRoleViolationBuilder implements ConstraintViolationBuilder {
         String jsonPath = FieldMap.underscorify(ActivityFieldsConstants.FUNDINGS);
         
         if (isFundingOrgRoleConstraint(v)) {
-            return new JsonConstraintViolation(jsonPath, ActivityErrors.ORGANIZATION_ROLE_PAIR_NOT_DECLARED);
+            return new JsonConstraintViolation(jsonPath, ValidationErrors.ORGANIZATION_ROLE_PAIR_NOT_DECLARED);
         }
     
         if (isTransactionOrgRoleConstraint(v)) {
@@ -43,7 +44,7 @@ public class OrgRoleViolationBuilder implements ConstraintViolationBuilder {
             }
         }
         
-        return new JsonConstraintViolation(jsonPath, ActivityErrors.ORGANIZATION_ROLE_PAIR_NOT_DECLARED);
+        return new JsonConstraintViolation(jsonPath, ValidationErrors.ORGANIZATION_ROLE_PAIR_NOT_DECLARED);
     }
     
     private boolean isFundingOrgRoleConstraint(ConstraintViolation violation) {

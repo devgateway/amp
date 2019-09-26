@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.InflationDataSource;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Path("currency")
 @Api("currency")
-public class Currencies implements ErrorReportingEndpoint {
+public class Currencies {
     
     @Context
     private HttpServletRequest httpRequest;
@@ -190,11 +189,4 @@ public class Currencies implements ErrorReportingEndpoint {
         return CurrencyService.INSTANCE.getExchangeRatesForPairs();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class getErrorsClass() {
-        return CurrencyErrors.class;
-    }
 }

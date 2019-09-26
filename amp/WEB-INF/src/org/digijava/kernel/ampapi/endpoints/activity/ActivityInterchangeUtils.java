@@ -26,6 +26,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -227,7 +228,7 @@ public final class ActivityInterchangeUtils {
                     result = exporter.export(activity);
                 } catch (Exception e) {
                     result.put(EPConstants.ERROR, ApiError.toError(
-                            ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage())).getErrors());
+                            GenericErrors.INTERNAL_ERROR.withDetails(e.getMessage())).getErrors());
                     result.put(ActivityEPConstants.AMP_ID_FIELD_NAME, ampId);
                 } finally {
                     PersistenceManager.getSession().evict(activity);

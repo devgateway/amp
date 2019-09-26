@@ -10,21 +10,22 @@ import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getRep
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportYearRangeField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getResourceManagerSettings;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.reports.converters.AmpReportsToReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportErrors;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.PublicConstants;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -41,7 +42,7 @@ import org.digijava.module.aim.util.DbUtil;
  */
 @Path("settings-definitions")
 @Api("settings-definitions")
-public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
+public class SettingsDefinitionsEndpoint {
 
     @GET
     @Path("/dashboards")
@@ -100,7 +101,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     public final List<SettingField> getSettingDefinitionsForReport(@PathParam("report_id") Long reportId) {
         AmpReports ampReport = DbUtil.getAmpReport(reportId);
         if (ampReport == null) {
-            ApiErrorResponseService.reportError(BAD_REQUEST, SettingsDefinitionsErrors.REPORT_NOT_FOUND);
+            ApiErrorResponseService.reportError(BAD_REQUEST, ReportErrors.REPORT_NOT_FOUND);
         }
 
         ReportSpecification spec = AmpReportsToReportSpecification.convert(ampReport);
@@ -148,8 +149,4 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
         return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField());
     }
 
-    @Override
-    public Class getErrorsClass() {
-        return SettingsDefinitionsErrors.class;
-    }
 }

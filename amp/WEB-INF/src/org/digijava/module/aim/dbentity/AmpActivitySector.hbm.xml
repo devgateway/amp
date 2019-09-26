@@ -18,7 +18,7 @@
 
 		<many-to-one name="classificationConfig" column="classification_config_id"
 			class="org.digijava.module.aim.dbentity.AmpClassificationConfiguration" cascade="none"
-			not-null="true" lazy="false"/>
+			not-null="true"/>
 
 		<property name="sectorPercentage" column="sector_percentage" type="java.lang.Float" />
 

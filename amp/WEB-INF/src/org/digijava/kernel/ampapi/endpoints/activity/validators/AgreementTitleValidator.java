@@ -19,7 +19,7 @@ public class AgreementTitleValidator extends InputValidator {
     
     @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.AGREEMENT_TITLE_REQUIRED;
+        return ValidationErrors.AGREEMENT_TITLE_REQUIRED;
     }
 
     @Override

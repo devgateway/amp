@@ -160,6 +160,7 @@
 	<page page="components/selectOrganization" title="AMP - Select Organization" />
 	<page page="components/selectOrganization" name="aim_orgComponentPopUp" title="AMP - Select Organization" />
 
+	<page page="selectSector" name="aim_selSectorPopupLayout" title="AMP - Select Sector" />
 	<page page="selectSectorForind" name="aim_selectSectorForind" title="AMP - Select Sector" />
 	<page page="editSectorForind" name="aim_selectSectorForindEdit" title="AMP - Select Sector" />
 

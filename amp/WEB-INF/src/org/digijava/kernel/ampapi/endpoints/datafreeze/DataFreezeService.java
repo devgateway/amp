@@ -60,7 +60,7 @@ public final class DataFreezeService {
         List<Map<String, String>> errors = new ArrayList<>();
         if (DataFreezeUtil.freezeDateExists(dataFreezeEvent.getId(), dataFreezeEvent.getFreezingDate())) {
             Map<String, String> error = new HashMap<>();
-            error.put(ApiError.getErrorCode(DataFreezeErrors.FREEZING_DATE_EXISTS),
+            error.put(DataFreezeErrors.FREEZING_DATE_EXISTS.getErrorId(),
                     DataFreezeErrors.FREEZING_DATE_EXISTS.description);
             errors.add(error);
         }
@@ -69,7 +69,7 @@ public final class DataFreezeService {
         Date openPeriodEnd = dataFreezeEvent.getOpenPeriodEnd();
         if (DataFreezeUtil.openPeriodOverlaps(dataFreezeEvent.getId(), openPeriodStart, openPeriodEnd)) {
             Map<String, String> error = new HashMap<>();
-            error.put(ApiError.getErrorCode(DataFreezeErrors.OPEN_PERIOD_OVERLAPS),
+            error.put(DataFreezeErrors.OPEN_PERIOD_OVERLAPS.getErrorId(),
                     DataFreezeErrors.OPEN_PERIOD_OVERLAPS.description);
             errors.add(error); 
         }

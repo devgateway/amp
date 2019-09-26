@@ -49,7 +49,7 @@ public class AMPRequestRule implements TestRule {
 
         Set<String> trnCodes = Collections.singleton("en");
         mockRequest.setAttribute(EPConstants.TRANSLATIONS, new TranslationSettings("en", trnCodes, false));
-
+    
         TLSUtils.populate(mockRequest, siteDomain);
 
         TranslationSettings defaultTranslationSettings = new TranslationSettings("en", trnCodes, false);

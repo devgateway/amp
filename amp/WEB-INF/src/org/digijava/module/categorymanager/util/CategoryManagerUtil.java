@@ -580,9 +580,8 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
             categoryValuesByKey.put(categoryKey, ampCategoryClass);
         }
 
-        List<AmpCategoryValue> ampCategoryValues = ampCategoryClass.getPossibleValues().stream()
-                .filter(cv -> cv != null)
-                .collect(Collectors.toList());
+        List<AmpCategoryValue> ampCategoryValues = ampCategoryClass.getPossibleValues();
+        ampCategoryValues.removeAll(Collections.singleton(null));
         
         PersistenceManager.getSession().evict(ampCategoryClass); // else funny things will happen if someone tries to delete()
         
@@ -850,43 +849,43 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
         return ampCategoryClass.getPossibleValues();
     }
     
-    public static String checkImplementationLocationCategory ()  {
-            String errorString          = "The following values were not found: ";
-            String separator            = "";
-            
-            AmpCategoryValue country = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
-            AmpCategoryValue region = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getAmpCategoryValueFromDB();
-            AmpCategoryValue zone = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.getAmpCategoryValueFromDB();
-            AmpCategoryValue district = CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.getAmpCategoryValueFromDB();
-            
-            if ( country == null ) {
-                errorString             += "Country";
-                separator               = ", ";
+    public static String checkImplementationLocationCategory() {
+        String errorString = "The following values were not found: ";
+        String separator = "";
+        
+        AmpCategoryValue country = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getAmpCategoryValueFromDB();
+        AmpCategoryValue region = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.getAmpCategoryValueFromDB();
+        AmpCategoryValue zone = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2.getAmpCategoryValueFromDB();
+        AmpCategoryValue district = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3.getAmpCategoryValueFromDB();
+        
+        if (country == null) {
+            errorString += CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey();
+            separator = ", ";
+        }
+        if (region == null) {
+            errorString += separator + CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.getValueKey();
+            separator = ", ";
+        }
+        if (zone == null) {
+            errorString += separator + CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2.getValueKey();
+            separator = ", ";
+        }
+        if (district == null) {
+            errorString += separator + CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3.getValueKey();
+            separator = ", ";
+        }
+        if (separator != "") {
+            return errorString;
+        } else { // checking order
+            if (country.getIndex() >= region.getIndex()) {
+                return "Administrative Level 0 must be before Administrative Level 1";
+            } else if (region.getIndex() >= zone.getIndex()) {
+                return "Administrative Level 1 must be before Administrative Level 2";
+            } else if (zone.getIndex() >= district.getIndex()) {
+                return "Administrative Level 2 must be before Administrative Level 3";
             }
-            if ( region == null ){
-                errorString             += separator + "Region";
-                separator               = ", ";
-            }
-            if ( zone == null ){
-                errorString             += separator + "Zone";
-                separator               = ", ";
-            }
-            if ( district == null ){
-                errorString             += separator + "District";
-                separator               = ", ";
-            }
-            if ( separator != "" ) {
-                return errorString;
-            }
-            else { // checking order
-                if ( country.getIndex() >= region.getIndex() )
-                    return "Country must be before Region";
-                if ( region.getIndex() >= zone.getIndex() )
-                    return "Region must be before Zone";
-                if ( zone.getIndex() >= district.getIndex() )
-                    return "Zone must be before District";
-            }
-            return null;
+        }
+        return null;
     }
 
     /**

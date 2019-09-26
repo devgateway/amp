@@ -32,7 +32,6 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -357,7 +356,7 @@ public class MainMap extends Action {
             try {
                 filter.setRegions(new ArrayList<AmpCategoryValueLocations>(
                         DynLocationManagerUtil
-                                .getLocationsOfTypeRegionOfDefCountry()));
+                                .getLocationsOfTypeAdmLevel1OfDefCountry()));
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

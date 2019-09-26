@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.UserDetailForm;
 import org.digijava.module.aim.helper.TeamMember;
@@ -47,7 +48,7 @@ public class ViewUserProfile
             userId = Long.parseLong(request.getParameter("id"));
         } else if (StringUtils.isNotEmpty(request.getParameter("email"))) {
             email = request.getParameter("email");
-            user = DbUtil.getUser(email);
+            user = UserUtils.getUserByEmailAddress(email);
             if (user == null || user.getId() == null) {
                  errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserIdLogs"));
                  saveErrors(request, errors);

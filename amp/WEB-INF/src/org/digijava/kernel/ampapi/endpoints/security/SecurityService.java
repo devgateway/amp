@@ -211,35 +211,29 @@ public class SecurityService {
             ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.INVALID_USER_PASSWORD);
         }
     
-        try {
-            User user = UserUtils.getUserByEmail(username);
-            if (user == null || !user.getPassword().equals(password)) {
-                ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.INVALID_USER_PASSWORD);
-            }
-        
-            ApiErrorMessage result = ApiAuthentication.login(user, TLSUtils.getRequest());
-            if (result != null) {
-                ApiErrorResponseService.reportForbiddenAccess(result);
-            }
-        
-            invalidateExistingSession();
-        
-            AmpTeamMember teamMember = getAmpTeamMember(username, workspaceId);
-            if (workspaceId != null && teamMember == null) {
-                ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.INVALID_TEAM);
-            }
-        
-            storeInSession(username, password, teamMember, user);
-        
-            AmpApiToken ampApiToken = SecurityUtil.generateToken();
-            String ampTeamName = (teamMember == null) ? null : teamMember.getAmpTeam().getName();
-            return SecurityService.getInstance().createUserSessionInformation(
-                    user.isGlobalAdmin(), ampApiToken, user, ampTeamName, true);
-        } catch (DgException e) {
-            logger.error("Error trying to login the user", e);
-            ApiErrorResponseService.reportError(INTERNAL_SERVER_ERROR, SecurityErrors.INVALID_REQUEST);
+        User user = UserUtils.getUserByEmailAddress(username);
+        if (user == null || !user.getPassword().equals(password)) {
+            ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.INVALID_USER_PASSWORD);
         }
-        return null;
+    
+        ApiErrorMessage result = ApiAuthentication.login(user, TLSUtils.getRequest());
+        if (result != null) {
+            ApiErrorResponseService.reportForbiddenAccess(result);
+        }
+    
+        invalidateExistingSession();
+    
+        AmpTeamMember teamMember = getAmpTeamMember(username, workspaceId);
+        if (workspaceId != null && teamMember == null) {
+            ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.INVALID_TEAM);
+        }
+    
+        storeInSession(username, password, teamMember, user);
+    
+        AmpApiToken ampApiToken = SecurityUtil.generateToken();
+        String ampTeamName = (teamMember == null) ? null : teamMember.getAmpTeam().getName();
+        return SecurityService.getInstance().createUserSessionInformation(
+                user.isGlobalAdmin(), ampApiToken, user, ampTeamName, true);
     }
     
     public void invalidateExistingSession() {

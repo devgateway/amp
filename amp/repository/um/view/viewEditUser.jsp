@@ -151,7 +151,7 @@ function validateUserInfo(){
     }
 	
 	if(country=='-1'){
-		errorMsg='<digi:trn jsFriendly="true" >Please Select Country</digi:trn>';
+		errorMsg='<digi:trn jsFriendly="true">Please Select Country</digi:trn>';
 		alert(errorMsg);
 		return false;
 	}
@@ -309,7 +309,7 @@ function validateUserInfo(){
 																	<tr>
 																		<td width="169" height="30" align="right"style="font-size: 11px;
     font-weight: bold; color:#000;">
-																			<digi:trn key="aim:viewEditUser:country">Country</digi:trn>
+																			<digi:trn key="aim:viewEditUser:country">Administrative Level 0</digi:trn>
 																			<font color="red">*</font>
 																	    </td>
 																	    <td width="190" height="30">

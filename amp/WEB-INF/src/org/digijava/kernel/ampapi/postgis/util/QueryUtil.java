@@ -1,8 +1,17 @@
 package org.digijava.kernel.ampapi.postgis.util;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.FilterParam;
@@ -60,16 +69,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKTReader;
 
 public class QueryUtil {
     protected static Logger logger = Logger.getLogger(QueryUtil.class);
-
-
-
-    public static List<String> getAdminLevels() {
-        return new ArrayList<String>(Arrays.asList("Country", "Region", "Zone", "District"));
-    }
-
 
 
     public static AmpActivity getActivity(Long ampActivityId) {
@@ -180,7 +185,7 @@ public class QueryUtil {
      */
     public static List<OrganizationSkeleton> getOrganizations(
             List<Long> orgGrpId) {
-        final List<String> roleCodes = OrganisationUtil.getVisibleRoles();
+        final List<String> roleCodes = OrganisationUtil.getVisibleRoleCodes();
         return OrganizationSkeleton
                 .populateOrganisationSkeletonListByOrgGrpIp(orgGrpId, roleCodes);
     }
@@ -274,7 +279,7 @@ public class QueryUtil {
      * 
      */
     public static List<Org> getOrgs() {
-        final List<String> roleCodes = OrganisationUtil.getVisibleRoles();
+        final List<String> roleCodes = OrganisationUtil.getVisibleRoleCodes();
         final SortedMap<Long, Org> orgs = new TreeMap<>();
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
@@ -373,7 +378,7 @@ public class QueryUtil {
 
     public static List<FilterValue> getOrgRoles() {
         // //yet not translatable but its ready when it is
-        final List<String> visibleRoles = OrganisationUtil.getVisibleRoles();
+        final List<String> visibleRoles = OrganisationUtil.getVisibleRoleCodes();
         final List<FilterValue> orgRoles = new ArrayList<FilterValue>();
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
@@ -476,8 +481,9 @@ public class QueryUtil {
         return buildLocationsJsonBean(rootLocation, 1);
     }
     
-    private static final String[] LEVEL_TO_NAME = {"na", FiltersConstants.COUNTRY, FiltersConstants.REGION,
-            FiltersConstants.ZONE, FiltersConstants.DISTRICT, FiltersConstants.COMMUNAL_SECTION, "na3", "na4"};
+    private static final String[] LEVEL_TO_NAME = {"na", FiltersConstants.ADMINISTRATIVE_LEVEL_0,
+            FiltersConstants.ADMINISTRATIVE_LEVEL_1, FiltersConstants.ADMINISTRATIVE_LEVEL_2,
+            FiltersConstants.ADMINISTRATIVE_LEVEL_3, FiltersConstants.ADMINISTRATIVE_LEVEL_4, "na3", "na4"};
     
     private static Location buildLocationsJsonBean(LocationSkeleton loc, int level) {
         Location res = new Location();

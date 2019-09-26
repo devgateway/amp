@@ -27,12 +27,14 @@
 		<property name="segmentCode" column="segment_code" type="java.lang.Integer" />
 
         <set name="indicators" table="AMP_SECTOR_INDICATOR" lazy="true" inverse="true" cascade="none">
+			<cache usage="read-write" />
 			<key column="amp_sector_id"/>
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpIndicator" column="indicator_id"/>
 		</set>
 		
 		
 		<set name="sectors" table="AMP_SECTOR" lazy="true" inverse="true" cascade="none">
+			<cache usage="read-write" />
 			<key column="parent_sector_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpSector"/>
 			<filter name="isDeletedFilter" condition="(deleted is null or deleted = :deleted )"/>

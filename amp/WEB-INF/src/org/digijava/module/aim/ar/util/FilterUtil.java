@@ -15,6 +15,7 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
@@ -89,7 +90,13 @@ public class FilterUtil {
     public static AmpARFilter buildFilterFromSource(FilterDataSetInterface source, TeamMember tm) {
         AmpARFilter arf = new AmpARFilter(tm);
         arf.fillWithDefaultsSettings();
-        arf.fillWithDefaultsFilter(null);
+        
+        if (source instanceof AmpReports && source != null) {
+            arf.fillWithDefaultsFilter(((AmpReports) source).getId());
+        } else {
+            arf.fillWithDefaultsFilter(null);
+        }
+        
         FilterUtil.populateFilter(source, arf);
         arf.postprocess();
         return arf;
@@ -161,6 +168,7 @@ public class FilterUtil {
         form.setSelectedNatPlanObj( FilterUtil.getObjectsIds(filter.getSelectedNatPlanObj()) );
         form.setSelectedPrimaryPrograms( FilterUtil.getObjectsIds(filter.getSelectedPrimaryPrograms()) );
         form.setSelectedSecondaryPrograms( FilterUtil.getObjectsIds(filter.getSelectedSecondaryPrograms()) );
+        form.setSelectedTertiaryPrograms(FilterUtil.getObjectsIds(filter.getSelectedTertiaryPrograms()));
         
         form.setRegionSelected( FilterUtil.getObjectsIds( filter.getLocationSelected() ) );
         
@@ -201,6 +209,17 @@ public class FilterUtil {
         form.getDynamicActivityActualCompletionFilter().setOperator(filter.getDynActivityActualCompletionFilterOperator());
         form.getDynamicActivityActualCompletionFilter().setxPeriod(filter.getDynActivityActualCompletionFilterXPeriod());
 
+        form.setToActualApprovalDate(convertArFilterToUiDate(filter.getToActualApprovalDate()));
+        form.setFromActualApprovalDate(convertArFilterToUiDate(filter.getFromActualApprovalDate()));
+
+        form.setToProposedCompletionDate(convertArFilterToUiDate(filter.getToProposedCompletionDate()));
+        form.setFromProposedCompletionDate(convertArFilterToUiDate(filter.getFromProposedCompletionDate()));
+
+        form.setToPledgeDetailStartDate(convertArFilterToUiDate(filter.getToPledgeDetailStartDate()));
+        form.setFromPledgeDetailStartDate(convertArFilterToUiDate(filter.getFromPledgeDetailStartDate()));
+        form.setToPledgeDetailEndDate(convertArFilterToUiDate(filter.getToPledgeDetailEndDate()));
+        form.setFromPledgeDetailEndDate(convertArFilterToUiDate(filter.getFromPledgeDetailEndDate()));
+
         form.setToActivityFinalContractingDate(convertArFilterToUiDate(filter.getToActivityFinalContractingDate()));
         form.setFromActivityFinalContractingDate(convertArFilterToUiDate(filter.getFromActivityFinalContractingDate()));
         form.getDynamicActivityFinalContractingFilter().setCurrentPeriod(filter.getDynActivityFinalContractingFilterCurrentPeriod());
@@ -216,6 +235,8 @@ public class FilterUtil {
         form.getDynamicActualApprovalFilter().setxPeriod(filter.getDynActualApprovalFilterXPeriod());
         form.setToProposedApprovalDate(convertArFilterToUiDate(filter.getToProposedApprovalDate()));
         form.setFromProposedApprovalDate(convertArFilterToUiDate(filter.getFromProposedApprovalDate()));
+        form.setFromProposedStartDate(convertArFilterToUiDate(filter.getFromProposedStartDate()));
+        form.setToProposedStartDate(convertArFilterToUiDate(filter.getToProposedStartDate()));
         form.getDynamicProposedApprovalFilter().setCurrentPeriod(filter.getDynProposedApprovalFilterCurrentPeriod());
         form.getDynamicProposedApprovalFilter().setAmount(filter.getDynProposedApprovalFilterAmount());
         form.getDynamicProposedApprovalFilter().setOperator(filter.getDynProposedApprovalFilterOperator());
@@ -287,7 +308,16 @@ public class FilterUtil {
 
         form.setSelectedDonorTypes( FilterUtil.getObjectsIds(filter.getDonorTypes()) );
         form.setSelectedDonorGroups( FilterUtil.getObjectsIds(filter.getDonorGroups()) );
-        form.setSelectedContractingAgencyGroups( FilterUtil.getObjectsIds(filter.getContractingAgencyGroups()) );
+        form.setSelectedBeneficiaryAgencyTypes(FilterUtil.getObjectsIds(filter.getBeneficiaryAgencyTypes()));
+        form.setSelectedBeneficiaryAgencyGroups(FilterUtil.getObjectsIds(filter.getBeneficiaryAgencyGroups()));
+        form.setSelectedContractingAgencyTypes(FilterUtil.getObjectsIds(filter.getContractingAgencyTypes()));
+        form.setSelectedContractingAgencyGroups(FilterUtil.getObjectsIds(filter.getContractingAgencyGroups()));
+        form.setSelectedExecutingAgencyTypes(FilterUtil.getObjectsIds(filter.getExecutingAgencyTypes()));
+        form.setSelectedExecutingAgencyGroups(FilterUtil.getObjectsIds(filter.getExecutingAgencyGroups()));
+        form.setSelectedImplementingAgencyTypes(FilterUtil.getObjectsIds(filter.getImplementingAgencyTypes()));
+        form.setSelectedImplementingAgencyGroups(FilterUtil.getObjectsIds(filter.getImplementingAgencyGroups()));
+        form.setSelectedResponsibleOrgTypes(FilterUtil.getObjectsIds(filter.getResponsibleAgencyTypes()));
+        form.setSelectedResponsibleOrgGroups(FilterUtil.getObjectsIds(filter.getResponsibleAgencyGroups()));
 
         form.setSelectedBudgets(FilterUtil.getObjectsIds(filter.getBudget()));
         
@@ -330,6 +360,10 @@ public class FilterUtil {
         }
         form.setSelectedHumanitarianAid(collectValues(filter.getHumanitarianAid()));
         form.setSelectedDisasterResponse(collectValues(filter.getDisasterResponse()));
+
+        form.setComputedYear(filter.getComputedYear() != null ? filter.getComputedYear() : -1);
+        
+        form.getUndefinedOptions().addAll(filter.getUndefinedOptions());
         
         return filter;
     }
@@ -420,6 +454,7 @@ public class FilterUtil {
         Set<AmpTheme> selectedNatPlanObj = arf.getSelectedNatPlanObj();
         Set<AmpTheme> selectedPrimaryPrograms = arf.getSelectedPrimaryPrograms();
         Set<AmpTheme> selectedSecondaryPrograms = arf.getSelectedSecondaryPrograms();
+        Set<AmpTheme> selectedTertiaryPrograms = arf.getSelectedTertiaryPrograms();
         
         if (selectedNatPlanObj != null && selectedNatPlanObj.size() > 0) {
             arf.setNationalPlanningObjectives( new ArrayList<AmpTheme>(selectedNatPlanObj) );           
@@ -450,6 +485,17 @@ public class FilterUtil {
             arf.setSecondaryPrograms(null);
             arf.setSelectedSecondaryPrograms(null);
             arf.setRelatedSecondaryProgs(null);
+        }
+    
+        if (selectedTertiaryPrograms != null && selectedTertiaryPrograms.size() > 0) {
+            arf.setTertiaryPrograms(new ArrayList<>(selectedTertiaryPrograms));
+            arf.setRelatedTertiaryProgs(new HashSet<>());
+            ProgramUtil.collectFilteringInformation(selectedTertiaryPrograms, arf.getTertiaryPrograms(),
+                    arf.getRelatedTertiaryProgs());
+        } else {
+            arf.setTertiaryPrograms(null);
+            arf.setSelectedTertiaryPrograms(null);
+            arf.setRelatedTertiaryProgs(null);
         }
     }
 

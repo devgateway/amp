@@ -23,6 +23,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.values.FiscalYearPossibleVa
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
@@ -243,10 +244,13 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Sectors/Primary Sectors/minSizeSectorsValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/treeSectorsValidator")
+                    },
                     validators = @Validators(
-                            unique = "/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator",
-                            treeCollection = "/Activity Form/Sectors/Primary Sectors/treeSectorsValidator")),
+                            unique = "/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.SECONDARY_SECTORS,
                     discriminatorOption = "Secondary", importable = true,
                     fmPath = "/Activity Form/Sectors/Secondary Sectors",
@@ -255,10 +259,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Sectors/Secondary Sectors/minSizeSectorsValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/treeSectorsValidator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Sectors/Secondary Sectors/uniqueSectorsValidator",
-                            treeCollection = "/Activity Form/Sectors/Secondary Sectors/treeSectorsValidator")),
+                            unique = "/Activity Form/Sectors/Secondary Sectors/uniqueSectorsValidator")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.TERTIARY_SECTORS,
                     discriminatorOption = "Tertiary", importable = true,
                     fmPath = "/Activity Form/Sectors/Tertiary Sectors",
@@ -267,10 +273,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Sectors/Tertiary Sectors/minSizeSectorsValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/treeSectorsValidator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Sectors/Tertiary Sectors/uniqueSectorsValidator",
-                            treeCollection = "/Activity Form/Sectors/Secondary Sectors/treeSectorsValidator")),
+                            unique = "/Activity Form/Sectors/Tertiary Sectors/uniqueSectorsValidator")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.TAG_SECTORS,
                     discriminatorOption = "Tag", importable = true,
                     fmPath = "/Activity Form/Sectors/Tag Sectors",
@@ -279,10 +287,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Sectors/Tag Sectors/minSizeSectorsValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/treeSectorsValidator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Sectors/Tag Sectors/uniqueSectorsValidator",
-                            treeCollection = "/Activity Form/Sectors/Tag Sectors/treeSectorsValidator"))
+                            unique = "/Activity Form/Sectors/Tag Sectors/uniqueSectorsValidator"))
     })
     protected Set<AmpActivitySector> sectors = new HashSet<>();
     
@@ -298,10 +308,12 @@ LoggerIdentifiable, Cloneable {
                             fmPath = "/Activity Form/Location/Locations/Location required validator"),
                     @InterchangeableValidator(
                             value = TotalPercentageValidator.class,
-                            fmPath = "/Activity Form/Location/Locations/locationPercentageTotal")},
+                            fmPath = "/Activity Form/Location/Locations/locationPercentageTotal"),
+                    @InterchangeableValidator(
+                            value = TreeCollectionValidator.class,
+                            fmPath = "/Activity Form/Location/Locations/Tree Validator")},
             validators = @Validators(
-                    unique = "/Activity Form/Location/Locations/uniqueLocationsValidator",
-                    treeCollection = "/Activity Form/Location/Locations/Tree Validator"))
+                    unique = "/Activity Form/Location/Locations/uniqueLocationsValidator"))
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.LOCATIONS)
     protected Set<AmpActivityLocation> locations = new HashSet<>();
     
@@ -871,10 +883,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Program/National Plan Objective/minSizeProgramValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/Tree Validator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Program/National Plan Objective/uniqueProgramsValidator",
-                            treeCollection = "/Activity Form/Program/National Plan Objective/Tree Validator")),
+                            unique = "/Activity Form/Program/National Plan Objective/uniqueProgramsValidator")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.PRIMARY_PROGRAMS,
                     discriminatorOption = "Primary Program", importable = true,
                     fmPath = "/Activity Form/Program/Primary Programs",
@@ -883,10 +897,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Program/Primary Programs/minSizeProgramValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/Tree Validator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Program/Primary Programs/uniqueProgramsValidator",
-                            treeCollection = "/Activity Form/Program/Primary Programs/Tree Validator")),
+                            unique = "/Activity Form/Program/Primary Programs/uniqueProgramsValidator")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.SECONDARY_PROGRAMS,
                     discriminatorOption = "Secondary Program", importable = true,
                     fmPath = "/Activity Form/Program/Secondary Programs",
@@ -895,10 +911,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Program/Secondary Programs/minSizeProgramValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/Tree Validator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Program/Secondary Programs/uniqueProgramsValidator",
-                            treeCollection = "/Activity Form/Program/Secondary Programs/Tree Validator")),
+                            unique = "/Activity Form/Program/Secondary Programs/uniqueProgramsValidator")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.TERTIARY_PROGRAMS,
                     discriminatorOption = "Tertiary Program", importable = true,
                     fmPath = "/Activity Form/Program/Tertiary Programs",
@@ -907,10 +925,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Program/Tertiary Programs/minSizeProgramValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/Tree Validator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Program/Tertiary Programs/uniqueProgramsValidator",
-                            treeCollection = "/Activity Form/Program/Tertiary Programs/Tree Validator"))})
+                            unique = "/Activity Form/Program/Tertiary Programs/uniqueProgramsValidator"))})
     protected Set<AmpActivityProgram> actPrograms = new HashSet<>();
 
     @VersionableCollection(fieldTitle = "Act. Budget Structure")

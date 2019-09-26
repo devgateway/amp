@@ -128,7 +128,7 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                 // toggleHeading(target, setModel.getObject());
 
                 // remove any regional funding with this region
-                if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.
+                if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.
                         equalsCategoryValue(model.getObject().getLocation().getLocation().getParentCategoryValue())) {
                     final IModel<Set<AmpRegionalFunding>> regionalFundings = new PropertyModel<Set<AmpRegionalFunding>>(am, "regionalFundings");
                     Iterator<AmpRegionalFunding> iterator = regionalFundings.getObject().iterator();

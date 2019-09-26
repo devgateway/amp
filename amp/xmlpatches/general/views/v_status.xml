@@ -21,14 +21,26 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_status CASCADE;
 			    CREATE OR REPLACE VIEW v_status AS 
-			    	SELECT aac.amp_activity_id, acv.category_value AS name, aac.amp_categoryvalue_id AS amp_status_id 
-			    	FROM amp_category_value acv, amp_category_class acc, amp_activities_categoryvalues aac 
-			    	WHERE (((acv.id = aac.amp_categoryvalue_id) AND (acc.id = acv.amp_category_class_id)) AND ((acc.keyname)::text = 'activity_status'::text));;;
+			        SELECT aav.amp_activity_id, v.name AS name, COALESCE(v.amp_status_id, -999999999) AS amp_status_id 
+			        FROM amp_activity_version aav
+			        LEFT JOIN (
+				        SELECT aac.amp_activity_id, acv.category_value AS name, aac.amp_categoryvalue_id AS amp_status_id 
+				        FROM amp_category_value acv, amp_category_class acc, amp_activities_categoryvalues aac 
+				        WHERE (((acv.id = aac.amp_categoryvalue_id) AND (acc.id = acv.amp_category_class_id)) AND ((acc.keyname)::text = 'activity_status'::text))
+				    ) v
+				    ON aav.amp_activity_id = v.amp_activity_id;
+
 				DROP VIEW IF EXISTS v_ssc_status CASCADE;
-					CREATE OR REPLACE VIEW v_ssc_status AS
-					SELECT aac.amp_activity_id, acv.category_value AS name, aac.amp_categoryvalue_id AS amp_status_id
-					FROM amp_category_value acv, amp_category_class acc, amp_activities_categoryvalues aac
-					WHERE (((acv.id = aac.amp_categoryvalue_id) AND (acc.id = acv.amp_category_class_id)) AND ((acc.keyname)::text = 'SSC_activity_status'::text));;;
+				CREATE OR REPLACE VIEW v_ssc_status AS
+				    SELECT aav.amp_activity_id, v.name AS name, COALESCE(v.amp_status_id, -999999999) AS amp_status_id 
+				    FROM amp_activity_version aav
+                    LEFT JOIN (
+						SELECT aac.amp_activity_id, acv.category_value AS name, aac.amp_categoryvalue_id AS amp_status_id
+						FROM amp_category_value acv, amp_category_class acc, amp_activities_categoryvalues aac
+						WHERE (((acv.id = aac.amp_categoryvalue_id) AND (acc.id = acv.amp_category_class_id)) AND ((acc.keyname)::text = 'SSC_activity_status'::text))
+					) v
+                    ON aav.amp_activity_id = v.amp_activity_id;
+
         	</lang>
 		</script>
 	</apply>

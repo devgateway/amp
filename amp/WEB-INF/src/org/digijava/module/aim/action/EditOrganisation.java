@@ -62,6 +62,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.helper.CrConstants;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.JDBCException;
@@ -73,6 +74,7 @@ public class EditOrganisation extends DispatchAction {
   
   private boolean sessionChk(HttpServletRequest request) {
       HttpSession session = request.getSession();
+      DocumentManagerUtil.setMaxFileSizeAttribute(request);
       if (session.getAttribute("ampAdmin") == null) {
           return true;
       } else {
@@ -85,8 +87,9 @@ public class EditOrganisation extends DispatchAction {
   }
   private boolean sessionChkForWInfo(HttpServletRequest request) {
       HttpSession session = request.getSession();
+      DocumentManagerUtil.setMaxFileSizeAttribute(request);
       TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-        boolean plainTeamMember = tm==null||!tm.getTeamHead();
+      boolean plainTeamMember = tm == null || !tm.getTeamHead();
       if (session.getAttribute("ampAdmin") == null&&plainTeamMember) {
           return true;
       } else {
@@ -123,6 +126,7 @@ public class EditOrganisation extends DispatchAction {
       if (sessionChkForWInfo(request)) {
           return mapping.findForward("index");
       }
+      
       AddOrgForm editForm = (AddOrgForm) form;
       Long orgId = editForm.getAmpOrgId();
       clean(editForm);
@@ -1338,6 +1342,7 @@ public class EditOrganisation extends DispatchAction {
       editForm.setOrgContacts(odlOrgContacts);
       editForm.setSelContactId(null);
       editForm.setSelectedContactInfoIds(null);
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
         HttpSession session = request.getSession();
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
         if (tm != null && tm.getTeamHead()) {

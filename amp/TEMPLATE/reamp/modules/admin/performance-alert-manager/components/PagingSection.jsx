@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as startUp from '../actions/StartUpAction';
 import Utils from '../common/Utils';
-class PagingSection extends Component {
+export default class PagingSection extends Component {
     constructor( props, context ) {
-        super( props, context );
+        super( props, context );     
         this.state = { recordsPerPage: this.props.page.recordsPerPage};
         this.goToClickedPage = this.goToClickedPage.bind( this );
         this.goToNextPage = this.goToNextPage.bind( this );
         this.goToLastPage = this.goToLastPage.bind( this );
-        this.updateRecordsPerPage = this.updateRecordsPerPage.bind( this );
+        this.updateRecordsPerPage = this.updateRecordsPerPage.bind( this ); 
         this.onRecordsPerPageChange= this.onRecordsPerPageChange.bind(this);
     }
 
@@ -29,7 +29,7 @@ class PagingSection extends Component {
     goToLastPage() {
         this.props.goToPage( this.props.page.totalPageCount );
     }
-
+    
     generatePaginationLinks() {
         const paginationLinks = [];
         for ( let i = 1; i <= this.props.page.totalPageCount; i++ ) {
@@ -38,11 +38,11 @@ class PagingSection extends Component {
         }
         return paginationLinks;
     }
-
-    updateRecordsPerPage() {
+    
+    updateRecordsPerPage() {        
         this.props.updateRecordsPerPage(this.state.recordsPerPage);
     }
-
+    
     displayPagingInfo() {
         const transParams = {};
         if (this.props.translate) {
@@ -55,27 +55,27 @@ class PagingSection extends Component {
                 <div>{this.props.translate( 'amp.performance-rule:records-displayed', transParams )}</div>
                 <div>{this.props.translate( 'amp.performance-rule:page-info', transParams )}</div>
              </div> )
-            }
-    }
+            } 
+    }    
 
-    onRecordsPerPageChange(event) {
+    onRecordsPerPageChange(event) {     
       if (Utils.isNumber(event.target.value) && parseInt(event.target.value) > 0 ) {
           this.setState( { recordsPerPage: parseInt( this.refs.recordsPerPage.value ) });
       }
     }
-
+    
     render() {
         if (this.props.page ) {
-                   return (
+                   return (               
                         <div >
-                            <div className="pagination-wrapper row">
+                            <div className="pagination-wrapper row">                                
                                     <div className="col-md-8">
                                         <ul className="pagination pull-right">
                                             {this.generatePaginationLinks()}
                                             <li className="next"><a onClick={this.goToNextPage}><span aria-hidden="true">&rarr;</span></a></li>
                                             <li className="page-item"><a onClick={this.goToLastPage} className="page-link">&raquo;</a></li>
                                         </ul>
-                                    </div>
+                                    </div>                                
                                 <div className="col-md-2">
                                     <div className="input-group pull-right">
                                         <span className="input-group-addon" id="basic-addon1">
@@ -86,7 +86,7 @@ class PagingSection extends Component {
                                 </div>
                                 {this.displayPagingInfo()}
                             </div>
-                        </div>
+                        </div>               
             );
         }
 
@@ -98,7 +98,7 @@ class PagingSection extends Component {
 function mapStateToProps( state, ownProps ) {
     return {
         translations: state.startUp.translations,
-        translate: state.startUp.translate,
+        translate: state.startUp.translate,       
     }
 }
 

@@ -10,7 +10,7 @@ import {
 } from 'redux';
 import * as Constants from '../common/Constants';
 require('../styles/less/main.less');
-class AppliedFilters extends Component {
+export default class AppliedFilters extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {

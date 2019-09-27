@@ -1,5 +1,5 @@
 "use strict";
-require('babel-polyfill');
+require('babel-core/polyfill');
 import Model from "./model";
 import React from "react";
 import ReactDOM from 'react-dom';

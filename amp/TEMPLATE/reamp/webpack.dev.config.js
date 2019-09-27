@@ -65,18 +65,8 @@ module.exports = {
   },
   module: {
     loaders: [
-
-      { test: /\.jsx$/, loader:'babel', exclude: /node_modules/,
-          query:{
-          presets: ['es2015', 'stage-0','react']
-          }
-      },
-      { test: /\.es6$/, loader:'babel', exclude: /node_modules/,
-          query: {
-              presets: ['es2015', 'stage-0', 'react']
-          }
-      },
-
+      { test: /\.jsx$/, loaders:['react-hot', 'babel'], exclude: /node_modules/ },
+      { test: /\.es6$/, loaders:['react-hot', 'babel'], exclude: /node_modules/ },
       { test: /\.json$/, loader: 'json' },
       { test: /\.css$/, exclude: /\.useable\.css$/, loader: "style!css" },
       { test: /\.less$/, loader: "style!css!less" }

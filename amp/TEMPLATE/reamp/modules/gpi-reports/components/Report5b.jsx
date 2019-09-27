@@ -10,7 +10,7 @@ import Loading from './Loading';
 import { IMG_VALUE, INDICATOR_5B, INDICATOR_5B_CODE, GREG_BASE_CALENDAR} from '../common/Constants';
 import HeaderToolTip from './HeaderToolTip';
 import YearsFilterSection from './YearsFilterSection';
-class Report5b extends Component {
+export default class Report5b extends Component {
     constructor( props, context ) {
         super( props, context );
         this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedDonor: "", waiting: true};
@@ -38,7 +38,7 @@ class Report5b extends Component {
         });
         this.settingsWidget = Utils.initializeSettingsWidget();
         this.props.actions.getYears();
-        this.props.actions.getOrgList(false);
+        this.props.actions.getOrgList(false);        
         this.props.actions.getSettings();
         this.settingsWidget.definitions.loaded.done( function() {
             this.fetchReportData();
@@ -109,34 +109,34 @@ class Report5b extends Component {
             "recordsPerPage": this.state.recordsPerPage
         };
 
-        requestData.filters = this.filter.serialize().filters;
-        requestData.settings = this.settingsWidget.toAPIFormat();
+        requestData.filters = this.filter.serialize().filters;        
+        requestData.settings = this.settingsWidget.toAPIFormat();      
         if ( this.getSelectedYear() ) {
             requestData.filters.date = this.getStartEndDates();
         }
-
+        
         if(this.state.hierarchy === 'donor-agency'){
             requestData.filters[this.state.hierarchy] = requestData.filters[this.state.hierarchy] || [];
             if (this.state.selectedDonor && requestData.filters[this.state.hierarchy].indexOf(this.state.selectedDonor) == -1) {
-                requestData.filters[this.state.hierarchy].push(this.state.selectedDonor);
+                requestData.filters[this.state.hierarchy].push(this.state.selectedDonor); 
             }
         }
-
+        
         if(requestData.filters['donor-agency'] && requestData.filters['donor-agency'].length == 0){
-            delete requestData.filters['donor-agency']
+            delete requestData.filters['donor-agency'] 
         }
-
+        
         if(requestData.filters['donor-group'] && requestData.filters['donor-group'].length == 0){
-            delete requestData.filters['donor-group']
+            delete requestData.filters['donor-group'] 
         }
-
+        
         return requestData
     }
-
+    
     getStartEndDates() {
         return Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.getSelectedYear(), this.props.years);
     }
-
+    
    updateRecordsPerPage() {
         if ( this.refs.recordsPerPage && this.refs.recordsPerPage.value ) {
             this.setState( { recordsPerPage: parseInt( this.refs.recordsPerPage.value ) }, function() {
@@ -150,7 +150,7 @@ class Report5b extends Component {
         var requestData = requestData || this.getRequestData();
         this.setState({waiting:true});
         this.props.actions.fetchReportData( requestData, '5b' ).then(function(){
-            this.setState({waiting: false});
+            this.setState({waiting: false});  
         }.bind(this));
     }
 
@@ -166,18 +166,18 @@ class Report5b extends Component {
     }
 
    onYearClick( selectedYear ) {
-        this.setState( { selectedYear: selectedYear }, function() {
+        this.setState( { selectedYear: selectedYear }, function() {                      
             let filters = this.filter.serialize().filters;
             filters.date = {};
             if (this.state.selectedYear) {
                 filters.date = this.getStartEndDates();
-            }
-            this.filter.deserialize({filters: filters}, {silent : true});
+            }           
+            this.filter.deserialize({filters: filters}, {silent : true});          
             this.fetchReportData();
         }.bind( this ) );
 
-    }
-
+    }   
+    
     resetQuickFilters() {
         var filters = this.filter.serialize().filters;
         if ( filters.date ) {
@@ -196,8 +196,8 @@ class Report5b extends Component {
             filters['donor-group'] = [];
             filters['donor-agency'] = [];
             filters[this.state.hierarchy].push( this.state.selectedDonor);
-            this.filter.deserialize({filters: filters}, {silent : true});
-            this.fetchReportData();
+            this.filter.deserialize({filters: filters}, {silent : true});           
+            this.fetchReportData();                     
         }.bind( this ) );
     }
 
@@ -223,7 +223,7 @@ class Report5b extends Component {
         requestData.page = pageNumber;
         this.props.actions.fetchReportData( requestData, '5b' );
     }
-
+    
     generatePaginationLinks() {
         var paginationLinks = [];
         for ( var i = 1; i <= this.props.mainReport.page.totalPageCount; i++ ) {
@@ -264,32 +264,32 @@ class Report5b extends Component {
                 var columnName = parseInt(header.columnName);
                 if(isNaN(columnName) == false) {
                     years.push(columnName);
-                }
-              }
-        }
-
+                }              
+              }            
+        } 
+        
         return years.sort();
     }
-
+    
     downloadExcelFile() {
         this.props.actions.downloadExcelFile(this.getRequestData(), '5b');
     }
-
+    
     downloadPdfFile(){
         this.props.actions.downloadPdfFile(this.getRequestData(), '5b');
-    }
-
+    } 
+    
     render() {
 
         var MTEFYears =  this.getMTEFYears();
-        var addedGroups = [];
+        var addedGroups = [];            
         return (
                 <div>
-                    {this.state.waiting &&
-                        <Loading/>
-                    }
+                    {this.state.waiting &&                      
+                        <Loading/>                
+                    } 
                     {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&
-                     <div>
+                     <div>                    
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <div className="container-fluid indicator-nav no-padding">
@@ -319,7 +319,7 @@ class Report5b extends Component {
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.INDICATOR_5B]}</div>
                                     <div className="stat-label">{this.props.translations['amp-gpi-reports:5b-stat-label']}</div>
                                 </div>
-                            </div>
+                            </div>                           
                         </div>
                     }
                     {this.props.mainReport.empty == true  &&
@@ -337,7 +337,7 @@ class Report5b extends Component {
                                     <option value={org.id} key={org.id} >{org.name}</option>
                                 )}
                             </select>
-                        </div>
+                        </div>                        
                     </div>
                         <div className="container-fluid">
                         <div className="row">
@@ -346,8 +346,8 @@ class Report5b extends Component {
                       </div>
                       <div className="section-divider"></div>
                       { this.props.mainReport.empty &&
-                          <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
-                      }
+                          <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div> 
+                      }  
                       { this.props.mainReport.empty == false  &&
                             <table className="table table-bordered table-striped indicator-table">
                             <thead>
@@ -361,27 +361,27 @@ class Report5b extends Component {
                                     Utils.getCalendarPrefix(this.settingsWidget,this.props.calendars, this.props.translate('amp.gpi-reports:fy')) +
                                     year} <br/> {this.props.translations['amp-gpi-reports:5b-column-legend']}
                                 </th>
-                              )}
+                              )}                          
                               <th className="col-md-2">
                               <HeaderToolTip column={INDICATOR_5B} imgType={IMG_VALUE} headers={this.props.mainReport.page.headers}/>
                               {this.props.translations['amp-gpi-reports:indicator-5b']}</th>
                             </tr>
                           </thead>
-                          <tbody>
+                          <tbody>                     
                               {this.props.mainReport && this.props.mainReport.page && this.props.mainReport.page.contents.map(( row, i ) =>
                               <tr key={i} >
                                   <td>{row[Constants.DONOR_AGENCY] || row[Constants.DONOR_GROUP]}</td>
                                   {MTEFYears.map(( year, i ) =>
                                   <td className="number-column">{row[year]}</td>
                                   )}
-                                  <td className="number-column">{row[Constants.INDICATOR_5B]}</td>
+                                  <td className="number-column">{row[Constants.INDICATOR_5B]}</td>                                    
                               </tr>
-                          )}
+                          )}                     
                           </tbody>
-                          </table>
+                          </table>     
                         }
-
-
+                        
+                                         
                       <div>
                         { this.props.mainReport.empty == false  && this.props.mainReport.page.totalPageCount > 1 &&
                         <div className="row">
@@ -409,14 +409,14 @@ class Report5b extends Component {
                             </div>
                         </div>
                       }
-
+                      
                     </div>
-
+                        
                  </div>
                  }
                 </div>
-            );
-
+            );           
+        
     }
 
 }

@@ -34,7 +34,7 @@ class Location extends Component {
     content = content.filter(el => el !== undefined);
     let table = null;
     if ((activity[IMPLEMENTATION_LEVEL] && activity[IMPLEMENTATION_LEVEL].value !== 'National')
-      || (activity[IMPLEMENTATION_LOCATION] && activity[IMPLEMENTATION_LOCATION].value !== 'Country')) {
+      || (activity[IMPLEMENTATION_LOCATION] && activity[IMPLEMENTATION_LOCATION].value !== 'Administrative Level 0')) {
       table = (<table className={'box_table2'}>
         <tbody>
           <tr><td>

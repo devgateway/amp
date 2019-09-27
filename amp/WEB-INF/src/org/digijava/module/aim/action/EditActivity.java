@@ -1097,7 +1097,7 @@ public class EditActivity extends Action {
             if ( !"true".equals( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES ) ) &&
                     implLevel!=null && implLocValue!=null &&
                             CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
-                            CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue)
+                            CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocValue)
             ) {
                 setFullPercForDefaultCountry            = true;
             }
@@ -1119,32 +1119,26 @@ public class EditActivity extends Action {
                 Country cntry = DbUtil.getDgCountry(cIso);
                 location.setCountryId(cntry.getCountryId());
                 location.setCountry(cntry.getCountryName());
-                location.setNewCountryId(cntry.getIso());
+                location.setIso(cntry.getIso());
 
                 location.setAmpCVLocation( loc.getLocation() );
-                if ( loc.getLocation() != null ){
-                    location.setAncestorLocationNames( DynLocationManagerUtil.getParents( loc.getLocation()) );
-                    location.setLocationName(loc.getLocation().getName());
-                    location.setLocId( loc.getLocation().getId() );
-                    location.setLevelIdx(loc.getLocation().getParentCategoryValue().getIndex());
-                }
-                AmpCategoryValueLocations ampCVRegion   =
-                    DynLocationManagerUtil.getAncestorByLayer(loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-
-                if ( ampCVRegion != null ) {
-//                if (loc.getAmpRegion() != null) {
-//                  location.setRegion(loc.getAmpRegion()
-//                                     .getName());
-//                  location.setRegionId(loc.getAmpRegion()
-//                                       .getAmpRegionId());
-                  if (eaForm.getFunding().getFundingRegions() == null) {
-                    eaForm.getFunding()
-                        .setFundingRegions(new ArrayList());
+                  if (loc.getLocation() != null) {
+                      location.setAncestorLocationNames(DynLocationManagerUtil.getParents(loc.getLocation()));
+                      location.setLocationName(loc.getLocation().getName());
+                      location.setLocId(loc.getLocation().getId());
+                      location.setLevelIdx(loc.getLocation().getParentCategoryValue().getIndex());
                   }
-                  if (!eaForm.getFunding().getFundingRegions().contains(ampCVRegion) ) {
-                    eaForm.getFunding().getFundingRegions().add( ampCVRegion );
+                  AmpCategoryValueLocations ampCVRegion = DynLocationManagerUtil.getAncestorByLayer(
+                                  loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
+    
+                  if (ampCVRegion != null) {
+                      if (eaForm.getFunding().getFundingRegions() == null) {
+                          eaForm.getFunding().setFundingRegions(new ArrayList());
+                      }
+                      if (!eaForm.getFunding().getFundingRegions().contains(ampCVRegion)) {
+                          eaForm.getFunding().getFundingRegions().add(ampCVRegion);
+                      }
                   }
-                }
 
                 if(actLoc.getLocationPercentage()!=null){
 //                  String strPercentage    = FormatHelper.formatNumberNotRounded((double)actLoc.getLocationPercentage() );
@@ -1152,13 +1146,14 @@ public class EditActivity extends Action {
                     location.setPercent(strPercentage);
 //                  location.setPercent( strPercentage.replace(",", ".") );
                 }
-
-                if ( setFullPercForDefaultCountry && (actLoc.getLocationPercentage()==null || actLoc.getLocationPercentage() == 0.0) &&
-                        CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getLocation().getParentCategoryValue()) &&
-                                loc.getLocation().getId() != defCountry.getId() )
-                {
-                    location.setPercentageBlocked(true);
-                }
+    
+                  if (setFullPercForDefaultCountry && (actLoc.getLocationPercentage() == null
+                          || actLoc.getLocationPercentage() == 0.0)
+                          && CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(
+                                  loc.getLocation().getParentCategoryValue())
+                          && loc.getLocation().getId() != defCountry.getId()) {
+                      location.setPercentageBlocked(true);
+                  }
 
                 locs.add(location);
               }

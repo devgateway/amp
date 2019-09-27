@@ -247,7 +247,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
         
         if("region_name".equals(headMetaName)){
             String regionName = retrieveValueFromRS(rs,columnsMetaData.get(  "region_name") );
-            headMeta= this.getCachedMetaInfo(ArConstants.REGION, regionName);           
+            headMeta = this.getCachedMetaInfo(ArConstants.COLUMN_LOC_ADM_LEVEL_1, regionName);
         } else
             
         if("component_type".equals(headMetaName)){

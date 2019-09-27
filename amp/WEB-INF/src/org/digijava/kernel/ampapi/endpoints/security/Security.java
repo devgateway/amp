@@ -154,5 +154,5 @@ public class Security {
     public final AmpTeam getWorkspace(@PathParam("id") Long id) {
         return TeamUtil.getAmpTeam(id);
     }
-
+    
 }

@@ -2,12 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as startUp from '../actions/StartUpAction.jsx';
-class Loading extends Component {
+export default class Loading extends Component {
     constructor( props, context ) {
-        super( props, context );
+        super( props, context );                 
     }
-
-    render() {
+   
+    render() {                       
             return (<div className="processing">
                     <div className="processing_inner">
                     <div className="processing_content">
@@ -15,9 +15,9 @@ class Loading extends Component {
                       <span className="processing_message">{this.props.translations['amp-gpi-reports:loading-message']}</span>
                     </div>
                      </div>
-                    </div>
+                    </div>  
                    );
-
+        
     }
 
 }

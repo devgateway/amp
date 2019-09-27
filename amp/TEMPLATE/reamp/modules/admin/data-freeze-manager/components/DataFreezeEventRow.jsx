@@ -14,7 +14,7 @@ import * as dataFreezeActions from '../actions/DataFreezeActions';
 import DataFreezeEventEdit from '../components/DataFreezeEventEdit';
 import DataFreezeEventView from '../components/DataFreezeEventView';
 import * as Constants from '../common/Constants';
-class DataFreezeEventRow extends Component {
+export default class DataFreezeEventRow extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {

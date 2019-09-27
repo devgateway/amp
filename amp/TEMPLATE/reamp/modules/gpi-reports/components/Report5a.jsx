@@ -14,16 +14,16 @@ import { Modal } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import HeaderToolTip from './HeaderToolTip';
 import Loading from './Loading';
-class Report5a extends Component {
+export default class Report5a extends Component {
     constructor( props, context ) {
         super( props, context );
         this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false, waiting:true};
         this.showFilters = this.showFilters.bind( this );
-        this.showSettings = this.showSettings.bind( this );
+        this.showSettings = this.showSettings.bind( this );        
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );
-        this.toggleHierarchy = this.toggleHierarchy.bind( this );
+        this.toggleHierarchy = this.toggleHierarchy.bind( this );  
         this.downloadExcelFile = this.downloadExcelFile.bind(this);
-        this.downloadPdfFile = this.downloadPdfFile.bind(this);
+        this.downloadPdfFile = this.downloadPdfFile.bind(this);        
       }
 
     componentDidMount() {
@@ -37,28 +37,28 @@ class Report5a extends Component {
         this.props.actions.getOrgList(false);
         this.props.actions.getSettings();
         this.fetchReportData();
-
+        
     }
 
     showFilters() {
         Utils.showFilters(this.refs.filterPopup, this.filter, this.onFilterApply.bind(this), this.onFilterCancel.bind(this));
     }
-
+    
     onFilterApply() {
         this.resetQuickFilters();
         this.fetchReportData();
         $( this.refs.filterPopup ).hide();
     }
-
+    
     onFilterCancel() {
-        $( this.refs.filterPopup ).hide();
+        $( this.refs.filterPopup ).hide(); 
     }
 
     showSettings() {
        this.setState( { calendarId: Utils.getCalendarId(this.settingsWidget) });
-       Utils.showSettings(this.refs.settingsPopup, this.settingsWidget, this.onSettingsApply.bind(this), this.onSettingsCancel.bind(this));
+       Utils.showSettings(this.refs.settingsPopup, this.settingsWidget, this.onSettingsApply.bind(this), this.onSettingsCancel.bind(this));       
     }
-
+    
     onSettingsCancel() {
         $( this.refs.settingsPopup ).hide();
     }
@@ -66,17 +66,17 @@ class Report5a extends Component {
     onSettingsApply(){
         //if calendar has changed reset year filter
         if(Utils.hasCalendarChanged(this.settingsWidget, this.state.calendarId)) {
-            this.onYearClick(null);
+            this.onYearClick(null);            
         } else {
-            this.fetchReportData();
-        }
+            this.fetchReportData(); 
+        }  
         $( this.refs.settingsPopup ).hide();
     }
-
-    getRecordsPerPage(recordsPerPage) {
-        return (this.props.mainReport && this.props.mainReport.page) ? this.props.mainReport.page.recordsPerPage : this.state.recordsPerPage;
+    
+    getRecordsPerPage(recordsPerPage) {               
+        return (this.props.mainReport && this.props.mainReport.page) ? this.props.mainReport.page.recordsPerPage : this.state.recordsPerPage;           
     }
-
+    
     getRequestData() {
         let requestData = {
             "hierarchy": this.state.hierarchy,
@@ -84,26 +84,26 @@ class Report5a extends Component {
             "recordsPerPage": this.getRecordsPerPage()
         };
 
-        requestData.filters = this.filter.serialize().filters;
-        requestData.settings = this.settingsWidget.toAPIFormat();
+        requestData.filters = this.filter.serialize().filters;        
+        requestData.settings = this.settingsWidget.toAPIFormat();        
         if(this.state.hierarchy === 'donor-agency'){
             requestData.filters[this.state.hierarchy] = requestData.filters[this.state.hierarchy] || [];
             if (this.state.selectedDonor && requestData.filters[this.state.hierarchy].indexOf(this.state.selectedDonor) == -1) {
-                requestData.filters[this.state.hierarchy].push(this.state.selectedDonor);
+                requestData.filters[this.state.hierarchy].push(this.state.selectedDonor); 
             }
         }
-
+        
         return requestData
-    }
+    } 
 
     fetchReportData( data ) {
         let requestData = data || this.getRequestData();
         this.setState({waiting: true});
         this.props.actions.fetchReportData( requestData, '5a' ).then(function(){
-            this.setState({waiting: false});
+            this.setState({waiting: false});  
         }.bind(this));
     }
-
+    
     onDonorFilterChange( e ) {
         this.setState( { selectedDonor: parseInt( e.target.value ), showRemarks: false, remarksUrl: null }, function() {
             let filters = this.filter.serialize().filters;
@@ -117,13 +117,13 @@ class Report5a extends Component {
     }
 
     onYearClick( selectedYear ) {
-        this.setState( { selectedYear: selectedYear }, function() {
+        this.setState( { selectedYear: selectedYear }, function() {                      
             let filters = this.filter.serialize().filters;
             filters.date = {};
             if (this.state.selectedYear) {
                 filters.date = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years);
-            }
-            this.filter.deserialize({filters: filters}, {silent : true});
+            }           
+            this.filter.deserialize({filters: filters}, {silent : true});          
             this.fetchReportData();
         }.bind( this ) );
 
@@ -148,8 +148,8 @@ class Report5a extends Component {
             delete filters['donor-agency'];
             filters[this.state.hierarchy] = [];
             filters[this.state.hierarchy].push( this.state.selectedDonor);
-            this.filter.deserialize({filters: filters}, {silent : true});
-            this.fetchReportData();
+            this.filter.deserialize({filters: filters}, {silent : true});          
+            this.fetchReportData();                     
         }.bind( this ) );
     }
 
@@ -170,46 +170,46 @@ class Report5a extends Component {
             let matches = this.props.mainReport.page.contents.filter( content => content[Constants.YEAR] === row[Constants.YEAR] );
             return ( <td className="year-col" rowSpan={matches.length}>{row[Constants.YEAR]}</td> )
         }
-    }
-
+    }  
+    
     goToPage( pageNumber ) {
         let requestData = this.getRequestData();
         requestData.page = pageNumber;
         this.props.actions.fetchReportData( requestData, '5a' );
     }
-
+    
     updateRecordsPerPage(recordsPerPage) {
         let requestData = this.getRequestData();
         requestData.recordsPerPage = recordsPerPage;
         this.props.actions.fetchReportData(requestData, '5a' );
     }
-
+    
     closeRemarksModal() {
         this.setState({showRemarks: false, remarksUrl: null});
     }
-
-    showRemarksModal(event) {
+    
+    showRemarksModal(event) {       
         this.setState({showRemarks: true, remarksUrl: $(event.target).data("url")});
     }
-
+    
     downloadExcelFile() {
         this.props.actions.downloadExcelFile(this.getRequestData(), '5a');
     }
-
+    
     downloadPdfFile(){
         this.props.actions.downloadPdfFile(this.getRequestData(), '5a');
     }
-
-    render() {
-            let addedGroups = [];
+    
+    render() {        
+            let addedGroups = [];           
             return (
-                  <div>
-                    {this.state.waiting &&
-                        <Loading/>
-                    }
-
+                  <div>                   
+                    {this.state.waiting &&                      
+                        <Loading/>                
+                    } 
+                    
                     {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&
-                     <div>
+                     <div>                    
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <ToolBar showFilters={this.showFilters} showSettings={this.showSettings} downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile} />
@@ -232,7 +232,7 @@ class Report5a extends Component {
                         </div>
                         <div className="col-md-3 reduced-padding">
                         </div>
-                      </div>
+                      </div>                        
                     }
                     <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear}
                                         mainReport={this.props.mainReport} filter={this.filter}
@@ -250,11 +250,11 @@ class Report5a extends Component {
                         </div>
                         <div className="pull-right currency-label">{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
                         {(this.props.settings['number-divider'] != 1) &&
-                            <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>
+                            <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
                         }
                         </div>
-                    </div>
-
+                    </div>                                       
+                        
                         <div className="container-fluid">
                         <div className="row">
                           <h4>{this.props.translations['amp.gpi-reports:indicator5a-description']}</h4>
@@ -262,8 +262,8 @@ class Report5a extends Component {
                       </div>
                         <div className="section-divider"></div>
                         {this.state.showRemarks &&
-                             <RemarksPopup showRemarks={this.state.showRemarks} closeRemarksModal={this.closeRemarksModal.bind(this)} remarksUrl={this.state.remarksUrl} code="5a" settings={this.props.settings} />
-                        }
+                             <RemarksPopup showRemarks={this.state.showRemarks} closeRemarksModal={this.closeRemarksModal.bind(this)} remarksUrl={this.state.remarksUrl} code="5a" settings={this.props.settings} />                                                  
+                        }  
                         {this.props.mainReport.empty == true  &&
                             <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
                         }
@@ -284,7 +284,7 @@ class Report5a extends Component {
                           <th className="col-md-2"><HeaderToolTip column={Constants.OVER_DISBURSED} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.OVER_DISBURSED)}</th>
                           <th>
                             <div className="popup">
-                             <HeaderToolTip column={Constants.REMARK} headers={this.props.mainReport.page.headers} imgSrc="images/remarks-heading-icon.svg" tooltip={this.props.translations['amp-gpi-reports:remarks']}/>
+                             <HeaderToolTip column={Constants.REMARK} headers={this.props.mainReport.page.headers} imgSrc="images/remarks-heading-icon.svg" tooltip={this.props.translations['amp-gpi-reports:remarks']}/>               
                             </div>
                           </th>
                         </tr>
@@ -302,22 +302,22 @@ class Report5a extends Component {
                               <td className="number-column">{row[Constants.OVER_DISBURSED]}</td>
                               <td className="number-column">
                               { parseInt(row[Constants.NUMBER_OF_REMARKS]) > 0 &&
-                                  <img className="table-icon" src="images/remarks-icon.svg" data-url={row[Constants.REMARK]} onClick={this.showRemarksModal.bind(this)}/>
+                                  <img className="table-icon" src="images/remarks-icon.svg" data-url={row[Constants.REMARK]} onClick={this.showRemarksModal.bind(this)}/> 
                               }
                               </td>
                           </tr>
-                      )}
+                      )}                      
                       </tbody>
-                      </table>
+                      </table> 
                      }
-                    <div>
+                    <div>                 
                          <PagingSection mainReport={this.props.mainReport} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
                     </div>
                 </div>
                 }
                </div>
-
-            );
+                          
+            );            
     }
 
 }

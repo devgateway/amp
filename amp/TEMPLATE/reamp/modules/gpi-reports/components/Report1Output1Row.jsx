@@ -7,17 +7,17 @@ import * as Constants from '../common/Constants';
 import SupportingEvidencePopup from  './SupportingEvidencePopup'
 import { Overlay  } from 'react-bootstrap';
 import { Tooltip   } from 'react-bootstrap';
-class Report1Output1Row extends Component {
+export default class Report1Output1Row extends Component {
     constructor( props, context ) {
-        super( props, context );
+        super( props, context ); 
         this.state = {descriptionsExpanded:{Q6: false, Q10: false}, showSupportingEvidence: false};
         this.toggleDescription = this.toggleDescription.bind(this);
         this.toggleSupportingEvidence = this.toggleSupportingEvidence.bind(this);
     }
-
+    
     componentDidMount() {
     }
-
+    
     getLocalizedColumnName( originalColumnName ) {
         let name = originalColumnName;
         if ( this.props.reportData && this.props.reportData.page && this.props.reportData.page.headers ) {
@@ -27,31 +27,31 @@ class Report1Output1Row extends Component {
             }
         }
         return name;
-    }
-
-    getListFromString(str){
-       let markup = [];
+    }       
+    
+    getListFromString(str){        
+       let markup = []; 
        if (str) {
-           let elements = str.split(Constants.DELIMETER);
+           let elements = str.split(Constants.DELIMETER);              
            elements.forEach((element, i) => {
                markup.push(<li key={i}>{element}</li>);
            });
-       }
+       }       
        return markup;
     }
-
+   
     toggleDescription(event) {
         let descriptionToggleState = this.state.descriptionsExpanded;
         let question = $(event.target).data("question");
         descriptionToggleState[question] = !descriptionToggleState[question];
         this.setState({descriptionsExpanded: descriptionToggleState})
     }
-
-    toggleSupportingEvidence(event) {
-        this.setState({showSupportingEvidence: !this.state.showSupportingEvidence})
+    
+    toggleSupportingEvidence(event) {  
+        this.setState({showSupportingEvidence: !this.state.showSupportingEvidence}) 
     }
-
-    render() {
+    
+    render() {          
              return (
                     <tr >
                     <td>{this.props.rowData[Constants.PROJECT_TITLE]}</td>
@@ -76,12 +76,12 @@ class Report1Output1Row extends Component {
                     </td>
                     <td >{this.props.rowData[Constants.Q6]}
                         {this.props.rowData[Constants.Q6] == Constants.OPTION_YES &&
-                           <span className="glyphicon glyphicon-chevron-down" onClick={this.toggleDescription} data-question="Q6"></span>
+                           <span className="glyphicon glyphicon-chevron-down" onClick={this.toggleDescription} data-question="Q6"></span> 
                         }
-
+                                             
                         {this.props.rowData[Constants.Q6] == Constants.OPTION_YES && this.state.descriptionsExpanded[Constants.Q6] &&
                             <div>{this.props.rowData[Constants.Q6_DESCRIPTION]}</div>
-                        }
+                        }                      
                     </td>
                     <td className="number-column">{this.props.rowData[Constants.Q7]}</td>
                     <td className="number-column">{this.props.rowData[Constants.Q8]}</td>
@@ -89,29 +89,29 @@ class Report1Output1Row extends Component {
                     <td >{this.props.rowData[Constants.Q10]}
                     {this.props.rowData[Constants.Q10] == Constants.OPTION_YES &&
                         <span className="glyphicon glyphicon-chevron-down" onClick={this.toggleDescription} data-question="Q10"></span>
-                    }
+                    }                    
                     {this.props.rowData[Constants.Q10] == Constants.OPTION_YES && this.state.descriptionsExpanded[Constants.Q10] &&
                        <div>{this.props.rowData[Constants.Q10_DESCRIPTION]}</div>
                     }
                     </td>
                     <td className="number-column">{this.props.rowData[Constants.RESULT]}</td>
                     <td className="number-column">{this.props.rowData[Constants.M_E]}</td>
-                    <td>
+                    <td>                   
                     <div style={{ position: 'relative' }}>
                         {this.state.showSupportingEvidence &&
-                           <SupportingEvidencePopup code="1" requestData={{}} toggleSupportingEvidence={this.toggleSupportingEvidence} rowData={this.props.rowData}/>
+                           <SupportingEvidencePopup code="1" requestData={{}} toggleSupportingEvidence={this.toggleSupportingEvidence} rowData={this.props.rowData}/> 
                         }
                         <img className="table-icon" ref="showSupportingEvidenceToggle" src="images/icon-download-blue.svg" onClick={this.toggleSupportingEvidence}/>
-                    </div>
+                    </div>                                          
                     </td>
                     </tr>
-            );
+            );        
     }
 
 }
 
 function mapStateToProps( state, ownProps ) {
-    return {
+    return {           
         translations: state.startUp.translations,
         translate: state.startUp.translate
     }

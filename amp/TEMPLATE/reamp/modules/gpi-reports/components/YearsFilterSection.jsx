@@ -5,25 +5,25 @@ import * as startUp from '../actions/StartUpAction';
 import * as commonListsActions from '../actions/CommonListsActions';
 import Utils from '../common/Utils';
 import { INDICATOR_5B_CODE, GREG_BASE_CALENDAR} from '../common/Constants';
-class YearsFilterSection extends Component {
+export default class YearsFilterSection extends Component {
     constructor( props, context ) {
-        super( props, context );
+        super( props, context );        
          this.onYearClick = this.onYearClick.bind( this );
-
+        
     }
 
-    componentDidMount() {
-    }
-
+    componentDidMount() {        
+    }    
+    
     onYearClick( event ) {
         this.props.onYearClick($( event.target ).data( "year" ));
     }
-
+    
     showSelectedDates() {
         var displayDates = '';
-        if (this.props.filter) {
+        if (this.props.filter) {           
             var filters = this.props.filter.serialize().filters;
-
+                              
             if (filters[this.props.dateField]) {
                 filters[this.props.dateField].start = filters[this.props.dateField].start || '';
                 filters[this.props.dateField].end = filters[this.props.dateField].end || '';
@@ -39,7 +39,7 @@ class YearsFilterSection extends Component {
                     }
                     displayDates += endDatePrefix + " " + this.props.filter.formatDate( filters[this.props.dateField].end );
                 }
-            }
+            } 
         }
         return displayDates;
     }
@@ -55,9 +55,9 @@ class YearsFilterSection extends Component {
                               {this.props.report !== INDICATOR_5B_CODE &&
                                   <li className={this.props.selectedYear ? '' : 'active'}>
                                     <a onClick={this.onYearClick}>{this.props.translations['amp.gpi-reports:all-years']}</a>
-                                   </li>
+                                   </li> 
                               }
-
+                               
                                {( ( years.length > 3 ) ? years.splice( years.length - 3, 3 ).reverse() : years.reverse() ).map( year =>
                                    <li className={this.props.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{this.props.prefix + ' ' + year}</a></li>
                                )}
@@ -78,9 +78,9 @@ class YearsFilterSection extends Component {
                        </div>
                        <div className="selection-legend">
                            <div className="pull-right">{this.showSelectedDates().length > 0 ? this.props.translations['amp-gpi-reports:selected'] : ''}{this.showSelectedDates()}</div>
-                       </div>
+                       </div>   
                       </div>
-
+                           
             );
         }
 

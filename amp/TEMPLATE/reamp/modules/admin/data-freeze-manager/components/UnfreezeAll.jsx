@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as dataFreezeActions from '../actions/DataFreezeActions';
-class UnfreezeAll extends Component {
+export default class UnfreezeAll extends Component {
      constructor(props, context) {
           super(props, context);
           this.state = {};

@@ -9,7 +9,7 @@ import * as Constants from '../common/Constants';
 import HeaderToolTip from './HeaderToolTip';
 import Loading from './Loading';
 import YearsFilterSection from './YearsFilterSection';
-class Report6 extends Component {
+export default class Report6 extends Component {
     constructor( props, context ) {
         super( props, context );
         this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", waiting: true};

@@ -12,15 +12,15 @@ import IconGroup from './IconGroup';
 require('../styles/ActivityView.css');
 
 /**
- *    
+ *
  */
-export default class ActivityView extends Component { 
-    
+class ActivityView extends Component {
+
     constructor( props, context ) {
         super( props, context );
     }
 
-	
+
 	componentDidMount() {
         this.initializeFieldsAndActivity();
     }
@@ -35,7 +35,7 @@ export default class ActivityView extends Component {
         const settings = this.props.settings;
         const translations = this.props.translations;
         const sections = AC.ACTIVITY_SECTION_IDS.map((section) => {
-            return <li key={section.key}><a href={'javascript:openSection("'+section.hash+'")'}> 
+            return <li key={section.key}><a href={'javascript:openSection("'+section.hash+'")'}>
                 {translations[section.translationKey]} </a></li>;
           });
         const sectionKeys = AC.ACTIVITY_SECTION_IDS.map(section => section.key);
@@ -46,7 +46,7 @@ export default class ActivityView extends Component {
             activityInfo: activityInfo
         }
         const statusBarStyles = {
-            inline : true,         
+            inline : true,
             fieldNameClass: 'preview_status_title',
             fieldValueClass: 'preview_status_detail',
             titleClass: 'status_title_class',
@@ -58,7 +58,7 @@ export default class ActivityView extends Component {
                     {this._getLegends(translations, activityInfo)}
                 </div>
                 <div className="l_divright">
-                   <IconGroup activity={activity} translations={translations} 
+                   <IconGroup activity={activity} translations={translations}
                    settings={settings} activityInfo={activityInfo} />
                 </div>
                 <div className="preview_header">
@@ -99,15 +99,15 @@ export default class ActivityView extends Component {
 	_hasSettings() {
         return this.props.isSettingsLoaded && this.props.settings;
     }
-	
+
 	_hasActivity() {
         return this.props.isActivityHydrated && this.props.activity;
     }
-	
+
 	_hasActivityInfo() {
         return this.props.isActivityInfoLoaded && this.props.activityInfo;
     }
-    
+
     _getMessage() {
         let message = null;
         if (this.props.isActivityError === true) {
@@ -130,17 +130,17 @@ export default class ActivityView extends Component {
             );
         } else if (this.props.isActivityHydrated === true) {
             if (!this.props.activity) {
-                message = ( 
+                message = (
                     <Alert bsStyle="danger">
                         <strong>{this.props.translations['amp.activity-preview:activityUnexpectedError']}</strong>
                     </Alert>);
             }
-        } 
+        }
         return message === null ? '' : <div>{message}</div>;
     }
 
     _getLegends(translations, activityInfo) {
-        let alertMsg = activityInfo[AC.INFO_ACTIVITY_TEAM] && !activityInfo[AC.INFO_ACTIVITY_TEAM][AC.INFO_IS_PRIVATE] ? '' : 
+        let alertMsg = activityInfo[AC.INFO_ACTIVITY_TEAM] && !activityInfo[AC.INFO_ACTIVITY_TEAM][AC.INFO_IS_PRIVATE] ? '' :
         (
             <Alert bsStyle="warning">
                 <strong>{translations['amp.activity-preview:isPrivate']}</strong>
@@ -181,15 +181,15 @@ export default class ActivityView extends Component {
               break;
         }
 
-        let alertMsg = msg.length < 1 ? '' : 
+        let alertMsg = msg.length < 1 ? '' :
         (
             <Alert bsStyle="danger">
                 <strong><li>{msg}</li></strong>
                 {lastVersionMsg &&
                     <div><strong><li>{lastVersionMsg}</li></strong></div>
                 }
-                {addLink && 
-                    <div><li><a href={'/TEMPLATE/reamp/modules/activity-preview/index.html#/activity/' + 
+                {addLink &&
+                    <div><li><a href={'/TEMPLATE/reamp/modules/activity-preview/index.html#/activity/' +
                         activityInfo[AC.INFO_LAST_VERSION]}>{translations['click_latest_version']}
                     </a></li></div>
                 }
@@ -200,7 +200,7 @@ export default class ActivityView extends Component {
         );
         return ret;
     }
-    
+
     render() {
         const activityPreview = this._hasActivity() && this._hasSettings() && this._hasActivityInfo() ? this._renderData() : '';
         return (

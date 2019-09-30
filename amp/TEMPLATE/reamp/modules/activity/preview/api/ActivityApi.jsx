@@ -4,13 +4,8 @@ import {ACTIVITY_API, FIELDS_DEFINITION_API, POSSIBLE_VALUES_API, FM_API} from '
 
 export default class ActivityApi {
     static getActivity(activityId) {
-        return new Promise((resolve, reject) => {
-            fetchJson(ACTIVITY_API + activityId).then((activity) => {
-                resolve(activity)
-            }).catch((error) => {
-                reject(error);
-            });
-        });
+        const url = ACTIVITY_API + activityId;
+        return this._fetchData(url);
     }
 
     static getFieldsDefinition() {
@@ -20,10 +15,10 @@ export default class ActivityApi {
 
     static _fetchData(url) {
         return new Promise((resolve, reject) => {
-            fetchJson(url).then((result) => {
+            return fetchJson(url).then((result) => {
                 resolve(result)
             }).catch((error) => {
-                reject(error);
+                return reject(error);
             });
         });
     }
@@ -39,9 +34,9 @@ export default class ActivityApi {
     static _postData(url, body) {
         return new Promise((resolve, reject) => {
             postJson(url,body).then((result) => {
-                resolve(result.json())
+                return resolve(result.json())
             }).catch((error) => {
-                reject(error);
+                return reject(error);
             });
         });
     }

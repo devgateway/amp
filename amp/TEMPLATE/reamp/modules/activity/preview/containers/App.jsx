@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {ActivityPreviewUI, FieldsManager, FeatureManager} from 'amp-ui';
+import {ActivityPreviewUI, FieldsManager } from 'amp-ui';
 import Home from "./Home";
 import * as ActivityActions from '../actions/ActivityActions';
 import activityContext from '../jsons/activityContext.json';

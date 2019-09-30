@@ -1,19 +1,16 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {ActivityPreviewUI, FieldsManager, FeatureManager} from 'amp-ui';
+import {ActivityPreviewUI, FieldsManager } from 'amp-ui';
 import Home from "./Home";
-import activity from '../jsons/activity.json';
+import * as ActivityActions from '../actions/ActivityActions';
 import activityContext from '../jsons/activityContext.json';
-import fmTree from '../jsons/fmTree.json';
-import fieldsDef from '../jsons/fieldsDef.json';
-import possibleValuesCollection from '../jsons/possibleValuesCollection.json';
 import Logger from '../tempUtils/LoggerManager';
 import DateUtils from '../tempUtils/DateUtils';
 import translate from '../tempUtils/translate';
 import ActivityFundingTotals from '../tempUtils/ActivityFundingTotals';
 // { getAmountsInThousandsMessage, rawNumberToFormattedString }
 import NumberUtils from '../tempUtils/NumberUtils';
-import  ContactActions from '../tempUtils/ContactsActions';
+import ContactActions from '../tempUtils/ContactsActions';
 import contactsByIds from '../jsons/ContactsById.json'
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
@@ -22,7 +19,6 @@ import {connect} from "react-redux";
  *
  */
 class App extends Component {
-
     static childContextTypes = {
         Logger: PropTypes.func.isRequired,
         translate: PropTypes.func.isRequired,
@@ -38,13 +34,14 @@ class App extends Component {
 
     constructor(props, context) {
         super(props, context);
-        FeatureManager.setFMTree(fmTree);
-        FeatureManager.setLoggerManager(Logger);
+    }
+
+    componentWillMount() {
+        this.props.actions.loadActivityForActivityPreview(this.props.activityId);
     }
 
     getChildContext() {
-        const activityFieldsManager = new FieldsManager(fieldsDef, possibleValuesCollection, 'en',
-            Logger);
+        const activityFieldsManager = this.props.activityReducer.activityFieldsManager;
         const activityFundingTotals = new ActivityFundingTotals(null, null, null, null);
         console.log(NumberUtils.getAmountsInThousandsMessage);
         return {
@@ -54,31 +51,34 @@ class App extends Component {
             DateUtils,
             activityFundingTotals,
             getAmountsInThousandsMessage: NumberUtils.getAmountsInThousandsMessage,
-            rawNumberToFormattedString:NumberUtils.rawNumberToFormattedString,
-            getActivityContactIds:ContactActions.getActivityContactIds,
+            rawNumberToFormattedString: NumberUtils.rawNumberToFormattedString,
+            getActivityContactIds: ContactActions.getActivityContactIds,
             contactsByIds
         }
     }
 
     render() {
-        return (
-            <ActivityPreviewUI activity={activity} activityContext={activityContext} />
-        );
+        console.log(this.props);
+        if (this.props.activityReducer.isActivityLoading) {
+            return (<div> LOADING ACTIVITY </div>)
+        } else {
+            const activity = this.props.activityReducer.activity;
+            return (
+                <ActivityPreviewUI activity={activity} activityContext={activityContext}/>
+            );
+        }
     }
 }
 
 function mapStateToProps(state, ownProps) {
-    console.log(ownProps.params.activityId);
-    return{}
-    /*return {
-        translations: state.startUp.translations,
-        translate: state.startUp.translate
-    }*/
+    return {
+        activityId: ownProps.params.activityId,
+        activityReducer: state.activityReducer
+    }
 }
 
 function mapDispatchToProps(dispatch) {
-    //return { actions: bindActionCreators( Object.assign( {}, commonListsActions ), dispatch ) };
-    return {actions: bindActionCreators({}, dispatch)};
+    return {actions: bindActionCreators(Object.assign({}, ActivityActions), dispatch)};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

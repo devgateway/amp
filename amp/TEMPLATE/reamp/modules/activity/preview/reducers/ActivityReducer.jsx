@@ -2,7 +2,7 @@ import {ACTIVITY_LOAD_LOADING, ACTIVITY_LOAD_LOADED, ACTIVITY_LOAD_FAILED} from 
 
 const defaultState = {
     activity: undefined,
-    isActivityLoading: false,
+    isActivityLoading: true,
     isActivityLoaded: false,
     error: undefined
 };
@@ -17,6 +17,7 @@ export default function activityReducer(state: Object = defaultState, action: Ob
                 ...state,
                 activity: action.payload.activity,
                 activityFieldsManager: action.payload.activityFieldsManager,
+                activityContext: action.payload.activityContext,
                 fmTree: action.payload.fmTree,
                 isActivityLoading: false,
                 isActivityLoaded: true

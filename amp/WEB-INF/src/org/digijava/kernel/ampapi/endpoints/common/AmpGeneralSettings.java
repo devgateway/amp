@@ -83,6 +83,12 @@ public class AmpGeneralSettings {
     @JsonProperty("workspace-prefix")
     private String workspacePrefix;
 
+    @JsonProperty(SettingsConstants.CALENDAR_TYPE_ID)
+    private Long calendarId;
+
+    @JsonProperty(SettingsConstants.CALENDAR_IS_FISCAL)
+    private boolean calendarIsFiscal;
+
     @JsonProperty(SettingsConstants.DASHBOARD_DEFAULT_MAX_DATE)
     private String dashboardDefaultMaxDate;
     
@@ -377,5 +383,21 @@ public class AmpGeneralSettings {
     
     public void setGisDefaultMinYearRange(String gisDefaultMinYearRange) {
         this.gisDefaultMinYearRange = gisDefaultMinYearRange;
+    }
+
+    public Long getCalendarId() {
+        return calendarId;
+    }
+
+    public void setCalendarId(Long calendarId) {
+        this.calendarId = calendarId;
+    }
+
+    public boolean isCalendarIsFiscal() {
+        return calendarIsFiscal;
+    }
+
+    public void setCalendarIsFiscal(boolean calendarIsFiscal) {
+        this.calendarIsFiscal = calendarIsFiscal;
     }
 }

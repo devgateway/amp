@@ -24,7 +24,7 @@
 		<property name="segmentCode" column="segment_code" type="java.lang.String" />
 		<property name="deleted" column="deleted" type="java.lang.Boolean" />
 
-		<set name="sectors" table="AMP_ORGANISATION_SECTOR" cascade="none">
+		<set name="sectors" table="AMP_ORGANISATION_SECTOR" cascade="none" lazy="true">
 			<cache usage="read-write" />
 			<key column="amp_org_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpSector" />
@@ -119,7 +119,8 @@
 				<many-to-one name="parentsector" column="budget_sector_id" class="org.digijava.module.budget.dbentity.AmpBudgetSector" cascade="none" />
 				
 
-		<set name="organizationContacts" inverse="true" cascade="delete" lazy="false">
+		<set name="organizationContacts" inverse="true" cascade="delete" lazy="true">
+			<cache usage="read-write" />
 			<key column="amp_org_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationContact" />
 		</set>

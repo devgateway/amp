@@ -15,6 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
+import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -44,7 +45,7 @@ public final class ContactUtil {
                     result = exporter.export(contact);
                 } catch (Exception e) {
                     result.put(EPConstants.ERROR, ApiError.toError(
-                            ApiExceptionMapper.INTERNAL_ERROR.withDetails(e.getMessage())).getErrors());
+                            GenericErrors.INTERNAL_ERROR.withDetails(e.getMessage())).getErrors());
                     result.put(ContactEPConstants.ID, contact.getId());
                 } finally {
                     PersistenceManager.getSession().evict(contact);

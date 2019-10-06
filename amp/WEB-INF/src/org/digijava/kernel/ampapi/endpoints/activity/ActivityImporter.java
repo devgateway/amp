@@ -34,6 +34,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.ActivityErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
@@ -313,18 +314,18 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             String requestedAmpId = reqAmpIdObj instanceof String ? (String) reqAmpIdObj : null;
             if (!ampId.equals(requestedAmpId)) {
                 // amp id must match amp id of the existing activity
-                addError(ActivityErrors.FIELD_INVALID_VALUE.withDetails(ampIdFieldName));
+                addError(ValidationErrors.FIELD_INVALID_VALUE.withDetails(ampIdFieldName));
             }
         } else if (reqAmpIdObj != null) {
             // amp id must be null on insert
-            addError(ActivityErrors.FIELD_INVALID_VALUE.withDetails(ampIdFieldName));
+            addError(ValidationErrors.FIELD_INVALID_VALUE.withDetails(ampIdFieldName));
         }
 
         // activity id must not be specified on insert
         String activityIdFieldName = ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME;
         Object activityId = newJson.get(activityIdFieldName);
         if (!update && activityId != null) {
-            addError(ActivityErrors.FIELD_INVALID_VALUE.withDetails(activityIdFieldName));
+            addError(ValidationErrors.FIELD_INVALID_VALUE.withDetails(activityIdFieldName));
         }
     }
 

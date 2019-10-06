@@ -17,15 +17,17 @@ import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.LocationUtil;
 
-/**
+    /**
  *
  *Todo refactoring whole code using Dynamic location manager
  * but not today. This is a quick bug fix version.
  */
     public class SelectLocationForIndicatorValue   extends Action {
-        
+    
+        public static final int LEVEL_INDEX_3 = 3;
+        public static final int LEVEL_INDEX_4 = 4;
+    
         public ActionForward execute(ActionMapping mapping, ActionForm form,
                                      HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
             ThemeForm themeForm = (ThemeForm) form;
@@ -40,72 +42,74 @@ import org.digijava.module.aim.util.LocationUtil;
             String iso= FeaturesUtil.getDefaultCountryIso();
             Long countryId;
             Country ampGS=null;
-            String CountryName = null; 
+            String countryName = null; 
             if(iso!=null){
                 themeForm.setDefaultCountryIsSet(true);                 
                 Collection<Country> b = FeaturesUtil.getDefaultCountry(iso);
                 Iterator<Country> itr2 = b.iterator();
                 while (itr2.hasNext()) {
                 ampGS = (Country) itr2.next();
-                CountryName = ampGS.getCountryName();            
+                countryName = ampGS.getCountryName();            
               }
     
               if (themeForm.getFill() == null || themeForm.getFill().trim().length() == 0) {
-                  themeForm.setCountry(CountryName);
-                  themeForm.setImpCountry(iso);
-                  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+                  themeForm.setAdmLevel0Location(countryName);
+                  themeForm.setImpAdmLevel0(iso);
+                  themeForm.setAdmLevel1Locations(DynLocationManagerUtil.getLocationsOfTypeAdmLevel1OfDefCountry());
               }
               else {
-                if (themeForm.getFill().equals("zone")) {
-                  if (themeForm.getImpRegion() != null) {
-                      AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
-                      if (selectedRegion != null) {
-                          themeForm.setZones(selectedRegion.getChildLocations());
+                if (themeForm.getFill().equals("admLevel2Location")) {
+                  if (themeForm.getImpAdmLevel1() != null) {
+                      AmpCategoryValueLocations selectedAdmLevel1Locations =
+                              DynLocationManagerUtil.getLocation(themeForm.getImpAdmLevel1(), true);
+                      if (selectedAdmLevel1Locations != null) {
+                          themeForm.setAdmLevel2Locations(selectedAdmLevel1Locations.getChildLocations());
                       } else {
-                          themeForm.setZones(null);
+                          themeForm.setAdmLevel2Locations(null);
                       }
-                      themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
-                      themeForm.setImpZone(null);
-    //                themeForm.setImpMultiZone(null);
-    //                themeForm.setImpMultiWoreda(null);
-                      themeForm.setImpWoreda(null); 
+                      themeForm.setAdmLevel1Locations(DynLocationManagerUtil.getLocationsOfTypeAdmLevel1OfDefCountry());
+                      themeForm.setImpAdmLevel2(null);
+                      themeForm.setImpAdmLevel3(null);
                   }
-                }
-                else if (themeForm.getFill().equals("woreda")) {
-                  if (themeForm.getImpZone() != null) {
-                      AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
-                     AmpCategoryValueLocations selectedZone=DynLocationManagerUtil.getLocation(themeForm.getImpZone(), true);
-                      if (selectedZone != null) {
-                          themeForm.setWoredas(selectedZone.getChildLocations());
-                      } else {
-                          themeForm.setWoredas(null);
-                      }
-                      if (selectedRegion != null) {
-                          themeForm.setZones(selectedRegion.getChildLocations());
-                      } else {
-                          themeForm.setZones(null);
-                      }
-                      themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
-                      themeForm.setImpWoreda(null);
-                  }
-                }
-                else if (themeForm.getFill().equals("woredaSelected")) {
-                  if (themeForm.getImpWoreda() != null) {
-                     AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
-                     AmpCategoryValueLocations selectedZone=DynLocationManagerUtil.getLocation(themeForm.getImpZone(), true);
-                       if (selectedZone != null) {
-                          themeForm.setWoredas(selectedZone.getChildLocations());
-                      } else {
-                          themeForm.setWoredas(null);
-                      }
-                      if (selectedRegion != null) {
-                          themeForm.setZones(selectedRegion.getChildLocations());
-                      } else {
-                          themeForm.setZones(null);
-                      }
-                      themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
-                      //themeForm.setImpWoreda(null);
-                  }
+                } else if (themeForm.getFill().equals("admLevel3Location")) {
+                    if (themeForm.getImpAdmLevel2() != null) {
+                        AmpCategoryValueLocations selectedAdmLevel1Location =
+                                DynLocationManagerUtil.getLocation(themeForm.getImpAdmLevel1(), true);
+                        AmpCategoryValueLocations selectedAdmLevel2Location =
+                                DynLocationManagerUtil.getLocation(themeForm.getImpAdmLevel2(), true);
+                        if (selectedAdmLevel2Location != null) {
+                            themeForm.setAdmLevel3Locations(selectedAdmLevel2Location.getChildLocations());
+                        } else {
+                            themeForm.setAdmLevel3Locations(null);
+                        }
+                        if (selectedAdmLevel1Location != null) {
+                            themeForm.setAdmLevel2Locations(selectedAdmLevel1Location.getChildLocations());
+                        } else {
+                            themeForm.setAdmLevel2Locations(null);
+                        }
+                        themeForm.setAdmLevel1Locations(
+                                DynLocationManagerUtil.getLocationsOfTypeAdmLevel1OfDefCountry());
+                        themeForm.setImpAdmLevel3(null);
+                    }
+                } else if (themeForm.getFill().equals("admLevel3LocationSelected")) {
+                    if (themeForm.getImpAdmLevel3() != null) {
+                        AmpCategoryValueLocations selectedAdmLevel1Location =
+                                DynLocationManagerUtil.getLocation(themeForm.getImpAdmLevel1(), true);
+                        AmpCategoryValueLocations selectedAdmLevel2Location =
+                                DynLocationManagerUtil.getLocation(themeForm.getImpAdmLevel2(), true);
+                        if (selectedAdmLevel2Location != null) {
+                            themeForm.setAdmLevel3Locations(selectedAdmLevel2Location.getChildLocations());
+                        } else {
+                            themeForm.setAdmLevel3Locations(null);
+                        }
+                        if (selectedAdmLevel1Location != null) {
+                            themeForm.setAdmLevel2Locations(selectedAdmLevel1Location.getChildLocations());
+                        } else {
+                            themeForm.setAdmLevel2Locations(null);
+                        }
+                        themeForm.setAdmLevel1Locations(
+                                DynLocationManagerUtil.getLocationsOfTypeAdmLevel1OfDefCountry());
+                    }
                 }
               }
             }
@@ -123,28 +127,19 @@ import org.digijava.module.aim.util.LocationUtil;
                 Long id=null;
 
               
-//              if(indValue.getLocation()!=null){
-//                  location=indValue.getLocation();
-//              }else {
-//                  location=new AmpLocation();
-//              }
                 //National
-                if(themeForm.getLocationLevelIndex().intValue()==2){
+                if (themeForm.getLocationLevelIndex().intValue() == 2) {
                     //Regional
-                    id=themeForm.getImpRegion();
-                }
-                else{
-                      if (themeForm.getLocationLevelIndex().intValue()==3){
-                          //Zone
-                          id=themeForm.getImpZone();
-
-                      }
-                      if (themeForm.getLocationLevelIndex().intValue()==4){
-                          //District
-                          id=themeForm.getImpWoreda();
-
-                      }
-
+                    id = themeForm.getImpAdmLevel1();
+                } else {
+                    if (themeForm.getLocationLevelIndex().intValue() == LEVEL_INDEX_3) {
+                        //Zone
+                        id = themeForm.getImpAdmLevel2();
+                    }
+                    if (themeForm.getLocationLevelIndex().intValue() == LEVEL_INDEX_4) {
+                        //District
+                        id = themeForm.getImpAdmLevel3();
+                    }
                 }
                 
                 AmpLocation ampLoc = DynLocationManagerUtil.getOrCreateAmpLocationByCVLId(id);
@@ -156,10 +151,10 @@ import org.digijava.module.aim.util.LocationUtil;
                 themeForm.setSelectedLocationId(null);
                 themeForm.setLocation(null);
                 themeForm.setLocationLevelIndex(null);
-                themeForm.setImpCountry(null);
-                themeForm.setImpRegion(null);
-                themeForm.setImpZone(null);
-                themeForm.setImpWoreda(null);
+                themeForm.setImpAdmLevel0(null);
+                themeForm.setImpAdmLevel1(null);
+                themeForm.setImpAdmLevel2(null);
+                themeForm.setImpAdmLevel3(null);
                 themeForm.setAction(null);
                 return mapping.findForward("backToAddDataPage");
             }

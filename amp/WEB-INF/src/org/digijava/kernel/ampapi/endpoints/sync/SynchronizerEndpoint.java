@@ -19,7 +19,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -38,7 +37,7 @@ import org.digijava.module.aim.util.TeamUtil;
 @Path("sync")
 @Api("sync")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-public class SynchronizerEndpoint implements ErrorReportingEndpoint {
+public class SynchronizerEndpoint {
 
     private SyncService syncService = SpringUtil.getBean(SyncService.class);
 
@@ -108,11 +107,6 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
             throw new AmpWebApplicationException(Status.BAD_REQUEST, SynchronizerErrors.LAST_SYNC_TIME_REQUIRED);
         }
         return syncService.getChangedExchangeRates(lastSyncTime);
-    }
-
-    @Override
-    public Class getErrorsClass() {
-        return SynchronizerErrors.class;
     }
 
 }

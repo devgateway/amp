@@ -1,6 +1,6 @@
 <div class="templateBugWorkaround">
 <div>
-    <h3 data-i18n="amp.gis:title-<%= title %>"><%= title %></h3>
+    <h3 data-i18n="amp.gis:title-<%= title.replace(/ /g,'') %>"><%= title %></h3>
   <small><%= obj.description %></small>
 </div>
   <% if (status === 'loading') { %>

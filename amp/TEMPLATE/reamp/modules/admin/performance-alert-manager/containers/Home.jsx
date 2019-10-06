@@ -11,9 +11,9 @@ import {
 require('../styles/less/main.less');
 import * as startUp from '../actions/StartUpAction';
 import PerformanceRuleList from '../components/PerformanceRuleList.jsx';
-export default class App extends Component {
+class App extends Component {
     constructor(props, context) {
-        super(props, context);        
+        super(props, context);
     }
 
     componentWillMount() {}

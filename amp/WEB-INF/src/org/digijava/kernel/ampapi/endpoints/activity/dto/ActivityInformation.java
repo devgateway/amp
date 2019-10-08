@@ -3,14 +3,9 @@ package org.digijava.kernel.ampapi.endpoints.activity.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.ActivityHistory;
-import org.digijava.module.aim.util.ValidationStatus;
 
 import java.util.List;
 

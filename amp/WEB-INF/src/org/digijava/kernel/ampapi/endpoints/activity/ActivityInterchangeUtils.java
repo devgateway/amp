@@ -163,8 +163,8 @@ public final class ActivityInterchangeUtils {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         User activityWorkspaceTeamLead = project.getTeam().getTeamLead().getUser();
         activityInformation.setActivityWorkspace(project.getTeam());
-        activityInformation.setActivityWorkspaceLeadData(activityWorkspaceTeamLead.getFirstNames() + " " +
-                activityWorkspaceTeamLead.getLastName() + " " +  activityWorkspaceTeamLead.getEmail());
+        activityInformation.setActivityWorkspaceLeadData(activityWorkspaceTeamLead.getFirstNames() + " "
+                + activityWorkspaceTeamLead.getLastName() + " " +  activityWorkspaceTeamLead.getEmail());
 
 
         if (tm != null) {

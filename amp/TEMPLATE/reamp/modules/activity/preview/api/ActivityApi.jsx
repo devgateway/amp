@@ -1,5 +1,6 @@
 import {fetchJson, postJson} from 'amp/tools/index';
-import {ACTIVITY_API, FIELDS_DEFINITION_API, POSSIBLE_VALUES_API, FM_API} from '../common/Constants.jsx'
+import {ACTIVITY_API, FIELDS_DEFINITION_API, POSSIBLE_VALUES_API, FM_API, SETTINGS_API , ACTIVITY_INFO_API}
+from '../common/ReampConstants.jsx'
 
 
 export default class ActivityApi {
@@ -23,17 +24,29 @@ export default class ActivityApi {
         });
     }
 
-    static fetchPossibleValues(body){
+    static fetchPossibleValues(body) {
         const url = POSSIBLE_VALUES_API;
         return ActivityApi._postData(url, body)
     }
-    static fetchFmConfiguration(body){
+
+    static fetchFmConfiguration(body) {
         const url = FM_API;
         return ActivityApi._postData(url, body);
     }
+
+    static fetchSettings() {
+        const url = SETTINGS_API;
+        return ActivityApi._fetchData(url);
+    }
+
+    static fetchActivityInfo(activityId) {
+        const url = ACTIVITY_INFO_API + activityId;
+        return ActivityApi._fetchData(url);
+    }
+
     static _postData(url, body) {
         return new Promise((resolve, reject) => {
-            postJson(url,body).then((result) => {
+            postJson(url, body).then((result) => {
                 return resolve(result.json())
             }).catch((error) => {
                 return reject(error);

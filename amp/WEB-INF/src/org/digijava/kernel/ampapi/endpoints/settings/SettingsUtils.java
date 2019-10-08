@@ -430,10 +430,18 @@ public class SettingsUtils {
         if (MenuUtils.getCurrentView() == AmpView.TEAM) {
             addWorkspaceSettings(settings);
         }
+        addCalendarSettings(settings);
 
         addDateRangeSettingsForDashboardsAndGis(settings);
 
         return settings;
+    }
+
+    private static void addCalendarSettings(AmpGeneralSettings settings) {
+        AmpFiscalCalendar ampFiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(FeaturesUtil.
+                getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR));
+        settings.setCalendarId(ampFiscalCalendar.getAmpFiscalCalId());
+        settings.setCalendarIsFiscal(ampFiscalCalendar.getIsFiscal());
     }
 
     private static void addWorkspaceSettings(AmpGeneralSettings settings) {

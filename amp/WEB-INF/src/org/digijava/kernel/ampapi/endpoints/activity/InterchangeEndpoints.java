@@ -26,6 +26,7 @@ import javax.ws.rs.core.UriInfo;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityInformation;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityView;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.SwaggerActivity;

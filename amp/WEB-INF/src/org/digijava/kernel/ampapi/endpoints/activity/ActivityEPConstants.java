@@ -69,7 +69,14 @@ public class ActivityEPConstants {
 
     public static final String VALIDATION_STATUS = "validation-status";
     public static final String DAYS_FOR_AUTOMATIC_VALIDATION = "days-for-automatic-validation";
-    public static final String ACTIVITY_TEAM = "activity-team";
+    public static final String ACTIVITY_WORKSPACE = "activityWorkspace";
+
+    public static final String TEAM_MEMBER = "teamMember";
+    public static final String TEAM_MEMBER_ROLE = "teamMemberRole";
+    public static final String ACTIVITY_TEAM_LEAD_DATA = "activity-workspace-lead-data";
+
+
+
     public static final String VERSION_HISTORY = "version-history";
     public static final String MODIFIED_BY = "modified-by";
     public static final String MODIFIED_DATE = "modified-date";

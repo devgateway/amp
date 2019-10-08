@@ -1,10 +1,11 @@
-package org.digijava.kernel.ampapi.endpoints.activity;
+package org.digijava.kernel.ampapi.endpoints.activity.dto;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.ActivityHistory;
-import org.digijava.module.aim.util.ValidationStatus;
 
 import java.util.List;
 
@@ -16,19 +17,15 @@ public class ActivityInformation {
     @JsonProperty(ActivityEPConstants.AMP_ACTIVITY_LAST_VERSION_ID)
     private Long ampActiviylastVersionId;
 
-    private boolean edit;
-
-    private boolean validate;
-
-    @JsonProperty(ActivityEPConstants.VALIDATION_STATUS)
-    private ValidationStatus validationStatus;
-
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @JsonInclude(value = JsonInclude.Include.NON_NULL)
     @JsonProperty(ActivityEPConstants.DAYS_FOR_AUTOMATIC_VALIDATION)
     private Integer daysForAutomaticValidation;
 
-    @JsonProperty(ActivityEPConstants.ACTIVITY_TEAM)
-    private AmpTeam activityTeam;
+    @JsonProperty(ActivityEPConstants.ACTIVITY_WORKSPACE)
+    private AmpTeam activityWorkspace;
+
+    @JsonProperty(ActivityEPConstants.TEAM_MEMBER)
+    private TeamMemberInformation teamMember;
 
     @JsonProperty(ActivityEPConstants.VERSION_HISTORY)
     private List<ActivityHistory> versionHistory;
@@ -36,9 +33,11 @@ public class ActivityInformation {
     @JsonProperty(ActivityEPConstants.UPDATE_CURRENT_VERSION)
     private boolean updateCurrentVersion;
 
+    @JsonProperty(ActivityEPConstants.ACTIVITY_TEAM_LEAD_DATA)
+    private String activityWorkspaceLeadData;
+
     public ActivityInformation(Long ampActivityId) {
         this.ampActivityId = ampActivityId;
-        this.validationStatus = ValidationStatus.UNKNOWN;
     }
 
     public Long getAmpActivityId() {
@@ -57,29 +56,6 @@ public class ActivityInformation {
         this.ampActiviylastVersionId = ampActiviylastVersionId;
     }
 
-    public boolean isEdit() {
-        return edit;
-    }
-
-    public void setEdit(boolean edit) {
-        this.edit = edit;
-    }
-
-    public boolean isValidate() {
-        return validate;
-    }
-
-    public void setValidate(boolean validate) {
-        this.validate = validate;
-    }
-    public ValidationStatus getValidationStatus() {
-        return validationStatus;
-    }
-
-    public void setValidationStatus(ValidationStatus validationStatus) {
-        this.validationStatus = validationStatus;
-    }
-
     public Integer getDaysForAutomaticValidation() {
         return daysForAutomaticValidation;
     }
@@ -88,13 +64,22 @@ public class ActivityInformation {
         this.daysForAutomaticValidation = daysForAutomaticValidation;
     }
 
-    public AmpTeam getActivityTeam() {
-        return activityTeam;
+    public AmpTeam getActivityWorkspace() {
+        return activityWorkspace;
     }
 
-    public void setActivityTeam(AmpTeam activityTeam) {
-        this.activityTeam = activityTeam;
+    public void setActivityWorkspace(AmpTeam activityTeam) {
+        this.activityWorkspace = activityTeam;
     }
+
+    public TeamMemberInformation getTeamMember() {
+        return teamMember;
+    }
+
+    public void setTeamMember(TeamMemberInformation teamMember) {
+        this.teamMember = teamMember;
+    }
+
 
     public List<ActivityHistory> getVersionHistory() {
         return versionHistory;
@@ -111,4 +96,15 @@ public class ActivityInformation {
     public void setUpdateCurrentVersion(boolean updateCurrentVersion) {
         this.updateCurrentVersion = updateCurrentVersion;
     }
+
+    public String getActivityWorkspaceLeadData() {
+        return activityWorkspaceLeadData;
+    }
+
+    public void setActivityWorkspaceLeadData(String activityWorkspaceLeadData) {
+        this.activityWorkspaceLeadData = activityWorkspaceLeadData;
+    }
+
+
+
 }

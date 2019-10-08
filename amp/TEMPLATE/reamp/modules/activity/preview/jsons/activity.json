@@ -1,8 +1,8 @@
 {
   "budget_code_project_id": null,
-  "internal_id": 21268,
+  "internal_id": 20509,
   "amp_id": "871733711337",
-  "project_title": "ASSN OF PUBLIC HEALTH LABORATORIES [UPS001799A] DECOUPLE",
+  "project_title": "ASSN OF PUBLIC HEALTH LABORATORIES [UPS001799A] TEST PREVIEW",
   "description": null,
   "project_comments": null,
   "objective": "<p>\r\n\tAPHL fournira des initiatives de formation de base qui soutiennent le renforcement des laboratoires . Les initiatives de formation comprennent : 1 ) la formation en gestion de laboratoire fournit les superviseurs et les administrateurs les connaissances, les comp&eacute;tences et les capacit&eacute;s pour &ecirc;tre plus efficaces dans leur travail , des ateliers 2 ) planification strat&eacute;gique et op&eacute;rationnelle , les professionnels de laboratoire avec les connaissances, les comp&eacute;tences et les outils pour &eacute;laborer des plans strat&eacute;giques efficaces que soutenir les objectifs nationaux de sant&eacute; et de guider l&#39;&eacute;laboration des plans op&eacute;rationnels annuels pour des am&eacute;liorations durables syst&eacute;matiques dans les services de laboratoire; 3 ) accords de jumelage entre les grands laboratoires de sant&eacute; publique des &Eacute;tats-Unis et les laboratoires nationaux de r&eacute;f&eacute;rence cultivent d&#39;&eacute;troites relations de travail , les possibilit&eacute;s et le partage des informations d&#39;apprentissage; 4 ) la mise en &oelig;uvre de syst&egrave;mes de gestion d&#39;information de laboratoire fournit une efficacit&eacute; accrue de l&#39;essai, un meilleur suivi du contr&ocirc;le de la qualit&eacute;, l&#39;approvisionnement et la gestion de l&#39;&eacute;quipement , et des donn&eacute;es de surveillance, de suivi de tendance et des d&eacute;cisions fond&eacute;es sur des donn&eacute;es probantes .</p>",
@@ -10,14 +10,11 @@
   "document_space": null,
   "iati_identifier": null,
   "is_draft": false,
-  "last_imported_at": "2019-09-06T13:48:11.227+0000",
-  "last_imported_by": {
-    "id": 6,
-    "value": "ATL ATL"
-  },
+  "last_imported_at": null,
+  "last_imported_by": null,
   "primary_sectors": [
     {
-      "id": 68948,
+      "id": 67890,
       "sector": {
         "id": 250,
         "value": "120 - SANTE",
@@ -41,7 +38,7 @@
   "secondary_sectors": [],
   "locations": [
     {
-      "id": 49449,
+      "id": 48509,
       "location": {
         "id": 2,
         "value": "Haiti",
@@ -74,7 +71,7 @@
   ],
   "donor_organization": [
     {
-      "id": 124285,
+      "id": 122436,
       "organization": {
         "id": 1739,
         "value": "USG - HHS/CDC",
@@ -87,33 +84,13 @@
           "organization_group": "États-Unis",
           "budget_organization_code": ""
         }
-      },
-      "additional_info": null
+      }
     }
   ],
-  "responsible_organization": [
-    {
-      "id": 124286,
-      "organization": {
-        "id": 221,
-        "value": "Deutsche Welthungerhilfe / Agro Action Allemande",
-        "translated-value": {
-          "en": "Deutsche Welthungerhilfe / Agro Action Allemande",
-          "fr": "Deutsche Welthungerhilfe / Agro Action Allemande"
-        },
-        "extra_info": {
-          "acronym": "AAA",
-          "organization_group": "ONG non haïtienne"
-        }
-      },
-      "percentage": 100,
-      "budgets": [],
-      "additional_info": null
-    }
-  ],
+  "responsible_organization": [],
   "executing_agency": [
     {
-      "id": 124284,
+      "id": 122435,
       "organization": {
         "id": 1770,
         "value": "ASSN OF PUBLIC HEALTH LABORATORIES ",
@@ -131,10 +108,12 @@
     }
   ],
   "implementing_agency": [],
+  "beneficiary_agency": [],
+  "contracting_agency": [],
   "activity_internal_ids": [],
   "fundings": [
     {
-      "funding_id": 67340,
+      "funding_id": 66501,
       "donor_organization_id": {
         "id": 1739,
         "value": "USG - HHS/CDC",
@@ -156,7 +135,7 @@
       "commitments": [],
       "disbursements": [
         {
-          "transaction_id": 171654,
+          "transaction_id": 167147,
           "adjustment_type": {
             "id": 327,
             "value": "Actual",
@@ -169,8 +148,8 @@
             }
           },
           "transaction_date": "2010-12-31",
-          "reporting_date": "2014-01-17T10:44:55.744+0000",
-          "updated_date": "2014-01-17T10:44:55.744+0000",
+          "reporting_date": "2014-01-17T13:44:55.744+0000",
+          "updated_date": "2014-01-17T13:44:55.744+0000",
           "transaction_amount": 79853,
           "currency": {
             "id": 21,
@@ -185,10 +164,10 @@
           },
           "fixed_exchange_rate": null,
           "pledge": null,
-          "disaster_response": null
+          "disaster_response": false
         },
         {
-          "transaction_id": 171646,
+          "transaction_id": 167150,
           "adjustment_type": {
             "id": 327,
             "value": "Actual",
@@ -201,8 +180,8 @@
             }
           },
           "transaction_date": "2011-12-31",
-          "reporting_date": "2014-01-17T10:44:57.143+0000",
-          "updated_date": "2014-01-17T10:44:57.143+0000",
+          "reporting_date": "2014-01-17T13:44:57.143+0000",
+          "updated_date": "2014-01-17T13:44:57.143+0000",
           "transaction_amount": 189047,
           "currency": {
             "id": 21,
@@ -217,10 +196,10 @@
           },
           "fixed_exchange_rate": null,
           "pledge": null,
-          "disaster_response": null
+          "disaster_response": false
         },
         {
-          "transaction_id": 171648,
+          "transaction_id": 167148,
           "adjustment_type": {
             "id": 327,
             "value": "Actual",
@@ -233,8 +212,8 @@
             }
           },
           "transaction_date": "2012-12-31",
-          "reporting_date": "2014-01-17T10:45:32.183+0000",
-          "updated_date": "2014-01-17T10:45:32.183+0000",
+          "reporting_date": "2014-01-17T13:45:32.183+0000",
+          "updated_date": "2014-01-17T13:45:32.183+0000",
           "transaction_amount": 165954,
           "currency": {
             "id": 21,
@@ -249,10 +228,10 @@
           },
           "fixed_exchange_rate": null,
           "pledge": null,
-          "disaster_response": null
+          "disaster_response": false
         },
         {
-          "transaction_id": 171644,
+          "transaction_id": 167145,
           "adjustment_type": {
             "id": 327,
             "value": "Actual",
@@ -265,8 +244,8 @@
             }
           },
           "transaction_date": "2013-03-31",
-          "reporting_date": "2014-01-17T10:47:09.097+0000",
-          "updated_date": "2014-01-17T10:47:09.097+0000",
+          "reporting_date": "2014-01-17T13:47:09.097+0000",
+          "updated_date": "2014-01-17T13:47:09.097+0000",
           "transaction_amount": 134632,
           "currency": {
             "id": 21,
@@ -281,10 +260,10 @@
           },
           "fixed_exchange_rate": null,
           "pledge": null,
-          "disaster_response": null
+          "disaster_response": false
         },
         {
-          "transaction_id": 171656,
+          "transaction_id": 167143,
           "adjustment_type": {
             "id": 327,
             "value": "Actual",
@@ -297,8 +276,8 @@
             }
           },
           "transaction_date": "2013-06-30",
-          "reporting_date": "2014-01-17T10:47:10.307+0000",
-          "updated_date": "2014-01-17T10:47:10.307+0000",
+          "reporting_date": "2014-01-17T13:47:10.307+0000",
+          "updated_date": "2014-01-17T13:47:10.307+0000",
           "transaction_amount": 279582,
           "currency": {
             "id": 21,
@@ -313,10 +292,10 @@
           },
           "fixed_exchange_rate": null,
           "pledge": null,
-          "disaster_response": null
+          "disaster_response": false
         },
         {
-          "transaction_id": 171653,
+          "transaction_id": 167144,
           "adjustment_type": {
             "id": 327,
             "value": "Actual",
@@ -329,8 +308,8 @@
             }
           },
           "transaction_date": "2013-12-31",
-          "reporting_date": "2014-01-17T10:47:11.877+0000",
-          "updated_date": "2014-01-17T10:47:11.877+0000",
+          "reporting_date": "2014-01-17T13:47:11.877+0000",
+          "updated_date": "2014-01-17T13:47:11.877+0000",
           "transaction_amount": 191219,
           "currency": {
             "id": 21,
@@ -345,12 +324,12 @@
           },
           "fixed_exchange_rate": null,
           "pledge": null,
-          "disaster_response": null
+          "disaster_response": false
         }
       ],
       "expenditures": [
         {
-          "transaction_id": 171655,
+          "transaction_id": 167140,
           "adjustment_type": {
             "id": 327,
             "value": "Actual",
@@ -363,8 +342,8 @@
             }
           },
           "transaction_date": "2010-12-31",
-          "reporting_date": "2014-01-17T10:49:14.632+0000",
-          "updated_date": "2014-01-17T10:49:14.632+0000",
+          "reporting_date": "2014-01-17T13:49:14.632+0000",
+          "updated_date": "2019-09-25T19:49:18.209+0000",
           "transaction_amount": 141035,
           "currency": {
             "id": 21,
@@ -379,7 +358,7 @@
           }
         },
         {
-          "transaction_id": 171651,
+          "transaction_id": 167152,
           "adjustment_type": {
             "id": 327,
             "value": "Actual",
@@ -392,8 +371,8 @@
             }
           },
           "transaction_date": "2011-12-31",
-          "reporting_date": "2014-01-17T10:52:39.536+0000",
-          "updated_date": "2014-01-17T10:52:39.536+0000",
+          "reporting_date": "2014-01-17T13:52:39.536+0000",
+          "updated_date": "2019-09-25T19:49:18.209+0000",
           "transaction_amount": 182723,
           "currency": {
             "id": 21,
@@ -408,7 +387,7 @@
           }
         },
         {
-          "transaction_id": 171647,
+          "transaction_id": 167151,
           "adjustment_type": {
             "id": 327,
             "value": "Actual",
@@ -421,8 +400,8 @@
             }
           },
           "transaction_date": "2012-12-31",
-          "reporting_date": "2014-01-17T10:53:04.716+0000",
-          "updated_date": "2014-01-17T10:53:04.716+0000",
+          "reporting_date": "2014-01-17T13:53:04.716+0000",
+          "updated_date": "2019-09-25T19:49:18.209+0000",
           "transaction_amount": 194292,
           "currency": {
             "id": 21,
@@ -437,7 +416,7 @@
           }
         },
         {
-          "transaction_id": 171650,
+          "transaction_id": 167146,
           "adjustment_type": {
             "id": 327,
             "value": "Actual",
@@ -450,8 +429,8 @@
             }
           },
           "transaction_date": "2013-03-31",
-          "reporting_date": "2014-01-17T10:48:26.586+0000",
-          "updated_date": "2014-01-17T10:48:26.586+0000",
+          "reporting_date": "2014-01-17T13:48:26.586+0000",
+          "updated_date": "2019-09-25T19:49:18.209+0000",
           "transaction_amount": 1531952,
           "currency": {
             "id": 21,
@@ -466,7 +445,7 @@
           }
         },
         {
-          "transaction_id": 171649,
+          "transaction_id": 167149,
           "adjustment_type": {
             "id": 327,
             "value": "Actual",
@@ -479,8 +458,8 @@
             }
           },
           "transaction_date": "2013-06-30",
-          "reporting_date": "2014-01-17T10:48:28.636+0000",
-          "updated_date": "2014-01-17T10:48:28.636+0000",
+          "reporting_date": "2014-01-17T13:48:28.636+0000",
+          "updated_date": "2019-09-25T19:49:18.209+0000",
           "transaction_amount": 1678079,
           "currency": {
             "id": 21,
@@ -495,7 +474,7 @@
           }
         },
         {
-          "transaction_id": 171652,
+          "transaction_id": 167141,
           "adjustment_type": {
             "id": 327,
             "value": "Actual",
@@ -508,8 +487,8 @@
             }
           },
           "transaction_date": "2013-09-30",
-          "reporting_date": "2014-01-17T10:49:11.762+0000",
-          "updated_date": "2014-01-17T10:49:11.762+0000",
+          "reporting_date": "2014-01-17T13:49:11.762+0000",
+          "updated_date": "2019-09-25T19:49:18.209+0000",
           "transaction_amount": 1678128,
           "currency": {
             "id": 21,
@@ -524,7 +503,7 @@
           }
         },
         {
-          "transaction_id": 171645,
+          "transaction_id": 167142,
           "adjustment_type": {
             "id": 327,
             "value": "Actual",
@@ -537,8 +516,8 @@
             }
           },
           "transaction_date": "2013-12-31",
-          "reporting_date": "2014-01-17T10:49:13.021+0000",
-          "updated_date": "2014-01-17T10:49:13.021+0000",
+          "reporting_date": "2014-01-17T13:49:13.021+0000",
+          "updated_date": "2019-09-25T19:49:18.209+0000",
           "transaction_amount": 850919,
           "currency": {
             "id": 21,
@@ -553,7 +532,28 @@
           }
         }
       ],
-      "mtef_projections": [],
+      "type_of_assistance": {
+        "id": 80,
+        "value": "Grant",
+        "translated-value": {
+          "en": "Grant",
+          "fr": "Don en argent"
+        },
+        "extra_info": {
+          "index": 0
+        }
+      },
+      "financing_instrument": {
+        "id": 183,
+        "value": "Support to project/programme",
+        "translated-value": {
+          "en": "Support to project/programme",
+          "fr": "Appui projet/programme"
+        },
+        "extra_info": {
+          "index": 5
+        }
+      },
       "group_versioned_funding": 1389973489000,
       "source_role": {
         "id": 1,
@@ -586,35 +586,30 @@
     },
     "funding_date": null
   },
-  "donor_contact_information": [
-    {
-      "id": 527,
-      "contact": {
-        "id": 320,
-        "value": "Julian de Anquin"
-      },
-      "mark_as_primary": false
-    }
-  ],
+  "donor_contact_information": [],
   "project_coordinator_contact_information": [],
+  "sector_ministry_contact_information": [],
   "implementing/executing_agency_contact_information": [],
+  "components": [],
   "structures": [],
   "proposed_start_date": null,
   "actual_start_date": null,
+  "proposed_approval_date": null,
+  "actual_approval_date": null,
   "actual_completion_date": null,
   "proposed_completion_date": null,
   "created_by": {
     "id": 1685,
     "value": "Lucienne BENOIT"
   },
-  "creation_date": "2014-01-17T10:53:53.196+0000",
-  "update_date": "2019-09-06T13:48:11.169+0000",
+  "creation_date": "2014-01-17T13:53:53.196+0000",
+  "update_date": "2019-09-25T19:49:18.221+0000",
   "iati_last_update_date": null,
   "approved_by": {
     "id": 1836,
     "value": "Jean Emmanuel Zamy"
   },
-  "approval_date": "2014-03-18T09:53:54.596+0000",
+  "approval_date": "2014-03-18T12:53:54.596+0000",
   "approval_status": 2,
   "archived": null,
   "activity_documents": [],
@@ -651,15 +646,14 @@
     "extra_info": {
       "index": 0,
       "implementation-levels": [
-        70,
-        71,
         361,
         122,
-        332
+        332,
+        70,
+        71
       ]
     }
   },
-  "financial_instrument": null,
   "fy": [],
   "cris_number": null,
   "national_plan_objective": [],
@@ -671,5 +665,5 @@
     "id": 1876,
     "value": "ATL ATL"
   },
-  "id": "21268"
+  "id": "20509"
 }

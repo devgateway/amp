@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {ActivityPreviewUI, FieldsManager } from 'amp-ui';
 import Home from "./Home";
 import * as ActivityActions from '../actions/ActivityActions';
-import activityContext from '../jsons/activityContext.json';
 import Logger from '../tempUtils/LoggerManager';
 import DateUtils from '../tempUtils/DateUtils';
 import translate from '../tempUtils/translate';
@@ -62,7 +61,7 @@ class App extends Component {
         if (this.props.activityReducer.isActivityLoading) {
             return (<div> LOADING ACTIVITY </div>)
         } else {
-            const activity = this.props.activityReducer.activity;
+            const { activity, activityContext } = this.props.activityReducer;
             return (
                 <ActivityPreviewUI activity={activity} activityContext={activityContext}/>
             );

@@ -44,7 +44,6 @@ public class ConfigHelper {
     public static final String T_DOUBLE = "t_Double";
     public static final String T_STATIC_YEAR = "t_static_year";
     public static final String T_YEAR = "t_year";
-    public static final String T_AUDIT_TRIAL_CLENAUP = "t_audit_trial_clenaup";
     public static final String T_COMPONENTS_SORT = "t_components_sort";
     public static final String T_DAILY_CURRENCY_UPDATE_HOUR = "t_daily_currency_update_hour";
     public static final String T_SECURE_VALUES = "t_secure_values";
@@ -150,7 +149,6 @@ public class ConfigHelper {
             case T_INTEGER_NON_NEGATIVE:
             case T_INTEGER_POSITIVE:
             case T_TIMEOUT_CURRENCY_UPDATE:
-            case T_AUDIT_TRIAL_CLENAUP:
             case T_STATIC_RANGE:
                 try {
                     isValid = isValidNumber(Integer.class, value);

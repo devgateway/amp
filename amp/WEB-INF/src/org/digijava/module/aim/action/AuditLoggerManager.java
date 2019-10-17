@@ -25,9 +25,13 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.form.AuditLoggerManagerForm;
 import org.digijava.module.aim.util.AuditLoggerUtil;
+import org.digijava.module.um.util.AmpUserUtil;
 
 public class AuditLoggerManager extends MultiAction {
-    
+
+    private static final Integer PAGES_TO_SHOW = 10;
+    private static final Integer TOTAL_RECORDS = 20;
+
     public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
@@ -61,8 +65,13 @@ public class AuditLoggerManager extends MultiAction {
             }
                 
         }
-        Collection<AmpAuditLogger> logs=AuditLoggerUtil.getLogObjects(vForm.isWithLogin());
-        
+        vForm.populateEffectiveFilters();
+        Collection<AmpAuditLogger> logs = AuditLoggerUtil.getLogObjects(vForm.isWithLogin(),
+                vForm.getEffectiveSelectedUser(), vForm.getEffectiveSelectedTeam(), vForm.getEffectiveDateFrom(),
+                vForm.getEffectiveDateTo());
+        vForm.setUserList(AmpUserUtil.getAllUsers(false));
+        vForm.setTeamList(AuditLoggerUtil.getTeamFromLog());
+
         if (request.getParameter("sortBy")!=null){
             vForm.setSortBy(request.getParameter("sortBy"));
         }
@@ -138,8 +147,8 @@ public class AuditLoggerManager extends MultiAction {
 
                           }
         }
-        vForm.setPagesToShow(10);
-        int totalrecords=20;
+        vForm.setPagesToShow(PAGES_TO_SHOW);
+        int totalrecords = TOTAL_RECORDS;
         int page = 0;
         if (request.getParameter("page") == null) {
             page = 1;

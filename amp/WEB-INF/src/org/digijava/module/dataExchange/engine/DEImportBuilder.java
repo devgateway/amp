@@ -1484,7 +1484,7 @@ public class DEImportBuilder {
                 ed.setBody(obj.getValue());
                 try {
                     org.digijava.module.editor.util.DbUtil.saveEditor(ed);
-                } catch (EditorException e) {
+                } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
@@ -2376,7 +2376,7 @@ public class DEImportBuilder {
                     ed.setBody("");
                     try {
                         org.digijava.module.editor.util.DbUtil.saveEditor(ed);
-                    } catch (EditorException e) {
+                    } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }

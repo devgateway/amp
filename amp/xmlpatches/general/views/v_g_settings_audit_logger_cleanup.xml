@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMPET-148</jira>
+    <keyword>Views</keyword>
+    <author>Wessi</author>
+    <description>recreate view at every server startup</description>
+    <trigger type="all">
+        <condition type="custom">
+            <script returnVar="val">
+                <lang type="sql">
+                    SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+                </lang>
+            </script>
+            <test>val.equalsIgnoreCase("true")</test>
+        </condition>
+    </trigger>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                CREATE OR REPLACE VIEW v_g_settings_audit_logger_cleanup AS
+                SELECT value_id AS id, value_shown AS value
+                FROM util_global_settings_possible_
+                WHERE setting_name = 'Automatic Audit Logger Cleanup';
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -74,7 +74,7 @@ public class AddEditor
 
                     DbUtil.saveEditor(ed);
 
-            } catch (EditorException ex1) {
+            } catch (Exception ex1) {
                 /**@todo exception handling */
             }
         }

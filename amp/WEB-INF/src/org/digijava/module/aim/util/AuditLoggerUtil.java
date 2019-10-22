@@ -22,7 +22,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -31,42 +30,44 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.DateType;
+import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+import org.hibernate.type.TimestampType;
+
 /**
  * ActivityUtil is the persister class for all activity related
  * entities
  *
  * @author Priyajith
  */
-public class AuditLoggerUtil {
+public final class AuditLoggerUtil {
 
+    private static String query;
     private static Logger logger = Logger.getLogger(AuditLoggerUtil.class);
-    //can't we get session from request? why passing it as parameter?
-    public static void logObject(HttpServletRequest request,
-            LoggerIdentifiable o, String action,String additionalDetails) throws DgException { 
+    private AuditLoggerUtil() {
 
-        Session session = null;
-        Transaction tx = null;
-        HttpSession hsession=request.getSession();
-        TeamMember tm = (TeamMember) hsession.getAttribute(Constants.CURRENT_MEMBER);
-        String objId;
-        objId = o.getIdentifier().toString();
+    }
+    public static void logObject(HttpServletRequest request,
+                                 LoggerIdentifiable o, String action,String additionalDetails) throws DgException {
+
+        Session session;
+        TeamMember tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
+        String objId = o.getIdentifier().toString();
         String objType = (String) o.getObjectType();
         String browser=request.getHeader("user-agent");
         try {
             session = PersistenceManager.getRequestDBSession();
-
-//beginTransaction();
             AmpAuditLogger aal = new AmpAuditLogger();
             long time = System.currentTimeMillis();
             Timestamp ts = new Timestamp(time);
             if ("update".compareTo(action) == 0) {
                 Collection<AmpAuditLogger> col = getAudits(session, objId, objType);
                 if (col != null && col.size() == 1) {
-                    AmpAuditLogger existentLoggerObj = (AmpAuditLogger) col.iterator().next();
+                    AmpAuditLogger existentLoggerObj =  col.iterator().next();
                     aal.setAuthorEmail(existentLoggerObj.getAuthorEmail());
                     aal.setAuthorName(existentLoggerObj.getAuthorName());
                     aal.setLoggedDate(existentLoggerObj.getLoggedDate());
@@ -77,53 +78,41 @@ public class AuditLoggerUtil {
                 aal.setLoggedDate(ts);
             }
 
-
             aal.setEditorEmail(tm.getEmail());
             aal.setEditorName(tm.getMemberName());
             aal.setAction(action);
             aal.setModifyDate(ts);
             aal.setBrowser(browser);
             aal.setIp(request.getRemoteAddr());
-            aal.setObjectId((String) o.getIdentifier().toString());
+            aal.setObjectId(o.getIdentifier().toString());
             aal.setObjectType((String) o.getObjectType());
             aal.setTeamName(tm.getTeamName());
             aal.setObjectName(o.getObjectName());
             aal.setDetail(additionalDetails);
-            
+
             session.save(aal);
-            //tx.commit();
         } catch (Exception ex) {
-            ex.printStackTrace();
-            logger.error("Cannot save audit logger :", ex);
-//          if (tx!=null){
-//              try {
-//                  tx.rollback();
-//              } catch (Exception e1) {
-//                  logger.error("Release session failed :", e1);
-//                  throw new DgException("Cannot rallback",e1);
-//              }
-//          }
             throw new DgException("Cannot save audit logger",ex);
-        } 
+        }
         return;
     }
-    
-    
+
+
     public static void logObject(HttpSession hsession,HttpServletRequest request,
-            LoggerIdentifiable o, String action) throws DgException {
+                                 LoggerIdentifiable o, String action) throws DgException {
         logObject(request,o, action,null);
     }
 
 
     private static Collection<AmpAuditLogger> getAudits(Session session,
-            String objId, String objType) {
+                                                        String objId, String objType) {
         String qryStr;
         Query qry;
         try {
             String addAction = "add";
             qryStr = "select f from "
-                + AmpAuditLogger.class.getName()
-                + " f where f.objectType=:objectType and f.action=:actionObj and f.objectId=:objectId ";
+                    + AmpAuditLogger.class.getName()
+                    + " f where f.objectType=:objectType and f.action=:actionObj and f.objectId=:objectId ";
             qry = session.createQuery(qryStr);
             qry.setParameter("objectType", objType.toString(),
                     StringType.INSTANCE);
@@ -137,7 +126,7 @@ public class AuditLoggerUtil {
         }
         return null;
     }
-    
+
     public static void logUserLogin(HttpServletRequest request,User currentUser,String action){
         Session session = null;
         Transaction tx = null;
@@ -164,18 +153,17 @@ public class AuditLoggerUtil {
             aal.setTeamName("");
             aal.setObjectName(Constants.LOGIN_ACTION);
             aal.setDetail("");
-            
+
             session.save(aal);
         }catch (Exception ex) {
             ex.printStackTrace();
             logger.error("Cannot save audit logger :", ex);
-        } 
+        }
     }
-    
+
     public static void logSentReminderEmails(Session session,User user){
         try {
 
-//beginTransaction();
             AmpAuditLogger aal = new AmpAuditLogger();
             long time = System.currentTimeMillis();
             Timestamp ts = new Timestamp(time);
@@ -193,14 +181,13 @@ public class AuditLoggerUtil {
             aal.setTeamName("");
             aal.setObjectName("");
             aal.setDetail(Constants.SENT_REMINDER);
-            
+
             session.save(aal);
         }catch (Exception ex) {
-            ex.printStackTrace();
             logger.error("Cannot save audit logger :", ex);
-        } 
+        }
     }
-    
+
     public static void logActivityUpdate(HttpServletRequest request, AmpActivityVersion activity, List<String> details){
         logActivityUpdate(request, activity, details, null);
     }
@@ -213,7 +200,6 @@ public class AuditLoggerUtil {
      */
     public static void logActivityUpdate(HttpServletRequest request, AmpActivityVersion activity, List<String> details, Date dateUpdated){
         Session session = null;
-        Transaction tx = null;
         HttpSession hsession = request.getSession();
         TeamMember tm = (TeamMember) hsession.getAttribute(Constants.CURRENT_MEMBER);
         String objId;
@@ -223,8 +209,6 @@ public class AuditLoggerUtil {
         try {
             session = PersistenceManager.getSession();
 
-//beginTransaction();           
-            
             long time = System.currentTimeMillis();
             Timestamp ts;
             if(dateUpdated!=null){
@@ -233,56 +217,102 @@ public class AuditLoggerUtil {
             }else{
                 ts= new Timestamp(time);
             }
-                
+            AmpAuditLogger existentLoggerObj = null;
+
+            Collection<AmpAuditLogger> col = getAudits(session, objId, objType);
+            if (col != null && col.size() == 1) {
+                existentLoggerObj = (AmpAuditLogger) col
+                        .iterator().next();
+            }
+
             StringBuilder message=new StringBuilder();
             for(String detail:details){
                 message.append(detail+" ");
             }
-                AmpAuditLogger aal = new AmpAuditLogger();
-                aal.setAuthorEmail(activity.getActivityCreator().getUser().getEmail());
-                aal.setAuthorName(activity.getActivityCreator().getUser().getName());
-                aal.setLoggedDate(new Timestamp(activity.getCreatedDate().getTime()));
-                aal.setUserid(DbUtil.getUser(tm.getEmail()).getId());
-                aal.setEditorEmail(tm.getEmail());
-                aal.setEditorName(tm.getMemberName());
-                aal.setAction("update");
-                aal.setModifyDate(ts);
-                aal.setBrowser(browser);
-                aal.setIp(request.getRemoteAddr());
-                aal.setObjectId((String) activity.getIdentifier().toString());
-                aal.setObjectType((String) activity.getObjectType());
-                aal.setTeamName(tm.getTeamName());
-                aal.setObjectName(activity.getObjectName());
-                aal.setDetail(message.toString());
-                session.save(aal);              
-            
-
-            //tx.commit();
+            AmpAuditLogger aal = new AmpAuditLogger();
+            if(existentLoggerObj!=null){
+                aal.setAuthorEmail(existentLoggerObj.getAuthorEmail());
+                aal.setAuthorName(existentLoggerObj.getAuthorName());
+                aal.setLoggedDate(existentLoggerObj.getLoggedDate());
+            } else{
+                aal.setAuthorName(tm.getMemberName());
+                aal.setAuthorEmail(tm.getEmail());
+                aal.setLoggedDate(ts);
+            }
+            aal.setUserid(DbUtil.getUser(tm.getEmail()).getId());
+            aal.setEditorEmail(tm.getEmail());
+            aal.setEditorName(tm.getMemberName());
+            aal.setAction("update");
+            aal.setModifyDate(ts);
+            aal.setBrowser(browser);
+            aal.setIp(request.getRemoteAddr());
+            aal.setObjectId((String) activity.getIdentifier().toString());
+            aal.setObjectType((String) activity.getObjectType());
+            aal.setTeamName(tm.getTeamName());
+            aal.setObjectName(activity.getObjectName());
+            aal.setDetail(message.toString());
+            session.save(aal);
         } catch (Exception ex) {
             logger.error("Exception : ", ex);
         }
     }
-    
+
     /**
      * @author dan
      */
-    public static Collection<AmpAuditLogger> getLogObjects(boolean withLogin) {
+    public static Collection<AmpAuditLogger> getLogObjects(boolean withLogin, Long userIdToFilter, String teamToFilter,
+                                                           Date dateFrom, Date dateTo) {
         try {
-            String qryStr = null;
-            if (!withLogin){
-                qryStr = "select f from " + AmpAuditLogger.class.getName() + " f where action<>'"
-                        + Constants.LOGIN_ACTION + "' order by modifyDate desc";
-            } else {
-                qryStr = "select f from " + AmpAuditLogger.class.getName() + " f order by modifyDate desc";
+            StringBuffer qryStr = new StringBuffer();
+            //TODO this comments will be removed
+            //I added 1 = 1 in order to be able to concat the ands with out thinking if i added a condidtion before
+            List<HibernateFilterParam> filters = new ArrayList<HibernateFilterParam>();
+
+            qryStr.append("select f from " + AmpAuditLogger.class.getName() + " f where 1 = 1 ");
+
+            if (!withLogin) {
+                filters.add(new HibernateFilterParam("action", null, Constants.LOGIN_ACTION,
+                        StringType.INSTANCE, "<>"));
+
             }
-            return PersistenceManager.getSession().createQuery(qryStr).list();
+            if (userIdToFilter != null) {
+                filters.add(new HibernateFilterParam("userid", null, userIdToFilter,
+                        LongType.INSTANCE));
+            }
+            if (teamToFilter != null) {
+                filters.add(new HibernateFilterParam("teamname", null, teamToFilter,
+                        StringType.INSTANCE));
+            }
+            if (dateFrom != null) {
+                filters.add(new HibernateFilterParam("modifyDate", "modifyDateFrom",
+                        dateFrom, TimestampType.INSTANCE, ">="));
+            }
+            if (dateTo != null) {
+                filters.add(new HibernateFilterParam("modifyDate", "modifyDateTo",
+                        dateTo, TimestampType.INSTANCE, "<="));
+            }
+
+            HibernateFilterParam.getQueryStringFromFilterParam(filters, qryStr);
+            Query auditLoggerQuery = PersistenceManager.getSession().createQuery(qryStr.toString()
+                    + " order by loggedDate desc");
+            HibernateFilterParam.setQueryParams(filters, auditLoggerQuery);
+
+            return auditLoggerQuery.list();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
-    
+    public static List<String> getTeamFromLog() {
+        String query = "select distinct teamname from amp_audit_logger "
+                + "where teamname <> '' "
+                + "order by teamname asc";
+        Session session = PersistenceManager.getSession();
+        SQLQuery sqlQuery = session.createSQLQuery(query);
+        return sqlQuery.list();
+    }
+
     /**
-     * 
+     *
      * @return
      */
     public static Collection getTeamLogObjects(String teamname) {
@@ -290,14 +320,14 @@ public class AuditLoggerUtil {
         Collection<AmpAuditLogger> col = new ArrayList<AmpAuditLogger>();
         String qryStr = null;
         Query qry = null;
-        
+
         try {
             session = PersistenceManager.getSession();
-            qryStr = "select f from " 
-                + AmpAuditLogger.class.getName() 
-                + " f where f.teamName=:teamname";
+            qryStr = "select f from "
+                    + AmpAuditLogger.class.getName()
+                    + " f where f.teamName=:teamname";
             qry = session.createQuery(qryStr);
-                        qry.setString("teamname", teamname);
+            qry.setString("teamname", teamname);
             col = qry.list();
         } catch (Exception ex) {
             logger.error("Exception : " + ex.getMessage());
@@ -335,10 +365,10 @@ public class AuditLoggerUtil {
         List<AmpAuditLogger> col = new ArrayList<AmpAuditLogger>();
         String qryStr = null;
         Query qry = null;
-        
+
         try {
             session = PersistenceManager.getSession();
-            
+
             qryStr = "select f from "
                     + AmpAuditLogger.class.getName()
                     + " f where f.objectType=:objectType and f.objectId=:objectId order by f.modifyDate desc";
@@ -353,7 +383,7 @@ public class AuditLoggerUtil {
     }
 
     public static List<String> generateLogs(AmpActivityVersion activity,
-            Long activityId) {
+                                            Long activityId) {
         List<String> auditTrail = new ArrayList<String>();
         Session session = null;
         try {
@@ -372,8 +402,8 @@ public class AuditLoggerUtil {
         }
         return auditTrail;
 
-    } 
-    
+    }
+
     private static Date getDateRange(int interval) {
         GregorianCalendar cal = new GregorianCalendar();
         cal.add(Calendar.DATE, -interval);
@@ -390,12 +420,12 @@ public class AuditLoggerUtil {
         Collection<AmpAuditLogger> col = new ArrayList<AmpAuditLogger>();
         String qryStr = null;
         Query qry = null;
-        
+
         try {
             session = PersistenceManager.getSession();
-            qryStr = "select f from " + 
-                AmpAuditLogger.class.getName() 
-                + " f where f.modifyDate >= :dateParam order by loggedDate desc";
+            qryStr = "select f from " +
+                    AmpAuditLogger.class.getName()
+                    + " f where f.modifyDate >= :dateParam order by loggedDate desc";
             qry = session.createQuery(qryStr);
             qry.setParameter("dateParam",getDateRange(interval),DateType.INSTANCE);
             col = qry.list();
@@ -404,13 +434,13 @@ public class AuditLoggerUtil {
         }
         return col;
     }
-    
-    
+
+
     /**
      * @author Diego Dimunzio
      * Delete all records whose date is less than the interval
      * @param interval
-    */
+     */
     public static void deleteLogsByPeriod(String interval) {
         try {
             String qryStr = "delete from " + AmpAuditLogger.class.getName()
@@ -424,7 +454,60 @@ public class AuditLoggerUtil {
             throw new RuntimeException(e);
         }
     }
-    
+
+    public static List<Object[]> getListOfActivitiesFromAuditLogger(Long userid, String team, Date fromDate,
+                                                                    Date toDate) {
+        SQLQuery sqlQuery;
+        Session session = PersistenceManager.getSession();
+
+        StringBuffer query = new StringBuffer();
+        query.append("select * from ( ");
+        query.append(" select  aav.amp_activity_id current_id ,  ");
+        query.append(" lead(aav.amp_activity_id, 1) ");
+        query.append(" over(partition by aav.amp_activity_group_id order by aav.amp_activity_id desc) previous_id, ");
+        query.append(" aal.objectname, aav.amp_activity_group_id, ");
+        query.append(" aal.id  from amp_activity_version aav ");
+        query.append(" left join amp_audit_logger aal on ");
+        query.append(" (aal.objecttype ='org.digijava.module.aim.dbentity.AmpActivityVersion' ");
+        query.append("  and cast (aal.objectId AS INTEGER) = aav.amp_activity_id");
+        if (userid != null) {
+            query.append("  and aal.userid=:userId ");
+        }
+        if (fromDate != null) {
+            query.append("  and modifydate>:fromDate ");
+        }
+        if (toDate != null) {
+            query.append(" and modifydate<:toDate ");
+
+        }
+        if (team != null) {
+            query.append(" and aal.teamname=:team ");
+        }
+        query.append("   and trim(aal.detail) ='approved') ");
+        query.append("   and aav.approval_status in ('approved','startedapproved') ");
+        query.append(" order by amp_activity_group_id desc ");
+        query.append(" ) t where t.id is not null");
+        query.append(" and t.previous_id is not null");
+
+        sqlQuery = session.createSQLQuery(query.toString());
+        if (userid != null) {
+            sqlQuery.setParameter("userId", userid);
+        }
+        if (fromDate != null) {
+            sqlQuery.setParameter("fromDate", fromDate);
+        }
+        if (toDate != null) {
+            sqlQuery.setParameter("toDate", toDate);
+        }
+        if (team != null) {
+            sqlQuery.setParameter("team", team);
+        }
+
+
+        return sqlQuery.list();
+    }
+
+
     /**
      * This class is used for sorting by name.
      * @author Diego Dimunzio
@@ -445,12 +528,12 @@ public class AuditLoggerUtil {
         public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
-            
+
             int result = (o1.getObjectName()==null || o2.getObjectName()==null)?0:collator.compare(o1.getObjectName().toLowerCase(), o2.getObjectName().toLowerCase());
             return result;
         }
     }
-    
+
     /**
      * This class is used for sorting by Object type.
      * @author Diego Dimunzio
@@ -471,12 +554,12 @@ public class AuditLoggerUtil {
         public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
-            
+
             int result = (o1.getObjectTypeTrimmed()==null || o2.getObjectName()==null)?0:collator.compare(o1.getObjectTypeTrimmed().toLowerCase(), o2.getObjectTypeTrimmed().toLowerCase());
             return result;
         }
     }
-    
+
     /**
      * This class is used for sorting by Team Name.
      * @author Diego Dimunzio
@@ -497,12 +580,12 @@ public class AuditLoggerUtil {
         public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
-            
+
             int result = (o1.getTeamName()==null || o2.getTeamName()==null)?0:collator.compare(o1.getTeamName().toLowerCase(), o2.getTeamName().toLowerCase());
             return result;
         }
     }
-    
+
     /**
      * This class is used for sorting by Author Name.
      * @author Diego Dimunzio
@@ -523,12 +606,12 @@ public class AuditLoggerUtil {
         public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
-            
+
             int result = (o1.getAuthorName()==null || o2.getAuthorName()==null)?0:collator.compare(o1.getAuthorName().toLowerCase(), o2.getAuthorName().toLowerCase());
             return result;
         }
     }
-    
+
     /**
      * This class is used for sorting by  Creation Date.
      * @author Diego Dimunzio
@@ -540,19 +623,19 @@ public class AuditLoggerUtil {
             return result;
         }
     }
-    
+
     /**
      * This class is used for sorting by  Change Date.
      * @author Diego Dimunzio
      *
      */
     public static class HelperAuditloggerChangeDateComparator implements Comparator<AmpAuditLogger> {
-           public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
+        public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
             int result = (o1.getModifyDate()==null || o2.getModifyDate()==null)?0:o1.getModifyDate().compareTo(o2.getModifyDate());
             return result;
         }
     }
-    
+
     /**
      * This class is used for sorting by Editor Name.
      * @author Diego Dimunzio
@@ -573,7 +656,7 @@ public class AuditLoggerUtil {
         public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
-            
+
             int result = (o1.getEditorName()==null || o2.getEditorName()==null)?0:collator.compare(o1.getEditorName(), o2.getEditorName());
             return result;
         }
@@ -598,7 +681,7 @@ public class AuditLoggerUtil {
         public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
-            
+
             int result = (o1.getAction()==null || o2.getAction()==null)?0:collator.compare(o1.getAction(), o2.getAction());
             return result;
         }
@@ -634,4 +717,23 @@ public class AuditLoggerUtil {
             return result;
         }
     }
-} 
+
+    public static boolean checkPermission(HttpServletRequest request) {
+        boolean permitted = false;
+        HttpSession session = request.getSession();
+        if (session.getAttribute("ampAdmin") != null) {
+            String key = (String) session.getAttribute("ampAdmin");
+            if (key.equalsIgnoreCase("yes")) {
+                permitted = true;
+            } else {
+                if (session.getAttribute("teamLeadFlag") != null) {
+                    key = (String) session.getAttribute("teamLeadFlag");
+                    if (key.equalsIgnoreCase("true")) {
+                        permitted = true;
+                    }
+                }
+            }
+        }
+        return permitted;
+    }
+}

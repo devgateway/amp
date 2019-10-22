@@ -1570,7 +1570,7 @@ public class IatiActivityWorker {
                 ed.setBody(value);
                 try {
                     org.digijava.module.editor.util.DbUtil.saveEditor(ed);
-                } catch (EditorException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return key;

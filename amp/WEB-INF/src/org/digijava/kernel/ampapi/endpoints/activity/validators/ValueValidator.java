@@ -64,7 +64,7 @@ public class ValueValidator extends InputValidator {
         Object value = newFieldParent.get(fieldDescription.getFieldName());
         String cPVPath = fieldDescription.getCommonPossibleValuesPath();
 
-        if (pvc.hasPossibleValues(fieldPath, cPVPath) && value != null) {
+        if (value != null && pvc.hasPossibleValues(fieldPath, cPVPath)) {
             if (fieldDescription.getApiType().getFieldType().isList()) {
                 if (fieldDescription.getApiType().isSimpleItemType()) {
                     return ((List<?>) value).stream().allMatch(

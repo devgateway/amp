@@ -11,6 +11,8 @@ import java.util.Set;
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.persistence.InMemoryCategoryValuesManager;
+import org.digijava.kernel.persistence.InMemoryLocationManager;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -24,12 +26,12 @@ import org.junit.Test;
 public class TreeCollectionValidatorTest {
 
     private static APIField activityField;
-    private static HardcodedLocations locations;
+    private static InMemoryLocationManager locationManager;
 
     @BeforeClass
     public static void setUp() {
-        HardcodedCategoryValues categoryValues = new HardcodedCategoryValues();
-        locations = new HardcodedLocations(categoryValues);
+        InMemoryCategoryValuesManager categoryValues = InMemoryCategoryValuesManager.getInstance();
+        locationManager = InMemoryLocationManager.getInstance();
 
         activityField = ValidatorUtil.getMetaData();
     }
@@ -46,8 +48,8 @@ public class TreeCollectionValidatorTest {
     @Test
     public void testAncestorIsPresent() {
         AmpActivityVersion activity = new ActivityBuilder()
-                .addLocation(locations.getAmpLocation("Haiti"), 50f)
-                .addLocation(locations.getAmpLocation("Haiti", "Artibonite"), 50f)
+                .addLocation(locationManager.getAmpLocation("Haiti"), 50f)
+                .addLocation(locationManager.getAmpLocation("Haiti", "Artibonite"), 50f)
                 .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
@@ -58,8 +60,8 @@ public class TreeCollectionValidatorTest {
     @Test
     public void testAncestorIsButInDifferentOrderPresent() {
         AmpActivityVersion activity = new ActivityBuilder()
-                .addLocation(locations.getAmpLocation("Haiti", "Artibonite"), 50f)
-                .addLocation(locations.getAmpLocation("Haiti"), 50f)
+                .addLocation(locationManager.getAmpLocation("Haiti", "Artibonite"), 50f)
+                .addLocation(locationManager.getAmpLocation("Haiti"), 50f)
                 .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
@@ -70,8 +72,8 @@ public class TreeCollectionValidatorTest {
     @Test
     public void testRepeatingItemsAreAllowed() {
         AmpActivityVersion activity = new ActivityBuilder()
-                .addLocation(locations.getAmpLocation("Haiti", "Artibonite"), 50f)
-                .addLocation(locations.getAmpLocation("Haiti", "Artibonite"), 50f)
+                .addLocation(locationManager.getAmpLocation("Haiti", "Artibonite"), 50f)
+                .addLocation(locationManager.getAmpLocation("Haiti", "Artibonite"), 50f)
                 .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);

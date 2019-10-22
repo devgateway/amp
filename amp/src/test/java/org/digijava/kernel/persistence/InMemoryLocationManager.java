@@ -1,6 +1,9 @@
-package org.digijava.kernel.validators.activity;
+package org.digijava.kernel.persistence;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -9,16 +12,33 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
+ * Non-persistent implementation of {@code InMemoryManager} which is backed by an in-memory map.
+ * <p>
+ * Mainly intended for testing purposes, where a full blown persistent system isn't required.
+ * <p>
  * Small subset of Haiti location tree.
  *
  * @author Octavian Ciubotaru
  */
-public class HardcodedLocations {
-
+public class InMemoryLocationManager implements InMemoryManager<AmpLocation> {
+    
+    private static InMemoryLocationManager instance;
+    
+    InMemoryCategoryValuesManager categoryValueManager = InMemoryCategoryValuesManager.getInstance();
+    
     private AmpCategoryValueLocations root;
-
-    public HardcodedLocations(HardcodedCategoryValues categoryValues) {
-
+    
+    private Map<Long, AmpLocation> ampLocations = new HashMap<>();
+    
+    public static InMemoryLocationManager getInstance() {
+        if (instance == null) {
+            instance = new InMemoryLocationManager();
+        }
+        
+        return instance;
+    }
+    
+    private InMemoryLocationManager() {
         root = location(96L, "Haiti",
                 location(1901L, "Artibonite",
                         location(1911L, "Dessalines",
@@ -36,34 +56,42 @@ public class HardcodedLocations {
                                         location(2687L, "Ville de Verrettes")))),
                 location(1903L, "Grande Anse"),
                 location(1904L, "Nippes"));
-
+        
         root.setIso3("HTI");
         root.setIso("ht");
-
-        setParentCategoryValues(categoryValues);
+        
+        setParentCategoryValues(categoryValueManager);
+        addToAmpLocationsList(root);
     }
-
-    private void setParentCategoryValues(HardcodedCategoryValues categoryValues) {
-        HardcodedCategoryValues.ImplementationLocations implLocs =
+    
+    private void addToAmpLocationsList(AmpCategoryValueLocations location) {
+        ampLocations.put(location.getId(), getAmpLocation(location));
+        for (AmpCategoryValueLocations loc : location.getChildren()) {
+            addToAmpLocationsList(loc);
+        }
+    }
+    
+    private void setParentCategoryValues(InMemoryCategoryValuesManager categoryValues) {
+        InMemoryCategoryValuesManager.ImplementationLocations implLocs =
                 categoryValues.getImplementationLocations();
-
+        
         ImmutableList<AmpCategoryValue> cvByLevel = ImmutableList.of(
                 implLocs.getCountry(),
                 implLocs.getRegion(),
                 implLocs.getZone(),
                 implLocs.getDistrict(),
                 implLocs.getCommunalSection());
-
+        
         setParentCategoryValue(root, cvByLevel, 0);
     }
-
+    
     private void setParentCategoryValue(AmpCategoryValueLocations loc, List<AmpCategoryValue> cvByLevel, int level) {
         loc.setParentCategoryValue(cvByLevel.get(level));
         for (AmpCategoryValueLocations child : loc.getChildLocations()) {
             setParentCategoryValue(child, cvByLevel, level + 1);
         }
     }
-
+    
     private AmpCategoryValueLocations location(Long id, String name, AmpCategoryValueLocations... children) {
         AmpCategoryValueLocations loc = new AmpCategoryValueLocations();
         loc.setId(id);
@@ -74,17 +102,26 @@ public class HardcodedLocations {
         }
         return loc;
     }
-
-
+    
+    
     public AmpLocation getAmpLocation(String... path) {
         AmpCategoryValueLocations location = getLocation(ImmutableList.copyOf(path));
-
+        
         AmpLocation ampLocation = new AmpLocation();
         ampLocation.setAmpLocationId(location.getId());
         ampLocation.setLocation(location);
+        
+        return getAmpLocation(location);
+    }
+    
+    public AmpLocation getAmpLocation(AmpCategoryValueLocations location) {
+        AmpLocation ampLocation = new AmpLocation();
+        ampLocation.setAmpLocationId(location.getId());
+        ampLocation.setLocation(location);
+        
         return ampLocation;
     }
-
+    
     public AmpCategoryValueLocations getLocation(List<String> path) {
         if (path.size() > 0 && root.getName().equals(path.get(0))) {
             return getLocation(root, path.subList(1, path.size()));
@@ -92,7 +129,7 @@ public class HardcodedLocations {
             throw new IllegalArgumentException("No such location: " + path);
         }
     }
-
+    
     private AmpCategoryValueLocations getLocation(AmpCategoryValueLocations loc, List<String> path) {
         if (path.size() == 0) {
             return loc;
@@ -104,5 +141,15 @@ public class HardcodedLocations {
                     .orElseThrow(() -> new IllegalArgumentException("No such location: " + name));
             return getLocation(child, path.subList(1, path.size()));
         }
+    }
+    
+    @Override
+    public AmpLocation get(Long id) {
+        return ampLocations.get(id);
+    }
+    
+    @Override
+    public List<AmpLocation> getAllValues() {
+        return new ArrayList<>(ampLocations.values());
     }
 }

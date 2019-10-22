@@ -37,6 +37,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.ActivityErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
+import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
@@ -113,10 +114,14 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     private ActivityService activityService;
     private TeamMemberService teamMemberService;
     private PersistenceTransactionManager persistenceTransactionManager;
-
+    
     public ActivityImporter(APIField apiField, ActivityImportRules rules) {
+       this(apiField, rules, new ValueConverter());
+    }
+
+    public ActivityImporter(APIField apiField, ActivityImportRules rules, ValueConverter valueConverter) {
         super(new InputValidatorProcessor(InputValidatorProcessor.getFormatValidators()),
-                apiField, TLSUtils.getSite());
+                apiField, TLSUtils.getSite(), valueConverter);
         setJsonErrorMapper(new ActivityErrorsMapper());
         this.rules = rules;
         this.saveContext = SaveContext.api(!rules.isProcessApprovalFields());
@@ -294,6 +299,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                         getSite());
             }
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             addError(new ApiExceptionMapper().getApiErrorMessageFromException(e));
         }
         

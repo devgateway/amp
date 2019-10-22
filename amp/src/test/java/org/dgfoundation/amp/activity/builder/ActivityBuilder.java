@@ -15,6 +15,9 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
@@ -130,6 +133,22 @@ public class ActivityBuilder {
     
     public ActivityBuilder withGroup(AmpActivityGroup group) {
         activity.setAmpActivityGroup(group);
+        return this;
+    }
+    
+    public ActivityBuilder withActivityCreator(AmpTeamMember creator) {
+        activity.setActivityCreator(creator);
+        return this;
+    }
+    
+    
+    public ActivityBuilder withApprovalStatus(ApprovalStatus approvalStatus) {
+        activity.setApprovalStatus(approvalStatus);
+        return this;
+    }
+    
+    public ActivityBuilder withTeam(AmpTeam ampTeam) {
+        activity.setTeam(ampTeam);
         return this;
     }
 }

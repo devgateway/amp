@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.util.SaveContext;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
@@ -16,6 +17,8 @@ public interface ActivityService {
     boolean addActivityAllowed(AmpTeamMember ampTeamMember);
     
     boolean isEditableActivity(AmpTeamMember ampTeamMember, Long activityId);
+    
+    AmpActivityVersion getActivity(Long activityId) throws DgException;
     
     AmpActivityVersion saveActivity(AmpActivityVersion newActivity, List<AmpContentTranslation> translations,
                                               AmpTeamMember modifiedBy, boolean draftChange, SaveContext saveContext,

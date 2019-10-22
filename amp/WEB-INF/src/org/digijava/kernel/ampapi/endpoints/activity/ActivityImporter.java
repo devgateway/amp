@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
-import static org.digijava.module.aim.util.ActivityUtil.loadActivity;
 
 import java.lang.reflect.Field;
 import java.util.Date;
@@ -250,7 +249,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         try {
             if (activityId != null) {
                 try {
-                    oldActivity = loadActivity(activityId);
+                    oldActivity = activityService.getActivity(activityId);
                 } catch (DgException e) {
                     logger.error(e.getMessage());
                     errors.put(ActivityErrors.ACTIVITY_NOT_LOADED.id, ActivityErrors.ACTIVITY_NOT_LOADED);

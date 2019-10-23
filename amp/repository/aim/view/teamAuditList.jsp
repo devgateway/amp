@@ -1,3 +1,4 @@
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -6,10 +7,11 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <jsp:include page="/repository/aim/view/scripts/auditFilter.jsp"  />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/compareAcivity.js"/>"/>
-<script language="javascript">
+</script>
+<script language="JavaScript">
 function showUser(email){
 	if (email != ""){
 		<digi:context name="information" property="context/module/moduleinstance/userProfile.do" />
@@ -34,6 +36,10 @@ function submitFilter() {
 }
 
 </script>
+<% if (FeaturesUtil.isVisibleFeature("Activity Diferrence") ){%>
+<c:set var="isActivityDifferenceEnabled" value="true" scope="request"/>
+<%}%>
+
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
 <c:set target="${bcparams}" property="dest" value="teamLead"/>
@@ -76,14 +82,12 @@ function submitFilter() {
 										</tr>
 										<tr>
 											<td valign="top">
-												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">	
-										
+												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 									<jsp:include page="teamSetupMenu.jsp"  />
-
+													<c:if test="${isActivityDifferenceEnabled =='true'}">
 													<input type="button" value="Compare All"
 														   onclick="javascript:compareAll()" class="dr-menu"
-														   style="cursor: pointer; font-style: italic; float: right; margin: 0.5% 1.5% 0.5%;">
-
+														   style="cursor: pointer; font-style: italic; float: right; margin: 0% 1.5% 1% 1.5%; ">
 													<span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleFilterSettings();" id="displayFilterButton">
 					<c:set var="hiddenStyle" value="display:none;"/>
 					<c:set var="settingsTitle">
@@ -152,10 +156,8 @@ function submitFilter() {
 														</div>
 													</div>
 												</div>
-												</div>
-												</div>
-												</div>
 												<br>
+												</c:if>
 
 
 												<table class="inside" width="970" cellpadding="0" cellspacing="0">
@@ -304,10 +306,12 @@ function submitFilter() {
 											</c:if>
 										</b>
 									</td>
+									<c:if test="${isActivityDifferenceEnabled == 'true'}">
 									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif"
 										class="inside"><b class="ins_title"> <digi:trn
 											key="aim:action"> View differences</digi:trn>
 									</b></td>
+									</c:if>
 								</tr>
 
 													<logic:iterate name="aimTeamAuditListForm" property="logs" id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
@@ -368,11 +372,13 @@ function submitFilter() {
 												<digi:trn key="admin:update">Update</digi:trn>
 											</logic:equal>								  
 										</td>
-										<td width="50" class="inside">
-											<div style="text-align:center">
-												<input type="button" value="<digi:trn>Compare</digi:trn>" onclick="javascript:viewDifferences(${log.objectId})" class="dr-menu">
-											</div>
-										</td>
+										<c:if test="${isActivityDifferenceEnabled == 'true'}">
+											<td width="50" class="inside">
+												<div style="text-align:center">
+													<input type="button" value="<digi:trn>Compare</digi:trn>" onclick="javascript:viewDifferences(${log.objectId})" class="dr-menu">
+												</div>
+											</td>
+										</c:if>
 									</tr>
 								</logic:iterate>
 							</table>

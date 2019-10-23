@@ -6,8 +6,12 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="org.digijava.module.aim.services.auditcleaner.AuditCleaner"%>
+
+<% if (FeaturesUtil.isVisibleFeature("Activity Diferrence") ){%>
+<c:set var="isActivityDifferenceEnabled" value="true" scope="request"/>
+<%}%>
 <jsp:include page="/repository/aim/view/scripts/auditFilter.jsp"  />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/compareAcivity.js"/>"></script>
 <script language="javascript">
@@ -135,6 +139,7 @@ function exportScorecard () {
 }
 
 function filtersort(filterBy) {
+
 	document.aimAuditLoggerManagerForm.selectedUser.value = document.getElementById("userId").value;
 	document.aimAuditLoggerManagerForm.selectedTeam.value = document.getElementById("teamId").value;
 	document.aimAuditLoggerManagerForm.selectedDateFrom.value = document.getElementById("selectedDateFromText").value;
@@ -246,14 +251,14 @@ function filtersort(filterBy) {
 
                           		<jsp:include page="loggerQuickView.jsp" />
 										<c:if
-												test="${aimAuditLoggerManagerForm.withLogin==false }">
+												test="${aimAuditLoggerManagerForm.withLogin==false and isActivityDifferenceEnabled == 'true'}">
 											<input type="button"
 												   title="<digi:trn>Click here to view full list of activities compared to its previous versions</digi:trn>"
 												   onclick="javascript:compareAll()" class="dr-menu"
 												   value="&nbsp;&nbsp;<digi:trn>Compare All</digi:trn>&nbsp;&nbsp;"
 												   style="cursor: pointer; font-style: italic; float: right; margin: 0.5% 1.5% 0.5%;">
 										</c:if> <br>
-
+								<c:if test="${aimAuditLoggerManagerForm.withLogin == false and isActivityDifferenceEnabled == 'true'}">
 
 										<span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleFilterSettings();" id="displayFilterButton">
 														<c:set var="hiddenStyle" value="display:none;"/>
@@ -330,10 +335,7 @@ function filtersort(filterBy) {
 												</div>
 											</div>
 										</div>
-										</div>
-										</div>
-										</div>
-										</div>
+								</c:if>
 										<br>
 				<table width="100%" height="100%" cellpadding="0" cellspacing="0" bgColor=#ffffff id="auditloggertable">
 				<tr>
@@ -351,19 +353,19 @@ function filtersort(filterBy) {
 								</c:if>
 								<c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='nameasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('namedesc'); return false;">
+									<digi:link style="color:#376091;" href ="#" onclick="javascript:filtersort('namedesc'); return false;">
 										<b><digi:trn key="aim:name">Name</digi:trn></b>
 									</digi:link>
 							   </c:if>
 							   </td>
 								<td valign="center" align="center"bgcolor="#C7D4DB" style="color: black" width="150">
 								<c:if test="${aimAuditLoggerManagerForm.sortBy!='typeasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('typeasc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('typeasc');return false;">
 										<b><digi:trn key="aim:objectType">Object Type</digi:trn></b>
 									</digi:link>
 								</c:if>
 								<c:if test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='typeasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('typedesc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('typedesc'); return false;">
 										<b><digi:trn key="aim:objectType">Object Type</digi:trn></b>
 									</digi:link>
 								</c:if>
@@ -371,89 +373,89 @@ function filtersort(filterBy) {
 								<td valign="center" align="center"bgcolor="#C7D4DB"
 									style="color: black"><c:if
 									test="${aimAuditLoggerManagerForm.sortBy!='teamasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('teamasc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('teamasc'); return false;">
 										<b><digi:trn key="aim:teamName">Team Name</digi:trn></b>
 									</digi:link>
 								</c:if> <c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='teamasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('teamdesc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('teamdesc'); return false;">
 										<b><digi:trn key="aim:teamName">Team Name</digi:trn></b>
 									</digi:link>
 								</c:if></td>
 								<td align="center" valign="center"bgcolor="#C7D4DB"
 									style="color: black"><c:if
 									test="${aimAuditLoggerManagerForm.sortBy!='authorasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('authorasc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('authorasc'); return false;">
 										<b><digi:trn key="aim:authorName">Author Name</digi:trn></b>
 									</digi:link>
 								</c:if> <c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='authorasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('authordesc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('authordesc'); return false;">
 										<b><digi:trn key="aim:authorName">Author Name</digi:trn></b>
 									</digi:link>
 								</c:if></td>
 								<td width="100" align="center" valign="center"bgcolor="#C7D4DB"
 									style="color: black"><c:if
 									test="${aimAuditLoggerManagerForm.sortBy!='creationdateasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('creationdateasc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('creationdateasc'); return false;">
 										<b><digi:trn key="aim:creationDateLogger">Creation Date</digi:trn></b>
 									</digi:link>
 								</c:if> <c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='creationdateasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('creationdatedesc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('creationdatedesc'); return false;">
 										<b><digi:trn key="aim:creationDateLogger">Creation Date</digi:trn></b>
 									</digi:link>
 							  </c:if></td>
 								<td width="208" align="center" valign="center"bgcolor="#C7D4DB"
 									style="color: black"><c:if
 									test="${aimAuditLoggerManagerForm.sortBy!='editorasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('editorasc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('editorasc'); return false;">
 										<b><digi:trn key="aim:editorName">Editor Name</digi:trn></b>
 									</digi:link>
 								</c:if> <c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='editorasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('editordesc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('editordesc'); return false;">
 										<b><digi:trn key="aim:editorName">Editor Name</digi:trn></b>
 									</digi:link>
 								</c:if></td>
 								<td align="center" valign="center"bgcolor="#C7D4DB"
 									style="color: black"><c:if
 									test="${aimAuditLoggerManagerForm.sortBy!='changedateasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('changedateasc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('changedateasc'); return false;">
 										<b><digi:trn key="aim:changeDate">Change Date</digi:trn></b>
 									</digi:link>
 								</c:if> <c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='changedateasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('changedatedesc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('changedatedesc'); return false;">
 										<b><digi:trn key="aim:changeDate">Change Date</digi:trn></b>
 									</digi:link>
 								</c:if></td>
 								<td width="129" align="center" valign="center"bgcolor="#C7D4DB"style="color: black">
 								<c:if test="${aimAuditLoggerManagerForm.sortBy!='actionasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('actionasc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('actionasc'); return false;">
 										<b><digi:trn key="aim:action">Action</digi:trn></b>
 									</digi:link>
 								</c:if> <c:if
 									test="${not empty aimAuditLoggerManagerForm.sortBy && aimAuditLoggerManagerForm.sortBy=='actionasc'}">
-									<digi:link style="color:#376091;" href="javascript:filtersort('actiondesc'); return false;">
+									<digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('actiondesc'); return false;">
 										<b><digi:trn key="aim:action">Action</digi:trn></b>
 									</digi:link>
 								</c:if></td>
                                                                 <td  align="center" valign="center"bgcolor="#C7D4DB"style="color: black;" nowrap>
                                                                 <c:choose>
                                                                     <c:when test="${aimAuditLoggerManagerForm.sortBy!='detailasc'}">
-                                                                        <digi:link style="color:#376091;" href="javascript:filtersort('detailasc'); return false;">
+                                                                        <digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('detailasc'); return false;">
                                                                             <b><digi:trn>Additional Details</digi:trn></b>
                                                                         </digi:link>
                                                                     </c:when>
                                                                     <c:otherwise>
-                                                                        <digi:link style="color:#376091;" href="javascript:filtersort('detaildesc'); return false;">
+                                                                        <digi:link style="color:#376091;" href="#" onclick="javascript:filtersort('detaildesc'); return false;">
                                                                             <b><digi:trn>Additional Details</digi:trn></b>
                                                                         </digi:link>
                                                                     </c:otherwise>
                                                                 </c:choose>
                                         </td>
-								<c:if test="${aimAuditLoggerManagerForm.withLogin==false }">
+								<c:if test="${aimAuditLoggerManagerForm.withLogin == false and isActivityDifferenceEnabled == 'true'}">
 									<td width="129" align="center" valign="center"bgcolor="#C7D4DB"style="color: #376091;">
 										<b><digi:trn key="aim:viewDiff">View Differences</digi:trn></b>
 									</td>
@@ -525,12 +527,19 @@ function filtersort(filterBy) {
 										<digi:trn>No Data</digi:trn>
 									</c:if>
 								</td>
-									<td>
-										<c:if test="${not empty log.objectId && log.objectType=='org.digijava.module.aim.dbentity.AmpActivityVersion'}">
-											<input type="button" title="<digi:trn>Click here to compare with previous version</digi:trn>" onclick="javascript:viewDifferences(${log.objectId})"
-												   class="dr-menu" value="&nbsp;&nbsp;<digi:trn>Compare</digi:trn>&nbsp;&nbsp;">
-										</c:if>
-									</td>
+									<c:if test="${isActivityDifferenceEnabled == 'true'}">
+										<c:choose>
+											<c:when test="${not empty log.objectId
+											and log.objectType=='org.digijava.module.aim.dbentity.AmpActivityVersion'}">
+												<td><input type="button" title="<digi:trn>Click here to compare with previous version</digi:trn>" onclick="javascript:viewDifferences(${log.objectId})" class="dr-menu" value="&nbsp;&nbsp;<digi:trn>Compare</digi:trn>&nbsp;&nbsp;">
+												</td>
+											</c:when>
+											<c:otherwise>
+												<td>&nbsp;</td>
+											</c:otherwise>
+										</c:choose>
+
+									</c:if>
 							</tr>
                           </logic:iterate>
 						</table>
@@ -636,13 +645,6 @@ function filtersort(filterBy) {
 							<span style="font-size: 8pt; font-family: Tahoma;">&gt;&gt;</span>
 						</digi:link>
 					</c:if>
-							<c:if test="${aimAuditLoggerManagerForm.withLogin==false }">
-							<input type="button"
-								   title="<digi:trn>Click to view list of activities compared to its previous versions</digi:trn>"
-								   onclick="javascript:compareAll()" class="dr-menu"
-								   value="&nbsp;&nbsp;<digi:trn>Compare All</digi:trn>&nbsp;&nbsp;"
-								   style="cursor: pointer; font-style: italic; float: right; margin: 0 1% 0.5% 2.8%;">
-							</c:if>
 					<c:out value="${aimAuditLoggerManagerForm.currentPage}"/>&nbsp;
 					<span style="font-size: 8pt; font-family: Tahoma;">
 					<digi:trn key="aim:of">of</digi:trn></span>&nbsp;

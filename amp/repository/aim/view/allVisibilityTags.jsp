@@ -112,7 +112,7 @@
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-
+<feature:display name="Activity Diferrence" module="Audit Logger Manager"></feature:display>
 <module:display name="Aid Effectiveness" parentModule="PROJECT MANAGEMENT"></module:display>
 
 <feature:display name="Aid Effectiveness" module="Aid Effectiveness"></feature:display>

@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.form.AuditLoggerManagerForm;
@@ -69,7 +71,10 @@ public class AuditLoggerManager extends MultiAction {
         Collection<AmpAuditLogger> logs = AuditLoggerUtil.getLogObjects(vForm.isWithLogin(),
                 vForm.getEffectiveSelectedUser(), vForm.getEffectiveSelectedTeam(), vForm.getEffectiveDateFrom(),
                 vForm.getEffectiveDateTo());
-        vForm.setUserList(AmpUserUtil.getAllUsers(false));
+        List<User> userList = (List<User>)AmpUserUtil.getAllUsers(false);
+        userList.sort(Comparator.comparing(User::getName));
+
+        vForm.setUserList(userList);
         vForm.setTeamList(AuditLoggerUtil.getTeamFromLog());
 
         if (request.getParameter("sortBy")!=null){

@@ -10,7 +10,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/amp.css">
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_datatable.css">
@@ -38,12 +38,15 @@
 	background-color: #FFFFFF;
 }
 @media print {
-	.printPreview {visibility:visible;}
+	.printPreview {display: inline}
 }
 @media screen {
-	.printPreview {visibility:hidden;}
+	.printPreview {display: none;}
 }
 </style>
+<% if (FeaturesUtil.isVisibleFeature("Activity Diferrence") ){%>
+<c:set var="isActivityDifferenceEnabled" value="true" scope="request"/>
+<%}%>
 
 <digi:instance property="aimCompareActivityVersionsForm" />
 <digi:errors/>
@@ -71,6 +74,9 @@
 					<c:if test="${aimCompareActivityVersionsForm.method != 'compareAll'}">
 						<a><div><digi:trn>Compare Activities</digi:trn></div></a>
 					</c:if>
+				</li>
+				<c:if test="${isActivityDifferenceEnabled == 'true'}">
+			    <li>
 					<a target="_blank" onclick="generateExport('pdfExport'); return false;" title="Export to PDF"
 					   style="cursor: pointer;">
 						<img src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0" hspace="2" vspace="2" alt="Export to PDF">
@@ -80,18 +86,16 @@
 					</a>
 					<a target="_blank" onclick="window.print();" style="cursor: pointer; color:#376091;" title="Print">
 						<img id="Print" hspace="2" src="img_2/ico_print.gif" width="15" height="18">
-						Print
 					</a>
 				</li>
+				</c:if>
 			</ul>
 		</div>
-
 		<c:if test="${aimCompareActivityVersionsForm.method == 'viewDifferences'}">
 			<div class="printPreview">
 				<strong>Activity: <bean:write name="aimCompareActivityVersionsForm" property="activityName" /> </strong>
 			</div>
 		</c:if>
-
 		<div style="border: 1px solid rgb(208, 208, 208); padding: 10px;font-size:12px; height: 100%;" class="contentstyle" id="ajaxcontentarea">
 			<table border="0" cellpadding="2" cellspacing="0" bgcolor="#FFFFFF" id="dataTable" width="100%">
 				<tr>
@@ -145,8 +149,6 @@
 						</tr>
 					</logic:iterate>
 				</c:if>
-
-					<%-- if the method isn't compareAll, for any method is to keep the existing functionality and fix null pointer exception --%>
 				<c:if test="${(not empty aimCompareActivityVersionsForm.outputCollectionGrouped) and (aimCompareActivityVersionsForm.method != 'compareAll')}">
 					<bean:define id="beanGroupItem" name="aimCompareActivityVersionsForm" property="outputCollectionGroupedAsSet" scope="page" toScope="request"/>
 					<jsp:include page="viewGroupedOutput.jsp"/>
@@ -155,7 +157,6 @@
 			</table>
 			<br/>
 			<input id="backButton" type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="javascript:back()" />
-			<input id="exportButton" type="button" value="<digi:trn>Export to Excel</digi:trn>" onclick="javascript:generateExport('xlsExport');" />
 			<logic:equal name="aimCompareActivityVersionsForm" property="advancemode" value="true">
 				<input id="mergeButton" type="button" value="<digi:trn>Enable Merge Process</digi:trn>" onclick="javascript:enableMerge();" />
 			</logic:equal>

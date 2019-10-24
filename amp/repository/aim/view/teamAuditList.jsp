@@ -86,6 +86,7 @@ function submitFilter() {
 									<jsp:include page="teamSetupMenu.jsp"  />
 													<c:if test="${isActivityDifferenceEnabled =='true'}">
 													<input type="button" value="Compare All"
+														   title="<digi:trn>Click here to view full list of activities compared to its previous versions that were editied in the last year</digi:trn>"
 														   onclick="javascript:compareAll()" class="dr-menu"
 														   style="cursor: pointer; font-style: italic; float: right; margin: 0% 1.5% 1% 1.5%; ">
 													<span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleFilterSettings();" id="displayFilterButton">

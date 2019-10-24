@@ -482,6 +482,8 @@ public final class AuditLoggerUtil {
         query.append(" left join amp_audit_logger aal on ");
         query.append(" (aal.objecttype ='org.digijava.module.aim.dbentity.AmpActivityVersion' ");
         query.append("  and cast (aal.objectId AS INTEGER) = aav.amp_activity_id");
+        query.append("  and aal.modifyDate > :yearToDate");
+        //query.append(" AND modifydate > :year) ");
         if (editorName != null) {
             query.append("  and aal.editorName=:editorName ");
         }
@@ -502,6 +504,7 @@ public final class AuditLoggerUtil {
         query.append(" and t.previous_id is not null");
 
         sqlQuery = session.createSQLQuery(query.toString());
+        sqlQuery.setParameter("yearToDate", getDateRange(365));
         if (editorName != null) {
             sqlQuery.setParameter("editorName", editorName);
         }

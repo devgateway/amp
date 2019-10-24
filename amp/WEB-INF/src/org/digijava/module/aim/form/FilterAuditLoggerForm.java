@@ -204,11 +204,13 @@ public class FilterAuditLoggerForm extends ActionForm {
             this.setSelectedTeam(null);
         }
         effectiveDateFrom = DateConversion.getDate(this.getSelectedDateFrom());
-        if (this.getSelectedDateTo() != null) {
+        if (this.getSelectedDateTo() != null && !this.getSelectedDateTo().trim().equals("")) {
 
             effectiveDateTo = new DateTime(DateConversion.getDate(this.getSelectedDateTo())).
                     plusHours(LAST_HOUR_OF_DAY).plusMinutes(LAST_MINUTE_OF_HOUR).
                     plusSeconds(LAST_SECOND_OF_MINUTE).toDate();
+        }else{
+            this.setEffectiveDateTo(null);
         }
     }
 }

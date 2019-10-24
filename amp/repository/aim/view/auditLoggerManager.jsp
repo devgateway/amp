@@ -625,20 +625,20 @@ function filtersort(filterBy) {
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsLast}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
-								<c:set target="${urlParamsNext}" property="selectedUser" value="${aimAuditLoggerManagerForm.selectedUser}" />
-								<c:set target="${urlParamsNext}" property="selectedTeam" value="${aimAuditLoggerManagerForm.selectedTeam}" />
-								<c:set target="${urlParamsNext}" property="selectedDateFrom" value="${aimAuditLoggerManagerForm.selectedDateFrom}" />
-								<c:set target="${urlParamsNext}" property="selectedDateTo" value="${aimAuditLoggerManagerForm.selectedDateTo}" />
+								<c:set target="${urlParamsLast}" property="selectedUser" value="${aimAuditLoggerManagerForm.selectedUser}" />
+								<c:set target="${urlParamsLast}" property="selectedTeam" value="${aimAuditLoggerManagerForm.selectedTeam}" />
+								<c:set target="${urlParamsLast}" property="selectedDateFrom" value="${aimAuditLoggerManagerForm.selectedDateFrom}" />
+								<c:set target="${urlParamsLast}" property="selectedDateTo" value="${aimAuditLoggerManagerForm.selectedDateTo}" />
 						</c:if>
 
 						<c:if test="${aimAuditLoggerManagerForm.pagesSize < aimAuditLoggerManagerForm.pagesToShow}">
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
 							<c:set target="${urlParamsLast}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
-								<c:set target="${urlParamsNext}" property="selectedUser" value="${aimAuditLoggerManagerForm.selectedUser}" />
-								<c:set target="${urlParamsNext}" property="selectedTeam" value="${aimAuditLoggerManagerForm.selectedTeam}" />
-								<c:set target="${urlParamsNext}" property="selectedDateFrom" value="${aimAuditLoggerManagerForm.selectedDateFrom}" />
-								<c:set target="${urlParamsNext}" property="selectedDateTo" value="${aimAuditLoggerManagerForm.selectedDateTo}" />
+								<c:set target="${urlParamsLast}" property="selectedUser" value="${aimAuditLoggerManagerForm.selectedUser}" />
+								<c:set target="${urlParamsLast}" property="selectedTeam" value="${aimAuditLoggerManagerForm.selectedTeam}" />
+								<c:set target="${urlParamsLast}" property="selectedDateFrom" value="${aimAuditLoggerManagerForm.selectedDateFrom}" />
+								<c:set target="${urlParamsLast}" property="selectedDateTo" value="${aimAuditLoggerManagerForm.selectedDateTo}" />
 						</c:if>
 						<c:set var="translation"><digi:trn key="aim:lastpage">Last Page</digi:trn></c:set>
 						<digi:link href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsLast" title="${translation}" friendlyUrl="false">

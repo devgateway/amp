@@ -93,7 +93,7 @@ function submitFilter() {
 					<c:set var="settingsTitle">
 						<digi:trn key="aim:Showfilteroptions">Show Filter options</digi:trn>
 					</c:set>
-					  <c:if test="${(not empty aimTeamAuditListForm.selectedUser and aimTeamAuditListForm.selectedUser !=-1 )
+					  <c:if test="${(not empty aimTeamAuditListForm.selectedUser and aimTeamAuditListForm.selectedUser !='-1' )
 					   or (not empty aimTeamAuditListForm.selectedTeam )
 					  or (not empty aimTeamAuditListForm.selectedDateFrom ) or (not empty aimTeamAuditListForm.selectedDateTo )}">
 						  <c:set var="hiddenStyle" value="display:inline-flex;"/>

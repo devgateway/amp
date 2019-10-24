@@ -192,8 +192,10 @@ public final class AuditLoggerUtil {
         logActivityUpdate(request, activity, details, null);
     }
     /**
-     * This method was changed to simulate an update that happened in the past. Will be removed once donorscore card testing is done
-     *  @deprecated Do not use this method use {@link AuditLoggerUtil.logActivityUpdate(HttpServletRequest request, AmpActivityVersion activity, List<String> details)}
+     * This method was changed to simulate an update that happened in the past. Will be removed once donorscore
+     * card testing is done
+     *  @deprecated Do not use this method use AuditLoggerUtil.logActivityUpdate(HttpServletRequest request,
+     *  AmpActivityVersion activity, List<String> details)
      * @param request
      * @param activity
      * @param details
@@ -260,7 +262,7 @@ public final class AuditLoggerUtil {
     /**
      * @author dan
      */
-    public static Collection<AmpAuditLogger> getLogObjects(boolean withLogin, Long userIdToFilter, String teamToFilter,
+    public static Collection<AmpAuditLogger> getLogObjects(boolean withLogin, String editorName, String teamToFilter,
                                                            Date dateFrom, Date dateTo) {
         try {
             StringBuffer qryStr = new StringBuffer();
@@ -275,9 +277,9 @@ public final class AuditLoggerUtil {
                         StringType.INSTANCE, "<>"));
 
             }
-            if (userIdToFilter != null) {
-                filters.add(new HibernateFilterParam("userid", null, userIdToFilter,
-                        LongType.INSTANCE));
+            if (editorName != null) {
+                filters.add(new HibernateFilterParam("editorName", null, editorName,
+                        StringType.INSTANCE));
             }
             if (teamToFilter != null) {
                 filters.add(new HibernateFilterParam("teamname", null, teamToFilter,
@@ -306,6 +308,16 @@ public final class AuditLoggerUtil {
         String query = "select distinct teamname from amp_audit_logger "
                 + "where teamname <> '' "
                 + "order by teamname asc";
+        return getStringsFromQuery(query);
+    }
+    public static List<String> getEditorNameFromLog() {
+        String query = "select distinct editorname from amp_audit_logger "
+                + "where editorname <> '' "
+                + "order by editorname asc";
+        return getStringsFromQuery(query);
+    }
+
+    private static List<String> getStringsFromQuery(String query) {
         Session session = PersistenceManager.getSession();
         SQLQuery sqlQuery = session.createSQLQuery(query);
         return sqlQuery.list();
@@ -455,7 +467,7 @@ public final class AuditLoggerUtil {
         }
     }
 
-    public static List<Object[]> getListOfActivitiesFromAuditLogger(Long userid, String team, Date fromDate,
+    public static List<Object[]> getListOfActivitiesFromAuditLogger(String editorName, String team, Date fromDate,
                                                                     Date toDate) {
         SQLQuery sqlQuery;
         Session session = PersistenceManager.getSession();
@@ -470,8 +482,8 @@ public final class AuditLoggerUtil {
         query.append(" left join amp_audit_logger aal on ");
         query.append(" (aal.objecttype ='org.digijava.module.aim.dbentity.AmpActivityVersion' ");
         query.append("  and cast (aal.objectId AS INTEGER) = aav.amp_activity_id");
-        if (userid != null) {
-            query.append("  and aal.userid=:userId ");
+        if (editorName != null) {
+            query.append("  and aal.editorName=:editorName ");
         }
         if (fromDate != null) {
             query.append("  and modifydate>:fromDate ");
@@ -490,8 +502,8 @@ public final class AuditLoggerUtil {
         query.append(" and t.previous_id is not null");
 
         sqlQuery = session.createSQLQuery(query.toString());
-        if (userid != null) {
-            sqlQuery.setParameter("userId", userid);
+        if (editorName != null) {
+            sqlQuery.setParameter("editorName", editorName);
         }
         if (fromDate != null) {
             sqlQuery.setParameter("fromDate", fromDate);

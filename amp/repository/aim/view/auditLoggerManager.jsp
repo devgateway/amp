@@ -265,7 +265,7 @@ function filtersort(filterBy) {
 														<c:set var="settingsTitle">
 															<digi:trn key="aim:Showfilteroptions">Show Filter options</digi:trn>
 														</c:set>
-														  <c:if test="${(not empty aimAuditLoggerManagerForm.selectedUser and aimAuditLoggerManagerForm.selectedUser !=-1 )
+														  <c:if test="${(not empty aimAuditLoggerManagerForm.selectedUser and aimAuditLoggerManagerForm.selectedUser !='-1' )
 														  or (not empty aimAuditLoggerManagerForm.selectedTeam and aimAuditLoggerManagerForm.selectedTeam != '-1' )
 														  or (not empty aimAuditLoggerManagerForm.selectedDateFrom ) or (not empty aimAuditLoggerManagerForm.selectedDateTo )}">
 															  <c:set var="hiddenStyle" value="display:inline-flex;"/>
@@ -283,7 +283,7 @@ function filtersort(filterBy) {
 														<div class="divTableCell divTableCellLeft" ><digi:trn>User:</digi:trn></div>
 														<div class="divTableCell"><html:select property="selectedUser" styleClass="inp-text" styleId="userId">
 															<html:option value="-1"><digi:trn>Select User</digi:trn> </html:option>
-															<html:optionsCollection property="userList" value="id" label="name"></html:optionsCollection>
+															<html:options property="userList"></html:options>
 														</html:select></div>
 													</div>
 													<div class="divTableRow">

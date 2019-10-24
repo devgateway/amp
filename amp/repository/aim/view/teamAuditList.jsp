@@ -111,7 +111,8 @@ function submitFilter() {
 																	<div class="divTableCell divTableCellLeft" ><digi:trn>User:</digi:trn></div>
 																	<div class="divTableCell"><html:select property="selectedUser" styleClass="inp-text" styleId="userId">
 																		<html:option value="-1"><digi:trn>Select User</digi:trn> </html:option>
-																		<html:optionsCollection property="userList" value="id" label="name"></html:optionsCollection>
+																		<html:options property="userList"></html:options>
+
 																	</html:select></div>
 																</div>
 																<div class="divTableRow">

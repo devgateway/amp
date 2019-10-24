@@ -43,7 +43,7 @@ public class TeamAuditLogger extends MultiAction {
         }
 
         TeamAuditForm vForm = (TeamAuditForm) form;
-        vForm.setUserList(AmpUserUtil.getAllUsers(false));
+        vForm.setUserList(AuditLoggerUtil.getEditorNameFromLog());
         vForm.setTeamName(teamname);
         vForm.populateEffectiveFilters();
 

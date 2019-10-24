@@ -683,13 +683,13 @@ public class ActivityVersionUtil {
         }
     }
 
-    public static List<ActivityComparisonResult> getOutputCollectionGrouped(Long userId, String team,
+    public static List<ActivityComparisonResult> getOutputCollectionGrouped(String editorName, String team,
                                                                             Date fromDate, Date toDate) {
         List<Object[]> activitiesFromAuditLogger;
         List<ActivityComparisonResult> activityComparisonResults = new ArrayList<>();
 
 
-        activitiesFromAuditLogger = AuditLoggerUtil.getListOfActivitiesFromAuditLogger(userId, team, fromDate, toDate);
+        activitiesFromAuditLogger = AuditLoggerUtil.getListOfActivitiesFromAuditLogger(editorName, team, fromDate, toDate);
 
         for (int startIndex = 0; startIndex < activitiesFromAuditLogger.size(); startIndex += AUDIT_LOGGER_BATCH_SIZE) {
 

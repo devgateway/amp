@@ -2021,14 +2021,13 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         Session session = PersistenceManager.getRequestDBSession();
         Query qry = session.createQuery(String.format("SELECT act FROM " + AmpActivityVersion.class.getName()
                 + " act WHERE approval_status in ( '%s','%s' )  and act.ampActivityGroup.ampActivityGroupId = ? "
-                + " and act.ampActivityId <> ? "
+                + " and act.ampActivityId < ?  "
                 + " ORDER BY act.ampActivityId DESC", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS))
                 .setMaxResults(1);
         qry.setParameter(0, activity.getAmpActivityGroup().getAmpActivityGroupId());
         qry.setParameter(1, activity.getAmpActivityId());
         return (qry.list().size() > 0 ? (AmpActivityVersion) qry.list().get(0) : null);
     }
-
     /**
      * @param a
      * @param activityDisbursements

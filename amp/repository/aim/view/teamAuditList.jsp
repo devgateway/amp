@@ -86,6 +86,7 @@ function submitFilter() {
 									<jsp:include page="teamSetupMenu.jsp"  />
 													<c:if test="${isActivityDifferenceEnabled =='true'}">
 													<input type="button" value="Compare All"
+														   title="<digi:trn>Click here to view full list of activities compared to its previous versions that were editied in the last year</digi:trn>"
 														   onclick="javascript:compareAll()" class="dr-menu"
 														   style="cursor: pointer; font-style: italic; float: right; margin: 0% 1.5% 1% 1.5%; ">
 													<span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleFilterSettings();" id="displayFilterButton">
@@ -93,7 +94,7 @@ function submitFilter() {
 					<c:set var="settingsTitle">
 						<digi:trn key="aim:Showfilteroptions">Show Filter options</digi:trn>
 					</c:set>
-					  <c:if test="${(not empty aimTeamAuditListForm.selectedUser and aimTeamAuditListForm.selectedUser !=-1 )
+					  <c:if test="${(not empty aimTeamAuditListForm.selectedUser and aimTeamAuditListForm.selectedUser !='-1' )
 					   or (not empty aimTeamAuditListForm.selectedTeam )
 					  or (not empty aimTeamAuditListForm.selectedDateFrom ) or (not empty aimTeamAuditListForm.selectedDateTo )}">
 						  <c:set var="hiddenStyle" value="display:inline-flex;"/>
@@ -111,7 +112,8 @@ function submitFilter() {
 																	<div class="divTableCell divTableCellLeft" ><digi:trn>User:</digi:trn></div>
 																	<div class="divTableCell"><html:select property="selectedUser" styleClass="inp-text" styleId="userId">
 																		<html:option value="-1"><digi:trn>Select User</digi:trn> </html:option>
-																		<html:optionsCollection property="userList" value="id" label="name"></html:optionsCollection>
+																		<html:options property="userList"></html:options>
+
 																	</html:select></div>
 																</div>
 																<div class="divTableRow">

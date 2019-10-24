@@ -43,7 +43,7 @@ public class TeamAuditLogger extends MultiAction {
         }
 
         TeamAuditForm vForm = (TeamAuditForm) form;
-        vForm.setUserList(AmpUserUtil.getAllUsers(false));
+        vForm.setUserList(AuditLoggerUtil.getEditorNameFromLog());
         vForm.setTeamName(teamname);
         vForm.populateEffectiveFilters();
 
@@ -106,10 +106,10 @@ public class TeamAuditLogger extends MultiAction {
             Collections.reverse((List<AmpAuditLogger>)logs);
         }
         else if("changedateasc".equalsIgnoreCase(vForm.getSortBy())){
-            Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerActionComparator());
+            Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerChangeDateComparator());
         }
         else if("changedatedesc".equalsIgnoreCase(vForm.getSortBy())){
-            Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerActionComparator());
+            Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerChangeDateComparator());
             Collections.reverse((List<AmpAuditLogger>)logs);
         }
 

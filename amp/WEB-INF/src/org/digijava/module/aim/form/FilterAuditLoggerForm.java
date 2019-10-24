@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 
 public class FilterAuditLoggerForm extends ActionForm {
@@ -14,15 +15,15 @@ public class FilterAuditLoggerForm extends ActionForm {
     public static final Integer LAST_HOUR_OF_DAY = 30;
     public static final Integer LAST_MINUTE_OF_HOUR = 59;
     public static final Integer LAST_SECOND_OF_MINUTE = 59;
-    private Long selectedUser;
+    private String selectedUser;
     private String selectedTeam;
     private String selectedDateFrom;
     private String selectedDateTo;
-    private Long effectiveSelectedUser;
+    private String effectiveSelectedUser;
     private String effectiveSelectedTeam;
     private Date effectiveDateFrom;
     private Date effectiveDateTo;
-    private Collection<User> userList;
+    private List<String> userList;
 
     private Collection logs;
     private String sortBy;
@@ -117,11 +118,11 @@ public class FilterAuditLoggerForm extends ActionForm {
     }
 
 
-    public Collection<User> getUserList() {
+    public List<String> getUserList() {
         return userList;
     }
 
-    public void setUserList(Collection<User> userList) {
+    public void setUserList(List<String> userList) {
         this.userList = userList;
     }
 
@@ -146,11 +147,11 @@ public class FilterAuditLoggerForm extends ActionForm {
         this.selectedDateTo = selectedDateTo;
     }
 
-    public Long getSelectedUser() {
+    public String getSelectedUser() {
         return selectedUser;
     }
 
-    public void setSelectedUser(Long selectedUser) {
+    public void setSelectedUser(String selectedUser) {
         this.selectedUser = selectedUser;
     }
 
@@ -162,11 +163,11 @@ public class FilterAuditLoggerForm extends ActionForm {
         this.selectedTeam = selectedTeam;
     }
 
-    public Long getEffectiveSelectedUser() {
+    public String getEffectiveSelectedUser() {
         return effectiveSelectedUser;
     }
 
-    public void setEffectiveSelectedUser(Long effectiveSelectedUser) {
+    public void setEffectiveSelectedUser(String effectiveSelectedUser) {
         this.effectiveSelectedUser = effectiveSelectedUser;
     }
 
@@ -195,19 +196,21 @@ public class FilterAuditLoggerForm extends ActionForm {
     }
 
     public void populateEffectiveFilters() {
-        effectiveSelectedUser = this.getSelectedUser() != null && !this.getSelectedUser().equals(-1L)
+        effectiveSelectedUser = this.getSelectedUser() != null && !this.getSelectedUser().equals("-1")
                 ? this.getSelectedUser() : null;
         effectiveSelectedTeam = this.getSelectedTeam() != null && !this.getSelectedTeam().equals("-1")
-                && effectiveSelectedUser == null ? this.getSelectedTeam() : null;
+                ? this.getSelectedTeam() : null;
         if (effectiveSelectedTeam == null) {
             this.setSelectedTeam(null);
         }
         effectiveDateFrom = DateConversion.getDate(this.getSelectedDateFrom());
-        if (this.getSelectedDateTo() != null) {
+        if (this.getSelectedDateTo() != null && !this.getSelectedDateTo().trim().equals("")) {
 
             effectiveDateTo = new DateTime(DateConversion.getDate(this.getSelectedDateTo())).
                     plusHours(LAST_HOUR_OF_DAY).plusMinutes(LAST_MINUTE_OF_HOUR).
                     plusSeconds(LAST_SECOND_OF_MINUTE).toDate();
+        }else{
+            this.setEffectiveDateTo(null);
         }
     }
 }

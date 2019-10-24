@@ -253,7 +253,7 @@ function filtersort(filterBy) {
 										<c:if
 												test="${aimAuditLoggerManagerForm.withLogin==false and isActivityDifferenceEnabled == 'true'}">
 											<input type="button"
-												   title="<digi:trn>Click here to view full list of activities compared to its previous versions</digi:trn>"
+												   title="<digi:trn>Click here to view full list of activities compared to its previous versions that were editied in the last year</digi:trn>"
 												   onclick="javascript:compareAll()" class="dr-menu"
 												   value="&nbsp;&nbsp;<digi:trn>Compare All</digi:trn>&nbsp;&nbsp;"
 												   style="cursor: pointer; font-style: italic; float: right; margin: 0.5% 1.5% 0.5%;">
@@ -265,7 +265,7 @@ function filtersort(filterBy) {
 														<c:set var="settingsTitle">
 															<digi:trn key="aim:Showfilteroptions">Show Filter options</digi:trn>
 														</c:set>
-														  <c:if test="${(not empty aimAuditLoggerManagerForm.selectedUser and aimAuditLoggerManagerForm.selectedUser !=-1 )
+														  <c:if test="${(not empty aimAuditLoggerManagerForm.selectedUser and aimAuditLoggerManagerForm.selectedUser !='-1' )
 														  or (not empty aimAuditLoggerManagerForm.selectedTeam and aimAuditLoggerManagerForm.selectedTeam != '-1' )
 														  or (not empty aimAuditLoggerManagerForm.selectedDateFrom ) or (not empty aimAuditLoggerManagerForm.selectedDateTo )}">
 															  <c:set var="hiddenStyle" value="display:inline-flex;"/>
@@ -283,7 +283,7 @@ function filtersort(filterBy) {
 														<div class="divTableCell divTableCellLeft" ><digi:trn>User:</digi:trn></div>
 														<div class="divTableCell"><html:select property="selectedUser" styleClass="inp-text" styleId="userId">
 															<html:option value="-1"><digi:trn>Select User</digi:trn> </html:option>
-															<html:optionsCollection property="userList" value="id" label="name"></html:optionsCollection>
+															<html:options property="userList"></html:options>
 														</html:select></div>
 													</div>
 													<div class="divTableRow">
@@ -625,20 +625,20 @@ function filtersort(filterBy) {
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsLast}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
-								<c:set target="${urlParamsNext}" property="selectedUser" value="${aimAuditLoggerManagerForm.selectedUser}" />
-								<c:set target="${urlParamsNext}" property="selectedTeam" value="${aimAuditLoggerManagerForm.selectedTeam}" />
-								<c:set target="${urlParamsNext}" property="selectedDateFrom" value="${aimAuditLoggerManagerForm.selectedDateFrom}" />
-								<c:set target="${urlParamsNext}" property="selectedDateTo" value="${aimAuditLoggerManagerForm.selectedDateTo}" />
+								<c:set target="${urlParamsLast}" property="selectedUser" value="${aimAuditLoggerManagerForm.selectedUser}" />
+								<c:set target="${urlParamsLast}" property="selectedTeam" value="${aimAuditLoggerManagerForm.selectedTeam}" />
+								<c:set target="${urlParamsLast}" property="selectedDateFrom" value="${aimAuditLoggerManagerForm.selectedDateFrom}" />
+								<c:set target="${urlParamsLast}" property="selectedDateTo" value="${aimAuditLoggerManagerForm.selectedDateTo}" />
 						</c:if>
 
 						<c:if test="${aimAuditLoggerManagerForm.pagesSize < aimAuditLoggerManagerForm.pagesToShow}">
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
 							<c:set target="${urlParamsLast}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
-								<c:set target="${urlParamsNext}" property="selectedUser" value="${aimAuditLoggerManagerForm.selectedUser}" />
-								<c:set target="${urlParamsNext}" property="selectedTeam" value="${aimAuditLoggerManagerForm.selectedTeam}" />
-								<c:set target="${urlParamsNext}" property="selectedDateFrom" value="${aimAuditLoggerManagerForm.selectedDateFrom}" />
-								<c:set target="${urlParamsNext}" property="selectedDateTo" value="${aimAuditLoggerManagerForm.selectedDateTo}" />
+								<c:set target="${urlParamsLast}" property="selectedUser" value="${aimAuditLoggerManagerForm.selectedUser}" />
+								<c:set target="${urlParamsLast}" property="selectedTeam" value="${aimAuditLoggerManagerForm.selectedTeam}" />
+								<c:set target="${urlParamsLast}" property="selectedDateFrom" value="${aimAuditLoggerManagerForm.selectedDateFrom}" />
+								<c:set target="${urlParamsLast}" property="selectedDateTo" value="${aimAuditLoggerManagerForm.selectedDateTo}" />
 						</c:if>
 						<c:set var="translation"><digi:trn key="aim:lastpage">Last Page</digi:trn></c:set>
 						<digi:link href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsLast" title="${translation}" friendlyUrl="false">

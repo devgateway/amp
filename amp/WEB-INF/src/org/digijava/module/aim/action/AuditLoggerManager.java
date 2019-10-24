@@ -71,10 +71,7 @@ public class AuditLoggerManager extends MultiAction {
         Collection<AmpAuditLogger> logs = AuditLoggerUtil.getLogObjects(vForm.isWithLogin(),
                 vForm.getEffectiveSelectedUser(), vForm.getEffectiveSelectedTeam(), vForm.getEffectiveDateFrom(),
                 vForm.getEffectiveDateTo());
-        List<User> userList = (List<User>)AmpUserUtil.getAllUsers(false);
-        userList.sort(Comparator.comparing(User::getName));
-
-        vForm.setUserList(userList);
+        vForm.setUserList(AuditLoggerUtil.getEditorNameFromLog());
         vForm.setTeamList(AuditLoggerUtil.getTeamFromLog());
 
         if (request.getParameter("sortBy")!=null){

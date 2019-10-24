@@ -105,12 +105,11 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
                     int i = 0;
                     while (it2.hasNext()) {
                         AmpActor actor = (AmpActor) it2.next();
-                        if (actor.getName() != null){
-                            actors[i] = actor.getName();
-                            if (it2.hasNext())
-                                actors[i] += ", ";
-                            i++;
+                        actors[i] = actor.getName() != null ? actor.getName() : " ";
+                        if (it2.hasNext()) {
+                            actors[i] += ", ";
                         }
+                        i++;
                     }
                     Output out1 = new Output(new ArrayList<Output>(), new String[] {"Actors"}, actors);
                     

@@ -363,6 +363,9 @@ public class CompareActivityVersions extends DispatchAction {
         if(result!=null) {
             vForm.setOutputCollectionGrouped(result.getCompareOutput());
             vForm.setActivityName(result.getName());
+        }else{
+            vForm.setOutputCollectionGrouped(null);
+            vForm.setActivityName(null);
         }
 
         return mapping.findForward("forward");

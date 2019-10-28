@@ -1,10 +1,7 @@
 package org.digijava.module.aim.form;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
-
-import org.digijava.kernel.user.User;
 
 public class AuditLoggerManagerForm extends FilterAuditLoggerForm implements Serializable {
 

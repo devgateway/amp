@@ -1,7 +1,6 @@
 package org.digijava.module.aim.form;
 
 import org.apache.struts.action.ActionForm;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.helper.DateConversion;
 import org.joda.time.DateTime;
 
@@ -209,7 +208,7 @@ public class FilterAuditLoggerForm extends ActionForm {
             effectiveDateTo = new DateTime(DateConversion.getDate(this.getSelectedDateTo())).
                     plusHours(LAST_HOUR_OF_DAY).plusMinutes(LAST_MINUTE_OF_HOUR).
                     plusSeconds(LAST_SECOND_OF_MINUTE).toDate();
-        }else{
+        } else {
             this.setEffectiveDateTo(null);
         }
     }

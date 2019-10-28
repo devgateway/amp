@@ -377,7 +377,8 @@ function submitFilter() {
 										<c:if test="${isActivityDifferenceEnabled == 'true'}">
 											<td width="50" class="inside">
 												<div style="text-align:center">
-													<input type="button" value="<digi:trn>Compare</digi:trn>" onclick="javascript:viewDifferences(${log.objectId})" class="dr-menu">
+													<input type="button" title="<digi:trn>Click here to compare with previous version</digi:trn>"
+														   value="<digi:trn>Compare</digi:trn>" onclick="javascript:viewDifferences(${log.objectId})" class="dr-menu">
 												</div>
 											</td>
 										</c:if>

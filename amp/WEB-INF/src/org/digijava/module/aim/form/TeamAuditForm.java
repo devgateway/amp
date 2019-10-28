@@ -1,13 +1,8 @@
 package org.digijava.module.aim.form;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 
-import org.apache.struts.action.ActionForm;
-import org.digijava.kernel.user.User;
-
-public class TeamAuditForm extends FilterAuditLoggerForm implements Serializable{
+public class TeamAuditForm extends FilterAuditLoggerForm implements Serializable {
 
     /**
      *

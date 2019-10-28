@@ -11,7 +11,6 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.util.ActivityVersionUtil;
-import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.versioning.ActivityComparisonResult;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -25,9 +24,18 @@ public  class AuditExcelExporter {
     private static final Integer FIRST_COLUMN = 0;
     private static final Integer LAST_COLUMN = 2;
     private static final Integer VALUE_NAME = 0;
-    AuditXLSExportService auditXLSExportService;
+    private AuditXLSExportService auditXLSExportService;
+
     public AuditExcelExporter() {
         auditXLSExportService = new AuditXLSExportService();
+    }
+
+    public AuditXLSExportService getAuditXLSExportService() {
+        return auditXLSExportService;
+    }
+
+    public void setAuditXLSExportService(AuditXLSExportService auditXLSExportService) {
+        this.auditXLSExportService = auditXLSExportService;
     }
 
     public HSSFWorkbook generateExcel(List<ActivityComparisonResult> outputCollection) {

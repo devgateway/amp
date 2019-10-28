@@ -367,7 +367,7 @@ public class ActivityVersionUtil {
         return (ampActivityTwo == null) ? null
                 : new ActivityComparisonResult(activityOneId, ampActivityOne.getAmpId() + " "
                 + ampActivityOne.getName(), compareActivities(activityOneId,
-                ampActivityTwo.getAmpActivityId(), context)) ;
+                ampActivityTwo.getAmpActivityId(), context));
     }
 
 
@@ -689,7 +689,8 @@ public class ActivityVersionUtil {
         List<ActivityComparisonResult> activityComparisonResults = new ArrayList<>();
 
 
-        activitiesFromAuditLogger = AuditLoggerUtil.getListOfActivitiesFromAuditLogger(editorName, team, fromDate, toDate);
+        activitiesFromAuditLogger = AuditLoggerUtil.
+                getListOfActivitiesFromAuditLogger(editorName, team, fromDate, toDate);
 
         for (int startIndex = 0; startIndex < activitiesFromAuditLogger.size(); startIndex += AUDIT_LOGGER_BATCH_SIZE) {
 
@@ -757,7 +758,8 @@ public class ActivityVersionUtil {
 
 
     private static void addAsDifferentIfNnoPresent(List<CompareOutput> outputCollection, Field[] fields, int i,
-                                                   VersionableCollection auxAnnotation, Collection auxCollection2, Iterator iter1) {
+                                                   VersionableCollection auxAnnotation, Collection auxCollection2,
+                                                   Iterator iter1) {
         while (iter1.hasNext()) {
             int coincidence = 0;
             Object auxObject1 = iter1.next();

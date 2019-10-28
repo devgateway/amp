@@ -4,7 +4,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,12 +21,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
-import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.form.AuditLoggerManagerForm;
 import org.digijava.module.aim.util.AuditLoggerUtil;
-import org.digijava.module.um.util.AmpUserUtil;
 
 public class AuditLoggerManager extends MultiAction {
 
@@ -74,81 +71,10 @@ public class AuditLoggerManager extends MultiAction {
         vForm.setUserList(AuditLoggerUtil.getEditorNameFromLog());
         vForm.setTeamList(AuditLoggerUtil.getTeamFromLog());
 
-        if (request.getParameter("sortBy")!=null){
+        if (request.getParameter("sortBy") != null) {
             vForm.setSortBy(request.getParameter("sortBy"));
         }
-        if(vForm.getSortBy()!=null){
-                    Long siteId = RequestUtils.getSiteDomain(request).getSite().getId();
-                    String langCode = RequestUtils.getNavigationLanguage(request).getCode();
-              if(vForm.getSortBy().equalsIgnoreCase("nameasc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerNameComparator()) ;
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("namedesc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerNameComparator());
-                  Collections.reverse((List<AmpAuditLogger>)logs);
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("typeasc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerTypeComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("typedesc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerTypeComparator());
-                  Collections.reverse((List<AmpAuditLogger>)logs);
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("teamasc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerTeamComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("teamdesc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerTeamComparator());
-                  Collections.reverse((List<AmpAuditLogger>)logs);
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("authorasc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerAuthorComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("authordesc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerAuthorComparator());
-                  Collections.reverse((List<AmpAuditLogger>)logs);
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("creationdateasc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerCreationDateComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("creationdatedesc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerCreationDateComparator());
-                  Collections.reverse((List<AmpAuditLogger>)logs);
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("editorasc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerEditorNameComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("editordesc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerEditorNameComparator());
-                  Collections.reverse((List<AmpAuditLogger>)logs);
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("actionasc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerActionComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("actiondesc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerActionComparator());
-                  Collections.reverse((List<AmpAuditLogger>)logs);
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("changedateasc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerChangeDateComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("changedatedesc")){
-                  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerChangeDateComparator());
-                  Collections.reverse((List<AmpAuditLogger>)logs);
-              }
-                          else {
-                              if (vForm.getSortBy().equalsIgnoreCase("detaildesc")) {
-                                  Collections.sort((List<AmpAuditLogger>) logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode, siteId));
-                                  Collections.reverse((List<AmpAuditLogger>) logs);
-                              } else {
-                                  if (vForm.getSortBy().equalsIgnoreCase("detailasc")) {
-                                      Collections.sort((List<AmpAuditLogger>) logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode, siteId));
-                                  }
-
-                              }
-
-                          }
-        }
+        applySortBy(request, vForm, (List<AmpAuditLogger>) logs);
         vForm.setPagesToShow(PAGES_TO_SHOW);
         int totalrecords = TOTAL_RECORDS;
         int page = 0;
@@ -189,6 +115,81 @@ public class AuditLoggerManager extends MultiAction {
             vForm.setPagesSize(pages.size());
         }
         return  modeSelect(mapping, form, request, response);
+    }
+
+    private void applySortBy(HttpServletRequest request, AuditLoggerManagerForm vForm, List<AmpAuditLogger> logs) {
+        if(vForm.getSortBy()!=null){
+                    Long siteId = RequestUtils.getSiteDomain(request).getSite().getId();
+                    String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+              if(vForm.getSortBy().equalsIgnoreCase("nameasc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerNameComparator()) ;
+              }
+              else if(vForm.getSortBy().equalsIgnoreCase("namedesc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerNameComparator());
+                  Collections.reverse(logs);
+              }
+              else if(vForm.getSortBy().equalsIgnoreCase("typeasc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerTypeComparator());
+                }
+              else if(vForm.getSortBy().equalsIgnoreCase("typedesc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerTypeComparator());
+                  Collections.reverse(logs);
+              }
+              else if(vForm.getSortBy().equalsIgnoreCase("teamasc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerTeamComparator());
+                }
+              else if(vForm.getSortBy().equalsIgnoreCase("teamdesc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerTeamComparator());
+                  Collections.reverse(logs);
+              }
+              else if(vForm.getSortBy().equalsIgnoreCase("authorasc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerAuthorComparator());
+                }
+              else if(vForm.getSortBy().equalsIgnoreCase("authordesc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerAuthorComparator());
+                  Collections.reverse(logs);
+              }
+              else if (vForm.getSortBy().equalsIgnoreCase("creationdateasc")) {
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerCreationDateComparator());
+                }
+              else if(vForm.getSortBy().equalsIgnoreCase("creationdatedesc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerCreationDateComparator());
+                  Collections.reverse(logs);
+              }
+              else if(vForm.getSortBy().equalsIgnoreCase("editorasc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerEditorNameComparator());
+                }
+              else if(vForm.getSortBy().equalsIgnoreCase("editordesc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerEditorNameComparator());
+                  Collections.reverse(logs);
+              }
+              else if(vForm.getSortBy().equalsIgnoreCase("actionasc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerActionComparator());
+                }
+              else if(vForm.getSortBy().equalsIgnoreCase("actiondesc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerActionComparator());
+                  Collections.reverse(logs);
+              }
+              else if(vForm.getSortBy().equalsIgnoreCase("changedateasc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerChangeDateComparator());
+                }
+              else if(vForm.getSortBy().equalsIgnoreCase("changedatedesc")){
+                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerChangeDateComparator());
+                  Collections.reverse(logs);
+              }
+                          else {
+                              if (vForm.getSortBy().equalsIgnoreCase("detaildesc")) {
+                                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode, siteId));
+                                  Collections.reverse(logs);
+                              } else {
+                                  if (vForm.getSortBy().equalsIgnoreCase("detailasc")) {
+                                      Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode, siteId));
+                                  }
+
+                              }
+
+                          }
+        }
     }
 
     public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {

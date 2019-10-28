@@ -360,10 +360,10 @@ public class CompareActivityVersions extends DispatchAction {
         CompareActivityVersionsForm vForm = (CompareActivityVersionsForm) form;
 
         ActivityComparisonResult result = ActivityVersionUtil.compareActivities(vForm.getActivityOneId());
-        if(result!=null) {
+        if (result != null) {
             vForm.setOutputCollectionGrouped(result.getCompareOutput());
             vForm.setActivityName(result.getName());
-        }else{
+        } else {
             vForm.setOutputCollectionGrouped(null);
             vForm.setActivityName(null);
         }

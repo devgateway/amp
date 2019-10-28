@@ -34,7 +34,6 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.DateType;
-import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 import org.hibernate.type.TimestampType;
 
@@ -48,11 +47,12 @@ public final class AuditLoggerUtil {
 
     private static String query;
     private static Logger logger = Logger.getLogger(AuditLoggerUtil.class);
+    private static Integer DAYS_IN_YEAR = 365;
     private AuditLoggerUtil() {
 
     }
     public static void logObject(HttpServletRequest request,
-                                 LoggerIdentifiable o, String action,String additionalDetails) throws DgException {
+                                 LoggerIdentifiable o, String action, String additionalDetails) throws DgException {
 
         Session session;
         TeamMember tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
@@ -98,9 +98,9 @@ public final class AuditLoggerUtil {
     }
 
 
-    public static void logObject(HttpSession hsession,HttpServletRequest request,
+    public static void logObject(HttpSession hsession, HttpServletRequest request,
                                  LoggerIdentifiable o, String action) throws DgException {
-        logObject(request,o, action,null);
+        logObject(request, o, action, null);
     }
 
 
@@ -127,7 +127,7 @@ public final class AuditLoggerUtil {
         return null;
     }
 
-    public static void logUserLogin(HttpServletRequest request,User currentUser,String action){
+    public static void logUserLogin(HttpServletRequest request, User currentUser, String action) {
         Session session = null;
         Transaction tx = null;
         HttpSession hsession = request.getSession();
@@ -161,7 +161,7 @@ public final class AuditLoggerUtil {
         }
     }
 
-    public static void logSentReminderEmails(Session session,User user){
+    public static void logSentReminderEmails(Session session, User user) {
         try {
 
             AmpAuditLogger aal = new AmpAuditLogger();
@@ -188,7 +188,8 @@ public final class AuditLoggerUtil {
         }
     }
 
-    public static void logActivityUpdate(HttpServletRequest request, AmpActivityVersion activity, List<String> details){
+    public static void logActivityUpdate(HttpServletRequest request, AmpActivityVersion activity,
+                                         List<String> details) {
         logActivityUpdate(request, activity, details, null);
     }
     /**
@@ -227,16 +228,16 @@ public final class AuditLoggerUtil {
                         .iterator().next();
             }
 
-            StringBuilder message=new StringBuilder();
+            StringBuilder message = new StringBuilder();
             for(String detail:details){
                 message.append(detail+" ");
             }
             AmpAuditLogger aal = new AmpAuditLogger();
-            if(existentLoggerObj!=null){
+            if (existentLoggerObj != null) {
                 aal.setAuthorEmail(existentLoggerObj.getAuthorEmail());
                 aal.setAuthorName(existentLoggerObj.getAuthorName());
                 aal.setLoggedDate(existentLoggerObj.getLoggedDate());
-            } else{
+            } else {
                 aal.setAuthorName(tm.getMemberName());
                 aal.setAuthorEmail(tm.getEmail());
                 aal.setLoggedDate(ts);
@@ -435,8 +436,8 @@ public final class AuditLoggerUtil {
 
         try {
             session = PersistenceManager.getSession();
-            qryStr = "select f from " +
-                    AmpAuditLogger.class.getName()
+            qryStr = "select f from "
+                    + AmpAuditLogger.class.getName()
                     + " f where f.modifyDate >= :dateParam order by loggedDate desc";
             qry = session.createQuery(qryStr);
             qry.setParameter("dateParam",getDateRange(interval),DateType.INSTANCE);
@@ -504,7 +505,7 @@ public final class AuditLoggerUtil {
         query.append(" and t.previous_id is not null");
 
         sqlQuery = session.createSQLQuery(query.toString());
-        sqlQuery.setParameter("yearToDate", getDateRange(365));
+        sqlQuery.setParameter("yearToDate", getDateRange(DAYS_IN_YEAR));
         if (editorName != null) {
             sqlQuery.setParameter("editorName", editorName);
         }

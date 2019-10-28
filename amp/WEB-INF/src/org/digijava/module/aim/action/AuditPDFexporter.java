@@ -104,8 +104,8 @@ public final class AuditPDFexporter {
         for (String key : keyset) {
             List<CompareOutput> nameList = outputCollectionGrouped.get(key);
             CompareOutput comp = nameList.get(VALUE_NAME);
-            generateSimpleCell(mainLayout, ActivityVersionUtil.sanitizeHtmlForExport(key), Element.ALIGN_CENTER, PLAIN_FONT,
-                    null, null);
+            generateSimpleCell(mainLayout, ActivityVersionUtil.sanitizeHtmlForExport(key),
+                    Element.ALIGN_CENTER, PLAIN_FONT, null, null);
             generateSimpleCell(mainLayout, ActivityVersionUtil.sanitizeHtmlForExport(comp.getStringOutput()[1]));
             generateSimpleCell(mainLayout, ActivityVersionUtil.sanitizeHtmlForExport(comp.getStringOutput()[0]));
 

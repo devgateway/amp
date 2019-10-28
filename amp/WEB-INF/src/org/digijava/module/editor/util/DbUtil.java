@@ -75,9 +75,9 @@ public class DbUtil {
         List<Editor> items = new ArrayList<Editor>();
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from " +
-                    Editor.class.getName() +
-                    " e where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language!=:language)");
+            Query q = session.createQuery("from "
+                    + Editor.class.getName()
+                    + " e where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language!=:language)");
 
             q.setString("siteId", site.getSiteId());
             q.setString("editorKey", editorKey);
@@ -206,11 +206,11 @@ public class DbUtil {
         List<Editor> items = new ArrayList<Editor>();
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from " +
-                    Editor.class.getName() +
-                    " e where e.siteId=:siteId and e.groupName=:groupName " +
-                    "and e.language=:language " +
-                    "order by e.orderIndex");
+            Query q = session.createQuery("from "
+                    + Editor.class.getName()
+                    + " e where e.siteId=:siteId and e.groupName=:groupName "
+                    + "and e.language=:language "
+                    + "order by e.orderIndex");
 
             q.setString("siteId", site.getSiteId());
             q.setString("groupName", groupName);
@@ -252,10 +252,10 @@ public class DbUtil {
                 q.setString("editorKey", editorKey);
                 //q.setString("language", language);
                 @SuppressWarnings("unchecked")
-                Collection<Editor> edits=q.list();
+                Collection<Editor> edits = q.list();
                 for (Iterator iterator = edits.iterator(); iterator.hasNext();) {
                     Editor editor = (Editor) iterator.next();
-                    if (editor.getLanguage().equalsIgnoreCase(language) && !"".equalsIgnoreCase(editor.getBody())){
+                    if (editor.getLanguage().equalsIgnoreCase(language) && !"".equalsIgnoreCase(editor.getBody())) {
                         item = editor;
                         break;
                     }
@@ -283,7 +283,7 @@ public class DbUtil {
                 q.setString("siteId", siteId);
                 q.setString("editorKey", editorKey);
                 q.setString("language", language);
-                item = (Editor)q.uniqueResult();
+                item = (Editor) q.uniqueResult();
             }
             catch (ObjectNotFoundException ex1) {
                 logger.error("DbUtil:getEditor:Unable to get Editor item", ex1);
@@ -303,10 +303,10 @@ public class DbUtil {
         Editor item = new Editor();
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from " +
-                    Editor.class.getName() +
-                    " e where (e.siteId=:siteId) and " +
-                    "(e.orderIndex=:orderIndex)");
+            Query q = session.createQuery("from "
+                    + Editor.class.getName()
+                    + " e where (e.siteId=:siteId) and "
+                    + "(e.orderIndex=:orderIndex)");
 
             q.setString("siteId", site.getSiteId());
             q.setInteger("orderIndex", new Integer(orderIndex));
@@ -344,8 +344,8 @@ public class DbUtil {
         Editor item = new Editor();
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from " + Editor.class.getName() +
-                    " e where (e.editorKey=:editorKey) and (e.language=:language)");
+            Query q = session.createQuery("from " + Editor.class.getName()
+                    + " e where (e.editorKey=:editorKey) and (e.language=:language)");
 
             q.setString("editorKey", editorKey);
             q.setString("language", language);
@@ -540,8 +540,8 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery(
-                    "select e.body from " + Editor.class.getName() + " e " +
-                            " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and e.language=:language");
+                    "select e.body from " + Editor.class.getName() + " e "
+                            + " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and e.language=:language");
             //  q.setCacheable(true);
             q.setString("siteId", site.getSiteId());
             q.setString("editorKey", editorKey);
@@ -592,9 +592,9 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
 
             Query q = session.createQuery(
-                    "select e.title from " +
-                            Editor.class.getName() + " e, " +
-                            " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language=:language)");
+                    "select e.title from "
+                            + Editor.class.getName() + " e, "
+                            + " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language=:language)");
 
             q.setCacheable(true);
             q.setString("siteId", site.getSiteId());

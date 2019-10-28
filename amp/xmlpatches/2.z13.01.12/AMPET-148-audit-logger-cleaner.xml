@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMPET-148</jira>
+    <keyword>Global settings for Automatic Audit Logger Cleanup</keyword>
+    <author>Wessi</author>
+    <description>Add possible values, insert into amp_global_settings</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+
+                INSERT INTO util_global_settings_possible_(setting_name, value_id, value_shown) VALUES
+                ('Automatic Audit Logger Cleanup', -1, 'Disabled'),
+                ('Automatic Audit Logger Cleanup', 30, '30 Days'),
+                ('Automatic Audit Logger Cleanup', 60, '60 Days'),
+                ('Automatic Audit Logger Cleanup', 90, '90 Days'),
+                ('Automatic Audit Logger Cleanup', 120, '120 Days'),
+                ('Automatic Audit Logger Cleanup', 150, '150 Days'),
+                ('Automatic Audit Logger Cleanup', 180, '180 Days'),
+                ('Automatic Audit Logger Cleanup', 210, '210 Days'),
+                ('Automatic Audit Logger Cleanup', 240, '240 Days'),
+                ('Automatic Audit Logger Cleanup', 270, '270 Days'),
+                ('Automatic Audit Logger Cleanup', 300, '300 Days'),
+                ('Automatic Audit Logger Cleanup', 330, '330 Days'),
+                ('Automatic Audit Logger Cleanup', 365, '365 Days');
+
+                UPDATE amp_global_settings SET possiblevalues = 'v_g_settings_audit_logger_cleanup' WHERE possiblevalues = 't_audit_trial_clenaup';
+
+                UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname = 'Recreate the views on the next server restart';
+
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

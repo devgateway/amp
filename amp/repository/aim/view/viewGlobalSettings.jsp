@@ -469,6 +469,17 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 
 																			</logic:iterate>
 			                                    </html:select>
+												  <%
+													  if (!globalSett.getGlobalSettingsValue().equalsIgnoreCase("-1") && globalSett.getGlobalSettingsName()
+															  .equals(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP)) {
+														  String sdate = org.digijava.module.common.util.DateTimeUtil
+																  .formatDate(AuditCleaner.getInstance().getNextcleanup());
+												  %>
+												  <br>
+												  <digi:trn key="aim:globalSettings:NextCleanUp">Next Audit Cleanup:</digi:trn><%=" " + sdate%>
+												  <%
+													  }
+												  %>
 			                                    <%
 			                                    	}
 			                                    %>										
@@ -713,54 +724,6 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 					                                    		%>
 				                                    		</select>
 				                                    	</c:when>
-				                                    	<c:when test='${type == "t_audit_trial_clenaup"}'>
-				                                    	<%
-				                                    		String peridiodvalues = globalSett
-				                                    												.getGlobalSettingsValue();
-				                                    										int selected = Integer
-				                                    												.parseInt(peridiodvalues);
-				                                    	%>
-															<select styleClass="inp-text" name="gsfValue" >
-															<option value="-1"><digi:trn key="aim:globalSettings:Disabled">Disabled</digi:trn></option>
-															<%
-																for (int k = 30; k <= 90; k += 30) {
-																									if (k == selected) {
-															%>
-				                                    					<option value="<%=k%>" selected="selected"><%=k%>
-				                                    						<digi:trn key="aim:globalSettings:Days"> 
-				                                    							Days
-				                                    						</digi:trn>
-				                                    					</option>
-				                                    						 
-				                                    			<%
-				                                    						 				                                    				} else {
-				                                    						 				                                    			%>
-					                                    				<option value="<%=k%>"><%=k%>
-					                                    					<digi:trn key="aim:globalSettings:Days"> 
-				                                    							Days
-				                                    						</digi:trn>
-					                                    				</option>
-					                                    		<%
-					                                    			}
-					                                    											}
-					                                    		%>
-															</select>
-															<%
-																if (!globalSett
-																										.getGlobalSettingsValue()
-																										.equalsIgnoreCase("-1")) {
-																									String sdate = org.digijava.module.common.util.DateTimeUtil
-																											.formatDate(AuditCleaner
-																													.getInstance()
-																													.getNextcleanup());
-															%>
-																<br>
-																<digi:trn key="aim:globalSettings:NextCleanUp">Next Audit Cleanup:</digi:trn>
-																<%=" " + sdate%>
-															<%
-																}
-															%>
-														</c:when>
 				                                    	
 														<c:when test='${type == "t_components_sort"}'>
 															<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>

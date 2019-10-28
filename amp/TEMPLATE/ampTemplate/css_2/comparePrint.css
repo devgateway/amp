@@ -1,0 +1,5 @@
+.yui-nav {visibility:hidden;}
+button, html input[type="button"] {visibility:hidden;}
+@page {
+    margin: 2cm;
+}

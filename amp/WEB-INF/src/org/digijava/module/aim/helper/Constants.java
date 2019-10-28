@@ -448,4 +448,5 @@ public class Constants
 
 
     public static final String AUTOMATIC_VALIDATION_JOB_CLASS_NAME = "org.digijava.module.message.jobs.ActivityAutomaticValidationJob" ;
+    public static final Integer AUDIT_LOGGER_BATCH_SIZE = 10;
 }

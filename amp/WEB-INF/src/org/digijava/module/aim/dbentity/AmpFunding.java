@@ -183,7 +183,10 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
             if (auxDetail.getContract() != null) ret.append("-" + auxDetail.getContract().getId());
             ret.append("-" + auxDetail.getExpCategory());
             ret.append("-" + auxDetail.getDisbursementOrderRejected());
-            if (auxDetail.getRecipientOrg() != null) ret.append("- recipient " + auxDetail.getRecipientOrg().getAmpOrgId() + " with role of " + auxDetail.getRecipientRole().getAmpRoleId());
+            if (auxDetail.getRecipientOrg() != null && auxDetail.getRecipientRole() != null) {
+                ret.append("- recipient " + auxDetail.getRecipientOrg().getAmpOrgId()
+                        + " with role of " + auxDetail.getRecipientRole().getAmpRoleId());
+            }
         }
 
         // Compare fields from AmpFundingMTEFProjection.
@@ -355,7 +358,10 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
             }
             if (!error) {
                 String recipientInfo = "";
-                if (auxDetail.getRecipientOrg() != null) recipientInfo = String.format(" to %s as %s", auxDetail.getRecipientOrg().getName(), auxDetail.getRecipientRole().getName());
+                if (auxDetail.getRecipientOrg() != null && auxDetail.getRecipientRole() != null) {
+                    recipientInfo = String.format(" to %s as %s", auxDetail.getRecipientOrg().getName(),
+                            auxDetail.getRecipientRole().getName());
+                }
                 String adjustment = auxDetail.getAdjustmentType().getValue();
                 auxOutDetail = out.getOutputs().get(out.getOutputs().size() - 1);
                 auxOutDetail.getOutputs().add(new Output(null, new String[]{""}, new Object[]{adjustment, " - ", auxDetail.getTransactionAmount(), " ", auxDetail.getAmpCurrencyId(), " - ", auxDetail.getTransactionDate(), extraValues + recipientInfo}));

@@ -60,8 +60,8 @@ import org.hibernate.Transaction;
 public class DbUtil {
 
     private static Logger logger = Logger.getLogger(DbUtil.class);
-    
-     /**
+
+    /**
      * Get editor item by key from database
      *
      * @param key
@@ -75,9 +75,9 @@ public class DbUtil {
         List<Editor> items = new ArrayList<Editor>();
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from " +
-                                          Editor.class.getName() +
-                                          " e where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language!=:language)");
+            Query q = session.createQuery("from "
+                    + Editor.class.getName()
+                    + " e where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language!=:language)");
 
             q.setString("siteId", site.getSiteId());
             q.setString("editorKey", editorKey);
@@ -88,7 +88,7 @@ public class DbUtil {
         catch (Exception ex) {
             logger.debug("Unable to get editor item from database ", ex);
             throw new EditorException("Unable to get editor item from database",
-                                      ex);
+                    ex);
         }
 
         return items;
@@ -110,8 +110,8 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery("from "
-                            + Editor.class.getName()
-                            + " e where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
+                    + Editor.class.getName()
+                    + " e where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
 
             q.setString("siteId", site.getSiteId());
             q.setString("editorKey", editorKey);
@@ -124,8 +124,8 @@ public class DbUtil {
         }
 
         return items;
-    }    
-    
+    }
+
     public static List<Editor> getEditorList(String editorKey, Site site, Session session) throws EditorException {
         List<Editor> items = new ArrayList<Editor>();
         try {
@@ -141,10 +141,10 @@ public class DbUtil {
         }
 
         return items;
-    }    
-    
+    }
+
     public static void deleteEditor(Editor ed) throws
-        EditorException {
+            EditorException {
         Transaction tx = null;
         Session session = null;
         try {
@@ -158,7 +158,7 @@ public class DbUtil {
 
             logger.debug("Unable to delete editor", ex);
             throw new EditorException(
-                "Unable to delete editor", ex);
+                    "Unable to delete editor", ex);
         }
     }
 
@@ -169,16 +169,16 @@ public class DbUtil {
      * @return
      * @throws EditorException
      */
-    
+
     public static List<Editor> getSiteEditorList(Site site) throws
-        EditorException {
+            EditorException {
 
         Session session = null;
         List<Editor> items = new ArrayList<Editor>();
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery("from " + Editor.class.getName() +
-                " e where (e.siteId=:siteId) order by e.orderIndex");
+                    " e where (e.siteId=:siteId) order by e.orderIndex");
 
             q.setString("siteId", site.getSiteId());
 
@@ -194,7 +194,7 @@ public class DbUtil {
         catch (Exception ex) {
             logger.debug("Unable to get editor list from database ", ex);
             throw new EditorException("Unable to get editor item from database",
-                                      ex);
+                    ex);
         }
 
         return items;
@@ -206,11 +206,11 @@ public class DbUtil {
         List<Editor> items = new ArrayList<Editor>();
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from " +
-                                          Editor.class.getName() +
-                " e where e.siteId=:siteId and e.groupName=:groupName " +
-                "and e.language=:language " +
-                "order by e.orderIndex");
+            Query q = session.createQuery("from "
+                    + Editor.class.getName()
+                    + " e where e.siteId=:siteId and e.groupName=:groupName "
+                    + "and e.language=:language "
+                    + "order by e.orderIndex");
 
             q.setString("siteId", site.getSiteId());
             q.setString("groupName", groupName);
@@ -248,18 +248,18 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             try {
                 Query q = session.createQuery("from " + Editor.class.getName() +" e where e.siteId=:siteId and e.editorKey=:editorKey");
-                    q.setString("siteId", site.getSiteId());
-                    q.setString("editorKey", editorKey);
-                    //q.setString("language", language);
-                    @SuppressWarnings("unchecked")
-                    Collection<Editor> edits=q.list();
-                    for (Iterator iterator = edits.iterator(); iterator.hasNext();) {
-                        Editor editor = (Editor) iterator.next();
-                        if (editor.getLanguage().equalsIgnoreCase(language) && !"".equalsIgnoreCase(editor.getBody())){
-                            item = editor;
-                            break;
-                        }
+                q.setString("siteId", site.getSiteId());
+                q.setString("editorKey", editorKey);
+                //q.setString("language", language);
+                @SuppressWarnings("unchecked")
+                Collection<Editor> edits = q.list();
+                for (Iterator iterator = edits.iterator(); iterator.hasNext();) {
+                    Editor editor = (Editor) iterator.next();
+                    if (editor.getLanguage().equalsIgnoreCase(language) && !"".equalsIgnoreCase(editor.getBody())) {
+                        item = editor;
+                        break;
                     }
+                }
             }
             catch (ObjectNotFoundException ex1) {
                 logger.error("DbUtil:getEditor:Unable to get Editor item", ex1);
@@ -271,7 +271,7 @@ public class DbUtil {
         }
         return item;
     }
-    
+
     public static Editor getEditorForUpdate(String siteId, String editorKey,String language) throws EditorException {
 
         Session session = null;
@@ -280,10 +280,10 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             try {
                 Query q = session.createQuery("from " + Editor.class.getName() +" e where e.siteId=:siteId and e.editorKey=:editorKey and e.language=:language");
-                    q.setString("siteId", siteId);
-                    q.setString("editorKey", editorKey);
-                    q.setString("language", language);
-                    item = (Editor)q.uniqueResult();
+                q.setString("siteId", siteId);
+                q.setString("editorKey", editorKey);
+                q.setString("language", language);
+                item = (Editor) q.uniqueResult();
             }
             catch (ObjectNotFoundException ex1) {
                 logger.error("DbUtil:getEditor:Unable to get Editor item", ex1);
@@ -303,10 +303,10 @@ public class DbUtil {
         Editor item = new Editor();
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from " +
-                                          Editor.class.getName() +
-                                          " e where (e.siteId=:siteId) and " +
-                                          "(e.orderIndex=:orderIndex)");
+            Query q = session.createQuery("from "
+                    + Editor.class.getName()
+                    + " e where (e.siteId=:siteId) and "
+                    + "(e.orderIndex=:orderIndex)");
 
             q.setString("siteId", site.getSiteId());
             q.setInteger("orderIndex", new Integer(orderIndex));
@@ -344,8 +344,8 @@ public class DbUtil {
         Editor item = new Editor();
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from " + Editor.class.getName() + 
-                " e where (e.editorKey=:editorKey) and (e.language=:language)");
+            Query q = session.createQuery("from " + Editor.class.getName()
+                    + " e where (e.editorKey=:editorKey) and (e.language=:language)");
 
             q.setString("editorKey", editorKey);
             q.setString("language", language);
@@ -366,9 +366,9 @@ public class DbUtil {
         return item;
     }
 
-   
-    
-    
+
+
+
     /**
      * Update editor
      *
@@ -398,12 +398,12 @@ public class DbUtil {
                 }
             }
             throw new EditorException(
-                "Unable to update editor information into database", ex);
+                    "Unable to update editor information into database", ex);
         }
     }
 
     public static void updateEditorList(Collection<Editor> editors) throws
-        EditorException {
+            EditorException {
 
         Session session = null;
         Transaction tx = null;
@@ -420,7 +420,7 @@ public class DbUtil {
             logger.debug("Unable to update editor information into database", ex);
 
             throw new EditorException(
-                "Unable to update editor information into database", ex);
+                    "Unable to update editor information into database", ex);
         }
     }
 
@@ -429,9 +429,8 @@ public class DbUtil {
      * Save editor
      *
      * @param editor
-     * @throws EditorException
      */
-    public static void saveEditor(Editor editor) throws EditorException {
+    public static void saveEditor(Editor editor) {
         PersistenceManager.getSession().save(editor);
     }
 
@@ -457,7 +456,7 @@ public class DbUtil {
 
         // get module instance
         ModuleInstance moduleInstance = RequestUtils.getRealModuleInstance(request);
-        // TODO: not sure if moduleInstance is now always false and we can simply replace with TLSUtils.getSite()  
+        // TODO: not sure if moduleInstance is now always false and we can simply replace with TLSUtils.getSite()
         Site site = moduleInstance == null ? TLSUtils.getSite() : moduleInstance.getSite();
 
         editor.setSite(site);
@@ -477,31 +476,44 @@ public class DbUtil {
     }
 
     /**
-     * Retrieves editor body text. Gives priority to chosen language, else returns English, else returns any, else returns null
-     * @param siteId
-     * @param editorKey
-     * @param language
-     * @return
+     *
+     * @param site Site object for the current deployed amp
+     * @param editorKey editor key to fetch the body for
+     * @param language lanaguage of the body
+     * @return the body for the given parameters
      * @throws EditorException
      */
-    public static String getEditorBody(Site site, String editorKey, String language) throws EditorException
-    {
+    public static String getEditorBody(Site site, String editorKey, String language) throws EditorException {
+        return getEditorBody(site.getSiteId(),  editorKey,  language);
+    }
+
+    /**
+     * Retrieves editor body text. Gives priority to chosen language, else returns English, else returns any,
+     *  else returns null
+     * @param siteId
+     * @param editorKey editor key to fetch the body for
+     * @param language language of the body
+     * @return the body for the given parameters
+     * @throws EditorException
+     */
+    public static String getEditorBody(String siteId, String editorKey, String language) throws EditorException {
         String bodyEn = null; // translation in English
         String bodyOther = null; // translation in any language which is not English and is not the requested one
-    
-        String stat = String.format("SELECT body, language FROM dg_editor WHERE site_id = '%s' AND editor_key = '%s'", site.getSiteId(), editorKey);
-        List<Object[]> res = PersistenceManager.getSession().createSQLQuery(stat).list();
+
+        String stat = String.format("SELECT body, language FROM dg_editor WHERE site_id = '%s' AND editor_key = '%s'",
+                siteId, editorKey);
+        List<Object[]> res = PersistenceManager.getRequestDBSession().createSQLQuery(stat).list();
         for(Object[] entry:res)
         {
             String editorBody = PersistenceManager.getString(entry[0]);
             String editorLanguage = PersistenceManager.getString(entry[1]);
-                
+
             if ("".equals(editorBody))
                 continue; // ignore this one
-                
+
             if (editorLanguage.equalsIgnoreCase(language))
                 return editorBody;
-            
+
             if (editorLanguage.equalsIgnoreCase("en"))
                 bodyEn = editorBody;
             else
@@ -511,7 +523,7 @@ public class DbUtil {
             return bodyEn;
         return bodyOther;
     }
-    
+
     /**
      * Retrieves editor body text.
      * @param siteId
@@ -528,9 +540,9 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery(
-                "select e.body from " + Editor.class.getName() + " e " +
-                " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and e.language=:language");
-          //  q.setCacheable(true);
+                    "select e.body from " + Editor.class.getName() + " e "
+                            + " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and e.language=:language");
+            //  q.setCacheable(true);
             q.setString("siteId", site.getSiteId());
             q.setString("editorKey", editorKey);
             q.setString("language", language);
@@ -543,15 +555,15 @@ public class DbUtil {
 
         return body;
     }
-    
+
     /**
      * Returns editor body text but strips out all HTML tags.
-     * Uses {@link #getEditorBody(String, String, String)} method to 
+     * Uses {@link #getEditorBody(String, String, String)} method to
      * retrieve initial body text and then uses regexps to strip tags.
-     * Note that to strip all possible HTML tags batch processing is used to 
+     * Note that to strip all possible HTML tags batch processing is used to
      * avoid stack overflow problems which happens when processing too huge regexp.
      * Solution copied from AMP v2 Help+Lucene integration solution.
-     * Check AMP-9328 for more details. 
+     * Check AMP-9328 for more details.
      * @param siteId
      * @param editorKey
      * @param language
@@ -580,9 +592,9 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
 
             Query q = session.createQuery(
-                "select e.title from " +
-                Editor.class.getName() + " e, " +
-                " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language=:language)");
+                    "select e.title from "
+                            + Editor.class.getName() + " e, "
+                            + " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language=:language)");
 
             q.setCacheable(true);
             q.setString("siteId", site.getSiteId());
@@ -611,7 +623,7 @@ public class DbUtil {
         catch (Exception ex) {
             logger.debug("Unable to get editor title from database", ex);
             throw new EditorException(
-                "Unable to get editor title from database", ex);
+                    "Unable to get editor title from database", ex);
         }
 
         return title;

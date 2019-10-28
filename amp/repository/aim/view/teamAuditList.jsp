@@ -1,13 +1,17 @@
-<%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
+<%@ page pageEncoding="UTF-8"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
-<script language="javascript">
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<jsp:include page="/repository/aim/view/scripts/auditFilter.jsp"  />
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/compareAcivity.js"/>"/>
+</script>
+<script language="JavaScript">
 function showUser(email){
 	if (email != ""){
 		<digi:context name="information" property="context/module/moduleinstance/userProfile.do" />
@@ -20,8 +24,22 @@ function showUser(email){
 	}
 }
 
+function resetSearch() {
+	document.getElementById("userId").selectedIndex = 0;
+	document.getElementById("selectedDateFromText").value="";
+	document.getElementById("selectedDateToText").value="";
+	document.aimTeamAuditListForm.action = "/aim/teamAuditList.do?action=reset";
+	document.aimTeamAuditListForm.submit();
+}
+function submitFilter() {
+	document.aimTeamAuditListForm.submit();
+}
 
 </script>
+<% if (FeaturesUtil.isVisibleFeature("Activity Diferrence") ){%>
+<c:set var="isActivityDifferenceEnabled" value="true" scope="request"/>
+<%}%>
+
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
 <c:set target="${bcparams}" property="dest" value="teamLead"/>
@@ -64,12 +82,87 @@ function showUser(email){
 										</tr>
 										<tr>
 											<td valign="top">
-												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">	
-										
+												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 									<jsp:include page="teamSetupMenu.jsp"  />
-										
+													<c:if test="${isActivityDifferenceEnabled =='true'}">
+													<input type="button" value="Compare All"
+														   title="<digi:trn>Click here to view full list of activities compared to its previous versions that were editied in the last year</digi:trn>"
+														   onclick="javascript:compareAll()" class="dr-menu"
+														   style="cursor: pointer; font-style: italic; float: right; margin: 0% 1.5% 1% 1.5%; ">
+													<span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleFilterSettings();" id="displayFilterButton">
+					<c:set var="hiddenStyle" value="display:none;"/>
+					<c:set var="settingsTitle">
+						<digi:trn key="aim:Showfilteroptions">Show Filter options</digi:trn>
+					</c:set>
+					  <c:if test="${(not empty aimTeamAuditListForm.selectedUser and aimTeamAuditListForm.selectedUser !='-1' )
+					   or (not empty aimTeamAuditListForm.selectedTeam )
+					  or (not empty aimTeamAuditListForm.selectedDateFrom ) or (not empty aimTeamAuditListForm.selectedDateTo )}">
+						  <c:set var="hiddenStyle" value="display:inline-flex;"/>
+						  <c:set var="settingsTitle">
+							  <digi:trn key="aim:Showfilteroptions">Hide Filter options</digi:trn>
+						  </c:set>
+					  </c:if>
 
-							<table class="inside" width="970" cellpadding="0" cellspacing="0">
+				  <c:out value="${settingsTitle}"/> </span>
+													&nbsp;<br>
+													<div style="<c:out value ="${hiddenStyle}"/>background-color:#ffffff;padding:2px; width: 100%" id="currentFilterSettings" >
+														<div class="divTable">
+															<div class="divTableBody">
+																<div class="divTableRow">
+																	<div class="divTableCell divTableCellLeft" ><digi:trn>User:</digi:trn></div>
+																	<div class="divTableCell"><html:select property="selectedUser" styleClass="inp-text" styleId="userId">
+																		<html:option value="-1"><digi:trn>Select User</digi:trn> </html:option>
+																		<html:options property="userList"></html:options>
+
+																	</html:select></div>
+																</div>
+																<div class="divTableRow">
+																	<div class="divTableCell divTableCellLeft"><digi:trn>Team:</digi:trn></div>
+																	<div class="divTableCell"><html:text property="teamName" styleClass="inp-text" styleId="teamId" readonly="true">
+																	</html:text></div>
+																</div>
+																<c:set var="dateTr">
+																	<digi:trn>Date</digi:trn>
+																</c:set>
+																<div class="divTableRow" >
+																	<div class="divTableCell divTableCellLeft" ><c:out value="${dateTr}"/> <digi:trn>From</digi:trn>:</div>
+																	<div id="dateFrom">
+																		<div class="divTableCell" id="selectedDateFrom"><html:text property="selectedDateFrom" styleClass="inp-text" readonly="true" styleId="selectedDateFromText"/>
+																			<a id="date2" href='javascript:pickDateById2("dateFrom","selectedDateFromText",true,"tl")'>
+																				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"/>
+																			</a>
+																			<a id="clear2" href='javascript:clearDate("selectedDateFromText")'>
+																				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this date"/>
+																			</a>
+																		</div>
+																	</div>
+																</div>
+																<div class="divTableRow">
+																	<div class="divTableCell divTableCellLeft" ><c:out value="${dateTr}"/> <digi:trn>To</digi:trn>:</div>
+																	<div id="dateTo">
+																		<div class="divTableCell" id="selectedDateTo">                                 	<html:text property="selectedDateTo" styleClass="inp-text" readonly="true" styleId="selectedDateToText"/>
+																			<a id="date2" href='javascript:pickDateById2("dateTo","selectedDateToText",true,"tl")'>
+																				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"/>
+																			</a>
+																			<a id="clear2" href='javascript:clearDate("selectedDateToText")'>
+																				<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this date"/>
+																			</a>
+																		</div>
+																	</div>
+																</div>
+																<div class="divTableRow">
+																	<div class="divTableCell divTableCellLeft"><input  class="dr-menu" type="button" onclick="submitFilter()" value="<digi:trn>Apply</digi:trn>"></div>
+																	<div class="divTableCell"><input class="dr-menu" type="button" value="<digi:trn>Reset</digi:trn>" onclick="document.aimTeamAuditListForm.reset();resetSearch()"></div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<br>
+												</c:if>
+
+
+												<table class="inside" width="970" cellpadding="0" cellspacing="0">
 								<tr>
 							    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">
@@ -215,10 +308,15 @@ function showUser(email){
 											</c:if>
 										</b>
 									</td>
+									<c:if test="${isActivityDifferenceEnabled == 'true'}">
+									<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif"
+										class="inside"><b class="ins_title"> <digi:trn
+											key="aim:action"> View differences</digi:trn>
+									</b></td>
+									</c:if>
 								</tr>
-								
-								
-								<logic:iterate name="aimTeamAuditListForm" property="logs" id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
+
+													<logic:iterate name="aimTeamAuditListForm" property="logs" id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
 									<tr>
 										<td width="280" class="inside" title="${log.objectName}">
 											<c:choose>
@@ -276,6 +374,14 @@ function showUser(email){
 												<digi:trn key="admin:update">Update</digi:trn>
 											</logic:equal>								  
 										</td>
+										<c:if test="${isActivityDifferenceEnabled == 'true'}">
+											<td width="50" class="inside">
+												<div style="text-align:center">
+													<input type="button" title="<digi:trn>Click here to compare with previous version</digi:trn>"
+														   value="<digi:trn>Compare</digi:trn>" onclick="javascript:viewDifferences(${log.objectId})" class="dr-menu">
+												</div>
+											</td>
+										</c:if>
 									</tr>
 								</logic:iterate>
 							</table>

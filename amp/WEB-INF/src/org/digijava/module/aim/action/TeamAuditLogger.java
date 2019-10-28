@@ -83,7 +83,7 @@ public class TeamAuditLogger extends MultiAction {
                 Integer pageNum = new Integer(i + 1);
                 pages.add(pageNum);
             }
-        }else{
+        } else {
             pages = new ArrayList<AmpAuditLogger>();
         }
 
@@ -147,12 +147,6 @@ public class TeamAuditLogger extends MultiAction {
 
     public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                     HttpServletResponse response) throws Exception {
-        // TODO Auto-generated method stub
-        //return modeNew(mapping, form, request, response);
-        if (request.getParameter("action") != null)
-        {
-//              if(request.getParameter("action").compareTo("add")==0) return modeAddTemplate(mapping, form, request, response);
-        }
         return mapping.findForward("forward");
     }
 

@@ -358,7 +358,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
             }
             if (!error) {
                 String recipientInfo = "";
-                if (auxDetail.getRecipientOrg() != null && auxDetail.getRecipientRole() != null){
+                if (auxDetail.getRecipientOrg() != null && auxDetail.getRecipientRole() != null) {
                     recipientInfo = String.format(" to %s as %s", auxDetail.getRecipientOrg().getName(),
                             auxDetail.getRecipientRole().getName());
                 }

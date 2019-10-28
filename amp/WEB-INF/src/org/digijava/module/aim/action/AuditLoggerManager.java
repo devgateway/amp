@@ -43,7 +43,7 @@ public class AuditLoggerManager extends MultiAction {
 
                 OutputStream out = response.getOutputStream();
                 try {
-                    XlsMaker(vForm, request, response).write(out);
+                    xlsMaker(vForm, request, response).write(out);
                     out.flush();
                     out.close();
                     return null;
@@ -118,94 +118,80 @@ public class AuditLoggerManager extends MultiAction {
     }
 
     private void applySortBy(HttpServletRequest request, AuditLoggerManagerForm vForm, List<AmpAuditLogger> logs) {
-        if(vForm.getSortBy()!=null){
-                    Long siteId = RequestUtils.getSiteDomain(request).getSite().getId();
-                    String langCode = RequestUtils.getNavigationLanguage(request).getCode();
-              if(vForm.getSortBy().equalsIgnoreCase("nameasc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerNameComparator()) ;
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("namedesc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerNameComparator());
-                  Collections.reverse(logs);
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("typeasc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerTypeComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("typedesc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerTypeComparator());
-                  Collections.reverse(logs);
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("teamasc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerTeamComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("teamdesc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerTeamComparator());
-                  Collections.reverse(logs);
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("authorasc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerAuthorComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("authordesc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerAuthorComparator());
-                  Collections.reverse(logs);
-              }
-              else if (vForm.getSortBy().equalsIgnoreCase("creationdateasc")) {
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerCreationDateComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("creationdatedesc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerCreationDateComparator());
-                  Collections.reverse(logs);
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("editorasc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerEditorNameComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("editordesc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerEditorNameComparator());
-                  Collections.reverse(logs);
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("actionasc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerActionComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("actiondesc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerActionComparator());
-                  Collections.reverse(logs);
-              }
-              else if(vForm.getSortBy().equalsIgnoreCase("changedateasc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerChangeDateComparator());
-                }
-              else if(vForm.getSortBy().equalsIgnoreCase("changedatedesc")){
-                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerChangeDateComparator());
-                  Collections.reverse(logs);
-              }
-                          else {
-                              if (vForm.getSortBy().equalsIgnoreCase("detaildesc")) {
-                                  Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode, siteId));
-                                  Collections.reverse(logs);
-                              } else {
-                                  if (vForm.getSortBy().equalsIgnoreCase("detailasc")) {
-                                      Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode, siteId));
-                                  }
+        if (vForm.getSortBy() != null) {
+            Long siteId = RequestUtils.getSiteDomain(request).getSite().getId();
+            String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+            if (vForm.getSortBy().equalsIgnoreCase("nameasc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerNameComparator());
+            } else if (vForm.getSortBy().equalsIgnoreCase("namedesc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerNameComparator());
+                Collections.reverse(logs);
+            } else if (vForm.getSortBy().equalsIgnoreCase("typeasc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerTypeComparator());
+            } else if (vForm.getSortBy().equalsIgnoreCase("typedesc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerTypeComparator());
+                Collections.reverse(logs);
+            } else if (vForm.getSortBy().equalsIgnoreCase("teamasc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerTeamComparator());
+            } else if (vForm.getSortBy().equalsIgnoreCase("teamdesc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerTeamComparator());
+                Collections.reverse(logs);
+            } else if (vForm.getSortBy().equalsIgnoreCase("authorasc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerAuthorComparator());
+            } else if (vForm.getSortBy().equalsIgnoreCase("authordesc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerAuthorComparator());
+                Collections.reverse(logs);
+            } else if (vForm.getSortBy().equalsIgnoreCase("creationdateasc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerCreationDateComparator());
+            } else if (vForm.getSortBy().equalsIgnoreCase("creationdatedesc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerCreationDateComparator());
+                Collections.reverse(logs);
+            } else if (vForm.getSortBy().equalsIgnoreCase("editorasc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerEditorNameComparator());
+            } else if (vForm.getSortBy().equalsIgnoreCase("editordesc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerEditorNameComparator());
+                Collections.reverse(logs);
+            } else if (vForm.getSortBy().equalsIgnoreCase("actionasc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerActionComparator());
+            } else if (vForm.getSortBy().equalsIgnoreCase("actiondesc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerActionComparator());
+                Collections.reverse(logs);
+            } else if (vForm.getSortBy().equalsIgnoreCase("changedateasc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerChangeDateComparator());
+            } else if (vForm.getSortBy().equalsIgnoreCase("changedatedesc")) {
+                Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerChangeDateComparator());
+                Collections.reverse(logs);
+            } else {
+                if (vForm.getSortBy().equalsIgnoreCase("detaildesc")) {
+                    Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode, siteId));
+                    Collections.reverse(logs);
+                } else {
+                    if (vForm.getSortBy().equalsIgnoreCase("detailasc")) {
+                        Collections.sort(logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode, siteId));
+                    }
 
-                              }
+                }
 
-                          }
+            }
         }
     }
 
-    public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+                                    HttpServletResponse response) throws Exception {
         return mapping.findForward("forward");
     }
     
-    private HSSFWorkbook XlsMaker( AuditLoggerManagerForm form, HttpServletRequest request, HttpServletResponse response) {
+    private HSSFWorkbook xlsMaker(AuditLoggerManagerForm form, HttpServletRequest request,
+                                  HttpServletResponse response) {
         int interval = Integer.parseInt(form.getFrecuency());
-        Collection<AmpAuditLogger> Xlslogs=AuditLoggerUtil.getLogByPeriod(interval);
+        Collection<AmpAuditLogger> xlslogs = AuditLoggerUtil.getLogByPeriod(interval);
 
         HSSFWorkbook wb = new HSSFWorkbook();
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "inline; filename=Audit-logger.xls");
         HSSFSheet sheet = wb.createSheet("Audit-logger.xls");
         
-        HSSFRow row = sheet.createRow((short)(0));
+        HSSFRow row = sheet.createRow((short) (0));
         HSSFRichTextString str = null;
         HSSFFont titlefont = wb.createFont();
 
@@ -233,7 +219,7 @@ public class AuditLoggerManager extends MultiAction {
         
         style.setFont(font);
         int i = 1;
-        for (Iterator iterator = Xlslogs.iterator(); iterator.hasNext();) {
+        for (Iterator iterator = xlslogs.iterator(); iterator.hasNext();) {
             AmpAuditLogger ampAuditLogger = (AmpAuditLogger) iterator.next();
             row = sheet.createRow((short)(i));
             

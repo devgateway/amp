@@ -47,7 +47,7 @@ public final class AuditLoggerUtil {
 
     private static String query;
     private static Logger logger = Logger.getLogger(AuditLoggerUtil.class);
-    private static Integer DAYS_IN_YEAR = 365;
+    private static final Integer DAYS_IN_YEAR = 365;
     private AuditLoggerUtil() {
 
     }

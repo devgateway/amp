@@ -306,6 +306,8 @@ public class ActivityUtil {
             saveActivityResources(a, session);
             saveActivityGPINiResources(a, session);
             saveComments(a, session, draft);
+        } else {
+            updateFiscalYears(a);
         }
         saveEditors(session, createNewVersion, editorStore, site);
 
@@ -316,7 +318,6 @@ public class ActivityUtil {
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
         saveStructures(a, session);
-        updateFiscalYears(a);
 
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version

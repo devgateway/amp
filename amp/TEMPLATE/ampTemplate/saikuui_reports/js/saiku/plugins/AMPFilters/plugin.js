@@ -135,7 +135,7 @@ var AMPFilters = Backbone.View.extend({
 
 		});
 
-Saiku.events.bind('render:end', function(session) {
+Saiku.events.bind('session:new', function(session) {
 	function new_workspace(args) {
 		Saiku.logger.log("AMPFilters.new_workspace");
 		if (typeof args.workspace.amp_filters == "undefined") {

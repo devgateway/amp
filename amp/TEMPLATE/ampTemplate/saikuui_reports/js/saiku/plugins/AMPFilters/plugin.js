@@ -58,9 +58,10 @@ var AMPFilters = Backbone.View.extend({
 				Saiku.logger.log("AMPFilters.parseSavedFilters");
 		        if (window.currentFilter !== undefined) {
 		            window.currentFilter.loaded.done(function() {
-			            var auxFilters = obj.workspace.query.get('filters');
+			            var auxFilters = {filters: obj.workspace.query.get('filters')};;
 			            auxFilters.includeLocationChildren = obj.workspace.query.get('includeLocationChildren');
-			            window.currentFilter.deserialize({filters: auxFilters}, {
+						auxFilters['include-location-children'] = obj.workspace.query.get('includeLocationChildren');
+			            window.currentFilter.deserialize(auxFilters, {
 			            	silent : true
 			            });
 		            });		            

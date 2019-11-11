@@ -42,6 +42,7 @@ module.exports = Backbone.View.extend({
 
     if (!_.isEmpty(content)) {
       this.$el.addClass('expanded');  // always expand when new layers are added
+        this.originalHeight = this.$el.height();
       this.$('.legend-content').html(content);
     }    
         
@@ -69,8 +70,16 @@ module.exports = Backbone.View.extend({
   toggleLegend: function() {
     this.$el.toggleClass('expanded');
     
-    if (this.$el.hasClass('expanded')) {    	
-    	this.$el.removeClass('legend-collapsed');
+    if (this.$el.hasClass('expanded')) {
+        this.$el.removeClass('legend-collapsed');
+        var realHeight = Math.trunc($('.legend-content')[0].getBoundingClientRect().height +
+            $('.legend-header')[0].getBoundingClientRect().height);
+        var theoreticalTop = Math.trunc($('.footer').offset().top - realHeight);
+        var actualTop = Math.trunc($('.legend').offset().top);
+        var newBottom = realHeight - this.originalHeight;
+        if (actualTop > theoreticalTop) {
+            $('.legend').css({bottom: newBottom > 0 ? newBottom : 0, top: ''});
+        }
     } else {
     	this.$el.addClass('legend-collapsed')
     }

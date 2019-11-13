@@ -15,7 +15,7 @@
         <jackrabbit.version>2.16.2</jackrabbit.version>
         <lucene.version>3.6.2</lucene.version>
         <jersey.version>1.19</jersey.version>
-        <jackson.version>2.9.5</jackson.version>
+        <jackson.version>2.10.1</jackson.version>
         <swagger.version>1.5.20</swagger.version>
         <powermock.version>1.6.6</powermock.version>
         <buildSource></buildSource>

@@ -87,7 +87,7 @@ module.exports = {
       { test: /\.less$/, loader: "style!css!less" }
     ]
   },
-  devtool: 'source-map',
+  devtool: 'source-map-inline',
   resolve: {
     extensions: ['', '.js', '.es6', '.jsx'],
     alias: {

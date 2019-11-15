@@ -19,6 +19,8 @@ export default function activityReducer(state: Object = defaultState, action: Ob
                 activityFieldsManager: action.payload.activityFieldsManager,
                 activityContext: action.payload.activityContext,
                 fmTree: action.payload.fmTree,
+                activityFundingTotals: action.payload.activityFundingTotals,
+                currencyRatesManager: action.payload.currencyRatesManager,
                 isActivityLoading: false,
                 isActivityLoaded: true
             };

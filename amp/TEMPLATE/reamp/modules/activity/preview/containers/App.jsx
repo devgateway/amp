@@ -1,18 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {ActivityPreviewUI, FieldsManager } from 'amp-ui';
-import Home from "./Home";
 import * as ActivityActions from '../actions/ActivityActions';
 import Logger from '../tempUtils/LoggerManager';
 import DateUtils from '../tempUtils/DateUtils';
 import translate from '../tempUtils/translate';
-import ActivityFundingTotals from '../tempUtils/ActivityFundingTotals';
-// { getAmountsInThousandsMessage, rawNumberToFormattedString }
-import NumberUtils from '../tempUtils/NumberUtils';
 import ContactActions from '../tempUtils/ContactsActions';
-import contactsByIds from '../jsons/ContactsById.json'
-import {bindActionCreators} from "redux";
-import {connect} from "react-redux";
+import contactsByIds from '../jsons/ContactsByIds.json'
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 
 /**
  *
@@ -23,10 +19,9 @@ class App extends Component {
         translate: PropTypes.func.isRequired,
         activityFieldsManager: PropTypes.instanceOf(FieldsManager),
         DateUtils: PropTypes.func.isRequired,
-        activityFundingTotals: PropTypes.instanceOf(ActivityFundingTotals),
-        getAmountsInThousandsMessage: PropTypes.func.isRequired,
-        rawNumberToFormattedString: PropTypes.func.isRequired,
+        activityFundingTotals: PropTypes.object.isRequired,
         getActivityContactIds: PropTypes.func.isRequired,
+        currencyRatesManager: PropTypes.func.isRequired,
         contactsByIds: PropTypes.object,
 
     }
@@ -40,19 +35,17 @@ class App extends Component {
     }
 
     getChildContext() {
-        const activityFieldsManager = this.props.activityReducer.activityFieldsManager;
-        const activityFundingTotals = new ActivityFundingTotals(null, null, null, null);
-        console.log(NumberUtils.getAmountsInThousandsMessage);
+        const { activityFieldsManager , activityFundingTotals} = this.props.activityReducer;
+
         return {
             activityFieldsManager,
             Logger,
             translate,
             DateUtils,
             activityFundingTotals,
-            getAmountsInThousandsMessage: NumberUtils.getAmountsInThousandsMessage,
-            rawNumberToFormattedString: NumberUtils.rawNumberToFormattedString,
             getActivityContactIds: ContactActions.getActivityContactIds,
-            contactsByIds
+            contactsByIds,
+            currencyRatesManager: this.props.activityReducer.currencyRatesManager,
         }
     }
 

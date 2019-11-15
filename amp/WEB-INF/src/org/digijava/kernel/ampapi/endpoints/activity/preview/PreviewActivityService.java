@@ -9,16 +9,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.ws.rs.core.Response;
 
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
+import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.exception.DgException;
@@ -96,7 +101,7 @@ public final class PreviewActivityService {
 
             activityFunding.setFundingInformation(getFundingInformation(activity, currencyCode));
 
-            activityFunding.setCurrency(currencyId);
+            activityFunding.setCurrency(currency.getCurrencyCode());
         } catch (DgException e) {
             throw new RuntimeException(e);
         }
@@ -110,6 +115,7 @@ public final class PreviewActivityService {
         List<PreviewFunding> previewFundings = new ArrayList<>();
         for (AmpFunding f : activity.getFunding()) {
             PreviewFunding previewFunding = new PreviewFunding();
+            Map<String,List<PreviewFundingTransaction>>fundingItemTransactions = new HashMap<>();
             List<FundingInformationItem> allFundingItems = new ArrayList<>(f.getFundingDetails());
             allFundingItems.addAll(f.getMtefProjections());
 
@@ -117,33 +123,31 @@ public final class PreviewActivityService {
                     .collect(groupingBy(FundingInformationItem::getTransactionType,
                             groupingBy(FundingInformationItem::getAdjustmentType)));
 
-            List<PreviewFundingDetail> fundingDetails = new ArrayList<>();
             for (Entry<Integer, Map<AmpCategoryValue, List<FundingInformationItem>>> e : groupedDetails.entrySet()) {
                 Integer transactionType = e.getKey();
                 Map<AmpCategoryValue, List<FundingInformationItem>> fdMap = e.getValue();
                 for (AmpCategoryValue cv : fdMap.keySet()) {
-                    PreviewFundingDetail fundingDetail = new PreviewFundingDetail();
-
                     List<PreviewFundingTransaction> transactions = fdMap.get(cv).stream()
                             .map(fd -> generateFundingTransaction(fd, currencyCode))
                             .sorted(PreviewFundingTransactionComparator.getTransactionComparator())
                             .collect(Collectors.toList());
 
-                    fundingDetail.setTransactionType(transactionType.longValue());
-                    fundingDetail.setAdjustmentType(cv.getId());
-                    fundingDetail.setTransactions(transactions);
-                    fundingDetail.setSubtotal(calculateSubTotal(transactions));
-                    fundingDetails.add(fundingDetail);
+                    List<PreviewFundingTransaction> previewTransactions =
+                    fundingItemTransactions.get(FieldMap.underscorify(ArConstants.TRANSACTION_ID_TO_TYPE_NAME.get(transactionType)));
+                    if(previewTransactions == null){
+                        previewTransactions = new ArrayList<>();
+                    }
+                    previewTransactions.addAll(transactions);
+                    fundingItemTransactions.put(FieldMap.underscorify(ArConstants.TRANSACTION_ID_TO_TYPE_NAME.get(transactionType)),previewTransactions);
                 }
             }
-
-            previewFunding.setFundingDetails(fundingDetails);
             previewFunding.setDonorOrganizationId(f.getAmpDonorOrgId().getAmpOrgId());
             previewFunding.setFundingId(f.getAmpFundingId());
-            previewFunding.setUndisbursedBalance(calculateUndisbursedBalance(fundingDetails));
+            previewFunding.setUndisbursedBalance(calculateUndisbursedBalance(fundingItemTransactions));
+            previewFunding.setTransactions(fundingItemTransactions);
             previewFundings.add(previewFunding);
-        }
 
+        }
         fundingInformation.setFundings(previewFundings);
         fundingInformation.setTotals(calculateTotals(previewFundings));
         fundingInformation.setDeliveryRate(calculateDeliveryRate(fundingInformation.getTotals()));
@@ -151,40 +155,54 @@ public final class PreviewActivityService {
 
         return fundingInformation;
     }
-
     /**
      * Calculate totals for transactions grouped by transaction type and adjustment type
      *
      * @param previewFundings
      * @return
      */
-    private List<PreviewFundingTotal> calculateTotals(List<PreviewFunding> previewFundings) {
-        List<PreviewFundingDetail> allFundingDetails = previewFundings.stream()
-                .map(PreviewFunding::getFundingDetails)
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
 
-        Map<Long, Map<Long, List<PreviewFundingDetail>>> groupedFundingDetails = allFundingDetails.stream()
-                .collect(groupingBy(PreviewFundingDetail::getTransactionType,
-                        groupingBy(PreviewFundingDetail::getAdjustmentType)));
+    private List<PreviewFundingTotal>calculateTotals(List<PreviewFunding>previewFundings) {
 
+        Optional<Map<String, List<PreviewFundingTransaction>>> allTransactionsByTypeAndAdjustment =
+                previewFundings.stream().map(PreviewFunding::getTransactions).
+                        collect(Collectors.toList()).stream().reduce((firstMap, secondMap)
+                        -> Stream.concat(firstMap.entrySet().stream(), secondMap.entrySet().stream())
+                        .collect(Collectors.toMap(Entry::getKey, Entry::getValue,
+                                (countInFirstMap, countInSecondMap) -> {
+                                    countInFirstMap.addAll(countInSecondMap);
+                                    return countInFirstMap;
+                                }
+                        )));
         List<PreviewFundingTotal> totals = new ArrayList<>();
 
-        for (Entry<Long, Map<Long, List<PreviewFundingDetail>>> e : groupedFundingDetails.entrySet()) {
-            Long transactionTypeId = e.getKey();
-            Map<Long, List<PreviewFundingDetail>> fdMap = e.getValue();
-            for (Long adjustmentTypeId : fdMap.keySet()) {
-                PreviewFundingTotal total = new PreviewFundingTotal();
-                total.setTransactionType(transactionTypeId);
-                total.setAdjustmentType(adjustmentTypeId);
-                total.setAmount(calculateTotal(fdMap.get(adjustmentTypeId)));
-                totals.add(total);
-            }
-        }
+        allTransactionsByTypeAndAdjustment.get().forEach((transactionType, previewFundingTransactions) -> {
+            Map<Long, Double> transactionTotalByAdjustmentType =
+                    previewFundingTransactions.stream().collect(Collectors.
+                            groupingBy(PreviewFundingTransaction::getAdjustmentType,
+                                    Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount)
+                            ));
 
+            transactionTotalByAdjustmentType.forEach((adjustmentType, totalAmount) -> {
+
+                PreviewFundingTotal total = new PreviewFundingTotal();
+                total.setTransactionType(transactionType);
+                total.setAdjustmentType(adjustmentType);
+                total.setAmount(totalAmount);
+                totals.add(total);
+            });
+        });
         return totals;
     }
 
+    private ImmutablePair<Double, Double> getTotalActualCommitmentDisbursement(List totals) {
+        Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
+
+        Double totalActualCommitments = calculateTotal(totals, actualCategoryValueId, ArConstants.COMMITMENT.toLowerCase());
+
+        Double totalActualDisbursements = calculateTotal(totals, actualCategoryValueId, ArConstants.DISBURSEMENT.toLowerCase());
+        return new ImmutablePair(totalActualCommitments, totalActualDisbursements);
+    }
     /**
      * Delviery Rate = Total Actual Disbursements / Total Actual Commitments * 100;
      *
@@ -192,22 +210,14 @@ public final class PreviewActivityService {
      * @return delivery rate
      */
     private Double calculateDeliveryRate(List<PreviewFundingTotal> totals) {
-        Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
 
-        Double totalActualCommitments = totals.stream()
-                .filter(fd -> fd.getTransactionType().equals((long) Constants.COMMITMENT)
-                        && fd.getAdjustmentType().equals(actualCategoryValueId))
-                .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
-
-        Double totalActualDisbursements = totals.stream()
-                .filter(fd -> fd.getTransactionType().equals((long) Constants.DISBURSEMENT)
-                        && fd.getAdjustmentType().equals(actualCategoryValueId))
-                .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
-
+        ImmutablePair <Double, Double> totalActualCommitmentsDisbursements =
+                getTotalActualCommitmentDisbursement(totals);
         Double deliveryRate = null;
 
-        if (totalActualCommitments != 0 && totalActualDisbursements != 0) {
-            deliveryRate = totalActualDisbursements / totalActualCommitments * PERCENTAGE_MULTIPLIER;
+        if (totalActualCommitmentsDisbursements.k != 0 && totalActualCommitmentsDisbursements.v != 0) {
+            deliveryRate = totalActualCommitmentsDisbursements.v / totalActualCommitmentsDisbursements.k
+                    * PERCENTAGE_MULTIPLIER;
         }
 
         return deliveryRate;
@@ -220,19 +230,18 @@ public final class PreviewActivityService {
      * @return undisbursed balance
      */
     private Double calculateTotalsUndisbursedBalance(List<PreviewFundingTotal> totals) {
-        Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
-        Double totalActualCommitments = totals.stream()
-                .filter(fd -> fd.getTransactionType().equals((long) Constants.COMMITMENT)
+        ImmutablePair<Double, Double> totalActualCommitmentsDisbursements =
+                getTotalActualCommitmentDisbursement(totals);
+
+        return totalActualCommitmentsDisbursements.k != 0 || totalActualCommitmentsDisbursements.v != 0
+                ? totalActualCommitmentsDisbursements.k - totalActualCommitmentsDisbursements.v : null;
+    }
+
+    private Double calculateTotal(List<PreviewFundingTotal> totals, Long actualCategoryValueId, String commitment) {
+        return totals.stream()
+                .filter(fd -> fd.getTransactionType().equals(commitment)
                         && fd.getAdjustmentType().equals(actualCategoryValueId))
                 .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
-
-        Double totalActualDisbursements = totals.stream()
-                .filter(fd -> fd.getTransactionType().equals((long) Constants.DISBURSEMENT)
-                        && fd.getAdjustmentType().equals(actualCategoryValueId))
-                .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
-
-        return totalActualCommitments != 0 || totalActualDisbursements != 0
-                ? totalActualCommitments - totalActualDisbursements : null;
     }
 
 
@@ -247,42 +256,31 @@ public final class PreviewActivityService {
 
         PreviewFundingTransaction transaction = new PreviewFundingTransaction();
         transaction.setTransactionId(fd.getDbId());
+        transaction.setAdjustmentType(fd.getAdjustmentType().getId());
+        transaction.setTransactionType(fd.getTransactionType().longValue());
         transaction.setTransactionAmount(convertedAmount);
         transaction.setTransactionDate(DateTimeUtil.formatISO8601Timestamp(fd.getTransactionDate()));
         transaction.setReportingDate(DateTimeUtil.formatISO8601Timestamp(fd.getReportingDate()));
 
         return transaction;
     }
-
-    private Double calculateSubTotal(List<PreviewFundingTransaction> transactions) {
-        return transactions.stream().collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
-    }
-
-    private Double calculateTotal(List<PreviewFundingDetail> fundingDetails) {
-        return fundingDetails.stream().collect(Collectors.summingDouble(PreviewFundingDetail::getSubtotal));
-    }
-
     /**
      * Undisbursed Balance = Total Actual Commitments - Total Actual Disbursements
      *
-     * @param fundingDetails
+     * @param transactions
      * @return undisbursed balance
      */
-    private Double calculateUndisbursedBalance(List<PreviewFundingDetail> fundingDetails) {
-        Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
-        Double totalActualCommitments = fundingDetails.stream()
-                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.COMMITMENT))
-                        && fd.getAdjustmentType().equals(actualCategoryValueId))
-                .map(PreviewFundingDetail::getTransactions)
-                .flatMap(List::stream)
-                .collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
+    private Double calculateUndisbursedBalance(Map<String,List<PreviewFundingTransaction>>transactions) {
 
-        Double totalActualDisbursements = fundingDetails.stream()
-                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.DISBURSEMENT))
-                        && fd.getAdjustmentType().equals(actualCategoryValueId))
-                .map(PreviewFundingDetail::getTransactions)
-                .flatMap(List::stream)
-                .collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
+        Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
+
+        Double totalActualCommitments = transactions.get(ArConstants.COMMITMENT.toLowerCase()).stream().
+                filter(t-> t.getAdjustmentType().equals(actualCategoryValueId)).
+                collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
+
+        Double totalActualDisbursements = transactions.get(ArConstants.DISBURSEMENT.toLowerCase()).stream().
+                filter(t-> t.getAdjustmentType().equals(actualCategoryValueId)).
+                collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
 
         return totalActualCommitments != 0 || totalActualDisbursements != 0
                 ? totalActualCommitments - totalActualDisbursements : null;

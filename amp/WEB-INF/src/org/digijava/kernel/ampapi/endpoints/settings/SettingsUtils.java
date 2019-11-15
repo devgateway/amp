@@ -391,6 +391,8 @@ public class SettingsUtils {
 
         settings.setNumberFormat(ReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat().toPattern());
 
+        settings.setGsNumberFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT));
+
         settings.setNumberGroupSeparator(
                 FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR));
 

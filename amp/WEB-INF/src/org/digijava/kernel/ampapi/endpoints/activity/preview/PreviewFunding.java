@@ -1,9 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * 
@@ -17,9 +19,9 @@ public class PreviewFunding {
     
     @JsonProperty("funding_id")
     private Long fundingId;
-    
+
     @JsonProperty("funding_details")
-    private List<PreviewFundingDetail> fundingDetails;
+    private Map<String,List<PreviewFundingTransaction>> transactions;
     
     @JsonSerialize(using = AmountSerializer.class)
     @JsonProperty("undisbursed_balance")
@@ -41,14 +43,6 @@ public class PreviewFunding {
         this.undisbursedBalance = undisbursedBalance;
     }
 
-    public List<PreviewFundingDetail> getFundingDetails() {
-        return fundingDetails;
-    }
-
-    public void setFundingDetails(List<PreviewFundingDetail> fundingDetails) {
-        this.fundingDetails = fundingDetails;
-    }
-
     public Long getFundingId() {
         return fundingId;
     }
@@ -56,5 +50,12 @@ public class PreviewFunding {
     public void setFundingId(Long fundingId) {
         this.fundingId = fundingId;
     }
-    
+
+    public Map<String, List<PreviewFundingTransaction>> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Map<String, List<PreviewFundingTransaction>> transactions) {
+        this.transactions = transactions;
+    }
 }

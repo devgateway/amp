@@ -115,7 +115,7 @@ public final class PreviewActivityService {
         List<PreviewFunding> previewFundings = new ArrayList<>();
         for (AmpFunding f : activity.getFunding()) {
             PreviewFunding previewFunding = new PreviewFunding();
-            Map<String,List<PreviewFundingTransaction>>fundingItemTransactions = new HashMap<>();
+            Map<String, List<PreviewFundingTransaction>> fundingItemTransactions = new HashMap<>();
             List<FundingInformationItem> allFundingItems = new ArrayList<>(f.getFundingDetails());
             allFundingItems.addAll(f.getMtefProjections());
 
@@ -133,12 +133,14 @@ public final class PreviewActivityService {
                             .collect(Collectors.toList());
 
                     List<PreviewFundingTransaction> previewTransactions =
-                    fundingItemTransactions.get(FieldMap.underscorify(ArConstants.TRANSACTION_ID_TO_TYPE_NAME.get(transactionType)));
-                    if(previewTransactions == null){
+                    fundingItemTransactions.get(FieldMap.underscorify(ArConstants.TRANSACTION_ID_TO_TYPE_NAME.
+                            get(transactionType)));
+                    if (previewTransactions == null) {
                         previewTransactions = new ArrayList<>();
                     }
                     previewTransactions.addAll(transactions);
-                    fundingItemTransactions.put(FieldMap.underscorify(ArConstants.TRANSACTION_ID_TO_TYPE_NAME.get(transactionType)),previewTransactions);
+                    fundingItemTransactions.put(FieldMap.underscorify(ArConstants.TRANSACTION_ID_TO_TYPE_NAME.
+                            get(transactionType)), previewTransactions);
                 }
             }
             previewFunding.setDonorOrganizationId(f.getAmpDonorOrgId().getAmpOrgId());
@@ -162,7 +164,7 @@ public final class PreviewActivityService {
      * @return
      */
 
-    private List<PreviewFundingTotal>calculateTotals(List<PreviewFunding>previewFundings) {
+    private List<PreviewFundingTotal> calculateTotals(List<PreviewFunding> previewFundings) {
 
         Optional<Map<String, List<PreviewFundingTransaction>>> allTransactionsByTypeAndAdjustment =
                 previewFundings.stream().map(PreviewFunding::getTransactions).
@@ -198,9 +200,11 @@ public final class PreviewActivityService {
     private ImmutablePair<Double, Double> getTotalActualCommitmentDisbursement(List totals) {
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
 
-        Double totalActualCommitments = calculateTotal(totals, actualCategoryValueId, ArConstants.COMMITMENT.toLowerCase());
+        Double totalActualCommitments = calculateTotal(totals, actualCategoryValueId,
+                ArConstants.COMMITMENT.toLowerCase());
 
-        Double totalActualDisbursements = calculateTotal(totals, actualCategoryValueId, ArConstants.DISBURSEMENT.toLowerCase());
+        Double totalActualDisbursements = calculateTotal(totals, actualCategoryValueId,
+                ArConstants.DISBURSEMENT.toLowerCase());
         return new ImmutablePair(totalActualCommitments, totalActualDisbursements);
     }
     /**
@@ -211,7 +215,7 @@ public final class PreviewActivityService {
      */
     private Double calculateDeliveryRate(List<PreviewFundingTotal> totals) {
 
-        ImmutablePair <Double, Double> totalActualCommitmentsDisbursements =
+        ImmutablePair<Double, Double> totalActualCommitmentsDisbursements =
                 getTotalActualCommitmentDisbursement(totals);
         Double deliveryRate = null;
 
@@ -270,7 +274,7 @@ public final class PreviewActivityService {
      * @param transactions
      * @return undisbursed balance
      */
-    private Double calculateUndisbursedBalance(Map<String,List<PreviewFundingTransaction>>transactions) {
+    private Double calculateUndisbursedBalance(Map<String, List<PreviewFundingTransaction>> transactions) {
 
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
 

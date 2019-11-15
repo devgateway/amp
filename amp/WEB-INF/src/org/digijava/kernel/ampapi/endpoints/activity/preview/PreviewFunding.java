@@ -21,7 +21,7 @@ public class PreviewFunding {
     private Long fundingId;
 
     @JsonProperty("funding_details")
-    private Map<String,List<PreviewFundingTransaction>> transactions;
+    private Map<String, List<PreviewFundingTransaction>> transactions;
     
     @JsonSerialize(using = AmountSerializer.class)
     @JsonProperty("undisbursed_balance")

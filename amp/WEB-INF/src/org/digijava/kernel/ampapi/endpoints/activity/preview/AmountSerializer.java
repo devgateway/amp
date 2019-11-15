@@ -1,10 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import io.swagger.models.properties.DateTimeProperty;
 import io.swagger.models.properties.DoubleProperty;
 import io.swagger.models.properties.Property;
 import org.digijava.kernel.ampapi.swagger.converters.PropertyDescriber;
@@ -23,7 +21,7 @@ public class AmountSerializer extends JsonSerializer<Double> implements Property
 
     @Override
     public void serialize(Double value, JsonGenerator jgen, SerializerProvider provider)
-            throws IOException{
+            throws IOException {
         jgen.writeString(BigDecimal.valueOf(value).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
     }
 

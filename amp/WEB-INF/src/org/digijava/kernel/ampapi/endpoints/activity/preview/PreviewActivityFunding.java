@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 
 /**
  * 

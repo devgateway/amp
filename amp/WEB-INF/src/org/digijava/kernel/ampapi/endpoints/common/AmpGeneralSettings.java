@@ -16,7 +16,10 @@ public class AmpGeneralSettings {
     
     @JsonProperty("number-format")
     private String numberFormat;
-    
+
+    @JsonProperty("gs-number-format")
+    private String gsNumberFormat;
+
     @JsonProperty("number-group-separator")
     private String numberGroupSeparator;
     
@@ -144,7 +147,15 @@ public class AmpGeneralSettings {
     public void setNumberFormat(String numberFormat) {
         this.numberFormat = numberFormat;
     }
-    
+
+    public String getGsNumberFormat() {
+        return gsNumberFormat;
+    }
+
+    public void setGsNumberFormat(String gsNumberFormat) {
+        this.gsNumberFormat = gsNumberFormat;
+    }
+
     public String getNumberGroupSeparator() {
         return numberGroupSeparator;
     }

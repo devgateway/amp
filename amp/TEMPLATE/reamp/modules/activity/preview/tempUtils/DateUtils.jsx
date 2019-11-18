@@ -1,5 +1,8 @@
 export default class DateUtils {
 
+    static formatDateForAPI(date){
+        return '01/01/2010';
+    }
     static createFormattedDate(date) {
         return '01/01/2010';
     }

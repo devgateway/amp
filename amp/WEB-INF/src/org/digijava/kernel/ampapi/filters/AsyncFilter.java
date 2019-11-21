@@ -27,7 +27,7 @@ public class AsyncFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = ((HttpServletResponse) servletResponse);
         String preferHeader = request.getHeader("Prefer");
-        if (preferHeader != null && preferHeader.contains("return-asynch")) {
+        if (preferHeader != null && preferHeader.contains("respond-async")) {
             String resultId = UUID.randomUUID().toString();
             servletRequest.setAttribute("result-id", resultId);
         }

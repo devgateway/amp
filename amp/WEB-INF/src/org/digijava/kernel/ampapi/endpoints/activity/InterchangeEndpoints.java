@@ -387,12 +387,12 @@ public class InterchangeEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "importProjects")
     @ApiOperation(
-            value = "Imports asynchrony a list of activities.",
+            value = "Imports asynchronous a list of activities.",
             notes = "The input body is an array of activity objects."
                     + "The format of activity object matches the existing format used by post / and POST /{projectId}."
-                    + "If the header Prefer: respond-asynch is not present, "
+                    + "If the header Prefer: respond-async is not present, "
                     + "then the endpoint will respond with a list of import/update result."
-                    + "If the header Prefer: respond-asynch is present then an immediate response will be returned."
+                    + "If the header Prefer: respond-async is present then an immediate response will be returned."
                     + "The response will contain in headers (location) the url where the results can be retrieved"
                     + "If the size is bigger than 20, the request will be rejected.")
     public Response importProjects(@QueryParam("can-downgrade-to-draft") @DefaultValue("false")

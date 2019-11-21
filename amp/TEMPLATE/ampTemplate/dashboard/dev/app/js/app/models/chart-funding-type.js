@@ -81,8 +81,11 @@ module.exports = ChartModel.extend({
 		  keyId: keyId
         };
       })
-      .value();
-    
+      .value().sort(function(a, b){
+		  var x = a['key'];
+		  var y = b['key'];
+		  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+	  });
  
 	
     // group smallest contributors as "other"s

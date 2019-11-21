@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyCommonPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.AbstractPossibleValuesBaseProvider;
@@ -188,7 +189,7 @@ public class PossibleValuesEnumerator {
         return apiFields.stream()
                 .filter(f -> f.getFieldName().equals(fieldName))
                 .findFirst()
-                .orElseThrow(() -> newBadRequestException(ActivityErrors.FIELD_INVALID.withDetails(fieldName)));
+                .orElseThrow(() -> newBadRequestException(ValidationErrors.FIELD_INVALID.withDetails(fieldName)));
     }
 
     private PossibleValuesProvider getPossibleValuesProvider(APIField apiField, String discriminatorValue)

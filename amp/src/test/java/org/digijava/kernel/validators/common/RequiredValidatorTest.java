@@ -18,11 +18,11 @@ import java.util.stream.Stream;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.TestFieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validation.Validator;
@@ -520,7 +520,8 @@ public class RequiredValidatorTest {
     }
 
     private Matcher<ConstraintViolation> violation(String path) {
-        return ValidatorMatchers.violationFor(RequiredValidator.class, path, anything(), ActivityErrors.FIELD_REQUIRED);
+        return ValidatorMatchers.violationFor(RequiredValidator.class, path, anything(),
+                ValidationErrors.FIELD_REQUIRED);
     }
 
     @Test

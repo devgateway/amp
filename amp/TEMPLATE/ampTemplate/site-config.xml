@@ -18,7 +18,7 @@
 		  <put-item name="body" file="gpi_N.jsp"/>
 		</layout>
 
-		<layout name="helpLayout" file="helpLayout.jsp">
+		<layout name="helpLayout" extends="default">
 			<put name="title">Help</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>

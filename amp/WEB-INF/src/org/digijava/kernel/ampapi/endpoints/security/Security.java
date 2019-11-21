@@ -14,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.dto.AuthenticationRequest;
 import org.digijava.kernel.ampapi.endpoints.security.dto.LayoutInformation;
 import org.digijava.kernel.ampapi.endpoints.security.dto.MenuItemStructure;
@@ -39,7 +38,7 @@ import org.digijava.module.aim.util.TeamUtil;
  */
 @Path("security")
 @Api("security")
-public class Security implements ErrorReportingEndpoint {
+public class Security {
     
     private static String SITE_CONFIG_PATH = "TEMPLATE" + System.getProperty("file.separator") + "ampTemplate"
             + System.getProperty("file.separator") + "site-config.xml";
@@ -147,14 +146,6 @@ public class Security implements ErrorReportingEndpoint {
     }
     */
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class getErrorsClass() {
-        return SecurityErrors.class;
-    }
-
     @GET
     @Path("/ampTeam/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -163,4 +154,5 @@ public class Security implements ErrorReportingEndpoint {
     public final AmpTeam getWorkspace(@PathParam("id") Long id) {
         return TeamUtil.getAmpTeam(id);
     }
+    
 }

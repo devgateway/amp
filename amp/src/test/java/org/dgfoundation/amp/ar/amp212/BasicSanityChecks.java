@@ -123,10 +123,10 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
             .add(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR)
             .add(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1)
             .add(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2)
-            .add(ColumnConstants.COUNTRY)
-            .add(ColumnConstants.REGION)
-            .add(ColumnConstants.ZONE)
-            .add(ColumnConstants.DISTRICT)
+            .add(ColumnConstants.LOCATION_ADM_LEVEL_0)
+            .add(ColumnConstants.LOCATION_ADM_LEVEL_1)
+            .add(ColumnConstants.LOCATION_ADM_LEVEL_2)
+            .add(ColumnConstants.LOCATION_ADM_LEVEL_3)
             .build();
 
     static final List<String> DONOR_HIERARCHIES_TO_TRY = new ImmutableList.Builder<String>()
@@ -171,9 +171,9 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     @Test
     public void testByRegionReportTotals() { //CHECKED
         ReportSpecification spec = buildSpecification("ByRegion", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-            Arrays.asList(ColumnConstants.REGION), 
+            Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
             GroupingCriteria.GROUPING_YEARLY);
         
         assertEquals("{(root) -> Anenii Noi County=1611832, (root) -> Balti County=2144284.31691055, (root) -> Cahul County=7070000, (root) -> Chisinau City=296912, (root) -> Chisinau County=5066960.631302, (root) -> Drochia County=621600, (root) -> Dubasari County=213231, (root) -> Edinet County=567421, (root) -> Falesti County=999888, (root) -> Transnistrian Region=166899.25929045, (root) -> =649662.978885, (root)=19408691.186388}", 
@@ -189,9 +189,9 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     @Test
     public void testByRegionByZoneReportTotals() { //CHECKED
         ReportSpecification spec = buildSpecification("ByRegionByZone", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.ZONE), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.LOCATION_ADM_LEVEL_2),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-            Arrays.asList(ColumnConstants.REGION, ColumnConstants.ZONE), 
+            Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.LOCATION_ADM_LEVEL_2),
             GroupingCriteria.GROUPING_YEARLY);
 
         assertEquals(
@@ -214,9 +214,9 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     @Test
     public void testByZoneReportTotals() { //CHECKED
         ReportSpecification spec = buildSpecification("ByZone", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ZONE), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_2),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-            Arrays.asList(ColumnConstants.ZONE), 
+            Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_2),
             GroupingCriteria.GROUPING_YEARLY);
                 
         assertEquals("{(root) -> Apareni=53262.31691055, (root) -> Bulboaca=285000, (root) -> Dolboaca=178000, (root) -> Glodeni=1491289, (root) -> Slobozia=43578.25929045, (root) -> Tiraspol=123321, (root) -> =17234240.610187, (root)=19408691.186388}", 
@@ -229,9 +229,9 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     @Test
     public void testByZoneByRegionReportTotals() { //CHECKED
         ReportSpecification spec = buildSpecification("ByZoneByRegion", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ZONE, ColumnConstants.REGION), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_2, ColumnConstants.LOCATION_ADM_LEVEL_1),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-            Arrays.asList(ColumnConstants.ZONE, ColumnConstants.REGION), 
+            Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_2, ColumnConstants.LOCATION_ADM_LEVEL_1),
             GroupingCriteria.GROUPING_YEARLY);
 
         assertEquals(
@@ -270,9 +270,9 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     @Test
     public void testByZoneByPrimarySector() {
         ReportSpecification spec = buildSpecification("ByZoneByPrimarySector", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ZONE, ColumnConstants.PRIMARY_SECTOR), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_2, ColumnConstants.PRIMARY_SECTOR),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-            Arrays.asList(ColumnConstants.ZONE, ColumnConstants.PRIMARY_SECTOR), 
+            Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_2, ColumnConstants.PRIMARY_SECTOR),
             GroupingCriteria.GROUPING_YEARLY);
         
         assertEquals(
@@ -304,9 +304,9 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     @Test
     public void testByRegionByPrimarySectorByZone() {
         ReportSpecification spec = buildSpecification("ByRegionByPrimarySectorByZone", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.ZONE), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.LOCATION_ADM_LEVEL_2),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-            Arrays.asList(ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.ZONE), 
+            Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.LOCATION_ADM_LEVEL_2),
             GroupingCriteria.GROUPING_YEARLY);
         
         assertEquals(
@@ -583,23 +583,23 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     @Test
     public void testByRegionBySector() {
         ReportSpecification spec = buildSpecification("testByRegionBySector", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-            Arrays.asList(ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR),
+            Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR),
             GroupingCriteria.GROUPING_YEARLY);
         
         NiReportModel cor = new NiReportModel("testByRegionBySector")
             .withHeaders(Arrays.asList(
                     "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 21))",
-                    "(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 16));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 19, colSpan: 2))",
+                    "(Administrative Level 1: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 16));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 19, colSpan: 2))",
                     "(2006: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 13, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 15, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 17, colSpan: 2))",
                     "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1))"))
                 .withWarnings(Arrays.asList())
                 .withBody(      new ReportAreaForTests(null)
-                  .withContents("Region", "", "Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "780,311", "Funding-2011-Actual Commitments", "1,213,119", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "7,842,086", "Funding-2013-Actual Disbursements", "1,266,956", "Funding-2014-Actual Commitments", "8,159,813,77", "Funding-2014-Actual Disbursements", "710,200", "Funding-2015-Actual Commitments", "1,971,831,84", "Funding-2015-Actual Disbursements", "437,335", "Totals-Actual Commitments", "19,408,691,19", "Totals-Actual Disbursements", "3,206,802")
+                  .withContents("Administrative Level 1", "", "Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "780,311", "Funding-2011-Actual Commitments", "1,213,119", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "7,842,086", "Funding-2013-Actual Disbursements", "1,266,956", "Funding-2014-Actual Commitments", "8,159,813,77", "Funding-2014-Actual Disbursements", "710,200", "Funding-2015-Actual Commitments", "1,971,831,84", "Funding-2015-Actual Disbursements", "437,335", "Totals-Actual Commitments", "19,408,691,19", "Totals-Actual Disbursements", "3,206,802")
                   .withChildren(
-                    new ReportAreaForTests(new AreaOwner("Region", "Anenii Noi County"))
-                    .withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "143,777", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "1,574,332", "Funding-2013-Actual Disbursements", "1,100,111", "Funding-2014-Actual Commitments", "37,500", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "1,611,832", "Totals-Actual Disbursements", "1,243,888", "Region", "Anenii Noi County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Anenii Noi County"))
+                    .withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "143,777", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "1,574,332", "Funding-2013-Actual Disbursements", "1,100,111", "Funding-2014-Actual Commitments", "37,500", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "1,611,832", "Totals-Actual Disbursements", "1,243,888", "Administrative Level 1", "Anenii Noi County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION"))
                       .withContents("Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "143,777", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "1,449,732", "Funding-2013-Actual Disbursements", "1,100,111", "Funding-2014-Actual Commitments", "37,500", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "1,487,232", "Totals-Actual Disbursements", "1,243,888", "Primary Sector", "110 - EDUCATION")
@@ -615,8 +615,8 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "120 - HEALTH")).withContents("Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "124,600", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "124,600", "Totals-Actual Disbursements", "0", "Primary Sector", "120 - HEALTH")
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Funding-2013-Actual Commitments", "124,600", "Totals-Actual Commitments", "124,600")          )        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Balti County"))
-                    .withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "53,262,32", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "1,330,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "37,500", "Funding-2014-Actual Disbursements", "27,500", "Funding-2015-Actual Commitments", "723,189", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "2,144,284,32", "Totals-Actual Disbursements", "349,265", "Region", "Balti County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Balti County"))
+                    .withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "53,262,32", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "1,330,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "37,500", "Funding-2014-Actual Disbursements", "27,500", "Funding-2015-Actual Commitments", "723,189", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "2,144,284,32", "Totals-Actual Disbursements", "349,265", "Administrative Level 1", "Balti County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION"))
                       .withContents("Project Title", "", "Funding-2006-Actual Commitments", "31,957,39", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "831,933", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "37,500", "Funding-2014-Actual Disbursements", "16,500", "Funding-2015-Actual Commitments", "388,234,5", "Funding-2015-Actual Disbursements", "160,882,5", "Totals-Actual Commitments", "1,289,624,89", "Totals-Actual Disbursements", "177,382,5", "Primary Sector", "110 - EDUCATION")
@@ -639,12 +639,12 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Funding-2013-Actual Commitments", "498,400", "Totals-Actual Commitments", "498,400"),
                         new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Funding-2006-Actual Commitments", "15,978,7", "Funding-2014-Actual Disbursements", "8,250", "Totals-Actual Commitments", "15,978,7", "Totals-Actual Disbursements", "8,250")          )        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Cahul County")).withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000", "Region", "Cahul County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Cahul County")).withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000", "Administrative Level 1", "Cahul County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "113 - SECONDARY EDUCATION")).withContents("Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000", "Primary Sector", "113 - SECONDARY EDUCATION")
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")          )        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Chisinau City")).withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "50,000", "Funding-2014-Actual Disbursements", "27,500", "Funding-2015-Actual Commitments", "246,912", "Funding-2015-Actual Disbursements", "17,500", "Totals-Actual Commitments", "296,912", "Totals-Actual Disbursements", "45,000", "Region", "Chisinau City")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Chisinau City")).withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "50,000", "Funding-2014-Actual Disbursements", "27,500", "Funding-2015-Actual Commitments", "246,912", "Funding-2015-Actual Disbursements", "17,500", "Totals-Actual Commitments", "296,912", "Totals-Actual Disbursements", "45,000", "Administrative Level 1", "Chisinau City")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION"))
                       .withContents("Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "50,000", "Funding-2014-Actual Disbursements", "27,500", "Funding-2015-Actual Commitments", "246,912", "Funding-2015-Actual Disbursements", "17,500", "Totals-Actual Commitments", "296,912", "Totals-Actual Disbursements", "45,000", "Primary Sector", "110 - EDUCATION")
@@ -653,7 +653,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                         new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
                         new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
                         new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Funding-2014-Actual Disbursements", "27,500", "Funding-2015-Actual Disbursements", "17,500", "Totals-Actual Disbursements", "45,000")          )        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Chisinau County")).withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "1,700,000", "Funding-2013-Actual Disbursements", "35,000", "Funding-2014-Actual Commitments", "3,365,760,63", "Funding-2014-Actual Disbursements", "155,000", "Funding-2015-Actual Commitments", "1,200", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "5,066,960,63", "Totals-Actual Disbursements", "190,000", "Region", "Chisinau County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Chisinau County")).withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "1,700,000", "Funding-2013-Actual Disbursements", "35,000", "Funding-2014-Actual Commitments", "3,365,760,63", "Funding-2014-Actual Disbursements", "155,000", "Funding-2015-Actual Commitments", "1,200", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "5,066,960,63", "Totals-Actual Disbursements", "190,000", "Administrative Level 1", "Chisinau County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION"))
                       .withContents("Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "1,700,000", "Funding-2013-Actual Disbursements", "35,000", "Funding-2014-Actual Commitments", "3,365,760,63", "Funding-2014-Actual Disbursements", "155,000", "Funding-2015-Actual Commitments", "1,200", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "5,066,960,63", "Totals-Actual Disbursements", "190,000", "Primary Sector", "110 - EDUCATION")
@@ -662,8 +662,8 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                         new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000"),
                         new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Funding-2015-Actual Commitments", "1,200", "Totals-Actual Commitments", "1,200"),
                         new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Funding-2013-Actual Disbursements", "35,000", "Funding-2014-Actual Disbursements", "75,000", "Totals-Actual Disbursements", "110,000")          )        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Drochia County"))
-                    .withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "621,600", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Commitments", "621,600", "Totals-Actual Disbursements", "80,000", "Region", "Drochia County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Drochia County"))
+                    .withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "621,600", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Commitments", "621,600", "Totals-Actual Disbursements", "80,000", "Administrative Level 1", "Drochia County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION"))
                       .withContents("Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "372,960", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Commitments", "372,960", "Totals-Actual Disbursements", "80,000", "Primary Sector", "110 - EDUCATION")
@@ -673,8 +673,8 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "112 - BASIC EDUCATION")).withContents("Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "248,640", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "248,640", "Totals-Actual Disbursements", "0", "Primary Sector", "112 - BASIC EDUCATION")
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Funding-2015-Actual Commitments", "248,640", "Totals-Actual Commitments", "248,640")          )        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Dubasari County"))
-                    .withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "27,500", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "17,500", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "168,321", "Region", "Dubasari County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Dubasari County"))
+                    .withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "27,500", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "17,500", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "168,321", "Administrative Level 1", "Dubasari County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION")).withContents("Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "27,500", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "17,500", "Totals-Actual Commitments", "0", "Totals-Actual Disbursements", "45,000", "Primary Sector", "110 - EDUCATION")
                       .withChildren(
@@ -682,18 +682,18 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "112 - BASIC EDUCATION")).withContents("Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321", "Primary Sector", "112 - BASIC EDUCATION")
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321")          )        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Edinet County")).withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "567,421", "Funding-2013-Actual Disbursements", "131,845", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "567,421", "Totals-Actual Disbursements", "131,845", "Region", "Edinet County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Edinet County")).withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "567,421", "Funding-2013-Actual Disbursements", "131,845", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "567,421", "Totals-Actual Disbursements", "131,845", "Administrative Level 1", "Edinet County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "112 - BASIC EDUCATION")).withContents("Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "567,421", "Funding-2013-Actual Disbursements", "131,845", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "567,421", "Totals-Actual Disbursements", "131,845", "Primary Sector", "112 - BASIC EDUCATION")
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Funding-2013-Actual Commitments", "567,421", "Funding-2013-Actual Disbursements", "131,845", "Totals-Actual Commitments", "567,421", "Totals-Actual Disbursements", "131,845")          )        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Falesti County")).withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "453,213", "Funding-2011-Actual Commitments", "999,888", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213", "Region", "Falesti County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Falesti County")).withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "453,213", "Funding-2011-Actual Commitments", "999,888", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213", "Administrative Level 1", "Falesti County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH")).withContents("Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "453,213", "Funding-2011-Actual Commitments", "999,888", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213", "Primary Sector", "130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH")
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Funding-2010-Actual Disbursements", "453,213", "Funding-2011-Actual Commitments", "999,888", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213")          )        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Transnistrian Region"))
-                    .withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "43,578,26", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "123,321", "Funding-2014-Actual Disbursements", "22,500", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "166,899,26", "Totals-Actual Disbursements", "22,500", "Region", "Transnistrian Region")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Transnistrian Region"))
+                    .withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "43,578,26", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "123,321", "Funding-2014-Actual Disbursements", "22,500", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "166,899,26", "Totals-Actual Disbursements", "22,500", "Administrative Level 1", "Transnistrian Region")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION"))
                       .withContents("Project Title", "", "Funding-2006-Actual Commitments", "26,146,96", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "123,321", "Funding-2014-Actual Disbursements", "13,500", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "149,467,96", "Totals-Actual Disbursements", "13,500", "Primary Sector", "110 - EDUCATION")
@@ -706,8 +706,8 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "120 - HEALTH")).withContents("Project Title", "", "Funding-2006-Actual Commitments", "13,073,48", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "6,750", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "13,073,48", "Totals-Actual Disbursements", "6,750", "Primary Sector", "120 - HEALTH")
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Funding-2006-Actual Commitments", "13,073,48", "Funding-2014-Actual Disbursements", "6,750", "Totals-Actual Commitments", "13,073,48", "Totals-Actual Disbursements", "6,750")          )        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined"))
-                    .withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "145,732,14", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Commitments", "378,930,84", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Commitments", "649,662,98", "Totals-Actual Disbursements", "72,770", "Region", "Region: Undefined")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Administrative Level 1: Undefined"))
+                    .withContents("Primary Sector", "", "Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "145,732,14", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Commitments", "378,930,84", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Commitments", "649,662,98", "Totals-Actual Disbursements", "72,770", "Administrative Level 1", "Administrative Level 1: Undefined")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION"))
                       .withContents("Project Title", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "120,168,92", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "322,737,76", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "567,906,68", "Totals-Actual Disbursements", "72,000", "Primary Sector", "110 - EDUCATION")
@@ -739,25 +739,25 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     @Test
     public void testRegionUndefinedHierarchyOutput() {
         ReportSpecification spec = buildSpecification("regionUndefinedHierarchy", 
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR), 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-                Arrays.asList(ColumnConstants.REGION),
+                Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
                 GroupingCriteria.GROUPING_YEARLY);
         
         NiReportModel cor = new NiReportModel("regionUndefinedHierarchy")
         .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 11))",
-                "(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 9, colSpan: 2))",
+                "(Administrative Level 1: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 9, colSpan: 2))",
                 "(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2))",
                 "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1))"))
             .withWarnings(Arrays.asList())
             .withBody(      new ReportAreaForTests(null)
-              .withContents("Region", "", "Project Title", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "33,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "117,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "483,333", "Totals-Actual Disbursements", "0")
+              .withContents("Administrative Level 1", "", "Project Title", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "33,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "117,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "483,333", "Totals-Actual Disbursements", "0")
               .withChildren(
-                new ReportAreaForTests(new AreaOwner("Region", "Balti County")).withContents("Project Title", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "333,333", "Totals-Actual Disbursements", "0", "Region", "Balti County")
+                new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Balti County")).withContents("Project Title", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "333,333", "Totals-Actual Disbursements", "0", "Administrative Level 1", "Balti County")
                 .withChildren(
                   new ReportAreaForTests(null, "Project Title", "crazy funding 1", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")        ),
-                new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined")).withContents("Project Title", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "33,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "117,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "150,000", "Totals-Actual Disbursements", "0", "Region", "Region: Undefined")
+                new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Administrative Level 1: Undefined")).withContents("Project Title", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "33,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "117,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "150,000", "Totals-Actual Disbursements", "0", "Administrative Level 1", "Administrative Level 1: Undefined")
                 .withChildren(
                   new ReportAreaForTests(null, "Project Title", "activity_with_disaster_response", "Primary Sector", "110 - EDUCATION, 113 - SECONDARY EDUCATION", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000")        )      ));
         
@@ -767,7 +767,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     @Test
     public void testRegionUndefinedColumn() {
         ReportSpecification spec = buildSpecification("regionUndefinedColumn", 
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR), 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
                 null,
                 GroupingCriteria.GROUPING_YEARLY);
@@ -775,15 +775,15 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel cor = new NiReportModel("regionUndefinedColumn")
         .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 11))",
-                "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 9, colSpan: 2))",
+                "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Administrative Level 1: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 9, colSpan: 2))",
                 "(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2))",
                 "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1))"))
             .withWarnings(Arrays.asList())
             .withBody(      new ReportAreaForTests(null)
-              .withContents("Project Title", "", "Region", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "33,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "117,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "483,333", "Totals-Actual Disbursements", "0")
+              .withContents("Project Title", "", "Administrative Level 1", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "33,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "117,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "483,333", "Totals-Actual Disbursements", "0")
               .withChildren(
-                new ReportAreaForTests(null, "Project Title", "crazy funding 1", "Region", "Balti County", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333"),
-                new ReportAreaForTests(null, "Project Title", "activity_with_disaster_response", "Region", "", "Primary Sector", "110 - EDUCATION, 113 - SECONDARY EDUCATION", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000")      ));
+                new ReportAreaForTests(null, "Project Title", "crazy funding 1", "Administrative Level 1", "Balti County", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333"),
+                new ReportAreaForTests(null, "Project Title", "activity_with_disaster_response", "Administrative Level 1", "", "Primary Sector", "110 - EDUCATION, 113 - SECONDARY EDUCATION", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000")      ));
         
         runNiTestCase(cor, spec, Arrays.asList("crazy funding 1", "activity_with_disaster_response"));
     }
@@ -865,23 +865,23 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     
     @Test
     public void test_AMP_18530_no_hier() {
-        // report with "Region" as a column, an activity without locations + one with locations
+        // report with "Administrative Level 1" as a column, an activity without locations + one with locations
         NiReportModel cor = new NiReportModel("AMP-18530-no-hier")
                 .withHeaders(Arrays.asList(
                         "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 12))",
-                        "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 8));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 10, colSpan: 2))",
+                        "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Administrative Level 1: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 8));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 10, colSpan: 2))",
                         "(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 2))",
                         "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1))"))
                     .withWarnings(Arrays.asList())
                     .withBody(      new ReportAreaForTests(null)
-                      .withContents("Project Title", "", "Region", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "458,333", "Totals-Actual Disbursements", "72,000")
+                      .withContents("Project Title", "", "Administrative Level 1", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "458,333", "Totals-Actual Disbursements", "72,000")
                       .withChildren(
-                        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Region", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
-                        new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Region", "Balti County", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")      ));
+                        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Administrative Level 1", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
+                        new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Administrative Level 1", "Balti County", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")      ));
         
         runNiTestCase(
                 buildSpecification("AMP-18530-no-hier",                     
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
                         null,
                         GroupingCriteria.GROUPING_YEARLY),
@@ -893,29 +893,29 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     
     @Test
     public void test_AMP_18530_hier() {
-        // report with "Region" as a hier, an activity without locations + one with locations
+        // report with "Administrative Level 1" as a hier, an activity without locations + one with locations
         NiReportModel cor = new NiReportModel("AMP-18530-hier")
         .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 12))",
-                "(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 8));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 10, colSpan: 2))",
+                "(Administrative Level 1: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 8));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 10, colSpan: 2))",
                 "(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 2))",
                 "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1))"))
             .withWarnings(Arrays.asList())
             .withBody(      new ReportAreaForTests(null)
-              .withContents("Region", "", "Project Title", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "458,333", "Totals-Actual Disbursements", "72,000")
+              .withContents("Administrative Level 1", "", "Project Title", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "458,333", "Totals-Actual Disbursements", "72,000")
               .withChildren(
-                new ReportAreaForTests(new AreaOwner("Region", "Balti County")).withContents("Project Title", "", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "333,333", "Totals-Actual Disbursements", "0", "Region", "Balti County")
+                new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Balti County")).withContents("Project Title", "", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "333,333", "Totals-Actual Disbursements", "0", "Administrative Level 1", "Balti County")
                 .withChildren(
                   new ReportAreaForTests(null, "Project Title", "crazy funding 1", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")        ),
-                new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined")).withContents("Project Title", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000", "Region", "Region: Undefined")
+                new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Administrative Level 1: Undefined")).withContents("Project Title", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000", "Administrative Level 1", "Administrative Level 1: Undefined")
                 .withChildren(
                   new ReportAreaForTests(null, "Project Title", "date-filters-activity", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000")        )      ));
         
         runNiTestCase(
                 buildSpecification("AMP-18530-hier", 
-                        Arrays.asList(ColumnConstants.REGION, ColumnConstants.PROJECT_TITLE), 
+                        Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PROJECT_TITLE),
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-                        Arrays.asList(ColumnConstants.REGION), 
+                        Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
                         GroupingCriteria.GROUPING_YEARLY),
                 "en",
                 Arrays.asList("date-filters-activity", "crazy funding 1"),
@@ -923,9 +923,9 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         
         runNiTestCase(
                 buildSpecification("AMP-18541-columns-not-ordered", 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION), 
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-                        Arrays.asList(ColumnConstants.REGION), 
+                        Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
                         GroupingCriteria.GROUPING_YEARLY),
                 "en",
                 Arrays.asList("date-filters-activity", "crazy funding 1"),
@@ -934,29 +934,29 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     
     @Test
     public void test_AMP_18542() {
-        // report with "Region" as a column, an activity without locations + one with locations
+        // report with "Administrative Level 1" as a column, an activity without locations + one with locations
         NiReportModel cor = new NiReportModel("AMP-18542-ordered-columns")
         .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 12))",
-                "(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 8));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 10, colSpan: 2))",
+                "(Administrative Level 1: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 8));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 10, colSpan: 2))",
                 "(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 2))",
                 "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1))"))
             .withWarnings(Arrays.asList())
             .withBody(      new ReportAreaForTests(null)
-              .withContents("Region", "", "Project Title", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "458,333", "Totals-Actual Disbursements", "72,000")
+              .withContents("Administrative Level 1", "", "Project Title", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "458,333", "Totals-Actual Disbursements", "72,000")
               .withChildren(
-                new ReportAreaForTests(new AreaOwner("Region", "Balti County")).withContents("Project Title", "", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "333,333", "Totals-Actual Disbursements", "0", "Region", "Balti County")
+                new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Balti County")).withContents("Project Title", "", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "333,333", "Totals-Actual Disbursements", "0", "Administrative Level 1", "Balti County")
                 .withChildren(
                   new ReportAreaForTests(null, "Project Title", "crazy funding 1", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")        ),
-                new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined")).withContents("Project Title", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000", "Region", "Region: Undefined")
+                new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Administrative Level 1: Undefined")).withContents("Project Title", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000", "Administrative Level 1", "Administrative Level 1: Undefined")
                 .withChildren(
                   new ReportAreaForTests(null, "Project Title", "date-filters-activity", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000")        )      ));
         
         runNiTestCase(
                 buildSpecification("AMP-18542-ordered-columns", 
-                    Arrays.asList(ColumnConstants.REGION, ColumnConstants.PROJECT_TITLE), 
+                    Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PROJECT_TITLE),
                     Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-                    Arrays.asList(ColumnConstants.REGION), 
+                    Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
                     GroupingCriteria.GROUPING_YEARLY),
                 "en",
                 Arrays.asList("date-filters-activity", "crazy funding 1"),
@@ -964,9 +964,9 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         
         runNiTestCase(
                 buildSpecification("AMP-18542-unordered-columns", 
-                    Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION), 
+                    Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
                     Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-                    Arrays.asList(ColumnConstants.REGION), 
+                    Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
                     GroupingCriteria.GROUPING_YEARLY),
                 "en",
                 Arrays.asList("date-filters-activity", "crazy funding 1"),
@@ -1040,20 +1040,20 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel corYearly = new NiReportModel("emptyMeasuresFlat")
                 .withHeaders(Arrays.asList(
                         "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 8))",
-                        "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 4));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 6, colSpan: 2))",
+                        "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Administrative Level 1: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 4));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 6, colSpan: 2))",
                         "(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2))",
                         "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Pipeline Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Pipeline Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Pipeline Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))"))
                     .withWarnings(Arrays.asList(
                         "-1: [entityId: -1, message: measure \"pipeline Estimated Disbursements\" not supported in NiReports]"))
                     .withBody(      new ReportAreaForTests(null)
-                      .withContents("Project Title", "", "Region", "", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Pipeline Commitments", "0", "Funding-2013-Actual Commitments", "1,236,777", "Funding-2013-Pipeline Commitments", "0", "Totals-Actual Commitments", "1,450,008", "Totals-Pipeline Commitments", "0")
+                      .withContents("Project Title", "", "Administrative Level 1", "", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Pipeline Commitments", "0", "Funding-2013-Actual Commitments", "1,236,777", "Funding-2013-Pipeline Commitments", "0", "Totals-Actual Commitments", "1,450,008", "Totals-Pipeline Commitments", "0")
                       .withChildren(
-                        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Region", "Dubasari County", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231"),
-                        new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Region", "Anenii Noi County", "Funding-2013-Actual Commitments", "666,777", "Totals-Actual Commitments", "666,777"),
-                        new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Region", "Anenii Noi County, Balti County", "Funding-2013-Actual Commitments", "570,000", "Totals-Actual Commitments", "570,000")      ));
+                        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Administrative Level 1", "Dubasari County", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231"),
+                        new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Administrative Level 1", "Anenii Noi County", "Funding-2013-Actual Commitments", "666,777", "Totals-Actual Commitments", "666,777"),
+                        new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Administrative Level 1", "Anenii Noi County, Balti County", "Funding-2013-Actual Commitments", "570,000", "Totals-Actual Commitments", "570,000")      ));
         
         ReportSpecificationImpl spec = buildSpecification("emptyMeasuresFlat", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.PIPELINE_COMMITMENTS, MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS),
             null,
             GroupingCriteria.GROUPING_YEARLY);
@@ -1063,16 +1063,16 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel corTotalsOnly = new NiReportModel("emptyMeasuresFlat")
                 .withHeaders(Arrays.asList(
                         "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
-                        "(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
+                        "(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Administrative Level 1: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
                         "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Pipeline Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
                     .withWarnings(Arrays.asList(
                         "-1: [entityId: -1, message: measure \"pipeline Estimated Disbursements\" not supported in NiReports]"))
                     .withBody(      new ReportAreaForTests(null)
-                      .withContents("Project Title", "", "Region", "", "Totals-Actual Commitments", "1,450,008", "Totals-Pipeline Commitments", "0")
+                      .withContents("Project Title", "", "Administrative Level 1", "", "Totals-Actual Commitments", "1,450,008", "Totals-Pipeline Commitments", "0")
                       .withChildren(
-                        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Region", "Dubasari County", "Totals-Actual Commitments", "213,231"),
-                        new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Region", "Anenii Noi County", "Totals-Actual Commitments", "666,777"),
-                        new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Region", "Anenii Noi County, Balti County", "Totals-Actual Commitments", "570,000")      ));
+                        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Administrative Level 1", "Dubasari County", "Totals-Actual Commitments", "213,231"),
+                        new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Administrative Level 1", "Anenii Noi County", "Totals-Actual Commitments", "666,777"),
+                        new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Administrative Level 1", "Anenii Noi County, Balti County", "Totals-Actual Commitments", "570,000")      ));
         
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
         
@@ -1084,30 +1084,30 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel corYearly = new NiReportModel("emptyMeasuresWithHier")
             .withHeaders(Arrays.asList(
                     "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 8))",
-                    "(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 4));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 6, colSpan: 2))",
+                    "(Administrative Level 1: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 4));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 6, colSpan: 2))",
                     "(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2))",
                     "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Pipeline Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Pipeline Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Pipeline Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))"))
                 .withWarnings(Arrays.asList(
                     "-1: [entityId: -1, message: measure \"pipeline Estimated Disbursements\" not supported in NiReports]"))
                 .withBody(      new ReportAreaForTests(null)
-                  .withContents("Region", "", "Project Title", "", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Pipeline Commitments", "0", "Funding-2013-Actual Commitments", "1,236,777", "Funding-2013-Pipeline Commitments", "0", "Totals-Actual Commitments", "1,450,008", "Totals-Pipeline Commitments", "0")
+                  .withContents("Administrative Level 1", "", "Project Title", "", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Pipeline Commitments", "0", "Funding-2013-Actual Commitments", "1,236,777", "Funding-2013-Pipeline Commitments", "0", "Totals-Actual Commitments", "1,450,008", "Totals-Pipeline Commitments", "0")
                   .withChildren(
-                    new ReportAreaForTests(new AreaOwner("Region", "Anenii Noi County"))
-                    .withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-Pipeline Commitments", "0", "Funding-2013-Actual Commitments", "951,777", "Funding-2013-Pipeline Commitments", "0", "Totals-Actual Commitments", "951,777", "Totals-Pipeline Commitments", "0", "Region", "Anenii Noi County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Anenii Noi County"))
+                    .withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-Pipeline Commitments", "0", "Funding-2013-Actual Commitments", "951,777", "Funding-2013-Pipeline Commitments", "0", "Totals-Actual Commitments", "951,777", "Totals-Pipeline Commitments", "0", "Administrative Level 1", "Anenii Noi County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Funding-2013-Actual Commitments", "666,777", "Totals-Actual Commitments", "666,777"),
                       new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Funding-2013-Actual Commitments", "285,000", "Totals-Actual Commitments", "285,000")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Balti County")).withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-Pipeline Commitments", "0", "Funding-2013-Actual Commitments", "285,000", "Funding-2013-Pipeline Commitments", "0", "Totals-Actual Commitments", "285,000", "Totals-Pipeline Commitments", "0", "Region", "Balti County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Balti County")).withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-Pipeline Commitments", "0", "Funding-2013-Actual Commitments", "285,000", "Funding-2013-Pipeline Commitments", "0", "Totals-Actual Commitments", "285,000", "Totals-Pipeline Commitments", "0", "Administrative Level 1", "Balti County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Funding-2013-Actual Commitments", "285,000", "Totals-Actual Commitments", "285,000")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Dubasari County")).withContents("Project Title", "", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Pipeline Commitments", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Pipeline Commitments", "0", "Totals-Actual Commitments", "213,231", "Totals-Pipeline Commitments", "0", "Region", "Dubasari County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Dubasari County")).withContents("Project Title", "", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Pipeline Commitments", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Pipeline Commitments", "0", "Totals-Actual Commitments", "213,231", "Totals-Pipeline Commitments", "0", "Administrative Level 1", "Dubasari County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231")        )      ));
         
         ReportSpecificationImpl spec = buildSpecification("emptyMeasuresWithHier", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.PIPELINE_COMMITMENTS, MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS),
-            Arrays.asList(ColumnConstants.REGION),
+            Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
             GroupingCriteria.GROUPING_YEARLY);
         
         runNiTestCase(spec, "en", Arrays.asList("TAC_activity_1", "ptc activity 1", "Activity with Zones"), corYearly);
@@ -1115,22 +1115,22 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel corTotalsOnly = new NiReportModel("emptyMeasuresWithHier")
             .withHeaders(Arrays.asList(
                     "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
-                    "(Region: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
+                    "(Administrative Level 1: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
                     "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Pipeline Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
                 .withWarnings(Arrays.asList(
                     "-1: [entityId: -1, message: measure \"pipeline Estimated Disbursements\" not supported in NiReports]"))
                 .withBody(      new ReportAreaForTests(null)
-                  .withContents("Region", "", "Project Title", "", "Totals-Actual Commitments", "1,450,008", "Totals-Pipeline Commitments", "0")
+                  .withContents("Administrative Level 1", "", "Project Title", "", "Totals-Actual Commitments", "1,450,008", "Totals-Pipeline Commitments", "0")
                   .withChildren(
-                    new ReportAreaForTests(new AreaOwner("Region", "Anenii Noi County"))
-                    .withContents("Project Title", "", "Totals-Actual Commitments", "951,777", "Totals-Pipeline Commitments", "0", "Region", "Anenii Noi County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Anenii Noi County"))
+                    .withContents("Project Title", "", "Totals-Actual Commitments", "951,777", "Totals-Pipeline Commitments", "0", "Administrative Level 1", "Anenii Noi County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Totals-Actual Commitments", "666,777"),
                       new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Totals-Actual Commitments", "285,000")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Balti County")).withContents("Project Title", "", "Totals-Actual Commitments", "285,000", "Totals-Pipeline Commitments", "0", "Region", "Balti County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Balti County")).withContents("Project Title", "", "Totals-Actual Commitments", "285,000", "Totals-Pipeline Commitments", "0", "Administrative Level 1", "Balti County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Totals-Actual Commitments", "285,000")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Dubasari County")).withContents("Project Title", "", "Totals-Actual Commitments", "213,231", "Totals-Pipeline Commitments", "0", "Region", "Dubasari County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Dubasari County")).withContents("Project Title", "", "Totals-Actual Commitments", "213,231", "Totals-Pipeline Commitments", "0", "Administrative Level 1", "Dubasari County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Totals-Actual Commitments", "213,231")        )      ));
         
@@ -1169,67 +1169,67 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel cor = new NiReportModel("test_by_mode_of_payment")
                 .withHeaders(Arrays.asList(
                         "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 21))",
-                        "(Mode of Payment: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 16));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 19, colSpan: 2))",
+                        "(Mode of Payment: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Administrative Level 1: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 16));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 19, colSpan: 2))",
                         "(2006: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 13, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 15, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 17, colSpan: 2))",
                         "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1))"))
                     .withWarnings(Arrays.asList())
                     .withBody(      new ReportAreaForTests(null)
-                      .withContents("Mode of Payment", "", "Project Title", "", "Region", "", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "780,311", "Funding-2011-Actual Commitments", "1,213,119", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "7,842,086", "Funding-2013-Actual Disbursements", "1,266,956", "Funding-2014-Actual Commitments", "8,159,813,77", "Funding-2014-Actual Disbursements", "710,200", "Funding-2015-Actual Commitments", "1,971,831,84", "Funding-2015-Actual Disbursements", "437,335", "Totals-Actual Commitments", "19,408,691,19", "Totals-Actual Disbursements", "3,206,802")
+                      .withContents("Mode of Payment", "", "Project Title", "", "Administrative Level 1", "", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "780,311", "Funding-2011-Actual Commitments", "1,213,119", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "7,842,086", "Funding-2013-Actual Disbursements", "1,266,956", "Funding-2014-Actual Commitments", "8,159,813,77", "Funding-2014-Actual Disbursements", "710,200", "Funding-2015-Actual Commitments", "1,971,831,84", "Funding-2015-Actual Disbursements", "437,335", "Totals-Actual Commitments", "19,408,691,19", "Totals-Actual Disbursements", "3,206,802")
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner("Mode of Payment", "Cash"))
-                        .withContents("Project Title", "", "Region", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "143,777", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "111,111", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "50,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "161,111", "Totals-Actual Disbursements", "143,777", "Mode of Payment", "Cash")
+                        .withContents("Project Title", "", "Administrative Level 1", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "143,777", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "111,111", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "50,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "161,111", "Totals-Actual Disbursements", "143,777", "Mode of Payment", "Cash")
                         .withChildren(
-                          new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Region", "Anenii Noi County", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
-                          new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Region", "Balti County", "Funding-2013-Actual Commitments", "111,111", "Totals-Actual Commitments", "111,111"),
-                          new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Region", "", "Funding-2014-Actual Commitments", "50,000", "Totals-Actual Commitments", "50,000")        ),
+                          new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Administrative Level 1", "Anenii Noi County", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
+                          new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Administrative Level 1", "Balti County", "Funding-2013-Actual Commitments", "111,111", "Totals-Actual Commitments", "111,111"),
+                          new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "50,000", "Totals-Actual Commitments", "50,000")        ),
                         new ReportAreaForTests(new AreaOwner("Mode of Payment", "Direct payment"))
-                        .withContents("Project Title", "", "Region", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "900,976", "Funding-2013-Actual Disbursements", "721,956", "Funding-2014-Actual Commitments", "111,632,14", "Funding-2014-Actual Disbursements", "75,000", "Funding-2015-Actual Commitments", "1,222,386,84", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "2,234,994,98", "Totals-Actual Disbursements", "796,956", "Mode of Payment", "Direct payment")
+                        .withContents("Project Title", "", "Administrative Level 1", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "900,976", "Funding-2013-Actual Disbursements", "721,956", "Funding-2014-Actual Commitments", "111,632,14", "Funding-2014-Actual Disbursements", "75,000", "Funding-2015-Actual Commitments", "1,222,386,84", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "2,234,994,98", "Totals-Actual Disbursements", "796,956", "Mode of Payment", "Direct payment")
                         .withChildren(
-                          new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Region", "Anenii Noi County", "Funding-2013-Actual Commitments", "111,333", "Funding-2013-Actual Disbursements", "555,111", "Totals-Actual Commitments", "111,333", "Totals-Actual Disbursements", "555,111"),
-                          new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Region", "Edinet County", "Funding-2013-Actual Commitments", "567,421", "Funding-2013-Actual Disbursements", "131,845", "Totals-Actual Commitments", "567,421", "Totals-Actual Disbursements", "131,845"),
-                          new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Region", "Balti County", "Funding-2013-Actual Commitments", "222,222", "Totals-Actual Commitments", "222,222"),
-                          new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Region", "Anenii Noi County, Balti County", "Funding-2014-Actual Commitments", "75,000", "Totals-Actual Commitments", "75,000"),
-                          new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Region", "Balti County, Drochia County", "Funding-2015-Actual Commitments", "888,000", "Totals-Actual Commitments", "888,000"),
-                          new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Region", "", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000"),
-                          new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Region", "Chisinau City", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
-                          new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Region", "Chisinau County", "Funding-2013-Actual Disbursements", "35,000", "Funding-2014-Actual Disbursements", "75,000", "Totals-Actual Disbursements", "110,000"),
-                          new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Region", "", "Funding-2014-Actual Commitments", "3,632,14", "Funding-2015-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "97,562,98")        ),
-                        new ReportAreaForTests(new AreaOwner("Mode of Payment", "No Information")).withContents("Project Title", "", "Region", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "333,222", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "333,222", "Totals-Actual Disbursements", "0", "Mode of Payment", "No Information")
+                          new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Administrative Level 1", "Anenii Noi County", "Funding-2013-Actual Commitments", "111,333", "Funding-2013-Actual Disbursements", "555,111", "Totals-Actual Commitments", "111,333", "Totals-Actual Disbursements", "555,111"),
+                          new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Administrative Level 1", "Edinet County", "Funding-2013-Actual Commitments", "567,421", "Funding-2013-Actual Disbursements", "131,845", "Totals-Actual Commitments", "567,421", "Totals-Actual Disbursements", "131,845"),
+                          new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Administrative Level 1", "Balti County", "Funding-2013-Actual Commitments", "222,222", "Totals-Actual Commitments", "222,222"),
+                          new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Administrative Level 1", "Anenii Noi County, Balti County", "Funding-2014-Actual Commitments", "75,000", "Totals-Actual Commitments", "75,000"),
+                          new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Administrative Level 1", "Balti County, Drochia County", "Funding-2015-Actual Commitments", "888,000", "Totals-Actual Commitments", "888,000"),
+                          new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000"),
+                          new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Administrative Level 1", "Chisinau City", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
+                          new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Administrative Level 1", "Chisinau County", "Funding-2013-Actual Disbursements", "35,000", "Funding-2014-Actual Disbursements", "75,000", "Totals-Actual Disbursements", "110,000"),
+                          new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "3,632,14", "Funding-2015-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "97,562,98")        ),
+                        new ReportAreaForTests(new AreaOwner("Mode of Payment", "No Information")).withContents("Project Title", "", "Administrative Level 1", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "333,222", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "333,222", "Totals-Actual Disbursements", "0", "Mode of Payment", "No Information")
                         .withChildren(
-                          new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Region", "Anenii Noi County", "Funding-2013-Actual Commitments", "333,222", "Totals-Actual Commitments", "333,222")        ),
-                        new ReportAreaForTests(new AreaOwner("Mode of Payment", "Reimbursable")).withContents("Project Title", "", "Region", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "666,777", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "666,777", "Totals-Actual Disbursements", "0", "Mode of Payment", "Reimbursable")
+                          new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Administrative Level 1", "Anenii Noi County", "Funding-2013-Actual Commitments", "333,222", "Totals-Actual Commitments", "333,222")        ),
+                        new ReportAreaForTests(new AreaOwner("Mode of Payment", "Reimbursable")).withContents("Project Title", "", "Administrative Level 1", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "666,777", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "666,777", "Totals-Actual Disbursements", "0", "Mode of Payment", "Reimbursable")
                         .withChildren(
-                          new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Region", "Anenii Noi County", "Funding-2013-Actual Commitments", "666,777", "Totals-Actual Commitments", "666,777")        ),
+                          new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Administrative Level 1", "Anenii Noi County", "Funding-2013-Actual Commitments", "666,777", "Totals-Actual Commitments", "666,777")        ),
                         new ReportAreaForTests(new AreaOwner("Mode of Payment", "Mode of Payment: Undefined"))
-                        .withContents("Project Title", "", "Region", "", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "636,534", "Funding-2011-Actual Commitments", "1,213,119", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "5,830,000", "Funding-2013-Actual Disbursements", "545,000", "Funding-2014-Actual Commitments", "7,998,181,63", "Funding-2014-Actual Disbursements", "635,200", "Funding-2015-Actual Commitments", "749,445", "Funding-2015-Actual Disbursements", "437,335", "Totals-Actual Commitments", "16,012,586,21", "Totals-Actual Disbursements", "2,266,069", "Mode of Payment", "Mode of Payment: Undefined")
+                        .withContents("Project Title", "", "Administrative Level 1", "", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "636,534", "Funding-2011-Actual Commitments", "1,213,119", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "5,830,000", "Funding-2013-Actual Disbursements", "545,000", "Funding-2014-Actual Commitments", "7,998,181,63", "Funding-2014-Actual Disbursements", "635,200", "Funding-2015-Actual Commitments", "749,445", "Funding-2015-Actual Disbursements", "437,335", "Totals-Actual Commitments", "16,012,586,21", "Totals-Actual Disbursements", "2,266,069", "Mode of Payment", "Mode of Payment: Undefined")
                         .withChildren(
-                          new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Region", "Dubasari County", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321"),
-                          new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Region", "Falesti County", "Funding-2010-Actual Disbursements", "453,213", "Funding-2011-Actual Commitments", "999,888", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213"),
-                          new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Region", "Anenii Noi County", "Funding-2013-Actual Disbursements", "545,000", "Totals-Actual Disbursements", "545,000"),
-                          new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Region", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
-                          new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Region", "Anenii Noi County, Balti County", "Funding-2013-Actual Commitments", "570,000", "Totals-Actual Commitments", "570,000"),
-                          new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Region", "Anenii Noi County, Balti County", "Funding-2013-Actual Commitments", "890,000", "Totals-Actual Commitments", "890,000"),
-                          new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Region", "Chisinau City", "Funding-2014-Actual Commitments", "50,000", "Totals-Actual Commitments", "50,000"),
-                          new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Region", "", "Funding-2014-Actual Commitments", "32,000", "Totals-Actual Commitments", "32,000"),
-                          new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Region", "", "Funding-2014-Actual Commitments", "15,000", "Totals-Actual Commitments", "15,000"),
-                          new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Region", "Chisinau County", "Funding-2013-Actual Commitments", "1,700,000", "Funding-2014-Actual Commitments", "3,300,000", "Totals-Actual Commitments", "5,000,000"),
-                          new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Region", "Cahul County", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000"),
-                          new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Region", "Chisinau County", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000"),
-                          new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Region", "Balti County, Transnistrian Region", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Commitments", "96,840,58", "Totals-Actual Disbursements", "50,000"),
-                          new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Region", "", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000"),
-                          new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Region", "Transnistrian Region", "Funding-2014-Actual Commitments", "123,321", "Totals-Actual Commitments", "123,321"),
-                          new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Region", "", "Funding-2014-Actual Commitments", "100", "Totals-Actual Commitments", "100"),
-                          new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Region", "", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000"),
-                          new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Region", "Balti County", "Funding-2015-Actual Commitments", "456,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "456,789", "Totals-Actual Disbursements", "321,765"),
-                          new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Region", "Chisinau County", "Funding-2015-Actual Commitments", "1,200", "Totals-Actual Commitments", "1,200"),
-                          new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Region", "Chisinau City", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
-                          new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Region", "", "Funding-2015-Actual Commitments", "123,000", "Totals-Actual Commitments", "123,000"),
-                          new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Region", "", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Disbursements", "770"),
-                          new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Region", "Chisinau City, Dubasari County", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000"),
-                          new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Region", "Drochia County", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Disbursements", "80,000"))));
+                          new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Administrative Level 1", "Dubasari County", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321"),
+                          new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Administrative Level 1", "Falesti County", "Funding-2010-Actual Disbursements", "453,213", "Funding-2011-Actual Commitments", "999,888", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213"),
+                          new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Administrative Level 1", "Anenii Noi County", "Funding-2013-Actual Disbursements", "545,000", "Totals-Actual Disbursements", "545,000"),
+                          new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Administrative Level 1", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
+                          new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Administrative Level 1", "Anenii Noi County, Balti County", "Funding-2013-Actual Commitments", "570,000", "Totals-Actual Commitments", "570,000"),
+                          new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Administrative Level 1", "Anenii Noi County, Balti County", "Funding-2013-Actual Commitments", "890,000", "Totals-Actual Commitments", "890,000"),
+                          new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Administrative Level 1", "Chisinau City", "Funding-2014-Actual Commitments", "50,000", "Totals-Actual Commitments", "50,000"),
+                          new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "32,000", "Totals-Actual Commitments", "32,000"),
+                          new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "15,000", "Totals-Actual Commitments", "15,000"),
+                          new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Administrative Level 1", "Chisinau County", "Funding-2013-Actual Commitments", "1,700,000", "Funding-2014-Actual Commitments", "3,300,000", "Totals-Actual Commitments", "5,000,000"),
+                          new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Administrative Level 1", "Cahul County", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000"),
+                          new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Administrative Level 1", "Chisinau County", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000"),
+                          new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Administrative Level 1", "Balti County, Transnistrian Region", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Commitments", "96,840,58", "Totals-Actual Disbursements", "50,000"),
+                          new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000"),
+                          new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Administrative Level 1", "Transnistrian Region", "Funding-2014-Actual Commitments", "123,321", "Totals-Actual Commitments", "123,321"),
+                          new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "100", "Totals-Actual Commitments", "100"),
+                          new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Administrative Level 1", "", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000"),
+                          new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Administrative Level 1", "Balti County", "Funding-2015-Actual Commitments", "456,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "456,789", "Totals-Actual Disbursements", "321,765"),
+                          new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Administrative Level 1", "Chisinau County", "Funding-2015-Actual Commitments", "1,200", "Totals-Actual Commitments", "1,200"),
+                          new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Administrative Level 1", "Chisinau City", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
+                          new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Administrative Level 1", "", "Funding-2015-Actual Commitments", "123,000", "Totals-Actual Commitments", "123,000"),
+                          new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Administrative Level 1", "", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Disbursements", "770"),
+                          new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Administrative Level 1", "Chisinau City, Dubasari County", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000"),
+                          new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Administrative Level 1", "Drochia County", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Disbursements", "80,000"))));
 
         ReportSpecificationImpl spec = buildSpecification("test_by_mode_of_payment",
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.MODE_OF_PAYMENT),
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.MODE_OF_PAYMENT),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
                 Arrays.asList(ColumnConstants.MODE_OF_PAYMENT),
                 GroupingCriteria.GROUPING_YEARLY);
@@ -1242,60 +1242,60 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel cor = new NiReportModel("test_by_type_of_assistance")
                 .withHeaders(Arrays.asList(
                         "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 21))",
-                        "(Type Of Assistance: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 16));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 19, colSpan: 2))",
+                        "(Type Of Assistance: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Administrative Level 1: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 16));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 19, colSpan: 2))",
                         "(2006: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 13, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 15, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 17, colSpan: 2))",
                         "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1))"))
                     .withWarnings(Arrays.asList())
                     .withBody(      new ReportAreaForTests(null)
-                      .withContents("Type Of Assistance", "", "Project Title", "", "Region", "", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "780,311", "Funding-2011-Actual Commitments", "1,213,119", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "7,842,086", "Funding-2013-Actual Disbursements", "1,266,956", "Funding-2014-Actual Commitments", "8,159,813,77", "Funding-2014-Actual Disbursements", "710,200", "Funding-2015-Actual Commitments", "1,971,831,84", "Funding-2015-Actual Disbursements", "437,335", "Totals-Actual Commitments", "19,408,691,19", "Totals-Actual Disbursements", "3,206,802")
+                      .withContents("Type Of Assistance", "", "Project Title", "", "Administrative Level 1", "", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "780,311", "Funding-2011-Actual Commitments", "1,213,119", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "7,842,086", "Funding-2013-Actual Disbursements", "1,266,956", "Funding-2014-Actual Commitments", "8,159,813,77", "Funding-2014-Actual Disbursements", "710,200", "Funding-2015-Actual Commitments", "1,971,831,84", "Funding-2015-Actual Disbursements", "437,335", "Totals-Actual Commitments", "19,408,691,19", "Totals-Actual Disbursements", "3,206,802")
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance"))
-                        .withContents("Project Title", "", "Region", "", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "780,311", "Funding-2011-Actual Commitments", "1,213,119", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "4,949,864", "Funding-2013-Actual Disbursements", "1,266,956", "Funding-2014-Actual Commitments", "3,570,732,14", "Funding-2014-Actual Disbursements", "180,200", "Funding-2015-Actual Commitments", "1,971,831,84", "Funding-2015-Actual Disbursements", "437,335", "Totals-Actual Commitments", "11,927,387,56", "Totals-Actual Disbursements", "2,676,802", "Type Of Assistance", "default type of assistance")
+                        .withContents("Project Title", "", "Administrative Level 1", "", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "780,311", "Funding-2011-Actual Commitments", "1,213,119", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "4,949,864", "Funding-2013-Actual Disbursements", "1,266,956", "Funding-2014-Actual Commitments", "3,570,732,14", "Funding-2014-Actual Disbursements", "180,200", "Funding-2015-Actual Commitments", "1,971,831,84", "Funding-2015-Actual Disbursements", "437,335", "Totals-Actual Commitments", "11,927,387,56", "Totals-Actual Disbursements", "2,676,802", "Type Of Assistance", "default type of assistance")
                         .withChildren(
-                          new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Region", "Dubasari County", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321"),
-                          new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Region", "Falesti County", "Funding-2010-Actual Disbursements", "453,213", "Funding-2011-Actual Commitments", "999,888", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213"),
-                          new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Region", "Anenii Noi County", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
-                          new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Region", "Anenii Noi County", "Funding-2013-Actual Disbursements", "545,000", "Totals-Actual Disbursements", "545,000"),
-                          new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Region", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
-                          new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Region", "Anenii Noi County", "Funding-2013-Actual Commitments", "666,777", "Totals-Actual Commitments", "666,777"),
-                          new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Region", "Anenii Noi County", "Funding-2013-Actual Commitments", "333,222", "Totals-Actual Commitments", "333,222"),
-                          new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Region", "Anenii Noi County", "Funding-2013-Actual Commitments", "111,333", "Funding-2013-Actual Disbursements", "555,111", "Totals-Actual Commitments", "111,333", "Totals-Actual Disbursements", "555,111"),
-                          new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Region", "Edinet County", "Funding-2013-Actual Commitments", "567,421", "Funding-2013-Actual Disbursements", "131,845", "Totals-Actual Commitments", "567,421", "Totals-Actual Disbursements", "131,845"),
-                          new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Region", "Balti County", "Funding-2013-Actual Commitments", "111,111", "Totals-Actual Commitments", "111,111"),
-                          new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Region", "Anenii Noi County, Balti County", "Funding-2013-Actual Commitments", "570,000", "Totals-Actual Commitments", "570,000"),
-                          new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Region", "Anenii Noi County, Balti County", "Funding-2013-Actual Commitments", "890,000", "Totals-Actual Commitments", "890,000"),
-                          new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Region", "Anenii Noi County, Balti County", "Funding-2014-Actual Commitments", "75,000", "Totals-Actual Commitments", "75,000"),
-                          new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Region", "Chisinau City", "Funding-2014-Actual Commitments", "50,000", "Totals-Actual Commitments", "50,000"),
-                          new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Region", "", "Funding-2014-Actual Commitments", "50,000", "Totals-Actual Commitments", "50,000"),
-                          new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Region", "", "Funding-2014-Actual Commitments", "32,000", "Totals-Actual Commitments", "32,000"),
-                          new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Region", "", "Funding-2014-Actual Commitments", "15,000", "Totals-Actual Commitments", "15,000"),
-                          new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Region", "Chisinau County", "Funding-2013-Actual Commitments", "1,700,000", "Funding-2014-Actual Commitments", "3,300,000", "Totals-Actual Commitments", "5,000,000"),
-                          new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Region", "Balti County, Transnistrian Region", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Commitments", "96,840,58", "Totals-Actual Disbursements", "50,000"),
-                          new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Region", "", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000"),
-                          new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Region", "", "Funding-2014-Actual Commitments", "100", "Totals-Actual Commitments", "100"),
-                          new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Region", "", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000"),
-                          new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Region", "Balti County", "Funding-2015-Actual Commitments", "456,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "456,789", "Totals-Actual Disbursements", "321,765"),
-                          new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Region", "Chisinau County", "Funding-2015-Actual Commitments", "1,200", "Totals-Actual Commitments", "1,200"),
-                          new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Region", "Chisinau City", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
-                          new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Region", "", "Funding-2015-Actual Commitments", "123,000", "Totals-Actual Commitments", "123,000"),
-                          new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Region", "", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Disbursements", "770"),
-                          new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Region", "Balti County, Drochia County", "Funding-2015-Actual Commitments", "888,000", "Totals-Actual Commitments", "888,000"),
-                          new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Region", "", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000"),
-                          new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Region", "Chisinau City", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
-                          new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Region", "Chisinau County", "Funding-2013-Actual Disbursements", "35,000", "Funding-2014-Actual Disbursements", "75,000", "Totals-Actual Disbursements", "110,000"),
-                          new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Region", "Chisinau City, Dubasari County", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000"),
-                          new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Region", "Drochia County", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Disbursements", "80,000"),
-                          new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Region", "", "Funding-2014-Actual Commitments", "3,632,14", "Funding-2015-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "97,562,98")        ),
+                          new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Administrative Level 1", "Dubasari County", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321"),
+                          new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Administrative Level 1", "Falesti County", "Funding-2010-Actual Disbursements", "453,213", "Funding-2011-Actual Commitments", "999,888", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213"),
+                          new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Administrative Level 1", "Anenii Noi County", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
+                          new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Administrative Level 1", "Anenii Noi County", "Funding-2013-Actual Disbursements", "545,000", "Totals-Actual Disbursements", "545,000"),
+                          new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Administrative Level 1", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
+                          new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Administrative Level 1", "Anenii Noi County", "Funding-2013-Actual Commitments", "666,777", "Totals-Actual Commitments", "666,777"),
+                          new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Administrative Level 1", "Anenii Noi County", "Funding-2013-Actual Commitments", "333,222", "Totals-Actual Commitments", "333,222"),
+                          new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Administrative Level 1", "Anenii Noi County", "Funding-2013-Actual Commitments", "111,333", "Funding-2013-Actual Disbursements", "555,111", "Totals-Actual Commitments", "111,333", "Totals-Actual Disbursements", "555,111"),
+                          new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Administrative Level 1", "Edinet County", "Funding-2013-Actual Commitments", "567,421", "Funding-2013-Actual Disbursements", "131,845", "Totals-Actual Commitments", "567,421", "Totals-Actual Disbursements", "131,845"),
+                          new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Administrative Level 1", "Balti County", "Funding-2013-Actual Commitments", "111,111", "Totals-Actual Commitments", "111,111"),
+                          new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Administrative Level 1", "Anenii Noi County, Balti County", "Funding-2013-Actual Commitments", "570,000", "Totals-Actual Commitments", "570,000"),
+                          new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Administrative Level 1", "Anenii Noi County, Balti County", "Funding-2013-Actual Commitments", "890,000", "Totals-Actual Commitments", "890,000"),
+                          new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Administrative Level 1", "Anenii Noi County, Balti County", "Funding-2014-Actual Commitments", "75,000", "Totals-Actual Commitments", "75,000"),
+                          new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Administrative Level 1", "Chisinau City", "Funding-2014-Actual Commitments", "50,000", "Totals-Actual Commitments", "50,000"),
+                          new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "50,000", "Totals-Actual Commitments", "50,000"),
+                          new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "32,000", "Totals-Actual Commitments", "32,000"),
+                          new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "15,000", "Totals-Actual Commitments", "15,000"),
+                          new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Administrative Level 1", "Chisinau County", "Funding-2013-Actual Commitments", "1,700,000", "Funding-2014-Actual Commitments", "3,300,000", "Totals-Actual Commitments", "5,000,000"),
+                          new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Administrative Level 1", "Balti County, Transnistrian Region", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Commitments", "96,840,58", "Totals-Actual Disbursements", "50,000"),
+                          new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000"),
+                          new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "100", "Totals-Actual Commitments", "100"),
+                          new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Administrative Level 1", "", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000"),
+                          new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Administrative Level 1", "Balti County", "Funding-2015-Actual Commitments", "456,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "456,789", "Totals-Actual Disbursements", "321,765"),
+                          new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Administrative Level 1", "Chisinau County", "Funding-2015-Actual Commitments", "1,200", "Totals-Actual Commitments", "1,200"),
+                          new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Administrative Level 1", "Chisinau City", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
+                          new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Administrative Level 1", "", "Funding-2015-Actual Commitments", "123,000", "Totals-Actual Commitments", "123,000"),
+                          new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Administrative Level 1", "", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Disbursements", "770"),
+                          new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Administrative Level 1", "Balti County, Drochia County", "Funding-2015-Actual Commitments", "888,000", "Totals-Actual Commitments", "888,000"),
+                          new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000"),
+                          new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Administrative Level 1", "Chisinau City", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
+                          new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Administrative Level 1", "Chisinau County", "Funding-2013-Actual Disbursements", "35,000", "Funding-2014-Actual Disbursements", "75,000", "Totals-Actual Disbursements", "110,000"),
+                          new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Administrative Level 1", "Chisinau City, Dubasari County", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000"),
+                          new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Administrative Level 1", "Drochia County", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Disbursements", "80,000"),
+                          new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Administrative Level 1", "", "Funding-2014-Actual Commitments", "3,632,14", "Funding-2015-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "97,562,98")        ),
                         new ReportAreaForTests(new AreaOwner("Type Of Assistance", "second type of assistance"))
-                        .withContents("Project Title", "", "Region", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "2,892,222", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4,589,081,63", "Funding-2014-Actual Disbursements", "530,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "7,481,303,63", "Totals-Actual Disbursements", "530,000", "Type Of Assistance", "second type of assistance")
+                        .withContents("Project Title", "", "Administrative Level 1", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "2,892,222", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4,589,081,63", "Funding-2014-Actual Disbursements", "530,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "7,481,303,63", "Totals-Actual Disbursements", "530,000", "Type Of Assistance", "second type of assistance")
                         .withChildren(
-                          new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Region", "Balti County", "Funding-2013-Actual Commitments", "222,222", "Totals-Actual Commitments", "222,222"),
-                          new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Region", "Cahul County", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000"),
-                          new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Region", "Chisinau County", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000"),
-                          new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Region", "Transnistrian Region", "Funding-2014-Actual Commitments", "123,321", "Totals-Actual Commitments", "123,321"))));
+                          new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Administrative Level 1", "Balti County", "Funding-2013-Actual Commitments", "222,222", "Totals-Actual Commitments", "222,222"),
+                          new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Administrative Level 1", "Cahul County", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000"),
+                          new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Administrative Level 1", "Chisinau County", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000"),
+                          new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Administrative Level 1", "Transnistrian Region", "Funding-2014-Actual Commitments", "123,321", "Totals-Actual Commitments", "123,321"))));
         
         ReportSpecificationImpl spec = buildSpecification("test_by_type_of_assistance",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.TYPE_OF_ASSISTANCE),
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.TYPE_OF_ASSISTANCE),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
             Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE),
             GroupingCriteria.GROUPING_YEARLY);
@@ -1308,60 +1308,60 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel cor = new NiReportModel("testActivityCountFlat")
             .withHeaders(Arrays.asList(
                     "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
-                    "(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Activity Count: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
+                    "(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Administrative Level 1: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Activity Count: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
                     "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
                 .withWarnings(Arrays.asList())
                 .withBody(      new ReportAreaForTests(null)
-                  .withContents("Project Title", "", "Region", "", "Activity Count", "44", "Totals-Actual Commitments", "19,408,691,19")
+                  .withContents("Project Title", "", "Administrative Level 1", "", "Activity Count", "44", "Totals-Actual Commitments", "19,408,691,19")
                   .withChildren(
-                    new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Region", "Dubasari County", "Totals-Actual Commitments", "213,231"),
-                    new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Region", "Falesti County", "Totals-Actual Commitments", "999,888"),
-                    new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Region", "Drochia County"),
-                    new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Region", "Anenii Noi County"),
-                    new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Region", "Anenii Noi County"),
-                    new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Region", "Cahul County"),
-                    new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components", "Region", "Anenii Noi County"),
-                    new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents", "Region", "Balti County"),
-                    new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Region", "Anenii Noi County"),
-                    new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Region", ""),
-                    new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Region", "", "Totals-Actual Commitments", "125,000"),
-                    new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "Region", "Anenii Noi County"),
-                    new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Region", "Anenii Noi County", "Totals-Actual Commitments", "666,777"),
-                    new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Region", "Anenii Noi County", "Totals-Actual Commitments", "333,222"),
-                    new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Region", "Anenii Noi County", "Totals-Actual Commitments", "111,333"),
-                    new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Region", "Edinet County", "Totals-Actual Commitments", "567,421"),
-                    new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Region", "Balti County", "Totals-Actual Commitments", "333,333"),
-                    new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Region", "Anenii Noi County, Balti County", "Totals-Actual Commitments", "570,000"),
-                    new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Region", "Anenii Noi County, Balti County", "Totals-Actual Commitments", "890,000"),
-                    new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Region", "Anenii Noi County, Balti County", "Totals-Actual Commitments", "75,000"),
-                    new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Region", "Chisinau City", "Totals-Actual Commitments", "50,000"),
-                    new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Region", "", "Totals-Actual Commitments", "50,000"),
-                    new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Region", "", "Totals-Actual Commitments", "32,000"),
-                    new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Region", "", "Totals-Actual Commitments", "15,000"),
-                    new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Region", "Chisinau County", "Totals-Actual Commitments", "5,000,000"),
-                    new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Region", "Cahul County", "Totals-Actual Commitments", "7,070,000"),
-                    new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Region", "Chisinau County", "Totals-Actual Commitments", "65,760,63"),
-                    new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Region", "Balti County, Transnistrian Region", "Totals-Actual Commitments", "96,840,58"),
-                    new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Region", "", "Totals-Actual Commitments", "12,000"),
-                    new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Region", "Transnistrian Region", "Totals-Actual Commitments", "123,321"),
-                    new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Region", "", "Totals-Actual Commitments", "100"),
-                    new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Region", "", "Totals-Actual Commitments", "45,000"),
-                    new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Region", "Balti County", "Totals-Actual Commitments", "456,789"),
-                    new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Region", "Chisinau County", "Totals-Actual Commitments", "1,200"),
-                    new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Region", "Chisinau City", "Totals-Actual Commitments", "123,456"),
-                    new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Region", "", "Totals-Actual Commitments", "123,000"),
-                    new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Region", ""),
-                    new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Region", "Balti County, Drochia County", "Totals-Actual Commitments", "888,000"),
-                    new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Region", "", "Totals-Actual Commitments", "150,000"),
-                    new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Region", "Chisinau City", "Totals-Actual Commitments", "123,456"),
-                    new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Region", "Chisinau County"),
-                    new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Region", "Chisinau City, Dubasari County"),
-                    new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Region", "Drochia County"),
-                    new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Region", "", "Totals-Actual Commitments", "97,562,98")      ));
+                    new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Administrative Level 1", "Dubasari County", "Totals-Actual Commitments", "213,231"),
+                    new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Administrative Level 1", "Falesti County", "Totals-Actual Commitments", "999,888"),
+                    new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Administrative Level 1", "Drochia County"),
+                    new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Administrative Level 1", "Anenii Noi County"),
+                    new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Administrative Level 1", "Anenii Noi County"),
+                    new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Administrative Level 1", "Cahul County"),
+                    new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components", "Administrative Level 1", "Anenii Noi County"),
+                    new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents", "Administrative Level 1", "Balti County"),
+                    new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Administrative Level 1", "Anenii Noi County"),
+                    new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Administrative Level 1", ""),
+                    new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Administrative Level 1", "", "Totals-Actual Commitments", "125,000"),
+                    new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "Administrative Level 1", "Anenii Noi County"),
+                    new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Administrative Level 1", "Anenii Noi County", "Totals-Actual Commitments", "666,777"),
+                    new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Administrative Level 1", "Anenii Noi County", "Totals-Actual Commitments", "333,222"),
+                    new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Administrative Level 1", "Anenii Noi County", "Totals-Actual Commitments", "111,333"),
+                    new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Administrative Level 1", "Edinet County", "Totals-Actual Commitments", "567,421"),
+                    new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Administrative Level 1", "Balti County", "Totals-Actual Commitments", "333,333"),
+                    new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Administrative Level 1", "Anenii Noi County, Balti County", "Totals-Actual Commitments", "570,000"),
+                    new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Administrative Level 1", "Anenii Noi County, Balti County", "Totals-Actual Commitments", "890,000"),
+                    new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Administrative Level 1", "Anenii Noi County, Balti County", "Totals-Actual Commitments", "75,000"),
+                    new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Administrative Level 1", "Chisinau City", "Totals-Actual Commitments", "50,000"),
+                    new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Administrative Level 1", "", "Totals-Actual Commitments", "50,000"),
+                    new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Administrative Level 1", "", "Totals-Actual Commitments", "32,000"),
+                    new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Administrative Level 1", "", "Totals-Actual Commitments", "15,000"),
+                    new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Administrative Level 1", "Chisinau County", "Totals-Actual Commitments", "5,000,000"),
+                    new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Administrative Level 1", "Cahul County", "Totals-Actual Commitments", "7,070,000"),
+                    new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Administrative Level 1", "Chisinau County", "Totals-Actual Commitments", "65,760,63"),
+                    new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Administrative Level 1", "Balti County, Transnistrian Region", "Totals-Actual Commitments", "96,840,58"),
+                    new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Administrative Level 1", "", "Totals-Actual Commitments", "12,000"),
+                    new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Administrative Level 1", "Transnistrian Region", "Totals-Actual Commitments", "123,321"),
+                    new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Administrative Level 1", "", "Totals-Actual Commitments", "100"),
+                    new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Administrative Level 1", "", "Totals-Actual Commitments", "45,000"),
+                    new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Administrative Level 1", "Balti County", "Totals-Actual Commitments", "456,789"),
+                    new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Administrative Level 1", "Chisinau County", "Totals-Actual Commitments", "1,200"),
+                    new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Administrative Level 1", "Chisinau City", "Totals-Actual Commitments", "123,456"),
+                    new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Administrative Level 1", "", "Totals-Actual Commitments", "123,000"),
+                    new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Administrative Level 1", ""),
+                    new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Administrative Level 1", "Balti County, Drochia County", "Totals-Actual Commitments", "888,000"),
+                    new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Administrative Level 1", "", "Totals-Actual Commitments", "150,000"),
+                    new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Administrative Level 1", "Chisinau City", "Totals-Actual Commitments", "123,456"),
+                    new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Administrative Level 1", "Chisinau County"),
+                    new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Administrative Level 1", "Chisinau City, Dubasari County"),
+                    new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Administrative Level 1", "Drochia County"),
+                    new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Administrative Level 1", "", "Totals-Actual Commitments", "97,562,98")      ));
 
         
         ReportSpecificationImpl spec = buildSpecification("testActivityCountFlat",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.ACTIVITY_COUNT),
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.ACTIVITY_COUNT),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
             null,
             GroupingCriteria.GROUPING_TOTALS_ONLY);
@@ -1374,14 +1374,14 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel cor = new NiReportModel("testActivityCountSpecHier")
             .withHeaders(Arrays.asList(
                     "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
-                    "(Region: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Activity Count: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
+                    "(Administrative Level 1: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Activity Count: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
                     "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
                 .withWarnings(Arrays.asList())
                 .withBody(      new ReportAreaForTests(null)
-                  .withContents("Region", "", "Project Title", "", "Activity Count", "31", "Totals-Actual Commitments", "19,408,691,19")
+                  .withContents("Administrative Level 1", "", "Project Title", "", "Activity Count", "31", "Totals-Actual Commitments", "19,408,691,19")
                   .withChildren(
-                    new ReportAreaForTests(new AreaOwner("Region", "Anenii Noi County", 9085))
-                    .withContents("Project Title", "", "Activity Count", "6", "Totals-Actual Commitments", "1,611,832", "Region", "Anenii Noi County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Anenii Noi County", 9085))
+                    .withContents("Project Title", "", "Activity Count", "6", "Totals-Actual Commitments", "1,611,832", "Administrative Level 1", "Anenii Noi County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Totals-Actual Commitments", "666,777"),
                       new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Totals-Actual Commitments", "333,222"),
@@ -1389,8 +1389,8 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                       new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Totals-Actual Commitments", "285,000"),
                       new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Totals-Actual Commitments", "178,000"),
                       new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Totals-Actual Commitments", "37,500")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Balti County", 9086))
-                    .withContents("Project Title", "", "Activity Count", "7", "Totals-Actual Commitments", "2,144,284,32", "Region", "Balti County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Balti County", 9086))
+                    .withContents("Project Title", "", "Activity Count", "7", "Totals-Actual Commitments", "2,144,284,32", "Administrative Level 1", "Balti County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Totals-Actual Commitments", "333,333"),
                       new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Totals-Actual Commitments", "285,000"),
@@ -1399,40 +1399,40 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                       new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Actual Commitments", "53,262,32"),
                       new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Totals-Actual Commitments", "456,789"),
                       new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Totals-Actual Commitments", "266,400")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Cahul County", 9087)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "7,070,000", "Region", "Cahul County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Cahul County", 9087)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "7,070,000", "Administrative Level 1", "Cahul County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Totals-Actual Commitments", "7,070,000")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Chisinau City", 9088))
-                    .withContents("Project Title", "", "Activity Count", "3", "Totals-Actual Commitments", "296,912", "Region", "Chisinau City")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Chisinau City", 9088))
+                    .withContents("Project Title", "", "Activity Count", "3", "Totals-Actual Commitments", "296,912", "Administrative Level 1", "Chisinau City")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Totals-Actual Commitments", "50,000"),
                       new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Totals-Actual Commitments", "123,456"),
                       new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Totals-Actual Commitments", "123,456")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Chisinau County", 9089))
-                    .withContents("Project Title", "", "Activity Count", "3", "Totals-Actual Commitments", "5,066,960,63", "Region", "Chisinau County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Chisinau County", 9089))
+                    .withContents("Project Title", "", "Activity Count", "3", "Totals-Actual Commitments", "5,066,960,63", "Administrative Level 1", "Chisinau County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Totals-Actual Commitments", "5,000,000"),
                       new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Totals-Actual Commitments", "65,760,63"),
                       new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Totals-Actual Commitments", "1,200")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Drochia County", 9090)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "621,600", "Region", "Drochia County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Drochia County", 9090)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "621,600", "Administrative Level 1", "Drochia County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Totals-Actual Commitments", "621,600")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Dubasari County", 9091)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "213,231", "Region", "Dubasari County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Dubasari County", 9091)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "213,231", "Administrative Level 1", "Dubasari County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Totals-Actual Commitments", "213,231")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Edinet County", 9092)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "567,421", "Region", "Edinet County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Edinet County", 9092)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "567,421", "Administrative Level 1", "Edinet County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Totals-Actual Commitments", "567,421")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Falesti County", 9093)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "999,888", "Region", "Falesti County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Falesti County", 9093)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "999,888", "Administrative Level 1", "Falesti County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Totals-Actual Commitments", "999,888")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Transnistrian Region", 9105))
-                    .withContents("Project Title", "", "Activity Count", "2", "Totals-Actual Commitments", "166,899,26", "Region", "Transnistrian Region")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Transnistrian Region", 9105))
+                    .withContents("Project Title", "", "Activity Count", "2", "Totals-Actual Commitments", "166,899,26", "Administrative Level 1", "Transnistrian Region")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Actual Commitments", "43,578,26"),
                       new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Totals-Actual Commitments", "123,321")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined", -8977))
-                    .withContents("Project Title", "", "Activity Count", "10", "Totals-Actual Commitments", "649,662,98", "Region", "Region: Undefined")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Administrative Level 1: Undefined", -8977))
+                    .withContents("Project Title", "", "Activity Count", "10", "Totals-Actual Commitments", "649,662,98", "Administrative Level 1", "Administrative Level 1: Undefined")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Totals-Actual Commitments", "125,000"),
                       new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Totals-Actual Commitments", "50,000"),
@@ -1447,9 +1447,9 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 
         
         ReportSpecificationImpl spec = buildSpecification("testActivityCountSpecHier",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.ACTIVITY_COUNT),
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.ACTIVITY_COUNT),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
-            Arrays.asList(ColumnConstants.REGION),
+            Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
             GroupingCriteria.GROUPING_TOTALS_ONLY);
         
         runNiTestCase(spec, "en", acts, cor);
@@ -1460,28 +1460,28 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel cor = new NiReportModel("testActivityCountSpecHierSummary")
             .withHeaders(Arrays.asList(
                     "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
-                    "(Region: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Activity Count: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+                    "(Administrative Level 1: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Activity Count: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
                     "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
                 .withWarnings(Arrays.asList())
                 .withBody(      new ReportAreaForTests(null)
-                  .withContents("Region", "", "Activity Count", "31", "Totals-Actual Commitments", "19,408,691,19")
+                  .withContents("Administrative Level 1", "", "Activity Count", "31", "Totals-Actual Commitments", "19,408,691,19")
                   .withChildren(
-                    new ReportAreaForTests(new AreaOwner("Region", "Anenii Noi County", 9085), "Activity Count", "6", "Totals-Actual Commitments", "1,611,832", "Region", "Anenii Noi County"),
-                    new ReportAreaForTests(new AreaOwner("Region", "Balti County", 9086), "Activity Count", "7", "Totals-Actual Commitments", "2,144,284,32", "Region", "Balti County"),
-                    new ReportAreaForTests(new AreaOwner("Region", "Cahul County", 9087), "Activity Count", "1", "Totals-Actual Commitments", "7,070,000", "Region", "Cahul County"),
-                    new ReportAreaForTests(new AreaOwner("Region", "Chisinau City", 9088), "Activity Count", "3", "Totals-Actual Commitments", "296,912", "Region", "Chisinau City"),
-                    new ReportAreaForTests(new AreaOwner("Region", "Chisinau County", 9089), "Activity Count", "3", "Totals-Actual Commitments", "5,066,960,63", "Region", "Chisinau County"),
-                    new ReportAreaForTests(new AreaOwner("Region", "Drochia County", 9090), "Activity Count", "1", "Totals-Actual Commitments", "621,600", "Region", "Drochia County"),
-                    new ReportAreaForTests(new AreaOwner("Region", "Dubasari County", 9091), "Activity Count", "1", "Totals-Actual Commitments", "213,231", "Region", "Dubasari County"),
-                    new ReportAreaForTests(new AreaOwner("Region", "Edinet County", 9092), "Activity Count", "1", "Totals-Actual Commitments", "567,421", "Region", "Edinet County"),
-                    new ReportAreaForTests(new AreaOwner("Region", "Falesti County", 9093), "Activity Count", "1", "Totals-Actual Commitments", "999,888", "Region", "Falesti County"),
-                    new ReportAreaForTests(new AreaOwner("Region", "Transnistrian Region", 9105), "Activity Count", "2", "Totals-Actual Commitments", "166,899,26", "Region", "Transnistrian Region"),
-                    new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined", -8977), "Activity Count", "10", "Totals-Actual Commitments", "649,662,98", "Region", "Region: Undefined")      ));
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Anenii Noi County", 9085), "Activity Count", "6", "Totals-Actual Commitments", "1,611,832", "Administrative Level 1", "Anenii Noi County"),
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Balti County", 9086), "Activity Count", "7", "Totals-Actual Commitments", "2,144,284,32", "Administrative Level 1", "Balti County"),
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Cahul County", 9087), "Activity Count", "1", "Totals-Actual Commitments", "7,070,000", "Administrative Level 1", "Cahul County"),
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Chisinau City", 9088), "Activity Count", "3", "Totals-Actual Commitments", "296,912", "Administrative Level 1", "Chisinau City"),
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Chisinau County", 9089), "Activity Count", "3", "Totals-Actual Commitments", "5,066,960,63", "Administrative Level 1", "Chisinau County"),
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Drochia County", 9090), "Activity Count", "1", "Totals-Actual Commitments", "621,600", "Administrative Level 1", "Drochia County"),
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Dubasari County", 9091), "Activity Count", "1", "Totals-Actual Commitments", "213,231", "Administrative Level 1", "Dubasari County"),
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Edinet County", 9092), "Activity Count", "1", "Totals-Actual Commitments", "567,421", "Administrative Level 1", "Edinet County"),
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Falesti County", 9093), "Activity Count", "1", "Totals-Actual Commitments", "999,888", "Administrative Level 1", "Falesti County"),
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Transnistrian Region", 9105), "Activity Count", "2", "Totals-Actual Commitments", "166,899,26", "Administrative Level 1", "Transnistrian Region"),
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Administrative Level 1: Undefined", -8977), "Activity Count", "10", "Totals-Actual Commitments", "649,662,98", "Administrative Level 1", "Administrative Level 1: Undefined")      ));
         
         ReportSpecificationImpl spec = buildSpecification("testActivityCountSpecHierSummary",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.ACTIVITY_COUNT),
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.ACTIVITY_COUNT),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
-            Arrays.asList(ColumnConstants.REGION),
+            Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
             GroupingCriteria.GROUPING_TOTALS_ONLY);
         
         spec.setSummaryReport(true);
@@ -2092,38 +2092,38 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel cor = new NiReportModel("testFetchedMeasureTotalMissingPrecursorHier")
             .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 4))",
-                "(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 2, colSpan: 2))",
+                "(Administrative Level 1: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 2, colSpan: 2))",
                 "",
                 "(Percentage of Total Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Percentage Of Total Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
             .withWarnings(Arrays.asList())
             .withBody(      new ReportAreaForTests(null)
-            .withContents("Region", "", "Project Title", "", "Totals-Percentage of Total Commitments", "100", "Totals-Percentage Of Total Disbursements", "100")
+            .withContents("Administrative Level 1", "", "Project Title", "", "Totals-Percentage of Total Commitments", "100", "Totals-Percentage Of Total Disbursements", "100")
             .withChildren(
-                    new ReportAreaForTests(new AreaOwner("Region", "Balti County", 9086)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "62,01", "Totals-Percentage Of Total Disbursements", "0", "Region", "Balti County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Balti County", 9086)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "62,01", "Totals-Percentage Of Total Disbursements", "0", "Administrative Level 1", "Balti County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Totals-Percentage of Total Commitments", "62,01")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Chisinau City", 9088))
-                    .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "22,97", "Totals-Percentage Of Total Disbursements", "26,35", "Region", "Chisinau City")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Chisinau City", 9088))
+                    .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "22,97", "Totals-Percentage Of Total Disbursements", "26,35", "Administrative Level 1", "Chisinau City")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Totals-Percentage of Total Commitments", "22,97"),
                       new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Totals-Percentage Of Total Disbursements", "26,35")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Chisinau County", 9089)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "12,23", "Totals-Percentage Of Total Disbursements", "46,85", "Region", "Chisinau County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Chisinau County", 9089)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "12,23", "Totals-Percentage Of Total Disbursements", "46,85", "Administrative Level 1", "Chisinau County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Totals-Percentage of Total Commitments", "12,23", "Totals-Percentage Of Total Disbursements", "46,85")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Dubasari County", 9091)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "0", "Totals-Percentage Of Total Disbursements", "26,35", "Region", "Dubasari County")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Dubasari County", 9091)).withContents("Project Title", "", "Totals-Percentage of Total Commitments", "0", "Totals-Percentage Of Total Disbursements", "26,35", "Administrative Level 1", "Dubasari County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Totals-Percentage Of Total Disbursements", "26,35")        ),
-                    new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined", -8977))
-                    .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "2,79", "Totals-Percentage Of Total Disbursements", "0,45", "Region", "Region: Undefined")
+                    new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Administrative Level 1: Undefined", -8977))
+                    .withContents("Project Title", "", "Totals-Percentage of Total Commitments", "2,79", "Totals-Percentage Of Total Disbursements", "0,45", "Administrative Level 1", "Administrative Level 1: Undefined")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Totals-Percentage of Total Commitments", "2,79"),
                       new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Totals-Percentage Of Total Disbursements", "0,45")        )      ));
 
         
         ReportSpecificationImpl spec = buildSpecification("testFetchedMeasureTotalMissingPrecursorHier",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
             Arrays.asList(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS),
-            Arrays.asList(ColumnConstants.REGION),
+            Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
             GroupingCriteria.GROUPING_YEARLY);
         
         runNiTestCase(spec, "en", executionRateActs, cor);
@@ -2198,13 +2198,13 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel cor = new NiReportModel("testMeasurelessReportWithHier")
                 .withHeaders(Arrays.asList(
                         "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 2))",
-                        "(Country: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
+                        "(Administrative Level 0: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
                 .withWarnings(Arrays.asList())
                 .withBody(      new ReportAreaForTests(null)
-                        .withContents("Country", "", "Project Title", "")
+                        .withContents("Administrative Level 0", "", "Project Title", "")
                         .withChildren(
-                                new ReportAreaForTests(new AreaOwner("Country", "Moldova", 8977))
-                                        .withContents("Project Title", "", "Country", "Moldova")
+                                new ReportAreaForTests(new AreaOwner("Administrative Level 0", "Moldova", 8977))
+                                        .withContents("Project Title", "", "Administrative Level 0", "Moldova")
                                         .withChildren(
                                                 new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1"),
                                                 new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2"),
@@ -2249,14 +2249,14 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                                                 new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity"),
                                                 new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
                                                 new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies")        ),
-                                new ReportAreaForTests(new AreaOwner("Country", "Country: Undefined", -999999999)).withContents("Project Title", "", "Country", "Country: Undefined")
+                                new ReportAreaForTests(new AreaOwner("Administrative Level 0", "Administrative Level 0: Undefined", -999999999)).withContents("Project Title", "", "Administrative Level 0", "Administrative Level 0: Undefined")
                                         .withChildren(
                                                 new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting")        )      ));
 
         ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportWithHier",
-                Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.PROJECT_TITLE),
+                Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_0, ColumnConstants.PROJECT_TITLE),
                 null,
-                Arrays.asList(ColumnConstants.COUNTRY),
+                Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_0),
                 GroupingCriteria.GROUPING_YEARLY);
 
         runNiTestCase(spec, "en", acts, cor);
@@ -2267,29 +2267,29 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel cor = new NiReportModel("testMeasurelessReportWithFilteringByRegion")
                 .withHeaders(Arrays.asList(
                         "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 2))",
-                        "(Region: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
+                        "(Administrative Level 1: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
                 .withWarnings(Arrays.asList())
                 .withBody(      new ReportAreaForTests(null)
-                        .withContents("Region", "", "Project Title", "")
+                        .withContents("Administrative Level 1", "", "Project Title", "")
                         .withChildren(
-                                new ReportAreaForTests(new AreaOwner(17), "Region", "Anenii Noi County", "Project Title", "Proposed Project Cost 2 - EUR"),
-                                new ReportAreaForTests(new AreaOwner(18), "Region", "Anenii Noi County", "Project Title", "Test MTEF directed"),
-                                new ReportAreaForTests(new AreaOwner(21), "Region", "Anenii Noi County", "Project Title", "activity with components"),
-                                new ReportAreaForTests(new AreaOwner(24), "Region", "Anenii Noi County", "Project Title", "Eth Water"),
-                                new ReportAreaForTests(new AreaOwner(27), "Region", "Anenii Noi County", "Project Title", "mtef activity 2"),
-                                new ReportAreaForTests(new AreaOwner(28), "Region", "Anenii Noi County", "Project Title", "ptc activity 1"),
-                                new ReportAreaForTests(new AreaOwner(29), "Region", "Anenii Noi County", "Project Title", "ptc activity 2"),
-                                new ReportAreaForTests(new AreaOwner(30), "Region", "Anenii Noi County", "Project Title", "SSC Project 1"),
-                                new ReportAreaForTests(new AreaOwner(33), "Region", "Anenii Noi County", "Project Title", "Activity with Zones"),
-                                new ReportAreaForTests(new AreaOwner(36), "Region", "Anenii Noi County", "Project Title", "Activity With Zones and Percentages"),
-                                new ReportAreaForTests(new AreaOwner(40), "Region", "Anenii Noi County", "Project Title", "SubNational no percentages")      ));
+                                new ReportAreaForTests(new AreaOwner(17), "Administrative Level 1", "Anenii Noi County", "Project Title", "Proposed Project Cost 2 - EUR"),
+                                new ReportAreaForTests(new AreaOwner(18), "Administrative Level 1", "Anenii Noi County", "Project Title", "Test MTEF directed"),
+                                new ReportAreaForTests(new AreaOwner(21), "Administrative Level 1", "Anenii Noi County", "Project Title", "activity with components"),
+                                new ReportAreaForTests(new AreaOwner(24), "Administrative Level 1", "Anenii Noi County", "Project Title", "Eth Water"),
+                                new ReportAreaForTests(new AreaOwner(27), "Administrative Level 1", "Anenii Noi County", "Project Title", "mtef activity 2"),
+                                new ReportAreaForTests(new AreaOwner(28), "Administrative Level 1", "Anenii Noi County", "Project Title", "ptc activity 1"),
+                                new ReportAreaForTests(new AreaOwner(29), "Administrative Level 1", "Anenii Noi County", "Project Title", "ptc activity 2"),
+                                new ReportAreaForTests(new AreaOwner(30), "Administrative Level 1", "Anenii Noi County", "Project Title", "SSC Project 1"),
+                                new ReportAreaForTests(new AreaOwner(33), "Administrative Level 1", "Anenii Noi County", "Project Title", "Activity with Zones"),
+                                new ReportAreaForTests(new AreaOwner(36), "Administrative Level 1", "Anenii Noi County", "Project Title", "Activity With Zones and Percentages"),
+                                new ReportAreaForTests(new AreaOwner(40), "Administrative Level 1", "Anenii Noi County", "Project Title", "SubNational no percentages")      ));
 
         ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportWithFilteringByRegion",
-                Arrays.asList(ColumnConstants.REGION, ColumnConstants.PROJECT_TITLE),
+                Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PROJECT_TITLE),
                 null,
                 null,
                 GroupingCriteria.GROUPING_YEARLY);
-        spec.setFilters(buildSimpleFilter(ColumnConstants.REGION, "9085"/*"Anenii Noi County"*/, true));
+        spec.setFilters(buildSimpleFilter(ColumnConstants.LOCATION_ADM_LEVEL_1, "9085"/*"Anenii Noi County"*/, true));
 
         runNiTestCase(spec, "en", acts, cor);
     }
@@ -2416,12 +2416,12 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         NiReportModel cor = new NiReportModel("testMeasurelessReportWithHier")
                 .withHeaders(Arrays.asList(
                         "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 0, colSpan: 2))",
-                        "(Country: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
+                        "(Administrative Level 0: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
                 .withWarnings(Arrays.asList())
-                .withBody(      new ReportAreaForTests(null).withContents("Country", "", "Project Title", "")
+                .withBody(      new ReportAreaForTests(null).withContents("Administrative Level 0", "", "Project Title", "")
                         .withChildren(
-                                new ReportAreaForTests(new AreaOwner("Country", "Moldova", 8977))
-                                        .withContents("Project Title", "", "Country", "Moldova")
+                                new ReportAreaForTests(new AreaOwner("Administrative Level 0", "Moldova", 8977))
+                                        .withContents("Project Title", "", "Administrative Level 0", "Moldova")
                                         .withChildren(
                                                 new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1"),
                                                 new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2"),
@@ -2468,11 +2468,11 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                                                 new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies")        )      ));
 
         ReportSpecificationImpl spec = buildSpecification("testMeasurelessReportWithHier",
-                Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.PROJECT_TITLE),
+                Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_0, ColumnConstants.PROJECT_TITLE),
                 null,
-                Arrays.asList(ColumnConstants.COUNTRY),
+                Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_0),
                 GroupingCriteria.GROUPING_YEARLY);
-        spec.setFilters(buildSimpleFilter(ColumnConstants.COUNTRY, "8977"/*"Moldova"*/, true));
+        spec.setFilters(buildSimpleFilter(ColumnConstants.LOCATION_ADM_LEVEL_0, "8977"/*"Moldova"*/, true));
 
         runNiTestCase(spec, "en", acts, cor);
     }

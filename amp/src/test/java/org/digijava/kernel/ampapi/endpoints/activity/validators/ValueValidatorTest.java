@@ -110,7 +110,7 @@ public class ValueValidatorTest {
 
         assertFalse("Sector must be invalid",
                 valueValidator.isValid(importer, newFieldParent, sectorFieldDescription, SECTOR_FIELD));
-        assertEquals(ActivityErrors.FIELD_INVALID_VALUE, valueValidator.getErrorMessage());
+        assertEquals(ValidationErrors.FIELD_INVALID_VALUE, valueValidator.getErrorMessage());
     }
 
     @Test
@@ -133,7 +133,7 @@ public class ValueValidatorTest {
 
         assertFalse("FY must be invalid",
                 valueValidator.isValid(importer, newFieldParent, fyFieldDescription, FY_FIELD));
-        assertEquals(ActivityErrors.FIELD_INVALID_VALUE, valueValidator.getErrorMessage());
+        assertEquals(ValidationErrors.FIELD_INVALID_VALUE, valueValidator.getErrorMessage());
     }
 
     @Test

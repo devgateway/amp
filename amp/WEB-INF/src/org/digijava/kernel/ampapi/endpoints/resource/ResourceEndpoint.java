@@ -33,7 +33,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.ResourceView;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerListResource;
@@ -55,7 +54,7 @@ import io.swagger.annotations.ApiResponses;
  */
 @Path("resource")
 @Api("resource")
-public class ResourceEndpoint implements ErrorReportingEndpoint {
+public class ResourceEndpoint {
 
     private static final Logger logger = LoggerFactory.getLogger(ResourceEndpoint.class);
 
@@ -212,11 +211,6 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
         } finally {
             FileUtils.deleteQuietly(file);
         }
-    }
-
-    @Override
-    public Class<?> getErrorsClass() {
-        return ResourceErrors.class;
     }
 
 }

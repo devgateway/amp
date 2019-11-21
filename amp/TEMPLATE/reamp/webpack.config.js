@@ -16,7 +16,7 @@ config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
 	    	name: 'dependencies-bundle',
 	        filename: 'dependencies-bundle.js',
 	        minChunks(module, count) {
-	            var context = module.context;                 
+	            var context = module.context;
 	            return context && context.indexOf('node_modules') >= 0 && count > 1;
 	        }
 	      }));

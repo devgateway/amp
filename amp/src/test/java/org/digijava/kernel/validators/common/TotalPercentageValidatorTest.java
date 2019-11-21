@@ -12,6 +12,7 @@ import java.util.Set;
 import com.google.common.collect.ImmutableSet;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
@@ -140,7 +141,7 @@ public class TotalPercentageValidatorTest {
 
     private Matcher<ConstraintViolation> violation() {
         return ValidatorMatchers.violationFor(TotalPercentageValidator.class, "items", anything(),
-                ActivityErrors.FIELD_PERCENTAGE_SUM_BAD);
+                ValidationErrors.FIELD_PERCENTAGE_SUM_BAD);
     }
 
     private Set<ConstraintViolation> getConstraintViolations(APIField dummyObjField, Object object) {

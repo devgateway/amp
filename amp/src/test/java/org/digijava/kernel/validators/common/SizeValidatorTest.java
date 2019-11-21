@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
@@ -103,7 +104,7 @@ public class SizeValidatorTest {
 
     private Matcher<ConstraintViolation> violation(String path) {
         return ValidatorMatchers.violationFor(SizeValidator.class, path, anything(),
-                ActivityErrors.FIELD_TOO_MANY_VALUES_NOT_ALLOWED);
+                ValidationErrors.FIELD_TOO_MANY_VALUES_NOT_ALLOWED);
     }
 
     private Set<ConstraintViolation> getConstraintViolations(Object object) {

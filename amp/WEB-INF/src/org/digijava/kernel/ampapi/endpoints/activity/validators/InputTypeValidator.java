@@ -23,7 +23,7 @@ public class InputTypeValidator extends InputValidator {
 
     @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.FIELD_INVALID_TYPE;
+        return ValidationErrors.FIELD_INVALID_TYPE;
     }
 
     private boolean isStringValid(Object item, boolean translatable) {

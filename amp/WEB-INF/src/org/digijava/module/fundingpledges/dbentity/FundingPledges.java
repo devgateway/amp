@@ -50,10 +50,10 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable,
     
     private AmpOrgGroup organizationGroup;
     
-    private Set<FundingPledgesSector> sectorlist;
-    private Set<FundingPledgesLocation> locationlist;
-    private Set<FundingPledgesProgram> programlist;
-    private Set<FundingPledgesDetails> fundingPledgesDetails;
+    private Set<FundingPledgesSector> sectorlist = new HashSet<>();
+    private Set<FundingPledgesLocation> locationlist = new HashSet<>();
+    private Set<FundingPledgesProgram> programlist = new HashSet<>();
+    private Set<FundingPledgesDetails> fundingPledgesDetails = new HashSet<>();
     // "Point of Contact at Donors Conference on March 31st"
     private String contactName;
     private String contactAddress;
@@ -79,7 +79,7 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable,
     private String contactAlternativeTelephone_1;
     private String contactAlternativeEmail_1;
     private TreeSet<String> yearsList;
-    private Set<FundingPledgesDocument> documents;
+    private Set<FundingPledgesDocument> documents = new HashSet<>();
     
     @Override
     public boolean equals(Object o) {

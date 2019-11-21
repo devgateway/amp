@@ -32,7 +32,6 @@ public final class ErrorDecorator {
     }
 
     private static void addErrorInJson(Map<String, Object> newParent, String fieldName, ApiErrorMessage error) {
-        String errorCode = ApiError.getErrorCode(error);
         Object newFieldValue = newParent.get(fieldName);
         BadInput newField;
 
@@ -43,7 +42,7 @@ public final class ErrorDecorator {
             newParent.put(fieldName, newField);
         }
 
-        newField.addErrorCode(errorCode);
+        newField.addErrorCode(error.getErrorId());
     }
 
     private static void addError(String fieldPath, ApiErrorMessage error, Map<Integer, ApiErrorMessage> errors) {

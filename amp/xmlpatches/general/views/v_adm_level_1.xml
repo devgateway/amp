@@ -19,22 +19,22 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_districts;
-			    CREATE OR REPLACE VIEW v_districts AS
+				DROP VIEW IF EXISTS v_adm_level_1 CASCADE;
+				CREATE OR REPLACE VIEW v_adm_level_1 AS
 					SELECT
 						aav.amp_activity_id,
-						v.district_name,
-						COALESCE(v.district_id, -999999999) AS district_id,
+						v.adm_level_1_name,
+						COALESCE(v.adm_level_1_id, -999999999) AS adm_level_1_id,
 						v.percentage,
 						COALESCE(v.cnt_nulls, 0) AS cnt_nulls
 					FROM amp_activity_version aav
 					LEFT JOIN (
-						SELECT ra.amp_activity_id, loc.district_name, loc.district_id, sum(ra.location_percentage) AS percentage, COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
+						SELECT ra.amp_activity_id, loc.adm_level_1_name, loc.adm_level_1_id, sum(ra.location_percentage) AS percentage, COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
 							FROM amp_activity_location ra JOIN ni_all_locations_with_levels loc on loc.amp_location_id = ra.amp_location_id
-							GROUP BY ra.amp_activity_id, loc.district_id, loc.district_name
+							GROUP BY ra.amp_activity_id, loc.adm_level_1_id, loc.adm_level_1_name
 					) v
 					ON aav.amp_activity_id = v.amp_activity_id;
-			</lang>
+       		</lang>
 		</script>
 	</apply>
 </tns:patch>

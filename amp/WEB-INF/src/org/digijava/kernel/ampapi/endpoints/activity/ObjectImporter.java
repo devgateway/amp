@@ -35,10 +35,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.DefaultErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonConstraintViolation;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.JsonErrorIntegrator;
-import org.digijava.kernel.ampapi.endpoints.common.CommonErrors;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
-import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
-import org.digijava.kernel.ampapi.endpoints.common.values.BadInput;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;

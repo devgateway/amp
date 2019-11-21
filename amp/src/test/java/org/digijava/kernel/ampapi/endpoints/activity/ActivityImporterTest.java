@@ -415,9 +415,9 @@ public class ActivityImporterTest {
         
         ActivityImporter importer = buildActivityImporter(true, true, false, false);
         importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
-        
+
         Assert.assertThat(importer.errors,
-                hasValue(error(ActivityErrors.FIELD_INVALID_VALUE, "amp_id")));
+                hasValue(error(ValidationErrors.FIELD_INVALID_VALUE, "amp_id")));
     }
     
     @Test

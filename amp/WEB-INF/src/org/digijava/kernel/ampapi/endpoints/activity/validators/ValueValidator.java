@@ -33,13 +33,13 @@ public class ValueValidator extends InputValidator {
     @Override
     public ApiErrorMessage getErrorMessage() {
         if (!isValidLength)
-            return ActivityErrors.FIELD_INVALID_LENGTH;
+            return ValidationErrors.FIELD_INVALID_LENGTH;
         if (!isValidPercentage)
-            return ActivityErrors.FIELD_INVALID_PERCENTAGE;
+            return ValidationErrors.FIELD_INVALID_PERCENTAGE;
         if (draftDisabled) {
             return ActivityErrors.SAVE_AS_DRAFT_FM_DISABLED;
         }
-        return ActivityErrors.FIELD_INVALID_VALUE;
+        return ValidationErrors.FIELD_INVALID_VALUE;
     }
 
     @Override

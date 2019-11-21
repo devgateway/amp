@@ -4,6 +4,8 @@ import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_TEST_ID;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class ApiErrorCollectorTest {
     }
 
     public static class OneError {
-        public static final ApiErrorMessage ONE_ERROR = new ApiErrorMessage(1, "First error");
+        public static final ApiErrorMessage ONE_ERROR = new ApiErrorMessage(ERROR_CLASS_TEST_ID, 1, "First error");
     }
 
     @Test
@@ -35,8 +37,8 @@ public class ApiErrorCollectorTest {
     }
 
     public static class TwoErrors {
-        public static final ApiErrorMessage FIRST_ERROR = new ApiErrorMessage(1, "First error");
-        public static final ApiErrorMessage SECOND_ERROR = new ApiErrorMessage(2, "Second error");
+        public static final ApiErrorMessage FIRST_ERROR = new ApiErrorMessage(ERROR_CLASS_TEST_ID, 1, "First error");
+        public static final ApiErrorMessage SECOND_ERROR = new ApiErrorMessage(ERROR_CLASS_TEST_ID, 2, "Second error");
     }
 
     @Test
@@ -45,8 +47,8 @@ public class ApiErrorCollectorTest {
     }
 
     public static class DoNotInterfereErrors {
-        private static final ApiErrorMessage PRIVATE_ERROR = new ApiErrorMessage(1, "First error");
-        public ApiErrorMessage INSTANCE_ERROR = new ApiErrorMessage(2, "Instance error");
+        private static final ApiErrorMessage PRIVATE_ERROR = new ApiErrorMessage(ERROR_CLASS_TEST_ID, 1, "First error");
+        public ApiErrorMessage INSTANCE_ERROR = new ApiErrorMessage(ERROR_CLASS_TEST_ID, 2, "Instance error");
         public static final ApiErrorMessage NULL_ERROR = null;
         public static final Object SIMPLE_OBJECT = new Object();
     }
@@ -60,7 +62,7 @@ public class ApiErrorCollectorTest {
     }
 
     public static class ErrorsSuper {
-        public static final ApiErrorMessage ONE_ERROR = new ApiErrorMessage(1, "First error");
+        public static final ApiErrorMessage ONE_ERROR = new ApiErrorMessage(ERROR_CLASS_TEST_ID, 1, "First error");
     }
 
     private List<ApiErrorMessage> errorsFor(Class errorsClass) {

@@ -9,13 +9,14 @@ import static org.junit.Assert.*;
 import java.util.Set;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.persistence.InMemoryCategoryValuesManager;
 import org.digijava.kernel.persistence.InMemoryLocationManager;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpLocation;
 import org.hamcrest.Matcher;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -68,6 +69,19 @@ public class TreeCollectionValidatorTest {
 
         assertThat(violations, contains(violation()));
     }
+    
+    @Test
+    public void testObjectWithNullEntityInCollection() {
+        AmpLocation loc = new AmpLocation();
+        AmpActivityVersion activity = new ActivityBuilder()
+                .addLocation(loc, 50f)
+                .addLocation(locationManager.getAmpLocation("Haiti"), 50f)
+                .getActivity();
+        
+        Set<ConstraintViolation> violations = getConstraintViolations(activity);
+    
+        assertThat(violations, emptyIterable());
+    }
 
     @Test
     public void testRepeatingItemsAreAllowed() {
@@ -83,7 +97,7 @@ public class TreeCollectionValidatorTest {
 
     private Matcher<ConstraintViolation> violation() {
         return ValidatorMatchers.violationFor(TreeCollectionValidator.class, "locations", anything(),
-                ActivityErrors.FIELD_PARENT_CHILDREN_NOT_ALLOWED);
+                ValidationErrors.FIELD_PARENT_CHILDREN_NOT_ALLOWED);
     }
 
     private Set<ConstraintViolation> getConstraintViolations(AmpActivityVersion activity) {

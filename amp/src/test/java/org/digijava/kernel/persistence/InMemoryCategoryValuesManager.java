@@ -210,23 +210,23 @@ public class InMemoryCategoryValuesManager implements InMemoryManager<AmpCategor
         financingInstrument = newCategoryClass(12L, "Financing Instrument", "financing_instrument");
         adjustmentType = newCategoryClass(44L, "Adjustment Type", "adjustment_type");
         activityStatus = newCategoryClass(6L, "Activity Status", "activity_status");
-        
+
         implementationLevels = new ImplementationLevels();
-        implementationLevels.toBeSpecified = newCategory(361L, implementationLevel, "A spécifier", 0);
-        implementationLevels.central = newCategory(332L, implementationLevel, "Central", 1);
+        implementationLevels.toBeSpecified = newCategory(361L, implementationLevel, "A spécifier",0);
+        implementationLevels.central = newCategory(332L, implementationLevel, "Central",1);
         implementationLevels.regional = newCategory(69L, implementationLevel, "Regional", 2);
         implementationLevels.international = newCategory(122L, implementationLevel, "International", 3);
         implementationLevels.national = newCategory(70L, implementationLevel, "National", 4);
         implementationLevels.both = newCategory(71L, implementationLevel, "Both", 5);
-        
+
         implementationLocations = new ImplementationLocations();
-        implementationLocations.country = newCategory(76L, implementationLocation, "Country", 0);
-        implementationLocations.region = newCategory(77L, implementationLocation, "Region", 1);
-        implementationLocations.zone = newCategory(119L, implementationLocation, "Zone", 2);
-        implementationLocations.district = newCategory(123L, implementationLocation, "District", 3);
-        implementationLocations.communalSection = newCategory(162L, implementationLocation, "Communal section", 4);
-        implementationLocations.unspecified = newCategory(367L, implementationLocation, "Unspecified", 5);
-        
+        implementationLocations.country = newCategory(76L, implementationLocation, "Administrative Level 0", 0);
+        implementationLocations.region = newCategory(77L, implementationLocation, "Administrative Level 1", 1);
+        implementationLocations.zone = newCategory(119L, implementationLocation, "Administrative Level 2", 2);
+        implementationLocations.district = newCategory(123L, implementationLocation, "Administrative Level 3", 3);
+        implementationLocations.communalSection = newCategory(162L, implementationLocation, "Administrative Level 4", 4);
+        implementationLocations.unspecified = newCategory(367L, implementationLocation, "Administrative Level 5", 5);
+
         markUsedBy(implementationLevels.toBeSpecified, implementationLocations.country);
         markUsedBy(implementationLevels.central, implementationLocations.country);
         markUsedBy(implementationLevels.regional,

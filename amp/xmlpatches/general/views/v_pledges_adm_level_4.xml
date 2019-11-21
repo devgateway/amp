@@ -19,12 +19,27 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_communal_section;
-			    CREATE OR REPLACE VIEW v_communal_section AS
-					SELECT ra.amp_activity_id, loc.communal_section_name, loc.communal_section_id, sum(ra.location_percentage) AS percentage, COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
-					FROM amp_activity_location ra JOIN ni_all_locations_with_levels loc on loc.amp_location_id = ra.amp_location_id
-					GROUP BY ra.amp_activity_id, loc.communal_section_id, loc.communal_section_name;
-			</lang>
+				DROP VIEW IF EXISTS v_pledges_adm_level_4 CASCADE;
+		    	CREATE OR REPLACE VIEW v_pledges_adm_level_4 AS
+					SELECT
+						afp.id AS pledge_id,
+						v.adm_level_4_name,
+						COALESCE(v.adm_level_4_id, -999999999) AS adm_level_4_id,
+						percentage,
+						COALESCE(v.cnt_nulls, 0) AS cnt_nulls
+					FROM amp_funding_pledges afp
+					LEFT JOIN (
+						SELECT
+							ra.pledge_id,
+							loc.adm_level_4_name,
+							loc.adm_level_4_id,
+							sum(ra.location_percentage) AS percentage,
+							COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
+						FROM amp_funding_pledges_location ra JOIN ni_all_locations_with_levels loc on loc.acvl_id = ra.location_id
+						GROUP BY ra.pledge_id, loc.adm_level_4_id, loc.adm_level_4_name
+					) v
+				ON afp.id = v.pledge_id;
+       		</lang>
 		</script>
 	</apply>
 </tns:patch>

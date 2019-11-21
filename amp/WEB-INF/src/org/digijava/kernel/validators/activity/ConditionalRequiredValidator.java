@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
@@ -65,7 +65,7 @@ public abstract class ConditionalRequiredValidator implements ConstraintValidato
                 }
 
                 if (isEmptyValue(field.getFieldAccessor().get(value))) {
-                    context.buildConstraintViolation(ActivityErrors.FIELD_REQUIRED)
+                    context.buildConstraintViolation(ValidationErrors.FIELD_REQUIRED)
                             .addPropertyNode(field.getFieldName())
                             .addConstraintViolation();
 

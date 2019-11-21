@@ -170,7 +170,7 @@ public class AMPStartupListener extends HttpServlet implements
             }
             
             logger.info("loading the activity->pledge view twins configuration and checking for consistency...");
-            int a = PledgesToActivitiesBridge.activityViewToPledgeView.size();
+            int a = PledgesToActivitiesBridge.ACTIVITY_VIEW_TO_PLEDGE_VIEW.size();
             if (a < 0)
                 throw new RuntimeException("should not happen!");
             

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
@@ -42,6 +43,6 @@ public class SizeValidator implements ConstraintValidator {
 
     @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.FIELD_TOO_MANY_VALUES_NOT_ALLOWED;
+        return ValidationErrors.FIELD_TOO_MANY_VALUES_NOT_ALLOWED;
     }
 }

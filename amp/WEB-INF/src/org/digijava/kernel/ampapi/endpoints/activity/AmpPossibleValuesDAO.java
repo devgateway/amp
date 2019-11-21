@@ -1,9 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.math.BigInteger;
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +17,6 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.jdbc.Work;
 
 /**
  * @author Octavian Ciubotaru
@@ -73,18 +70,16 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
             String entityIdColumnName, String entityValueColumnName, String entityParentIdColumnName,
             final String conditionColumnName, final String idColumnName, Class<?> clazz) {
 
-        final List<Long> itemIds = new ArrayList<Long>();
-        PersistenceManager.getSession().doWork(new Work() {
-            public void execute(Connection conn) throws SQLException {
-                String allSectorsQuery = "SELECT " + idColumnName + " FROM " + configTableName + " WHERE "
-                        + conditionColumnName + "='" + configType + "'" + " ORDER BY " + idColumnName;
-                try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
-                    ResultSet rs = rsi.rs;
-                    while (rs.next()) {
-                        itemIds.add(rs.getLong(idColumnName));
-                    }
-                    rs.close();
+        final List<Long> itemIds = new ArrayList<>();
+        PersistenceManager.getSession().doWork(conn -> {
+            String allSectorsQuery = "SELECT " + idColumnName + " FROM " + configTableName + " WHERE "
+                    + conditionColumnName + "='" + configType + "'" + " ORDER BY " + idColumnName;
+            try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
+                ResultSet rs = rsi.rs;
+                while (rs.next()) {
+                    itemIds.add(rs.getLong(idColumnName));
                 }
+                rs.close();
             }
         });
 
@@ -143,7 +138,11 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
     @SuppressWarnings("unchecked")
     private List<Object[]> query(String queryString) {
-        return (List<Object[]>) InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
+        return (List<Object[]>) InterchangeUtils.getSessionWithPendingChanges()
+                .createQuery(queryString)
+                .setCacheable(true)
+                .setCacheRegion(CACHE)
+                .list();
     }
 
     @Override

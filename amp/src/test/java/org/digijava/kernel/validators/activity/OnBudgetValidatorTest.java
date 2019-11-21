@@ -11,9 +11,9 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.persistence.InMemoryCategoryValuesManager;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -140,7 +140,8 @@ public class OnBudgetValidatorTest {
     }
 
     private Matcher<ConstraintViolation> violation(String path) {
-        return ValidatorMatchers.violationFor(OnBudgetValidator.class, path, anything(), ActivityErrors.FIELD_REQUIRED);
+        return ValidatorMatchers.violationFor(OnBudgetValidator.class, path, anything(),
+                ValidationErrors.FIELD_REQUIRED);
     }
 
     private Set<ConstraintViolation> getConstraintViolations(Object object, Class<?>... groups) {

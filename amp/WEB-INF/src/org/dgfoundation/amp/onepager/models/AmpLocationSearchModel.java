@@ -70,7 +70,7 @@ public class AmpLocationSearchModel extends
         AmpCategoryValue cvLevel= levelModel.getObject().iterator().next();
 
         if (!CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(cvLevel)
-                && CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(cvLayer)) {
+                && CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(cvLayer)) {
             // then we can only return the current default country of the system
             try {
                 Set<AmpCategoryValueLocations> filterCountries = new HashSet<AmpCategoryValueLocations>();
@@ -118,7 +118,8 @@ public class AmpLocationSearchModel extends
             Iterator<AmpCategoryValueLocations> it = tempList.iterator();
             while (it.hasNext()) {
                 AmpCategoryValueLocations location = it.next();
-                AmpCategoryValueLocations locationRegion = DynLocationManagerUtil.getAncestorByLayer(location, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                AmpCategoryValueLocations locationRegion = DynLocationManagerUtil.getAncestorByLayer(
+                        location, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
                 if (locationRegion == null || !assignedRegion.getId().equals(locationRegion.getId()))
                     it.remove();
             }

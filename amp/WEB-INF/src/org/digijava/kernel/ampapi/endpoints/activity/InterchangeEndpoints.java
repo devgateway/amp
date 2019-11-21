@@ -37,7 +37,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.request.TLSUtils;
@@ -61,7 +60,7 @@ import io.swagger.annotations.ExampleProperty;
  */
 @Path("activity")
 @Api("activity")
-public class InterchangeEndpoints implements ErrorReportingEndpoint {
+public class InterchangeEndpoints {
 
     @Context
     private UriInfo uri;
@@ -375,11 +374,4 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         return PreviewActivityService.getInstance().getWorkspaces(projectId);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class getErrorsClass() {
-        return ActivityErrors.class;
-    }
 }

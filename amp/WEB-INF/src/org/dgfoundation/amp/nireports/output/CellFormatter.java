@@ -95,7 +95,7 @@ public class CellFormatter implements CellVisitor<ReportCell> {
     public ReportCell visit(NiSplitCell cell, CellColumn currentColumn) {
         boolean needSubCells = outputSettings.needsIdsValues(currentColumn);
         return asTextCell(
-            cell.undefined ? (cell.entity.name + ": " + translate("Undefined")) : cell.text, 
+            cell.undefined ? (translate(cell.entity.name) + ": " + translate("Undefined")) : cell.text,
             any(cell.entityIds, -1l), 
             needSubCells ? cell.entityIds.stream().collect(Collectors.toMap(z -> z, z -> cell.text)) : null);
     }

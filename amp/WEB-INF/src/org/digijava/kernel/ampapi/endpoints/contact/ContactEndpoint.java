@@ -26,7 +26,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.contact.dto.ContactView;
 import org.digijava.kernel.ampapi.endpoints.contact.dto.SwaggerContact;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
@@ -43,7 +42,7 @@ import io.swagger.annotations.ApiResponses;
  */
 @Path("contact")
 @Api("contact")
-public class ContactEndpoint implements ErrorReportingEndpoint {
+public class ContactEndpoint {
 
     @GET
     @Path("fields")
@@ -139,8 +138,4 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
         return new ContactImporter().updateContact(id, contact.getMap()).getResult();
     }
 
-    @Override
-    public Class getErrorsClass() {
-        return ContactErrors.class;
-    }
 }

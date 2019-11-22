@@ -156,7 +156,7 @@ public class ViewEditUser extends Action {
                 uForm.setLanguages(userLangs);
             }
 
-            uForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+            uForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeAdmLevel1OfDefCountry());
             
             Collection<AmpOrgType> orgTypeCol = DbUtil.getAllOrgTypes();
             if (orgTypeCol != null) {

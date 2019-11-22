@@ -15,7 +15,7 @@ import AppliedFilters from './AppliedFilters';
 import moment from 'moment';
 import * as Constants from '../common/Constants';
 require('../styles/less/main.less');
-export default class DataFreezeEventView extends Component {
+class DataFreezeEventView extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -63,7 +63,7 @@ export default class DataFreezeEventView extends Component {
             showAppliedFilters: !this.state.showAppliedFilters
         });
     }
-    
+
     getFilterObject(){
         var filters;
         if(this.props.dataFreezeEvent.filters){
@@ -71,15 +71,15 @@ export default class DataFreezeEventView extends Component {
         }
         return filters;
     }
-    
-    render() {                
+
+    render() {
         if (this.props.context === Constants.UNFREEZE_ALL) {
             return (
                 <tr >
-                    <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)}</td>                    
+                    <td className="date-column">{this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)}</td>
                     <td className="text-left">
                      {this.props.dataFreezeEvent.count}
-                    </td>                            
+                    </td>
                   </tr>
             );
         } else {
@@ -97,7 +97,7 @@ export default class DataFreezeEventView extends Component {
                     <td>
                     {this.props.dataFreezeEvent.notificationDays}
                     </td>
-                    <td>   
+                    <td>
                      {filterObject && Object.keys(filterObject.filters).length > 0 &&
                       <button className="btn btn-default filter-add" onClick={this.toggleAppliedFilters}>
                       <span className={this.state.showAppliedFilters ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'}></span>
@@ -106,21 +106,21 @@ export default class DataFreezeEventView extends Component {
                       {filterObject && Object.keys(filterObject.filters).length > 0 &&  this.state.showAppliedFilters &&
                           <AppliedFilters {...this.props}/>
                       }
-                    </td>  
+                    </td>
                     <td> {this.props.dataFreezeEvent.enabled ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}</td>
                     <td className="action-column">
                     {this.props.dataFreezeEvent.executed != true &&
-                        <div>                   
+                        <div>
                          <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.props.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteDataFreezeEvent}></span>
                         </div>
-                    }  
-                    
-                    {this.props.dataFreezeEvent.executed == true &&
-                        <div>                   
-                        <span className="glyphicon glyphicon-custom glyphicon-pencil" style={{color: '#ccc'}} ></span> <span className="glyphicon glyphicon-custom glyphicon-trash" style={{color: '#ccc'}}></span>
-                       </div> 
                     }
-                    </td>               
+
+                    {this.props.dataFreezeEvent.executed == true &&
+                        <div>
+                        <span className="glyphicon glyphicon-custom glyphicon-pencil" style={{color: '#ccc'}} ></span> <span className="glyphicon glyphicon-custom glyphicon-trash" style={{color: '#ccc'}}></span>
+                       </div>
+                    }
+                    </td>
                   </tr>
             );
         }

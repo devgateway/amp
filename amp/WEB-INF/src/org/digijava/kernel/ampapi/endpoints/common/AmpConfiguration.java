@@ -31,7 +31,6 @@ import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.filetype.MimeUtil;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -56,7 +55,7 @@ import org.slf4j.LoggerFactory;
  */
 @Path("amp")
 @Api("amp")
-public class AmpConfiguration implements ErrorReportingEndpoint {
+public class AmpConfiguration {
 
     private Logger logger = LoggerFactory.getLogger(AmpConfiguration.class);
 
@@ -285,8 +284,4 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
         return getServerId() != null ? getServerId().equals(serverId) : false;
     }
 
-    @Override
-    public Class getErrorsClass() {
-        return AmpConfigurationErrors.class;
-    }
 }

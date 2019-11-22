@@ -199,12 +199,12 @@ public class HardcodedCategoryValues {
         implementationLevels.both = newCategory(71L, implementationLevel, "Both");
 
         implementationLocations = new ImplementationLocations();
-        implementationLocations.country = newCategory(76L, implementationLocation, "Country");
-        implementationLocations.region = newCategory(77L, implementationLocation, "Region");
-        implementationLocations.zone = newCategory(119L, implementationLocation, "Zone");
-        implementationLocations.district = newCategory(123L, implementationLocation, "District");
-        implementationLocations.communalSection = newCategory(162L, implementationLocation, "Communal section");
-        implementationLocations.unspecified = newCategory(367L, implementationLocation, "Unspecified");
+        implementationLocations.country = newCategory(76L, implementationLocation, "Administrative Level 0");
+        implementationLocations.region = newCategory(77L, implementationLocation, "Administrative Level 1");
+        implementationLocations.zone = newCategory(119L, implementationLocation, "Administrative Level 2");
+        implementationLocations.district = newCategory(123L, implementationLocation, "Administrative Level 3");
+        implementationLocations.communalSection = newCategory(162L, implementationLocation, "Administrative Level 4");
+        implementationLocations.unspecified = newCategory(367L, implementationLocation, "Administrative Level 5");
 
         markUsedBy(implementationLevels.toBeSpecified, implementationLocations.country);
         markUsedBy(implementationLevels.central, implementationLocations.country);

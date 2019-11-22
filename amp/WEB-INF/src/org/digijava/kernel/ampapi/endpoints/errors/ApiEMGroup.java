@@ -34,7 +34,7 @@ public class ApiEMGroup {
     
     /**
      * Append error message value to the existing one or create new.
-     * @param aem error message template
+     * @param aemTemplate error message template
      * @param value custom value
      */
     public void addApiErrorMessage(ApiErrorMessage aemTemplate, String value) {

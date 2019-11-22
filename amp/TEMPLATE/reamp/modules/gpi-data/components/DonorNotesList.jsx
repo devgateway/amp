@@ -7,14 +7,14 @@ import * as commonListsActions from  '../actions/CommonListsActions.jsx';
 import * as startUp from '../actions/StartUpAction.jsx';
 import { Alert } from 'react-bootstrap';
 import Utils from '../common/utils.jsx';
-export default class DonorNotesList extends Component {    
-    constructor(props, context) {      
+class DonorNotesList extends Component {
+    constructor(props, context) {
         super(props, context);
-        this.state = {                
+        this.state = {
                 errors: [],
                 infoMessages:[]
         };
-        
+
         this.addNew = this.addNew.bind(this);
         this.showErrors = this.showErrors.bind(this);
         this.showInfoMessages = this.showInfoMessages.bind(this);
@@ -22,55 +22,55 @@ export default class DonorNotesList extends Component {
         this.goToClickedPage = this.goToClickedPage.bind(this);
         this.goToNextPage = this.goToNextPage.bind(this);
         this.goToPreviousPage = this.goToPreviousPage.bind(this);
-        this.sort = this.sort.bind(this); 
+        this.sort = this.sort.bind(this);
         this.showSortCaret =  this.showSortCaret.bind(this);
         this.isEditing = this.isEditing.bind(this);
     }
-    
-    componentWillMount() {        
-        this.props.actions.loadDonorNotesList({paging: this.props.paging, sorting: this.props.sorting}, this.props.indicatorCode); 
+
+    componentWillMount() {
+        this.props.actions.loadDonorNotesList({paging: this.props.paging, sorting: this.props.sorting}, this.props.indicatorCode);
         this.props.actions.getCurrencyList();
         this.props.actions.getOrgList(true);
         this.props.actions.getSettings();
     }
-    
-    componentWillReceiveProps(nextProps) { 
-        this.setState({errors: nextProps.errors, infoMessages:  nextProps.infoMessages});        
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({errors: nextProps.errors, infoMessages:  nextProps.infoMessages});
     }
-    
+
     addNew() {
-        this.props.actions.addNewDonorNotes(this.props.indicatorCode);       
+        this.props.actions.addNewDonorNotes(this.props.indicatorCode);
     }
-    
+
     goToClickedPage(event){
         const pageNumber = event.target.getAttribute('data-page');
-        this.goToPage(pageNumber);  
+        this.goToPage(pageNumber);
     }
-    
+
     goToNextPage() {
         const pageNumber = ++this.props.paging.currentPageNumber
         this.goToPage(pageNumber);
     }
-    
+
     goToPreviousPage(){
         const pageNumber = --this.props.paging.currentPageNumber;
-        this.goToPage(pageNumber);        
+        this.goToPage(pageNumber);
     }
-    
+
     goToPage(pageNumber){
         if(this.isEditing() == false){
             const loadParams = {};
             loadParams.paging = this.props.paging;
             loadParams.sorting = this.props.sorting;
             loadParams.paging.currentPageNumber = pageNumber;
-            loadParams.paging.offset = ((pageNumber - 1) * this.props.paging.recordsPerPage);  
-            this.props.actions.loadDonorNotesList(loadParams, this.props.indicatorCode);   
-        }        
+            loadParams.paging.offset = ((pageNumber - 1) * this.props.paging.recordsPerPage);
+            this.props.actions.loadDonorNotesList(loadParams, this.props.indicatorCode);
+        }
     }
-    
+
     sort(event) {
         if(this.isEditing() == false){
-            const field = event.target.getAttribute('data-field'); 
+            const field = event.target.getAttribute('data-field');
             const loadParams = {};
             loadParams.paging = this.props.paging;
             loadParams.sorting = this.props.sorting;
@@ -79,57 +79,57 @@ export default class DonorNotesList extends Component {
             } else {
                 loadParams.sorting.orderBy = field;
                 loadParams.sorting.sortOrder = 'asc';
-            }         
-            this.props.actions.loadDonorNotesList(loadParams, this.props.indicatorCode);    
-        }       
+            }
+            this.props.actions.loadDonorNotesList(loadParams, this.props.indicatorCode);
+        }
     }
-    
+
     saveAllEdits() {
         const list = this.props.donorNotesList.filter(donorNotes => {return donorNotes.isEditing})
         this.props.actions.saveAllEdits(list, this.props.indicatorCode)
     }
-    
-    showErrors() {           
-        const messages = [];    
+
+    showErrors() {
+        const messages = [];
         this.props.errors.forEach((error, index) =>{
             messages.push(<span key={index}>{this.props.translations[error.messageKey]} <br/></span>  )
         });
-        
+
         return (this.props.errors.length > 0 && <div className="alert alert-danger" role="alert">
            {messages}
-        </div>) 
+        </div>)
     }
-    
+
     showInfoMessages() {
         return (this.props.infoMessages.length > 0 &&
                 <div className="alert alert-info" role="alert">
                 {this.props.infoMessages.map((info, index) =>
                 <span  key={index} >{this.props.translate(info.messageKey, info.params)} <br/></span>
                 )}
-        </div>) 
+        </div>)
     }
-    
-    showSortCaret(field) {        
-        var className = '';         
+
+    showSortCaret(field) {
+        var className = '';
         if(this.props.sorting.sortOrder == 'asc' && field === this.props.sorting.orderBy){
             className = 'glyphicon glyphicon-chevron-up';
         } else if(this.props.sorting.sortOrder == 'desc' && field === this.props.sorting.orderBy){
             className = 'glyphicon glyphicon-chevron-down';
-        } 
-        
+        }
+
         return className;
     }
-    
+
     isEditing(){
-        return this.props.donorNotesList.filter(donorNotes => {return donorNotes.isEditing}).length > 0;       
+        return this.props.donorNotesList.filter(donorNotes => {return donorNotes.isEditing}).length > 0;
      }
-    
-    render() {       
-        const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);        
+
+    render() {
+        const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);
         return (
-                <div>               
+                <div>
                 <p className="indicator-description">{this.props.translations['amp.gpi-data-donor-notes-indicator' + this.props.indicatorCode + ':header-info']}</p>
-                <div className="panel panel-default">                 
+                <div className="panel panel-default">
                 <div className="panel-body custom-panel">
                 <span className="glyphicon glyphicon-plus" onClick={this.addNew}></span>
                 <span  onClick={this.addNew} className="add-new-text">{Utils.capitalizeFirst(this.props.translations['amp.gpi-data:add-new'])} </span>
@@ -137,10 +137,10 @@ export default class DonorNotesList extends Component {
                 <span> / </span> <span className="glyphicon glyphicon-ok-circle success-color"> </span> <span className="click-save-text" >{this.props.translations['amp.gpi-data:click-save']}</span>
                 <span> / </span><span className="required-fields">{this.props.translations['amp.gpi-data:required-fields']}</span>
                 <span className="float-right button-wrapper"> <button type="button" className="btn btn-success" onClick = {this.saveAllEdits}>{this.props.translations['amp.gpi-data:button-save-all-edits']}</button></span>
-                </div>                 
-                </div>  
+                </div>
+                </div>
                 {this.showErrors()}
-                {this.showInfoMessages()} 
+                {this.showInfoMessages()}
                 <table className="table table-striped">
                 <thead>
                 <tr >
@@ -151,12 +151,12 @@ export default class DonorNotesList extends Component {
                 <td className="actions-column">{this.props.translations['amp.gpi-data-donor-notes:action']}</td>
                 </tr>
                 </thead>
-                <tbody>               
-                {this.props.donorNotesList.map(donorNotes => 
-                <DonorNotesRow indicatorCode = {this.props.indicatorCode} donorNotes={donorNotes} currencyList={this.props.currencyList} verifiedOrgList={this.props.verifiedOrgList} settings={this.props.settings} key={donorNotes.id || 'c' + donorNotes.cid} errors={this.props.errors}/>  
-                )}                
+                <tbody>
+                {this.props.donorNotesList.map(donorNotes =>
+                <DonorNotesRow indicatorCode = {this.props.indicatorCode} donorNotes={donorNotes} currencyList={this.props.currencyList} verifiedOrgList={this.props.verifiedOrgList} settings={this.props.settings} key={donorNotes.id || 'c' + donorNotes.cid} errors={this.props.errors}/>
+                )}
                 </tbody>
-                </table> 
+                </table>
                 {pages.length > 1 &&
                     <nav>
                     <ul className="pagination fixed-pagination">
@@ -165,9 +165,9 @@ export default class DonorNotesList extends Component {
                     <span aria-hidden="true" data-page="-">&laquo;</span>
                 <span className="sr-only">{this.props.translations['amp.gpi-data:button-previous']}</span>
                 </a>
-                </li>                     
-                {pages.map(pageNumber => 
-                <li className={this.props.paging.currentPageNumber == pageNumber ? 'page-item  active': 'page-item' } key={pageNumber} ><a className="page-link pagination-link" data-page={pageNumber} onClick={this.goToClickedPage}>{pageNumber}</a></li>  
+                </li>
+                {pages.map(pageNumber =>
+                <li className={this.props.paging.currentPageNumber == pageNumber ? 'page-item  active': 'page-item' } key={pageNumber} ><a className="page-link pagination-link" data-page={pageNumber} onClick={this.goToClickedPage}>{pageNumber}</a></li>
                 )}
                 <li className={this.props.paging.currentPageNumber == this.props.paging.totalPageCount ? 'page-item disabled': 'page-item' }>
                 <a className="page-link pagination-link"  aria-label="Next" data-page="+" onClick={this.goToNextPage}>
@@ -182,14 +182,14 @@ export default class DonorNotesList extends Component {
     }
 }
 
-function mapStateToProps(state, ownProps) {   
+function mapStateToProps(state, ownProps) {
     var donorNotes = state.donorNotes[ownProps.indicatorCode];
     return {
         donorNotesList: donorNotes.donorNotesList || [],
         paging: donorNotes.paging,
         sorting: donorNotes.sorting,
         errors: donorNotes.errors || [],
-        infoMessages: donorNotes.infoMessages || [],        
+        infoMessages: donorNotes.infoMessages || [],
         currencyList: state.commonLists.currencyList || [],
         verifiedOrgList: state.commonLists.verifiedOrgList || [],
         settings: state.commonLists.settings || {},

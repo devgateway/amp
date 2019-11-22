@@ -92,10 +92,10 @@ module.exports = Backbone.Model
 
   _translateADMToMagicWord: function(admString) {
     var magicWords = {
-      'adm-0': 'Country',
-      'adm-1': 'Region',
-      'adm-2': 'Zone',
-      'adm-3': 'District'
+      'adm-0': 'Administrative Level 0',
+      'adm-1': 'Administrative Level 1',
+      'adm-2': 'Administrative Level 2',
+      'adm-3': 'Administrative Level 3'
     };
 
     return magicWords[admString];

@@ -28,7 +28,6 @@ import org.digijava.kernel.ampapi.endpoints.dto.DateConversionResult;
 import org.digijava.kernel.ampapi.endpoints.dto.Org;
 import org.digijava.kernel.ampapi.endpoints.dto.SaveResult;
 import org.digijava.kernel.ampapi.endpoints.dto.YearsForCalendar;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -41,7 +40,7 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 @Path("gpi")
 @Api("gpi")
-public class GPIEndPoints implements ErrorReportingEndpoint {
+public class GPIEndPoints {
 
     @GET
     @Path("/aid-on-budget")
@@ -264,11 +263,4 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
         return new DateConversionResult(GPIDataService.getConvertedDate(fromCalId, toCalId, date));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class<GPIErrors> getErrorsClass() {
-        return GPIErrors.class;
-    }
 }

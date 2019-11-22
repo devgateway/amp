@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
@@ -56,7 +57,7 @@ public class RegexValidatorTest {
         Set<ConstraintViolation> violations = getConstraintViolations(obj);
 
         assertThat(violations, contains(ValidatorMatchers.violationFor(
-                RegexValidator.class, "field", anything(), ActivityErrors.FIELD_INVALID_VALUE)));
+                RegexValidator.class, "field", anything(), ValidationErrors.FIELD_INVALID_VALUE)));
     }
 
     @Test

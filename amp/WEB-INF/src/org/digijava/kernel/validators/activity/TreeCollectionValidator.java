@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
@@ -31,7 +31,9 @@ public class TreeCollectionValidator implements ConstraintValidator {
         Collection col = (Collection) value;
         for (Object item : col) {
             AmpAutoCompleteDisplayable<?> treeNode = ((TreeNodeAware) item).getTreeNode();
-            treeNodes.add(treeNode);
+            if (treeNode != null) {
+                treeNodes.add(treeNode);
+            }
         }
 
         for (AmpAutoCompleteDisplayable<?> node : treeNodes) {
@@ -47,6 +49,6 @@ public class TreeCollectionValidator implements ConstraintValidator {
 
     @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.FIELD_PARENT_CHILDREN_NOT_ALLOWED;
+        return ValidationErrors.FIELD_PARENT_CHILDREN_NOT_ALLOWED;
     }
 }

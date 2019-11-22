@@ -37,7 +37,6 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
 //  @Interchangeable(fieldTitle="Expenditure Category")
     private String expenditureCategory;
 
-//  @Interchangeable(fieldTitle="Region Location")
     private AmpCategoryValueLocations regionLocation;
     /**
      * @return Returns the activity.

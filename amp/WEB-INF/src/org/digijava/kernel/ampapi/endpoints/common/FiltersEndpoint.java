@@ -1,792 +1,817 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.function.Function;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.WorkspaceFilter;
-import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
-import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
-import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
-import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
+import org.digijava.kernel.ampapi.endpoints.filters.ApprovalStatusFilterListManager;
 import org.digijava.kernel.ampapi.endpoints.filters.FilterList;
-import org.digijava.kernel.ampapi.endpoints.common.model.FilterDescriptor;
-import org.digijava.kernel.ampapi.endpoints.common.model.Location;
-import org.digijava.kernel.ampapi.endpoints.common.model.Org;
-import org.digijava.kernel.ampapi.endpoints.common.model.OrgGroup;
-import org.digijava.kernel.ampapi.endpoints.common.model.OrgType;
-import org.digijava.kernel.ampapi.endpoints.common.model.YearRange;
-import org.digijava.kernel.ampapi.endpoints.dto.FilterValue;
-import org.digijava.kernel.ampapi.endpoints.filters.FiltersBuilder;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersManager;
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
-import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
+import org.digijava.kernel.ampapi.endpoints.filters.WorkspaceFilterListManager;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
-import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.kernel.ampapi.endpoints.util.FilterComponentType;
+import org.digijava.kernel.ampapi.endpoints.util.FilterDataType;
+import org.digijava.kernel.ampapi.endpoints.util.FilterDefinition;
+import org.digijava.kernel.ampapi.endpoints.util.FilterFieldType;
+import org.digijava.kernel.ampapi.endpoints.util.FilterReportType;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.AmpThemeSkeleton;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.hibernate.ObjectNotFoundException;
 
 /**
- * Class that holds method related to filters (available options, available filters)
+ * Retrieve available filters.
  * 
- * @author jdeanquin@developmentgateway.org
+ * @author vchihai@developmentgateway.org
  * 
  */
 @Path("filters")
-@Api("filters")
-public class FiltersEndpoint implements AmpEndpoint {
-    private static final String DISPLAY_NAME_PROPERTY = "DisplayName";
-    private static final String NAME_PROPERTY = "Name";
-    private static final String SECTORS_SUFFIX = " Sectors";
-    private static final Logger logger = Logger.getLogger(FiltersEndpoint.class);
-    
-    // todo
-    // probably not the best place to keep, but definitely better than in the method
-    private static final String PRIVATE_WS_CONDITION = "WHERE (isolated is false) OR (isolated is null)";
-    private static final String PARENT_WS_CONDITION = "WHERE parent_team_id = ";
+public class FiltersEndpoint {
 
-    private static final int START_YEAR = 1985;
-    private static final int END_YEAR = 2025;
-
-
-    //AmpARFilter filters;
-    
-    public FiltersEndpoint() {
-        //filters = new AmpARFilter();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public List<AvailableMethod> getAvailableFilters() {
-        return EndpointUtils.getAvailableMethods(FiltersEndpoint.class.getName(),true);
-    }
-
-
-    @GET
-    @Path("/activityapprovalStatus")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.APPROVAL_STATUS, columns = ColumnConstants.APPROVAL_STATUS,
-                name = "Approval Status", visibilityCheck = "hasToShowActivityapprovalStatusFilter", tab=EPConstants.TAB_ACTIVITY)
-    @ApiOperation("Return activity status options")
-    public FilterDescriptor getActivityApprovalStatus() {
-        FilterDescriptor as = new FilterDescriptor();
-
-        List<FilterValue> activityStatus = new ArrayList<FilterValue>();
-        for (String key : AmpARFilter.VALIDATION_STATUS.keySet()) {
-            FilterValue sjb = new FilterValue();
-            sjb.setId(AmpARFilter.VALIDATION_STATUS.get(key));
-            sjb.setName(TranslatorWorker.translateText(key));
-            activityStatus.add(sjb);
-        }
-        activityStatus = orderByProperty(activityStatus, NAME_PROPERTY);
-        as.setFilterId(FiltersConstants.APPROVAL_STATUS);
-        as.setName(TranslatorWorker.translateText(ColumnConstants.APPROVAL_STATUS));
-        as.setValues(activityStatus);
-
-        return as;
-    }
-
-    private AmpTeam getAmpTeam() {
-        TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(
-                Constants.CURRENT_MEMBER);
-        AmpTeam ampTeam = null;
-        if (teamMember != null) {
-            ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
-        }
-        return ampTeam;
-    }
+    public FiltersEndpoint() { }
 
     /**
-     * Returns fi the approval status filter should be shown
+     * Retrieve all filter definitions.
+     * </br>
+     * 
+     * <dl>
+     * Each filter definition holds information regarding:
+     * <dt><b>id</b><dd> - the id of the filter
+     * <dt><b>name</b><dd> - the name of the filter
+     * <dt><b>endpoint</b><dd> - the relative URL where the values should be fetched
+     * <dt><b>ui</b><dd> - whenever to display this filter in UI (widget)
+     * <dt><b>method</b><dd> - the used method for fetching the values (see endpoint attribute)
+     * <dt><b>columns</b><dd> - the visibility of the filters depends on the columns
+     * <dt><b>tab</b><dd> - under which tab in Filter Widget should be visible the filter
+     * <dt><b>fieldType</b><dd> - the type of the filter field. Used for building the Filter Widget
+     * Possible Values (TREE|OPTIONS|DATE)
+     * <dt><b>dataType</b><dd> - the type of the filter data. Used for building the Filter Widget
+     * Possible Values (TEXT|DATE)
+     * <dt><b>componentType</b><dd> - the AMP component where the filter can be visible
+     * Used for building the Filter Widget. Possible Values (ALL|DASHBOARD|REPORTS|GIS|TAB|GPI_REPORT)
+     * <dt><b>multiple</b><dd> - can be selected multiple values for the specific filter
+     * </dl></br></br>
      *
-     * @return
+     * </br>
+     * <h3>Sample Output:</h3><pre>
+     * [
+     *   ...
+     *   {
+     *     "id": "type-of-assistance",
+     *     "name": "Type Of Assistance",
+     *     "endpoint": "/rest/filters/typeOfAssistance/",
+     *     "ui": true,
+     *     "method": "GET",
+     *     "columns": ["Type Of Assistance"],
+     *     "tab": "Financial",
+     *     "fieldType": "TREE",
+     *     "dataType": "TEXT",
+     *     "componentType": ["ALL"],
+     *     "multiple" : true
+     *   }
+     *   ....
+     * ]</pre>
+     *
+     * @return list of filter definitions
      */
-    public boolean hasToShowActivityapprovalStatusFilter() {
-        return (TLSUtils.getRequest().getSession().getAttribute(
-                org.digijava.module.aim.helper.Constants.CURRENT_MEMBER) != null);
-    }
-
     @GET
-    @Path("/boundaries")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false,  id = "Boundaries", tab=EPConstants.TAB_LOCATIONS)
-    @ApiOperation("Return the admin levels for filtering")
-    public List<String> getBoundaries() {
-        return QueryUtil.getImplementationLocationsInUse();
-    }
-
-    @GET
-    @Path("/sectors")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = "Sectors", id = "Sectors", tab = EPConstants.TAB_SECTORS)
-    @ApiOperation("Returns the sector schema lists")
-    public List<FilterValue> getSectorsSchemas() throws AmpApiException {
-        List<FilterValue> sectorList = new ArrayList<FilterValue>();
-        List<AmpClassificationConfiguration> schems = SectorUtil.getAllClassificationConfigs();
-        Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
-        for (AmpClassificationConfiguration ampClassificationConfiguration : schems) {
-            final String columnName = AmpClassificationConfiguration.NAME_TO_COLUMN_MAP
-                    .get(ampClassificationConfiguration.getName()); 
-            if (visibleColumns.contains(columnName)) {
-                Long sectorConfigId = ampClassificationConfiguration.getId();
-                String sectorDisplayName = TranslatorWorker.translateText(ampClassificationConfiguration.getName() + SECTORS_SUFFIX);
-                
-                FilterValue sectorBean = new FilterValue(sectorConfigId, sectorDisplayName);
-                sectorBean.setFilterId(FilterUtils.INSTANCE.idFromColumnName(columnName));
-                
-                sectorList.add(sectorBean);
-            }
-        }
-        
-        return sectorList;
-    }
-
-    @GET
-    @Path("/sectors/{sectorId}")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "SectorsById", tab = EPConstants.TAB_SECTORS)
-    @ApiOperation("Return the sector filtered by the given sectorName")
-    public FilterValue getSectors(@PathParam("sectorId") Long sectorId) {
-
-        FilterValue sector = new FilterValue();
-
-        try {
-            AmpClassificationConfiguration c = SectorUtil
-                    .getClassificationConfigById(sectorId);
-
-            String sectorConfigName = c.getName();
-            List<FilterValue> ampSectorsList = new ArrayList<FilterValue>();
-            sector.setId(sectorId);
-            sector.setName(TranslatorWorker.translateText(sectorConfigName + SECTORS_SUFFIX));
-            List<AmpSector> s = SectorUtil
-                    .getAmpSectorsAndSubSectorsHierarchy(sectorConfigName);
-            for (AmpSector ampSector : s) {
-                ampSectorsList.add(getSectors(ampSector,sectorConfigName,1));
-            }
-            ampSectorsList = orderByProperty(ampSectorsList,NAME_PROPERTY);
-            sector.setChildren(ampSectorsList);
-        } catch (DgException e) {
-            logger.error("Cannot get sector by id",e);
-        }
-        return sector;
-    }
-
-    @GET
-    @Path("/date/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = "Date", id = "date", tab = EPConstants.TAB_OTHER)
-    @ApiOperation("Return the year range configure for GIS")
-    public YearRange getDates() {
-        YearRange range = new YearRange();
-        range.setStartYear(START_YEAR);
-        range.setEndYear(END_YEAR);
-        return range;
-        //return getDefaultDate(); // tabs/saiku should have this empty by default; gis/dashboards fill it client side
-        // the API does not offer server-side the possibility of knowing the kind of filter widget being filtered, so instead
-        // the settings API ships them all client side and they are sorted out there
-        //return new JsonBean();
+    public List<AvailableMethod> getAvailableFilters(@DefaultValue("D") @QueryParam("report-type") String reportType) {
+        return EndpointUtils.getAvailableFilterMethods(FiltersEndpoint.class.getName(), reportType);
     }
     
+    /**
+     * List the organization types and items of 'Organizations' filter.
+     * 
+     * </br>
+     * The response contains 2 objects - the list definitions and the values. 
+     * Having this, the filter widget should create a tree for each list.
+     * <dl>
+     * Each filter definition holds information regarding:
+     * <dt><b>id</b><dd> - the id of the filter. 
+     * It is used during the fetching the children from the items object (see listDefinitionIds in items objects)
+     * <dt><b>name</b><dd> - the name of the filter
+     * <dt><b>displayName</b><dd> - the translated name of the filter. This will be shown in Filter Widget
+     * <dt><b>filterIds</b><dd> - what filterId should be associated to the each tree item. 
+     * If the filterId is an empty string, that level should removed form the tree.
+     * <dt><b>tab</b><dd> - under which tab should be shown the filter tree
+     * <dt><b>items</b><dd> - the name of the object from which the values should be fetched
+     * <dt><b>filtered</b><dd> - if the tree should be build dynamically. 
+     * If it is false, the list of items should be taken as it is. 
+     * </dl></br></br>
+     * 
+     * The items object contains the values used to build the tree.
+     *
+     * </br>
+     * <h3>Sample Output:</h3><pre>
+     * "listDefinitions" : 
+     *  [
+     *    ...
+     *    {
+     *     "id": 1,
+     *     "name": "Donor",
+     *     "displayName": "donor",
+     *     "filterIds": ["donor-type", "donor-group", "donor-agency"],
+     *     "tab": "Funding Organizations",
+     *     "items": "organizations",
+     *     "filtered": false
+     *    },
+     *    {
+     *     "id": 8,
+     *     "name": "Contracting Agency",
+     *     "displayName": "Contracting Agency",
+     *     "filterIds": ["", "contracting-agency-group", "contracting-agency"],
+     *     "tab": "All Agencies",
+     *     "items": "organizations",
+     *     "filtered": false
+     *    }
+     *    ...
+     *  ], 
+     * "items" : {
+     *   "organizations": [
+     *     {
+     *        "id": 4,
+     *        "name": "Bilateral",
+     *        "children": [
+     *            {
+     *               "id": 4,
+     *               "name": "BILATERAL Group",
+     *               "children": [
+     *                  {
+     *                     "id": 20,
+     *                     "name": "Austria",
+     *                     "acronym": "Austria",
+     *                     "listDefinitionIds": [
+     *                        1,
+     *                        2,
+     *                        4,
+     *                        11
+     *                     ]
+     *                  },
+     *                  {
+     *                     "id": 21,
+     *                     "name": "Belgium",
+     *                     "acronym": "Belgium",
+     *                     "listDefinitionIds": [
+     *                        1
+     *                     ]
+     *                  },
+     *                  ...
+     *               ]
+     *            },
+     *            ...
+     *         ]
+     *      },
+     *      ...
+     *   ]
+     *  }
+     * </pre>
+     * 
+     * @return tree definitions (filter types) and the list of organizations
+     */
     @GET
-    @Path("/proposedStartDate/")
+    @Path("/organizations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_START_DATE, columns = ColumnConstants.PROPOSED_START_DATE,
-            id = FiltersConstants.PROPOSED_START_DATE, tab = EPConstants.TAB_OTHER)
-    public void getProposedStartDate() {
+    @ApiMethod(id = "organizations", name = "Organizations")
+    @FilterDefinition(tab = EPConstants.TAB_ORGANIZATIONS)
+    public FilterList getOrganizations() {
+        return FiltersManager.getInstance().getOrganizationFilterList();
     }
     
-    @GET
-    @Path("/actualStartDate/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_START_DATE, columns = ColumnConstants.ACTUAL_START_DATE,
-            id = FiltersConstants.ACTUAL_START_DATE, tab = EPConstants.TAB_OTHER)
-    public void getActualStartDate() {
-    }
-    
-    @GET
-    @Path("/proposedCompletionDate/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_COMPLETION_DATE, columns = ColumnConstants.PROPOSED_COMPLETION_DATE,
-            id = FiltersConstants.PROPOSED_COMPLETION_DATE, tab = EPConstants.TAB_OTHER)
-    public void getProposedCompletionDate() {
-    }
-    
-    @GET
-    @Path("/actualCompletionDate/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_COMPLETION_DATE, columns = ColumnConstants.ACTUAL_COMPLETION_DATE,
-            id = FiltersConstants.ACTUAL_COMPLETION_DATE, tab = EPConstants.TAB_OTHER)
-    public void getActualCompletionDate() {
-    }
-
-    @GET
-    @Path("/finalDateContracting/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING,
-            id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, tab = EPConstants.TAB_OTHER)
-    public void getDateForContracting() {
-    }
-
-    @GET
-    @Path("/issueDate/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.ISSUE_DATE, columns = ColumnConstants.ISSUE_DATE,
-            id = FiltersConstants.ISSUE_DATE, tab = EPConstants.TAB_OTHER)
-    public void getIssueDate() {
-    }
-    
-    @GET
-    @Path("/proposedApprovalDate/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_APPROVAL_DATE, columns = ColumnConstants.PROPOSED_APPROVAL_DATE,
-            id = FiltersConstants.PROPOSED_APPROVAL_DATE, tab = EPConstants.TAB_OTHER)
-    public void getProposedApprovalDate() {
-    }
-
-    @GET
-    @Path("/actualApprovalDate/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_APPROVAL_DATE, columns = ColumnConstants.ACTUAL_APPROVAL_DATE,
-            id = FiltersConstants.ACTUAL_APPROVAL_DATE, tab = EPConstants.TAB_OTHER)
-    public void getActualApprovalDate() {
-    }
-
+    /**
+     * List the program settings and items of 'Programs' filter.
+     * 
+     * The structure of the response is similar to /organizations endpoint.
+     * 
+     * @return tree definitions (filter types) and the list of programs
+     */
     @GET
     @Path("/programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = "Programs", id = "Programs", tab = EPConstants.TAB_PROGRAMS)
-    @ApiOperation("Return the programs filtered by the given sectorName")
-    public List<FilterValue> getPrograms() {
-        List<FilterValue> programs = new ArrayList<FilterValue>();
-        try {
-            Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
-
-            List<Object[]> progs = PersistenceManager.getSession().createSQLQuery("SELECT amp_program_settings_id, name FROM amp_program_settings").list();
-            for (Object[] program : progs) {
-                String programName = String.valueOf(program[1]);
-                final String columnName = ProgramUtil.NAME_TO_COLUMN_MAP.get(String.valueOf(program[1]));
-                // only add if its enabled
-                if (visibleColumns.contains(columnName)) {
-                    Long programSettingId = PersistenceManager.getLong(program[0]);
-                    String translatedProgramName = TranslatorWorker.translateText(programName);
-                    FilterValue bean = new FilterValue(programSettingId, translatedProgramName);
-                    bean.setFilterId(FilterUtils.INSTANCE.idFromColumnName(columnName));
-                    programs.add(bean);
-                }
-            }
-            return programs;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @GET
-    @Path("/org-types")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = "Types of Organizations", id = "organizationTypesList")
-    @ApiOperation("Return org types with its orgs groups")
-    public List<OrgType> getOrgTypes() {
-        List<OrgType> orgTypes = QueryUtil.getOrgTypes();
-        orderByName(orgTypes, OrgType::getName);
-        return orgTypes;
-    }
-
-    @GET
-    @Path("/org-groups")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = "Organization Groups", id = "orgGroupsList")
-    @ApiOperation("Return org groups with its orgs ids")
-    public List<OrgGroup> getOrgGroups() {
-        List<OrgGroup> orgGroups = QueryUtil.getOrgGroups();
-        orderByName(orgGroups, OrgGroup::getName);
-        return orgGroups;
-    }
-
-    @GET
-    @Path("/orgs")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = "Organizations", name = "orgsList", tab=EPConstants.TAB_ORGANIZATIONS)
-    @ApiOperation("List all available orgs")
-    public List<Org> getOrgs() {
-        List<Org> orgs = QueryUtil.getOrgs();
-        orderByName(orgs, Org::getName);
-        return orgs;
-    }
-
-
-
-    @GET
-    @Path("/org-roles")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = "Organization Roles", id = "orgRolesList", tab=EPConstants.TAB_ALL_AGENCIES)
-    @ApiOperation("List all available orgs roles")
-    public List<FilterValue> getorgRoles() {
-        List<FilterValue> orgRoles = QueryUtil.getOrgRoles();
-        return orderByProperty(orgRoles,DISPLAY_NAME_PROPERTY);
-    }
-
-    @GET
-    @Path("/programs/{programId}")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "ProgramsByProgramName", tab = EPConstants.TAB_PROGRAMS)
-    @ApiOperation("Return the programs filtered by the given programSettingsId")
-    public FilterValue getPrograms(@PathParam("programId") Long programId) {
-        try {
-            Object[] idname = (Object[]) PersistenceManager.getSession().createSQLQuery("select default_hierarchy, name from amp_program_settings where amp_program_settings_id = " + programId).uniqueResult();
-            Long rootAmpThemeId = idname == null ? null : PersistenceManager.getLong(idname[0]);
-            if (rootAmpThemeId != null) {
-                String schemeName = String.valueOf(idname[1]);
-                Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesTree(rootAmpThemeId);
-                String programName = schemeName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)
-                        ? ProgramUtil.NATIONAL_PLANNING_OBJECTIVES : schemeName;
-                FilterValue bean = buildProgramsJsonBean(themes.get(rootAmpThemeId), programName, 0);
-                bean.setFilterId(FilterUtils.INSTANCE.idFromColumnName(programName + " Level 1"));
-                return bean;
-            } else {
-                return new FilterValue();
-            }
-
-        } catch (ObjectNotFoundException e) {
-            return new FilterValue();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @GET
-    @Path("/typeOfAssistance/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.TYPE_OF_ASSISTANCE, columns = ColumnConstants.TYPE_OF_ASSISTANCE,
-            name="Type of Assistance", tab=EPConstants.TAB_FINANCIALS)
-    @ApiOperation("Return type of assistance")
-    public FilterDescriptor getTypeOfAssistance() {
-        return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY, ColumnConstants.TYPE_OF_ASSISTANCE);
-    }
-
-    @GET
-    @Path("/modeOfPayment/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.MODE_OF_PAYMENT, columns = ColumnConstants.MODE_OF_PAYMENT,
-            name="Mode of Payment", tab=EPConstants.TAB_FINANCIALS)
-    @ApiOperation("Return mode of payment")
-    public FilterDescriptor getModeOfPayment() {
-        return getCategoryValue(CategoryConstants.MODE_OF_PAYMENT_KEY, ColumnConstants.MODE_OF_PAYMENT);
-    }
-
-    @GET
-    @Path("/activityStatus/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.STATUS, columns = ColumnConstants.STATUS,name="Activity Status",
-            tab=EPConstants.TAB_ACTIVITY)
-    @ApiOperation("Return Activitystatus")
-    public FilterDescriptor getActivityStatus() {
-        return getCategoryValue(CategoryConstants.ACTIVITY_STATUS_KEY, ColumnConstants.STATUS);
-    }
-
-    @GET
-    @Path("/activityBudget/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.ACTIVITY_BUDGET, columns = ColumnConstants.ACTIVITY_BUDGET,
-            name="Activity Budget", tab=EPConstants.TAB_FINANCIALS)
-    @ApiOperation("Return Activity Budget")
-    public FilterDescriptor getActivityBudget() {
-        return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.ACTIVITY_BUDGET);
-    }   
-
-    @GET
-    @Path("/fundingStatus/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.FUNDING_STATUS, columns = ColumnConstants.FUNDING_STATUS,
-            name="Funding Status",tab=EPConstants.TAB_FINANCIALS)
-    @ApiOperation("Funding status filter information")
-    public FilterDescriptor getFundingStatus() {
-        return getCategoryValue(CategoryConstants.FUNDING_STATUS_KEY, ColumnConstants.FUNDING_STATUS);
-    }
-
-    @GET
-    @Path("/expenditureClass/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.EXPENDITURE_CLASS, columns = ColumnConstants.EXPENDITURE_CLASS,
-            name="Expenditure Class", tab=EPConstants.TAB_FINANCIALS)
-    @ApiOperation("Funding status filter information")
-    public FilterDescriptor getExpenditureClass() {
-        return getCategoryValue(CategoryConstants.EXPENDITURE_CLASS_KEY, ColumnConstants.EXPENDITURE_CLASS);
-    }
-
-    @GET
-    @Path("/concessionalityLevel/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.CONCESSIONALITY_LEVEL, columns = ColumnConstants.CONCESSIONALITY_LEVEL,
-            name="Concessionality Level", tab=EPConstants.TAB_FINANCIALS)
-    @ApiOperation("Funding concessionality level information")
-    public FilterDescriptor getConcessionalityLevel() {
-        return getCategoryValue(CategoryConstants.CONCESSIONALITY_LEVEL_KEY, ColumnConstants.CONCESSIONALITY_LEVEL);
-    }
-
-    @GET
-    @Path("/performanceAlertLevel")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.PERFORMANCE_ALERT_LEVEL,
-            columns = ColumnConstants.PERFORMANCE_ALERT_LEVEL, name = ColumnConstants.PERFORMANCE_ALERT_LEVEL,
-            tab = EPConstants.TAB_ACTIVITY)
-    @ApiOperation("Performance Alert Level filter")
-    public FilterDescriptor getPerformanceAlertLevel() {
-        return getCategoryValue(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, ColumnConstants.PERFORMANCE_ALERT_LEVEL);
-    }
-
-    @GET
-    @Path("/performanceAlertType")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.PERFORMANCE_ALERT_TYPE,
-            columns = ColumnConstants.PERFORMANCE_ALERT_TYPE, name = ColumnConstants.PERFORMANCE_ALERT_TYPE,
-            tab = EPConstants.TAB_ACTIVITY)
-    @ApiOperation("Performance Alert Type filter")
-    public FilterDescriptor getPerformanceAlertType() {
-        FilterDescriptor pt = new FilterDescriptor();
-
-        List<FilterValue> performanceAlertTypes = new ArrayList<FilterValue>();
-
-        for (Entry<String, Long> entry : PerformanceRuleManager.PERF_ALERT_TYPE_TO_ID.entrySet()) {
-            FilterValue sjb = new FilterValue();
-            sjb.setId(entry.getValue());
-            sjb.setName(TranslatorWorker.translateText(
-                    PerformanceRuleManager.PERF_ALERT_TYPE_TO_DESCRIPTION.get(entry.getKey())));
-            performanceAlertTypes.add(sjb);
-        }
-
-        performanceAlertTypes = orderByProperty(performanceAlertTypes, NAME_PROPERTY);
-        pt.setFilterId(FiltersConstants.PERFORMANCE_ALERT_TYPE);
-        pt.setName(TranslatorWorker.translateText(ColumnConstants.PERFORMANCE_ALERT_TYPE));
-        pt.setValues(performanceAlertTypes);
-
-        return pt;
-    }
-
-    @GET
-    @Path("/financingInstruments/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.FINANCING_INSTRUMENT, columns = ColumnConstants.FINANCING_INSTRUMENT,
-            name = ColumnConstants.FINANCING_INSTRUMENT, tab = EPConstants.TAB_FINANCIALS)
-    @ApiOperation("Return financing instruments")
-    public FilterDescriptor getFinancingInstruments() {
-        return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY, ColumnConstants.FINANCING_INSTRUMENT);
-    }
-
-    private List<FilterValue> getCategoryValue(String categoryKey) {
-        List<FilterValue> fi = new ArrayList<FilterValue>();
-
-        Collection<AmpCategoryValue> col = CategoryManagerUtil
-                .getAmpCategoryValueCollectionByKey(categoryKey,true);
-        for (AmpCategoryValue ampCategoryValue : col) {
-            if (!Boolean.TRUE.equals(ampCategoryValue.getDeleted())) {
-                String translatedValue = CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue);
-                fi.add(new FilterValue(ampCategoryValue.getIdentifier(), translatedValue));
-            }
-        }
-        //reorder because after we get the translated name we lose ordering
-        fi = orderByProperty (fi,NAME_PROPERTY);
-        fi.add(new FilterValue(ColumnReportData.UNALLOCATED_ID, FiltersConstants.UNDEFINED_NAME));
-        return fi;
-        
-    }
-
-    @GET
-    @Path("/locations/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.LOCATION, columns = ColumnConstants.LOCATION, name="Locations",
-            tab=EPConstants.TAB_LOCATIONS)
-    @ApiOperation("Return locations")
-    public Location getLocations() {
-        return QueryUtil.getLocationsForFilter();
+    @ApiMethod(id = "programs", name = "Programs")
+    @FilterDefinition(tab = EPConstants.TAB_PROGRAMS)
+    public FilterList getPrograms() {
+        return FiltersManager.getInstance().getProgramFilterList();
     }
     
     /**
-     * List the locations tree
-     *
+     * List the sector schemas and items of 'Sectors' filter.
+     * 
+     * The structure of the response is similar to /organizations endpoint.
+     * 
+     * @return tree definitions (filter types) and the tree structure of the sectors
+     */
+    @GET
+    @Path("/sectors")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "sectors", name = "Sectors")
+    @FilterDefinition(tab = EPConstants.TAB_SECTORS)
+    public FilterList getSectors() {
+        return FiltersManager.getInstance().getSectorFilterList();
+    }
+    
+    /**
+     * List the locations of the 'Locations' filter.
+     * 
+     * The structure of the response is similar to /organizations endpoint.
+     * 
      * @return tree definitions (filter types) and the tree structure of the locations
      */
     @GET
-    @Path("/locationlist")
+    @Path("/locations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = "LocationList", name = "LocationList", tab = EPConstants.TAB_LOCATIONS)
-    public FilterList getLocationsList() {
+    @ApiMethod(id = "locations", name = "Locations")
+    @FilterDefinition(tab = EPConstants.TAB_LOCATIONS)
+    public FilterList getLocations() {
         return FiltersManager.getInstance().getLocationFilterList();
     }
+
+    /**
+     * List the possible values of 'Approval Status' filter.
+     * 
+     * @return filter definition and values of 'approval-status' filter
+     */
+    @GET
+    @Path("/activityApprovalStatus")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.APPROVAL_STATUS, name = ColumnConstants.APPROVAL_STATUS)
+    @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.APPROVAL_STATUS, 
+                        visibilityCheck = "hasToShowActivityApprovalStatusFilter")
+    public FilterList getActivityApprovalStatus() {
+        return FiltersManager.getInstance().getApprovalStatusFilter();
+    }
+
+    /**
+     * List the possible values of 'Type Of Assistance' filter.
+     * 
+     * @return filter definition and values of 'type-of-assistance' filter.
+     */
+    @GET
+    @Path("/typeOfAssistance/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.TYPE_OF_ASSISTANCE, name = ColumnConstants.TYPE_OF_ASSISTANCE)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.TYPE_OF_ASSISTANCE)
+    public FilterList getTypeOfAssistance() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.TYPE_OF_ASSISTANCE);
+    }
     
+    /**
+     * List the possible values of 'Mode of Payment' filter.
+     * 
+     * @return filter definition and values of 'mode-of-payment' filter.
+     */
+    @GET
+    @Path("/modeOfPayment/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.MODE_OF_PAYMENT, name = ColumnConstants.MODE_OF_PAYMENT)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.MODE_OF_PAYMENT)
+    public FilterList getModeOfPayment() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.MODE_OF_PAYMENT);
+    }
+    
+    /**
+     * List the possible values of 'Activity Status' filter.
+     * 
+     * @return filter definition and values of 'status' filter.
+     */
+    @GET
+    @Path("/activityStatus/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.STATUS, name = FiltersConstants.ACTIVITY_STATUS_NAME)
+    @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.STATUS)
+    public FilterList getActivityStatus() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.STATUS);
+    }
+
+    /**
+     * List the possible values of 'Activity Budget' filter.
+     * 
+     * @return filter definition and values of 'activity-budget' filter.
+     */
+    @GET
+    @Path("/activityBudget/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.ACTIVITY_BUDGET, name = FiltersConstants.ACTIVITY_BUDGET_NAME)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.ACTIVITY_BUDGET)
+    public FilterList getActivityBudget() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.ACTIVITY_BUDGET);
+    }   
+    
+    /**
+     * List the possible values of 'Funding Status' filter.
+     * 
+     * @return filter definition and values of 'funding-status' filter.
+     */
+    @GET
+    @Path("/fundingStatus/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.FUNDING_STATUS)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.FUNDING_STATUS)
+    public FilterList getFundingStatus() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.FUNDING_STATUS);
+    }
+    
+    /**
+     * List the possible values of 'Expenditure Class' filter.
+     * 
+     * @return filter definition and values of 'expenditure-class' filter.
+     */
+    @GET
+    @Path("/expenditureClass/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.EXPENDITURE_CLASS, name = ColumnConstants.EXPENDITURE_CLASS)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.EXPENDITURE_CLASS)
+    public FilterList getExpenditureClass() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.EXPENDITURE_CLASS);
+    }
+    
+    /**
+     * List the possible values of 'Concessionality Level' filter.
+     * 
+     * @return filter definition and values of 'concessionality-level' filter.
+     */
+    @GET
+    @Path("/concessionalityLevel/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.CONCESSIONALITY_LEVEL, name = ColumnConstants.CONCESSIONALITY_LEVEL)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.CONCESSIONALITY_LEVEL)
+    public FilterList getConcessionalityLevel() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.CONCESSIONALITY_LEVEL);
+    }
+
+    /**
+     * List the possible values of 'Performance Alert Level' filter.
+     * 
+     * @return filter definition and values of 'performance-alert-level' filter.
+     */
+    @GET
+    @Path("/performanceAlertLevel")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.PERFORMANCE_ALERT_LEVEL,
+            columns = ColumnConstants.PERFORMANCE_ALERT_LEVEL, name = ColumnConstants.PERFORMANCE_ALERT_LEVEL)
+    @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.PERFORMANCE_ALERT_LEVEL)
+    public FilterList getPerformanceAlertLevel() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PERFORMANCE_ALERT_LEVEL);
+    }
+
+    /**
+     * List the possible values of 'Financing Instrument' filter.
+     * 
+     * @return filter definition and values of 'financing-instrument' filter.
+     */
+    @GET
+    @Path("/financingInstruments/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.FINANCING_INSTRUMENT, name = ColumnConstants.FINANCING_INSTRUMENT)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.FINANCING_INSTRUMENT)
+    public FilterList getFinancingInstruments() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.FINANCING_INSTRUMENT);
+    }
+    
+    /**
+     * List the possible values of 'Humanitarian Aid' filter.
+     * 
+     * @return filter definition and values of 'humanitarian-aid' filter.
+     */
     @GET
     @Path("/humanitarianAid/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.HUMANITARIAN_AID, columns = ColumnConstants.HUMANITARIAN_AID,
-            name=ColumnConstants.HUMANITARIAN_AID, tab=EPConstants.TAB_FINANCIALS)
-    public FilterDescriptor getHumanitarianAid() {
-        return buildYesNoJsonBean(ColumnConstants.HUMANITARIAN_AID);
+    @ApiMethod(id = FiltersConstants.HUMANITARIAN_AID, name = ColumnConstants.HUMANITARIAN_AID)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.HUMANITARIAN_AID)
+    public FilterList getHumanitarianAid() {
+        return FiltersManager.getInstance().getBooleanFilter(FiltersConstants.HUMANITARIAN_AID);
     }
     
+    /**
+     * List the possible values of 'Disaster Response Marker' filter.
+     * 
+     * @return filter definition and values of 'disaster-response-marker' filter.
+     */
     @GET
     @Path("/disasterResponse/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.DISASTER_RESPONSE_MARKER, columns = ColumnConstants.DISASTER_RESPONSE_MARKER,
-            name=ColumnConstants.DISASTER_RESPONSE_MARKER, tab=EPConstants.TAB_FINANCIALS)
-    public FilterDescriptor getDisasterResponse() {
-        return buildYesNoJsonBean(ColumnConstants.DISASTER_RESPONSE_MARKER);
-    }
-    
-    protected FilterDescriptor buildYesNoJsonBean(String columnName) {
-        FilterDescriptor res = new FilterDescriptor();
-        res.setFilterId(FilterUtils.INSTANCE.idFromColumnName(columnName));
-        res.setName(columnName);
-        res.setValues(
-                Arrays.asList(
-                    new FilterValue(1, "Yes", null, TranslatorWorker.translateText("Yes")),
-                    new FilterValue(2, "No", null, TranslatorWorker.translateText("No"))
-                ));
-        return res;
-    }
-
-    /**
-     * used to return AmpCategoryClass values wrapped to be provided to the filter widget
-     *
-     * @param categoryKey
-     * @param filterId
-     * @return
-     */
-    private FilterDescriptor getCategoryValue(String categoryKey, String columnName) {
-        FilterDescriptor js = new FilterDescriptor();
-        js.setFilterId(FilterUtils.INSTANCE.idFromColumnName(columnName));
-        js.setName(TranslatorWorker.translateText(columnName));
-        js.setValues(getCategoryValue(categoryKey));
-        return js;
-    }
-    
-    public static FilterValue buildProgramsJsonBean(AmpThemeSkeleton loc, String programName, int level) {
-        FilterValue res = new FilterValue();
-        res.setId(loc.getId());
-        res.setName(loc.getName());     
-        res.setFilterId(FilterUtils.INSTANCE.idFromColumnName(programName + " Level " + level));
-        ArrayList<FilterValue> children = new ArrayList<FilterValue>();
-        for(AmpThemeSkeleton child:loc.getChildLocations())
-            children.add(buildProgramsJsonBean(child, programName, level + 1));
-        res.setChildren(children);
-        return res;
+    @ApiMethod(id = FiltersConstants.DISASTER_RESPONSE_MARKER, 
+                    name = ColumnConstants.DISASTER_RESPONSE_MARKER)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.DISASTER_RESPONSE_MARKER)
+    public FilterList getDisasterResponse() {
+        return FiltersManager.getInstance().getBooleanFilter(FiltersConstants.DISASTER_RESPONSE_MARKER);
     }
     
     /**
-     * Get Sectors from AmpSector
+     * List the possible values of 'Workspaces' filter.
      * 
-     * @param as
-     * @param sectorConfigName 
-     * @return
+     * @return filter definition and values of 'team' filter.
      */
-
-    private FilterValue getSectors(AmpSector as, String sectorConfigName, Integer level) {
-        FilterValue s = new FilterValue();
-        s.setId(as.getAmpSectorId());
-        s.setCode(as.getSectorCodeOfficial());
-        s.setName(as.getName());
-        s.setChildren(new ArrayList<>());
-        String columnName = AmpClassificationConfiguration.NAME_TO_COLUMN_AND_LEVEL.get(sectorConfigName).get(level);
-        s.setFilterId(FilterUtils.INSTANCE.idFromColumnName(columnName));
-        level++;
-        for (AmpSector ampSectorChild : as.getSectors()) {
-            s.getChildren().add(getSectors(ampSectorChild, sectorConfigName, level));
-        }
-        orderByProperty(s.getChildren(), NAME_PROPERTY);
-        return s;
-    }
-    
-
     @GET
     @Path("/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = "Workspaces", id = FiltersConstants.TEAM, columns = ColumnConstants.TEAM,
-                visibilityCheck = "hasToShowWorkspaceFilter", tab = EPConstants.TAB_OTHER)
-    @ApiOperation("Return all workspaces to be used for filtering")
-    public FilterDescriptor getWorkspaces() {
-        List<FilterValue> teamsListJson = new ArrayList<FilterValue>();
-        if (hasToShowWorkspaceFilter()) {
-
-            AmpTeam ws = getAmpTeam();
-
-            Map<Long, String> teamNames = null;
-
-            if (ws != null && ws.getComputation() != null && ws.getComputation()) {
-                Set<AmpTeam> workspaces = WorkspaceFilter.getComputedRelatedWorkspaces();
-                if (workspaces != null) {
-                    teamNames = new HashMap<Long, String>();
-                    for (AmpTeam team : workspaces) {
-                        teamNames.put(team.getAmpTeamId(), team.getName());
-                    }
-                }
-            } else {
-                // display only child workspaces in case of computed workspaces
-                if (ws != null && Constants.ACCESS_TYPE_MNGMT.equals(ws.getAccessType())) {
-                    teamNames = DatabaseViewFetcher
-                            .fetchInternationalizedView("amp_team", PARENT_WS_CONDITION + ws.getAmpTeamId(), "amp_team_id", "name");
-                } else {
-                    teamNames = DatabaseViewFetcher
-                            .fetchInternationalizedView("amp_team", PRIVATE_WS_CONDITION, "amp_team_id", "name");
-                }
-            }
-
-            if (teamNames != null) {
-                for (long ampTeamId : teamNames.keySet()) {
-                    FilterValue ampTeamJson = new FilterValue();
-                    ampTeamJson.setId(ampTeamId);
-                    ampTeamJson.setName(teamNames.get(ampTeamId));
-                    teamsListJson.add(ampTeamJson);
-                }
-            }
-
-            teamsListJson = orderByProperty(teamsListJson, NAME_PROPERTY);
-        }
-        FilterDescriptor js = new FilterDescriptor();
-        js.setFilterId(FiltersConstants.TEAM);
-        js.setName(TranslatorWorker.translateText("Workspaces"));
-        js.setValues(teamsListJson);
-        
-        return js;
-    }
-
-    public boolean hasToShowWorkspaceFilter () {
-        boolean showWorkspaceFilter = true;
-        boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(
-                FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
-        AmpTeam ampTeam = getAmpTeam();
-
-        //Hide Workspace in public view
-        if (ampTeam == null) {
-            showWorkspaceFilter = false;
-        } else {
-            boolean isComputation = ampTeam.getComputation() != null && ampTeam.getComputation();
-
-            // showWorkspaceFilterInTeamWorkspace matters for computation workspace
-            if (ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) && isComputation && !showWorkspaceFilterInTeamWorkspace) {
-                showWorkspaceFilter = false;
-            }
-
-            // showWorkspaceFilterInTeamWorkspace matters for management workspace
-            if (ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT) && !showWorkspaceFilterInTeamWorkspace) {
-                showWorkspaceFilter = false;
-            }
-
-            // if it's regular team, non computation workspace
-            if (ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) && !isComputation) {
-                showWorkspaceFilter = false;
-            }
-        }
-        return showWorkspaceFilter;
-
+    @ApiMethod(id = FiltersConstants.TEAM, name = "Workspaces")
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.TEAM, 
+                        visibilityCheck = "hasToShowWorkspaceFilter")
+    public FilterList getWorkspaces() {
+        return FiltersManager.getInstance().getWorkspaceFilter();
     }
 
     /**
-     * Orders a List<T> by name.
-     *
-     * @param list, List<T> to be ordered
-     * @param nameFn function to retrieve the name of an item
-     */
-    private static <T> void orderByName(List<T> list, Function<T, String> nameFn) {
-        Collections.sort(list, new Comparator<T>() {
-            @Override
-            public int compare(T a, T b) {
-                return nameFn.apply(a).trim().compareToIgnoreCase(nameFn.apply(b).trim());
-            }
-        });
-    }
-
-    /**
-     * Orders a List <FilterValue> based on the property desired.
-     * It can order using any attributes of FilterValue like: id, code, name, displayName
+     * List the possible values of 'Computed Year' filter.
      * 
-     * @param list the list to be ordered
-     * @param property, String with the attribute to be ordered
-     * @return ordered List <FilterValue>
+     * @return filter definition and values of 'computed-year' filter.
      */
-    private static List<FilterValue> orderByProperty(List<FilterValue> list, final String property) {
-        Collections.sort(list, new Comparator<FilterValue>() {
-            @Override
-            public int compare(FilterValue a, FilterValue b) {
-                try {
-                    String property1 = (String) FilterValue.class.getMethod("get" + property).invoke(a);
-                    String property2 = (String) FilterValue.class.getMethod("get" + property).invoke(b);
-                    property1 = property1.trim();
-                    property2 = property2.trim();
-                    return property1.compareToIgnoreCase(property2);
+    @GET
+    @Path("/computedYear")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.COMPUTED_YEAR, name = ColumnConstants.COMPUTED_YEAR)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER,  columns = ColumnConstants.COMPUTED_YEAR,
+                         fieldType = FilterFieldType.OPTIONS, multiple = false)
+    public FilterList getComputedYear() {
+        return FiltersManager.getInstance().getComputedYearFilter();
+    }
 
-                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-                        | NoSuchMethodException | SecurityException e) {
-                    logger.warn("Couldn't order the JSON objects based on property " + property);
-                    return 0;
-                }
-
-            }
-        });
-        return list;
-        
+    /**
+     * List the values of startYear and endYear of 'Date' filter.
+     * 
+     * The startYear and endYear values are taken from the items.values object.
+     * 
+     * </br>
+     * <h3>Sample Output:</h3><pre>
+     * "listDefinitions" : 
+     *  [
+     *    {
+     *     "name": "Date",
+     *     "displayName": "Date",
+     *     "filterIds": ["date"],
+     *     "items": "values",
+     *     "filtered": true
+     *    }
+     *  ], 
+     * "items" : {
+     *   "values": [
+     *      {
+     *         "id" : 1985,
+     *         "name" : "startYear",
+     *         "value" : "1985"
+     *      },
+     *      {
+     *         "id" : 2025,
+     *         "name" : "endYear",
+     *         "value" : "2025"
+     *      }
+     *   ]
+     *  }
+     * </pre>
+     * 
+     * @return filter definition and year values (star and end) of 'date' filter.
+     */
+    @GET
+    @Path("/date/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "date", name = "Date")
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, dataType = FilterDataType.DATE)
+    public FilterList getDates() {
+        return FiltersManager.getInstance().getDateFilter();
     }
     
+    /**
+     * Generic endpoint for 'Proposed Start Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
     @GET
-    @Path("/computed-year")
+    @Path("/proposedStartDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.COMPUTED_YEAR, name = "Computed Year",
-        columns = ColumnConstants.COMPUTED_YEAR, tab = EPConstants.TAB_OTHER)
-    public SettingField getComputedYear() {
-        return FiltersBuilder.buildComputedYears();
+    @ApiMethod(id = FiltersConstants.PROPOSED_START_DATE, name = ColumnConstants.PROPOSED_START_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_START_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    public FilterList getProposedStartDate() {
+        return new FilterList();
     }
-
+    
+    /**
+     * Generic endpoint for 'Actual Start Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
+    @GET
+    @Path("/actualStartDate/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.ACTUAL_START_DATE, name = ColumnConstants.ACTUAL_START_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_START_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    public FilterList getActualStartDate() {
+        return new FilterList();
+    }
+    
+    /**
+     * Generic endpoint for 'Actual Approval Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
+    @GET
+    @Path("/actualApprovalDate/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.ACTUAL_APPROVAL_DATE, name = ColumnConstants.ACTUAL_APPROVAL_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_APPROVAL_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    public FilterList getActualApprovalDate() {
+        return new FilterList();
+    }
+    
+    /**
+     * Generic endpoint for 'Actual Completion Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
+    @GET
+    @Path("/actualCompletionDate/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.ACTUAL_COMPLETION_DATE, name = ColumnConstants.ACTUAL_COMPLETION_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_COMPLETION_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    public FilterList getActualCompletionDate() {
+        return new FilterList();
+    }
+    
+    /**
+     * Generic endpoint for 'Effective Funding Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
     @GET
     @Path("/effectiveFundingDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.EFFECTIVE_FUNDING_DATE, columns = ColumnConstants.EFFECTIVE_FUNDING_DATE,
-            id = FiltersConstants.EFFECTIVE_FUNDING_DATE, tab = EPConstants.TAB_FINANCIALS)
-    public void getEffectiveFundingDate() {
+    @ApiMethod(id = FiltersConstants.EFFECTIVE_FUNDING_DATE, name = ColumnConstants.EFFECTIVE_FUNDING_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.EFFECTIVE_FUNDING_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    public FilterList getEffectiveFundingDate() {
+        return new FilterList();
+    }
+    
+    /**
+     * Generic endpoint for 'Final Date for Contracting' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
+    @GET
+    @Path("/finalDateContracting/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    public FilterList getFinalDateForContracting() {
+        return new FilterList();
     }
 
+    /**
+     * Generic endpoint for 'Funding Closing Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
     @GET
     @Path("/fundingClosingDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.FUNDING_CLOSING_DATE, columns = ColumnConstants.FUNDING_CLOSING_DATE,
-            id = FiltersConstants.FUNDING_CLOSING_DATE, tab = EPConstants.TAB_FINANCIALS)
-    public void getFundingClosingDate() {
+    @ApiMethod(id = FiltersConstants.FUNDING_CLOSING_DATE, name = ColumnConstants.FUNDING_CLOSING_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.FUNDING_CLOSING_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    public FilterList getFundingClosingDate() {
+        return new FilterList();
     }
+
+    /**
+     * Generic endpoint for 'Issue Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
+    @GET
+    @Path("/issueDate/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.ISSUE_DATE, name = ColumnConstants.ISSUE_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ISSUE_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    public FilterList getIssueDate() {
+        return new FilterList();
+    }
+    
+    /**
+     * Generic endpoint for 'Proposed Approval Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
+    @GET
+    @Path("/proposedApprovalDate/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.PROPOSED_APPROVAL_DATE, name = ColumnConstants.PROPOSED_APPROVAL_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_APPROVAL_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    public FilterList getProposedApprovalDate() {
+        return new FilterList();
+    }  
+    
+    /**
+     * Generic endpoint for 'Proposed Compledtion Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
+    @GET
+    @Path("/proposedCompletionDate/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.PROPOSED_COMPLETION_DATE, name = ColumnConstants.PROPOSED_COMPLETION_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_COMPLETION_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    public FilterList getProposedCompletionDate() {
+        return new FilterList();
+    }
+    
+    /**
+     * List the donor types and groups.
+     * 
+     * The items object contains the values used to build the tree.
+     *
+     * @return tree definitions (filter types) and the list of pledges donor types and groups
+     */
+    @GET
+    @Path("/pledgesDonors")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "pledges-donors", name = "Pledges Donors")
+    @FilterDefinition(tab = EPConstants.TAB_ORGANIZATIONS, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesDonros() {
+        return FiltersManager.getInstance().getPledgesDonorFilterList();
+    }
+    
+    /**
+     * List the program settings and items of 'Pledges Programs' filter.
+     * 
+     * The structure of the response is similar to /organizations endpoint.
+     * 
+     * @return tree definitions (filter types) and the list of pledges programs
+     */
+    @GET
+    @Path("/pledgesPrograms")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "pledges-programs", name = "Pledges Programs")
+    @FilterDefinition(tab = EPConstants.TAB_PROGRAMS, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesPrograms() {
+        return FiltersManager.getInstance().getPledgesProgramFilterList();
+    }
+    
+    /**
+     * List the sector schemas and items of 'Pledges Sectors' filter.
+     * 
+     * The structure of the response is similar to /organizations endpoint.
+     * 
+     * @return tree definitions (filter types) and the tree structure of the pledges sectors
+     */
+    @GET
+    @Path("/pledgesSectors")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "pledges-sectors", name = "Pledges Sectors")
+    @FilterDefinition(tab = EPConstants.TAB_SECTORS, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesSectors() {
+        return FiltersManager.getInstance().getPledgesSectorFilterList();
+        
+    }
+    
+    /**
+     * List the locations of the 'Pledges Locations' filter.
+     * 
+     * The structure of the response is similar to /organizations endpoint.
+     * 
+     * @return tree definitions (filter types) and the tree structure of the pledges locations
+     */
+    @GET
+    @Path("/pledgesLocations")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "pledges-locations", name = "Pledges Locations")
+    @FilterDefinition(tab = EPConstants.TAB_LOCATIONS, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesLocations() {
+        return FiltersManager.getInstance().getPledgesLocationFilterList();
+    }
+    
+    /**
+     * List the possible values of 'Pledges Status' filter.
+     * 
+     * @return filter definition and values of 'pledge-status' filter.
+     */
+    @GET
+    @Path("/pledgesStatus/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.STATUS, name = ColumnConstants.PLEDGE_STATUS)
+    @FilterDefinition(tab = EPConstants.TAB_PLEDGE, columns = ColumnConstants.PLEDGE_STATUS, 
+                        componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesStatus() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PLEDGES_STATUS);
+    }
+    
+    /**
+     * List the possible values of 'Pledges Aid of Modality' filter.
+     * 
+     * @return filter definition and values of 'pledge-aid-of-modality' filter.
+     */
+    @GET
+    @Path("/pledgesAidOfModality/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.PLEDGES_AID_MODALITY, name = ColumnConstants.PLEDGES_AID_MODALITY)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.PLEDGES_AID_MODALITY,
+                        componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesAidOfModality() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PLEDGES_AID_MODALITY);
+    }
+    
+    /**
+     * List the possible values of 'Pledges Type of Assistance' filter.
+     * 
+     * @return filter definition and values of 'pledge-type-of-assistance' filter.
+     */
+    @GET
+    @Path("/pledgesTypeOfAssistance/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE, name = ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE,
+                        componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesTypeOfAssistance() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE);
+    }
+    
+    /**
+     * Generic endpoint for 'Pledges Detail Start Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
+    @GET
+    @Path("/pledgesDetailStartDate/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.PLEDGES_DETAIL_START_DATE, name = ColumnConstants.PLEDGES_DETAIL_START_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PLEDGES_DETAIL_START_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
+                        componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesDetailStartDate() {
+        return new FilterList();
+    }
+    
+    /**
+     * Generic endpoint for 'Pledges Detail End Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
+    @GET
+    @Path("/pledgesDetailEndDate/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.PLEDGES_DETAIL_END_DATE, name = ColumnConstants.PLEDGES_DETAIL_END_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PLEDGES_DETAIL_END_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
+                        componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesDetailEndDate() {
+        return new FilterList();
+    }
+    
+    /**
+     * List the possible values of 'Boundaries' filter.
+     * 
+     * @return filter definition and values of 'boundaries' filter.
+     */
+    @GET
+    @Path("/boundaries")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "boundaries", name = "Boundaries")
+    @FilterDefinition(ui = false, tab = EPConstants.TAB_LOCATIONS)
+    public List<String> getBoundaries() {
+        return QueryUtil.getImplementationLocationsInUse();
+    }
+    
+    public boolean hasToShowActivityApprovalStatusFilter() {
+        return ApprovalStatusFilterListManager.getInstance().isVisible();
+    }
+    
+    public boolean hasToShowWorkspaceFilter() {
+        return WorkspaceFilterListManager.getInstance().isVisible();
+    }
+    
 }

@@ -347,7 +347,8 @@ public class PledgeForm extends ActionForm implements Serializable {
             // something selected -> so need to build list of forbidden locations so that they are disabled in the multiselect
             Set<Long> forbiddenLocations = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(getAllSelectedLocations(), false);
             forbiddenLocations.addAll(DynLocationManagerUtil.getRecursiveAscendantsOfCategoryValueLocations(getAllSelectedLocations(), false)); // any selected locations and any of their descendants or ascendants are forbidden
-            if (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.equalsCategoryValue(implLevel) && CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocationValue)) {
+            if (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.equalsCategoryValue(implLevel)
+                    && CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocationValue)) {
                 // Implementation Level: NATIONAL, Implementation Location: Country: only the default country is available
                 AmpCategoryValueLocations country = DynLocationManagerUtil.getDefaultCountry();
                 res.add(new DisableableKeyValue(new KeyValue(country.getId().toString(), country.getName()), !forbiddenLocations.contains(country.getId())));

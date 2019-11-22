@@ -13,10 +13,15 @@ import org.dgfoundation.amp.annotations.checkstyle.IgnoreCanonicalNames;
  * @author Nadejda Mandrescu
  */
 public class ApiErrorMessage {
-
+    
+    public static final int MAX_ERROR_CODE = 99;
+    
+    private final Integer typeId;
+    
     /** Message custom Error Code [0..99] within its component/method */
     public final Integer id;
-    /**
+    
+        /**
      * General error description (laconic), automatically translated.<br>
      * For custom details per error, you must use: <br>
      * <dl>
@@ -36,37 +41,48 @@ public class ApiErrorMessage {
     /** (Optional) Flags if this error should be treated as a generic error under the default 00 package code */
     @IgnoreCanonicalNames
     public final boolean isGeneric;
-
+    
+    public Integer getId() {
+        return id;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
+    
+    public Set<String> getValues() {
+        return values;
+    }
+    
     /**
-     * Defines an ApiErrorMessage
-     * @param id see {@link #id}
-     * @param description see {@link #description}
-     * @param prefix see {@link #prefix}
+     *
+     * @param typeId - the type of error
+     * @param id
+     * @param description
      */
-    public ApiErrorMessage(Integer id, String description, String prefix) {
-        this(id, description, prefix, null, false);
+    public ApiErrorMessage(int typeId, int id, String description) {
+        this(typeId, id, description, null);
     }
-
-    /**
-     * Defines an ApiErrorMessahe
-     * @param id see {@link #id id}
-     * @param description see {@link #description}
-     */
-    public ApiErrorMessage(Integer id, String description) {
-        this(id, description, null, null, false);
+    
+    public ApiErrorMessage(int typeId, int id, String description, String prefix) {
+        this(typeId, id, description, prefix, null, false);
     }
-
-    public ApiErrorMessage(Integer id, String description, boolean isGeneric) {
-        this(id, description, null, null, isGeneric);
-    }
-
-    private ApiErrorMessage(int id, String description, String prefix, Set<String> values, boolean isGeneric) {
-        if (id <0 || id > 99) {
-            throw new RuntimeException(String.format("Invalid id = %d, must be within [0..99] range.", id));
+    
+    private ApiErrorMessage(int typeId, int id, String description, String prefix, Set<String> values,
+                            boolean isGeneric) {
+        if (typeId < 0 || typeId > MAX_ERROR_CODE) {
+            throw new RuntimeException(String.format("Invalid typeId = %d, must be within [0..%d] range.",
+                    typeId, MAX_ERROR_CODE));
+        }
+        
+        if (id < 0 || id > MAX_ERROR_CODE) {
+            throw new RuntimeException(String.format("Invalid id = %d, must be within [0..%d] range.",
+                    id, MAX_ERROR_CODE));
         }
         if (description == null) {
             throw new RuntimeException("Description is mandatory");
         }
+        this.typeId = typeId;
         this.id = id;
         this.description = description;
         this.prefix = prefix;
@@ -75,7 +91,7 @@ public class ApiErrorMessage {
     }
 
     /**
-     * Configures an {@link #ApiErrorMessage(Integer, String, String)} with more details
+     * Configures an {@link #ApiErrorMessage(int, int, String)} with more details
      * @param value details, see {@link #values}
      */
     public ApiErrorMessage withDetails(String value) {
@@ -86,11 +102,20 @@ public class ApiErrorMessage {
         if (value != null) {
             newValues.add(value);
         }
-        return new ApiErrorMessage(id, description, prefix, newValues, isGeneric);
+        return new ApiErrorMessage(typeId, id, description, prefix, newValues, isGeneric);
+    }
+    
+    /**
+     * Configures an {@link #ApiErrorMessage(int, int, String)} with prefix
+     * @param prefix
+     * @return
+     */
+    public ApiErrorMessage withPrefix(String prefix) {
+        return new ApiErrorMessage(typeId, id, description, prefix);
     }
 
     /**
-     * Configures an {@link #ApiErrorMessage(Integer, String, String)} with more details
+     * Configures an {@link #ApiErrorMessage(int, int, String)} with more details
      * @param details details, see {@link #values}
      */
     public ApiErrorMessage withDetails(Collection<String> details) {
@@ -99,15 +124,19 @@ public class ApiErrorMessage {
             newValues.addAll(values);
         }
         newValues.addAll(details);
-        return new ApiErrorMessage(id, description, prefix, newValues, isGeneric);
+        return new ApiErrorMessage(id, typeId, description, prefix, newValues, isGeneric);
     }
-
+    
+    public String getErrorId() {
+        return String.format(ApiError.ERROR_PATTERN, typeId, id);
+    }
+    
     @Override
     public String toString() {
         return "[" + (isGeneric ? "generic" : "package") + "]" + "[" + id + "] "
                 + (prefix == null ? "" : "(" + prefix + ") ")
-                + description +
-                (values == null ? "" :  " : " + values);
+                + description
+                + (values == null ? "" :  " : " + values);
     }
 
     @Override

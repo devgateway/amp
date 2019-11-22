@@ -9,8 +9,8 @@ import static org.junit.Assert.*;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
@@ -74,7 +74,7 @@ public class PrivateResourceValidatorTest {
 
     private Matcher<ConstraintViolation> violation() {
         return ValidatorMatchers.violationFor(PrivateResourceValidator.class, "uuid", anything(),
-                ActivityErrors.FIELD_INVALID_VALUE);
+                ValidationErrors.FIELD_INVALID_VALUE);
     }
 
     private Set<ConstraintViolation> getConstraintViolations(AmpActivityDocument doc) {

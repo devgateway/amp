@@ -41,7 +41,6 @@ public class SelectTeam extends Action {
             throws java.lang.Exception {
 
         HttpSession session = request.getSession();
-        SimpleUrlLogoutSuccessHandler  l;
         
         //Removing attributes from previous session (East Timor. Aug.2011)
         ReportContextData.clearSession();
@@ -99,7 +98,6 @@ public class SelectTeam extends Action {
             session.removeAttribute(Constants.MY_REPORTS_PER_PAGE);
             session.removeAttribute(Constants.LAST_VIEWED_REPORTS);
             session.removeAttribute(Constants.UNASSIGNED_ACTIVITY_LIST);
-            //TODO remove token if the user changed the workspace?
 
             //See if current workspace has a FM Template attached to it
             AmpTeam currentTeam = member.getAmpTeam();

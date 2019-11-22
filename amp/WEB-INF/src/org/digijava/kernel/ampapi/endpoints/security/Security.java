@@ -14,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.dto.AuthenticationRequest;
 import org.digijava.kernel.ampapi.endpoints.security.dto.LayoutInformation;
 import org.digijava.kernel.ampapi.endpoints.security.dto.MenuItemStructure;
@@ -33,21 +32,21 @@ import org.digijava.module.aim.util.TeamUtil;
 
 /**
  * This class should have all security / permissions related methods
- * 
+ *
  * @author jdeanquin@developmentgateway.org
- * 
+ *
  */
 @Path("security")
 @Api("security")
-public class Security implements ErrorReportingEndpoint {
-    
+public class Security {
+
     private static String SITE_CONFIG_PATH = "TEMPLATE" + System.getProperty("file.separator") + "ampTemplate"
             + System.getProperty("file.separator") + "site-config.xml";
 
     public static String getSiteConfigPath() {
         return SITE_CONFIG_PATH;
     }
-    
+
     private SecurityService securityService = SecurityService.getInstance();
 
     @GET
@@ -66,8 +65,7 @@ public class Security implements ErrorReportingEndpoint {
             notes = "<p>This endpoint is used to authenticate users via API. Mandatory fields are username and "
                     + "password. Password value is a sha1 hash of the actual password. Third parameter is "
                     + "workspaceId which allows to preselect active workspace.</p>\n"
-                    + "Workspace parameter is optional. If specified all with calls issued with the provided token "
-                    + "will be handled for respective workspace.\n")
+                    + "Workspace parameter is optional.\n")
 
     public UserSessionInformation authenticate(@ApiParam(required = true) AuthenticationRequest authRequest) {
         return securityService.authenticate(authRequest);
@@ -85,14 +83,14 @@ public class Security implements ErrorReportingEndpoint {
     }
 
     @GET
-    @Path("/menus") 
+    @Path("/menus")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "Menu", name = "Menu")
     @ApiOperation("Get menu structure for the current view, user and state.")
     public List<MenuItemStructure> getMenu() {
         return securityService.getMenuStructures();
     }
-    
+
     @GET
     @Path("/layout")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -101,7 +99,7 @@ public class Security implements ErrorReportingEndpoint {
     public LayoutInformation getLayout() {
         return securityService.getLayout();
     }
-    
+
     @GET
     @Path("/workspace-member")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -132,14 +130,6 @@ public class Security implements ErrorReportingEndpoint {
         return securityService.getWorkspaces();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class getErrorsClass() {
-        return SecurityErrors.class;
-    }
-
     @GET
     @Path("/ampTeam/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -148,4 +138,5 @@ public class Security implements ErrorReportingEndpoint {
     public final AmpTeam getWorkspace(@PathParam("id") Long id) {
         return TeamUtil.getAmpTeam(id);
     }
+
 }

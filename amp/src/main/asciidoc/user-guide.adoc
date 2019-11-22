@@ -34,3 +34,4 @@ has the following structure:
   }
 }
 ----
+include::{outputdir}/apierrors.adoc[]

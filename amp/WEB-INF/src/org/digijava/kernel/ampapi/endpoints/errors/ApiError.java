@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,21 +16,25 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
-
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.algo.AlgoUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeEndpoints;
-import org.digijava.kernel.ampapi.endpoints.common.AmpConfiguration;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
+import org.digijava.kernel.ampapi.endpoints.common.AmpConfigurationErrors;
+import org.digijava.kernel.ampapi.endpoints.common.CommonErrors;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.contact.ContactEndpoint;
-import org.digijava.kernel.ampapi.endpoints.currency.Currencies;
-import org.digijava.kernel.ampapi.endpoints.dashboards.EndPoints;
-import org.digijava.kernel.ampapi.endpoints.gis.GisEndPoints;
-import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEndPoints;
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRulesEndpoint;
-import org.digijava.kernel.ampapi.endpoints.reports.Reports;
-import org.digijava.kernel.ampapi.endpoints.security.Security;
-import org.digijava.kernel.ampapi.endpoints.settings.SettingsDefinitionsEndpoint;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactErrors;
+import org.digijava.kernel.ampapi.endpoints.currency.CurrencyErrors;
+import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardErrors;
+import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeErrors;
+import org.digijava.kernel.ampapi.endpoints.gpi.GPIErrors;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorErrors;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRulesErrors;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportErrors;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceErrors;
+import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
+import org.digijava.kernel.ampapi.endpoints.sync.SynchronizerErrors;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.json.JSONObject;
 import org.json.XML;
@@ -40,45 +45,61 @@ import org.json.XML;
  */
 
 public class ApiError {
+    
+    public static final int ERROR_CLASS_GENERIC_ID = 0;
+    public static final int ERROR_CLASS_VALIDATION_ID = 1;
+    public static final int ERROR_CLASS_ACTIVITY_ID = 2;
+    public static final int ERROR_CLASS_CONTACT_ID = 3;
+    public static final int ERROR_CLASS_RESOURCE_ID = 4;
+    public static final int ERROR_CLASS_SECURITY_ID = 5;
+    public static final int ERROR_CLASS_REPORT_ID = 6;
+    public static final int ERROR_CLASS_CURRENCY_ID = 7;
+    public static final int ERROR_CLASS_DASHBOARD_ID = 8;
+    public static final int ERROR_CLASS_INDICATOR_ID = 9;
+    public static final int ERROR_CLASS_CONFIGURATION_ID = 10;
+    public static final int ERROR_CLASS_GPI_ID = 11;
+    public static final int ERROR_CLASS_SYNCHRONYZER_ID = 12;
+    public static final int ERROR_CLASS_COMMON_ID = 13;
+    public static final int ERROR_CLASS_DATAFREEZE_ID = 14;
+    public static final int ERROR_CLASS_PERFORMANCERULE_ID = 15;
+    
+    public static final int ERROR_CLASS_TEST_ID = 99;
 
-    public final static int GENERAL_ERROR_CODE = 0;
-    public final static int GENERIC_HANDLED_ERROR_CODE = 0;
-    public final static int GENERIC_UNHANDLED_ERROR_CODE = 1;
-
-    public final static String API_ERROR_PATTERN = "%02d%02d";
-
-    public final static String UNKOWN_ERROR = "Unknown Error";
-
-    /**
-     *  Stores the mapping between the component and it's Id (C).
-     *  Component id 0 is reserved for all errors that are not tied to any component.
-     */
-    private static Map<String, Integer> componentIdClassMap;
+    public static final String ERROR_PATTERN = "%02d%02d";
+    
+    public static final Map<String, Class> ERROR_NAME_CLASSES = new LinkedHashMap<String, Class>() {{
+        put("Generic Errors", GenericErrors.class);
+        put("Validation Errors", ValidationErrors.class);
+        put("Activity Errors", ActivityErrors.class);
+        put("Contact Errors", ContactErrors.class);
+        put("Resource Errors", ResourceErrors.class);
+        put("Security Errors", SecurityErrors.class);
+        put("Report Errors", ReportErrors.class);
+        put("Currency Errors", CurrencyErrors.class);
+        put("Dashboard Errors", DashboardErrors.class);
+        put("Indicator Errors", IndicatorErrors.class);
+        put("Configuration Errors", AmpConfigurationErrors.class);
+        put("GPI Errors", GPIErrors.class);
+        put("Synchronizer Errors", SynchronizerErrors.class);
+        put("Common Errors", CommonErrors.class);
+        put("Data Freeze Errors", DataFreezeErrors.class);
+        put("Performance Rules Errors", PerformanceRulesErrors.class);
+    }};
 
     public static void configureComponentClassToIdMap() {
-        Map<String, Integer> source = new HashMap<String, Integer>() {{
-            put(InterchangeEndpoints.class.getName(), 1);
-            put(Security.class.getName(), 2);
-            put(Reports.class.getName(), 3);
-            put(Currencies.class.getName(), 4);
-            put(EndPoints.class.getName(), 5);
-            put(IndicatorEndPoints.class.getName(), 6);
-            put(GisEndPoints.class.getName(), 7);
-            put(SettingsDefinitionsEndpoint.class.getName(), 8);
-            put(AmpConfiguration.class.getName(), 9);
-            put(ContactEndpoint.class.getName(), 10);
-            put(PerformanceRulesEndpoint.class.getName(), 11);
-        }};
-        Set<Integer> usedIds = new TreeSet<>();
-        // Component id 0 is reserved for all errors that are not tied to any component.
-        usedIds.add(0);
-        source.forEach((cn, id) -> {
-            if (usedIds.contains(id)) {
-                throw new RuntimeException("Class '" + cn + "' cannot be mapped to id=" + id + ". Id already in use.");
+        ApiErrorCollector errorCollector = new ApiErrorCollector();
+        
+        Set<String> usedIds = new TreeSet<>();
+        ERROR_NAME_CLASSES.values().forEach(e -> {
+            List<ApiErrorMessage> errorsIds = errorCollector.collect(e);
+            for (ApiErrorMessage error : errorsIds) {
+                if (usedIds.contains(error.getErrorId())) {
+                    throw new RuntimeException("ApiErrorMessage '" + error.description + "' cannot be mapped to id="
+                            + error.getErrorId() + ". Id already in use.");
+                }
+                usedIds.add(error.getErrorId());
             }
-            usedIds.add(id);
         });
-        componentIdClassMap = Collections.unmodifiableMap(source);
     }
 
     private final static Set<String> COMPONENTS_WITH_NEW_ERROR_FORMAT = new HashSet<>(
@@ -129,11 +150,6 @@ public class ApiError {
         return format(apiErrorMessage);
     }
 
-    public static ApiErrorResponse toError(ApiErrorMessage apiErrorMessage, Throwable e) {
-        processErrorResponseStatus();
-        return format(apiErrorMessage, e);
-    }
-
     public static Map<String, Collection<Object>> formatNoWrap(Collection<?> messages) {
         return format(messages).getErrors();
     }
@@ -143,13 +159,12 @@ public class ApiError {
 
         if (errorMessages != null && errorMessages.size() > 0) {
             if (errorMessages.iterator().next() instanceof String) {
-                String generalErrorCode = String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE);
+                String generalErrorCode = GenericErrors.INTERNAL_ERROR.getErrorId();
                 errors.put(generalErrorCode, (Collection<Object>) errorMessages);
             } else if (errorMessages.iterator().next() instanceof ApiErrorMessage) {
-                int componentId = getErrorComponentId();
                 for(Object errorMessage : errorMessages) {
                     ApiErrorMessage apiError = (ApiErrorMessage) errorMessage;
-                    String errorId = getErrorId(apiError.isGeneric ? GENERAL_ERROR_CODE : componentId, apiError.id);
+                    String errorId = apiError.getErrorId();
 
                     if (errors.get(errorId) == null) {
                         errors.put(errorId, new ArrayList<>());
@@ -163,27 +178,16 @@ public class ApiError {
         return new ApiErrorResponse(errors);
     };
 
-    public static ApiErrorResponse format(ApiErrorMessage apiErrorMessage, Throwable e) {
-        Map<String, Collection<Object>> errors = new HashMap<>();
-        int componendId = apiErrorMessage.isGeneric ? GENERAL_ERROR_CODE : getErrorComponentIdFromException(e);
-        errors.put(getErrorId(componendId, apiErrorMessage.id),
-                Arrays.asList(getErrorText(apiErrorMessage)));
-
-        return new ApiErrorResponse(errors);
-    };
-
     private static ApiErrorResponse format(ApiErrorMessage apiErrorMessage) {
         Map<String, Collection<Object>> errors = new HashMap<>();
-        int componendId = apiErrorMessage.isGeneric ? GENERAL_ERROR_CODE : getErrorComponentId();
-        errors.put(getErrorId(componendId, apiErrorMessage.id), Arrays.asList(getErrorText(apiErrorMessage)));
+        errors.put(apiErrorMessage.getErrorId(), Arrays.asList(getErrorText(apiErrorMessage)));
 
         return new ApiErrorResponse(errors);
     };
 
     private static ApiErrorResponse format(String errorMessage) {
         Map<String, Collection<Object>> errors = new HashMap<>();
-        errors.put(String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE),
-                Arrays.asList(errorMessage));
+        errors.put(GenericErrors.UNKNOWN_ERROR.getErrorId(), Arrays.asList(errorMessage));
 
         return new ApiErrorResponse(errors);
     }
@@ -198,53 +202,6 @@ public class ApiError {
         if (responseMarker == null || responseMarker == HttpServletResponse.SC_OK) {
             EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
         }
-    }
-
-    /**
-     * Builds full error code, that can be used for logging.
-     * Please refer to {@link #toError(ApiErrorMessage)} and its overloaded alternatives
-     * to generate a correct Amp API Error response.
-     * @param error API Message error reference
-     * @return full error code
-     */
-    public static String getErrorCode(ApiErrorMessage error) {
-        return getErrorId(getErrorComponentId(), error.id);
-    }
-
-    /**
-     * Returns the id of the ApiErrorMessage object. A lookup for the class code will be made on the stacktrace .
-     * @param componentId component id
-     * @param errorId error id
-     * @return the id of the error
-     */
-    private static String getErrorId(int componentId, int errorId) {
-        if (componentId != 0 && errorId < 100) {
-            return String.format(API_ERROR_PATTERN, componentId, errorId);
-        } else {
-            return String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, errorId);
-        }
-    }
-
-    private static Integer getErrorComponentId() {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        return getErrorComponentIdFromStackTrace(stackTrace);
-    }
-
-    private static Integer getErrorComponentIdFromException(Throwable e) {
-        StackTraceElement[] stackTrace = e.getStackTrace();
-        return getErrorComponentIdFromStackTrace(stackTrace);
-    }
-
-    private static Integer getErrorComponentIdFromStackTrace(StackTraceElement[] stackTrace) {
-        if (componentIdClassMap == null) {
-            configureComponentClassToIdMap();
-        }
-        for (StackTraceElement st : stackTrace) {
-            if (componentIdClassMap.containsKey(st.getClassName())) {
-                return componentIdClassMap.get(st.getClassName());
-            }
-        }
-        return GENERAL_ERROR_CODE;
     }
 
     /**

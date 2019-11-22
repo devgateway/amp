@@ -1286,7 +1286,10 @@ public class TeamMemberUtil {
      */
     public static AmpTeamMember getCurrentAmpTeamMember(HttpServletRequest request) {
         TeamMember currentTeamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
-        AmpTeamMember currentAmpTeamMember = getAmpTeamMember(currentTeamMember.getMemberId());
+        AmpTeamMember currentAmpTeamMember = null;
+        if (currentTeamMember != null) {
+            currentAmpTeamMember = getAmpTeamMember(currentTeamMember.getMemberId());
+        }
         return currentAmpTeamMember;
     }
 

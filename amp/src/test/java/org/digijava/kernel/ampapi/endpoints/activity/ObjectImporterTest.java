@@ -33,6 +33,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.common.ObjectImporterAnyType;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.persistence.InMemoryValueConverter;
 import org.digijava.module.aim.annotations.interchange.Independent;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
@@ -481,7 +482,7 @@ public class ObjectImporterTest {
     public static class PersonAttribute {
 
         @PossibleValueId
-        private String id;
+        private Long id;
 
         private String type; // Hair, Height
 
@@ -491,17 +492,17 @@ public class ObjectImporterTest {
         public PersonAttribute() {
         }
 
-        public PersonAttribute(String id, String type, String value) {
+        public PersonAttribute(Long id, String type, String value) {
             this.id = id;
             this.type = type;
             this.value = value;
         }
 
-        public String getId() {
+        public Long getId() {
             return id;
         }
 
-        public void setId(String id) {
+        public void setId(Long id) {
             this.id = id;
         }
 
@@ -555,7 +556,7 @@ public class ObjectImporterTest {
 
         InputValidatorProcessor formatValidator = new InputValidatorProcessor(Collections.emptyList());
 
-        TestValueConverter valueConverter = new TestValueConverter();
+        InMemoryValueConverter valueConverter = new InMemoryValueConverter();
 
         TranslationSettings plainEnglish = new TranslationSettings("en", "en", Collections.singleton("en"), false);
 
@@ -767,15 +768,15 @@ public class ObjectImporterTest {
         Map<String, Object> json = (Map<String, Object>) examples.get("match-discriminated-id-only");
 
         Parent parent = new Parent();
-        parent.addAttribute(new PersonAttribute("1", "Hair", "Blond"));
-        parent.addAttribute(new PersonAttribute("2", "Height", "Tall"));
+        parent.addAttribute(new PersonAttribute(1L, "Hair", "Blond"));
+        parent.addAttribute(new PersonAttribute(2L, "Height", "Tall"));
 
         importer.validateAndImport(parent, json);
 
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, parentWithAttributes(null, null, containsInAnyOrder(
-                attribute("Hair", "1", "Blond"),
-                attribute("Height", "10", "Small"))));
+                attribute("Hair", 1L, "Blond"),
+                attribute("Height", 10L, "Small"))));
     }
 
     /**
@@ -887,15 +888,15 @@ public class ObjectImporterTest {
     @Test
     public void testDiscriminatorIdOnly() {
         Parent parent = new Parent();
-        parent.addAttribute(new PersonAttribute("1", "Hair", "Blond"));
-        parent.addAttribute(new PersonAttribute("2", "Height", "Tall"));
+        parent.addAttribute(new PersonAttribute(1L, "Hair", "Blond"));
+        parent.addAttribute(new PersonAttribute(2L, "Height", "Tall"));
     
         importer.validateAndImport(parent, new HashMap<>());
     
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, parentWithAttributes(null, null, containsInAnyOrder(
-                attribute("Hair", "1", "Blond"),
-                attribute("Height", "2", "Tall"))));
+                attribute("Hair", 1L, "Blond"),
+                attribute("Height", 2L, "Tall"))));
     }
 
     @Test
@@ -1074,7 +1075,7 @@ public class ObjectImporterTest {
                 hasProperty("extraInfo", is(extraInfo)));
     }
 
-    private Matcher<PersonAttribute> attribute(String type, String id, String value) {
+    private Matcher<PersonAttribute> attribute(String type, Long id, String value) {
         return allOf(
                 hasProperty("id", is(id)),
                 hasProperty("type", is(type)),

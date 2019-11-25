@@ -90,8 +90,12 @@ public abstract class ObjectImporter<T> {
     private TranslatedValueContext translatedValueContext;
 
     public ObjectImporter(InputValidatorProcessor formatValidator, APIField apiField, Site site) {
-        this(formatValidator, TranslationSettings.getCurrent(), apiField, site,
-                new ValueConverter());
+        this(formatValidator, apiField, site, new ValueConverter());
+    }
+    
+    public ObjectImporter(InputValidatorProcessor formatValidator, APIField apiField, Site site,
+                          ValueConverter valueConverter) {
+        this(formatValidator, TranslationSettings.getCurrent(), apiField, site, valueConverter);
     }
 
     public ObjectImporter(InputValidatorProcessor formatValidator,

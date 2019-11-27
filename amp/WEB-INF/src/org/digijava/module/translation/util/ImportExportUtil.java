@@ -514,8 +514,9 @@ public class ImportExportUtil {
 
     /**
      * Used to import translations from xsl file.
-     * @param inputStreame 
-     * @param msgSiteId 
+     * @param fsFileSystem
+     * @param option
+     * @param site
      * @return list of errors 
      * @throws AimException
      */
@@ -554,6 +555,16 @@ public class ImportExportUtil {
                     continue;
                 }
 
+                if (option.getTypeByLanguage().get(targetLanguage) != null
+                        && !option.getTypeByLanguage().get(targetLanguage).equals(ImportType.ONLY_NEW)) {
+                    Message existingMessage = option.getSearcher().get(key, "en", site.getId());
+                    if (existingMessage == null) {
+                        errors.add(TranslatorWorker.translateText(
+                                "Key \"{key}\" not found in the system. Please modify the import file and try again.")
+                                .replace("{key}", key));
+                        continue;
+                    }
+                }
                 hssfRow.getCell(COL_ENGLISH_TEXT).setCellType(HSSFCell.CELL_TYPE_STRING);
                 String englishText = (hssfRow.getCell(COL_ENGLISH_TEXT) == null) ? ""
                         : hssfRow.getCell(COL_ENGLISH_TEXT).getStringCellValue();

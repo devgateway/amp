@@ -1,14 +1,14 @@
 import activityJson from '../jsons/activity.json';
 import ActivityApi from '../api/ActivityApi.jsx';
-import {FM_ROOT, FUNDING_INFORMATION, TRANSACTION_ID} from '../common/ReampConstants.jsx';
+import { FM_ROOT, FUNDING_INFORMATION, TRANSACTION_ID,ACTIVITY_FORM_URL } from '../common/ReampConstants.jsx';
 import DateUtils from '../tempUtils/DateUtils.jsx';
 import {ACTIVITY_WORKSPACE_LEAD_DATA, CALENDAR_IS_FISCAL, IS_FISCAL, CALENDAR_ID} from '../common/ReampConstants';
 import {
     FieldsManager, FieldPathConstants, ActivityConstants, FeatureManagerConstants, FeatureManager,
-    FmManagerHelper, CommonActivityHelper, Constants, NumberUtils, CurrencyRatesManager
+    FmManagerHelper, CommonActivityHelper, Constants, NumberUtils, CurrencyRatesManager, ActivityLinks
 } from "amp-ui";
 import processPossibleValues from '../common/PossibleValuesHelper.jsx';
-import Logger from "amp/modules/activity/preview/tempUtils/LoggerManager";
+import Logger from 'amp/modules/activity/preview/tempUtils/LoggerManager' ;
 import ActivityFundingTotals from '../utils/ActivityFundingTotals.jsx'
 import translate from '../tempUtils/translate.jsx';
 
@@ -18,6 +18,9 @@ export const ACTIVITY_LOAD_FAILED = 'ACTIVITY_LOAD_FAILED';
 
 export function loadActivityForActivityPreview(activityId) {
     return (dispatch, ownProps) => {
+        // register links
+        const editLink = { url:ACTIVITY_FORM_URL, isExternal:true };
+        ActivityLinks.registerLinks({editLink });
         dispatch(sendingRequest());
         const paths = [...FieldPathConstants.ADJUSTMENT_TYPE_PATHS, ActivityConstants.CREATED_BY, ActivityConstants.TEAM,
             ActivityConstants.MODIFIED_BY];

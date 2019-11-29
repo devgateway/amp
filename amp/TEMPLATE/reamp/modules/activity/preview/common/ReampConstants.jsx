@@ -16,4 +16,6 @@ export const IS_FISCAL = 'is-fiscal';
 export const CALENDAR_IS_FISCAL = CALENDAR + '-' + IS_FISCAL;
 
 export const FUNDING_INFORMATION ='funding_information';
-export const TRANSACTION_ID = 'transaction_id'
+export const TRANSACTION_ID = 'transaction_id';
+
+export const ACTIVITY_FORM_URL = '/wicket/onepager/activity';

@@ -50,7 +50,7 @@ export function loadActivityForActivityPreview(activityId) {
                             payload: {
                                 activity: activity,
                                 activityFieldsManager,
-                                activityContext: _getActivityContext(settings, activityInfo, activityJson),
+                                activityContext: _getActivityContext(settings, activityInfo, activity),
                                 activityFundingTotals: new ActivityFundingTotals(activity, activityFundingInformation),
                                 currencyRatesManager
                             }

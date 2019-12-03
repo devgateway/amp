@@ -1,4 +1,3 @@
-import activityJson from '../jsons/activity.json';
 import ActivityApi from '../api/ActivityApi.jsx';
 import { FM_ROOT, FUNDING_INFORMATION, TRANSACTION_ID,ACTIVITY_FORM_URL } from '../common/ReampConstants.jsx';
 import DateUtils from '../tempUtils/DateUtils.jsx';
@@ -8,7 +7,7 @@ import {
     FmManagerHelper, CommonActivityHelper, Constants, NumberUtils, CurrencyRatesManager, ActivityLinks
 } from "amp-ui";
 import processPossibleValues from '../common/PossibleValuesHelper.jsx';
-import Logger from 'amp/modules/activity/preview/tempUtils/LoggerManager' ;
+import Logger from '../tempUtils/LoggerManager' ;
 import ActivityFundingTotals from '../utils/ActivityFundingTotals.jsx'
 import translate from '../tempUtils/translate.jsx';
 
@@ -37,22 +36,26 @@ export function loadActivityForActivityPreview(activityId) {
                 const activityFieldsManager = new FieldsManager(fieldsDef, processPossibleValues(possibleValuesCollectionAPI), 'en', Logger);
                 _populateFMTree(fmTree);
                 _configureNumberUtils(settings);
-                //this has to be done _after_ activity Hydration
-                _convertCurrency(activityJson, activityFundingInformation);
-                //we create an empty currency rates manager since we will be converting from same currencies, it wont
-                //be used it will just return 1.
-                const currencyRatesManager = new CurrencyRatesManager([],
-                    activityFundingInformation.currency, translate, DateUtils, {});
-                return dispatch({
-                    type: ACTIVITY_LOAD_LOADED,
-                    payload: {
-                        activity: activityJson,
-                        activityFieldsManager,
-                        activityContext: _getActivityContext(settings, activityInfo, activityJson),
-                        activityFundingTotals: new ActivityFundingTotals(activityJson, activityFundingInformation),
-                        currencyRatesManager
-                    }
-                })
+
+                ActivityApi.fetchValuesForHydration(_fetchRequestDataForHydration(activity, activityFieldsManager, ''))
+                    .then(valuesForHydration => {
+                        _hydrateActivity(activity, activityFieldsManager, '', null, valuesForHydration);
+                        _convertCurrency(activity, activityFundingInformation);
+                        //we create an empty currency rates manager since we will be converting from same currencies, it wont
+                        //be used it will just return 1.
+                        const currencyRatesManager = new CurrencyRatesManager([],
+                            activityFundingInformation.currency, translate, DateUtils, {});
+                        return dispatch({
+                            type: ACTIVITY_LOAD_LOADED,
+                            payload: {
+                                activity: activity,
+                                activityFieldsManager,
+                                activityContext: _getActivityContext(settings, activityInfo, activityJson),
+                                activityFundingTotals: new ActivityFundingTotals(activity, activityFundingInformation),
+                                currencyRatesManager
+                            }
+                        })
+                    })
             })//TODO catch errors
         }).catch(error => {
             return dispatch({
@@ -69,6 +72,52 @@ export function loadActivityForActivityPreview(activityId) {
             type: ACTIVITY_LOAD_LOADING
         };
     }
+    function _fetchRequestDataForHydration(activity, activityFieldsManager, parent) {
+        const requestData = {};
+        _hydrateActivity(activity, activityFieldsManager, parent, requestData);
+        return requestData;
+    }
+
+    function _hydrateActivity(activity, activityFieldsManager, parent, requestData, valuesForHydration) {
+        function _hydrateActivityHelper(objectToHydrate, key) {
+            let newParent = '';
+            if (parent !== '') {
+                newParent = parent + "~";
+            }
+            newParent = newParent + key;
+            _hydrateActivity(objectToHydrate, activityFieldsManager, newParent, requestData, valuesForHydration);
+        }
+        Object.keys(activity).forEach(activityField => {
+            if (activity[activityField] instanceof Object) {
+                if (Array.isArray(activity[activityField])) {
+                    activity[activityField].forEach(child => _hydrateActivityHelper(child, activityField));
+                } else {
+                    _hydrateActivityHelper(activity[activityField], activityField);
+                }
+            } else {
+                let fieldToHydrate = '';
+                if (parent !== '') {
+                    fieldToHydrate = parent + "~";
+                }
+                fieldToHydrate = fieldToHydrate + activityField;
+                if (activityFieldsManager.getFieldDef(fieldToHydrate)['id_only'] === true) {
+                    if (activity[activityField]) {
+                        if (!valuesForHydration) {
+                            if (requestData[fieldToHydrate]) {
+                                requestData[fieldToHydrate].push(activity[activityField]);
+                            } else {
+                                requestData[fieldToHydrate] = [(activity[activityField])];
+                            }
+                        } else {
+                            activity[activityField] = valuesForHydration[fieldToHydrate]
+                                .find(field => field.id === activity[activityField]);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
 
     function _populateFMTree(fmTree) {
         FeatureManager.setFMTree(fmTree[FM_ROOT]);

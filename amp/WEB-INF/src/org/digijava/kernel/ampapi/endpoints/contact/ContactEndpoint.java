@@ -20,6 +20,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import org.digijava.kernel.ampapi.endpoints.activity.FieldIdValue;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -83,6 +85,19 @@ public class ContactEndpoint {
         return response;
     }
 
+
+    @POST
+    @Path("field/id-values")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getIdValues", ui = false)
+    @ApiOperation(value = "Returns a list of values for all id of requested fields.")
+    public Map<String, List<FieldIdValue>> getFieldValuesById(
+            @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
+        List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getContactFields();
+        Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds, apiFields);
+
+        return response;
+    }
     private List<PossibleValue> possibleValuesFor(String fieldName, List<APIField> apiFields) {
         return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, apiFields);
     }

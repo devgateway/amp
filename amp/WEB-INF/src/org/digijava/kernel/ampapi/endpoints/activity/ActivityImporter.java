@@ -153,7 +153,8 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             modifiedBy = teamMemberService.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson));
         } else {
             TeamMember currentTeamMember = TeamUtil.getCurrentMember();
-            modifiedBy = teamMemberService.getAmpTeamMember(currentTeamMember.getMemberId());
+            modifiedBy = teamMemberService.
+                    getAmpTeamMember(currentTeamMember != null ? currentTeamMember.getMemberId() : null);
             Long mId = modifiedBy == null ? null : modifiedBy.getAmpTeamMemId();
             newJson.put(FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY), mId);
             newJson.remove(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY));

@@ -27,8 +27,6 @@ import org.digijava.kernel.ampapi.endpoints.security.dto.MenuItemStructure;
 import org.digijava.kernel.ampapi.endpoints.security.dto.UserSessionInformation;
 import org.digijava.kernel.ampapi.endpoints.security.dto.WorkspaceInfo;
 import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
-import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpVersionInfo;
@@ -229,11 +227,9 @@ public class SecurityService {
         }
     
         storeInSession(username, password, teamMember, user);
-    
-        AmpApiToken ampApiToken = SecurityUtil.generateToken();
         String ampTeamName = (teamMember == null) ? null : teamMember.getAmpTeam().getName();
-        return SecurityService.getInstance().createUserSessionInformation(
-                user.isGlobalAdmin(), ampApiToken, user, ampTeamName, true);
+        boolean isAdmin = user.isGlobalAdmin();
+        return SecurityService.getInstance().createUserSessionInformation(isAdmin, user, ampTeamName, true);
     }
     
     public void invalidateExistingSession() {
@@ -267,50 +263,30 @@ public class SecurityService {
     }
     
     public UserSessionInformation getUserSessionInformation() {
-        AmpApiToken apiToken = SecurityUtil.getTokenFromSession();
-    
-        // if the user is logged in without a token, we generate one
-        if (apiToken == null) {
-            apiToken = SecurityUtil.generateToken();
-        }
-    
         boolean isAdmin = "yes".equals(TLSUtils.getRequest().getSession().getAttribute("ampAdmin"));
     
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         String teamName = null;
         boolean addActivity = false;
-    
-        User user;
+        
+        User user = TeamUtil.getCurrentUser();
     
         // if the user is admin the he doesn't have a workspace assigned
-        if (!isAdmin) {
-            if (tm != null) {
-                AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-                AmpTeam team = ampTeamMember.getAmpTeam();
-                teamName = team.getName();
-                addActivity = FeaturesUtil.isVisibleField("Add Activity Button")
-                        && Boolean.TRUE.equals(team.getAddActivity());
-            }
-        
-            user = apiToken.getUser();
-        } else {
-            user = UserUtils.getUser(tm.getMemberId());
+        if (!isAdmin && tm != null) {
+            AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+            AmpTeam team = ampTeamMember.getAmpTeam();
+            teamName = team.getName();
+            addActivity = FeaturesUtil.isVisibleField("Add Activity Button")
+                    && Boolean.TRUE.equals(team.getAddActivity());
         }
         
-        return createUserSessionInformation(isAdmin, apiToken, user, teamName, addActivity);
+        return createUserSessionInformation(isAdmin, user, teamName, addActivity);
     }
     
-    public UserSessionInformation createUserSessionInformation(boolean isAdmin, AmpApiToken apiToken, User user,
+    public UserSessionInformation createUserSessionInformation(boolean isAdmin, User user,
                                                                String teamName, boolean addActivity) {
         
         UserSessionInformation userSessionInformation = new UserSessionInformation();
-        
-        if (apiToken != null) {
-            userSessionInformation.setToken(apiToken != null ? apiToken.getToken() : null);
-            if (apiToken.getExpirationTime() != null) {
-                userSessionInformation.setTokenExpiration(apiToken.getExpirationTime().getMillis());
-            }
-        }
         
         userSessionInformation.setUrl(getLoginUrl());
         userSessionInformation.setTeamName(teamName);

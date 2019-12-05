@@ -50,16 +50,7 @@ public class AmpPostLoginAction extends Action {
         if(res != null) {
             out.println(getJsonResponse(res.description));
         } else {
-            String ampApiIntegration="\"generate_token\":";
-
-            if ("true".equals(request.getParameter("generateToken"))) {
-                ampApiIntegration += "true";
-                ampApiIntegration += ",\"callback_url\":\"" + request.getParameter("callbackUrl") + "\" ";
-            } else {
-                ampApiIntegration += "false";
-            }
-
-            out.println(getJsonResponse("noError",ampApiIntegration));
+            out.println(getJsonResponse("noError", null));
         }
 
         return null;
@@ -74,7 +65,7 @@ public class AmpPostLoginAction extends Action {
      * @param newMessage
      * @return
      */
-    private String getJsonResponse(String originalMessage,String newMessage){ 
+    private String getJsonResponse(String originalMessage, String newMessage) {
         String json="{ "+  
                 "\"original_result\":\""+ originalMessage +"\" ";
         if(newMessage!=null){

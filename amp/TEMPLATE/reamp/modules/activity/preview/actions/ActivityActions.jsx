@@ -1,7 +1,8 @@
 import ActivityApi from '../api/ActivityApi.jsx';
-import { FM_ROOT, FUNDING_INFORMATION, TRANSACTION_ID,ACTIVITY_FORM_URL } from '../common/ReampConstants.jsx';
+import {FM_ROOT, FUNDING_INFORMATION, TRANSACTION_ID, ACTIVITY_FORM_URL} from '../common/ReampConstants.jsx';
 import DateUtils from '../tempUtils/DateUtils.jsx';
 import {ACTIVITY_WORKSPACE_LEAD_DATA, CALENDAR_IS_FISCAL, IS_FISCAL, CALENDAR_ID} from '../common/ReampConstants';
+import HydratorHelper from '../utils/HydratorHelper.jsx';
 import {
     FieldsManager, FieldPathConstants, ActivityConstants, FeatureManagerConstants, FeatureManager,
     FmManagerHelper, CommonActivityHelper, Constants, NumberUtils, CurrencyRatesManager, ActivityLinks
@@ -10,6 +11,7 @@ import processPossibleValues from '../common/PossibleValuesHelper.jsx';
 import Logger from '../tempUtils/LoggerManager' ;
 import ActivityFundingTotals from '../utils/ActivityFundingTotals.jsx'
 import translate from '../tempUtils/translate.jsx';
+import * as ContactAction from './ContactsAction.jsx';
 
 export const ACTIVITY_LOAD_LOADING = 'ACTIVITY_LOAD_LOADING';
 export const ACTIVITY_LOAD_LOADED = 'ACTIVITY_LOAD_LOADED';
@@ -18,8 +20,8 @@ export const ACTIVITY_LOAD_FAILED = 'ACTIVITY_LOAD_FAILED';
 export function loadActivityForActivityPreview(activityId) {
     return (dispatch, ownProps) => {
         // register links
-        const editLink = { url:ACTIVITY_FORM_URL, isExternal:true };
-        ActivityLinks.registerLinks({editLink });
+        const editLink = {url: ACTIVITY_FORM_URL, isExternal: true};
+        ActivityLinks.registerLinks({editLink});
         dispatch(sendingRequest());
         const paths = [...FieldPathConstants.ADJUSTMENT_TYPE_PATHS, ActivityConstants.CREATED_BY, ActivityConstants.TEAM,
             ActivityConstants.MODIFIED_BY];
@@ -27,7 +29,8 @@ export function loadActivityForActivityPreview(activityId) {
             ActivityApi.fetchFmConfiguration(FmManagerHelper.getRequestFmSyncUpBody(Object.values(FeatureManagerConstants))),
             ActivityApi.fetchSettings(), ActivityApi.fetchActivityInfo(activityId)]
         ).then(([activity, fieldsDef, fmTree, settings, activityInfo]) => {
-            //TODO activity is still the JSON file since we dont have yet the hydrated version
+            //once we have the activity we go and load activity dydrated values
+            ContactAction.loadHydratedContactsForActivity(activity)(dispatch, ownProps);
             //TODO find a better way to filter out non enabled paths
             const activityFieldsManagerTemp = new FieldsManager(fieldsDef, [], 'en', Logger);
             const enabledPaths = paths.filter(path => activityFieldsManagerTemp.isFieldPathEnabled(path));
@@ -37,9 +40,10 @@ export function loadActivityForActivityPreview(activityId) {
                 _populateFMTree(fmTree);
                 _configureNumberUtils(settings);
 
-                ActivityApi.fetchValuesForHydration(_fetchRequestDataForHydration(activity, activityFieldsManager, ''))
+                ActivityApi.fetchValuesForHydration(HydratorHelper.fetchRequestDataForHydration(activity, activityFieldsManager, ''))
                     .then(valuesForHydration => {
-                        _hydrateActivity(activity, activityFieldsManager, '', null, valuesForHydration);
+                        HydratorHelper.hydrateObject(activity, activityFieldsManager, '', null, valuesForHydration);
+                        activity.id = String(activity.internal_id);
                         _convertCurrency(activity, activityFundingInformation);
                         //we create an empty currency rates manager since we will be converting from same currencies, it wont
                         //be used it will just return 1.
@@ -50,7 +54,7 @@ export function loadActivityForActivityPreview(activityId) {
                             payload: {
                                 activity: activity,
                                 activityFieldsManager,
-                                activityContext: _getActivityContext(settings, activityInfo, activityJson),
+                                activityContext: _getActivityContext(settings, activityInfo, activity),
                                 activityFundingTotals: new ActivityFundingTotals(activity, activityFundingInformation),
                                 currencyRatesManager
                             }
@@ -72,51 +76,8 @@ export function loadActivityForActivityPreview(activityId) {
             type: ACTIVITY_LOAD_LOADING
         };
     }
-    function _fetchRequestDataForHydration(activity, activityFieldsManager, parent) {
-        const requestData = {};
-        _hydrateActivity(activity, activityFieldsManager, parent, requestData);
-        return requestData;
-    }
 
-    function _hydrateActivity(activity, activityFieldsManager, parent, requestData, valuesForHydration) {
-        function _hydrateActivityHelper(objectToHydrate, key) {
-            let newParent = '';
-            if (parent !== '') {
-                newParent = parent + "~";
-            }
-            newParent = newParent + key;
-            _hydrateActivity(objectToHydrate, activityFieldsManager, newParent, requestData, valuesForHydration);
-        }
-        Object.keys(activity).forEach(activityField => {
-            if (activity[activityField] instanceof Object) {
-                if (Array.isArray(activity[activityField])) {
-                    activity[activityField].forEach(child => _hydrateActivityHelper(child, activityField));
-                } else {
-                    _hydrateActivityHelper(activity[activityField], activityField);
-                }
-            } else {
-                let fieldToHydrate = '';
-                if (parent !== '') {
-                    fieldToHydrate = parent + "~";
-                }
-                fieldToHydrate = fieldToHydrate + activityField;
-                if (activityFieldsManager.getFieldDef(fieldToHydrate)['id_only'] === true) {
-                    if (activity[activityField]) {
-                        if (!valuesForHydration) {
-                            if (requestData[fieldToHydrate]) {
-                                requestData[fieldToHydrate].push(activity[activityField]);
-                            } else {
-                                requestData[fieldToHydrate] = [(activity[activityField])];
-                            }
-                        } else {
-                            activity[activityField] = valuesForHydration[fieldToHydrate]
-                                .find(field => field.id === activity[activityField]);
-                        }
-                    }
-                }
-            }
-        });
-    }
+
 
 
     function _populateFMTree(fmTree) {
@@ -159,6 +120,8 @@ export function loadActivityForActivityPreview(activityId) {
                         if (rawTransactionsList && rawTransactionsList.length > 0
                             && transactionListInWsCurrency && transactionListInWsCurrency.length > 0) {
                             rawTransactionsList.forEach(t => {
+                                console.log(transactionListInWsCurrency);
+                                console.log(t[TRANSACTION_ID]);
                                 const transactionInWsCurrency =
                                     transactionListInWsCurrency.find(tiwc => tiwc[TRANSACTION_ID] === t[TRANSACTION_ID]);
                                 t[ActivityConstants.TRANSACTION_AMOUNT] = transactionInWsCurrency[ActivityConstants.TRANSACTION_AMOUNT];

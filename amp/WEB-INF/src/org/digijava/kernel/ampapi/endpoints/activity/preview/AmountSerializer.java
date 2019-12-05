@@ -22,7 +22,7 @@ public class AmountSerializer extends JsonSerializer<Double> implements Property
     @Override
     public void serialize(Double value, JsonGenerator jgen, SerializerProvider provider)
             throws IOException {
-        jgen.writeString(BigDecimal.valueOf(value).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+        jgen.writeNumber(BigDecimal.valueOf(value).setScale(0, BigDecimal.ROUND_HALF_UP));
     }
 
     @Override

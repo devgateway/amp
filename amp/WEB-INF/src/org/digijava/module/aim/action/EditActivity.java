@@ -1685,7 +1685,7 @@ public class EditActivity extends Action {
             } else {
                 message = "";
             }
-            response.sendRedirect("/TEMPLATE/reamp/modules/activity-preview/index.html#/activity/" + ampActivityId
+            response.sendRedirect("/TEMPLATE/reamp/modules/activity/preview/index.html#/activity/" + ampActivityId
                     + message);
         } catch (IOException e) {
             logger.error("Cannot redirect to activity preview");

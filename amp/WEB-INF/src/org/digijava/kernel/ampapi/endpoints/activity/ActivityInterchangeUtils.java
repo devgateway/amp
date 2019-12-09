@@ -69,9 +69,10 @@ public final class ActivityInterchangeUtils {
     public static JsonApiResponse<ActivitySummary> importActivity(Map<String, Object> newJson, boolean update,
             ActivityImportRules rules, String endpointContextPath) {
         APIField activityField = AmpFieldsEnumerator.getEnumerator().getActivityField();
+        StringBuffer sourceURL = TLSUtils.getRequest().getRequestURL();
 
         return new ActivityImporter(activityField, rules)
-                .importOrUpdate(newJson, update, endpointContextPath)
+                .importOrUpdate(newJson, update, endpointContextPath, sourceURL.toString())
                 .getResult();
     }
 
@@ -114,25 +115,6 @@ public final class ActivityInterchangeUtils {
     }
 
     /**
-     * @param teamMember    team member
-     * @param activityId    activity id
-     * @return true if team member can edit the activity
-     */
-    public static boolean isEditableActivity(TeamMember teamMember, Long activityId) {
-        // we reuse the same approach as the one done by Project List EP
-        return activityId != null && ActivityUtil.getEditableActivityIdsNoSession(teamMember).contains(activityId);
-    }
-
-    /**
-     * @return true if add activity is allowed
-     */
-    public static boolean addActivityAllowed(TeamMember tm) {
-        return tm != null && Boolean.TRUE.equals(tm.getAddActivity())
-                && (FeaturesUtil.isVisibleField("Add Activity Button")
-                        || FeaturesUtil.isVisibleField("Add SSC Button"));
-    }
-
-    /**
      * @param containerReq
      * @return true if request is valid to view an activity
      */
@@ -162,7 +144,8 @@ public final class ActivityInterchangeUtils {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         activityInformation.setActivityTeam(project.getTeam());
         if (tm != null) {
-            activityInformation.setEdit(isEditableActivity(tm, projectId));
+            activityInformation.setEdit(new AMPActivityService().isEditableActivity(
+                    TeamMemberUtil.getAmpTeamMember(tm.getMemberId()), projectId));
             if (activityInformation.isEdit()) {
                 activityInformation.setValidate(ActivityUtil.canValidateActivity(project, tm));
             }

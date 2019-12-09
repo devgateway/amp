@@ -99,51 +99,51 @@
  }
 
  function toggleChildrenVisibility(callerId) {
- //alert("aaa"+callerId);
+     caller = document.getElementById(callerId);
+     inputs = caller.getElementsByTagName('input');
+     for (i = 1; i < inputs.length; i++) {
+         if (inputs[i].type == "checkbox") {
+             if (inputs[0].checked || inputs[i].id.indexOf("moduleEdit") == 0 ||
+                 inputs[i].id.indexOf("featureEdit") == 0 ||
+                 inputs[i].id.indexOf("fieldEdit") == 0 ||
+                 inputs[i].id.indexOf("moduleMandatory") == 0 ||
+                 inputs[i].id.indexOf("featureMandatory") == 0 ||
+                 inputs[i].id.indexOf("fieldMandatory") == 0) continue;
+             inputs[i].checked = false;
+         }
+     }
 
- 		caller = document.getElementById(callerId);
- 	//	alert("caller-"+caller);
- 		inputs = caller.getElementsByTagName('input');
- 		for(i=1 ; i< inputs.length; i++){
- 			if(inputs[i].type!="checkbox") continue;
- 			if(inputs[i].id.indexOf("moduleEdit")==0 ||
- 			inputs[i].id.indexOf("featureEdit")==0 ||
- 			inputs[i].id.indexOf("fieldEdit")==0 ||
- 			inputs[i].id.indexOf("moduleMandatory")==0 ||
- 			inputs[i].id.indexOf("featureMandatory")==0 ||
- 			inputs[i].id.indexOf("fieldMandatory")==0) continue;
- 			inputs[i].checked=inputs[0].checked;
- 		}
-
+     if (inputs[0].checked == true) {
+         toggleParentVisibility(caller);
+     }
  }
 
+ function toggleParentVisibility(item) {
+     hasParentCheckbox = true;
+     if (item.parentElement.getAttribute('name') == 'dhtmltreeArray') {
+         parent = item.parentElement.parentElement.parentElement;
+         hasParentCheckbox = false;
+     } else {
+         parent = item.parentElement.parentElement;
+     }
 
- function toggleChildrenMandatory(callerId) {
- 		caller = document.getElementById(callerId);
- 		inputs = caller.getElementsByTagName('input');
- 		var found=0;
- 		for(i=1 ; i< inputs.length; i++){
- 			if(inputs[i].type!="checkbox") continue;
- 			if(inputs[i].id.indexOf("moduleMandatory")==0 ||
- 			inputs[i].id.indexOf("featureMandatory")==0 ||
- 			inputs[i].id.indexOf("fieldMandatory")==0)
- 			{
- 				if(found!=1)
- 				{
- 					found=1;
- 					inputaux=inputs[i];
- 				}
- 			}
+     if (parent) {
+         if (parent.getElementsByTagName('input')) {
+             var checkboxItem = parent.getElementsByTagName('input')[0];
+             checkboxItem.checked = true;
+         }
 
- 			if(inputs[i].id.indexOf("moduleMandatory")==0 ||
- 			inputs[i].id.indexOf("featureMandatory")==0 ||
- 			inputs[i].id.indexOf("fieldMandatory")==0)
- 			 {
- 			 	inputs[i].checked=inputaux.checked;
- 			 }
- 		}
-
+         if (parent && hasParentCheckbox) {
+             toggleParentVisibility(parent);
+         }
+ 	}
  }
+
+ function toggleParentVisibilityOfTheField(itemId) {
+     var item = document.getElementById(itemId);
+     toggleParentVisibility(item.parentElement);
+}
+
 
  function openURLinWindow(url, wndWidth, wndHeight, resizeable)
  {

@@ -306,6 +306,8 @@ public class ActivityUtil {
             saveActivityResources(a, session);
             saveActivityGPINiResources(a, session);
             saveComments(a, session, draft);
+        } else {
+            updateFiscalYears(a);
         }
         saveEditors(session, createNewVersion, editorStore, site);
 
@@ -316,7 +318,6 @@ public class ActivityUtil {
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
         saveStructures(a, session);
-        updateFiscalYears(a);
 
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
@@ -446,29 +447,6 @@ public class ActivityUtil {
      */
     private static void forceVersionIncrement(Session session, AmpActivityGroup group) {
         session.buildLockRequest(new LockOptions(LockMode.OPTIMISTIC_FORCE_INCREMENT)).lock(group);
-    }
-
-    /**
-     * Checks if the activity is stale. Used only for the case when new activity versions are created.
-     */
-    public static boolean isActivityStale(Long ampActivityId, Long activityGroupVersion) {
-        Number activityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityVersion.class)
-                .add(Restrictions.eq("ampActivityId", ampActivityId))
-                .setProjection(Projections.count("ampActivityId"))
-                .uniqueResult();
-        if (activityCount.longValue() == 0) {
-            return false;
-        }
-
-        Number latestActivityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityGroup.class)
-                .createAlias("ampActivityLastVersion", "a")
-                .add(Restrictions.and(
-                        Restrictions.eq("a.ampActivityId", ampActivityId),
-                        Restrictions.eq("version", activityGroupVersion)))
-                .setProjection(Projections.count("a.ampActivityId"))
-                .uniqueResult();
-
-        return latestActivityCount.longValue() == 0;
     }
 
     /**
@@ -657,7 +635,7 @@ public class ActivityUtil {
      */
     private static boolean isApprover(AmpTeamMember atm) {
         AmpTeamMemberRoles role = atm.getAmpMemberRole();
-        return role.getTeamHead() || role.isApprover();
+        return role != null && (role.getTeamHead() || role.isApprover());
     }
 
     public static boolean canApproveWith(ApprovalStatus approvalStatus, AmpTeamMember atm, boolean isNewActivity,

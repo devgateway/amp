@@ -62,7 +62,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY, ColumnConstants.BENEFICIARY_AGENCY);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_GROUP, ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_TYPE, ColumnConstants.BENEFICIARY_AGENCY_TYPE);
-        mapSimpleColumn(FiltersConstants.COMMUNAL_SECTION, ColumnConstants.COMMUNAL_SECTION);
+        mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_4, ColumnConstants.LOCATION_ADM_LEVEL_4);
         mapSimpleColumn(FiltersConstants.COMPONENT_FUNDING_ORGANIZATION,
                 ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
         mapSimpleColumn(FiltersConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
@@ -72,9 +72,9 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY);
         mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_GROUP, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
         mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_TYPE, ColumnConstants.CONTRACTING_AGENCY_TYPE);
-        mapSimpleColumn(FiltersConstants.COUNTRY, ColumnConstants.COUNTRY);
+        mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_0, ColumnConstants.LOCATION_ADM_LEVEL_0);
         mapSimpleColumn(FiltersConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.DISASTER_RESPONSE_MARKER);
-        mapSimpleColumn(FiltersConstants.DISTRICT, ColumnConstants.DISTRICT);
+        mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_3, ColumnConstants.LOCATION_ADM_LEVEL_3);
         mapSimpleColumn(FiltersConstants.DONOR_AGENCY, ColumnConstants.DONOR_AGENCY);
         mapSimpleColumn(FiltersConstants.DONOR_GROUP, ColumnConstants.DONOR_GROUP);
         mapSimpleColumn(FiltersConstants.DONOR_TYPE, ColumnConstants.DONOR_TYPE);
@@ -107,10 +107,13 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PERFORMANCE_ALERT_LEVEL, ColumnConstants.PERFORMANCE_ALERT_LEVEL);
         mapSimpleColumn(FiltersConstants.PERFORMANCE_ALERT_TYPE, ColumnConstants.PERFORMANCE_ALERT_TYPE);
         mapSimpleColumn(FiltersConstants.PLEDGES_AID_MODALITY, ColumnConstants.PLEDGES_AID_MODALITY);
-        mapSimpleColumn(FiltersConstants.PLEDGES_COUNTRIES, ColumnConstants.PLEDGES_COUNTRIES);
+        mapSimpleColumn(FiltersConstants.PLEDGES_ADM_LEVEL_0, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_ADM_LEVEL_1, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1);
+        mapSimpleColumn(FiltersConstants.PLEDGES_ADM_LEVEL_2, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_2);
+        mapSimpleColumn(FiltersConstants.PLEDGES_ADM_LEVEL_3, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_3);
+        mapSimpleColumn(FiltersConstants.PLEDGES_ADM_LEVEL_4, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_4);
         mapDateColumn(FiltersConstants.PLEDGES_DETAIL_START_DATE, ColumnConstants.PLEDGES_DETAIL_START_DATE);
         mapDateColumn(FiltersConstants.PLEDGES_DETAIL_END_DATE, ColumnConstants.PLEDGES_DETAIL_END_DATE);
-        mapSimpleColumn(FiltersConstants.PLEDGES_DISTRICTS, ColumnConstants.PLEDGES_DISTRICTS);
         mapSimpleColumn(FiltersConstants.PLEDGES_DONOR_GROUP, ColumnConstants.PLEDGES_DONOR_GROUP);
         mapSimpleColumn(FiltersConstants.PLEDGES_DONOR_TYPE, ColumnConstants.PLEDGES_DONOR_TYPE);
         
@@ -180,11 +183,8 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SECTORS_SUB_SUB_SECTORS,
                 ColumnConstants.PLEDGES_QUINARY_SUBSUBSECTORS);
         
-        mapSimpleColumn(FiltersConstants.PLEDGES_REGIONS, ColumnConstants.PLEDGES_REGIONS);
         mapSimpleColumn(FiltersConstants.PLEDGES_STATUS, ColumnConstants.PLEDGE_STATUS);
         mapSimpleColumn(FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
-        mapSimpleColumn(FiltersConstants.PLEDGES_ZONES, ColumnConstants.PLEDGES_ZONES);
-        mapSimpleColumn(FiltersConstants.PLEDGES_COMMUNAL_SECTION, ColumnConstants.PLEDGES_COMMUNAL_SECTION);
         mapSimpleColumn(FiltersConstants.PLEDGES_TITLES, ColumnConstants.PLEDGES_TITLES);
     
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_0, ColumnConstants.PRIMARY_PROGRAM_LEVEL_0);
@@ -201,7 +201,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR);
         mapSimpleColumn(FiltersConstants.PROCUREMENT_SYSTEM, ColumnConstants.PROCUREMENT_SYSTEM);
         mapSimpleColumn(FiltersConstants.PROJECT_IMPLEMENTING_UNIT, ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
-        mapSimpleColumn(FiltersConstants.REGION, ColumnConstants.REGION);
+        mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_1, ColumnConstants.LOCATION_ADM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
         mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION_GROUP,
                 ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
@@ -242,7 +242,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.QUINARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.QUINARY_SECTOR_SUB_SUB_SECTOR);
         mapSimpleColumn(FiltersConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_ASSISTANCE);
         mapSimpleColumn(FiltersConstants.WORKSPACES, ColumnConstants.WORKSPACES);
-        mapSimpleColumn(FiltersConstants.ZONE, ColumnConstants.ZONE);
+        mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_2, ColumnConstants.LOCATION_ADM_LEVEL_2);
     }
 
     private void mapSimpleColumn(String filterId, String columnName) {
@@ -459,7 +459,7 @@ public class FilterUtils {
      * @return
      */
     public static String getApprovalStatusByNumber(Integer status){
-        for (Entry<String, Integer> entry : AmpARFilter.activityApprovalStatus.entrySet()) {
+        for (Entry<String, Integer> entry : AmpARFilter.VALIDATION_STATUS.entrySet()) {
             if (entry.getValue().equals(status)) {
                 return entry.getKey();
             }

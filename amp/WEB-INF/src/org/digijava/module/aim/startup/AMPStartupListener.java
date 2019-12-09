@@ -41,6 +41,7 @@ import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
@@ -169,7 +170,7 @@ public class AMPStartupListener extends HttpServlet implements
             }
             
             logger.info("loading the activity->pledge view twins configuration and checking for consistency...");
-            int a = PledgesToActivitiesBridge.activityViewToPledgeView.size();
+            int a = PledgesToActivitiesBridge.ACTIVITY_VIEW_TO_PLEDGE_VIEW.size();
             if (a < 0)
                 throw new RuntimeException("should not happen!");
             
@@ -246,6 +247,7 @@ public class AMPStartupListener extends HttpServlet implements
             ReportsUtil.checkPledgesViewsSanity(session);
             ReportsUtil.checkLocationsSanity(session);
             CurrencyUtil.checkDatabaseSanity(session);
+            OrganisationUtil.checkOrganisationNamesSanity(session);
         }catch(Exception e){
             throw new Error("database does not conform to minimum sanity requirements, shutting down AMP", e);
         }finally {

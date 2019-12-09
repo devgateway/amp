@@ -488,7 +488,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
      * @param activity
      */
     private static void initializeFiscalYears(AmpActivityVersion activity) {
-        if (activity.getFiscalYears() == null) {
+        if (activity.getFiscalYears() == null || activity.getFiscalYears().size() == 0) {
             List<Long> fiscalYears = new ArrayList<>();
             if (StringUtils.isNotBlank(activity.getFY())) {
                 try {
@@ -1879,15 +1879,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 logActivityHistory.setModifiedDate(DateTimeUtil.formatISO8601Timestamp(aal.getLoggedDate()));
                 return logActivityHistory;
             } else if (StringUtils.isNotEmpty(aal.getEditorEmail())) {
-                try {
-                    User u = UserUtils.getUserByEmail(aal.getEditorEmail());
-                    if (u != null) {
-                        logActivityHistory.setModifiedBy(String.format("%s %s", u.getFirstNames(), u.getLastName()));
-                        logActivityHistory.setModifiedDate(DateTimeUtil.formatISO8601Timestamp(aal.getLoggedDate()));
-                        return logActivityHistory;
-                    }
-                } catch (DgException e) {
-                    logger.error(e.getMessage(), e);
+                User u = UserUtils.getUserByEmailAddress(aal.getEditorEmail());
+                if (u != null) {
+                    logActivityHistory.setModifiedBy(String.format("%s %s", u.getFirstNames(), u.getLastName()));
+                    logActivityHistory.setModifiedDate(DateTimeUtil.formatISO8601Timestamp(aal.getLoggedDate()));
+                    return logActivityHistory;
                 }
             }
         }

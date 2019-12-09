@@ -919,7 +919,7 @@ public class ObjectImporterTest {
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, parentWithAttributes(null, null, containsInAnyOrder(
                 attribute("Hair", 1L, "Blond"),
-                attribute("Height", 10L, "Short"))));
+                attribute("Height", 10L, "Small"))));
     }
 
     /**
@@ -1305,7 +1305,7 @@ public class ObjectImporterTest {
         importer.validateAndImport(parent, ImmutableMap.of("height", 10));
 
         assertThat(importer.errors.size(), is(0));
-        assertThat(parent.getAttributes(), contains(attribute("Height", 10L, "Short")));
+        assertThat(parent.getAttributes(), contains(attribute("Height", 10L, "Small")));
     }
 
     @Test
@@ -1316,7 +1316,7 @@ public class ObjectImporterTest {
         importer.validateAndImport(parent, ImmutableMap.of("height", 10));
 
         assertThat(importer.errors.size(), is(0));
-        assertThat(parent.getAttributes(), contains(attribute("Height", 10L, "Short")));
+        assertThat(parent.getAttributes(), contains(attribute("Height", 10L, "Small")));
     }
 
     // list of primitives

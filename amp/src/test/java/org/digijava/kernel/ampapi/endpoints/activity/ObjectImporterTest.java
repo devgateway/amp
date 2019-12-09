@@ -37,6 +37,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.common.ObjectImporterAnyType;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.persistence.InMemoryValueConverter;
 import org.digijava.module.aim.annotations.interchange.Independent;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
@@ -698,7 +699,7 @@ public class ObjectImporterTest {
 
         InputValidatorProcessor formatValidator = new InputValidatorProcessor(Collections.emptyList());
 
-        TestValueConverter valueConverter = new TestValueConverter();
+        InMemoryValueConverter valueConverter = new InMemoryValueConverter();
 
         TranslationSettings plainEnglish = new TranslationSettings("en", "en", Collections.singleton("en"), false);
 

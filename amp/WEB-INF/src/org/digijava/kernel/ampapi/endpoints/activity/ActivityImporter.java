@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
-import static org.digijava.module.aim.util.ActivityUtil.loadActivity;
 
 import java.lang.reflect.Field;
 import java.util.Date;
@@ -38,6 +37,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors
 import org.digijava.kernel.ampapi.endpoints.activity.validators.mapping.ActivityErrorsMapper;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
+import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
@@ -114,10 +114,14 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     private ActivityService activityService;
     private TeamMemberService teamMemberService;
     private PersistenceTransactionManager persistenceTransactionManager;
-
+    
     public ActivityImporter(APIField apiField, ActivityImportRules rules) {
+       this(apiField, rules, new ValueConverter());
+    }
+
+    public ActivityImporter(APIField apiField, ActivityImportRules rules, ValueConverter valueConverter) {
         super(new InputValidatorProcessor(InputValidatorProcessor.getFormatValidators()),
-                apiField, TLSUtils.getSite());
+                apiField, TLSUtils.getSite(), valueConverter);
         setJsonErrorMapper(new ActivityErrorsMapper());
         this.rules = rules;
         this.saveContext = SaveContext.api(!rules.isProcessApprovalFields());
@@ -149,7 +153,8 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             modifiedBy = teamMemberService.getAmpTeamMember(AIHelper.getModifiedByOrNull(newJson));
         } else {
             TeamMember currentTeamMember = TeamUtil.getCurrentMember();
-            modifiedBy = teamMemberService.getAmpTeamMember(currentTeamMember.getMemberId());
+            modifiedBy = teamMemberService.
+                    getAmpTeamMember(currentTeamMember != null ? currentTeamMember.getMemberId() : null);
             Long mId = modifiedBy == null ? null : modifiedBy.getAmpTeamMemId();
             newJson.put(FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY), mId);
             newJson.remove(FieldMap.underscorify(ActivityFieldsConstants.CREATED_BY));
@@ -246,7 +251,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         try {
             if (activityId != null) {
                 try {
-                    oldActivity = loadActivity(activityId);
+                    oldActivity = activityService.getActivity(activityId);
                 } catch (DgException e) {
                     logger.error(e.getMessage());
                     errors.put(ActivityErrors.ACTIVITY_NOT_LOADED.id, ActivityErrors.ACTIVITY_NOT_LOADED);

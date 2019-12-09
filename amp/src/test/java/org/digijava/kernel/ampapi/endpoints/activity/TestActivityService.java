@@ -6,6 +6,7 @@ import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.ampapi.exception.ActivityLockNotGrantedException;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.InMemoryActivityManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -17,7 +18,7 @@ public class TestActivityService implements ActivityService {
     
     public TestTeamMemberContext tmContext;
     
-    public InMemoryActivityManager activityManager = new InMemoryActivityManager();
+    public InMemoryActivityManager activityManager = InMemoryActivityManager.getInstance();
     
     public TestActivityService(TestTeamMemberContext tmContext) {
         this.tmContext = tmContext;
@@ -43,6 +44,11 @@ public class TestActivityService implements ActivityService {
     }
     
     @Override
+    public AmpActivityVersion getActivity(Long activityId) {
+        return activityManager.getActivity(activityId);
+    }
+    
+    @Override
     public AmpActivityVersion saveActivity(AmpActivityVersion newActivity, List<AmpContentTranslation> translations,
                                            AmpTeamMember modifiedBy, boolean draftChange, SaveContext saveContext,
                                            EditorStore editorStore, Site site) {
@@ -54,4 +60,5 @@ public class TestActivityService implements ActivityService {
                                   TranslationSettings trnSettings, List<AmpContentTranslation> translations, Site site) {
         
     }
+    
 }

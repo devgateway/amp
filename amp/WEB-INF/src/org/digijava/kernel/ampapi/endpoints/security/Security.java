@@ -32,21 +32,21 @@ import org.digijava.module.aim.util.TeamUtil;
 
 /**
  * This class should have all security / permissions related methods
- * 
+ *
  * @author jdeanquin@developmentgateway.org
- * 
+ *
  */
 @Path("security")
 @Api("security")
 public class Security {
-    
+
     private static String SITE_CONFIG_PATH = "TEMPLATE" + System.getProperty("file.separator") + "ampTemplate"
             + System.getProperty("file.separator") + "site-config.xml";
 
     public static String getSiteConfigPath() {
         return SITE_CONFIG_PATH;
     }
-    
+
     private SecurityService securityService = SecurityService.getInstance();
 
     @GET
@@ -65,8 +65,7 @@ public class Security {
             notes = "<p>This endpoint is used to authenticate users via API. Mandatory fields are username and "
                     + "password. Password value is a sha1 hash of the actual password. Third parameter is "
                     + "workspaceId which allows to preselect active workspace.</p>\n"
-                    + "Workspace parameter is optional. If specified all with calls issued with the provided token "
-                    + "will be handled for respective workspace.\n")
+                    + "Workspace parameter is optional.\n")
 
     public UserSessionInformation authenticate(@ApiParam(required = true) AuthenticationRequest authRequest) {
         return securityService.authenticate(authRequest);
@@ -84,14 +83,14 @@ public class Security {
     }
 
     @GET
-    @Path("/menus") 
+    @Path("/menus")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "Menu", name = "Menu")
     @ApiOperation("Get menu structure for the current view, user and state.")
     public List<MenuItemStructure> getMenu() {
         return securityService.getMenuStructures();
     }
-    
+
     @GET
     @Path("/layout")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -100,7 +99,7 @@ public class Security {
     public LayoutInformation getLayout() {
         return securityService.getLayout();
     }
-    
+
     @GET
     @Path("/workspace-member")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -131,21 +130,6 @@ public class Security {
         return securityService.getWorkspaces();
     }
 
-    /**
-     * THIS IS FOR DEBUG ONLY. Must be disabled on production.
-     * @param token
-     * @return
-     */
-    /*
-    @GET
-    @Path("/token")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public String echo(@QueryParam("amp_api_token") String token) {
-        token = SecurityUtil.generateToken();
-        return "Token: " + token;
-    }
-    */
-
     @GET
     @Path("/ampTeam/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -154,5 +138,5 @@ public class Security {
     public final AmpTeam getWorkspace(@PathParam("id") Long id) {
         return TeamUtil.getAmpTeam(id);
     }
-    
+
 }

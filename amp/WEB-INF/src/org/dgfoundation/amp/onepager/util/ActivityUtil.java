@@ -635,7 +635,7 @@ public class ActivityUtil {
      */
     private static boolean isApprover(AmpTeamMember atm) {
         AmpTeamMemberRoles role = atm.getAmpMemberRole();
-        return role.getTeamHead() || role.isApprover();
+        return role != null && (role.getTeamHead() || role.isApprover());
     }
 
     public static boolean canApproveWith(ApprovalStatus approvalStatus, AmpTeamMember atm, boolean isNewActivity,

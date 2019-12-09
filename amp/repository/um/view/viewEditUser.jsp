@@ -433,7 +433,7 @@ function validateUserInfo(){
     font-weight: bold; color:#000;"><digi:trn key="aim:viewEditUser:verifiedAssignedOrgs">Verified Assigned Organisations</digi:trn></td>
                                                                         <td>
 	                                                                        <table width="80%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
-    	                                                                        <logic:iterate id="org" name="umViewEditUserForm" property="assignedOrgs" indexId="ind">
+    	                                                                        <logic:iterate id="organisation" name="umViewEditUserForm" property="assignedOrgs" indexId="ind">
         		                                                                    <tr>
                 	                                                                    <td width="2%">
                                                                                              <html:multibox name="umViewEditUserForm" property="selAssignedOrgs" styleId="verOrg_${ind}">

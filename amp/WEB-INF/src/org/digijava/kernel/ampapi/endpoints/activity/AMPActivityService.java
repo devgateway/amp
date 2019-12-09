@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.util.SaveContext;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -69,6 +70,11 @@ public class AMPActivityService implements ActivityService {
     public boolean isEditableActivity(AmpTeamMember ampTeamMember, Long activityId) {
         TeamMember tm = new TeamMember(ampTeamMember);
         return activityId != null && ActivityUtil.getEditableActivityIdsNoSession(tm).contains(activityId);
+    }
+    
+    @Override
+    public AmpActivityVersion getActivity(Long activityId) throws DgException {
+        return ActivityUtil.loadActivity(activityId);
     }
     
     @Override

@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.groupingBy;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -278,12 +279,12 @@ public final class PreviewActivityService {
 
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
 
-        Double totalActualCommitments = transactions.get(ArConstants.COMMITMENT.toLowerCase()).stream().
-                filter(t-> t.getAdjustmentType().equals(actualCategoryValueId)).
+        Double totalActualCommitments = transactions.getOrDefault(ArConstants.COMMITMENT.toLowerCase(),
+                Collections.emptyList()).stream().filter(t-> t.getAdjustmentType().equals(actualCategoryValueId)).
                 collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
 
-        Double totalActualDisbursements = transactions.get(ArConstants.DISBURSEMENT.toLowerCase()).stream().
-                filter(t-> t.getAdjustmentType().equals(actualCategoryValueId)).
+        Double totalActualDisbursements = transactions.getOrDefault(ArConstants.DISBURSEMENT.toLowerCase(),
+                Collections.emptyList()).stream().filter(t-> t.getAdjustmentType().equals(actualCategoryValueId)).
                 collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
 
         return totalActualCommitments != 0 || totalActualDisbursements != 0

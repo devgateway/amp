@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.function.Function;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -196,6 +198,9 @@ public class FilterUtils {
             filterRules = addDateFilterRule(null, date, filterRules);
         }
 
+        filterRules = addQuarterFilterRule(filter, filterRules);
+        filterRules = addYearFilterRule(filter, filterRules);
+
         return filterRules;
     }
 
@@ -221,6 +226,161 @@ public class FilterUtils {
         } catch (AmpApiException | ParseException e) {
             logger.error("cannot process date", e);
             //throw new RuntimeException(e);
+        }
+        return filterRules;
+    }
+
+    private static AmpReportFilters addQuarterFilterRule(Map<String, Object> filter, AmpReportFilters filterRules) {
+        Object rawFilter = filter.get(FiltersConstants.QUARTER);
+
+        Pair<Integer, Integer> range = extractRange(rawFilter, FilterUtils::parseQuarter);
+        filterRules = addQuarterFilterRule(range, filterRules);
+
+        List<Integer> years = extractList(rawFilter, FilterUtils::parseQuarter);
+        filterRules = addQuarterFilterRule(years, filterRules);
+
+        return filterRules;
+    }
+
+    private static AmpReportFilters addYearFilterRule(Map<String, Object> filter, AmpReportFilters filterRules) {
+        Object rawYearFilter = filter.get(FiltersConstants.YEAR);
+
+        Pair<Integer, Integer> yearRange = extractRange(rawYearFilter, FilterUtils::parseYear);
+        filterRules = addYearFilterRule(yearRange, filterRules);
+
+        List<Integer> years = extractList(rawYearFilter, FilterUtils::parseYear);
+        filterRules = addYearFilterRule(years, filterRules);
+
+        return filterRules;
+    }
+
+    /**
+     * Parse a quarter string to integer representation. Handles cases like Q2, 3 or q4.
+     * @param quarter number or Q+number
+     */
+    private static Integer parseQuarter(String quarter) {
+        if (quarter == null) {
+            return null;
+        }
+        String stripped = (quarter.length() > 1 && Character.toUpperCase(quarter.charAt(0)) == 'Q')
+                ? quarter.substring(1) : quarter;
+        return Integer.parseInt(stripped);
+    }
+
+    /**
+     * Convert a year string to an integer. Handles fiscal years like 2018/2019 by returning first part, i.e. 2018.
+     * @param year regular year or FY
+     */
+    private static Integer parseYear(String year) {
+        if (year == null) {
+            return null;
+        }
+        int p = year.indexOf('/');
+        return Integer.parseInt((p >= 0) ? year.substring(0, p) : year);
+    }
+
+    private static Pair<Integer, Integer> extractRange(Object rawFilter, Function<String, Integer> parser) {
+        Integer start = null;
+        Integer end = null;
+        if (rawFilter instanceof Map) {
+            Map map = (Map) rawFilter;
+            start = extractInt(map.get("start"), parser);
+            end = extractInt(map.get("end"), parser);
+        }
+        return Pair.of(start, end);
+    }
+
+    private static List<Integer> extractList(Object rawFilter, Function<String, Integer> parser) {
+        List<Integer> values = new ArrayList<>();
+        if (rawFilter instanceof List) {
+            List<?> rawValues = (List<?>) rawFilter;
+            for (Object rawValue : rawValues) {
+                Integer value = extractInt(rawValue, parser);
+                if (value != null) {
+                    values.add(value);
+                }
+            }
+        } else if (!(rawFilter instanceof Map)) {
+            Integer value = extractInt(rawFilter, parser);
+            if (value != null) {
+                values.add(value);
+            }
+        }
+        return values;
+    }
+
+    /**
+     * Attempt to convert a value parsed by Jackson to Integer. If the value is likely a string, use the parser to
+     * convert to int.
+     *
+     * @param rawValue as parsed by Jackson
+     * @param parser parser that can convert a non-null string to an Integer
+     * @return extracted Integer or null if rawValue is null
+     */
+    private static Integer extractInt(Object rawValue, Function<String, Integer> parser) {
+        if (rawValue instanceof Integer) {
+            return (Integer) rawValue;
+        } else if (rawValue instanceof Long) {
+            return ((Long) rawValue).intValue();
+        } else if (rawValue != null) {
+            return parser.apply(rawValue.toString());
+        } else {
+            return null;
+        }
+    }
+
+    private static AmpReportFilters addQuarterFilterRule(Pair<Integer, Integer> pair, AmpReportFilters filterRules) {
+        try {
+            if (filterRules == null) {
+                filterRules = new AmpReportFilters();
+            }
+            if (pair.getLeft() != null || pair.getRight() != null) {
+                filterRules.addQuarterFilterRule(pair.getLeft(), pair.getRight());
+            }
+        } catch (AmpApiException | NumberFormatException e) {
+            logger.error("cannot process quarter", e);
+        }
+        return filterRules;
+    }
+
+    private static AmpReportFilters addQuarterFilterRule(List<Integer> quarters, AmpReportFilters filterRules) {
+        try {
+            if (filterRules == null) {
+                filterRules = new AmpReportFilters();
+            }
+            if (!quarters.isEmpty()) {
+                filterRules.addQuarterFilterRule(quarters);
+            }
+        } catch (AmpApiException | NumberFormatException e) {
+            logger.error("cannot process quarter", e);
+        }
+        return filterRules;
+    }
+
+    private static AmpReportFilters addYearFilterRule(Pair<Integer, Integer> range, AmpReportFilters filterRules) {
+        try {
+            if (filterRules == null) {
+                filterRules = new AmpReportFilters();
+            }
+            if (range.getLeft() != null && range.getRight() != null) {
+                filterRules.addYearsRangeFilterRuleNoConv(range.getLeft(), range.getRight());
+            }
+        } catch (AmpApiException | NumberFormatException e) {
+            logger.error("cannot process year", e);
+        }
+        return filterRules;
+    }
+
+    private static AmpReportFilters addYearFilterRule(List<Integer> years, AmpReportFilters filterRules) {
+        try {
+            if (filterRules == null) {
+                filterRules = new AmpReportFilters();
+            }
+            if (!years.isEmpty()) {
+                filterRules.addYearsFilterRule(years, true);
+            }
+        } catch (AmpApiException | NumberFormatException e) {
+            logger.error("cannot process year", e);
         }
         return filterRules;
     }

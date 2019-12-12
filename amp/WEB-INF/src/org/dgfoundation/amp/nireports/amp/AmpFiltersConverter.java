@@ -178,7 +178,16 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
     @Override
     protected void processMiscElement(ReportElement repElem, FilterRule rule) {
         if (repElem.type == ElementType.DATE) {
-            addCellPredicate(NiReportsEngine.FUNDING_COLUMN_NAME, cell -> ((CategAmountCell) cell).amount.getJulianDayCode(), rule);
+            addCellPredicate(NiReportsEngine.FUNDING_COLUMN_NAME,
+                    cell -> ((CategAmountCell) cell).amount.getJulianDayCode(), rule);
+        }
+        if (repElem.type == ElementType.QUARTER) {
+            addCellPredicate(NiReportsEngine.FUNDING_COLUMN_NAME,
+                    cell -> ((CategAmountCell) cell).translatedDate.getRawQuarter(), rule);
+        }
+        if (repElem.type == ElementType.YEAR) {
+            addCellPredicate(NiReportsEngine.FUNDING_COLUMN_NAME,
+                    cell -> ((CategAmountCell) cell).translatedDate.getRawYear(), rule);
         }
     }
 

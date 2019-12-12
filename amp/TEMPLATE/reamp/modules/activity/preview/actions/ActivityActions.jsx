@@ -1,6 +1,6 @@
 import ActivityApi from '../api/ActivityApi.jsx';
 import {FM_ROOT, FUNDING_INFORMATION, TRANSACTION_ID, ACTIVITY_FORM_URL} from '../common/ReampConstants.jsx';
-import DateUtils from '../tempUtils/DateUtils.jsx';
+import DateUtils from '../utils/DateUtils.jsx';
 import {ACTIVITY_WORKSPACE_LEAD_DATA, CALENDAR_IS_FISCAL, IS_FISCAL, CALENDAR_ID} from '../common/ReampConstants';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
 import {
@@ -19,17 +19,15 @@ export const ACTIVITY_LOAD_FAILED = 'ACTIVITY_LOAD_FAILED';
 
 export function loadActivityForActivityPreview(activityId) {
     return (dispatch, ownProps) => {
-        // register links
-        const editLink = {url: ACTIVITY_FORM_URL, isExternal: true};
-        ActivityLinks.registerLinks({editLink});
         dispatch(sendingRequest());
-        const paths = [...FieldPathConstants.ADJUSTMENT_TYPE_PATHS, ActivityConstants.CREATED_BY, ActivityConstants.TEAM,
+
+            const paths = [...FieldPathConstants.ADJUSTMENT_TYPE_PATHS, ActivityConstants.CREATED_BY, ActivityConstants.TEAM,
             ActivityConstants.MODIFIED_BY];
         Promise.all([ActivityApi.getActivity(activityId), ActivityApi.getFieldsDefinition(),
             ActivityApi.fetchFmConfiguration(FmManagerHelper.getRequestFmSyncUpBody(Object.values(FeatureManagerConstants))),
             ActivityApi.fetchSettings(), ActivityApi.fetchActivityInfo(activityId)]
         ).then(([activity, fieldsDef, fmTree, settings, activityInfo]) => {
-            //once we have the activity we go and load activity dydrated values
+            _registerSettings(settings.language, settings['default-date-format'].toUpperCase());
             ContactAction.loadHydratedContactsForActivity(activity)(dispatch, ownProps);
             //TODO find a better way to filter out non enabled paths
             const activityFieldsManagerTemp = new FieldsManager(fieldsDef, [], 'en', Logger);
@@ -71,6 +69,11 @@ export function loadActivityForActivityPreview(activityId) {
         })
     }
 
+    function _registerSettings(lang, pGSDateFormat){
+        const editLink = {url: ACTIVITY_FORM_URL, isExternal: true};
+        ActivityLinks.registerLinks({editLink});
+        DateUtils.registerSettings({lang, pGSDateFormat});
+    }
     function sendingRequest() {
         return {
             type: ACTIVITY_LOAD_LOADING

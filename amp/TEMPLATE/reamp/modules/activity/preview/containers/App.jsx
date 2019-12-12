@@ -4,7 +4,7 @@ import {ActivityPreviewUI, FieldsManager, CurrencyRatesManager } from 'amp-ui';
 import * as ActivityActions from '../actions/ActivityActions';
 import ActivityFundingTotals from '../utils/ActivityFundingTotals';
 import Logger from '../tempUtils/LoggerManager';
-import DateUtils from '../tempUtils/DateUtils';
+import DateUtils from '../utils/DateUtils';
 import translate from '../tempUtils/translate';
 import * as ContactActions from '../actions/ContactsAction.jsx'
 import { bindActionCreators } from "redux";

@@ -178,23 +178,24 @@ public final class PreviewActivityService {
                                 }
                         )));
         List<PreviewFundingTotal> totals = new ArrayList<>();
+        if (allTransactionsByTypeAndAdjustment.isPresent()) {
+            allTransactionsByTypeAndAdjustment.get().forEach((transactionType, previewFundingTransactions) -> {
+                Map<Long, Double> transactionTotalByAdjustmentType =
+                        previewFundingTransactions.stream().collect(Collectors.
+                                groupingBy(PreviewFundingTransaction::getAdjustmentType,
+                                        Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount)
+                                ));
 
-        allTransactionsByTypeAndAdjustment.get().forEach((transactionType, previewFundingTransactions) -> {
-            Map<Long, Double> transactionTotalByAdjustmentType =
-                    previewFundingTransactions.stream().collect(Collectors.
-                            groupingBy(PreviewFundingTransaction::getAdjustmentType,
-                                    Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount)
-                            ));
+                transactionTotalByAdjustmentType.forEach((adjustmentType, totalAmount) -> {
 
-            transactionTotalByAdjustmentType.forEach((adjustmentType, totalAmount) -> {
-
-                PreviewFundingTotal total = new PreviewFundingTotal();
-                total.setTransactionType(transactionType);
-                total.setAdjustmentType(adjustmentType);
-                total.setAmount(totalAmount);
-                totals.add(total);
+                    PreviewFundingTotal total = new PreviewFundingTotal();
+                    total.setTransactionType(transactionType);
+                    total.setAdjustmentType(adjustmentType);
+                    total.setAmount(totalAmount);
+                    totals.add(total);
+                });
             });
-        });
+        }
         return totals;
     }
 

@@ -25,7 +25,7 @@ function hashLinkScroll() {
     }
 }
 
-//startUp(store).then(() => {
+startUp(store).then(() => {
     ReactDOM.render(
         <Provider store={store}>
             <Router history={history} store={store} onUpdate={hashLinkScroll}>
@@ -35,6 +35,6 @@ function hashLinkScroll() {
         </Provider>,
         document.getElementById('activity-preview')
     );
-//});
+});
 
 new boilerplate.layout({});

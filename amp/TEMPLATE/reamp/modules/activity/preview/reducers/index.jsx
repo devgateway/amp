@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { routerReducer as routing } from "react-router-redux";
-import startUp from "./StartUpReducer";
+import startUpReducer from "./StartUpReducer";
 import contactReducer from "./ContactsReducer";
 import activityReducer from './ActivityReducer';
 
@@ -10,7 +10,7 @@ import activityReducer from './ActivityReducer';
 
 const rootReducer = combineReducers({
    routing,
-   startUp,
+   startUpReducer,
    activityReducer,
    contactReducer
 });

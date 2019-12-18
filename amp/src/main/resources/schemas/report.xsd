@@ -18,6 +18,7 @@
       <xs:element type="filters" name="filters"/>
       <xs:element type="groupingOption" name="groupingOption" minOccurs="0" />
       <xs:element type="xs:boolean" name="summary" minOccurs="0" />
+      <xs:element type="xs:string" name="xsl" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
 
@@ -91,9 +92,9 @@
   <xs:complexType name="column">
     <xs:sequence>
       <xs:element type="xs:string" name="name"/>
-      <xs:element type="xs:string" name="description"/>
+      <xs:element type="xs:string" name="description" minOccurs="0"/>
       <xs:element type="xs:string" name="hierarchicalName"/>
-      <xs:element type="parentColumn" name="parentColumn"/>
+      <xs:element type="parentColumn" name="parentColumn" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
   
@@ -173,16 +174,16 @@
     <xs:sequence>
        <xs:element type="xs:int" name="number-divider" nillable="true"/>
          <xs:element type="xs:int" name="max-frac-digits" nillable="true"/>
-         <xs:element type="xs:string" name="decimal-symbol"/>
+         <xs:element type="xs:string" name="decimal-symbol" minOccurs="0"/>
          <xs:element type="xs:boolean" name="use-grouping"/>
-         <xs:element type="xs:string" name="group-separator"/>
+         <xs:element type="xs:string" name="group-separator" minOccurs="0"/>
          <xs:element type="xs:int" name="group-size" nillable="true"/>
     </xs:sequence>
   </xs:complexType>
   
   <xs:complexType name="filters">
     <xs:sequence>
-      <xs:element type="filter" name="filter"  maxOccurs="unbounded" minOccurs="1"/>
+      <xs:element type="filter" name="filter"  maxOccurs="unbounded" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
   

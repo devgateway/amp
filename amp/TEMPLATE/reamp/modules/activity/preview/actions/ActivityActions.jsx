@@ -8,7 +8,7 @@ import {
     FmManagerHelper, CommonActivityHelper, Constants, NumberUtils, CurrencyRatesManager, ActivityLinks
 } from "amp-ui";
 import processPossibleValues from '../common/PossibleValuesHelper.jsx';
-import Logger from '../tempUtils/LoggerManager' ;
+import Logger from '../utils/LoggerManager' ;
 import ActivityFundingTotals from '../utils/ActivityFundingTotals.jsx'
 import translate from '../tempUtils/translate.jsx';
 import * as ContactAction from './ContactsAction.jsx';

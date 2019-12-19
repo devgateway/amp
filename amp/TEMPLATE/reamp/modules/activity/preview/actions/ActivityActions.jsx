@@ -10,7 +10,7 @@ import {
 import processPossibleValues from '../common/PossibleValuesHelper.jsx';
 import Logger from '../tempUtils/LoggerManager' ;
 import ActivityFundingTotals from '../utils/ActivityFundingTotals.jsx'
-import translate from '../tempUtils/translate.jsx';
+import translate from '../utils/translate.jsx';
 import * as ContactAction from './ContactsAction.jsx';
 
 export const ACTIVITY_LOAD_LOADING = 'ACTIVITY_LOAD_LOADING';

@@ -22,12 +22,10 @@ config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
 	            return context && context.indexOf('node_modules') >= 0 && count > 1;
 	        }
 	      }));
+config.plugins.push(new webpack.DefinePlugin({'process.env': {
+		'NODE_ENV': JSON.stringify('production')
+	}
+}));
 config.plugins.push(new webpack.optimize.UglifyJsPlugin({sourceMap: false, compress: false}));
 config.plugins.push(new webpack.optimize.DedupePlugin());
-config.plugins.push(new webpack.DefinePlugin({
-    'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-    }
-}));
-
 module.exports = config;

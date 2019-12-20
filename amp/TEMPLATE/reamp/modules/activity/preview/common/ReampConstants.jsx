@@ -20,3 +20,5 @@ export const FUNDING_INFORMATION ='funding_information';
 export const TRANSACTION_ID = 'transaction_id';
 
 export const ACTIVITY_FORM_URL = '/wicket/onepager/activity';
+
+export const PRODUCTION = 'production';

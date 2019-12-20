@@ -1,7 +1,7 @@
 import ActivityApi from '../api/ActivityApi.jsx';
-import {FM_ROOT, FUNDING_INFORMATION, TRANSACTION_ID, ACTIVITY_FORM_URL} from '../common/ReampConstants.jsx';
+import { FM_ROOT, FUNDING_INFORMATION, TRANSACTION_ID, ACTIVITY_FORM_URL,
+    ACTIVITY_WORKSPACE_LEAD_DATA, CALENDAR_IS_FISCAL, IS_FISCAL, CALENDAR_ID } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
-import {ACTIVITY_WORKSPACE_LEAD_DATA, CALENDAR_IS_FISCAL, IS_FISCAL, CALENDAR_ID} from '../common/ReampConstants';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
 import {
     FieldsManager, FieldPathConstants, ActivityConstants, FeatureManagerConstants, FeatureManager,

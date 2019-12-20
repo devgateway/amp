@@ -1,10 +1,11 @@
+import { PRODUCTION } from '../common/ReampConstants.jsx';
 import * as log from 'loglevel';
 
 export default class LoggerManager {
 
     constructor(module) {
         this.logger = log.getLogger(module);
-        if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
+        if (process.env.NODE_ENV && process.env.NODE_ENV === PRODUCTION) {
             this.logger.setLevel(log.levels.WARN);
         }
     }

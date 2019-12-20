@@ -1,11 +1,13 @@
 import ActivityApi from '../api/ActivityApi.jsx';
 import {FM_ROOT, FUNDING_INFORMATION, TRANSACTION_ID, ACTIVITY_FORM_URL} from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
-import {ACTIVITY_WORKSPACE_LEAD_DATA, CALENDAR_IS_FISCAL, IS_FISCAL, CALENDAR_ID} from '../common/ReampConstants';
+import { ACTIVITY_WORKSPACE_LEAD_DATA, CALENDAR_IS_FISCAL, IS_FISCAL, CALENDAR_ID, REORDER_FUNDING_ITEM }
+from '../common/ReampConstants';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
 import {
     FieldsManager, FieldPathConstants, ActivityConstants, FeatureManagerConstants, FeatureManager,
-    FmManagerHelper, CommonActivityHelper, Constants, NumberUtils, CurrencyRatesManager, ActivityLinks
+    FmManagerHelper, CommonActivityHelper, Constants, NumberUtils, CurrencyRatesManager, ActivityLinks,
+    GlobalSettingsConstants
 } from "amp-ui";
 import processPossibleValues from '../common/PossibleValuesHelper.jsx';
 import Logger from '../tempUtils/LoggerManager' ;
@@ -123,8 +125,6 @@ export function loadActivityForActivityPreview(activityId) {
                         if (rawTransactionsList && rawTransactionsList.length > 0
                             && transactionListInWsCurrency && transactionListInWsCurrency.length > 0) {
                             rawTransactionsList.forEach(t => {
-                                console.log(transactionListInWsCurrency);
-                                console.log(t[TRANSACTION_ID]);
                                 const transactionInWsCurrency =
                                     transactionListInWsCurrency.find(tiwc => tiwc[TRANSACTION_ID] === t[TRANSACTION_ID]);
                                 t[ActivityConstants.TRANSACTION_AMOUNT] = transactionInWsCurrency[ActivityConstants.TRANSACTION_AMOUNT];
@@ -144,7 +144,8 @@ export function loadActivityForActivityPreview(activityId) {
             calendar: {id: settings[CALENDAR_ID], [IS_FISCAL]: settings[CALENDAR_IS_FISCAL]},
             workspaceLeadData: activityInfo[ACTIVITY_WORKSPACE_LEAD_DATA],
             effectiveCurrency: settings[Constants.EFFECTIVE_CURRENCY].code,
-            teamMember: activityInfo.teamMember
+            teamMember: activityInfo.teamMember,
+            reorderFundingItemId: settings[REORDER_FUNDING_ITEM]
         };
         return activityContext;
     }

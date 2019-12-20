@@ -5,7 +5,7 @@ import * as ActivityActions from '../actions/ActivityActions';
 import ActivityFundingTotals from '../utils/ActivityFundingTotals';
 import Logger from '../utils/LoggerManager';
 import DateUtils from '../utils/DateUtils';
-import translate from '../tempUtils/translate';
+import translate from '../utils/translate';
 import * as ContactActions from '../actions/ContactsAction.jsx'
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";

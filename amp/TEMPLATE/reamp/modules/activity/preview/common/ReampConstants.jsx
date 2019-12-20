@@ -15,7 +15,7 @@ const CALENDAR = 'calendar';
 export const CALENDAR_ID = CALENDAR + '-id';
 export const IS_FISCAL = 'is-fiscal';
 export const CALENDAR_IS_FISCAL = CALENDAR + '-' + IS_FISCAL;
-
+export const REORDER_FUNDING_ITEM = 'reorder-funding-item';
 export const FUNDING_INFORMATION ='funding_information';
 export const TRANSACTION_ID = 'transaction_id';
 

@@ -11,6 +11,8 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
+import static org.junit.Assert.assertThat;
+
 /**
  * Non-persistent implementation of {@code ValueConverter} which is backed by an in-memory map.
  * <p>
@@ -21,7 +23,10 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 public class InMemoryValueConverter extends ValueConverter {
     
     public static final Map<Long, Object> PERSONE_ATTRIBUTE_TEST_OBJECTS = ImmutableMap.of(
-            10L, new ObjectImporterTest.PersonAttribute(10L, "Height", "Small")
+            10L, new ObjectImporterTest.PersonAttribute(10L, "Height", "Small"),
+            2L, new ObjectImporterTest.PersonAttribute(2L, "Color", "Red"),
+            1L, new ObjectImporterTest.PersonAttribute(1L, "Color", "Yellow")
+
     );
     
     public static final Map<Class<?>, Function<Long, Object>> DAO_PROVIDER = ImmutableMap.of(

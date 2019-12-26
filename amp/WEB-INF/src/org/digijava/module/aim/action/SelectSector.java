@@ -12,6 +12,7 @@ import java.util.Iterator;
 
 import javax.servlet.http.HttpSession;
 
+import com.google.common.collect.ImmutableList;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -46,9 +47,8 @@ public class SelectSector extends Action {
             //Added for AMP-3943, to be able to select sectors from a specified scheme
             ssForm.setSectorScheme(new Long(request.getParameter("sectorScheme")));
             //If the sectorSchemes is specified, set it with the current Sector Scheme
-            AmpSectorScheme defClassification=SectorUtil.getAmpSectorScheme(ssForm.getSectorScheme());
-            ssForm.setSectorScheme(defClassification.getAmpSecSchemeId());
-            Collection classConfigs = SectorUtil.getAllClassificationConfigs();
+            AmpSectorScheme defClassification = SectorUtil.getAmpSectorScheme(ssForm.getSectorScheme());
+            ssForm.setSectorSchemes(ImmutableList.of(defClassification));
         }
         if (ssForm.getSectorScheme() == null
                 || ssForm.getSectorScheme().equals(new Long(-1))) {

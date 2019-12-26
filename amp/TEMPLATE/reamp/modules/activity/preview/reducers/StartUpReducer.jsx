@@ -1,4 +1,4 @@
-import { STATE_TRANSLATIONS_LOADED } from '../actions/StartUpAction';
+import {STATE_TRANSLATIONS_LOADED, STATE_APP_INITIALIZED} from '../actions/StartUpAction';
 import TranslationManager from '../utils/TranslationManager';
 
 /**
@@ -8,17 +8,20 @@ import TranslationManager from '../utils/TranslationManager';
 
 const defaultState = {
     translations: {},
-    translationsLoaded: false
+    isStartupInProgress: true,
+    settings: undefined
 };
 
 export default function startUpReducer(state: Object = defaultState, action: Object) {
 
     switch (action.type) {
-        case STATE_TRANSLATIONS_LOADED:
+        case STATE_APP_INITIALIZED:
             return Object.assign({}, state, {
                 translations: action.payload.translations,
-                translationsLoaded: true
+                isStartupInProgress: false,
+                settings: action.payload.settings
             });
+
         default:
             return state;
     }

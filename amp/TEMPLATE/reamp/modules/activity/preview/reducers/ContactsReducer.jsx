@@ -2,7 +2,7 @@ import {CONTACTS_LOAD_LOADING, CONTACTS_LOAD_LOADED, CONTACTS_LOAD_FAILED} from 
 
 const defaultState = {
     contactsByIds: {},
-    contactFieldsManager: {},
+    contactFieldsManager: undefined,
     isContactLoading: true,
     isContactLoaded: false,
     error: undefined

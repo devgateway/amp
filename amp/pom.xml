@@ -1022,20 +1022,21 @@
                         </manifestEntries>
                     </archive>
                     <webResources>
+                        <!-- Intellij Idea cannot handle correctly two resources with the same source directory. -->
                         <resource>
-                            <directory>.</directory>
+                            <directory>${project.basedir}/TEMPLATE/ampTemplate</directory>
                             <includes>
-                                <include>TEMPLATE/ampTemplate/site-config.xml</include>
+                                <include>site-config.xml</include>
                             </includes>
-                           <filtering>true</filtering>
+                            <filtering>true</filtering>
+                            <targetPath>TEMPLATE/ampTemplate</targetPath>
                         </resource>
                         <resource>
-                            <directory>.</directory>
+                            <directory>${project.basedir}</directory>
                             <includes>
                                 <include>**/*</include>
                             </includes>
                             <excludes>
-                                <exclude>META-INF/context.xml</exclude>
                                 <exclude>WEB-INF/src/**</exclude>
                                 <exclude>.settings/**</exclude>
                                 <exclude>.externalToolBuilders/**</exclude>

@@ -17,7 +17,9 @@ export const loadHydratedContactsForActivity = (activity) => (dispatch, ownProps
 export const loadHydratedContacts = (ids) => (dispatch, ownProps) => {
     Promise.all([ContactsApi.getContacts(ids), ContactsApi.getContactsEnabledFields()]).then(([contactsByIdsRaw, contactsFieldsDef]) => {
         const contactsByIds = {};
-        const contactFieldsManager = new FieldsManager(contactsFieldsDef, [], 'en', Logger);
+        const { settings } = ownProps().startUpReducer;
+        const contactFieldsManager = new FieldsManager(contactsFieldsDef, [],
+            settings.language, Logger);
         // So far there is no need to Hydrate values that doesn't already come from contacts api
         // const requestData = {};
         //contactsByIdsRaw.forEach(c => HydratorHelper.hydrateObject(c, contactFieldsManager, '', requestData));

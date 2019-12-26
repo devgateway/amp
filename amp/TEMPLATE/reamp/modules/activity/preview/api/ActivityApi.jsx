@@ -34,11 +34,6 @@ export default class ActivityApi {
         return ActivityApi._postData(url, body);
     }
 
-    static fetchSettings() {
-        const url = SETTINGS_API;
-        return ActivityApi._fetchData(url);
-    }
-
     static fetchActivityInfo(activityId) {
         const url = ACTIVITY_INFO_API + activityId;
         return ActivityApi._fetchData(url);

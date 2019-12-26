@@ -13,6 +13,7 @@ import Logger from '../utils/LoggerManager' ;
 import ActivityFundingTotals from '../utils/ActivityFundingTotals.jsx'
 import translate from '../utils/translate.jsx';
 import * as ContactAction from './ContactsAction.jsx';
+import * as ResourceAction from './ResourceAction.jsx';
 
 export const ACTIVITY_LOAD_LOADING = 'ACTIVITY_LOAD_LOADING';
 export const ACTIVITY_LOAD_LOADED = 'ACTIVITY_LOAD_LOADED';
@@ -24,28 +25,36 @@ export function loadActivityForActivityPreview(activityId) {
 
             const paths = [...FieldPathConstants.ADJUSTMENT_TYPE_PATHS, ActivityConstants.CREATED_BY, ActivityConstants.TEAM,
             ActivityConstants.MODIFIED_BY];
+            const { settings } = ownProps().startUpReducer;
         Promise.all([ActivityApi.getActivity(activityId), ActivityApi.getFieldsDefinition(),
             ActivityApi.fetchFmConfiguration(FmManagerHelper.getRequestFmSyncUpBody(Object.values(FeatureManagerConstants))),
-            ActivityApi.fetchSettings(), ActivityApi.fetchActivityInfo(activityId)]
-        ).then(([activity, fieldsDef, fmTree, settings, activityInfo]) => {
+            ActivityApi.fetchActivityInfo(activityId)]
+        ).then(([activity, fieldsDef, fmTree, activityInfo]) => {
             _registerSettings(settings.language, settings['default-date-format'].toUpperCase());
             ContactAction.loadHydratedContactsForActivity(activity)(dispatch, ownProps);
+            ResourceAction.loadResourcesForActivity(activity)(dispatch, ownProps);
+
             //TODO find a better way to filter out non enabled paths
-            const activityFieldsManagerTemp = new FieldsManager(fieldsDef, [], 'en', Logger);
+            const activityFieldsManagerTemp = new FieldsManager(fieldsDef, [],
+                settings.language, Logger);
             const enabledPaths = paths.filter(path => activityFieldsManagerTemp.isFieldPathEnabled(path));
             Promise.all([ActivityApi.fetchPossibleValues(enabledPaths),
-                ActivityApi.fetchFundingInformation(activityId, settings[Constants.EFFECTIVE_CURRENCY].id)]).then(([possibleValuesCollectionAPI, activityFundingInformation]) => {
-                const activityFieldsManager = new FieldsManager(fieldsDef, processPossibleValues(possibleValuesCollectionAPI), 'en', Logger);
+                ActivityApi.fetchFundingInformation(activityId, settings[Constants.EFFECTIVE_CURRENCY].id)])
+                .then(([possibleValuesCollectionAPI, activityFundingInformation]) => {
+                const activityFieldsManager = new FieldsManager(fieldsDef,
+                    processPossibleValues(possibleValuesCollectionAPI), settings.language, Logger);
                 _populateFMTree(fmTree);
                 _configureNumberUtils(settings);
 
-                ActivityApi.fetchValuesForHydration(HydratorHelper.fetchRequestDataForHydration(activity, activityFieldsManager, ''))
+                ActivityApi.fetchValuesForHydration(HydratorHelper.fetchRequestDataForHydration(activity,
+                    activityFieldsManager, ''))
                     .then(valuesForHydration => {
-                        HydratorHelper.hydrateObject(activity, activityFieldsManager, '', null, valuesForHydration);
+                        HydratorHelper.hydrateObject(activity, activityFieldsManager, '',
+                            null, valuesForHydration);
                         activity.id = String(activity.internal_id);
                         _convertCurrency(activity, activityFundingInformation);
-                        //we create an empty currency rates manager since we will be converting from same currencies, it wont
-                        //be used it will just return 1.
+                        //we create an empty currency rates manager since we will be converting from same currencies,
+                        // it wont be used it will just return 1.
                         const currencyRatesManager = new CurrencyRatesManager([],
                             activityFundingInformation.currency, translate, DateUtils, {});
                         return dispatch({

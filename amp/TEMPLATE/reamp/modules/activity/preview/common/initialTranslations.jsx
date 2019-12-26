@@ -461,5 +461,6 @@ export const initialTranslations = {
   "fundingRelated": "This organization has a funding related.",
   "oldVersionWarning": "You are attempting to start an older AMP Offline %current-version% after using AMP Offline %newest-used%. This can cause application to crash or corrupt the data. It is highly recommended to close the application and switch to AMP Offline %newest-used%.",
   "failOnErrorMessage": "A critical error occurred during data update. Please collect logs, note your actions and contact the administrator.",
-  "clickToPrint": "Click to print the activity"
+  "clickToPrint": "Click to print the activity",
+  "amp.preview:server-errors-0001": "Internal server error"
 }

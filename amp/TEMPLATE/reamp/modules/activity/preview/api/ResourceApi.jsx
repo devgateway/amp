@@ -1,5 +1,5 @@
-import { RESOURCES_POSSIBLE_VALUES_API, RESOURCES_ENABLED_FIELDS_API, RESOURCES_API }
-from '../common/ReampConstants.jsx';
+import {RESOURCES_POSSIBLE_VALUES_API, RESOURCES_ENABLED_FIELDS_API, RESOURCES_API}
+    from '../common/ReampConstants.jsx';
 import {fetchJson, postJson} from 'amp/tools/index';
 
 export default class ResourceApi {
@@ -19,19 +19,15 @@ export default class ResourceApi {
     }
 
     static extractErrors(errors, obj) {
-        var errorMessages = [];
+        const errorMessages = [];
         if (errors) {
             errors = Array.isArray(errors) ? errors : [errors];
-            errors.forEach(function (error) {
-                for (var key in error) {
-                    let messageKey = 'amp.preview:server-errors-' + key;
-                    let message = {messageKey: messageKey};
+            errors.forEach((error) => {
+                for (const key in error) {
+                    const messageKey = 'amp.preview:server-errors-' + key;
+                    const message = {messageKey};
                     if (obj && obj.id) {
                         message.id = obj.id;
-                    }
-
-                    if (obj && obj.cid) {
-                        message.cid = obj.cid;
                     }
 
                     errorMessages.push(message);

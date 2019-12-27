@@ -24,25 +24,24 @@ export default class ResourceApi {
             errors = Array.isArray(errors) ? errors : [errors];
             errors.forEach((error) => {
                 for (const key in error) {
-                    let messageKey = 'amp.preview:server-errors-' + key;
-                    let message = {messageKey};
+                    const messageKey = 'amp.preview:server-errors-' + key;
+                    const message = {messageKey};
                     if (obj && obj.id) {
                         message.id = obj.id;
                     }
 
-                    if (obj && obj.cid) {
-                        message.cid = obj.cid;
-                    }
                     errorMessages.push(message);
                 }
             });
         }
+
         return errorMessages;
     }
 
     static _postData(url, body) {
         return postJson(url, body).then((result) => result.json())
             .then((data) => {
+            debugger;
                 if (data.error) {
                     throw ResourceApi.extractErrors(data.error);
                 } else {

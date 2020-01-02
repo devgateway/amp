@@ -464,10 +464,10 @@ export const initialTranslations = {
   "clickToPrint": "Click to print the activity",
   "amp.preview:server-errors-0001": "Internal server error",
   "View Workspaces": "View Workspaces",
-  "workspaceWhereActivityIsDisplayed":"Workspace where activity is displayed",
+  "workspaceWhereActivityIsDisplayed": "Workspace where activity is displayed",
   "workspaceType": "Workspace Type",
   "howActivityIsLinked": "How the activity is linked to the workspace",
   "infoWsTooltipTeam": "Members can create new activities for the workspace but can also pull activities from other workspaces (computed)",
-  "infoWsTooltipManagement":"Members can view all of the Activities of the Team Workspaces that have been assigned as Child Workspaces",
-  "infoWsTooltipComputed":"Members can view all activities assigned to a particular organisation denoted in the Funding or Related Organisations portion of the Activity Form"
+  "infoWsTooltipManagement": "Members can view all of the Activities of the Team Workspaces that have been assigned as Child Workspaces",
+  "infoWsTooltipComputed": "Members can view all activities assigned to a particular organisation denoted in the Funding or Related Organisations portion of the Activity Form"
 }

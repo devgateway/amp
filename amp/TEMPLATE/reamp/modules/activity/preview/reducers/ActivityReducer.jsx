@@ -1,10 +1,17 @@
-import {ACTIVITY_LOAD_LOADING, ACTIVITY_LOAD_LOADED, ACTIVITY_LOAD_FAILED} from '../actions/ActivityActions.jsx';
+import {
+    ACTIVITY_LOAD_LOADING,
+    ACTIVITY_LOAD_LOADED,
+    ACTIVITY_LOAD_FAILED,
+    ACTIVITY_WS_INFO_LOADED
+} from '../actions/ActivityActions.jsx';
+import {ACTIVITY_WS_INFO_LOADING} from "../actions/ActivityActions";
 
 const defaultState = {
     activity: undefined,
     isActivityLoading: true,
     isActivityLoaded: false,
-    error: undefined
+    error: undefined,
+    activityWsInfo: []
 };
 
 export default function activityReducer(state: Object = defaultState, action: Object) {
@@ -25,7 +32,9 @@ export default function activityReducer(state: Object = defaultState, action: Ob
                 isActivityLoaded: true
             };
         case ACTIVITY_LOAD_FAILED:
-            return {...state, error: action.payload.error}
+            return {...state, error: action.payload.error};
+        case ACTIVITY_WS_INFO_LOADED:
+            return {...state, activityWsInfo: action.payload.activityWsInfo};
         default:
             return state;
     }

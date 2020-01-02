@@ -434,6 +434,9 @@ public class SettingsUtils {
         }
         addCalendarSettings(settings);
 
+        if (TeamUtil.getCurrentUser() != null){
+            settings.setShowActivityWorkspaces(true);
+        }
         addDateRangeSettingsForDashboardsAndGis(settings);
 
         return settings;

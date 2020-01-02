@@ -57,7 +57,9 @@ public class SettingsConstants {
 
     public static final String REORDER_FUNDING_ITEM_ID = "reorder-funding-item";
     public static final String EFFECTIVE_CURRENCY = "effective-currency";
-    
+
+    public static final String SHOW_ACTIVITY_WORKSPACES = "show-activity-workspaces";
+
     public static final String DASHBOARD_DEFAULT_MAX_YEAR_RANGE = "dashboard-default-max-year-range";
     public static final String DASHBOARD_DEFAULT_MIN_YEAR_RANGE = "dashboard-default-min-year-range";
     public static final String DASHBOARD_DEFAULT_MAX_DATE = "dashboard-default-max-date";

@@ -41,7 +41,6 @@ export default class ResourceApi {
     static _postData(url, body) {
         return postJson(url, body).then((result) => result.json())
             .then((data) => {
-            debugger;
                 if (data.error) {
                     throw ResourceApi.extractErrors(data.error);
                 } else {

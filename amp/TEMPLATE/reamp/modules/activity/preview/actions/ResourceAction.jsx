@@ -23,10 +23,10 @@ export const loadHydratedResources = (ids) => (dispatch, ownProps) => {
     Promise.all([ResourceApi.fetchResources(ids),
         ResourceApi.getResourcesEnabledFields(), ResourceApi.fetchPossibleValues(resourcesFields)])
         .then(([resourcesByUUIDRaw, rFields, possibleValuesCollection]) => {
-        debugger;
             const resourcesByUUID = {};
             resourcesByUUIDRaw.forEach(r => {
                 resourcesByUUID[r.uuid] = r;
+                r.id = r.uuid;
             });
             const resourceFieldsManager = new FieldsManager(rFields, processPossibleValues(possibleValuesCollection),
                 settings.language,LoggerManager);

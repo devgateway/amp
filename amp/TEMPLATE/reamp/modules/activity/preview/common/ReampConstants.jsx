@@ -10,7 +10,10 @@ export const RESOURCES_POSSIBLE_VALUES_API = '/rest/resource/field/values';
 export const RESOURCES_ENABLED_FIELDS_API = '/rest/resource/fields';
 export const RESOURCES_API = '/rest/resource';
 export const FUNDING_INFORMATION_API= '/rest/activity/{ACTIVITY_ID}/preview/fundings/?currency-id={CURRENCY_ID}';
+export const ACTIVITY_WS_INFO = '/rest/activity/{ACTIVITY_ID}/preview/workspaces';
 export const FM_ROOT = 'fm-settings';
+export const RTL_DIRECTION = 'rtl-direction';
+export const SHOW_ACTIVITY_WORKSPACES = 'show-activity-workspaces';
 
 
 export const ACTIVITY_WORKSPACE_LEAD_DATA = 'activity-workspace-lead-data';

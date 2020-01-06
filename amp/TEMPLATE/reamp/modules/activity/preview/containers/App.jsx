@@ -27,6 +27,7 @@ class App extends Component {
         contactsByIds: PropTypes.object,
         APDocumentPage: PropTypes.func.isRequired,
         resourceReducer: PropTypes.object,
+        activityWsInfo: PropTypes.array.isRequired
 
     }
 
@@ -52,7 +53,8 @@ class App extends Component {
             contactFieldsManager,
             currencyRatesManager: this.props.activityReducer.currencyRatesManager,
             APDocumentPage,
-            resourceReducer: this.props.resourceReducer
+            resourceReducer: this.props.resourceReducer,
+            activityWsInfo: this.props.activityReducer.activityWsInfo
         };
     }
 

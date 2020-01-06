@@ -462,5 +462,12 @@ export const initialTranslations = {
   "oldVersionWarning": "You are attempting to start an older AMP Offline %current-version% after using AMP Offline %newest-used%. This can cause application to crash or corrupt the data. It is highly recommended to close the application and switch to AMP Offline %newest-used%.",
   "failOnErrorMessage": "A critical error occurred during data update. Please collect logs, note your actions and contact the administrator.",
   "clickToPrint": "Click to print the activity",
-  "amp.preview:server-errors-0001": "Internal server error"
+  "amp.preview:server-errors-0001": "Internal server error",
+  "View Workspaces": "View Workspaces",
+  "workspaceWhereActivityIsDisplayed": "Workspace where activity is displayed",
+  "workspaceType": "Workspace Type",
+  "howActivityIsLinked": "How the activity is linked to the workspace",
+  "infoWsTooltipTeam": "Members can create new activities for the workspace but can also pull activities from other workspaces (computed)",
+  "infoWsTooltipManagement": "Members can view all of the Activities of the Team Workspaces that have been assigned as Child Workspaces",
+  "infoWsTooltipComputed": "Members can view all activities assigned to a particular organisation denoted in the Funding or Related Organisations portion of the Activity Form"
 }

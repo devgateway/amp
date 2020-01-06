@@ -1,6 +1,6 @@
 import { fetchJson, postJson } from 'amp/tools/index';
 import { ACTIVITY_API, FIELDS_DEFINITION_API, POSSIBLE_VALUES_API, FM_API, SETTINGS_API , ACTIVITY_INFO_API,
-    FUNDING_INFORMATION_API, ACTIVITY_FIELDS_ID_VALUES_API }  from '../common/ReampConstants.jsx'
+    FUNDING_INFORMATION_API, ACTIVITY_FIELDS_ID_VALUES_API, ACTIVITY_WS_INFO }  from '../common/ReampConstants.jsx'
 
 
 export default class ActivityApi {
@@ -39,11 +39,15 @@ export default class ActivityApi {
         return ActivityApi._fetchData(url);
     }
     static fetchFundingInformation(activityId, currencyId){
-        const url =FUNDING_INFORMATION_API.replace('{ACTIVITY_ID}', activityId).
+        const url = FUNDING_INFORMATION_API.replace('{ACTIVITY_ID}', activityId).
         replace('{CURRENCY_ID}',currencyId);
         return this._fetchData(url);
     }
+    static fetchActivityWsInformation(activityId){
+        const url = ACTIVITY_WS_INFO.replace('{ACTIVITY_ID}', activityId);
+        return this._fetchData(url);
 
+    }
     static fetchValuesForHydration(activityFieldsWithIds){
         const url = ACTIVITY_FIELDS_ID_VALUES_API;
         return this._postData(url, activityFieldsWithIds);

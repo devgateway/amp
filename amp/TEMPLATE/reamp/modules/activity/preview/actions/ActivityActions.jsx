@@ -10,7 +10,12 @@ import {
     CALENDAR_ID,
     REORDER_FUNDING_ITEM,
     RTL_DIRECTION,
-    SHOW_ACTIVITY_WORKSPACES
+    SHOW_ACTIVITY_WORKSPACES,
+    VERSION_HISTORY_URL,
+    COMPARE_ACTIVITY_URL,
+    PUBLIC_CHANGE_SUMMARY,
+    TEAM_ID,
+    PUBLIC_VERSION_HISTORY
 } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
@@ -96,7 +101,9 @@ export function loadActivityForActivityPreview(activityId) {
 
     function _registerSettings(lang, pGSDateFormat) {
         const editLink = {url: ACTIVITY_FORM_URL, isExternal: true};
-        ActivityLinks.registerLinks({editLink});
+        const versionHistoryLink = { url : VERSION_HISTORY_URL, isExternal: true};
+        const compareActivityLink = { url : COMPARE_ACTIVITY_URL, isExternal: true};
+        ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink});
         DateUtils.registerSettings({lang, pGSDateFormat});
     }
 
@@ -169,7 +176,15 @@ export function loadActivityForActivityPreview(activityId) {
             teamMember: activityInfo.teamMember,
             reorderFundingItemId: settings[REORDER_FUNDING_ITEM],
             rtlDirection: settings[RTL_DIRECTION],
-            showActivityWorkspaces: settings[SHOW_ACTIVITY_WORKSPACES]
+            showActivityWorkspaces: settings[SHOW_ACTIVITY_WORKSPACES],
+            versionHistoryInformation: {
+                versionHistory: activityInfo['version-history'],
+                activityLastVersionId: activityInfo['amp-activity-last-version-id'],
+                updateCurrentVersion: activityInfo['update-current-version'],
+                showChangeSummary: settings[TEAM_ID] || settings[PUBLIC_CHANGE_SUMMARY],
+                showVersionHistory: settings[TEAM_ID] || settings[PUBLIC_VERSION_HISTORY],
+            }
+
         };
         return activityContext;
     }

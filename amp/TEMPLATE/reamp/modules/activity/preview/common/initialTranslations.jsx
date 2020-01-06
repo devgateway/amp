@@ -469,5 +469,13 @@ export const initialTranslations = {
   "howActivityIsLinked": "How the activity is linked to the workspace",
   "infoWsTooltipTeam": "Members can create new activities for the workspace but can also pull activities from other workspaces (computed)",
   "infoWsTooltipManagement": "Members can view all of the Activities of the Team Workspaces that have been assigned as Child Workspaces",
-  "infoWsTooltipComputed": "Members can view all activities assigned to a particular organisation denoted in the Funding or Related Organisations portion of the Activity Form"
+  "infoWsTooltipComputed": "Members can view all activities assigned to a particular organisation denoted in the Funding or Related Organisations portion of the Activity Form",
+  "versionHistory": "Version History",
+  "show_change_summary": "Show Change Summary",
+  "close": "Close",
+  "compare_version": "Compare versions",
+  "LastModifiedBy": "Last modified by",
+  "Action": "Action",
+  "current_version": "Current version",
+  "makeCurrentVersion": "make current version"
 }

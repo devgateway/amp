@@ -21,10 +21,15 @@ const CALENDAR = 'calendar';
 export const CALENDAR_ID = CALENDAR + '-id';
 export const IS_FISCAL = 'is-fiscal';
 export const CALENDAR_IS_FISCAL = CALENDAR + '-' + IS_FISCAL;
+export const PUBLIC_CHANGE_SUMMARY = 'public-change-summary';
+export const PUBLIC_VERSION_HISTORY = 'public-version-history'
+export const TEAM_ID = 'team-id';
 export const REORDER_FUNDING_ITEM = 'reorder-funding-item';
 export const FUNDING_INFORMATION ='funding_information';
 export const TRANSACTION_ID = 'transaction_id';
 
 export const ACTIVITY_FORM_URL = '/wicket/onepager/activity';
+export const VERSION_HISTORY_URL = '/aim/viewActivityHistory.do';
+export const COMPARE_ACTIVITY_URL = '/aim/compareActivityVersions.do';
 
 export const PRODUCTION = 'production';

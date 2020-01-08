@@ -101,8 +101,8 @@ export function loadActivityForActivityPreview(activityId) {
 
     function _registerSettings(lang, pGSDateFormat) {
         const editLink = {url: ACTIVITY_FORM_URL, isExternal: true};
-        const versionHistoryLink = { url : VERSION_HISTORY_URL, isExternal: true};
-        const compareActivityLink = { url : COMPARE_ACTIVITY_URL, isExternal: true};
+        const versionHistoryLink = {url: VERSION_HISTORY_URL, isExternal: true};
+        const compareActivityLink = {url: COMPARE_ACTIVITY_URL, isExternal: true};
         ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink});
         DateUtils.registerSettings({lang, pGSDateFormat});
     }
@@ -177,6 +177,10 @@ export function loadActivityForActivityPreview(activityId) {
             reorderFundingItemId: settings[REORDER_FUNDING_ITEM],
             rtlDirection: settings[RTL_DIRECTION],
             showActivityWorkspaces: settings[SHOW_ACTIVITY_WORKSPACES],
+            validation: {
+                status: activityInfo['validation-status'],
+                daysToAutomaticValidation: activityInfo['days-for-automatic-validation'],
+            },
             versionHistoryInformation: {
                 versionHistory: activityInfo['version-history'],
                 activityLastVersionId: activityInfo['amp-activity-last-version-id'],

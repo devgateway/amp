@@ -46,6 +46,7 @@ import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.ValidationStatus;
 import org.hibernate.CacheMode;
 
 /**
@@ -181,6 +182,11 @@ public final class ActivityInterchangeUtils {
 
             activityInformation.setUpdateCurrentVersion(isCurrentWorkspaceManager && !isPartOfMamanagetmentWorkspace);
             activityInformation.setVersionHistory(ActivityUtil.getActivityHistories(projectId));
+
+            activityInformation.setValidationStatus(ActivityUtil.getValidationStatus(project, tm));
+            if (activityInformation.getValidationStatus() == ValidationStatus.AUTOMATIC_VALIDATION) {
+                activityInformation.setDaysForAutomaticValidation(ActivityUtil.daysToValidation(project));
+            }
         } else {
             // if not logged in but the show version history in public preview is on, then we should show
             // version history information

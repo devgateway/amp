@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.ActivityHistory;
+import org.digijava.module.aim.util.ValidationStatus;
 
 import java.util.List;
 
@@ -24,6 +25,9 @@ public class ActivityInformation {
     @JsonProperty(ActivityEPConstants.ACTIVITY_WORKSPACE)
     private AmpTeam activityWorkspace;
 
+    @JsonProperty(ActivityEPConstants.VALIDATION_STATUS)
+    private ValidationStatus validationStatus;
+
     @JsonProperty(ActivityEPConstants.TEAM_MEMBER)
     private TeamMemberInformation teamMember;
 
@@ -38,6 +42,7 @@ public class ActivityInformation {
 
     public ActivityInformation(Long ampActivityId) {
         this.ampActivityId = ampActivityId;
+        this.validationStatus = ValidationStatus.UNKNOWN;
     }
 
     public Long getAmpActivityId() {
@@ -70,6 +75,14 @@ public class ActivityInformation {
 
     public void setActivityWorkspace(AmpTeam activityTeam) {
         this.activityWorkspace = activityTeam;
+    }
+
+    public ValidationStatus getValidationStatus() {
+        return validationStatus;
+    }
+
+    public void setValidationStatus(ValidationStatus validationStatus) {
+        this.validationStatus = validationStatus;
     }
 
     public TeamMemberInformation getTeamMember() {

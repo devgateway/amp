@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {ActivityPreviewUI, FieldsManager, CurrencyRatesManager} from 'amp-ui';
+import queryString from 'query-string';
 import * as ActivityActions from '../actions/ActivityActions';
 import ActivityFundingTotals from '../utils/ActivityFundingTotals';
 import Logger from '../utils/LoggerManager';
@@ -64,7 +65,12 @@ class App extends Component {
         } else {
             const {activity, activityContext} = this.props.activityReducer;
             return (
-                <ActivityPreviewUI activity={activity} activityContext={activityContext}/>
+                <ActivityPreviewUI
+                    activity={activity}
+                    activityContext={activityContext}
+                    messageInformation={this.props.messageInformation}
+                    isOnline={true}
+                />
             );
         }
     }
@@ -76,7 +82,8 @@ function mapStateToProps(state, ownProps) {
         activityReducer: state.activityReducer,
         contactReducer: state.contactReducer,
         resourceReducer: state.resourceReducer,
-        startUpReducer: state.startUpReducer
+        startUpReducer: state.startUpReducer,
+        messageInformation: state.routing.locationBeforeTransitions.query
     }
 }
 

@@ -30,6 +30,7 @@ import translate from '../utils/translate.jsx';
 import * as ContactAction from './ContactsAction.jsx';
 import * as ResourceAction from './ResourceAction.jsx';
 import {CONTACTS_LOAD_LOADING, getActivityContactsId, loadHydratedContacts} from "./ContactsAction";
+import {ACTIVITY_PREVIEW_URL} from "../common/ReampConstants";
 
 export const ACTIVITY_LOAD_LOADING = 'ACTIVITY_LOAD_LOADING';
 export const ACTIVITY_LOAD_LOADED = 'ACTIVITY_LOAD_LOADED';
@@ -101,9 +102,10 @@ export function loadActivityForActivityPreview(activityId) {
 
     function _registerSettings(lang, pGSDateFormat) {
         const editLink = {url: ACTIVITY_FORM_URL, isExternal: true};
-        const versionHistoryLink = { url : VERSION_HISTORY_URL, isExternal: true};
-        const compareActivityLink = { url : COMPARE_ACTIVITY_URL, isExternal: true};
-        ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink});
+        const viewLink = {url: ACTIVITY_PREVIEW_URL, isExternal: true};
+        const versionHistoryLink = {url: VERSION_HISTORY_URL, isExternal: true};
+        const compareActivityLink = {url: COMPARE_ACTIVITY_URL, isExternal: true};
+        ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink, viewLink});
         DateUtils.registerSettings({lang, pGSDateFormat});
     }
 
@@ -177,6 +179,10 @@ export function loadActivityForActivityPreview(activityId) {
             reorderFundingItemId: settings[REORDER_FUNDING_ITEM],
             rtlDirection: settings[RTL_DIRECTION],
             showActivityWorkspaces: settings[SHOW_ACTIVITY_WORKSPACES],
+            validation: {
+                status: activityInfo['validation-status'],
+                daysToAutomaticValidation: activityInfo['days-for-automatic-validation'],
+            },
             versionHistoryInformation: {
                 versionHistory: activityInfo['version-history'],
                 activityLastVersionId: activityInfo['amp-activity-last-version-id'],

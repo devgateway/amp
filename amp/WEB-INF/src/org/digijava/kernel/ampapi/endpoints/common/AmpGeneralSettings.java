@@ -76,6 +76,9 @@ public class AmpGeneralSettings {
     
     @JsonProperty("team-validator")
     private Boolean teamValidator;
+
+    @JsonProperty(SettingsConstants.SHOW_ACTIVITY_WORKSPACES)
+    private Boolean showActivityWorkspaces;
     
     @JsonProperty("cross_team_validation")
     private Boolean crossTeamValidation;
@@ -410,5 +413,13 @@ public class AmpGeneralSettings {
 
     public void setCalendarIsFiscal(boolean calendarIsFiscal) {
         this.calendarIsFiscal = calendarIsFiscal;
+    }
+
+    public Boolean getShowActivityWorkspaces() {
+        return showActivityWorkspaces;
+    }
+
+    public void setShowActivityWorkspaces(Boolean showActivityWorkspaces) {
+        this.showActivityWorkspaces = showActivityWorkspaces;
     }
 }

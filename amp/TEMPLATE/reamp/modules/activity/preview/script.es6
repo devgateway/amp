@@ -25,16 +25,20 @@ function hashLinkScroll() {
     }
 }
 
-//startUp(store).then(() => {
-    ReactDOM.render(
-        <Provider store={store}>
-            <Router history={history} store={store} onUpdate={hashLinkScroll}>
-                <Route path="/" component={App}/>
-                <Route path="/activity/:activityId" component={App}/>
-            </Router>
-        </Provider>,
-        document.getElementById('activity-preview')
-    );
-//});
+function onAppInit(dispatch) {
+    return (nextState, replace, callback) => {
+        startUp(dispatch).then(() => callback());
+    };
+}
+
+ReactDOM.render(
+    <Provider store={store}>
+        <Router history={history} store={store} onUpdate={hashLinkScroll}>
+            <Route path="/" component={App}/>
+            <Route path="/activity/:activityId" component={App} onEnter={onAppInit(store.dispatch)}/>
+        </Router>
+    </Provider>,
+    document.getElementById('activity-preview')
+);
 
 new boilerplate.layout({});

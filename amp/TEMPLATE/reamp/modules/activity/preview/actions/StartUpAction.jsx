@@ -1,31 +1,24 @@
-import * as AMP from 'amp/architecture';
 import { loadTranslations } from 'amp/modules/translate';
-import { initialTranslations } from '../common/Translations';
+import { initialTranslations } from '../common/initialTranslations';
+import TranslationManager from '../utils/TranslationManager';
+import StartUpApi from "../api/StartUpApi";
 
 /**
  *
  */
 export const STATE_TRANSLATIONS_LOADED = 'STATE_TRANSLATIONS_LOADED';
+export const STATE_APP_INITIALIZED = 'STATE_APP_INITIALIZED';
 
-export function startUp(store) {
-    return new Promise((resolve, reject) => {
-        let toTranslate = new AMP.Model().toJS();
-        loadTranslations(initialTranslations).then(trns => {
-            toTranslate = trns;
-            store.dispatch({
-                type: STATE_TRANSLATIONS_LOADED,
-                actionData: {
-                    translations: toTranslate,
-                    translate: function(messageKey, params = {}){
-                        var message = toTranslate[messageKey];
-                        for(var key in params) {
-                            message = message.replace('__' + key + '__', params[key]);
-                        }
-                        return message;
-                    }
-                }
-            });
+export function startUp(dispatch) {
+    return Promise.all([StartUpApi.fetchSettings(),
+        loadTranslations(initialTranslations)]).then(([settings, trns]) => {
+        TranslationManager.initializeTranslations(trns);
+        return dispatch({
+            type: STATE_APP_INITIALIZED,
+            payload: {
+                translations: trns,
+                settings
+            }
         });
-        resolve();
     });
 }

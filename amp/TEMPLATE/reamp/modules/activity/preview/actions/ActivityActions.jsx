@@ -52,7 +52,7 @@ export function loadActivityForActivityPreview(activityId) {
             ActivityApi.fetchActivityInfo(activityId)]
         ).then(([activity, fieldsDef, fmTree, activityInfo]) => {
             _registerSettings(settings.language, settings['default-date-format'].toUpperCase());
-            ContactAction.loadHydratedContactsForActivity({activity: activity})(dispatch, ownProps);
+            ContactAction.loadHydratedContactsForActivity(activity)(dispatch, ownProps);
             ResourceAction.loadResourcesForActivity(activity)(dispatch, ownProps);
             loadWsInfoForActivity(activity, dispatch);
             //TODO find a better way to filter out non enabled paths

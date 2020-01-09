@@ -162,10 +162,12 @@ public final class ActivityInterchangeUtils {
 
         ActivityInformation activityInformation = new ActivityInformation(projectId);
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-        User activityWorkspaceTeamLead = project.getTeam().getTeamLead().getUser();
+        if (project.getTeam().getTeamLead() != null) {
+            User activityWorkspaceTeamLead = project.getTeam().getTeamLead().getUser();
+            activityInformation.setActivityWorkspaceLeadData(activityWorkspaceTeamLead.getFirstNames() + " "
+                    + activityWorkspaceTeamLead.getLastName() + " " + activityWorkspaceTeamLead.getEmail());
+        }
         activityInformation.setActivityWorkspace(project.getTeam());
-        activityInformation.setActivityWorkspaceLeadData(activityWorkspaceTeamLead.getFirstNames() + " "
-                + activityWorkspaceTeamLead.getLastName() + " " +  activityWorkspaceTeamLead.getEmail());
 
 
         if (tm != null) {

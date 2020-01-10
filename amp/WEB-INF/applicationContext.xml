@@ -100,7 +100,7 @@
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />
 	
 	<http pattern="/TEMPLATE/reamp/modules/ampoffline/download/**" security="none" />
-	<http pattern="/TEMPLATE/reamp/modules/activity-preview/**" security="none" />
+	<http pattern="/TEMPLATE/reamp/modules/activity/preview/**" security="none" />
 
     <http pattern="/TEMPLATE/ampTemplate/saikuui_reports/**" security="none" />
     

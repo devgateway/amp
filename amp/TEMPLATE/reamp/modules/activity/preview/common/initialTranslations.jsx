@@ -463,6 +463,7 @@ export const initialTranslations = {
     "failOnErrorMessage": "A critical error occurred during data update. Please collect logs, note your actions and contact the administrator.",
     "clickToPrint": "Click to print the activity",
     "amp.preview:server-errors-0001": "Internal server error",
+    "amp.preview:server-errors-0512":"Unauthorized",
     "View Workspaces": "View Workspaces",
     "workspaceWhereActivityIsDisplayed": "Workspace where activity is displayed",
     "workspaceType": "Workspace Type",
@@ -485,5 +486,6 @@ export const initialTranslations = {
     "awaiting_validation": "The activity is awaiting approval.",
     "editingOtherUserError": "Current activity is being edited by:",
     "editPermissionError": "You do not have permissions to edit this activity.",
-    "sameUserEditingError": "You may only edit one activity at a time."
+    "sameUserEditingError": "You may only edit one activity at a time.",
+    "exporttoWord":"Export to Word"
 }

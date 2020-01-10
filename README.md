@@ -1,4 +1,3 @@
-
 # Aid Management Program
 
 ## Supporting aid transparency and development effectiveness.
@@ -12,7 +11,25 @@ AMP helps governments and development partners gather, access, and monitor infor
 ## Architecture
 AMP is a web based java  application. [In this document you can find a detail explanation of AMP architecture](/docs/AMP_3_Technical_Documentation.pdf).
 We have built a comprehensive [installation guide](/docs/AMP_Installation_Guide.pdf). in order to properly assist in the installation of the software.
+### How-to
 
+#### Skip building node apps
+
+Add the following parameters for maven `-Dskip.npm -Dskip.gulp`.
+
+#### Run tests
+
+Unit tests:
+
+```
+mvn test
+```
+
+Integration tests:
+
+```
+mvn verify
+```
 ## Contact information
 
 [For any comments, please conctact us](mailto:info@developmentgateway.org "Development Gateway's Email")

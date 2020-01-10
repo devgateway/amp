@@ -20,14 +20,20 @@
 			<lang delimiter=";" type="postgres"><![CDATA[
 				
 				CREATE OR REPLACE VIEW v_performance_alert_level AS
-				  SELECT DISTINCT
+				  SELECT aav.amp_activity_id,
+				    v.name,
+				    COALESCE(v.level_code, -999999999) AS level_code
+				  FROM amp_activity_version aav
+				  LEFT JOIN (
+				    SELECT DISTINCT
                     apr.amp_activity_id,
                     acv.category_value AS name,
                     acv.id AS level_code
                   FROM amp_activity_performance_rule apr
                     JOIN amp_performance_rule pr ON pr.rule_id = apr.performance_rule_id
                     JOIN amp_category_value acv ON pr.level_category = acv.id
-
+				  ) v
+				  ON aav.amp_activity_id = v.amp_activity_id;
 			]]></lang>
 		</script>
 	</apply>

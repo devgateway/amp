@@ -1,12 +1,8 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Map;
-
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -23,14 +19,17 @@ public abstract class InputValidator {
      * Validates new field value configuration
      * @param importer or null if none existed
      * @param newFieldParent parent input JSON definition of the field
-     * @param oldFieldParent existing parent JSON definition of the field (can be null if not present)
      * @param fieldDescription description of the current field (type, required, edit rights, etc)
      * @param fieldPath full field path
-     * @param update true if this is an update request
      * @return true if chain validation passed
      */
     public abstract boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                                    Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath);
+            APIField fieldDescription, String fieldPath);
+    
+    public boolean isValid(ObjectImporter importer, Object currentObject, Map<String, Object> newFieldParent,
+                                    APIField fieldDescription, String fieldPath) {
+        return isValid(importer, newFieldParent, fieldDescription, fieldPath);
+    }
     
     /**
      * @return this validator specific Error message

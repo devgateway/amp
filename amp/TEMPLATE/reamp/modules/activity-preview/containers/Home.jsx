@@ -5,30 +5,30 @@ import * as commonListsActions from '../actions/CommonListsActions';
 require('../styles/main.less');
 
 /**
- *    
+ *
  */
-export default class App extends Component {
+class App extends Component {
     constructor( props, context ) {
         super( props, context );
         this.state = { currentActivity: null};
     }
 
-   
-    render() { 
-      
+
+    render() {
+
       return (
-            <div>             
+            <div>
                 <div className="title-bar">
                     <h2>{this.props.translations['amp.activity-preview:main-title']}</h2>
                 </div>
             </div>
-             
+
         );
     }
 }
 
-function mapStateToProps(state, ownProps) { 
-    return { 
+function mapStateToProps(state, ownProps) {
+    return {
         translations: state.startUp.translations,
         translate: state.startUp.translate
     }

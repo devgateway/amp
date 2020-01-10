@@ -20,6 +20,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs"%> 
 
 <jsp:include page="activityHistoryUtil.jsp" flush="true" />
+<jsp:include page="activityViewWorkspaces.jsp" flush="true" />
 <%@page import="java.math.BigDecimal"%>
 <%@ page import="org.digijava.module.aim.util.TeamUtil" %>
 <style type="text/css">
@@ -991,6 +992,14 @@ function collapseAll() {
 						<c:out value="${aimEditActivityForm.identification.crisNumber}"/>
 					</span>
 					<hr />
+			</module:display>
+
+			<module:display name="/Activity Form/Identification/IATI Identifier" parentModule="/Activity Form/Identification">
+				<digi:trn>IATI Identifier</digi:trn>:&nbsp;<br />
+				<span class="word_break bold">
+						<c:out value="${aimEditActivityForm.identification.iatiIdentifier}"/>
+					</span>
+				<hr />
 			</module:display>
 					
 			<module:display name="/Activity Form/Identification/Procurement System" parentModule="/Activity Form/Identification">
@@ -2596,7 +2605,6 @@ function collapseAll() {
 </module:display>
 
 <jsp:include page="previewActivityRegionalObservations.jsp"></jsp:include>
-
 <jsp:include page="previewActivityLineMinistryObservations.jsp"></jsp:include>
 
 <!-- RELATED ORGANIZATIONS SECTION -->

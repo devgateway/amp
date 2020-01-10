@@ -5,16 +5,14 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.PaginatedReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.PaginatedReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
-import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.ReportModelGenerator;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -41,14 +39,8 @@ public class PaginationTests extends ReportingTestCase {
             "SubNational no percentages", "TAC_activity_1", "TAC_activity_2", "Test MTEF directed",
             "third activity with agreements", "Unvalidated activity", "with weird currencies");
 
-    @Override
-    protected NiReportExecutor getNiExecutor(List<String> activityNames) {
-        return getOfflineExecutor(activityNames);
-    }
-
-    @BeforeClass
-    public static void setUp() {
-        // this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
+    public PaginationTests() {
+        inTransactionRule = null;
     }
 
     final ReportSpecification theFlatSpec = ReportSpecificationImpl.buildFor("initReport",
@@ -104,7 +96,7 @@ public class PaginationTests extends ReportingTestCase {
                   new PaginatedReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Region", "Cahul County", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000").withCounts(1, -1),
                   new PaginatedReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Region", "Chisinau County", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000").withCounts(1, -1),
                   new PaginatedReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Region", "Balti County, Transnistrian Region", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Commitments", "96,840,58", "Totals-Actual Disbursements", "50,000").withCounts(1, -1),
-                  new PaginatedReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000").withCounts(1, -1),
+                  new PaginatedReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Region", "", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000").withCounts(1, -1),
                   new PaginatedReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Region", "Transnistrian Region", "Funding-2014-Actual Commitments", "123,321", "Totals-Actual Commitments", "123,321").withCounts(1, -1),
                   new PaginatedReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Region", "", "Funding-2014-Actual Commitments", "100", "Totals-Actual Commitments", "100").withCounts(1, -1),
                   new PaginatedReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Region", "", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000").withCounts(1, -1),

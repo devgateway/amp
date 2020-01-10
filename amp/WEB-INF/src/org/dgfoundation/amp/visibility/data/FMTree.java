@@ -4,14 +4,14 @@
 package org.dgfoundation.amp.visibility.data;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsTree;
 
 /**
  * A simple representation of an FM section in a tree structure
@@ -72,9 +72,9 @@ public class FMTree {
     }   
     
     /**
-     * Transforms FM tree to a JSON
+     * Transforms FM tree to a FMSettingsTree
      * @param fullEnabledPaths if true, then each level will have at a minimum "__enabled" (true/false) status
-     * @return JSON tree
+     * @return Map<String, Object> tree
      * <pre>
      * "REPORTING": {
      *      "__enabled" : true, // omitted if fullEnabledPaths are requested (same below) 
@@ -89,20 +89,23 @@ public class FMTree {
      *  }
      * </pre>
      */
-    public JsonBean asJson(boolean fullEnabledPaths) {
-        JsonBean json = new JsonBean();
-        if (!fullEnabledPaths || this.enabled)
+    public FMSettingsTree asFmSettingsTree(boolean fullEnabledPaths) {
+        FMSettingsTree fmSettingsTree = new FMSettingsTree();
+        if (!fullEnabledPaths || this.enabled) {
             if (!fullEnabledPaths) {
-                json.set(EPConstants.FM_ENABLED, this.enabled);
+                fmSettingsTree.setEnabled(this.enabled);
             }
+            Map<String, FMSettingsTree> modules = new HashMap<>();
             for (Entry<String, FMTree> entry : entries.entrySet()) {
                 FMTree value = entry.getValue();
                 if (!fullEnabledPaths || value.enabled) {
-                    JsonBean children = value.asJson(fullEnabledPaths);
-                    json.set(entry.getKey(), children);
+                    modules.put(entry.getKey(), value.asFmSettingsTree(fullEnabledPaths));
                 }
             }
-        return json;
+            fmSettingsTree.setModules(modules);
+        }
+            
+        return fmSettingsTree;
     }
 
     public boolean isEnabled() {

@@ -17,7 +17,7 @@ import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.gpi.GpiFormParameters;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -35,7 +35,7 @@ public abstract class GPIReportOutputBuilder  {
     
     protected boolean isDonorAgency = true;
     
-    protected JsonBean originalFormParams;
+    protected GpiFormParameters originalFormParams;
     
     public GPIReportOutputBuilder() {
     };
@@ -48,12 +48,12 @@ public abstract class GPIReportOutputBuilder  {
         columns.put(col.originalColumnName, col);
     }
     
-    public void setOriginalFormParams(JsonBean originalFormParams) {
+    public void setOriginalFormParams(GpiFormParameters originalFormParams) {
         this.originalFormParams = originalFormParams;
         this.isDonorAgency = GPIReportUtils.isDonorAgency(originalFormParams);
     }
     
-    public JsonBean getOriginalFormParams() {
+    public GpiFormParameters getOriginalFormParams() {
         return originalFormParams;
     }
     
@@ -179,7 +179,7 @@ public abstract class GPIReportOutputBuilder  {
     protected boolean isOnBudget(ReportArea budgetArea) {
         String activityBudgetOnValue = CategoryConstants.ACTIVITY_BUDGET_ON.getValueKey();
         boolean match = budgetArea.getContents().entrySet().stream()
-                .anyMatch(e -> e.getKey().originalColumnName.equals(ColumnConstants.ON_OFF_TREASURY_BUDGET)
+                .anyMatch(e -> e.getKey().originalColumnName.equals(ColumnConstants.ACTIVITY_BUDGET)
                         && (String.valueOf(e.getValue().value)).equals(activityBudgetOnValue));
 
         return match;
@@ -190,8 +190,8 @@ public abstract class GPIReportOutputBuilder  {
     }
     
     /**
-     * @param cnt
-     * @param q6Cnt
+     * @param a
+     * @param b
      * @return
      */
     protected BigDecimal getPercentage(BigDecimal a, BigDecimal b) {

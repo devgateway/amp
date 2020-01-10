@@ -655,7 +655,7 @@ public class ContentTranslationUtil {
      */
     public static void saveFieldTranslations(final Long newId,
             final FieldTranslationPack ftp) {
-        PersistenceManager.getCurrentSession().doWork(
+        PersistenceManager.getSession().doWork(
             new org.hibernate.jdbc.Work() {
                 public void execute(Connection conn) throws SQLException {
                     Session newSession = null;

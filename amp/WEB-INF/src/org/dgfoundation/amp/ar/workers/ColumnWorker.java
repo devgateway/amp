@@ -11,8 +11,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import javax.servlet.http.HttpSession;
 
@@ -164,7 +164,7 @@ public abstract class ColumnWorker {
             String locale = TLSUtils.getEffectiveLangCode();
             
             ViewFetcher fetcher = DatabaseViewFetcher.getFetcherForView(queryView, queryCondition, locale, generator.getColumnCachers(), conn, "*");            
-            RsInfo rs = fetcher.fetch(generator.getFilter().getIndexedParams());
+            RsInfo rs = fetcher.fetch(new ArrayList<>());
             
             rsmd = rs.rs.getMetaData();
             

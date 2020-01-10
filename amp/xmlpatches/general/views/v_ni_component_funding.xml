@@ -31,7 +31,7 @@
 						 f.adjustment_type,
 						 f.transaction_date,
 						 f.transaction_amount,
-						 f.exchange_rate              AS fixed_exchange_rate,
+						 1::decimal                   AS fixed_exchange_rate,
 						 f.currency_id,
 						 c.type                       AS component_type_id,
 						 f.rep_organization_id        AS component_rep_org_id,

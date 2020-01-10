@@ -3,8 +3,10 @@
  */
 package org.digijava.module.contentrepository.helper;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -15,7 +17,8 @@ import org.hibernate.Session;
  */
 public abstract class ObjectReferringDocument {
     
-    @Interchangeable(fieldTitle = "UUID", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.UUID, importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String uuid;
 
     public ObjectReferringDocument() {

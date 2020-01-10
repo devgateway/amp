@@ -94,7 +94,7 @@ class Utils {
     }
     static getCalendarPrefix(settingsWidget, calendars, translatedFY){
         const fiscalYear = translatedFY ? translatedFY : Constants.FY;
-        const cal = calendars.filter( calendar => calendar.ampFiscalCalId == Utils.getCalendarId(settingsWidget) )[0];
+        const cal = calendars.filter( calendar => calendar.id == Utils.getCalendarId(settingsWidget) )[0];
         return cal.isFiscal ? fiscalYear + ' ' : '';
     }
 

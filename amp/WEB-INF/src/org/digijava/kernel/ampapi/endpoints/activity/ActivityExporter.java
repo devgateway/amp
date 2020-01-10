@@ -2,30 +2,39 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
  * Class used for exporting an activity as a JSON
- * 
+ *
  * @author Viorel Chihai
  */
 public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
 
-    private JsonBean filter;
+    private Map<String, Object> filter;
     private List<String> filteredFields = new ArrayList<>();
 
-    public ActivityExporter(JsonBean filter) {
+    public ActivityExporter(Map<String, Object> filter) {
+        this(new DefaultTranslatedFieldReader(), AmpFieldsEnumerator.getEnumerator().getActivityFields(), filter);
+    }
+
+    public ActivityExporter(TranslatedFieldReader translatedFieldReader, List<APIField> fields,
+            Map<String, Object> filter) {
+        super(translatedFieldReader, fields);
         this.filter = filter;
     }
 
     @Override
-    public JsonBean export(AmpActivityVersion object) {
-        JsonBean resultJson = new JsonBean();
+    public Map<String, Object> export(AmpActivityVersion object) {
+        ApiErrorResponse error = ActivityInterchangeUtils.validateFilterActivityFields(filter, getApiFields());
 
-        if (!InterchangeUtils.validateFilterActivityFields(filter, resultJson)) {
-            return resultJson;
+        if (error != null) {
+            return (Map) error.getErrors();
         }
 
         if (filter != null) {
@@ -35,19 +44,11 @@ public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
         return super.export(object);
     }
 
-    @Override
-    protected Class<?> getClassOf(Object object) {
-        if (object instanceof AmpActivityVersion) {
-            return object.getClass().getSuperclass();
-        } else {
-            return object.getClass();
-        }
-    }
-
     /**
      * @param filteredFieldPath the underscorified path to the field
      * @return boolean, if the field should be exported in the result Json
      */
+    @Override
     protected boolean isFiltered(String filteredFieldPath) {
         if (filteredFields.isEmpty()) {
             return true;

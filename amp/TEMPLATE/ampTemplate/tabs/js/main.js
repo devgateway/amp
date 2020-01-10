@@ -6,6 +6,7 @@ require.config({
 		underscore : 'lib/backbone.marionette/underscore',
 		jquery : 'lib/jquery_1.10.2',
 		jqueryui : 'lib/jquery-ui.min_1.11.0',
+		jqueryuii18n : '/TEMPLATE/ampTemplate/script/common/lib/jquery-ui-i18n.min',
 		marionette : 'lib/backbone.marionette/backbone.marionette.min',
 		text : 'lib/text_2.0.12',
 		localStorage : 'lib/Backbone.localStorage-master/backbone.localStorage-min',
@@ -35,6 +36,9 @@ require.config({
 		},
 		jqueryui : {
 			deps : ['jquery']
+		},
+		jqueryuii18n : {
+			deps : ['jquery','jqueryui']
 		},
 		documentModel : {
 			deps : [ 'backbone' ],
@@ -71,7 +75,7 @@ require.config({
 require([ 'jquery', 'text!views/html/regions.html','translationManager' ], function(jQuery, regionsTemplate, TranslationManager) {
 	
 	var data = {};
-	data["tabs.common:loadingTabs"] = "Loading tabs...";
+	data["tabs.common:loadingTabs"] = "Loading...";
 	TranslationManager.postJSON('/rest/translations/label-translations', data,
 			function(data) {
 				// Need to do this here because of some crazy FF errors.

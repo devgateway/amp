@@ -28,7 +28,8 @@ public class GisConstants {
     public static final String ADM1 = "adm-1";
     public static final String ADM2 = "adm-2";
     public static final String ADM3 = "adm-3";
-    
+    public static final String ADM4 = "adm-4";
+
     public static final String GIS_STRUCTURE_POLYGON = "Polygon";
     public static final String GIS_STRUCTURE_POINT = "Point";
     public static final String GIS_STRUCTURE_POLYLINE = "Polyline";

@@ -1,17 +1,14 @@
 package org.dgfoundation.amp.newreports;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.dgfoundation.amp.algo.timing.RunNode;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.helper.TeamMember;
 
 public class GeneratedReport {
@@ -62,12 +59,12 @@ public class GeneratedReport {
      */
     public final SortedMap<Long, SortedSet<ReportWarning>> reportWarnings;
     
-    public final JsonBean jsonTimings;
+    private final Map<String, Object> mapTimings;
     
     public final boolean isEmpty;
 
     private final boolean hasTotals;
-    
+
     public GeneratedReport(ReportSpecification spec, int generationTime, TeamMember requestingUser, 
             ReportArea reportContents, List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders, 
             List<List<HeaderCell>> generatedHeaders, RunNode timings, SortedMap<Long, SortedSet<ReportWarning>> reportWarnings, boolean isEmpty) {
@@ -78,7 +75,7 @@ public class GeneratedReport {
         this.rootHeaders = rootHeaders;
         this.leafHeaders = leafHeaders;
         this.timings = timings;
-        this.jsonTimings = timings == null ? null : timings.asJsonBean(); 
+        this.mapTimings = timings == null ? null : timings.asMap();
         this.generatedHeaders = generatedHeaders;
         this.reportWarnings = reportWarnings;
         this.isEmpty = isEmpty;
@@ -95,6 +92,9 @@ public class GeneratedReport {
         return hasTotals;
     }
     
+    public Map<String, Object> getMapTimings() {
+        return mapTimings;
+    }
 }
 
     

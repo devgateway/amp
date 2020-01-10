@@ -25,6 +25,7 @@ package org.digijava.kernel.mail;
 // System  packages
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
@@ -35,6 +36,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -464,7 +466,12 @@ public class DgEmailManager {
 
     public static void sendMail(Address[] to, String from, Address[] cc, Address[] bcc, String subject, String text, String charset, boolean asHtml,
                                 boolean log, boolean rtl) throws java.lang.Exception {
-        emailLogger.debug("Sending mail from " + from + " to " + (to != null ? to.length : 0)
+        String toEmails = "";
+        if (to != null) {
+            toEmails = "[" + String.join(", ",
+                    Arrays.asList(to).stream().map(Address::toString).collect(Collectors.toList())) + "]";
+        }
+        emailLogger.debug("Sending mail from " + from + " to " + (to != null ? toEmails : "none")
                 + " recipient(s). Subject: "
                 + subject + ". Encoding: " + charset + ". asHtml: " + asHtml);
         emailLogger.debug("Mail text:\n" + text);

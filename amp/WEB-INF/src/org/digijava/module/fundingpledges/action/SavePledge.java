@@ -11,13 +11,14 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.forms.ValidationError;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -71,13 +72,14 @@ public class SavePledge extends Action {
                 logger.error("exception while trying to save pledge", e);
             }
             // gone till here -> errors is not empty
-            JSONArray arr = new JSONArray();
-            String[] fields = new String[] {"errMsg"};
-            for(ValidationError err:errors)
-                arr.put(new JSONObject(err, fields));
-            String errs = arr.toString();
-            ARUtil.writeResponse(response, errs);
-            return null;
+        JsonNodeFactory nf = JsonNodeFactory.instance;
+        ArrayNode arr = nf.arrayNode();
+        for (ValidationError err : errors) {
+            arr.add(nf.objectNode().put("errMsg", err.errMsg));
+        }
+        String errs = new ObjectMapper().writeValueAsString(arr);
+        ARUtil.writeResponse(response, errs);
+        return null;
     }
     
     /**

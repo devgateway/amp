@@ -1,6 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author Octavian Ciubotaru

@@ -1,33 +1,29 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.sql.Connection;
+import java.math.BigInteger;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import clover.org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.common.values.providers.GenericPossibleValuesProvider;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpComponentType;
-import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.jdbc.Work;
 
 /**
  * @author Octavian Ciubotaru
  */
 public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
-    private static final String CACHE = "org.digijava.kernel.ampapi.endpoints.activity.AmpPossibleValuesDAO";
+    public static final String CACHE = "org.digijava.kernel.ampapi.endpoints.activity.AmpPossibleValuesDAO";
 
     @Override
     public List<Object[]> getCategoryValues(String discriminatorOption) {
@@ -74,18 +70,16 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
             String entityIdColumnName, String entityValueColumnName, String entityParentIdColumnName,
             final String conditionColumnName, final String idColumnName, Class<?> clazz) {
 
-        final List<Long> itemIds = new ArrayList<Long>();
-        PersistenceManager.getSession().doWork(new Work() {
-            public void execute(Connection conn) throws SQLException {
-                String allSectorsQuery = "SELECT " + idColumnName + " FROM " + configTableName + " WHERE "
-                        + conditionColumnName + "='" + configType + "'" + " ORDER BY " + idColumnName;
-                try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
-                    ResultSet rs = rsi.rs;
-                    while (rs.next()) {
-                        itemIds.add(rs.getLong(idColumnName));
-                    }
-                    rs.close();
+        final List<Long> itemIds = new ArrayList<>();
+        PersistenceManager.getSession().doWork(conn -> {
+            String allSectorsQuery = "SELECT " + idColumnName + " FROM " + configTableName + " WHERE "
+                    + conditionColumnName + "='" + configType + "'" + " ORDER BY " + idColumnName;
+            try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
+                ResultSet rs = rsi.rs;
+                while (rs.next()) {
+                    itemIds.add(rs.getLong(idColumnName));
                 }
+                rs.close();
             }
         });
 
@@ -101,6 +95,21 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
         return query(queryString);
     }
 
+    public boolean isSectorValid(String configType, Long id) {
+        return isValid("all_sectors_with_levels", "sector_config_name", configType, "amp_sector_id", id);
+    }
+
+    public boolean isThemeValid(String configType, Long id) {
+        return isValid("all_programs_with_levels", "program_setting_name", configType, "amp_theme_id", id);
+    }
+
+    private boolean isValid(String tableName, String configColName, String configType, String idColName, Long id) {
+        String query = "SELECT count(" + idColName + ") FROM " + tableName + " WHERE " + configColName + "='"
+                + configType + "' AND " + idColName + "=" + id;
+        BigInteger count = (BigInteger) PersistenceManager.getSession().createSQLQuery(query).uniqueResult();
+        return count.intValue() == 1;
+    }
+
     @Override
     public List<Object[]> getPossibleLocations() {
         String queryString = "SELECT loc.id, acvl.id, acvl.name, acvlParent.id, acvlParent.name, "
@@ -111,6 +120,10 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 + " LEFT JOIN acvl.parentCategoryValue AS parentCat"
                 + " ORDER BY loc.id";
         return query(queryString);
+    }
+
+    public boolean isLocationValid(Long id) {
+        return GenericPossibleValuesProvider.isAllowed(AmpLocation.class, id);
     }
 
     @Override
@@ -125,23 +138,13 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
     @SuppressWarnings("unchecked")
     private List<Object[]> query(String queryString) {
-        return (List<Object[]>) InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
-    }
-
-    @Override
-    public List<AmpComponentType> getComponentTypes() {
-        return ComponentsUtil.getAmpComponentTypes(true);
-    }
-    
-    @Override
-    public List<AmpContact> getContacts() {
-        return InterchangeUtils.getSessionWithPendingChanges()
-                .createCriteria(AmpContact.class)
+        return (List<Object[]>) InterchangeUtils.getSessionWithPendingChanges()
+                .createQuery(queryString)
                 .setCacheable(true)
                 .setCacheRegion(CACHE)
                 .list();
     }
-    
+
     @Override
     public List<AmpOrganisation> getOrganisations() {
         return InterchangeUtils.getSessionWithPendingChanges()
@@ -153,6 +156,12 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 .setCacheable(true)
                 .setCacheRegion(CACHE)
                 .list();
+    }
+
+    public boolean isOrganizationValid(Long id) {
+        AmpOrganisation o = (AmpOrganisation) InterchangeUtils.getSessionWithPendingChanges()
+                .get(AmpOrganisation.class, id);
+        return o != null && !Boolean.TRUE.equals(o.getDeleted());
     }
 
 }

@@ -67,7 +67,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 	    $.ajax({
 			  url: '/rest/gis/has-enabled-performance-rules'			 
 	      }).done(function(data) {	    	  
-	    	  self.performanceToggleModel.set('isPerformanceToggleAvailable', data.hasEnabledPerformanceRules);
+	    	  self.performanceToggleModel.set('isPerformanceToggleAvailable', data);
 		});		
 
 	    this.activities = new Activities([], {

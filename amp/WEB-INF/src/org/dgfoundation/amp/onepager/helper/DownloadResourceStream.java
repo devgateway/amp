@@ -53,7 +53,7 @@ public class DownloadResourceStream<T extends ObjectReferringDocument> implement
                 try {
                     fileData = file.getInputStream();
                 } catch (IOException e) {
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                 }
             }
             else{

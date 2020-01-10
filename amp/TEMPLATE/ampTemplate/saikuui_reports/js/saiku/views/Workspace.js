@@ -118,7 +118,7 @@ var Workspace = Backbone.View
 						.template(template)
 						(
 								{
-									cube_navigation : Saiku.session.sessionworkspace.cube_navigation
+                                    cube_navigation: {} //Saiku.session.sessionworkspace.cube_navigation
 								});
 			},
 
@@ -262,7 +262,8 @@ var Workspace = Backbone.View
 				//this.adjust();
 				//this.switch_view_state(this.viewState, true);
 			    window.currentFilter.loaded.done(function() {
-		            var auxFilters = self.query.get('filters');			            
+		            var auxFilters = self.query.get('filters');
+		            auxFilters.includeLocationChildren = self.query.get('includeLocationChildren');
 		            window.currentFilter.deserialize({filters: auxFilters}, {
 		            	silent : true
 		            });

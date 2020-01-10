@@ -495,6 +495,19 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 
         return treeSet;
     }
+
+    public static boolean isExitingAmpCategoryValue(String categoryKey, Long id, boolean onlyVisible) {
+        Integer count = (Integer) PersistenceManager.getSession().createQuery(
+                "select count(a) from " + AmpCategoryValue.class.getName()
+                + " a where a.id=:id "
+                + (onlyVisible ? "and (a.deleted=false or a.deleted is null) " : "") 
+                + "and a.ampCategoryClass.keyName=:keyName")
+            .setParameter("id", id)
+            .setParameter("keyName", categoryKey)
+            .uniqueResult();
+        return count == 1;
+    }
+
     /**
      * This is a wrapper function for getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered). 
      * The function is called with ordered = false
@@ -567,9 +580,8 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
             categoryValuesByKey.put(categoryKey, ampCategoryClass);
         }
 
-        List<AmpCategoryValue> ampCategoryValues = ampCategoryClass.getPossibleValues().stream()
-                .filter(cv -> cv != null)
-                .collect(Collectors.toList());
+        List<AmpCategoryValue> ampCategoryValues = ampCategoryClass.getPossibleValues();
+        ampCategoryValues.removeAll(Collections.singleton(null));
         
         PersistenceManager.getSession().evict(ampCategoryClass); // else funny things will happen if someone tries to delete()
         
@@ -909,7 +921,6 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     public static List<AmpCategoryValue> getAllAcceptableValuesForACVClass(String categoryKey, Collection<AmpCategoryValue> relatedCollection)
     {
         List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
-//      collectionByKey.addAll(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey));
         Collection<AmpCategoryValue> collectionPrefiltered = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey);
         for (AmpCategoryValue acv: collectionPrefiltered){
             if (acv!= null && acv.isVisible())
@@ -925,7 +936,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
         }
         return collectionByKey;
     }
-    
+
     /**
      * null-guards the result
      * @param id

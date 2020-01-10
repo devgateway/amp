@@ -8,18 +8,22 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * Simple Funding Amount
  */
 public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializable, Versionable, Cloneable {
+
     public enum FundingType {
         PROPOSED, //0
         REVISED; //1
@@ -38,20 +42,21 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
     };
     
     private Long ampFundingAmountId;
-    
-    @Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable = false)
+
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
     
     @Interchangeable(fieldTitle = "Amount", importable = true,
             fmPath = FMVisibility.PARENT_FM + "/" + CategoryConstants.PROJECT_AMOUNT_NAME,
-            required = FMVisibility.PARENT_FM + "/Required Validator for Cost Amount")
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = FMVisibility.PARENT_FM + "/Required Validator for Cost Amount"))
     @VersionableFieldSimple(fieldTitle = "Fun Amount")
     protected Double funAmount;
     
-    @Interchangeable(fieldTitle = "Currency Code", importable = true, fmPath = FMVisibility.PARENT_FM + "/Currency")
-    @PossibleValues(CurrencyPossibleValuesProvider.class)
-    @VersionableFieldSimple(fieldTitle = "Currency Code")
-    protected String currencyCode;
+    @Interchangeable(fieldTitle = "Currency", importable = true, fmPath = FMVisibility.PARENT_FM + "/Currency",
+            pickIdOnly = true, commonPV = CommonFieldsConstants.COMMON_CURRENCY)
+    @VersionableFieldSimple(fieldTitle = "Currency")
+    private AmpCurrency currency;
     
     @Interchangeable(fieldTitle = "Funding Date", importable = true, fmPath = FMVisibility.PARENT_FM + "/" + CategoryConstants.PROPOSE_PRJC_DATE_NAME)
     @VersionableFieldSimple(fieldTitle = "Fun Date")
@@ -101,18 +106,16 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
         this.funAmount = funAmount;
     }
 
-    /**
-     * @return the currencyCode
-     */
-    public String getCurrencyCode() {
-        return currencyCode;
+    public AmpCurrency getCurrency() {
+        return currency;
     }
 
-    /**
-     * @param currencyCode the currencyCode to set
-     */
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
+    public void setCurrency(AmpCurrency currency) {
+        this.currency = currency;
+    }
+
+    public String getCurrencyCode() {
+        return currency != null ? currency.getCurrencyCode() : null;
     }
 
     /**
@@ -147,7 +150,7 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
     public boolean equalsForVersioning(Object obj) {
         AmpFundingAmount aux = (AmpFundingAmount) obj;
         String original = getVersionableStr();
-        String copy = "" + aux.funAmount + "-" + aux.currencyCode + "-" + aux.funDate;
+        String copy = "" + aux.funAmount + "-" + aux.currency.getCurrencyCode() + "-" + aux.funDate;
         if (original.equals(copy)) {
             return true;
         }
@@ -155,7 +158,7 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
     }
     
     protected String getVersionableStr() {
-        return "" + this.funAmount + "-" + this.currencyCode + "-" + this.funDate;
+        return "" + this.funAmount + "-" + this.currency.getCurrencyCode() + "-" + this.funDate;
     }
 
     @Override
@@ -167,15 +170,19 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
     public Output getOutput() {
         Output out = new Output();
         out.setOutputs(new ArrayList<Output>());
-        if (funType != null)
+        if (funType != null) {
             out.getOutputs().add(new Output(null, new String[]{"Type"}, new Object[]{
                     StringUtils.capitalize(StringUtils.lowerCase(funType.name()))}));
-        if (funAmount != null)
+        }
+        if (funAmount != null) {
             out.getOutputs().add(new Output(null, new String[]{"Amount"}, new Object[]{funAmount}));
-        if (funDate != null)
+        }
+        if (funDate != null) {
             out.getOutputs().add(new Output(null, new String[]{"Date"}, new Object[]{funDate}));
-        if (currencyCode != null)
-            out.getOutputs().add(new Output(null, new String[]{"Currency Code"}, new Object[]{currencyCode}));
+        }
+        if (currency != null) {
+            out.getOutputs().add(new Output(null, new String[]{"Currency"}, new Object[]{currency}));
+        }
         return out;
     }
 
@@ -199,4 +206,5 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
             return -1;
         }
     }
+    
 }

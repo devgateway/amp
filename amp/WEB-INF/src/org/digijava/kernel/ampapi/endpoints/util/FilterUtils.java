@@ -23,12 +23,9 @@ import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.common.FiltersEndpoint;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersProcessor;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.TeamMember;
@@ -62,8 +59,9 @@ public class FilterUtils {
 
         mapSimpleColumn(FiltersConstants.ACTIVITY_ID, ColumnConstants.ACTIVITY_ID);
         mapSimpleColumn(FiltersConstants.APPROVAL_STATUS, ColumnConstants.APPROVAL_STATUS);
-        mapSimpleColumn(FiltersConstants.ARCHIVED, ColumnConstants.ARCHIVED);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY, ColumnConstants.BENEFICIARY_AGENCY);
+        mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_GROUP, ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_TYPE, ColumnConstants.BENEFICIARY_AGENCY_TYPE);
         mapSimpleColumn(FiltersConstants.COMMUNAL_SECTION, ColumnConstants.COMMUNAL_SECTION);
         mapSimpleColumn(FiltersConstants.COMPONENT_FUNDING_ORGANIZATION,
                 ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
@@ -72,7 +70,8 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.COMPUTED_YEAR, ColumnConstants.COMPUTED_YEAR);
         mapSimpleColumn(FiltersConstants.CONCESSIONALITY_LEVEL, ColumnConstants.CONCESSIONALITY_LEVEL);
         mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY);
-        mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_GROUPS, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_GROUP, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_TYPE, ColumnConstants.CONTRACTING_AGENCY_TYPE);
         mapSimpleColumn(FiltersConstants.COUNTRY, ColumnConstants.COUNTRY);
         mapSimpleColumn(FiltersConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.DISASTER_RESPONSE_MARKER);
         mapSimpleColumn(FiltersConstants.DISTRICT, ColumnConstants.DISTRICT);
@@ -80,15 +79,22 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.DONOR_GROUP, ColumnConstants.DONOR_GROUP);
         mapSimpleColumn(FiltersConstants.DONOR_TYPE, ColumnConstants.DONOR_TYPE);
         mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY, ColumnConstants.EXECUTING_AGENCY);
+        mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY_GROUP, ColumnConstants.EXECUTING_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY_TYPE, ColumnConstants.EXECUTING_AGENCY_TYPE);
         mapSimpleColumn(FiltersConstants.EXPENDITURE_CLASS, ColumnConstants.EXPENDITURE_CLASS);
         mapSimpleColumn(FiltersConstants.FINANCING_INSTRUMENT, ColumnConstants.FINANCING_INSTRUMENT);
         mapSimpleColumn(FiltersConstants.FUNDING_STATUS, ColumnConstants.FUNDING_STATUS);
         mapSimpleColumn(FiltersConstants.GOVERNMENT_APPROVAL_PROCEDURES, ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
         mapSimpleColumn(FiltersConstants.HUMANITARIAN_AID, ColumnConstants.HUMANITARIAN_AID);
         mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY, ColumnConstants.IMPLEMENTING_AGENCY);
+        mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY_GROUP, ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY_TYPE, ColumnConstants.IMPLEMENTING_AGENCY_TYPE);
         mapSimpleColumn(FiltersConstants.JOINT_CRITERIA, ColumnConstants.JOINT_CRITERIA);
         mapSimpleColumn(FiltersConstants.LOCATION, ColumnConstants.LOCATION);
+        mapSimpleColumn(FiltersConstants.RAW_LOCATION, ColumnConstants.RAW_LOCATION);
         mapSimpleColumn(FiltersConstants.MODE_OF_PAYMENT, ColumnConstants.MODE_OF_PAYMENT);
+        mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0,
+                ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
@@ -97,20 +103,91 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8);
-        mapSimpleColumn(FiltersConstants.ON_OFF_TREASURY_BUDGET, ColumnConstants.ON_OFF_TREASURY_BUDGET);
+        mapSimpleColumn(FiltersConstants.ACTIVITY_BUDGET, ColumnConstants.ACTIVITY_BUDGET);
         mapSimpleColumn(FiltersConstants.PERFORMANCE_ALERT_LEVEL, ColumnConstants.PERFORMANCE_ALERT_LEVEL);
         mapSimpleColumn(FiltersConstants.PERFORMANCE_ALERT_TYPE, ColumnConstants.PERFORMANCE_ALERT_TYPE);
         mapSimpleColumn(FiltersConstants.PLEDGES_AID_MODALITY, ColumnConstants.PLEDGES_AID_MODALITY);
+        mapSimpleColumn(FiltersConstants.PLEDGES_COUNTRIES, ColumnConstants.PLEDGES_COUNTRIES);
+        mapDateColumn(FiltersConstants.PLEDGES_DETAIL_START_DATE, ColumnConstants.PLEDGES_DETAIL_START_DATE);
+        mapDateColumn(FiltersConstants.PLEDGES_DETAIL_END_DATE, ColumnConstants.PLEDGES_DETAIL_END_DATE);
+        mapSimpleColumn(FiltersConstants.PLEDGES_DISTRICTS, ColumnConstants.PLEDGES_DISTRICTS);
         mapSimpleColumn(FiltersConstants.PLEDGES_DONOR_GROUP, ColumnConstants.PLEDGES_DONOR_GROUP);
-        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
+        mapSimpleColumn(FiltersConstants.PLEDGES_DONOR_TYPE, ColumnConstants.PLEDGES_DONOR_TYPE);
+        
+        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES,
+                ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
+        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0,
+                ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1,
+                ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1);
+        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2,
+                ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2);
+        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3,
+                ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3);
+        
         mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS, ColumnConstants.PLEDGES_PROGRAMS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS_LEVEL_0, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS_LEVEL_1, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_1);
+        mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS_LEVEL_2, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_2);
+        mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS_LEVEL_3, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_3);
+        
         mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
-        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_SECTORS, ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_0,
+                ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_1,
+                ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_1);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2,
+                ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3,
+                ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3);
+        
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_0,
+                ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_1,
+                ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_1);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2,
+                ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_3,
+                ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_3);
+        
         mapSimpleColumn(FiltersConstants.PLEDGES_SECTORS, ColumnConstants.PLEDGES_SECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECTORS_SUB_SECTORS, ColumnConstants.PLEDGES_SECTORS_SUBSECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECTORS_SUB_SUB_SECTORS,
+                ColumnConstants.PLEDGES_SECTORS_SUBSUBSECTORS);
+        
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_SECTORS, ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_SECTORS_SUB_SECTORS,
+                ColumnConstants.PLEDGES_SECONDARY_SUBSECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_SECTORS_SUB_SUB_SECTORS,
+                ColumnConstants.PLEDGES_SECONDARY_SUBSUBSECTORS);
+        
         mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS, ColumnConstants.PLEDGES_TERTIARY_SECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS_SUB_SECTORS,
+                ColumnConstants.PLEDGES_TERTIARY_SUBSECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS_SUB_SUB_SECTORS,
+                ColumnConstants.PLEDGES_TERTIARY_SUBSUBSECTORS);
+        
         mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SECTORS, ColumnConstants.PLEDGES_QUATERNARY_SECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SECTORS_SUB_SECTORS,
+                ColumnConstants.PLEDGES_QUATERNARY_SUBSECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SECTORS_SUB_SUB_SECTORS,
+                ColumnConstants.PLEDGES_QUATERNARY_SUBSUBSECTORS);
+        
         mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SECTORS, ColumnConstants.PLEDGES_QUINARY_SECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SECTORS_SUB_SECTORS,
+                ColumnConstants.PLEDGES_QUINARY_SUBSECTORS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SECTORS_SUB_SUB_SECTORS,
+                ColumnConstants.PLEDGES_QUINARY_SUBSUBSECTORS);
+        
+        mapSimpleColumn(FiltersConstants.PLEDGES_REGIONS, ColumnConstants.PLEDGES_REGIONS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_STATUS, ColumnConstants.PLEDGE_STATUS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
+        mapSimpleColumn(FiltersConstants.PLEDGES_ZONES, ColumnConstants.PLEDGES_ZONES);
+        mapSimpleColumn(FiltersConstants.PLEDGES_COMMUNAL_SECTION, ColumnConstants.PLEDGES_COMMUNAL_SECTION);
         mapSimpleColumn(FiltersConstants.PLEDGES_TITLES, ColumnConstants.PLEDGES_TITLES);
+    
+        mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_0, ColumnConstants.PRIMARY_PROGRAM_LEVEL_0);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_1, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_2, ColumnConstants.PRIMARY_PROGRAM_LEVEL_2);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_3, ColumnConstants.PRIMARY_PROGRAM_LEVEL_3);
@@ -126,6 +203,10 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PROJECT_IMPLEMENTING_UNIT, ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
         mapSimpleColumn(FiltersConstants.REGION, ColumnConstants.REGION);
         mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
+        mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION_GROUP,
+                ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
+        mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION_TYPE, ColumnConstants.RESPONSIBLE_ORGANIZATION_TYPE);
+        mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_0, ColumnConstants.SECONDARY_PROGRAM_LEVEL_0);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_1, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_2, ColumnConstants.SECONDARY_PROGRAM_LEVEL_2);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_3, ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
@@ -140,6 +221,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.SECTOR_TAG, ColumnConstants.SECTOR_TAG);
         mapSimpleColumn(FiltersConstants.STATUS, ColumnConstants.STATUS);
         mapSimpleColumn(FiltersConstants.TEAM, ColumnConstants.TEAM);
+        mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_0, ColumnConstants.TERTIARY_PROGRAM_LEVEL_0);
         mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_1, ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_2, ColumnConstants.TERTIARY_PROGRAM_LEVEL_2);
         mapSimpleColumn(FiltersConstants.TERTIARY_PROGRAM_LEVEL_3, ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
@@ -176,6 +258,10 @@ public class FilterUtils {
     public String idFromColumnName(String columnName) {
         return columnNameToId.get(columnName);
     }
+    
+    public String simpleColumnNameFromFilterId(String filterId) {
+        return idToSimpleColumn.get(filterId);
+    }
 
     private static AmpReportFilters getApiDateFilters(Map<String, Object> filter, AmpReportFilters filterRules) {
         for (Entry<String, String> entry : INSTANCE.idToDateColumn.entrySet()) {
@@ -205,7 +291,7 @@ public class FilterUtils {
             String end = denull(String.valueOf(date.get("end")));
             
             if (start != null || end != null) {
-                SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
+                SimpleDateFormat sdf = new SimpleDateFormat(FiltersConstants.DATE_FORMAT);
                 Date startDate = start == null ? null : sdf.parse(start);
                 Date endDate = end == null ? null : sdf.parse(end);
                 if (dateColumn != null) {
@@ -267,12 +353,7 @@ public class FilterUtils {
         List<String> s = new ArrayList<String>();
         for (Object obj : theArray) {
             if (obj != null) {
-                if(FiltersEndpoint.ANY_BOOLEAN.equals(obj.toString())) {
-                    s.add(FilterRule.FALSE_VALUE);
-                    s.add(FilterRule.TRUE_VALUE);
-                } else {
-                    s.add(obj.toString());
-                }
+                s.add(obj.toString());
             }
         }
         return s;
@@ -387,27 +468,18 @@ public class FilterUtils {
         return "";
     }
     
-    /**
-     * 
-     * @param JsonBean 
-     * @param value
-     * @return
-     */
-    public static String getSettingbyName(JsonBean config, String value){
-        Map<String, Object> settings = config == null ? null : (Map<String, Object>) config.get(EPConstants.SETTINGS);
-        String retval = settings == null ? null : (String) settings.get(value);
-        return retval;
+    public static String getSettingbyName(Map<String, Object> settings, String value) {
+        return settings == null ? null : (String) settings.get(value);
     }
-    
+
     /**
      * AMP-26444 When switching to ETH-CALENDAR or to GREG-CALENDAR with offsets (m, d), the selected year for
-     * date should be updated. 
+     * date should be updated.
      * We have to update explicitly the dates. E.g.: If in GPI
      * was selected 2009 in ETH-Calendar, we have to update the date
      * filter in Gregorian CAL 2009: "01/01/2009 to 31/12/2009" in ETH Calendar
      * equals to "11/09/2016 to 10/09/2017" in GREG
-     * 
-     * @param formParams
+     *
      * @param spec
      */
     public static void updateAllDateFilters(ReportSpecificationImpl spec) {
@@ -415,17 +487,17 @@ public class FilterUtils {
 
         CalendarConverter calendarConverter = (spec.getSettings() != null && spec.getSettings().getCalendar() != null)
                 ? spec.getSettings().getCalendar() : AmpARFilter.getDefaultCalendar();
-                
+
         boolean shouldFilterDatesToBeConverted = false;
-        if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
+        if (calendarConverter instanceof AmpFiscalCalendar) {
             AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
-            shouldFilterDatesToBeConverted = !calendar.getBaseCal().equals(BaseCalendar.BASE_GREGORIAN.getValue()) 
+            shouldFilterDatesToBeConverted = !calendar.getBaseCal().equals(BaseCalendar.BASE_GREGORIAN.getValue())
                     || calendar.getStartMonthNum() != 1 || calendar.getStartDayNum() != 1;
         }
-        
+
         if (shouldFilterDatesToBeConverted) {
             AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
-            
+
             // update all date filter columns
             if (filters.getDateFilterRules() != null && !filters.getDateFilterRules().isEmpty()) {
                 filters.getDateFilterRules().entrySet().forEach(entry -> {
@@ -436,14 +508,14 @@ public class FilterUtils {
                     }
                 });
             }
-            
+
             // update date filter
             Optional<Entry<ReportElement, FilterRule>> dateRuleEntry = spec.getFilters()
                     .getFilterRules().entrySet().stream()
                     .filter(entry -> entry.getKey().type.equals(ElementType.DATE))
                     .filter(entry -> entry.getKey().entity == null)
                     .findAny();
-            
+
             if (dateRuleEntry.isPresent() && dateRuleEntry.get().getValue() != null) {
                 FilterRule dateFilterRule = dateRuleEntry.get().getValue();
                 FilterRule convertedFilterRule = convertDateFilterRule(calendar, dateFilterRule);
@@ -451,7 +523,7 @@ public class FilterUtils {
             }
         }
     }
-    
+
     /**
      * Get year from date
      * @param date
@@ -460,18 +532,16 @@ public class FilterUtils {
     public static int getYearFromDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        
+
         return calendar.get(Calendar.YEAR);
     }
-    
+
     /**
      * @param sourceCalendar
      * @param gregFilterRule
      * @return
      */
     private static FilterRule convertDateFilterRule(AmpFiscalCalendar sourceCalendar, FilterRule gregFilterRule) {
-        FilterRule ethFilterRule = null;
-
         Date gregStart = gregFilterRule.min == null ? null : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.min);
         Date gregEnd = gregFilterRule.max == null ? null : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.max);
 
@@ -479,14 +549,12 @@ public class FilterUtils {
         Date end = FiscalCalendarUtil.toGregorianDate(gregEnd, sourceCalendar);
 
         try {
-            ethFilterRule = DateFilterUtils.getDatesRangeFilterRule(ElementType.DATE,
+            return DateFilterUtils.getDatesRangeFilterRule(ElementType.DATE,
                     DateTimeUtil.toJulianDayNumber(start), DateTimeUtil.toJulianDayNumber(end),
                     DateTimeUtil.formatDateOrNull(start), DateTimeUtil.formatDateOrNull(end), false);
         } catch (AmpApiException e) {
             throw new RuntimeException(e);
         }
-
-        return ethFilterRule;
     }
 
     /**
@@ -509,7 +577,7 @@ public class FilterUtils {
                 }
                 filterRules.addDateRangeFilterRule(cal.getTime(), currentCal.getTime());
             } catch (AmpApiException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
 
             }
         }

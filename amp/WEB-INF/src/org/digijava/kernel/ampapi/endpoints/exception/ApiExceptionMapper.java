@@ -13,8 +13,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
 
 /**
  * Builds the generic response with error code 500 for all unhandled exceptions
@@ -24,8 +25,6 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
 
     private static final Logger logger = Logger.getLogger(ApiExceptionMapper.class);
     private static final int MAX_EXCEPTION_NESTED = 2;
-    public static final ApiErrorMessage INTERNAL_ERROR = new ApiErrorMessage(ApiError.GENERIC_UNHANDLED_ERROR_CODE, 
-            ApiErrorResponse.INTERNAL_ERROR);
     
     @Context
     private HttpServletRequest httpRequest;
@@ -38,9 +37,18 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
 
         String accept = httpRequest.getHeader(HttpHeaders.ACCEPT);
         String contentType = httpRequest.getHeader(HttpHeaders.CONTENT_TYPE);
+
+        String mediaType = null;
+        // accept can list many mime types, select first one we can respond with
+        if (accept != null) {
+            if (accept.contains(MediaType.APPLICATION_JSON)) {
+                mediaType = MediaType.APPLICATION_JSON;
+            } else if (accept.contains(MediaType.APPLICATION_XML)) {
+                mediaType = MediaType.APPLICATION_XML;
+            }
+        }
         
-        String mediaType = accept;
-        if (accept == null || accept.equals(MediaType.WILDCARD)) {
+        if (mediaType == null) {
             if (contentType != null && contentType.equals(MediaType.APPLICATION_XML)) {
                 mediaType = MediaType.APPLICATION_XML;
             } else {
@@ -53,13 +61,14 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
         if (e instanceof ApiRuntimeException) {
             ApiRuntimeException apiException = (ApiRuntimeException) e;
 
-            return ApiErrorResponse.buildGenericError(apiException.getResponseStatus(), apiException.getError(),
+            return ApiErrorResponseService.buildGenericError(apiException.getResponseStatus(), apiException.getError(),
                     mediaType);
         }
 
         ApiErrorMessage apiErrorMessage = getApiErrorMessageFromException(e);
        
-        return ApiErrorResponse.buildGenericError(Response.Status.INTERNAL_SERVER_ERROR, apiErrorMessage, mediaType);
+        return ApiErrorResponseService.buildGenericError(
+                Response.Status.INTERNAL_SERVER_ERROR, apiErrorMessage, mediaType);
     }
     
     /**
@@ -69,13 +78,13 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
      */
     public ApiErrorMessage getApiErrorMessageFromException(Throwable e) {
         String message = extractMessageFromException(e);
-        return INTERNAL_ERROR.withDetails(message);
+        return GenericErrors.INTERNAL_ERROR.withDetails(message);
     }
 
     private String extractMessageFromException(Throwable e) {
         StringBuilder accumulatedMessage = new StringBuilder(e.getMessage() == null ? "" : e.getMessage());
         String message = extractMessageFromException(e, 0, accumulatedMessage);
-        message = StringUtils.isBlank(message) ? ApiErrorResponse.UNKNOWN_ERROR : message;
+        message = StringUtils.isBlank(message) ? GenericErrors.UNKNOWN_ERROR.description : message;
         
         return message;
     }

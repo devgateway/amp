@@ -145,7 +145,7 @@ public class ColorRampUtil {
         return colorRamps[index];
     }
 
-    public static String[] getColorRamp(Integer index, Long classes) {
+    public static String[] getColorRamp(int index, Long classes) {
         if (index >= colorRamps.length || (classes - 1) > colorRamps[index].length) {
             return DEFAULT_RAMP;
         }
@@ -162,9 +162,8 @@ public class ColorRampUtil {
         return colors;
     }
 
-    public static long getColorId(String color) {
-        long colorId = 0;
-        String[][] colors = new String [colorRamps.length][8];
+    public static int getColorId(String color) {
+        int colorId = 0;
         for (int i = 0; i < colorRamps.length; i++) {
             if (color.equals(colorRamps[i][IndicatorEPConstants.COLOR_RAMP_INDEX][0])) {
                 colorId = i;

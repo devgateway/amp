@@ -14,8 +14,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 	<!-- Jquery Base Library -->
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-
+<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
+<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery-ui.min.js" type="text/javascript"></script>
+<script src="/TEMPLATE/ampTemplate/script/common/lib/jquery-ui-i18n.min.js" type="text/javascript"></script>
 <c:set var="maxFractionDigits"><%= org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits() %></c:set>
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
@@ -663,7 +664,7 @@ function validateFormat(){
 	window.onload=initScripts;
 
 
-	var msg0="<digi:trn key="rep:pop:pleasewait..." jsFriendly='true'> Please wait...</digi:trn>";
+	var msg0="<digi:trn key="rep:pop:pleasewait..." jsFriendly='true'>Loading...</digi:trn>";
 	
 	var msg1="<digi:trn key="rep:pop:freezeReportHeading" jsFriendly='true'>Freeze Report Heading</digi:trn>";
 	

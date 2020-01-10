@@ -3,6 +3,7 @@ package org.digijava.module.aim.util;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -11,7 +12,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
-import org.h2.util.StringUtils;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public class ExportUtil {
         String result = "[" + internal.getOrganisation().getName() + "] ";
         if (FeaturesUtil.isVisibleModule("/Activity Form/Activity Internal IDs/Internal IDs/internalId")) {
             result += "\t ";
-            if (!StringUtils.isNullOrEmpty(internal.getInternalId())) {
+            if (StringUtils.isNotEmpty(internal.getInternalId())) {
                 result += internal.getInternalId();
             }
         }
@@ -91,7 +91,9 @@ public class ExportUtil {
 
             telephones = contactProperties.stream().filter(z -> Constants.CONTACT_PROPERTY_NAME_PHONE.equals(z.getName())).limit(2).map(entry -> entry.getValue()).collect(Collectors.joining(", "));
         }
-        output += contact.getName() + " " + contact.getLastname() + (clover.org.apache.commons.lang.StringUtils.isNotEmpty(emails) ? " - " + emails : "") + (clover.org.apache.commons.lang.StringUtils.isNotEmpty(telephones) ? " - " + telephones : "") + ";\n";
+        output += contact.getName() + " " + contact.getLastname()
+                + (StringUtils.isNotEmpty(emails) ? " - " + emails : "")
+                + (StringUtils.isNotEmpty(telephones) ? " - " + telephones : "") + ";\n";
         return output;
     }
 }

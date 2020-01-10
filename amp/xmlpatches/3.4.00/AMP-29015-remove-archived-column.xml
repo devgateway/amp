@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-29015</jira>
+    <keyword>remove archived column</keyword>
+    <author>vchihai</author>
+    <description>Remove Archived column</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+
+                DROP VIEW IF EXISTS v_archived;
+
+				DELETE FROM amp_report_column WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Archived');
+
+				UPDATE amp_report_column SET order_id = v.new_order_id
+                FROM (
+                    SELECT amp_report_id, columnid, order_id, row_number()
+                    OVER (partition by amp_report_id order by order_id, columnid) new_order_id
+                    FROM amp_report_column
+                ) v
+                WHERE amp_report_column.amp_report_id = v.amp_report_id
+                AND amp_report_column.columnid = v.columnid;
+
+				DELETE FROM amp_report_hierarchy WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Archived');
+
+                UPDATE amp_report_hierarchy SET levelid = v.new_levelid
+                FROM (
+                    SELECT amp_report_id, columnid, levelid, row_number()
+                    OVER (partition by amp_report_id order by levelid, columnid) new_levelid
+                    FROM amp_report_hierarchy
+                ) v
+                WHERE amp_report_hierarchy.amp_report_id = v.amp_report_id
+                AND amp_report_hierarchy.columnid = v.columnid;
+
+				DELETE FROM amp_columns WHERE columnname = 'Archived';
+
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

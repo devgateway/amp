@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-28569</jira>
+    <keyword>menu fm fk</keyword>
+    <author>Octavian Ciubotaru</author>
+    <description>
+        Must execute before AMP-25234. Create missing FK. Remove unused visibility rules.
+        Those visibility rules prevented removal of some FM entries.
+    </description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+                ALTER TABLE amp_menu_entry_view
+                    ADD CONSTRAINT amp_menu_entry_view_amp_visibility_rule_id_fk
+                    FOREIGN KEY (rule_id) REFERENCES amp_visibility_rule (id);
+            ]]></lang>
+        </script>
+        <script>
+            <lang delimiter=";" type="bsh"><![CDATA[
+                org.digijava.kernel.xmlpatches.MenuRemover.removeUnusedVisibilityRules();
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

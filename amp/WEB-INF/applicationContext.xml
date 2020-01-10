@@ -14,8 +14,6 @@
 
 	<beans:import resource="classpath:/applicationContext.xml" />
 
-	<beans:import resource="saiku/context.xml" />
-
 	<!-- by default allow displaying of the flag -->
 	<http pattern="/aim/default/displayFlag.do**" security="none" />
 
@@ -102,10 +100,8 @@
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />
 	
 	<http pattern="/TEMPLATE/reamp/modules/ampoffline/download/**" security="none" />
-	<http pattern="/TEMPLATE/reamp/modules/activity-preview/**" security="none" />
+	<http pattern="/TEMPLATE/reamp/modules/activity/preview/**" security="none" />
 
-	<http pattern="/saiku/rest/**" security="none" />
-    <http pattern="/TEMPLATE/ampTemplate/saikuui/**" security="none" />
     <http pattern="/TEMPLATE/ampTemplate/saikuui_reports/**" security="none" />
     
   

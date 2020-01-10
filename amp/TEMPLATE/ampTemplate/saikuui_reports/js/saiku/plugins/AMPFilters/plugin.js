@@ -1,4 +1,14 @@
-window.currentFilter = new ampFilter({el:$('#filter-popup'), draggable:true, caller: 'REPORTS'});
+var reportType = Saiku.originalReportMetadata.reportMetadata.reportSpec.reportType;
+var reportTypeCode = 'D';
+if (reportType === 5) {
+    reportTypeCode = 'P';
+}
+window.currentFilter = new ampFilter({
+    el: $('#filter-popup'),
+    draggable: true,
+    caller: 'REPORTS',
+    reportType: reportTypeCode
+});
 
 var AMPFilters = Backbone.View.extend({
 			events : {
@@ -35,8 +45,8 @@ var AMPFilters = Backbone.View.extend({
 					$('#filter-popup').hide();
 				});
 				Saiku.events.listenTo(window.currentFilter, 'apply', function(data) {
-					var filterObject = window.currentFilter.serialize();					
-					self.workspace.query.run_query(filterObject.filters || {}, null);
+					var filterObject = window.currentFilter.serialize();
+					self.workspace.query.run_query(filterObject || {}, null);
 					self.filters_button.removeClass('on');
 					$('#filter-popup').hide();
 				});
@@ -48,8 +58,10 @@ var AMPFilters = Backbone.View.extend({
 				Saiku.logger.log("AMPFilters.parseSavedFilters");
 		        if (window.currentFilter !== undefined) {
 		            window.currentFilter.loaded.done(function() {
-			            var auxFilters = obj.workspace.query.get('filters');			            
-			            window.currentFilter.deserialize({filters: auxFilters}, {
+			            var auxFilters = {filters: obj.workspace.query.get('filters')};;
+			            auxFilters.includeLocationChildren = obj.workspace.query.get('includeLocationChildren');
+						auxFilters['include-location-children'] = obj.workspace.query.get('includeLocationChildren');
+			            window.currentFilter.deserialize(auxFilters, {
 			            	silent : true
 			            });
 		            });		            
@@ -124,7 +136,7 @@ var AMPFilters = Backbone.View.extend({
 
 		});
 
-Saiku.events.bind('render:end', function(session) {
+Saiku.events.bind('session:new', function(session) {
 	function new_workspace(args) {
 		Saiku.logger.log("AMPFilters.new_workspace");
 		if (typeof args.workspace.amp_filters == "undefined") {

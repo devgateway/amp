@@ -128,9 +128,17 @@ module.exports = ChartModel.extend({
 		
 		// Process params from heat-map/configs, in that EP we have defined each heatmap.
 		var configs = this.get('heatmap_config').models[0];
-		var thisChart = _.find(configs.get('charts'), function(item) {return item.name === self.get('name')});
-		var xColumn = self.get('xAxisColumn') !== '' ? self.get('xAxisColumn') : configs.get('columns')[thisChart.xColumns[0]].origName; // First column is default.
-		var yColumn = configs.get('columns')[thisChart.yColumns[0]].origName; // First column is default.
+		var thisChart = _.find(configs.get('charts'), function (item) {
+			return item.name === self.get('name');
+		});
+		var xColumn = self.get('xAxisColumn') !== '' ?
+			self.get('xAxisColumn') :
+			_.find(configs.get('columns'), function (item, i) {
+				return item.origName === thisChart.xColumns[0];
+			}).origName; // First column is default.
+		var yColumn = _.find(configs.get('columns'), function (item, i) {
+			return item.origName === thisChart.yColumns[0];
+		}).origName; // First column is default.
 		
 		// Check if we need to switch axis.
 		if (self.get('swapAxes') === true) {

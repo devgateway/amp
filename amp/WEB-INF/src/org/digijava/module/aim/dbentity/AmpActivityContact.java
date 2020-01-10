@@ -4,21 +4,32 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
+import org.digijava.kernel.ampapi.endpoints.contact.values.providers.ContactPossibleValuesProvider;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
 
 @TranslatableClass (displayName="ActivityContact")
 public class AmpActivityContact implements Versionable, Comparable, Serializable, Cloneable {
-    
+
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long id;
-    
-    @Interchangeable(fieldTitle="Activity", pickIdOnly=true)
+
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
-    
-    @Interchangeable(fieldTitle="Contact", pickIdOnly=true, importable=true, uniqueConstraint=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+
+    @PossibleValues(ContactPossibleValuesProvider.class)
+    @Interchangeable(fieldTitle = "Contact", pickIdOnly = true, importable = true, uniqueConstraint = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
+            commonPV = CommonFieldsConstants.COMMON_CONTACT)
     private AmpContact contact;
     
     @Interchangeable(fieldTitle = ActivityFieldsConstants.PRIMARY_CONTACT, importable = true)
@@ -123,4 +134,5 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
 }

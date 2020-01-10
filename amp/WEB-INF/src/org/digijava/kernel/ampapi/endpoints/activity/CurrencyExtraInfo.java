@@ -13,4 +13,8 @@ public class CurrencyExtraInfo {
     public CurrencyExtraInfo(Boolean active) {
         this.active = active;
     }
+    
+    public Boolean getActive() {
+        return active;
+    }
 }

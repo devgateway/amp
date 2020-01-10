@@ -605,6 +605,16 @@ body {background:none;}
 									</tr>
 									</module:display>
 
+								    <module:display name="/Activity Form/Identification/IATI Identifier" parentModule="/Activity Form/Identification">
+									    <tr>
+										   <td class="field_name" >
+											   <b><digi:trn key="aim:iatiIdentifier">IATI Identifier</digi:trn></b>
+										   </td>
+										   <td bgcolor="#ffffff">
+											   <c:out value="${aimEditActivityForm.identification.iatiIdentifier}"/>&nbsp;</td>
+									    </tr>
+								    </module:display>
+
 									<module:display name="/Activity Form/Identification/Procurement System" parentModule="/Activity Form/Identification">
 									<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">
 									<tr>
@@ -745,7 +755,7 @@ body {background:none;}
 										</b>
 										</td>
 										<td bgcolor="#ffffff">
-										<field:display name="On/Off/Treasury Budget" feature="Budget">
+										<field:display name="Activity Budget" feature="Budget">
 											<c:choose>
 												<c:when test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
 												<digi:trn>Activity is On Budget</digi:trn>

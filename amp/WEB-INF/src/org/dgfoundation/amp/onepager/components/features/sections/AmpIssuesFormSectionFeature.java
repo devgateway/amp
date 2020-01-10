@@ -13,11 +13,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpIssueTreePanel;
@@ -31,9 +30,11 @@ import org.digijava.module.aim.dbentity.AmpMeasure;
  * @since Oct 26, 2010
  */
 public class AmpIssuesFormSectionFeature extends
-        AmpFormSectionFeaturePanel {
+        AmpFormSectionFeaturePanel implements AmpRequiredComponentContainer {
 
     private static final long serialVersionUID = -6654390083784446344L;
+
+    private List<FormComponent<?>> requiredFormComponents = new ArrayList<>();
 
     public AmpIssuesFormSectionFeature(String id, String fmName,
             final IModel<AmpActivityVersion> am) throws Exception {
@@ -60,7 +61,8 @@ public class AmpIssuesFormSectionFeature extends
             protected void onPopulateItem(
                     org.dgfoundation.amp.onepager.components.ListItem<AmpIssues> item) {
                 try {
-                    AmpIssueTreePanel aitp = new AmpIssueTreePanel("issue", classTree, setName, labelName, item.getModel(), setModel, AmpIssues.class, 0, "Issue Field");
+                    AmpIssueTreePanel aitp = new AmpIssueTreePanel("issue", classTree, setName, labelName,
+                            item.getModel(), 0, "Issue Field", AmpIssuesFormSectionFeature.this);
                     aitp.setOutputMarkupId(true);
                     item.add(aitp);
                 } catch (Exception e) {
@@ -77,7 +79,6 @@ public class AmpIssuesFormSectionFeature extends
                 AmpIssues issues = new AmpIssues();
                 issues.setName(new String(""));
                 issues.setIssueDate(new Date());
-                issues.setMeasures(new HashSet());
                 issues.setActivity(am.getObject());
                 list.addItem(issues);
                 target.add(this.getParent());
@@ -87,4 +88,8 @@ public class AmpIssuesFormSectionFeature extends
 
     }
 
+    @Override
+    public List<FormComponent<?>> getRequiredFormComponents() {
+        return requiredFormComponents;
+    }
 }

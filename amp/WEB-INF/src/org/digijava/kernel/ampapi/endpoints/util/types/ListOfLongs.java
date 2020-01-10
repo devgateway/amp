@@ -3,11 +3,13 @@ package org.digijava.kernel.ampapi.endpoints.util.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.swagger.annotations.ApiModel;
 import org.apache.commons.lang.StringUtils;
 
 /**
  * @author Octavian Ciubotaru
  */
+@ApiModel("A comma separated list of longs")
 public class ListOfLongs extends ArrayList<Long> {
 
     public ListOfLongs(String value) {

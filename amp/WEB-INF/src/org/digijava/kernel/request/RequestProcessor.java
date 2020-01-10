@@ -913,8 +913,7 @@ public class RequestProcessor
         try {
             return super.processValidate(request, response, form, originalMapping);
         } catch (InvalidCancelException e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             return false;
         }
     }

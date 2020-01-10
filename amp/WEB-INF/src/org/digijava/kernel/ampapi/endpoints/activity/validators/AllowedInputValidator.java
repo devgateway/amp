@@ -1,13 +1,9 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Map;
-
-import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -19,12 +15,12 @@ public class AllowedInputValidator extends InputValidator {
 
     @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.FIELD_READ_ONLY;
+        return ValidationErrors.FIELD_READ_ONLY;
     }
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+            APIField fieldDescription, String fieldPath) {
         return true;
 //      if (importer.isUpdate()) {
 //          if (fieldDescription.get(ActivityEPConstants.FIELD_NAME).equals(ActivityEPConstants.))

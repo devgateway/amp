@@ -13,11 +13,6 @@ import java.util.Set;
  */
 public class IndicatorEPConstants {
 
-    public static final String INSERTED = "INSERTED";
-    public static final String IMPORTED = "IMPORTED";
-    public static final String SAVED = "SAVED";
-    public static final String DELETED = "DELETED";
-
     public static final String DEFAULT_INDICATOR_ORDER_FIELD = "createdOn";
 
     public static final int DEFAULT_COUNT = 10;

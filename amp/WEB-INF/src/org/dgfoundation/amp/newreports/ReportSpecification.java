@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * this defines a report specification, e.g. the requested structure of a report. 
@@ -115,6 +115,7 @@ public interface ReportSpecification extends Cloneable {
      * these are the simple names of the columns {@see #getColumns()}
      * @return the set of column names to use
      */
+    @JsonIgnore
     public default Set<String> getColumnNames() {
         return new LinkedHashSet<>(getColumns().stream().map(z -> z.getColumnName()).collect(Collectors.toList()));
     }
@@ -123,16 +124,19 @@ public interface ReportSpecification extends Cloneable {
      * these are the simple names of the hierarchies {@see #getHierarchies()}
      * @return the set of column names to use
      */
+    @JsonIgnore
     public default Set<String> getHierarchyNames() {
         return new LinkedHashSet<>(getHierarchies().stream().map(z -> z.getColumnName()).collect(Collectors.toList()));
     }
 
+    @JsonIgnore
     default Set<String> getInvisibleHierarchyNames() {
         return new LinkedHashSet<>(getInvisibleHierarchies().stream()
                 .map(ReportColumn::getColumnName)
                 .collect(Collectors.toList()));
     }
-    
+
+    @JsonIgnore
     public default Set<String> getMeasureNames() {
         return new LinkedHashSet<>(getMeasures().stream().map(z -> z.getMeasureName()).collect(Collectors.toList()));
     }

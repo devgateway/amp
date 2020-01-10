@@ -27,7 +27,7 @@
                	</td>
             </tr>
         </wicket:fm>
-        <wicket:fm fmNames="Funding Status;Mode of Payment;Loan Terms;Funding Classification Date;Required Validator for Funding Status;Show Funding Status in summary;Show Mode of Payment in summary;Ratification Date;Maturity;Concessionality Level">
+        <wicket:fm fmNames="Funding Status;Mode of Payment;Loan Terms;Funding Classification Date;Required Validator for Funding Status;Show Funding Status in summary;Show Mode of Payment in summary;Ratification Date;Maturity;Concessionality Level;Required Validator for Concessionality Level">
             <tr>
                 <wicket:fm fmNames="Funding Status;Required Validator for Funding Status;Show Funding Status in summary">
                     <td><span wicket:id="fundingStatus"/><span wicket:id="fundingStatusRequired"/><span wicket:id="showFundingStatus"/></td>
@@ -55,7 +55,7 @@
                     </wicket:fm>
                 </td>
             </tr>
-            <wicket:fm fmNames="Concessionality Level">
+            <wicket:fm fmNames="Concessionality Level;Required Validator for Concessionality Level">
             	<tr>
             		<td>
             			<span wicket:id="concessionalityLevel"/>
@@ -76,7 +76,7 @@
                 </td>
             </tr>
         </wicket:fm>
-        <wicket:fm fmNames="Effective Funding Date;Funding Closing Date">
+        <wicket:fm fmNames="Effective Funding Date;Funding Closing Date;Required Validator for Effective Funding Date;Required Validator for Funding Closing Date">
             <tr>
                 <td>
                     <span wicket:id="effectiveFundingDate"/>

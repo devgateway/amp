@@ -4,9 +4,8 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.dgfoundation.amp.algo.AmpCollections;
-import org.dgfoundation.amp.mondrian.ReportAreaDescriber;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportAreaDescriber;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.ReportArea;
 
 /**

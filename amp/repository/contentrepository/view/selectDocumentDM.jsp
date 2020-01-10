@@ -63,7 +63,7 @@
 <digi:ref href="css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" /> 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
-<link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
+<link href='/TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
 
 <style>
 .yui-skin-sam a.yui-pg-page{

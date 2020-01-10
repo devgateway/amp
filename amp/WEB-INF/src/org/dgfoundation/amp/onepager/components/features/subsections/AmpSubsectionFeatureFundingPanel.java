@@ -1,7 +1,10 @@
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
+import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFundingItemSummaryFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFundingMtefSummaryFieldPanel;
 import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
@@ -30,4 +33,9 @@ public class AmpSubsectionFeatureFundingPanel<T> extends AmpSubsectionFeaturePan
         add(c);
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptReferenceHeaderItem.forReference(QuarterInformationPanel.JS_FILE));
+    }
 }

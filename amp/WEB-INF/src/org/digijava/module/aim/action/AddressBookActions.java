@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactPhoneProperty;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
@@ -158,12 +159,14 @@ public class AddressBookActions extends DispatchAction {
                                 emails+="<ul style=\"padding:10px;\">";
                             }
                             emails+="<li>"+property.getValue() +" </li>";
-                        }else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
+                        } else if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)
+                                && ((AmpContactPhoneProperty) property).getValueAsFormatedPhoneNum().length() > 0) {
                             if(phones.length()==0){
                                 phones+="<ul style=\"padding:10px;\">";
                             }
-                            phones += "<li>" + TranslatorWorker.translateText(property.getPhoneCategory()) + " "
-                                    + property.getValue() + " </li>";
+                            String phoneCategory = ((AmpContactPhoneProperty) property).getPhoneCategory();
+                            phones += "<li>" + TranslatorWorker.translateText(phoneCategory) + " " + property.getValue()
+                                    + " </li>";
                         }else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
                             if(faxes.length()==0){
                                 faxes+="<ul style=\"padding:10px;\">";
@@ -429,10 +432,6 @@ public class AddressBookActions extends DispatchAction {
                 }
             }
             clearContact(contact);
-        } else {
-            TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
-            AmpTeamMember creator = TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId());
-            contact.setCreator(creator);
         }
 
         contact.setName(myForm.getName().trim());

@@ -4,7 +4,9 @@
  */
 package org.digijava.module.aim.form;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -75,17 +77,25 @@ public class ReportsFilterPickerForm extends ActionForm {
     private Long[] selectedConcensionalityLevel;
     private Object[] selectedDonorTypes; // ids of AmpOrgType
     private Object[] selectedDonorGroups; //
+    private Object[] selectedBeneficiaryAgencyTypes;
+    private Object[] selectedBeneficiaryAgencyGroups;
     private Object[] selectedContractingAgencyGroups; //
+    private Object[] selectedContractingAgencyTypes;
+    private Object[] selectedExecutingAgencyTypes;
+    private Object[] selectedExecutingAgencyGroups;
     private Object[] selectedExecutingAgency;
     private Object[] selectedContractingAgency;
     private Object[] selectedImplementingAgency;
+    private Object[] selectedImplementingAgencyTypes;
+    private Object[] selectedImplementingAgencyGroups;
+    private Object[] selectedResponsibleOrgTypes;
+    private Object[] selectedResponsibleOrgGroups;
     private Object[] selectedBeneficiaryAgency;
     private Object[] selectedDonnorAgency;
     private Object[] selectedProjectCategory;
     private Object[] selectedresponsibleorg;
     private Object[] selectedComponentSecondResponsibleOrg;
     private Object[] selectedComponentFundingOrg;
-    private Object[] selectedArchivedStatus = new Object[]{"1"};
     private Object[] selectedHumanitarianAid;
     private Object[] selectedDisasterResponse;
     private Object[] selectedActivitySettings;
@@ -105,12 +115,23 @@ public class ReportsFilterPickerForm extends ActionForm {
     private String toIssueDate;
     private DynamicDateFilter dynamicActivityStartFilter = new DynamicDateFilter();
     private DynamicDateFilter dynamicIssueFilter = new DynamicDateFilter();
+    private DynamicDateFilter dynamicActualApprovalFilter = new DynamicDateFilter();
+    private String fromActualApprovalDate;
+    private String toActualApprovalDate;
     private String fromProposedApprovalDate;
     private String toProposedApprovalDate;
+    private String fromProposedStartDate;
+    private String toProposedStartDate;
     private DynamicDateFilter dynamicProposedApprovalFilter = new DynamicDateFilter();
     private String fromActivityActualCompletionDate;
     private String toActivityActualCompletionDate;
     private DynamicDateFilter dynamicActivityActualCompletionFilter = new DynamicDateFilter();
+    private String fromPledgeDetailStartDate;
+    private String toPledgeDetailStartDate;
+    private String fromPledgeDetailEndDate;
+    private String toPledgeDetailEndDate;
+    private String fromProposedCompletionDate;
+    private String toProposedCompletionDate;
     private String fromActivityFinalContractingDate;
     private String toActivityFinalContractingDate;
     private DynamicDateFilter dynamicActivityFinalContractingFilter = new DynamicDateFilter();
@@ -130,11 +151,12 @@ public class ReportsFilterPickerForm extends ActionForm {
     private Long[] selectedBudgets = null;
     private Boolean justSearch = null;
     private Boolean pledged;
-    private Boolean unallocatedLocation = null;
     // to keep the default currency after user changes
     private Long defaultCurrency;
     //private boolean isnewreport;
     private Long countYearFrom;
+    
+    private Boolean includeLocationChildren = true;
     
 //  private List nationalPlanningObjectives;
 //  private List primaryPrograms;
@@ -142,6 +164,7 @@ public class ReportsFilterPickerForm extends ActionForm {
     private Object[] selectedNatPlanObj;
     private Object[] selectedPrimaryPrograms;
     private Object[] selectedSecondaryPrograms;
+    private Object[] selectedTertiaryPrograms;
     private Integer renderStartYear; // the range of dates columns that has
     // to be render, years not in range will
     // be computables for totals but wont be
@@ -183,6 +206,7 @@ public class ReportsFilterPickerForm extends ActionForm {
     private String toEffectiveFundingDate;
     private String fromFundingClosingDate;
     private String toFundingClosingDate;
+    private List<String> undefinedOptions = new ArrayList<>();
 
     public int getCalendarsSize() {
         if (calendars == null) return 0;
@@ -389,6 +413,38 @@ public class ReportsFilterPickerForm extends ActionForm {
     public Object[] getSelectedImplementingAgency() {
         return this.selectedImplementingAgency;
     }
+
+    public Object[] getSelectedImplementingAgencyTypes() {
+        return selectedImplementingAgencyTypes;
+    }
+
+    public void setSelectedImplementingAgencyTypes(Object[] selectedImplementingAgencyTypes) {
+        this.selectedImplementingAgencyTypes = selectedImplementingAgencyTypes;
+    }
+
+    public Object[] getSelectedImplementingAgencyGroups() {
+        return selectedImplementingAgencyGroups;
+    }
+
+    public void setSelectedImplementingAgencyGroups(Object[] selectedImplementingAgencyGroups) {
+        this.selectedImplementingAgencyGroups = selectedImplementingAgencyGroups;
+    }
+
+    public Object[] getSelectedResponsibleOrgTypes() {
+        return selectedResponsibleOrgTypes;
+    }
+
+    public void setSelectedResponsibleOrgTypes(Object[] selectedResponsibleOrgTypes) {
+        this.selectedResponsibleOrgTypes = selectedResponsibleOrgTypes;
+    }
+
+    public Object[] getSelectedResponsibleOrgGroups() {
+        return selectedResponsibleOrgGroups;
+    }
+
+    public void setSelectedResponsibleOrgGroups(Object[] selectedResponsibleOrgGroups) {
+        this.selectedResponsibleOrgGroups = selectedResponsibleOrgGroups;
+    }
     
     @java.lang.SuppressWarnings("all")
     public Object[] getSelectedBeneficiaryAgency() {
@@ -408,11 +464,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public Object[] getSelectedresponsibleorg() {
         return this.selectedresponsibleorg;
-    }
-    
-    @java.lang.SuppressWarnings("all")
-    public Object[] getSelectedArchivedStatus() {
-        return this.selectedArchivedStatus;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -488,6 +539,10 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public String getToProposedApprovalDate() {
         return this.toProposedApprovalDate;
+    }
+    
+    public DynamicDateFilter getDynamicActualApprovalFilter() {
+        return this.dynamicActualApprovalFilter;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -606,11 +661,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     }
     
     @java.lang.SuppressWarnings("all")
-    public Boolean getUnallocatedLocation() {
-        return this.unallocatedLocation;
-    }
-    
-    @java.lang.SuppressWarnings("all")
     public Long getDefaultCurrency() {
         return this.defaultCurrency;
     }
@@ -633,6 +683,10 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public Object[] getSelectedSecondaryPrograms() {
         return this.selectedSecondaryPrograms;
+    }
+    
+    public Object[] getSelectedTertiaryPrograms() {
+        return this.selectedTertiaryPrograms;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -936,7 +990,23 @@ public class ReportsFilterPickerForm extends ActionForm {
     public void setSelectedDonorTypes(final Object[] selectedDonorTypes) {
         this.selectedDonorTypes = selectedDonorTypes;
     }
-    
+
+    public Object[] getSelectedBeneficiaryAgencyTypes() {
+        return selectedBeneficiaryAgencyTypes;
+    }
+
+    public void setSelectedBeneficiaryAgencyTypes(Object[] selectedBeneficiaryAgencyTypes) {
+        this.selectedBeneficiaryAgencyTypes = selectedBeneficiaryAgencyTypes;
+    }
+
+    public Object[] getSelectedBeneficiaryAgencyGroups() {
+        return selectedBeneficiaryAgencyGroups;
+    }
+
+    public void setSelectedBeneficiaryAgencyGroups(Object[] selectedBeneficiaryAgencyGroups) {
+        this.selectedBeneficiaryAgencyGroups = selectedBeneficiaryAgencyGroups;
+    }
+
     @java.lang.SuppressWarnings("all")
     public void setSelectedDonorGroups(final Object[] selectedDonorGroups) {
         this.selectedDonorGroups = selectedDonorGroups;
@@ -946,7 +1016,34 @@ public class ReportsFilterPickerForm extends ActionForm {
     public void setSelectedContractingAgencyGroups(final Object[] selectedContractingAgencyGroups) {
         this.selectedContractingAgencyGroups = selectedContractingAgencyGroups;
     }
-    
+
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedContractingAgencyTypes(final Object[] selectedContractingAgencyTypes) {
+        this.selectedContractingAgencyTypes = selectedContractingAgencyTypes;
+    }
+
+    public Object[] getSelectedContractingAgencyTypes() {
+        return selectedContractingAgencyTypes;
+    }
+
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedExecutingAgencyTypes(final Object[] selectedExecutingAgencyTypes) {
+        this.selectedExecutingAgencyTypes = selectedExecutingAgencyTypes;
+    }
+
+    public Object[] getSelectedExecutingAgencyTypes() {
+        return selectedExecutingAgencyTypes;
+    }
+
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedExecutingAgencyGroups(final Object[] selectedExecutingAgencyGroups) {
+        this.selectedExecutingAgencyGroups = selectedExecutingAgencyGroups;
+    }
+
+    public Object[] getSelectedExecutingAgencyGroups() {
+        return selectedExecutingAgencyGroups;
+    }
+
     @java.lang.SuppressWarnings("all")
     public void setSelectedExecutingAgency(final Object[] selectedExecutingAgency) {
         this.selectedExecutingAgency = selectedExecutingAgency;
@@ -980,11 +1077,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public void setSelectedresponsibleorg(final Object[] selectedresponsibleorg) {
         this.selectedresponsibleorg = selectedresponsibleorg;
-    }
-    
-    @java.lang.SuppressWarnings("all")
-    public void setSelectedArchivedStatus(final Object[] selectedArchivedStatus) {
-        this.selectedArchivedStatus = selectedArchivedStatus;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -1177,11 +1269,6 @@ public class ReportsFilterPickerForm extends ActionForm {
     }
     
     @java.lang.SuppressWarnings("all")
-    public void setUnallocatedLocation(final Boolean unallocatedLocation) {
-        this.unallocatedLocation = unallocatedLocation;
-    }
-    
-    @java.lang.SuppressWarnings("all")
     public void setDefaultCurrency(final Long defaultCurrency) {
         this.defaultCurrency = defaultCurrency;
     }
@@ -1204,6 +1291,10 @@ public class ReportsFilterPickerForm extends ActionForm {
     @java.lang.SuppressWarnings("all")
     public void setSelectedSecondaryPrograms(final Object[] selectedSecondaryPrograms) {
         this.selectedSecondaryPrograms = selectedSecondaryPrograms;
+    }
+    
+    public void setSelectedTertiaryPrograms(final Object[] selectedTertiaryPrograms) {
+        this.selectedTertiaryPrograms = selectedTertiaryPrograms;
     }
     
     @java.lang.SuppressWarnings("all")
@@ -1464,7 +1555,7 @@ public class ReportsFilterPickerForm extends ActionForm {
     public Long[] getSelectedConcensionalityLevel() {
         return selectedConcensionalityLevel;
     }
-
+    
     public void setSelectedConcensionalityLevel(Long[] selectedConcensionalityLevel) {
         this.selectedConcensionalityLevel = selectedConcensionalityLevel;
     }
@@ -1499,5 +1590,101 @@ public class ReportsFilterPickerForm extends ActionForm {
 
     public void setSelectedComponentFundingOrg(Object[] selectedComponentFundingOrg) {
         this.selectedComponentFundingOrg = selectedComponentFundingOrg;
+    }
+
+    public String getFromActualApprovalDate() {
+        return fromActualApprovalDate;
+    }
+
+    public void setFromActualApprovalDate(String fromActualApprovalDate) {
+        this.fromActualApprovalDate = fromActualApprovalDate;
+    }
+
+    public String getToActualApprovalDate() {
+        return toActualApprovalDate;
+    }
+
+    public void setToActualApprovalDate(String toActualApprovalDate) {
+        this.toActualApprovalDate = toActualApprovalDate;
+    }
+
+    public String getFromProposedCompletionDate() {
+        return fromProposedCompletionDate;
+    }
+
+    public void setFromProposedCompletionDate(String fromProposedCompletionDate) {
+        this.fromProposedCompletionDate = fromProposedCompletionDate;
+    }
+
+    public String getToProposedCompletionDate() {
+        return toProposedCompletionDate;
+    }
+
+    public void setToProposedCompletionDate(String toProposedCompletionDate) {
+        this.toProposedCompletionDate = toProposedCompletionDate;
+    }
+    
+    public List<String> getUndefinedOptions() {
+        return undefinedOptions;
+    }
+    
+    public void setUndefinedOptions(List<String> undefinedOptions) {
+        this.undefinedOptions = undefinedOptions;
+    }
+
+    public String getFromPledgeDetailStartDate() {
+        return fromPledgeDetailStartDate;
+    }
+
+    public void setFromPledgeDetailStartDate(String fromPledgeDetailStartDate) {
+        this.fromPledgeDetailStartDate = fromPledgeDetailStartDate;
+    }
+
+    public String getToPledgeDetailStartDate() {
+        return toPledgeDetailStartDate;
+    }
+
+    public void setToPledgeDetailStartDate(String toPledgeDetailStartDate) {
+        this.toPledgeDetailStartDate = toPledgeDetailStartDate;
+    }
+
+    public String getToPledgeDetailEndDate() {
+        return toPledgeDetailEndDate;
+    }
+
+    public void setToPledgeDetailEndDate(String toPledgeDetailEndDate) {
+        this.toPledgeDetailEndDate = toPledgeDetailEndDate;
+    }
+
+    public String getFromPledgeDetailEndDate() {
+        return fromPledgeDetailEndDate;
+    }
+
+    public void setFromPledgeDetailEndDate(String fromPledgeDetailEndDate) {
+        this.fromPledgeDetailEndDate = fromPledgeDetailEndDate;
+    }
+    
+    public Boolean getIncludeLocationChildren() {
+        return includeLocationChildren;
+    }
+    
+    public void setIncludeLocationChildren(Boolean includeLocationChildren) {
+        this.includeLocationChildren = includeLocationChildren;
+    }
+
+    public String getFromProposedStartDate() {
+        return fromProposedStartDate;
+    }
+
+    public void setFromProposedStartDate(String fromProposedStartDate) {
+        this.fromProposedStartDate = fromProposedStartDate;
+    }
+
+    public String getToProposedStartDate() {
+        return toProposedStartDate;
+    }
+
+    public void setToProposedStartDate(String toProposedStartDate) {
+        this.toProposedStartDate = toProposedStartDate;
     }
 }

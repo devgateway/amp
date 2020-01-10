@@ -4,12 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import org.dgfoundation.amp.test.categories.SlowTests;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.ExceptionRunnable;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -24,8 +25,8 @@ import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.TrailCellsDigest;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
-import org.digijava.module.aim.util.DbUtil;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 /**
  * basic sanity checks common between both the offdb schema and the AmpReportsSchema-using one.
@@ -442,6 +443,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     
     
     @Test
+    @Category(SlowTests.class)
     public void testTripleHierarchiesDoNotChangeTotals() {
         if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
             return; // these are too slow if backed by DB
@@ -533,6 +535,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     
     
     @Test
+    @Category(SlowTests.class)
     public void testTripleHierarchiesWithEmptyRowsDoNotChangeTotals() {
         if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
             return; // these are too slow if backed by DB
@@ -835,7 +838,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     
     @Test
     public void test_AMP_18497() {
-        // for running manually: open http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/32 on the AMP 2.10 testcases database
+        // for running manually: open http://localhost:8080/TEMPLATE/ampTemplate/saikuui_reports/index.html#report/open/32 on the AMP 2.10 testcases database
         
         NiReportModel cor = new NiReportModel("AMP-18497")
                 .withHeaders(Arrays.asList(
@@ -1213,7 +1216,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                           new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Region", "Cahul County", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000"),
                           new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Region", "Chisinau County", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000"),
                           new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Region", "Balti County, Transnistrian Region", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Commitments", "96,840,58", "Totals-Actual Disbursements", "50,000"),
-                          new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000"),
+                          new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Region", "", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000"),
                           new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Region", "Transnistrian Region", "Funding-2014-Actual Commitments", "123,321", "Totals-Actual Commitments", "123,321"),
                           new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Region", "", "Funding-2014-Actual Commitments", "100", "Totals-Actual Commitments", "100"),
                           new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Region", "", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000"),
@@ -1268,7 +1271,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                           new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Region", "", "Funding-2014-Actual Commitments", "15,000", "Totals-Actual Commitments", "15,000"),
                           new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Region", "Chisinau County", "Funding-2013-Actual Commitments", "1,700,000", "Funding-2014-Actual Commitments", "3,300,000", "Totals-Actual Commitments", "5,000,000"),
                           new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Region", "Balti County, Transnistrian Region", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Commitments", "96,840,58", "Totals-Actual Disbursements", "50,000"),
-                          new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000"),
+                          new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Region", "", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000"),
                           new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Region", "", "Funding-2014-Actual Commitments", "100", "Totals-Actual Commitments", "100"),
                           new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Region", "", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000"),
                           new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Region", "Balti County", "Funding-2015-Actual Commitments", "456,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "456,789", "Totals-Actual Disbursements", "321,765"),
@@ -1339,7 +1342,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                     new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Region", "Cahul County", "Totals-Actual Commitments", "7,070,000"),
                     new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Region", "Chisinau County", "Totals-Actual Commitments", "65,760,63"),
                     new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Region", "Balti County, Transnistrian Region", "Totals-Actual Commitments", "96,840,58"),
-                    new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Totals-Actual Commitments", "12,000"),
+                    new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Region", "", "Totals-Actual Commitments", "12,000"),
                     new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Region", "Transnistrian Region", "Totals-Actual Commitments", "123,321"),
                     new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Region", "", "Totals-Actual Commitments", "100"),
                     new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Region", "", "Totals-Actual Commitments", "45,000"),
@@ -1526,7 +1529,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                                 new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Donor Agency", "Finland, USAID", "Primary Sector", "113 - SECONDARY EDUCATION", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Disbursements", "450,000"),
                                 new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION", "Funding-2014-Planned Disbursements", "90,000", "Funding-2014-Actual Disbursements", "80,000", "Totals-Planned Disbursements", "90,000", "Totals-Actual Disbursements", "80,000", "Totals-Execution Rate", "88,89"),
                                 new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Donor Agency", "Finland, Ministry of Finance", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION, 120 - HEALTH", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Disbursements", "50,000"),
-                                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Donor Agency", "Finland"),
+                                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Donor Agency", "Finland", "Primary Sector", ""),
                                 new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Donor Agency", "Finland, Ministry of Economy", "Primary Sector", "110 - EDUCATION"),
                                 new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Donor Agency", "UNDP, Water Foundation, World Bank", "Primary Sector", "110 - EDUCATION"),
                                 new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Donor Agency", "UNDP", "Primary Sector", "110 - EDUCATION"),
@@ -1594,7 +1597,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                                 new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Donor Agency", "Finland, USAID", "Primary Sector", "113 - SECONDARY EDUCATION", "Funding-2014-Actual Disbursements", "450", "Totals-Actual Disbursements", "450"),
                                 new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION", "Funding-2014-Planned Disbursements", "90", "Funding-2014-Actual Disbursements", "80", "Totals-Planned Disbursements", "90", "Totals-Actual Disbursements", "80", "Totals-Execution Rate", "88,89"),
                                 new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Donor Agency", "Finland, Ministry of Finance", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION, 120 - HEALTH", "Funding-2014-Actual Disbursements", "50", "Totals-Actual Disbursements", "50"),
-                                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Donor Agency", "Finland"),
+                                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Donor Agency", "Finland", "Primary Sector", ""),
                                 new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Donor Agency", "Finland, Ministry of Economy", "Primary Sector", "110 - EDUCATION"),
                                 new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Donor Agency", "UNDP, Water Foundation, World Bank", "Primary Sector", "110 - EDUCATION"),
                                 new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Donor Agency", "UNDP", "Primary Sector", "110 - EDUCATION"),

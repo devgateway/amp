@@ -2,7 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Octavian Ciubotaru

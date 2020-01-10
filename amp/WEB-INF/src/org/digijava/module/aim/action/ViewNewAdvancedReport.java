@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -33,7 +32,6 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
-import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportExecutor;
@@ -104,12 +102,6 @@ public class ViewNewAdvancedReport extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, 
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
     {
-        if (request.getParameter("mondrian_etl") != null) {
-            double elapsedSecs = MondrianETL.runETL(request.getParameter("force_full") != null).duration;
-            ARUtil.writeResponse(response, String.format("ETL done in %.2f seconds", elapsedSecs));
-            return null;
-        }
-                
         if (request.getParameter("redo_virtual_currencies") != null) {
             ARUtil.writeResponse(response, redo_virtual_currencies());
             return null;

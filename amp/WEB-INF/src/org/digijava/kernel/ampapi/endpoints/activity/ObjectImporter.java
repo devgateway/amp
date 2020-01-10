@@ -307,9 +307,13 @@ public abstract class ObjectImporter<T> {
         try {
             if (isCollection) {
                 Collection collection = (Collection) apiField.getFieldAccessor().get(parentObj);
-                if (idOnly && jsonValue != null && !apiField.getApiType().isSimpleItemType()) {
+                if (idOnly && jsonValue != null) {
                     collection.clear();
-                    collection.add(valueConverter.getObjectById(apiField.getApiType().getType(), jsonValue));
+                    if (apiField.getApiType().isSimpleItemType()) {
+                        collection.addAll((Collection) jsonValue);
+                    } else {
+                        collection.add(valueConverter.getObjectById(apiField.getApiType().getType(), jsonValue));
+                    }
                 }
                 return collection;
             } else if (fieldType.isSimpleType()) {

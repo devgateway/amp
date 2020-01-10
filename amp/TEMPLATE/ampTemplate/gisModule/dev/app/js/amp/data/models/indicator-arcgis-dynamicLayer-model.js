@@ -14,6 +14,17 @@ module.exports = Backbone.Model
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
     });
+
+    // We listen to the "apply" event on filter widget and trigger a "filter" event that will be listened by our view.
+    // This way the view will also receive this model as parameter.
+    //TODO this is the same event we listen for indicator-join-model. Created AMP-29430 as followup to create
+    // a base indicator class
+    this.listenTo(app.data.filter, 'apply', function(blah, show) {
+      this.trigger('applyFilter', this);
+    });
+    this.listenTo(app.data.settingsWidget, 'applySettings', function(blah, show) {
+      this.trigger('applySettings', this);
+    });
   },
 
   fetch: function() {

@@ -1,10 +1,5 @@
 [
    {
-      "name":"AMPFilters",
-      "description":"",
-      "path":"js/saiku/plugins/AMPFilters/plugin.js"
-   },
-   {
       "name":"AMPGisExport",
       "description":"",
       "path":"js/saiku/plugins/AMPGisExport/plugin.js"
@@ -23,6 +18,11 @@
       "name":"AMPSettings",
       "description":"",
       "path":"js/saiku/plugins/AMPSettings/plugin.js"
+   },
+   {
+      "name":"AMPFilters",
+      "description":"",
+      "path":"js/saiku/plugins/AMPFilters/plugin.js"
    },
    {
       "name":"Fullscreen",

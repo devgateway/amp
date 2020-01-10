@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {ActivityPreviewUI, FieldsManager, CurrencyRatesManager} from 'amp-ui';
-import queryString from 'query-string';
+import {ActivityPreviewUI, FieldsManager, CurrencyRatesManager, ErrorHelper} from 'amp-ui';
 import * as ActivityActions from '../actions/ActivityActions';
 import ActivityFundingTotals from '../utils/ActivityFundingTotals';
 import Logger from '../utils/LoggerManager';
@@ -61,17 +60,30 @@ class App extends Component {
 
     render() {
         if (this.props.activityReducer.isActivityLoading) {
-            return (<div> LOADING ACTIVITY </div>)
+            return (<div className={'jumbotron'}>
+                <div className={'progress'}>
+                    <div className={'progress-bar progress-bar-striped bg-info'}
+                         role={'progressbar'}
+                         aria-valuenow={'100'}
+                         aria-valuemin={'0'}
+                         aria-valuemax={'100'} style={{width: '100%'}}>{translate('Loading')}
+                    </div>
+                </div>
+            </div>)
         } else {
-            const {activity, activityContext} = this.props.activityReducer;
-            return (
-                <ActivityPreviewUI
-                    activity={activity}
-                    activityContext={activityContext}
-                    messageInformation={this.props.messageInformation}
-                    isOnline={true}
-                />
-            );
+            const {activity, activityContext, error} = this.props.activityReducer;
+            if (error) {
+                return ErrorHelper.showErrors(error, translate);
+            } else {
+                return (
+                    <ActivityPreviewUI
+                        activity={activity}
+                        activityContext={activityContext}
+                        messageInformation={this.props.messageInformation}
+                        isOnline={true}
+                    />
+                );
+            }
         }
     }
 }

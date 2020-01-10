@@ -63,7 +63,7 @@ public class ResourceEndpoint {
     @GET
     @Path("fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getFields", ui = false)
+    @ApiMethod(id = "getFields", ui = false)
     @ApiOperation(
             value = "Provides full set of available fields and their settings/rules in a hierarchical structure.",
             notes = "Return JSON with fields information. See "
@@ -75,7 +75,7 @@ public class ResourceEndpoint {
     @POST
     @Path("field/values")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getResourceMultiValues", ui = false)
+    @ApiMethod(id = "getResourceMultiValues", ui = false)
     @ApiOperation(
             value = "Returns a list of possible values for each requested field.",
             notes = "If value can be translated then each possible value will contain value-translations element, "

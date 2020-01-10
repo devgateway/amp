@@ -15,7 +15,8 @@ import {
     COMPARE_ACTIVITY_URL,
     PUBLIC_CHANGE_SUMMARY,
     TEAM_ID,
-    PUBLIC_VERSION_HISTORY
+    PUBLIC_VERSION_HISTORY,
+    WORD_EXPORT_URL
 } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
@@ -44,17 +45,18 @@ export const ACTIVITY_WS_INFO_FAILED = 'ACTIVITY_WS_INFO_FAILED';
 export function loadActivityForActivityPreview(activityId) {
     return (dispatch, ownProps) => {
         dispatch(sendingRequest());
-        const paths = [...FieldPathConstants.ADJUSTMENT_TYPE_PATHS, ActivityConstants.CREATED_BY, ActivityConstants.TEAM,
-            ActivityConstants.MODIFIED_BY];
+        const paths = [...FieldPathConstants.ADJUSTMENT_TYPE_PATHS];
         const {settings} = ownProps().startUpReducer;
         Promise.all([ActivityApi.getActivity(activityId), ActivityApi.getFieldsDefinition(),
             ActivityApi.fetchFmConfiguration(FmManagerHelper.getRequestFmSyncUpBody(Object.values(FeatureManagerConstants))),
             ActivityApi.fetchActivityInfo(activityId)]
         ).then(([activity, fieldsDef, fmTree, activityInfo]) => {
             _registerSettings(settings.language, settings['default-date-format'].toUpperCase());
-            ContactAction.loadHydratedContactsForActivity(activity)(dispatch, ownProps);
+            if (settings['team-id']) {
+                ContactAction.loadHydratedContactsForActivity(activity)(dispatch, ownProps);
+                loadWsInfoForActivity(activity, dispatch);
+            }
             ResourceAction.loadResourcesForActivity(activity)(dispatch, ownProps);
-            loadWsInfoForActivity(activity, dispatch);
             //TODO find a better way to filter out non enabled paths
             const activityFieldsManagerTemp = new FieldsManager(fieldsDef, [],
                 settings.language, Logger);
@@ -89,14 +91,21 @@ export function loadActivityForActivityPreview(activityId) {
                                 }
                             })
                         })
-                })//TODO catch errors
+                }).catch(error => {
+                return dispatch({
+                    type: ACTIVITY_LOAD_FAILED,
+                    payload: {
+                        error: error
+                    }
+                });
+            })//TODO catch errors
         }).catch(error => {
             return dispatch({
                 type: ACTIVITY_LOAD_FAILED,
                 payload: {
                     error: error
                 }
-            })
+            });
         })
     };
 
@@ -105,7 +114,9 @@ export function loadActivityForActivityPreview(activityId) {
         const viewLink = {url: ACTIVITY_PREVIEW_URL, isExternal: true};
         const versionHistoryLink = {url: VERSION_HISTORY_URL, isExternal: true};
         const compareActivityLink = {url: COMPARE_ACTIVITY_URL, isExternal: true};
-        ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink, viewLink});
+        const wordExportLink = {url: WORD_EXPORT_URL, isExternal: true};
+
+        ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink, viewLink, wordExportLink});
         DateUtils.registerSettings({lang, pGSDateFormat});
     }
 
@@ -189,7 +200,8 @@ export function loadActivityForActivityPreview(activityId) {
                 updateCurrentVersion: activityInfo['update-current-version'],
                 showChangeSummary: settings[TEAM_ID] || settings[PUBLIC_CHANGE_SUMMARY],
                 showVersionHistory: settings[TEAM_ID] || settings[PUBLIC_VERSION_HISTORY],
-            }
+            },
+            hideEditableExportFormatsPublicView: settings['hide-editable-export-formats-public-view']
 
         };
         return activityContext;
@@ -203,6 +215,13 @@ export function loadActivityForActivityPreview(activityId) {
                     activityWsInfo: activityWsInfo
                 }
             })
+        }).catch(error => {
+            return dispatch({
+                type: ACTIVITY_LOAD_FAILED,
+                payload: {
+                    error: error
+                }
+            });
         });
     }
 }

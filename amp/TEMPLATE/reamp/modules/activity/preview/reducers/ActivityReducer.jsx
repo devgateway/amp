@@ -32,7 +32,11 @@ export default function activityReducer(state: Object = defaultState, action: Ob
                 isActivityLoaded: true
             };
         case ACTIVITY_LOAD_FAILED:
-            return {...state, error: action.payload.error};
+            return {
+                ...state,
+                error: action.payload.error,
+                isActivityLoading: false
+            };
         case ACTIVITY_WS_INFO_LOADED:
             return {...state, activityWsInfo: action.payload.activityWsInfo};
         default:

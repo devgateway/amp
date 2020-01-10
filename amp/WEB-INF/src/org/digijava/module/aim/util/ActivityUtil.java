@@ -488,7 +488,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
      * @param activity
      */
     private static void initializeFiscalYears(AmpActivityVersion activity) {
-        if (activity.getFiscalYears() == null) {
+        if (activity.getFiscalYears() == null || activity.getFiscalYears().size() == 0) {
             List<Long> fiscalYears = new ArrayList<>();
             if (StringUtils.isNotBlank(activity.getFY())) {
                 try {

@@ -487,5 +487,5 @@ export const initialTranslations = {
     "editingOtherUserError": "Current activity is being edited by:",
     "editPermissionError": "You do not have permissions to edit this activity.",
     "sameUserEditingError": "You may only edit one activity at a time.",
-    "exporttoWord":"Export to Word"
+    "exportToWord":"Export to Word"
 }

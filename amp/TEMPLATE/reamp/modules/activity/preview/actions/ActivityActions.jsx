@@ -92,7 +92,6 @@ export function loadActivityForActivityPreview(activityId) {
                             })
                         })
                 }).catch(error => {
-            debugger;
                 return dispatch({
                     type: ACTIVITY_LOAD_FAILED,
                     payload: {
@@ -101,7 +100,6 @@ export function loadActivityForActivityPreview(activityId) {
                 });
             })//TODO catch errors
         }).catch(error => {
-        debugger;
             return dispatch({
                 type: ACTIVITY_LOAD_FAILED,
                 payload: {

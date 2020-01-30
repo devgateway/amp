@@ -33,6 +33,5 @@ export const ACTIVITY_PREVIEW_URL = '/aim/viewActivityPreview.do~activityId=';
 
 export const VERSION_HISTORY_URL = '/aim/viewActivityHistory.do';
 export const COMPARE_ACTIVITY_URL = '/aim/compareActivityVersions.do';
-export const WORD_EXPORT_URL = '/aim/exportActToWord.do?activityid=';
 
 export const PRODUCTION = 'production';

@@ -15,8 +15,7 @@ import {
     COMPARE_ACTIVITY_URL,
     PUBLIC_CHANGE_SUMMARY,
     TEAM_ID,
-    PUBLIC_VERSION_HISTORY,
-    WORD_EXPORT_URL
+    PUBLIC_VERSION_HISTORY
 } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
@@ -114,9 +113,8 @@ export function loadActivityForActivityPreview(activityId) {
         const viewLink = {url: ACTIVITY_PREVIEW_URL, isExternal: true};
         const versionHistoryLink = {url: VERSION_HISTORY_URL, isExternal: true};
         const compareActivityLink = {url: COMPARE_ACTIVITY_URL, isExternal: true};
-        const wordExportLink = {url: WORD_EXPORT_URL, isExternal: true};
 
-        ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink, viewLink, wordExportLink});
+        ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink, viewLink});
         DateUtils.registerSettings({lang, pGSDateFormat});
     }
 

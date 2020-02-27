@@ -177,10 +177,13 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
             tdd.setCmDocTypeId(resource.getType().getId());
         }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(resource.getAddingDate());
-        tdd.setDate(calendar.getTime());
-        tdd.setYearofPublication(String.valueOf(calendar.get(Calendar.YEAR)));
+        if (StringUtils.isBlank(resource.getYearOfPublication())) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(resource.getAddingDate());
+            tdd.setDate(calendar.getTime());
+            resource.setYearOfPublication(String.valueOf(calendar.get(Calendar.YEAR)));
+        }
+        tdd.setYearofPublication(resource.getYearOfPublication());
 
         if (ResourceType.LINK.equals(resource.getResourceType())) {
             tdd.setWebLink(resource.getWebLink());

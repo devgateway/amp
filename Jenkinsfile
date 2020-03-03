@@ -189,7 +189,7 @@ stage('Build') {
                             " amp/TEMPLATE/ampTemplate/dashboard/dev/node" +
                             " amp/TEMPLATE/ampTemplate/dashboard/dev/node_modules" +
                             " amp/TEMPLATE/reamp/node" +
-                            " amp/TEMPLATE/reamp/node_modules"
+                            " amp/TEMPLATE/reamp/node_modules --exclude=amp-ui"
                 }
             }
         }

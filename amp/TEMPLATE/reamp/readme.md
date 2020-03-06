@@ -25,7 +25,7 @@ Run
     npm start
 
 Navigate to _dev.html's_ url. The browser will be automatically updated
- whenever you save some changes. By default it will be deployed on port 3000
+	 whenever you save some changes. By default it will be deployed on port 3000.
 
 To get the project ready for production, run just
 

@@ -1,7 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * 
@@ -22,7 +23,13 @@ public class PreviewFundingTransaction {
 
     @JsonProperty("reporting_date")
     private String reportingDate;
-    
+
+    @JsonProperty("adjustment_type")
+    private Long adjustmentType;
+
+    @JsonProperty("transaction_type")
+    private Long transactionType;
+
     public Long getTransactionId() {
         return transactionId;
     }
@@ -55,4 +62,19 @@ public class PreviewFundingTransaction {
         this.reportingDate = reportingDate;
     }
 
+    public Long getAdjustmentType() {
+        return adjustmentType;
+    }
+
+    public void setAdjustmentType(Long adjustmentType) {
+        this.adjustmentType = adjustmentType;
+    }
+
+    public Long getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(Long transactionType) {
+        this.transactionType = transactionType;
+    }
 }

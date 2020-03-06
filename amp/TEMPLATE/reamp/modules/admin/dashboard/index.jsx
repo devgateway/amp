@@ -13,7 +13,6 @@ var DashboardSettings = React.createClass({displayName: 'Heat Map Settings',
     return {translations: []};
   },
   componentDidMount: function() {
-    debugger;
   	let toTranslate = new AMP.Model(translations).toJS();
     loadTranslations(translations).then(trns => this.updateTranslations(trns));
     console.log(this.state.translations);

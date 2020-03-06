@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -171,7 +172,9 @@ public class DynamicLocationManager extends MultiAction {
         
         for(AmpCategoryValueLocations loc : sameParentLocations) {
             if (loc.getChildLocations() != null && loc.getChildLocations().size() > 0 ) {
-                correctStructure(loc.getChildLocations(), implLocValues, layer+1, hideEmptyCountries);
+                correctStructure(loc.getChildLocations().stream()
+                                .filter(l -> !l.getDeleted()).collect(Collectors.toList()),
+                        implLocValues, layer + 1, hideEmptyCountries);
             }
         }
         

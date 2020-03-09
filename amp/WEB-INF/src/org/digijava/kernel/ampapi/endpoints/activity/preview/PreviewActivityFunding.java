@@ -1,7 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * 
@@ -21,7 +21,7 @@ public class PreviewActivityFunding {
     @JsonProperty("rpc_amount")
     private Double rpcAmount;
 
-    private Long currency;
+    private String currency;
 
     public PreviewFundingInformation getFundingInformation() {
         return fundingInformation;
@@ -47,12 +47,11 @@ public class PreviewActivityFunding {
         this.rpcAmount = rpcAmount;
     }
 
-    public Long getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Long currency) {
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
-
 }

@@ -1187,6 +1187,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             }
   }
 
+  //TODO change so it calculates days to automatic validation
     public static ValidationStatus getValidationStatus(AmpActivityVersion activity, TeamMember tm) {
         ValidationStatus vs = ValidationStatus.UNKNOWN;
         if (!activity.getDraft()) {

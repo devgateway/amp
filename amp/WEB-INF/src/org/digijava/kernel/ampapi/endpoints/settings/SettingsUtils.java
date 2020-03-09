@@ -391,6 +391,8 @@ public class SettingsUtils {
 
         settings.setNumberFormat(ReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat().toPattern());
 
+        settings.setGsNumberFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT));
+
         settings.setNumberGroupSeparator(
                 FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR));
 
@@ -430,10 +432,21 @@ public class SettingsUtils {
         if (MenuUtils.getCurrentView() == AmpView.TEAM) {
             addWorkspaceSettings(settings);
         }
+        addCalendarSettings(settings);
 
+        if (TeamUtil.getCurrentUser() != null) {
+            settings.setShowActivityWorkspaces(true);
+        }
         addDateRangeSettingsForDashboardsAndGis(settings);
 
         return settings;
+    }
+
+    private static void addCalendarSettings(AmpGeneralSettings settings) {
+        AmpFiscalCalendar ampFiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(FeaturesUtil.
+                getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR));
+        settings.setCalendarId(ampFiscalCalendar.getAmpFiscalCalId());
+        settings.setCalendarIsFiscal(ampFiscalCalendar.getIsFiscal());
     }
 
     private static void addWorkspaceSettings(AmpGeneralSettings settings) {

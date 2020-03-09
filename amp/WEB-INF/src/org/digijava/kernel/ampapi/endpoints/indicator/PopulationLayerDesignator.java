@@ -15,7 +15,6 @@ import java.util.Set;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
@@ -44,7 +43,7 @@ public class PopulationLayerDesignator {
      */
     public List<Long> getAllowedPopulationLayersOptions() {
         AmpCategoryValue typeAcv = CategoryConstants.INDICATOR_LAYER_TYPE_COUNT.getAmpCategoryValueFromDB();
-        AmpCategoryValue admAcv = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
+        AmpCategoryValue admAcv = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getAmpCategoryValueFromDB();
         Long admId = admAcv == null ? null : admAcv.getId(); // exclude none if something wrong  
         if (typeAcv != null && typeAcv.isVisible()) {
             return DynLocationManagerUtil.getIndicatorLayersIdsByTypeExcludeAdm(typeAcv.getId(), admId);
@@ -123,7 +122,7 @@ public class PopulationLayerDesignator {
         String invalidTypes = "";
         String invalidAdmLevel = "";
         String allowedType = CategoryConstants.INDICATOR_LAYER_TYPE_COUNT.getValueKey();
-        String notAllowedAdm = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
+        String notAllowedAdm = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey();
         for (AmpIndicatorLayer newPopLayer : idToAil.values()) {
             if (newPopLayer == null) continue;
             String indType = newPopLayer.getIndicatorType() == null ? null : newPopLayer.getIndicatorType().getValue();

@@ -61,7 +61,7 @@
 				
 				
 				<tr>
-					<td noWrap width=80% vAlign="top" class="yui-skin-sam" >
+					<td noWrap width="80%" vAlign="top">
 						<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">			
 							<jsp:include page="manageTreeVisibility.jsp" />
 						</logic:equal>

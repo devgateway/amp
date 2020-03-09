@@ -15,9 +15,7 @@ public final class ContactEPConstants {
     public static final String ID = "id";
     public static final String NAME = "name";
     public static final String LAST_NAME = "last-name";
-    public static final String ORGANISATION_CONTACTS = "organisation_contacts";
-    public static final String PRIMARY_CONTACT = "primary_contact";
-    
+
     public static final String PHONE = "phone";
     public static final String FAX = "fax";
     public static final String EMAIL = "email";

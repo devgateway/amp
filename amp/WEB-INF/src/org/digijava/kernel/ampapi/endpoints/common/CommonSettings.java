@@ -13,7 +13,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 public class CommonSettings {
 
     @PossibleValues(CurrencyCommonPossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Currency")
+    @Interchangeable(fieldTitle = "Currency", pickIdOnly = true)
     private AmpCurrency currency;
 
 }

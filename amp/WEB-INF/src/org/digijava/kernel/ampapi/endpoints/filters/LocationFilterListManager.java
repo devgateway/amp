@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_COMMUNAL_SECTION;
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY;
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_4;
 import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY;
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_REGION;
-import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ZONE;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,11 +42,11 @@ public class LocationFilterListManager implements FilterListManager {
     private static final String LOCATIONS_ITEMS_NAME = "locations";
 
     private static final Map<String, String> FILTER_COLUMN_BY_IMPL_LOC_KEY = new ImmutableMap.Builder<String, String>()
-            .put(IMPLEMENTATION_LOCATION_COUNTRY.getValueKey(), FiltersConstants.COUNTRY)
-            .put(IMPLEMENTATION_LOCATION_REGION.getValueKey(), FiltersConstants.REGION)
-            .put(IMPLEMENTATION_LOCATION_ZONE.getValueKey(), FiltersConstants.ZONE)
-            .put(IMPLEMENTATION_LOCATION_DISTRICT.getValueKey(), FiltersConstants.DISTRICT)
-            .put(IMPLEMENTATION_LOCATION_COMMUNAL_SECTION.getValueKey(), FiltersConstants.COMMUNAL_SECTION)
+            .put(IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey(), FiltersConstants.ADMINISTRATIVE_LEVEL_0)
+            .put(IMPLEMENTATION_LOCATION_ADM_LEVEL_1.getValueKey(), FiltersConstants.ADMINISTRATIVE_LEVEL_1)
+            .put(IMPLEMENTATION_LOCATION_ADM_LEVEL_2.getValueKey(), FiltersConstants.ADMINISTRATIVE_LEVEL_2)
+            .put(IMPLEMENTATION_LOCATION_ADM_LEVEL_3.getValueKey(), FiltersConstants.ADMINISTRATIVE_LEVEL_3)
+            .put(IMPLEMENTATION_LOCATION_ADM_LEVEL_4.getValueKey(), FiltersConstants.ADMINISTRATIVE_LEVEL_4)
             .build();
 
     private static LocationFilterListManager locationFilterListManager;

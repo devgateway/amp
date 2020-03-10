@@ -5,7 +5,6 @@ import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,11 +36,9 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -69,7 +66,6 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.endpoints.util.ReportConstants;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -341,7 +337,7 @@ public class Reports implements ErrorReportingEndpoint {
     @Path("/report/custom")
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
-    public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter) {
+    public final String getXmlReportResult(ReportParameter reportParameter) {
         return getXmlReportResult(reportParameter, null);
     }
 
@@ -374,11 +370,11 @@ public class Reports implements ErrorReportingEndpoint {
     @Path("/report/{report_id}")
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
-    public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter, @PathParam("report_id") Long reportId) {
+    public final String getXmlReportResult(ReportParameter reportParameter, @PathParam("report_id") Long reportId) {
         Report xmlReport = ApiXMLService.getXmlReport(reportParameter, reportId);
         ObjectFactory xmlReportObjFactory = new ObjectFactory();
-
-        return xmlReportObjFactory.createReport(xmlReport);
+        JAXBElement<Report> report = xmlReportObjFactory.createReport(xmlReport);
+        return ApiXMLService.marshallOrTransform(reportParameter.getXsl(), report);
     }
 
     @POST

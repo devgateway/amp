@@ -322,7 +322,7 @@ public class Reports {
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
     @ApiOperation("Generates a custom xml report.")
-    public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter) {
+    public final String getXmlReportResult(ReportParameter reportParameter) {
         return getXmlReportResult(reportParameter, null);
     }
 
@@ -341,11 +341,11 @@ public class Reports {
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
     @ApiOperation("Retrieves report data in XML format for the specified reportId")
-    public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter, @PathParam("report_id") Long reportId) {
+    public final String getXmlReportResult(ReportParameter reportParameter, @PathParam("report_id") Long reportId) {
         Report xmlReport = ApiXMLService.getXmlReport(reportParameter, reportId);
         ObjectFactory xmlReportObjFactory = new ObjectFactory();
-
-        return xmlReportObjFactory.createReport(xmlReport);
+        JAXBElement<Report> report = xmlReportObjFactory.createReport(xmlReport);
+        return ApiXMLService.marshallOrTransform(reportParameter.getXsl(), report);
     }
 
     @POST

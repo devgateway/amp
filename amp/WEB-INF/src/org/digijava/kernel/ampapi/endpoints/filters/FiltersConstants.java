@@ -25,6 +25,8 @@ public class FiltersConstants {
     public static final String CURRENT = "current";
 
     public static final String DATE = "date";
+    public static final String QUARTER = "quarter";
+    public static final String YEAR = "year";
 
     public static final String ACTUAL_APPROVAL_DATE = "actual-approval-date";
     public static final String ACTUAL_COMPLETION_DATE = "actual-completion-date";

@@ -1006,7 +1006,11 @@
             <artifactId>passay</artifactId>
             <version>1.2.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.9.1-6</version>
+        </dependency>
     </dependencies>
 
     <build>

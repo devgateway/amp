@@ -9,36 +9,57 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class AmpRegionalFunding implements Versionable, Serializable, Cloneable {
     //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle = "ID", id = true)
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "ID")
     private Long ampRegionalFundingId;
-//  @Interchangeable(fieldTitle="Activity", pickIdOnly = true)
+
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
-//  @PossibleValues(TransactionTypePossibleValuesProvider.class)
-//  @Interchangeable(fieldTitle="Transaction type")
+
     private Integer transactionType;
-//  @Interchangeable(fieldTitle="Adjustment Type")
+
+    @Interchangeable(fieldTitle = "Adjustment Type", importable = true, pickIdOnly = true,
+        discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY,
+        interValidators = @InterchangeableValidator(RequiredValidator.class))
     private AmpCategoryValue adjustmentType;
-//  @Interchangeable(fieldTitle="Transaction Date")
+
+    @Interchangeable(fieldTitle = "Transaction Date", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Date transactionDate;
-//  @Interchangeable(fieldTitle="Reporting Date")
+
     private Date reportingDate;
-//  @Interchangeable(fieldTitle="Transaction Amount")
+
+    @Interchangeable(fieldTitle = "Transaction Amount", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Double transactionAmount;
-//  @Interchangeable(fieldTitle="Reporting Organization", pickIdOnly = true)
+
     private AmpOrganisation reportingOrganization;
-//  @Interchangeable(fieldTitle="Currency")
+
+    @Interchangeable(fieldTitle = "Currency", importable = true, pickIdOnly = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
+            commonPV = CommonFieldsConstants.COMMON_CURRENCY)
     private AmpCurrency currency;
-//  @Interchangeable(fieldTitle="Expenditure Category")
+
     private String expenditureCategory;
 
-//  @Interchangeable(fieldTitle="Region Location")
-    private AmpCategoryValueLocations regionLocation;
+    // TODO expose this ids or from AmpLocation???
+    // TODO validator, can't select here region unless it was selected in location section (what if impl level is not region?)
+    @Interchangeable(fieldTitle="Region Location", pickIdOnly = true, commonPV = CommonFieldsConstants.COMMON_REGION,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private AmpCategoryValueLocations regionLocation; // TODO possible values?
     /**
      * @return Returns the activity.
      */

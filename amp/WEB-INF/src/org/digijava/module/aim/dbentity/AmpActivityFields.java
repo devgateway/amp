@@ -13,11 +13,13 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivityProgramDiscriminatorConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpFundingAmountDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpOrgRoleDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivitySectorDiscriminationConfigurer;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpRegionalFundingDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.values.ApprovalStatusPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.values.FiscalYearPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
@@ -661,7 +663,20 @@ LoggerIdentifiable, Cloneable {
     @TimestampField
     protected Date approvalDate;
 
-//  @Interchangeable(fieldTitle = "Regional Fundings", importable = true, fmPath = "/Activity Form/Regional Funding")
+    @InterchangeableDiscriminator(discriminatorField = "transactionType",
+            configurer = AmpRegionalFundingDiscriminationConfigurer.class, settings = {
+            @Interchangeable(fieldTitle = ArConstants.REGIONAL_COMMITMENTS,
+                    discriminatorOption = "" + Constants.COMMITMENT,
+                    fmPath = ActivityEPConstants.REGIONAL_COMMITMENTS_FM_PATH,
+                    importable = true),
+            @Interchangeable(fieldTitle = ArConstants.REGIONAL_DISBURSEMENTS,
+                    discriminatorOption = "" + Constants.DISBURSEMENT,
+                    fmPath = ActivityEPConstants.REGIONAL_DISBURSEMENTS_FM_PATH,
+                    importable = true),
+            @Interchangeable(fieldTitle = ArConstants.REGIONAL_EXPENDITURES,
+                    discriminatorOption = "" + Constants.EXPENDITURE,
+                    fmPath = ActivityEPConstants.REGIONAL_EXPENDITURES_FM_PATH,
+                    importable = true)})
     @VersionableCollection(fieldTitle = "Regional Fundings")
     protected Set <AmpRegionalFunding> regionalFundings;
 

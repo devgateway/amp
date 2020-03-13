@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
@@ -92,7 +91,6 @@ public class ImplementationLevelValidator implements ConstraintValidator {
             Long implLevelId = implLevel.getId();
 
             boolean found = activityLocation.getLocation()
-                    .getLocation()
                     .getParentCategoryValue()
                     .getUsedValues()
                     .stream()
@@ -105,7 +103,7 @@ public class ImplementationLevelValidator implements ConstraintValidator {
                 context.buildConstraintViolation(ValidationErrors.DOESNT_MATCH_IMPLEMENTATION_LEVEL)
                         .addPropertyNode(LOCATIONS_FIELD_NAME)
                         .addPropertyNode(LOCATION_FIELD_NAME)
-                        .addAttribute(ATTR_LOC_ID, activityLocation.getLocation().getAmpLocationId())
+                        .addAttribute(ATTR_LOC_ID, activityLocation.getLocation().getId())
                         .addConstraintViolation();
             }
         }

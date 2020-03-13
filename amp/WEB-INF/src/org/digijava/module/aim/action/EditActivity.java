@@ -47,7 +47,6 @@ import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -1106,13 +1105,13 @@ public class EditActivity extends Action {
                 AmpActivityLocation actLoc = (AmpActivityLocation) locIter.next();  //AMP-2250
                 if (actLoc == null)
                     continue;
-                AmpLocation loc=actLoc.getLocation();                               //AMP-2250
+                AmpCategoryValueLocations loc = actLoc.getLocation();                               //AMP-2250
 
               if (loc != null) {
                 Location location = new Location();
-                location.setLocId(loc.getAmpLocationId());
-                location.setLat(loc.getLocation().getGsLat());
-                location.setLon(loc.getLocation().getGsLong());
+                location.setLocId(loc.getId());
+                location.setLat(loc.getGsLat());
+                location.setLon(loc.getGsLong());
 
                 String cIso = FeaturesUtil.getDefaultCountryIso();
                 //logger.info(" this is the settings Value" + cIso);
@@ -1121,15 +1120,12 @@ public class EditActivity extends Action {
                 location.setCountry(cntry.getCountryName());
                 location.setNewCountryId(cntry.getIso());
 
-                location.setAmpCVLocation( loc.getLocation() );
-                if ( loc.getLocation() != null ){
-                    location.setAncestorLocationNames( DynLocationManagerUtil.getParents( loc.getLocation()) );
-                    location.setLocationName(loc.getLocation().getName());
-                    location.setLocId( loc.getLocation().getId() );
-                    location.setLevelIdx(loc.getLocation().getParentCategoryValue().getIndex());
-                }
-                AmpCategoryValueLocations ampCVRegion   =
-                    DynLocationManagerUtil.getAncestorByLayer(loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                location.setAmpCVLocation(loc);
+                location.setAncestorLocationNames(DynLocationManagerUtil.getParents(loc));
+                location.setLocationName(loc.getName());
+                location.setLevelIdx(loc.getParentCategoryValue().getIndex());
+                AmpCategoryValueLocations ampCVRegion = DynLocationManagerUtil.getAncestorByLayer(loc,
+                        CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
 
                 if ( ampCVRegion != null ) {
 //                if (loc.getAmpRegion() != null) {
@@ -1153,10 +1149,11 @@ public class EditActivity extends Action {
 //                  location.setPercent( strPercentage.replace(",", ".") );
                 }
 
-                if ( setFullPercForDefaultCountry && (actLoc.getLocationPercentage()==null || actLoc.getLocationPercentage() == 0.0) &&
-                        CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getLocation().getParentCategoryValue()) &&
-                                loc.getLocation().getId() != defCountry.getId() )
-                {
+                if (setFullPercForDefaultCountry
+                        && (actLoc.getLocationPercentage() == null || actLoc.getLocationPercentage() == 0.0)
+                        && CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(
+                                loc.getParentCategoryValue())
+                        && !loc.getId().equals(defCountry.getId())) {
                     location.setPercentageBlocked(true);
                 }
 

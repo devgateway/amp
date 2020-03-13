@@ -678,7 +678,7 @@ LoggerIdentifiable, Cloneable {
                     fmPath = ActivityEPConstants.REGIONAL_EXPENDITURES_FM_PATH,
                     importable = true)})
     @VersionableCollection(fieldTitle = "Regional Fundings")
-    protected Set <AmpRegionalFunding> regionalFundings;
+    protected Set<AmpRegionalFunding> regionalFundings = new HashSet<>();
 
     @AllowedApprovalStatus(groups = API.class)
     @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS, pickIdOnly = true, importable = true)

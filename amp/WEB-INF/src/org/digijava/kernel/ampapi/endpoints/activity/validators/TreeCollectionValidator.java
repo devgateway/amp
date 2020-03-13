@@ -10,7 +10,6 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -20,7 +19,6 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -167,16 +165,16 @@ public class TreeCollectionValidator extends InputValidator {
      */
     private boolean isPresentParentLocationInCollection(Long locationId, Set<Long> idValues) {
         Session session = InterchangeUtils.getSessionWithPendingChanges();
-        AmpLocation oldLocation = null;
+        AmpCategoryValueLocations oldLocation = null;
         try {
-            oldLocation = (AmpLocation) session.load(AmpLocation.class, locationId);
+            oldLocation = (AmpCategoryValueLocations) session.load(AmpCategoryValueLocations.class, locationId);
         } catch (ObjectNotFoundException ex) {
             // invalid location cannot be checked
             logger.error(ex.getMessage());
             return false;
         }
 
-        Collection<AmpCategoryValueLocations> parentLocations = getParentLocations(oldLocation.getLocation());
+        Collection<AmpCategoryValueLocations> parentLocations = getParentLocations(oldLocation);
 
         for (AmpCategoryValueLocations t : parentLocations) {
             if (idValues.contains(t.getId())) {

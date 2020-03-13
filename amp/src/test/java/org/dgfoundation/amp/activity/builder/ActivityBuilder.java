@@ -7,9 +7,9 @@ import java.util.Set;
 import com.google.common.collect.ImmutableSet;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -48,7 +48,7 @@ public class ActivityBuilder {
         return this;
     }
 
-    public ActivityBuilder addLocation(AmpLocation location, Float percentage) {
+    public ActivityBuilder addLocation(AmpCategoryValueLocations location, Float percentage) {
         AmpActivityLocation activityLocation = new AmpActivityLocation();
         activityLocation.setLocation(location);
         activityLocation.setLocationPercentage(percentage);

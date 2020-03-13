@@ -260,12 +260,12 @@ public class PossibleValuesEnumeratorTest {
     @Test
     public void testStraightCaseAmpLocation() throws IOException {
         when(possibleValuesDAO.getPossibleLocations()).thenReturn(Arrays.asList(
-                        values(101, 1, "Loc 1", null, null, 50, "Country", "MD"),
-                        values(102, 2, "Loc 2", 1, "Loc 1", 51, "Commune", null)
+                        values(1, "Loc 1", null, null, 50, "Country", "MD"),
+                        values(2, "Loc 2", 1, "Loc 1", 51, "Commune", null)
                 ));
         assertJsonEquals(possibleValuesFor("locations~location"),
-                "[{\"id\":101,\"value\":\"Loc 1\",\"children\":[{\"id\":102,\"value\":\"Loc 2\","
-                        + "\"extra_info\":{\"parent_location_id\":101,\"parent_location_name\":\"Loc 1\","
+                "[{\"id\":1,\"value\":\"Loc 1\",\"children\":[{\"id\":2,\"value\":\"Loc 2\","
+                        + "\"extra_info\":{\"parent_location_id\":1,\"parent_location_name\":\"Loc 1\","
                         + "\"implementation_level_id\":51,\"implementation_location_name\":\"Commune\"}}],"
                         + "\"extra_info\":{\"parent_location_id\":null,\"parent_location_name\":null,"
                         + "\"implementation_level_id\":50,\"implementation_location_name\":\"Country\","

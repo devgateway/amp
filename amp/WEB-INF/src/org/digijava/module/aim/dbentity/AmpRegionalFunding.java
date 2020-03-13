@@ -56,8 +56,9 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
     private String expenditureCategory;
 
     // TODO expose this ids or from AmpLocation???
-    // TODO validator, can't select here region unless it was selected in location section (what if impl level is not region?)
-    @Interchangeable(fieldTitle="Region Location", pickIdOnly = true, commonPV = CommonFieldsConstants.COMMON_REGION,
+    // TODO validator, can't select here region unless it was selected in location section
+    //      (what if impl level is not region?)
+    @Interchangeable(fieldTitle = "Region Location", pickIdOnly = true, commonPV = CommonFieldsConstants.COMMON_REGION,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private AmpCategoryValueLocations regionLocation; // TODO possible values?
     /**

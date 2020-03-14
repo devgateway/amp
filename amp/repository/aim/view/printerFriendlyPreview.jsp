@@ -2114,7 +2114,7 @@ body {background:none;}
 															<span class="word_break bold">
 																<c:out value="${comp.title}"/>
 															</span>
-															</td></tr>
+															</b></td></tr>
 
 															<tr><td>
 																<i>
@@ -3168,8 +3168,8 @@ body {background:none;}
 													<digi:trn>Donor funding contact information</digi:trn>
 												</td>
 												<td>
-													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.donorContacts}" />
-													<%@include file="activitypreview/contactInformation.jspf" %>
+													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.donorContacts}" scope="request" />
+													<jsp:include page="activitypreview/contactInformation.jsp"/>
 												</td>
 											</tr>
 											</module:display>
@@ -3179,8 +3179,8 @@ body {background:none;}
 													<digi:trn>MOFED contact information</digi:trn>
 												</td>
 												<td>
-													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.mofedContacts}" />
-													<%@include file="activitypreview/contactInformation.jspf" %>
+													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.mofedContacts}" scope="request" />
+													<jsp:include page="activitypreview/contactInformation.jsp"/>
 												</td>
 											</tr>
 											</module:display>
@@ -3190,8 +3190,8 @@ body {background:none;}
 													<digi:trn>Project Coordinator Contact Information</digi:trn>
 												</td>
 												<td>
-													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.projCoordinatorContacts}" />
-													<%@include file="activitypreview/contactInformation.jspf" %>
+													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.projCoordinatorContacts}" scope="request" />
+													<jsp:include page="activitypreview/contactInformation.jsp"/>
 												</td>
 											</tr>
 											</module:display>
@@ -3201,8 +3201,8 @@ body {background:none;}
 													<digi:trn>Sector Ministry Contact Information</digi:trn>
 												</td>
 												<td>
-													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.sectorMinistryContacts}" />
-													<%@include file="activitypreview/contactInformation.jspf" %>
+													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.sectorMinistryContacts}" scope="request" />
+													<jsp:include page="activitypreview/contactInformation.jsp"/>
 												</td>
 											</tr>
 										</module:display>
@@ -3212,8 +3212,8 @@ body {background:none;}
 													<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>
 												</td>
 												<td>
-													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}" />
-													<%@include file="activitypreview/contactInformation.jspf" %>
+													<c:set var="contactInformation" value="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}" scope="request" />
+													<jsp:include page="activitypreview/contactInformation.jsp"/>
 												</td>
 											</tr>
 										</module:display>
@@ -3427,7 +3427,7 @@ body {background:none;}
                                               <tr>
                                                 <td>
                                                 	<bean:define id="mode" value="preview" type="java.lang.String" toScope="request" />
-                                                    <jsp:include page="viewCostsSummary.jsp" flush="" />
+                                                    <jsp:include page="viewCostsSummary.jsp" />
                                                 </td>
                                               </tr>
                                             </table>

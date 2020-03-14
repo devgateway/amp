@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.devgateway</groupId>
     <artifactId>amp</artifactId>
-    <version>3.4.1-SNAPSHOT</version>
+    <version>3.5-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Aid Management Platform</name>
     <properties>
@@ -984,6 +984,11 @@
             <artifactId>javamelody-core</artifactId>
             <version>1.75.0</version>
         </dependency>
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.9.1-6</version>
+        </dependency>	
     </dependencies>
 
     <build>

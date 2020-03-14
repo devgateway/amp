@@ -4,6 +4,7 @@
 package org.digijava.module.contentrepository.helper;
 
 import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.kernel.validators.activity.PrivateResourceValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
@@ -18,7 +19,10 @@ import org.hibernate.Session;
 public abstract class ObjectReferringDocument {
     
     @Interchangeable(fieldTitle = ActivityFieldsConstants.UUID, importable = true,
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
+            interValidators = {
+                    @InterchangeableValidator(RequiredValidator.class),
+                    @InterchangeableValidator(PrivateResourceValidator.class)
+            })
     private String uuid;
 
     public ObjectReferringDocument() {

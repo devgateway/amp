@@ -147,7 +147,7 @@ public class QueryUtil {
         }
         if (filter.getRegions() == null) {
             try {
-                filter.setRegions(new ArrayList<AmpCategoryValueLocations>(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry()));
+                filter.setRegions(new ArrayList<>(DynLocationManagerUtil.getLocationsOfTypeAdmLevel1OfDefCountry()));
             } catch (Exception e) {
                 e.printStackTrace();
             }

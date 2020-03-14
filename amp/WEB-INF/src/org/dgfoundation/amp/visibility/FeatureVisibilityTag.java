@@ -211,16 +211,18 @@ public class FeatureVisibilityTag extends BodyTagSupport {
         return false;
     }
     
-    public boolean existModule(AmpTreeVisibility atv)
-    {
-
+    public boolean existModule(AmpTreeVisibility atv) {
+        
         AmpModulesVisibility moduleByNameFromRoot = atv.getModuleByNameFromRoot(this.getModule());
-        if(moduleByNameFromRoot==null) return false;
-        return true;
+        
+        if (moduleByNameFromRoot == null) {
+            return false;
+        }
+        
+        return FeaturesUtil.isVisibleModule(this.getModule());
     }
     
-    public boolean existFeatureinDB(AmpTreeVisibility atv)
-    {
+    public boolean existFeatureinDB(AmpTreeVisibility atv) {
         AmpFeaturesVisibility featureByNameFromRoot = atv.getFeatureByNameFromRoot(this.getName());
         if(featureByNameFromRoot==null) return false;
         return true;

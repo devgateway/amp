@@ -21,8 +21,9 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author medea
  */
 @TranslatableClass (displayName = "Location")
-public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCategoryValueLocations>, 
-        HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable,OrgProfileValue, NameableOrIdentifiable {
+public class AmpCategoryValueLocations implements Identifiable,
+        HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable<AmpCategoryValueLocations>,
+        OrgProfileValue, NameableOrIdentifiable {
     //IATI-check: this is not to be ignored, but not importable, since it's obtained from possible values
     private Long id;
     @TranslatableField

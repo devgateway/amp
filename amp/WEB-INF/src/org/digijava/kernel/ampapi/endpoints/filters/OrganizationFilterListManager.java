@@ -27,20 +27,19 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * This class generates the filter list (tree) object for organizations
- * 
- * @author Viorel Chihai
  *
+ * @author Viorel Chihai
  */
 public final class OrganizationFilterListManager implements FilterListManager {
-    
+
     private static final int COL_ORG_ID_POS = 0;
     private static final int COL_ORG_NAME_POS = 1;
     private static final int COL_ORG_ACR_POS = 2;
     private static final int COL_ORG_GRP_POS = 3;
     private static final int COL_ORG_ROLES_POS = 4;
-    
+
     private static final String ORGANIZATIONS_ITEMS_NAME = "organizations";
-    
+
     private static final Map<String, String> ORG_ROLE_CODE_TO_TAB =
             new ImmutableMap.Builder<String, String>()
                     .put(Constants.ROLE_CODE_DONOR, EPConstants.TAB_ORGANIZATIONS)
@@ -54,11 +53,10 @@ public final class OrganizationFilterListManager implements FilterListManager {
                     .put(Constants.ROLE_CODE_COMPONENT_FUNDING_ORGANIZATION, EPConstants.TAB_ALL_AGENCIES)
                     .put(Constants.ROLE_CODE_COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, EPConstants.TAB_ORGANIZATIONS)
                     .build();
-    
+
     private static OrganizationFilterListManager organizationFilterListManager;
-    
+
     /**
-     * 
      * @return FiltersManager instance
      */
     public static OrganizationFilterListManager getInstance() {
@@ -68,17 +66,18 @@ public final class OrganizationFilterListManager implements FilterListManager {
 
         return organizationFilterListManager;
     }
-    
-    private OrganizationFilterListManager() { }
+
+    private OrganizationFilterListManager() {
+    }
 
     @Override
     public FilterList getFilterList() {
         List<FilterListDefinition> orgTreeDefinitions = getOrgListDefinitions();
         Map<String, List<FilterListTreeNode>> orgTreeItems = getOrgListItems();
-        
+
         return new FilterList(orgTreeDefinitions, orgTreeItems);
     }
-    
+
     /**
      * @return List<FilterTreeNode>
      */
@@ -96,10 +95,10 @@ public final class OrganizationFilterListManager implements FilterListManager {
             FilterListTreeNode typeNode = new FilterListTreeNode();
             typeNode.setId(orgType.getAmpOrgTypeId());
             typeNode.setName(orgType.getName());
-            
+
             List<AmpOrgGroup> orderedGroups = orgType.getOrgGroups().stream()
-                .sorted(Comparator.comparing(AmpOrgGroup::getName))
-                .collect(Collectors.toList());
+                    .sorted(Comparator.comparing(AmpOrgGroup::getName))
+                    .collect(Collectors.toList());
 
             for (AmpOrgGroup orgGroup : orderedGroups) {
                 if (orgFilterNodes.containsKey(orgGroup.getAmpOrgGrpId())) {
@@ -116,7 +115,7 @@ public final class OrganizationFilterListManager implements FilterListManager {
             orgItems.add(typeNode);
         }
         orgItems.add(getUndefinedOption());
-        
+
         items.put(ORGANIZATIONS_ITEMS_NAME, orgItems);
 
         return items;
@@ -155,7 +154,6 @@ public final class OrganizationFilterListManager implements FilterListManager {
     }
 
     /**
-     * 
      * @return List<AmpOrgType> organization types
      */
     private List<AmpOrgType> getOrgTypes() {
@@ -166,7 +164,6 @@ public final class OrganizationFilterListManager implements FilterListManager {
     }
 
     /**
-     * 
      * @return List<AmpRole> visible Roles
      */
     public List<AmpRole> getVisibleRoles() {
@@ -185,7 +182,6 @@ public final class OrganizationFilterListManager implements FilterListManager {
     }
 
     /**
-     * 
      * @return List<OrganizationSkeleton> organizations with roles
      */
     public List<OrganizationSkeleton> getAllOrganizationsWithRoles() {
@@ -195,7 +191,7 @@ public final class OrganizationFilterListManager implements FilterListManager {
         String query = "SELECT orgId, orgName, orgAcronym, grpId, roles FROM v_all_organizations_with_roles "
                 + "ORDER BY orgname";
         List<Object[]> rows = session.createSQLQuery(query).list();
-        
+
         ArrayList<OrganizationSkeleton> orgsWithRoles = new ArrayList<OrganizationSkeleton>();
         for (Object[] row : rows) {
             String treeIds = (String) row[COL_ORG_ROLES_POS];
@@ -206,7 +202,7 @@ public final class OrganizationFilterListManager implements FilterListManager {
 
             orgRoleIds.retainAll(visibleRoleIds);
 
-            if (!orgRoleIds.isEmpty()) {
+            if (!orgRoleIds.isEmpty() && row[COL_ORG_GRP_POS] != null) {
                 OrganizationSkeleton org = new OrganizationSkeleton();
                 org.setAmpOrgId(Long.parseLong(row[COL_ORG_ID_POS].toString()));
                 org.setName(row[COL_ORG_NAME_POS] != null ? row[COL_ORG_NAME_POS].toString() : "");
@@ -217,7 +213,7 @@ public final class OrganizationFilterListManager implements FilterListManager {
                 orgsWithRoles.add(org);
             }
         }
-        
+
         List<OrganizationSkeleton> orderedOrgs = orgsWithRoles.stream()
                 .sorted(Comparator.comparing(OrganizationSkeleton::getName))
                 .collect(Collectors.toList());

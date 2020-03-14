@@ -45,6 +45,8 @@ public @interface Interchangeable {
     /**
      * Whether the collection field in AF supports several values. It will be used just for collection fields
      * (like: one activity might have several sectors assigned, or only one)
+     *
+     * <p>multipleValues not supported if pickIdOnly is true and collection is discriminated. See AMP-23362.</p>
      */
     boolean multipleValues() default true;
     

@@ -21,7 +21,7 @@ import java.util.List;
 public class LocationDistrictAdapter implements MappingEntityAdapter {
     public List<HierarchyListable> getAllObjects() throws DgException {
         Session sess = PersistenceManager.getRequestDBSession();
-        StringBuilder queryStr = new StringBuilder("select distinct loc.location_id from v_districts loc");
+        StringBuilder queryStr = new StringBuilder("select distinct loc.adm_level_3_id from v_adm_level_3_id loc");
         SQLQuery q = sess.createSQLQuery(queryStr.toString());
         List<Long> ids = q.list();
 
@@ -37,7 +37,7 @@ public class LocationDistrictAdapter implements MappingEntityAdapter {
 
     public int getObjectCount() throws DgException {
         Session sess = PersistenceManager.getRequestDBSession();
-        StringBuilder queryStr = new StringBuilder("select distinct loc.location_id from v_districts loc");
+        StringBuilder queryStr = new StringBuilder("select distinct loc.adm_level_3_id from v_adm_level_3_id loc");
         SQLQuery q = sess.createSQLQuery(queryStr.toString());
         List<Long> ids = q.list();
         return ids != null?ids.size():0;

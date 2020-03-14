@@ -3,15 +3,25 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class FilterListTreeNode {
-
+    
+    @ApiModelProperty(value = "The id of the filter item", example = "1")
     private Long id;
+    
+    @ApiModelProperty(value = "The name of the filter item", example = "Belgium")
     private String name;
+    
+    @ApiModelProperty(value = "The acronym of the filter item. Used for organisation names.", example = "Belgium")
     private String acronym;
+    
+    @ApiModelProperty(value = "The code of the filter item. Used for organisation groups.", example = "AUG")
     private String code;
+    
+    @ApiModelProperty(value = "The translated name", example = "Belgium")
     private String value;
     
     private List<Long> listDefinitionIds;

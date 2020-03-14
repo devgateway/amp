@@ -31,7 +31,7 @@ export default class HomePage extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.homePage.typesLoaded && nextProps.homePage.allowedLoaded) {
+        if (nextProps.homePage.typesLoaded && nextProps.homePage.allowedLoaded && !this.state.areListloaded) {
             const areListloaded = true;
             const selectedAllowedTypes = nextProps.homePage.typesAllowed;
             this.setState({ areListloaded, selectedAllowedTypes });
@@ -42,7 +42,8 @@ export default class HomePage extends Component {
             const alertMsg = nextProps.homePage.alertMsg;
             this.setState({ alert, alertMsg });
         }
-        if (nextProps.homePage.settingsLoaded) {
+
+        if (nextProps.homePage.settingsLoaded && !this.state.settingsLoaded) {
             //settings have loaded
             const settingsList = nextProps.homePage.settingsList;
             const settingsLoaded = nextProps.homePage.settingsLoaded;

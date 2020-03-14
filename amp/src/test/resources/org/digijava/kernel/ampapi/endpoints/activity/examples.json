@@ -130,7 +130,7 @@
     }
   },
   "match-discriminated-id-only": {
-    "height": "10"
+    "height": 10
   },
   "agreement-update": {
     "agreement": {
@@ -160,5 +160,27 @@
       "id": 1,
       "detail": "Detail A"
     }
+  },
+  "read-only-fields": {
+    "read_only_name": "John Doe",
+    "read_only_favorite_color": 1,
+    "read_only_details": {
+      "detail": "X"
+    },
+    "read_only_years": [2019, 2020],
+    "read_only_children": [
+      {
+        "name": "John Doe"
+      }
+    ],
+    "read_only_home": [
+      {
+        "address": "X"
+      }
+    ],
+    "read_only_phone": {
+      "number": "X"
+    },
+    "read_only_intelligence": 45
   }
 }

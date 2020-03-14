@@ -24,7 +24,8 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
-import org.digijava.module.aim.dbentity.AmpSummaryNotificationSettings;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpTeamSummaryNotificationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
 import org.digijava.module.aim.helper.TeamMember;
@@ -102,11 +103,11 @@ public class UpdateWorkspace extends Action {
             newTeam.setComputation(uwForm.getComputation());
             newTeam.setCrossteamvalidation(uwForm.getCrossteamvalidation());
             newTeam.setIsolated(uwForm.getIsolated());
-
-            newTeam.setSumaryNotificationSettings(new AmpSummaryNotificationSettings());
-            newTeam.getSumaryNotificationSettings().setNotifyApprover(uwForm.getSendSummaryChangesApprover());
-            newTeam.getSumaryNotificationSettings().setNotifyManager(uwForm.getSendSummaryChangesManager());
-            newTeam.getSumaryNotificationSettings().setAmpTeam(newTeam);
+    
+            AmpTeamSummaryNotificationSettings notificationSettings = new AmpTeamSummaryNotificationSettings();
+            notificationSettings.setNotifyApprover(uwForm.getSendSummaryChangesApprover());
+            notificationSettings.setNotifyManager(uwForm.getSendSummaryChangesManager());
+            notificationSettings.setAmpTeam(newTeam);
 
             newTeam.setAddActivity(uwForm.getAddActivity());
 
@@ -165,8 +166,8 @@ public class UpdateWorkspace extends Action {
             uwForm.setComputation(null);
             uwForm.setCrossteamvalidation(null);
             uwForm.setIsolated(null);
-            uwForm.setSendSummaryChangesApprover(null);
-            uwForm.setSendSummaryChangesManager(null);
+            uwForm.setSendSummaryChangesApprover(false);
+            uwForm.setSendSummaryChangesManager(false);
             uwForm.setUseFilter(null);
             if (uwForm.getChildWorkspaces() != null) {
                 uwForm.getChildWorkspaces().clear();
@@ -299,6 +300,19 @@ public class UpdateWorkspace extends Action {
                 }
 
                 boolean teamExist = TeamUtil.updateTeam(newTeam, uwForm.getChildWorkspaces());
+                
+                AmpTeamSummaryNotificationSettings notificationSettings =
+                        (AmpTeamSummaryNotificationSettings) PersistenceManager.getSession()
+                                .get(AmpTeamSummaryNotificationSettings.class, newTeam.getAmpTeamId());
+                
+                if (notificationSettings == null) {
+                    notificationSettings = new AmpTeamSummaryNotificationSettings();
+                    notificationSettings.setAmpTeam(newTeam);
+                }
+    
+                notificationSettings.setNotifyManager(uwForm.getSendSummaryChangesManager());
+                notificationSettings.setNotifyApprover(uwForm.getSendSummaryChangesApprover());
+                PersistenceManager.getSession().saveOrUpdate(notificationSettings);
                 if (teamExist) {
                     errors.add(
                             ActionMessages.GLOBAL_MESSAGE,

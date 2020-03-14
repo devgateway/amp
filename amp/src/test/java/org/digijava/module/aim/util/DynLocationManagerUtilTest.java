@@ -24,7 +24,8 @@ public class DynLocationManagerUtilTest extends AbstractIntegrationTest {
     @Test
     public void testLocationImport() throws AimException {
         List<List<String>> rows = ImmutableList.of(
-                ImmutableList.of("Database ID", "Country", "Region", "Zone", "District", "Groupement",
+                ImmutableList.of("Database ID", "Administrative Level 0", "Administrative Level 1",
+                        "Administrative Level 2", "Administrative Level 3", "Administrative Level 5",
                         "Latitude", "Longitude", "GeoID", "ISO", "ISO3"),
                 ImmutableList.of("", "Disneyland", "", "", "", "", "0", "0", "", "DD", "DDD")
         );
@@ -49,7 +50,8 @@ public class DynLocationManagerUtilTest extends AbstractIntegrationTest {
         AmpCategoryValueLocations oz = getCategoryValueLocationByName("Oz");
         
         List<List<String>> updateList = ImmutableList.of(
-                ImmutableList.of("Database ID", "Country", "Region", "Zone", "District", "Groupement",
+                ImmutableList.of("Database ID", "Administrative Level 0", "Administrative Level 1",
+                        "Administrative Level 2", "Administrative Level 3", "Administrative Level 5",
                         "Latitude", "Longitude", "GeoID", "ISO", "ISO3"),
                 ImmutableList.of("" + disneyland.getId(), "Disneyland", "", "", "", "", "0", "0", "", "DD", "DDD"),
                 ImmutableList.of("" + wonderland.getId(), "Wonderland", "", "", "", "", "0", "0", "", "WW", "WWW"),
@@ -72,8 +74,8 @@ public class DynLocationManagerUtilTest extends AbstractIntegrationTest {
     }
     
     private void initLocations() {
-        AmpCategoryValue country = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
-        AmpCategoryValue region = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getAmpCategoryValueFromDB();
+        AmpCategoryValue country = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getAmpCategoryValueFromDB();
+        AmpCategoryValue region = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.getAmpCategoryValueFromDB();
     
         AmpCategoryValueLocations disneyLand = new AmpCategoryValueLocations();
         disneyLand.setName("Disneyland");

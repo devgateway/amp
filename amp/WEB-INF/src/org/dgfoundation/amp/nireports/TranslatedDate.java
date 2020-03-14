@@ -18,19 +18,26 @@ public class TranslatedDate implements Comparable<TranslatedDate> {
     public final ComparableValue<String> year;
     public final ComparableValue<String> month;
     public final ComparableValue<String> quarter;
-    
+    private final Long rawQuarter;
+    private final Long rawYear;
+
     public TranslatedDate(int year, String yearStr, int quarter, int month, String monthName) {
-        this(new ComparableValue<>(yearStr, year), new ComparableValue<>(String.format("Q%d", quarter), quarter), new ComparableValue<>(monthName, month));
+        this(new ComparableValue<>(yearStr, year), (long) year,
+                new ComparableValue<>(String.format("Q%d", quarter), quarter), (long) quarter,
+                new ComparableValue<>(monthName, month));
     }
     
-    public TranslatedDate(ComparableValue<String> year, ComparableValue<String> quarter, ComparableValue<String> month) {
+    public TranslatedDate(ComparableValue<String> year, Long rawYear, ComparableValue<String> quarter, Long rawQuarter,
+            ComparableValue<String> month) {
         this.year = year;
+        this.rawYear = rawYear;
         this.month = month;
         this.quarter = quarter;
+        this.rawQuarter = rawQuarter;
     }
 
     public TranslatedDate withMonth(ComparableValue<String> newMonth) {
-        return new TranslatedDate(this.year, this.quarter, newMonth);
+        return new TranslatedDate(this.year, this.rawYear, this.quarter, rawQuarter, newMonth);
     }
 
     @Override
@@ -59,5 +66,13 @@ public class TranslatedDate implements Comparable<TranslatedDate> {
     public boolean equals(Object oth) {
         TranslatedDate o = (TranslatedDate) oth;
         return year.equals(o.year) && quarter.equals(o.quarter) && month.equals(o.month);
+    }
+
+    public Long getRawQuarter() {
+        return rawQuarter;
+    }
+
+    public Long getRawYear() {
+        return rawYear;
     }
 }

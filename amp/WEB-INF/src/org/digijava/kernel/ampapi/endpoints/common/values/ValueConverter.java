@@ -1,16 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.common.values;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.log4j.Logger;
@@ -33,7 +27,7 @@ public class ValueConverter {
     /**
      * Used to restore the value of the discrimination field.
      */
-    public void configureDiscriminationField(Object obj, APIField fieldDef) {
+    private void configureDiscriminationField(Object obj, APIField fieldDef) {
         if (fieldDef.getDiscriminationConfigurer() != null) {
             DiscriminationConfigurer configurer = discriminatorConfigurerCache.computeIfAbsent(
                     fieldDef.getDiscriminationConfigurer(), this::newConfigurer);
@@ -51,11 +45,11 @@ public class ValueConverter {
 
     /**
      * Handles integer -> long and similar conversions, since exact type is not guaranteed during deserialisation 
-     * @param value
      * @param type
+     * @param value
      * @return
      */
-    public Object toSimpleTypeValue(Object value, Class<?> type) {
+    public Object toSimpleTypeValue(Class<?> type, Object value) {
         if (value == null || type.isAssignableFrom(value.getClass())) {
             return value;
         }
@@ -70,35 +64,17 @@ public class ValueConverter {
     }
 
     /**
-     * Generates an instance of a type
-     * @param concreteType
+     * Instantiate the object referred by the field. If the field is a list of objects then the element of the
+     * collection is instantiated.
+     *
+     * @param field
      * @return
      */
-    public Object getNewInstance(Class<?> concreteType) {
+    public Object instantiate(APIField field) {
         try {
-            return instantiate(findConcreteType(concreteType));
-        } catch (IllegalArgumentException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    // this class can work with plain lists
-    private Class findConcreteType(Class type) {
-        if (SortedSet.class.isAssignableFrom(type)) {
-            return TreeSet.class;
-        } else if (Set.class.isAssignableFrom(type)) {
-            return HashSet.class;
-        } else if (Collection.class.isAssignableFrom(type)) {
-            return ArrayList.class;
-        } else {
-            return type;
-        }
-    }
-
-    public Object instantiate(Class type) {
-        try {
-            return type.newInstance();
+            Object newInstance = field.getApiType().getType().newInstance();
+            configureDiscriminationField(newInstance, field);
+            return newInstance;
         } catch (InstantiationException | IllegalAccessException e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
@@ -110,9 +86,9 @@ public class ValueConverter {
             throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
         }
         if (ApprovalStatus.class.isAssignableFrom(entityClass)) {
-            return ApprovalStatus.fromId((Integer) id);
+            return ApprovalStatus.fromId(Integer.valueOf(id.toString()));
         } else if (ResourceType.class.isAssignableFrom(entityClass)) {
-            return ResourceType.fromId((Integer) id);
+            return ResourceType.fromId(Integer.valueOf(id.toString()));
         } else if (InterchangeUtils.isSimpleType(entityClass)) {
             return ConvertUtils.convert(id, entityClass);
         } else {

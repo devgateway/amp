@@ -102,8 +102,10 @@ public class GetAvailableUsersForWorkspaceJSON extends Action {
                 orgs+="</ul>";
             }
             juser.put("organizations", orgs);
-            String roles="<select class=\"inp-text\" id=\"role_"+user.getId()+"\" onclick=\"updateUserRole(this)\" >";
-            roles+="<option value=\"-1\" >-----" +TranslatorWorker.translateText("Select Role", locale, siteId)+"-----</option>";
+            String roles = "<select class=\"inp-text\" id=\"role_" + user.getId()
+                    + "\" onchange=\"updateUserRole(this)\" >";
+            roles += "<option value=\"-1\" >-----" + TranslatorWorker.translateText("Select Role", locale, siteId)
+                    + "-----</option>";
             Collection<AmpTeamMemberRoles> allRoles= TeamMemberUtil.getAllTeamMemberRoles();
             if(allRoles!=null && allRoles.size()>0){
                 for (AmpTeamMemberRoles ampTmRole : allRoles) {

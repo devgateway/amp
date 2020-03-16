@@ -9,9 +9,11 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -123,6 +125,22 @@ public class ActivityBuilder {
 
     public ActivityBuilder withDraft(boolean draft) {
         activity.setDraft(draft);
+        return this;
+    }
+
+    public ActivityBuilder addRegionalFunding(int transactionType, AmpCategoryValue adjustmentType,
+            Date transactionDate, Double transactionAmount, AmpCurrency currency, AmpCategoryValueLocations location) {
+
+        AmpRegionalFunding funding = new AmpRegionalFunding();
+        funding.setTransactionType(transactionType);
+        funding.setAdjustmentType(adjustmentType);
+        funding.setTransactionDate(transactionDate);
+        funding.setTransactionAmount(transactionAmount);
+        funding.setCurrency(currency);
+        funding.setRegionLocation(location);
+
+        activity.getRegionalFundings().add(funding);
+
         return this;
     }
 }

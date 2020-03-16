@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
@@ -44,9 +45,6 @@ public class ImplementationLevelValidator implements ConstraintValidator {
     private static final String IMPL_LOC_FIELD_NAME =
             FieldMap.underscorify(ActivityFieldsConstants.IMPLEMENTATION_LOCATION);
 
-    private static final String LOCATIONS_FIELD_NAME =
-            FieldMap.underscorify(ActivityFieldsConstants.LOCATIONS);
-
     private static final String LOCATION_FIELD_NAME =
             FieldMap.underscorify(ActivityFieldsConstants.Locations.LOCATION);
 
@@ -72,12 +70,12 @@ public class ImplementationLevelValidator implements ConstraintValidator {
 
         boolean valid = true;
 
-        APIField locsField = type.getField(LOCATIONS_FIELD_NAME);
+        APIField locsField = type.getField(ActivityEPConstants.LOCATIONS_FIELD_NAME);
         Collection<AmpActivityLocation> actLocs = readFieldValueOrDefault(locsField, value, ImmutableList.of());
 
         if (implLevel == null && !actLocs.isEmpty()) {
             context.buildConstraintViolation(ValidationErrors.IMPLEMENTATION_LEVEL_NOT_SPECIFIED)
-                    .addPropertyNode(LOCATIONS_FIELD_NAME)
+                    .addPropertyNode(ActivityEPConstants.LOCATIONS_FIELD_NAME)
                     .addConstraintViolation();
             return false;
         }
@@ -101,7 +99,7 @@ public class ImplementationLevelValidator implements ConstraintValidator {
                 valid = false;
 
                 context.buildConstraintViolation(ValidationErrors.DOESNT_MATCH_IMPLEMENTATION_LEVEL)
-                        .addPropertyNode(LOCATIONS_FIELD_NAME)
+                        .addPropertyNode(ActivityEPConstants.LOCATIONS_FIELD_NAME)
                         .addPropertyNode(LOCATION_FIELD_NAME)
                         .addAttribute(ATTR_LOC_ID, activityLocation.getLocation().getId())
                         .addConstraintViolation();

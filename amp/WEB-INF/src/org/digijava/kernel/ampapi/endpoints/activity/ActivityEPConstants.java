@@ -67,6 +67,9 @@ public class ActivityEPConstants {
             FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY);
     public static final String VERSION_FIELD_NAME = FieldMap.underscorify(ActivityFieldsConstants.VERSION);
 
+    public static final String LOCATIONS_FIELD_NAME =
+            FieldMap.underscorify(ActivityFieldsConstants.LOCATIONS);
+
     public static final String AMP_ACTIVITY_ID = "amp-activity-id";
     public static final String AMP_ACTIVITY_LAST_VERSION_ID = "amp-activity-last-version-id";
 

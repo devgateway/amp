@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
+import org.digijava.kernel.ampapi.endpoints.common.values.providers.RegionPossibleValuesProvider;
 import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -55,12 +58,12 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
 
     private String expenditureCategory;
 
-    // TODO expose this ids or from AmpLocation???
-    // TODO validator, can't select here region unless it was selected in location section
-    //      (what if impl level is not region?)
-    @Interchangeable(fieldTitle = "Region Location", pickIdOnly = true, commonPV = CommonFieldsConstants.COMMON_REGION,
+    @PossibleValues(RegionPossibleValuesProvider.class)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.RegionalFunding.LOCATION, pickIdOnly = true,
+            commonPV = CommonFieldsConstants.COMMON_REGION, importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private AmpCategoryValueLocations regionLocation; // TODO possible values?
+    private AmpCategoryValueLocations regionLocation;
+
     /**
      * @return Returns the activity.
      */
@@ -158,18 +161,38 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
     public void setReportingOrganization(AmpOrganisation reportingOrganization) {
         this.reportingOrganization = reportingOrganization;
     }
+
     /**
      * @return Returns the transactionAmount.
      */
     public Double getTransactionAmount() {
-        return FeaturesUtil.applyThousandsForVisibility(transactionAmount);
+        return transactionAmount;
     }
+
     /**
      * @param transactionAmount The transactionAmount to set.
      */
     public void setTransactionAmount(Double transactionAmount) {
+        this.transactionAmount = transactionAmount;
+    }
+
+    /**
+     * Return transaction amount. Amount is converted for visibility.
+     * @return Returns the transactionAmount.
+     */
+    public Double getTransactionAmountWithFormatConversion() {
+        return FeaturesUtil.applyThousandsForVisibility(transactionAmount);
+    }
+
+    /**
+     * Used from Wicket.
+     * Set transaction amount. Amount is converted from visibility to storage format.
+     * @param transactionAmount The transactionAmount to set.
+     */
+    public void setTransactionAmountWithFormatConversion(Double transactionAmount) {
         this.transactionAmount = FeaturesUtil.applyThousandsForEntry(transactionAmount);
     }
+
     /**
      * @return Returns the transactionDate.
      */

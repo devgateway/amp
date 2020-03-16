@@ -123,7 +123,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 + " LEFT JOIN amp_location al ON acvl.id = al.location_id"
                 + " WHERE NOT acvl.deleted"
                 + " OR acvl.deleted IS NULL"
-                + " ORDER BY acvl.id;";
+                + " ORDER BY acvl.id";
 
         List<Object[]> result = new ArrayList<>();
 

@@ -444,7 +444,7 @@ public class ShowActivityPrintPreview
                         double disb = 0;
                         if(ampRegFund.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()) &&
                            ampRegFund.getTransactionType().intValue() == 1)
-                            disb = ampRegFund.getTransactionAmount().
+                            disb = ampRegFund.getTransactionAmountWithFormatConversion().
                                 doubleValue();
                
                         eaForm.getFunding().setRegionTotalDisb(eaForm.getFunding().getRegionTotalDisb() +
@@ -460,7 +460,7 @@ public class ShowActivityPrintPreview
                         fd.setTransactionAmount(DecimalToText
                                                 .ConvertDecimalToText(
                                                     ampRegFund
-                                                    .getTransactionAmount().doubleValue()));
+                                                    .getTransactionAmountWithFormatConversion().doubleValue()));
                         fd.setTransactionDate(DateConversion.convertDateToString(ampRegFund.getTransactionDate()));
                         fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampRegFund.getTransactionDate()));
 

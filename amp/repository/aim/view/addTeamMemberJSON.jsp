@@ -419,6 +419,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 					</tr>
 				</logic:empty>
 				<bean:define id="addSelectedMembers"><digi:trn>Add Selected Members</digi:trn></bean:define>
+				<bean:define id="Cancel"><digi:trn>Cancel</digi:trn></bean:define>
 						<tr>
 							<td>
 								<div>
@@ -441,7 +442,8 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 						<td align=center>
 							<div class='yui-skin-sam'>
                             	<div id="dynamicdata" class="report"></div>
-                            	<div align="center" style="border: 1px black;"><br><html:button property="" styleClass="buttonx" value="${addSelectedMembers}" onclick="addUsersToWorkspace()"></html:button> </div>
+                            	<div align="center" style="border: 1px black;"><br><html:button property="" styleClass="buttonx" value="${addSelectedMembers}" onclick="addUsersToWorkspace()"></html:button>
+									<html:button property="" styleClass="buttonx" value="${Cancel}" onclick="window.location = '/workspaceManager.do~page=1~reset=true';"></html:button></div>
 								<div id="dt-pag-nav"></div>
 								<div id="errors"></div>
 							</div>

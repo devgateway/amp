@@ -8,24 +8,34 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.digijava.module.aim.annotations.translation.TranslatableClass;
-import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
 
-@TranslatableClass (displayName = "Line Ministry Observation")
 public class AmpLineMinistryObservation implements Serializable, Versionable, Cloneable {
     private static final long serialVersionUID = 1L;
     //IATI-check: to be ignored
-    
-//  @Interchangeable(fieldTitle="ID")
+
+    @InterchangeableId
+    @Interchangeable(fieldTitle="ID")
     private Long ampLineMinistryObservationId;
-    @TranslatableField
-//  @Interchangeable(fieldTitle="Name")
+
+    @Interchangeable(fieldTitle="Name", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String name;
+
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
-//  @Interchangeable(fieldTitle="Line Ministry Observation Measures",fmPath="/Activity Form/Line Ministry Observations/Observation/Measure")
-    private Set<AmpLineMinistryObservationMeasure> lineMinistryObservationMeasures;
-//  @Interchangeable(fieldTitle="Observation Date",fmPath="/Activity Form/Line Ministry Observations/Observation/Date")
+
+    @Interchangeable(fieldTitle = "Measures", importable = true,
+            fmPath = "/Activity Form/Line Ministry Observations/Observation/Measure")
+    private Set<AmpLineMinistryObservationMeasure> lineMinistryObservationMeasures = new HashSet<>();
+
+    @Interchangeable(fieldTitle = "Date", importable = true,
+            fmPath = "/Activity Form/Line Ministry Observations/Observation/Date")
     private Date observationDate;
 
     public String getName() {

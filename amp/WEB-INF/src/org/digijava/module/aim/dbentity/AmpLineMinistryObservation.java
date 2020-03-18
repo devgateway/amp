@@ -20,10 +20,10 @@ public class AmpLineMinistryObservation implements Serializable, Versionable, Cl
     //IATI-check: to be ignored
 
     @InterchangeableId
-    @Interchangeable(fieldTitle="ID")
+    @Interchangeable(fieldTitle = "ID")
     private Long ampLineMinistryObservationId;
 
-    @Interchangeable(fieldTitle="Name", importable = true,
+    @Interchangeable(fieldTitle = "Name", importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String name;
 

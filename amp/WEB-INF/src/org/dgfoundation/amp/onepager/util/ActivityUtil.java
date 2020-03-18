@@ -298,7 +298,7 @@ public class ActivityUtil {
         }
 
         a.setAmpActivityGroup(group);
-
+        updateMultiStakeholderField(a);
         if (isActivityForm) {
 
             saveIndicators(a, session);
@@ -339,7 +339,13 @@ public class ActivityUtil {
 
         return a;
     }
-    
+
+    private static void updateMultiStakeholderField(AmpActivityVersion a) {
+        if (!Boolean.TRUE.equals(a.getMultiStakeholderPartnership())) {
+            a.setMultiStakeholderPartners(null);
+        }
+    }
+
     public static boolean detectDraftChange(AmpActivityVersion a, boolean draft) {
         return Boolean.TRUE.equals(a.getDraft()) != draft;
     }

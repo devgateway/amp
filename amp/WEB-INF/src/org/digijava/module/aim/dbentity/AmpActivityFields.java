@@ -851,6 +851,12 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "Joint Criteria", importable = true, fmPath = "/Activity Form/Identification/Joint Criteria")
     @VersionableFieldSimple(fieldTitle = "Joint Criteria")
     protected Boolean jointCriteria;
+
+    @VersionableFieldSimple(fieldTitle = "Multi Stakeholder Partnership")
+    protected Boolean multiStakeholderPartnership;
+
+    @VersionableFieldSimple(fieldTitle = "Multi Stakeholder Partners")
+    protected String multiStakeholderPartners;
     
     @Interchangeable(fieldTitle = "Humanitarian Aid", importable = true,
             fmPath = "/Activity Form/Identification/Humanitarian Aid",
@@ -1876,6 +1882,22 @@ LoggerIdentifiable, Cloneable {
 
         public Boolean getGovernmentApprovalProcedures() {
             return governmentApprovalProcedures;
+        }
+
+        public Boolean getMultiStakeholderPartnership() {
+            return multiStakeholderPartnership;
+        }
+
+        public void setMultiStakeholderPartnership(Boolean multiStakeholderPartnership) {
+            this.multiStakeholderPartnership = multiStakeholderPartnership;
+        }
+
+        public String getMultiStakeholderPartners() {
+            return multiStakeholderPartners;
+        }
+
+        public void setMultiStakeholderPartners(String multiStakeholderPartners) {
+            this.multiStakeholderPartners = multiStakeholderPartners;
         }
 
         public Boolean getJointCriteria() {

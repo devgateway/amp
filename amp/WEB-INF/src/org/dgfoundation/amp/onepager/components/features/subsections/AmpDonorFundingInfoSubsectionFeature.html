@@ -65,15 +65,6 @@
             		<td></td>
            		</tr>
             </wicket:fm>
-            <wicket:fm fmNames="Vulnerable Group;Required Validator for Vulnerable Group">
-                <tr>
-                    <td colspan="2">
-                        <span wicket:id="vulnerableGroup"/>
-                        <span wicket:id="vulnerableGroupRequired"/>
-                    </td>
-                    <td></td>
-                </tr>
-            </wicket:fm>
         </wicket:fm>
         <wicket:fm fmNames="Interest Rate;Grace Period">
             <tr>
@@ -96,6 +87,26 @@
                     <span wicket:id="fundingClosingDateRequired"/>
                 </td>
             </tr>
+        </wicket:fm>
+        <wicket:fm fmNames="Vulnerable Group;Required Validator for Vulnerable Group;">
+            <wicket:fm fmNames="Vulnerable Group;Required Validator for Vulnerable Group">
+                <tr>
+                    <td colspan="2">
+                        <span wicket:id="vulnerableGroup"/>
+                        <span wicket:id="vulnerableGroupRequired"/>
+                    </td>
+                    <td></td>
+                </tr>
+            </wicket:fm>
+            <wicket:fm fmNames="Project Results Available;Required Validator for Project Results Available;Project Results Link">
+                <tr>
+                    <td colspan="3">
+                        <span wicket:id="projectResultsAvailable"/>
+                        <span wicket:id="projectResultsAvailableRequired"/>
+                        <span wicket:id="projectResultsLink"/>
+                    </td>
+                </tr>
+            </wicket:fm>
         </wicket:fm>
 	</table>	
 </wicket:extend>

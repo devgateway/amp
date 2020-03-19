@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -21,6 +22,7 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpFundingSummaryPanel;
@@ -121,6 +123,49 @@ implements AmpRequiredComponentContainer{
                     vulnerableGroup.getChoiceContainer().setRequired(true);
                     requiredFormComponents.add(vulnerableGroup.getChoiceContainer());
                 }
+            }
+        });
+
+        AmpBooleanChoiceField projectResultsAvailable = new AmpBooleanChoiceField("projectResultsAvailable",
+                new PropertyModel<>(model, "projectResultsAvailable"),
+                "Project Results Available") {
+            @Override
+            public void configureLabelText() {
+                this.setLabelText("Are the project results available to the public?");
+            }
+        };
+        add(projectResultsAvailable);
+        add(new AmpComponentPanel("projectResultsAvailableRequired",
+                "Required Validator for Project Results Available") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()) {
+                    projectResultsAvailable.getChoiceContainer().setRequired(true);
+                    requiredFormComponents.add(projectResultsAvailable.getChoiceContainer());
+                }
+            }
+        });
+
+        AmpTextFieldPanel projectResultsLink = new AmpTextFieldPanel("projectResultsLink",
+                new PropertyModel<String>(model, "projectResultsLink"), "Project Results Link") {
+            @Override
+            protected void configureLabelText() {
+                this.setLabelText("Please provide link if available");
+            }
+        };
+        projectResultsLink.setOutputMarkupPlaceholderTag(true);
+        projectResultsLink.setVisibilityAllowed(
+                Boolean.TRUE.equals(projectResultsAvailable.getChoiceContainer().getModel().getObject()));
+        projectResultsLink.getTextContainer().add(new AttributeModifier("style", "width: 300px"));
+        add(projectResultsLink);
+
+        projectResultsAvailable.getChoiceContainer().add(new AjaxFormChoiceComponentUpdatingBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                projectResultsLink.setVisibilityAllowed(
+                        Boolean.TRUE.equals(projectResultsAvailable.getChoiceContainer().getConvertedInput()));
+                target.add(projectResultsLink);
             }
         });
             

@@ -160,6 +160,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     @Interchangeable(fieldTitle="Concessionality Level", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level", 
              discriminatorOption = CategoryConstants.CONCESSIONALITY_LEVEL_KEY, importable=true, pickIdOnly=true)
     private AmpCategoryValue concessionalityLevel;
+
+    private AmpCategoryValue vulnerableGroup;
     
     @Interchangeable(fieldTitle="Loan Terms",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Loan Terms", importable=true)
     private String loanTerms;
@@ -231,6 +233,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
         ret.append("-Concessionality Level:" + (this.concessionalityLevel != null ? this.concessionalityLevel.getEncodedValue() : ""));
         ret.append("-Funding Status:" + (this.fundingStatus != null ? this.fundingStatus.getEncodedValue() : ""));
         ret.append("-Funding Status:" + (this.financingId != null ? this.financingId : ""));
+        ret.append("-Vulnerability Groups:" + (this.vulnerableGroup != null ? this.vulnerableGroup : ""));
         if (this.agreement != null)
             ret.append("-Agreement:" + this.agreement.getValue());
         // Compare fields from AmpFundingDetail.
@@ -933,6 +936,14 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     
     public AmpCategoryValue getConcessionalityLevel() {
         return this.concessionalityLevel;
+    }
+
+    public AmpCategoryValue getVulnerableGroup() {
+        return vulnerableGroup;
+    }
+
+    public void setVulnerableGroup(AmpCategoryValue vulnerableGroup) {
+        this.vulnerableGroup = vulnerableGroup;
     }
 
     @Override

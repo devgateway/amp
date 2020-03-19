@@ -4,10 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -35,6 +31,10 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 4, 2010
@@ -166,6 +166,86 @@ implements AmpRequiredComponentContainer{
                 projectResultsLink.setVisibilityAllowed(
                         Boolean.TRUE.equals(projectResultsAvailable.getChoiceContainer().getConvertedInput()));
                 target.add(projectResultsLink);
+            }
+        });
+
+        AmpTextAreaFieldPanel projectJointDecision = new AmpTextAreaFieldPanel("projectJointDecision",
+                new PropertyModel<>(model, "projectJointDecision"),
+                "Project Joint Decision", false, false, false) {
+            @Override
+            public void configureLabelText() {
+                this.setLabelText("How is joint decision making made in this project/action?");
+            }
+        };
+        add(projectJointDecision);
+        add(new AmpComponentPanel("projectJointDecisionRequired", "Required Validator for Project Joint Decision") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()) {
+                    projectJointDecision.getTextAreaContainer().setRequired(true);
+                    requiredFormComponents.add(projectJointDecision.getTextAreaContainer());
+                }
+            }
+        });
+
+        AmpTextAreaFieldPanel projectMonitoring = new AmpTextAreaFieldPanel("projectMonitoring",
+                new PropertyModel<>(model, "projectJointDecision"),
+                "Project Monitoring", false, false, false) {
+            @Override
+            public void configureLabelText() {
+                this.setLabelText("How do you monitor and evaluate this project/action?");
+            }
+        };
+        add(projectMonitoring);
+        add(new AmpComponentPanel("projectMonitoringRequired", "Required Validator for Project Monitoring") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()) {
+                    projectMonitoring.getTextAreaContainer().setRequired(true);
+                    requiredFormComponents.add(projectMonitoring.getTextAreaContainer());
+                }
+            }
+        });
+
+        AmpTextAreaFieldPanel projectSustainability = new AmpTextAreaFieldPanel("projectSustainability",
+                new PropertyModel<>(model, "projectSustainability"),
+                "Project Sustainability", false, false, false) {
+            @Override
+            public void configureLabelText() {
+                this.setLabelText("Sustainability: what happens when the project/action ends?");
+            }
+        };
+        add(projectSustainability);
+        add(new AmpComponentPanel("projectSustainabilityRequired", "Required Validator for Project Sustainability") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()) {
+                    projectSustainability.getTextAreaContainer().setRequired(true);
+                    requiredFormComponents.add(projectSustainability.getTextAreaContainer());
+                }
+            }
+        });
+
+        AmpTextAreaFieldPanel projectProblems = new AmpTextAreaFieldPanel("projectProblems",
+                new PropertyModel<>(model, "projectProblems"),
+                "Project Problems", false, false, false) {
+            @Override
+            public void configureLabelText() {
+                this.setLabelText("What problems were encountered in this project?");
+            }
+        };
+        add(projectProblems);
+        add(new AmpComponentPanel("projectProblemsRequired", "Required Validator for Project Problems") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()) {
+                    projectProblems.getTextAreaContainer().setRequired(true);
+                    requiredFormComponents.add(projectProblems.getTextAreaContainer());
+                }
             }
         });
             

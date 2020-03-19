@@ -22,7 +22,18 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
-import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
+import org.dgfoundation.amp.onepager.components.fields.AmpBudgetClassificationField;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCommentPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCommentTab;
+import org.dgfoundation.amp.onepager.components.fields.AmpCommentTabsFieldWrapper;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpWarningComponentPanel;
+import org.dgfoundation.amp.onepager.components.fields.TranslationDecorator;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
@@ -41,7 +52,11 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
 import javax.servlet.ServletContext;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -511,8 +526,8 @@ implements AmpRequiredComponentContainer{
                     "Multi Stakeholder Partnership") {
                 @Override
                 public void configureLabelText() {
-                    this.setLabelText("Does the project/action involve a multi-stakeholder partnership " +
-                            "(private sector, CSO etc.)?");
+                    this.setLabelText("Does the project/action involve a multi-stakeholder partnership "
+                            + "(private sector, CSO etc.)?");
                 }
             };
 
@@ -523,7 +538,7 @@ implements AmpRequiredComponentContainer{
                 @Override
                 protected void onConfigure() {
                     super.onConfigure();
-                    if (this.isVisible()){
+                    if (this.isVisible()) {
                         multiStakeholderPartnership.getChoiceContainer().setRequired(true);
                         requiredFormComponents.add(multiStakeholderPartnership.getChoiceContainer());
                     }

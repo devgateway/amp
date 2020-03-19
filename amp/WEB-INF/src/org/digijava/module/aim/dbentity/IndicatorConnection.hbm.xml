@@ -30,6 +30,8 @@
 				class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
 			<many-to-one name="risk" column="risk"
 				class="org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings" cascade="none" />
+			<many-to-one name="logFrame" column="ind_val_category"
+				class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		</subclass>
 
 		<subclass name="org.digijava.module.aim.dbentity.IndicatorSector" discriminator-value="s" lazy="false">

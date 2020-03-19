@@ -308,10 +308,10 @@ public class ExportActivityToWordBuilder {
                                 indicator.getIndicator().getCode(), false);
                     }
                     if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/Logframe Category")) {
-                        if (indicator.getValues() != null && indicator.getValues().size() > 0) {
+                        if (indicator.getLogFrame() != null) {
                             setRun(headerRow.getCell(cellIndex++).getParagraphs().get(0).createRun(),
                                     new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false),
-                                    indicator.getLogFrame() + "\n", false);
+                                    indicator.getLogFrame().getValue() + "\n", false);
                         }
                     }
 

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 
@@ -41,8 +40,6 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
 
     private Double value;
     private int valueType;
-    private AmpCategoryValue logFrame;
-    private AmpIndicatorRiskRatings risk;
     private Boolean defaultInd;
     private IndicatorConnection indicatorConnection;
     private AmpLocation location;
@@ -110,18 +107,6 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     }
     public void setValueType(int valueType) {
         this.valueType = valueType;
-    }
-    public AmpCategoryValue getLogFrame() {
-        return logFrame;
-    }
-    public void setLogFrame(AmpCategoryValue logFrame) {
-        this.logFrame = logFrame;
-    }
-    public AmpIndicatorRiskRatings getRisk() {
-        return risk;
-    }
-    public void setRisk(AmpIndicatorRiskRatings risk) {
-        this.risk = risk;
     }
     public IndicatorConnection getIndicatorConnection() {
         return indicatorConnection;

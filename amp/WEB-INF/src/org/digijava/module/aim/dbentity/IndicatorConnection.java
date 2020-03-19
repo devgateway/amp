@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -55,5 +56,20 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
         return getId().compareTo(o.getId());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof IndicatorConnection)) {
+            return false;
+        }
+        IndicatorConnection that = (IndicatorConnection) o;
+        return id != null && id.equals(that.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

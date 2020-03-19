@@ -15,7 +15,8 @@ import {
     COMPARE_ACTIVITY_URL,
     PUBLIC_CHANGE_SUMMARY,
     TEAM_ID,
-    PUBLIC_VERSION_HISTORY
+    PUBLIC_VERSION_HISTORY,
+    HIDE_CONTACTS_PUBLIC_VIEW
 } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
@@ -29,7 +30,6 @@ import ActivityFundingTotals from '../utils/ActivityFundingTotals.jsx'
 import translate from '../utils/translate.jsx';
 import * as ContactAction from './ContactsAction.jsx';
 import * as ResourceAction from './ResourceAction.jsx';
-import {CONTACTS_LOAD_LOADING, getActivityContactsId, loadHydratedContacts} from "./ContactsAction";
 import {ACTIVITY_PREVIEW_URL} from "../common/ReampConstants";
 
 export const ACTIVITY_LOAD_LOADING = 'ACTIVITY_LOAD_LOADING';
@@ -51,7 +51,7 @@ export function loadActivityForActivityPreview(activityId) {
             ActivityApi.fetchActivityInfo(activityId)]
         ).then(([activity, fieldsDef, fmTree, activityInfo]) => {
             _registerSettings(settings.language, settings['default-date-format'].toUpperCase());
-            if (settings['team-id']) {
+            if (settings[TEAM_ID]) {
                 ContactAction.loadHydratedContactsForActivity(activity)(dispatch, ownProps);
                 loadWsInfoForActivity(activity, dispatch);
             }
@@ -188,6 +188,7 @@ export function loadActivityForActivityPreview(activityId) {
             reorderFundingItemId: settings[REORDER_FUNDING_ITEM],
             rtlDirection: settings[RTL_DIRECTION],
             showActivityWorkspaces: settings[SHOW_ACTIVITY_WORKSPACES],
+            hideContacts: !settings['team-id'] && settings[HIDE_CONTACTS_PUBLIC_VIEW],
             validation: {
                 status: activityInfo['validation-status'],
                 daysToAutomaticValidation: activityInfo['days-for-automatic-validation'],

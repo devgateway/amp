@@ -50,6 +50,8 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
+import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
+
 /**
  * Utility class for amp settings handling
  * 
@@ -426,6 +428,7 @@ public class SettingsUtils {
     
         settings.setPublicChangeSummary(FeaturesUtil.isVisibleField("Show Change Summary"));
     
+        settings.setHideContactsPublicView(!FeaturesUtil.isVisibleFeature("Contacts"));
         AmpCurrency effCurrency = CurrencyUtil.getEffectiveCurrency();
         settings.setEffectiveCurrency(new CurrencySettings(effCurrency.getId(), effCurrency.getCurrencyCode()));
 

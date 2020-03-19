@@ -122,6 +122,9 @@ public class CategoryConstants {
     
     public static final String CONCESSIONALITY_LEVEL_NAME   = "Concessionality Level";
     public static final String CONCESSIONALITY_LEVEL_KEY    = "concessionality_level";
+
+    public static final String VULNERABLE_GROUP_LEVEL_NAME   = "Vulnerable Group";
+    public static final String VULNERABLE_GROUP_LEVEL_KEY    = "vulnerable_group";
     
     
     //--- IPA Contracting Step 13

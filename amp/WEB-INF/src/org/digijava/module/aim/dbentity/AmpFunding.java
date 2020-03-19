@@ -162,6 +162,10 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     private AmpCategoryValue concessionalityLevel;
 
     private AmpCategoryValue vulnerableGroup;
+
+    protected Boolean projectResultsAvailable;
+
+    protected String projectResultsLink;
     
     @Interchangeable(fieldTitle="Loan Terms",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Loan Terms", importable=true)
     private String loanTerms;
@@ -234,6 +238,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
         ret.append("-Funding Status:" + (this.fundingStatus != null ? this.fundingStatus.getEncodedValue() : ""));
         ret.append("-Funding Status:" + (this.financingId != null ? this.financingId : ""));
         ret.append("-Vulnerability Groups:" + (this.vulnerableGroup != null ? this.vulnerableGroup : ""));
+        ret.append("-Donor Objective:" + (this.donorObjective == null ? "" : this.donorObjective.trim()));
+        ret.append("-Projects Results Link:" + (this.projectResultsLink == null ? "" : this.projectResultsLink.trim()));
         if (this.agreement != null)
             ret.append("-Agreement:" + this.agreement.getValue());
         // Compare fields from AmpFundingDetail.
@@ -944,6 +950,22 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
 
     public void setVulnerableGroup(AmpCategoryValue vulnerableGroup) {
         this.vulnerableGroup = vulnerableGroup;
+    }
+
+    public Boolean getProjectResultsAvailable() {
+        return projectResultsAvailable;
+    }
+
+    public void setProjectResultsAvailable(Boolean projectResultsAvailable) {
+        this.projectResultsAvailable = projectResultsAvailable;
+    }
+
+    public String getProjectResultsLink() {
+        return projectResultsLink;
+    }
+
+    public void setProjectResultsLink(String projectResultsLink) {
+        this.projectResultsLink = projectResultsLink;
     }
 
     @Override

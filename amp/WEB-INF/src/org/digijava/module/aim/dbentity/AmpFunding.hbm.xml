@@ -50,6 +50,8 @@
         <property name="gracePeriod" column="grace_period" type="java.lang.Integer" />
         <property name="interestRate" column="interest_rate" type="java.lang.Float" />
         <property name="maturity" column="maturity" type="java.util.Date" />
+		<property name="projectResultsAvailable" column="projects_results_available" type="java.lang.Boolean" />
+		<property name="projectResultsLink" column="projects_results_link" type="java.lang.String" />
 		
 
 		<many-to-one name="ampDonorOrgId" column="amp_donor_org_id"

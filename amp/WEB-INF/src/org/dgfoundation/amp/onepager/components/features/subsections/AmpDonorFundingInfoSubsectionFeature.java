@@ -45,6 +45,7 @@ implements AmpRequiredComponentContainer{
     private AmpCategorySelectFieldPanel financingInstrument;
     private AmpCategorySelectFieldPanel typeOfAssistance;
     private AmpCategorySelectFieldPanel concessionalityLevel;
+    private AmpCategorySelectFieldPanel vulnerableGroup;
     private AmpTextAreaFieldPanel loanTerms;
     private AmpTextFieldPanel<Float> interestRate;
     private AmpTextFieldPanel<Integer> gracePeriod;
@@ -86,7 +87,7 @@ implements AmpRequiredComponentContainer{
         concessionalityLevel.getChoiceContainer().setRequired(false);
         concessionalityLevel.getChoiceContainer().add(new AttributeModifier("style", "max-width: 210px!important;"));
         add(concessionalityLevel);
-        
+
         add(new AmpComponentPanel("concessionalityLevelRequired", "Required Validator for " + CategoryConstants.CONCESSIONALITY_LEVEL_NAME) {
             
             @Override
@@ -95,6 +96,30 @@ implements AmpRequiredComponentContainer{
                 if (this.isVisible()) {
                     concessionalityLevel.getChoiceContainer().setRequired(true);
                     requiredFormComponents.add(concessionalityLevel.getChoiceContainer());
+                }
+            }
+        });
+
+        vulnerableGroup = new AmpCategorySelectFieldPanel(
+                "vulnerableGroup", CategoryConstants.VULNERABLE_GROUP_LEVEL_KEY,
+                new PropertyModel<AmpCategoryValue>(model, "vulnerableGroup"),
+                CategoryConstants.VULNERABLE_GROUP_LEVEL_NAME, true, false) {
+            @Override
+            protected void configureLabelText() {
+                setLabelText("Which vulnerable groups does this project/action work with?");
+            }
+        };
+        vulnerableGroup.getChoiceContainer().setRequired(false);
+        vulnerableGroup.getChoiceContainer().add(new AttributeModifier("style", "max-width: 210px!important;"));
+        add(vulnerableGroup);
+        add(new AmpComponentPanel("vulnerableGroupRequired",
+                "Required Validator for " + CategoryConstants.VULNERABLE_GROUP_LEVEL_NAME) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()) {
+                    vulnerableGroup.getChoiceContainer().setRequired(true);
+                    requiredFormComponents.add(vulnerableGroup.getChoiceContainer());
                 }
             }
         });

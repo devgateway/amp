@@ -23,7 +23,7 @@
   "author": "Alexei Savca",
   "license": "inherit",
   "devDependencies": {
-    "amp-ui": "git+ssh://github.com/devgateway/amp-ui#task/AMPUI-86/word",
+    "amp-ui": "git+ssh://github.com/devgateway/amp-ui#bug/AMPUI-134/disaster-response",
     "babel-core": "^6.26.3",
     "babel-jest": "^6.0.1",
     "babel-loader": "^6.3.2",

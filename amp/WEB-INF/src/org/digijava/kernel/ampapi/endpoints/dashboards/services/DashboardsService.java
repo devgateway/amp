@@ -268,8 +268,8 @@ public class DashboardsService {
             filters = new LinkedHashMap<>();
         }
 
-        spec.addColumn(new ReportColumn(ColumnConstants.COUNTRY));
-        spec.getHierarchies().add(new ReportColumn(ColumnConstants.COUNTRY));
+        spec.addColumn(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0));
+        spec.getHierarchies().add(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0));
         spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);

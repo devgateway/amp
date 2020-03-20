@@ -140,7 +140,7 @@ public class Login extends Action {
 
 
                 // Get the DgUser object from the username
-                User usr = DbUtil.getUser(lForm.getUserId());
+                User usr = UserUtils.getUserByEmailAddress(lForm.getUserId());
 
                 // Check whether the user is a site admin or not
                 boolean siteAdmin = DgUtil.isSiteAdministrator(request);

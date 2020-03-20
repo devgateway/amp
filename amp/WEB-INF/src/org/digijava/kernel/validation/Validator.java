@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
-import org.digijava.kernel.ampapi.endpoints.activity.DiscriminatedFieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 
@@ -104,15 +103,7 @@ public class Validator {
             TranslationContext translationContext, Set<Class<?>> groups,
             ValidationContext validationContext, PathImpl path) {
         if (type.getApiType().isAnObject()) {
-
-            // TODO remove this after refactor to DiscriminatedFieldAccessor
-            if (type.isDiscriminatedObject()) {
-                value = DiscriminatedFieldAccessor.unwrapSingleElement((Collection) value);
-            }
-
-            if (value != null) { // TODO remove this condition after refactor to DiscriminatedFieldAccessor
-                validate(type, value, translationContext, groups, validationContext, path);
-            }
+            validate(type, value, translationContext, groups, validationContext, path);
         } else if (type.getApiType().isAListOfObjects()) {
             Collection subFieldValueList = (Collection) value;
             for (Object el : subFieldValueList) {

@@ -160,7 +160,9 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     @Interchangeable(fieldTitle="Concessionality Level", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level", 
              discriminatorOption = CategoryConstants.CONCESSIONALITY_LEVEL_KEY, importable=true, pickIdOnly=true)
     private AmpCategoryValue concessionalityLevel;
-    
+
+    private AmpCategoryValue vulnerableGroup;
+
     @Interchangeable(fieldTitle="Loan Terms",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Loan Terms", importable=true)
     private String loanTerms;
     @Interchangeable(fieldTitle="Group Versioned Funding", importable=true)
@@ -202,7 +204,19 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
             fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Maturity",
             importable = true)
     private Date maturity;
-    
+
+    protected Boolean projectResultsAvailable;
+
+    protected String projectResultsLink;
+
+    protected String projectJointDecision;
+
+    protected String projectMonitoring;
+
+    protected String projectSustainability;
+
+    protected String projectProblems;
+
     private Integer orderNumber;
     private Integer index;
     
@@ -231,6 +245,9 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
         ret.append("-Concessionality Level:" + (this.concessionalityLevel != null ? this.concessionalityLevel.getEncodedValue() : ""));
         ret.append("-Funding Status:" + (this.fundingStatus != null ? this.fundingStatus.getEncodedValue() : ""));
         ret.append("-Funding Status:" + (this.financingId != null ? this.financingId : ""));
+        ret.append("-Vulnerability Groups:" + (this.vulnerableGroup != null ? this.vulnerableGroup : ""));
+        ret.append("-Donor Objective:" + (this.donorObjective == null ? "" : this.donorObjective.trim()));
+        ret.append("-Projects Results Link:" + (this.projectResultsLink == null ? "" : this.projectResultsLink.trim()));
         if (this.agreement != null)
             ret.append("-Agreement:" + this.agreement.getValue());
         // Compare fields from AmpFundingDetail.
@@ -933,6 +950,62 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     
     public AmpCategoryValue getConcessionalityLevel() {
         return this.concessionalityLevel;
+    }
+
+    public AmpCategoryValue getVulnerableGroup() {
+        return vulnerableGroup;
+    }
+
+    public void setVulnerableGroup(AmpCategoryValue vulnerableGroup) {
+        this.vulnerableGroup = vulnerableGroup;
+    }
+
+    public Boolean getProjectResultsAvailable() {
+        return projectResultsAvailable;
+    }
+
+    public void setProjectResultsAvailable(Boolean projectResultsAvailable) {
+        this.projectResultsAvailable = projectResultsAvailable;
+    }
+
+    public String getProjectResultsLink() {
+        return projectResultsLink;
+    }
+
+    public void setProjectResultsLink(String projectResultsLink) {
+        this.projectResultsLink = projectResultsLink;
+    }
+
+    public String getProjectJointDecision() {
+        return projectJointDecision;
+    }
+
+    public void setProjectJointDecision(String projectJointDecision) {
+        this.projectJointDecision = projectJointDecision;
+    }
+
+    public String getProjectMonitoring() {
+        return projectMonitoring;
+    }
+
+    public void setProjectMonitoring(String projectMonitoring) {
+        this.projectMonitoring = projectMonitoring;
+    }
+
+    public String getProjectSustainability() {
+        return projectSustainability;
+    }
+
+    public void setProjectSustainability(String projectSustainability) {
+        this.projectSustainability = projectSustainability;
+    }
+
+    public String getProjectProblems() {
+        return projectProblems;
+    }
+
+    public void setProjectProblems(String projectProblems) {
+        this.projectProblems = projectProblems;
     }
 
     @Override

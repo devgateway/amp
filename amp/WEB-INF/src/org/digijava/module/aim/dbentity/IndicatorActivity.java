@@ -1,7 +1,12 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.kernel.ampapi.endpoints.activity.values.AmpIndicatorRiskRatingsPossibleValuesProvider;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,16 +35,20 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
     /**
      * Activity
      */
-//  @Interchangeable(fieldTitle="Activity", recursive=true)
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
     
     /**
      * Indicator risk.
      * Actually risk is in each connection of indicator and activity.
      */
-//  @Interchangeable(fieldTitle="Risk", importable = true)
+    @PossibleValues(AmpIndicatorRiskRatingsPossibleValuesProvider.class)
+    @Interchangeable(fieldTitle = "Risk", importable = true, pickIdOnly = true)
     private AmpIndicatorRiskRatings risk;
 
+    @Interchangeable(fieldTitle = "Log Frame", importable = true, pickIdOnly = true,
+            discriminatorOption = CategoryConstants.LOGFRAME_KEY,
+            fmPath = "/Activity Form/M&E/ME Item/Logframe Category")
     private AmpCategoryValue logFrame;
 
     public AmpActivityVersion getActivity() {
@@ -99,7 +108,7 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
         if (logFrame != null) {
             value += logFrame.getValue();
         }
-        
+
         return value;
     }
 

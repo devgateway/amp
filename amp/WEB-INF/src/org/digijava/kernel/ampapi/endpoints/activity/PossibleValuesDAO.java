@@ -3,6 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.util.List;
 
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
@@ -43,4 +45,12 @@ public interface PossibleValuesDAO {
     List<AmpOrganisation> getOrganisations();
 
     boolean isOrganizationValid(Long id);
+
+    List<AmpIndicatorRiskRatings> getIndicatorRiskRatings();
+
+    boolean isIndicatorRiskRatingValid(Long id);
+
+    List<AmpIndicator> getIndicators();
+
+    boolean isIndicatorValid(Long id);
 }

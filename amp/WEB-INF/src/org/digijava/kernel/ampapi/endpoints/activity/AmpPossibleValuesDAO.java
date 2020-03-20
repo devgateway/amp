@@ -11,6 +11,8 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.GenericPossibleValuesProvider;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -164,4 +166,31 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
         return o != null && !Boolean.TRUE.equals(o.getDeleted());
     }
 
+    @Override
+    public List<AmpIndicatorRiskRatings> getIndicatorRiskRatings() {
+        return InterchangeUtils.getSessionWithPendingChanges()
+                .createCriteria(AmpIndicatorRiskRatings.class)
+                .setCacheable(true)
+                .setCacheRegion(CACHE)
+                .list();
+    }
+
+    @Override
+    public boolean isIndicatorRiskRatingValid(Long id) {
+        return InterchangeUtils.getSessionWithPendingChanges().get(AmpIndicatorRiskRatings.class, id) != null;
+    }
+
+    @Override
+    public List<AmpIndicator> getIndicators() {
+        return InterchangeUtils.getSessionWithPendingChanges()
+                .createCriteria(AmpIndicator.class)
+                .setCacheable(true)
+                .setCacheRegion(CACHE)
+                .list();
+    }
+
+    @Override
+    public boolean isIndicatorValid(Long id) {
+        return InterchangeUtils.getSessionWithPendingChanges().get(AmpIndicator.class, id) != null;
+    }
 }

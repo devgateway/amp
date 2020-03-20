@@ -288,13 +288,25 @@ public class FieldsEnumerator {
             ConstraintDescriptor.ConstraintTarget constraintTarget, FEContext context) {
         List<ConstraintDescriptor> descriptors = new ArrayList<>();
         for (InterchangeableValidator validator : validators) {
-            if (isVisible(validator.fmPath(), context)) {
+            if (isVisible(validator.fmPath(), context)
+                    && isVisibleByDiscriminator(validator.discriminatorOptions(), context)) {
                 ImmutableSet<Class<?>> groups = ImmutableSet.copyOf(validator.groups());
                 Map<String, String> attributes = parseAttributes(validator);
                 descriptors.add(new ConstraintDescriptor(validator.value(), attributes, groups, constraintTarget));
             }
         }
         return descriptors;
+    }
+
+    private boolean isVisibleByDiscriminator(String[] discriminatorOptions, FEContext context) {
+        ImmutablePair<Class<?>, Object> pair = context.getDiscriminationInfoStack().peek();
+        Object discriminatorOption = pair != null ? pair.v : null;
+        for (String opt : discriminatorOptions) {
+            if (opt != null && (opt.equals("*") || opt.equals(discriminatorOption))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Map<String, String> parseAttributes(InterchangeableValidator validator) {

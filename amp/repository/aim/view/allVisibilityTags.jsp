@@ -345,7 +345,9 @@
 <field:display feature="Identification" name="Only show projects related to pledges"></field:display>
 <field:display feature="Identification" name="Purpose"></field:display> 
 <field:display feature="Identification" name="Results"></field:display> 
-<field:display feature="Issues" name="Issue Date"></field:display> 
+<field:display feature="Identification" name="Multi Stakeholder Partners"></field:display>
+<field:display feature="Identification" name="Multi Stakeholder Partnership"></field:display>
+<field:display feature="Issues" name="Issue Date"></field:display>
 <field:display feature="Issues" name="Measures Taken"></field:display> 
 <field:display feature="MTEF Projections" name="MTEFProjections"></field:display> 
 <field:display feature="Planning" name="Line Ministry Rank"></field:display> 

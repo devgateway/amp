@@ -175,6 +175,8 @@ public class ColumnConstants {
     public static final String OBJECTIVE = "Objective";
     public static final String ACTIVITY_BUDGET = "Activity Budget";
     public static final String HUMANITARIAN_AID = "Humanitarian Aid";
+    public static final String MULTI_STAKEHOLDER_PARTNERS = "Multi Stakeholder Partners";
+    public static final String MULTI_STAKEHOLDER_PARTNERSHIP = "Multi Stakeholder Partnership";
     public static final String DISASTER_RESPONSE_MARKER = "Disaster Response Marker";
     public static final String EXPENDITURE_CLASS = "Expenditure Class";
     public static final String ORGANIZATIONS_AND_PROJECT_ID = "Organizations and Project ID";

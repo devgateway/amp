@@ -1,13 +1,22 @@
 [
   {
-    "id": "adm-0",
-    "label": "ADM 0",
-    "country": "JO"
+    "id":"adm-0",
+    "label":"ADM 0",
+    "country":"JO",
+    "rectangle-to-center-gis":{
+      "upper-left-corner":{
+        "lat":32.64863,
+        "long":35.57922
+      },
+      "lower-right-corner":{
+        "lat":30.61428,
+        "long":41.12183
+      }
+    }
   },
   {
-    "id": "adm-1",
-    "label": "ADM 1",
-    "country": "JO"
- 
+    "id":"adm-1",
+    "label":"ADM 1",
+    "country":"JO"
   }
 ]

@@ -35,7 +35,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpUtils;
 
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.log4j.Level;
@@ -75,13 +74,7 @@ import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.ModuleUtils;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
 
 /**
  * This class works as Struts request processor
@@ -92,23 +85,16 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @version 1.0
  *
  */
-
 public class RequestProcessor
     extends TilesRequestProcessor {
 
     private static Logger logger = I18NHelper.getKernelLogger(RequestProcessor.class);
-    private HashMap actionPermissions;
-    private WebApplicationContext springContext;
-    
-    private static  final String  httpsScheme = "https";
-    private static final String httpScheme = "http";
-    
-    private static String httpPort = null;
-    private static String httpsPort = null;
 
-    private static Set<String> bypassRefererCheckActions = null;
+    private HashMap actionPermissions;
+
+    private static Set<String> bypassRefererCheckActions;
     static {
-        bypassRefererCheckActions = new HashSet<String>();
+        bypassRefererCheckActions = new HashSet<>();
         bypassRefererCheckActions.add("/aim/confirmRegisteration.do");
         bypassRefererCheckActions.add("/aim/csvExport.do");
         bypassRefererCheckActions.add("/aim/xlsExport.do");
@@ -118,10 +104,6 @@ public class RequestProcessor
         bypassRefererCheckActions.add("/aim/default/previewActivity.do");
     }
     
-
-    public static class ModuleSecurityException
-        extends RuntimeException {};
-
     /**
      * Initialize RequestProcessor. Populate required permissions for Struts
      * actions
@@ -133,9 +115,6 @@ public class RequestProcessor
                      ModuleConfig moduleConfig) throws ServletException {
 
         super.init(servlet, moduleConfig);
-
-        springContext = WebApplicationContextUtils.
-        getRequiredWebApplicationContext(servlet.getServletContext());
 
         String modulePrefix = moduleConfig.getPrefix();
         actionPermissions = new HashMap();
@@ -272,11 +251,8 @@ public class RequestProcessor
                         HttpServletResponse response) throws IOException,
         ServletException {
         request.setCharacterEncoding("UTF-8");
-        String uri  = request.getRequestURI();
-        String layout = request.getParameter("layout");
         String referrer = request.getHeader("referer"); // Yes, with the legendaric misspelling
-        String secure = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SECURE_SERVER);
-        
+
         //AMP Security Issues - AMP-12638
         if (false)
         {
@@ -327,67 +303,15 @@ public class RequestProcessor
             }
         }
         
-        
-
-        if (secure != null && ("login-only".compareToIgnoreCase(secure) == 0 || "everything".compareToIgnoreCase(secure) == 0)){
-            if (httpPort == null || httpsPort == null){
-                Integer regularPort = DigiConfigManager.getConfig().getHttpPort();
-                if (regularPort != null && regularPort.intValue() > 0)
-                    httpPort = String.valueOf(regularPort);
-                Integer securePort = DigiConfigManager.getConfig().getHttpsPort();
-                if (securePort != null && securePort.intValue() > 0)
-                    httpsPort = String.valueOf(securePort);
-            }
-            if (httpPort != null && httpsPort !=null && uri != null){
-                if ("/index.do".compareTo(uri) == 0){
-                    String usingScheme = request.getScheme();
-                    if ( !httpsScheme.equals(usingScheme) ) {
-                        StringBuffer url = HttpUtils.getRequestURL(request);
-                        url.replace(0, usingScheme.length(), httpsScheme );
-                        int httpPosition = url.indexOf(httpPort);
-                        if (httpPosition != -1)
-                            url.replace(httpPosition, httpPosition + 4, httpsPort);
-                        else{
-                            int pos = url.indexOf("/", 8);
-                            url.insert(pos, ":"+httpsPort);
-                        }
-                        response.sendRedirect(response.encodeRedirectURL(url.toString()));
-                        return;
-                    }
-                }
-                if ("login-only".compareToIgnoreCase(secure) == 0){
-                    if ("/admin.do".compareTo(uri) == 0 || "/aim/showDesktop.do".compareTo(uri) == 0 || "/showDesktop.do".compareTo(uri) == 0 || "/aim/default/showDesktop.do".compareTo(uri) == 0){
-                        String usingScheme = request.getScheme();
-                        if ( !httpScheme.equals(usingScheme) ) {
-                            StringBuffer url = HttpUtils.getRequestURL(request);
-                            url.replace(0, usingScheme.length(), httpScheme );
-                            int httpsPosition = url.indexOf(httpsPort);
-                            if (httpsPosition != -1)
-                                url.replace(httpsPosition, httpsPosition + 4, httpPort);
-                            else{
-                                int pos = url.indexOf("/", 9);
-                                url.insert(pos, ":"+httpPort);
-                            }
-                            response.sendRedirect(response.encodeRedirectURL(url.toString()));
-                            return;
-                        }
-                    }
-                }
-
-            }
-        }
-        
         super.process(request, response);
-       
+
     }
 
     @Override
-    public boolean processPreprocess(HttpServletRequest request, HttpServletResponse response)
-    {
-        TLSUtils.populate(request);
-        DocumentManagerUtil.initJCRSessions(request);
+    public boolean processPreprocess(HttpServletRequest request, HttpServletResponse response) {
         TranslatorUtil.insertAvailableLanguages(request);
         request.setAttribute("currentLocale", TLSUtils.getEffectiveLangCode());
+        
         return true;
     }
         
@@ -989,8 +913,7 @@ public class RequestProcessor
         try {
             return super.processValidate(request, response, form, originalMapping);
         } catch (InvalidCancelException e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             return false;
         }
     }

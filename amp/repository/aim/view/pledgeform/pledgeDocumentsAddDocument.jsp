@@ -23,5 +23,10 @@
 		</div>
 	</div>
 	<div class="col-xs-4 col-xs-offset-2 text-right"><button type="button" class="btn btn-success btn-sm" id='pledge_form_documents_change_submit' onclick="documentsController.submitClicked(this);" ><digi:trn>Submit</digi:trn></button></div>
-	<div class="col-xs-4 col-xs-offset-0 text-left"><button type="button" class="btn btn-success btn-sm" id='pledge_form_documents_change_cancel' onclick="documentsController.cancelClicked(this);" ><digi:trn>Cancel</digi:trn></button></div>	
+	<div class="col-xs-4 col-xs-offset-0 text-left">
+		<button type="button" class="btn btn-success btn-sm" id='pledge_form_documents_change_cancel'
+				onclick="documentsController.onDeleteAllNonSubmitted('#pledge_form_documents_change');
+				documentsController.cancelClicked(this);" ><digi:trn>Cancel</digi:trn>
+		</button>
+	</div>
 </div>

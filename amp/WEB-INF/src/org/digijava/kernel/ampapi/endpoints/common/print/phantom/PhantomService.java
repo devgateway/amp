@@ -17,17 +17,19 @@ import java.util.concurrent.TimeUnit;
 public class PhantomService {
 
     private static final String PHANTOM_SCRIPT_FILE = "phantom-script.js";
-    private static final int TIMEOUT = 40;
+    private static final int TIMEOUT = 40;  // TODO make time configurable probably dynamic
     private static volatile boolean initialized = false;
     private static PhantomJSFileExecutor executor;
     private static File scriptFile;
     private static final Logger LOGGER = Logger.getLogger(PhantomService.class);
 
-    public static String createImage(final String uri, final String imagePath, final Integer width, final Integer height, final String script) throws ExecutionException, InterruptedException {
-        if(!initialized) {
+    public static String createImage(final String uri, final String imagePath, final Integer width,
+                                     final Integer height, final String scriptPath)
+            throws ExecutionException, InterruptedException {
+        if (!initialized) {
             init();
         }
-        return executor.execute(scriptFile, uri, imagePath, width.toString(), height.toString(), script).get();
+        return executor.execute(scriptFile, uri, imagePath, width.toString(), height.toString(), scriptPath).get();
     }
 
     private static synchronized void init() {

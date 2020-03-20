@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.common.print;
 
-import clover.com.google.common.base.Strings;
-import clover.org.apache.commons.codec.binary.Base64;
 import com.google.common.base.Charsets;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.print.phantom.PhantomService;
 
@@ -59,7 +59,7 @@ public class PrintImageService {
             final String scriptPath = tmpJsFile != null ? tmpJsFile.getAbsolutePath(): "";
             PhantomService.createImage(tmpContentFile.toURI().toString(), tmpImageFile.getAbsolutePath(), width, height, scriptPath);
             Files.copy(tmpImageFile.toPath(), output);
-            return createResponse(output);
+            return createImageBase64Response(output); // this also should change for PDF
         } catch (final Exception e) {
             LOGGER.error(errorMessage, e);
             errorMessage = e.getMessage();
@@ -71,7 +71,7 @@ public class PrintImageService {
         return Response.serverError().entity(errorMessage).build();
     }
 
-    private static Response createResponse(final ByteArrayOutputStream output) {
+    private static Response createImageBase64Response(final ByteArrayOutputStream output) {
         return Response.ok(Base64.encodeBase64String(output.toByteArray()))
                 .type(new MediaType(IMAGE, PNG))
                 .header(CONTENT_DISPOSITION, ATTACHMENT_FILENAME_GIS_IMAGE_PNG)
@@ -96,7 +96,7 @@ public class PrintImageService {
     }
 
     private static File createTmpFile(final String content, String extension) throws IOException {
-        if(!Strings.isNullOrEmpty(content)) {
+        if (StringUtils.isNotEmpty(content)) {
             final File file = File.createTempFile(RandomStringUtils.randomAlphabetic(FILE_NAME_LENGTH), extension);
             FileUtils.writeStringToFile(file, content, Charsets.UTF_8.displayName());
             return file;

@@ -13,11 +13,6 @@ import java.util.Set;
  */
 public class IndicatorEPConstants {
 
-    public static final String INSERTED = "INSERTED";
-    public static final String IMPORTED = "IMPORTED";
-    public static final String SAVED = "SAVED";
-    public static final String DELETED = "DELETED";
-
     public static final String DEFAULT_INDICATOR_ORDER_FIELD = "createdOn";
 
     public static final int DEFAULT_COUNT = 10;
@@ -28,6 +23,7 @@ public class IndicatorEPConstants {
     
     public static final long RED_GREEN_PALETTE_INDEX = 9;
     public static final long BLUE_PURPLE_PALETTE_INDEX = 10;
+    public static final Integer MAX_ADMIN_LEVEL_SUPPORTED = 4;
    
     public static final String RESULT = "result";
     public static final String VALUES = "values";
@@ -74,6 +70,7 @@ public class IndicatorEPConstants {
     public static final String FIELD_UPDATED_ON = "updatedOn";
     public static final String FIELD_CREATED_BY = "email";
     public static final String FIELD_ID = "id";
+    public static final String FIELD_ZERO_CATEGORY_ENABLED = "zeroCategoryEnabled";
 
     public static final String PAGE = "page";
     public static final String DATA = "data";

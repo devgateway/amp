@@ -43,7 +43,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
-import org.digijava.module.contentrepository.util.DocToOrgDAO;
+import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.parisindicator.form.PIForm;
 import org.digijava.module.parisindicator.helper.PIAbstractReport;
@@ -373,8 +373,7 @@ public class PIUseCase {
             // As explained above here we convert a list with duplicated surveys into a Set with no duplicates.
             commonDataUnique = new LinkedHashSet<AmpAhsurvey>(commonData);
         } catch (Exception e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         return commonDataUnique;
     }
@@ -420,7 +419,7 @@ public class PIUseCase {
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return commonData;
     }
@@ -438,7 +437,7 @@ public class PIUseCase {
                 TeamMember auxTeamMember = new TeamMember(iterTeamMembers.next());
                 
                 // Get the main team node for this team member.
-                Node teamNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, auxTeamMember.getTeamId());
+                Node teamNode = DocumentManagerUtil.getOrCreateTeamNode(jcrWriteSession, auxTeamMember.getTeamId());
 
                 // Iterate documents and get organizations.
                 Iterator<Node> iter = teamNode.getNodes();
@@ -452,7 +451,8 @@ public class PIUseCase {
                         if (docType.getValue().equalsIgnoreCase(TranslatorWorker.translateText(CategoryConstants.RESOURCE_TYPE_COUNTRY_ANALYTIC_REPORT_KEY))) {
 
                             // Only add documents that have at least 1 donor.
-                            Collection<AmpOrganisation> auxOrganizations = DocToOrgDAO.getOrgsObjByUuid(nextWrapper.getUuid());
+                            Collection<AmpOrganisation> auxOrganizations = DocumentOrganizationManager.getInstance()
+                                    .getOrganizationsByUUID(nextWrapper.getUuid());
                             Iterator<AmpOrganisation> iterOrgs = auxOrganizations.iterator();
                             while (iterOrgs.hasNext()) {
                                 AmpOrganisation auxOrganisation = iterOrgs.next();
@@ -485,7 +485,7 @@ public class PIUseCase {
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return commonData;
     }

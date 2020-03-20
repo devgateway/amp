@@ -176,8 +176,4 @@ public class PledgesFormTests extends ReportsTestCase {
         FeaturesUtil.overriddenFields.put("Use Free Text", true);
     }
     
-    @After
-    public void tearDown() {
-        DocumentManagerUtil.closeJCRSessions(TLSUtils.getRequest());
-    }
 }

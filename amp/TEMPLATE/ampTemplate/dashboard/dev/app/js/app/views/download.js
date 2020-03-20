@@ -73,6 +73,12 @@ module.exports = BackboneDash.View.extend({
 			        nv.tooltip.cleanup();
 			        if (rendered === false) {
 			        	rendered = true;
+                        if (self.model.get('chartType') === 'fragmentation') {
+                            var svg = $($($(self.chart)[0].el).find("svg"))[0].getBBox();
+                            self.dashChartOptions.height = svg.height + 100;
+                            self.dashChartOptions.width = svg.width + 80;
+                        }
+
 			        	self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
 			        		self.$('.preview-area .canvas-wrap'), self.chart);
 			        }
@@ -80,7 +86,6 @@ module.exports = BackboneDash.View.extend({
 			});
 		}
     }, 100);
-    
     return this;
   },
 
@@ -90,11 +95,7 @@ module.exports = BackboneDash.View.extend({
       this.app.viewFail(this, 'Chart export requires a modern web browser');
     }
     
-    if (self.model.get('chartType') === 'fragmentation') {
-    	var svg = $($($(chart)[0].el).find("svg"))[0].getBBox();
-	    this.dashChartOptions.height = svg.height + 100;
-	    this.dashChartOptions.width = svg.width + 80;
-    }
+
         
     var view = this.model.get('view'),
         data = this.model.get('processed'),
@@ -103,11 +104,11 @@ module.exports = BackboneDash.View.extend({
           _({}).extend(this.dashChartOptions, { height: this.dashChartOptions.height - 42 })).el;
 
     svgContainer.html(chartEl);
-
     this.prepareCanvas(canvas, this.dashChartOptions.height, this.dashChartOptions.width);
+    svgContainer.hide();
 
     this.chartToCanvas(chartEl, canvas, function() {
-      svgContainer.hide();
+
       var img = new Image();
       img.src = canvas.toDataURL('image/png');
       canvasContainer.html(img);
@@ -223,15 +224,34 @@ module.exports = BackboneDash.View.extend({
     var boundCB = _(cb).bind(this);
     window.setTimeout(function() {
       this.app.tryTo(function() {
-        canvg(canvas, svg.parentNode.innerHTML, { // note: svg.outerHTML breaks IE
-          offsetY: ((self.model.get('chartType') !== 'fragmentation') ? 42 : 65),
-          ignoreDimensions: true,
-          ignoreClear: true,
-          ignoreMouse: true,
-          renderCallback: boundCB
-        });
+          //before calling canvas we adjust the text if in rtl mode
+
+          if (this.isRtl) {
+              $('.preview-area .svg-wrap .nv-group .nv-bar text').each(function (index, element) {
+
+                  var NUMERIC_REGEXP = /[-]{0,1}[\d]*[\.]{0,1}[\d]+/;
+                  var STRING_REGEXP = /[^0-9.]/;
+                  if (this.textContent.match(NUMERIC_REGEXP) && this.textContent.match(STRING_REGEXP)) {
+                      var newText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                      newText.setAttributeNS(null, "x", parseFloat(element.getAttributeNS(null, "x")) - 20);
+                      newText.setAttributeNS(null, "y", element.getAttributeNS(null, "y"));
+                      var textNode = document.createTextNode(this.textContent.match(STRING_REGEXP)[0]);
+                      newText.appendChild(textNode);
+                      this.parentNode.appendChild(newText);
+                      this.textContent = this.textContent.match(NUMERIC_REGEXP)[0];
+                  }
+
+              });
+          }
+          canvg(canvas, svg.parentNode.innerHTML, { // note: svg.outerHTML breaks IE
+              offsetY: ((self.model.get('chartType') !== 'fragmentation') ? 42 : 65),
+              ignoreDimensions: true,
+              ignoreClear: true,
+              ignoreMouse: true,
+              renderCallback: boundCB
+          });
       }, this);
-    }.bind(this), 1500);  // we have to wait for stupid nvd3...
+    }.bind(this), 1500);  // we have to wait for nvd3 to load
   },
 
   renderCSV: function(csvContainer) {
@@ -262,11 +282,11 @@ module.exports = BackboneDash.View.extend({
               })
               .map(function (row) {
                   var trnAdjType = '';
+                  row.push(currency || '');
                   if (adjtype) {
                       trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
+                      row.push(trnAdjType);
                   }
-                  row.push(currency || '');
-                  row.push(trnAdjType);
                   return row;
               })
               .value();

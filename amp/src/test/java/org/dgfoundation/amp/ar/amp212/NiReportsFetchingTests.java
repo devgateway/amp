@@ -12,7 +12,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.AmpReportingTestCase;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -29,7 +29,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class NiReportsFetchingTests extends ReportingTestCase {
+public class NiReportsFetchingTests extends AmpReportingTestCase {
 
     @Test
     public void testSpeed() throws AMPException {
@@ -203,13 +203,13 @@ public class NiReportsFetchingTests extends ReportingTestCase {
         // "new activity with contracting" lacks location entries
         List<String> acts = Arrays.asList("new activity with contracting",  "Activity with both MTEFs and Act.Comms", "Activity with Zones");
         runInEngineContext(acts, engine -> {
-            List<? extends Cell> cells = nicelySorted(engine.schema.getColumns().get(ColumnConstants.REGION).fetch(engine));
-            assertEquals("[Anenii Noi County (id: 33, eid: 9085, coos: {locs.LOCS=(level: 1, id: 9085)}, p: 0.50), Balti County (id: 33, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.50), Balti County (id: 70, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.30), Drochia County (id: 70, eid: 9090, coos: {locs.LOCS=(level: 1, id: 9090)}, p: 0.70)]", 
+            List<? extends Cell> cells = nicelySorted(engine.schema.getColumns().get(ColumnConstants.LOCATION_ADM_LEVEL_1).fetch(engine));
+            assertEquals("[Anenii Noi County (id: 33, eid: 9085, coos: {locs.LOCS=(level: 1, id: 9085)}, p: 0.50), Balti County (id: 33, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.50),  (id: 53, eid: -999999999, coos: {locs.LOCS=(level: 1, id: -999999999)}, p: 1.00), Balti County (id: 70, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.30), Drochia County (id: 70, eid: 9090, coos: {locs.LOCS=(level: 1, id: 9090)}, p: 0.70)]",
                     cells.toString());
         });
         runInEngineContext(acts, engine -> {
-            List<? extends Cell> cellsZone = nicelySorted(engine.schema.getColumns().get(ColumnConstants.ZONE).fetch(engine));
-            assertEquals("[Bulboaca (id: 33, eid: 9108, coos: {locs.LOCS=(level: 2, id: 9108)}, p: 0.50), Glodeni (id: 33, eid: 9111, coos: {locs.LOCS=(level: 2, id: 9111)}, p: 0.50),  (id: 70, eid: -9090, coos: {locs.LOCS=(level: 2, id: -9090)}, p: 0.70),  (id: 70, eid: -9086, coos: {locs.LOCS=(level: 2, id: -9086)}, p: 0.30)]", 
+            List<? extends Cell> cellsZone = nicelySorted(engine.schema.getColumns().get(ColumnConstants.LOCATION_ADM_LEVEL_2).fetch(engine));
+            assertEquals("[Bulboaca (id: 33, eid: 9108, coos: {locs.LOCS=(level: 2, id: 9108)}, p: 0.50), Glodeni (id: 33, eid: 9111, coos: {locs.LOCS=(level: 2, id: 9111)}, p: 0.50),  (id: 53, eid: -999999999, coos: {locs.LOCS=(level: 2, id: -999999999)}, p: 1.00),  (id: 70, eid: -9090, coos: {locs.LOCS=(level: 2, id: -9090)}, p: 0.70),  (id: 70, eid: -9086, coos: {locs.LOCS=(level: 2, id: -9086)}, p: 0.30)]",
                     cellsZone.toString());
         });
     }

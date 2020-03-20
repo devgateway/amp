@@ -22,10 +22,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.helper.Constants;
@@ -45,7 +45,7 @@ import org.hibernate.type.StringType;
 public class AuditLoggerUtil {
 
     private static Logger logger = Logger.getLogger(AuditLoggerUtil.class);
-
+    
     /**
      * Call this method only in http request scope.
      */
@@ -67,15 +67,13 @@ public class AuditLoggerUtil {
         String remoteAddr = request != null ? request.getRemoteAddr() : null;
         try {
             session = PersistenceManager.getRequestDBSession();
-
-//beginTransaction();
             AmpAuditLogger aal = new AmpAuditLogger();
             long time = System.currentTimeMillis();
             Timestamp ts = new Timestamp(time);
             if ("update".compareTo(action) == 0) {
                 Collection<AmpAuditLogger> col = getAudits(session, objId, objType);
                 if (col != null && col.size() == 1) {
-                    AmpAuditLogger existentLoggerObj = (AmpAuditLogger) col.iterator().next();
+                    AmpAuditLogger existentLoggerObj =  col.iterator().next();
                     aal.setAuthorEmail(existentLoggerObj.getAuthorEmail());
                     aal.setAuthorName(existentLoggerObj.getAuthorName());
                     aal.setLoggedDate(existentLoggerObj.getLoggedDate());
@@ -85,7 +83,6 @@ public class AuditLoggerUtil {
                 aal.setAuthorEmail(tm.getEmail());
                 aal.setLoggedDate(ts);
             }
-
 
             aal.setEditorEmail(tm.getEmail());
             aal.setEditorName(tm.getMemberName());
@@ -100,18 +97,7 @@ public class AuditLoggerUtil {
             aal.setDetail(additionalDetails);
             
             session.save(aal);
-            //tx.commit();
         } catch (Exception ex) {
-            ex.printStackTrace();
-            logger.error("Cannot save audit logger :", ex);
-//          if (tx!=null){
-//              try {
-//                  tx.rollback();
-//              } catch (Exception e1) {
-//                  logger.error("Release session failed :", e1);
-//                  throw new DgException("Cannot rallback",e1);
-//              }
-//          }
             throw new DgException("Cannot save audit logger",ex);
         } 
         return;
@@ -176,7 +162,6 @@ public class AuditLoggerUtil {
             
             session.save(aal);
         }catch (Exception ex) {
-            ex.printStackTrace();
             logger.error("Cannot save audit logger :", ex);
         } 
     }
@@ -184,7 +169,6 @@ public class AuditLoggerUtil {
     public static void logSentReminderEmails(Session session,User user){
         try {
 
-//beginTransaction();
             AmpAuditLogger aal = new AmpAuditLogger();
             long time = System.currentTimeMillis();
             Timestamp ts = new Timestamp(time);
@@ -205,7 +189,6 @@ public class AuditLoggerUtil {
             
             session.save(aal);
         }catch (Exception ex) {
-            ex.printStackTrace();
             logger.error("Cannot save audit logger :", ex);
         } 
     }
@@ -263,28 +246,16 @@ public class AuditLoggerUtil {
             }else{
                 ts= new Timestamp(time);
             }
-            AmpAuditLogger existentLoggerObj = null;
                 
-            Collection<AmpAuditLogger> col = getAudits(session, objId, objType);
-            if (col != null && col.size() == 1) {
-                existentLoggerObj = (AmpAuditLogger) col
-                        .iterator().next();
-            }
             StringBuilder message=new StringBuilder();
             for(String detail:details){
                 message.append(detail+" ");
             }
                 AmpAuditLogger aal = new AmpAuditLogger();
-                if(existentLoggerObj!=null){
-                    aal.setAuthorEmail(existentLoggerObj.getAuthorEmail());
-                    aal.setAuthorName(existentLoggerObj.getAuthorName());
-                    aal.setLoggedDate(existentLoggerObj.getLoggedDate());
-                } else{
-                    aal.setAuthorName(tm.getMemberName());
-                    aal.setAuthorEmail(tm.getEmail());
-                    aal.setLoggedDate(ts);
-                }
-                aal.setUserid(DbUtil.getUser(tm.getEmail()).getId());
+                aal.setAuthorEmail(activity.getActivityCreator().getUser().getEmail());
+                aal.setAuthorName(activity.getActivityCreator().getUser().getName());
+                aal.setLoggedDate(new Timestamp(activity.getCreatedDate().getTime()));
+                aal.setUserid(UserUtils.getUserByEmailAddress(tm.getEmail()).getId());
                 aal.setEditorEmail(tm.getEmail());
                 aal.setEditorName(tm.getMemberName());
                 aal.setAction("update");
@@ -297,9 +268,6 @@ public class AuditLoggerUtil {
                 aal.setObjectName(activity.getObjectName());
                 aal.setDetail(message.toString());
                 session.save(aal);              
-            
-
-            //tx.commit();
         } catch (Exception ex) {
             logger.error("Exception : ", ex);
         }
@@ -312,9 +280,10 @@ public class AuditLoggerUtil {
         try {
             String qryStr = null;
             if (!withLogin){
-                qryStr = "select f from " + AmpAuditLogger.class.getName() + " f where action<>'"+Constants.LOGIN_ACTION+"' order by loggedDate desc";
-            }else {
-                qryStr = "select f from " + AmpAuditLogger.class.getName() + " f order by loggedDate desc";
+                qryStr = "select f from " + AmpAuditLogger.class.getName() + " f where action<>'"
+                        + Constants.LOGIN_ACTION + "' order by modifyDate desc";
+            } else {
+                qryStr = "select f from " + AmpAuditLogger.class.getName() + " f order by modifyDate desc";
             }
             return PersistenceManager.getSession().createQuery(qryStr).list();
         } catch (Exception ex) {

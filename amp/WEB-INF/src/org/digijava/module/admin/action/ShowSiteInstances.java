@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.struts.action.Action;
@@ -52,36 +53,40 @@ public class ShowSiteInstances extends Action {
 
         Site currentSite = RequestUtils.getSite(request);
         Site realSite = DbUtil.getSite(currentSite.getId());
+        
+        Set<String> modulesConfigInstanceNames = DigiConfigManager.getModulesConfig().keySet();
 
         SiteInstancesForm formBean = (SiteInstancesForm) form;
         formBean.setInstances(new ArrayList());
         Iterator iter = realSite.getModuleInstances().iterator();
         while (iter.hasNext()) {
-            ModuleInstance inst = (ModuleInstance)iter.next();
-            SiteInstancesForm.InstanceInfo info = new SiteInstancesForm.InstanceInfo();
-            info.setId(inst.getModuleInstanceId());
-            info.setModule(inst.getModuleName());
-            info.setInstance(inst.getInstanceName());
-            info.setSelectedNumOfItemsInTeaser(inst.getNumberOfItemsInTeaser());
-            if (inst.getRealInstance() != null) {
-                info.setMappingId(inst.getRealInstance().getModuleInstanceId());
-                info.setMappingSite(inst.getRealInstance().getSite().getName());
-                info.setMappingInstance(inst.getInstanceName());
-                info.setPermitted(inst.isPermitted());
-            } else {
-                info.setMappingId(null);
-                info.setMappingSite(null);
-                info.setMappingInstance(null);
-                info.setPermitted(inst.isPermitted());
+            ModuleInstance inst = (ModuleInstance) iter.next();
+            if (modulesConfigInstanceNames.contains(inst.getModuleName())) {
+                SiteInstancesForm.InstanceInfo info = new SiteInstancesForm.InstanceInfo();
+                info.setId(inst.getModuleInstanceId());
+                info.setModule(inst.getModuleName());
+                info.setInstance(inst.getInstanceName());
+                info.setSelectedNumOfItemsInTeaser(inst.getNumberOfItemsInTeaser());
+                if (inst.getRealInstance() != null) {
+                    info.setMappingId(inst.getRealInstance().getModuleInstanceId());
+                    info.setMappingSite(inst.getRealInstance().getSite().getName());
+                    info.setMappingInstance(inst.getInstanceName());
+                    info.setPermitted(inst.isPermitted());
+                } else {
+                    info.setMappingId(null);
+                    info.setMappingSite(null);
+                    info.setMappingInstance(null);
+                    info.setPermitted(inst.isPermitted());
+                }
+    
+                formBean.getInstances().add(info);
             }
-
-            formBean.getInstances().add(info);
         }
 
         ViewConfig viewConfig = ViewConfigFactory.getInstance().getViewConfig(currentSite);
 
         TreeSet modules = new TreeSet();
-        modules.addAll(DigiConfigManager .getModulesConfig().keySet());
+        modules.addAll(modulesConfigInstanceNames);
         modules.addAll(viewConfig.getReferencedModules(false));
         formBean.setModules(modules);
 

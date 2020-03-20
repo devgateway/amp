@@ -1,7 +1,16 @@
 /**
- * 
+ *
  */
 package org.digijava.kernel.ampapi.endpoints.common.fm;
+
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.dgfoundation.amp.visibility.data.FMSettingsMediator;
+import org.dgfoundation.amp.visibility.data.FMTree;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.common.FMSettingsConfig;
+import org.digijava.kernel.persistence.PersistenceManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,154 +21,114 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
-import org.dgfoundation.amp.visibility.data.FMSettingsMediator;
-import org.dgfoundation.amp.visibility.data.FMTree;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.persistence.PersistenceManager;
-
 /**
- * Feature Manager services that can be used by FM, menu and other endpoints 
+ * Feature Manager services that can be used by FM, menu and other endpoints
  * @author Nadejda Mandrescu
  */
 public class FMService {
-    protected static final Logger LOGGER = Logger.getLogger(FMService.class);
-    
-    /**
-     * 
-     * @param config
-     * @return
-     */
-    public static JsonBean getCurrentUserFMSettings(JsonBean config) {
-        return getFMSettings(config);
+
+    protected static final Logger logger = Logger.getLogger(FMService.class);
+
+    public static FMSettingsResult getFMSettingsResult(FMSettingsConfig config) {
+        return getFMSettingsResult(config, null);
     }
-    
+
     /**
-     * 
+     *
      * @param config
      * @return
      */
-    public static List<JsonBean> getFMSettingsGroupedByWsMember(JsonBean config) {
-        List<JsonBean> fmTrees = new ArrayList<>();
-        
+    public static List<FMMemberSettingsResult> getFMSettingsResultGroupedByWsMember(FMSettingsConfig config) {
+        List<FMMemberSettingsResult> fmTrees = new ArrayList<>();
+
         Map<Long, List<Long>> fmTreesWsMap = getFMTreeWsMap();
 
         fmTreesWsMap.entrySet().forEach(fmTree -> {
-            JsonBean result = new JsonBean();
-            result.set(EPConstants.WS_MEMBER_IDS, fmTree.getValue());
-            result.set(EPConstants.FM_TREE, getFMSettings(config, fmTree.getKey()));
-            fmTrees.add(result);
+            FMMemberSettingsResult memberSettingsResult = new FMMemberSettingsResult();
+            memberSettingsResult.setWsMemberIds(fmTree.getValue());
+            memberSettingsResult.setFmTree(getFMSettingsResult(config, fmTree.getKey()));
+            fmTrees.add(memberSettingsResult);
         });
-        
+
         return fmTrees;
     }
-    
-    /**
-     * Get the list workspace members grouped by feature manager templates
-     * 
-     * @return
-     */
+
+
     private static Map<Long, List<Long>> getFMTreeWsMap() {
-        String wsQuery = "SELECT amp_team_mem_id, COALESCE(fm_template, (SELECT settingsvalue FROM amp_global_settings "
-                + "WHERE settingsname = 'Visibility Template')::bigint) AS fm_template FROM amp_team_member tm "
-                + "JOIN amp_team t ON tm.amp_team_id = t.amp_team_id";
-        
+        String wsQuery = "SELECT amp_team_id, COALESCE(fm_template, (SELECT settingsvalue FROM amp_global_settings "
+                + "WHERE settingsname = 'Visibility Template')::bigint) AS fm_template FROM amp_team";
+
         PersistenceManager.getSession().doReturningWork(connection -> SQLUtils.collectKeyValue(connection, wsQuery));
         Map<Long, Long> valsA = PersistenceManager.getSession()
                 .doReturningWork(connection -> SQLUtils.collectKeyLongValue(connection, wsQuery));
-        
-        Map<Long, List<Long>> vals = valsA.entrySet().stream().collect(Collectors.groupingBy(Entry::getValue, 
-                    Collectors.mapping(Entry::getKey, Collectors.toList())));
+
+        Map<Long, List<Long>> vals = valsA.entrySet().stream().collect(Collectors.groupingBy(Entry::getValue,
+                Collectors.mapping(Entry::getKey, Collectors.toList())));
 
         return vals;
     }
-    
-    public static JsonBean getFMSettings(JsonBean config) {
-        return getFMSettings(config, null);
-    }
 
-    /**
-     * 
+    /**s
+     *
      * @param config
-     * @return
+     * @return fm settings
      */
-    public static JsonBean getFMSettings(JsonBean config, Long templateId) {
-        JsonBean result = new JsonBean();
-        try {
-            Boolean fullEnabledPaths = EndpointUtils.getSingleValue(config, EPConstants.FULL_ENABLED_PATHS,
-                    Boolean.TRUE);
+    public static FMSettingsResult getFMSettingsResult(FMSettingsConfig config, Long templateId) {
+        FMSettingsResult fmSettingsResult = new FMSettingsResult();
 
-            String err = validate(config, fullEnabledPaths, templateId);
-            
-            if (err != null) {
-                result.set(EPConstants.ERROR, err);
-            } else {
-                if (EndpointUtils.getSingleValue(config, EPConstants.REPORTING_FIELDS, Boolean.FALSE)) {
-                    result.set(EPConstants.REPORTING_FIELDS, ColumnsVisibility.getConfigurableColumns(templateId));
-                }
-                
-                if (EndpointUtils.getSingleValue(config, EPConstants.ENABLED_MODULES, Boolean.FALSE)) {
-                    result.set(EPConstants.ENABLED_MODULES, 
-                            FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES, templateId));
-                }
-                
-                Boolean detailFlat = EndpointUtils.getSingleValue(config, EPConstants.DETAILS_FLAT, Boolean.TRUE);
-                List<String> requiredPaths = (List) config.get(EPConstants.FM_PATHS_FILTER);
-                
-                provideModulesDetails(result, EndpointUtils.getSingleValue(config, EPConstants.DETAIL_MODULES, 
-                        new ArrayList<String>()), detailFlat, fullEnabledPaths, requiredPaths, templateId);
+        if (config.isValid(templateId)) {
+            if (config.getReportingFields()) {
+                fmSettingsResult.setReportingFields(ColumnsVisibility.getConfigurableColumns());
             }
-        } catch(Exception ex) {
-            LOGGER.error("Unexpected error occurred while generating FM settings", ex);
-            result.set(EPConstants.ERROR, ex.getMessage());
-        }
-        
-        return result;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    private static String validate(JsonBean config, Boolean fullEnabledPaths, Long templateId) {
-        String err = null;
-        List<String> requestedModules = EndpointUtils.getSingleValue(config, EPConstants.DETAIL_MODULES,
-                new ArrayList<String>());
-        Set<String> allowedModules;
-        if (fullEnabledPaths) {
-            allowedModules = FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES, templateId);
+
+            if (config.getEnabledModules()) {
+                fmSettingsResult.setEnabledModules(
+                        FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES, templateId));
+            }
+
+            provideModulesDetails(fmSettingsResult, config, templateId);
         } else {
-            allowedModules = FMSettingsMediator.getSettings(FMSettingsMediator.FMGROUP_MODULES, templateId);
+            fmSettingsResult.setError(String.format("Invalid modules details requested: %s. Allowed are: %s",
+                    config.getDetailModules(), config.getAllowedModules(templateId)));
         }
-        if (requestedModules != null && !allowedModules.containsAll(requestedModules)) {
-            err = "Invalid modules details requested: " + requestedModules
-                    + ". Allowed are: " + allowedModules;
-        }
-        return err;
+
+        return fmSettingsResult;
     }
-    
-    private static void provideModulesDetails(JsonBean result, List<String> detailModules, Boolean detailFlat,
-            Boolean fullEnabledPaths, List<String> requiredPaths, Long templateId) {
-        if (detailModules == null || detailModules.size() == 0) return;
-        
+
+    private static void provideModulesDetails(FMSettingsResult fmSettingsResult, FMSettingsConfig config,
+                                              Long templateId) {
+        List<String> detailModules = config.getDetailModules();
+
+        FMSettingsTree settingsTree = new FMSettingsTree();
+        FMSettingsFlat settingsFlat = new FMSettingsFlat();
+
+        if (detailModules == null || detailModules.isEmpty()) {
+            return;
+        }
+
         // check if all enabled modules are requested
         if (detailModules.contains(EPConstants.DETAIL_ALL_ENABLED_MODULES)) {
-            detailModules = new ArrayList<String>(
+            detailModules = new ArrayList<>(
                     FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES, templateId));
         }
+
         for (String module : detailModules) {
             boolean supportsFMTree = FMSettingsMediator.supportsFMTree(module, templateId);
-            if (detailFlat || !supportsFMTree) {
-                Set<String> entries = !supportsFMTree ? FMSettingsMediator.getEnabledSettings(module, templateId) 
-                        : getFmSettingsAsTree(module, requiredPaths, templateId).toFlattenedTree(fullEnabledPaths);
-                result.set(module, entries);
+            if (config.getDetailsFlat() || !supportsFMTree) {
+                Set<String> entries = !supportsFMTree ? FMSettingsMediator.getEnabledSettings(module, templateId)
+                        : getFmSettingsAsTree(module, config.getRequiredPaths(), templateId)
+                            .toFlattenedTree(config.getFullEnabledPaths());
+                settingsFlat.getModules().put(module, entries);
             } else {
-                result.set(module, getFmSettingsAsTree(module, requiredPaths, templateId).asJson(fullEnabledPaths));
+                FMTree fmTree = getFmSettingsAsTree(module, config.getRequiredPaths(), templateId);
+                settingsTree.getModules().putAll(fmTree.asFmSettingsTree(config.getFullEnabledPaths()).getModules());
             }
+        }
+
+        if (config.getDetailsFlat()) {
+            fmSettingsResult.setFmSettings(settingsFlat);
+        } else {
+            fmSettingsResult.setFmSettings(settingsTree);
         }
     }
 

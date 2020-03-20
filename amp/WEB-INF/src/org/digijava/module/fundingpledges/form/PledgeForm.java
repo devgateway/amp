@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -29,13 +30,16 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.IdWithValueShim;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -120,6 +124,7 @@ public class PledgeForm extends ActionForm implements Serializable {
     //private String defaultCurrency;
     private Long pledgeTitleId;
     private Long pledgeStatusId;
+    private String createdDate;
     
     //private Collection<String> years;
     private String year;
@@ -168,6 +173,7 @@ public class PledgeForm extends ActionForm implements Serializable {
     public void reset() {
         this.setTitleFreeText(null);
         this.setPledgeId(null);
+
         this.setPledgeTitleId(null);
         this.setPledgeStatusId(null);
         //this.setFundingPledges(null);
@@ -200,6 +206,8 @@ public class PledgeForm extends ActionForm implements Serializable {
     public void importPledgeData(FundingPledges fp) {
         //this.setFundingPledges(fp);
         this.setPledgeId(fp.getId());
+        //we set the id formated only for the view form
+        this.setCreatedDate(fp.getCreatedDate() != null ? FormatHelper.formatDate(fp.getCreatedDate()) : "-");
         this.setTitleFreeText(fp.getTitleFreeText());
         this.setPledgeTitleId(fp.getTitle() == null ? null : fp.getTitle().getId());
         this.setPledgeStatusId(fp.getStatus() == null ? null : fp.getStatus().getId());
@@ -339,7 +347,8 @@ public class PledgeForm extends ActionForm implements Serializable {
             // something selected -> so need to build list of forbidden locations so that they are disabled in the multiselect
             Set<Long> forbiddenLocations = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(getAllSelectedLocations(), false);
             forbiddenLocations.addAll(DynLocationManagerUtil.getRecursiveAscendantsOfCategoryValueLocations(getAllSelectedLocations(), false)); // any selected locations and any of their descendants or ascendants are forbidden
-            if (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.equalsCategoryValue(implLevel) && CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocationValue)) {
+            if (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.equalsCategoryValue(implLevel)
+                    && CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocationValue)) {
                 // Implementation Level: NATIONAL, Implementation Location: Country: only the default country is available
                 AmpCategoryValueLocations country = DynLocationManagerUtil.getDefaultCountry();
                 res.add(new DisableableKeyValue(new KeyValue(country.getId().toString(), country.getName()), !forbiddenLocations.contains(country.getId())));
@@ -426,9 +435,21 @@ public class PledgeForm extends ActionForm implements Serializable {
      * @return
      */
     public List<IdWithValueShim> getOrgGroups() {
+
+        List<Long> orgGroupIds = null;
+        TeamMember currentTeamMember = TeamMemberUtil.getLoggedInTeamMember();
+        if (!currentTeamMember.getPledgeSuperUser() && FeaturesUtil.isVisibleFeature("Pledges",
+                "Limit Pledge Edition"))  {
+            orgGroupIds = UserUtils.getVerifiedOrgsStream(currentTeamMember.getUserId()).map(organisation ->
+                    organisation.getOrgGrpId().getAmpOrgGrpId()).collect(Collectors.toList());
+        }
         List<IdWithValueShim> res = new ArrayList<>();
-        if (this.getSelectedOrgGrpId() == null) res.add(new IdWithValueShim(-1L, TranslatorWorker.translateText("Please select")));
-        for (AmpOrgGroup acv : org.digijava.module.aim.util.DbUtil.getAllVisibleOrgGroups()) res.add(new IdWithValueShim(acv));
+        if (this.getSelectedOrgGrpId() == null) {
+            res.add(new IdWithValueShim(-1L, TranslatorWorker.translateText("Please select")));
+        }
+        for (AmpOrgGroup acv : org.digijava.module.aim.util.DbUtil.getAllVisibleOrgGroups(orgGroupIds)) {
+            res.add(new IdWithValueShim(acv));
+        }
         return res;
     }
     
@@ -674,7 +695,6 @@ public class PledgeForm extends ActionForm implements Serializable {
     public List<DocumentShim> getSelectedDocs() {
         return selectedDocs;
     }
-    // TRASH GETTERS AND SETTERS BELOW
     @java.lang.SuppressWarnings("all")
     public PledgeForm() {
     }
@@ -683,7 +703,15 @@ public class PledgeForm extends ActionForm implements Serializable {
     public Long getPledgeId() {
         return this.pledgeId;
     }
-    
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
     @java.lang.SuppressWarnings("all")
     public Long getSelectedOrgId() {
         return this.selectedOrgId;

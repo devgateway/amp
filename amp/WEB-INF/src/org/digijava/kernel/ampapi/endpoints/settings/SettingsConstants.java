@@ -1,10 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -16,11 +14,19 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
  * @author Nadejda Mandrescu
  */
 public class SettingsConstants {
+
+    public static final String ID = "id";
+    public static final String CODE = "code";
+    public static final String CALENDAR = "calendar";
     public static final String FUNDING_TYPE_ID = "funding-type";
-    public static final String CURRENCY_ID = "currency-code";
-    public static final String CALENDAR_TYPE_ID = "calendar-id";
-    public static final String CALENDAR_CURRENCIES_ID = "calendar-currencies";
+    public static final String CURRENCY_ID = "currency-" + CODE;
+    public static final String CALENDAR_TYPE_ID = CALENDAR + "-" + ID;
+    public static final String CALENDAR_IS_FISCAL = CALENDAR + "-is-fiscal";
+    public static final String CALENDAR_CURRENCIES_ID = CALENDAR + "-currencies";
+
     public static final String AMOUNT_FORMAT_ID = "amount-format";
+
+
     public static final String YEAR_RANGE_ID = "year-range";
 
     public static final String DEFAULT_FUNDING_TYPE_ID = MeasureConstants.ACTUAL_COMMITMENTS;
@@ -43,12 +49,29 @@ public class SettingsConstants {
     public static final String MAXIMUM_FILE_SIZE = "maximum-file-size";
     public static final String LIMIT_FILE_TO_UPLOAD = "limit-file-to-upload";
     public static final String SORT_COLUMN_VIEW="v_g_settings_resource_columns";
-    
+
     public static final String PERFORMANCE_ISSUES = "performanceIssues";
     
     public static final String NO_LIMIT = "noLimit";
     public static final String CUSTOM = "custom";
+
+    public static final String REORDER_FUNDING_ITEM_ID = "reorder-funding-item";
+    public static final String EFFECTIVE_CURRENCY = "effective-currency";
+
+    public static final String SHOW_ACTIVITY_WORKSPACES = "show-activity-workspaces";
+
+    public static final String DASHBOARD_DEFAULT_MAX_YEAR_RANGE = "dashboard-default-max-year-range";
+    public static final String DASHBOARD_DEFAULT_MIN_YEAR_RANGE = "dashboard-default-min-year-range";
+    public static final String DASHBOARD_DEFAULT_MAX_DATE = "dashboard-default-max-date";
+    public static final String DASHBOARD_DEFAULT_MIN_DATE = "dashboard-default-min-date";
     
+    public static final String GIS_DEFAULT_MAX_YEAR_RANGE = "gis-default-max-year-range";
+    public static final String GIS_DEFAULT_MIN_YEAR_RANGE = "gis-default-min-year-range";
+    public static final String GIS_DEFAULT_MAX_DATE = "gis-default-max-date";
+    public static final String GIS_DEFAULT_MIN_DATE = "gis-default-min-date";
+
+
+
 
     /** {id, value} map for settings fields ID-NAME map */
     public static final Map<String, String> ID_NAME_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
@@ -73,9 +96,9 @@ public class SettingsConstants {
         put(YEAR_FROM, "From:");
         put(YEAR_TO, "To:");
         put(YEAR_ALL, "All");
-        put(SORT_COLUMN,GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN );
+        put(SORT_COLUMN, GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN);
         put(MAXIMUM_FILE_SIZE, GlobalSettingsConstants.CR_MAX_FILE_SIZE );
-        put(LIMIT_FILE_TO_UPLOAD,GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD);
+        put(LIMIT_FILE_TO_UPLOAD, GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD);
     }});
 
     public static final String DOT = "dot";
@@ -126,4 +149,5 @@ public class SettingsConstants {
     public static final Map<String, String> YEAR_MAP = Collections.unmodifiableMap(new LinkedHashMap<String, String>() {{
         put(YEAR_ALL, "-1");
     }});
+    
 }

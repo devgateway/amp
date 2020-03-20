@@ -25,6 +25,7 @@ package org.digijava.kernel.mail;
 // System  packages
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
@@ -35,6 +36,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -48,6 +50,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.google.common.base.Strings;
+import org.apache.commons.validator.EmailValidator;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.config.ForwardEmails;
 import org.digijava.kernel.config.Smtp;
@@ -72,9 +76,24 @@ public class DgEmailManager {
     private static String SCHEMA_DELIMITER = "://";
 
     private static Logger logger = Logger.getLogger(DgEmailManager.class);
+    private static Logger emailLogger = Logger.getLogger("amp-email");
     private static Pattern CarReturnPattern = null;
 
+    /**
+     * Email mode can be either 'smtp' or 'log'. If not specified defaults to 'log'. Any value different from 'smtp'
+     * will fall back to 'log' option.
+     */
+    private static final boolean EMAIL_SENDING_ENABLED = "smtp".equalsIgnoreCase(System.getProperty("email.mode"));
+
+    private static final int CONSOLE_LINE_LENGTH = 80;
+
     static {
+        if (!EMAIL_SENDING_ENABLED) {
+            logger.warn(Strings.repeat("-", CONSOLE_LINE_LENGTH));
+            logger.warn("Emails will be written to log instead of being sent to smtp!");
+            logger.warn("In production environment configure java with '-Demail.mode=smtp'");
+            logger.warn(Strings.repeat("-", CONSOLE_LINE_LENGTH));
+        }
 
         CarReturnPattern = Pattern.compile("(\r|\n|\r\n|\n\r)");
 
@@ -125,6 +144,9 @@ public class DgEmailManager {
          locale2encoding.put("ro", "ISO-8859-2");
          locale2encoding.put("zh", "EUC-CN");
          */
+    }
+
+    public static void triggerStaticInitializers() {
     }
 
     /**
@@ -444,17 +466,38 @@ public class DgEmailManager {
 
     public static void sendMail(Address[] to, String from, Address[] cc, Address[] bcc, String subject, String text, String charset, boolean asHtml,
                                 boolean log, boolean rtl) throws java.lang.Exception {
-        logger.debug("Sending mail from " + from + " to " + (to != null ? to.length : 0) + " recipient(s). Subject: " +
-                     subject + ". Encoding: " + charset + ". asHtml: " + asHtml);
-        logger.debug("Mail text:\n" + text);
+        String toEmails = "";
+        if (to != null) {
+            toEmails = "[" + String.join(", ",
+                    Arrays.asList(to).stream().map(Address::toString).collect(Collectors.toList())) + "]";
+        }
+        emailLogger.debug("Sending mail from " + from + " to " + (to != null ? toEmails : "none")
+                + " recipient(s). Subject: "
+                + subject + ". Encoding: " + charset + ". asHtml: " + asHtml);
+        emailLogger.debug("Mail text:\n" + text);
+
+        if (!EMAIL_SENDING_ENABLED) {
+            return;
+        }
+
+        // see digi.xml for more details
+        logger.info("Start Getting Config");
+        Smtp smtp = DigiConfigManager.getConfig().getSmtp();
+
+        //If the from address is the default we will use the one configured in amp/repository/digi.xml
+        if (from.equals(EmailConstants.DEFAULT_EMAIL_SENDER) && smtp.getFrom() != null) {
+            if (EmailValidator.getInstance().isValid(smtp.getFrom())) {
+                from = smtp.getFrom();
+            } else {
+                logger.error("Email Address configured in amp/repository/digi.xml is not valid");
+            }
+        }
 
         PlainTextEmailMessage emailMessage = createEmailMessage(to,new InternetAddress(from), cc, bcc, subject, text, charset, asHtml, rtl);
 
         // Get SMTP object from configuration file,
         
-        // see digi.xml for more details
-        logger.info("Start Getting Config");
-        Smtp smtp = DigiConfigManager.getConfig().getSmtp();
+
 
         logger.info("End Getting Config");
         logger.debug("SMTP User Name: " + smtp.getUserName() + " Password: " + smtp.getUserPassword());

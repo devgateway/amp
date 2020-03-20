@@ -54,7 +54,7 @@ public class DownloadFile extends Action {
             }
             
             NodeWrapper nodeWrapper = new NodeWrapper(node);
-            DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, nodeWrapper.getName(), null, null);
+            DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper);
 
             /**
              * We do not save this date to the document repository node

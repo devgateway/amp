@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
@@ -11,8 +12,6 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
-import clover.org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Encaspulates a html link of type {@link IndicatingAjaxLink}

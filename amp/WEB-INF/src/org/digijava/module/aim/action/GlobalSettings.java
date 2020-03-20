@@ -195,10 +195,11 @@ public class GlobalSettings extends Action {
     private void resetWorkspaceValidationSettings(String gsNewValue) {
         String query ="UPDATE " + AmpApplicationSettings.class.getName();
         if (gsNewValue.toLowerCase().equals("on")) {
-            query+=" SET validation='allEdits' WHERE validation='validationOff'";
+            query += " SET validation='" + Constants.PROJECT_VALIDATION_FOR_ALL_EDITS
+                    + "' WHERE validation='" + Constants.PROJECT_VALIDATION_OFF + "'";
         } 
         else if (gsNewValue.toLowerCase().equals("off")) {
-            query+=" SET validation='validationOff'";
+            query += " SET validation='" + Constants.PROJECT_VALIDATION_OFF + "'";
         }
         PersistenceManager.getSession()
             .createQuery(query)

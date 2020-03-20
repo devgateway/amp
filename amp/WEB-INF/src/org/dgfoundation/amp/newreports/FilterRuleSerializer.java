@@ -2,15 +2,17 @@ package org.dgfoundation.amp.newreports;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.map.SerializerProvider;
-import org.codehaus.jackson.map.ser.std.SerializerBase;
-import org.digijava.module.aim.util.AmpMath;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import org.digijava.kernel.ampapi.swagger.converters.ModelDescriber;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class FilterRuleSerializer extends SerializerBase<FilterRule> {
+public class FilterRuleSerializer extends StdSerializer<FilterRule> implements ModelDescriber {
 
     public FilterRuleSerializer() {
         super(FilterRule.class);
@@ -50,25 +52,17 @@ public class FilterRuleSerializer extends SerializerBase<FilterRule> {
     }
 
     private void writeCorrectType(String value, JsonGenerator jgen) throws IOException {
-        if (value.chars().allMatch(Character::isDigit)) {
-            if (AmpMath.isLong(value)) {
-                jgen.writeNumber(Long.valueOf(value));
-            } else {
-                jgen.writeNumber(Integer.valueOf(value));
-            }
-        } else {
+        try {
+            jgen.writeNumber(Long.parseLong(value));
+        } catch (NumberFormatException e) {
             jgen.writeString(value);
         }
     }
 
     private void writeCorrectTypeField(String name, String value, JsonGenerator jgen) throws IOException {
-        if (value.chars().allMatch(Character::isDigit)) {
-            if (AmpMath.isLong(value)) {
-                jgen.writeNumberField(name, Long.valueOf(value));
-            } else {
-                jgen.writeNumberField(name, Integer.valueOf(value));
-            }
-        } else {
+        try {
+            jgen.writeNumberField(name, Long.valueOf(value));
+        } catch (NumberFormatException e) {
             jgen.writeStringField(name, value);
         }
     }
@@ -86,5 +80,15 @@ public class FilterRuleSerializer extends SerializerBase<FilterRule> {
             }
             jgen.writeEndObject();
         }
+    }
+
+    @Override
+    public Model describe() {
+        // Open API v2 does not support oneOf combining schema. Open API v3 supports oneOf!
+        ModelImpl model = new ModelImpl();
+        model.name("FilterRule");
+        model.type("string");
+        model.description("Actual type is oneOf: integer/string/array of integer or string/range object.");
+        return model;
     }
 }

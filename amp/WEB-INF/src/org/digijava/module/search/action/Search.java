@@ -2,7 +2,7 @@ package org.digijava.module.search.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -12,13 +12,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.search.form.SearchForm;
 import org.digijava.module.search.util.SearchUtil;
-import org.digijava.module.aim.helper.Constants;
 
 public class Search extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -88,68 +88,58 @@ public class Search extends Action {
                 Collection<LoggerIdentifiable> resultActivitiesWithExeOrgs = new ArrayList<LoggerIdentifiable>();
                 Collection<LoggerIdentifiable> resultActivitiesWithImpOrgs = new ArrayList<LoggerIdentifiable>();
                 Collection<LoggerIdentifiable> resultPledges = new ArrayList<LoggerIdentifiable>();
+                
+                String keywordString = searchForm.getKeyword().trim();
+                List<String> keywords = SearchUtil.buildKeywordsList(keywordString);
+                int searchMode = searchForm.getSearchMode();
     
                 switch (searchForm.getQueryType()) {
                 case SearchUtil.QUERY_ALL:
-                    resultActivities = SearchUtil.getActivities(searchForm
-                            .getKeyword(), request, tm);
-                    resultPledges = SearchUtil.getPledges(searchForm.getKeyword(), request);
-                    resultReports = SearchUtil.getReports(tm, searchForm
-                            .getKeyword());
-                    resultTabs = SearchUtil.getTabs(tm, searchForm.getKeyword());
-                    resultResources = SearchUtil.getResources(searchForm
-                            .getKeyword(), request, tm);
-                    if ( FeaturesUtil.isVisibleField("Search Feature - Responsible Organization")) {
-                        resultActivitiesWithRespOrgs.addAll(SearchUtil
-                                .getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
-                                        tm, Constants.ROLE_CODE_RESPONSIBLE_ORG));
+                    resultActivities = SearchUtil.getActivities(keywordString, request, tm);
+                    resultPledges = SearchUtil.getPledges(keywords, request, searchMode);
+                    resultReports = SearchUtil.getReports(tm, keywords, searchMode);
+                    resultTabs = SearchUtil.getTabs(tm, keywords, searchMode);
+                    resultResources = SearchUtil.getResources(keywords, request, tm, searchMode);
+                    if (FeaturesUtil.isVisibleField("Search Feature - Responsible Organization")) {
+                        resultActivitiesWithRespOrgs.addAll(SearchUtil.getActivitiesUsingRelatedOrgs(keywords, tm, 
+                                Constants.ROLE_CODE_RESPONSIBLE_ORG, searchMode));
                     }
-                    if ( FeaturesUtil.isVisibleField("Search Feature - Executing Agency")) {
-                            resultActivitiesWithExeOrgs.addAll(SearchUtil
-                                    .getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
-                                            tm, Constants.ROLE_CODE_EXECUTING_AGENCY));
+                    if (FeaturesUtil.isVisibleField("Search Feature - Executing Agency")) {
+                        resultActivitiesWithExeOrgs.addAll(SearchUtil.getActivitiesUsingRelatedOrgs(keywords, tm, 
+                                Constants.ROLE_CODE_EXECUTING_AGENCY, searchMode));
                     }
-                    if ( FeaturesUtil.isVisibleField("Search Feature - Implementing Agency")) {
-                                resultActivitiesWithImpOrgs.addAll(SearchUtil
-                                        .getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
-                                                tm, Constants.ROLE_CODE_IMPLEMENTING_AGENCY));
+                    if (FeaturesUtil.isVisibleField("Search Feature - Implementing Agency")) {
+                        resultActivitiesWithImpOrgs.addAll(SearchUtil.getActivitiesUsingRelatedOrgs(keywords, tm, 
+                                Constants.ROLE_CODE_IMPLEMENTING_AGENCY, searchMode));
                     }
                     break;
                 case SearchUtil.ACTIVITIES:
-                    resultActivities = SearchUtil.getActivities(searchForm
-                            .getKeyword(), request, tm);
+                    resultActivities = SearchUtil.getActivities(keywordString, request, tm);
                     break;
                 case SearchUtil.PLEDGE:
-                    resultPledges = SearchUtil.getPledges(searchForm
-                            .getKeyword(), request);
+                    resultPledges = SearchUtil.getPledges(keywords, request, searchMode);
                     break;                  
                 case SearchUtil.REPORTS:
-                    resultReports = SearchUtil.getReports(tm, searchForm
-                            .getKeyword());
+                    resultReports = SearchUtil.getReports(tm, keywords, searchMode);
                     break;
                 case SearchUtil.TABS:
-                    resultTabs = SearchUtil.getTabs(tm, searchForm.getKeyword());
+                    resultTabs = SearchUtil.getTabs(tm, keywords, searchMode);
                     break;
                 case SearchUtil.RESOURCES:
-                    resultResources = SearchUtil.getResources(searchForm
-                            .getKeyword(), request, tm);
+                    resultResources = SearchUtil.getResources(keywords, request, tm, searchMode);
                     break;
                 case SearchUtil.RESPONSIBLE_ORGANIZATION:
-                    resultActivitiesWithRespOrgs = SearchUtil
-                            .getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
-                                    tm, Constants.ROLE_CODE_RESPONSIBLE_ORG);
+                    resultActivitiesWithRespOrgs = SearchUtil.getActivitiesUsingRelatedOrgs(keywords, tm, 
+                            Constants.ROLE_CODE_RESPONSIBLE_ORG, searchMode);
                     break;
                 case SearchUtil.EXECUTING_AGENCY:
-                    resultActivitiesWithExeOrgs = SearchUtil
-                            .getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
-                                    tm, Constants.ROLE_CODE_EXECUTING_AGENCY);
+                    resultActivitiesWithExeOrgs = SearchUtil.getActivitiesUsingRelatedOrgs(keywords, tm, 
+                            Constants.ROLE_CODE_EXECUTING_AGENCY, searchMode);
                     break;
                 case SearchUtil.IMPLEMENTING_AGENCY:
-                    resultActivitiesWithImpOrgs = SearchUtil
-                            .getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
-                                    tm, Constants.ROLE_CODE_IMPLEMENTING_AGENCY);
+                    resultActivitiesWithImpOrgs = SearchUtil.getActivitiesUsingRelatedOrgs(keywords, tm, 
+                            Constants.ROLE_CODE_IMPLEMENTING_AGENCY, searchMode);
                     break;
-                    
                 }
     
                 if (! searchForm.getKeyword().equals("")) {

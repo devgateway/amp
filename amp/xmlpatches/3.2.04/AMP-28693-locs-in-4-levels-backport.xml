@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-28693</jira>
+    <keyword>constraints fk</keyword>
+    <author>Octavian Ciubotaru</author>
+    <description>
+        Adding 4th level in location hierarchy for reports.
+    </description>
+    <apply>
+        <script>
+            <lang delimiter="@@@" type="postgres"><![CDATA[
+
+                DROP VIEW IF EXISTS v_amp_location_cache CASCADE@@@
+
+                CREATE VIEW v_amp_location_cache AS
+                SELECT
+                  l.amp_location_id,
+                  acvl.id AS acvl_id, acvl.location_name AS acvl_name,
+                  acvl.parent_location,
+                  getlocationidbyimplloc(acvl.id, 'Region'::character varying) AS region_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Region'::character varying)) as region_name,
+                  getlocationidbyimplloc(acvl.id, 'Zone'::character varying) AS zone_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Zone'::character varying)) as zone_name,
+                  getlocationidbyimplloc(acvl.id, 'District'::character varying) AS district_id, getlocationname(getlocationidbyimplloc(acvl.id, 'District'::character varying)) as district_name,
+                  getlocationidbyimplloc(acvl.id, 'Communal section'::character varying) AS communal_section_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Communal section'::character varying)) as communal_section_name,
+                  getlocationidbyimplloc(acvl.id, 'Country'::character varying) AS country_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Country'::character varying)) as country_name
+                FROM amp_category_value_location acvl LEFT JOIN amp_location l ON l.location_id = acvl.id
+                ORDER BY acvl.id@@@
+
+                CREATE VIEW v_ni_all_locations_with_levels AS
+					SELECT amp_location_id, acvl_id, acvl_name, parent_location, getlocationdepth(acvl_id) AS location_depth,
+						COALESCE(country_id, - acvl_id) AS country_id, COALESCE(country_name, 'Undefined') AS country_name,
+						COALESCE(region_id, - acvl_id) AS region_id, COALESCE(region_name, 'Undefined') AS region_name,
+						COALESCE(zone_id, - acvl_id) AS zone_id, COALESCE(zone_name, 'Undefined') AS zone_name,
+						COALESCE(district_id, - acvl_id) AS district_id, COALESCE(district_name, 'Undefined') AS district_name,
+						COALESCE(communal_section_id, - acvl_id) AS communal_section_id, COALESCE(communal_section_name, 'Undefined') AS communal_section_name
+					FROM v_amp_location_cache@@@
+
+				DROP TABLE IF EXISTS ni_all_locations_with_levels CASCADE@@@
+				CREATE TABLE ni_all_locations_with_levels AS
+					SELECT * FROM v_ni_all_locations_with_levels@@@
+
+				CREATE INDEX ni_alwl_loc_id ON ni_all_locations_with_levels(amp_location_id)@@@
+				CREATE INDEX ni_alwl_acvl_id ON ni_all_locations_with_levels(acvl_id)@@@
+				CREATE INDEX ni_alwl_parent_id ON ni_all_locations_with_levels(parent_location)@@@
+				CREATE INDEX ni_alwl_depth ON ni_all_locations_with_levels(location_depth)@@@
+				CREATE INDEX ni_alwl_country_id ON ni_all_locations_with_levels(country_id)@@@
+				CREATE INDEX ni_alwl_region_id ON ni_all_locations_with_levels(region_id)@@@
+				CREATE INDEX ni_alwl_zone_id ON ni_all_locations_with_levels(zone_id)@@@
+				CREATE INDEX ni_alwl_district_id ON ni_all_locations_with_levels(district_id)@@@
+				CREATE INDEX ni_alwl_communal_section_id ON ni_all_locations_with_levels(communal_section_id)@@@
+
+                CREATE TRIGGER ni_locations_changed
+                    AFTER INSERT OR UPDATE OR DELETE ON ni_all_locations_with_levels
+                    FOR EACH STATEMENT
+                        EXECUTE PROCEDURE dimension_updated_proc()@@@
+
+                CREATE OR REPLACE FUNCTION update_location_level_caches_internal()
+                    RETURNS bigint AS
+                    $BODY$
+                        BEGIN
+                            TRUNCATE ni_all_locations_with_levels;
+                            INSERT INTO ni_all_locations_with_levels
+                                SELECT * FROM v_ni_all_locations_with_levels;
+
+                            RETURN 1;
+                            end;
+                        $BODY$
+                LANGUAGE plpgsql VOLATILE@@@
+
+                CREATE TEMPORARY TABLE DUMMY_TABLE AS
+                SELECT update_location_level_caches_internal() FROM (select 1) AS dual @@@
+
+                DROP TABLE DUMMY_TABLE @@@
+
+                UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart' @@@
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

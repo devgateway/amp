@@ -1,43 +1,45 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.security.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModelProperty;
+import java.util.Date;
 import java.util.Set;
 import java.util.SortedSet;
-
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityConstants;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601TimeStampSerializer;
 
 /**
  * Basic user information
  * 
  * @author Nadejda Mandrescu
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
     @JsonProperty(EPConstants.ID)
     private Long id;
     
     @JsonProperty(SecurityConstants.FIRST_NAME)
+    @ApiModelProperty(example = "ATL")
     private String firstName;
     
     @JsonProperty(SecurityConstants.LAST_NAME)
+    @ApiModelProperty(example = "ATL")
     private String lastName;
     
     @JsonProperty(SecurityConstants.EMAIL)
+    @ApiModelProperty(example = "atltest@amp.org")
     private String email;
     
     @JsonProperty(SecurityConstants.PASSWORD_CHANGED_AT)
-    private String passwordChangedAt;
+    @JsonSerialize(using = ISO8601TimeStampSerializer.class)
+    @ApiModelProperty(example = "2018-06-19T09:50:59.582+0300")
+    private Date passwordChangedAt;
     
     @JsonProperty(SecurityConstants.IS_BANNED)
     private boolean isBanned;
-    
-    @JsonProperty(SecurityConstants.IS_ACTIVE)
-    private boolean isActive;
     
     @JsonProperty(SecurityConstants.IS_PLEDGER)
     private boolean isPledger;
@@ -46,9 +48,11 @@ public class User {
     private boolean isAdmin;
     
     @JsonProperty(SecurityConstants.LANG_ISO2)
+    @ApiModelProperty(example = "en")
     private String langIso2;
     
     @JsonProperty(SecurityConstants.COUNTRY_ISO2)
+    @ApiModelProperty(example = "ht")
     private String countryIso2;
     
     @JsonProperty(SecurityConstants.ORG_TYPE_ID)
@@ -62,6 +66,7 @@ public class User {
     private SortedSet<Long> assignedOrgIds;
     
     @JsonProperty(SecurityConstants.GROUP_KEYS)
+    @ApiModelProperty("Sorted list of user group keys, e.g. [EDT, MEM]")
     private SortedSet<String> groupKeys;
     
     /**
@@ -123,14 +128,14 @@ public class User {
     /**
      * @return the passwordChangedAt
      */
-    public String getPasswordChangedAt() {
+    public Date getPasswordChangedAt() {
         return passwordChangedAt;
     }
 
     /**
      * @param passwordChangedAt the passwordChangedAt to set
      */
-    public void setPasswordChangedAt(String passwordChangedAt) {
+    public void setPasswordChangedAt(Date passwordChangedAt) {
         this.passwordChangedAt = passwordChangedAt;
     }
 
@@ -146,20 +151,6 @@ public class User {
      */
     public void setBanned(boolean isBanned) {
         this.isBanned = isBanned;
-    }
-    
-    /**
-     * @return the isActive
-     */
-    public boolean getIsActive() {
-        return isActive;
-    }
-    
-    /**
-     * @param isActive the isActive to set
-     */
-    public void setActive(boolean isActive) {
-        this.isActive = isActive;
     }
     
     /**

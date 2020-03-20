@@ -26,11 +26,7 @@ public class ExportActivityToWord extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
         EditActivityForm myForm=(EditActivityForm)form;
 
-        //to know whether print happens from Public View or not
-        HttpSession session = request.getSession();
-        
-        TeamMember teamMember = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-        if(teamMember == null && !FeaturesUtil.isVisibleModule("Show Editable Export Formats")) {
+        if (!FeaturesUtil.showEditableExportFormats()) {
             return mapping.findForward("index");
         }
         

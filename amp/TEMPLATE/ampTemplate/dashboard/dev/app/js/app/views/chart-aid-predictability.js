@@ -1,6 +1,8 @@
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
+var util = require('../../ugly/util');
+
 var ProjectsListModalView = require('./chart-detail-info-modal');
 
 module.exports = ChartViewBase.extend({
@@ -22,11 +24,23 @@ module.exports = ChartViewBase.extend({
       var key = $(e.currentTarget).find('.nv-legend-text').text();
 	  var plannedDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-planned-disbursements","Planned Disbursements");
 	  var actualDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-actual-disbursements","Actual Disbursements");
-	  if(key == plannedDisbursementTrn){
-		  this.model.set('showPlannedDisbursements', !this.model.get('showPlannedDisbursements'));	
-	  }else if(key == actualDisbursementTrn){
-		  this.model.set('showActualDisbursements', !this.model.get('showActualDisbursements'));	
+	  var planned = this.model.get('showPlannedDisbursements');
+	  var actual = this.model.get('showActualDisbursements');
+	
+	  if (key === plannedDisbursementTrn) {
+		  planned = !planned; 		 
+	  } else if (key === actualDisbursementTrn) {
+		  actual = !actual;
 	  }	
+	  
+	  if (planned === false && actual === false) {
+		 //re-enable both measures 
+		  this.model.set('showPlannedDisbursements', true);
+		  this.model.set('showActualDisbursements', true);
+	  } else {
+		  this.model.set('showPlannedDisbursements', planned);
+		  this.model.set('showActualDisbursements', actual); 
+	  }	 
   },
   chartViews: [
     'multibar',
@@ -62,16 +76,14 @@ module.exports = ChartViewBase.extend({
     var header = context.x.raw + ' ' +
           app.translator.translateSync('amp.dashboard:aid-predictability-' +
           context.data[index].originalKey + '-' + this.model.get('measure'), '');
+    var ofTotal = of + ' '  + context.x.raw + ' ' + total;
 
     var otherSeries = context.data[1 - index];  // WARNING: assumes only 2 series
     var otherHere = otherSeries.values[context.x.index];
-    var line2Amount = 0;
-    if (otherHere.y > 0) {
-      line2Amount = context.y.raw / otherHere.y;
-    }
-    var line2 = '<b>' + d3.format('f')(line2Amount * 100) +
-        ' %</b>&nbsp<span>' + of + '</span>&nbsp' + context.x.raw +
-        '&nbsp<span>' + total + '</span>';
+
+    var line2 = util.formatOfTotal(context.y.raw, otherHere.y, ofTotal);
+
+
     var self = this;
     var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value; 
     return {tt: {

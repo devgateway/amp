@@ -7,7 +7,6 @@
 package org.dgfoundation.amp.ar;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants.SyntheticColumnsMeta;
 import org.dgfoundation.amp.ar.cell.AmountCell;
@@ -39,7 +37,6 @@ import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
-import org.dgfoundation.amp.ar.filtercacher.FastFilterCacher;
 import org.dgfoundation.amp.ar.filtercacher.FilterCacher;
 import org.dgfoundation.amp.ar.filtercacher.NopFilterCacher;
 import org.dgfoundation.amp.ar.viewfetcher.GeneratedPropertyDescription;
@@ -47,19 +44,11 @@ import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
 import org.dgfoundation.amp.ar.workers.TextColWorker;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.dgfoundation.amp.ar.workers.ComputedAmountColWorker;
 import org.dgfoundation.amp.exprlogic.Values;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpColumnsFilters;
 import org.digijava.module.aim.dbentity.AmpMeasures;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
@@ -68,7 +57,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * 
@@ -465,7 +453,8 @@ public class AmpReportGenerator extends ReportGenerator {
             //System.out.println(fundingCol.prettyPrint());
         }
         
-        PledgesToActivitiesBridge.BridgeItem correspondingPledgeView = PledgesToActivitiesBridge.activityViewToPledgeView.get(rcol.getColumn().getExtractorView());
+        PledgesToActivitiesBridge.BridgeItem correspondingPledgeView =
+                PledgesToActivitiesBridge.ACTIVITY_VIEW_TO_PLEDGE_VIEW.get(rcol.getColumn().getExtractorView());
         if (correspondingPledgeView != null) {
             Collection<Cell> nameCells = extractPledgeEquivalentColumn(rcol, correspondingPledgeView.pledgeView);
             CellColumn normalCol = (CellColumn) rawColumns.getColumnByName(rcol.getColumn().getColumnName());
@@ -645,7 +634,9 @@ public class AmpReportGenerator extends ReportGenerator {
             fakeMc.setColumn(c);
             //NEVER apply this for regional reports with regional metaCell:
             if (reportMetadata.getType().equals(ArConstants.REGIONAL_TYPE) &&
-                    (fakeMc.getColumn().getName().equals(ArConstants.REGION) || fakeMc.getColumn().getName().equals(ArConstants.DISTRICT) || fakeMc.getColumn().getName().equals(ArConstants.ZONE) ))
+                    (fakeMc.getColumn().getName().equals(ArConstants.COLUMN_LOC_ADM_LEVEL_1)
+                            || fakeMc.getColumn().getName().equals(ArConstants.COLUMN_LOC_ADM_LEVEL_3)
+                            || fakeMc.getColumn().getName().equals(ArConstants.COLUMN_LOC_ADM_LEVEL_2)))
                 continue;
 
             for(String value:cellValues){
@@ -933,8 +924,7 @@ public class AmpReportGenerator extends ReportGenerator {
             try {
                 tmpColumnList.add((Column) funding.clone());
             } catch (CloneNotSupportedException e) {
-                logger.error(e);
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
 
         }
@@ -1247,8 +1237,9 @@ public class AmpReportGenerator extends ReportGenerator {
         rawColumns.getItems().clear();
         rawColumns = null;
         report.removeEmptyChildren();
-        
-        boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
+
+        String removeEmptyRows = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.REPORTS_REMOVE_EMPTY_ROWS);
+        boolean dateFilterHidesProjects = "true".equalsIgnoreCase(removeEmptyRows);
                                 
         if (dateFilterHidesProjects && !reportMetadata.getDrilldownTab() && 
                 (this.getFilter().wasDateFilterUsed() || (reportMetadata.getHierarchies().size() > 0))
@@ -1483,8 +1474,7 @@ public class AmpReportGenerator extends ReportGenerator {
             try {
                 report = report.horizSplitByCateg(c.getColumnName());
             } catch (UnidentifiedItemException | IncompatibleColumnException e) {
-                logger.error(e);
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }
 
@@ -1567,7 +1557,7 @@ public class AmpReportGenerator extends ReportGenerator {
         
         if (regenerateFilterQuery)
         {
-            filter.generateFilterQuery(TLSUtils.getRequest(), false);
+            filter.generateFilterQuery();
             debugMode = (TLSUtils.getRequest().getParameter("debugMode") != null);
         }
         else

@@ -15,14 +15,13 @@ import java.util.stream.Collectors;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeUtil;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.mail.DgEmailManager;
+import org.digijava.kernel.mail.EmailConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -30,7 +29,6 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.exception.AimException;
@@ -84,7 +82,6 @@ import org.hibernate.jdbc.Work;
 
 public class AmpMessageWorker {
 
-    public static final String DEFAULT_EMAIL_SENDER = "system@digijava.org";
     public static final long SITE_ID = 3L;
     private static final String PARAM_NAME = "name";
     private static final int SUBJECT_MAX_LENGTH = 77;
@@ -167,7 +164,7 @@ public class AmpMessageWorker {
                     // running (for long time) code we process this particular
                     // case in a separate piece of
                     // code
-                    
+
                     List<AmpAlert> listNewMsg = processActivityLevelEvent(e, newAlert, template,e.getTrigger().equals(ActivityMeassureComparisonTrigger.class));
 
                     for (AmpAlert ampMessage : listNewMsg) {
@@ -817,7 +814,7 @@ public class AmpMessageWorker {
                         alerts.add(createAlertFromTemplate(template, myHashMap, newAlert, tm));
                         AmpMessageUtil.saveOrUpdateMessage(newAlert);
                         //Ideally we should keep in the template a relationship with AmpTeamMember
-                        //I will create a follow up ticket so we don't have to manipulate a 
+                        //I will create a follow up ticket so we don't have to manipulate a
                         //String
                         if(sendAlert){
                             createMsgState(template, newAlert, tm);
@@ -868,7 +865,7 @@ public class AmpMessageWorker {
 
         if (receiversAddresses.size() > 0) {
             for (String emailAddr : receiversAddresses) {
-                String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER 
+                String senderEmail = (msgSender == null) ? EmailConstants.DEFAULT_EMAIL_SENDER
                         : msgSender.getUser().getEmailUsedForNotification();
                 
                 String translatedName = TranslatorWorker.translateText(newMsg.getName());
@@ -885,7 +882,7 @@ public class AmpMessageWorker {
     }
 
     /**
-     * 
+     *
      * @param string
      * @return
      */
@@ -915,7 +912,7 @@ public class AmpMessageWorker {
 
     /**
      * List of teams that have to be notified
-     * 
+     *
      * @param ampActivityId
      * @param relatedTrigger
      * @return
@@ -984,23 +981,14 @@ public class AmpMessageWorker {
                 TeamMember member = new TeamMember(ampTeamMember);
 
                 TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER, member);
-                AmpARFilter af = FilterUtil.buildFilter(ampTeamMember.getAmpTeam(), null);
-                af.generateFilterQuery(TLSUtils.getRequest(), true);
 
-                CompleteWorkspaceFilter completeWorkspaceFilter = new CompleteWorkspaceFilter(member, af);
-                String wsQuery1 = WorkspaceFilter.generateWorkspaceFilterQuery(completeWorkspaceFilter.tm);
-                String wsQuery2 = completeWorkspaceFilter.workspaceFilter.getGeneratedFilterQuery();
+                String wsQuery = WorkspaceFilter.generateWorkspaceFilterQuery(member);
 
                 if (wsQueries.length() > 0) {
                     wsQueries.append(" UNION ");
                 }
-                wsQueries.append(addTeamIdToQuery(wsQuery1, ampTeamMember.getAmpTeam().getAmpTeamId(),
-                        ampTeamMember.getAmpTeam().getName())).append(" UNION ");
-                wsQueries.append("select amp_activity_id ," + ampTeamMember.getAmpTeam().getAmpTeamId()
-                        + " as  ampTeamId, '" + ampTeamMember.getAmpTeam().getName() + "' as teamName from ( ");
-                wsQueries.append(wsQuery2);
-                wsQueries.append(") as activityTemp ");
-
+                wsQueries.append(addTeamIdToQuery(wsQuery, ampTeamMember.getAmpTeam().getAmpTeamId(),
+                        ampTeamMember.getAmpTeam().getName()));
             }
             // we now turn queries into map, and store it at request level in
             // case its needed again
@@ -1049,8 +1037,8 @@ public class AmpMessageWorker {
      * templating engine for emails, we'll get the template from the alert
      * template and issue one, though it doesn't make much sense to send it (the
      * user has to first log in to get said message).
-     * 
-     * 
+     *
+     *
      * @param newMsg
      * @param e
      * @throws Exception
@@ -1364,7 +1352,7 @@ public class AmpMessageWorker {
         params.put(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE, 
                 e.getParameters().get(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE).toString());
         for(User user : users) {
-            String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER
+            String senderEmail = (msgSender == null) ? EmailConstants.DEFAULT_EMAIL_SENDER
                     : msgSender.getUser().getEmailUsedForNotification();
             AmpEmail ampEmail = emails.get(user.getRegisterLanguage().getCode());
             if (ampEmail == null) {
@@ -1387,23 +1375,27 @@ public class AmpMessageWorker {
     private static void defineReceiversForSummaryChange(AmpMessage newMsg, Event e, TemplateAlert template) throws
             Exception {
 
-        User user = UserUtils.getUserByEmail(e.getParameters().get(SummaryChangeNotificationTrigger
+        User user = UserUtils.getUserByEmailAddress(e.getParameters().get(SummaryChangeNotificationTrigger
                 .PARAM_SUMMARY_EMAIL).toString());
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY, String.valueOf(
                 SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY));
 
-        String senderEmail = DEFAULT_EMAIL_SENDER;
+        String senderEmail = EmailConstants.DEFAULT_EMAIL_SENDER;
         AmpEmail ampEmail;
 
-        String translatedName = TranslatorWorker.translateText(newMsg.getName(), user.getRegisterLanguage()
+        String translatedSubject = TranslatorWorker.translateText(e.getParameters().get(SummaryChangeNotificationTrigger
+                .PARAM_SUMMARY_SUBJECT).toString(), user.getRegisterLanguage()
                 .getCode(), SITE_ID) + ": " + e.getParameters().get(SummaryChangeNotificationTrigger
                 .PARAM_SUMMARY_DATE).toString();
+        String translatedBodyHeader = TranslatorWorker.translateText(e.getParameters().
+                get(SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY_HEADER).toString(), user.getRegisterLanguage()
+                .getCode(), SITE_ID);
 
-        String translatedDescription = e.getParameters().get(SummaryChangeNotificationTrigger
-                .PARAM_SUMMARY_BODY).toString();
+        String translatedDescription = "<br/>" + translatedBodyHeader + e.getParameters().
+                get(SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY).toString() + "<br/><br/>";
 
-        ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params), DgUtil.fillPattern(
+        ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedSubject, params), DgUtil.fillPattern(
                 translatedDescription, params));
         DbUtil.saveOrUpdateObject(ampEmail);
 
@@ -1453,7 +1445,7 @@ public class AmpMessageWorker {
     /**
      * Create AmpEmails with receivers that Quartz Job will use to send emails
      * when called
-     * 
+     *
      * @param message
      * @param receiversAddresses
      * @param calendarSaveActionWasCalled
@@ -1487,7 +1479,7 @@ public class AmpMessageWorker {
                     ampEmail = new AmpEmail(msgSender.getUser().getEmailUsedForNotification(), 
                             message.getName(), description);
                 } else {
-                    ampEmail = new AmpEmail(DEFAULT_EMAIL_SENDER, message.getName(), description);
+                    ampEmail = new AmpEmail(EmailConstants.DEFAULT_EMAIL_SENDER, message.getName(), description);
                 }
 
                 DbUtil.saveOrUpdateObject(ampEmail);
@@ -1503,7 +1495,7 @@ public class AmpMessageWorker {
         }
     }
 
-    private static String addTeamIdToQuery(String wsQuery, Long teamId, String teamName) {
+    public static String addTeamIdToQuery(String wsQuery, Long teamId, String teamName) {
         Integer indexToReplace = StringUtils.indexOf(wsQuery, "FROM amp_activity");
         wsQuery = StringUtils.left(wsQuery, indexToReplace) + " , " + teamId + " as ampTeamId , '" + teamName
                 + "' as teamName " + StringUtils.mid(wsQuery, indexToReplace, wsQuery.length() - 1);

@@ -228,7 +228,7 @@
 													<logic:notEmpty name="aimTeamActivitiesForm" property="pages">
 													<tr bgcolor="#ffffff">
 														<td colspan=2 height="20">
-															<digi:trn key="aim:pages">Pages :</digi:trn>
+															<digi:trn key="aim:pages">Pages:</digi:trn>
 															<logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" 
 															type="java.lang.Integer">
 															<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dgfoundation.amp.newreports.ReportArea;
+import org.dgfoundation.amp.newreports.ReportEnvBuilder;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -74,7 +75,7 @@ public class BenchmarksRunner {
      * @return
      */
     protected BenchmarkResult doRun(String runName, ReportSpecification spec, BenchmarkResult corOutput, int runNumber) {
-        NiReportsEngine engine = new NiReportsEngine(schema, spec);
+        NiReportsEngine engine = new NiReportsEngine(schema, spec, ReportEnvBuilder.dummy());
         long start = System.currentTimeMillis();
         NiReportRunResult reportRes = engine.execute();
         long reportEnd = System.currentTimeMillis();

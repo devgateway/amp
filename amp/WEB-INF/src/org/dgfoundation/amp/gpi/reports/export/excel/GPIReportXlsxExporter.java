@@ -198,7 +198,7 @@ public class GPIReportXlsxExporter implements GPIReportExporter {
             try {
                 val = df.parse(value).doubleValue();
             } catch (ParseException e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
             }
             cell.setCellValue(val);
         } else if (cellType == Cell.CELL_TYPE_STRING) {

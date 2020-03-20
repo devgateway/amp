@@ -2,14 +2,17 @@ package org.digijava.module.aim.helper;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.ActivityUtil;
 
 import java.sql.Connection;
@@ -20,19 +23,25 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.message.jobs.AmpJobsUtil;
 import org.hibernate.jdbc.Work;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 
 /**
  * @author Aldo Picca
@@ -67,28 +76,100 @@ public final class SummaryChangesService {
      * @param activities activities list.
      * @return list of approvers and activities.
      */
-    public static Map<String, Collection<AmpActivityVersion>> getValidators(LinkedHashMap<Long,
+    public static Map<String, Set<AmpActivityVersion>> getValidators(LinkedHashMap<Long,
             Collection<SummaryChange>> activities) {
 
-        Map<String, Collection<AmpActivityVersion>> results = new LinkedHashMap<>();
+        Map<String, Set<AmpActivityVersion>> results = new LinkedHashMap<>();
 
-        for (Long activityId : new HashSet<Long>(activities.keySet())) {
-            AmpActivityVersion currentActivity = ActivityUtil.loadAmpActivity(activityId);
 
-            List<AmpTeamMember> teamHeadAndAndApprovers = TeamMemberUtil.getTeamHeadAndApprovers(currentActivity
-                    .getTeam().getAmpTeamId());
-
-            for (AmpTeamMember approver : teamHeadAndAndApprovers) {
-                String key = approver.getUser().getEmail();
-                if (results.get(key) == null) {
-                    results.put(key, new ArrayList<AmpActivityVersion>());
-                }
-                results.get(key).add(currentActivity);
-            }
+        //we first need to fetch all ws in which we can see the activities 
+        Map<Long, Set<Long>> activityWs = getActivityWsVisibilityToNotify();
+        if (activityWs.size() > 0) {
+            Map<Long, List<String>> approversAndManagers = getApproversAndManagers();
+            activities.keySet().stream().forEach(activityId -> {
+                AmpActivityVersion currentActivity = ActivityUtil.loadAmpActivity(activityId);
+                //we go and see every ws in which the activity is visible
+                Optional.ofNullable(activityWs.get(activityId)).orElse(emptySet()).stream()
+                        .forEach(teamId -> {
+                            Optional.ofNullable(approversAndManagers.get(teamId)).orElse(emptyList()).
+                                    stream().forEach(approver -> {
+                                //we add the activity to the users who will get notifications
+                                if (results.get(approver) == null) {
+                                    results.put(approver, new LinkedHashSet<AmpActivityVersion>());
+                                }
+                                results.get(approver).add(currentActivity);
+                            });
+                        });
+            });
+        } else {
+            LOGGER.debug("There are no visible activities");
         }
+
         return results;
     }
 
+    /**
+     * get the list of activities with the ws in which they are visible so we can notify the approvers
+     * or managers
+     * @return
+     */
+    private static Map<Long, Set<Long>> getActivityWsVisibilityToNotify()  {
+        AmpJobsUtil.populateRequest();
+
+        final String query = "select min(tm.amp_team_mem_id) from amp_team_member tm ,amp_team t, "
+                + "amp_team_member_roles tmr, amp_summary_notification_settings sns "
+                + "where tm.amp_member_role_id = tmr. amp_team_mem_role_id "
+                + "and (tmr.team_head = true or tmr.approver = true) "
+                + " and (tm.deleted = false or tm.deleted is null )"
+                + "and  tm.amp_team_id=t.amp_team_id  and sns.amp_team_id=t.amp_team_id "
+                + "and (sns.notify_approver = true or sns.notify_manager = true) group by tm.amp_team_id ";
+        ValueWrapper<List<Long>> ampTeamMemberId = AmpJobsUtil.getTeamMembers(query);
+        Map<Long, Set<Long>> activitiesWs = new HashMap<>();
+
+        if (ampTeamMemberId.value.size() > 0) {
+            List<AmpTeamMember> ampTeamMembers = TeamUtil.getAmpTeamMembers(ampTeamMemberId.value);
+            for (AmpTeamMember atm : ampTeamMembers) {
+                TeamUtil.setupFiltersForLoggedInUser(TLSUtils.getRequest(), atm);
+                TeamMemberUtil.getActivitiesWsByTeamMember(activitiesWs, atm);
+            }
+        }
+        return activitiesWs;
+    }
+
+
+    /**
+     * Fetch all approvers and managers based con the configuration for summary changes notification
+     * @return
+     */
+    private static Map<Long, List<String>> getApproversAndManagers() {
+        final Map<Long, List<String>> approversAndManagersPerWS = new HashMap<>();
+        final String qryApproversAndManagers = "select t.amp_team_id as amp_team_id, u.email as email "
+                + "from amp_team t, amp_team_member atm, amp_team_member_roles tmr, amp_summary_notification_settings"
+                + " sns, dg_user u where t.amp_team_id =atm.amp_team_id "
+                + " and atm.amp_member_role_id = tmr.amp_team_mem_role_id  "
+                + " and t.amp_team_id = sns.amp_team_id and atm.user_ = u.id "
+                + " AND    (atm.deleted = false or atm.deleted is null) "
+                + " and ((case when sns.notify_approver then tmr.approver and tmr.team_head = false end ) "
+                + " or (case when sns.notify_manager then tmr.approver and tmr.team_head end )) ";
+
+        PersistenceManager.getSession().doWork(new Work() {
+            public void execute(Connection conn) throws SQLException {
+                RsInfo rsManagersAndApproversPerWS = SQLUtils.rawRunQuery(conn, qryApproversAndManagers, null);
+                Long lastTeamId = -1L;
+
+                while (rsManagersAndApproversPerWS.rs.next()) {
+                    if (!lastTeamId.equals(rsManagersAndApproversPerWS.rs.getLong("amp_team_id"))) {
+                        lastTeamId = rsManagersAndApproversPerWS.rs.getLong("amp_team_id");
+                        approversAndManagersPerWS.put(lastTeamId, new ArrayList<>());
+                    }
+                    approversAndManagersPerWS.get(lastTeamId)
+                            .add(rsManagersAndApproversPerWS.rs.getString("email"));
+                }
+                rsManagersAndApproversPerWS.close();
+            }
+        });
+        return approversAndManagersPerWS;
+    }
     /**
      * Return a list of activities that were modified in the 24 hours prior to the date.
      * @param fromDate filter by date
@@ -124,7 +205,8 @@ public final class SummaryChangesService {
                                 + "     WHERE isolated = FALSE "
                                 + "       OR isolated IS NULL ) ",
                         Constants.ACTIVITY_NEEDS_APPROVAL_STATUS,
-                        Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS);
+                        ApprovalStatus.APPROVED.getDbName(),
+                        ApprovalStatus.STARTED_APPROVED.getDbName());
 
                 ArrayList<FilterParam> params = new ArrayList<FilterParam>();
                 params.add(new FilterParam(DateUtils.addDays(fromDate, -1), Types.TIMESTAMP));

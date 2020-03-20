@@ -74,6 +74,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -89,19 +90,15 @@ import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
-
-import com.tonbeller.wcf.utils.SqlUtils;
-
-import clover.org.apache.commons.lang.StringEscapeUtils;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -517,14 +514,14 @@ public class DbUtil {
         return q.list();
     }
 
-    public static String getActivityApprovalStatus(Long actId) {
+    public static ApprovalStatus getActivityApprovalStatus(Long actId) {
         String qry = "select act.approvalStatus from " + AmpActivityVersion.class.getName()
                 + " act where act.ampActivityId=:actId";
         Query q = PersistenceManager.getSession().createQuery(qry);
         q.setParameter("actId", actId, LongType.INSTANCE);
-        List<String> res = q.list();
+        List res = q.list();
         if (!res.isEmpty())
-            return res.get(0);
+            return (ApprovalStatus) res.get(0);
         return null;
     }
 
@@ -627,27 +624,6 @@ public class DbUtil {
         return (AmpFiscalCalendar) PersistenceManager.getSession().get(AmpFiscalCalendar.class, ampFisCalId);
     }
 
-    public static User getUser(String email) {
-        Session session = null;
-        Query qry = null;
-        User user = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select u from " + User.class.getName() + " u where (u.email=:email)";
-            qry = session.createQuery(queryString);
-            qry.setParameter("email", StringUtils.lowerCase(email), StringType.INSTANCE);
-            Iterator itr = qry.list().iterator();
-            if (itr.hasNext()) {
-                user = (User) itr.next();
-            }
-        } catch (Exception e) {
-            logger.error("Unable to get user");
-            logger.debug("Exceptiion " + e);
-        }
-        return user;
-    }
-
     public static User getUser(Long userId) {
         return (User) PersistenceManager.getSession().get(User.class, userId);
     }
@@ -728,33 +704,6 @@ public class DbUtil {
             logger.error("Unable to get TeamAppSettings", e);
         }
         return ampAppSettings;
-    }
-
-    public static boolean isUserTranslator(User user) {
-
-        logger.debug("In isUserTranslator()");
-        boolean flag = false;
-        try {
-
-            Iterator itr = user.getGroups().iterator();
-            if (!itr.hasNext()) {
-                logger.debug("No groups");
-            }
-            while (itr.hasNext()) {
-                Group grp = (Group) itr.next();
-                logger.debug("Group key is " + grp.getKey());
-                if ((grp.getKey() != null) && "TRN".equals(grp.getKey().trim())) {
-                    logger.debug("setting flag as true");
-                    flag = true;
-                    break;
-                } else {
-                    logger.debug("in else");
-                }
-            }
-        } catch (Exception ex) {
-            logger.error("Unable to get team member ", ex);
-        }
-        return flag;
     }
 
     /*
@@ -1279,7 +1228,7 @@ public class DbUtil {
         if (publicView) {
             queryString.append(String.format(
                     " and orgRole.activity.approvalStatus in ('%s', '%s') and orgRole.activity.team.parentTeamId is not null ",
-                    Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
+                    ApprovalStatus.APPROVED.getDbName(), ApprovalStatus.STARTED_APPROVED.getDbName()));
         }
 
         Query query = PersistenceManager.getSession().createQuery(queryString.toString());
@@ -1619,37 +1568,6 @@ public class DbUtil {
         }
     }
 
-    public static Collection getQuarters(Long ampFundingId, Integer transactionType, Integer adjustmentType,
-            Integer fiscalYear) {
-        logger.debug("getQuarters() with ampFundingId=" + ampFundingId.longValue() + " fiscalYear=" + fiscalYear);
-
-        Session session = null;
-        Query q = null;
-        Collection c = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = new String();
-            queryString = "select f.fiscalQuarter from " + AmpFundingDetail.class.getName()
-                    + " f where (f.ampFundingId=:ampFundingId) " + " and (f.transactionType=:transactionType) "
-                    + " and (f.adjustmentType=:adjustmentType) " + " and (f.fiscalYear=:fiscalYear) "
-                    + " group by f.fiscalQuarter";
-
-            q = session.createQuery(queryString);
-            q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
-            q.setParameter("transactionType", transactionType, IntegerType.INSTANCE);
-            q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
-            q.setParameter("fiscalYear", fiscalYear, IntegerType.INSTANCE);
-            c = q.list();
-            logger.debug("No of Quarters : " + q.list().size());
-        } catch (Exception ex) {
-            logger.error("Unable to get  Quarters from database", ex);
-        }
-
-        logger.debug("getQuarters() collection size returned : " + (c != null ? c.size() : 0));
-        return c;
-    }
-
     public static Collection<AmpOrganisation> getDonors() {
         Session session = null;
         Query q = null;
@@ -1708,19 +1626,32 @@ public class DbUtil {
         return col;
     }
 
+    public static List<AmpOrgGroup> getAllVisibleOrgGroups() {
+        return getAllVisibleOrgGroups(null);
+    }
     /**
+     *
      * generates a list of all AmpOrgGroup elements which have deleted =null or
      * deleted = false
      *
+     * @param ampOrgGroupIds if not null will filter the list for the given ids
      * @return
      */
-    public static List<AmpOrgGroup> getAllVisibleOrgGroups() {
+    public static List<AmpOrgGroup> getAllVisibleOrgGroups(List<Long> ampOrgGroupIds) {
         try {
             Session session = PersistenceManager.getRequestDBSession();
             String orgGrpNameHql = AmpOrgGroup.hqlStringForName("c");
             String queryString = "select c from " + AmpOrgGroup.class.getName() + " c"
-                    + " WHERE c.deleted IS NULL OR c.deleted = false" + " order by lower(" + orgGrpNameHql + ") asc";
+                    + " WHERE (c.deleted IS NULL OR c.deleted = false)";
+            if (ampOrgGroupIds != null && ampOrgGroupIds.size() > 0) {
+                queryString += " AND c.ampOrgGrpId IN (:ids) ";
+            }
+            queryString += " order by lower(" + orgGrpNameHql + ") asc";
+
             Query qry = session.createQuery(queryString);
+            if (ampOrgGroupIds != null && ampOrgGroupIds.size() > 0) {
+                qry.setParameterList("ids", ampOrgGroupIds);
+            }
             return qry.list();
         } catch (Exception e) {
             logger.debug("Exception from getAllOrgGroups()");
@@ -2067,6 +1998,14 @@ public class DbUtil {
     }
 
     public static Collection getOrgByCode(String action, String code, Long id) {
+        return getOrgByCodeAndAcronym(action, code, null, id);
+    }
+
+    public static Collection getOrgByAcronym(String action, String acronym, Long id) {
+        return getOrgByCodeAndAcronym(action, null, acronym, id);
+    }
+
+    public static Collection getOrgByCodeAndAcronym(String action, String code, String acronym, Long id) {
 
         Session sess = null;
         Collection col = new ArrayList();
@@ -2075,16 +2014,26 @@ public class DbUtil {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            if ("create".equals(action)) {
-                queryString = "select o from " + AmpOrganisation.class.getName()
-                        + " o where (o.orgCode=:code) and (o.deleted is null or o.deleted = false) ";
-                qry = sess.createQuery(queryString);
+            queryString = "select o from " + AmpOrganisation.class.getName()
+                    + " o where (o.deleted is null or o.deleted = false) ";
+            if (code != null) {
+                queryString += " AND (o.orgCode=:code) ";
+            }
+            if (acronym != null) {
+                queryString += " AND (o.acronym=:acronym) ";
+            }
+            if ("edit".equals(action)) {
+
+                queryString += " and (o.ampOrgId!=:id) ";
+            }
+            qry = sess.createQuery(queryString);
+            if (code != null) {
                 qry.setParameter("code", code, StringType.INSTANCE);
-            } else if ("edit".equals(action)) {
-                queryString = "select o from " + AmpOrganisation.class.getName()
-                        + " o where (o.orgCode=:code) and (o.ampOrgId!=:id) and (o.deleted is null or o.deleted = false) ";
-                qry = sess.createQuery(queryString);
-                qry.setParameter("code", code, StringType.INSTANCE);
+            }
+            if (acronym != null) {
+                qry.setParameter("acronym", acronym, StringType.INSTANCE);
+            }
+            if ("edit".equals(action)) {
                 qry.setParameter("id", id, LongType.INSTANCE);
             }
             col = qry.list();
@@ -2753,6 +2702,9 @@ public class DbUtil {
         public HelperAmpOrganisationNameComparator() {
             this.locale = new Locale("en", "EN");
         }
+        public HelperAmpOrganisationNameComparator(Locale locale) {
+            this.locale = locale;
+        }
 
         public HelperAmpOrganisationNameComparator(String iso) {
             this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
@@ -2769,7 +2721,7 @@ public class DbUtil {
     }
 
     /**
-     * This class is used for soring organisations by acronym.
+     * This class is used for sorting organisations by acronym.
      * 
      * @author Dare Roinishvili
      * 
@@ -3172,26 +3124,23 @@ public class DbUtil {
         PersistenceManager.getSession().clear();
     }
 
+    /**
+     * get colors ordered by threshold
+     */
     public static List<AmpColorThreshold> getColorThresholds() {
         return PersistenceManager.getSession().createCriteria(AmpColorThreshold.class)
                 .addOrder(org.hibernate.criterion.Order.asc("thresholdStart")).list();
     }
 
     /*
-     * Get all agreements with the specified code
+     * Count agreements with the specified code.
      */
-    public static List<AmpAgreement> getAgreementsByCode(String agreementCode) {
-        List<AmpAgreement> agreements = new ArrayList<AmpAgreement>();
-        try {
-            agreements = PersistenceManager.getSession()
-                    .createQuery("select agr from " + AmpAgreement.class.getName()
-                            + " agr where (trim(agr.code) =:agreementCode) ")
-                    .setParameter("agreementCode", StringEscapeUtils.escapeSql(agreementCode)).list();
-        } catch (HibernateException e) {
-            logger.error("Unable to get agreements", e);
-        }
-
-        return agreements;
+    public static Integer countAgreementsByCode(String agreementCode) {
+        return (Integer) PersistenceManager.getSession()
+                .createCriteria(AmpAgreement.class)
+                .setProjection(Projections.count("id"))
+                .add(Restrictions.sqlRestriction("trim({alias}.code) = ?", agreementCode, StringType.INSTANCE))
+                .uniqueResult();
     }
     
     public static boolean hasDonorRole(Long id){

@@ -39,7 +39,6 @@ import org.digijava.kernel.entity.OrganizationType;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.request.Site;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -54,7 +53,6 @@ public class User
     private Subject subject;
     private String firstNames;
     private String lastName;
-    @Interchangeable(fieldTitle = "Email")
     private String email;
     private boolean emailVerified;
     private boolean emailBouncing;
@@ -64,9 +62,9 @@ public class User
     private String passQuestion;
     private String passAnswer;
     private String url;
-    private boolean active;
     private boolean banned;
     private Boolean pledger;
+    private Boolean pledgeSuperUser;
     private Site registeredThrough;
     private Set interests;
     private java.sql.Clob bio;
@@ -113,7 +111,6 @@ public class User
         //this.passQuestion = passQuestion;
         //this.passAnswer = passAnswer;
         //this.url = url;
-        this.active = false;
         //this.registeredThrough = Session.site;
 
     }
@@ -221,14 +218,6 @@ public class User
         this.url = url;
     }
 
-    public void setActivate(boolean a) {
-        this.active = a;
-    }
-
-    public boolean isActivate() {
-        return this.active;
-    }
-
     public boolean isRegistrationComplete() {
         return false;
     }
@@ -308,14 +297,6 @@ public class User
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public boolean isEmailVerified() {
@@ -434,6 +415,14 @@ public class User
      */
     public void setPledger(Boolean pledger) {
         this.pledger = pledger;
+    }
+
+    public Boolean getPledgeSuperUser() {
+        return pledgeSuperUser;
+    }
+
+    public void setPledgeSuperUser(Boolean pledgeSuperUser) {
+        this.pledgeSuperUser = pledgeSuperUser;
     }
 
     @Override

@@ -15,6 +15,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
 import org.dgfoundation.amp.onepager.events.ProposedProjectCostUpdateEvent;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 public class AmpComponentAnnualBudgetSubsectionFeature extends AmpSubsectionFeaturePanel<AmpActivityVersion> {
 
@@ -62,6 +63,7 @@ public class AmpComponentAnnualBudgetSubsectionFeature extends AmpSubsectionFeat
                 calendar.set(Calendar.DAY_OF_YEAR, 1);
                 calendar.set(Calendar.YEAR, currentYear);
                 projection.setYear(calendar.getTime());
+                projection.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
                 mtefTableFeature.getEditorList().addItem(projection);
                 
                 target.add(mtefTableFeature);

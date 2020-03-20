@@ -81,15 +81,8 @@ public class ModuleVisibilityTag extends BodyTagSupport {
         try
         {
             String cache=(String) ampContext.getAttribute("FMcache");
-//             if(cache==null || cache=="" || "read".compareTo(cache)==0) ;
-//             else
-//             if("readwrite".compareTo(cache)==0)
-//             {
-                  //logger.info("Module visibility: cache is in writing mode...");
                    if(ampTreeVisibility!=null)
                     {
-//                      if(!existModuleinDB(ampTreeVisibility) && FeaturesUtil.getModuleVisibility(name)==null) //for concurent users...
-                       
                         if(!existModuleinDB(ampTreeVisibility))
                         {//insert without parent??
                             if(parentModule!=null &&  FeaturesUtil.getModuleVisibility(parentModule)==null){
@@ -107,9 +100,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
                                 }
                             }
                         }
-//                      else 
-//                          if(!checkTypeAndParentOfModule(ampTreeVisibility) || !checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))) //parent or type is not ok
-                        if(!checkTypeAndParentOfModule(ampTreeVisibility)) 
+                        if (!checkTypeAndParentOfModule(ampTreeVisibility))
                             {
                             if(parentModule!=null &&  FeaturesUtil.getModuleVisibility(parentModule)==null){
                                 logger.error("FM tag ERROR: parentModule:"+ parentModule +" was not found! Please update the tag accordingly!");
@@ -139,10 +130,6 @@ public class ModuleVisibilityTag extends BodyTagSupport {
                                 }
                             }
                     }
-//                  else return SKIP_BODY;
-//              }
-            
-            
         }catch(Exception e)
         {
             e.printStackTrace();
@@ -193,17 +180,10 @@ public class ModuleVisibilityTag extends BodyTagSupport {
                 pageContext.getOut().print(bodyText);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
-                logger.error(e);
+                logger.error(e.getMessage(), e);
             }
            }
-           else{;
-            //////System.out.println("Field MANAGER!!!! module "+this.getName()+" is not ACTIVE");
-               //the field is not active!!!
-           }      
-      
-       
-       return EVAL_PAGE;//SKIP_BODY 
+       return EVAL_PAGE;
     }
     
     public boolean isModuleActive(AmpTreeVisibility atv)

@@ -110,7 +110,7 @@ public class FxtopWSCurrencyClientImpl implements WSCurrencyClient {
                 }
             } catch (IllegalArgumentException e) {
                 rate = WSCurrencyClient.INVALID_CURRENCY_CODE;
-                logger.error(e);
+                logger.error(e.getMessage(), e);
             } catch (org.apache.axis.AxisFault af) {
                 logger.error("AxisFault error to access currency "
                         + currencyCode[i], af);

@@ -1,290 +1,140 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dgfoundation.amp.nireports.ImmutablePair;
-import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpFundingAmount;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.editor.exception.EditorException;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author Octavian Ciubotaru
  */
-public abstract class ObjectExporter<T> {
+public class ObjectExporter<T> {
 
-    public JsonBean export(T object) {
-        JsonBean resultJson = new JsonBean();
+    private List<APIField> apiFields;
 
-        Field[] fields = getClassOf(object).getDeclaredFields();
+    private TranslatedFieldReader translatedFieldReader;
 
-        for (Field field : fields) {
-            try {
-                readFieldValue(field, object, object, resultJson, null, new FEContext());
-            } catch (IllegalArgumentException | IllegalAccessException
-                    | NoSuchMethodException | SecurityException
-                    | InvocationTargetException | EditorException e) {
-                throw new RuntimeException(String.format("Couldn't convert object %s to json.", object), e);
-            }
-        }
-
-        return resultJson;
+    public ObjectExporter(TranslatedFieldReader translatedFieldReader, List<APIField> apiFields) {
+        this.translatedFieldReader = translatedFieldReader;
+        this.apiFields = apiFields;
     }
 
-    protected Class<?> getClassOf(Object object) {
-        return object.getClass();
+    public List<APIField> getApiFields() {
+        return apiFields;
+    }
+
+    public Map<String, Object> export(T object) {
+        return getObjectJson(object, apiFields, null);
     }
 
     /**
+     * Convert an object to json object.
      *
-     * @param field the instance of the field
-     * @param fieldInstance the object of the field
-     * @param parentObject the object that contain the field
-     * @param resultJson result JSON object which will be filled with the values of the fields
-     * @param fieldPath the underscorified path to the field currently exported
-     * @return
-     */
-    private void readFieldValue(Field field, Object fieldInstance, Object parentObject, JsonBean resultJson,
-            String fieldPath, FEContext context) throws IllegalArgumentException, IllegalAccessException,
-            NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
-
-        Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
-
-        if (interchangeable != null && !InterchangeUtils.isAmpActivityVersion(field.getType())
-                && FMVisibility.isVisible(interchangeable.fmPath(), context.getIntchStack())
-                && isInContext(interchangeable, context)) {
-            context.getIntchStack().push(interchangeable);
-            field.setAccessible(true);
-            String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
-
-            String filteredFieldPath = fieldPath == null ? fieldTitle : fieldPath + "~" + fieldTitle;
-            Object fieldValue = field.get(fieldInstance);
-
-            if (!interchangeable.pickIdOnly()) {
-                // check if the member is a collection
-
-                if (InterchangeUtils.isCompositeField(field)) {
-                    generateCompositeValues(field, fieldValue, fieldPath, context, resultJson);
-                } else if (isFiltered(filteredFieldPath)) {
-                    if (InterchangeUtils.isCollection(field)) {
-                        Collection<Object> collectionItems = (Collection<Object>) fieldValue;
-                        // if the collection is not empty, it will be parsed and a JSON with member details
-                        // will be generated
-                        List<JsonBean> collectionJson = new ArrayList<JsonBean>();
-                        if (collectionItems != null) {
-                            // iterate over the objects of the collection
-                            for (Object item : collectionItems) {
-                                collectionJson.add(getObjectJson(item, filteredFieldPath, context));
-                            }
-                        }
-                        // put the array with object values in the result JSON
-                        resultJson.set(fieldTitle, collectionJson);
-                    } else {
-                        if (InterchangeableClassMapper.containsSupportedClass(field.getType()) || fieldValue == null) {
-                            Class<? extends Object> parentClassName =
-                                    parentObject == null ? field.getDeclaringClass() : parentObject.getClass();
-                            Long id = InterchangeUtils.getId(parentObject);
-                            Object values =
-                                    InterchangeUtils.getTranslationValues(field, parentClassName, fieldValue, id);
-                            resultJson.set(fieldTitle, values);
-                        } else {
-                            Class<? extends PossibleValuesProvider> providerClass =
-                                    InterchangeUtils.getPossibleValuesProvider(field);
-                            if (providerClass != null) {
-                                resultJson.set(InterchangeUtils.underscorify(interchangeable.fieldTitle()),
-                                        getJsonValue(providerClass, fieldValue));
-                            } else {
-                                resultJson.set(fieldTitle, getObjectJson(fieldValue, filteredFieldPath, context));
-                            }
-                        }
-                    }
-                }
-            } else {
-                if (isFiltered(filteredFieldPath)) {
-                    Class<? extends PossibleValuesProvider> providerClass =
-                            InterchangeUtils.getPossibleValuesProvider(field);
-                    if (providerClass != null) {
-                        resultJson.set(fieldTitle, getIdValue(providerClass, fieldValue));
-                    } else {
-                        resultJson.set(fieldTitle, InterchangeUtils.getId(fieldValue));
-                    }
-                }
-            }
-            context.getIntchStack().pop();
-        }
-    }
-
-    /**
-     *
-     * @param item
-     * @param fieldPath the underscorified path to the field currently exported
+     * @param pathToObject the path to the object currently exported
      * @return itemJson object JSON containing the value of the item
      */
-    private JsonBean getObjectJson(Object item, String fieldPath, FEContext context)
-            throws IllegalArgumentException, IllegalAccessException,
-            NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
+    private Map<String, Object> getObjectJson(Object item, List<APIField> apiFields, String pathToObject) {
 
-        Field[] itemFields = item.getClass().getDeclaredFields();
-        JsonBean itemJson = new JsonBean();
+        Map<String, Object> jsonObject = new LinkedHashMap<>();
 
-        // iterate the fields of the object and generate the JSON
-        for (Field itemField : itemFields) {
-            readFieldValue(itemField, item, item, itemJson, fieldPath, context);
-        }
+        for (APIField field : apiFields) {
+            String fieldTitle = field.getFieldName();
+            String fieldPath = pathToObject == null ? fieldTitle : pathToObject + "~" + fieldTitle;
 
-        return itemJson;
-    }
-
-    /**
-     * Generate the composite values. E.g: we have a list of sectors,
-     * in JSON the list should be written by classification
-     * (primary programs, secondary programs, etc.)
-     * @param field the instance of the field
-     * @param fieldInstance the object of the field
-     * @param resultJson object JSON containing the value of the item
-     * @param fieldPath the underscorified path to the field currently exported
-     */
-    private void generateCompositeValues(Field field, Object object, String fieldPath,
-            FEContext context, JsonBean resultJson) throws IllegalArgumentException, IllegalAccessException,
-            NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
-
-        Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
-        InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
-        Interchangeable[] settings = discriminator.settings();
-
-        context.getIntchStack().push(interchangeable);
-
-        Map<String, Object> compositeMap = new HashMap<String, Object>();
-        Map<String, Interchangeable> compositeMapSettings = new HashMap<String, Interchangeable>();
-        Map<String, String> filteredFieldsMap = new HashMap<String, String>();
-
-        // check that we need to initialize as a collection only real collections
-        boolean initAsCollection = InterchangeUtils.isCollection(field)
-                && !InterchangeUtils.getGenericClass(field).equals(AmpCategoryValue.class);
-
-        // create the map containing the correlation between the discriminatorOption and the JSON generated objects
-        for (Interchangeable setting : settings) {
-            // TODO: init settings with defaults from interchangeable
-            compositeMap.put(setting.discriminatorOption(), initAsCollection ? new ArrayList<JsonBean>() : null);
-            compositeMapSettings.put(setting.discriminatorOption(), setting);
-            String fieldTitle = InterchangeUtils.underscorify(setting.fieldTitle());
-            String filteredFieldPath = fieldPath == null ? fieldTitle : fieldPath + "~" + fieldTitle;
-
-            filteredFieldsMap.put(setting.discriminatorOption(), filteredFieldPath);
-        }
-
-        Class<?> classOfField = InterchangeUtils.getClassOfField(field);
-
-        if (InterchangeUtils.isCollection(field) && object != null) {
-            Collection<Object> compositeCollection = (Collection<Object>) object;
-            if (compositeCollection.size() > 0) {
-                boolean isRealCollection = true;
-                Object ref = compositeCollection.iterator().next();
-                if (ref instanceof AmpCategoryValue
-                        && compositeMapSettings.get(((AmpCategoryValue) ref).getAmpCategoryClass().getKeyName())
-                                .pickIdOnly()) {
-                    isRealCollection = false;
-                }
-                for (Object obj : compositeCollection) {
-                    String discOption = null;
-                    if (obj instanceof AmpActivitySector) {
-                        discOption = ((AmpActivitySector) obj).getClassificationConfig().getName();
-                    } else if (obj instanceof AmpActivityProgram) {
-                        discOption = ((AmpActivityProgram) obj).getProgramSetting().getName();
-                    } else if (obj instanceof AmpCategoryValue) {
-                        AmpCategoryValue catVal = (AmpCategoryValue) obj;
-                        discOption = catVal.getAmpCategoryClass().getKeyName();
-                        // we may need to move up for all composites, but so far applies to ACV,
-                        // so keeping here to avoid side effects in rush changes
-                        if (!isRealCollection) {
-                            compositeMap.put(catVal.getAmpCategoryClass().getKeyName(), catVal.getId());
-                        }
-                        //TODO we have to manage when the ActivityBudet is not present (Budget Unallocated)
-                    } else if (obj instanceof AmpOrgRole) {
-                        discOption = ((AmpOrgRole) obj).getRole().getRoleCode();
-                    } else if (obj instanceof AmpActivityContact) {
-                        discOption = ((AmpActivityContact) obj).getContactType();
-                    } else if (obj instanceof AmpFundingAmount) {
-                        discOption = "" + ((AmpFundingAmount) obj).getFunType().ordinal();
-                    } else if (obj instanceof AmpContactProperty) {
-                        discOption = ((AmpContactProperty) obj).getName();
-                    }
-
-                    String filteredFieldPath = filteredFieldsMap.get(discOption);
-                    if (isRealCollection) {
-                        Interchangeable current = compositeMapSettings.get(discOption);
-                        if (current != null) {
-                            context.getIntchStack().push(current);
-                            context.getDiscriminationInfoStack().push(new ImmutablePair<>(classOfField, discOption));
-                        }
-                        ((List<JsonBean>) compositeMap.get(discOption)).add(
-                                getObjectJson(obj, filteredFieldPath, context));
-                        if (current != null) {
-                            context.getDiscriminationInfoStack().pop();
-                            context.getIntchStack().pop();
-                        }
-                    }
-                }
+            if (isFiltered(fieldPath)) {
+                readFieldValue(field, item, jsonObject, fieldPath);
             }
         }
 
-        // put in the result JSON the generated structure
-        for (Interchangeable setting : settings) {
-            context.getIntchStack().push(setting);
-            String fieldTitle = InterchangeUtils.underscorify(setting.fieldTitle());
-            if (isFiltered(fieldTitle) && FMVisibility.isVisible(setting.fmPath(), context.getIntchStack())) {
-                resultJson.set(fieldTitle, compositeMap.get(setting.discriminatorOption()));
-            }
-            context.getIntchStack().pop();
-        }
-        context.getIntchStack().pop();
-    }
-
-    private boolean isInContext(Interchangeable intch, FEContext context) {
-        try {
-            ContextMatcher contextMatcher = intch.context().newInstance();
-            return contextMatcher.inContext(context);
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Failed to check field context.");
-        }
+        return jsonObject;
     }
 
     /**
+     * Convert a field of an object to its json representation and set it on jsonObject.
      *
-     * @param providerClass Provider class that will be used to load the values of the object
-     * @param fieldValue Object which will be used to retrieve the custom value
-     * @return object Custom value of the object
+     * @param field the instance of the field
+     * @param object the object of the field
+     * @param jsonObject result JSON object which will be filled with the values of the fields
+     * @param fieldPath the path of the field currently exported
      */
-    private Object getJsonValue(Class<? extends PossibleValuesProvider> providerClass, Object fieldValue) {
-        try {
-            PossibleValuesProvider providerObj = providerClass.newInstance();
-            return providerObj.toJsonOutput(fieldValue);
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException("Failed to obtain json value.", e);
+    private void readFieldValue(APIField field, Object object, Map<String, Object> jsonObject, String fieldPath) {
+        Object jsonValue;
+        Object fieldValue = field.getFieldAccessor().get(object);
+        boolean isList = field.getApiType().getFieldType().isList();
+
+        if (field.isIdOnly() && !(isList && field.getApiType().isSimpleItemType())) {
+            jsonValue = readFieldWithPossibleValues(field, fieldValue);
+        } else if (field.getApiType().getFieldType().isObject()) {
+            jsonValue = (fieldValue == null) ? null : getObjectJson(fieldValue, field.getChildren(), fieldPath);
+        } else if (isList) {
+            jsonValue = readCollection(field, fieldPath, (Collection) fieldValue);
+        } else {
+            jsonValue = readPrimitive(field, object, fieldValue);
+        }
+
+        jsonObject.put(field.getFieldName(), jsonValue);
+    }
+
+    /**
+     * Read value for a field that has possible values API.
+     * <p>If the value is {@link Identifiable} then it's id is returned.
+     */
+    private Object readFieldWithPossibleValues(APIField field, Object value) {
+        if (ApprovalStatus.class.isAssignableFrom(field.getApiType().getType())) {
+            return value == null ? null : ((ApprovalStatus) value).getId();
+        } else if (Identifiable.class.isAssignableFrom(field.getApiType().getType())) {
+            return value == null ? null : ((Identifiable) value).getIdentifier();
+        } else if (InterchangeUtils.isSimpleType(field.getApiType().getType())) {
+            return value;
+        } else {
+            throw new RuntimeException("Invalid field mapping. Must be either of simple type or identifiable. "
+                    + "Field: " + field.getFieldName());
         }
     }
 
-    private Object getIdValue(Class<? extends PossibleValuesProvider> providerClass, Object fieldValue) {
-        try {
-            PossibleValuesProvider providerObj = providerClass.newInstance();
-            return providerObj.getIdOf(fieldValue);
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException("Failed to obtain id value.", e);
+    /**
+     * Convert primitive value to json value.
+     */
+    private Object readPrimitive(APIField apiField, Object object, Object fieldValue) {
+        if (fieldValue instanceof Date) {
+            boolean isTimestamp = apiField.getApiType().getFieldType() == FieldType.TIMESTAMP;
+            return DateTimeUtil.formatISO8601DateTimestamp((Date) fieldValue, isTimestamp);
+        } else {
+            Field field = FieldUtils.getField(object.getClass(), apiField.getFieldNameInternal(), true);
+            Class<?> objectClass = object.getClass();
+            if (translatedFieldReader.isTranslatable(field, objectClass)) {
+                return translatedFieldReader.get(field, objectClass, fieldValue, object);
+            } else {
+                return fieldValue;
+            }
         }
+    }
+
+    /**
+     * Convert list of objects to a json array.
+     */
+    private List<Object> readCollection(APIField field, String fieldPath, Collection value) {
+        List<Object> collectionOutput = new ArrayList<>();
+        if (value != null) {
+            if (field.getApiType().isSimpleItemType()) {
+                collectionOutput.addAll(value);
+            } else {
+                for (Object item : value) {
+                    collectionOutput.add(getObjectJson(item, field.getChildren(), fieldPath));
+                }
+            }
+        }
+        return collectionOutput;
     }
 
     protected boolean isFiltered(String fieldPath) {

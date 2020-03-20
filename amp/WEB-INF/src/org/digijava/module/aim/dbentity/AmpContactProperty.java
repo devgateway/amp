@@ -2,54 +2,19 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.contact.ContactPhoneTypePossibleValuesProvider;
-import org.digijava.kernel.ampapi.endpoints.contact.PhoneDiscriminatorContextMatcher;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
-import org.digijava.module.aim.annotations.translation.TranslatableClass;
-import org.digijava.module.aim.util.ContactInfoUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.helper.Constants;
 
-@TranslatableClass (displayName = "Contact Property")
-public class AmpContactProperty  implements Comparable, Serializable {
-    
+public abstract class AmpContactProperty implements Comparable, Serializable {
+
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long id;
+
     private AmpContact contact;
 
     private String name;
-    
-    @Interchangeable(fieldTitle = "Value", required = ActivityEPConstants.REQUIRED_ALWAYS, importable = true)
-    private String value;
-    
-    @Interchangeable(fieldTitle = "Extension Value", importable = true,
-            context = PhoneDiscriminatorContextMatcher.class)
-    private String extensionValue;
-
-    @PossibleValues(ContactPhoneTypePossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Type", importable = true, pickIdOnly = true,
-            context = PhoneDiscriminatorContextMatcher.class)
-    private AmpCategoryValue type;
-
-    public AmpCategoryValue getType() {
-        return type;
-    }
-
-    public void setType(AmpCategoryValue type) {
-        this.type = type;
-    }
-
-    public String getPhoneCategory() {
-        if (type != null) {
-            return type.getValue();
-        } else {
-            return "None";
-        }
-    }
-    
-    public String getValueAsFormatedPhoneNum () {
-        return ContactInfoUtil.getFormattedPhoneNum(type, value);
-    }
 
     public Long getId() {
         return id;
@@ -74,23 +39,23 @@ public class AmpContactProperty  implements Comparable, Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
-    public String getValue() {
-        return value;
-    }
-    
-    public void setValue(String value) {
-        this.value = value;
-    }
-    
-    public String getExtensionValue() {
-        return extensionValue;
+
+    public abstract String getValue();
+
+    public abstract void setValue(String value);
+
+    public static AmpContactProperty instantiate(String type) {
+        if (Constants.CONTACT_PROPERTY_NAME_EMAIL.equals(type)) {
+            return new AmpContactEmailProperty();
+        } else if (Constants.CONTACT_PROPERTY_NAME_FAX.equals(type)) {
+            return new AmpContactFaxProperty();
+        } else if (Constants.CONTACT_PROPERTY_NAME_PHONE.equals(type)) {
+            return new AmpContactPhoneProperty();
+        } else {
+            throw new IllegalArgumentException("Unknown contact property type: " + type);
+        }
     }
 
-    public void setExtensionValue(String extensionValue) {
-        this.extensionValue = extensionValue;
-    }
-    
     @Override
     public int compareTo(Object o) {
         // TODO Auto-generated method stub
@@ -124,10 +89,8 @@ public class AmpContactProperty  implements Comparable, Serializable {
         if (!(o instanceof AmpContactProperty)) return false;
 
         AmpContactProperty that = (AmpContactProperty) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-
-        return true;
+        
+        return id != null && id.equals(that.id);
     }
 
     @Override

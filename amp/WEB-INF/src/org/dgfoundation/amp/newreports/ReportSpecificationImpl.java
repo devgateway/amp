@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.dgfoundation.amp.ar.ArConstants;
 
 /**
@@ -32,7 +33,9 @@ public class ReportSpecificationImpl implements ReportSpecification {
     protected boolean summaryReport = false;
     protected ReportCollapsingStrategy reportCollapsingStrategy = ReportCollapsingStrategy.UNKNOWNS;
     protected boolean displayTimeRangeSubtotals = true;
+    protected boolean showOriginalCurrency = false;
     
+    protected boolean includeLocationChildren = true;
     /**
      * If the report query results in empty data
      * Should the headers be populated
@@ -130,6 +133,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
         return settings;
     }
 
+    @JsonIgnore
     public ReportSettingsImpl getOrCreateSettings() {
         if (settings == null)
             settings = new ReportSettingsImpl();
@@ -313,5 +317,21 @@ public class ReportSpecificationImpl implements ReportSpecification {
 
     public void setDisplayTimeRangeSubtotals(Boolean displayTimeRangeSubtotals) {
         this.displayTimeRangeSubtotals = displayTimeRangeSubtotals;
+    }
+
+    public boolean isShowOriginalCurrency() {
+        return showOriginalCurrency;
+    }
+
+    public void setShowOriginalCurrency(boolean showOriginalCurrency) {
+        this.showOriginalCurrency = showOriginalCurrency;
+    }
+    
+    public boolean isIncludeLocationChildren() {
+        return includeLocationChildren;
+    }
+    
+    public void setIncludeLocationChildren(boolean includeLocationChildren) {
+        this.includeLocationChildren = includeLocationChildren;
     }
 }

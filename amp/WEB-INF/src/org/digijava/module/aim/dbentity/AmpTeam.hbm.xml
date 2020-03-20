@@ -19,7 +19,7 @@
 		<property name="hideDraftActivities" column="hide_draft" type="java.lang.Boolean" />
 		<property name="useFilter" column="use_filter" type="java.lang.Boolean" />
 		<property name="crossteamvalidation" column="cross_team_validation" type="java.lang.Boolean" />
-		
+
 		<many-to-one name="teamLead" column="team_lead_id"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 
@@ -44,10 +44,7 @@
 				column="amp_org_id" />
 		</set>
 
-		<one-to-one name="npdSettings" class="org.digijava.module.aim.dbentity.NpdSettings"
-			property-ref="team" cascade="delete" />
-
-		<many-to-one name="workspaceGroup" column="group_categoryvalue_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
+		<many-to-one name="workspaceGroup" column="group_categoryvalue_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" lazy="proxy" cascade="none" />
 		<property name="permissionStrategy" column="permission_strategy" type="java.lang.String" />
 		
 		<set name="filterDataSet" lazy="false" inverse="true" cascade="all-delete-orphan">
@@ -60,7 +57,7 @@
                      class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" cascade="none" lazy="proxy" />
 
         <many-to-one name="workspacePrefix" column="workspace_prefix_categoryvalue_id"
-                     class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+                     class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" lazy="proxy" />
 
     </class>
 </hibernate-mapping>

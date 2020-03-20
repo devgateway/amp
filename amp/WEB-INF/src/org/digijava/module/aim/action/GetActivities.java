@@ -117,13 +117,12 @@ public class GetActivities extends Action {
             logger.debug("closing and returning response XML of NPD Activities");
             outputStream.close();
         } catch (Exception e) {
-            logger.info(e);
-            e.printStackTrace();
+            logger.info(e.getMessage(), e);
             if (outputStream != null) {
                 try {
                     outputStream.write(stackTrace2XML(e));
                 } catch (IOException e1) {
-                    logger.info(e1);
+                    logger.info(e1.getMessage(), e1);
                 }
             }
         }
@@ -247,7 +246,7 @@ public class GetActivities extends Action {
                 }
                 return cal.getTime();
             } catch (Exception e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new AimException("Cannot convert year: " + year
                         + " to int. Invalid request param", e);
             }

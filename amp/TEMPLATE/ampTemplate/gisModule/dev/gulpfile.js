@@ -221,6 +221,7 @@ gulp.task('copy-stuff', ['clean', 'build-index'], function() {
 //gulp.src(paths.app.stylesheets.libs.concat(paths.app.stylesheets.entry))
   gulp.src(paths.app.images).pipe(gulp.dest(paths.dist.images));
   gulp.src(paths.app.fonts).pipe(gulp.dest(paths.dist.fonts));
+  gulp.src('app/empty.json').pipe(gulp.dest(paths.dist.root));
 });
 
 gulp.task('build-index',  function(){

@@ -50,10 +50,6 @@ public class ViewEditUser extends Action {
 
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         
-        //Clear users cache
-        TeamMemberUtil.users.clear();
-        TeamMemberUtil.atmUsers.clear();
-        
         ViewEditUserForm uForm = (ViewEditUserForm) form;
         User user = null;
         HttpSession session = request.getSession();
@@ -66,7 +62,7 @@ public class ViewEditUser extends Action {
         if (userId != null) {
             user = UserUtils.getUser(userId);
         } else if (uForm.getEmail() != null) {
-            user = UserUtils.getUserByEmail(uForm.getEmail());
+            user = UserUtils.getUserByEmailAddress(uForm.getEmail());
         }else{
             return mapping.findForward("forward");
         }
@@ -156,7 +152,7 @@ public class ViewEditUser extends Action {
                 uForm.setLanguages(userLangs);
             }
 
-            uForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+            uForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeAdmLevel1OfDefCountry());
             
             Collection<AmpOrgType> orgTypeCol = DbUtil.getAllOrgTypes();
             if (orgTypeCol != null) {
@@ -181,6 +177,7 @@ public class ViewEditUser extends Action {
             uForm.setAssignedOrgId(null);
             uForm.setAssignedOrgs(new TreeSet<AmpOrganisation>());
             uForm.setPledger(false);
+            uForm.setPledgeSuperUser(false);
             uForm.setId(null);
             uForm.setEmail(null);
             uForm.setConfirmNewPassword(null);
@@ -211,6 +208,7 @@ public class ViewEditUser extends Action {
                 uForm.setUrl(user.getUrl());
                 uForm.getAssignedOrgs().addAll(user.getAssignedOrgs());
                 uForm.setPledger(user.getPledger());
+                uForm.setPledgeSuperUser(user.getPledgeSuperUser());
                 uForm.setBanReadOnly(user.isBanned());
                 uForm.setExemptFromDataFreezing(user.getExemptFromDataFreezing());
                 
@@ -341,6 +339,7 @@ public class ViewEditUser extends Action {
 
                     user.setUserLangPreferences(userLangPreferences);
                     user.setPledger(uForm.getPledger());
+                    user.setPledgeSuperUser(uForm.getPledger() && uForm.getPledgeSuperUser());
                     user.setExemptFromDataFreezing(uForm.getExemptFromDataFreezing());
                     
                     user.setNotificationEmailEnabled(uForm.getNotificationEmailEnabled());

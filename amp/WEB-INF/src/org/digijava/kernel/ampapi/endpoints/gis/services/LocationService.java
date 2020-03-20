@@ -5,24 +5,24 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 
+import com.google.common.collect.ImmutableSet;
+import com.fasterxml.jackson.databind.node.POJONode;
+import com.fasterxml.jackson.databind.node.TextNode;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.node.POJONode;
-import org.codehaus.jackson.node.TextNode;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.AmountsUnits;
@@ -34,19 +34,17 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.GeoJSON;
@@ -54,9 +52,8 @@ import org.digijava.kernel.ampapi.helpers.geojson.LineStringGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpStructure;
@@ -64,6 +61,7 @@ import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.HibernateException;
@@ -90,19 +88,17 @@ public class LocationService {
      * @param config json configuration
      * @return
      */
-    public JsonBean getTotals(String admlevel, JsonBean config, AmountsUnits amountUnits) {
-        JsonBean retlist = new JsonBean();
+    public AdmLevelTotals getTotals(String admlevel, PerformanceFilterParameters config, AmountsUnits amountUnits) {
         HardCodedCategoryValue admLevelCV = GisConstants.ADM_TO_IMPL_CATEGORY_VALUE.getOrDefault(admlevel,
-                CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
         admlevel = admLevelCV.getValueKey();
         
-        String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
         ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals", ArConstants.DONOR_TYPE);
         this.spec = spec;
         spec.addColumn(new ReportColumn(admlevel));
         spec.getHierarchies().addAll(spec.getColumns());
         // also configures the measure(s) from funding type settings request
-        SettingsUtils.applyExtendedSettings(spec, config);
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
         ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
         // THIS IS OLD, just allowing now to not reset the units when used by other services 
         if (amountUnits != null)
@@ -111,7 +107,7 @@ public class LocationService {
         AmpReportFilters filterRules = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
         
         if(config != null){
-            Map<String, Object> filters = (Map<String, Object>) config.get(EPConstants.FILTERS);
+            Map<String, Object> filters = config.getFilters();
             if (filters != null) {
                 filterRules = FilterUtils.getFilterRules(filters, null, filterRules);
             }
@@ -119,58 +115,58 @@ public class LocationService {
             GisUtils.configurePerformanceFilter(config, filterRules);
         }
         Map<Long, String> admLevelToGeoCode;
-        if (admlevel.equals(ColumnConstants.COUNTRY)) {
+        if (admlevel.equals(ColumnConstants.LOCATION_ADM_LEVEL_0)) {
             // If the admin level is country we filter only to show projects at
             // the country of the current installation
             final ValueWrapper<String> countryId = new ValueWrapper<String>("");
-            final ValueWrapper<String> countryGeoCode = new ValueWrapper<String>("");
-            final ValueWrapper<String> countryName = new ValueWrapper<String>("");
-            PersistenceManager.getSession().doWork(new Work() {
-                public void execute(Connection conn) throws SQLException {
-                    String countryIdQuery = "select acvl.id,acvl.location_name from amp_category_value_location acvl,amp_global_settings gs "
-                            + " where acvl.iso=gs.settingsvalue  " + " and gs.settingsname ='Default Country'";
-                    RsInfo rsi = SQLUtils.rawRunQuery(conn, countryIdQuery, null);
-                    if (rsi.rs.next()) {
-                        countryId.value = rsi.rs.getString(1);
-                        countryName.value = rsi.rs.getString(2);
-                    }
-                    rsi.close();
+            final ValueWrapper<String> countryName = new ValueWrapper<>("");
+            PersistenceManager.getSession().doWork(conn -> {
+                String countryIdQuery = "select acvl.id,acvl.location_name from amp_category_value_location acvl,"
+                        + "amp_global_settings gs  ,amp_category_value acv "
+                        + "where acvl.iso=gs.settingsvalue and gs.settingsname ='%s' "
+                        + "and acvl.parent_category_value=acv.id "
+                        + "and acv.category_value = 'Administrative Level 0' ";
+                RsInfo rsi = SQLUtils.rawRunQuery(conn, String.format(countryIdQuery,
+                        GlobalSettingsConstants.DEFAULT_COUNTRY),
+                        null);
+                if (rsi.rs.next()) {
+                    countryId.value = rsi.rs.getString(1);
+                    countryName.value = rsi.rs.getString(2);
                 }
+                rsi.close();
             });
 
-            filterRules.addFilterRule(new ReportColumn(ColumnConstants.COUNTRY), new FilterRule(countryId.value, true));
+            filterRules.addFilterRule(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0),
+                    new FilterRule(countryId.value, true));
             
         } 
         
         admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
         spec.setFilters(filterRules);
         
-        String currcode = FilterUtils.getSettingbyName(config, SettingsConstants.CURRENCY_ID);
-        retlist.set("currency", currcode);
-        retlist.set("numberformat", numberformat);
+        String currcode = FilterUtils.getSettingbyName(config.getSettings(), SettingsConstants.CURRENCY_ID);
+
+        String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
+
         GeneratedReport report = EndpointUtils.runReport(spec);
-        List<JsonBean> values = new ArrayList<JsonBean>();
+        List<AdmLevelTotal> values = new ArrayList<>();
         
         if (report != null && report.reportContents != null && report.reportContents.getChildren() != null) {
             // find the admID (geocode) for each implementation location name
             
             for (ReportArea reportArea : report.reportContents.getChildren()) {
-                JsonBean item = new JsonBean();
                 Iterator<ReportCell> iter = reportArea.getContents().values().iterator();
-                BigDecimal value=(BigDecimal) iter.next().value;                
-                ReportCell reportcell = (ReportCell) iter.next();
+                BigDecimal value = (BigDecimal) iter.next().value;
+                ReportCell reportcell = iter.next();
                 //we fetch the entity id so we can Univocally search the GeoId
                 Long entityId=((IdentifiedReportCell)reportcell).entityId;
                 String admid = admLevelToGeoCode.get(entityId);
-                item.set("admID", admid);
-                item.set("amount", value);
-                if (admid!=null){
-                    values.add(item);
+                if (admid != null) {
+                    values.add(new AdmLevelTotal(admid, value));
                 }
             }
         }
-        retlist.set("values", values);
-        return retlist;
+        return new AdmLevelTotals(currcode, numberformat, values);
     }
     
     /**
@@ -190,12 +186,12 @@ public class LocationService {
         return levelToGeoCodeMap;
     }
     
-    public static List<ClusteredPoints> getClusteredPoints(JsonBean config) throws AmpApiException {
+    public static List<ClusteredPoints> getClusteredPoints(PerformanceFilterParameters config) throws AmpApiException {
         String adminLevel = "";
         final List<ClusteredPoints> l = new ArrayList<ClusteredPoints>();
 
         if (config != null) {
-            Map filters = (Map) config.get(EPConstants.FILTERS);
+            Map filters = config.getFilters();
             if (filters != null && filters.get("adminLevel") != null) {
                 adminLevel = filters.get("adminLevel").toString();
             }
@@ -207,14 +203,14 @@ public class LocationService {
         final Double countryLatitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LATITUDE);
         final Double countryLongitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LONGITUDE);
         final ValueWrapper<String> qry = new ValueWrapper<String>(null);
-        if (adminLevel.equals("Country")) {
+        if (adminLevel.equals("Administrative Level 0")) {
             qry.value = " SELECT al.amp_activity_id, acvl.id root_location_id,acvl.location_name "
                     + "root_location_description,acvl.gs_lat, acvl.gs_long "
                     + " FROM amp_activity_location al   "
                     + " join amp_location loc on al.amp_location_id = loc.amp_location_id  "
                     + " join amp_category_value_location acvl on loc.location_id = acvl.id  "
                     + " join amp_category_value amcv on acvl.parent_category_value =amcv.id "
-                    + " where amcv.category_value ='Country'"
+                    + " where amcv.category_value ='Administrative Level 0'"
                     + " and (acvl.deleted is null or acvl.deleted = false) "
                     + " and al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) "
                     + " and location_name=(select country_name "
@@ -263,7 +259,8 @@ public class LocationService {
                                 cp = new ClusteredPoints();
                                 cp.setAdmId(rootLocationId);
                                 cp.setAdmin(rs.getString("root_location_description"));
-                                if (usedAdminLevel.equals("Country")){
+                                if (usedAdminLevel.equals(
+                                        CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey())) {
                                     cp.setLat(countryLatitude.toString());
                                     cp.setLon(countryLongitude.toString());                         
                                 }else{
@@ -285,7 +282,7 @@ public class LocationService {
     
         return l;
     }
-    private static Set<Long> getActivitiesForFiltering(JsonBean config, String adminLevel)
+    private static Set<Long> getActivitiesForFiltering(PerformanceFilterParameters config, String adminLevel)
             throws AmpApiException {
         Set<Long> activitiesId = new HashSet<Long>();
          
@@ -299,22 +296,22 @@ public class LocationService {
             add(ColumnConstants.AMP_ID);
         }});
         
-        SettingsUtils.configureMeasures(spec, config);
+        SettingsUtils.configureMeasures(spec, config.getSettings());
 
         ReportColumn implementationLevelColumn = null;
         if (adminLevel != null) {
             switch (adminLevel) {
-                case ColumnConstants.COUNTRY:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_COUNTRIES);
+                case ColumnConstants.LOCATION_ADM_LEVEL_0:
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0);
                     break;
-                case ColumnConstants.REGION:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_REGIONS);
+                case ColumnConstants.LOCATION_ADM_LEVEL_1:
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_1);
                     break;
-                case ColumnConstants.ZONE:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_ZONES);
+                case ColumnConstants.LOCATION_ADM_LEVEL_2:
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_2);
                     break;
-                case ColumnConstants.DISTRICT:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_DISTRICTS);
+                case ColumnConstants.LOCATION_ADM_LEVEL_3:
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_3);
                     break;
             }
         }
@@ -327,12 +324,12 @@ public class LocationService {
         }
         spec.setDisplayEmptyFundingRows(true);
         
-        SettingsUtils.applyExtendedSettings(spec, config);
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
         ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
         mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 
         if (config != null) {
-            Map<String, Object> filterMap = (Map<String, Object>) config.get(EPConstants.FILTERS);
+            Map<String, Object> filterMap = config.getFilters();
             AmpReportFilters filterRules = FilterUtils.getFilters(filterMap, new AmpReportFilters(mrs.getCalendar()));
 
             GisUtils.configurePerformanceFilter(config, filterRules);
@@ -377,11 +374,12 @@ public class LocationService {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<AmpStructure> getStructures(JsonBean config) throws AmpApiException{
+    public static List<AmpStructure> getStructures(PerformanceFilterParameters config) throws AmpApiException {
         List<AmpStructure> al = null;
-        Set<Long> activitiesId = getActivitiesForFiltering( config,null);
-        String queryString = "select s from " + AmpStructure.class.getName() + " s inner join s.activities a where"
-                    + " a.ampActivityId in (" + Util.toCSStringForIN(activitiesId) + " )";
+        Set<Long> activitiesId = getActivitiesForFiltering(config, null);
+        String queryString = "select s from " + AmpStructure.class.getName() + " s where"
+                    + " s.activity in (" + Util.toCSStringForIN(activitiesId) + " )";
+
         Query q = PersistenceManager.getSession().createQuery(queryString);
         al = q.list();
         return al;
@@ -393,26 +391,41 @@ public class LocationService {
         try {
             fgj.geometry = getGeometry(structure);
             fgj.id = structure.getAmpStructureId().toString();
-            fgj.properties.put("title", new TextNode(structure.getTitle()));
+
+            fgj.properties.put("title", new TextNode(StringEscapeUtils.escapeHtml(structure.getTitle())));
             if (structure.getDescription() != null && !structure.getDescription().trim().equals("")) {
-                fgj.properties.put("description", new TextNode(structure.getDescription()));
-            }
-            Set<AmpActivityVersion> av = structure.getActivities();
-            List<Long> actIds = new ArrayList<Long>();
-
-            for (AmpActivityVersion ampActivity : av) {
-                actIds.add(ampActivity.getAmpActivityId());
+                fgj.properties.put("description", new TextNode(
+                        StringEscapeUtils.escapeHtml(structure.getDescription())));
             }
 
-            fgj.properties.put("activity", new POJONode(actIds));
+            if (structure.getStructureColor() != null) {
+                AmpCategoryValue cValue = structure.getStructureColor();
+                if (isValidColor(cValue.getValue())) {
+                    fgj.properties.put("color", new TextNode(TranslatorWorker.translateText(cValue.getValue())));  
+                }                
+            }            
+            
+            fgj.properties.put("activity", new POJONode(ImmutableSet.of(structure.getActivity().getAmpActivityId())));
         } catch (NumberFormatException e) {
             logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
                     + structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "
                     + structure.getTitle());
+            
+            return null;
         }
 
         return fgj;
 
+    }
+
+    private static boolean isValidColor(String color) {
+        if (!color.contains(GisConstants.GIS_STRUCTURE_COLOR_DELIMITER)) {
+            return false;
+        }
+
+        String hex = color.split(GisConstants.GIS_STRUCTURE_COLOR_DELIMITER)[0];
+        Matcher matcher = GisConstants.HEX_PATTERN.matcher(hex);
+        return matcher.matches();
     }
 
     private static GeoJSON getGeometry(AmpStructure structure) {

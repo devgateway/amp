@@ -7,7 +7,7 @@ define(
 		[ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'views/tabItemsView',
 				'views/tabBodyView', 'views/tabBodysView', 'business/tabEvents', 'util/tabUtils',
 				'business/filter/filterManager','business/settings/settingsManager', 'translationManager',
-				'business/widgets/documentsWidgetManager', 'jquery', 'jqueryui' ],
+				'business/widgets/documentsWidgetManager', 'jquery', 'jqueryui','jqueryuii18n'],
 		function(Marionette, Tabs, Tab, TabItemView, TabItemsView, TabBodyView, TabBodysView, TabEvents, TabUtils,
 				FilterManager, SettingsManager, TranslationManager, DocumentsWidgetManager, jQuery, jqueryui) {
 
@@ -61,8 +61,9 @@ define(
 			 * (no visible tabs first) and move all invisible tabs to the new list. 2) Add a new "More Tabs.." tab if
 			 * needed plus a hidden tab we will use to allocate content for the invisible tabs.
 			 */
-			var tabsCollection = new Tabs();
-			tabsCollection.fetchData();
+			var tabsCollectionData = new Tabs();
+            tabsCollectionData.fetchData();
+            var tabsCollection = tabsCollectionData.clone();
 			
 			tabsCollection.on("change:isOtherTabNowVisible", function(model, value, options) {
 				if (value === true) {
@@ -122,6 +123,7 @@ define(
 				app.TabsApp.tabContainer = tabContainer;
 				app.TabsApp.tabsCollection = tabsCollection;
 				app.TabsApp.tabUtils = TabUtils;
+                app.TabsApp.tabsCollectionData = tabsCollectionData;
 
 				// Use only one instance of filters for all tabs.
 				FilterManager.initializeFilterWidget();

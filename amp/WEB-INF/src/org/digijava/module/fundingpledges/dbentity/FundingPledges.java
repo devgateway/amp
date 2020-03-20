@@ -3,9 +3,9 @@ package org.digijava.module.fundingpledges.dbentity;
 
 import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -15,98 +15,71 @@ import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
+import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.jdbc.Work;
 
 /**
  * @author Diego Dimunzio
  */
-public class FundingPledges implements Comparable<FundingPledges>, Serializable {
+public class FundingPledges implements Comparable<FundingPledges>, Serializable, LoggerIdentifiable {
     
     private static final long serialVersionUID = 1L;
-    @Interchangeable(fieldTitle="ID")
+    
+    @PossibleValueId
     private Long id;
-    @Interchangeable(fieldTitle="Title")
+    private Date createdDate;
     private AmpCategoryValue title;
-    @Interchangeable(fieldTitle="Status")
     private AmpCategoryValue status;
-    @Interchangeable(fieldTitle="Title Free Text")
+    
+    @PossibleValueValue
     private String titleFreeText;
-    @Interchangeable(fieldTitle="Additional Information")
+    
     private String additionalInformation;
-    @Interchangeable(fieldTitle="Who Authorized Pledge")
     private String whoAuthorizedPledge;
-    @Interchangeable(fieldTitle="Further Approval Needed")
     private String furtherApprovalNedded;
     @Deprecated
     private AmpOrganisation organization;
-    @Interchangeable(fieldTitle="Organization Group")
+    
     private AmpOrgGroup organizationGroup;
-    @Interchangeable(fieldTitle="Sector List")
-    private Set<FundingPledgesSector> sectorlist;
-    @Interchangeable(fieldTitle="Location List")
-    private Set<FundingPledgesLocation> locationlist;
-    @Interchangeable(fieldTitle="Program List")
-    private Set<FundingPledgesProgram> programlist;
-    @Interchangeable(fieldTitle="Details")
-    private Set<FundingPledgesDetails> fundingPledgesDetails;
+    
+    private Set<FundingPledgesSector> sectorlist = new HashSet<>();
+    private Set<FundingPledgesLocation> locationlist = new HashSet<>();
+    private Set<FundingPledgesProgram> programlist = new HashSet<>();
+    private Set<FundingPledgesDetails> fundingPledgesDetails = new HashSet<>();
     // "Point of Contact at Donors Conference on March 31st"
-    @Interchangeable(fieldTitle="Contact Name")
     private String contactName;
-    @Interchangeable(fieldTitle="Contact Address")
     private String contactAddress;
-    @Interchangeable(fieldTitle="Contact Email")
     private String contactEmail;
-    @Interchangeable(fieldTitle="Contact Title")
     private String contactTitle;
-    @Interchangeable(fieldTitle="Contact Ministry")
     private String contactMinistry;
-    @Interchangeable(fieldTitle="Contact Telephone")
     private String contactTelephone;
-    @Interchangeable(fieldTitle="Contact Fax")
     private String contactFax;
-    @Interchangeable(fieldTitle="Contact Organization")
     private AmpOrganisation contactOrganization;
-    @Interchangeable(fieldTitle="Contact Alternative Name")
     private String contactAlternativeName;
-    @Interchangeable(fieldTitle="Contact Alternative Telephone")
     private String contactAlternativeTelephone;
-    @Interchangeable(fieldTitle="Contact Alternative Email")
     private String contactAlternativeEmail;
     //"is Point of Contact for Follow Up"
-    @Interchangeable(fieldTitle="Contact Name 1")
     private String contactName_1;
-    @Interchangeable(fieldTitle="Contact Address 1")
     private String contactAddress_1;
-    @Interchangeable(fieldTitle="Contact Email 1")
     private String contactEmail_1;
-    @Interchangeable(fieldTitle="Contact Title 1")
     private String contactTitle_1;
-    @Interchangeable(fieldTitle="Contact Ministry 1")
     private String contactMinistry_1;
-    @Interchangeable(fieldTitle="Contact Telephone 1")
     private String contactTelephone_1;
-    @Interchangeable(fieldTitle="Contact Fax 1")
     private String contactFax_1;
-    @Interchangeable(fieldTitle="Contact Organization 1")
     private AmpOrganisation contactOrganization_1;
-    @Interchangeable(fieldTitle="Contact Alternative Name 1")
     private String contactAlternativeName_1;
-    @Interchangeable(fieldTitle="Contact Alternative Telephone 1")
     private String contactAlternativeTelephone_1;
-    @Interchangeable(fieldTitle="Contact Alternative Email 1")
     private String contactAlternativeEmail_1;
-    @Interchangeable(fieldTitle="Years List")
     private TreeSet<String> yearsList;
-    @Interchangeable(fieldTitle="Documents")
-    private Set<FundingPledgesDocument> documents;
+    private Set<FundingPledgesDocument> documents = new HashSet<>();
     
     @Override
     public boolean equals(Object o) {
@@ -142,7 +115,15 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
     public Long getId() {
         return this.id;
     }
-    
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
     @java.lang.SuppressWarnings("all")
     public AmpCategoryValue getTitle() {
         return this.title;
@@ -542,5 +523,24 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
             }
         });     
         return uuids;
+    }
+
+    @Override
+    public Object getObjectType() {
+        return this.getClass().getName();
+    }
+
+    public String getObjectName() {
+        return this.getId() + " " + this.getEffectiveName();
+    }
+
+    @Override
+    public String getObjectFilteredName() {
+        return DbUtil.filter(getObjectName());
+    }
+
+    @Override
+    public Object getIdentifier() {
+        return this.id;
     }
 }

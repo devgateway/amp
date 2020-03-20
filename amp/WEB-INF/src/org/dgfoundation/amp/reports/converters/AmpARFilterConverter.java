@@ -3,6 +3,32 @@
  */
 package org.dgfoundation.amp.reports.converters;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
+import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportSettingsImpl;
+import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.NameableOrIdentifiable;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -14,29 +40,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.newreports.AmpReportFilters;
-import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportSettingsImpl;
-import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
-import org.digijava.kernel.ampapi.exception.AmpApiException;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.NameableOrIdentifiable;
-import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-
 /**
  * Translates report filters from ARFilters to a configuration that is applicable for Reports API.
- * Old AmpARFilter structure stores multiple information like the actual report filters, report settings, sorting info...  
+ * Old AmpARFilter structure stores multiple information like the actual report filters, report settings,
+ * sorting info...
+ *
+ * TODO AMP-26970 activity columns are converted to pledge columns here and in AmpFiltersConverter as well.
+ *
  * @author Nadejda Mandrescu
  */
 public class AmpARFilterConverter {
@@ -46,6 +56,39 @@ public class AmpARFilterConverter {
     private AmpReportFilters filterRules;
     private ReportSettingsImpl settings;
     private AmpARFilter arFilter;
+    
+    public static final Map<String, String> AMP_AR_FILTER_FIELD_NAME_TO_COLUMN = Collections.unmodifiableMap(
+            new HashMap<String, String>() {{
+                put("donorTypes", ColumnConstants.DONOR_TYPE);
+                put("executingAgencyTypes", ColumnConstants.EXECUTING_AGENCY_TYPE);
+                put("executingAgencyGroups", ColumnConstants.EXECUTING_AGENCY_GROUPS);
+                put("implementingAgencyGroups", ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
+                put("implementingAgencyTypes", ColumnConstants.IMPLEMENTING_AGENCY_TYPE);
+                put("beneficiaryAgencyGroups", ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
+                put("beneficiaryAgencyTypes", ColumnConstants.BENEFICIARY_AGENCY_TYPE);
+                put("contractingAgencyGroups", ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+                put("contractingAgencyTypes", ColumnConstants.CONTRACTING_AGENCY_TYPE);
+                put("responsibleAgencyGroups", ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
+                put("responsibleAgencyTypes", ColumnConstants.RESPONSIBLE_ORGANIZATION_TYPE);
+                put("componentFunding", ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
+                put("componentSecondResponsible", ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
+                put("selectedSectors", ColumnConstants.PRIMARY_SECTOR);
+                put("selectedSecondarySectors", ColumnConstants.SECONDARY_SECTOR);
+                put("selectedTertiarySectors", ColumnConstants.TERTIARY_SECTOR);
+                put("selectedNatPlanObj", ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0);
+                put("selectedPrimaryPrograms", ColumnConstants.PRIMARY_PROGRAM_LEVEL_0);
+                put("selectedSecondaryPrograms", ColumnConstants.SECONDARY_PROGRAM_LEVEL_0);
+                put("selectedTertiaryPrograms", ColumnConstants.TERTIARY_PROGRAM_LEVEL_0);
+                put("approvalStatusSelected", ColumnConstants.APPROVAL_STATUS);
+                put("locationSelected", ColumnConstants.LOCATION_ADM_LEVEL_0);
+                put("financingInstruments", ColumnConstants.FINANCING_INSTRUMENT);
+                put("typeOfAssistance", ColumnConstants.TYPE_OF_ASSISTANCE);
+                put("budget", ColumnConstants.ACTIVITY_BUDGET);
+                put("modeOfPayment", ColumnConstants.MODE_OF_PAYMENT);
+                put("humanitarianAid", ColumnConstants.HUMANITARIAN_AID);
+                put("disasterResponse", ColumnConstants.DISASTER_RESPONSE_MARKER);
+                put("statuses", ColumnConstants.STATUS);
+            }});
 
     /**
      * Translates report filters from ARFilters to a configuration that is applicable for Reports API.
@@ -67,6 +110,8 @@ public class AmpARFilterConverter {
         arFilter = tmpArFilter;
         */
         
+        addUndefinedOptions();
+        
         return filterRules;
     }
     
@@ -86,19 +131,63 @@ public class AmpARFilterConverter {
         addActivityDatesFilters();
     }
     
+    private void addUndefinedOptions() {
+        for (String fieldName : arFilter.getUndefinedOptions()) {
+            String columnName = getColumnName(fieldName);
+            
+            Optional<ReportElement> repElementOptional = filterRules.getAllFilterRules().keySet().stream()
+                    .filter(el -> columnName.equals(el.entity != null ? el.entity.getEntityName() : null))
+                    .findAny();
+            
+            List<String> values = new LinkedList<>();
+            List<String> names = new LinkedList<>();
+    
+            if (repElementOptional.isPresent()) {
+                ReportElement reportElement = repElementOptional.get();
+                FilterRule filterRule = filterRules.getFilterRules().get(reportElement);
+                values.addAll(filterRule.values);
+                values.stream().forEach(val -> names.add(filterRule.valueToName.get(val)));
+                values.add(Long.toString(ColumnReportData.UNALLOCATED_ID));
+                names.add(FiltersConstants.UNDEFINED_NAME);
+                filterRules.getFilterRules().put(reportElement, new FilterRule(names, values, true));
+            } else {
+                if (columnName != null) {
+                    values.add(Long.toString(ColumnReportData.UNALLOCATED_ID));
+                    names.add(FiltersConstants.UNDEFINED_NAME);
+                    addFilterRule(columnName, new FilterRule(names, values, true));
+                }
+            }
+        }
+    }
+    
+    private String getColumnName(String fieldName) {
+        String columnName = AMP_AR_FILTER_FIELD_NAME_TO_COLUMN.get(fieldName);
+    
+        if (arFilter.isPledgeFilter()) {
+            columnName = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.get(columnName);
+        }
+        
+        return columnName;
+    }
+    
     private void addProjectFilters() {
-        if (arFilter.isPledgeFilter()) return;
-        addCategoryValueNamesFilter(arFilter.getStatuses(), ColumnConstants.STATUS);
-        addFilter(arFilter.getWorkspaces(), ColumnConstants.TEAM);
-        addApprovalStatus();
-        addBooleansFilter(arFilter.getHumanitarianAid(), ColumnConstants.HUMANITARIAN_AID);
-        addBooleansFilter(arFilter.getDisasterResponse(), ColumnConstants.DISASTER_RESPONSE_MARKER);
-        addBooleanFilter(arFilter.getGovernmentApprovalProcedures(), ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
-        addBooleanFilter(arFilter.getJointCriteria(), ColumnConstants.JOINT_CRITERIA);
-        addBooleanFilter(arFilter.getShowArchived(), ColumnConstants.ARCHIVED);
-        addCategoryValueNamesFilter(arFilter.getProjectImplementingUnits(), ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
-        addCategoryValueNamesFilter(arFilter.getActivityPledgesTitle(), ColumnConstants.PLEDGES_TITLES);
-        addCategoryValueNamesFilter(arFilter.getPerformanceAlertLevel(), ColumnConstants.PERFORMANCE_ALERT_LEVEL);
+        if (!arFilter.isPledgeFilter()) {
+            addCategoryValueNamesFilter(arFilter.getStatuses(), ColumnConstants.STATUS);
+            addFilter(arFilter.getWorkspaces(), ColumnConstants.TEAM);
+            addApprovalStatus();
+            addBooleansFilter(arFilter.getHumanitarianAid(), ColumnConstants.HUMANITARIAN_AID);
+            addBooleansFilter(arFilter.getDisasterResponse(), ColumnConstants.DISASTER_RESPONSE_MARKER);
+            addBooleanFilter(arFilter.getGovernmentApprovalProcedures(),
+                    ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
+            addBooleanFilter(arFilter.getJointCriteria(), ColumnConstants.JOINT_CRITERIA);
+            addCategoryValueNamesFilter(arFilter.getProjectImplementingUnits(),
+                    ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
+            addCategoryValueNamesFilter(arFilter.getActivityPledgesTitle(), ColumnConstants.PLEDGES_TITLES);
+            addCategoryValueNamesFilter(arFilter.getPerformanceAlertLevel(), ColumnConstants.PERFORMANCE_ALERT_LEVEL);
+            addPerformanceAlertTypeFilter();
+        } else {
+            addCategoryValueNamesFilter(arFilter.getStatuses(), ColumnConstants.PLEDGE_STATUS);
+        }
     }
     
     /**
@@ -120,13 +209,22 @@ public class AmpARFilterConverter {
         if (arFilter.getApprovalStatusSelected() == null || arFilter.getApprovalStatusSelected().size() == 0) 
             return;
         List<String> values = new ArrayList<String>(arFilter.getApprovalStatusSelected());
-        filterRules.addFilterRule(new ReportColumn(ColumnConstants.APPROVAL_STATUS), new FilterRule(arFilter.getApprovalStatusSelectedStrings(), values, true));
+        filterRules.addFilterRule(new ReportColumn(ColumnConstants.APPROVAL_STATUS),
+                new FilterRule(arFilter.getApprovalStatusSelectedStrings(), values, true));
+    }
+    
+    private void addPerformanceAlertTypeFilter() {
+        if (arFilter.getPerformanceAlertType() != null && !arFilter.getPerformanceAlertType().isEmpty()) {
+            List<String> values = new ArrayList<String>(arFilter.getPerformanceAlertType());
+            filterRules.addFilterRule(new ReportColumn(ColumnConstants.PERFORMANCE_ALERT_TYPE),
+                    new FilterRule(values, values, true));
+        }
     }
     
     private void addFundingDatesFilters() {
         try {
             if (arFilter.getYearFrom() != null || arFilter.getYearTo() != null) {
-                if (arFilter.getYearFrom() == arFilter.getYearTo()) {
+                if (arFilter.getYearFrom().equals(arFilter.getYearTo())) {
                     filterRules.addSingleYearFilterRule(arFilter.getYearFrom(), true);
                 } else {
                     filterRules.addYearsRangeFilterRule(arFilter.getYearFrom(), arFilter.getYearTo());
@@ -147,18 +245,30 @@ public class AmpARFilterConverter {
             logger.error(ex.getMessage());
         }
     }
-    
+
     private void addActivityDatesFilters() {
+        addActivityDateFilter(arFilter.buildFromAndToActualApprovalDateAsDate(), ColumnConstants.ACTUAL_APPROVAL_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToProposedCompletionDateAsDate(),
+                ColumnConstants.PROPOSED_COMPLETION_DATE);
         addActivityDateFilter(arFilter.buildFromAndToActivityStartDateAsDate(), ColumnConstants.ACTUAL_START_DATE);
-        addActivityDateFilter(arFilter.buildFromAndToProposedApprovalDateAsDate(), ColumnConstants.PROPOSED_APPROVAL_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToProposedApprovalDateAsDate(),
+                ColumnConstants.PROPOSED_APPROVAL_DATE);
         addActivityDateFilter(arFilter.buildFromAndToProposedStartDateAsDate(), ColumnConstants.PROPOSED_START_DATE);
-        addActivityDateFilter(arFilter.buildFromAndToActivityActualCompletionDateAsDate(), ColumnConstants.ACTUAL_COMPLETION_DATE);
-        addActivityDateFilter(arFilter.buildFromAndToActivityFinalContractingDateAsDate(), ColumnConstants.FINAL_DATE_FOR_CONTRACTING);
-        addActivityDateFilter(arFilter.buildFromAndToEffectiveFundingDateAsDate(), ColumnConstants.EFFECTIVE_FUNDING_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToActivityActualCompletionDateAsDate(),
+                ColumnConstants.ACTUAL_COMPLETION_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToActivityFinalContractingDateAsDate(),
+                ColumnConstants.FINAL_DATE_FOR_CONTRACTING);
+        addActivityDateFilter(arFilter.buildFromAndToEffectiveFundingDateAsDate(),
+                ColumnConstants.EFFECTIVE_FUNDING_DATE);
         addActivityDateFilter(arFilter.buildFromAndToFundingClosingDateAsDate(), ColumnConstants.FUNDING_CLOSING_DATE);
         addActivityDateFilter(arFilter.buildFromAndToIssueDateAsDate(), ColumnConstants.ISSUE_DATE);
+
+        addActivityDateFilter(arFilter.buildFromAndToPledgeDetailStartDateAsDate(),
+                ColumnConstants.PLEDGES_DETAIL_START_DATE);
+        addActivityDateFilter(arFilter.buildFromAndToPledgeDetailEndDateAsDate(),
+                ColumnConstants.PLEDGES_DETAIL_END_DATE);
     }
-    
+
     private void addActivityDateFilter(Date[] fromTo, String columnName) {
         if (fromTo == null || fromTo.length != 2 || (fromTo[0] == null && fromTo[1] == null)) return;
         try {
@@ -169,43 +279,64 @@ public class AmpARFilterConverter {
     }
     
     private void addOrganizationsFilters() {
-        //Donor Agencies
-        addFilter(arFilter.getDonorTypes(), ColumnConstants.DONOR_TYPE);
-        addFilter(arFilter.getDonorGroups(), 
-                (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_DONOR_GROUP : ColumnConstants.DONOR_GROUP));
-        addFilter(arFilter.getDonnorgAgency(), ColumnConstants.DONOR_AGENCY);
-        
-        //Related Agencies
-        addFilter(arFilter.getImplementingAgency(), ColumnConstants.IMPLEMENTING_AGENCY);
-        addFilter(arFilter.getExecutingAgency(), ColumnConstants.EXECUTING_AGENCY);
-        addFilter(arFilter.getBeneficiaryAgency(), ColumnConstants.BENEFICIARY_AGENCY);
-        addFilter(arFilter.getResponsibleorg(), ColumnConstants.RESPONSIBLE_ORGANIZATION);
-        addFilter(arFilter.getComponentFunding(), ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
-        addFilter(arFilter.getComponentSecondResponsible(), ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
-        addFilter(arFilter.getContractingAgency(), ColumnConstants.CONTRACTING_AGENCY);
-        //related agencies groups
-        addFilter(arFilter.getContractingAgencyGroups(), ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+        if (!arFilter.isPledgeFilter()) {
+            //Donor Agencies
+            addFilter(arFilter.getDonorTypes(), ColumnConstants.DONOR_TYPE);
+            addFilter(arFilter.getDonorGroups(), ColumnConstants.DONOR_GROUP);
+            addFilter(arFilter.getDonnorgAgency(), ColumnConstants.DONOR_AGENCY);
+
+            //Related Agencies
+            addFilter(arFilter.getExecutingAgencyTypes(), ColumnConstants.EXECUTING_AGENCY_TYPE);
+            addFilter(arFilter.getExecutingAgencyGroups(), ColumnConstants.EXECUTING_AGENCY_GROUPS);
+            addFilter(arFilter.getExecutingAgency(), ColumnConstants.EXECUTING_AGENCY);
+            addFilter(arFilter.getImplementingAgencyTypes(), ColumnConstants.IMPLEMENTING_AGENCY_TYPE);
+            addFilter(arFilter.getImplementingAgencyGroups(), ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
+            addFilter(arFilter.getImplementingAgency(), ColumnConstants.IMPLEMENTING_AGENCY);
+            addFilter(arFilter.getBeneficiaryAgencyTypes(), ColumnConstants.BENEFICIARY_AGENCY_TYPE);
+            addFilter(arFilter.getBeneficiaryAgencyGroups(), ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
+            addFilter(arFilter.getBeneficiaryAgency(), ColumnConstants.BENEFICIARY_AGENCY);
+            addFilter(arFilter.getResponsibleAgencyGroups(), ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
+            addFilter(arFilter.getResponsibleorg(), ColumnConstants.RESPONSIBLE_ORGANIZATION);
+            addFilter(arFilter.getResponsibleAgencyTypes(), ColumnConstants.RESPONSIBLE_ORGANIZATION_TYPE);
+            addFilter(arFilter.getComponentFunding(), ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
+            addFilter(arFilter.getComponentSecondResponsible(),
+                    ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
+            addFilter(arFilter.getContractingAgency(), ColumnConstants.CONTRACTING_AGENCY);
+            //related agencies groups
+            addFilter(arFilter.getContractingAgencyGroups(), ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+            addFilter(arFilter.getContractingAgencyTypes(), ColumnConstants.CONTRACTING_AGENCY_TYPE);
+        } else {
+            addFilter(arFilter.getDonorTypes(), ColumnConstants.PLEDGES_DONOR_TYPE);
+            addFilter(arFilter.getDonorGroups(), ColumnConstants.PLEDGES_DONOR_GROUP);
+        }
     }
     
     /** adds primary, secondary and tertiary sectors to the filters if specified */
     private void addSectorFilters() {
-        addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", ColumnConstants.PRIMARY_SECTOR);
-        addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", ColumnConstants.SECONDARY_SECTOR);
-        addSectorSchemeFilters(arFilter.getSelectedTertiarySectors(), "Tertiary", ColumnConstants.TERTIARY_SECTOR);
-        addSectorSchemeFilters(arFilter.getSelectedQuaternarySectors(), "Quaternary",
-                ColumnConstants.QUATERNARY_SECTOR);
-        addSectorSchemeFilters(arFilter.getSelectedQuinarySectors(), "Quinary", ColumnConstants.QUINARY_SECTOR);
-
-        if (!arFilter.isPledgeFilter())
+        if (!arFilter.isPledgeFilter()) {
+            addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", ColumnConstants.PRIMARY_SECTOR);
+            addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary",
+                    ColumnConstants.SECONDARY_SECTOR);
+            addSectorSchemeFilters(arFilter.getSelectedTertiarySectors(), "Tertiary", ColumnConstants.TERTIARY_SECTOR);
+            addSectorSchemeFilters(arFilter.getSelectedQuaternarySectors(), "Quaternary",
+                    ColumnConstants.QUATERNARY_SECTOR);
+            addSectorSchemeFilters(arFilter.getSelectedQuinarySectors(), "Quinary", ColumnConstants.QUINARY_SECTOR);
             addSectorSchemeFilters(arFilter.getSelectedTagSectors(), "Tag", ColumnConstants.SECTOR_TAG);
+        } else {
+            addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", ColumnConstants.PLEDGES_SECTORS);
+            addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary",
+                    ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+        }
     }
 
     private void addSectorSchemeFilters(Set<AmpSector> selectedEntries, String scheme, String columnName) {
         if (selectedEntries == null || selectedEntries.isEmpty())
             return;
 
-        Map<Long, AmpSector> sectorsByIds = selectedEntries.stream().collect(Collectors.toMap(z -> z.getAmpSectorId(), z -> z));
-        Map<String, List<AmpSector>> sectorsByScheme = distributeEntities(SectorUtil.distributeSectorsByScheme(selectedEntries), sectorsByIds);
+        Map<Long, AmpSector> sectorsByIds = selectedEntries.stream()
+                .collect(Collectors.toMap(z -> z.getAmpSectorId(), z -> z));
+        Map<String, List<AmpSector>> sectorsByScheme = distributeEntities(SectorUtil
+                .distributeSectorsByScheme(selectedEntries), sectorsByIds);
 
 
         List<AmpSector> ampSectors = sectorsByScheme.get(scheme);
@@ -216,8 +347,12 @@ public class AmpARFilterConverter {
         }
     }
 
-    private String findSubSectorColumnName(String columnName, AmpSector sector) {
+    public String findSubSectorColumnName(String columnName, AmpSector sector) {
         AmpSector current = sector;
+        String sufix = "Sector";
+        if (arFilter.isPledgeFilter()) {
+            sufix = "Sectors";
+        }
         int depth = 0;
         while (current.getParentSectorId() != null) {
             current = current.getParentSectorId();
@@ -227,10 +362,10 @@ public class AmpARFilterConverter {
         if (depth == 0) {
             levelColumn = columnName;
         } else {
-            levelColumn = columnName + " " + StringUtils.repeat("Sub-", depth) + "Sector";
-        }
-        if (arFilter.isPledgeFilter()) {
-            levelColumn = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(levelColumn, levelColumn);
+            if (arFilter.isPledgeFilter() && !columnName.equals(ColumnConstants.PLEDGES_SECTORS)) {
+               columnName = StringUtils.removeEnd(columnName, " Sectors");
+            }
+            levelColumn = columnName + " " + StringUtils.repeat("Sub-", depth) + sufix;
         }
         return levelColumn;
     }
@@ -246,24 +381,22 @@ public class AmpARFilterConverter {
                     throw new RuntimeException("bug while restoring backmap for id: " + id + ", scheme: " + scheme);
                 res.get(scheme).add(entity);
             }
-        }           
+        }
         return res;
     }
-    
+
     /** adds programs and national objectives filters */
     private void addProgramAndNationalObjectivesFilters() {
-        addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PRIMARY_PROGRAM);
-
-        addMultiLevelFilter(arFilter.getSelectedSecondaryPrograms(), ColumnConstants.SECONDARY_PROGRAM);
-
-        //TODO: how to detect tertiary programs
-        //addFilter(arFilter.get(), 
-        //      (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_PROGRAMS : ColumnConstants.TERTIARY_PROGRAM), entityType);
-
-        addMultiLevelFilter(arFilter.getSelectedNatPlanObj(), ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
-        
         if (!arFilter.isPledgeFilter()) {
-            //TBD national plan objectives levels 1-8?
+            addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PRIMARY_PROGRAM);
+            addMultiLevelFilter(arFilter.getSelectedSecondaryPrograms(), ColumnConstants.SECONDARY_PROGRAM);
+            addMultiLevelFilter(arFilter.getSelectedTertiaryPrograms(), ColumnConstants.TERTIARY_PROGRAM);
+            addMultiLevelFilter(arFilter.getSelectedNatPlanObj(), ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
+        } else {
+            addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PLEDGES_PROGRAMS);
+            addMultiLevelFilter(arFilter.getSelectedSecondaryPrograms(), ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
+            addMultiLevelFilter(arFilter.getSelectedTertiaryPrograms(), ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
+            addMultiLevelFilter(arFilter.getSelectedNatPlanObj(), ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
         }
     }
 
@@ -282,60 +415,76 @@ public class AmpARFilterConverter {
             current = current.getParentThemeId();
             depth++;
         }
-        String levelColumnName = columnName + " Level " + depth;
-        if (arFilter.isPledgeFilter()) {
-            levelColumnName = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(levelColumnName, levelColumnName);
-        }
-        return levelColumnName;
+        return columnName + " Level " + depth;
     }
     
     private void addLocationFilters() {
-        Collection<AmpCategoryValueLocations> filterLocations = arFilter.isPledgeFilter() ? arFilter.getPledgesLocations() : arFilter.getLocationSelected();
+        Collection<AmpCategoryValueLocations> filterLocations = arFilter.getLocationSelected();
+        
+        // the pledge locations are null if they are loaded in JUnitTests so the location selected should be used
+        if (arFilter.isPledgeFilter() && arFilter.getPledgesLocations() != null
+                && !arFilter.getPledgesLocations().isEmpty()) {
+            filterLocations = arFilter.getPledgesLocations();
+        }
+        
         if (filterLocations == null || filterLocations.isEmpty())
             return;
-        
-        Set<AmpCategoryValueLocations> countries = new HashSet<AmpCategoryValueLocations>();
-        Set<AmpCategoryValueLocations> regions = new HashSet<AmpCategoryValueLocations>();
-        Set<AmpCategoryValueLocations> zones = new HashSet<AmpCategoryValueLocations>();
-        Set<AmpCategoryValueLocations> districts = new HashSet<AmpCategoryValueLocations>();
-//      Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
-//                              
+
+        Set<AmpCategoryValueLocations> countries = new HashSet<>();
+        Set<AmpCategoryValueLocations> regions = new HashSet<>();
+        Set<AmpCategoryValueLocations> zones = new HashSet<>();
+        Set<AmpCategoryValueLocations> districts = new HashSet<>();
+        Set<AmpCategoryValueLocations> communalSections = new HashSet<>();
+
         for(AmpCategoryValueLocations loc : filterLocations) {
-            if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getParentCategoryValue()))
+            AmpCategoryValue parentCatVal = loc.getParentCategoryValue();
+            if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(parentCatVal)) {
                 countries.add(loc);
-            else if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(loc.getParentCategoryValue()))
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.equalsCategoryValue(parentCatVal)) {
                 regions.add(loc);
-            else if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.equalsCategoryValue(loc.getParentCategoryValue()))
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2.equalsCategoryValue(parentCatVal)) {
                 zones.add(loc);
-            else if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.equalsCategoryValue(loc.getParentCategoryValue()))
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3.equalsCategoryValue(parentCatVal)) {
                 districts.add(loc);
-//          else
-//              locations.add(loc);
+            } else if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_4.equalsCategoryValue(parentCatVal)) {
+                communalSections.add(loc);
+            }
         }
 
-        addFilter(countries, ColumnConstants.COUNTRY);
-        addFilter(regions, ColumnConstants.REGION);
-        addFilter(zones, ColumnConstants.ZONE);
-        addFilter(districts, ColumnConstants.DISTRICT);
+        if (!arFilter.isPledgeFilter()) {
+            addFilter(countries, ColumnConstants.LOCATION_ADM_LEVEL_0);
+            addFilter(regions, ColumnConstants.LOCATION_ADM_LEVEL_1);
+            addFilter(zones, ColumnConstants.LOCATION_ADM_LEVEL_2);
+            addFilter(districts, ColumnConstants.LOCATION_ADM_LEVEL_3);
+            addFilter(communalSections, ColumnConstants.LOCATION_ADM_LEVEL_4);
+        } else {
+            addFilter(countries, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_0);
+            addFilter(regions, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1);
+            addFilter(zones, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_2);
+            addFilter(districts, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_3);
+            addFilter(communalSections, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_4);
+        }
     }
     
     /**
      * Adds values (ids/names) list to the filter rules
-     * @param filterRules - filter rules storage
      * @param set - a collection of {@link Identifiable} objects to retrieve the values from
      * @param columnName - column name of the to apply the rule over or null if this is a custom ElementType
-     * @param type - column type or null if elemType is provided
      */
     private void addFilter(Collection<? extends NameableOrIdentifiable> set, String columnName) {
-        if (set == null || set.size() == 0) return;
-        Set<String> values = new LinkedHashSet<>(set.size());
-        List<String> names = new ArrayList<String>(set.size());
+        if (set == null || set.isEmpty()) {
+            return;
+        }
+        
+        Set<String> values = new LinkedHashSet<>();
+        List<String> names = new LinkedList<>();
+        
         for (NameableOrIdentifiable identifiable: set) {
             final String value = identifiable.getIdentifier().toString();
-            if (values.contains(value))
-                continue;
-            values.add(value);
-            names.add(identifiable.getName());
+            if (!values.contains(value)) {
+                values.add(value);
+                names.add(identifiable.getName());
+            }
         }
         
         addFilterRule(columnName, new FilterRule(names, new ArrayList<>(values), true));
@@ -358,16 +507,23 @@ public class AmpARFilterConverter {
     }
     
     private void addFinancingFilters() {
-        addCategoryValueNamesFilter(arFilter.getFinancingInstruments(), ColumnConstants.FINANCING_INSTRUMENT);
+        if (!arFilter.isPledgeFilter()) {
+            addCategoryValueNamesFilter(arFilter.getFinancingInstruments(), ColumnConstants.FINANCING_INSTRUMENT);
+        } else {
+            addCategoryValueNamesFilter(arFilter.getFinancingInstruments(), ColumnConstants.PLEDGES_AID_MODALITY);
+        }
         addCategoryValueNamesFilter(arFilter.getFundingStatus(), ColumnConstants.FUNDING_STATUS);
-        addCategoryValueNamesFilter(arFilter.getAidModalities(), ColumnConstants.PLEDGES_AID_MODALITY);
-        addCategoryValueNamesFilter(arFilter.getTypeOfAssistance(), ColumnConstants.TYPE_OF_ASSISTANCE);
         addCategoryValueNamesFilter(arFilter.getModeOfPayment(), ColumnConstants.MODE_OF_PAYMENT);
         addCategoryValueNamesFilter(arFilter.getExpenditureClass(), ColumnConstants.EXPENDITURE_CLASS);
         addCategoryValueNamesFilter(arFilter.getConcessionalityLevel(), ColumnConstants.CONCESSIONALITY_LEVEL);
-        //TODO capital vs Recurrent
-        //addCategoryValueNamesFilter(arFilter.get, ColumnConstants., ReportEntityType.ENTITY_TYPE_ACTIVITY);
-        addCategoryValueNamesFilter(arFilter.getBudget(), ColumnConstants.ON_OFF_TREASURY_BUDGET);
+        
+        if (arFilter.isPledgeFilter()) {
+            addCategoryValueNamesFilter(arFilter.getTypeOfAssistance(), ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
+        } else {
+            addCategoryValueNamesFilter(arFilter.getTypeOfAssistance(), ColumnConstants.TYPE_OF_ASSISTANCE);
+        }
+        
+        addCategoryValueNamesFilter(arFilter.getBudget(), ColumnConstants.ACTIVITY_BUDGET);
     }
     
     private void addCategoryValueNamesFilter(Set<AmpCategoryValue> set, String columnName) {
@@ -379,6 +535,7 @@ public class AmpARFilterConverter {
             final String value = String.valueOf(categValue.getId());
             values.add(value);
         }
+        
         addFilterRule(columnName, new FilterRule(names, values, true));
     }
     

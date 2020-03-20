@@ -12,19 +12,19 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 
 import com.sun.jersey.api.client.UniformInterfaceException;
-import org.digijava.kernel.ampregistry.AmpRegistryClient;
+import org.digijava.kernel.ampregistry.AmpRegistryService;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.kernel.services.AmpOfflineService;
 import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.util.SpringUtil;
 import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.QuartzJobForm;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.QuartzJobClassUtils;
 import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.message.jobs.ConnectionCleaningJob;
+import org.digijava.module.message.jobs.NonConcurrentJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.SchedulerException;
@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Octavian Ciubotaru
  */
-public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
+public class DownloadAmpOfflineReleasesJob extends NonConcurrentJob {
 
     private final Logger logger = LoggerFactory.getLogger(DownloadAmpOfflineReleasesJob.class);
 
@@ -48,11 +48,11 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
     private AmpVersionService ampVersionService;
     private AmpOfflineService ampOfflineService;
 
-    private AmpRegistryClient ampRegistryClient = new AmpRegistryClient();
+    private AmpRegistryService ampRegistryService = AmpRegistryService.INSTANCE;
 
     @Override
-    public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        if (isAmpOfflineEnabled()) {
+    public void executeNonConcurrentInternal(JobExecutionContext context) throws JobExecutionException {
+        if (FeaturesUtil.isAmpOfflineEnabled()) {
             initialize(context);
 
             removeInvalidAmpOfflineReleases();
@@ -63,15 +63,11 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
         }
     }
 
-    private boolean isAmpOfflineEnabled() {
-        return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.AMP_OFFLINE_ENABLED);
-    }
-
     /**
      * Download all new and compatible AMPOfflineReleases.
      */
     private void downloadNewReleases() {
-        ampRegistryClient.getReleases()
+        ampRegistryService.getReleases()
                 .stream()
                 .filter(this::isNewAndCompatibleRelease)
                 .forEach(this::persistRelease);
@@ -131,7 +127,7 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
      */
     private void persistRelease(AmpOfflineRelease release) {
         try {
-            ampOfflineService.addRelease(release, ampRegistryClient.releaseFileSupplier(release));
+            ampOfflineService.addRelease(release, ampRegistryService.releaseFileSupplier(release));
 
             existingReleases.add(release);
         } catch (IOException | UniformInterfaceException e) {
@@ -151,7 +147,7 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
         jobForm.setGroupName("ampServices");
         jobForm.setManualJob(false);
         jobForm.setName(jobClass.getName());
-        jobForm.setTriggerType(2);
+        jobForm.setTriggerType(QuartzJobForm.HOURLY);
         jobForm.setExeTimeH("1");
 
         Calendar instance = Calendar.getInstance();

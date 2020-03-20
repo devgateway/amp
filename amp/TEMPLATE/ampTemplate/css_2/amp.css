@@ -1414,3 +1414,22 @@ div.footer {
 .tabs-grid-pager-info {
     display: inline-block;
 }
+.pledge-error-message{
+    text-align: center;
+    color: Red;
+    font-weight: bold;
+    font-size: 16px;
+}
+.pledge-date {
+    width: 49%;
+    display: inline-block;
+}
+.map-configuration-cell{
+    padding: 2px;
+    width: 50%;
+}
+
+.loading-spinner{
+	display:block;
+    margin:auto;
+}

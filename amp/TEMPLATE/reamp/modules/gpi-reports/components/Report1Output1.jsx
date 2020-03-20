@@ -12,7 +12,7 @@ import RemarksPopup from './RemarksPopup';
 import ToolBar from './ToolBar';
 import HeaderToolTip from './HeaderToolTip';
 import Loading from './Loading';
-export default class Report1Output1 extends Component {
+class Report1Output1 extends Component {
     constructor( props, context ) {
         super( props, context );
         this.state = { recordsPerPage: 150, selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false, waiting:true};
@@ -235,7 +235,7 @@ export default class Report1Output1 extends Component {
                               </div>
                             </div>
 
-                    }                    
+                    }
                     <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear}
                                         mainReport={this.props.mainReport} filter={this.filter}
                                         dateField="actual-approval-date" settingsWidget={this.settingsWidget}

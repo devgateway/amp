@@ -614,7 +614,7 @@ public final class PMUtil {
             return col;
         
         } catch (HibernateException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException("HibernateException Exception encountered", e);
         } finally {
             try {
@@ -709,7 +709,7 @@ public final class PMUtil {
 //          PermissionMap pm= (PermissionMap) col.get(0);     
             return col;
         } catch (HibernateException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException( "HibernateException Exception encountered", e);
         }
         }

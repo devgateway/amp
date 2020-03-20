@@ -38,7 +38,7 @@ public class TLSUtils {
     public HttpServletRequest request;
     private static String forcedLangCode = null;
     private Boolean forcedSSCWorkspace;
-    
+
     public static String getLangCode() {
         if (TLSUtils.forcedLangCode != null) {
             return TLSUtils.forcedLangCode;
@@ -153,28 +153,30 @@ public class TLSUtils {
         TLSUtils instance = getThreadLocalInstance();
         return instance.request;
     }
-    
+
     public static TLSUtils getThreadLocalInstance()
     {
         TLSUtils res = threadLocalInstance.get();
-        if (res == null)
-        {
+        if (res == null) {
             res = new TLSUtils();
             threadLocalInstance.set(res);
         }
         return res;
     }
     
-    public static void populate(HttpServletRequest request){
-        populate(request, null);
+    public static void populate(HttpServletRequest request) {
+        SiteDomain siteDomain = null;
+        if (request.getServerName() == null) {
+            // it is a mockup request. The site domain was populated on request previously
+            siteDomain = RequestUtils.getSiteDomain(request);
+        } else {
+            siteDomain = SiteCache.getInstance().getSiteDomain(request.getServerName(), null);
+        }
+        populate(request, siteDomain);
     }
     
     public static void populate(HttpServletRequest request, SiteDomain siteDomain) {
-        if (siteDomain == null) {
-            siteDomain = RequestUtils.getSiteDomain(request);
-        } else {
-            RequestUtils.setSiteDomain(request, siteDomain);
-        }
+        RequestUtils.setSiteDomain(request, siteDomain);
         TLSUtils.getThreadLocalInstance().request = request;
         TLSUtils.getThreadLocalInstance().site = siteDomain == null ? null : siteDomain.getSite();
     }
@@ -230,7 +232,7 @@ public class TLSUtils {
         
         populateMockSiteDomain(mockRequest, "/");
         populate(mockRequest);
-        
+
     }
 
     private static void populateMockSiteDomain(HttpServletRequest httpRequest, String mainPath) {
@@ -277,5 +279,5 @@ public class TLSUtils {
         }
 
     }
-         
+
 }

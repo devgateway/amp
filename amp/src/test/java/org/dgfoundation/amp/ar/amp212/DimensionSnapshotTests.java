@@ -46,7 +46,7 @@ public class DimensionSnapshotTests extends AmpTestCase {
     @Test
     public void testUniformDimension() {
         DimensionSnapshot snapshot = UNIFORM_3_LEVEL;
-        assertEquals("depth = 3, data = [level 0, info: [(id: 100, parent: 0, children: [110, 120]), (id: 200, parent: 0, children: [210])], level 1, info: [(id: 110, parent: 100, children: [112, 113]), (id: 120, parent: 100, children: [121]), (id: 210, parent: 200, children: [211])], level 2, info: [(id: 112, parent: 110, children: []), (id: 113, parent: 110, children: []), (id: 121, parent: 120, children: []), (id: 211, parent: 210, children: [])]]", snapshot.toString());
+        assertEquals("depth = 3, data = [level 0, info: [(id: -999999999, parent: 0, children: [-999999999]), (id: 100, parent: 0, children: [110, 120]), (id: 200, parent: 0, children: [210])], level 1, info: [(id: -999999999, parent: -999999999, children: [-999999999]), (id: 110, parent: 100, children: [112, 113]), (id: 120, parent: 100, children: [121]), (id: 210, parent: 200, children: [211])], level 2, info: [(id: -999999999, parent: -999999999, children: []), (id: 112, parent: 110, children: []), (id: 113, parent: 110, children: []), (id: 121, parent: 120, children: []), (id: 211, parent: 210, children: [])]]", snapshot.toString());
         shouldFail(() -> snapshot.getAcceptableAscendants(0, Arrays.asList(100l)));
         shouldFail(() -> snapshot.getAcceptableDescendants(2, Arrays.asList(121l)));
         assertColEquals("[]", snapshot.getAcceptableAscendants(1, Arrays.asList(777l)));
@@ -103,7 +103,7 @@ public class DimensionSnapshotTests extends AmpTestCase {
             Arrays.asList(100l, 110l, -113l),
             Arrays.asList(100l, -120l, -121l),
             Arrays.asList(-200l, 210l, 211l)));
-        assertEquals("depth = 3, data = [level 0, info: [(id: -200, parent: 0, children: [210]), (id: 100, parent: 0, children: [-120, 110])], level 1, info: [(id: -120, parent: 100, children: [-121]), (id: 110, parent: 100, children: [-113, 112]), (id: 210, parent: -200, children: [211])], level 2, info: [(id: -121, parent: -120, children: []), (id: -113, parent: 110, children: []), (id: 112, parent: 110, children: []), (id: 211, parent: 210, children: [])]]", snapshot.toString());
+        assertEquals("depth = 3, data = [level 0, info: [(id: -999999999, parent: 0, children: [-999999999]), (id: -200, parent: 0, children: [210]), (id: 100, parent: 0, children: [-120, 110])], level 1, info: [(id: -999999999, parent: -999999999, children: [-999999999]), (id: -120, parent: 100, children: [-121]), (id: 110, parent: 100, children: [-113, 112]), (id: 210, parent: -200, children: [211])], level 2, info: [(id: -999999999, parent: -999999999, children: []), (id: -121, parent: -120, children: []), (id: -113, parent: 110, children: []), (id: 112, parent: 110, children: []), (id: 211, parent: 210, children: [])]]", snapshot.toString());
         assertColEquals("[100]", snapshot.getAcceptableAscendants(1, Arrays.asList(-120l)));
         assertColEquals("[-200, 100]", snapshot.getAcceptableAscendants(1, Arrays.asList(-120l, 210l)));
         assertColEquals("[-121, -113, 112]", snapshot.getAcceptableNeighbours(0, Arrays.asList(100l), 2));
@@ -138,7 +138,7 @@ public class DimensionSnapshotTests extends AmpTestCase {
             Arrays.asList(1l, 1l, 1l, 2l),
             Arrays.asList(1l, 2l, 2l, 3l)
         ));
-        assertEquals("depth = 4, data = [level 0, info: [(id: 1, parent: 0, children: [1, 2])], level 1, info: [(id: 1, parent: 1, children: [1]), (id: 2, parent: 1, children: [2])], level 2, info: [(id: 1, parent: 1, children: [1, 2]), (id: 2, parent: 2, children: [3])], level 3, info: [(id: 1, parent: 1, children: []), (id: 2, parent: 1, children: []), (id: 3, parent: 2, children: [])]]", snapshot.toString());
+        assertEquals("depth = 4, data = [level 0, info: [(id: -999999999, parent: 0, children: [-999999999]), (id: 1, parent: 0, children: [1, 2])], level 1, info: [(id: -999999999, parent: -999999999, children: [-999999999]), (id: 1, parent: 1, children: [1]), (id: 2, parent: 1, children: [2])], level 2, info: [(id: -999999999, parent: -999999999, children: [-999999999]), (id: 1, parent: 1, children: [1, 2]), (id: 2, parent: 2, children: [3])], level 3, info: [(id: -999999999, parent: -999999999, children: []), (id: 1, parent: 1, children: []), (id: 2, parent: 1, children: []), (id: 3, parent: 2, children: [])]]", snapshot.toString());
         assertColEquals("[1]", snapshot.getAcceptableAscendants(1, Arrays.asList(1l, 2l)));
         assertColEquals("[1, 2]", snapshot.getAcceptableDescendants(0, Arrays.asList(1l)));
         assertColEquals("[2]", snapshot.getAcceptableDescendants(1, Arrays.asList(2l)));
@@ -172,7 +172,7 @@ public class DimensionSnapshotTests extends AmpTestCase {
             // intentional gap
             Arrays.asList(7l)));
         
-        assertEquals("depth = 1, data = [level 0, info: [(id: 1, parent: 0, children: []), (id: 2, parent: 0, children: []), (id: 3, parent: 0, children: []), (id: 7, parent: 0, children: [])]]", snapshot.toString());
+        assertEquals("depth = 1, data = [level 0, info: [(id: -999999999, parent: 0, children: []), (id: 1, parent: 0, children: []), (id: 2, parent: 0, children: []), (id: 3, parent: 0, children: []), (id: 7, parent: 0, children: [])]]", snapshot.toString());
         assertColEquals("[1]", snapshot.getAcceptableNeighbours(0, Arrays.asList(1l), 0));
         assertColEquals("[1, 2]", snapshot.getAcceptableNeighbours(0, Arrays.asList(1l, 2l), 0));
         assertColEquals("[2]", snapshot.getAcceptableNeighbours(0, Arrays.asList(2l, 5l, 6l), 0));

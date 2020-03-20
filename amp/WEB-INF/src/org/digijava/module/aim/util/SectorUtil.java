@@ -637,7 +637,6 @@ public class SectorUtil {
                 Iterator<AmpSector> iter = dbReturnSet.iterator();
                 while (iter.hasNext()) {
                     AmpSector ampSector = iter.next();
-                    ampSector.setName(ampSector.getName().toUpperCase());
                     ret.add(ampSector);
                     Collection<AmpSector> dbChildReturnSet = SectorUtil
                             .getAllChildSectors(ampSector.getAmpSectorId());
@@ -1033,7 +1032,7 @@ public class SectorUtil {
             // tx.commit();
             // session.flush();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -1211,7 +1210,7 @@ public class SectorUtil {
             qry.setParameter("id", id);
             activities = qry.list();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return activities;
     }

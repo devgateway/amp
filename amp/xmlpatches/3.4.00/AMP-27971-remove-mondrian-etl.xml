@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-28480</jira>
+    <keyword>amp offline</keyword>
+    <author>vchihai</author>
+    <description>update amp offline compatibility to 1.4</description>
+    <apply>
+        <script>
+            <lang type="postgres"><![CDATA[
+                DROP VIEW IF EXISTS v_mondrian_activity_currency_numbers;
+                DROP VIEW IF EXISTS v_mondrian_activity_fixed_texts CASCADE;
+                DROP VIEW IF EXISTS v_mondrian_activity_texts;
+                DROP VIEW IF EXISTS v_mondrian_activity_trn_texts;
+                DROP VIEW IF EXISTS v_mondrian_agreements;
+                DROP VIEW IF EXISTS v_mondrian_category_values;
+                DROP VIEW IF EXISTS v_mondrian_component_transactions;
+                DROP VIEW IF EXISTS v_mondrian_components;
+                DROP VIEW IF EXISTS v_mondrian_pure_transactions CASCADE;
+                DROP VIEW IF EXISTS v_mondrian_generic_texts;
+                DROP VIEW IF EXISTS v_mondrian_locations;
+                DROP VIEW IF EXISTS v_mondrian_organizations;
+                DROP VIEW IF EXISTS v_mondrian_pledge_fixed_texts;
+                DROP VIEW IF EXISTS v_mondrian_pledge_texts;
+                DROP VIEW IF EXISTS v_mondrian_pledge_transactions CASCADE;
+                DROP VIEW IF EXISTS v_mondrian_programs CASCADE;
+                DROP VIEW IF EXISTS v_mondrian_raw_donor_transactions CASCADE;
+                DROP VIEW IF EXISTS v_mondrian_raw_pledge_transactions CASCADE;
+                DROP VIEW IF EXISTS v_mondrian_sectors;
+
+                -- dropping the trigger explicitly, otherwise quartz will attempt to load the removed class and fail
+                DELETE FROM qrtz_cron_triggers
+                    WHERE trigger_name = (SELECT trigger_name FROM qrtz_triggers WHERE job_name = 'Run Mondrian ETL');
+                DELETE FROM qrtz_triggers
+                    WHERE job_name = 'Run Mondrian ETL';
+            ]]></lang>
+        </script>
+
+        <script>
+            <lang type="bsh"><![CDATA[
+                import org.digijava.kernel.xmlpatches.SqlExec;
+                import org.digijava.module.aim.util.QuartzJobUtils;
+                import org.quartz.Scheduler;
+
+                SqlExec.viewMap("mondrian_organizations____no_pledges", "DROP VIEW {0}");
+
+                SqlExec.exec("DROP TABLE IF EXISTS mondrian_raw_donor_transactions");
+
+                SqlExec.exec("DROP TABLE IF EXISTS mondrian_locations");
+                SqlExec.tableMap("mondrian_locations___", "DROP TABLE {0}");
+
+                SqlExec.exec("DROP TABLE IF EXISTS mondrian_sectors");
+                SqlExec.tableMap("mondrian_sectors___", "DROP TABLE {0}");
+
+                SqlExec.exec("DROP TABLE IF EXISTS mondrian_programs");
+                SqlExec.tableMap("mondrian_programs___", "DROP TABLE {0}");
+
+                SqlExec.exec("DROP TABLE IF EXISTS mondrian_organizations");
+                SqlExec.tableMap("mondrian_organizations___", "DROP TABLE {0}");
+
+                SqlExec.exec("DROP TABLE IF EXISTS mondrian_activity_texts");
+                SqlExec.tableMap("mondrian_activity_texts___", "DROP TABLE {0}");
+
+                SqlExec.exec("DROP TABLE IF EXISTS mondrian_activity_trn_texts");
+                SqlExec.tableMap("mondrian_activity_trn_texts___", "DROP TABLE {0}");
+
+                SqlExec.exec("DROP TABLE IF EXISTS mondrian_agreements");
+                SqlExec.tableMap("mondrian_agreements___", "DROP TABLE {0}");
+
+                SqlExec.exec("DROP TABLE IF EXISTS mondrian_category_values");
+                SqlExec.tableMap("mondrian_category_values___", "DROP TABLE {0}");
+
+                SqlExec.exec("DROP TABLE IF EXISTS mondrian_components");
+                SqlExec.tableMap("mondrian_components___", "DROP TABLE {0}");
+
+                SqlExec.exec("DROP TABLE IF EXISTS mondrian_generic_texts");
+                SqlExec.tableMap("mondrian_generic_texts___", "DROP TABLE {0}");
+
+                SqlExec.tableMap("mondrian_dates%", "DROP TABLE {0}");
+
+                Scheduler scheduler = QuartzJobUtils.getScheduler();
+                scheduler.deleteJob("Run Mondrian ETL", Scheduler.DEFAULT_GROUP);
+            ]]></lang>
+        </script>
+        <script>
+            <lang type="postgres"><![CDATA[
+                DROP TABLE IF EXISTS mondrian_activity_currency_numbers;
+                DROP TABLE IF EXISTS mondrian_activity_fixed_texts;
+                DROP TABLE IF EXISTS mondrian_activity_long_texts;
+                DROP TABLE IF EXISTS mondrian_raw_donor_transactions;
+
+                DROP TABLE IF EXISTS etl_executing_agencies;
+                DROP TABLE IF EXISTS etl_beneficiary_agencies;
+                DROP TABLE IF EXISTS etl_contracting_agencies;
+                DROP TABLE IF EXISTS etl_implementing_agencies;
+                DROP TABLE IF EXISTS etl_responsible_agencies;
+                DROP TABLE IF EXISTS etl_locations;
+                DROP TABLE IF EXISTS etl_regional_groups;
+                DROP TABLE IF EXISTS etl_activity_program_national_plan_objective;
+                DROP TABLE IF EXISTS etl_activity_program_primary_program;
+                DROP TABLE IF EXISTS etl_activity_program_secondary_program;
+                DROP TABLE IF EXISTS etl_activity_program_tertiary_program;
+                DROP TABLE IF EXISTS etl_activity_sector_primary;
+                DROP TABLE IF EXISTS etl_activity_sector_secondary;
+                DROP TABLE IF EXISTS etl_activity_sector_tertiary;
+                DROP TABLE IF EXISTS etl_sector_groups;
+                DROP TABLE IF EXISTS etl_fingerprints;
+
+                DROP TABLE IF EXISTS mondrian_fact_table;
+                DROP TABLE IF EXISTS mondrian_exchange_rates;
+
+                DROP TABLE IF EXISTS amp_etl_log;
+
+                DELETE FROM amp_quartz_job_class WHERE jc_class_fullname='org.dgfoundation.amp.mondrian.MondrianETLQuartzJob';
+
+                UPDATE amp_reports SET name = 'AMP-21336-pledge-details-contacts'
+                WHERE name = 'AMP-21336-pledge-details-contacts-in-mondrian';
+
+                UPDATE amp_content_translation
+                SET translation = 'AMP-21336-pledge-details-contacts'
+                WHERE translation = 'AMP-21336-pledge-details-contacts-in-mondrian';
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

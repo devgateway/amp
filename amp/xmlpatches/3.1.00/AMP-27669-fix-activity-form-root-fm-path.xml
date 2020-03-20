@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-27669</jira>
+    <keyword>activity form root fm</keyword>
+    <author>vchihai</author>
+    <description>Make Activity Form root FM Path visible</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+            
+            	INSERT INTO amp_modules_templates (template, module)
+                SELECT
+	                (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
+	                (SELECT id AS module FROM amp_modules_visibility WHERE name = '/Activity Form')
+	            WHERE NOT EXISTS (
+	                SELECT template FROM amp_modules_templates
+	                WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
+	                AND module = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form')
+	            );
+				
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

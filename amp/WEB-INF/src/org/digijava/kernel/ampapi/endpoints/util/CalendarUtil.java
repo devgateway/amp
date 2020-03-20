@@ -1,12 +1,22 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.ws.rs.core.Response.Status;
+
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.NepaliBasedWorker;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -143,5 +153,31 @@ public class CalendarUtil {
                 }
             }
         }
+    }
+    
+    public static List<AmpFiscalCalendar> getCalendars(List<Long> ids) {
+        
+        Session session = PersistenceManager.getSession();
+        List<AmpFiscalCalendar> allCalendars = session.createCriteria(AmpFiscalCalendar.class)
+                .addOrder(Order.asc("id"))
+                .list();
+        
+        List<Long> allDbIds = allCalendars.stream()
+                .map(AmpFiscalCalendar::getAmpFiscalCalId)
+                .collect(Collectors.toList());
+        
+        List<Long> notFoundIds = new ArrayList<>(ids);
+        notFoundIds.removeAll(allDbIds);
+        
+        if (!notFoundIds.isEmpty()) {
+            String errorDetails = notFoundIds.stream().map(id -> String.valueOf(id)).collect(Collectors.joining(","));
+            throw new ApiRuntimeException(Status.BAD_REQUEST, ApiError.toError("Wrong calendar id: " + errorDetails));
+        }
+        
+        List<AmpFiscalCalendar> calendars = allCalendars.stream()
+                .filter(cal -> ids.contains(cal.getAmpFiscalCalId()))
+                .collect(Collectors.toList());
+                
+        return calendars;
     }
 }

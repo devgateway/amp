@@ -82,7 +82,7 @@ public abstract class XmlPatcherWorker<T,P> {
             if (runTimeCheck())
                 return process();
         } catch (XmlPatcherWorkerException e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             log.appendToLog(e);
         }
         return false;

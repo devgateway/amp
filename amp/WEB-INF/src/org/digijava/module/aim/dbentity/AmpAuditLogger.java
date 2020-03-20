@@ -21,7 +21,7 @@ public class AmpAuditLogger implements Comparable, Serializable {
     /**
      * 
      */
-    
+    public static final String PREFIX_TO_REMOVE = "Amp";
 
     private Long id;
     private String teamName;
@@ -42,8 +42,8 @@ public class AmpAuditLogger implements Comparable, Serializable {
     private String objectName;
     private String detail;
     private Long userid;
-    
-    
+
+
     public Long getUserid() {
         return userid;
     }
@@ -51,19 +51,7 @@ public class AmpAuditLogger implements Comparable, Serializable {
         this.userid = userid;
     }
     public String getObjectName() {
-        /*Object o=AuditLoggerUtil.loadObject(this.objectId,this.objectType);
-        if(o instanceof AmpActivity) {
-            AmpActivityVersion a=(AmpActivityVersion)o;
-            return a.getAmpId()+" "+a.getName();
-        }
-        if(o instanceof AmpReports) {
-            AmpReports a=(AmpReports)o;
-            return a.getName();
-        }
-
-        return "";*/
         return this.objectName;
-
     }
     public void setObjectName(String objectName) {
         this.objectName = objectName;
@@ -147,9 +135,12 @@ public class AmpAuditLogger implements Comparable, Serializable {
         this.modifyDate = modifyDate;
     }
     public String getObjectTypeTrimmed() {
-        int i=objectType.lastIndexOf('.')+3;
-        int j=objectType.length();
-        return objectType.substring(i+1,j);
+
+        int startIndex = objectType.lastIndexOf('.');
+        if (objectType.lastIndexOf('.' + PREFIX_TO_REMOVE) > 0) {
+            startIndex = startIndex + PREFIX_TO_REMOVE.length();
+        }
+        return objectType.substring(startIndex + 1, objectType.length());
     }
     
     public void setObjectTypeTrimmed(String objectTypeTrimmed) {

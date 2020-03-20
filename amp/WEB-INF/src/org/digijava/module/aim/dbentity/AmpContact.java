@@ -2,23 +2,33 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactFieldsConstants;
-import org.digijava.kernel.ampapi.endpoints.contact.ContactTitlePossibleValuesProvider;
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.kernel.validators.common.SizeValidator;
+import org.digijava.kernel.ampapi.endpoints.contact.dto.ContactView;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
+import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * holds contact user's information
@@ -27,72 +37,106 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  */
 @TranslatableClass (displayName = "Contact")
 public class AmpContact implements Comparable, Serializable, Cloneable, Versionable, Identifiable {
-    
-    @Interchangeable(fieldTitle = "ID", id = true)
+
+    @Interchangeable(fieldTitle = "ID")
+    @JsonProperty(ContactEPConstants.ID)
+    @JsonView(ContactView.Summary.class)
     private Long id;
-    
-    @Interchangeable(fieldTitle = "Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+
+    @Interchangeable(fieldTitle = "Name", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    @JsonProperty(ContactEPConstants.NAME)
+    @JsonView(ContactView.Summary.class)
     private String name;
-    
-    @Interchangeable(fieldTitle = "Last Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+
+    @Interchangeable(fieldTitle = "Last Name", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    @JsonProperty(ContactEPConstants.LAST_NAME)
+    @JsonView(ContactView.Summary.class)
     private String lastname;
 
-    @PossibleValues(ContactTitlePossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Title", importable = true, pickIdOnly = true)
+    @Interchangeable(fieldTitle = "Title", importable = true, pickIdOnly = true,
+        discriminatorOption = CategoryConstants.CONTACT_TITLE_KEY)
+    @JsonIgnore
     private AmpCategoryValue title;
 
     @TranslatableField
     @Interchangeable(fieldTitle = "Organization Name", importable = true)
+    @JsonIgnore
     private String organisationName;
-    
+
     @TranslatableField
     @Interchangeable(fieldTitle = "Function", importable = true)
+    @JsonIgnore
     private String function;
-    
+
     @Interchangeable(fieldTitle = "Office Address", importable = true)
+    @JsonIgnore
     private String officeaddress;
-    
+
     // do we need it?
+    @JsonIgnore
     private String temporaryId;
-    
+
+    @JsonIgnore
     private String nameAndLastName;
-    
+
+    @JsonIgnore
     private String fullname;
-    
+
     /**
-     * currently these fields are not usable, but will become when we decide 
-     * to link contact list to calendar and messaging 
+     * currently these fields are not usable, but will become when we decide
+     * to link contact list to calendar and messaging
      */
+    @JsonIgnore
     private Boolean shared; //is contact shared between amp users
 
     @Interchangeable(fieldTitle = ContactFieldsConstants.CREATED_BY, pickIdOnly = true)
+    @JsonIgnore
     private AmpTeamMember creator; //who created the contact
-    
-    private SortedSet<AmpActivityContact> activityContacts;
-    
-    @Interchangeable(fieldTitle = "Organisation Contacts", importable = true)
-    private Set<AmpOrganisationContact> organizationContacts;
 
-    @Interchangeable(fieldTitle = "Properties")
+    @JsonIgnore
+    private SortedSet<AmpActivityContact> activityContacts;
+
+    @Interchangeable(fieldTitle = "Organisation Contacts", importable = true,
+            validators = @Validators(unique = FMVisibility.ALWAYS_VISIBLE_FM))
+    @JsonIgnore
+    private Set<AmpOrganisationContact> organizationContacts = new HashSet<>();
+
     @InterchangeableDiscriminator(discriminatorField = "name", settings = {
-            @Interchangeable(fieldTitle = "email", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_EMAIL,
-                    importable = true),
-            @Interchangeable(fieldTitle = "phone", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_PHONE,
-                    importable = true),
-            @Interchangeable(fieldTitle = "fax", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_FAX,
-                    importable = true)
-    })
-    private SortedSet<AmpContactProperty> properties;
+            @Interchangeable(fieldTitle = ContactEPConstants.EMAIL,
+                    discriminatorOption = Constants.CONTACT_PROPERTY_NAME_EMAIL,
+                    interValidators = @InterchangeableValidator(
+                            value = SizeValidator.class,
+                            attributes = "max=" + ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE),
+                    importable = true,
+                    type = AmpContactEmailProperty.class),
+            @Interchangeable(fieldTitle = ContactEPConstants.PHONE,
+                    discriminatorOption = Constants.CONTACT_PROPERTY_NAME_PHONE,
+                    interValidators = @InterchangeableValidator(
+                            value = SizeValidator.class,
+                            attributes = "max=" + ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE),
+                    importable = true,
+                    type = AmpContactPhoneProperty.class),
+            @Interchangeable(fieldTitle = ContactEPConstants.FAX,
+                    discriminatorOption = Constants.CONTACT_PROPERTY_NAME_FAX,
+                    interValidators = @InterchangeableValidator(
+                            value = SizeValidator.class,
+                            attributes = "max=" + ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE),
+                    importable = true,
+                    type = AmpContactFaxProperty.class)})
+    @JsonIgnore
+    private SortedSet<AmpContactProperty> properties = new TreeSet<>();
 
     public AmpContact(){
-        
+
     }
-    
+
     public AmpContact(String name, String lastName){
         this.name=name;
         this.lastname=lastName;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -110,7 +154,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     }
     public void setName(String name) {
         this.name = name;
-    }   
+    }
     public AmpCategoryValue getTitle() {
         return title;
     }
@@ -148,7 +192,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     public void setTemporaryId(String temporaryId) {
         this.temporaryId = temporaryId;
     }
-    
+
     public String getFunction() {
         return function;
     }
@@ -177,7 +221,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     }
 
     @Override
-     public int compareTo(Object arg0) {
+    public int compareTo(Object arg0) {
         // TODO Auto-generated method stub
         AmpContact a = (AmpContact) arg0;
         if (this.getId() != null && a.getId() != null) {
@@ -189,11 +233,11 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
             return 1;
         }
     }
-    
+
     public String getNameAndLastName() {
         nameAndLastName = (name != null) ? name + " " + lastname : name;
         return nameAndLastName;
-        }
+    }
 
     public void setNameAndLastName(String nameAndLastName) {
         this.nameAndLastName = nameAndLastName;
@@ -212,7 +256,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
         return super.clone();
     }
 
-
+    @JsonIgnore
     public List<String> getEmails (){
         List<String> emails =null;
         if (this.properties!= null ) {
@@ -223,12 +267,12 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
                     }
                     emails.add(prop.getValue());
                 }
-                
+
             }
-        }       
+        }
         return emails;
     }
-    
+
     @Override
     public boolean equalsForVersioning(Object obj) {
         AmpContact aux = (AmpContact) obj;
@@ -241,6 +285,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     }
 
     @Override
+    @JsonIgnore
     public Output getOutput() {
         Output out = new Output();
         out.setOutputs(new ArrayList<Output>());
@@ -251,10 +296,11 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     }
 
     @Override
+    @JsonIgnore
     public Object getValue() {
         return "" + this.name + "-" + this.lastname;
     }
-    
+
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpContact aux = (AmpContact) clone();
@@ -264,8 +310,9 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
         }
         return aux;
     }
-    
+
     @Override
+    @JsonIgnore
     public Object getIdentifier() {
         return id;
     }

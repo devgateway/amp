@@ -11,8 +11,8 @@ import org.dgfoundation.amp.ar.dimension.DonorDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.OrganisationValueProvider;
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrganizationReportColumn;
@@ -31,136 +31,88 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 {
     
     //IATI-check: not to be ignored. 
-    @Interchangeable(fieldTitle="Organization ID", id=true)
+    @PossibleValueId
     private Long ampOrgId;
     @TranslatableField
-    @Interchangeable(fieldTitle="Name", value=true)
     private String name;
     /**
      * @deprecated
      */
     private String orgType;  // defunct
-    @Interchangeable(fieldTitle="DAC Organization Code")
     private String dacOrgCode;
-    @Interchangeable(fieldTitle="Organization ISO Code")
     private String orgIsoCode;
-    @Interchangeable(fieldTitle="Description")
     @TranslatableField
     private String description;
-    @Interchangeable(fieldTitle="Organization Code")
     private String orgCode;
     
     @Deprecated
     private String orgGroup;  // defunct
-//  @Interchangeable(fieldTitle="AMP Fiscal Calendar")
     private AmpFiscalCalendar ampFiscalCalId;
-//  @Interchangeable(fieldTitle="AMP Sector Scheme")
     private AmpSectorScheme ampSecSchemeId;
-//  @Interchangeable(fieldTitle="Funding Organization ID")
     private String fundingorgid;
-    @Interchangeable(fieldTitle="Deleted")
     private Boolean deleted;
-    
-    @Interchangeable(fieldTitle="Budget Organization Code")
+
     private String budgetOrgCode;
-    
-    @Interchangeable(fieldTitle="Acronym And Name")
+
     private String acronymAndName;
     /**
      * @deprecated
      */
     private String orgTypeCode; // defunct
-    
-//  @Interchangeable(fieldTitle="Organization Group")
+
     private AmpOrgGroup orgGrpId;
-    @Interchangeable(fieldTitle="Address")
     private String address;
-//  @Interchangeable(fieldTitle="Country ID")
     private Country countryId;
-    @Interchangeable(fieldTitle="Organization URL")
     private String orgUrl;
-    @Interchangeable(fieldTitle="Acronym")
     private String acronym;
-    
-//  @Interchangeable(fieldTitle="Region")
+
     private AmpCategoryValueLocations region;
-//  @Interchangeable(fieldTitle="Implementation Location Level")
     private AmpCategoryValue implemLocationLevel;
-//  @Interchangeable(fieldTitle="Locations")
     private Set<AmpOrgLocation> locations;
-//  @Interchangeable(fieldTitle="Staff Infos")
     private Set<AmpOrgStaffInformation> staffInfos;
-//  @Interchangeable(fieldTitle="Contry")
     private AmpCategoryValueLocations country;
-//  @Interchangeable(fieldTitle="AMP Organization Recipients")
     private Set<AmpOrgRecipient> recipients;
-    
-    @Interchangeable(fieldTitle="Address Abroad")
+
     private String addressAbroad;
-    @Interchangeable(fieldTitle="Tax Number")
     private String taxNumber;
-    @Interchangeable(fieldTitle="Primary Purpose")
     private String primaryPurpose;
-    @Interchangeable(fieldTitle="Ministry Plan Registration Number") 
     private String minPlanRegNumb;
-    @Interchangeable(fieldTitle="Legal Person Number")
     private String legalPersonNum;
-    @Interchangeable(fieldTitle="Legal Person Registration Date")
     private Date legalPersonRegDate;
-    @Interchangeable(fieldTitle="Ministry Plan Registration Date") 
     private Date minPlanRegDate;
-    @Interchangeable(fieldTitle="Organization Budget Infos")
     private Set<AmpOrganizationBudgetInformation> organizationBudgetInfos;
-//  @Interchangeable(fieldTitle="Survey") there could be many items that are useless 
     private Set<AmpAhsurvey> survey;    // Collection of AmpAhsurvey dbentity objects
-//  @Interchangeable(fieldTitle="Calendar") //really, this seems useless
     private Set<AmpCalendar> calendar;
 
-    @Interchangeable(fieldTitle="Segment Code")
     private String segmentCode;
-//  @Interchangeable(fieldTitle="Sectors", pickIdOnly=true)
     private Set<AmpSector> sectors;
-    
-//  @Interchangeable(fieldTitle="Documents")
+
     private Set<AmpOrganisationDocument> documents;
 
-    @Interchangeable(fieldTitle="Other Information")
     private String otherInformation;
-    @Interchangeable(fieldTitle="Line Ministry Registration Date")
     private Date lineMinRegDate;
-    @Interchangeable(fieldTitle="Oper Func Approval Date") //???????????????????????????
     private Date operFuncApprDate;
-    @Interchangeable(fieldTitle="Receipt Leg Personality Act") //???????????????????????
     private String receiptLegPersonalityAct;
     
     //unused anywhere
-//  @Interchangeable(fieldTitle="Survey By Point Of Delivery Donor")  
     private transient Set<AmpAhsurvey> surveyByPointOfDeliveryDonor;
 
-//  @Interchangeable(fieldTitle="Organization Contacts")
     private Set<AmpOrganisationContact> organizationContacts;
     
     // this field is saved in Organization Dashboard and not from organization manager in admin
-    @Interchangeable(fieldTitle="Organization Background")
     private String orgBackground;
     /*
      *this field is saved in Organization Dashboard and not from organization manager in admin
      * don't confuse it with Description field
      */
-    @Interchangeable(fieldTitle="Organization Description Dashboard")
     private String orgDescription;
     // this field is saved in Organization Dashboard and not from organization manager in admin
-    @Interchangeable(fieldTitle="Organization Key Areas Dashboard")
     private String orgKeyAreas;
     
     //Budget fields
-//  @Interchangeable(fieldTitle="Parent Sector", pickIdOnly = true)
     private AmpBudgetSector parentsector;
-//  @Interchangeable(fieldTitle="Departments", pickIdOnly = true)
     private Set<AmpDepartments> departments;
-//  @Interchangeable(fieldTitle="Budget Sectors")
     private Set<AmpBudgetSector> budgetsectors;
-//  @Interchangeable(fieldTitle="Line Ministry Registration Number")
     private String  lineMinRegNumber;
     
     private boolean translateable   = true;
@@ -302,7 +254,6 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     }
 
     /**
-     * @deprecated
      * @param long1
      */
     public void setAmpOrgId(Long long1) {

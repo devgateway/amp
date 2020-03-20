@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
+import org.dgfoundation.amp.nireports.NiPrecisionSetting;
+import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -42,7 +45,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toCollection;
 
 /**
  * the {@link NiReportColumn} which fetches funding cells. This class is the common ancestors for all the coordinates-based funding cells in the AMP schema 
@@ -121,7 +124,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
     private SubDimensions subDimensions;
 
     /**
-     * delegates to {@link #AmpFundingColumn(String, String, Behaviour)} with {@link TrivialMeasureBehaviour} as a behaviour
+     * delegates to {@link #AmpFundingColumn(String, LocalizableLabel, String, Behaviour, SubDimensions)}
+     * with {@link TrivialMeasureBehaviour} as a behaviour
      */
     public AmpFundingColumn(String columnName, String viewName, SubDimensions subDimensions) {
         this(columnName, new LocalizableLabel(columnName), viewName, TrivialMeasureBehaviour.getInstance(), subDimensions);
@@ -190,12 +194,12 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
     protected synchronized FundingFetcherContext resetCache(NiReportsEngine engine) {
         engine.timer.putMetaInNode("resetCache", true);
         //Map<Long, String> adjTypeValue = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN ('%s', '%s')", CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY));
-        Map<Long, String> acvs = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, 
+        Map<Long, String> acvs = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection,
                 String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname "
-                        + "IN('%s', '%s', '%s', '%s', '%s', '%s', '%s')", 
-                CategoryConstants.EXPENDITURE_CLASS_KEY, CategoryConstants.TYPE_OF_ASSISTENCE_KEY, 
-                CategoryConstants.MODE_OF_PAYMENT_KEY, CategoryConstants.ADJUSTMENT_TYPE_KEY, 
-                CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY, CategoryConstants.CONCESSIONALITY_LEVEL_KEY, 
+                        + "IN('%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+                CategoryConstants.EXPENDITURE_CLASS_KEY, CategoryConstants.TYPE_OF_ASSISTENCE_KEY,
+                CategoryConstants.MODE_OF_PAYMENT_KEY, CategoryConstants.ADJUSTMENT_TYPE_KEY,
+                CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY, CategoryConstants.CONCESSIONALITY_LEVEL_KEY,
                 CategoryConstants.MTEF_PROJECTION_KEY));
         Map<Long, String> roles = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("SELECT amp_role_id, role_code FROM amp_role", CategoryConstants.ADJUSTMENT_TYPE_KEY));
         
@@ -207,25 +211,65 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
         AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
         AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
         boolean enableDiffing = schema.ENABLE_CACHING;
-        AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
+
+        List<CategAmountCellProto> protos;
         if (enableDiffing) {
             long start = System.currentTimeMillis();
-            List<CategAmountCellProto> protos;
             synchronized(CACHE_SYNC_OBJ) {
                 FundingFetcherContext cache = cacher.buildOrGetValue(true, engine);
-                Set<Long> deltas = scratchpad.differentiallyImportCells(engine.timer, mainColumn, cache.cache, ids -> fetchSkeleton(engine, ids, cache));
+
+                scratchpad.differentiallyImportCells(engine.timer, mainColumn, cache.cache,
+                        ids -> fetchSkeleton(engine, ids, cache));
+
                 protos = cache.cache.getCells(scratchpad.getMainIds(engine, this));
                 long delta = System.currentTimeMillis() - start;
                 engine.timer.putMetaInNode("hot_time", delta);
             }
-            List<CategAmountCell> res = protos.stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList());
-            return res;
+        } else {
+            protos = fetchSkeleton(engine, scratchpad.getMainIds(engine, this), resetCache(engine));
         }
-        else {
-            return fetchSkeleton(engine, scratchpad.getMainIds(engine, this), resetCache(engine)).stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList());
-        }
+
+        return materialize(engine, scratchpad, schema, protos);
     }
-    
+
+    /**
+     * @param engine
+     * @param scratchpad
+     * @param schema
+     * @param protos
+     * @return
+     */
+    private List<CategAmountCell> materialize(NiReportsEngine engine, AmpReportsScratchpad scratchpad,
+            AmpReportsSchema schema, List<CategAmountCellProto> protos) {
+
+        long start = System.currentTimeMillis();
+
+        AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
+        CachingCalendarConverter calendar = engine.calendar;
+        CurrencyConvertor currencyConvertor = schema.currencyConvertor;
+        NiPrecisionSetting precisionSetting = scratchpad.getPrecisionSetting();
+
+        List<CategAmountCell> res = protos.stream()
+                .map(cacp -> cacp.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, false))
+                .collect(toCollection(ArrayList::new));
+
+        /*
+         * AMP-27571
+         * if canSplittingStrategyBeAdded is true we need to duplicate cells in original currency
+        */
+        if (engine.spec.isShowOriginalCurrency()) {
+            // generate cells for original currency only (except used currency)
+            protos.stream()
+                    .map(cacp -> cacp.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, true))
+                    .forEach(res::add);
+        }
+
+        long delta = System.currentTimeMillis() - start;
+        engine.timer.putMetaInNode("materialize_time", delta);
+
+        return res;
+    }
+
     protected String buildSupplementalCondition(NiReportsEngine engine, Set<Long> ids, FundingFetcherContext context) {
         return "1=1";
     }

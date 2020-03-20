@@ -24,7 +24,7 @@ public class MenuUtils {
      * @return list of menu entries for the current request view
      */
     public static List<AmpMenuEntryInView> getMenuEntries(AmpView view, boolean orderByPosition) {
-        String query = "select ame from " + AmpMenuEntryInView.class.getName() 
+        String query = "select ame from " + AmpMenuEntryInView.class.getName()
                 + " ame where ame.viewType=:viewType"
                 + (orderByPosition ? " order by ame.position asc" : "");
         
@@ -38,13 +38,19 @@ public class MenuUtils {
      */
     public static AmpView getCurrentView() {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-        if (tm == null) 
+        if (tm == null) {
             return AmpView.PUBLIC;
-        if ("yes".equals(TLSUtils.getRequest().getSession().getAttribute("ampAdmin")))
+        }
+        if (isAmpAdmin()) {
             return AmpView.ADMIN;
+        }
         return AmpView.TEAM;
     }
-    
+
+    public static boolean isAmpAdmin() {
+        return "yes".equals(TLSUtils.getRequest().getSession().getAttribute("ampAdmin"));
+    }
+
     /**
      * @return current menu items list
      */

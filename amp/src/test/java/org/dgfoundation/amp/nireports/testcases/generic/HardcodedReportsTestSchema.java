@@ -15,7 +15,6 @@ import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.ReportExecutor;
-import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.AbstractReportsSchema;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.DateCell;
@@ -111,10 +110,10 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
         addPercentageColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2, new PrimaryProgramLevel2Cells(activityNames, progsDimension.getEntityIds(), PP_DIM_USG.getLevelColumn(LEVEL_PROGRAM_2)));
         
         //one more percentages dimension, independent of those at (2) and (3) (for example, locations)
-        addPercentageColumn(ColumnConstants.COUNTRY, new CountryCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(LEVEL_COUNTRY)));
-        addPercentageColumn(ColumnConstants.REGION, new RegionCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(LEVEL_REGION)));
-        addPercentageColumn(ColumnConstants.ZONE, new ZoneCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(LEVEL_ZONE)));
-        addPercentageColumn(ColumnConstants.DISTRICT, new DistrictCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(LEVEL_DISTRICT)));
+        addPercentageColumn(ColumnConstants.LOCATION_ADM_LEVEL_0, new CountryCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(ADM_LEVEL_0)));
+        addPercentageColumn(ColumnConstants.LOCATION_ADM_LEVEL_1, new RegionCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(ADM_LEVEL_1)));
+        addPercentageColumn(ColumnConstants.LOCATION_ADM_LEVEL_2, new ZoneCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(ADM_LEVEL_2)));
+        addPercentageColumn(ColumnConstants.LOCATION_ADM_LEVEL_3, new DistrictCells(activityNames, locsDimension.getEntityIds(), LOC_DIM_USG.getLevelColumn(ADM_LEVEL_3)));
         //one non-percentages dimension (like Project Title)
         addTextColumn(ColumnConstants.PROJECT_TITLE, new ProjectTitleCells(activityNames, activityNames));
                 
@@ -194,11 +193,6 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
         }
         return instance;
     }
-    
-    public static String getRenderedReport(ReportSpecification spec) {
-        NiReportsGenerator niGen = new NiReportsGenerator(getInstance());
-        return niGen.renderReport(spec);
-    }   
     
     @Override
     public NiFilters convertFilters(NiReportsEngine engine) {

@@ -3,21 +3,33 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.common.values.providers.ThemePossibleValuesProvider;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.TreeNodeAware;
 
-public class AmpActivityProgram implements Versionable, Serializable, Cloneable {
+public class AmpActivityProgram implements Versionable, Serializable, Cloneable, TreeNodeAware<AmpTheme> {
 
-//      @Interchangeable(fieldTitle="Activity ID", importable=false, pickIdOnly=true)
-        private Long ampActivityProgramId;
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
+    private Long ampActivityProgramId;
+
         @Interchangeable(fieldTitle = "Program Percentage", importable = true, percentageConstraint = true,
-                required = ActivityEPConstants.REQUIRED_ALWAYS)
+                interValidators = @InterchangeableValidator(RequiredValidator.class))
         private Float programPercentage;
-        @Interchangeable(fieldTitle="Program", importable = true, pickIdOnly = true, uniqueConstraint = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+
+        @PossibleValues(ThemePossibleValuesProvider.class)
+        @Interchangeable(fieldTitle = "Program", importable = true, pickIdOnly = true, uniqueConstraint = true,
+                interValidators = @InterchangeableValidator(RequiredValidator.class))
         private AmpTheme program;
-        @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true)
+        @InterchangeableBackReference
         private AmpActivityVersion activity;
         private AmpActivityProgramSettings programSetting;
         public Long getAmpActivityProgramId() {
@@ -109,5 +121,10 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
     @Override
     protected Object clone() throws CloneNotSupportedException {
     return super.clone();
+    }
+
+    @Override
+    public AmpAutoCompleteDisplayable<AmpTheme> getTreeNode() {
+        return program;
     }
 }

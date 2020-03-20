@@ -62,7 +62,7 @@
                 <li><a href="#sectorsprograms"><div><digi:trn key="rep:filer:tab:sectorsAndPrograms">Sectors & Programs</digi:trn></div></a> </li>
 		<li><a href="#donors"><div><digi:trn key="rep:filer:tab:DonorsAndAgencies">Donors & Agencies</digi:trn></div></a> </li>
 		<li><a href="#status"><div><digi:trn key="rep:filer:tab:StatusAndMinistryRank">Status & Ministry Rank</digi:trn></div></a> </li>
-		<feature:display name="Computed Columns Filters" module="Filter Section">
+		<feature:display name="Computed Year" module="Filter Widget">
 			<li><a href="#CCSettings"><div><digi:trn>Computed Column Settings</digi:trn></div></a> </li>
 		</feature:display>
 	</ul>
@@ -299,7 +299,7 @@
 						keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" />
 					</td>
 				</tr>
-				<field:display name="On/Off/Treasury Budget" feature="Budget">
+				<field:display name="Activity Budget" feature="Budget">
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5" styleClass="inp-text">
 						<html:checkbox property="selectedBudget" value="1" />&nbsp;
@@ -331,13 +331,13 @@
 				<table align="center" cellpadding="1" cellspacing="1">
 						<tr bgcolor="#EEEEEE">
 					<td colspan="5" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
-					<b><digi:trn key="rep:filter:RegionTitle">Region </digi:trn></b>
+					<b><digi:trn key="rep:filter:RegionTitle">Administrative Level 1</digi:trn></b>
 					<br>
 					</td>
 				</tr>
 				
 				<tr bgcolor="#EEEEEE" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
-					<td colspan="5"><digi:trn key="rep:filter:Location">Region</digi:trn></td>
+					<td colspan="5"><digi:trn key="rep:filter:Location">Administrative Level 1</digi:trn></td>
 				</tr>
 				<tr bgcolor="#EEEEEE" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
 					<td colspan="5"><html:select property="regionSelected"
@@ -851,7 +851,7 @@
 		</tr>
 		</table>
 		</div>
-		<feature:display name="Computed Columns Filters" module="Filter Section">
+		<feature:display name="Computed Year" module="Filter Widget">
 		<div id="CCSettings" >
 			<br>
 			<br>

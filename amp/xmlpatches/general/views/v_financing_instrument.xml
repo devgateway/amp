@@ -19,8 +19,19 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
-				DROP VIEW IF EXISTS v_financing_instrument CASCADE;
 				CREATE OR REPLACE VIEW v_financing_instrument AS
+				SELECT aav.amp_activity_id, 
+				    v.category_value,
+                    COALESCE(v.id, -999999999) AS id,
+                    v.terms_assist_id,
+                    v.financing_instrument_id,
+                    v.donor_org_id,
+                    v.mode_of_payment_id,
+                    v.funding_status_id,
+                    v.agreement_id,
+                    v.funding_id 
+                FROM amp_activity_version aav
+                LEFT JOIN (
 				  SELECT f.amp_activity_id, val.category_value,
 					f.financing_instr_category_value AS id,
 					f.type_of_assistance_category_va as terms_assist_id,
@@ -43,7 +54,9 @@
 					null::bigint as funding_id
 				  FROM amp_eu_activity eu
 					JOIN amp_eu_activity_contributions eu_con ON eu_con.eu_activity_id = eu.id
-					JOIN amp_category_value val ON eu_con.financing_instr_category_value = val.id;
+					JOIN amp_category_value val ON eu_con.financing_instr_category_value = val.id
+				 ) v
+				 ON aav.amp_activity_id = v.amp_activity_id;
 			]]></lang>
 		</script>
 	</apply>

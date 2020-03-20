@@ -135,7 +135,7 @@ public class GroupReportDataXLS extends XLSExporter{
                 }
             }
             catch(Exception e){
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 // autoSizeColumn() or setColumnWidth() sometime fail
             }
         }       

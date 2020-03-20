@@ -147,8 +147,10 @@ function init_ajax_upload(divId){
 //						alert(file.name);
 //					});
 					$.each(data.result, function (index, file) {
-						$('<p/>').text(file.name).appendTo(divId + ' .files-list');
-					});
+
+                        $('<p/>').attr("id", file.url.substring(file.url.lastIndexOf('?') + 1, file.url.length))
+                            .text(file.name).appendTo(divId + ' .files-list');
+                    });
 				},
 				progressall: function (e, data) {
 					var progress = parseInt(data.loaded / data.total * 100, 10);

@@ -48,6 +48,7 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.ManagedDocument;
 import org.digijava.module.aim.helper.OrgProjectId;
@@ -204,7 +205,7 @@ public class ShowActivityPrintPreview
                 }
                 eaForm.getIdentification().setAmpId(activity.getAmpId());
 
-                eaForm.getIdentification().setStatus(DbUtil.getActivityApprovalStatus(new Long(actId)));
+                eaForm.getIdentification().setStatus(DbUtil.getActivityApprovalStatus(new Long(actId)).getDbName());
 
                 String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 
@@ -326,11 +327,10 @@ public class ShowActivityPrintPreview
                           ISO = ampG.getGlobalSettingsValue();
                         }
                         
-                        //Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
                         Country cntry = DbUtil.getDgCountry(ISO);
                         location.setCountryId(cntry.getCountryId());
                         location.setCountry(cntry.getCountryName());
-                        location.setNewCountryId(cntry.getIso());
+                        location.setIso(cntry.getIso());
                         
                         location.setAmpCVLocation( loc.getLocation() );
                         if ( loc.getLocation() != null ){
@@ -338,8 +338,8 @@ public class ShowActivityPrintPreview
                             location.setLocationName(loc.getLocation().getName());
                             location.setLocId( loc.getLocation().getId() );
                         }
-                        AmpCategoryValueLocations ampCVRegion   = 
-                            DynLocationManagerUtil.getAncestorByLayer(loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                          AmpCategoryValueLocations ampCVRegion = DynLocationManagerUtil.getAncestorByLayer(
+                                  loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
                         if ( ampCVRegion != null ) {
                             if (eaForm.getFunding().getFundingRegions() == null) {
                               eaForm.getFunding()
@@ -426,8 +426,11 @@ public class ShowActivityPrintPreview
                 }
                 
                 String toCurrCode=null;
-                if (tm != null)
+                if (tm != null) {
                     toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+                } else {
+                    toCurrCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+                }
 
                 eaForm.getFunding().populateFromFundings(activity, toCurrCode, tm, false); // alternative to activity.getFunding(): DbUtil.getAmpFunding(activity.getAmpActivityId());
         
@@ -532,8 +535,8 @@ public class ShowActivityPrintPreview
 
                 eaForm.getComponents().setSelectedComponents(null);
                 eaForm.getComponents().setCompTotalDisb(0);
-                
-                Collection comp = ActivityUtil.getComponents(activity.getAmpActivityId());
+
+                Collection comp = activity.getComponents();
                 if (comp != null && comp.size() > 0) {
                     getComponents(comp, activity.getAmpActivityId(), eaForm);
                 }

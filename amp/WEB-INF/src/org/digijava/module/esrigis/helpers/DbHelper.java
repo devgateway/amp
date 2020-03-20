@@ -4,15 +4,12 @@ package org.digijava.module.esrigis.helpers;
  * @author Diego Dimunzio
  */
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,35 +17,23 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureType;
-import org.digijava.module.aim.dbentity.FundingInformationItem;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.logic.FundingCalculationsHelper;
-import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.jdbc.Work;
+import org.hibernate.criterion.Restrictions;
 
 public class DbHelper {
     private static Logger logger = Logger.getLogger(DbHelper.class);
@@ -139,149 +124,6 @@ public class DbHelper {
         return locationsMap;
     }
     
-    /**
-     * constructs a Map<ACVL.id, Region/Zone-ACVL.id>
-     * @param allUsedAcvlIDs
-     * @param impLevel
-     * @return
-     */
-    protected static Map<Long, Long> getLocationRegions(Set<Long> allUsedAcvlIDs, String impLevel)
-    {
-        final String findLocationRegionsQuery = 
-                String.format("SELECT acvl.id, getlocationidbyimpllocMap(acvl.id, '%s'::character varying) AS region_id FROM amp_category_value_location acvl WHERE acvl.id IN (" + Util.toCSStringForIN(allUsedAcvlIDs) + ")",
-                        impLevel);      
-        final Map<Long, Long> locationToRegion = new HashMap<Long, Long>();
-        PersistenceManager.getSession().doWork(new Work() {
-            public void execute(java.sql.Connection conn) throws java.sql.SQLException {
-                try(RsInfo rsi = SQLUtils.rawRunQuery(conn, findLocationRegionsQuery, null)) {
-                    while (rsi.rs.next()) {
-                        Long locId = rsi.rs.getLong(1);
-                        Long regionLocId = rsi.rs.getLong(2);
-                        locationToRegion.put(locId, regionLocId);
-                    }
-                }
-            }
-        });
-        return locationToRegion;
-    }
-    
-    /**
-     * generate a list of (Location, Funding) entries based on an unsorted input soup of funding information
-     * @param fundingDets - the input soup of raw funding information:
-     *  item[0] = FundingInformationItem fd
-     *  item[1] = [Long id] of region
-     *  item[2] = [String name] of region
-     *  item[3...end] = (optional) [Float locationPercentage, sectorPercentage, xxxPercentage]
-     * @param currCode - the code of the currency to use while doing the calculations
-     * @param adjustmentType - the adjustment type to add the totals to
-     * @param impLevel - the implementation level, used for location levels while walking up the hierarchy
-     * @param regListChildren - Collection<AmpCategoryValueLocations.id>, ignored
-     * @param decimalsToShow: decimals to format the output
-     * @param divideByDenominator: units used for formatting the output
-     * @return
-     */
-    protected static ArrayList<SimpleLocation> generateFundingSummaries(List<Object[]> fundingDets, String currCode, HardCodedCategoryValue adjustmentType, String impLevel, int decimalsToShow, BigDecimal divideByDenominator)
-    {
-        // collect all the location Ids existant in the system
-        Set<Long> allUsedAcvlIDs = new HashSet<Long>();
-        for(Object[] obj:fundingDets){
-            allUsedAcvlIDs.add((Long) obj[1]);
-        }
-
-        Map<Long, Long> locationToRegion = getLocationRegions(allUsedAcvlIDs, impLevel); // Map<acvl.id, region.id>
-        Map<Long, AmpCategoryValueLocations> regionLocations = getLocationsById(new HashSet<Long>(locationToRegion.values())); //Map<region.id, region>
-                
-        // group all funding items by respective region/zone/whatever
-        HashMap<Long, ArrayList<FundingInformationItem>> fundingByRegion = new HashMap<Long, ArrayList<FundingInformationItem>>();      
-        for(Object[] item:fundingDets)
-        {
-            FundingInformationItem fd = (FundingInformationItem) item[0];
-            FundingInformationItem currentFd;
-            if(fd.getTransactionType().equals(Constants.MTEFPROJECTION)){
-                currentFd=new AmpFundingMTEFProjection(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-            }else{
-                currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-            }
-            Double finalAmount = currentFd.getAbsoluteTransactionAmount();
-            for(int i = 3; i < item.length; i++)
-                if (item[i] != null)
-                {
-                    Float fl = (Float) item[i];
-                    finalAmount *= (fl / 100.0);
-                }
-            currentFd.setTransactionAmount(finalAmount);
-            Long originald = (Long) item[1];
-            Long regionId = locationToRegion.get(originald);
-            if (regionId == null)
-                continue; // this location has no region
-            
-            if (!fundingByRegion.containsKey(regionId))
-                fundingByRegion.put(regionId, new ArrayList<FundingInformationItem>());
-            
-            fundingByRegion.get(regionId).add(currentFd);
-        }
-        
-        ArrayList<SimpleLocation> regionTotals = new ArrayList<SimpleLocation>();
-        DecimalWraper totaldisbursement = null;
-        DecimalWraper totalexpenditures = null;
-        DecimalWraper totalcommitment = null;
-        DecimalWraper totalMtef = null;
-        Iterator<Long> it2 = fundingByRegion.keySet().iterator();
-        while(it2.hasNext())
-        {
-            Long locId = it2.next();
-            //Long regionId = locationToRegion.get(locId);
-            Long regionId = null;
-            for (Map.Entry<Long, Long> e : locationToRegion.entrySet()) {
-                if (e.getValue()==locId){
-                    regionId = e.getKey();
-                    break;
-                }
-            }
-            if (regionId!= 0L && regionId == null)
-                continue;
-
-            FundingCalculationsHelper cal = new FundingCalculationsHelper();
-
-            ArrayList<FundingInformationItem> afda = fundingByRegion.get(locId);
-            
-            cal.doCalculations(afda, currCode, true);
-           
-            if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                totalexpenditures = cal.getTotActualExp();
-            } else {
-                totalexpenditures = cal.getTotPlannedExp();
-            }
-            
-            if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                totaldisbursement = cal.getTotActualDisb();
-            } else {
-                totaldisbursement = cal.getTotPlanDisb();
-            }
-            
-            if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                totalcommitment = cal.getTotActualComm();
-            } else {
-                totalcommitment = cal.getTotPlannedComm();
-            }
-
-            totalMtef = cal.getTotalMtef(); // no adjustment for MTEF
-            
-            SimpleLocation sl = new SimpleLocation();
-            sl.setName(regionLocations.get(locId).getName());
-            sl.setGeoId(regionLocations.get(locId).getGeoCode());
-            sl.setCommitments(totalcommitment.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP).toString());
-            sl.setDisbursements(totaldisbursement.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP).toString());
-            sl.setExpenditures(totalexpenditures.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP).toString());
-            sl.setAmountsCurrencyCode(currCode); // was filter.getCurrencyCode()
-            sl.setMtef(totalMtef.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP).toString());
-            regionTotals.add(sl);
-        }
-    
-        return regionTotals;
-    }
-    
-    
     public static ArrayList<Long> getInActivitiesLong(String query)
             throws Exception {
         Session session = PersistenceManager.getRequestDBSession();
@@ -289,90 +131,6 @@ public class DbHelper {
         return result;
     }
     
-    public static AmpCategoryValueLocations getTopLevelLocation(AmpCategoryValueLocations location, String level) {
-        if (level.equals("Region"))
-            if (location.getParentLocation() != null && !location.getParentLocation().getParentCategoryValue().getValue().equals("Country")) {
-                location = getTopLevelLocation(location.getParentLocation(), level);
-            }
-        if (level.equals("Zone"))
-            if (location.getParentLocation() != null && !location.getParentLocation().getParentCategoryValue().getValue().equals("Region")) {
-                location = getTopLevelLocation(location.getParentLocation(), level);
-            }
-        return location;
-    }
-    
-    public static List<AmpOrganisation> getDonorOrganisationByGroupId(
-            Long orgGroupId, boolean publicView) {
-        Session session = null;
-        Query q = null;
-        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
-        StringBuilder queryString = new StringBuilder(
-                "select distinct org from "
-                        + AmpOrgRole.class.getName()
-                        + " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
-        if (publicView) {
-            queryString
-                    .append(" inner join orgRole.activity act  inner join act.team tm ");
-        }
-        queryString.append(" where  role.roleCode='DN' ");
-        if (orgGroupId != null && orgGroupId != -1) {
-            queryString.append(" and org.orgGrpId=:orgGroupId ");
-        }
-        if (publicView) {
-            queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus IN ('%s', '%s') and tm.parentTeamId is not null ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
-        }
-
-        queryString.append("order by org.name asc");
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            q = session.createQuery(queryString.toString());
-            if (orgGroupId != null && orgGroupId != -1) {
-                q.setLong("orgGroupId", orgGroupId);
-            }
-            organizations = q.list();
-        } catch (Exception ex) {
-            logger.error("Unable to get Amp organization names from database ",
-                    ex);
-        }
-        return organizations;
-    }
-
-    public static List<AmpOrganisation> getDonorOrganisationByType(
-            Long orgTypeId, boolean publicView) {
-        Session session = null;
-        Query q = null;
-        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
-        StringBuilder queryString = new StringBuilder(
-                "select distinct org from "
-                        + AmpOrgRole.class.getName()
-                        + " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
-        if (publicView) {
-            queryString
-                    .append(" inner join orgRole.activity act  inner join act.team tm ");
-        }
-        queryString.append(" where  role.roleCode='DN' ");
-        if (orgTypeId != null && orgTypeId != -1) {
-            queryString.append(" and org.orgGrpId.orgType=:orgtypeId ");
-        }
-        if (publicView) {
-            queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus in ('%s', '%s') and tm.parentTeamId is not null ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
-        }
-
-        queryString.append("order by org.name asc");
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            q = session.createQuery(queryString.toString());
-            if (orgTypeId != null && orgTypeId != -1) {
-                q.setLong("orgtypeId", orgTypeId);
-            }
-            organizations = q.list();
-        } catch (Exception ex) {
-            logger.error("Unable to get Amp organization names from database ",
-                    ex);
-        }
-        return organizations;
-    }
-
     public static Collection<AmpStructureType> getAllStructureTypes() {
         Session session = null;
         Query q = null;
@@ -414,23 +172,13 @@ public class DbHelper {
         return stt;
     }
 
-    public static Set<AmpActivity> getActivityByAmpId(String id) {
-        Session session = null;
-        Query q = null;
-        Set<AmpActivity> activities = null;
-        StringBuilder queryString = new StringBuilder("select a from "
-                + AmpActivity.class.getName() + " a ");
-        queryString.append("where a.ampId=:id");
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            q = session.createQuery(queryString.toString());
-            q.setString("id", id);
-            activities = new HashSet<AmpActivity>(q.list());
-
-        } catch (Exception ex) {
-            logger.error("Unable to get Amp Structure Type from database ", ex);
-        }
-        return activities;
+    public static AmpActivity getActivityByAmpId(String id) {
+        AmpActivity act = (AmpActivity) PersistenceManager.getSession()
+                .createCriteria(AmpActivity.class)
+                .add(Restrictions.eq("ampId", id))
+                .uniqueResult();
+        
+        return act;
     }
 
     public static AmpActivityVersion getActivityById(Long id) {

@@ -12,10 +12,10 @@ import java.util.TreeSet;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.event.Broadcast;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -33,6 +33,8 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.ContactChangedEvent;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.validators.ContactEmailValidator;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.helper.Constants;
@@ -51,8 +53,6 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
      * @param fmName
      * @throws Exception
      */
-    
-    final String  EXPRESSION = "^\\+?\\d?(\\([\\d]{1,3}\\))?[\\s\\d\\-\\/]*\\d+[\\s\\d\\-\\/]*";
     
     private WebMarkupContainer detailFeedbackContainer;
     private Label detailFeedbackLabel;
@@ -150,7 +150,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         else{
                             TextField<String> detailTextField=detailField.getTextContainer();
                             detailTextField.add(new AttributeModifier("size", "20"));
-                            detailTextField.add(new PatternValidator(EXPRESSION));
+                            detailTextField.add(new PatternValidator(ActivityEPConstants.REGEX_PATTERN_PHONE));
                             detailTextField.setRequired(true);
                         }
                         frg1.add(detailField);
@@ -174,7 +174,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                       
                             TextField<String> detailTextField=phn.getTextContainer();
                             detailTextField.setRequired(true);
-                            detailTextField.add(new PatternValidator(EXPRESSION));
+                            detailTextField.add(new PatternValidator(ActivityEPConstants.REGEX_PATTERN_PHONE));
                             detailTextField.add(new AttributeModifier("size", "20"));
                             final AmpTextFieldPanel<String> phnExt = new AmpTextFieldPanel<String>("phoneExt", extensionValueModel, fmName, true,true);
                             phnExt.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -188,7 +188,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                       
                             TextField<String> detailTextFieldExt=phnExt.getTextContainer();
                             detailTextFieldExt.setRequired(false);
-                            detailTextFieldExt.add(new PatternValidator(EXPRESSION));
+                            detailTextFieldExt.add(new PatternValidator(ActivityEPConstants.REGEX_PATTERN_PHONE));
                             detailTextFieldExt.add(new AttributeModifier("size", "5"));
                             final AmpCategorySelectFieldPanel typeField = new AmpCategorySelectFieldPanel("type",
                                     CategoryConstants.CONTACT_PHONE_TYPE_KEY, typeModel,
@@ -230,13 +230,20 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
         AmpAddLinkField addLink = new AmpAddLinkField("addDetailButton","Add Detail Button") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
-                if(detailsList.getModelObject().size() >= 3) {
-                    if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
-                        detailFeedbackLabel.setDefaultModelObject("*" + TranslatorUtil.getTranslatedText("Max limit for emails is 3"));                     
-                    }else if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-                        detailFeedbackLabel.setDefaultModelObject("*" + TranslatorUtil.getTranslatedText("Max limit for phones is 3"));
-                    }else if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_FAX)){
-                        detailFeedbackLabel.setDefaultModelObject("*" + TranslatorUtil.getTranslatedText("Max limit for faxes is 3"));
+                if (detailsList.getModelObject().size() >= ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE) {
+                    String property = "";
+                    if (contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)) {
+                        property = "emails";
+                    } else if (contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
+                        property = "phones";
+                    } else if (contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_FAX)) {
+                        property = "faxes";
+                    }
+                    
+                    if (StringUtils.isNotBlank(property)) {
+                        detailFeedbackLabel.setDefaultModelObject("*" 
+                                   + TranslatorUtil.getTranslatedText(String.format("Max limit for %s is %s", property, 
+                            ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE)));
                     }
                     detailFeedbackContainer.setVisible(true);
                     target.add(detailFeedbackContainer);
@@ -245,7 +252,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                     return;
                 }
                     
-                AmpContactProperty fakeContact1 = new AmpContactProperty();
+                AmpContactProperty fakeContact1 = AmpContactProperty.instantiate(contactProperty);
                 fakeContact1.setContact(model.getObject());
                 fakeContact1.setName(contactProperty);
                 fakeContact1.setValue("");

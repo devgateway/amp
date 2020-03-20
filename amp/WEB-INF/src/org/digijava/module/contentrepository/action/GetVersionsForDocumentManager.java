@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -28,6 +29,7 @@ import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerRights;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.contentrepository.util.DocumentsNodesAttributeManager;
 
 
 /**
@@ -61,8 +63,8 @@ public class GetVersionsForDocumentManager extends Action {
                     Node n                  = nIter.nextNode();
                     boolean thisVersionNeedsApproval=false;
                     //if this node is not approved,then only TL or it's creator should be allowed to see the version
-                    if(DocumentManagerUtil.isGivenVersionPendingApproval(n.getUUID())!=null){
-                        thisVersionNeedsApproval=true;
+                    if (DocumentManagerUtil.isGivenVersionPendingApproval(n.getIdentifier()) != null) {
+                        thisVersionNeedsApproval = true;
                     }
                     if(thisVersionNeedsApproval){
                         //thisVersionNeedsApproval=true;
@@ -114,13 +116,15 @@ public class GetVersionsForDocumentManager extends Action {
         if ( docData.getVersionNumber() == 0 )
             docData.setVersionNumber(verNum);
         
-        HashMap<String,CrDocumentNodeAttributes> uuidMapVer     = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
-        String nodeUUID                                         = n.getUUID();
+        Map<String, CrDocumentNodeAttributes> uuidMapVer = DocumentsNodesAttributeManager.getInstance()
+                .getPublicDocumentsMap(true);
+        
+        String nodeUUID = n.getIdentifier();
         if ( uuidMapVer.containsKey(nodeUUID) ) {
             docData.setIsPublic(true);
         }
         //if this version is shared or not
-        boolean isCurrentVersionShared=DocumentManagerUtil.isGivenVersionShared(n.getUUID());
+        boolean isCurrentVersionShared = DocumentManagerUtil.isGivenVersionShared(n.getIdentifier());
         docData.setIsShared(isCurrentVersionShared);
         
         docData.setCurrentVersionNeedsApproval(versionNeedsApproval);

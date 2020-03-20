@@ -189,6 +189,13 @@
 														<nested:checkbox property="splitByFunding"/>
 														<digi:trn>Split by funding</digi:trn>
 													</div>
+													<div id="showOriginalCurrencyDiv" >
+													    <c:set var="showOriginalCurrencyExplanation">
+                                                            <digi:trn>This feature will show each transaction in the currency originally reported in the AMP.</digi:trn>
+                                                        </c:set>
+                                                        <nested:checkbox property="showOriginalCurrency" title="${showOriginalCurrencyExplanation}" onchange="createPreview();"/>
+                                                        <digi:trn>Show Original reporting currencies</digi:trn>
+                                                    </div>
 			                                    </div>
 											</fieldset>
 										</td>

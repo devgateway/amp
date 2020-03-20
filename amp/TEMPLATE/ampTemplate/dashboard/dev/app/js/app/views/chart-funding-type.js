@@ -1,6 +1,8 @@
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
+var util = require('../../ugly/util');
+
 var ProjectsListModalView = require('./chart-detail-info-modal');
 
 module.exports = ChartViewBase.extend({
@@ -60,17 +62,16 @@ module.exports = ChartViewBase.extend({
     });
     
     var totalForYear = this.model.get('yearTotals') ? this.model.get('yearTotals')[context.x.raw ] : null;
-    var d3FormatTotal = '', totalSpan = '';
-    if(totalForYear && totalForYear != 0){
-    	d3FormatTotal = d3.format('f')(context.y.raw / totalForYear * 100) + ' %';
-        totalSpan = ' &nbsp<span>' + total + '</span>';
-    }
+    var totalSpan = ' &nbsp<span>' + total + '</span>';
+    var ofTotal =  of + '</span>&nbsp' + context.x.raw + totalSpan;
+    var footerText =  util.formatOfTotal(context.y.raw,totalForYear,ofTotal);
+
     var self = this;
     var currencyName =  app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;  
     return {tt: {
       heading: context.x.raw + ' ' + activeTooltipTitles[context.series.index].key,
       bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
-      footerText: '<b>' + d3FormatTotal + '</b>&nbsp<span>' + of + '</span>&nbsp' + context.x.raw + totalSpan
+      footerText: footerText + '</span>'
     }};
   },
 

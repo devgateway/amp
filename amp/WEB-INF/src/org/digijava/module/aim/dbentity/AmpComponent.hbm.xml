@@ -15,12 +15,8 @@
 		<property column="code" name="code" type="java.lang.String" />
 		<property column="creation_date" name="creationdate" type="java.sql.Timestamp" />
 
-		<set name="activities" table="AMP_ACTIVITY_COMPONENTS" lazy="true" cascade="none">
-			<cache usage="read-write" />
-			<key column="amp_component_id" />
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivityVersion"
-				column="amp_activity_id" />
-		</set>
+		<many-to-one name="activity" column="amp_activity_id" index="i_activity"
+					 class="org.digijava.module.aim.dbentity.AmpActivityVersion" />
 
 		<many-to-one name="type" column="type"
 			class="org.digijava.module.aim.dbentity.AmpComponentType" cascade="none" />

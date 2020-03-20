@@ -307,7 +307,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
                         target.add(list.getParent());
                         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
                     } catch (Exception e) {
-                        logger.error(e);
+                        logger.error(e.getMessage(), e);
                     }
                 }else{
                     updateVisibility(newInd);

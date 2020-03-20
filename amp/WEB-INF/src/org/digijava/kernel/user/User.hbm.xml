@@ -24,7 +24,6 @@
 		<property name="passQuestion" column="PASS_QUESTION" type="java.lang.String" />
 		<property name="passAnswer" column="PASS_ANSWER" type="java.lang.String" />
 		<property name="url" column="URL" type="java.lang.String" />
-		<property name="active" column="ACTIVE" type="boolean" />
 		<property name="banned" column="BANNED" type="boolean" />
 		<property name="referral" column="REFERRAL" type="java.lang.String" />
 		<property column="ORGANIZATION_TYPE_OTHER" name="organizationTypeOther" type="text" />
@@ -63,12 +62,15 @@
 
 		<many-to-one name="registeredThrough" column="REGISTERED_THROUGH" class="org.digijava.kernel.request.Site" cascade="none" />
 		
-		<set name="assignedOrgs" table="DG_USER_ORGS" lazy="false" cascade="none">
+		<set name="assignedOrgs" table="DG_USER_ORGS" lazy="true" cascade="none">
 		 	<cache usage="read-write" />
  	 	 	<key column="USER_ID" />
  	        <many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="ORG_ID"/>
  	 	</set>
 		<property name="pledger" column="PLEDGER" type="boolean" />
+		<property name="pledgeSuperUser"  type="boolean" >
+			<column name="PLEDGE_SUPER_USER" default="false"/>
+		</property>
 
 		<property name="passwordChangedAt" column="PASSWORD_CHANGED_AT" type="java.util.Date" />
 		<property name="exemptFromDataFreezing" column="EXEMPT_FROM_DATA_FREEZING" type="boolean" />

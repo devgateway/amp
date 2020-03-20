@@ -72,7 +72,6 @@ public class AmpEstimatedDonorDisbursementsFormTableFeature extends
             protected void onPopulateItem(
                     org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
                 item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
-                addFreezingvalidator(item);
                 AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
                 item.add(amountComponent);
                 addFreezingvalidator(item);

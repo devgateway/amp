@@ -61,6 +61,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 			regenerate : true,
 			columns_with_ids : app.TabsApp.COLUMNS_WITH_IDS,
 			filters : jsonFilters,
+			'include-location-children': app.TabsApp.serializedFilters ? app.TabsApp.serializedFilters['include-location-children'] : true,
 			settings : settings
 		};
 		if (app.TabsApp.currentSorting !== undefined) {
@@ -113,7 +114,6 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 					{
                         direction: getDirection(),
 						caption : false,
-						/* url : '/rest/data/report/' + id + '/result/', */
 						url : getURL(id),
 						datatype : 'json',
 						mtype : 'POST',
@@ -124,7 +124,8 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 							page : 1,
 							regenerate : true,
 							columns_with_ids : app.TabsApp.COLUMNS_WITH_IDS,
-							filters : app.TabsApp.serializedFilters.filters
+							filters : app.TabsApp.serializedFilters.filters,
+							'include-location-children': app.TabsApp.serializedFilters ? app.TabsApp.serializedFilters['include-location-children'] : true
 						},
 						jsonReader : {
 							repeatitems : false,
@@ -182,7 +183,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 							}
 							data.MD5 = generateMD5(data.filters, data.settings,  
 									{sidx: jQuery(grid).jqGrid('getGridParam','sortname'), sord: jQuery(grid).jqGrid('getGridParam','sortorder')}, 
-									id, app.TabsApp.generalSettings.get('language'), reportTimestamp);
+									data['include-location-children'], id, app.TabsApp.generalSettings.get('language'), reportTimestamp);
 							
 							return JSON.stringify(data);
 						},
@@ -209,9 +210,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 
 							if(app.TabsApp.settings.teamId){
 								teamid = app.TabsApp.settings.teamId;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
-								teamlead = (app.TabsApp.settings.teamLead === 'true');
-								validator = (app.TabsApp.settings.validator === 'true');
+								crossTeamValidation = app.TabsApp.settings.crossTeamEnable;
+								teamlead = app.TabsApp.settings.teamLead;
+								validator = app.TabsApp.settings.validator;
 								teamtype = app.TabsApp.settings.accessType;
 							}
 							if(app.TabsApp.settings.workspacePrefix){
@@ -252,9 +253,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								if(!teamid) continue;
 								
 								teamid = app.TabsApp.settings.teamId;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
-								teamlead = (app.TabsApp.settings.teamLead === 'true');
-								validator = (app.TabsApp.settings.validator === 'true');
+								crossTeamValidation = app.TabsApp.settings.crossTeamEnable;
+								teamlead = app.TabsApp.settings.teamLead;
+								validator = app.TabsApp.settings.validator;
 								teamtype = app.TabsApp.settings.accessType;
 								
 								// Set font color according to status.
@@ -316,9 +317,10 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								};
 
 								// Assign colors for each row for loggued users.
+								var statusClass = '';
 								var x = getApprovalStatus(draft, approvalStatus);
 								if (x === statusMapping.Approved) {
-									row.className = className + ' status_1';
+									statusClass = ' status_1';
 									// Create link to edit activity.
 									if (teamtype !== app.TabsApp.MANAGER_TYPE) {
 										jQuery(row.cells[0]).html(iconedit + link);
@@ -327,11 +329,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 									}
 
 								} else if (x === statusMapping.Existing_Draft || x === statusMapping.New_Draft) {
-									row.className = className + ' status_2';
+									statusClass = ' status_2';
 									jQuery(row.cells[0]).html(iconedit);
 
 								} else if (x === statusMapping.Existing_Unvalidated || x === statusMapping.New_Unvalidated) {
-									row.className = className + ' status_3';
+									statusClass = ' status_3';
 									// Cross team enable team lead and validators able to validate show icon.
 									if (crossTeamValidation && (teamlead || validator)) {
 										if (teamtype !== app.TabsApp.MANAGER_TYPE) {
@@ -347,6 +349,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										jQuery(row.cells[0]).html(iconedit);
 									}
 								}
+								row.className = className + statusClass;
 
 								// Create link to preview activity on first not grouped column.
 								var colIndex = -1;
@@ -355,7 +358,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										colIndex = i;
 									}
 								});
-                                var newContent = "<a class='preview-cell' href='" + getPreviewPageURL(id) + "'>"
+                                var newContent = "<a class='preview-cell" + statusClass + "' href='" + getPreviewPageURL(id) + "'>"
 									+ jQuery(row.cells[colIndex]).html() + "</a>";
 								jQuery(row.cells[colIndex]).html(newContent);
 							}
@@ -536,6 +539,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 					if (column.hierarchicalName === "[" + app.TabsApp.COLUMNS_WITH_IDS[0] + "]" && element && element.entityId !== undefined) {
 						row[app.TabsApp.COLUMN_ACTIVITY_ID] = element.entityId;
 					}
+					
+					// for team column it is needed to fetch the entityId
+					if (column.hierarchicalName === "[" + app.TabsApp.COLUMNS_WITH_IDS[1] + "]" && element && element.entityId !== undefined) {
+						row[column.columnName] = element.entityId;
+					}
 				});
 				
 				// To flatten the tree structure and maintain hierarchies values on every row we add the values from "auxCurrentHierarchiesValues".
@@ -640,7 +648,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 
 	return GridManager;
 	
-	function generateMD5(filters, settings, sorting, id, lang, timestamp) {
+	function generateMD5(filters, settings, sorting, includeLocationChildren, id, lang, timestamp) {
 		var model = {queryModel: {}};
 		if (filters !== null) {
 			model.queryModel.filters = filters;
@@ -651,6 +659,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		if (sorting !== null) {
 			model.queryModel.sorting = sorting;
 		}
+
+        if (includeLocationChildren !== null) {
+            model.queryModel['include-location-children'] = includeLocationChildren;
+        }
+
 		var md5 = CommonFilterUtils.calculateMD5FromParameters(model, id, lang, timestamp);
 		
 		return md5;

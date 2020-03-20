@@ -39,6 +39,19 @@ var formatShortText = function(maxWidth) {
     return text;
   };
 };
+var formatOfTotal = function(dividend, divisor,ofTotal) {
+    var isRtl = app.generalSettings.attributes['rtl-direction'];
+
+    if (dividend > 0) {
+        var number = d3.format('f')(dividend / divisor * 100);
+        if (isRtl) {
+            ofTotal = ofTotal + ' &nbsp<span>' + '<b>% ' + number + '</b>';
+        } else {
+            ofTotal = '<b>' + number + ' %' + '</b>&nbsp<span>' + ofTotal;
+        }
+    }
+    return ofTotal;
+}
 
 
 var categoryColours = function(cats) {
@@ -166,13 +179,14 @@ function calculateChartHeight(length, isDownload, model) {
 
 
 module.exports = {
-  formatKMB: formatKMB,
-  translateLanguage: translateLanguage,
-  formatShortText: formatShortText,
-  categoryColours: categoryColours,
-  u16le64: u16le64,
-  textAsDataURL: textAsDataURL,
-  transformArgs: transformArgs,
-  data: data,
-  calculateChartHeight: calculateChartHeight
+    formatKMB: formatKMB,
+    translateLanguage: translateLanguage,
+    formatShortText: formatShortText,
+    categoryColours: categoryColours,
+    u16le64: u16le64,
+    textAsDataURL: textAsDataURL,
+    transformArgs: transformArgs,
+    data: data,
+    calculateChartHeight: calculateChartHeight,
+    formatOfTotal: formatOfTotal
 };

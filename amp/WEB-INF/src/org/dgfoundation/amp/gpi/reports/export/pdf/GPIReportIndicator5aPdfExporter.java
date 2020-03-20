@@ -20,9 +20,16 @@ import com.lowagie.text.pdf.PdfPTable;
  *
  */
 public class GPIReportIndicator5aPdfExporter extends GPIReportPdfExporter {
+    
+    static final float GPI_COLUMN_4 = 4f;
+    static final float GPI_COLUMN_8 = 8f;
+    static final float GPI_COLUMN_10 = 10f;
+    static final float GPI_COLUMN_20 = 20f;
+    static final float GPI_COLUMN_24 = 24f;
 
     public GPIReportIndicator5aPdfExporter() {
-        relativeWidths = new float[] { 4f, 20f, 10f, 10f, 8f, 8f, 8f, 8f, 8f, 16f };
+        relativeWidths = new float[] { GPI_COLUMN_4, GPI_COLUMN_20, GPI_COLUMN_10, GPI_COLUMN_10, GPI_COLUMN_8, 
+                GPI_COLUMN_8, GPI_COLUMN_8, GPI_COLUMN_8, GPI_COLUMN_24 };
         reportTitle = "Indicator 5a";
     }
 

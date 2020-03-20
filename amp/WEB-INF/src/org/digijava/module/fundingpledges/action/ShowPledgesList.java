@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.*;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.fundingpledges.PledgeFormUtils;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
@@ -42,7 +43,11 @@ public class ShowPledgesList extends Action {
                 pledge.getYearsList().add(fpd.getDatesDescription());
             }
         }
+
         plForm.setAllFundingPledges(pledges);
+
+        PledgeFormUtils.pumpFlashAttribute(request, "PNOTIFY_ERROR_MESSAGE");
+        PledgeFormUtils.pumpFlashAttribute(request, "PNOTIFY_ERROR_TITLE");
         return mapping.findForward("forward");
     }
 

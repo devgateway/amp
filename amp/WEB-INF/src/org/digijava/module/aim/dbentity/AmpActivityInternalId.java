@@ -5,21 +5,26 @@ import java.util.ArrayList;
 
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.util.Output;
 
 public class AmpActivityInternalId implements Serializable, Versionable, Cloneable {
     //IATI-check: used. 
     private static final long serialVersionUID = 469552292854192522L;
-    
+
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long id;
 
-    @Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true)
+    @Interchangeable(fieldTitle = "Organization", importable = true, pickIdOnly = true)
     private AmpOrganisation organisation;
 
-    @Interchangeable(fieldTitle="AMP Activity", pickIdOnly=true)
+    @InterchangeableBackReference
     private AmpActivityVersion ampActivity;
     
-    @Interchangeable(fieldTitle="Internal ID", importable=true)
+    @Interchangeable(fieldTitle = "Internal ID", importable = true,
+            fmPath = "/Activity Form/Activity Internal IDs/Internal IDs/internalId")
     private String internalId;
 
     public Long getId() {
@@ -99,4 +104,5 @@ public class AmpActivityInternalId implements Serializable, Versionable, Cloneab
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
 }

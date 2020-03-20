@@ -493,7 +493,7 @@
 												%> <jsp:useBean id="urlParamsPagination"
 															type="java.util.Map" class="java.util.HashMap" /> <c:set
 															target="${urlParamsPagination}" property="action"
-															value="getPage" /> <digi:trn key="aim:pages">Pages :</digi:trn>&nbsp;
+															value="getPage" /> <digi:trn key="aim:pages">Pages:</digi:trn>&nbsp;
 														<c:if test="${aimActivityForm.currentPage >0}">
 															<jsp:useBean id="urlParamsFirst" type="java.util.Map"
 																class="java.util.HashMap" />

@@ -84,10 +84,9 @@ module.exports = Backbone.View.extend({
     this.$el.append('<div id="map-loading" style="position: absolute;left: 50%;top: 50%;">' +
       '<img src="img/loading-icon.gif"></div>');
 
-    this._renderCountryBoundary();
-    this.map.invalidateSize();
-
-    return this;
+     this._renderCountryBoundary();
+     this.map.invalidateSize();
+     return this;
   },
 
   _renderCountryBoundary: function() {
@@ -106,27 +105,43 @@ module.exports = Backbone.View.extend({
         self.countryBoundary = L.geoJson(boundary, {
           onEachFeature: function(feature) {
 
-            //For the AMP GIS app, use the sidebar width as padding */
-            var sidebarExpansionWidth = $('#sidebar').width();
-            /*TODO(thadk): consider using mapHeader height as well, shrinks DRC for me: */
-            /*var mapHeaderHeight = $('#map-header').height();*/
+              //For the AMP GIS app, use the sidebar width as padding */
+              var sidebarExpansionWidth = $('#sidebar').width();
 
-            var natlBounds = L.GeoJSON.geometryToLayer(feature.geometry).getBounds();
+              var paddingToLeft = {
+                  paddingTopLeft: new L.Point(sidebarExpansionWidth, 0)
+              };
 
-            /*
-             * If current viewport is already in
-             * the AMP country, then preserve the state rather that resetting.
-             *
-             * for the case where a state is saved which is not quite exactly inside
-             * the AMP national boundarybox, we add 30% padding to all directions
-             *
-             **/
-            if (!natlBounds.pad(30).contains(self.map.getBounds())) {
-              self.map.fitBounds(natlBounds, {
-                paddingTopLeft: new L.Point(sidebarExpansionWidth, 0)
-              });
-            }
+              /*TODO(thadk): consider using mapHeader height as well, shrinks DRC for me: */
+              /*var mapHeaderHeight = $('#map-header').height();*/
 
+              var natlBounds = L.GeoJSON.geometryToLayer(feature.geometry).getBounds();
+
+              if (boundary0.attributes['rectangle-to-center-gis']) { //If there is a rectangle configured in
+                  // list.json then we use it to center the map so that rectangle is visible
+                  var upperLeftCorner = boundary0.attributes['rectangle-to-center-gis']['upper-left-corner'],
+                      lowerRightCorner = boundary0.attributes['rectangle-to-center-gis']['lower-right-corner'];
+
+                  var corner1 = L.latLng(upperLeftCorner.lat, upperLeftCorner.long),
+                      corner2 = L.latLng(lowerRightCorner.lat, lowerRightCorner.long),
+                      jordanBounds = L.latLngBounds(corner1, corner2);
+
+
+                  self.map.fitBounds(jordanBounds, paddingToLeft);
+              }
+              else {
+                  /*
+                   * If current viewport is already in
+                   * the AMP country, then preserve the state rather that resetting.
+                   *
+                   * for the case where a state is saved which is not quite exactly inside
+                   * the AMP national boundarybox, we add 30% padding to all directions
+                   *
+                   **/
+                  if (!natlBounds.pad(30).contains(self.map.getBounds())) {
+                      self.map.fitBounds(natlBounds, paddingToLeft);
+                  }
+              }
           },
           style:  {color: '#29343F', fillColor:'none', weight: 1.4, dashArray: '1'}
         }).addTo(self.map);
@@ -145,7 +160,6 @@ module.exports = Backbone.View.extend({
       zoom: this.map.getZoom()
     };
   },
-
   _setMapView: function(stateBlob) {
     this.map.setView(stateBlob.center, stateBlob.zoom);
   },

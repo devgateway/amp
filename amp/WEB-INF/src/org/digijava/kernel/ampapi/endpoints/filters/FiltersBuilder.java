@@ -36,7 +36,7 @@ public class FiltersBuilder {
     }
     
     public static SettingField buildOptionsField(String id, String defaultId, List<SettingOptions.Option> options) {
-        return new SettingField(id, FiltersConstants.ID_GROUP_MAP.get(id), FiltersConstants.ID_NAME_MAP.get(id), 
+        return SettingField.create(id, FiltersConstants.ID_GROUP_MAP.get(id), FiltersConstants.ID_NAME_MAP.get(id),
                 new SettingOptions(defaultId, options));
     }
 

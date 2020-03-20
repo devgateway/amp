@@ -8,6 +8,9 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
+			
+			    ALTER TABLE amp_activity_group
+                  DROP COLUMN IF EXISTS "version"; 
 
 				ALTER TABLE amp_activity_group
 				  ADD COLUMN "version" BIGINT NOT NULL DEFAULT 0;

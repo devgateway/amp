@@ -14,7 +14,7 @@
 "amp.common:title-documents": "Documents",
 "amp.common:title-dashboards": "Dashboards",
 "amp.common:subtitle-gis": "New GIS (BETA)",
-"amp.common:subtitle-dashboards": "New Dashboard (BETA)",
+"amp.common:subtitle-dashboards": "Dashboard",
 "amp.common:subtitle-dashboard-generator": "Dashboard Generator",
 "amp.common:subtitle-donor-profile": "Donor Profile",
 "amp.common:subtitle-region-profile": "Region Profile",
@@ -33,10 +33,10 @@
 "amp.common:title-logout": "Log Out",
 "amp.gis:title-projectdata": "Project Data",
 "amp.gis:menu-title-projectdata": "View where projects are being implemented throughout the country.",
-"amp.gis:title-Country": "Country",
-"amp.gis:title-Region": "Region",
-"amp.gis:title-Zone": "Zone",
-"amp.gis:title-District": "District",
+"amp.gis:title-AdministrativeLevel0": "Administrative Level 0",
+"amp.gis:title-AdministrativeLevel1": "Administrative Level 1",
+"amp.gis:title-AdministrativeLevel2": "Administrative Level 2",
+"amp.gis:title-AdministrativeLevel3": "Administrative Level 3",
 "amp.gis:title-ProjectSites": "Project Sites",
 "amp.gis:title-statisticaldata": "Statistical Data",
 "amp.gis:menu-title-Countryindicators": "Country indicators",
@@ -113,5 +113,6 @@
 "amp.gis-layers-manager:tooltip-created-by": "by",
 "amp.gis:date-from": "From",
 "amp.gis:date-until": "Until",
-"amp.gis:title-performance-selector": "Good Performance Projects View"
+"amp.gis:title-performance-selector": "Good Performance Projects View",
+"amp.gis:legend-custom-structure-colors": "Infrastructure Colors"
 }

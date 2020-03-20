@@ -152,7 +152,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
                 Set<Integer> concessional = new HashSet<>();
                 for (ReportArea budgetArea : reportArea.getChildren()) {
                     ReportCell rc = budgetArea.getContents()
-                            .get(headersMap.get(ColumnConstants.ON_OFF_TREASURY_BUDGET));
+                            .get(headersMap.get(ColumnConstants.ACTIVITY_BUDGET));
                     if (String.valueOf(rc.value).equals(ACTIVITY_BUDGET_ON)) {
                         concessional.add(1);
                     } else if (String.valueOf(rc.value).equals("Off Budget")) {
@@ -206,13 +206,14 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
                     v.forEach((x, y) -> {
                         if (MeasureConstants.DISBURSED_AS_SCHEDULED.equals(x)
                                 || MeasureConstants.OVER_DISBURSED.equals(x)) {
-                            BigDecimal percentage = new BigDecimal(((AmountCell) y).extractValue());
+                            BigDecimal percentage = ((AmountCell) y).extractValue();
                             row.put(getColumns().get(x), percentage.setScale(0, RoundingMode.HALF_UP) + "%");
                         } else {
                             row.put(getColumns().get(x), y.displayedValue);
                         }
                         if (YEAR_LEVEL_HIERARCHIES.contains(x)) {
-                            if (y instanceof AmountCell && (((AmountCell) y).extractValue() != 0)) {
+                            if (y instanceof AmountCell
+                                    && ((AmountCell) y).extractValue().compareTo(BigDecimal.ZERO) != 0) {
                                 isRowEmpty.set(false);
                             }
 
@@ -255,7 +256,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
         String donorType = isDonorAgency ? GPIReportConstants.HIERARCHY_DONOR_AGENCY
                 : GPIReportConstants.HIERARCHY_DONOR_GROUP;
 
-        int y = Integer.parseInt(year);
+        int y = parseYear(year);
         String min = Integer.toString(DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y, 1)));
         String max = Integer.toString(DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y + 1, 1)));
 
@@ -265,7 +266,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
     private Integer getNumberOfRemarks(String year, long id, List<AmpGPINiDonorNotes> donorNotes) {
         String donorType = isDonorAgency ? GPIReportConstants.HIERARCHY_DONOR_AGENCY
                 : GPIReportConstants.HIERARCHY_DONOR_GROUP;
-        int y = Integer.parseInt(year);
+        int y = parseYear(year);
         Integer from = DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y, 1));
         Integer to = DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y + 1, 1));
         List<Long> donorIds = new ArrayList<>();
@@ -312,14 +313,14 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
                 .flatMap(budgetArea -> budgetArea.getContents().entrySet().stream())
                 .filter(entry -> isTotalMeasureColumn(MeasureConstants.ACTUAL_DISBURSEMENTS, entry.getKey()))
                 .map(entry -> entry.getValue()).filter(rc -> rc != null)
-                .map(rc -> new BigDecimal(((AmountCell) rc).extractValue())).reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(rc -> ((AmountCell) rc).extractValue()).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         // get the sum of planned disbursements for on-budget projects
         BigDecimal planDisbSum = onBudgetAreas.stream()
                 .flatMap(budgetArea -> budgetArea.getContents().entrySet().stream())
                 .filter(entry -> isTotalMeasureColumn(MeasureConstants.PLANNED_DISBURSEMENTS, entry.getKey()))
                 .map(entry -> entry.getValue()).filter(rc -> rc != null)
-                .map(rc -> new BigDecimal(((AmountCell) rc).extractValue())).reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(rc -> ((AmountCell) rc).extractValue()).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         columns.put(new GPIReportOutputColumn(MeasureConstants.DISBURSED_AS_SCHEDULED),
                 formatAmount(generatedReport, calculateDisbursedAsScheduled(actDisbSum, planDisbSum), false) + "%");
@@ -383,6 +384,11 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
     
     public String getColumnLabel(String columnName) {
         return getColumnLabel(GPIReportConstants.INDICATOR_5A_COLUMN_LABELS, columnName);
+    }
+    
+    private int parseYear(String year) {
+        int y = Integer.parseInt(year.replaceAll("[^0-9-]", "").split("-")[0]);
+        return y;        
     }
 
 }

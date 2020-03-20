@@ -390,7 +390,7 @@ function exportScorecard () {
 									</c:choose>
 								</td>
 								<td align="center" width="150" title="${log.objectTypeTrimmed}">
-									<digi:trn key="aim:ObjectType${log.objectTypeTrimmed}"><bean:write name="log" property="objectTypeTrimmed"/></digi:trn>									
+									<bean:write name="log" property="objectTypeTrimmed"/>
 								</td>
 								<td align="center" width="100" title="${log.teamName}">
 									<bean:write name="log" property="teamName"/>									

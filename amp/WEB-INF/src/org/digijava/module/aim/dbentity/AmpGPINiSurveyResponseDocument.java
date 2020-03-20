@@ -37,4 +37,5 @@ public class AmpGPINiSurveyResponseDocument extends ObjectReferringDocument impl
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+    
 }

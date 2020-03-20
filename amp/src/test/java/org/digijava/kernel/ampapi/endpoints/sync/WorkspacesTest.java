@@ -7,9 +7,11 @@ import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEqua
 
 import java.io.IOException;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.dgfoundation.amp.testutils.InTransactionRule;
 import org.digijava.kernel.AbstractIntegrationTest;
 import org.digijava.module.aim.util.TeamUtil;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -18,6 +20,9 @@ import org.junit.Test;
 public class WorkspacesTest extends AbstractIntegrationTest {
     
     private ObjectMapper mapper = new ObjectMapper();
+
+    @Rule
+    public InTransactionRule inTransactionRule = new InTransactionRule();
     
     @Test
     public void testFilteredWorkspaces() throws IOException {

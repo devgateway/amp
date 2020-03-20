@@ -13,12 +13,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.lang.math.NumberUtils;
+import javax.ws.rs.core.Response;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -42,7 +43,7 @@ public class PopulationLayerDesignator {
      */
     public List<Long> getAllowedPopulationLayersOptions() {
         AmpCategoryValue typeAcv = CategoryConstants.INDICATOR_LAYER_TYPE_COUNT.getAmpCategoryValueFromDB();
-        AmpCategoryValue admAcv = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
+        AmpCategoryValue admAcv = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getAmpCategoryValueFromDB();
         Long admId = admAcv == null ? null : admAcv.getId(); // exclude none if something wrong  
         if (typeAcv != null && typeAcv.isVisible()) {
             return DynLocationManagerUtil.getIndicatorLayersIdsByTypeExcludeAdm(typeAcv.getId(), admId);
@@ -52,12 +53,11 @@ public class PopulationLayerDesignator {
     
     /**
      * Designate indicator layers as population layers for their corresponding admLevel. 
-     * @param designatedIndicators indicator layers ids list
+     * @param populationLayerRequest containing indicator layers ids list
      * @return no data on success or errors
      */
-    public JsonBean designateAsPopulationLayers(JsonBean input) {
-        JsonBean result = new JsonBean();
-        List<Long> ids = getIds(input);
+    public void designateAsPopulationLayers(PopulationLayerRequest populationLayerRequest) {
+        List<Long> ids = populationLayerRequest.getLayersIds();
         LOGGER.info("Designating new population layers: " + Util.toCSString(ids));
         
         List<AmpIndicatorLayer> newPopulationLayers = new ArrayList<>(ids.size());
@@ -79,15 +79,14 @@ public class PopulationLayerDesignator {
         
         if (errors.isEmpty()) {
             DynLocationManagerUtil.setIndicatorLayersPopulation(false, null);
-            if(!ids.isEmpty()) {
+            if (!ids.isEmpty()) {
                 DynLocationManagerUtil.setIndicatorLayersPopulation(true, ids);
             }
-            LOGGER.info("New population layers designated successfully");
-        } else {
-            result = ApiError.toError(errors.getAllErrors());
-            LOGGER.warn("New population layers could not be desiganted due to errors: " + result.asJsonString());
+            
+            return;
         }
-        return result;
+    
+        throw new AmpWebApplicationException(Response.Status.BAD_REQUEST, ApiError.toError(errors));
     }
     
     private void validate(Map<Long, Set<Long>> admLevelIndicatorMap, Map<Long, AmpIndicatorLayer> idToAil) {
@@ -123,7 +122,7 @@ public class PopulationLayerDesignator {
         String invalidTypes = "";
         String invalidAdmLevel = "";
         String allowedType = CategoryConstants.INDICATOR_LAYER_TYPE_COUNT.getValueKey();
-        String notAllowedAdm = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
+        String notAllowedAdm = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey();
         for (AmpIndicatorLayer newPopLayer : idToAil.values()) {
             if (newPopLayer == null) continue;
             String indType = newPopLayer.getIndicatorType() == null ? null : newPopLayer.getIndicatorType().getValue();
@@ -154,23 +153,6 @@ public class PopulationLayerDesignator {
             invalidLayers += ", " + (ail == null ? "id = " + id : "name = " + ail.getName());
         }
         return layerIds.size() > 0 ? invalidLayers.substring(2) : invalidLayers;
-    }
-    
-    private List<Long> getIds(JsonBean input) {
-        List<Long> result = new ArrayList<>();
-        Object layerIds = input.get("layersIds");
-        if (layerIds != null && List.class.isAssignableFrom(layerIds.getClass()) && !((List) layerIds).isEmpty()) {
-            for (Object oId : (List) layerIds) {
-                String id = String.valueOf(oId);
-                if (NumberUtils.isDigits(id)) {
-                    result.add(Long.parseLong(id));
-                } else {
-                    result.clear();
-                    break;
-                }
-            }
-        }
-        return result;
     }
 
 }

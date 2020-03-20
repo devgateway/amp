@@ -15,10 +15,9 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Donor Group'
 				,'Donor Agency'
 				,'Primary Sector'
-				,'Status', 'Region', 'Country', 'District','Zone'
+				,'Status', 'Administrative Level 0', 'Administrative Level 1', 'Administrative Level 2','Administrative Level 3'
 				,'Type Of Assistance'
 				,'Financing Instrument'
-				,'National Planning Objectives'
 				,'National Planning Objectives Level 1'
 				,'National Planning Objectives Level 2'
 				,'National Planning Objectives Level 3'
@@ -27,7 +26,6 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'National Planning Objectives Level 6'
 				,'National Planning Objectives Level 7'
 				,'National Planning Objectives Level 8'
-				,'Primary Program'
 				,'Primary Program Level 1'
 				,'Primary Program Level 2'
 				,'Primary Program Level 3'
@@ -37,7 +35,6 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Primary Program Level 7'
 				,'Primary Program Level 8'
 				,'Componente'
-				,'Secondary Program'
 				,'Secondary Program Level 1'
 				,'Secondary Program Level 2'
 				,'Secondary Program Level 3'
@@ -46,7 +43,6 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Secondary Program Level 6'
 				,'Secondary Program Level 7'
 				,'Secondary Program Level 8'
-				,'Tertiary Program'
 				,'Tertiary Program Level 1'
 				,'Tertiary Program Level 2'
 				,'Tertiary Program Level 3'
@@ -81,9 +77,9 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 ,'Tertiary Sector Sub-Sub-Sector'
                 ,'Government Approval Procedures'
                 ,'Joint Criteria'
-                , 'On/Off/Treasury Budget'
+                , 'Activity Budget'
                 , 'Multi Donor'
-                , 'Capital - Expenditure'  
+                , 'Capital Expenditure'
                 , 'Sector Tag'
                 , 'Sector Tag Sub-Sector'
                 , 'Sector Tag Sub-Sub-Sector'
@@ -115,14 +111,14 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
-				'Status','Primary Sector','Primary Sector Sub-Sector','National Planning Objectives','Regional Region'
+				'Status','Primary Sector','Primary Sector Sub-Sector','National Planning Objectives Level 1','Regional Region'
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
-				 'Component Type','Region','Status','Primary Sector','National Planning Objectives','District','Zone','Component Name','Project Title','Component Funding Organization','Component Second Responsible Organization'
+				 'Component Type','Administrative Level 1','Status','Primary Sector','National Planning Objectives Level 1','Administrative Level 3','Administrative Level 2','Component Name','Project Title','Component Funding Organization','Component Second Responsible Organization'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
-				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program', 
-				'Secondary Program', 'Primary Sector Sub-Sector',
+				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives Level 1', 'Primary Program Level 1', 
+				'Secondary Program Level 1', 'Primary Sector Sub-Sector',
 				'Status', 'Primary Sector', 'A.C. Chapter',
 				'Accession Instrument', 'Donor', 'Secondary Sector', 'Secondary Sector Sub-Sector', 'Activity Created By' ,'Tertiary Sector'
 				,'Tertiary Sector Sub-Sector'
@@ -130,11 +126,11 @@ YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(
-		'Related Projects', 'Pledges Donor Group', 'Pledges Regions', 'Pledges Aid Modality',
+		'Related Projects', 'Pledges Donor Group', 'Pledges Aid Modality',
 		'Pledges Type Of Assistance',
 		'Pledges Titles', 'Pledges sectors', 'Pledges Secondary Sectors', 'Pledges Tertiary Sectors', 'Pledges Quaternary Sectors', 'Pledges Quinary Sectors',
 		'Pledges Programs', 'Pledges Secondary Programs', 'Pledges Tertiary Programs', 
-		'Pledges Regions', 'Pledges Zones', 'Pledge Status'
+		'Pledges Administrative Level 1', 'Pledges Administrative Level 2', 'Pledge Status'
 	);
 
 YAHOO.amp.reportwizard.fundingGroups["incompatible_hierarchies"]= new Array(
@@ -294,9 +290,9 @@ function colIdToName(id) {
 function updateColumnVisibility(reportType) {
     if (reportType === 'regional') {
         ColumnsDragAndDropObject.showObjsByDbId('source_col_div', [colNameToId('Regional Region')]);
-        ColumnsDragAndDropObject.hideObjsByDbId('source_col_div', [colNameToId('Region')]);
+        ColumnsDragAndDropObject.hideObjsByDbId('source_col_div', [colNameToId('Administrative Level 1')]);
     } else {
-        ColumnsDragAndDropObject.showObjsByDbId('source_col_div', [colNameToId('Region')]);
+        ColumnsDragAndDropObject.showObjsByDbId('source_col_div', [colNameToId('Administrative Level 1')]);
         ColumnsDragAndDropObject.hideObjsByDbId('source_col_div', [colNameToId('Regional Region')]);
     }
 }

@@ -40,7 +40,6 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.message.triggers.ActivityMeassureComparisonTrigger;
 import org.hibernate.jdbc.Work;
 import org.joda.time.DateTime;
@@ -54,10 +53,10 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
     private static Double DEFAULT_PERCENTAGE = 1D;
     private static BigDecimal HUNDRED = new BigDecimal(100);
     private static Integer DAYS_AFTER_QUARTER = 25;
+    private static final Integer DEFAULT_SCALE = 6;
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-
         AmpJobsUtil.populateRequest();
         Long ampTeamId = FeaturesUtil
                 .getGlobalSettingValueLong(GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_FROM_JOB);
@@ -113,9 +112,9 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
                     BigDecimal percentage = BigDecimal.valueOf(FeaturesUtil
                             .getGlobalSettingDouble(GlobalSettingsConstants.FUNDING_GAP_NOTIFICATION_THRESHOLD) != null
-                                    ? FeaturesUtil.getGlobalSettingDouble(
-                                            GlobalSettingsConstants.FUNDING_GAP_NOTIFICATION_THRESHOLD)
-                                    : DEFAULT_PERCENTAGE);
+                            ? FeaturesUtil.getGlobalSettingDouble(
+                            GlobalSettingsConstants.FUNDING_GAP_NOTIFICATION_THRESHOLD)
+                            : DEFAULT_PERCENTAGE);
 
                     spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
                     spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
@@ -130,7 +129,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
                         logger.debug(this.getClass() + " end date " + upperDateReport);
                     } catch (AmpApiException e1) {
 
-                        logger.error(e1);
+                        logger.error(e1.getMessage(), e1);
                     }
                     spec.setFilters(filterRules);
 
@@ -175,9 +174,9 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
                             }
                             if (dblMeasureA.compareTo(BigDecimal.ZERO) != 0
                                     && dblMeasureB.compareTo(BigDecimal.ZERO) != 0
-                                    && (100 - dblMeasureA.multiply(HUNDRED)
-                                            .divide(dblMeasureB, 6, RoundingMode.HALF_EVEN)
-                                            .compareTo(percentage)) >= 0) {
+                                    && (HUNDRED.subtract(dblMeasureA.multiply(HUNDRED))
+                                    .divide(dblMeasureB, DEFAULT_SCALE, RoundingMode.HALF_EVEN)
+                                    .compareTo(percentage)) >= 0) {
 
                                 activitiesToNofity.add(activityToNotify);
                             } else {

@@ -31,13 +31,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.stream.Stream;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.entity.UserPreferencesPK;
@@ -51,6 +53,7 @@ import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.security.principal.UserPrincipal;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -151,6 +154,9 @@ public class UserUtils {
      * Bulk version of user lang preferences retrieval.
      */
     public static Map<Long, UserLangPreferences> getUserLangPreferences(List<User> users, Site site) {
+        if (users.isEmpty()) {
+            return Collections.emptyMap();
+        }
         List<UserPreferencesPK> keys = users.stream().map(u -> new UserPreferencesPK(u, site)).collect(toList());
 
         org.hibernate.Session session = PersistenceManager.getSession();
@@ -310,8 +316,8 @@ public class UserUtils {
      * @return User by specified id, null of no user by that id was found
      */
     public static User getUser(Long id) {
-        User result = null;
-        Session session = null;
+        User result;
+        Session session;
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -356,6 +362,24 @@ public class UserUtils {
         return users;
     }
 
+    /**
+     *
+     * @param userId
+     * @param orgGroupId
+     * @return
+     */
+    public static boolean hasVerfifiedOrgGroup(Long userId, Long orgGroupId) {
+        return getVerifiedOrgsStream(userId).anyMatch(t -> t.getOrgGrpId().getAmpOrgGrpId().equals(orgGroupId));
+    }
+
+    public static Set<AmpOrganisation> getVerifiedOrgs(Long userId) {
+        User user = getUser(userId);
+        return user.getAssignedOrgs();
+    }
+
+    public static Stream<AmpOrganisation> getVerifiedOrgsStream(Long userId) {
+        return getVerifiedOrgs(userId).stream();
+    }
     /**
      * Searchs users with given criteria
      * @param criteria criteria by which users are searched
@@ -427,6 +451,7 @@ public class UserUtils {
         }
 
         return userList;
+        
     }
 
     /**
@@ -474,54 +499,18 @@ public class UserUtils {
     }
 
     /**
-     * Searches user object by email and returns it. If such user does not
-     * exists, returns null
-     * <p>The sole purpose of this function is to handle checked DgException by converting it to
-     * unchecked exception.</p>
-     * @param email String User email
-     * @return User object
-     * @throws AMPUncheckedException if error occurs
+     * Get user by email address.
+     *
+     * @param email
+     * @return user
      */
-    public static User getUserByEmailRt(String email) {
-        try {
-            return UserUtils.getUserByEmail(email);
-        } catch (DgException e) {
-            throw new AMPUncheckedException(e);
-        }
-    }
-
-    /**
-     * Searches user object by email and returns it. If such user does not
-     * exists, returns null
-     * @param email String User email
-     * @return User object
-     * @throws DgException if error occurs
-     */
-    public static User getUserByEmail(String email) throws DgException {
-        User user = null;
-        Session sess = null;
-        try {
-            sess = PersistenceManager.getRequestDBSession();
-            
-            Query query = sess.createQuery("from " + User.class.getName() + " rs where rs.email = :email ");
-            query.setString("email", email);
-            query.setCacheable(true);
-
-            Iterator iter = query.iterate();
-            while (iter.hasNext()) {
-                user = (User) iter.next();
-                ProxyHelper.initializeObject(user);
-                break;
-            }
-
-        }
-        catch (Exception ex0) {
-            logger.debug("Unable to get user from database", ex0);
-            throw new DgException(
-                    "Unable to get user information from database", ex0);
-        }
-
-        return user;
+    public static User getUserByEmailAddress(String email) {
+        String trimmedLowercasedEmail = StringUtils.trimToEmpty(StringUtils.lowerCase(email));
+        return (User) PersistenceManager.getSession()
+                .createCriteria(User.class)
+                .setCacheable(true)
+                .add(Restrictions.eq("email", trimmedLowercasedEmail).ignoreCase())
+                .uniqueResult();
     }
 
     /**

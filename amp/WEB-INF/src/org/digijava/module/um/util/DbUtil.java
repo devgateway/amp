@@ -420,7 +420,6 @@ public class DbUtil {
                 UserUtils.saveUserLangPreferences(user.getUserLangPreferences());
             }
         } catch(Exception ex) {
-            ex.printStackTrace();
             logger.debug("Unable to update user information into database", ex);
 
             throw new UMException(
@@ -509,7 +508,6 @@ public class DbUtil {
             iduser = (BigInteger) query.uniqueResult();
             if (iduser!= null){
                 User user = (User) session.load(User.class, iduser.longValue());
-                user.setActivate(true);
                 user.setBanned(false);
                 user.setEmailVerified(true);
                 user.updateLastModified();

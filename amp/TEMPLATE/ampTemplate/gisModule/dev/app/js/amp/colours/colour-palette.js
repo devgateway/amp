@@ -98,8 +98,10 @@ var Palette = Backbone.Model.extend({
     var stops = this.get('stops');
     //exclude null values that break Jenks.getGVF
     var values = _.reject(this.get('values'), function(value){ return value.value == null; });
+    var zeroCategoryEnabled = this.get('zeroCategoryEnabled');
+    
     var buckets = values.length > stops?
-        Jenks.getGVF(values, stops):
+        Jenks.getGVF(values, stops, zeroCategoryEnabled):
         niceBuckets.minFigs(stops, [this.get('min'), this.get('max')]);
     var stopSize = stops > 1 ? stops: 1;
     var newColours = [],
@@ -210,14 +212,15 @@ function FromRange(options) {
     // AMP-20346: If this parameter is too high or too low we can kill the browser.
     stops = 5;
   }
-
+ 
   var palette = new Palette({
     mode: 'range',
     min: min,
     max: max,
     stops: stops,
     linLog: options.linLog || 'linear',
-    values: values
+    values: values,
+    zeroCategoryEnabled: options.zeroCategoryEnabled
   });
 
   // after it's constructed so that its change listener will fire

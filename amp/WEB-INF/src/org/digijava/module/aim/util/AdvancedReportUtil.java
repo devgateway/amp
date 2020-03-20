@@ -4,9 +4,7 @@
  */
 package org.digijava.module.aim.util;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -15,12 +13,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpMeasures;
@@ -30,21 +25,10 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
-import org.hibernate.FlushMode;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import java.text.Collator;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
 
 /**
  * AdvancedReportUtil.java
@@ -127,11 +111,8 @@ public final class AdvancedReportUtil {
     public static List<AmpColumns> getColumnListFiltered()
     {
         List<AmpColumns> columnsOut = new ArrayList<AmpColumns>();
-//      public static Set<String> getConfigurableColumns()
-        Set<String> columnNames = ColumnsVisibility.getConfigurableColumns();
         for (AmpColumns col : CACHED_COLUMNS_LIST) {
-            //if (columnNames.contains(col.getColumnName()) || columnNames.contains(col.getAliasName()))
-                columnsOut.add(col);
+            columnsOut.add(col);
         }
         return columnsOut;
     }

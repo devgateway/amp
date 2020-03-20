@@ -346,7 +346,7 @@ function banUser(txt) {
 																		property="pages">
 																		<tr>
 																			<td colspan="4" nowrap="nowrap"><digi:trn
-																					key="um:userPages">Pages :</digi:trn> <c:if
+																					key="um:userPages">Pages:</digi:trn> <c:if
 																					test="${umViewAllUsersForm.currentPage > 1}">
 																					<jsp:useBean id="urlParamsFirst"
 																						type="java.util.Map" class="java.util.HashMap" />

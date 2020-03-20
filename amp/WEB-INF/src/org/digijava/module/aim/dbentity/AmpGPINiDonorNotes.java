@@ -3,14 +3,48 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateDeserializer;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AmpGPINiDonorNotes implements Serializable {
     
-    private static final long serialVersionUID = 7801819300013809821L;
-    
+    @JsonProperty("id")
     private Long ampGPINiDonorNotesId;
+
+    @JsonProperty("donorId")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampOrgId",
+            resolver = EntityResolver.class, scope = AmpOrganisation.class)
+    @JsonIdentityReference(alwaysAsId = true)
+    @NotNull
+    @ApiModelProperty(value = "Donor Agency", example = "41")
     private AmpOrganisation donor;
+
+    @NotNull
+    @Size(min = 1)
+    @ApiModelProperty(example = "Sample Note 1")
     private String notes;
+
+    @JsonSerialize(using = ISO8601DateSerializer.class)
+    @JsonDeserialize(using = ISO8601DateDeserializer.class)
+    @ApiModelProperty(example = "2018-11-29")
+    @NotNull
     private Date notesDate;
+
+    @NotNull
+    @Size(min = 1)
+    @ApiModelProperty(example = "1")
     private String indicatorCode;
 
     public Long getAmpGPINiDonorNotesId() {

@@ -2,11 +2,18 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.ampapi.endpoints.common.values.providers.LocationPossibleValuesProvider;
+import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.Validators;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.aim.util.TreeNodeAware;
 
 /**
  * Connection between Activity and Location.
@@ -14,24 +21,32 @@ import org.digijava.module.aim.util.Output;
  * @author Irakli Kobiashvili
  *
  */
-public class AmpActivityLocation implements Versionable,Serializable, Cloneable {
+public class AmpActivityLocation implements Versionable, Serializable, Cloneable,
+        TreeNodeAware<AmpCategoryValueLocations> {
+
     //IATI-check: should be exported.
-//  @Interchangeable(fieldTitle="ID", id=true)
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long id;
-    @Interchangeable(fieldTitle = "ID", pickIdOnly=true)
+
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
-    @Interchangeable(fieldTitle = "Location", pickIdOnly = true, importable = true, uniqueConstraint=true, required = ActivityEPConstants.REQUIRED_ALWAYS, 
+
+    @PossibleValues(LocationPossibleValuesProvider.class)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.Locations.LOCATION, pickIdOnly = true, importable = true,
+            uniqueConstraint = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
             dependencies={
-                            InterchangeDependencyResolver.IMPLEMENTATION_LEVEL_PRESENT_KEY,
-                            InterchangeDependencyResolver.IMPLEMENTATION_LEVEL_VALID_KEY,
-                            InterchangeDependencyResolver.IMPLEMENTATION_LOCATION_PRESENT_KEY
+                    ImplementationLevelValidator.IMPLEMENTATION_LEVEL_PRESENT_KEY,
+                    ImplementationLevelValidator.IMPLEMENTATION_LEVEL_VALID_KEY,
+                    ImplementationLevelValidator.IMPLEMENTATION_LOCATION_PRESENT_KEY
             })
     private AmpLocation location;
     @Interchangeable(fieldTitle = "Location Percentage",
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class,
+                    fmPath = "/Activity Form/Location/Locations/Location percentage required"),
             fmPath = "/Activity Form/Location/Locations/Location Item/locationPercentage",
-            required = "/Activity Form/Location/Locations/Location percentage required",
             percentageConstraint = true, importable = true)
-    @Validators (percentage = "/Activity Form/Location/Locations/locationPercentageTotal" )
     private Float locationPercentage;
     @Interchangeable(fieldTitle = "Latitude", fmPath = "/Activity Form/Location/Locations/Location Item/Latitude", importable = true)
     private String latitude;
@@ -120,5 +135,10 @@ public class AmpActivityLocation implements Versionable,Serializable, Cloneable 
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    @Override
+    public AmpAutoCompleteDisplayable<AmpCategoryValueLocations> getTreeNode() {
+        return location.getLocation();
     }
 }

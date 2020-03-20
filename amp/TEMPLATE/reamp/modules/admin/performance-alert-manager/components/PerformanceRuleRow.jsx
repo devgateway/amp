@@ -12,46 +12,46 @@ require('../styles/less/main.less');
 import * as startUp from '../actions/StartUpAction';
 import * as performanceRuleActions from '../actions/PerformanceRuleActions';
 import * as Constants from '../common/Constants';
-export default class PerformanceRuleRow extends Component {
+class PerformanceRuleRow extends Component {
     constructor(props, context) {
         super(props, context);
-        this.state = {};    
+        this.state = {};
         this.edit = this.edit.bind(this);
         this.deletePerformanceRule = this.deletePerformanceRule.bind(this);
     }
 
-    componentWillMount() {        
+    componentWillMount() {
     }
-    
+
     edit() {
         this.props.actions.clearMessages();
         this.props.actions.editPerformanceRule(this.props.performanceRule);
-        if(this.props.performanceRule['type-class-name']) {            
+        if(this.props.performanceRule['type-class-name']) {
             this.props.actions.getAttributeList(this.props.performanceRule['type-class-name']);
         }
         this.props.focusOnForm();
     }
-    
+
     deletePerformanceRule() {
         this.props.actions.clearMessages();
         if (confirm(this.props.translations['amp.performance-rule:delete-prompt'])) {
            this.props.actions.deletePerformanceRule(this.props.performanceRule).then(function(){
                this.props.actions.loadPerformanceRuleList({paging: this.props.paging});
            }.bind(this));
-        }        
+        }
     }
-    
+
     getTypeDescription(name) {
         const ruleType = this.props.typeList.filter(ruleType => ruleType.name === name)[0];
-        return ruleType ? ruleType[ruleType.name + Constants.TRANSLATED_DESCRIPTION] : '';         
+        return ruleType ? ruleType[ruleType.name + Constants.TRANSLATED_DESCRIPTION] : '';
     }
-    
+
     getLevelName(id) {
-        const level = this.props.levelList.filter(level => level.id === id)[0];  
-        return level.name;
+        const level = this.props.levelList.filter(level => level.id === id)[0];
+        return level.label;
     }
-    
-    render() {           
+
+    render() {
         return (
             <tr>
                 <td>{this.props.performanceRule.name}</td>

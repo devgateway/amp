@@ -4,9 +4,6 @@
 package org.digijava.module.aim.startup;
 
 import java.lang.management.ManagementFactory;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -27,35 +24,28 @@ import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.importers.GazeteerCSVImporter;
-import org.dgfoundation.amp.mondrian.MondrianETL;
-import org.dgfoundation.amp.mondrian.MondrianUtils;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.swagger.SwaggerConfigurer;
+import org.digijava.kernel.content.ContentRepositoryManager;
 import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
-import org.digijava.kernel.jobs.RegisterWithAmpRegistryJob;
 import org.digijava.kernel.lucene.LuceneModules;
 import org.digijava.kernel.lucene.LuceneWorker;
+import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.ar.util.ReportsUtil;
-import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettings;
-import org.digijava.module.aim.helper.QuartzJobForm;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.QuartzJobClassUtils;
-import org.digijava.module.aim.util.QuartzJobUtils;
+import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SchedulerFactory;
-import org.quartz.SchedulerMetaData;
-import org.quartz.ee.servlet.QuartzInitializerListener;
 
 public class AMPStartupListener extends HttpServlet implements
         ServletContextListener {
@@ -74,16 +64,6 @@ public class AMPStartupListener extends HttpServlet implements
         
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        ServletContext ampContext = sce.getServletContext();
-        
-        //destroy quartz
-        SchedulerFactory factory = (SchedulerFactory) ampContext.getAttribute(QuartzInitializerListener.QUARTZ_FACTORY_KEY);
-        try {
-            factory.getScheduler().shutdown();
-        } catch (Throwable e1) {
-            e1.printStackTrace();
-        }
-        
         //destroy jackrabbit
         try {
             DocumentManagerUtil.shutdownRepository(sce.getServletContext() );
@@ -101,131 +81,15 @@ public class AMPStartupListener extends HttpServlet implements
         logger.info("The AMP ServletContext has been terminated.");
     }
 
-    /**
-     * Initialize Quartz using some customized AMP settings - set the amp
-     * servlet context as a metadata of the scheduler, to be available later
-     * inside Jobs - set the quartz datasource the same as the Hibernate
-     * datasource to reduce configuration redundancy
-     * 
-     * @param sce
-     *            the servlet context event received from the initialization
-     */
-    private void initializeQuartz(ServletContextEvent sce) {
-//      logger.info("Intializing Quartz Scheduler using AMP datasource...");
-
-        ServletContext ampContext = sce.getServletContext();
-        try {
-    /*  Configuration hCfg = PersistenceManager.getHibernateConfiguration();
-
-            String requestedFile = System
-                    .getProperty(StdSchedulerFactory.PROPERTIES_FILE);
-            String propFileName = requestedFile != null ? requestedFile
-                    : ampContext
-                            .getRealPath("/WEB-INF/classes/quartz.properties");
-
-            File propFile = new File(propFileName);
-            
-            Properties quartzProperties = new Properties();
-            InputStream in = new BufferedInputStream(new FileInputStream(
-                    propFileName));
-            quartzProperties.load(in);
-
-            
-            //ALWAYS start AMP with a datasource while in servlet mode
-            String dataSource = (String) hCfg.getProperties().get(
-                    "connection.datasource");
-
-            quartzProperties.put("org.quartz.dataSource.ampQuartzDS.jndiURL",
-                    dataSource);
-
-            SchedulerFactory factory = new StdSchedulerFactory(quartzProperties);
-*/
-            SchedulerFactory factory = (SchedulerFactory) ampContext.getAttribute(QuartzInitializerListener.QUARTZ_FACTORY_KEY);
-
-            Scheduler scheduler = factory.getScheduler();
-            SchedulerMetaData metaData = scheduler.getMetaData();
-
-            scheduler.getContext().put(Constants.AMP_SERVLET_CONTEXT, ampContext);
-
-            scheduler.start();
-        
-            enableActivityCloserIfNeeded();
-
-        } catch (SchedulerException e) {
-            e.printStackTrace();
-            logger.error(e);
-        }
-    }
-    
-    
-    protected boolean isActivityCloserEnabled()
-    {
-        Connection connection = null;
-         try
-         {
-             connection = PersistenceManager.getJdbcConnection();
-             String statement = String.format("SELECT job_name from qrtz_job_details where job_class_name='%s'", "org.digijava.module.message.jobs.CloseExpiredActivitiesJob");
-             ResultSet resultSet = connection.createStatement().executeQuery(statement);
-             return resultSet.next();
-         }
-         catch (Exception ex) {
-             throw new RuntimeException(ex);
-         }
-         finally
-         {
-             PersistenceManager.closeQuietly(connection);
-         }
-    }
-    
-    /**
-     * a somewhat hacky way of making sure a quartz job is added & configured to run hourly. Did not risk doing it via an XML patch writing directly to qrtz_triggers, because there is a "job_data" binary column there.
-     * so, the job is added via Java calls to Quartz classes. This is the only way I have found to "run this Java code once and only once". A side-effect of this is that you won't ever be able to disable this job, but it is ok - it does nothing when the corresponding feature is disabled from the GS, so you won't save resources by disabling it
-     */
-    protected void enableActivityCloserIfNeeded()
-    {
-        if (isActivityCloserEnabled())
-            return; //nothing to do
-        
-        AmpQuartzJobClass jobClass = QuartzJobClassUtils.getJobClassesByClassfullName("org.digijava.module.message.jobs.CloseExpiredActivitiesJob");
-        
-        QuartzJobForm jobForm = new QuartzJobForm();
-        jobForm.setClassFullname(jobClass.getClassFullname());
-        jobForm.setDayOfMonth(1);
-        jobForm.setDayOfWeek(1);
-        jobForm.setGroupName("ampServices");
-        jobForm.setManualJob(false);
-        jobForm.setName(jobClass.getName());
-//      jobForm.setTriggerGroupName(triggerGroupName);
-//      jobForm.setTriggerName(triggerName);
-        jobForm.setTriggerType(3); // TODO-CONSTANTIN: 1 = MINUTELY, 2 = HOURLY, 3 = daily
-        jobForm.setExeTimeH("1");
-        jobForm.setExeTimeM("1");
-        jobForm.setExeTimeS("1");
-        jobForm.setStartDateTime("01/01/2013");
-        jobForm.setStartH("00");
-        jobForm.setStartM("00");
-        try
-        {
-            QuartzJobUtils.addJob(jobForm);
-        }
-        catch(Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-        
-    }
-
-    protected void doMondrianETL() throws SQLException {
-        logger.info("running Mondrian ETL");
-        double elapsedSecs = MondrianETL.runETL(false).duration;
-        logger.info(String.format("ETL took %.2f seconds", elapsedSecs));
-    }
-    
     protected void initNiReports() throws AMPException {
         AmpReportsSchema.init();
     }
-    
+
     public void contextInitialized(ServletContextEvent sce) {
+        PersistenceManager.inTransaction(() -> contextInitializedInternal(sce));
+    }
+    
+    public void contextInitializedInternal(ServletContextEvent sce) {
         logger.debug("I am running with a new code!!!!");
         
         
@@ -249,7 +113,7 @@ public class AMPStartupListener extends HttpServlet implements
                 ampContext.setAttribute(Constants.DEF_FLAG_EXIST, new Boolean(true));
 
             AmpReportsSchema.getInstance().maintainDescriptions();
-            
+
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             // get the default amp template
             AmpTemplatesVisibility currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
@@ -293,9 +157,6 @@ public class AMPStartupListener extends HttpServlet implements
                         GatePermConst.availablePermissibles[i]);
             }
 
-            //AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
-            initializeQuartz(sce);
-
             performSanityOperationsOnSchema(ampContext);
 
 //          logger.info("Checking if any MTEF columns need to be created...");
@@ -309,7 +170,7 @@ public class AMPStartupListener extends HttpServlet implements
             }
             
             logger.info("loading the activity->pledge view twins configuration and checking for consistency...");
-            int a = PledgesToActivitiesBridge.activityViewToPledgeView.size();
+            int a = PledgesToActivitiesBridge.ACTIVITY_VIEW_TO_PLEDGE_VIEW.size();
             if (a < 0)
                 throw new RuntimeException("should not happen!");
             
@@ -321,26 +182,17 @@ public class AMPStartupListener extends HttpServlet implements
             runCacheRefreshingQuery("update_sector_level_caches_internal", "sector");
             runCacheRefreshingQuery("update_organisation_caches_internal", "organisation");
             
-            PersistenceManager.getSession().getTransaction().commit();
-            
-            logger.info("Starting up JackRabbit repository...");
-            javax.jcr.Session jrSession = DocumentManagerUtil.getSession(ampContext, null);
-            if (jrSession != null)
-            {
-                DocumentManagerUtil.closeSession(jrSession);
-                logger.info("\t... JackRabbit startup ok!");
-            }
-            else 
-                logger.info("\t... JackRabbit startup failed!");
+            ContentRepositoryManager.initialize();
             
             checkDatabaseSanity();
-            checkMondrianETLSanity();
-            //doMonetETL();
             initNiReports();
             importGazeteer();
             registerEhCacheMBeans();
+            initAPI();
 
-            QuartzJobUtils.runJobIfNotPaused(RegisterWithAmpRegistryJob.NAME);
+            new SwaggerConfigurer().configure();
+
+            DgEmailManager.triggerStaticInitializers();
         } catch (Throwable e) {
             logger.error("Exception while initialising AMP :" + e.getMessage(), e);
             throw new Error(e);
@@ -395,20 +247,9 @@ public class AMPStartupListener extends HttpServlet implements
             ReportsUtil.checkPledgesViewsSanity(session);
             ReportsUtil.checkLocationsSanity(session);
             CurrencyUtil.checkDatabaseSanity(session);
+            OrganisationUtil.checkOrganisationNamesSanity(session);
         }catch(Exception e){
             throw new Error("database does not conform to minimum sanity requirements, shutting down AMP", e);
-        }finally {
-            PersistenceManager.cleanupSession(session);
-        }
-    }
-    
-    protected void checkMondrianETLSanity() {
-        Session session = null; 
-        try {
-            session = PersistenceManager.getSession();
-            MondrianUtils.checkMondrianViewsSanity(session);
-        }catch(Exception e){
-            throw new Error("database does not conform to minimum Mondrian ETL sanity requirements, shutting down AMP", e);
         }finally {
             PersistenceManager.cleanupSession(session);
         }
@@ -451,5 +292,9 @@ public class AMPStartupListener extends HttpServlet implements
         catch (Exception e){
             logger.error("cannot import gazeteer",e);
         }
-    }   
+    }
+
+    private void initAPI() {
+        ApiError.configureComponentClassToIdMap();
+    }
 }

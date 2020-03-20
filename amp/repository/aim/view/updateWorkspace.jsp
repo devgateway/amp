@@ -56,10 +56,22 @@
 
 <link rel="stylesheet" type="text/css" href="<digi:file src= '/repository/aim/view/scripts/jquery-ui-1.11.0/jquery-ui.min.css'/>">
 <link rel="stylesheet" type="text/css" href="<digi:file src= 'gisModule/dev/node_modules/jquery-ui/themes/smoothness/jquery-ui.min.css'/>">
+<link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
+
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.css">
+<link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
 
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>?version=fantastic_15" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
+
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/underscore.js"></script>
+<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/backbone/backbone.js" type="text/javascript"></script>
+<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
+<script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery-ui.min.js" type="text/javascript"></script>
+<script type="text/javascript"
+		src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js"/>"></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
 
 <c:set var="filterPanelName">
 	<digi:trn key="rep:filter:filters">Filters</digi:trn>
@@ -357,7 +369,7 @@ function update1(action, tid){
 		//document.aimUpdateWorkspaceForm.action = "<%=update%>~dest=admin&event="+action;
 		//document.aimUpdateWorkspaceForm.target = "_self";
 		//document.aimUpdateWorkspaceForm.submit();
-		window.location="<%=update%>~dest=admin~event=edit~tId="+tid;
+		window.location="<%=update%>?dest=admin&event=edit&tId="+tid;
 	}
 	return true;
 }
@@ -595,8 +607,7 @@ function cancel()
 
 <input type="hidden" name="currUrl">
 
-
-
+<div id="filter-popup" style="font-size: 14px !important;"></div>
 
 <div id="dialog-confirm" title="Workspace marked as child">
   <p>This workspace is marked as the child of ${aimUpdateWorkspaceForm.parentTeamName}.</p>
@@ -872,7 +883,42 @@ function cancel()
 															</table>
 															
 														</td>
-													</tr>	
+													</tr>
+													<tr id="send_summary_notification_">
+														<td colspan="4">
+															<table>
+																<tr>
+																	<td style="font-size:12px; font-weight:bold;">
+																		<html:checkbox
+																				property="sendSummaryChangesManager"
+																				value="true" >
+																			<digi:trn>Send summary changes
+																				to managers</digi:trn>
+																		</html:checkbox>
+																	</td>
+																</tr>
+															</table>
+
+														</td>
+													</tr>
+
+													<tr id="send_summary_notification_">
+														<td colspan="4">
+															<table>
+																<tr>
+																	<td style="font-size:12px; font-weight:bold;">
+																		<html:checkbox
+																				property="sendSummaryChangesApprover"
+																				value="true" >
+																			<digi:trn>Send summary changes
+																				to approvers</digi:trn>
+																		</html:checkbox>
+																	</td>
+																</tr>
+															</table>
+
+														</td>
+													</tr>
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">
 															<tr  id="relTeamRow">

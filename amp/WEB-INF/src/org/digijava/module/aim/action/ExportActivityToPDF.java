@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.common.base.Strings;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -75,6 +76,7 @@ import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
@@ -122,8 +124,6 @@ import com.lowagie.text.pdf.PdfPTableEvent;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.draw.LineSeparator;
 
-import clover.com.google.common.base.Strings;
-
 /**
  * Export Activity to PDF
  * @author Dare
@@ -143,6 +143,7 @@ public class ExportActivityToPDF extends Action {
     private static final int AMOUNT_COLUMN_WIDTH = 87;
     private static final float SUBTOTAL_BORDER_TOP_WIDTH = 0.5f;
     private static final int ARRAY_IDX_3 = 3;
+    private static final int SYMBOL_INDENT = 20;
     
     private static Logger logger = Logger.getLogger(ExportActivityToPDF.class);
 
@@ -263,7 +264,7 @@ public class ExportActivityToPDF extends Action {
             siteId = site.getId();
             locale = navigationLanguage.getCode();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
 
         //building  table
@@ -611,6 +612,11 @@ public class ExportActivityToPDF extends Action {
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Cris Number")){
                 columnName=TranslatorWorker.translateText("Cris Number");
                 createGeneralInfoRow(mainLayout,columnName,activity.getCrisNumber());
+            }
+    
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/IATI Identifier")) {
+                columnName = TranslatorWorker.translateText("IATI Identifier");
+                createGeneralInfoRow(mainLayout, columnName, activity.getIatiIdentifier());
             }
 
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Procurement System")){
@@ -1157,53 +1163,67 @@ public class ExportActivityToPDF extends Action {
                 createGeneralInfoRow(mainLayout,columnName,result);
             }
 
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Program")){
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective")){
-                    //National Plan Objective
-                    if (hasContents(myForm.getPrograms().getNationalPlanObjectivePrograms())){
-                        columnName=TranslatorWorker.translateText("National Plan Objective");
-                        String result= buildProgramsOutput(myForm.getPrograms().getNationalPlanObjectivePrograms());
-                        createGeneralInfoRow(mainLayout,columnName,result);
-                    }
-                }
+            // Programs
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Program")) {
+                PdfPCell programCell1 = new PdfPCell();
+                p1 = new Paragraph(postprocessText(
+                        TranslatorWorker.translateText("Program", locale, siteId)), titleFont);
+                p1.setAlignment(Element.ALIGN_RIGHT);
+                programCell1.addElement(p1);
+                programCell1.setBackgroundColor(BACKGROUND_COLOR);
+                programCell1.setBorder(0);
+                mainLayout.addCell(programCell1);
 
-
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs")){
-                    //Primary Programs
-                    if (hasContents(myForm.getPrograms().getPrimaryPrograms())){
-                        columnName=TranslatorWorker.translateText("Primary Programs");
-                        String result= buildProgramsOutput(myForm.getPrograms().getPrimaryPrograms());
-                        createGeneralInfoRow(mainLayout,columnName,result);
+                PdfPTable programsTable = new PdfPTable(2);
+                if (SiteUtils.isEffectiveLangRTL()) {
+                    programsTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+                }
+                
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective")) {
+                    if (hasContents(myForm.getPrograms().getNationalPlanObjectivePrograms())) {
+                        String programs = buildProgramsOutput(myForm.getPrograms().getNationalPlanObjectivePrograms());
+                        programsTable.addCell(buildProgramCell("National Plan Objective", true));
+                        programsTable.addCell(buildProgramCell(programs, false));
                     }
                 }
-
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs")){
-                    //secondary Programs
-                    if (hasContents(myForm.getPrograms().getSecondaryPrograms())){
-                        columnName=TranslatorWorker.translateText("Secondary Programs");
-                        String result= buildProgramsOutput(myForm.getPrograms().getSecondaryPrograms());
-                        createGeneralInfoRow(mainLayout,columnName,result);
+                
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs")) {
+                    if (hasContents(myForm.getPrograms().getPrimaryPrograms())) {
+                        String programs = buildProgramsOutput(myForm.getPrograms().getPrimaryPrograms());
+                        programsTable.addCell(buildProgramCell("Primary Programs", true));
+                        programsTable.addCell(buildProgramCell(programs, false));
                     }
                 }
-
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs")){
-                    //tertiary Programs
-                    if (hasContents(myForm.getPrograms().getTertiaryPrograms())){
-                        columnName=TranslatorWorker.translateText("Tertiary Programs");
-                        String result= buildProgramsOutput(myForm.getPrograms().getTertiaryPrograms());
-                        createGeneralInfoRow(mainLayout,columnName,result);
+                
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs")) {
+                    if (hasContents(myForm.getPrograms().getSecondaryPrograms())) {
+                        String programs = buildProgramsOutput(myForm.getPrograms().getSecondaryPrograms());
+                        programsTable.addCell(buildProgramCell("Secondary Programs", true));
+                        programsTable.addCell(buildProgramCell(programs, false));
                     }
                 }
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description")){
-                    //tertiary Programs
-                    if(myForm.getPrograms().getProgramDescription()!=null ){
-                        columnName=TranslatorWorker.translateText("Program Description");
-                        String result=processEditTagValue(request,  myForm.getPrograms().getProgramDescription());
-                        createGeneralInfoRow(mainLayout,columnName,result);
+                
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs")) {
+                    if (hasContents(myForm.getPrograms().getTertiaryPrograms())) {
+                        String programs = buildProgramsOutput(myForm.getPrograms().getTertiaryPrograms());
+                        programsTable.addCell(buildProgramCell("Tertiary Programs", true));
+                        programsTable.addCell(buildProgramCell(programs, false));
                     }
                 }
+                
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description")) {
+                    if (myForm.getPrograms().getProgramDescription() != null) {
+                        String programs = processEditTagValue(request, myForm.getPrograms().getProgramDescription());
+                        programsTable.addCell(buildProgramCell("Program Description", true));
+                        programsTable.addCell(buildProgramCell(programs, false));
+                    }
+                }
+                
+                PdfPCell cell2 = new PdfPCell(programsTable);
+                cell2.setBorder(0);
+                mainLayout.addCell(cell2);
             }
-
+            
             /**
              * funding
              */
@@ -1286,12 +1306,20 @@ public class ExportActivityToPDF extends Action {
             if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section")){
                 buildIssuesPart(myForm, mainLayout,ampContext,session);
             }
-
+    
             /**
              * related documents
              */
             if(FeaturesUtil.isVisibleModule("/Activity Form/Related Documents")){
                 buildRelatedDocsPart(myForm, mainLayout, event,ampContext);
+            }
+    
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Regional Observations")) {
+                buildRegionalObservationsPart(myForm, mainLayout);
+            }
+    
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Line Ministry Observations")) {
+                buildLineMinistryObservationsPart(myForm, mainLayout);
             }
 
             /**
@@ -1721,6 +1749,17 @@ public class ExportActivityToPDF extends Action {
         return null;
     }
 
+    private PdfPCell buildProgramCell(String programText, boolean toTranslate) {
+        String text = toTranslate ? TranslatorWorker.translateText(programText) : programText;
+        PdfPCell programsCell1 = new PdfPCell();
+        Paragraph p1 = new Paragraph(postprocessText(text), plainFont);
+        p1.setAlignment(Element.ALIGN_LEFT);
+        programsCell1.addElement(p1);
+        programsCell1.setBorder(0);
+        
+        return programsCell1;
+    }
+
     private PdfPTable buildPdfTable(int columns) {
         PdfPTable table = new PdfPTable(columns);
         if (SiteUtils.isEffectiveLangRTL()) {
@@ -1914,7 +1953,137 @@ public class ExportActivityToPDF extends Action {
         }
         mainLayout.addCell(issuesCell2);
     }
-
+    
+    private void buildRegionalObservationsPart(EditActivityForm myForm, PdfPTable mainLayout)
+            throws WorkerException {
+        ArrayList<Issues> regObs = myForm.getRegionalObservations().getIssues();
+        if (regObs == null || regObs.isEmpty()) {
+            return;
+        }
+        
+        PdfPCell regObsTitleCell = new PdfPCell();
+        regObsTitleCell.setBackgroundColor(BACKGROUND_COLOR);
+        regObsTitleCell.setBorder(0);
+        
+        Paragraph p1;
+        p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("Regional Observations")), titleFont);
+        p1.setAlignment(Element.ALIGN_RIGHT);
+        
+        regObsTitleCell.addElement(p1);
+        mainLayout.addCell(regObsTitleCell);
+        
+        PdfPCell regObsValuesCell = new PdfPCell();
+        regObsValuesCell.setBackgroundColor(BACKGROUND_COLOR_WHITE);
+        regObsValuesCell.setBorder(0);
+        
+        String regObsModulePath = "/Activity Form/Regional Observations/Observation";
+        String regObsDatePath = regObsModulePath + "/Date";
+        String regObsMeasurePath = regObsModulePath + "/Measure";
+        String regObsActorPath = regObsMeasurePath + "/Actor";
+        
+        for (Issues issue : regObs) {
+            com.lowagie.text.List issuesList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+            issuesList.setListSymbol(new Chunk("\u2022"));
+            String issueName = issue.getName();
+            if (FeaturesUtil.isVisibleModule(regObsDatePath)) {
+                issueName += " \t" + issue.getIssueDate();
+            }
+            
+            ListItem issueItem = new ListItem(new Phrase(issueName, plainFont));
+            issuesList.add(issueItem);
+            if (issue.getMeasures() != null && issue.getMeasures().size() > 0
+                    && FeaturesUtil.isVisibleModule(regObsMeasurePath)) {
+                com.lowagie.text.List measuresSubList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+                measuresSubList.setListSymbol("-");
+                
+                for (Measures measure : issue.getMeasures()) {
+                    ListItem measureItem = new ListItem(new Phrase(measure.getName(), plainFont));
+                    measuresSubList.add(measureItem);
+                    
+                    if (measure.getActors() != null && measure.getActors().size() > 0
+                            && FeaturesUtil.isVisibleModule(regObsActorPath)) {
+                        com.lowagie.text.List actorsSubList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+                        actorsSubList.setListSymbol(new Chunk("\u2022"));
+                        
+                        for (AmpActor actor : measure.getActors()) {
+                            ListItem actorItem = new ListItem(new Phrase(actor.getName(), plainFont));
+                            actorsSubList.add(actorItem);
+                        }
+                        measuresSubList.add(actorsSubList);
+                    }
+                }
+                issuesList.add(measuresSubList);
+            }
+            regObsValuesCell.addElement(issuesList);
+        }
+        mainLayout.addCell(regObsValuesCell);
+    }
+    
+    private void buildLineMinistryObservationsPart(EditActivityForm myForm, PdfPTable mainLayout)
+            throws WorkerException {
+        ArrayList<Issues> lmo = myForm.getLineMinistryObservations().getIssues();
+        if (lmo == null || lmo.isEmpty()) {
+            return;
+        }
+    
+        PdfPCell lmoTitleCell = new PdfPCell();
+        lmoTitleCell.setBackgroundColor(BACKGROUND_COLOR);
+        lmoTitleCell.setBorder(0);
+    
+        Paragraph p1;
+        p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("Line Ministry Observations")), titleFont);
+        p1.setAlignment(Element.ALIGN_RIGHT);
+    
+        lmoTitleCell.addElement(p1);
+        mainLayout.addCell(lmoTitleCell);
+    
+        PdfPCell lmoValuesCell = new PdfPCell();
+        lmoValuesCell.setBackgroundColor(BACKGROUND_COLOR_WHITE);
+        lmoValuesCell.setBorder(0);
+    
+        String lmoModulePath = "/Activity Form/Line Ministry Observations/Observation";
+        String lmoDatePath = lmoModulePath + "/Date";
+        String lmoMeasurePath = lmoModulePath + "/Measure";
+        String lmoActorPath = lmoMeasurePath + "/Actor";
+    
+        for (Issues issue : lmo) {
+            com.lowagie.text.List issuesList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+            issuesList.setListSymbol(new Chunk("\u2022"));
+            String issueName = issue.getName();
+            if (FeaturesUtil.isVisibleModule(lmoDatePath)) {
+                issueName += " \t" + issue.getIssueDate();
+            }
+            
+            ListItem issueItem = new ListItem(new Phrase(issueName, plainFont));
+            issuesList.add(issueItem);
+            if (issue.getMeasures() != null && issue.getMeasures().size() > 0
+                    && FeaturesUtil.isVisibleModule(lmoMeasurePath)) {
+                com.lowagie.text.List measuresSubList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+                measuresSubList.setListSymbol("-");
+                
+                for (Measures measure : issue.getMeasures()) {
+                    ListItem measureItem = new ListItem(new Phrase(measure.getName(), plainFont));
+                    measuresSubList.add(measureItem);
+                    
+                    if (measure.getActors() != null && measure.getActors().size() > 0
+                            && FeaturesUtil.isVisibleModule(lmoActorPath)) {
+                        com.lowagie.text.List actorsSubList = new com.lowagie.text.List(false, SYMBOL_INDENT);
+                        actorsSubList.setListSymbol(new Chunk("\u2022"));
+                        
+                        for (AmpActor actor : measure.getActors()) {
+                            ListItem actorItem = new ListItem(new Phrase(actor.getName(), plainFont));
+                            actorsSubList.add(actorItem);
+                        }
+                        measuresSubList.add(actorsSubList);
+                    }
+                }
+                issuesList.add(measuresSubList);
+            }
+            lmoValuesCell.addElement(issuesList);
+        }
+        mainLayout.addCell(lmoValuesCell);
+    }
+    
     private void buildCostingPart(HttpServletRequest request, Long actId,PdfPTable mainLayout,ServletContext ampContext) throws WorkerException, AimException {
         int fmVisibleFieldsCounter=0;
         String [] costingFmfields={"Costing Activity Name","Costing Total Cost","Costing Total Contribution"};
@@ -3225,7 +3394,7 @@ public class ExportActivityToPDF extends Action {
                 }
 
                 if (myForm.getFunding().getDeliveryRate() != null) {
-                    addTotalsOutput(fundingTable, "Delivery Rate",
+                    addTotalsOutput(fundingTable, "Delivery rate",
                         myForm.getFunding().getDeliveryRate().replace("%", ""), "%");
                 }
 
@@ -3558,9 +3727,9 @@ public class ExportActivityToPDF extends Action {
     private void createGeneralInfoRow(PdfPTable mainLayout, String columnName, String label, String value, 
             boolean isLtr) {
         
-        if (value == null || value.isEmpty())
+        if (value == null || value.isEmpty()) {
             return;
-        
+        }
         PdfPCell cell1 = new PdfPCell();
         Paragraph p1 = new Paragraph(postprocessText(columnName), titleFont);
         p1.setAlignment(Element.ALIGN_RIGHT);
@@ -3883,6 +4052,7 @@ public class ExportActivityToPDF extends Action {
             relatedOrgsTable.addCell(emptyCell);
         }
     }
+    
     protected PdfPCell buildPdfCell(String text, Font font, int colSpan)
     {
         PdfPCell result = new PdfPCell();
@@ -4031,9 +4201,9 @@ public class ExportActivityToPDF extends Action {
     }
 
     private String buildProgramsOutput(List<AmpActivityProgram> programs) {
-        String result="";
-        for (AmpActivityProgram pr :programs) {
-            result+=pr.getHierarchyNames()+" "+pr.getProgramPercentage()+"% \n";
+        String result = "";
+        for (AmpActivityProgram pr : programs) {
+            result += pr.getHierarchyNames() + " " + pr.getProgramPercentage() + "%\n";
         }
         return result;
     }

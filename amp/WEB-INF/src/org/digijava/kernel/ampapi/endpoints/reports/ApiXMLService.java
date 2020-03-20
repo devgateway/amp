@@ -1,15 +1,34 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import javax.ws.rs.core.Response;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.ws.rs.core.Response;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.util.JAXBSource;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+
+import net.sf.saxon.Configuration;
+import net.sf.saxon.lib.ErrorGatherer;
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.StaticError;
+import net.sf.saxon.s9api.XsltCompiler;
+import net.sf.saxon.s9api.XsltExecutable;
+import net.sf.saxon.s9api.XsltTransformer;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.reports.converters.GeneratedReportToXmlConverter;
 import org.dgfoundation.amp.reports.xml.Report;
 import org.dgfoundation.amp.reports.xml.ReportParameter;
 import org.dgfoundation.amp.reports.xml.XmlReportUtil;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 
 /**
  * Provides an API for manipulating xml reports
@@ -24,17 +43,17 @@ public class ApiXMLService {
      * @return report JAXB XML Report
      */
     public static Report getXmlReport(ReportParameter reportParameter, Long reportId) {
-        JsonBean formParams = XmlReportUtil.convertXmlCustomReportToJsonObj(reportParameter);
+        ReportFormParameters formParams = XmlReportUtil.convertXmlCustomReportToJsonObj(reportParameter);
         
         if (reportId == null) {
-            JsonBean errorValidJson = ReportsUtil.validateReportConfig(formParams, true);
-            if (errorValidJson != null) {
-                throw new ApiRuntimeException(Response.Status.BAD_REQUEST, errorValidJson);
+            ApiErrorResponse errorResponse = ReportsUtil.validateReportConfig(formParams, true);
+            if (errorResponse != null) {
+                throw new ApiRuntimeException(Response.Status.BAD_REQUEST, errorResponse);
             }
             
             // we need reportId only to store the report result in cache
-            reportId = (long) formParams.getString(EPConstants.REPORT_NAME).hashCode();
-            formParams.set(EPConstants.IS_CUSTOM, true);
+            reportId = (long) formParams.getReportName().hashCode();
+            formParams.setCustom(true);
         }
         
         GeneratedReport generatedReport = ReportsUtil.getGeneratedReport(reportId, formParams);
@@ -42,5 +61,81 @@ public class ApiXMLService {
         Report xmlReport = xmlConverter.convert();
 
         return xmlReport;
+    }
+
+    /**
+     * Marshal the report into an xml string or apply XSL transformation if one is provided.
+     *
+     * @param xsl XSL stylesheet
+     * @param report report to be marshalled
+     * @return xml representation of the report
+     */
+    public static String marshallOrTransform(String xsl, JAXBElement<Report> report) {
+        if (xsl != null) {
+            Source source;
+            try {
+                source = new JAXBSource(JAXBContext.newInstance(Report.class), report);
+            } catch (JAXBException e) {
+                throw new RuntimeException("Failed to create JAXBSource.", e);
+            }
+            return transform(xsl, source);
+        } else {
+            return marshall(report);
+        }
+    }
+
+    /**
+     * Marshal the jaxb report into xml string.
+     */
+    private static String marshall(JAXBElement<Report> report) {
+        try {
+            JAXBContext context = JAXBContext.newInstance(Report.class);
+            StringWriter writer = new StringWriter();
+            context.createMarshaller().marshal(report, writer);
+            return writer.toString();
+        } catch (JAXBException e) {
+            throw new RuntimeException("Failed to marshall the report.", e);
+        }
+    }
+
+    /**
+     * Applies XLS Transform. XSLT up to v3 is supported.
+     *
+     * @param xsl xls stylesheet to use for transform
+     * @param source xml source
+     * @return result of the transformation, already marshalled into a string
+     */
+    private static String transform(String xsl, Source source) {
+        List<StaticError> errors = new ArrayList<>();
+        try {
+            StreamSource xslSource = new StreamSource(new StringReader(xsl));
+
+            Configuration config = new Configuration();
+            Processor processor = new Processor(config);
+
+            XsltCompiler compiler = processor.newXsltCompiler();
+            compiler.setErrorListener(new ErrorGatherer(errors));
+            XsltExecutable executable = compiler.compile(xslSource);
+
+            XsltTransformer transformer = executable.load();
+
+            transformer.setSource(source);
+
+            StringWriter out = new StringWriter();
+            Serializer serializer = processor.newSerializer(out);
+            transformer.setDestination(serializer);
+
+            transformer.transform();
+
+            return out.toString();
+        } catch (SaxonApiException e) {
+            StringBuilder errorsAsStr = new StringBuilder();
+            for (StaticError error : errors) {
+                errorsAsStr.append("line:").append(error.getLineNumber())
+                        .append(" col:").append(error.getColumnNumber())
+                        .append(" msg:").append(error.getMessage()).append("\n");
+            }
+            throw new RuntimeException("Failed to transform. " + errorsAsStr, e);
+        }
     }
 }

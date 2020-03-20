@@ -27,7 +27,7 @@ import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.jcrentity.Label;
-import org.digijava.module.contentrepository.util.DocToOrgDAO;
+import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
@@ -56,14 +56,16 @@ public class ShareDocument extends Action {
                 
                 if(shareWithoutApprovalNeeded){
                     String sharedPrivateNodeVersionUUID=null;
-                    sharedDoc=DocumentManagerUtil.getCrSharedDoc(node.getUUID(), teamMember.getTeamId(), CrConstants.PENDING_STATUS);                   
+                    sharedDoc = DocumentManagerUtil.getCrSharedDoc(node.getIdentifier(), teamMember.getTeamId(),
+                            CrConstants.PENDING_STATUS);                 
                     if(sharedDoc!=null){
                         sharedPrivateNodeVersionUUID=sharedDoc.getSharedNodeVersionUUID();
                         DbUtil.delete(sharedDoc);
                     }
                     
                     Session jcrWriteSession     = DocumentManagerUtil.getWriteSession(request);
-                    Node teamHomeNode           = DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember.getTeamId());
+                    Node teamHomeNode = DocumentManagerUtil.getOrCreateTeamNode(jcrWriteSession,
+                            teamMember.getTeamId());
                     
                     /**
                      * if tm shared document,which was yet unapproved by TL and in the meantime he(TM) added new version to this private document,
@@ -93,17 +95,17 @@ public class ShareDocument extends Action {
                         sharedDoc=new CrSharedDoc(nodeWrapper.getUuid(), team, CrConstants.SHARED_IN_WORKSPACE);
                         sharedDoc.setSharedPrivateNodeUUID(nodeBaseUUID);
                         
-                        if(sharedPrivateNodeVersionUUID!=null){
+                        if (sharedPrivateNodeVersionUUID != null) {
                             sharedDoc.setSharedNodeVersionUUID((sharedPrivateNodeVersionUUID));
-                        }else{
-                            Node lastVersionNode = DocumentManagerUtil.getNodeOfLastVersion(node.getUUID(), request);                           
-                            sharedDoc.setSharedNodeVersionUUID(lastVersionNode.getUUID());
+                        } else {
+                            Node lastVersionNode = DocumentManagerUtil.getNodeOfLastVersion(node.getIdentifier(),
+                                    request);
+                            sharedDoc.setSharedNodeVersionUUID(lastVersionNode.getIdentifier());
                         }
                         
-                        //sharedDoc.setTeamNodeLastAppVersionUUID(lastApprovedNodeVersionUUID);
-
                         DbUtil.saveOrUpdateObject(sharedDoc);
-                        String lastApprovedNodeVersionUUID=DocumentManagerUtil.getNodeOfLastVersion(nodeWrapper.getUuid(), request).getUUID(); //es wesit null unda iyos sul !
+                        String lastApprovedNodeVersionUUID = DocumentManagerUtil
+                                .getNodeOfLastVersion(nodeWrapper.getUuid(), request).getIdentifier();
                         //delete previous approved versionId
                         NodeLastApprovedVersion lastAppVersion=DocumentManagerUtil.getlastApprovedVersionOfTeamNode(nodeWrapper.getUuid());
                         if(lastAppVersion!=null){
@@ -114,15 +116,15 @@ public class ShareDocument extends Action {
                         DbUtil.saveOrUpdateObject(lastAppVersion);
                     }   
                 } else {
-                    sharedDoc=DocumentManagerUtil.getCrSharedDoc(node.getUUID(), teamMember.getTeamId(), CrConstants.PENDING_STATUS);
+                    sharedDoc = DocumentManagerUtil.getCrSharedDoc(node.getIdentifier(), teamMember.getTeamId(),
+                            CrConstants.PENDING_STATUS);
                     if(sharedDoc!=null){ //if there was other version of this resource,which was not approved as team doc,then that previous version is replaced with this one
                         DbUtil.delete(sharedDoc);
                     }
                     
-                    sharedDoc=new CrSharedDoc(node.getUUID(),team,CrConstants.PENDING_STATUS);
-                    //sharedDoc.setSharedNodeVersionUUID(node.getBaseVersion().getUUID());
-                    Node lastVersionNode = DocumentManagerUtil.getNodeOfLastVersion(node.getUUID(), request);
-                    sharedDoc.setSharedNodeVersionUUID(lastVersionNode.getUUID());
+                    sharedDoc = new CrSharedDoc(node.getIdentifier(), team, CrConstants.PENDING_STATUS);
+                    Node lastVersionNode = DocumentManagerUtil.getNodeOfLastVersion(node.getIdentifier(), request);
+                    sharedDoc.setSharedNodeVersionUUID(lastVersionNode.getIdentifier());
                     DbUtil.saveOrUpdateObject(sharedDoc);
                     //create new Approval
                     new PendingResourceShareTrigger(lastVersionNode);
@@ -140,26 +142,31 @@ public class ShareDocument extends Action {
                 Collection<AmpTeam> teams= TeamUtil.getAllTeams();
                 if(teams!=null && teams.size()>0){
                     for (AmpTeam ampTeam : teams) {
-                        sharedDoc=DocumentManagerUtil.getCrSharedDoc(node.getUUID(),ampTeam.getAmpTeamId(),CrConstants.SHARED_AMONG_WORKSPACES);
-                        if(sharedDoc==null){
-                            sharedDoc=new CrSharedDoc(node.getUUID(),ampTeam,CrConstants.SHARED_AMONG_WORKSPACES);
+                        sharedDoc = DocumentManagerUtil.getCrSharedDoc(node.getIdentifier(), ampTeam.getAmpTeamId(),
+                                CrConstants.SHARED_AMONG_WORKSPACES);
+                        if (sharedDoc == null) {
+                            sharedDoc = new CrSharedDoc(node.getIdentifier(), ampTeam,
+                                    CrConstants.SHARED_AMONG_WORKSPACES);
                         }
 //                      Node lastVersionNode = DocumentManagerUtil.getNodeOfLastVersion(node.getUUID(), request);
 //                      sharedDoc.setSharedNodeVersionUUID(lastVersionNode.getUUID());
                         /**
                          * get current node's last approved version that will be shared
                          */
-                        NodeLastApprovedVersion lastAppVersionOfTeamNode=DocumentManagerUtil.getlastApprovedVersionOfTeamNode(node.getUUID());
-                        if(lastAppVersionOfTeamNode!=null){
-                            sharedDoc.setSharedNodeVersionUUID(lastAppVersionOfTeamNode.getVersionID());
-                        }else{
-                            sharedDoc.setSharedNodeVersionUUID(DocumentManagerUtil.getNodeOfLastVersion(node.getUUID(), request).getUUID());
-                        }
+                        NodeLastApprovedVersion lastAppVersionOfTeamNode = DocumentManagerUtil
+                                .getlastApprovedVersionOfTeamNode(node.getIdentifier());
                         
+                        if (lastAppVersionOfTeamNode != null) {
+                            sharedDoc.setSharedNodeVersionUUID(lastAppVersionOfTeamNode.getVersionID());
+                        } else {
+                            sharedDoc.setSharedNodeVersionUUID(DocumentManagerUtil
+                                    .getNodeOfLastVersion(node.getIdentifier(), request).getIdentifier());
+                        }
+
                         DbUtil.saveOrUpdateObject(sharedDoc);
                         
                         // copy all organizations from the original Node
-                        copyOrganizations(node.getUUID(), sharedDoc.getSharedNodeVersionUUID());
+                        copyOrganizations(node.getIdentifier(), sharedDoc.getSharedNodeVersionUUID());
                     }
                 }
             }
@@ -179,11 +186,12 @@ public class ShareDocument extends Action {
      */
     private void copyOrganizations(String originalNodeUUID, String destinationNodeUUID) {
         // copy all organizations from the original Node
-        List<AmpOrganisation> existingOrgs = DocToOrgDAO.getOrgsObjByUuid(originalNodeUUID);
+        List<AmpOrganisation> existingOrgs = DocumentOrganizationManager.getInstance()
+                .getOrganizationsByUUID(originalNodeUUID);
         if (existingOrgs != null) {
             for (AmpOrganisation organizationLinkToClone : existingOrgs) {
                 CrDocumentsToOrganisations docToOrgObj = new CrDocumentsToOrganisations(destinationNodeUUID, organizationLinkToClone);
-                DocToOrgDAO.saveObject(docToOrgObj);
+                DocumentOrganizationManager.getInstance().saveObject(docToOrgObj);
             }
         }       
     }

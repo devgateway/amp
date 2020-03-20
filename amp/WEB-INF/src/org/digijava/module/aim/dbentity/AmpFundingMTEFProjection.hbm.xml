@@ -21,7 +21,7 @@
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="ampFunding" column="amp_funding_id"
 			class="org.digijava.module.aim.dbentity.AmpFunding" />
-		<many-to-one name="projected" column="amp_projected_categoryvalue_id"
+		<many-to-one name="projection" column="amp_projected_categoryvalue_id"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 
 		<many-to-one name="recipientOrg" column="recipient_org_id"

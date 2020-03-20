@@ -3,33 +3,53 @@
  */
 package org.digijava.kernel.ampapi.endpoints.security;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.menu.MenuConstants;
 import org.dgfoundation.amp.menu.MenuItem;
 import org.dgfoundation.amp.menu.MenuUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
+import org.digijava.kernel.ampapi.endpoints.gpi.GPIEPConstants;
+import org.digijava.kernel.ampapi.endpoints.security.dto.AuthenticationRequest;
+import org.digijava.kernel.ampapi.endpoints.security.dto.LayoutInformation;
+import org.digijava.kernel.ampapi.endpoints.security.dto.MenuItemStructure;
+import org.digijava.kernel.ampapi.endpoints.security.dto.UserSessionInformation;
+import org.digijava.kernel.ampapi.endpoints.security.dto.WorkspaceInfo;
+import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpVersionInfo;
 import org.digijava.kernel.services.AmpVersionService;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.util.SpringUtil;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
+import org.digijava.kernel.util.SpringUtil;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 /**
  * Security Endpoint related services like menu, footer, user
@@ -37,102 +57,113 @@ import java.util.List;
  * @author Nadejda Mandrescu
  */
 public class SecurityService {
+    
+    private static final Logger logger = Logger.getLogger(SecurityService.class);
 
     private static String ampVersion;
     private static String releaseDate;
     
-    /**
-     * @return json structure for the current view + user + state menu
-     */
-    public static List<JsonBean> getMenu() {
-        List<MenuItem> items = MenuUtils.getCurrentRequestMenuItems();
-        return convert(items);
+    private static SecurityService securityService;
+    
+    private SecurityService() {
+    
+    }
+    
+    public static SecurityService getInstance() {
+        if (securityService == null) {
+            securityService = new SecurityService();
+        }
+        
+        return securityService;
     }
     
     /**
-     * Converts menu items to JSON structure
+     * @return json structure for the current view + user + state menu
+     */
+    public List<MenuItemStructure> getMenuStructures() {
+        List<MenuItem> items = MenuUtils.getCurrentRequestMenuItems();
+        return getMenuStructures(items);
+    }
+    
+    /**
+     * Converts menu items to menu item structures
      *  
      * @param items
-     * @return JsonBean of menu items
+     * @return menu item structures
      */
-    private static List<JsonBean> convert(List<MenuItem> items) {
-        List<JsonBean> jsonItems = new ArrayList<JsonBean>();
+    private List<MenuItemStructure> getMenuStructures(List<MenuItem> items) {
+        List<MenuItemStructure> menuItemStructures = new ArrayList<MenuItemStructure>();
+        
         for (MenuItem item : items) {
-            JsonBean jsonItem = new JsonBean();
+            MenuItemStructure menuStructureItem = new MenuItemStructure();
             // we use old menu names definition to use existing translations
             String name = TranslatorWorker.translateText(item.title);
             // AMP-20030: do top menu item All caps and all menu items underneath it capitalized
             if (item.getParent() == null || item.getParent().getParent() == null) { // we have a common root parent, that's why we check for grandparent
                 name = name.toUpperCase();
             }
-            jsonItem.set(EPConstants.MENU_NAME, name);
+            menuStructureItem.setName(name);
             if (item.tooltip != null) {
-                jsonItem.set(EPConstants.MENU_TOOLTIP, TranslatorWorker.translateText(item.tooltip));
+                menuStructureItem.setTooltip(TranslatorWorker.translateText(item.tooltip));
             }
-            if (item.url != null) {
-                jsonItem.set(EPConstants.MENU_URL, item.url);
-            }
-            if (item.isPopup) {
-                jsonItem.set(EPConstants.MENU_OPEN_POPUP, true);
-            }
-            if (item.isTab) {
-                jsonItem.set(EPConstants.MENU_OPEN_TAB, true);
-            }
-            if (item.isPost) {
-                jsonItem.set(EPConstants.MENU_POST, true);
-            }
+            menuStructureItem.setUrl(item.url);
+            menuStructureItem.setPopup(item.isPopup);
+            menuStructureItem.setTab(item.isTab);
+            menuStructureItem.setPopup(item.isPost);
+            
             if (item.getChildren().size() > 0) {
-                jsonItem.set(EPConstants.MENU_CHILDREN, convert(item.getChildren()));
+                menuStructureItem.setChildren(getMenuStructures(item.getChildren()));
             }
             // special case to allow GIS/Dashboards to treat language action in their custom way 
             if (MenuConstants.LANGUAGE_ITEM.equals(item.name) || MenuConstants.PUBLIC_LANGUAGE_ITEM.equals(item.name)) {
-                jsonItem.set(EPConstants.MENU_LANUGAGE, true);
+                menuStructureItem.setLanguage(true);
             }
-            jsonItems.add(jsonItem);
+            
+            menuItemStructures.add(menuStructureItem);
         }
-        return jsonItems;
+        
+        return menuItemStructures;
     }
     
     /**
      * 
-     * @param xmlFilePath
      * @param siteUrl
      * @param isAdmin
      * @return
      */
-    public static JsonBean getFooter(String siteUrl, boolean isAdmin) {
-        JsonBean jsonItem = new JsonBean();
+    private LayoutInformation getFooterInformation(String siteUrl, boolean isAdmin) {
         populateBuildValues();
+    
         Boolean trackingEnabled = FeaturesUtil
                 .getGlobalSettingValueBoolean(GlobalSettingsConstants.ENABLE_SITE_TRACKING);
         String siteId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.TRACKING_SITE_ID);
         String trackingUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.TRACKING_SITE_URL);
-        jsonItem.set(EPConstants.BUILD_DATE, releaseDate);
-        jsonItem.set(EPConstants.AMP_VERSION, ampVersion);
-        jsonItem.set(EPConstants.TRACKING_ENABLED, trackingEnabled);
-        jsonItem.set(EPConstants.SITE_ID, siteId);
-        jsonItem.set(EPConstants.TRACKING_URL, trackingUrl);
-        jsonItem.set(EPConstants.FOOTER_TEXT, TranslatorWorker
-                .translateText("Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DG"));
+    
+        LayoutInformation layout = new LayoutInformation();
+        layout.setBuildDate(releaseDate);
+        layout.setAmpVersion(ampVersion);
+        layout.setTrackingEnabled(trackingEnabled);
+        layout.setSiteId(siteId);
+        layout.setTrackingUrl(trackingUrl);
+        layout.setFooterText(TranslatorWorker.translateText("Developed in partnership with OECD, UNDP, "
+                + "WB, Government of Ethiopia and DG"));
+        
         if (isAdmin) {
-            List<JsonBean> links = new ArrayList<JsonBean>();
-            JsonBean adminLink = new JsonBean();
-            adminLink.set(EPConstants.LINK_NAME, EPConstants.ADMIN_LINK_NAME);
-            adminLink.set(EPConstants.LINK_URL, siteUrl + "/admin");
+            List<LayoutInformation.LayoutAdminLink> links = new ArrayList<>();
+            LayoutInformation.LayoutAdminLink adminLink =
+                    new LayoutInformation.LayoutAdminLink("admin", siteUrl + "/admin");
 
             links.add(adminLink);
-            jsonItem.set(EPConstants.ADMIN_LINKS, links);
+            layout.setAdminLinks(links);
         }
-        return jsonItem;
+        
+        return layout;
     }
     
     /**
-     * Obtains and populates the values for  Amp Version and Build Date
-     * 
-     * @param filePath the path to the xml file containing 'buildDate' and
-     * 'ampVersion' values
+     * Obtains and populates the values for Amp Version and Build Date
      */
-    private static void populateBuildValues() {
+    private void populateBuildValues() {
         if (releaseDate == null || ampVersion == null) {
             AmpVersionService ampVersionService = SpringUtil.getBean(AmpVersionService.class);
             AmpVersionInfo versionInfo = ampVersionService.getVersionInfo();
@@ -153,25 +184,176 @@ public class SecurityService {
         }
     }
     
-    public static Collection<JsonBean> getWorkspaces() {
-
-        Collection<AmpTeam> workspaces = null;
-
+    public List<WorkspaceInfo> getWorkspaces() {
         TeamMember tm = TeamUtil.getCurrentMember();
         if (tm != null) {
-            workspaces = TeamMemberUtil.getAllTeamsForUser(tm.getEmail());
+            List<AmpTeam> workspaces = TeamMemberUtil.getAllTeamsForUser(tm.getEmail());
+            
+            if (workspaces != null) {
+                return workspaces.stream()
+                        .map(t -> new WorkspaceInfo(t.getAmpTeamId(), t.getName()))
+                        .collect(Collectors.toList());
+            }
         }
 
-        Collection<JsonBean> workspacesList = new ArrayList<JsonBean>();
-
-        if (workspaces==null) {
-            workspaces = new ArrayList<AmpTeam>();
+        return new ArrayList<>();
+    }
+    
+    public UserSessionInformation authenticate(AuthenticationRequest authRequest) {
+        String username = authRequest.getUserName();
+        String password = authRequest.getPassword();
+        Integer workspaceIdInt = authRequest.getWorkspaceId();
+        Long workspaceId = (workspaceIdInt == null) ? null : workspaceIdInt.longValue();
+    
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+            ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.INVALID_USER_PASSWORD);
         }
-
-        for (AmpTeam ws: workspaces){
-            workspacesList.add(SecurityUtil.getTeamJsonBean(ws));
+    
+        User user = UserUtils.getUserByEmailAddress(username);
+        if (user == null || !user.getPassword().equals(password)) {
+            ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.INVALID_USER_PASSWORD);
         }
-
-        return workspacesList;
+    
+        ApiErrorMessage result = ApiAuthentication.login(user, TLSUtils.getRequest());
+        if (result != null) {
+            ApiErrorResponseService.reportForbiddenAccess(result);
+        }
+    
+        invalidateExistingSession();
+    
+        AmpTeamMember teamMember = getAmpTeamMember(username, workspaceId);
+        if (workspaceId != null && teamMember == null) {
+            ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.INVALID_TEAM);
+        }
+    
+        storeInSession(username, password, teamMember, user);
+        String ampTeamName = (teamMember == null) ? null : teamMember.getAmpTeam().getName();
+        boolean isAdmin = user.isGlobalAdmin();
+        return SecurityService.getInstance().createUserSessionInformation(isAdmin, user, ampTeamName, true);
+    }
+    
+    public void invalidateExistingSession() {
+        HttpSession session = TLSUtils.getRequest().getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+    }
+    
+    private AmpTeamMember getAmpTeamMember(String username, Long workspaceId) {
+        AmpTeamMember teamMember = null;
+        if (workspaceId != null) {
+            teamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(username, workspaceId);
+        }
+        return teamMember;
+    }
+    
+    private void storeInSession(String username, String password, AmpTeamMember teamMember, User user) {
+        final UsernamePasswordAuthenticationToken authRequest =
+                new UsernamePasswordAuthenticationToken(username, password);
+        authRequest.setDetails(new WebAuthenticationDetails(TLSUtils.getRequest()));
+        SecurityContextHolder.getContext().setAuthentication(authRequest);
+        final HttpSession session = TLSUtils.getRequest().getSession();
+        PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+        if (teamMember != null) {
+            session.setAttribute(Constants.CURRENT_MEMBER, teamMember.toTeamMember());
+        }
+        session.setAttribute(Constants.CURRENT_USER, user);
+        
+        session.setAttribute("ampAdmin", ApiAuthentication.isAdmin(user, TLSUtils.getRequest()) ? "yes" : "no");
+    }
+    
+    public UserSessionInformation getUserSessionInformation() {
+        boolean isAdmin = "yes".equals(TLSUtils.getRequest().getSession().getAttribute("ampAdmin"));
+    
+        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        String teamName = null;
+        boolean addActivity = false;
+        
+        User user = TeamUtil.getCurrentUser();
+    
+        // if the user is admin the he doesn't have a workspace assigned
+        if (!isAdmin && tm != null) {
+            AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+            AmpTeam team = ampTeamMember.getAmpTeam();
+            teamName = team.getName();
+            addActivity = FeaturesUtil.isVisibleField("Add Activity Button")
+                    && Boolean.TRUE.equals(team.getAddActivity());
+        }
+        
+        return createUserSessionInformation(isAdmin, user, teamName, addActivity);
+    }
+    
+    public UserSessionInformation createUserSessionInformation(boolean isAdmin, User user,
+                                                               String teamName, boolean addActivity) {
+        
+        UserSessionInformation userSessionInformation = new UserSessionInformation();
+        
+        userSessionInformation.setUrl(getLoginUrl());
+        userSessionInformation.setTeamName(teamName);
+        userSessionInformation.setUserId(user.getId());
+        userSessionInformation.setUserName(user.getName());
+        userSessionInformation.setAdmin(isAdmin);
+        userSessionInformation.setAddActivity(StringUtils.isNotBlank(teamName) && addActivity);
+        userSessionInformation.setViewActivity(!isAdmin);
+        userSessionInformation.setNationalCoordinator(user.hasNationalCoordinatorGroup());
+        
+        return userSessionInformation;
+    }
+    
+    private String getLoginUrl() {
+        String scheme = "http" + (TLSUtils.getRequest().isSecure() ? "s" : "");
+        return scheme + "://" + TLSUtils.getRequest().getServerName() + getPortPart() + "/showLayout.do?layout=login";
+    }
+    
+    private String getPortPart() {
+        String portPart = "";
+        //if we are in secure mode and the port is not 443 or if we are not secure and the port is not 80
+        // we have to add the port to the url
+        boolean secure = TLSUtils.getRequest().isSecure();
+        int port = TLSUtils.getRequest().getServerPort();
+        if ((secure && port != GPIEPConstants.DEFAULT_HTTPS_PORT)
+                || (!secure && port != GPIEPConstants.DEFAULT_HTTP_PORT)) {
+            portPart = ":" + port;
+        }
+        return portPart;
+    }
+    
+    public LayoutInformation getLayout() {
+        HttpServletRequest httpRequest = TLSUtils.getRequest();
+        TeamMember tm = (TeamMember) httpRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
+        String ampAdmin = (String) httpRequest.getSession().getAttribute("ampAdmin");
+        boolean isAdmin = ampAdmin != null && ampAdmin.equals("yes");
+        SiteDomain currentDomain = RequestUtils.getSiteDomain(httpRequest);
+        String siteUrl = SiteUtils.getSiteURL(currentDomain, httpRequest.getScheme(), httpRequest.getServerPort(),
+                httpRequest.getContextPath());
+        
+        LayoutInformation layout = getFooterInformation(siteUrl, isAdmin);
+        
+        if (tm != null) {
+            User u = UserUtils.getUserByEmailAddress(tm.getEmail());
+            boolean siteAdmin = ApiAuthentication.isAdmin(u, TLSUtils.getRequest());
+        
+            layout.setLogged(true);
+            layout.setEmail(u.getEmail());
+            layout.setUserId(u.getId());
+            layout.setFirstName(u.getFirstNames());
+            layout.setLastName(u.getLastName());
+            layout.setAdministratorMode(siteAdmin);
+            
+            if (!siteAdmin) {
+                AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+            
+                if (ampTeamMember.getAmpTeam() != null) {
+                    layout.setWorkspace(ampTeamMember.getAmpTeam().getName());
+                    layout.setWorkspaceId(ampTeamMember.getAmpTeam().getAmpTeamId());
+                }
+            } else {
+                return layout;
+            }
+        } else {
+            layout.setLogged("true".equals(TLSUtils.getRequest().getSession().getAttribute("isUserLogged")));
+        }
+    
+        return layout;
     }
 }

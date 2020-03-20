@@ -2,14 +2,14 @@ package org.digijava.kernel.ampapi.endpoints.settings;
 
 import java.util.List;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * Stores a generic setting configuration  
  * @author Nadejda Mandrescu
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SettingOptions {
     
     /**

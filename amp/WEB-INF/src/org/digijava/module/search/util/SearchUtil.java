@@ -2,23 +2,28 @@ package org.digijava.module.search.util;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.ActivityFilter;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.newreports.ReportEnvBuilder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.helper.AmpActivityFake;
@@ -30,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.LoggerIdentifiable;
@@ -39,12 +45,13 @@ import org.digijava.module.aim.util.time.StopWatch;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+import org.digijava.module.contentrepository.util.DocumentsNodesAttributeManager;
 import org.digijava.module.search.helper.Resource;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.type.LongType;
+import org.hibernate.type.StandardBasicTypes;
 
 public class SearchUtil {
 
@@ -59,11 +66,11 @@ public class SearchUtil {
     public static final int EXECUTING_AGENCY = 5;
     public static final int IMPLEMENTING_AGENCY = 6;
     public static final int PLEDGE = 7;
+    
+    public static final int KEYWORDS_ALL = 1;
 
-    public static Collection<? extends LoggerIdentifiable> getReports(TeamMember tm,
-            String string) {
-        // TODO: Unify this with getTabs()
-        string  = string.replace("*", "").toLowerCase();
+    public static Collection<? extends LoggerIdentifiable> getReports(TeamMember tm, List<String> keywords, 
+            int searchMode) {
         
         List<AmpReports> col;
 
@@ -86,21 +93,24 @@ public class SearchUtil {
                     Constants.ACCESS_TYPE_MNGMT)) {
                 queryString = "select DISTINCT r from "
                         + AmpReports.class.getName()
-                        + " r where r.drilldownTab=false AND (" + buildLike(string,reportNameHql) + " OR " + buildLike(string,reportDescriptionHql) + " ) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
+                        + " r where r.drilldownTab=false AND (" + buildLike(keywords, reportNameHql, searchMode) 
+                        + " OR " + buildLike(keywords, reportDescriptionHql, searchMode) + " ) "
+                        + "AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
                         + AmpTeamReports.class.getName()
                         + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
                 qry = session.createQuery(queryString);
 
                 qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
                 qry.setParameter("teamid", tm.getTeamId());
-                addParameter(qry,string);
+                addKeywordParameters(qry, keywords);
                 
                 col = qry.list();
             } else {
                 queryString = "select distinct r from "
                         + AmpReports.class.getName()
                         + "  r left join r.members m where "
-                        + " r.drilldownTab=false AND (" + buildLike(string,reportNameHql) + " OR " + buildLike(string,reportDescriptionHql) + " ) AND "
+                        + " r.drilldownTab=false AND (" + buildLike(keywords, reportNameHql, searchMode) + " OR " 
+                        + buildLike(keywords, reportDescriptionHql, searchMode) + " ) AND "
                         + " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"
                         + " or r.id in (select r2.id from "
                         + AmpTeamReports.class.getName()
@@ -108,7 +118,7 @@ public class SearchUtil {
                 qry = session.createQuery(queryString);
                 qry.setLong("ampTeamMemId", tm.getMemberId());
                 qry.setLong("teamId", tm.getTeamId());
-                addParameter(qry,string);
+                addKeywordParameters(qry, keywords);
                 col = qry.list();
 
             }
@@ -122,30 +132,27 @@ public class SearchUtil {
         return resultList;
     }
     
-    public static String buildLike(String string, String field) {
+    public static String buildLike(List<String> keywords, String field, int searchMode) {
         String query = "";
-        String[] str = string.split(" ");
-        int index = 1;
-        for (String s : str) {
-            query += (query != "" ? " OR " : "") + " lower(" + field + ") LIKE :keyword" + index++ + " ";
+        String operator = searchMode == KEYWORDS_ALL ? "AND" : "OR";
+        for (int index = 1; index < keywords.size() + 1; index++) {
+            query += (query != "" ? " " + operator + " " : "") + " lower(" + field + ") LIKE :keyword" + index + " ";
         }
         query = "( " + query + ")";
 
         return query;
     }
     
-    public static void addParameter(Query qry, String string) {
+    public static void addKeywordParameters(Query qry, List<String> keywords) {
         int index = 1;
-        String[] str = string.split(" ");
-        for (String s : str) {
-            qry.setParameter("keyword" + index++, "%" + s + "%");
+        for (String keyword : keywords) {
+            qry.setParameter("keyword" + index++, "%" + keyword + "%");
         }
 
     }
 
-    public static Collection<? extends LoggerIdentifiable> getTabs(TeamMember tm, String string) {
-
-        string = string.replace("*", "").toLowerCase();
+    public static Collection<? extends LoggerIdentifiable> getTabs(TeamMember tm, List<String> keywords, 
+            int searchMode) {
 
         List<AmpReports> col;
 
@@ -165,27 +172,27 @@ public class SearchUtil {
             if (team.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                 queryString = "select DISTINCT r from "
                         + AmpReports.class.getName()
-                        + " r where r.drilldownTab=true AND (" + buildLike(string,reportNameHql) + " OR "
-                        + buildLike(string,reportDescriptionHql)
+                        + " r where r.drilldownTab=true AND (" + buildLike(keywords, reportNameHql, searchMode) + " OR "
+                        + buildLike(keywords, reportDescriptionHql, searchMode)
                         + " ) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
                         + AmpTeamReports.class.getName() + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
                 qry = session.createQuery(queryString);
 
                 qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
                 qry.setParameter("teamid", tm.getTeamId());
-                addParameter(qry,string);
+                addKeywordParameters(qry, keywords);
                 col = qry.list();
             } else {
                 queryString = "select distinct r from " + AmpReports.class.getName() + "  r left join r.members m where "
-                        + " r.drilldownTab=true AND (" + buildLike(string,reportNameHql) + " OR "
-                        + buildLike(string,reportDescriptionHql) + ") AND "
+                        + " r.drilldownTab=true AND (" + buildLike(keywords, reportNameHql, searchMode) + " OR "
+                        + buildLike(keywords, reportDescriptionHql, searchMode) + ") AND "
                         + " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"
                         + " or r.id in (select r2.id from " + AmpTeamReports.class.getName()
                         + " tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
                 qry = session.createQuery(queryString);
                 qry.setLong("ampTeamMemId", tm.getMemberId());
                 qry.setLong("teamId", tm.getTeamId());
-                addParameter(qry,string);
+                addKeywordParameters(qry, keywords);
                 col = qry.list();
 
             }
@@ -201,18 +208,16 @@ public class SearchUtil {
 
     }
 
-    public static Collection<LoggerIdentifiable> getPledges(String keyword, HttpServletRequest request) {
+    public static Collection<LoggerIdentifiable> getPledges(List<String> keywords, HttpServletRequest request, 
+            int searchMode) {
         Collection<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
         StopWatch.reset("Search");
-
-        AmpARFilter filter = new AmpARFilter();
 
         /**
          * AmpARFilter.FILTER_SECTION_ALL, null - parameters were added on
          * merge, might not be right
          */
         Session session = null;
-        List<FundingPledges> col = new ArrayList<FundingPledges>();
 
         session = PersistenceManager.getSession();
 
@@ -222,15 +227,14 @@ public class SearchUtil {
         // AmpActivity.sqlStringForName("f.id") +
         // " AS name, FROM amp_funding_pledges f";
 
-        // keyword.replaceAll is done for single-quote escaping;
-        // normally, extended by
-        // org.apache.commons.lang.StringEscapeUtils.escapeSql should be used,
-        // but it does exactly the same thing
-        String newQueryString = "SELECT f.pledge_id, f.title FROM v_pledges_titles f WHERE lower(f.title) LIKE  lower('%"
-                + keyword.replaceAll("'", "''") + "%')";
-        SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("pledge_id",
-                org.hibernate.type.StandardBasicTypes.LONG);
-        newQuery = newQuery.addScalar("title", org.hibernate.type.StandardBasicTypes.STRING);
+        String newQueryString = "SELECT f.pledge_id, f.title FROM v_pledges_titles f "; 
+        if (keywords.size() > 0) {
+            newQueryString += "WHERE" +  buildLike(keywords, "f.title", searchMode);
+        }
+        
+        SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("pledge_id", StandardBasicTypes.LONG);
+        newQuery = newQuery.addScalar("title", StandardBasicTypes.STRING);
+        addKeywordParameters(newQuery, keywords);
 
         List<Object[]> items = newQuery.list();
         for (Object[] item : items) {
@@ -247,8 +251,6 @@ public class SearchUtil {
 
         StopWatch.reset("Search");
 
-        String workspaceQuery = WorkspaceFilter.generateWorkspaceFilterQuery(tm);
-
         AmpARFilter filter = new AmpARFilter();
 
         /**
@@ -261,8 +263,11 @@ public class SearchUtil {
                                                                                 // other
                                                                                 // auxiliary
                                                                                 // info
+
+        if (request.getParameter("searchMode") != null) {
+            filter.setSearchMode(request.getParameter("searchMode"));
+        }
         filter.setIndexText(keyword);
-        filter.generateFilterQuery(request, false, true);
 
         // String hsqlQuery = filter.getGeneratedFilterQuery().replaceAll(
         // "FROM amp_activity", "FROM " + AmpActivity.class.getName());
@@ -274,13 +279,14 @@ public class SearchUtil {
 
         session = PersistenceManager.getSession();
 
+        Set<Long> ids = ActivityFilter.getInstance().filter(filter, ReportEnvBuilder.forSession());
+
         // not a very nice solution, but I kept the old code and idea and just
         // added some speed
         String newQueryString = "SELECT f.amp_activity_id, f.amp_id, "
                 + AmpActivityVersion.sqlStringForName("f.amp_activity_id")
                 + " AS name, f.approval_status, f.draft FROM amp_activity f WHERE f.amp_activity_id in ("
-                + filter.getGeneratedFilterQuery() + ""
-                /* + "INTERSECT "+ workspaceQuery */+ ")";
+                + Util.toCSStringForIN(ids) + ")";
         SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("amp_activity_id", LongType.INSTANCE);
         newQuery = newQuery.addScalar("amp_id", org.hibernate.type.StandardBasicTypes.STRING);
         newQuery = newQuery.addScalar("name", org.hibernate.type.StandardBasicTypes.STRING);
@@ -288,7 +294,7 @@ public class SearchUtil {
         newQuery = newQuery.addScalar("draft", org.hibernate.type.StandardBasicTypes.BOOLEAN);
 
         LinkedHashMap<Long, LoggerIdentifiable> sortingActivities = new LinkedHashMap<>();
-        for (Long i : filter.getAmpActivityIdOrder()) {
+        for (Long i : ids) {
             sortingActivities.put(i,null);
         }
 
@@ -315,9 +321,8 @@ public class SearchUtil {
         return sortingActivities.values();
     }
 
-    public static Collection<LoggerIdentifiable> getResources(String keyword, HttpServletRequest request, TeamMember tm) {
-
-        keyword = keyword.replace("*", "");
+    public static Collection<LoggerIdentifiable> getResources(List<String> keywords, HttpServletRequest request, 
+            TeamMember tm, int searchMode) {
 
         javax.jcr.Session jcrWriteSession = DocumentManagerUtil.getWriteSession(request);
 
@@ -337,7 +342,7 @@ public class SearchUtil {
                     Node n = it.nextNode();
                     NodeWrapper nw = new NodeWrapper(n);
 
-                    if (keywordMatches(nw, keyword)) {
+                    if (keywordMatches(nw, keywords, searchMode)) {
                         Resource resource = new Resource();
                         resource.setName(nw.getTitle());
                         resource.setUuid(nw.getUuid());
@@ -354,7 +359,7 @@ public class SearchUtil {
                 while (it.hasNext()) {
                     Node n = it.nextNode();
                     NodeWrapper nw = new NodeWrapper(n);
-                    if (keywordMatches(nw, keyword)) {
+                    if (keywordMatches(nw, keywords, searchMode)) {
                         Resource resource = new Resource();
                         resource.setName(nw.getTitle());
                         resource.setUuid(nw.getUuid());
@@ -363,13 +368,14 @@ public class SearchUtil {
                     }
                 }
 
-                HashMap<String, CrDocumentNodeAttributes> pd = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
+                Map<String, CrDocumentNodeAttributes> pd = DocumentsNodesAttributeManager.getInstance()
+                        .getPublicDocumentsMap(false);
                 Set<String> keySet = pd.keySet();
                 for (String uuid : keySet) {
                     Node lastVersion = DocumentManagerUtil.getReadNode(uuid, request);
                     if (lastVersion != null) {
                         NodeWrapper nw = new NodeWrapper(lastVersion);
-                        if (keywordMatches(nw, keyword)) {
+                        if (keywordMatches(nw, keywords, searchMode)) {
                             Resource resource = new Resource();
                             resource.setName(nw.getTitle());
                             resource.setUuid(nw.getUuid());
@@ -396,39 +402,37 @@ public class SearchUtil {
         return resultList;
     }
 
-    private static boolean keywordMatches(NodeWrapper n, String keyword) {
-        String title = n.getTitle();
-        String description = n.getDescription();
-        String link = n.getWebLink();
-        String name = n.getName();
+    private static boolean keywordMatches(NodeWrapper n, List<String> filterKeywords, int searchMode) {
+        String title = n.getTitle() == null ? null : n.getTitle().toLowerCase();
+        String description = n.getDescription() == null ? null : n.getDescription().toLowerCase();
+        String link = n.getWebLink() == null ? null : n.getWebLink().toLowerCase();
+        String name = n.getName() == null ? null : n.getName().toLowerCase();
 
-        if (title == null)
+        boolean pass = true;
+        
+        if (title == null) {
             return false;
-
-        if (title != null && title.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
-            return true;
+        }
+        
+        Set<Boolean> keywordFound = filterKeywords.stream()
+            .map(word -> StringUtils.indexOf(title, word) != StringUtils.INDEX_NOT_FOUND
+                    || StringUtils.indexOf(name, word) != StringUtils.INDEX_NOT_FOUND
+                    || StringUtils.indexOf(link, word) != StringUtils.INDEX_NOT_FOUND
+                    || StringUtils.indexOf(description, word) != StringUtils.INDEX_NOT_FOUND)
+            .collect(Collectors.toSet());
+        
+        if (searchMode == KEYWORDS_ALL) {
+            pass &= !keywordFound.contains(Boolean.FALSE);
+        } else {
+            pass &= keywordFound.contains(Boolean.TRUE);
         }
 
-        if (description != null && description.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
-            return true;
-        }
-
-        if (link != null) // it's a link
-        {
-            if (link.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
-                return true;
-            }
-        } else // It's a doc
-        {
-            if (name != null && name.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
-                return true;
-            }
-        }
-        return false;
+        return pass;
     }
 
-    public static Collection<LoggerIdentifiable> getActivitiesUsingRelatedOrgs(String keyword, TeamMember tm, String roleCode)
-            throws DgException {
+    public static Collection<LoggerIdentifiable> getActivitiesUsingRelatedOrgs(List<String> keywords, TeamMember tm, 
+            String roleCode, int searchMode) throws DgException {
+        
         Collection<LoggerIdentifiable> activities = new ArrayList<LoggerIdentifiable>();
         Set<AmpTeam> teams = TeamUtil.getRelatedTeamsForMember(tm);
         Set teamAO = TeamUtil.getComputedOrgs(teams);
@@ -452,11 +456,12 @@ public class SearchUtil {
         query.append(")");
         query.append(" and roleCode.roleCode=:roleCode ");
         if (!hasComputedOrgs) {
-            query.append(" and " + buildLike(keyword,orgNameHql) + " ");
+            query.append(" and " + buildLike(keywords, orgNameHql, searchMode) + " ");
             if (tm.getTeamAccessType().equals("Management")) {
                 query.append(String.format(
                         " and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ",
-                        Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
+                        ApprovalStatus.STARTED_APPROVED.getDbName(),
+                        ApprovalStatus.APPROVED.getDbName()));
             }
         }
 
@@ -467,7 +472,7 @@ public class SearchUtil {
             qry.setString("roleCode", "DN");
         } else {
             qry.setString("roleCode", roleCode);
-            addParameter(qry,keyword.toLowerCase());
+            addKeywordParameters(qry, keywords);
         }
 
         List<AmpActivity> result = qry.list();
@@ -486,17 +491,15 @@ public class SearchUtil {
                 queryString.append(" and act.ampActivityId in (");
                 queryString.append(Util.toCSStringForIN(result));
                 queryString.append(")");
-                queryString.append(" and " + orgNameHql + " like :name");
+                queryString.append(" and " + buildLike(keywords, orgNameHql, searchMode) + " ");
                 qry = session.createQuery(queryString.toString());
                 qry.setString("roleCode", roleCode);
-                qry.setString("name", '%' + keyword.toLowerCase() + '%');
-                result = qry.list();
+                addKeywordParameters(qry, keywords);
                 if (result != null && !result.isEmpty()) {
+                    result = qry.list();
                     activities.addAll(result);
                 }
-
             }
-
         }
         return activities;
     }
@@ -517,6 +520,18 @@ public class SearchUtil {
 
         return remSource.toLowerCase(locale).contains(remKeyword.toLowerCase(locale));
 
+    }
+    
+    public static List<String> buildKeywordsList(String keywordString) {
+        keywordString = keywordString.replace("*", "").toLowerCase();
+        
+        Set<String> keywords =  Arrays.asList(keywordString.split(" ")).stream()
+            .map(word -> word.trim())
+            .filter(word -> StringUtils.isNotBlank(word))
+            .map(word -> StringEscapeUtils.escapeSql(word))
+            .collect(Collectors.toSet());
+        
+        return new ArrayList<String>(keywords);
     }
 
 }

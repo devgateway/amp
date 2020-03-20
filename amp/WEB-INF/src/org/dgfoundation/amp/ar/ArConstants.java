@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.collections.MapUtils;
 import org.digijava.module.aim.helper.Constants;
@@ -86,23 +85,6 @@ public final class ArConstants {
     
     public final static String DISABLE_PERCENT = "Disable_Percent";
     //public final static String IS_REAL_DISBURSEMENTS_COLUMN = "Is Real Disbursements";
-    
-    /**
-     * @deprecated use COLUMN_COUNTRY if it's related to the column
-     */
-    public final static String COUNTRY="Country";
-    /**
-     * @deprecated use COLUMN_REGION if it's related to the column
-     */
-    public final static String REGION="Region";
-    /**
-     * @deprecated use COLUMN_DISTRICT if it's related to the column
-     */
-    public final static String DISTRICT="District";
-    /**
-     * @deprecated use COLUMN_ZONE if it's related to the column
-     */
-    public final static String ZONE="Zone";
     
     public final static String COMPONENT_NAME = "Component Name";
     public final static String COMPONENT_TYPE_S = "Component Type";
@@ -319,19 +301,19 @@ public final class ArConstants {
         put(ArConstants.MTEF_PROJECTION, ArConstants.MTEF_PROJECTION);
     }};
     
-    public final static String COLUMN_COUNTRY = "Country";
-    public final static String COLUMN_REGION = "Region";
-    public final static String COLUMN_ZONE = "Zone";
-    public final static String COLUMN_DISTRICT = "District";
+    public static final String COLUMN_LOC_ADM_LEVEL_0 = "Administrative Level 0";
+    public static final String COLUMN_LOC_ADM_LEVEL_1 = "Administrative Level 1";
+    public static final String COLUMN_LOC_ADM_LEVEL_2 = "Administrative Level 2";
+    public static final String COLUMN_LOC_ADM_LEVEL_3 = "Administrative Level 3";
 
-    public final static String COLUMN_PLEDGE_REGION = "Pledges Regions";
-    public final static String COLUMN_PLEDGE_ZONE = "Pledges Zones";
-    public final static String COLUMN_PLEDGE_DISTRICT = "Pledges Districts";
+    public static final String COLUMN_PLEDGE_LOC_ADM_LEVEL_1 = "Pledges Administrative Level 1";
+    public static final String COLUMN_PLEDGE_LOC_ADM_LEVEL_2 = "Pledges Administrative Level 2";
+    public static final String COLUMN_PLEDGE_LOC_ADM_LEVEL_3 = "Pledges Administrative Level 3";
     
     public final static List<String> LOCATION_COLUMNS_LIST = Arrays.asList(new String[]{
-            ArConstants.COLUMN_REGION, ArConstants.COLUMN_PLEDGE_REGION,
-            ArConstants.COLUMN_ZONE, ArConstants.COLUMN_PLEDGE_ZONE,
-            ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_PLEDGE_DISTRICT});
+            ArConstants.COLUMN_LOC_ADM_LEVEL_1, ArConstants.COLUMN_PLEDGE_LOC_ADM_LEVEL_1,
+            ArConstants.COLUMN_LOC_ADM_LEVEL_2, ArConstants.COLUMN_PLEDGE_LOC_ADM_LEVEL_2,
+            ArConstants.COLUMN_LOC_ADM_LEVEL_3, ArConstants.COLUMN_PLEDGE_LOC_ADM_LEVEL_3});
     
     public final static Set<String> LOCATION_COLUMNS = new HashSet<String>(LOCATION_COLUMNS_LIST);
     
@@ -362,7 +344,7 @@ public final class ArConstants {
     public final static String COLUMN_ANY_PRIMARYPROG           = "Primary Program";
     public final static String COLUMN_ANY_SECONDARYPROG = "Secondary Program";
     
-    public final static String COLUMN_CAPITAL_EXPENDITRURE  =   "Capital - Expenditure";
+    public static final String COLUMN_CAPITAL_EXPENDITRURE  =   "Capital Expenditure";
     public final static String COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT="Payment Capital - Recurrent";
     
     //additional measures
@@ -465,9 +447,6 @@ public final class ArConstants {
     
     public final static String EXCHANGE_RATES_CACHE="EXCHANGE_RATES_CACHE";
     public static final String VIEW_PUBLIC_PREFIX = "cached_";
-    
-    public static String AMP_ACTIVITY_TABLE = "(\\bamp_activity\\b)";
-    public static String CACHED_ACTIVITY_TABLE = "cached_amp_activity";
     
     public final static List<SyntheticColumnsMeta> syntheticColumns = Arrays.asList(
             new SyntheticColumnsMeta("Planned Disbursements - Capital", new CapitalCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements - Capital","Planned Disbursements")),

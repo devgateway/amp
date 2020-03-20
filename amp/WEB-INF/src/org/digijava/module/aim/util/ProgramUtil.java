@@ -19,6 +19,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.common.collect.ImmutableList;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -32,9 +33,7 @@ import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -60,15 +59,13 @@ import org.hibernate.Transaction;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
-import com.tonbeller.wcf.utils.SqlUtils;
-
-
 public class ProgramUtil {
     private static Logger logger = Logger.getLogger(ProgramUtil.class);
 
     @Deprecated
     public static final int YAERS_LIST_START = 2000;
-    public static final String NATIONAL_PLAN_OBJECTIVE ="National Plan Objective";
+    public static final String NATIONAL_PLANNING_OBJECTIVES = "National Planning Objectives";
+    public static final String NATIONAL_PLAN_OBJECTIVE = "National Plan Objective";
     public static final String PRIMARY_PROGRAM = "Primary Program";
     public static final String SECONDARY_PROGRAM = "Secondary Program";
     public static final String TERTIARY_PROGRAM = "Tertiary Program";
@@ -78,11 +75,14 @@ public class ProgramUtil {
                 
     @SuppressWarnings("serial")
     public static final Map<String, String> NAME_TO_COLUMN_MAP = new HashMap<String, String>() {{
-        put(NATIONAL_PLAN_OBJECTIVE, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
-        put(PRIMARY_PROGRAM, ColumnConstants.PRIMARY_PROGRAM);
-        put(SECONDARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM);
-        put(TERTIARY_PROGRAM, ColumnConstants.TERTIARY_PROGRAM);
+        put(NATIONAL_PLAN_OBJECTIVE, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+        put(PRIMARY_PROGRAM, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
+        put(SECONDARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+        put(TERTIARY_PROGRAM, ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
     }};
+    
+    public static final ImmutableList<String> PROGRAM_NAMES = ImmutableList.of(NATIONAL_PLANNING_OBJECTIVES,
+            PRIMARY_PROGRAM, SECONDARY_PROGRAM, TERTIARY_PROGRAM);
     
 
         public static Collection getAllIndicatorsFromPrograms(Collection programs) throws AimException{
@@ -115,7 +115,7 @@ public class ProgramUtil {
                 return result;
 
             } catch (Exception e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
                 throw new AimException("Cannot get programs for activity.",e);
             }
 
@@ -1210,7 +1210,7 @@ public class ProgramUtil {
                     tempTheme.setDeleted(true);
                     sess.saveOrUpdate(tempTheme);
                 } catch (HibernateException e) {
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                     throw new AimException("Cannot delete theme with id "+themeId,e);
                 }
             }
@@ -1906,7 +1906,7 @@ public class ProgramUtil {
 
         public static List<String> getAllProgramColumnNames() {
             List<String> cNames = new ArrayList<String>();
-            for (String base : NAME_TO_COLUMN_MAP.values()) {
+            for (String base : PROGRAM_NAMES) {
                 for (int i = 1; i < 9; i++)
                     cNames.add(String.format("%s Level %d", base, i));
             }

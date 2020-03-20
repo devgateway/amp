@@ -26,21 +26,6 @@ public class DashboardConstants {
     public static final String NATIONAL = "National";
     public static final String INTERNATIONAL = "International";
 
-    // Settings.
-    public static final String DASHBOARD_DEFAULT_MAX_YEAR_DAY = "";
-    public static final String DASHBOARD_DEFAULT_MIN_YEAR_DAY = "";
-    
-    public static final String X_COUNT = "xCount";
-    public static final String Y_COUNT = "yCount";
     public static final String X_COLUMN = "xColumn";
-    public static final String X_COLUMNS = "xColumns";
     public static final String Y_COLUMN = "yColumn";
-    public static final String Y_COLUMNS = "yColumns";
-    public static final String COLUMNS = "columns";
-    public static final String CHARTS = "charts";
-    
-    public static final String COLOR = "color";
-    public static final String AMOUNT_FROM = "amountFrom";
-    public static final String AMOUNT_COLORS = "amountColors";
-
 }

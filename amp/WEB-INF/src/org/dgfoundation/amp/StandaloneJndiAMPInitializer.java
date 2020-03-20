@@ -151,7 +151,7 @@ public class StandaloneJndiAMPInitializer {
      * even when we run this in standalone mode we ought to have a JBoss running
      * on the same machine and with the JNP port open (this is the default JBoss
      * configuration). This alias can be then used by any tool inside AMP
-     * (Quartz, Junit, JackRabbit, Mondrian, Hibernate) to refer to the real
+     * (Quartz, Junit, JackRabbit, Hibernate) to refer to the real
      * datasource and thus to access the database.
      * 
      * @throws NamingException
@@ -170,16 +170,13 @@ public class StandaloneJndiAMPInitializer {
             realJndiName = parseJbossRealJndiName();
         } catch (SAXException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         } catch (ParserConfigurationException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
 
         env.setProperty(REAL_JNDI, realJndiName);

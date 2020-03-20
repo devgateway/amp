@@ -64,6 +64,7 @@
 		<action login-required="false" pattern="/showRegisterUser" />
 		<action login-required="false" pattern="/viewActivityHistory" />
 		<action login-required="false" pattern="/viewActivityPreview" />
+		<action login-required="false" pattern="/showPrinterFriendlyPage" />
 		<action login-required="false" pattern="/viewNewAdvancedReport" />
 		<action login-required="false" pattern="/viewTeamReports" />
 		<action login-required="false" pattern="/xlsExport" />
@@ -107,6 +108,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpInflationSource</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFilteredCurrencyRate</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeam</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamSummaryNotificationSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpMEIndicatorValue</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpMEIndicators</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamMemberRoles</hibernate-class>
@@ -259,6 +261,8 @@
         <hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineCompatibleVersionRange</hibernate-class>
 
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineRelease</hibernate-class>
+
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineChangelog</hibernate-class>
 
 	</hibernate-classes>
 	<!-- AIM classes End-->

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-27613</jira>
+    <author>vchihai</author>
+    <description>monitor changes to resources</description>
+    <trigger>
+        <condition type="tableOrViewExists">reppmver_node</condition>
+    </trigger>
+    <apply>
+        <script>
+            <lang delimiter="@@@" type="postgres"><![CDATA[
+            
+                CREATE TRIGGER update_offline_changelog_trg
+                AFTER INSERT OR UPDATE OR DELETE ON reppmver_node
+                FOR EACH ROW EXECUTE PROCEDURE update_offline_changelog('resource'); @@@
+
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public class SummaryChangeNotificationJob extends ConnectionCleaningJob implements StatefulJob {
 
@@ -43,15 +43,18 @@ public class SummaryChangeNotificationJob extends ConnectionCleaningJob implemen
                     LinkedHashMap<Long, Collection<SummaryChange>> activityList = SummaryChangesService
                             .processActivity(activitiesIds);
 
-                    Map<String, Collection<AmpActivityVersion>> reminderUsers = SummaryChangesService
+                    Map<String, Set<AmpActivityVersion>> reminderUsers = SummaryChangesService
                             .getValidators(activityList);
 
                     try {
+                        String bodyHeader = "The following activities, for which you are an approver, "
+                                + "were either added or edited within the last 24 hours. The details are below.";
+                        String subject = "Summary of changes in AMP";
 
                         for (String receiver : reminderUsers.keySet()) {
                             StringBuffer body = new StringBuffer();
 
-                            User user = UserUtils.getUserByEmail(receiver);
+                            User user = UserUtils.getUserByEmailAddress(receiver);
 
                             for (AmpActivityVersion activity : reminderUsers.get(receiver)) {
 
@@ -66,8 +69,10 @@ public class SummaryChangeNotificationJob extends ConnectionCleaningJob implemen
                             }
                             SummaryChangeData event = new SummaryChangeData();
                             event.setEmail(receiver);
+                            event.setSubject(subject);
                             event.setBody(body.toString());
                             event.setDate(date);
+                            event.setBodyHeader(bodyHeader);
                             new SummaryChangeNotificationTrigger(event);
                         }
                     } catch (Exception ex) {

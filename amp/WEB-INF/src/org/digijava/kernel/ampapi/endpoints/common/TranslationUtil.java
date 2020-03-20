@@ -3,33 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.common;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 
-import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.services.sync.model.Translation;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
-import org.digijava.module.aim.annotations.translation.TranslatableClass;
-import org.digijava.module.aim.annotations.translation.TranslatableField;
-import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
-import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.editor.dbentity.Editor;
-import org.digijava.module.editor.exception.EditorException;
-import org.digijava.module.editor.util.DbUtil;
-import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.digijava.module.translation.util.FieldTranslationPack;
-
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,9 +13,25 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
+import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.sync.model.Translation;
+import org.digijava.kernel.util.DgUtil;
+import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
+import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.digijava.module.translation.util.FieldTranslationPack;
+
 /**
  * Content Translator
- * 
+ *
  */
 public class TranslationUtil {
     protected static final Logger logger = Logger.getLogger(TranslationUtil.class);
@@ -48,14 +39,15 @@ public class TranslationUtil {
     private static final TranslationSettings trnSettings = TranslationSettings.getCurrent();
 
     public TranslationUtil() {
-       this.translations = new ArrayList<AmpContentTranslation>();
+        this.translations = new ArrayList<AmpContentTranslation>();
     }
 
     public List<AmpContentTranslation> getTranslations() {
         return translations;
     }
 
-    public static Object getTranslatableFieldValue(String fieldName, String fieldValue, Long parentObjectId) {
+    public static Map<String, String> getTranslatableFieldValue(String fieldName, String fieldValue,
+            Long parentObjectId) {
         try {
             return getTranslationValues(AmpIndicatorLayer.class.getDeclaredField(fieldName), AmpIndicatorLayer.class, fieldValue, parentObjectId);
         } catch (Exception e) {
@@ -81,21 +73,22 @@ public class TranslationUtil {
      * @param parentObjectId is the parent object id that contains the object in order to retrieve translations
      * @return object with the translated values
      */
-    public static Object getTranslationValues(Field field, Class<?> clazz, Object fieldValue, Long parentObjectId) throws NoSuchMethodException,
-            SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, EditorException {
+    private static Map<String, String> getTranslationValues(Field field, Class<?> clazz, String fieldValue,
+            Long parentObjectId) throws SecurityException, IllegalArgumentException {
 
         // check if this is translatable field
         boolean isTranslatable = isTranslatable(field);
 
-        // provide map for translatable fields
-        if (isTranslatable) {
-            return loadTranslationsForField(clazz, field.getName(), (String) fieldValue, parentObjectId);
+        if (!isTranslatable) {
+            throw new RuntimeException(String.format("Field %s is not translatable.", field));
         }
 
-        return fieldValue;
+        // provide map for translatable fields
+        return loadTranslationsForField(clazz, field.getName(), fieldValue, parentObjectId);
     }
 
-    public static Object loadTranslationsForField(Class<?> clazz, String propertyName, String fieldValue, Long id) {
+    private static Map<String, String> loadTranslationsForField(Class<?> clazz, String propertyName, String fieldValue,
+            Long id) {
         Map<String, String> translations = new LinkedHashMap<String, String>();
 
         if (ContentTranslationUtil.multilingualIsEnabled()) {
@@ -116,9 +109,7 @@ public class TranslationUtil {
         }
 
         String defLangCode = TranslationSettings.getDefault().getDefaultLangCode();
-        if (translations.get(defLangCode) == null) {
-            translations.put(defLangCode, fieldValue);
-        }
+        translations.putIfAbsent(defLangCode, fieldValue);
 
         return translations;
     }
@@ -158,99 +149,27 @@ public class TranslationUtil {
         if (field.isAnnotationPresent(VersionableFieldTextEditor.class)) {
             return TranslationSettings.TranslationType.TEXT;
         }
+        if (MultilingualContent.class.isAssignableFrom(field.getType())) {
+            return TranslationSettings.TranslationType.MULTILINGUAL;
+        }
         return TranslationSettings.TranslationType.NONE;
     }
-    
+
     /**
-     * Retrieves translation or a simple String value 
+     * Retrieves translation or a simple String value
      * @param fieldName
      * @param parentObj
      * @param jsonValue
      * @return
      */
-    public String extractTranslationsOrSimpleValue(String fieldName, Object parentObj, Object jsonValue) {
+    public String extractTranslationsOrSimpleValue(String fieldName, Object parentObj, Map<String, String> jsonValue) {
         return extractTranslationsOrSimpleValue(ReflectionUtil.getField(parentObj, fieldName), parentObj, jsonValue);
     }
 
-    public String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
-        TranslationSettings.TranslationType trnType = getTranslatableType(field);
-        // no translation expected
-        if (TranslationSettings.TranslationType.NONE == trnType) {
-            return (String) jsonValue;
-        }
-        // base table value
-        String value = null;
-        if (TranslationSettings.TranslationType.STRING == trnType) {
-            value = extractContentTranslation(field, parentObj, (Map<String, Object>) jsonValue);
-        } else {
-            Map<String, Object> editorText = null;
-            if (trnSettings.isMultilingual()) {
-                editorText = (Map<String, Object>) jsonValue;
-            } else {
-                // simulate the lang-value map, since dg_editor is still stored per language
-                editorText = new HashMap<String, Object>();
-                editorText.put(trnSettings.getDefaultLangCode(), jsonValue);
-            }
-            value = extractTextTranslations(field, parentObj, editorText);
-        }
-        return value;
+    public String extractTranslationsOrSimpleValue(Field field, Object parentObj, Map<String, String> jsonValue) {
+        return extractContentTranslation(field, parentObj, jsonValue);
     }
 
-    /**
-     * Stores Rich Text Editor entries
-     * @param field reference field for the key
-     * @param parentObj the object the field is part of
-     * @param trnJson <lang, value> map of translations for each language
-     * @return dg_editor key reference to be stored in the base table
-     */
-    protected static String extractTextTranslations(Field field, Object parentObj, Map<String, Object> trnJson) {
-        String key = null;
-        boolean update= false;
-        if (update) { // all editor keys must exist before
-            try {
-                key = (String) field.get(parentObj);
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                logger.error(e.getMessage());
-                throw new RuntimeException(e);
-            }
-        }
-        if (key == null) { // init it in any case
-            key = getEditorKey(field.getName());
-        }
-        for (Entry<String, Object> trn : trnJson.entrySet()) {
-            String langCode = trn.getKey();
-            // AMP-20884: no cleanup so far DgUtil.cleanHtmlTags((String) trn.getValue());
-            String translation = (String) trn.getValue();
-            Editor editor;
-            try {
-                editor = DbUtil.getEditor(key, langCode);
-                if (translation == null) {
-                    // remove existing translations
-                    if (editor != null) {
-                        DbUtil.deleteEditor(editor);
-                    }
-                } else if (editor == null) {
-                    // create new
-                    editor = DbUtil.createEditor(TeamUtil.getCurrentAmpTeamMember().getUser(), langCode, "", key, null, translation,
-                            "Indicator layer API", TLSUtils.getRequest());
-                    DbUtil.saveEditor(editor);
-                } else if (!editor.getBody().equals(translation)) {
-                    // update existing if needed
-                    editor.setBody(translation);
-                    DbUtil.updateEditor(editor);
-                }
-            } catch (EditorException e) {
-                logger.error(e.getMessage());
-                throw new RuntimeException(e);
-            }
-        }
-        return key;
-    }
-
-    private static String getEditorKey(String fieldName) {
-        // must start with "aim-" since it is expected by AF like this...
-        return "aim-import-" + fieldName + "-" + System.currentTimeMillis();
-    }
 
     /**
      * Stores all provided translations
@@ -259,7 +178,7 @@ public class TranslationUtil {
      * @param trnJson <lang, value> map of translations for each language
      * @return value to be stored in the base table
      */
-    protected String extractContentTranslation(Field field, Object parentObj, Map<String, Object> trnJson) {
+    protected String extractContentTranslation(Field field, Object parentObj, Map<String, String> trnJson) {
         String value = null;
         String currentLangValue = null;
         String anyLangValue = null;
@@ -273,9 +192,9 @@ public class TranslationUtil {
             objId = (long) System.identityHashCode(parentObj);
         }
         // process translations
-        for (Entry<String, Object> trn : trnJson.entrySet()) {
+        for (Entry<String, String> trn : trnJson.entrySet()) {
             String langCode = trn.getKey();
-            String translation = DgUtil.cleanHtmlTags((String) trn.getValue());
+            String translation = DgUtil.cleanHtmlTags(trn.getValue());
             AmpContentTranslation act = null;
             for (AmpContentTranslation existingAct : trnList) {
                 if (langCode.equalsIgnoreCase(existingAct.getLocale())) {

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
@@ -494,6 +495,19 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 
         return treeSet;
     }
+
+    public static boolean isExitingAmpCategoryValue(String categoryKey, Long id, boolean onlyVisible) {
+        Integer count = (Integer) PersistenceManager.getSession().createQuery(
+                "select count(a) from " + AmpCategoryValue.class.getName()
+                + " a where a.id=:id "
+                + (onlyVisible ? "and (a.deleted=false or a.deleted is null) " : "") 
+                + "and a.ampCategoryClass.keyName=:keyName")
+            .setParameter("id", id)
+            .setParameter("keyName", categoryKey)
+            .uniqueResult();
+        return count == 1;
+    }
+
     /**
      * This is a wrapper function for getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered). 
      * The function is called with ordered = false
@@ -567,12 +581,14 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
         }
 
         List<AmpCategoryValue> ampCategoryValues = ampCategoryClass.getPossibleValues();
+        ampCategoryValues.removeAll(Collections.singleton(null));
         
         PersistenceManager.getSession().evict(ampCategoryClass); // else funny things will happen if someone tries to delete()
         
         boolean shouldOrderAlphabetically = ordered == null ? ampCategoryClass.getIsOrdered() : ordered;
-        if ( !shouldOrderAlphabetically )
-                return ampCategoryValues;
+        if (!shouldOrderAlphabetically) {
+            return ampCategoryValues;
+        }
         
         TreeSet<AmpCategoryValue> treeSet   = new TreeSet<AmpCategoryValue>( new CategoryManagerUtil.CategoryComparator() );
         treeSet.addAll(ampCategoryValues);
@@ -833,43 +849,43 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
         return ampCategoryClass.getPossibleValues();
     }
     
-    public static String checkImplementationLocationCategory ()  {
-            String errorString          = "The following values were not found: ";
-            String separator            = "";
-            
-            AmpCategoryValue country = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
-            AmpCategoryValue region = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getAmpCategoryValueFromDB();
-            AmpCategoryValue zone = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.getAmpCategoryValueFromDB();
-            AmpCategoryValue district = CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.getAmpCategoryValueFromDB();
-            
-            if ( country == null ) {
-                errorString             += "Country";
-                separator               = ", ";
+    public static String checkImplementationLocationCategory() {
+        String errorString = "The following values were not found: ";
+        String separator = "";
+        
+        AmpCategoryValue country = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getAmpCategoryValueFromDB();
+        AmpCategoryValue region = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.getAmpCategoryValueFromDB();
+        AmpCategoryValue zone = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2.getAmpCategoryValueFromDB();
+        AmpCategoryValue district = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3.getAmpCategoryValueFromDB();
+        
+        if (country == null) {
+            errorString += CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey();
+            separator = ", ";
+        }
+        if (region == null) {
+            errorString += separator + CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.getValueKey();
+            separator = ", ";
+        }
+        if (zone == null) {
+            errorString += separator + CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2.getValueKey();
+            separator = ", ";
+        }
+        if (district == null) {
+            errorString += separator + CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3.getValueKey();
+            separator = ", ";
+        }
+        if (separator != "") {
+            return errorString;
+        } else { // checking order
+            if (country.getIndex() >= region.getIndex()) {
+                return "Administrative Level 0 must be before Administrative Level 1";
+            } else if (region.getIndex() >= zone.getIndex()) {
+                return "Administrative Level 1 must be before Administrative Level 2";
+            } else if (zone.getIndex() >= district.getIndex()) {
+                return "Administrative Level 2 must be before Administrative Level 3";
             }
-            if ( region == null ){
-                errorString             += separator + "Region";
-                separator               = ", ";
-            }
-            if ( zone == null ){
-                errorString             += separator + "Zone";
-                separator               = ", ";
-            }
-            if ( district == null ){
-                errorString             += separator + "District";
-                separator               = ", ";
-            }
-            if ( separator != "" ) {
-                return errorString;
-            }
-            else { // checking order
-                if ( country.getIndex() >= region.getIndex() )
-                    return "Country must be before Region";
-                if ( region.getIndex() >= zone.getIndex() )
-                    return "Region must be before Zone";
-                if ( zone.getIndex() >= district.getIndex() )
-                    return "Zone must be before District";
-            }
-            return null;
+        }
+        return null;
     }
 
     /**
@@ -905,7 +921,6 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     public static List<AmpCategoryValue> getAllAcceptableValuesForACVClass(String categoryKey, Collection<AmpCategoryValue> relatedCollection)
     {
         List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
-//      collectionByKey.addAll(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey));
         Collection<AmpCategoryValue> collectionPrefiltered = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey);
         for (AmpCategoryValue acv: collectionPrefiltered){
             if (acv!= null && acv.isVisible())
@@ -921,7 +936,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
         }
         return collectionByKey;
     }
-    
+
     /**
      * null-guards the result
      * @param id

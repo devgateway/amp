@@ -54,10 +54,10 @@ public class CodeGenerator  {
                  new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_SECTOR),
                  new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR),
                  new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR),
-                 new NiPercentageTextColumnGenerator(ColumnConstants.COUNTRY),
-                 new NiPercentageTextColumnGenerator(ColumnConstants.REGION),
-                 new NiPercentageTextColumnGenerator(ColumnConstants.ZONE),
-                 new NiPercentageTextColumnGenerator(ColumnConstants.DISTRICT),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.LOCATION_ADM_LEVEL_0),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.LOCATION_ADM_LEVEL_1),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.LOCATION_ADM_LEVEL_2),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.LOCATION_ADM_LEVEL_3),
                  //new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_PROGRAM),
                  new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1),
                  new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2),
@@ -165,8 +165,6 @@ DROP TABLE temp_orgs_to_delete;
 -----------------------------------------
 to export a database in a good-enough-for-benchmarks-use state, run the following SQL (warning: it will corrupt the history)
 
-TRUNCATE mondrian_fact_table;
-TRUNCATE mondrian_raw_donor_transactions;
 TRUNCATE dg_editor;
 TRUNCATE cached_v_pledges_funding_st;
 TRUNCATE cached_v_donor_funding;

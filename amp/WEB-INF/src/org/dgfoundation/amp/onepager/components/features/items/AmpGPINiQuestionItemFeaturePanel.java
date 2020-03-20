@@ -304,7 +304,7 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
                     responseModel, responseValidationFields);
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
 
         return resourceContainer;

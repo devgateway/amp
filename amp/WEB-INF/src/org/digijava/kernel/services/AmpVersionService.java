@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOfflineCompatibleVersionRange;
+import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -52,6 +53,10 @@ public class AmpVersionService {
 
     public AmpVersionInfo getVersionInfo() {
         return versionInfo;
+    }
+    
+    public boolean isAmpOfflineCompatible(AmpOfflineRelease release) {
+        return release != null && isAmpOfflineCompatible(release.getVersion());
     }
 
     public boolean isAmpOfflineCompatible(String ampOfflineVersion) {

@@ -104,13 +104,13 @@ public class PassiveNiFilters implements NiFilters {
     }
 
     @Override
-    public Set<Long> getWorkspaceActivityIds() {
+    public Set<Long> getActivityIds() {
         return workspaceFilter.get();
     }
 
     @Override
     public Set<Long> getFilteredActivityIds() {
-        Set<Long> curResult = new HashSet<>(getWorkspaceActivityIds());
+        Set<Long> curResult = new HashSet<>(getActivityIds());
         for(String fetchedColumn:engine.fetchedColumns.keySet().stream().filter(this::isFilteringColumn).collect(Collectors.toList())) { //TODO: maybe refactor this to plainly iterate over #getProcessedFilters (after we have some testcases)
             Set<Long> colIds = engine.fetchedColumns.get(fetchedColumn).data.keySet();
             curResult.retainAll(colIds);

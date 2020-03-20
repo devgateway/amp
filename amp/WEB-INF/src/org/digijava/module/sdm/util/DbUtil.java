@@ -553,7 +553,7 @@ public class DbUtil {
                 order = new Long(i);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
         return order;
     }

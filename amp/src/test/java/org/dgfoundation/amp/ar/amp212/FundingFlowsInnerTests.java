@@ -72,7 +72,7 @@ public class FundingFlowsInnerTests extends NiTestCase {
         assertEquals("(<DN-IMPL>: DN-IMPL)", cat1.toString());
         assertEquals("(<IMPL-EXEC>: IMPL-EXEC)", cat2.toString());
         assertEquals("(<DN-IMPL>: DN-IMPL)", cat3.toString());
-        assertEquals("[(<DN-IMPL>: DN-IMPL), (<IMPL-EXEC>: IMPL-EXEC)]", soleStrat.getSubcolumnsNames(new TreeSet<>(Arrays.asList(cat2, cat3, cat2, cat1))).toString());
+        assertEquals("[(<DN-IMPL>: DN-IMPL), (<IMPL-EXEC>: IMPL-EXEC)]", soleStrat.getSubcolumnsNames(new TreeSet<>(Arrays.asList(cat2, cat3, cat2, cat1)), false).toString());
     }
     
     void testFiltering(NiCell splitterCell, NiCell fundingCell, String expectedAcceptorCalls, boolean shouldPass, boolean isTransactionLevel) {

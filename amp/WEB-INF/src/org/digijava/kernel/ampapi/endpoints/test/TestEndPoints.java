@@ -1,7 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.test;
-//TODO: Add documentation to this class;
-import java.util.Random;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import java.util.Random;
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -18,18 +19,16 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
  */
 
 @Path("test")
+@Api("test")
 public class TestEndPoints {
 
     private ServletContext context;
 
-    /**
-     * Method handling HTTP GET requests. The returned object will be sent to
-     * the client as "text/plain" media type.
-     * 
-     * @return String that will be returned as a text/plain response.
-     */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
+    @ApiOperation(
+            value = "Test HTTP GET for \"text/plain\" media type",
+            notes = "Return a sample text as a text/plain response")
     public String ping() {
         return "Hey, This is AMP API Test Root Path";
     }
@@ -37,23 +36,34 @@ public class TestEndPoints {
     @GET
     @Path("/testjson")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public final testObj simplejson() {
-        testObj jsonobj = new testObj(
+    @ApiOperation(
+            value = "Test HTTP GET for \"application/json\" media type",
+            notes = "Return a sample text as a application/json response")
+    public final TestObj simplejson() {
+        TestObj jsonobj = new TestObj(
                 "AMP API Test End Point - Test JSON Format");
         return jsonobj;
     }
+    
     @GET
-     @Path("/testjsonauth")
-     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "simpleJsonAuth", ui = false)
-     public final testObj simpleJsonAuth() {
-          testObj jsonobj = new testObj(
-        "AMP API Test End Point Authenticated - Test JSON Format");
-          return jsonobj;
-     }  
+    @Path("/testjsonauth")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "simpleJsonAuth", ui = false)
+    @ApiOperation(
+            value = "Test HTTP GET that requires user to be authenticated",
+            notes = "Return a sample text as a application/json response on success or unauthorized error code")
+    public final TestObj simpleJsonAuth() {
+        TestObj jsonobj = new TestObj("AMP API Test End Point Authenticated - Test JSON Format");
+        return jsonobj;
+    }
+    
     @GET
     @Path ("/testquery")
     @Produces(MediaType.TEXT_PLAIN)
+    @ApiOperation(
+            value = "Test Mondrian API Query",
+            notes = "Return a text that clarifies that Mondrian API was removed from AMP")
+    @Deprecated
     public final String queryresult() {
         return "Mondrian API removed from AMP";
     }
@@ -71,11 +81,11 @@ public class TestEndPoints {
      * 
      */
 
-    private class testObj {
+    private class TestObj {
         private Integer Id;
         private String Message;
 
-        public testObj(String message) {
+        TestObj(String message) {
             super();
             this.setMessage(message);
             this.Id = this.getId();

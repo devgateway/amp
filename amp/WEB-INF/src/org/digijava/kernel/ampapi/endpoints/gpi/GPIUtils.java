@@ -5,23 +5,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.Map;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.dto.Org;
+import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -248,9 +244,9 @@ public class GPIUtils {
     public static boolean isValidSortOrder(String sort) {
         return GPIEPConstants.ORDER_ASC.equals(sort) || GPIEPConstants.ORDER_DESC.equals(sort);
     }
-    
-    public static List<JsonBean> getDonors() {
-        final List<JsonBean> donors = new ArrayList<JsonBean>();
+
+    public static List<Org> getDonors() {
+        final List<Org> donors = new ArrayList<>();
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
                 Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn, "amp_organisation",
@@ -269,15 +265,13 @@ public class GPIUtils {
                     ResultSet rs = rsi.rs;
 
                     while (rs.next()) {
-                        JsonBean org = new JsonBean();
-                        org.set("id", rs.getLong("orgId"));
+                        String name;
                         if (ContentTranslationUtil.multilingualIsEnabled()) {
-                            org.set("name", organisationsNames.get(rs.getLong("orgId")));
+                            name = organisationsNames.get(rs.getLong("orgId"));
                         } else {
-                            org.set("name", rs.getString("name"));
+                            name = rs.getString("name");
                         }
-                        org.set("acronym", rs.getString("acronym"));
-                        donors.add(org);
+                        donors.add(new Org(rs.getLong("orgId"), name, rs.getString("acronym")));
                     }
                 }
 
@@ -287,14 +281,12 @@ public class GPIUtils {
     }
     
     public static Date getYearStartDate(AmpFiscalCalendar calendar, int year) {
-        int month = Calendar.JANUARY;
-        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
-        return new GregorianCalendar(year, month, day).getTime();
+        return CalendarUtil.getStartOfYear(year, calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
     }
 
     public static Date getYearEndDate(AmpFiscalCalendar calendar, int year) {
-        int month = Calendar.JANUARY;
-        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
-        return new GregorianCalendar(year + 1, month, day).getTime();
+        return new Date(
+                CalendarUtil.getStartOfYear(year + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum())
+                        .getTime() - GPIEPConstants.MILLISECONDS_IN_DAY);
     }
 }

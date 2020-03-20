@@ -144,7 +144,7 @@ public class CurrencyManager extends Action {
             crForm.setId(null);
 
             } catch (Exception e) {
-                logger.error(e);
+                logger.error(e.getMessage(), e);
             }
 
             return mapping.findForward("forward");

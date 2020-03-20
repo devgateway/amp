@@ -2,19 +2,15 @@ package org.dgfoundation.amp.onepager.util;
 
 import java.util.HashMap;
 
-import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.digijava.kernel.ampapi.exception.ActivityLockNotGrantedException;
+import org.digijava.kernel.persistence.PersistenceTransactionManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.ShaCrypt;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ActivityVersionUtil;
-import org.digijava.module.aim.util.TeamUtil;
 
 public class ActivityGatekeeper {
     private static HashMap<String, String> timestamp = new HashMap<String, String>();
@@ -99,10 +95,6 @@ public class ActivityGatekeeper {
             }
         }
     }
-    
-    private static Long getUserEditing(String id){
-        return userEditing.get(id);
-    }
 
     public static String buildRedirectLink(String id, long currentUserId) {
         Long editingUserId = ActivityGatekeeper.getUserEditing(String.valueOf(id));
@@ -112,6 +104,10 @@ public class ActivityGatekeeper {
             editingUserId = currentUserId;
         }
         return "/aim/viewActivityPreview.do~activityId=" + id + "~editingUserId=" + editingUserId;
+    }
+    
+    public static Long getUserEditing(String id) {
+        return userEditing.get(id);
     }
 
     public static String buildPermissionRedirectLink(String id) {
@@ -157,8 +153,33 @@ public class ActivityGatekeeper {
             return false;
         }
     }
-
-    public static String getUserSession() {
-        return TLSUtils.getRequest().getSession().getId();
+    
+    /**
+     *
+     * @param ampActivityId
+     * @param ampTeamMemId
+     * @param ptm
+     * @param runnable
+     */
+    public static void doWithLock(Long ampActivityId, Long ampTeamMemId, PersistenceTransactionManager ptm,
+                                  Runnable runnable) {
+        String activityId = ampActivityId == null ? null : ampActivityId.toString();
+        String key = null;
+        try {
+            if (ampActivityId != null) {
+                key = ActivityGatekeeper.lockActivity(activityId, ampTeamMemId);
+                if (key == null) {
+                    Long editingUserId = ActivityGatekeeper.getUserEditing(activityId);
+                    throw new ActivityLockNotGrantedException(editingUserId);
+                }
+            }
+            ptm.inTransactionWithPendingChanges(runnable);
+        } finally {
+            if (key != null) {
+                ActivityGatekeeper.unlockActivity(activityId, key);
+            }
+        }
     }
+    
+
 }

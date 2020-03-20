@@ -75,7 +75,9 @@ function saveScorecardSetting() {
 		  dataType: "json",
 		  contentType: "application/json",
 		  data : jsonString
-	});
+	}).error(function(data) {
+	    showErrors(data);
+    });
 }
 
 // Step 2 - Donors Tree filter
@@ -86,6 +88,8 @@ $.ajax({
 	  context: document.body,
 }).done(function(data) {
 	buildDonorsTree(data.children);
+}).error(function(data) {
+    showErrors(data);
 });
 
 function buildDonorsTree(treeData) {
@@ -140,7 +144,6 @@ function loadFilteredDonors() {
 	    cleanUpErrors();
 		reloadDonorsNoUpdates(data);
 	}).error(function(data) {
-	    cleanUpErrors();
 	    showErrors(data);
     });
 	
@@ -152,8 +155,9 @@ function cleanUpErrors() {
 
 function showErrors(data) {
     if (data && data.responseText) {
+    	cleanUpErrors();
         try {
-            $("#scorecardErrors").html(jQuery.parseJSON(data.responseText).error["0001"]);
+            $("#scorecardErrors").html(JSON.stringify(data.responseJSON.error));
         } catch (e) {
         }
         $("#btnNext").hide();
@@ -193,7 +197,10 @@ function saveDonorsNoUpdates() {
 		  contentType: "application/json",
 		  data : JSON.stringify(jsonDonors),
 		  dataType: "json"
-	});
+	}).error(function(data) {
+	    cleanUpErrors();
+	    showErrors(data);
+    });;
 }
 
 
@@ -363,6 +370,7 @@ function handleWizardPrevious() {
         $('#Step4').hide();
         $('#Step3').show();
     }
+    cleanUpErrors();
 }
 
 function cleanupValidationTime() {

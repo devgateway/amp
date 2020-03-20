@@ -3,6 +3,7 @@ package org.dgfoundation.amp.activity.builder;
 import java.util.Date;
 
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
 /**
  * 
@@ -25,6 +26,12 @@ public class TransactionBuilder {
 
     public TransactionBuilder withTransactionDate(Date transactionDate) {
         transaction.setTransactionDate(transactionDate);
+
+        return this;
+    }
+
+    public TransactionBuilder withPledge(FundingPledges pledge) {
+        transaction.setPledgeid(pledge);
 
         return this;
     }

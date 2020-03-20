@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.ws.rs.core.MediaType;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
 import org.junit.Assert;
@@ -15,7 +15,7 @@ import org.junit.Test;
  */
 public class LocationExtraInfoTest {
 
-    private LocationExtraInfo locationExtraInfo = new LocationExtraInfo(1L, "PL", 2L, "CV");
+    private LocationExtraInfo locationExtraInfo = new LocationExtraInfo(1L, "PL", 2L, "CV", null);
 
     private String originalJson = "{\"parent_location_id\":1,\"parent_location_name\":\"PL\","
             + "\"implementation_level_id\":2,\"implementation_location_name\":\"CV\"}";

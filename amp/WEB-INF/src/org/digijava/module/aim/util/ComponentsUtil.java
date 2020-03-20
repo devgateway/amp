@@ -420,7 +420,10 @@ public class ComponentsUtil {
             try {
                 session = PersistenceManager.getRequestDBSession();
                 String componentTitle = InternationalizedModelDescription.getForProperty(AmpComponent.class, "title").getSQLFunctionCall("co.ampComponentId");
-                queryString = "select co from " + AmpComponent.class.getName() + " as co inner join co.activities ac inner join ac.ampActivityGroup actGroup where " + componentTitle + "=:title and actGroup.ampActivityGroupId <> :groupId ";
+                queryString = "select co from " + AmpComponent.class.getName() + " as co "
+                        + "inner join co.activity.ampActivityGroup actGroup "
+                        + "where " + componentTitle + "=:title "
+                        + "and actGroup.ampActivityGroupId <> :groupId ";
                 qry = session.createQuery(queryString);
                 qry.setParameter("title", title, StringType.INSTANCE);
                 qry.setParameter("groupId", g.getAmpActivityGroupId(), LongType.INSTANCE);
@@ -603,16 +606,12 @@ public class ComponentsUtil {
             double montoProgramado = yearInfo.get("MontoProgramado") != null ? yearInfo.get("MontoProgramado") : 0;
             double montoReprogramado = yearInfo.get("MontoReprogramado") != null ? yearInfo.get("MontoReprogramado") : 0;
             double montoEjecutado = yearInfo.get("MontoEjecutado") != null ? yearInfo.get("MontoEjecutado") : 0;
-            double exchangeRate = 1;
-            if (fundingDetail.getExchangeRate() != null && fundingDetail.getExchangeRate() != 0) {
-                exchangeRate = fundingDetail.getExchangeRate();
-            }
             if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()) ) {
-                montoProgramado += fundingDetail.getTransactionAmount() / exchangeRate;
+                montoProgramado += fundingDetail.getTransactionAmount();
             } else if (fundingDetail.getTransactionType() == 0 && fundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-                montoReprogramado += fundingDetail.getTransactionAmount() / exchangeRate;
+                montoReprogramado += fundingDetail.getTransactionAmount();
             } else if (fundingDetail.getTransactionType() == 2 && fundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-                montoEjecutado += fundingDetail.getTransactionAmount() / exchangeRate;
+                montoEjecutado += fundingDetail.getTransactionAmount();
             }
             yearInfo.put("MontoProgramado", montoProgramado);
             yearInfo.put("MontoReprogramado", montoReprogramado);

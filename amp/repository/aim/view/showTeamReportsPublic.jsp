@@ -464,7 +464,7 @@ function submitForm(action){
 						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_reports/images/saiku.png" border="0" /></a>
 																						
 																						<c:set var="showExportExcelSetting" scope="page" value="true"/>
-																						<%if(!FeaturesUtil.isVisibleModule("Show Editable Export Formats")){ %> 
+																						<%if(!FeaturesUtil.showEditableExportFormats()){ %>
 																							<c:set var="showExportExcelSetting" scope="page" value="false"/>
 																						<%}%>
 																						
@@ -637,11 +637,12 @@ function submitForm(action){
 jQuery.downloadReport = function(reportId, type){
 	//url and data options required
 	if(reportId && type){ 
-		var url = window.location.origin + '/rest/data/saikupublicreport/export/' + type + '/' + reportId;
-		var input ='<input type="hidden" name="reportId" value="'+ reportId +'" />'; 
+		var url = window.location.origin + '/rest/data/saikureport/export/' + type + '/' + reportId;
+		var input ='<input type="hidden" name="reportId" value="'+ reportId +'" />';
+		var inputPublic = '<input type="hidden" name="isPublic" value="true"/>';
 		
 		//send request
-		jQuery('<form action="'+ url +'" method="POST' +'">' + input + '</form>').appendTo('body').submit().remove();
+		jQuery('<form action="'+ url +'" method="POST' +'">' + input + inputPublic + '</form>').appendTo('body').submit().remove();
 	};
 };
 

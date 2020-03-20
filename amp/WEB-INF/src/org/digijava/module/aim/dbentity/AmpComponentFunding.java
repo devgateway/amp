@@ -5,22 +5,23 @@
 
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.REQUIRED_ALWAYS;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_ADJUSTMENT_TYPE;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_AMOUNT;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_CURRENCY;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_DESCRIPTION;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_DATE;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_TYPE;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_ORGANIZATION;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.ComponentTransactionTypePossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -28,58 +29,51 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 public class AmpComponentFunding implements Cloneable, Serializable {
     // IATI-check: to be ignored
 
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     private Long ampComponentFundingId;
 
-    // @Interchangeable(fieldTitle="Activity")
-    // private AmpActivityVersion activity;
-
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_TYPE, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
-    @PossibleValues(ComponentTransactionTypePossibleValuesProvider.class)
     private Integer transactionType;
 
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_ADJUSTMENT_TYPE, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS,
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_ADJUSTMENT_TYPE, importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_ADJUSTMENT_TYPE,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
             discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY)
     private AmpCategoryValue adjustmentType;
 
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_DATE, importable = true, required = REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_DATE, importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_TRANSACTION_DATE,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Date transactionDate;
 
     // @Interchangeable(fieldTitle="Reporting Date")
     private Date reportingDate;
 
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_AMOUNT, importable = true, required = REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_AMOUNT, importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_AMOUNT,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Double transactionAmount;
 
     @Interchangeable(fieldTitle = COMPONENT_ORGANIZATION, importable = true, pickIdOnly = true,
-            dependencies = {InterchangeDependencyResolver.ORGANIZATION_PRESENT_KEY})
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_ORGANIZATION,
+            dependencies = {ComponentFundingOrgRoleValidator.ORGANIZATION_PRESENT_KEY})
     private AmpOrganisation reportingOrganization;
 
     //@Interchangeable(fieldTitle = COMPONENT_SECOND_REPORTING_ORGANIZATION, importable = true, pickIdOnly = true)
     private AmpOrganisation componentSecondResponsibleOrganization;
 
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_CURRENCY,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private AmpCurrency currency;
 
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_DESCRIPTION)
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_DESCRIPTION,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_DESCRIPTION)
     private String description;
 
-    // @Interchangeable(fieldTitle="Component")
+    @InterchangeableBackReference
     private AmpComponent component;
-    // @Interchangeable(fieldTitle="Exchange Rate")
-    private Float exchangeRate;
 
-    // /**
-    // * @return Returns the activity.
-    // */
-    // public AmpActivityVersion getActivity() {
-    // return activity;
-    // }
-    // /**
-    // * @param activity The activity to set.
-    // */
-    // public void setActivity(AmpActivityVersion activity) {
-    // this.activity = activity;
-    // }
     /**
      * @return Returns the adjustmentType.
      */
@@ -260,17 +254,10 @@ public class AmpComponentFunding implements Cloneable, Serializable {
      *
      * }
      */
-    public void setExchangeRate(Float exchangeRate) {
-        this.exchangeRate = exchangeRate;
-    }
-
-    public Float getExchangeRate() {
-        return exchangeRate;
-    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
+    
 }

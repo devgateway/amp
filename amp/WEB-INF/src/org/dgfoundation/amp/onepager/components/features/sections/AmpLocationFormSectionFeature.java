@@ -11,7 +11,6 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.util.SetModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
@@ -19,7 +18,6 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPan
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -28,7 +26,6 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * Location section of the one pager form
@@ -140,7 +137,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
         }
 
         boolean defaultCountryCheck = CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
-                CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue);
+                CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocValue);
         return defaultCountryCheck;
     }
 
@@ -160,7 +157,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
         }
 
         boolean defaultCountryCheck = (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.equalsCategoryValue(implLevel) || CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel)) &&
-                CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue);
+                CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocValue);
         return defaultCountryCheck;
     }
 
@@ -183,8 +180,9 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
             AmpCategoryValueLocations defaultCountry = null;
             defaultCountry = DynLocationManagerUtil.getDefaultCountry();
 
-            if (target!=null){ //we're in an ajax context, and not in init
+            if (target != null) { //we're in an ajax context, and not in init
                 locationsTable.locationSelected(defaultCountry, am, disablePercentagesForInternational,true);
+                locationsTable.reloadValidationFields(target);
                 target.add(locationsTable);
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
             }

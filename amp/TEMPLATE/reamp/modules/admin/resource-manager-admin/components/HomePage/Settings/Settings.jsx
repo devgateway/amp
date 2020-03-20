@@ -48,10 +48,10 @@ export default class Settings extends Component {
         this.setState(this.onValuesChanges(nextState));
     }
 
-    onMaximunFileSizeChange(event) {
+    onMaximunFileSizeChange(val) {
         let nextState = this.state;
         const maximumFileSize = Object.assign({}, this.state.maximumFileSize, {
-            valueSelected: event.target.value
+            valueSelected: val
         });
         nextState.maximumFileSize = maximumFileSize;
         this.setState(this.onValuesChanges(nextState));

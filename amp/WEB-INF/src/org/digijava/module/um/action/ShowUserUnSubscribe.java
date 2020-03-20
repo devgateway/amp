@@ -95,9 +95,6 @@ public class ShowUserUnSubscribe
        unsubscribeForm.setDay(day);
        unsubscribeForm.setYear(year);
 
-
-       unsubscribeForm.setActive(user.isActivate());
-
        if (user==null) {
 
            ActionMessages errors = new ActionMessages();

@@ -85,19 +85,20 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
     
     @Test
     public void testTwoDisbursementLastPeriod() {
-       
+        
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_DAY, "120", getCriticalLevel());
+        LocalDate currentDate = new LocalDate();
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
-                                        .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
+                                        .withTransactionDate(currentDate.minusDays(100).toDate())
                                         .getTransaction())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
-                                        .withTransactionDate(new LocalDate(2017, 7, 12).toDate())
+                                        .withTransactionDate(new LocalDate(2015, 7, 12).toDate())
                                         .getTransaction())
                                 .withDonor(new OrganisationBuilder()
                                         .withOrganisationName("Donor1")

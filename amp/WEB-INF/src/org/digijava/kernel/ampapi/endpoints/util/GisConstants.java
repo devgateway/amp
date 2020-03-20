@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -27,10 +28,15 @@ public class GisConstants {
     public static final String ADM1 = "adm-1";
     public static final String ADM2 = "adm-2";
     public static final String ADM3 = "adm-3";
-    
+    public static final String ADM4 = "adm-4";
+
     public static final String GIS_STRUCTURE_POLYGON = "Polygon";
     public static final String GIS_STRUCTURE_POINT = "Point";
     public static final String GIS_STRUCTURE_POLYLINE = "Polyline";
+    
+    public static final String GIS_STRUCTURE_COLOR_DELIMITER = ":";
+    public static final String HEX_PATTERN_REGEX = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
+    public static final Pattern HEX_PATTERN = Pattern.compile(GisConstants.HEX_PATTERN_REGEX);
     
     /**
      * Set of measures that can be used in GIS module as funding type options.
@@ -50,17 +56,17 @@ public class GisConstants {
     }};
     
     public static final Map<String, HardCodedCategoryValue> ADM_TO_IMPL_CATEGORY_VALUE = new HashMap<String, HardCodedCategoryValue>() {{
-       put(ADM0, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY); 
-       put(ADM1, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-       put(ADM2, CategoryConstants.IMPLEMENTATION_LOCATION_ZONE);
-       put(ADM3, CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT);
+       put(ADM0, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
+       put(ADM1, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
+       put(ADM2, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2);
+       put(ADM3, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3);
     }};
     
     public static final Map<String, String> IMPL_CATEGORY_VALUE_TO_ADM = new HashMap<String, String>() {{
-        put(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey(), ADM0);
-        put(CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey(), ADM1);
-        put(CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.getValueKey(), ADM2);
-        put(CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.getValueKey(), ADM3);
+        put(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey(), ADM0);
+        put(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.getValueKey(), ADM1);
+        put(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2.getValueKey(), ADM2);
+        put(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3.getValueKey(), ADM3);
     }};
     
 }

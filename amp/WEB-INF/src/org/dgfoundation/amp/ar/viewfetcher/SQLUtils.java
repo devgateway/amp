@@ -15,8 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -99,39 +97,11 @@ public class SQLUtils {
         }
         return res;
     }
-    
-    public static Set<String> getTablesWithNameMatching(Connection conn, String query, String begin) {
-        Set<String> res = new TreeSet<>();
-        List<?> allTableNames = SQLUtils.fetchAsList(conn, query, 1);
-        for(Object obj:allTableNames) {
-            String tn = obj.toString();
-            if (tn.startsWith(begin)) res.add(tn);              
-        }
-        return res;
-    }
-    
-    public static Set<String> getTablesWithNameMatching(Connection conn, String begin) {
-        return getTablesWithNameMatching(conn, "select table_name from information_schema.tables WHERE table_schema='public'", begin);
-    }
 
     public static boolean isView(Connection conn, String viewName) {
         return getLong(conn, "select count(*) from information_schema.tables WHERE table_schema='public' AND lower(table_type)='view' and table_name='" + viewName + "'") > 0;
     }
-    
-    public static boolean isTable(Connection conn, String viewName) {
-        return getLong(conn, "select count(*) from information_schema.tables WHERE table_schema='public' AND lower(table_type)='base table' and table_name='" + viewName + "'") > 0;
-    }   
-    
-    /**
-     * returns the rowcount in a table
-     * @param conn
-     * @param tableName
-     * @return
-     */
-    public static long countRows(Connection conn, String tableName) {
-        return fetchLongs(conn, "SELECT COUNT(*) FROM " +tableName).get(0);
-    }
-    
+
     /**
      * equivalent to calling {@link #getTableColumns(String, false)}
      * @param tableName
@@ -220,9 +190,7 @@ public class SQLUtils {
         }
         
         ResultSet rs = ps.executeQuery();
-        if (!connection.getMetaData().getDatabaseProductName().equals("MonetDB"))
-            rs.setFetchSize(500);
-        
+
         return new RsInfo(rs, ps);
     }
     
@@ -242,6 +210,25 @@ public class SQLUtils {
         catch(SQLException ex) {
             throw new RuntimeException(ex);
         }
+        return res;
+    }
+    
+    /**
+     * fetches an ArrayList of Strings
+     * @param connection
+     * @param query
+     * @return
+     */
+    public static List<String> fetchStrings(Connection connection, String query) {
+        List<String> res = new ArrayList<>();
+        try (RsInfo rsi = rawRunQuery(connection, query, null)) {
+            while (rsi.rs.next()) {
+                res.add(rsi.rs.getString(1));
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        
         return res;
     }
     
@@ -333,8 +320,8 @@ public class SQLUtils {
                     throw new HibernateException("We do not support multiple identifiers just yet!");
 
                 if ( dialect instanceof PostgreSQLDialect ) {
-                    //AMP-15628 - the replace of "this_." with "" inside the ids and columns was removed
-                    String ret=" "+ids[0]+" = any(contentmatch('"+entityName+"','"+columns[0]+"','"+locale+"', ?)) OR ";
+                    String ret = " " + ids[0] + " = any(contentmatch('" + entityName + "','" + propertyName + "','"
+                            + locale + "', ?)) OR ";
                     ret+=" unaccent(" + columns[0] + ") ilike " +  "unaccent(?)";
                     return ret;
                 } else {
@@ -397,7 +384,6 @@ public class SQLUtils {
                 if (segmentStart >= segmentEnd)
                     break; 
                 String query = buildMultiRowInsert(tableName, idColumnName, seqName, colNames, values.subList(segmentStart, segmentEnd));
-                //System.out.println("executing mondrian dimension table insert " + query);
                 SQLUtils.executeQuery(conn, query.toString());
             }
         }
@@ -541,19 +527,6 @@ public class SQLUtils {
         catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-    
-    /**
-     * returns an ordered set of column names of a given ResultSet
-     * @param rs
-     * @return
-     * @throws SQLException
-     */
-    public static LinkedHashSet<String> collectColumnNames(ResultSet rs) throws SQLException {
-        LinkedHashSet<String> res = new LinkedHashSet<>();
-        for(int i = 0; i < rs.getMetaData().getColumnCount(); i++)
-            res.add(rs.getMetaData().getColumnName(i + 1));
-        return res;
     }
     
     /**

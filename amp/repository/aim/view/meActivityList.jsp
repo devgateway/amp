@@ -110,7 +110,7 @@
 								<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 								<div class="paging" style="font-size:11px;">
 									<digi:trn key="aim:pages">
-										Pages :
+										Pages:
 									</digi:trn>
 									<logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" type="java.lang.Integer">
 										<bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />

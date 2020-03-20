@@ -10,6 +10,10 @@ public class SummaryChangeNotificationTrigger extends Trigger {
     public static final String PARAM_SUMMARY_EMAIL = "summaryEmail";
     public static final String PARAM_SUMMARY_DATE = "summaryDate";
     public static final String PARAM_SUMMARY_BODY = "summaryBody";
+    public static final String PARAM_SUMMARY_SUBJECT = "summarySubject";
+    public static final String PARAM_SUMMARY_BODY_HEADER = "summaryBodyHeader";
+
+
 
     private static final String[] PARAMETER_NAMES = new String[] { PARAM_TRIGGER_SENDER, PARAM_SUMMARY_EMAIL,
             PARAM_SUMMARY_DATE, PARAM_SUMMARY_BODY };
@@ -29,8 +33,11 @@ public class SummaryChangeNotificationTrigger extends Trigger {
         SummaryChangeData event = (SummaryChangeData) this.source;
         e.getParameters().put(PARAM_TRIGGER_SENDER, MessageConstants.SENDER_TYPE_SYSTEM);
         e.getParameters().put(PARAM_SUMMARY_EMAIL, event.getEmail());
+        e.getParameters().put(PARAM_SUMMARY_SUBJECT, event.getSubject());
         e.getParameters().put(PARAM_SUMMARY_BODY, event.getBody());
         e.getParameters().put(PARAM_SUMMARY_DATE, FormatHelper.formatDate(event.getDate()));
+        e.getParameters().put(PARAM_SUMMARY_BODY_HEADER, event.getBodyHeader());
+
         return e;
     }
 

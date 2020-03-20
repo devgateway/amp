@@ -5,7 +5,19 @@ var MapView = require('../../map/views/main-view');
 //var DataQualityView = require('../../dataquality/views/dataquality-view');
 var SidebarView = require('../../sidebar/sidebar-view');
 var ModuleTemplate = fs.readFileSync(__dirname + '/../templates/module-template.html', 'utf8');
+var ResizeSensor = require('css-element-queries/src/ResizeSensor');
 var boilerplate = require('amp-boilerplate');
+
+function updateMapContainerSidebarPosition() {
+    var top = $('#amp-header-menu').height() - 4;
+    $('#sidebar').css('top', top + 'px');
+    $('#map-container').css('top', top + 'px');
+}
+
+function loadResizeSensor() {
+	new ResizeSensor($('#amp-header-menu'), updateMapContainerSidebarPosition);
+	updateMapContainerSidebarPosition();
+}
 
 module.exports = Backbone.View.extend({
 
@@ -46,6 +58,10 @@ module.exports = Backbone.View.extend({
       });
     $.when(headerWidget.layoutFetched).then(function() {
       $('.dropdown-toggle').dropdown();
+
+      $.when(headerWidget.header.menuRendered).then(function() {
+          loadResizeSensor();
+        });
     });
 
     // update translations

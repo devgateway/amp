@@ -14,8 +14,6 @@
 
 	<beans:import resource="classpath:/applicationContext.xml" />
 
-	<beans:import resource="saiku/context.xml" />
-
 	<!-- by default allow displaying of the flag -->
 	<http pattern="/aim/default/displayFlag.do**" security="none" />
 
@@ -68,8 +66,10 @@
 	<http pattern="/aim/exportActToWord.do**" security="none"  />
   
 	<http pattern="/aim/default/previewActivity.do**" security="none" />
-	
-	<!-- report wizard --> 
+
+	<http pattern="/showPrinterFriendlyPage.do**" security="none"  />
+
+	<!-- report wizard -->
 	<http pattern="/reportWizard.do**" security="none" />
 	<http pattern="/aim/reportWizard.do**" security="none" />
   	<!-- 
@@ -100,9 +100,8 @@
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />
 	
 	<http pattern="/TEMPLATE/reamp/modules/ampoffline/download/**" security="none" />
+	<http pattern="/TEMPLATE/reamp/modules/activity/preview/**" security="none" />
 
-	<http pattern="/saiku/rest/**" security="none" />
-    <http pattern="/TEMPLATE/ampTemplate/saikuui/**" security="none" />
     <http pattern="/TEMPLATE/ampTemplate/saikuui_reports/**" security="none" />
     
   
@@ -200,7 +199,6 @@
     <beans:constructor-arg index="0" value="/showLayout.do/?layout=login" />
     <beans:constructor-arg index="1">
         <beans:list>
-        	<beans:bean id="ampCustomLogoutHandler" class="org.digijava.kernel.security.auth.AmpCustomLogoutHandler" />
             <beans:bean id="securityContextLogoutHandler" class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
         </beans:list>
     </beans:constructor-arg>

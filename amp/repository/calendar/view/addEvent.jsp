@@ -198,7 +198,7 @@
 										<TD width="110" height="19">
 											<div align="left">
 												<SPAN class="gen"><FONT color="red">*</FONT><B>
-												<digi:trn key="calendar:title">Title:</digi:trn></B></SPAN>
+												<digi:trn key="calendar:title">Title</digi:trn>:</B></SPAN>
 											</div>
 										</TD>
 										<TD width="597" noWrap align="left" height="19">

@@ -6,23 +6,16 @@ package org.digijava.module.contentrepository.helper;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Iterator;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
-import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
@@ -68,7 +61,7 @@ public class TemporaryDocumentData extends DocumentData {
                 try {
                     this.setName( new String(formFile.getFileName().getBytes("UTF8"), "UTF8"));
                 } catch (UnsupportedEncodingException e) {
-                    logger.error(e);
+                    logger.error(e.getMessage(), e);
                 }
                 this.setTrueUploadedFileSize( formFile.getFileSize() );
                 this.setFileSize( DocumentManagerUtil.bytesToMega(trueUploadedFileSize) );
@@ -113,47 +106,31 @@ public class TemporaryDocumentData extends DocumentData {
     }
     
     public void addToSession(HttpServletRequest request) {
-        ArrayList<DocumentData> list    = retrieveTemporaryDocDataList(request);
+        ArrayList<DocumentData> list = DocumentManagerUtil.retrieveTemporaryDocDataList(request);
         list.add(this);
-        this.setUuid( CrConstants.TEMPORARY_UUID + (list.size()-1) );
+        this.setUuid(CrConstants.TEMPORARY_UUID + (list.size() - 1));
     }
     
-    public NodeWrapper saveToRepository (HttpServletRequest request, ActionMessages errors) {
-        Session jcrWriteSession     = DocumentManagerUtil.getWriteSession(request);
-        TeamMember teamMember       = (TeamMember)request.getSession().getAttribute(Constants.CURRENT_MEMBER);
-        
-        Node homeNode               = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
-        
-        NodeWrapper nodeWrapper     = new NodeWrapper(this, request, homeNode, false, errors);
-        
-        if ( !nodeWrapper.isErrorAppeared() ) {
-            if ( nodeWrapper.saveNode(jcrWriteSession) ) {
-                
+    public NodeWrapper saveToRepository(HttpServletRequest request) {
+        TeamMember teamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
+
+        return saveToRepository(request, teamMember);
+    }
+    
+    public NodeWrapper saveToRepository(HttpServletRequest request, TeamMember teamMember) {
+        Session jcrWriteSession = DocumentManagerUtil.getWriteSession(request);
+        Node homeNode = DocumentManagerUtil.getOrCreateUserPrivateNode(jcrWriteSession, teamMember);
+        NodeWrapper nodeWrapper = new NodeWrapper(this, request, teamMember, homeNode, false);
+
+        if (!nodeWrapper.isErrorAppeared()) {
+            if (nodeWrapper.saveNode(jcrWriteSession)) {
                 return nodeWrapper;
             }
         }
+
         return null;
     }
     
-    
-    public static ArrayList<DocumentData> retrieveTemporaryDocDataList(HttpServletRequest request) {
-        HashMap<String,Object> map      = SelectDocumentDM.getContentRepositoryHashMap(request);
-        ArrayList<DocumentData> list    = (ArrayList<DocumentData>)map.get(ActivityDocumentsConstants.TEMPORARY_DOCUMENTS);
-        if (list == null || (list != null && list.size() == 0)) {
-            list    = new ArrayList<DocumentData>();
-            map.put(ActivityDocumentsConstants.TEMPORARY_DOCUMENTS, list);
-        }
-        return list;
-    }
-    public static void refreshTemporaryUuids(HttpServletRequest request) {
-        ArrayList<DocumentData> list    = retrieveTemporaryDocDataList(request);
-        Iterator<DocumentData> iter     = list.iterator();
-        int i   = 0;
-        while ( iter.hasNext() ) {
-            iter.next().setUuid( CrConstants.TEMPORARY_UUID + (i++));
-        }
-    }
-
     @Override
     public String getNodeVersionUUID () {
         return this.uuid;

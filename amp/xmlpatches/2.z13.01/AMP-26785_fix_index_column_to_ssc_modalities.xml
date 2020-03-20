@@ -9,9 +9,6 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				ALTER TABLE amp_category_value
-				DROP CONSTRAINT IF EXISTS amp_category_class_id;
-
 				UPDATE amp_category_value cv
 				SET index_column = x.new_index_column
 				FROM

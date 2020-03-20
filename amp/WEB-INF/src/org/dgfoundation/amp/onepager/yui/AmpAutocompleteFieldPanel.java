@@ -323,7 +323,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
                         NodeWrapper nw = (NodeWrapper) ch;
                         String uuid = null;
                         try {
-                            uuid = nw.getNode().getUUID();
+                            uuid = nw.getNode().getIdentifier();
                         } catch (RepositoryException e) {
                             logger.error("Can't get uuid for node: ", e);
                             break;
@@ -386,7 +386,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
             NodeWrapper nodeWrapper = (NodeWrapper) choice;
             String uuid = null;
             try {
-                uuid = nodeWrapper.getNode().getUUID();
+                uuid = nodeWrapper.getNode().getIdentifier();
             } catch (RepositoryException e) {
                 logger.error("can't get node's uuid:" + e);
                 return null;

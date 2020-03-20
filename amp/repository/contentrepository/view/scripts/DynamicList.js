@@ -32,17 +32,19 @@ function FilterWrapper( trnObj ) {
 	this.filterOrganisations	= new Array();
 	this.filterFromDate			= new Array();
 	this.filterToDate			= new Array();
+	this.filterKeywordMode   	= new Array();
 	
 	this.trnObj				= {
 			labels: "Labels",
 			filters: "Filters",
-			keywords: "Keywords"
+			keywords: "Keywords",
+			keywordMode: "Mode"
 	};
 	if ( trnObj != null )
 		this.trnObj			= trnObj;
 	
-	
 }
+
 FilterWrapper.prototype.labelsToHTML	= function(text) {
 	var ret	= "";
 	ret += "<span style='font-family:Arial,sans-serif;font-size:11px;'><b>" + this.trnObj.labels + ":</b><span> "; 
@@ -119,6 +121,17 @@ FilterWrapper.prototype.kToHTML	= function() {
 	return ret;
 }
 
+FilterWrapper.prototype.mToHTML	= function() {
+	var ret	= "<span style='font-family:Arial,sans-serif;font-size:11px;'><b>" + this.trnObj.keywordMode + ":</b><span> ";
+	if (this.filterKeywordMode.length > 0) {
+		ret += "<span>" + this.filterKeywordMode[0].value;
+	} else {
+		ret += "<span>" + '<digi:trn>Any keyword</digi:trn>';
+	}
+		
+	return ret;
+}
+
 AbstractDynamicList.prototype.setKeywordTextboxInformation = function (inputId,buttonId){
 	this.searchBtn = document.getElementById(buttonId);
 	this.searchBox	= document.getElementById(inputId);
@@ -158,6 +171,8 @@ function AbstractDynamicList (containerEl, thisObjName, fDivId, trnObj) {
 	
 	this.fPanel				= null;
 	
+	this.keywordModePanel	= null;
+	
 	this.filterInfoDivId	= null;
 	
 	this.trnObj				= trnObj;	
@@ -182,10 +197,11 @@ AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 			this.reqString, callbackObj );
 	this.closeAll();
 	
-	if ( this.filterInfoDivId != null ) {
-		var divEl	= document.getElementById( this.filterInfoDivId );
+	if (this.filterInfoDivId != null && document.getElementById(this.filterInfoDivId)) {
+		var divEl = document.getElementById(this.filterInfoDivId);
 		divEl.innerHTML = this.filterWrapper.labelsToHTML(getlabelsext()) + "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.fToHTML(getfiltertext())
-		+ "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.kToHTML(getkeywordsext());
+		+ "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.kToHTML(getkeywordsext()) 
+		+ "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.mToHTML(getkeywordModeext());
 	}
 };
 AbstractDynamicList.prototype.sendRequestPublic	= function (shouldRetrieveFilters, id, listObj) {
@@ -289,6 +305,13 @@ AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
 		this.filterWrapper["filterKeywords"] = new Array();
 		this.filterWrapper["filterKeywords"].push( new KeyValue('', 'keyword'+i) );
 	}
+	
+	if(this.keywordModePanel != null) {
+		this.filterWrapper["filterKeywordMode"] = new Array();
+		this.filterWrapper["filterKeywordMode"].push(new KeyValue(
+				this.keywordModePanel.firstElement.selectedOptions[0].value, 
+				this.keywordModePanel.firstElement.selectedOptions[0].text));
+	}
 }
 
 AbstractDynamicList.prototype.createFilterString	= function (shouldRetrieveFilters) {
@@ -300,6 +323,10 @@ AbstractDynamicList.prototype.createFilterString	= function (shouldRetrieveFilte
 				for (var i=0; i<this.filterWrapper[field].length; i++)
 					this.reqString	+= "&"+field+"="+this.filterWrapper[field][i].key;
 			}
+		}
+		
+		if (this.keywordModePanel != null) {
+			this.reqString += "&" + "keywordMode" +"=" + this.filterWrapper["filterKeywordMode"][0].key;
 		}
 	
 	for (var i=0; i<this.filterWrapper.filterLabels.length; i++) {
@@ -358,7 +385,52 @@ AbstractDynamicList.prototype.getFilterPanel = function (buttonId, divId, hide) 
 		if (this.fPanel != null) this.fPanel.show();
 //		this.fPanel = null;
 	}
+	
+	if (this.keywordModePanel != null) {
+		this.keywordModePanel.hide();
+	}
+	
 	return this.fPanel;
+}
+
+AbstractDynamicList.prototype.getKeywordModePanel = function (buttonId, divId) {
+	if (this.keywordModePanel == null) {
+		var divEl = document.getElementById(divId);
+		
+		if (divEl == null) {
+		    return null;
+		}
+		
+		var panel 		= 
+			new YAHOO.widget.Panel("KeywordModePanel"+divId, { width:"400px", 
+				visible:true, draggable:true, close: true,
+				modal:false,
+				effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
+				context:[buttonId,"tl","bl"]} );
+		panel.setHeader(this.trnObj.keywordMode);
+		panel.setBody(divEl);
+
+		panel.render(document.body);
+		
+		this.keywordModePanel = panel;
+		
+		divEl.style.display	= "";
+		var buttonEls	= divEl.getElementsByTagName("button");		
+		YAHOO.util.Event.on(buttonEls[0], "click", this.sendRequest, this, true);
+		YAHOO.util.Event.on(buttonEls[1], "click", this.closeAll, this, true);
+		var closeButtons = panel.element.getElementsByClassName("container-close");
+		YAHOO.util.Event.on(closeButtons[0], "click", this.closeAll, this, true);
+	} 
+	
+	if (this.fPanel != null) {
+		this.fPanel.hide();
+	}
+	
+	if (this.keywordModePanel != null) {
+		this.keywordModePanel.show();
+	}
+	
+	return this.keywordModePanel;
 }
 
 AbstractDynamicList.prototype.closeAll = function (e) {
@@ -370,7 +442,10 @@ AbstractDynamicList.prototype.closeAll = function (e) {
 			}
 		}
 		this.fPanel.hide();
-
+	}
+	
+	if(this.keywordModePanel != null) {
+		this.keywordModePanel.hide();
 	}
 }
 AbstractDynamicList.prototype.emptyLabels			= function () {
@@ -393,7 +468,7 @@ DynamicList.prototype				= new AbstractDynamicList();
 DynamicList.prototype.parent		= AbstractDynamicList;
 DynamicList.prototype.constructor	= DynamicList;
 
-function DynamicList(containerEl, thisObjName,fDivId, teamId, username, trnObj) {
+function DynamicList(containerEl, thisObjName, fDivId, teamId, username, trnObj) {
 	
 	this.parent.call(this, containerEl, thisObjName, fDivId, trnObj);
 	

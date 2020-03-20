@@ -1160,7 +1160,18 @@
    	<!--new Organization component-->
   	<action name="aimSelectOrganizationForm" path="/aim/selectOrganizationComponent" scope="session" type="org.digijava.module.aim.uicomponents.action.selectOrganizationComponent">
       <forward name="forward" path="/showLayout.do?layout=aim_orgComponentPopUp" />
-    </action>    
+    </action>
+
+    <action name="aimEditActivityForm" path="/aim/selectLocation" scope="session" type="org.digijava.module.aim.action.SelectLocation">
+        <forward name="forwardToPopup" path="/showLayout.do?layout=aim_locPopupLayout"/>
+        <forward name="forwardToPopin" path="/showLayout.do?layout=aim_locPopinLayout"/>
+        <forward name="index" path="/aim/index.do" redirect="true"/>
+    </action>
+    <action name="aimEditActivityForm" path="/aim/locationSelected" scope="session" type="org.digijava.module.aim.action.DynLocationSelected">
+        <forward name="forward" path="/aim/addActivity.do?edit=true"/>
+        <forward name="forwardForOrg" path="/showLayout.do?layout=aim_locPopinLayout"/>
+        <forward name="index" path="/aim/index.do" redirect="true"/>
+    </action>
 
     <action name="aimSelectSectorForm" path="/aim/searchSectors" scope="session" type="org.digijava.module.aim.action.SearchSectors" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_searchSectorPopupLayout" />
@@ -1373,7 +1384,7 @@
       <forward name="forward" path="/showLayout.do?layout=invalidSectorPercentages" />
     </action>
      
-    <action name="BudgetManagerForm" scope="session" path="/aim/BudgetManager" type="org.digijava.module.budget.action.BudgetManager" validate="false">
+    <action name="BudgetManagerForm" path="/aim/BudgetManager" type="org.digijava.module.budget.action.BudgetManager" validate="false">
        <forward name="forward" path="/showLayout.do?layout=BudgetManager" />
        <forward name="finalized" path="/aim/BudgetManager.do" redirect="true" />
        <forward name="index" path="/aim/index.do" redirect="true" />

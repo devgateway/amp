@@ -1,7 +1,7 @@
 package org.digijava.module.aim.util;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,9 +17,6 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -56,6 +53,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 public class DynLocationManagerUtil {
+    public static final int NON_HIERARCHY_CELLS_CNT = 6;
     private static Logger logger = Logger
             .getLogger(DynLocationManagerUtil.class);
     
@@ -132,7 +130,7 @@ public class DynLocationManagerUtil {
             
         } catch (Exception e) {
             errors.add("title", new ActionMessage("error.aim.dynRegionManager.cannotSaveOrUpdate"));
-            logger.error(e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -295,7 +293,7 @@ public class DynLocationManagerUtil {
                 return;
 
             Set<AmpCategoryValueLocations> countryLocations = DynLocationManagerUtil
-                    .getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+                    .getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
             HashMap<String, AmpCategoryValueLocations> nameToLocationsMap = new HashMap<String, AmpCategoryValueLocations>();
             HashMap<String, AmpCategoryValueLocations> iso3ToLocationsMap = new HashMap<String, AmpCategoryValueLocations>();
 
@@ -310,7 +308,7 @@ public class DynLocationManagerUtil {
                 }
             }
 
-            AmpCategoryValue layer = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
+            AmpCategoryValue layer = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getAmpCategoryValueFromDB();
             if (layer == null) {
                 logger
                         .error("No Country value found in category Implementation Location. Please correct this.");
@@ -754,7 +752,8 @@ public class DynLocationManagerUtil {
      */
     public static AmpCategoryValueLocations getDefaultCountry()
     {
-        AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso(FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+        AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso(
+                FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
         return country;
     }
     
@@ -777,20 +776,21 @@ public class DynLocationManagerUtil {
         }
      }
     
-    public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegionOfDefCountry()
+    public static Set<AmpCategoryValueLocations> getLocationsOfTypeAdmLevel1OfDefCountry()
             throws Exception {
         TreeSet<AmpCategoryValueLocations> returnSet = new TreeSet<AmpCategoryValueLocations>(
                 alphabeticalLocComp);
         String defCountryIso = FeaturesUtil.getDefaultCountryIso();
         if (defCountryIso != null) {
-            Set<AmpCategoryValueLocations> allRegions = getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+            Set<AmpCategoryValueLocations> allRegions = getLocationsByLayer(
+                    CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
             if (allRegions != null && allRegions.size() > 0) {
                 Iterator<AmpCategoryValueLocations> regIter = allRegions
                         .iterator();
                 while (regIter.hasNext()) {
                     AmpCategoryValueLocations reg = regIter.next();
                     AmpCategoryValueLocations country = getAncestorByLayer(reg,
-                            CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+                            CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
                     if (defCountryIso.equals(country.getIso())) {
                         returnSet.add(reg);
                     }
@@ -802,7 +802,7 @@ public class DynLocationManagerUtil {
     }
 
     public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegion() {
-        return getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+        return getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
     }
 
     public static Set<AmpCategoryValueLocations> getLocationsByLayer(HardCodedCategoryValue hcLayer) {
@@ -912,7 +912,7 @@ public class DynLocationManagerUtil {
             ampLoc.setLocation(ampCVLocation);
             
             AmpCategoryValueLocations regionLocation = DynLocationManagerUtil
-                    .getAncestorByLayer(ampCVLocation, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                    .getAncestorByLayer(ampCVLocation, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
             
             if (regionLocation != null) {
                 ampLoc.setRegionLocation(regionLocation);
@@ -983,26 +983,47 @@ public class DynLocationManagerUtil {
             return result;
         }
     };
-
+    
     public static ErrorCode importExcelFile(InputStream inputStream, Option option) throws AimException {
+        return importExcelFile(getCells(inputStream), option);
+    }
+    
+    public static List<List<String>> getCells(InputStream inputStream) {
         try {
+            List<List<String>> rows = new ArrayList<>();
             Workbook workBook = WorkbookFactory.create(inputStream);
             Sheet hssfSheet = workBook.getSheetAt(0);
-            Row hssfRow = hssfSheet.getRow(0);
+            int physicalNumberOfCells = hssfSheet.getRow(0).getPhysicalNumberOfCells();
+            for (int j = 0; j < hssfSheet.getPhysicalNumberOfRows(); j++) {
+                List<String> row = new ArrayList<>(physicalNumberOfCells);
+                Row hssfRow = hssfSheet.getRow(j);
+                for (int i = 0; i < physicalNumberOfCells; i++) {
+                    row.add(getValue(hssfRow.getCell(i)));
+                }
+                rows.add(row);
+            }
+            return rows;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-            int physicalNumberOfCells = hssfRow.getPhysicalNumberOfCells();
+    public static ErrorCode importExcelFile(List<List<String>> rows, Option option) throws AimException {
+        try {
+            List<String> header = rows.get(0);
+
             List<AmpCategoryValue> implLocs = new ArrayList<AmpCategoryValue>(
                     CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.IMPLEMENTATION_LOCATION_KEY));
             
             int i = 1;
             int hierarchyNumberOfCells=implLocs.size();
             // last five cells are not hierarchy cells and first cell is db id
-            if (hierarchyNumberOfCells + 6 != physicalNumberOfCells) {
+            if (hierarchyNumberOfCells + NON_HIERARCHY_CELLS_CNT != header.size()) {
                 return ErrorCode.NUMBER_NOT_MATCH;
             }
 
             for (AmpCategoryValue location : implLocs) {
-                String cellValue = hssfRow.getCell(i).getStringCellValue();
+                String cellValue = header.get(i);
                 if (!StringUtils.equalsIgnoreCase(cellValue, location.getValue())
                         && !StringUtils.equalsIgnoreCase(cellValue, TranslatorWorker.translateText(location.getValue()))) {
                     return ErrorCode.NAME_NOT_MATCH;
@@ -1011,36 +1032,23 @@ public class DynLocationManagerUtil {
                 i++;
             }
 
-            for (int j = 1; j < hssfSheet.getPhysicalNumberOfRows(); j++) {
+            for (int j = 1; j < rows.size(); j++) {
                 AmpCategoryValueLocations parentLoc=null;
-                hssfRow = hssfSheet.getRow(j);
+                List<String> hssfRow = rows.get(j);
 
-                if (hssfRow != null) {
-
-                    Cell cell = hssfRow.getCell(0);
-                    Long databaseId = null;
-
-                    if (cell != null) {
-                        switch (cell.getCellType()) {
-                            case Cell.CELL_TYPE_STRING:
-                                databaseId = (cell.getStringCellValue() == null || (cell.getStringCellValue() != null && cell.getStringCellValue().trim().equals(""))) ? null : Long.parseLong(cell.getStringCellValue());
-                                break;
-                            case Cell.CELL_TYPE_NUMERIC:
-                                databaseId = (long) cell.getNumericCellValue();
-                                break;
-                        }
-                    }
+                    String cell = hssfRow.get(0);
+                    Long databaseId = StringUtils.isBlank(cell) ? null : new BigDecimal(cell).longValue();
 
                     List<String> locationNames = new ArrayList<String>();
                     int k = 1;
 
                     for (; k <= hierarchyNumberOfCells; k++) {
-                        cell = hssfRow.getCell(k);
+                        cell = hssfRow.get(k);
                         if (cell == null) {
                             k = hierarchyNumberOfCells + 1;
                             break;
                         }
-                        String location = getValue(cell);
+                        String location = cell;
                         if (location == null || location.trim().length() == 0) {
                             k = hierarchyNumberOfCells + 1;
                             break;
@@ -1048,21 +1056,16 @@ public class DynLocationManagerUtil {
                         locationNames.add(location);
                     }
 
-                    cell = hssfRow.getCell(k++);
-                    String lalitude = getValue(cell);
-                    cell = hssfRow.getCell(k++);
-                    String longitude = getValue(cell);
-                    cell = hssfRow.getCell(k++);
-                    String geoID = getValue(cell);
+                    String latitude = hssfRow.get(k++);
+                    String longitude = hssfRow.get(k++);
+                    String geoID = hssfRow.get(k++);
                     
                     if (geoID != null && geoID.contains(".0")) {
                         geoID = geoID.replace(".0", "");
                     }
                     
-                    cell = hssfRow.getCell(k++);
-                    String iso = getValue(cell);
-                    cell = hssfRow.getCell(k++);
-                    String iso3 = getValue(cell);
+                    String iso = hssfRow.get(k++);
+                    String iso3 = hssfRow.get(k++);
                     for (k = 0; k < locationNames.size(); k++) {
                         String name = locationNames.get(k);
                         AmpCategoryValue implLoc = implLocs.get(k);
@@ -1090,16 +1093,26 @@ public class DynLocationManagerUtil {
                                     break;
                                 }
                                 
+                                AmpCategoryValueLocations oldParent = location.getParentLocation();
+                                
                                 location.setName(name);
-                                location.setGsLat(lalitude);
-                                location.setGsLong(longitude);
-                                location.setGeoCode(geoID);
-                                location.setIso(iso);
-                                location.setIso3(iso3);
+                                location.setGsLat(getValueOrNull(latitude));
+                                location.setGsLong(getValueOrNull(longitude));
+                                location.setGeoCode(getValueOrNull(geoID));
+                                location.setIso(getValueOrNull(iso));
+                                location.setIso3(getValueOrNull(iso3));
                                 location.setParentCategoryValue(implLoc);
                                 location.setParentLocation(parentLoc);
                                 location.setDeleted(false);
                                 boolean edit = location.getId() != null;
+    
+    
+                                if (edit && oldParent != null && parentLoc != null
+                                        && !oldParent.getId().equals(parentLoc.getId())) {
+                                    oldParent.getChildLocations().remove(location);
+                                    parentLoc.getChildLocations().add(location);
+                                }
+                                
                                 LocationUtil.saveLocation(location, edit);
                             }
                         } else {
@@ -1110,7 +1123,6 @@ public class DynLocationManagerUtil {
                             }
                         }
                     }
-                }
             }
 
         }
@@ -1123,14 +1135,18 @@ public class DynLocationManagerUtil {
     }
 
     private static String getValue(Cell cell) {
-        String value=null;
-        if(cell!=null){
-            switch(cell.getCellType()){
-                case Cell.CELL_TYPE_STRING:value=(cell.getStringCellValue()!=null&&cell.getStringCellValue().trim().equals(""))?null:cell.getStringCellValue();break;
-                case Cell.CELL_TYPE_NUMERIC: value=""+cell.getNumericCellValue();break;
+        if (cell != null) {
+            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                return "" + cell.getNumericCellValue();
             }
+            return cell.getStringCellValue();
         }
-        return value;
+        
+        return "";
+    }
+    
+    private static String getValueOrNull(String value) {
+        return StringUtils.isNotBlank(value) ? value : null;
     }
     
     public enum ErrorCode{

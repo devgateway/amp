@@ -228,7 +228,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
                     try {
                         aaps = ProgramUtil.getAmpActivityProgramSettings(programSettingsString);
                     } catch (DgException e) {
-                        logger.error(e);
+                        logger.error(e.getMessage(), e);
                         return;
                     }
                     choice = aaps.getDefaultHierarchy();

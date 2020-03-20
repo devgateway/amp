@@ -1,24 +1,24 @@
 <?xml version="1.0"?>
 <!DOCTYPE page [
 <!ENTITY ampVersion "${project.version}">
-<!ENTITY releaseDate "13.02.2018">
+<!ENTITY releaseDate "10.01.2020">
 <!ENTITY buildDate "${buildDate}">
 <!ENTITY buildSource "${buildSource}">
 ]>
 <site-config>
 	<site-layout>
-		
+
 		<layout name="newParisIndicatorLayout" extends="default" file="noLayout.jsp">
 		  <put name="title">Paris Indicator Reports</put>
 		  <put-item name="body" file="parisindicator_N.jsp"/>
 		</layout>
-		
+
 		<layout name="newGPILayout" extends="default" file="noLayout.jsp">
 		  <put name="title">Global Partnership Indicators</put>
 		  <put-item name="body" file="gpi_N.jsp"/>
 		</layout>
 
-		<layout name="helpLayout" file="helpLayout.jsp">
+		<layout name="helpLayout" extends="default">
 			<put name="title">Help</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
@@ -26,12 +26,12 @@
 			<put-item name="footer" layout="footerNoAdminLayout"/>
 			<put-item name="body" layout="helpBodyLayout"/>
 		</layout>
-		
+
 		<layout name="helpAdminLayout" extends="default">
 			<put-item name="body" layout="helpBodyLayout"/>
 			<put-item name="footer" layout="footerLayout"/>
-		</layout>		
-		
+		</layout>
+
 		<layout name="helpBodyLayout" file="helpBodyLayout.jsp">
 			<put-item name="helpTopics" module="help" instance="default" teaser="helpTopics"/>
             <put-item name="adminHelpTopics" module="help" instance="admin" teaser="helpTopics"/>
@@ -51,21 +51,21 @@
 		<layout name="seachResultsLayout" extends="helpLayout">
 			<put-item name="body" module="help" page="searchResults"/>
 		</layout>
-		
+
 		<layout name="helpAdminTopicLayout" extends="helpAdminLayout">
 			<put-item name="body" module="help" page="helpAdmin"/>
 		</layout>
-		
-		 
+
+
 		<layout name="ampMessageLayout" file="ampMessagesLayout.jsp">
 			<put name="title"> - MESSAGES</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="footer" layout="footerLayout"/>
-			<put-item name="body"  module="message" page="addMessages"/>			
+			<put-item name="body"  module="message" page="addMessages"/>
 		</layout>
-		
+
 
 		<layout name="allMessagesLayoutMainFrame" file="ampMessagesLayoutMainFrame.jsp">
 			<put-item name="body" layout="allMessagesLayoutContent"/>
@@ -79,7 +79,7 @@
 		<layout name="allMessagesLayout" extends="ampMessageLayout">
 			<put-item name="body" layout="allMessagesLayoutMainFrame"/>
 		</layout>
-		
+
 		<layout name="forwardMessagesLayout" extends="ampMessageLayout">
 			<put-item name="body" module="message" page="forwardMessage"/>
 		</layout>
@@ -88,36 +88,36 @@
 			<put-item name="body" module="message" page="viewSelectedMessage"/>
 		</layout>
 
-			
-		
+
+
 		<layout name="headerMiddleLayout" file="headerMiddle.jsp">
 			<put name="version">&ampVersion;</put>
 			<put name="build_version">&releaseDate;</put>
-			
+
 			<!-- The build_info parameter is not used in the jsp. But we need to reference the entities in order to read the values.
-				 For the entities declared but non-referenced, the java xml parser will set "null". 
+				 For the entities declared but non-referenced, the java xml parser will set "null".
 			-->
 			<put name="build_info">&buildSource;&buildDate;</put>
-	  		
+
 	  		<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
-		
+
 		<layout name="footerLayout" file="footerLayout.jsp">
 			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
-		
+
 		<layout name="footerLayoutPledges" file="footerLayoutPledges.jsp">
 			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
-		
+
 		<layout name="footerNoAdminLayout" file="footerNoAdminLayout.jsp">
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
-		
-		
+
+
 		<layout name="default">
 			<put name="title">AMP</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
@@ -132,7 +132,7 @@
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="footer" layout="footerLayoutPledges"/>
-			<put-item name="body" file="/repository/aim/view/addPledge.jsp"/>			
+			<put-item name="body" file="/repository/aim/view/addPledge.jsp"/>
 		</layout>
 		<layout name="logoutLayout" file="logoutLayout.jsp">
 			<put-item name="logout" module="aim" instance="default" teaser="logout"/>
@@ -169,7 +169,7 @@
 		</layout>
 		<layout name="popupActivityPreview" extends="popup">
 			<put-item name="body" module="aim" page="previewActivity"/>
-		</layout>		
+		</layout>
 		<layout name="noLayout" file="noLayout.jsp">
 			<put name="title">none</put>
 		</layout>
@@ -222,12 +222,12 @@
 			<put name="title">Activity - Project Costing </put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="costsBreakdown"/>
 	 	</layout>
-                
+
         <layout name="layoutViewIPAContracting" extends="tabLayout">
 			<put name="title">Activity - IPA Contracting </put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="contractingBreakdown"/>
 	 	</layout>
-                
+
  		<layout name="layoutRegionalFundingBreakdown" extends="tabLayout">
 			<put name="title">Activity - Regional Funding </put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="regionalFundingBreakdown"/>
@@ -313,12 +313,12 @@
 			<put name="title">Activity - Financial Progress - Discrepancy All</put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="yearlyDiscrepancyAllFilter"/>
 		</layout>
-      
+
                  <layout name="layoutMonthlyInfo" extends="tabLayout">
 			<put name="title">Activity - Financial Progress - Monthly</put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="monthlyInfo"/>
 		</layout>
-                
+
                 <layout name="layoutMonthlyComparisons" extends="tabLayout">
 			<put name="title">Activity - Financial Progress - All(Monthly)</put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="monthlyComparisons"/>
@@ -347,12 +347,12 @@
         <put-item name="tabBody" module="aim" instance="default"
 			teaser="channelOverviewObjective"/>
        </layout>
-		
+
 		<layout name="layoutRegionalObservations" extends="tabLayout">
         	<put name="title">Activity - Regional Observations </put>
         	<put-item name="tabBody" module="aim" instance="default" teaser="regionalObservations"/>
        	</layout>
-		
+
 	   <layout name="layoutPhysicalProgress" extends="tabLayout">
         <put name="title">Activity - Physical Progress </put>
         <put-item name="tabBody" module="aim" instance="default"
@@ -490,19 +490,19 @@
 			<put name="title">AIM</put>
 			<put-item name="body" module="aim" instance="default"/>
 		</layout>
-		
+
 		<layout name="wicketFooterLayout" extends="noLayout" file="wicketFooterLayout.jsp">
 		    <put-item name="footer" layout="footerLayout"/>
 		</layout>
-		
-		
+
+
 		<layout name="wicketHeaderLayout" extends="noLayout" file="wicketHeaderLayout.jsp">
 	 		<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	    	<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 			<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
-	
+
 		</layout>
 
 		<layout name="wicketAdminHeaderLayout" extends="noLayout" file="wicketAdminHeaderLayout.jsp">
@@ -517,14 +517,14 @@
 				<page>wicketHeader</page>
 			</module>
 		</page-group>
-		
+
 		<page-group masterLayout="wicketAdminHeaderLayout">
 			<module name="aim">
 				<page>wicketAdminHeader</page>
 			</module>
 		</page-group>
-		
-		
+
+
 		<page-group masterLayout="wicketFooterLayout">
 			<module name="aim">
 				<page>wicketFooter</page>
@@ -595,7 +595,7 @@
 				<!-- New Org Selector -->
 				<page>aim_orgSelectorSearchForm</page>
 				<page>aim_saveErrors</page>
-                
+
 				<page>previewLogframe</page>
 				<page>aim_fundingImportPopupLayout</page>
 				<page>aim_fundingPopupLayout</page>
@@ -615,17 +615,17 @@
 				<page>aim_editComponents</page>
 				<page>aim_addComponentType</page>
 				<page>aim_orgComponentPopUp</page>
-				
+
 				<page>aim_addComponentIndicator</page>
 				<page>aim_reviseCloseDate</page>
 				<page>aim_addIssue</page>
 				<page>aim_addMeasure</page>
 				<page>aim_addActor</page>
-				
+
 				<page>aim_addObservation</page>
 				<page>aim_addRegionalObservationMeasure</page>
 				<page>aim_addRegionalObservationActor</page>
-				
+
 				<page>aim_addChildWorkspaces</page>
 
 				<page>aim_viewOrgDetailPopupLayout</page>
@@ -697,7 +697,7 @@
                 <page>viewActivityHistory</page>
                 <page>myLastVersions</page>
                 <page>aim_assignActivitiesJSON</page>
-				<page>aim_updateTeamMembersJSON</page> 
+				<page>aim_updateTeamMembersJSON</page>
 				<page>aim_filterPicker2</page>
             </module>
 			<module name="contentrepository">

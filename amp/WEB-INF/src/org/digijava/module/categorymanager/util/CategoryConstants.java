@@ -180,14 +180,16 @@ public class CategoryConstants {
     public static final HardCodedCategoryValue FIN_INSTR_BUDGET_SUPPORT = 
         new CategoryConstants.HardCodedCategoryValue("financing_instrument","Budget Support", false);
     
-    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_COUNTRY  = 
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Country", true);
-    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_REGION   = 
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Region", true);
-    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ZONE = 
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Zone", true);
-    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_DISTRICT = 
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "District", true);
+    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ADM_LEVEL_0 =
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 0", true);
+    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ADM_LEVEL_1 =
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 1", true);
+    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ADM_LEVEL_2 =
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 2", true);
+    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ADM_LEVEL_3 =
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 3", true);
+    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ADM_LEVEL_4 =
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 4", true);
     public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ALL  =
             new CategoryConstants.HardCodedCategoryValue("implementation_location", "All", true);
     
@@ -275,6 +277,9 @@ public class CategoryConstants {
     
     public static final String EXPENDITURE_CLASS_NAME = "Expenditure Class";
     public static final String EXPENDITURE_CLASS_KEY = "expenditure_class";
+    
+    public static final String GIS_STRUCTURES_COLOR_CODING_NAME = "GIS Structures Color Coding";
+    public static final String GIS_STRUCTURES_COLOR_CODING_KEY = "gis_structures_color_coding";
     
     public static class HardCodedCategoryValue
     {

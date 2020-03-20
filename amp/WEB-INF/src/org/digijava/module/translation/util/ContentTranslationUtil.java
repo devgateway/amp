@@ -476,6 +476,7 @@ public class ContentTranslationUtil {
         Criteria criteria = session.createCriteria(AmpContentTranslation.class);
         criteria.add(Restrictions.eq("objectClass", objClass));
         criteria.add(Restrictions.eq("objectId", objId));
+        criteria.setCacheable(true);
         if (fieldName != null){
             criteria.add(Restrictions.eq("fieldName", fieldName));
         }
@@ -655,7 +656,7 @@ public class ContentTranslationUtil {
      */
     public static void saveFieldTranslations(final Long newId,
             final FieldTranslationPack ftp) {
-        PersistenceManager.getCurrentSession().doWork(
+        PersistenceManager.getSession().doWork(
             new org.hibernate.jdbc.Work() {
                 public void execute(Connection conn) throws SQLException {
                     Session newSession = null;

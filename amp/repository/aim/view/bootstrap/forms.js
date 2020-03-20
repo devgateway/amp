@@ -127,22 +127,37 @@ function InteractiveFormArea(masterDivId, ajaxPage, submitAttrName, actionName, 
 	_self.registerJsEvents();
 }
 
+
+function deleteDocuments(_self, idsPropertyName, idsPropertyValue, deleteAction){
+
+    var zzz = getFormData(_self.dataDivId);
+    zzz.push({name: 'extraAction', value: _self.actionName + deleteAction});
+    zzz.push({name: idsPropertyName , value: idsPropertyValue});
+
+    if(_self.submitActionName == 'pledge_funding_submit'){
+        formatDatesToISO(zzz);
+    }
+
+    $.post(_self.ajaxPage,
+        zzz,
+        function(data){
+            _self.refreshDataArea();
+        });
+}
+InteractiveFormArea.prototype.onDeleteAllNonSubmitted = function(containerDivId){
+
+
+	var idsToDelete = [];
+    $(containerDivId +' p').each(function( index , p ) {
+        idsToDelete.push(p.id);
+    });
+    if(idsToDelete.length>0) {
+        deleteDocuments(this, 'idsToDelete', idsToDelete, '_deleteAllNonSubmitted')
+    }
+};
+
 InteractiveFormArea.prototype.onDelete = function(element_id){
-	var _self = this;
-	var zzz = getFormData(_self.dataDivId);
-	
-	zzz.push({name: 'extraAction', value: _self.actionName + "_delete"});
-	zzz.push({name: 'id', value: element_id});
-	
-	if(_self.submitActionName == 'pledge_funding_submit'){
-		formatDatesToISO(zzz);
-	}	
-	
-	$.post(_self.ajaxPage,
-			zzz,
-			function(data){
-				_self.refreshDataArea();
-			});
+    deleteDocuments(this,'id',element_id,'_delete');
 };
 
 /**

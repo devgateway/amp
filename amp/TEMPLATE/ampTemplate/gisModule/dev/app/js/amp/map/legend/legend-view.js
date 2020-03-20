@@ -4,6 +4,7 @@ var $ = require('jquery');
 var Backbone = require('backbone');
 var LegendItem = require('./legend-item-view');
 var Template = fs.readFileSync(__dirname + '/legend-template.html', 'utf8');
+require('jquery-ui/resizable');
 
 module.exports = Backbone.View.extend({
 
@@ -11,14 +12,15 @@ module.exports = Backbone.View.extend({
 
   template: _.template(Template),
 
+
   events: {
     'click a[href="#toggle-legend-collapse"]': 'toggleLegend'
   },
-
+ 
   initialize: function(options) {
     var self = this;
     this.app = options.app;
-
+    
     //attach legend listeners after filter and app state loaded.
     $.when(this.app.data.filter.loaded, this.app.data._stateWait).then(function() {
       self.listenTo(self.app.data, 'show hide refresh sync valuesChanged', self.render);
@@ -40,14 +42,47 @@ module.exports = Backbone.View.extend({
 
     if (!_.isEmpty(content)) {
       this.$el.addClass('expanded');  // always expand when new layers are added
+        this.originalHeight = this.$el.height();
       this.$('.legend-content').html(content);
-    }
-
+    }    
+        
+    this.makeLegendDraggable();
+    this.makeLegendResizable();
+    
     return this;
+  },  
+  makeLegendDraggable: function() {
+	  $('.legend').draggable({
+    	  containment : "parent",
+    	  stop: function( event, ui ) {
+    		  if (event.originalEvent.target.id === 'legend-title'){
+    			this.$el.toggleClass('expanded'); //hack to prevent legend from collapsing when dragging stops.  
+    		  }    		 
+    	  }.bind(this)
+     });
   },
-
+  makeLegendResizable: function() {
+	  this.$('.legend-content').resizable({
+	    	alsoResize: ".legend",
+	        handles: 's, e, se'       
+	    });      
+  },
   toggleLegend: function() {
     this.$el.toggleClass('expanded');
+    
+    if (this.$el.hasClass('expanded')) {
+        this.$el.removeClass('legend-collapsed');
+        var realHeight = Math.trunc($('.legend-content')[0].getBoundingClientRect().height +
+            $('.legend-header')[0].getBoundingClientRect().height);
+        var theoreticalTop = Math.trunc($('.footer').offset().top - realHeight);
+        var actualTop = Math.trunc($('.legend').offset().top);
+        var newBottom = realHeight - this.originalHeight;
+        if (actualTop > theoreticalTop) {
+            $('.legend').css({bottom: newBottom > 0 ? newBottom : 0, top: ''});
+        }
+    } else {
+    	this.$el.addClass('legend-collapsed')
+    }
     return false; // stops it updating the url.
   }
 

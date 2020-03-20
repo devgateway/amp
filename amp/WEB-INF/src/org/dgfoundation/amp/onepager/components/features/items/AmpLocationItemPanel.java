@@ -19,15 +19,14 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
@@ -44,19 +43,18 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
     public AmpLocationItemPanel(String id, final IModel<AmpActivityLocation> model,
                                 String fmName, final IModel<Boolean> disablePercentagesForInternational,
                                 final IModel<AmpActivityVersion> am, final AmpRegionalFundingFormSectionFeature regionalFundingFeature,
-                                final AmpPercentageCollectionValidatorField<AmpActivityLocation> percentageValidationField,
-                                final AmpUniqueCollectionValidatorField<AmpActivityLocation> uniqueCollectionValidationField,
-                                final AmpCollectionValidatorField minSizeCollectionValidationField,
-                                final AmpCollectionValidatorField treeCollectionValidatorField,
+                                final AmpLocationFormTableFeature locationTable,
                                 final AmpComponentPanel locationPercentageRequired,
-                                final IModel<Set<AmpActivityLocation>> setModel, final ListView<AmpActivityLocation> list,final Label totalLabel) {
+                                final IModel<Set<AmpActivityLocation>> setModel,
+                                final ListView<AmpActivityLocation> list, final Label totalLabel) {
         super(id, model, fmName, true);
         
         this.locationModel = model;
         
         PropertyModel<Double> percModel = new PropertyModel<Double>(model, "locationPercentage");
         final AmpPercentageTextField percentageField = new AmpPercentageTextField("percentage", percModel,
-                "locationPercentage", percentageValidationField, locationPercentageRequired.isVisible()){
+                "locationPercentage", locationTable.getPercentageValidationField(),
+                locationPercentageRequired.isVisible()) {
             private static final long serialVersionUID = 1L;
             @Override
             protected void onBeforeRender() {
@@ -67,7 +65,7 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
             }
             @Override
             protected void onAjaxOnUpdate(AjaxRequestTarget target) {
-                percentageValidationField.reloadValidationField(target);
+                locationTable.getPercentageValidationField().reloadValidationField(target);
                 target.add(totalLabel);
                 
             }
@@ -130,7 +128,7 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                 // toggleHeading(target, setModel.getObject());
 
                 // remove any regional funding with this region
-                if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.
+                if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.
                         equalsCategoryValue(model.getObject().getLocation().getLocation().getParentCategoryValue())) {
                     final IModel<Set<AmpRegionalFunding>> regionalFundings = new PropertyModel<Set<AmpRegionalFunding>>(am, "regionalFundings");
                     Iterator<AmpRegionalFunding> iterator = regionalFundings.getObject().iterator();
@@ -145,10 +143,8 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                     target.add(totalLabel);
                     
                 }
-                percentageValidationField.reloadValidationField(target);
-                uniqueCollectionValidationField.reloadValidationField(target);
-                minSizeCollectionValidationField.reloadValidationField(target);
-                treeCollectionValidatorField.reloadValidationField(target);
+
+                locationTable.reloadValidationFields(target);
                 setModel.getObject().remove(model.getObject());
                 
               

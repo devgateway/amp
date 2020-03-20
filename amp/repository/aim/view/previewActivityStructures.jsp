@@ -132,7 +132,7 @@ function moveDisplayedImages(structureId, imgCount, next){
 				<tr bgcolor="#f0f0f0">
 					<td colspan="2" align="center">
 						<b>
-							${structure.title}
+								${fn:escapeXml(structure.title)}
 						</b>
 					</td>
 				</tr>
@@ -150,7 +150,7 @@ function moveDisplayedImages(structureId, imgCount, next){
 					parentModule="/Activity Form/Structures">
 					<tr>
 						<td bgcolor="#f0f0f0" style="padding-left:5px;"><digi:trn key="trn:title">Title</digi:trn></td>
-						<td align="left"> <b> ${structure.title} </b></td>
+						<td align="left"> <b> ${fn:escapeXml(structure.title)} </b></td>
 					</tr>
 				</module:display>
 				<module:display
@@ -158,7 +158,7 @@ function moveDisplayedImages(structureId, imgCount, next){
 					parentModule="/Activity Form/Structures">
 					<tr>
 						<td bgcolor="#f0f0f0" style="padding-left:5px;"><digi:trn key="trn:description">Description</digi:trn></td>
-						<td align="left"><b> ${structure.description} </b></td>
+						<td align="left"><b> ${fn:escapeXml(structure.description)} </b></td>
 					</tr>
 				</module:display>
 				<module:display

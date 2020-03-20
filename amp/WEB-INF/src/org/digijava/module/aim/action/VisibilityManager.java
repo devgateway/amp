@@ -105,7 +105,7 @@ public class VisibilityManager extends MultiAction {
             VisibilityManagerExportHelper vhelper = new VisibilityManagerExportHelper();
             vhelper.importXmlVisbilityTemplate(vtemplate);
         } catch (JAXBException je) {
-            logger.error(je);
+            logger.error(je.getMessage(), je);
         }
         return modeManageTemplates(mapping, form, request, response);
     }

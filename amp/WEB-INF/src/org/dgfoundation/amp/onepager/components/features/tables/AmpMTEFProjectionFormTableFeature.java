@@ -50,16 +50,16 @@ public class AmpMTEFProjectionFormTableFeature extends
             protected void onPopulateItem(
                     org.dgfoundation.amp.onepager.components.ListItem<AmpFundingMTEFProjection> item) {
             super.onPopulateItem(item);
-                AmpCategorySelectFieldPanel projected;
+                AmpCategorySelectFieldPanel projection;
                 try {
-                    projected = new AmpCategorySelectFieldPanel("projected",
+                    projection = new AmpCategorySelectFieldPanel("projection",
                             CategoryConstants.MTEF_PROJECTION_KEY,
                             new PropertyModel<AmpCategoryValue>(
-                                    item.getModel(), "projected"),
+                                    item.getModel(), "projection"),
                             CategoryConstants.MTEF_PROJECTION_NAME, true,
                             false, false, null, false);
-                    projected.getChoiceContainer().setRequired(true);
-                    item.add(projected);
+                    projection.getChoiceContainer().setRequired(true);
+                    item.add(projection);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

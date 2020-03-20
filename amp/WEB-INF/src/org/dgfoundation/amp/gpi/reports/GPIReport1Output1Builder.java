@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.gpi.reports;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -220,7 +219,7 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
     }
 
     /**
-     * @param gpiElement
+     * @param gpiElements
      * @return
      */
     private Map<GPIReportOutputColumn, String> generateSummary(List<GPIOutput1Item> gpiElements) {
@@ -279,8 +278,6 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
     /**
      * Generate the remark endpoint url
      * 
-     * @param spec
-     * @param id
      * @return
      */
     private String getRemarkEndpointURL() {

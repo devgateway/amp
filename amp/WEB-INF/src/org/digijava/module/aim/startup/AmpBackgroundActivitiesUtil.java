@@ -115,7 +115,7 @@ public class AmpBackgroundActivitiesUtil
         user.setOrganizationName("Development Gateway");
 
         user.setPledger(false);
-
+        user.setPledgeSuperUser(false);
         user.setOrganizationTypeOther(" ");
 
         // set country
@@ -124,7 +124,6 @@ public class AmpBackgroundActivitiesUtil
         // set default language
         user.setRegisterLanguage(site.getDefaultLanguage());
         user.setEmailVerified(false);
-        user.setActive(false);
         user.setBanned(false);
 
         // ------------- SET USER LANGUAGES
@@ -174,12 +173,12 @@ public class AmpBackgroundActivitiesUtil
 
     public static User createActivityUserIfNeeded(User u) throws Exception
     {
-        User user = UserUtils.getUserByEmail(u.getEmail());
+        User user = UserUtils.getUserByEmailAddress(u.getEmail());
         if (user != null)
             return user;
 
         createAmpValidatorUser(u.getEmail(), u.getFirstNames(), u.getLastName());
-        user = UserUtils.getUserByEmail(u.getEmail());
+        user = UserUtils.getUserByEmailAddress(u.getEmail());
         if (user == null)
             throw new RuntimeException("bug creating user");
         return user;

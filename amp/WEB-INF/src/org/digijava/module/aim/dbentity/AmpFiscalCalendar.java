@@ -1,18 +1,18 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.nireports.TranslatedDate;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianBasedWorker;
@@ -22,29 +22,29 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.NepaliBasedWorker;
 import org.digijava.module.aim.util.Identifiable;
 
-import java.util.Arrays;
-
 public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfileValue, CalendarConverter {
     
-    //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="Fiscal Calendar ID")
+    @JsonProperty("id")
     private Long ampFiscalCalId;
-//  @Interchangeable(fieldTitle="Start Month Number")
-    private Integer startMonthNum;
-//  @Interchangeable(fieldTitle="Year Offset")
-    private Integer yearOffset;
-//  @Interchangeable(fieldTitle="Start Day Number")
-    private Integer startDayNum;
-//  @Interchangeable(fieldTitle="Name")
-    private String name;
-//  @Interchangeable(fieldTitle="Description")
-    private String description;
-//  @Interchangeable(fieldTitle="Base Calendar")
-    private String baseCal;
-//  @Interchangeable(fieldTitle="Is Fiscal")
-    private Boolean isFiscal; // This indicates whether calendar is fiscal or
 
-    // not.
+    @JsonProperty("start-month-num")
+    private Integer startMonthNum;
+
+    @JsonProperty("year-offset")
+    private Integer yearOffset;
+
+    @JsonProperty("start-day-num")
+    private Integer startDayNum;
+
+    private String name;
+
+    private String description;
+
+    @JsonProperty("base-cal")
+    private String baseCal;
+
+    @JsonProperty("is-fiscal")
+    private Boolean isFiscal; // This indicates whether calendar is fiscal or not.
     
     private Set<AmpCurrency> constantCurrencies;
 
@@ -128,6 +128,7 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
         description = string;
     }
 
+    @JsonIgnore
     public Long getIdentifier() {
         return this.getAmpFiscalCalId();
     }
@@ -161,7 +162,9 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
     public void setIsFiscal(Boolean isFiscal) {
         this.isFiscal = isFiscal;
     }
+
     @Override
+    @JsonIgnore
     public List<ValueTranslatabePair> getValuesForOrgReport(){
         List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
         ValueTranslatabePair value=new ValueTranslatabePair(Arrays.asList(new String[]{getName()}),false);
@@ -170,6 +173,7 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
     }
 
     @Override
+    @JsonIgnore
     public String[] getSubHeaders() {
         // TODO Auto-generated method stub
         return null;
@@ -203,8 +207,20 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
     }
 
     @Override
+    @JsonIgnore
     public String getDefaultFiscalYearPrefix() {
         return this.getworker().getDefaultFiscalPrefix();
+    }
+
+    @Override
+    public int parseYear(String year, String prefix) {
+        return this.getworker().parseYear(year, prefix);
+    }
+
+    @Override
+    public int parseYear(String year) {
+        String prefix = TranslatorWorker.translateText(this.getworker().getDefaultFiscalPrefix());
+        return this.getworker().parseYear(year, prefix);
     }
 
 }

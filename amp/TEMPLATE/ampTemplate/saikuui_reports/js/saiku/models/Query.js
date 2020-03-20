@@ -97,6 +97,7 @@ var Query = Backbone.Model.extend({
 
     run_query: function(filters, settings) {
     	Saiku.logger.log("Query.run_query");
+        Saiku.logger.log(filters ? JSON.stringify(filters) : '');
    		this.set({page: 1});
     	this.run(null, null, filters, settings);
     },
@@ -128,11 +129,16 @@ var Query = Backbone.Model.extend({
     	this.run(true);
     },
     //End Custom Code for Pagination
-    run: function(force, mdx, filters, settings) {
+    run: function(force, mdx, filtersObject, settings) {
     	Saiku.logger.log("Query.run");
     	Saiku.logger.log('END!!!');
     	Saiku.logger.log(new Date().getTime() - window.saiku_time + "ms");
-
+    	
+        var filters;
+        if (filtersObject) {
+        	filters = filtersObject.filters ? filtersObject.filters : filtersObject;
+        }
+        	
         var self = this;
         // Check for automatic execution
         Saiku.ui.unblock();
@@ -187,6 +193,10 @@ var Query = Backbone.Model.extend({
     	exModel.queryModel.filters = this.get('filters'); 
     	exModel.queryModel.filtersWithModels = this.get('filtersWithModels');
     	exModel.queryModel.filtersApplied = filtersApplied;
+    	if (filtersObject) {
+    		exModel.queryModel['include-location-children'] = filtersObject['include-location-children'];
+    	}
+    	
     	
     	exModel.queryModel.settings = this.get('settings');        	
     	exModel.queryModel.settingsApplied = settingsApplied;

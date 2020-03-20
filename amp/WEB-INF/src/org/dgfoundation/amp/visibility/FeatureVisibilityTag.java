@@ -76,16 +76,22 @@ public class FeatureVisibilityTag extends BodyTagSupport {
             if (!addResult)
                 return SKIP_BODY;
         }
-                
+
        if (!isModuleTheParent(ampTreeVisibility)) {
            FeaturesUtil.updateFeatureWithModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getModule()).getId(),this.getName());
-           AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-           ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-           FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
+           rebuildTreeVisibility(ampContext, session, ampTreeVisibility);
        }
        return EVAL_BODY_BUFFERED;       
     }
-    
+
+    private void rebuildTreeVisibility(ServletContext ampContext, HttpSession session,
+                                       AmpTreeVisibility ampTreeVisibility) {
+        AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility) FeaturesUtil.
+                getTemplateById(ampTreeVisibility.getRoot().getId());
+        ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+        FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
+    }
+
     /**
      * returns false if asked to add a feature under a non-existing module
      * @param ampTreeVisibility
@@ -99,14 +105,14 @@ public class FeatureVisibilityTag extends BodyTagSupport {
                 if (moduleByNameFromRoot != null) {
                    id = moduleByNameFromRoot.getId();
                    if (FeaturesUtil.getFeatureVisibility(this.getName()) != null) {
-                       FeaturesUtil.updateFeatureWithModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getModule()).getId(),this.getName());
+                       FeaturesUtil.updateFeatureWithModuleVisibility(ampTreeVisibility.
+                               getModuleByNameFromRoot(this.getModule()).getId(), this.getName());
                    }
                    else {    
-                       FeaturesUtil.insertFeatureWithModuleVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(), this.getHasLevel());
+                       FeaturesUtil.insertFeatureWithModuleVisibility(ampTreeVisibility.getRoot().getId(), id, this
+                               .getName(), this.getHasLevel());
                    }
-                   AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-                   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-                   FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
+                    rebuildTreeVisibility(ampContext, session, ampTreeVisibility);
                 }
                 else {
                     logger.debug("Feature: "+this.getName() + " has the parent: "+this.getModule()+ " which doesn't exist in DB");
@@ -205,16 +211,18 @@ public class FeatureVisibilityTag extends BodyTagSupport {
         return false;
     }
     
-    public boolean existModule(AmpTreeVisibility atv)
-    {
-
+    public boolean existModule(AmpTreeVisibility atv) {
+        
         AmpModulesVisibility moduleByNameFromRoot = atv.getModuleByNameFromRoot(this.getModule());
-        if(moduleByNameFromRoot==null) return false;
-        return true;
+        
+        if (moduleByNameFromRoot == null) {
+            return false;
+        }
+        
+        return FeaturesUtil.isVisibleModule(this.getModule());
     }
     
-    public boolean existFeatureinDB(AmpTreeVisibility atv)
-    {
+    public boolean existFeatureinDB(AmpTreeVisibility atv) {
         AmpFeaturesVisibility featureByNameFromRoot = atv.getFeatureByNameFromRoot(this.getName());
         if(featureByNameFromRoot==null) return false;
         return true;

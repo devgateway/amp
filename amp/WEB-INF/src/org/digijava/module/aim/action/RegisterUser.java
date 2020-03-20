@@ -98,7 +98,6 @@ public class RegisterUser extends Action {
             user.setRegisterLanguage(RequestUtils
                     .getNavigationLanguage(request));
                         user.setEmailVerified(false);
-                        user.setActive(false);
                         user.setBanned(true);
 
             SiteDomain siteDomain = (SiteDomain) request

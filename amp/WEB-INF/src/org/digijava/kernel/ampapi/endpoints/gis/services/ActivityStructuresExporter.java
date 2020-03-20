@@ -89,10 +89,9 @@ public class ActivityStructuresExporter extends ActivityExporter {
         return PersistenceManager.getSession().doReturningWork(new ReturningWork<List<StructuresDataSkeleton>>() {
             public List<StructuresDataSkeleton> execute(Connection conn) throws SQLException {
                 List <StructuresDataSkeleton> res = new ArrayList<>();
-                String query = "select ast.amp_activity_id, s.title, s.description, s.latitude, s.longitude " +
-                        "  from amp_activity_structures ast, amp_structure s  " +
-                        " where ast.amp_structure_id = s.amp_structure_id "+
-                        " and ast.amp_activity_id in("+ org.dgfoundation.amp.Util.toCSString(activityIds) +")";
+                String query = "select amp_activity_id, title, description, latitude, longitude"
+                        + " from amp_structure"
+                        + " where amp_activity_id in(" + org.dgfoundation.amp.Util.toCSString(activityIds) + ")";
                 try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
                     ResultSet rs = rsi.rs;
                     while (rs.next()) {

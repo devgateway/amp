@@ -305,29 +305,18 @@ public class ActivityManager extends Action {
       actForm.setAllActivityList(activities);
     }
 
-    /**
-     * @param actForm
-     * @param actForm
-     * @param request
-     * @param session
-     * @throws DgException 
-     */
     private void deleteActivity(ActivityForm actForm, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
-        String tIds=request.getParameter("tIds");
-        String advancedAdminDelete = request.getParameter("advancedAdminDelete");
-        List<Long> topicsIds=getActsIds(tIds.trim());
-        for (Long ampActId : topicsIds) {
-            AmpActivityVersion activity = ActivityUtil.loadAmpActivity(ampActId);
+        String tIds = request.getParameter("tIds");
+        List<Long> ids = getActsIds(tIds.trim());
+        for (Long id : ids) {
+            AmpActivityVersion activity = ActivityUtil.loadAmpActivity(id);
             AuditLoggerUtil.logObject(session, request, activity, "delete");
-            //ActivityUtil.deleteActivity(ampActId);
-            if(advancedAdminDelete!=null && "true".compareTo(advancedAdminDelete)==0 )
-                ActivityUtil.deleteAmpActivityWithVersions(ampActId);
-            else
-                ActivityUtil.archiveAmpActivityWithVersions(ampActId);
+            ActivityUtil.deleteAmpActivityWithVersions(id);
         }
         actForm.setAllActivityList(ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL));      
     }
+
     private List<Long> getActsIds(String ids){
         List<Long> actsIds=new ArrayList<Long>();
         while(ids.indexOf(",")!= -1){

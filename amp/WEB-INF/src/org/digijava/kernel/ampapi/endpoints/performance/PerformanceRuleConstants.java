@@ -32,6 +32,20 @@ public final class PerformanceRuleConstants {
     public static final String JSON_ATTRIBUTE_TRANSLATED_LABEL = "translated-label";
     
     public static final String HAS_ENABLED_PERFORMANCE_RULES = "hasEnabledPerformanceRules";
+    
+    public static final String MATCHER_DISB_ACTIVITY_DATE = "disbursementsAfterActivityDate";
+    public static final String MATCHER_NO_DISB_FUNDING_DATE = "noDisbursementsAfterFundingDate";
+    public static final String MATCHER_NO_UPD_DISB_TIME_PERIOD = "noUpdatedDisbursements";
+    public static final String MATCHER_NO_UPDATED_STATUS = "noUpdatedStatusAfterFundingDate";
+    
+    public static final String MATCHER_DESCR_DISB_ACTIVITY_DATE = "Disbursements after selected activity date";
+    public static final String MATCHER_DESCR_NO_DISB_FUNDING_DATE = "No disbursements after selected funding date";
+    public static final String MATCHER_DESCR_NO_UPD_DISB_TIME_PERIOD = "No updated disbursements";
+    public static final String MATCHER_DESCR_NO_UPDATED_STATUS = "No updated status after selected funding date";
+
+    public static final String GROUPING_ROLE_CODE = "RO";
+    public static final String GROUPING_ROLE_LABEL = "Responsible Organisation";
+
 
     private PerformanceRuleConstants() { }
 

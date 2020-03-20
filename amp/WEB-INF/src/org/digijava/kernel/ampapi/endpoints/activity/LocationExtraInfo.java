@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author Octavian Ciubotaru
  */
 @JsonSerialize(using = LocationExtraInfoJsonSerializer.class)
-public class LocationExtraInfo {
+public class LocationExtraInfo implements ParentExtraInfo {
 
     /**
      * Note: this field is kept for backwards compatibility and is only used in flat format of possible values.
@@ -22,12 +22,15 @@ public class LocationExtraInfo {
 
     private final String categoryValueName;
 
+    private final String iso2;
+
     public LocationExtraInfo(Long parentLocationId, String parentLocationName, Long categoryValueId,
-            String categoryValueName) {
+            String categoryValueName, String iso2) {
         this.parentLocationId = parentLocationId;
         this.parentLocationName = parentLocationName;
         this.categoryValueId = categoryValueId;
         this.categoryValueName = categoryValueName;
+        this.iso2 = iso2;
     }
 
     public Long getParentLocationId() {
@@ -44,5 +47,14 @@ public class LocationExtraInfo {
 
     public String getCategoryValueName() {
         return categoryValueName;
+    }
+
+    public String getIso2() {
+        return iso2;
+    }
+    
+    @Override
+    public Long getParentId() {
+        return parentLocationId;
     }
 }

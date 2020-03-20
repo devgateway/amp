@@ -774,20 +774,6 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                    			<html:option value="false"><digi:trn key="aim:globalsettings:false">false</digi:trn></html:option>
 				                                    		</html:select>
 				                                    	</c:when>
-														<c:when test='${type == "t_secure_values"}'>
-															<html:select property="gsfValue" styleClass="inp-text"
-																value='<%= globalSett.getGlobalSettingsValue() %>'>
-																<html:option value="off">
-																	<digi:trn key="aim:globalsettings:secure:off">off</digi:trn>
-																</html:option>
-																<html:option value="login-only">
-																	<digi:trn key="aim:globalsettings:secure:login-only">login-only</digi:trn>
-																</html:option>
-																<html:option value="everything">
-																	<digi:trn key="aim:globalsettings:secure:everything">everything</digi:trn>
-																</html:option>
-															</html:select>
-														</c:when>
 														<c:otherwise>
 				                                      		<html:text property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>' />
 				                                      	</c:otherwise>

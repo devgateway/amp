@@ -945,15 +945,11 @@ td.inside ul {
 
 .nv-group .nv-bar text{
     direction: rtl !important;
-   /* unicode-bidi: bidi-override;*/
 }
 .nv-pieLabels .nv-label text{
     direction: rtl !important;
-    /*unicode-bidi: bidi-override;*/
-
 }
 
 .tick text {
     direction: rtl !important;
-    /*unicode-bidi: bidi-override;*/
 }

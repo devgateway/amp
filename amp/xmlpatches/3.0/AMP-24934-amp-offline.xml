@@ -9,15 +9,6 @@
         <script>
             <lang delimiter="@@@" type="postgres">
 
-                create table amp_offline_changelog (
-                    id bigint primary key,
-                    entity_name varchar(50) not null,
-                    entity_id varchar(255),
-                    operation_name varchar(20) not null,
-                    operation_time timestamp not null
-                ) @@@
-
-                create sequence amp_offline_changelog_seq @@@
                 ALTER TABLE amp_offline_changelog ALTER COLUMN id SET DEFAULT nextval('amp_offline_changelog_seq') @@@
 
                 CREATE INDEX amp_offline_changelog_idx ON amp_offline_changelog (operation_time, entity_name, entity_id, operation_name) @@@

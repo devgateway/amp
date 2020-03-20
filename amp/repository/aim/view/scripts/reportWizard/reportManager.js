@@ -61,8 +61,7 @@ function populateRPS(rpSettings) {
 	rpSettings.hierarchies		= hierArray;
 	rpSettings.measures			= measArray;
 	rpSettings.summary			= getHideActivities();
-	
-	
+	rpSettings.showOriginalCurrency = getShowOriginalCurrency();
 	
 	return rpSettings;
 }
@@ -124,6 +123,7 @@ function continueInitialization( e, rmParams ){
 			repManager.addStyleToButton("step"+ i +"_prev_button");
 			repManager.addStyleToButton("step"+ i +"_next_button");
 			repManager.addStyleToButton("step"+ i +"_add_filters_button");
+			repManager.addStyleToButton("step"+ i +"_add_new_filters_button");
 			repManager.addStyleToButton("step"+ i +"_add_settings_button");
 			repManager.addStyleToButton("step"+ i +"_cancel");
 		}

@@ -1,23 +1,35 @@
 package org.digijava.module.aim.dbentity ;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
+
 import java.io.Serializable;
 
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.validator.groups.Submit;
 
 @TranslatableClass (displayName = "Actor")
-public class AmpActor  implements Serializable, Cloneable
-{
+public class AmpActor  implements Serializable, Cloneable, Identifiable {
     //IATI-check: not used in IATI
-    private Long ampActorId ;
 
-    @Interchangeable(fieldTitle = "Name", importable = true)
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
+    private Long ampActorId;
+
+    @Interchangeable(fieldTitle = "Name", label = "Actor", importable = true,
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class))
     @TranslatableField
     private String name;
 
     private String nameTrimmed;
 
+    @InterchangeableBackReference
     private AmpMeasure measure;
     
 
@@ -54,6 +66,9 @@ public class AmpActor  implements Serializable, Cloneable
         // TODO Auto-generated method stub
         return super.clone();
     }
-    
 
+    @Override
+    public Object getIdentifier() {
+        return ampActorId;
+    }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-25937</jira>
+    <keyword>remove duplicated translations</keyword>
+    <author>vchihai</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+            
+				DELETE FROM dg_message WHERE message_key = '1651954138';	<!-- Indicator 1:	 -->
+				DELETE FROM dg_message WHERE message_key = '-329024163';    <!-- Indicator 5a:   -->
+				DELETE FROM dg_message WHERE message_key = '1651954293';    <!-- Indicator 6:    -->
+				DELETE FROM dg_message WHERE message_key = '-329020288';    <!-- Indicator 9:    -->
+				DELETE FROM dg_message WHERE message_key = '2006961871';    <!-- Title    -->
+				DELETE FROM dg_message WHERE message_key = '-873453342';    <!-- Title:   -->
+				DELETE FROM dg_message WHERE message_key = '-1422574593';   <!-- Add aa:  -->
+				DELETE FROM dg_message WHERE message_key = '92657826';      <!-- Add a:   -->
+				DELETE FROM dg_message WHERE message_key = '-1422575713';   <!-- Add >>   -->
+				DELETE FROM dg_message WHERE message_key = '1209107904';    <!-- Does this project use the national budget execution procedures?    -->
+				DELETE FROM dg_message WHERE message_key = '1398029650';    <!-- Does this project use the national financial reporting procedures?    -->
+				DELETE FROM dg_message WHERE message_key = '106387690';     <!-- Does this project use the national auditing procedures?    -->
+				
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -32,7 +32,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
-import org.digijava.module.contentrepository.util.DocToOrgDAO;
+import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
 import org.digijava.module.parisindicator.helper.row.PIReport10aRow;
 import org.digijava.module.parisindicator.helper.row.PIReport10bRow;
 import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
@@ -248,7 +248,8 @@ public class PIReport10b extends PIAbstractReport {
                 NodeWrapper auxNodeWrapper = iterNodes.next();
                 // Get organizations for this document (trying to get documents
                 // from an organization didn't work).
-                Collection<AmpOrganisation> orgsFromDocument = DocToOrgDAO.getOrgsObjByUuid(auxNodeWrapper.getUuid());
+                Collection<AmpOrganisation> orgsFromDocument = DocumentOrganizationManager.getInstance()
+                        .getOrganizationsByUUID(auxNodeWrapper.getUuid());
                 Collection<AmpOrganisation> auxOrganizations = new ArrayList<AmpOrganisation>();
                 // Calculate number of MUL and BIL donors for this document.
                 int orgs4Doc = 0;
@@ -278,8 +279,7 @@ public class PIReport10b extends PIAbstractReport {
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         return list;
     }

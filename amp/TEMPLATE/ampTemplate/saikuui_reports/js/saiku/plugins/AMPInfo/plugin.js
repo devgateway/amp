@@ -44,11 +44,15 @@ var AMPInfo = Backbone.View.extend({
     	content += "<div id='amp_info_filters_block'></div>";
     	content += "</div>";
     	var notification = this.build_notification();
-    	if(settings){
-    		var currencyCode = settings[window.settingsWidget.Constants.CURRENCY_ID];
-    		var currencyValue = window.settingsWidget.definitions.findCurrencyById(currencyCode).value;
-        	content += "<div id='amp_info_settings'><h5><span class='i18n'>Currency</span>: " + currencyValue;
-        	content += "</h5></div>";
+    	if(settings) {
+    		if (this.workspace.query.attributes.original_currency) {
+    			content += "<div id='amp_info_settings'><h5><span class='i18n'>&nbsp;</h5></div>";
+    		} else {
+	    		var currencyCode = settings[window.settingsWidget.Constants.CURRENCY_ID];
+	    		var currencyValue = window.settingsWidget.definitions.findCurrencyById(currencyCode).value;
+	        	content += "<div id='amp_info_settings'><h5><span class='i18n'>Currency</span>: " + currencyValue;
+	        	content += "</h5></div>";
+    		}
             notification = this.build_notificationFromSettings(settings);
     	}
     	content = content.replace("{0}", notification);

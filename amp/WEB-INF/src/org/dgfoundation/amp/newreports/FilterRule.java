@@ -10,14 +10,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.dgfoundation.amp.algo.AmpCollections;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 
 /**
  * Filter rule that can be of one of {@link FilterType} type
@@ -34,6 +33,9 @@ public class FilterRule {
     
     /** the value to use as a filter value when filtering booleans for FALSEs */
     public static final String FALSE_VALUE = "2";
+    
+    /** the value to use as a filter value when filtering booleans for Undefined */
+    public static final String UNDEFINED_VALUE = String.valueOf(ColumnReportData.UNALLOCATED_ID);
     
     public final static Map<String, Long> HARDCODED_VALUES = Collections.unmodifiableMap(new HashMap<String, Long>() {{
         put(NULL_VALUE, null);
@@ -280,4 +282,29 @@ public class FilterRule {
         return in.negate();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof FilterRule)) {
+            return false;
+        }
+        FilterRule that = (FilterRule) o;
+        return minInclusive == that.minInclusive
+                && maxInclusive == that.maxInclusive
+                && valuesInclusive == that.valuesInclusive
+                && filterType == that.filterType
+                && Objects.equals(value, that.value)
+                && Objects.equals(min, that.min)
+                && Objects.equals(max, that.max)
+                && Objects.equals(values, that.values)
+                && Objects.equals(valueToName, that.valueToName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(filterType, value, min, max, values, valueToName, minInclusive, maxInclusive,
+                valuesInclusive);
+    }
 }

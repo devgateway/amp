@@ -107,7 +107,9 @@ var SavedQuery = Backbone.Model.extend({
             hierarchies: model.get('hierarchies'),
             measures: model.get('measures'),
             columns: model.get('columns'),
-            page_timestamp: model.get('page_timestamp')
+            page_timestamp: model.get('page_timestamp'),
+            original_currency: model.get('original_currency'),
+            includeLocationChildren: model.get('includeLocationChildren')
         },{
             name: filename
         });

@@ -30,7 +30,7 @@ define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','un
 		});
 		app.TabsApp.listenTo(app.TabsApp.filtersWidget, 'apply', function(data) {			
 			// Save just applied filters in case the user hits "reset" button.
-			app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize() || {};
+			app.TabsApp.serializedFilters = data || {};
 			
 			// Get list of human friendly applied filters we will use in the
 			// accordion.
@@ -71,6 +71,7 @@ define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','un
 		var sord = (app.TabsApp.currentTab.get('currentSorting') !== null ? app.TabsApp.currentTab.get('currentSorting').sord : null);
 		var data = JSON.stringify({
 			filters : app.TabsApp.serializedFilters ? app.TabsApp.serializedFilters.filters : {},
+		    'include-location-children': app.TabsApp.serializedFilters ? app.TabsApp.serializedFilters['include-location-children'] : true,
 			reportData : reportNames,
 			sidx: sidx,
 			sord: sord,
@@ -85,19 +86,18 @@ define(['business/grid/gridManager', 'business/filter/filterUtils', 'jquery','un
 			data : data
 		}).done(function(data, textStatus, jqXHR) {
 			if(data == undefined) {
-				var searchedId = 'newTabNameInput_' + window.currentLocale;
-				var searchedIdEn = 'newTabNameInput_en';
-				var newTabName = jQuery('[id="' + searchedId + '"]').val();
-				if (!newTabName)
-					newTabName = jQuery('[id="' + searchedIdEn + '"]').val();
-				jQuery('#tab-link-'+tabId).prop('title', newTabName);
-				jQuery('#tab-link-'+tabId).html(newTabName);
+                app.TabsApp.tabsCollectionData.fetchData();
+                app.TabsApp.tabUtils.shortenTabNames(app.TabsApp.tabsCollectionData.models);
+                app.TabsApp.tabsCollection._byId[tabId] = app.TabsApp.tabsCollectionData._byId[tabId];
+				jQuery('#tab-link-'+tabId).prop('title', app.TabsApp.tabsCollection._byId[tabId].get('name'));
+				jQuery('#tab-link-'+tabId).html(app.TabsApp.tabsCollection._byId[tabId].get('shortName'));
 				jQuery(dialogView.el).dialog('close');
-				// AMP-19587: TODO: remove the next line. If we fetch the tabs collection we 
-				// loose the 'more tabs' tab and initial context of the tabs @see app.js LOC 117-140
-				//app.TabsApp.tabsCollection.fetchData();
-			} else {
-				alert(data);
+
+                // AMP-19587: TODO: remove the next line. If we fetch the tabs collection we
+                // loose the 'more tabs' tab and initial context of the tabs @see app.js LOC 117-140
+                //app.TabsApp.tabsCollection.fetchData();
+            } else {
+                alert(data);
 			}
 		});
 	};

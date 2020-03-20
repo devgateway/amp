@@ -43,10 +43,16 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 
 			// --------------------------------------------------------------------------------------//
 			// TODO: Move filters section elsewhere.
-			// Create collection of Filters used for legends.	
+			// Create collection of Filters used for legends.
 			app.TabsApp.rawFilters = firstContent.filtersToJSON();
 			app.TabsApp.filtersWidget.loaded.done(function() {
-				app.TabsApp.filtersWidget.deserialize(firstContent.filtersToJSON(), {
+				// includeLocationChildren is not part of the filters but the spec :((( so we add it manually.
+				var filters = firstContent.filtersToJSON();
+				var includeLocationChildren = firstContent.toJSON().reportMetadata.reportSpec.includeLocationChildren;
+				if (filters) {
+					filters.filters.includeLocationChildren = includeLocationChildren;
+				}
+				app.TabsApp.filtersWidget.deserialize(filters, {
 					silent : true
 				});
 				
@@ -55,7 +61,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				// Variable to save the current serialized filters from widget.
 				app.TabsApp.serializedFilters = null;
 				// Save default sorters if any.
-				app.TabsApp.currentSorting = FilterUtils.extractSorters(firstContent.get('reportMetadata').get('reportSpec').get('sorters'), 
+				app.TabsApp.currentSorting = FilterUtils.extractSorters(firstContent.get('reportMetadata').get('reportSpec').get('sorters'),
 						firstContent.get('reportMetadata').get('reportSpec').get('columns'),
 						firstContent.get('reportMetadata').get('reportSpec').get('measures'),
 						firstContent.get('reportMetadata').get('reportSpec').get('hierarchies'));
@@ -79,7 +85,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				});
 
 				app.TabsApp.settingsWidget.restoreFromSaved(firstContent.get('reportMetadata').get('settings').toJSON());			
-				app.TabsApp.numericFormatOptions = firstContent.get('reportMetadata').get('settings').models;
+				app.TabsApp.numericFormatOptions = firstContent.get('reportMetadata').get('settings').attributes;
 
 				// Render views.
 				var dynamicLayoutView = new DynamicContentView({
@@ -127,7 +133,14 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				
 				
 				var currencyCode = firstContent.get('reportMetadata').get('settings').get(app.TabsApp.settingsWidget.Constants.CURRENCY_ID) || app.TabsApp.settingsWidget.definitions.getDefaultCurrencyId();
-				var currencyValue = app.TabsApp.settingsWidget.definitions.findCurrencyById(currencyCode).value;
+				var currency  = app.TabsApp.settingsWidget.definitions.findCurrencyById(currencyCode);
+                var currencyValue = currencyCode;
+                //TODO this is a work around in case we disable a currency that we have active in a tab.
+				//TODO nevertheless we have in value the same as in code, it does not use the currency label.
+				//TODO we will provide the proper fix in AMP-28464
+                if(currency){
+					currencyValue = currency.value;
+				}
 				
 				var legend = new Legend({
 					currencyCode : currencyCode,
@@ -180,6 +193,8 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 		onActivateTab : function(event, ui) {
 			// Restart app variables defined for the active tab.
 			app.TabsApp.serializedFilters = null;
+			app.TabsApp.filters = null;
+			app.TabsApp.rawFilters = null;
 			app.TabsApp.currentGrid = null;
 			app.TabsApp.currentTab = null;
 			app.TabsApp.numericFormatOptions = null;

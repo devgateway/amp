@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
@@ -16,7 +17,7 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 /**
  * Class for storing translating settings for activity export. <br>
  * The bean is created in AuthRequestFilter and stored in request.
- * 
+ *
  * @author Viorel Chihai
  */
 public class TranslationSettings {
@@ -26,29 +27,31 @@ public class TranslationSettings {
         STRING,
         /** Associated to @VersionableFieldTextEditor fields if multilingual is enabled */
         TEXT,
+        /** Associated to MultilingualContent fields if multilingual is enabled */
+        MULTILINGUAL,
         /** No Translation associated to the given String field or multilingual is disabled */
         NONE
     };
 
     /** Base language code (retrieved from 'language' parameter) */
     private String currentLangCode;
-    
+
     /** Default language code for the current site */
     private String defaultLangCode;
-    
+
     /** Allowed language codes */
     private Collection<String> allowedLangCodes = null;
-    
-    /** 
+
+    /**
      * List of translations.
      * Reunion of language codes from <default_language>, 'language' and 'translations' parameter
      */
     private Set<String> trnLocaleCodes = new HashSet<String>();
-    
+
     private boolean multilingual;
 
     private static TranslationSettings defaultOverride;
-    
+
     /**
      * @return default trn settings for the current request environment
      */
@@ -72,7 +75,7 @@ public class TranslationSettings {
             trn = getDefault();
         return trn;
     }
-    
+
     public TranslationSettings() {
         init(ContentTranslationUtil.multilingualIsEnabled());
         this.trnLocaleCodes.add(currentLangCode);
@@ -82,20 +85,32 @@ public class TranslationSettings {
     public TranslationSettings(String currentLangCode, Set<String> trnLocaleCodes) {
         this(currentLangCode, trnLocaleCodes, ContentTranslationUtil.multilingualIsEnabled());
     }
-    
+
     public TranslationSettings(String currentLangCode, Set<String> trnLocaleCodes, boolean multilingual) {
-        this.currentLangCode = currentLangCode;
-        this.trnLocaleCodes = trnLocaleCodes;
-        init(multilingual);
+        this(currentLangCode, null, trnLocaleCodes, multilingual);
+    }
+
+    public TranslationSettings(String currentLangCode, String defaultLangCode, Set<String> trnLocaleCodes,
+            boolean multilingual) {
+        this(currentLangCode, defaultLangCode, trnLocaleCodes, null, multilingual);
     }
     
+    public TranslationSettings(String currentLangCode, String defaultLangCode, Set<String> trnLocaleCodes,
+                               Set<String> allowedLocaleCodes, boolean multilingual) {
+        this.currentLangCode = currentLangCode;
+        this.defaultLangCode = defaultLangCode;
+        this.trnLocaleCodes = trnLocaleCodes;
+        this.allowedLangCodes = allowedLocaleCodes;
+        init(multilingual);
+    }
+
     private void init(boolean multilingual) {
         if (this.currentLangCode == null) {
             this.currentLangCode = TLSUtils.getEffectiveLangCode();
         }
         this.multilingual = multilingual;
     }
-    
+
     /**
      * @return default language code for the current site
      */
@@ -105,11 +120,11 @@ public class TranslationSettings {
         }
         return defaultLangCode;
     }
-    
+
     public void setTrnLocaleCodes(Set<String> trnLocaleCodes) {
         this.trnLocaleCodes = trnLocaleCodes;
     }
-    
+
     /**
      * @return user selected language, that can be configured also via 'language' parameter
      */
@@ -124,9 +139,9 @@ public class TranslationSettings {
     public Set<String> getTrnLocaleCodes() {
         return trnLocaleCodes;
     }
-    
+
     /**
-     * @param langCode code of the language (locale)  
+     * @param langCode code of the language (locale)
      * @return boolean if the langCode is equal with the default system language code
      * */
     public boolean isDefaultLanguage(String langCode) {
@@ -142,7 +157,7 @@ public class TranslationSettings {
         }
         return allowedLangCodes;
     }
-    
+
     /**
      * @return the multilingual
      */
@@ -152,31 +167,39 @@ public class TranslationSettings {
 
     /**
      * Detects if a field is translatable
-     * 
+     *
      * @param field
      * @return true if this field is translatable
-     */ 
+     */
     public boolean isTranslatable(Field field) {
-        return multilingual && (field.isAnnotationPresent(TranslatableField.class) 
+        return multilingual && (field.isAnnotationPresent(TranslatableField.class)
                 && field.getDeclaringClass().isAnnotationPresent(TranslatableClass.class)
-                || field.isAnnotationPresent(VersionableFieldTextEditor.class));
+                || field.isAnnotationPresent(VersionableFieldTextEditor.class)
+                || MultilingualContent.class.isAssignableFrom(field.getType()));
     }
-    
+
+    public static boolean canBeTranslatable(Class<?> clazz) {
+        return java.lang.String.class.isAssignableFrom(clazz)
+                || MultilingualContent.class.isAssignableFrom(clazz);
+    }
+
     /**
-     * Provides 
+     * Provides
      * @param field
-     * @param multilingual
      * @return
      */
     public TranslationType getTranslatableType(Field field) {
-        if (multilingual && field.isAnnotationPresent(TranslatableField.class) 
+        if (multilingual && field.isAnnotationPresent(TranslatableField.class)
                 && field.getDeclaringClass().isAnnotationPresent(TranslatableClass.class)) {
             return TranslationType.STRING;
         }
         if (field.isAnnotationPresent(VersionableFieldTextEditor.class)) {
             return TranslationType.TEXT;
         }
+        if (MultilingualContent.class.isAssignableFrom(field.getType())) {
+            return TranslationType.MULTILINGUAL;
+        }
         return TranslationType.NONE;
     }
-    
+
 }

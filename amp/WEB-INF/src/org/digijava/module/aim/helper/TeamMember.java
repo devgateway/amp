@@ -3,10 +3,7 @@ package org.digijava.module.aim.helper;
 import java.io.Serializable;
 import java.util.Set;
 
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -18,6 +15,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 public class TeamMember implements Comparable, Serializable{
 
     private Long memberId;
+    private Long userId;
     private String memberName;
     private String email;
     private Long roleId;
@@ -37,13 +35,13 @@ public class TeamMember implements Comparable, Serializable{
                                               * member
                                               */
 
-    private boolean translator;
     private Set activities;
     private Boolean publishDocuments; /*permissions to make docs public*/
     private boolean approver;
     private AmpCategoryValue workspacePrefix;
     private Integer allowAddTeamRes;
     private long visibilityTemplateId;
+    private Boolean pledgeSuperUser;
 
     /**
      * use {@link #TeamMember(AmpTeamMember)} instead of this one
@@ -78,10 +76,11 @@ public class TeamMember implements Comparable, Serializable{
     private void init(User u) {
         if( u!=null ) {
             this.memberId = u.getId();
+            this.userId = u.getId();
             this.memberName = u.getName();
             this.email = u.getEmail();
             this.pledger = u.getPledger();
-            this.translator = DbUtil.isUserTranslator(u);
+            this.pledgeSuperUser = u.getPledgeSuperUser();
         }
     }
     
@@ -151,6 +150,15 @@ public class TeamMember implements Comparable, Serializable{
     public void setMemberId(Long memberId) {
         this.memberId = memberId;
     }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     /**
      * @return Returns the memberName.
      */
@@ -213,12 +221,6 @@ public class TeamMember implements Comparable, Serializable{
         this.teamName = teamName;
     }
     /**
-     * @return Returns the translator.
-     */
-    public boolean getTranslator() {
-        return translator;
-    }
-    /**
      * @return Returns the activities.
      */
     public Set getActivities() {
@@ -259,6 +261,9 @@ public class TeamMember implements Comparable, Serializable{
         return pledger;
     }
 
+    public Boolean getPledgeSuperUser() {
+        return pledgeSuperUser;
+    }
     public Boolean getPublishDocuments() {
         return publishDocuments;
     }

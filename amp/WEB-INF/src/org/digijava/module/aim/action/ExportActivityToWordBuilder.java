@@ -20,6 +20,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.google.common.base.Strings;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.util.Units;
@@ -57,10 +58,16 @@ import org.digijava.module.aim.dbentity.AmpImputation;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpRegionalObservation;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
@@ -116,8 +123,6 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
 
-import clover.com.google.common.base.Strings;
-
 /**
  * Created by apicca.
  */
@@ -136,6 +141,8 @@ public class ExportActivityToWordBuilder {
     public static final int TABLE_SEPARATOR_LENGTH = 100;
     public static final int COLUMNS_2 = 2;
     private static final int CELL_LEFT_INDENT_SPACE = 50;
+    private static final String NO_BR_SPACE = "\u00a0";
+    
     private static Logger logger = Logger.getLogger(ExportActivityToWordBuilder.class);
 
     public static final String CELLCOLORGRAY = "F2F2F2";
@@ -217,6 +224,10 @@ public class ExportActivityToWordBuilder {
             getComponentTables();
 
             getIssuesTables();
+    
+            getRegionObservationsTables();
+    
+            getLineMinistryObservationsTables();
 
             getRelatedDocsTables();
 
@@ -351,55 +362,75 @@ public class ExportActivityToWordBuilder {
 
     private void getProgramsTables() throws Exception {
         String columnVal;
-        if (FeaturesUtil.isVisibleFeature("NPD Programs")) {
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Program")) {
+            addSectionTitle(TranslatorWorker.translateText("Program").toUpperCase());
+            
             XWPFTable programsTbl = buildXwpfTable(2);
-
-            addSectionTitle(TranslatorWorker.translateText("programs").toUpperCase());
 
             if (FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective")) {
                 if (hasContent(programs.getNationalPlanObjectivePrograms())) {
-
-                    columnVal = buildProgramsOutput(programs.getNationalPlanObjectivePrograms());
-                    generateOverAllTableRows(programsTbl, TranslatorWorker.translateText("National Plan Objective")
-                            .toUpperCase(), columnVal, null);
+                    buildProgramRow(programsTbl, programs.getNationalPlanObjectivePrograms(),
+                            "National Plan Objective");
                 }
             }
-            if (FeaturesUtil.isVisibleModule("/Activity Form/Program")) {
-
-                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs")) {
-                    if (hasContent(programs.getPrimaryPrograms())) {
-
-                        columnVal = buildProgramsOutput(programs.getPrimaryPrograms());
-                        generateOverAllTableRows(programsTbl, TranslatorWorker.translateText("Primary Programs")
-                                .toUpperCase(), columnVal, null);
-                    }
-                }
-
-
-                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs")) {
-                    if (hasContent(programs.getSecondaryPrograms())) {
-                        columnVal = buildProgramsOutput(programs.getSecondaryPrograms());
-                        generateOverAllTableRows(programsTbl, TranslatorWorker.translateText("Secondary Programs")
-                                .toUpperCase(), columnVal, null);
-                    }
-                }
-                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs")) {
-                    if (hasContent(programs.getTertiaryPrograms())) {
-                        columnVal = buildProgramsOutput(programs.getTertiaryPrograms());
-                        generateOverAllTableRows(programsTbl, TranslatorWorker.translateText("Tertiary Programs")
-                                .toUpperCase(), columnVal, null);
-                    }
-                }
-                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description")) {
-                    if (programs.getProgramDescription() != null) {
-                        columnVal = processEditTagValue(request, programs.getProgramDescription());
-                        generateOverAllTableRows(programsTbl, TranslatorWorker.translateText("Program Description")
-                                .toUpperCase(), columnVal, null);
-                    }
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs")) {
+                if (hasContent(programs.getPrimaryPrograms())) {
+                    buildProgramRow(programsTbl, programs.getPrimaryPrograms(), "Primary Programs");
                 }
             }
 
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs")) {
+                if (hasContent(programs.getSecondaryPrograms())) {
+                    buildProgramRow(programsTbl, programs.getSecondaryPrograms(), "Secondary Programs");
+                }
+            }
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs")) {
+                if (hasContent(programs.getTertiaryPrograms())) {
+                    buildProgramRow(programsTbl, programs.getTertiaryPrograms(), "Tertiary Programs");
+                }
+            }
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description")) {
+                String programDescription = null;
+                if (programs.getProgramDescription() != null) {
+                    programDescription = processEditTagValue(request, programs.getProgramDescription());
+                }
+                
+                if (StringUtils.isNotBlank(programDescription)) {
+                    buildProgramTitle(programsTbl, "Program Description");
+                    generateOverAllTableRows(programsTbl, programDescription, "", null);
+                }
+            }
         }
+    }
+
+    /**
+     * @param programsTbl
+     * @param programs
+     * @param programTypeName
+     * @throws Exception
+     */
+    private void buildProgramRow(XWPFTable programsTbl, List<AmpActivityProgram> programs, String programTypeName)
+            throws Exception {
+        
+        buildProgramTitle(programsTbl, programTypeName);
+        
+        for (AmpActivityProgram pr : programs) {
+            String columnVal = pr.getHierarchyNames();
+            generateOverAllTableRows(programsTbl, columnVal, pr.getProgramPercentage() + NO_BR_SPACE + "% ", null);
+        }
+    }
+
+    /**
+     * @param programsTbl
+     * @param programTypeName
+     */
+    private void buildProgramTitle(XWPFTable programsTbl, String programTypeName) {
+        String programName = TranslatorWorker.translateText(programTypeName).toUpperCase();
+        XWPFTableRow programsTblTitleRow = programsTbl.createRow();
+        XWPFParagraph programTitleParagraphs = programsTblTitleRow.getCell(0).getParagraphs().get(0);
+        setOrientation(programTitleParagraphs);
+        setRun(programTitleParagraphs.createRun(),
+                new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), programName, false);
     }
 
     private void getSectorsTables() throws Exception  {
@@ -428,7 +459,7 @@ public class ExportActivityToWordBuilder {
                         XWPFParagraph sectorTitleParagraphs = sectorsTblTitleRow.getCell(0).getParagraphs().get(0);
                         setOrientation(sectorTitleParagraphs);
                         setRun(sectorTitleParagraphs.createRun(), 
-                                new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false), sector.toUpperCase(), false);
+                                new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), sector.toUpperCase(), false);
                     }
                     if (sectors.getActivitySectors() != null) {
                         for (ActivitySector actSect : sectors.getActivitySectors()) {
@@ -443,8 +474,8 @@ public class ExportActivityToWordBuilder {
                                 if (actSect.getSubsectorLevel2Name() != null) {
                                     columnVal += " - " + actSect.getSubsectorLevel2Name();
                                 }
-                                generateOverAllTableRows(sectorsTbl, columnVal, actSect.getSectorPercentage() + " %",
-                                        null);
+                                generateOverAllTableRows(sectorsTbl, columnVal,
+                                        actSect.getSectorPercentage() + NO_BR_SPACE + "%", null);
                             }
                         }
                     }
@@ -645,10 +676,11 @@ public class ExportActivityToWordBuilder {
          */
         if (FeaturesUtil.isVisibleField("Project Risk")) {
 
+            addSectionTitle("Activity Risk");
+            
             XWPFTable table = buildXwpfTable(1);
             table.setWidth(WIDTH);
             setTableAlignment(table, STJc.CENTER);
-            addSectionTitle("Activity Risk");
 
             // chart
             ByteArrayOutputStream outByteStream1 = new ByteArrayOutputStream();
@@ -686,10 +718,11 @@ public class ExportActivityToWordBuilder {
          * Activity - Performance
          */
         if (FeaturesUtil.isVisibleField("Activity Performance")) {
+            addSectionTitle("Activity Performance");
+            
             XWPFTable table = buildXwpfTable(1);
             table.setWidth(WIDTH);
             setTableAlignment(table, STJc.CENTER);
-            addSectionTitle("Activity Performance");
 
             // chart
             Set<IndicatorActivity> values = activity.getIndicators();
@@ -1555,7 +1588,8 @@ public class ExportActivityToWordBuilder {
                     addRowLtrData(projCost == null ? null : projCost.getFunAmount()).
                     addRowData(currencyCode));
             eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Date", null, null, true).
-                    addRowLtrData(projCost == null ? null : projCost.getFunDate()));
+                    addRowLtrData(projCost == null ? null : projCost.getFunDate())
+                    .addEmptyData());
 
             if ("Proposed Project Cost".equals(costName)
                     && FeaturesUtil.isVisibleModule(
@@ -1844,7 +1878,100 @@ public class ExportActivityToWordBuilder {
         }
 
     }
-
+    
+    /*
+     * Regional Observations
+     */
+    private void getRegionObservationsTables() throws WorkerException {
+        String regObsModulePath = "/Activity Form/Regional Observations/Observation";
+        String regObsDatePath = regObsModulePath + "/Date";
+        String regObsMeasurePath = regObsModulePath + "/Measure";
+        String regObsActorPath = regObsMeasurePath + "/Actor";
+        
+        if (FeaturesUtil.isVisibleModule(regObsModulePath)) {
+            ExportSectionHelper eshTitle = new ExportSectionHelper("Regional Observations", true)
+                    .setWidth(WIDTH).setAlign(STJc.LEFT);
+            createSectionTable(eshTitle);
+            
+            if (activity.getRegionalObservations() != null && !activity.getRegionalObservations().isEmpty()) {
+                Set<AmpRegionalObservation> regObsValues = activity.getRegionalObservations();
+                
+                ExportSectionHelper eshRegObsSection = new ExportSectionHelper(null, false)
+                        .setWidth(WIDTH).setAlign(STJc.LEFT);
+                for (AmpRegionalObservation regObs : regObsValues) {
+                    String issueName = regObs.getName();
+                    if (FeaturesUtil.isVisibleModule(regObsDatePath)) {
+                        issueName += "  " + DateConversion.convertDateToLocalizedString(regObs.getObservationDate());
+                    }
+                    eshRegObsSection.addRowData(new ExportSectionHelperRowData(issueName, null, null, false));
+                    if (FeaturesUtil.isVisibleModule(regObsMeasurePath)
+                            && regObs.getRegionalObservationMeasures() != null
+                            && !regObs.getRegionalObservationMeasures().isEmpty()) {
+                        for (AmpRegionalObservationMeasure measure : regObs.getRegionalObservationMeasures()) {
+                            String measureName = measure.getName();
+                            eshRegObsSection.addRowData((new ExportSectionHelperRowData(" \u2022" + measureName, null,
+                                    null, false)));
+                            if (measure.getActors() != null && !measure.getActors().isEmpty()
+                                    && FeaturesUtil.isVisibleModule(regObsActorPath)) {
+                                for (AmpRegionalObservationActor actor : measure.getActors()) {
+                                    eshRegObsSection.addRowData((new ExportSectionHelperRowData(" \t \u2022" + actor
+                                            .getName(), null, null, false)));
+                                }
+                            }
+                        }
+                    }
+                }
+                createSectionTable(eshRegObsSection);
+            }
+        }
+    }
+    
+    /*
+     * Line Ministry Observations
+     */
+    private void getLineMinistryObservationsTables() throws WorkerException {
+        String lmoModulePath = "/Activity Form/Line Ministry Observations/Observation";
+        String lmoDatePath = lmoModulePath + "/Date";
+        String lmoMeasurePath = lmoModulePath + "/Measure";
+        String lmoActorPath = lmoMeasurePath + "/Actor";
+        
+        if (FeaturesUtil.isVisibleModule(lmoModulePath)) {
+            ExportSectionHelper eshTitle = new ExportSectionHelper("Line Ministry Observations", true)
+                    .setWidth(WIDTH).setAlign(STJc.LEFT);
+            createSectionTable(eshTitle);
+            
+            if (activity.getLineMinistryObservations() != null && !activity.getLineMinistryObservations().isEmpty()) {
+                Set<AmpLineMinistryObservation> lmoValues = activity.getLineMinistryObservations();
+                
+                ExportSectionHelper eshLmoSection = new ExportSectionHelper(null, false)
+                        .setWidth(WIDTH).setAlign(STJc.LEFT);
+                for (AmpLineMinistryObservation lmo : lmoValues) {
+                    String issueName = lmo.getName();
+                    if (FeaturesUtil.isVisibleModule(lmoDatePath)) {
+                        issueName += "  " + DateConversion.convertDateToLocalizedString(lmo.getObservationDate());
+                    }
+                    eshLmoSection.addRowData(new ExportSectionHelperRowData(issueName, null, null, false));
+                    if (FeaturesUtil.isVisibleModule(lmoMeasurePath) && lmo.getLineMinistryObservationMeasures() != null
+                            && !lmo.getLineMinistryObservationMeasures().isEmpty()) {
+                        for (AmpLineMinistryObservationMeasure measure : lmo.getLineMinistryObservationMeasures()) {
+                            String measureName = measure.getName();
+                            eshLmoSection.addRowData((new ExportSectionHelperRowData(" \u2022" + measureName, null,
+                                    null, false)));
+                            if (measure.getActors() != null && !measure.getActors().isEmpty()
+                                    && FeaturesUtil.isVisibleModule(lmoActorPath)) {
+                                for (AmpLineMinistryObservationActor actor : measure.getActors()) {
+                                    eshLmoSection.addRowData((new ExportSectionHelperRowData(" \t \u2022" + actor
+                                            .getName(), null, null, false)));
+                                }
+                            }
+                        }
+                    }
+                }
+                createSectionTable(eshLmoSection);
+            }
+        }
+    }
+    
     /*
      * Component funding section
      */
@@ -2284,7 +2411,7 @@ public class ExportActivityToWordBuilder {
             // Delivery Rate
             if (activityForm.getFunding().getDeliveryRate() != null
                     && activityForm.getFunding().getDeliveryRate().length() > 0) {
-                addTotalsOutput(fundingTotalsDetails, "Delivery Rate",
+                addTotalsOutput(fundingTotalsDetails, "Delivery rate",
                         activityForm.getFunding().getDeliveryRate().replace("%", ""), "%");
             }
 
@@ -2654,7 +2781,7 @@ public class ExportActivityToWordBuilder {
         List<ExportSectionHelperRowData> mtefProjection = new ArrayList<ExportSectionHelperRowData>();
 
         for (AmpFundingMTEFProjection projection : mtefList) {
-            String projectedType = projection.getProjected().getValue();
+            String projectedType = projection.getProjection().getValue();
             FundingDetail fd = getCalculatedMtefFundingDetail(calc, projection);
 
             String transactionAmount = fd == null ? formatNumber(projection.getAmount()) : fd.getTransactionAmount();
@@ -3331,6 +3458,15 @@ public class ExportActivityToWordBuilder {
             catVal = null;
             if (identification.getCrisNumber() != null) {
                 columnVal = identification.getCrisNumber();
+            }
+            generateOverAllTableRows(identificationSubTable1, columnName, columnVal, null);
+        }
+    
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/IATI Identifier")) {
+            columnName = TranslatorWorker.translateText("IATI Identifier");
+            columnVal = "";
+            if (StringUtils.isNotBlank(identification.getIatiIdentifier())) {
+                columnVal = identification.getIatiIdentifier();
             }
             generateOverAllTableRows(identificationSubTable1, columnName, columnVal, null);
         }

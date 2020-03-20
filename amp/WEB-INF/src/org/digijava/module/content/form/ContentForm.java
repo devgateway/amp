@@ -21,7 +21,7 @@ public class ContentForm extends ActionForm {
 
     private Long ampContentFormId;
     private String editKey;
-    private String layout;
+    private String contentLayout;
     private String pageCode;
     private String title;
     private String description;
@@ -94,11 +94,11 @@ public class ContentForm extends ActionForm {
     public String getPageCode() {
         return pageCode;
     }
-    public void setLayout(String layout) {
-        this.layout = layout;
+    public void setContentLayout(String contentLayout) {
+        this.contentLayout = contentLayout;
     }
-    public String getLayout() {
-        return layout;
+    public String getContentLayout() {
+        return contentLayout;
     }
     public void setEditKey(String editKey) {
         this.editKey = editKey;
@@ -111,7 +111,7 @@ public class ContentForm extends ActionForm {
         if(isReset()){
             ampContentFormId = null;
             editKey = null;
-            layout = null;
+            contentLayout = null;
             pageCode = null;
             title = null;
             description = null;

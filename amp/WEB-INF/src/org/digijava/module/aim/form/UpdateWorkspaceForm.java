@@ -8,12 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.multistepwizard.MultiStepActionForm;
 import org.digijava.module.aim.multistepwizard.annotation.Checkbox;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class UpdateWorkspaceForm extends MultiStepActionForm{
@@ -34,6 +32,13 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
     
     @Checkbox(step=1, resetValue="false")
     private Boolean isolated=null;
+
+    @Checkbox(step = 1, resetValue = "false")
+    private Boolean sendSummaryChangesApprover = null;
+    @Checkbox(step = 1, resetValue = "false")
+
+    private Boolean sendSummaryChangesManager = null;
+
     
     
     private Collection organizations;
@@ -434,6 +439,8 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
             relatedTeamFlag = "no";
             relatedTeamBilatCollSize = null;
             parentTeamId = null;
+            sendSummaryChangesApprover = false;
+            sendSummaryChangesManager = false;
             parentTeamName = null;
             deleteFlag = null;
             updateFlag = false;
@@ -716,8 +723,24 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 
     public void setIsolated(Boolean isolated) {
         this.isolated = isolated;
-    }    
-    
+    }
+
+    public Boolean getSendSummaryChangesApprover() {
+        return sendSummaryChangesApprover;
+    }
+
+    public void setSendSummaryChangesApprover(Boolean sendSummaryChangesApprover) {
+        this.sendSummaryChangesApprover = sendSummaryChangesApprover;
+    }
+
+    public Boolean getSendSummaryChangesManager() {
+        return sendSummaryChangesManager;
+    }
+
+    public void setSendSummaryChangesManager(Boolean sendSummaryChangesManager) {
+        this.sendSummaryChangesManager = sendSummaryChangesManager;
+    }
+
     public void setWorkspacePrefix(Long workspacePrefix) {
         this.workspacePrefix = workspacePrefix;
     }

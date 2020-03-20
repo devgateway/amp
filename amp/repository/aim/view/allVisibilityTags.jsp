@@ -60,7 +60,7 @@
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Regional Observations" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Line Ministries" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Line Ministry Observations" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display> 
 <module:display name="MONITORING AND EVALUATING"></module:display> 
 <module:display name="Measures" parentModule="REPORTING"></module:display> 
@@ -87,12 +87,11 @@
 <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Donor Profile Report" parentModule="REPORTING"></module:display>
-<module:display name="Saiku" parentModule="REPORTING"></module:display>
 <module:display name="Pledge Reports" parentModule="REPORTING"></module:display>
 <feature:display name="Pledges Default Reports" module="Pledge Reports"></feature:display>
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display>
-<module:display name="Filter Section" parentModule="REPORTING"></module:display> 
+<module:display name="Filter Widget" parentModule="REPORTING"></module:display>
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
 <module:display name="Tab Generator" parentModule="REPORTING"></module:display>
@@ -142,8 +141,7 @@
 <field:display name="Resource Category" feature="Resource Columns"></field:display>
 <field:display name="Resource Organisations" feature="Resource Columns"></field:display>
 
-<feature:display name="Archived" module="Filter Section"></feature:display>
-<feature:display module="Activity Costing" name="Costing"></feature:display> 
+<feature:display module="Activity Costing" name="Costing"></feature:display>
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
 <feature:display module="Contracting" name="Contracting"></feature:display> 
 <feature:display module="Funding" name="Activity Pledges"></feature:display>
@@ -176,6 +174,7 @@
 <feature:display name="Activity Dashboard" module="M & E"></feature:display>
 <feature:display name="Workspace Info" module="Tools"></feature:display>
 <feature:display name="IATI Importer" module="Tools"></feature:display>
+<feature:display name="Address Book" module="Tools"></feature:display>
 <field:display name="Unassigned Activities" feature="Workspace Info"></field:display>
 <field:display name="Non-archived Activities" feature="Workspace Info"></field:display>
 <field:display name="Archived Activities" feature="Workspace Info"></field:display>
@@ -193,7 +192,7 @@
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Approval Tab" module="Messages"></feature:display>
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display>
-<feature:display name="Computed Columns Filters" module="Filter Section"></feature:display> 
+<feature:display name="Computed Year" module="Filter Widget"></feature:display>
 <feature:display name="Component Report" module="Report Types"></feature:display> 
 <feature:display name="Components" module="Components"></feature:display> 
 
@@ -217,7 +216,7 @@
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Issues" module="Issues"></feature:display>
 <feature:display name="Regional Observations" module="Regional Observations"></feature:display>
-<feature:display name="Line Ministries" module="Line Ministries"></feature:display>
+<feature:display name="Line Ministry Observations" module="Line Ministry Observations"></feature:display>
 <feature:display name="Logframe" module="Previews"></feature:display> 
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
 <feature:display name="Message tab" module="Messages"></feature:display>
@@ -243,8 +242,9 @@
 
 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
-<feature:display name="Add Pledge Button" module="Pledges"></feature:display> 
-<feature:display name="Pledge Donor Information" module="Pledges"></feature:display> 
+<feature:display name="Add Pledge Button" module="Pledges"></feature:display>
+<feature:display name="Limit Pledge Edition" module="Pledges"></feature:display>
+<feature:display name="Pledge Donor Information" module="Pledges"></feature:display>
 <feature:display name="Pledge Sector and Location" module="Pledges"></feature:display>
 <feature:display name="Pledge Status" module="Pledges"></feature:display>
 <feature:display name="Pledge Contact 1" module="Pledges"></feature:display> 
@@ -301,14 +301,17 @@
 <field:display name="Regional Observations Actors" feature="Regional Observations"></field:display>
 <field:display name="Regional Observations Date" feature="Regional Observations"></field:display>
 
-<field:display name="Line Ministries Observations" feature="Line Ministries"></field:display>
+<field:display name="Line Ministry Observations" feature="Line Ministry Observations"></field:display>
+<field:display name="Line Ministry Observations Actors" feature="Line Ministry Observations"></field:display>
+<field:display name="Line Ministry Observations Date" feature="Line Ministry Observations"></field:display>
+<field:display name="Line Ministry Observations Measures" feature="Line Ministry Observations"></field:display>
 
 <field:display feature="Activity Pledges" name="Activity Pledges Title"></field:display>
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 
 <field:display feature="Funding Information" name="Type Of Assistance"></field:display>
-<field:display feature="Funding Information" name="Capital - Expenditure"></field:display>
+<field:display feature="Funding Information" name="Capital Expenditure"></field:display>
 <field:display feature="Funding Information" name="Payment Capital - Recurrent"></field:display>
 <field:display feature="Funding Information" name="Agreement Title + Code"></field:display>
 <field:display feature="Funding Information" name="Agreement Code"></field:display>
@@ -337,6 +340,7 @@
 <field:display feature="Identification" name="Objective"></field:display> 
 <field:display feature="Identification" name="Organizations and Project ID"></field:display> 
 <field:display feature="Identification" name="Project Title"></field:display>
+<field:display feature="Identification" name="Project Management"></field:display>
 <field:display feature="Identification" name="Related Pledges"></field:display>
 <field:display feature="Identification" name="Only show projects related to pledges"></field:display>
 <field:display feature="Identification" name="Purpose"></field:display> 
@@ -670,6 +674,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Grand Total Disbursements" feature="Activity - Component Step"></field:display> 
 <field:display name="Humanitarian Aid" feature="Identification"></field:display> 
 <field:display name="Disaster Response Marker" feature="Identification"></field:display>
+<field:display name="IATI Identifier" feature="Identification"></field:display>
 <field:display name="Implementation Level" feature="Location"></field:display> 
 <field:display name="Implementation Location" feature="Location"></field:display> 
 <field:display name="Implementing Agency" feature="Implementing Agency"></field:display>
@@ -764,9 +769,9 @@ deleted 6 fields, do not reinsert
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 
 <field:display name="Objectively Verifiable Indicators" feature="Identification"></field:display> 
- <field:display name="On/Off/Treasury Budget" feature="Budget"></field:display>
- <field:display name="Project Code" feature="Budget"></field:display>
- <field:display name="Sub-Program" feature="Budget"></field:display> 
+<field:display name="Activity Budget" feature="Budget"></field:display>
+<field:display name="Project Code" feature="Budget"></field:display>
+<field:display name="Sub-Program" feature="Budget"></field:display>
 <field:display name="Sub-Vote" feature="Budget"></field:display> 
 <field:display name="Vote" feature="Budget"></field:display>
 <field:display name="Validate Mandatory Vote" feature="Budget"></field:display>
@@ -828,11 +833,12 @@ deleted 6 fields, do not reinsert
 <field:display name="Proposed Start Date" feature="Planning"></field:display> 
 <field:display name="Purpose" feature="Identification"></field:display> 
 <field:display name="Recievers" feature="Create Message Form"></field:display>
-<field:display name="Country" feature="Location"></field:display>  
-<field:display name="Region" feature="Location"></field:display>
-<field:display name="District" feature="Location"></field:display>
-<field:display name="Zone" feature="Location"></field:display>
-<field:display name="Regional Funding Tab" feature="Regional Funding"></field:display> 
+<field:display name="Administrative Level 0" feature="Location"></field:display>
+<field:display name="Administrative Level 1" feature="Location"></field:display>
+<field:display name="Administrative Level 2" feature="Location"></field:display>
+<field:display name="Administrative Level 3" feature="Location"></field:display>
+<field:display name="Administrative Level 4" feature="Location"></field:display>
+<field:display name="Regional Funding Tab" feature="Regional Funding"></field:display>
 <field:display name="Regional Group" feature="Regional Group"></field:display>
 <field:display name="Regional Percentage" feature="Location"></field:display> 
 <field:display name="Related Activity Dropdown" feature="Create Message Form"></field:display> 
@@ -878,6 +884,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Search Feature - Executing Agency" feature="Search Feature"></field:display>
 <field:display name="Search Feature - Implementing Agency" feature="Search Feature"></field:display>
 <field:display name="Search Feature - Responsible Organization" feature="Search Feature"></field:display>
+<field:display name="Fuzzy Search" feature="Search Feature"></field:display>
 <field:display name="Sector Group" feature="Sector Group"></field:display>
 <field:display name="Sector Ministry Contact Email" feature="Sector Ministry Contact Information"></field:display> 
 <field:display name="Sector Ministry Contact Fax Number" feature="Sector Ministry Contact Information"></field:display> 
@@ -979,14 +986,17 @@ deleted 6 fields, do not reinsert
 <field:display name="Commitment Gap" feature="Computed Fields"></field:display>
 <field:display name="Calculated Project Life" feature="Computed Fields"></field:display>
 <field:display name="Performance Alert Level" feature="Performance Monitoring"></field:display>
+<field:display name="Performance Alert Type" feature="Performance Monitoring"></field:display>
 
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>
+<field:display name="Beneficiary Agency Type" feature="Beneficiary Agency"></field:display>
 <field:display name="Contracting Agency Department/Division"  feature="Contracting Agency"></field:display>
 <field:display name="Contracting Agency Groups" feature="Contracting Agency"></field:display>
 <field:display name="Contracting Agency Acronym"  feature="Contracting Agency"></field:display>
+<field:display name="Contracting Agency Type"  feature="Contracting Agency"></field:display>
 <field:display name="Executing Agency Groups" feature="Executing Agency"></field:display>
-<field:display name="Executing Agency Type" feature="Executing Agency"></field:display>   
+<field:display name="Executing Agency Type" feature="Executing Agency"></field:display>
 <field:display name="Executing Agency Department/Division" feature="Executing Agency"></field:display>
 <field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display>
 <field:display name="Implementing Agency Type" feature="Implementing Agency"></field:display>  
@@ -995,6 +1005,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Regional Group Department/Division"  feature="Regional Group"></field:display> 
 <field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Department/Division"  feature="Responsible Organization"></field:display>
+<field:display name="Responsible Organization Type" feature="Responsible Organization"></field:display>
 <field:display name="Sector Group Department/Division"  feature="Sector Group"></field:display>
 
 <feature:display name="Pledges Columns" module="Pledges"></feature:display>
@@ -1002,10 +1013,11 @@ deleted 6 fields, do not reinsert
 <field:display feature="Pledges Columns" name="Pledges Donor Group"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
 <field:display feature="Pledges Columns" name="Pledge Status"></field:display>
-<field:display feature="Pledges Countries" name="Pledges Countries"></field:display>
-<field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
-<field:display feature="Pledges Columns" name="Pledges Zones"></field:display>
-<field:display feature="Pledges Columns" name="Pledges Districts"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Administrative Level 0"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Administrative Level 1"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Administrative Level 2"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Administrative Level 3"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Administrative Level 4"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Programs"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Secondary Programs"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Tertiary Programs"></field:display>
@@ -1080,8 +1092,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Show Change Summary" feature="Version History"></field:display>
 
 <module:display name="Show Editable Export Formats" parentModule="PUBLIC VIEW"></module:display>
-<module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>
-<feature:display name="Filters" module="Public Reports and Tabs"></feature:display>
 <!-- AMP-9437 -->
 <module:display name="Public Site" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Documents" parentModule="PUBLIC VIEW"></module:display>
@@ -1115,6 +1125,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Mandatory Organization Code" feature="Organization Form"></field:display>
 
   <!-- GPI  -->
+<module:display name="GPI Data Entry" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="GPI Reports" parentModule="REPORTING"></module:display>
 <module:display name="GPI" parentModule="GPI Reports"></module:display>
 <module:display name="GPI 2014" parentModule="GPI Reports"></module:display>

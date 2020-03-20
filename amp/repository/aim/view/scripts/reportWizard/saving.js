@@ -37,6 +37,13 @@ function getSplitByFunding() {
     return checkboxObject.checked;
 }
 
+function getShowOriginalCurrency() {
+    if (aimReportWizardForm.showOriginalCurrency == null)
+        return false;
+    var checkboxObject = aimReportWizardForm.showOriginalCurrency;
+    return checkboxObject.checked;
+}
+
 function getReportTitleEl() {
 	var divEl	= document.getElementById("titlePanelBody");
 	var titleEl	= divEl.getElementsByTagName("input")[0];
@@ -359,6 +366,7 @@ SaveReportEngine.prototype.saveAndOrOpenReport = function (openReport) {
 							"&workspaceLinked="+getWorkspaceLinked() +
 							"&alsoShowPledges="+getAlsoShowPledges() +
 							"&splitByFunding="+getSplitByFunding() +
+							"&showOriginalCurrency=" + getShowOriginalCurrency() +
 							//"&onlyShowProjectsRelatedPledges=" + getOnlyShowProjectsRelatedPledges() +
 							"&hideActivities="+getHideActivities() +
 							"&useFilters="+getUseFilters()+

@@ -1,11 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Class that holds the activitiy data to be serialized as a JsonObject.
@@ -18,7 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  * @author Fernando Ferreyra
  *
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Activity {
     private Long id;
     private String name;
@@ -38,7 +35,7 @@ public class Activity {
     private String longitude;
     private String primarySector;
 
-    private JsonBean matchesFilters;
+    private Map<String, Object>  matchesFilters;
 
     public Activity() {
 
@@ -135,11 +132,11 @@ public class Activity {
         this.totalDisbursmentsForActivity = totalDisbursmentsForActivity;
     }
 
-    public JsonBean getMatchesFilters() {
+    public Map<String, Object> getMatchesFilters() {
         return matchesFilters;
     }
 
-    public void setMatchesFilters(JsonBean matchesFilters) {
+    public void setMatchesFilters(Map<String, Object>  matchesFilters) {
         this.matchesFilters = matchesFilters;
     }
 

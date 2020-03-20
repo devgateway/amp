@@ -22,12 +22,18 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -40,6 +46,11 @@ import org.digijava.module.translation.exotic.AmpDateFormatter;
 
 public class DateTimeUtil {
 
+    private static final Logger logger = LoggerFactory.getLogger(DateTimeUtil.class);
+
+    private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<>();
+    private static final ThreadLocal<SimpleDateFormat> TIMESTAMP_FORMATTER = new ThreadLocal<>();
+    
     /**
      * Convert iso date to java.util.Calendar
      * example:
@@ -177,7 +188,7 @@ public class DateTimeUtil {
     }
     
     public static Date fromJulianNumberToDate(String julianNumber) {
-        if (julianNumber != null && !"999999998".equals(julianNumber)) {
+        if (julianNumber != null && !FiltersConstants.FILTER_UNDEFINED_MAX.equals(julianNumber)) {
             try {
                 int day = Integer.parseInt(julianNumber) - 2440587; 
                 julianNumber = Integer.toString(day);
@@ -236,5 +247,129 @@ public class DateTimeUtil {
         sdf.setLenient(false);
         return sdf;
     }
+    
+    public static LocalDate getLocalDate(Date date) {
+        return (new java.sql.Date(date.getTime())).toLocalDate();
+    }
 
+    /**
+     * Returns a date representing first day of the year. Uses Gregorian calendar.
+     */
+    public static Date firstDayOfYear(int year) {
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.clear();
+        calendar.set(Calendar.YEAR, year);
+        return calendar.getTime();
+    }
+
+    /**
+     * Returns a date representing last day of the year. Uses Gregorian calendar.
+     */
+    public static Date lastDayOfYear(int year) {
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.clear();
+        calendar.set(Calendar.YEAR, year + 1);
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        return calendar.getTime();
+    }
+    
+    /**
+     * Gets a date formatted in ISO 8601 date format. If the date is null, returns null.
+     *
+     * @param date the date to be formatted
+     * @return String, date in ISO 8601 date format
+     */
+    public static String formatISO8601Date(Date date) {
+        return formatISO8601DateTimestamp(date, false);
+    }
+    
+    /**
+     * Gets a date formatted in ISO 8601 date time format. If the date is null, returns null.
+     *
+     * @param date the date to be formatted
+     * @return String, date in ISO 8601 date time format
+     */
+    public static String formatISO8601Timestamp(Date date) {
+        return formatISO8601DateTimestamp(date, true);
+    }
+    
+    /**
+     * Gets a date formatted in ISO 8601 date time format. If the date is null, returns null.
+     *
+     * @param date the date to be formatted
+     * @param isTimestamp if the value should be parsed using the ISO8601DateTime or ISO8601Date format
+     * @return String, date in ISO 8601 date time format
+     */
+    public static String formatISO8601DateTimestamp(Date date, boolean isTimestamp) {
+        SimpleDateFormat formatter = isTimestamp ? getTimestampFormatter() : getDateFormatter();
+        return date == null ? null : formatter.format(date);
+    }
+    
+    /**
+     * Gets a date formatted in ISO 8601 date format. If the date is null, returns null.
+     *
+     * @param date the date to be formatted
+     * @return String, date in ISO 8601 date format
+     */
+    
+    public static Date parseISO8601Date(String date) {
+        return parseISO8601DateTimestamp(date, false);
+    }
+    
+    /**
+     * Gets a date formatted in ISO 8601 date time format. If the date is null, returns null.
+     *
+     * @param date the date to be formatted
+     * @return String, date in ISO 8601 date time format
+     */
+    
+    public static Date parseISO8601Timestamp(String date) {
+        return parseISO8601DateTimestamp(date, true);
+    }
+    
+    /**
+     * Gets a date formatted in ISO 8601 date time format. If the date is null, returns null.
+     *
+     * @param date the date to be formatted
+     * @param isTimestamp if the value should be parsed using the ISO8601DateTime or ISO8601Date format
+     * @return String, date in ISO 8601 date time format
+     */
+    
+    public static Date parseISO8601DateTimestamp(String date, boolean isTimestamp) {
+        try {
+            SimpleDateFormat formatter = isTimestamp ? getTimestampFormatter() : getDateFormatter();
+            if (date != null) {
+                if (date.length() != EPConstants.DATE_FORMAT_STRICT_LENGTH.get(formatter.toPattern())) {
+                    throw new ParseException("Unparseable date '" + date + "'", date.length());
+                }
+                return formatter.parse(date);
+            }
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        
+        return null;
+    }
+    
+    private static SimpleDateFormat getDateFormatter() {
+        if (DATE_FORMATTER.get() == null) {
+            SimpleDateFormat format = new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT);
+            format.setLenient(false);
+            DATE_FORMATTER.set(format);
+        }
+        
+        return DATE_FORMATTER.get();
+    }
+    
+    protected static SimpleDateFormat getTimestampFormatter() {
+        if (TIMESTAMP_FORMATTER.get() == null) {
+            SimpleDateFormat format = new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT);
+            format.setLenient(false);
+            format.setTimeZone(TimeZone.getTimeZone("UTC"));
+            TIMESTAMP_FORMATTER.set(format);
+        }
+        
+        return TIMESTAMP_FORMATTER.get();
+    }
+    
 }

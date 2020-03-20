@@ -50,8 +50,6 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
-import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
-
 /**
  * Utility class for amp settings handling
  * 

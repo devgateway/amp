@@ -14,7 +14,6 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.PercentageHelperMap;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.workers.AmountColWorker;
-import org.digijava.module.aim.helper.FormatHelper;
 
 /**
  * 
@@ -516,12 +515,13 @@ public class AmountCell extends Cell {
             keyName = ArConstants.COLUMN_ANY_SECONDARYPROG;
         else if ( keyName.contains(ArConstants.COLUMN_ANY_PRIMARYPROG) )
             keyName = ArConstants.COLUMN_ANY_PRIMARYPROG;
-        else if ( keyName.contains(ArConstants.COLUMN_REGION) )
-            keyName = ArConstants.COLUMN_REGION;
-        else if ( keyName.contains(ArConstants.COLUMN_ZONE) )
-            keyName = ArConstants.COLUMN_REGION;
-        else if ( keyName.contains(ArConstants.COLUMN_DISTRICT) )
-            keyName = ArConstants.COLUMN_REGION;
+        else if (keyName.contains(ArConstants.COLUMN_LOC_ADM_LEVEL_1)) {
+            keyName = ArConstants.COLUMN_LOC_ADM_LEVEL_1;
+        } else if (keyName.contains(ArConstants.COLUMN_LOC_ADM_LEVEL_2)) {
+            keyName = ArConstants.COLUMN_LOC_ADM_LEVEL_1;
+        } else if (keyName.contains(ArConstants.COLUMN_LOC_ADM_LEVEL_3)) {
+            keyName = ArConstants.COLUMN_LOC_ADM_LEVEL_1;
+        }
         
         
         columnCellValue.put(keyName, source.getValue().toString(), source.getId(), percentage, dimensionClass, hierarchyPurpose);
@@ -566,14 +566,7 @@ public class AmountCell extends Cell {
 //      this.replacePercentage(ArConstants.COLUMN_ANY_PRIMARYPROG, ArConstants.COLUMN_ANY_PRIMARYPROG, source, sourceCol, percentage);
 //
 //
-//      /**
-//       * For locations
-//       */
-//      this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_ZONE, source, sourceCol, percentage);
-//      this.replacePercentage(ArConstants.COLUMN_ZONE, ArConstants.COLUMN_DISTRICT, source, sourceCol, percentage);
-//      this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_DISTRICT, source, sourceCol, percentage);
-//      
-        
+
 //      columnPercent.put(sourceCol.getName(), percentage);
 //      columnCellValue
 //              .put(sourceCol.getName(), (Comparable) source.getValue());

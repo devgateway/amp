@@ -93,17 +93,17 @@ public class ThemeForm extends ActionForm {
           
           private String fill; // National, region, district    
           private boolean defaultCountryIsSet;
-          private Collection<AmpCategoryValueLocations> regions;
-          private Long impRegion;
+          private Collection<AmpCategoryValueLocations> admLevel1Locations;
+          private Long impAdmLevel1;
           
-          private Collection<AmpCategoryValueLocations> zones;
-          private Long impZone;
+          private Collection<AmpCategoryValueLocations> admLevel2Locations;
+          private Long impAdmLevel2;
           
-          private Collection<AmpCategoryValueLocations> woredas;
-          private Long impWoreda;
+          private Collection<AmpCategoryValueLocations> admLevel3Locations;
+          private Long impAdmLevel3;
           
-          private String country;
-          private String impCountry;
+          private String admLevel0Location;
+          private String impAdmLevel0;
           
           private Integer locationLevelIndex;
           
@@ -180,52 +180,52 @@ public class ThemeForm extends ActionForm {
             this.defaultCountryIsSet = defaultCountryIsSet;
         }
 
-        public Collection<AmpCategoryValueLocations> getRegions() {
-            return regions;
+        public Collection<AmpCategoryValueLocations> getAdmLevel1Locations() {
+            return admLevel1Locations;
         }
 
-        public void setRegions(Collection<AmpCategoryValueLocations> regions) {
-            this.regions = regions;
+        public void setAdmLevel1Locations(Collection<AmpCategoryValueLocations> admLevel1Locations) {
+            this.admLevel1Locations = admLevel1Locations;
         }
 
-        public Long getImpRegion() {
-            return impRegion;
+        public Long getImpAdmLevel1() {
+            return impAdmLevel1;
         }
 
-        public void setImpRegion(Long impRegion) {
-            this.impRegion = impRegion;
+        public void setImpAdmLevel1(Long impAdmLevel1) {
+            this.impAdmLevel1 = impAdmLevel1;
         }
 
-        public Collection<AmpCategoryValueLocations> getZones() {
-            return zones;
+        public Collection<AmpCategoryValueLocations> getAdmLevel2Locations() {
+            return admLevel2Locations;
         }
 
-        public void setZones(Collection<AmpCategoryValueLocations> zones) {
-            this.zones = zones;
+        public void setAdmLevel2Locations(Collection<AmpCategoryValueLocations> admLevel2Locations) {
+            this.admLevel2Locations = admLevel2Locations;
         }
 
-        public Long getImpZone() {
-            return impZone;
+        public Long getImpAdmLevel2() {
+            return impAdmLevel2;
         }
 
-        public void setImpZone(Long impZone) {
-            this.impZone = impZone;
+        public void setImpAdmLevel2(Long impAdmLevel2) {
+            this.impAdmLevel2 = impAdmLevel2;
         }
 
-        public Collection<AmpCategoryValueLocations> getWoredas() {
-            return woredas;
+        public Collection<AmpCategoryValueLocations> getAdmLevel3Locations() {
+            return admLevel3Locations;
         }
 
-        public void setWoredas(Collection<AmpCategoryValueLocations> woredas) {
-            this.woredas = woredas;
+        public void setAdmLevel3Locations(Collection<AmpCategoryValueLocations> admLevel3Locations) {
+            this.admLevel3Locations = admLevel3Locations;
         }
 
-        public Long getImpWoreda() {
-            return impWoreda;
+        public Long getImpAdmLevel3() {
+            return impAdmLevel3;
         }
 
-        public void setImpWoreda(Long impWoreda) {
-            this.impWoreda = impWoreda;
+        public void setImpAdmLevel3(Long impAdmLevel3) {
+            this.impAdmLevel3 = impAdmLevel3;
         }
 
         public String getFlag() {
@@ -236,20 +236,20 @@ public class ThemeForm extends ActionForm {
             this.flag = flag;
         }
 
-        public String getCountry() {
-            return country;
+        public String getAdmLevel0Location() {
+            return admLevel0Location;
         }
 
-        public void setCountry(String country) {
-            this.country = country;
+        public void setAdmLevel0Location(String admLevel0Location) {
+            this.admLevel0Location = admLevel0Location;
         }
 
-        public String getImpCountry() {
-            return impCountry;
+        public String getImpAdmLevel0() {
+            return impAdmLevel0;
         }
 
-        public void setImpCountry(String impCountry) {
-            this.impCountry = impCountry;
+        public void setImpAdmLevel0(String impAdmLevel0) {
+            this.impAdmLevel0 = impAdmLevel0;
         }
 
         /**

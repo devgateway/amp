@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.NotImplementedException;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
@@ -29,7 +30,7 @@ public class TestTranslatorService implements TranslatorService {
 
     @Override
     public Map<String, String> translateLabel(String label) {
-        throw new NotImplementedException("NOT IN USE YET");
+        return ImmutableMap.of("en", label, "fr", label + " fr");
     }
 
     @Override

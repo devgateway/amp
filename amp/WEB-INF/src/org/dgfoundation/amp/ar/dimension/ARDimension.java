@@ -13,14 +13,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
-
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.cell.Cell;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.hibernate.HibernateException;
 
@@ -64,12 +61,12 @@ public abstract class ARDimension {
                 put("Sector Tag Sub-Sector", "Sector Tag");
                 put("Sector Tag Sub-Sub-Sector", "Sector Tag Sub-Sector");
                 
-                put(ArConstants.COLUMN_REGION, ArConstants.COLUMN_COUNTRY);
-                put(ArConstants.COLUMN_ZONE, ArConstants.COLUMN_REGION);
-                put(ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_ZONE);
+                put(ArConstants.COLUMN_LOC_ADM_LEVEL_1, ArConstants.COLUMN_LOC_ADM_LEVEL_0);
+                put(ArConstants.COLUMN_LOC_ADM_LEVEL_2, ArConstants.COLUMN_LOC_ADM_LEVEL_1);
+                put(ArConstants.COLUMN_LOC_ADM_LEVEL_3, ArConstants.COLUMN_LOC_ADM_LEVEL_2);
                 
-                put(ArConstants.COLUMN_PLEDGE_ZONE, ArConstants.COLUMN_PLEDGE_REGION);
-                put(ArConstants.COLUMN_PLEDGE_DISTRICT, ArConstants.COLUMN_PLEDGE_ZONE);                
+                put(ArConstants.COLUMN_PLEDGE_LOC_ADM_LEVEL_2, ArConstants.COLUMN_PLEDGE_LOC_ADM_LEVEL_1);
+                put(ArConstants.COLUMN_PLEDGE_LOC_ADM_LEVEL_3, ArConstants.COLUMN_PLEDGE_LOC_ADM_LEVEL_2);
             }});
 
     /**

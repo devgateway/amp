@@ -63,7 +63,7 @@ public class SelectLocation extends Action {
                 eaForm.getLocation().getImplemLocationLevel());
         
         if (implLocValue == null) {
-            implLocValue = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
+            implLocValue = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getAmpCategoryValueFromDB();
         }
     
         Integer impLevelValue = implLocValue != null ? new Integer(implLocValue.getIndex() + 1) : new Integer(1);
@@ -84,9 +84,9 @@ public class SelectLocation extends Action {
         AmpCategoryValue implLevel = CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getLocation().getLevelId());
         
         if (implLevel != null && CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel)
-                && CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue)) {
+                && CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocValue)) {
             Collection<AmpCategoryValueLocations> countries =
-                    DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+                    DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
             
             if (countries != null) {
                 Integer countryIndex = null;
@@ -105,7 +105,7 @@ public class SelectLocation extends Action {
         if (cIso != null && parentLocId == null) { // Setting up the country
             eaForm.getLocation().setDefaultCountryIsSet(true);
             AmpCategoryValueLocations defCountry = DynLocationManagerUtil
-                    .getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+                    .getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
             Integer countryLayerIndex = defCountry.getParentCategoryValue().getIndex();
             KeyValue countryKV = new KeyValue(defCountry.getId().toString(), defCountry.getName());
             ArrayList<KeyValue> countries = new ArrayList<KeyValue>();

@@ -151,7 +151,7 @@ function validateUserInfo(){
     }
 	
 	if(country=='-1'){
-		errorMsg='<digi:trn jsFriendly="true" >Please Select Country</digi:trn>';
+		errorMsg='<digi:trn jsFriendly="true">Please Select Country</digi:trn>';
 		alert(errorMsg);
 		return false;
 	}
@@ -309,7 +309,7 @@ function validateUserInfo(){
 																	<tr>
 																		<td width="169" height="30" align="right"style="font-size: 11px;
     font-weight: bold; color:#000;">
-																			<digi:trn key="aim:viewEditUser:country">Country</digi:trn>
+																			<digi:trn key="aim:viewEditUser:country">Administrative Level 0</digi:trn>
 																			<font color="red">*</font>
 																	    </td>
 																	    <td width="190" height="30">
@@ -433,7 +433,7 @@ function validateUserInfo(){
     font-weight: bold; color:#000;"><digi:trn key="aim:viewEditUser:verifiedAssignedOrgs">Verified Assigned Organisations</digi:trn></td>
                                                                         <td>
 	                                                                        <table width="80%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
-    	                                                                        <logic:iterate id="org" name="umViewEditUserForm" property="assignedOrgs" indexId="ind">
+    	                                                                        <logic:iterate id="organisation" name="umViewEditUserForm" property="assignedOrgs" indexId="ind">
         		                                                                    <tr>
                 	                                                                    <td width="2%">
                                                                                              <html:multibox name="umViewEditUserForm" property="selAssignedOrgs" styleId="verOrg_${ind}">

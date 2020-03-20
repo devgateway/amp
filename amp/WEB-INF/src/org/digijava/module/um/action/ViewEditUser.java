@@ -50,10 +50,6 @@ public class ViewEditUser extends Action {
 
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         
-        //Clear users cache
-        TeamMemberUtil.users.clear();
-        TeamMemberUtil.atmUsers.clear();
-        
         ViewEditUserForm uForm = (ViewEditUserForm) form;
         User user = null;
         HttpSession session = request.getSession();
@@ -66,7 +62,7 @@ public class ViewEditUser extends Action {
         if (userId != null) {
             user = UserUtils.getUser(userId);
         } else if (uForm.getEmail() != null) {
-            user = UserUtils.getUserByEmail(uForm.getEmail());
+            user = UserUtils.getUserByEmailAddress(uForm.getEmail());
         }else{
             return mapping.findForward("forward");
         }
@@ -156,7 +152,7 @@ public class ViewEditUser extends Action {
                 uForm.setLanguages(userLangs);
             }
 
-            uForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+            uForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeAdmLevel1OfDefCountry());
             
             Collection<AmpOrgType> orgTypeCol = DbUtil.getAllOrgTypes();
             if (orgTypeCol != null) {

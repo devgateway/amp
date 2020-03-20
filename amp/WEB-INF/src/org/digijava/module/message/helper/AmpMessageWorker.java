@@ -1375,7 +1375,7 @@ public class AmpMessageWorker {
     private static void defineReceiversForSummaryChange(AmpMessage newMsg, Event e, TemplateAlert template) throws
             Exception {
 
-        User user = UserUtils.getUserByEmail(e.getParameters().get(SummaryChangeNotificationTrigger
+        User user = UserUtils.getUserByEmailAddress(e.getParameters().get(SummaryChangeNotificationTrigger
                 .PARAM_SUMMARY_EMAIL).toString());
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY, String.valueOf(
@@ -1497,7 +1497,8 @@ public class AmpMessageWorker {
 
     public static String addTeamIdToQuery(String wsQuery, Long teamId, String teamName) {
         Integer indexToReplace = StringUtils.indexOf(wsQuery, "FROM amp_activity");
-        wsQuery = StringUtils.left(wsQuery, indexToReplace) + " , " + teamId + " as ampTeamId , '" + teamName
+        wsQuery = StringUtils.left(wsQuery, indexToReplace) + " , " + teamId + " as ampTeamId , '"
+                + SQLUtils.sqlEscapeStr(teamName)
                 + "' as teamName " + StringUtils.mid(wsQuery, indexToReplace, wsQuery.length() - 1);
         return wsQuery;
     }
@@ -1523,13 +1524,5 @@ public class AmpMessageWorker {
             }
         }
         return result;
-    }
-
-    public static void main (String []args){
-        String receiver="Marina Baralo<maguibaralo@gmail.com>;Coordination Workspace;";
-        String email = receiver.substring(receiver.indexOf("<")+1,receiver.indexOf(">"));
-        String team = receiver.substring(receiver.indexOf(";")+1 ,receiver.lastIndexOf(";"));
-        System.out.println(email);
-        System.out.println(team);
     }
 }

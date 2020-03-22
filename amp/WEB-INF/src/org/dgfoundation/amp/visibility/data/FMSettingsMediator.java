@@ -47,6 +47,10 @@ public class FMSettingsMediator {
      * @return
      */
     public static Set<String> getEnabledSettings(String fmGroupName, Long templateId) {
+        if (templateId == null) {
+            templateId = FeaturesUtil.getCurrentTemplateId();
+        }
+        
         FMSettings fmGroup = getFMSettings(fmGroupName, templateId);
         
         if (fmGroup != null) {
@@ -86,10 +90,6 @@ public class FMSettingsMediator {
      */
     synchronized
     private static Map<String, FMSettings> getTemplate(Long id) {
-        if (id == null) {
-            id = FeaturesUtil.getCurrentTemplateId();
-        }
-        
         Map<String, FMSettings> templateGroup = templateToFMGroupMap.get(id);
         if (templateGroup == null) {
             templateGroup = Collections.synchronizedMap(new HashMap<String, FMSettings>());

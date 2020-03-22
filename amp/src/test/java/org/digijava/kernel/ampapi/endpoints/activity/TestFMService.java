@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableSet;
 /**
  * @author Octavian Ciubotaru
  */
-public class TestFMService implements FMService {
+public class TestFMService implements FeatureManagerService {
 
     public static final String HIDDEN_FM_PATH = "fm hidden";
     public static final String VISIBLE_FM_PATH = "fm visible";

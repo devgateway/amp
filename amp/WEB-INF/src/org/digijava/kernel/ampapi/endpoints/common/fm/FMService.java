@@ -54,7 +54,7 @@ public class FMService {
     }
 
 
-    private static Map<Long, List<Long>> getFMTreeWsMap() {
+    public static Map<Long, List<Long>> getFMTreeWsMap() {
         String wsQuery = "SELECT amp_team_id, COALESCE(fm_template, (SELECT settingsvalue FROM amp_global_settings "
                 + "WHERE settingsname = 'Visibility Template')::bigint) AS fm_template FROM amp_team";
 

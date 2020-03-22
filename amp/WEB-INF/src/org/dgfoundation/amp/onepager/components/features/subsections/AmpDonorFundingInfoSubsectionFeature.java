@@ -190,7 +190,7 @@ implements AmpRequiredComponentContainer{
         });
 
         AmpTextAreaFieldPanel projectMonitoring = new AmpTextAreaFieldPanel("projectMonitoring",
-                new PropertyModel<>(model, "projectJointDecision"),
+                new PropertyModel<>(model, "projectMonitoring"),
                 "Project Monitoring", false, false, false) {
             @Override
             public void configureLabelText() {

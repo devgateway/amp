@@ -33,7 +33,9 @@
          fd.recipient_org_id AS recipient_org_id, fd.recipient_role_id AS recipient_role_id,
          f.source_role_id AS source_role_id,
          fd.expenditure_class AS expenditure_class_id,
-         f.concessionality_level_va AS concessionality_level_id
+         f.concessionality_level_va AS concessionality_level_id,
+		 COALESCE(f.vulnerable_group_va, -999999999) as vulnerable_group_id,
+		 CASE f.project_results_available WHEN TRUE THEN 1 WHEN FALSE THEN 2 ELSE -999999999 END AS project_results_available_id
 	FROM amp_funding f
 		JOIN amp_funding_detail fd ON fd.amp_funding_id = f.amp_funding_id
      
@@ -49,7 +51,9 @@
      NULL as recipient_org_id, NULL as recipient_role_id,
      (SELECT amp_role_id FROM amp_role WHERE role_code='DN'),
      NULL as expenditure_class_id, 
-     NULL as concessionality_level_id
+     NULL as concessionality_level_id,
+	 NULL AS vulnerable_group_id,
+	 NULL AS project_results_available_id
     FROM amp_annual_project_budget apb
 
     UNION ALL
@@ -69,7 +73,9 @@
      NULL as recipient_org_id, NULL as recipient_role_id,
      (SELECT amp_role_id FROM amp_role WHERE role_code='DN'),
      NULL as expenditure_class_id,
-     NULL as concessionality_level_id
+     NULL as concessionality_level_id,
+	 NULL AS vulnerable_group_id,
+	 NULL AS project_results_available_id
     FROM v_proposed_cost vpc
 	WHERE vpc.currency_id IS NOT NULL
 
@@ -82,7 +88,9 @@
          m.recipient_org_id AS recipient_org_id, m.recipient_role_id AS recipient_role_id,
          f.source_role_id AS source_role_id,
          NULL AS expenditure_class_id,
-         f.concessionality_level_va AS concessionality_level_id
+         f.concessionality_level_va AS concessionality_level_id,
+		 NULL AS vulnerable_group_id,
+		 NULL AS project_results_available_id
     FROM amp_funding f
         JOIN amp_funding_mtef_projection m ON m.amp_funding_id = f.amp_funding_id;
     
@@ -112,9 +120,10 @@
 			vdf.recipient_role_id, recipient_role.name AS recipient_role_name,
 			vdf.source_role_id, source_role.name AS source_role_name,
 			vdf.expenditure_class_id, ec.category_value AS expenditure_class_name,
-			vdf.concessionality_level_id, cl.category_value AS concessionality_level_name
-			
-		FROM v_ni_donor_funding vdf 
+			vdf.concessionality_level_id, cl.category_value AS concessionality_level_name,
+			vdf.vulnerable_group_id, vg.category_value AS vulnerable_group_name,
+			vdf.project_results_available_id
+		FROM v_ni_donor_funding vdf
 			JOIN amp_activity_version aa ON aa.amp_activity_id = vdf.amp_activity_id
 			LEFT JOIN amp_category_value adjtype ON adjtype.id = vdf.adjustment_type
 			LEFT JOIN v_pledges_titles pledge ON pledge.pledge_id = vdf.related_pledge_id
@@ -132,7 +141,8 @@
 			LEFT JOIN amp_role source_role ON source_role.amp_role_id = vdf.source_role_id
 			LEFT JOIN amp_category_value ec ON ec.id = vdf.expenditure_class_id
 			LEFT JOIN amp_category_value cl ON cl.id = vdf.concessionality_level_id
-			
+			LEFT JOIN amp_category_value vg ON vg.id = vdf.vulnerable_group_id
+
 		ORDER BY amp_activity_id;
         	</lang>
 		</script>

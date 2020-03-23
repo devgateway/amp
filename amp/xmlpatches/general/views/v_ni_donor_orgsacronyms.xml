@@ -15,7 +15,7 @@
 			</script>
  			<test>val.equalsIgnoreCase("true")</test>
 		</condition>
-	</trigger> 
+	</trigger>
 	<apply>
 		<script> <!-- v_donors: all donors which are mentioned in amp_funding with:
 		  - a src-role of DN 
@@ -31,7 +31,9 @@
 					d.mode_of_payment_id,
 					d.funding_status_id,
 					d.agreement_id,
-					d.funding_id
+					d.funding_id,
+					d.vulnerable_group_id,
+					d.project_results_available_id
 				  FROM v_ni_donor_orgs d JOIN ni_all_orgs_dimension orgs ON orgs.org_id = d.org_id;
 			]]></lang>
 		</script>

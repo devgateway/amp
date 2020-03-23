@@ -413,4 +413,11 @@ public class ColumnConstants {
     public static final String INDICATOR_REVISED_TARGET_DATE = "Indicator Revised Target Date";
     public static final String INDICATOR_REVISED_TARGET_COMMENT = "Indicator Revised Target Comment";
 
+    public static final String PROJECT_RESULTS_AVAILABLE = "Project Results Available";
+    public static final String VULNERABLE_GROUP = "Vulnerable Group";
+    public static final String PROJECT_RESULTS_LINK = "Project Results Link";
+    public static final String PROJECT_JOINT_DECISION = "Project Joint Decision";
+    public static final String PROJECT_MONITORING = "Project Monitoring";
+    public static final String PROJECT_SUSTAINABILITY = "Project Sustainability";
+    public static final String PROJECT_PROBLEMS = "Project Problems";
 }

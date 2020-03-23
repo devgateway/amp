@@ -364,6 +364,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             .put(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, "component_rep_org_id")
             .put(ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, "component_second_rep_org_id")
             .put(ColumnConstants.REGIONAL_REGION, "region_location_id")
+            .put(ColumnConstants.PROJECT_RESULTS_AVAILABLE, "project_results_available_id")
+            .put(ColumnConstants.VULNERABLE_GROUP, "vulnerable_group_id")
             .build());
 
     /**
@@ -697,6 +699,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         date_column(ColumnConstants.PLEDGES_DETAIL_END_DATE, "v_pledges_funding_end_date"); 
         date_column(ColumnConstants.PROPOSED_COMPLETION_DATE, "v_proposed_completion_date"); 
         date_column(ColumnConstants.PROPOSED_START_DATE, "v_proposed_start_date");
+
+        degenerate_dimension(ColumnConstants.PROJECT_RESULTS_AVAILABLE, "v_project_results_available", boolDimension);
+        no_entity(ColumnConstants.PROJECT_RESULTS_LINK, "v_project_results_link");
+        no_entity(ColumnConstants.PROJECT_JOINT_DECISION, "v_project_joint_decision");
+        no_entity(ColumnConstants.PROJECT_MONITORING, "v_project_monitoring");
+        no_entity(ColumnConstants.PROJECT_SUSTAINABILITY, "v_project_sustainability");
+        no_entity(ColumnConstants.PROJECT_PROBLEMS, "v_project_problems");
+        degenerate_dimension(ColumnConstants.VULNERABLE_GROUP, "v_vulnerable_group", catsDimension);
 
         addPledgeColumns();
         

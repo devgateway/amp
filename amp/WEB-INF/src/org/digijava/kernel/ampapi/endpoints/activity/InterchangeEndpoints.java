@@ -193,7 +193,7 @@ public class InterchangeEndpoints {
     @ApiMethod(id = "getAvailableFieldsBasedOnWs", ui = false)
     public List<APIWorkspaceMemberFieldList> getAvailableFieldsBasedOnWs(
             @QueryParam("ws-member-ids") List<Long> wsMemberIds) {
-        return AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(wsMemberIds);
+        return AmpFieldsEnumerator.getAvailableActivityFieldsBasedOnWs(wsMemberIds);
     }
 
     @GET

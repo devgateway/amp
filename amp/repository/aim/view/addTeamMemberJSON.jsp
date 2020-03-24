@@ -443,7 +443,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 							<div class='yui-skin-sam'>
                             	<div id="dynamicdata" class="report"></div>
                             	<div align="center" style="border: 1px black;"><br><html:button property="" styleClass="buttonx" value="${addSelectedMembers}" onclick="addUsersToWorkspace()"></html:button>
-									<html:button property="" styleClass="buttonx" value="${Cancel}" onclick="window.location = '/workspaceManager.do~page=1~reset=true';"></html:button></div>
+									<html:button property="" styleClass="buttonx" value="${Cancel}" onclick="window.location = '/aim/workspaceManager.do~page=1~reset=true';"></html:button></div>
 								<div id="dt-pag-nav"></div>
 								<div id="errors"></div>
 							</div>

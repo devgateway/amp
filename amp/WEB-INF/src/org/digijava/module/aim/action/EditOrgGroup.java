@@ -19,6 +19,8 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.form.AddOrgGroupForm;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class EditOrgGroup extends Action {
 
@@ -41,6 +43,8 @@ public class EditOrgGroup extends Action {
         editForm.setAction(action);
         Collection col = DbUtil.getAllOrgTypes();
         editForm.setOrgTypeColl(col);
+        editForm.setCountries(DynLocationManagerUtil.getLocationsByLayer(
+                CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0));
 
         if (action.indexOf("create") > -1) {
             editForm.setAction("save");
@@ -63,6 +67,11 @@ public class EditOrgGroup extends Action {
             editForm.setOrgTypeId(ampGrp.getOrgType().getAmpOrgTypeId());
             editForm.setAction("save");
             editForm.setFlag("delete");
+
+            if (ampGrp.getCountry() != null) {
+                editForm.setCountryId(ampGrp.getCountry().getId());
+            }
+
             return mapping.findForward("forward");
         }
 
@@ -87,9 +96,13 @@ public class EditOrgGroup extends Action {
             AmpOrgType ot = DbUtil.getAmpOrgType(editForm.getOrgTypeId());
             ampGrp.setOrgType(ot);
             ARUtil.clearOrgGroupTypeDimensions();
-            
-            
-            
+
+            if (editForm.getCountryId() != null && !editForm.getCountryId().equals(-1L)) {
+                ampGrp.setCountry(DynLocationManagerUtil.getLocation(editForm.getCountryId(), false));
+            } else {
+                ampGrp.setCountry(null);
+            }
+
             if (DbUtil.checkAmpOrgGroupDuplication(ampGrp.getOrgGrpName(), groupId)) {
 //              if (deleted != null) {
 //                  the org. group has existed before and has been softdeleted -> let's restore it

@@ -123,7 +123,7 @@
 													
 													
 													
-													<table border="0" cellspacing="3" cellpadding="3" align="center">
+<table border="0" class="admin-content" align="center">
   <tr>
     <td align="right"><digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font>	</td>
     <td><html:text property="orgGrpName" size="35" /></td><td><digi:errors /></td>
@@ -146,7 +146,21 @@
 	   		</logic:notEmpty>
 		</html:select>
 	</td>
-</tr>
+	</tr>
+	<tr>
+		<td align="right"><digi:trn key="aim:orgGroupType">Administrative Level 0</digi:trn></td>
+		<td>
+			<c:set var="translation">
+				<digi:trn>Select Country</digi:trn>
+			</c:set>
+			<html:select property="countryId" styleClass="selectStyle" styleId="countryId">
+				<html:option value="-1">-- ${translation} --</html:option>
+				<logic:notEmpty name="aimAddOrgGroupForm" property="countries">
+					<html:optionsCollection  name="aimAddOrgGroupForm" property="countries" label="name" value="id" />
+				</logic:notEmpty>
+			</html:select>
+		</td>
+	</tr>
 </table>
 
 													

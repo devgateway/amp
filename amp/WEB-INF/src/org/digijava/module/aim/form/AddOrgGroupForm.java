@@ -13,7 +13,11 @@ public class AddOrgGroupForm extends ActionForm {
     private String action = null;
     private String flag = null;
     private Collection level = null;    // defunct
-    private Long ampOrgId = null;
+    private Long ampOrgId;
+
+    private Collection countries = null;
+
+    private Long countryId = null;
     
     private Collection orgTypeColl = null;
     private Long orgTypeId = null;
@@ -105,5 +109,21 @@ public class AddOrgGroupForm extends ActionForm {
      */
     public void setOrgTypeId(Long orgTypeId) {
         this.orgTypeId = orgTypeId;
+    }
+
+    public Collection getCountries() {
+        return countries;
+    }
+
+    public void setCountries(Collection countries) {
+        this.countries = countries;
+    }
+
+    public Long getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(Long countryId) {
+        this.countryId = countryId;
     }
 }

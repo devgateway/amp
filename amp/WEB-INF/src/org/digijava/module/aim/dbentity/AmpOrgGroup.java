@@ -50,8 +50,9 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
     // this field is saved in  Organization Dashboard and not from organization manager in admin
 //  @Interchangeable(fieldTitle="Organization Group Key Areas (Dashboard)")
     private String orgGrpKeyAreas;
-    
-    
+
+    private AmpCategoryValueLocations country;
+
     private Boolean deleted;
     
     /**
@@ -194,5 +195,13 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
     }
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public AmpCategoryValueLocations getCountry() {
+        return country;
+    }
+
+    public void setCountry(AmpCategoryValueLocations country) {
+        this.country = country;
     }
 }

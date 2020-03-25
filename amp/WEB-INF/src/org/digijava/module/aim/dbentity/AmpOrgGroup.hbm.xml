@@ -17,5 +17,8 @@
         <property name="orgGrpDescription" column="org_grp_description" type="java.lang.String" />
         <property name="orgGrpKeyAreas" column="org_grp_keyareas" type="java.lang.String" />
 		<property name="deleted" column="deleted" type="java.lang.Boolean" />
+
+		<many-to-one name="country" column="country_id" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
+
 	</class>
 </hibernate-mapping>

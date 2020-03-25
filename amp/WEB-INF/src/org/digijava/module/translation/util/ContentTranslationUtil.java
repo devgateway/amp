@@ -476,6 +476,7 @@ public class ContentTranslationUtil {
         Criteria criteria = session.createCriteria(AmpContentTranslation.class);
         criteria.add(Restrictions.eq("objectClass", objClass));
         criteria.add(Restrictions.eq("objectId", objId));
+        criteria.setCacheable(true);
         if (fieldName != null){
             criteria.add(Restrictions.eq("fieldName", fieldName));
         }

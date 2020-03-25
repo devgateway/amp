@@ -1062,6 +1062,24 @@ border-right: 1px solid rgb(208, 208, 208);
                                                         height="10" /> <a href="javascript:addGroup()"> <digi:trn>Add a Group</digi:trn>
                                                     </a></td>
                                             </tr>
+                                            <field:display name="FM Template" feature="Organization Form">
+                                                <tr>
+                                                    <td style="text-align:left; " class="tdBoldClass" nowrap>
+                                                        <digi:trn>Template</digi:trn>
+                                                    </td>
+                                                    <td>
+                                                        <html:select property="templateId" styleClass="selectStyle">
+                                                            <c:set var="translation">
+                                                                <digi:trn>Select Template</digi:trn>
+                                                            </c:set>
+                                                            <html:option value="-1">-- ${translation} --</html:option>
+                                                            <logic:notEmpty name="aimAddOrgForm" property="templates" >
+                                                                <html:optionsCollection name="aimAddOrgForm" property="templates" value="id" label="name" />
+                                                            </logic:notEmpty>
+                                                        </html:select>
+                                                    </td>
+                                                </tr>
+                                            </field:display>
                                         </table>
 										<hr width=80% align=center>
                                     </td>

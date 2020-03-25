@@ -108,6 +108,8 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Quinary Sector'
                 , 'Quinary Sector Sub-Sector'
                 , 'Quinary Sector Sub-Sub-Sector'
+                , 'Project Results Available'
+                , 'Vulnerable Group'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(

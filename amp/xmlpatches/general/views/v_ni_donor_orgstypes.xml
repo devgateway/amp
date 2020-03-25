@@ -34,7 +34,9 @@
 						v.mode_of_payment_id,
 						v.funding_status_id,
 						v.agreement_id,
-						v.funding_id
+						v.funding_id,
+						v.vulnerable_group_id,
+						v.project_results_available_id
 					FROM amp_activity_version aav
 					LEFT JOIN (
 						SELECT d.amp_activity_id,
@@ -46,7 +48,9 @@
 							d.mode_of_payment_id,
 							d.funding_status_id,
 							d.agreement_id,
-							d.funding_id
+							d.funding_id,
+							d.vulnerable_group_id,
+							d.project_results_available_id
 						FROM v_ni_donor_orgs d
 						LEFT JOIN ni_all_orgs_dimension orgs ON orgs.org_id = d.org_id
 					) v

@@ -37,7 +37,9 @@
         f.agreement AS agreement_id,
         m.recipient_org_id AS recipient_org_id,
         m.recipient_role_id AS recipient_role_id,
-        f.source_role_id AS source_role_id
+        f.source_role_id AS source_role_id,
+		f.vulnerable_group_va AS vulnerable_group_id,
+		CASE WHEN f.project_results_available THEN 1 ELSE 2 END AS project_results_available_id
         
        FROM
         amp_funding f
@@ -65,7 +67,9 @@
 			vdf.agreement_id, agr.title AS agreement_title,
 			vdf.recipient_org_id, recipient.name AS recipient_org_name,
 			vdf.recipient_role_id, recipient_role.name AS recipient_role_name,
-			vdf.source_role_id, source_role.name AS source_role_name
+			vdf.source_role_id, source_role.name AS source_role_name,
+			vdf.vulnerable_group_id, vg.category_value AS vulnerable_group_name,
+			vdf.project_results_available_id
 			
 		FROM v_ni_mtef_funding vdf 
 			JOIN amp_activity_version aa ON aa.amp_activity_id = vdf.amp_activity_id
@@ -82,7 +86,8 @@
 			LEFT JOIN amp_organisation recipient ON recipient.amp_org_id = vdf.recipient_org_id
 			LEFT JOIN amp_role recipient_role ON recipient_role.amp_role_id = vdf.recipient_role_id
 			LEFT JOIN amp_role source_role ON source_role.amp_role_id = vdf.source_role_id
-			
+			LEFT JOIN amp_category_value vg ON vg.id = vdf.vulnerable_group_id
+
 		ORDER BY amp_activity_id;
         	</lang>
 		</script>

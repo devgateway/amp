@@ -4,9 +4,6 @@
 */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -15,6 +12,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
@@ -25,9 +23,13 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author aartimon@dginternational.org
@@ -49,8 +51,19 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
         if (value.longValue()!=-1) {
         setDefaultOrgGroup(DbUtil.getAmpOrgGroup(value));
         }
-        
-        
+
+        AmpTemplatesVisibility currentTemplate = AmpAuthWebSession.getYourAppSession()
+                .getAmpCurrentMember()
+                .getAmpTeam()
+                .getFmTemplate();
+
+        AmpTemplatesVisibility defaultTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
+
+        if (currentTemplate != null && currentTemplate.getId() != defaultTemplate.getId()) {
+            setTemplateFilter(currentTemplate);
+        }
+
+
         setTitleHeaderColSpan(5);
         list.setObject(new ListView<AmpOrgRole>("list", listModel) {
             private static final long serialVersionUID = 7218457979728871528L;

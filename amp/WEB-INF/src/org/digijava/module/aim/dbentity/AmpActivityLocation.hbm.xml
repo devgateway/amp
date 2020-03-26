@@ -14,8 +14,8 @@
 		<many-to-one name="activity" column="amp_activity_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
 
-		<many-to-one name="location" column="amp_location_id" 
-			class="org.digijava.module.aim.dbentity.AmpLocation" cascade="none" not-null="true" />
+		<many-to-one name="location" column="location_id"
+			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" not-null="true" />
 
 		<property name="locationPercentage" column="location_percentage" type="java.lang.Float" />
 		<property name="latitude" column="location_latitude" type="java.lang.String" />

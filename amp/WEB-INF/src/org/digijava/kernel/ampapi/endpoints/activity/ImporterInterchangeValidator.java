@@ -20,6 +20,7 @@ import org.digijava.kernel.validation.TranslatedValueContext;
 import org.digijava.kernel.validation.Path;
 import org.digijava.kernel.validation.TranslationContext;
 import org.digijava.kernel.validation.Validator;
+import org.digijava.kernel.validators.activity.RegionLocationValidator;
 import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.FundingWithTransactionsValidator;
@@ -152,6 +153,9 @@ public class ImporterInterchangeValidator {
         } else if (validatorClass.equals(ImplementationLevelValidator.class)) {
             Long locId = (Long) violation.getAttributes().get(ImplementationLevelValidator.ATTR_LOC_ID);
             leafFilter = value -> locId == null || locId.equals(intToLong(value));
+        } else if (validatorClass.equals(RegionLocationValidator.class)) {
+            Set<?> ids = (Set<?>) violation.getAttributes().get(RegionLocationValidator.ATTR_LOC_IDS);
+            leafFilter = value -> ids.contains(intToLong(value));
         } else if (validatorClass.equals(FundingWithTransactionsValidator.class)) {
             // this condition is not sufficient, will match funding items what do not have transactions at all
             leafFilter = Objects::isNull;

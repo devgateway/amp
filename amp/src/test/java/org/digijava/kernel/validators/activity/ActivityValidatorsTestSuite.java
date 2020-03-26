@@ -13,7 +13,7 @@ import org.junit.runners.Suite;
         FundingWithTransactionsValidatorTest.class,
         ComponentFundingOrgRoleValidatorTest.class,
         PledgeOrgValidatorTest.class,
-        UniqueActivityTitleValidator.class,
+        UniqueActivityTitleValidatorTest.class,
         UniqueValidatorTest.class
 })
 public class ActivityValidatorsTestSuite {

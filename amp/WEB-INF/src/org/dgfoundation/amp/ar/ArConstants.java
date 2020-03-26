@@ -139,6 +139,10 @@ public final class ArConstants {
     public final static String FUNDING_TYPE_COMMITMENT_GAP = "Commitment Gap";
     public final static String PLEDGES_METADATA_NAME = "Pledges ";
 
+    public static final String REGIONAL_COMMITMENTS = "Regional Commitments";
+    public static final String REGIONAL_DISBURSEMENTS = "Regional Disbursements";
+    public static final String REGIONAL_EXPENDITURES = "Regional Expenditures";
+
     public final static Map<String, String> USER_FRIENDLY_ROLE_CODES = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put("IA", "IMPL");
         put("EA", "EXEC");

@@ -67,6 +67,9 @@ public class ActivityEPConstants {
             FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY);
     public static final String VERSION_FIELD_NAME = FieldMap.underscorify(ActivityFieldsConstants.VERSION);
 
+    public static final String LOCATIONS_FIELD_NAME =
+            FieldMap.underscorify(ActivityFieldsConstants.LOCATIONS);
+
     public static final String AMP_ACTIVITY_ID = "amp-activity-id";
     public static final String AMP_ACTIVITY_LAST_VERSION_ID = "amp-activity-last-version-id";
 
@@ -117,6 +120,15 @@ public class ActivityEPConstants {
             + "/Release of Funds/Release of Funds Table";
     public static final String EXPENDITURES_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH
             + "/Expenditures/Expenditures Table";
+
+    public static final String REGIONAL_FUNDING_FM_PATH =  "/Activity Form/Regional Funding";
+    private static final String REGIONAL_FUNDING_ITEM_FM_PATH = REGIONAL_FUNDING_FM_PATH + "/Region Item";
+    public static final String REGIONAL_COMMITMENTS_FM_PATH =
+            REGIONAL_FUNDING_ITEM_FM_PATH + "/Commitments/Commitments Table";
+    public static final String REGIONAL_DISBURSEMENTS_FM_PATH =
+            REGIONAL_FUNDING_ITEM_FM_PATH + "/Disbursements/Disbursements Table";
+    public static final String REGIONAL_EXPENDITURES_FM_PATH =
+            REGIONAL_FUNDING_ITEM_FM_PATH + "/Expenditures/Expenditures Table";
 
     public static final String RECIPIENT_ROLE_FM_PATH = "/Funding Flows OrgRole Selector/Recipient Org Role";
     public static final String RECIPIENT_ORG_FM_PATH = "/Funding Flows OrgRole Selector/Recipient Organization";

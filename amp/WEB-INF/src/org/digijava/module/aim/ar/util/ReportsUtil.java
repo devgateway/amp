@@ -251,16 +251,6 @@ public class ReportsUtil {
         logger.debug("Database sanity check - PASS");
     }
     
-    public static void checkLocationsSanity(Session session) throws Exception {
-        String errMsg = "";
-        logger.debug("checking database location tables sanity...");
-        List<?> duplicates = session.createSQLQuery("select amp_location_id from amp_location al where (select count(*) from amp_location al2 where al2.location_id = al.location_id) > 1").list();
-        if (!duplicates.isEmpty())
-            errMsg += "The following amp_location entries reference the same ACVL_id repeatedly: " + duplicates.toString();
-        throwErrorIfNotEmpty(errMsg);
-        logger.debug("\t...location tables sanity check passed");
-    }
-    
     /**
      * checks that the "while fetching view X, filter by columns Y in case they are set in the filter bean" table is sane, e.g. references existing views and columns in them
      * also checks that "fetch column X if filter field Y is not null" configuration is valid

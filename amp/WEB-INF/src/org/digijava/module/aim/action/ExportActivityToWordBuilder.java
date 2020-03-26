@@ -2241,7 +2241,7 @@ public class ExportActivityToWordBuilder {
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
                                 .addRowLtrData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
-                                .addRowLtrData(regFnd.getTransactionAmount().toString())
+                                .addRowLtrData(regFnd.getTransactionAmountWithFormatConversion().toString())
                                 .addRowData(regFnd.getCurrency().getCurrencyCode()));
                         createSectionTable(eshRegFundingDetails);
                     }
@@ -2258,7 +2258,7 @@ public class ExportActivityToWordBuilder {
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
                                 .addRowLtrData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
-                                .addRowLtrData(regFnd.getTransactionAmount().toString())
+                                .addRowLtrData(regFnd.getTransactionAmountWithFormatConversion().toString())
                                 .addRowData(regFnd.getCurrency().getCurrencyCode()));
                         createSectionTable(eshRegFundingDetails);
                     }
@@ -2275,7 +2275,7 @@ public class ExportActivityToWordBuilder {
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
                                 .addRowLtrData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
-                                .addRowLtrData(regFnd.getTransactionAmount().toString())
+                                .addRowLtrData(regFnd.getTransactionAmountWithFormatConversion().toString())
                                 .addRowData(regFnd.getCurrency().getCurrencyCode()));
                         createSectionTable(eshRegFundingDetails);
                     }

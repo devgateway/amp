@@ -28,12 +28,12 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.services.sync.model.SyncConstants.Entities;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -62,7 +62,7 @@ public class PossibleValuesEnumerator {
     private static final Multimap<Class<?>, String> ENTITY_CLASS_TO_SYNC_ENTITIES =
             new ImmutableMultimap.Builder<Class<?>, String>()
                 .putAll(AmpCategoryValue.class, Entities.CATEGORY_VALUE, Entities.CATEGORY_CLASS)
-                .putAll(AmpLocation.class, Entities.LOCATION, Entities.CATEGORY_VALUE_LOCATION,
+                .putAll(AmpCategoryValueLocations.class, Entities.CATEGORY_VALUE_LOCATION,
                         Entities.CATEGORY_VALUE, Entities.CATEGORY_CLASS)
                 .putAll(AmpSector.class, Entities.SECTOR, Entities.SECTOR_SCHEME, Entities.CLASSIFICATION_CONFIG)
                 .putAll(AmpTheme.class, Entities.THEME, Entities.ACTIVITY_PROGRAM_SETTINGS)

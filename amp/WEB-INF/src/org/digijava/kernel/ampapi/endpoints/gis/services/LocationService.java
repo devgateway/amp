@@ -206,8 +206,7 @@ public class LocationService {
             qry.value = " SELECT al.amp_activity_id, acvl.id root_location_id,acvl.location_name "
                     + "root_location_description,acvl.gs_lat, acvl.gs_long "
                     + " FROM amp_activity_location al   "
-                    + " join amp_location loc on al.amp_location_id = loc.amp_location_id  "
-                    + " join amp_category_value_location acvl on loc.location_id = acvl.id  "
+                    + " join amp_category_value_location acvl on al.location_id = acvl.id  "
                     + " join amp_category_value amcv on acvl.parent_category_value =amcv.id "
                     + " where amcv.category_value ='Country'"
                     + " and (acvl.deleted is null or acvl.deleted = false) "
@@ -234,8 +233,7 @@ public class LocationService {
                 + " )  "
                 + " SELECT distinct al.amp_activity_id, acvl.root_location_id, acvl.root_location_description, acvl.gs_lat, acvl.gs_long  "
                 + " FROM amp_activity_location al  "
-                + " join amp_location loc on al.amp_location_id = loc.amp_location_id  "
-                + " join rt_amp_category_value_location acvl on loc.location_id = acvl.id  "
+                + " join rt_amp_category_value_location acvl on al.location_id = acvl.id  "
                 + " where al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) "
                 + " order by acvl.root_location_id,al.amp_activity_id";
         }

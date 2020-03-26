@@ -74,7 +74,7 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
         RangeValidator <Double> validator = new RangeValidator<Double>(0.1d, 100d);
         percentageField.getTextContainer().add(validator);
         add(percentageField);
-        add(new Label("locationLabel", model.getObject().getLocation().getLocation().getAutoCompleteLabel()));
+        add(new Label("locationLabel", model.getObject().getLocation().getAutoCompleteLabel()));
 
         String expressionLatitude = "(^\\+?([1-8])?\\d(\\.\\d+)?$)|(^-90$)|(^-(([1-8])?\\d(\\.\\d+)?$))";
         PatternValidator latitudeValidator = new PatternValidator(expressionLatitude) {
@@ -129,13 +129,14 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 
                 // remove any regional funding with this region
                 if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.
-                        equalsCategoryValue(model.getObject().getLocation().getLocation().getParentCategoryValue())) {
+                        equalsCategoryValue(model.getObject().getLocation().getParentCategoryValue())) {
                     final IModel<Set<AmpRegionalFunding>> regionalFundings = new PropertyModel<Set<AmpRegionalFunding>>(am, "regionalFundings");
                     Iterator<AmpRegionalFunding> iterator = regionalFundings.getObject().iterator();
                     while (iterator.hasNext()) {
                         AmpRegionalFunding ampRegionalFunding = (AmpRegionalFunding) iterator.next();
-                        if (ampRegionalFunding.getRegionLocation().equals(model.getObject().getLocation().getLocation()))
+                        if (ampRegionalFunding.getRegionLocation().equals(model.getObject().getLocation())) {
                             iterator.remove();
+                        }
                     }
                     regionalFundingFeature.getList().removeAll();
                     target.add(regionalFundingFeature);
@@ -158,7 +159,7 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
     
     @Override
     protected void onConfigure() {
-        AmpCategoryValueLocations loc = locationModel.getObject().getLocation().getLocation();
+        AmpCategoryValueLocations loc = locationModel.getObject().getLocation();
         AmpAuthWebSession session = (AmpAuthWebSession) getSession();
         if (loc != null){
             PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION, loc);

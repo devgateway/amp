@@ -275,6 +275,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     // various single-dimension-usage 
     public final static NiDimensionUsage LOC_DIM_USG = locsDimension.getDimensionUsage("LOCS");
     public final static NiDimensionUsage AGR_DIM_USG = agreementsDimension.getDimensionUsage("agr");
+    public final static NiDimensionUsage DN_COUNTRY_DIM_USG = locsDimension.getDimensionUsage("Donor Country");
     public final static LevelColumn AGR_LEVEL_COLUMN = AGR_DIM_USG.getLevelColumn(0);
     
     public final static NiDimensionUsage ACT_DIM_USG = activitiesDimension.getDimensionUsage("acts");
@@ -366,6 +367,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             .put(ColumnConstants.REGIONAL_REGION, "region_location_id")
             .put(ColumnConstants.PROJECT_RESULTS_AVAILABLE, "project_results_available_id")
             .put(ColumnConstants.VULNERABLE_GROUP, "vulnerable_group_id")
+            .put(ColumnConstants.DONOR_COUNTRY, "country_id")
             .build());
 
     /**
@@ -552,6 +554,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         single_dimension(ColumnConstants.DONOR_TYPE, "v_ni_donor_orgstypes", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_TYPE));
         single_dimension(ColumnConstants.DONOR_BUDGET_CODE, "v_ni_donor_orgbudget_code",
                 DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        single_dimension(ColumnConstants.DONOR_COUNTRY, "v_donor_country", DN_COUNTRY_DIM_USG.getLevelColumn(0), true);
 
         single_dimension(ColumnConstants.DONOR_ACRONYM, "v_ni_donor_orgsacronyms", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
         

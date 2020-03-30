@@ -638,6 +638,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Donor Group" feature="Funding Information"></field:display>
 <field:display name="Donor Type" feature="Funding Information"></field:display>
 <field:display name="Donor Budget Code" feature="Funding Information"></field:display>
+<field:display name="Donor Country" feature="Funding Information"></field:display>
 <field:display name="Donor Last Name" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Objective" feature="Funding Information"></field:display> 
 <field:display name="Donor Organization" feature="Donor Contact Information"></field:display> 

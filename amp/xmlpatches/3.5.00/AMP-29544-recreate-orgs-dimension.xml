@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+	<jira>AMP-29544</jira>
+	<keyword>organisations</keyword>
+	<author>vchihai</author>
+	<description>recreate orgs dimension by adding country_id from amp_org_group</description>
+	<apply>
+		<script>
+			<lang delimiter="@" type="postgres">
+  				DROP VIEW IF EXISTS v_ni_all_orgs_dimension CASCADE@@@
+				CREATE OR REPLACE VIEW v_ni_all_orgs_dimension AS 
+					SELECT
+						org.amp_org_id AS org_id, org.name AS org_name, org.org_code, org.acronym AS org_acronym,
+						grp.amp_org_grp_id AS org_grp_id, grp.org_grp_name AS org_grp_name,
+						aot.amp_org_type_id AS org_type_id, aot.org_type AS org_type_name, aot.org_type_code,
+				        org.budget_org_code, grp.country_id as country_id
+						FROM amp_organisation org
+							FULL OUTER JOIN amp_org_group grp ON org.org_grp_id = grp.amp_org_grp_id
+							FULL OUTER JOIN amp_org_type aot ON grp.org_type = aot.amp_org_type_id
+							LEFT JOIN amp_category_value_location acv ON grp.country_id = acv.id@@@
+										
+				DROP TABLE IF EXISTS ni_all_orgs_dimension CASCADE@@@
+				CREATE TABLE ni_all_orgs_dimension AS SELECT * FROM v_ni_all_orgs_dimension@@@ <!-- will be overridden ASAP, we don't want nulls -->
+				
+				CREATE INDEX aod_org_id ON ni_all_orgs_dimension(org_id)@@@
+				CREATE INDEX aod_org_grp_id ON ni_all_orgs_dimension(org_grp_id)@@@
+				CREATE INDEX aod_org_type_id ON ni_all_orgs_dimension(org_type_id)@@@
+				CREATE INDEX aod_country_id ON ni_all_orgs_dimension(country_id)@@@
+
+				CREATE OR REPLACE FUNCTION update_organisation_caches_internal()
+				RETURNS bigint AS
+				$BODY$
+				BEGIN
+					TRUNCATE ni_all_orgs_dimension;
+
+					CREATE TEMPORARY SEQUENCE ni_all_orgs_dimension_seq;
+					INSERT INTO ni_all_orgs_dimension
+						SELECT
+							COALESCE(org_id, - nextval('ni_all_orgs_dimension_seq')) AS org_id, COALESCE(org_name, '#') AS org_name, COALESCE(org_code, '#') AS org_code, COALESCE(org_acronym, '#') AS org_acronym,
+							COALESCE(org_grp_id, - nextval('ni_all_orgs_dimension_seq')) AS org_grp_id, COALESCE(org_grp_name, '#') AS org_grp_name,
+							COALESCE(org_type_id, - nextval('ni_all_orgs_dimension_seq')) AS org_type_id, COALESCE(org_type_name,
+								'#') AS org_grp_name, COALESCE(org_type_code, '#') AS org_type_code, COALESCE(budget_org_code, '#') AS budget_org_code,
+							COALESCE(country_id, - nextval('ni_all_orgs_dimension_seq')) AS country_id
+						FROM v_ni_all_orgs_dimension;
+
+					DROP SEQUENCE ni_all_orgs_dimension_seq;
+					RETURN 1;
+				end;
+				$BODY$
+				LANGUAGE plpgsql VOLATILE; @@@
+				
+				CREATE OR REPLACE FUNCTION update_organisation_caches()
+  				RETURNS TRIGGER AS
+				$BODY$
+					declare	dummy bigint;
+					BEGIN
+						SELECT into dummy update_organisation_caches_internal() FROM (select 1) AS dual;
+						RETURN NULL;
+					end;
+				$BODY$
+				LANGUAGE plpgsql VOLATILE; @@@
+
+				DROP TRIGGER IF EXISTS update_organisation_caches_trg_organisation ON amp_organisation@@@
+				DROP TRIGGER IF EXISTS update_organisation_caches_trg_org_group ON amp_org_group@@@
+				DROP TRIGGER IF EXISTS update_organisation_caches_trg_org_type ON amp_org_type@@@
+
+				CREATE TRIGGER update_organisation_caches_trg_organisation AFTER INSERT OR UPDATE OR DELETE OR TRUNCATE ON amp_organisation
+    				EXECUTE PROCEDURE update_organisation_caches() @@@
+    				
+				CREATE TRIGGER update_organisation_caches_trg_org_group AFTER INSERT OR UPDATE OR DELETE OR TRUNCATE ON amp_org_group
+    				EXECUTE PROCEDURE update_organisation_caches() @@@
+    				
+				CREATE TRIGGER update_organisation_caches_trg_org_type AFTER INSERT OR UPDATE OR DELETE OR TRUNCATE ON amp_org_type
+    				EXECUTE PROCEDURE update_organisation_caches() @@@
+
+				CREATE TEMPORARY TABLE DUMMY_TABLE_YOU_SHOULD_NOT_SEE_IT_WE_ARE_TRYING_TO_MAKE_XML_PATCHER_HAPPY_1 AS SELECT update_organisation_caches_internal() FROM (select 1) AS dual @@@
+				DROP TABLE DUMMY_TABLE_YOU_SHOULD_NOT_SEE_IT_WE_ARE_TRYING_TO_MAKE_XML_PATCHER_HAPPY_1 @@@
+				
+				UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart' @@@	
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

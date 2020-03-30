@@ -233,6 +233,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put(ColumnConstants.DONOR_GROUP, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_TYPE, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_BUDGET_CODE, ColumnConstants.DONOR_AGENCY);
+        put(ColumnConstants.DONOR_COUNTRY, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_COMMITMENT_DATE, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
         put(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, ColumnConstants.RESPONSIBLE_ORGANIZATION);

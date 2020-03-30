@@ -3,6 +3,7 @@ YAHOO.widget.WicketDataSource = function(callbackUrl) {
     this.responseArray = [];
     this.transactionId = 0;
     this.queryMatchContains = true;
+};
 
 var levelColors = ["222222", "444444", "666666", "888888", "AAAAAA", "BBBBBB", "CCCCCC"];
 

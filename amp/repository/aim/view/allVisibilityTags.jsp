@@ -999,6 +999,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>
 <field:display name="Beneficiary Agency Type" feature="Beneficiary Agency"></field:display>
+<field:display name="Beneficiary Agency Country" feature="Beneficiary Agency"></field:display>
 <field:display name="Contracting Agency Department/Division"  feature="Contracting Agency"></field:display>
 <field:display name="Contracting Agency Groups" feature="Contracting Agency"></field:display>
 <field:display name="Contracting Agency Acronym"  feature="Contracting Agency"></field:display>
@@ -1006,6 +1007,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Executing Agency Groups" feature="Executing Agency"></field:display>
 <field:display name="Executing Agency Type" feature="Executing Agency"></field:display>
 <field:display name="Executing Agency Department/Division" feature="Executing Agency"></field:display>
+<field:display name="Executing Agency Country" feature="Executing Agency"></field:display>
 <field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display>
 <field:display name="Implementing Agency Type" feature="Implementing Agency"></field:display>  
 <field:display name="Implementing Agency Department/Division"  feature="Implementing Agency"></field:display> 

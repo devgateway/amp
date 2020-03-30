@@ -241,12 +241,14 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put(ColumnConstants.EXECUTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.EXECUTING_AGENCY);
         put(ColumnConstants.EXECUTING_AGENCY_GROUPS, ColumnConstants.EXECUTING_AGENCY);
         put(ColumnConstants.EXECUTING_AGENCY_TYPE, ColumnConstants.EXECUTING_AGENCY);
+        put(ColumnConstants.EXECUTING_AGENCY_COUNTRY, ColumnConstants.EXECUTING_AGENCY);
         put(ColumnConstants.IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.IMPLEMENTING_AGENCY);
         put(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, ColumnConstants.IMPLEMENTING_AGENCY);
         put(ColumnConstants.IMPLEMENTING_AGENCY_TYPE, ColumnConstants.IMPLEMENTING_AGENCY);
         put(ColumnConstants.BENEFICIARY_AGENCY__DEPARTMENT_DIVISION, ColumnConstants.BENEFICIARY_AGENCY);
         put(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, ColumnConstants.BENEFICIARY_AGENCY);
         put(ColumnConstants.BENEFICIARY_AGENCY_TYPE, ColumnConstants.BENEFICIARY_AGENCY);
+        put(ColumnConstants.BENEFICIARY_AGENCY_COUNTRY, ColumnConstants.BENEFICIARY_AGENCY);
         put(ColumnConstants.CONTRACTING_AGENCY_ACRONYM, ColumnConstants.CONTRACTING_AGENCY);
         put(ColumnConstants.CONTRACTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.CONTRACTING_AGENCY);
         put(ColumnConstants.CONTRACTING_AGENCY_GROUPS, ColumnConstants.CONTRACTING_AGENCY);

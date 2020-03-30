@@ -48,6 +48,7 @@ public class ColumnConstants {
     public static final String BENEFICIARY_AGENCY__DEPARTMENT_DIVISION = "Beneficiary Agency  Department/Division";
     public static final String BENEFICIARY_AGENCY_GROUPS = "Beneficiary Agency Groups";
     public static final String BENEFICIARY_AGENCY_TYPE = "Beneficiary Agency Type";
+    public static final String BENEFICIARY_AGENCY_COUNTRY = "Beneficiary Agency Country";
     public static final String BUDGET_CODE_PROJECT_ID = "Budget Code Project Id";
     public static final String BUDGET_DEPARTMENT = "Budget Department";
     public static final String BUDGET_ORGANIZATION = "Budget Organization";
@@ -98,6 +99,7 @@ public class ColumnConstants {
     public static final String EXECUTING_AGENCY_DEPARTMENT_DIVISION = "Executing Agency Department/Division";
     public static final String EXECUTING_AGENCY_GROUPS = "Executing Agency Groups";
     public static final String EXECUTING_AGENCY_TYPE = "Executing Agency Type";
+    public static final String EXECUTING_AGENCY_COUNTRY = "Executing Agency Country";
     public static final String EXECUTION_RATE = "Execution Rate";
     public static final String FINAL_DATE_FOR_CONTRACTING = "Final Date for Contracting";
     public static final String FINAL_DATE_FOR_DISBURSEMENTS = "Final Date for Disbursements";

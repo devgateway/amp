@@ -33,7 +33,8 @@
 					d.agreement_id,
 					d.funding_id,
 					d.vulnerable_group_id,
-					d.project_results_available_id
+					d.project_results_available_id,
+					d.country_id
 				  FROM v_ni_donor_orgs d JOIN ni_all_orgs_dimension orgs ON orgs.org_id = d.org_id;
 			]]></lang>
 		</script>

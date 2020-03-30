@@ -36,7 +36,8 @@
                         v.agreement_id,
                         v.funding_id,
                         v.vulnerable_group_id,
-                        v.project_results_available_id
+                        v.project_results_available_id,
+                        v.country_id
 				  	FROM amp_activity_version aav
 					LEFT JOIN (
 						SELECT r.activity as amp_activity_id, org.name AS org_name, r.organisation as org_id,
@@ -48,9 +49,11 @@
 							f.agreement as agreement_id,
 							f.amp_funding_id as funding_id,
 							f.vulnerable_group_va AS vulnerable_group_id,
-							CASE WHEN f.project_results_available THEN 1 ELSE 2 END AS project_results_available_id
+							CASE WHEN f.project_results_available THEN 1 ELSE 2 END AS project_results_available_id,
+							og.country_id AS country_id
 						FROM amp_org_role r
 						JOIN amp_organisation org ON org.amp_org_id = r.organisation
+						JOIN amp_org_group og ON org.org_grp_id = og.amp_org_grp_id
 						LEFT JOIN amp_funding f ON f.amp_activity_id = r.activity and f.amp_donor_org_id = r.organisation and f.source_role_id=r.role
 							WHERE
 								(r.role = (SELECT amp_role.amp_role_id FROM amp_role WHERE amp_role.role_code = 'DN'))

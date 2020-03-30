@@ -31,7 +31,8 @@
                     v.agreement_id,
                     v.funding_id,
                     v.vulnerable_group_id,
-                    v.project_results_available_id
+                    v.project_results_available_id,
+                    v.country_id
 				FROM amp_activity_version aav
 				LEFT JOIN (
 				  SELECT a.amp_activity_id, val.category_value AS funding_status_name, val.id AS funding_status_code,
@@ -43,12 +44,15 @@
 					fund.agreement as agreement_id,
 					fund.amp_funding_id as funding_id,
 					fund.vulnerable_group_va AS vulnerable_group_id,
-					CASE WHEN fund.project_results_available THEN 1 ELSE 2 END AS project_results_available_id
+					CASE WHEN fund.project_results_available THEN 1 ELSE 2 END AS project_results_available_id,
+					og.country_id AS country_id
 				  FROM amp_activity_version a
 					JOIN amp_funding fund ON fund.amp_activity_id = a.amp_activity_id
 					JOIN amp_category_value val ON val.id = fund.funding_status_category_va
 					JOIN amp_category_class c ON c.keyname = 'funding_status' AND c.id = val.amp_category_class_id
-				  GROUP BY a.amp_activity_id, val.id, val.category_value, fund.type_of_assistance_category_va, fund.financing_instr_category_value, fund.amp_donor_org_id, fund.mode_of_payment_category_va, fund.funding_status_category_va, fund.agreement, fund.amp_funding_id
+					JOIN amp_organisation o ON fund.amp_donor_org_id = o.amp_org_id
+					JOIN amp_org_group og ON o.org_grp_id = og.amp_org_grp_id
+				  GROUP BY a.amp_activity_id, val.id, val.category_value, fund.type_of_assistance_category_va, fund.financing_instr_category_value, fund.amp_donor_org_id, fund.mode_of_payment_category_va, fund.funding_status_category_va, fund.agreement, fund.amp_funding_id, og.country_id
 				) v
 				ON aav.amp_activity_id = v.amp_activity_id;
 			]]></lang>

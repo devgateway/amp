@@ -33,7 +33,7 @@
                     v.funding_id,
                     v.vulnerable_group_id,
                     v.project_results_available_id,
-                    v.country_id
+                    v.donor_org_country_id
                   FROM amp_activity_version aav
                   LEFT JOIN (
 					  SELECT DISTINCT
@@ -49,7 +49,7 @@
 						af.amp_funding_id as funding_id,
 						af.vulnerable_group_va AS vulnerable_group_id,
 						CASE WHEN af.project_results_available THEN 1 ELSE 2 END AS project_results_available_id,
-						og.country_id as country_id
+						og.country_id AS donor_org_country_id
 					  FROM amp_funding af
 						JOIN amp_funding_detail afd ON afd.amp_funding_id = af.amp_funding_id
 						JOIN amp_organisation o ON af.amp_donor_org_id = o.amp_org_id

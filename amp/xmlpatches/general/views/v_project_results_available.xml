@@ -33,7 +33,7 @@
 					fund.agreement as agreement_id,
 					fund.amp_funding_id as funding_id,
                     fund.vulnerable_group_va as vulnerable_group_id,
-                    og.country_id AS country_id
+                    og.country_id AS donor_org_country_id
 				  FROM amp_activity_version a
 					JOIN amp_funding fund ON fund.amp_activity_id = a.amp_activity_id
 					JOIN amp_organisation o ON fund.amp_donor_org_id = o.amp_org_id

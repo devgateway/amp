@@ -35,7 +35,7 @@
 					f.amp_funding_id as funding_id,
                     f.vulnerable_group_va AS vulnerable_group_id,
                     CASE WHEN f.project_results_available THEN 1 ELSE 2 END AS project_results_available_id,
-                    og.country_id as country_id
+                    og.country_id AS donor_org_country_id
 				  FROM amp_agreement ag, amp_funding f, amp_organisation o, amp_org_group og
 				  WHERE f.agreement=ag.id AND f.amp_donor_org_id = o.amp_org_id AND o.org_grp_id = og.amp_org_grp_id AND
 						ag.effective_date IS NOT NULL;

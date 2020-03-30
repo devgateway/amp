@@ -281,7 +281,7 @@ public class InternationalizedViewsRepository {
                         addColumnDef(new I18nViewColumnDescription("name", "amp_donor_org_id", AmpOrganisation.class, "name")));
 
                 addViewDef(this, new I18nViewDescription("v_donor_country").
-                        addColumnDef(new I18nViewColumnDescription("country_name", "country_id",
+                        addColumnDef(new I18nViewColumnDescription("donor_org_country_name", "donor_org_country_id",
                                 AmpCategoryValueLocations.class, "name")));
                 
                 addViewDef(this, new I18nViewDescription("v_executing_agency").

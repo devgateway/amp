@@ -1,90 +1,39 @@
 ----------------------------------------------------------------
-2016-05-23 15:17:33.260 GMT:
- Booting Derby version The Apache Software Foundation - Apache Derby - 10.5.3.0 - (802917): instance a816c00e-0154-de31-4b6f-000016bff420
-on database directory /fastdata/dg-workspace-mars/amp-2.12-release/target/jackrabbit/version/db  
-
+Mon Mar 30 19:59:34 EEST 2020:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0171-2c62-5736-00001aa086a0 
+on database directory D:\Work\amp\amp\target\jackrabbit\version\db with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
+Loaded from file:/C:/Users/Viorel/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_192-b12
+user.dir=D:\Work\amp\amp
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
-2016-05-23 15:17:34.924 GMT:
- Booting Derby version The Apache Software Foundation - Apache Derby - 10.5.3.0 - (802917): instance 52da80c5-0154-de31-4b6f-000016bff420
-on database directory /fastdata/dg-workspace-mars/amp-2.12-release/target/jackrabbit/workspaces/default/db  
-
+Mon Mar 30 19:59:36 EEST 2020:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance cead00d8-0171-2c62-5736-00001aa086a0 
+on database directory D:\Work\amp\amp\target\jackrabbit\workspaces\default\db with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
+Loaded from file:/C:/Users/Viorel/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_192-b12
+user.dir=D:\Work\amp\amp
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
-2016-05-23 15:17:36.868 GMT:
- Booting Derby version The Apache Software Foundation - Apache Derby - 10.5.3.0 - (802917): instance 06b1817d-0154-de31-4b6f-000016bff420
-on database directory /fastdata/dg-workspace-mars/amp-2.12-release/target/jackrabbit/workspaces/security/db  
-
+Mon Mar 30 19:59:38 EEST 2020:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance f584c1a3-0171-2c62-5736-00001aa086a0 
+on database directory D:\Work\amp\amp\target\jackrabbit\workspaces\security\db with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
+Loaded from file:/C:/Users/Viorel/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_192-b12
+user.dir=D:\Work\amp\amp
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
-
-2016-05-23 15:17:38.380 GMT:
-Shutting down instance 52da80c5-0154-de31-4b6f-000016bff420
-----------------------------------------------------------------
-
-2016-05-23 15:17:38.509 GMT:
-Shutting down instance 06b1817d-0154-de31-4b6f-000016bff420
-----------------------------------------------------------------
-
-2016-05-23 15:17:38.643 GMT:
-Shutting down instance a816c00e-0154-de31-4b6f-000016bff420
-----------------------------------------------------------------
-----------------------------------------------------------------
-2016-05-23 15:17:38.687 GMT:
- Booting Derby version The Apache Software Foundation - Apache Derby - 10.5.3.0 - (802917): instance db988235-0154-de31-4b6f-000016bff420
-on database directory /fastdata/dg-workspace-mars/amp-2.12-release/target/jackrabbit/version/db  
-
-Database Class Loader started - derby.database.classpath=''
-----------------------------------------------------------------
-2016-05-23 15:17:38.792 GMT:
- Booting Derby version The Apache Software Foundation - Apache Derby - 10.5.3.0 - (802917): instance de3f0248-0154-de31-4b6f-000016bff420
-on database directory /fastdata/dg-workspace-mars/amp-2.12-release/target/jackrabbit/workspaces/default/db  
-
-Database Class Loader started - derby.database.classpath=''
-----------------------------------------------------------------
-2016-05-23 15:17:38.888 GMT:
- Booting Derby version The Apache Software Foundation - Apache Derby - 10.5.3.0 - (802917): instance d13fc25b-0154-de31-4b6f-000016bff420
-on database directory /fastdata/dg-workspace-mars/amp-2.12-release/target/jackrabbit/workspaces/security/db  
-
-Database Class Loader started - derby.database.classpath=''
-
-2016-05-23 15:17:38.997 GMT:
-Shutting down instance de3f0248-0154-de31-4b6f-000016bff420
-----------------------------------------------------------------
-
-2016-05-23 15:17:39.008 GMT:
-Shutting down instance d13fc25b-0154-de31-4b6f-000016bff420
-----------------------------------------------------------------
-
-2016-05-23 15:17:39.027 GMT:
-Shutting down instance db988235-0154-de31-4b6f-000016bff420
-----------------------------------------------------------------
-----------------------------------------------------------------
-2016-05-23 15:17:39.088 GMT:
- Booting Derby version The Apache Software Foundation - Apache Derby - 10.5.3.0 - (802917): instance 649ac26e-0154-de31-4b6f-000016bff420
-on database directory /fastdata/dg-workspace-mars/amp-2.12-release/target/jackrabbit/version/db  
-
-Database Class Loader started - derby.database.classpath=''
-----------------------------------------------------------------
-2016-05-23 15:17:39.171 GMT:
- Booting Derby version The Apache Software Foundation - Apache Derby - 10.5.3.0 - (802917): instance 48500281-0154-de31-4b6f-000016bff420
-on database directory /fastdata/dg-workspace-mars/amp-2.12-release/target/jackrabbit/workspaces/default/db  
-
-Database Class Loader started - derby.database.classpath=''
-----------------------------------------------------------------
-2016-05-23 15:17:39.267 GMT:
- Booting Derby version The Apache Software Foundation - Apache Derby - 10.5.3.0 - (802917): instance 2c5f8294-0154-de31-4b6f-000016bff420
-on database directory /fastdata/dg-workspace-mars/amp-2.12-release/target/jackrabbit/workspaces/security/db  
-
-Database Class Loader started - derby.database.classpath=''
-
-2016-05-23 15:17:39.339 GMT:
-Shutting down instance 48500281-0154-de31-4b6f-000016bff420
-----------------------------------------------------------------
-
-2016-05-23 15:17:39.350 GMT:
-Shutting down instance 2c5f8294-0154-de31-4b6f-000016bff420
-----------------------------------------------------------------
-
-2016-05-23 15:17:39.360 GMT:
-Shutting down instance 649ac26e-0154-de31-4b6f-000016bff420
-----------------------------------------------------------------

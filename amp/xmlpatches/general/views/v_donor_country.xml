@@ -23,11 +23,12 @@
 		  - containing amp_funding_details with an adjustment_type::category_class:key of "SSC_adjustment_type"   
 		   -->
 			<lang delimiter=";" type="postgres"><![CDATA[
+				DROP VIEW IF EXISTS v_donor_country;
 				CREATE OR REPLACE VIEW v_donor_country AS
 					SELECT
 						aav.amp_activity_id,
-						v.country_name,
-						COALESCE(v.country_id, -999999999) AS country_id,
+						v.donor_org_country_name,
+						COALESCE(v.donor_org_country_id, -999999999) AS donor_org_country_id,
 						v.org_grp_id,
 						v.terms_assist_id,
 						v.financing_instrument_id,
@@ -42,8 +43,8 @@
 					LEFT JOIN (
 						SELECT
 							d.amp_activity_id,
-							locs.acvl_id AS country_id,
-							locs.acvl_name AS country_name,
+							locs.acvl_id AS donor_org_country_id,
+							locs.acvl_name AS donor_org_country_name,
 							orgs.org_grp_id AS org_grp_id,
 							d.terms_assist_id,
 							d.financing_instrument_id,

@@ -23,8 +23,8 @@
 		  - containing amp_funding_details with an adjustment_type::category_class:key of "SSC_adjustment_type"   
 		   -->
 			<lang delimiter=";" type="postgres"><![CDATA[
-				DROP VIEW IF EXISTS v_donor_country;
-				CREATE OR REPLACE VIEW v_donor_country AS
+				DROP VIEW IF EXISTS v_ni_donor_orgs_country;
+				CREATE OR REPLACE VIEW v_ni_donor_orgs_country AS
 					SELECT
 						aav.amp_activity_id,
 						v.donor_org_country_name,

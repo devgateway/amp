@@ -871,6 +871,7 @@ LoggerIdentifiable, Cloneable {
             fmPath = "/Activity Form/Identification/Multi Stakeholder Partnership",
             interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
                     fmPath = "/Activity Form/Identification/Required Validator for Multi Stakeholder Partnership"))
+    @VersionableFieldSimple(fieldTitle = "Multi Stakeholder Partnership")
     protected Boolean multiStakeholderPartnership;
 
     @Interchangeable(fieldTitle = "Multi Stakeholder Partners", importable = true,

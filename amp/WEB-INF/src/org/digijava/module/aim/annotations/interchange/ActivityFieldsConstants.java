@@ -103,6 +103,13 @@ public class ActivityFieldsConstants {
         }
     }
 
+    public static final class RegionalFunding {
+        private RegionalFunding() {
+        }
+
+        public static final String LOCATION = "Region Location";
+    }
+
     public static final Map<String, String> ORG_ROLE_CODES = new ImmutableMap.Builder<String, String>()
             .put(FieldMap.underscorify(DONOR_ORGANIZATION), Constants.FUNDING_AGENCY)
             .put(FieldMap.underscorify(RESPONSIBLE_ORGANIZATION), Constants.RESPONSIBLE_ORGANISATION)

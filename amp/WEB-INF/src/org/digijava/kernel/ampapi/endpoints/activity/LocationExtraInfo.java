@@ -24,13 +24,19 @@ public class LocationExtraInfo implements ParentExtraInfo {
 
     private final String iso2;
 
+    /**
+     * Needed to map old location ids to new location ids in AMP Offline.
+     */
+    private final Long oldLocationId;
+
     public LocationExtraInfo(Long parentLocationId, String parentLocationName, Long categoryValueId,
-            String categoryValueName, String iso2) {
+            String categoryValueName, String iso2, Long oldLocationId) {
         this.parentLocationId = parentLocationId;
         this.parentLocationName = parentLocationName;
         this.categoryValueId = categoryValueId;
         this.categoryValueName = categoryValueName;
         this.iso2 = iso2;
+        this.oldLocationId = oldLocationId;
     }
 
     public Long getParentLocationId() {
@@ -52,7 +58,11 @@ public class LocationExtraInfo implements ParentExtraInfo {
     public String getIso2() {
         return iso2;
     }
-    
+
+    public Long getOldLocationId() {
+        return oldLocationId;
+    }
+
     @Override
     public Long getParentId() {
         return parentLocationId;

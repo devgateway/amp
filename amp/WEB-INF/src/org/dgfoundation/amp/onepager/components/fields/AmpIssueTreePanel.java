@@ -45,11 +45,10 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
         final Class levelClass = tree.get(level);
         String levelChildrenName = setName.get(levelClass);
         final PropertyModel<Set<Object>> levelChildren = new PropertyModel<Set<Object>>(objModel, levelChildrenName);
-    
-        final TextArea name =new TextArea<String>("name", new PropertyModel<String>(objModel,"name"));
+
+        final TextArea name = new TextArea<String>("name", new PropertyModel<>(objModel, "name"));
         name.setRequired(true);
-        name.add(visualErrorBehavior());
-        add(name);
+        addFormComponent(name);
         rcc.getRequiredFormComponents().add(name);
         Label label = new TrnLabel("label", labelName.get(levelClass));
         add(label);
@@ -145,7 +144,7 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
                 }
             };
             
-            
+
             add(addLink);
             
             // AMP-11750

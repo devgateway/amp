@@ -32,6 +32,9 @@ To get the project ready for production, run just
     webpack
 
 That will minify and optimize the scripts, use _index.html_ for production.
+### AMP-UI development
+
+TODO
 
 ### Debugging
 Add the "debug" key to the local storage to get debug messages

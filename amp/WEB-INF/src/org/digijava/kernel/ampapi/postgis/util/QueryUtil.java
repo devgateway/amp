@@ -56,30 +56,16 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 
+import static org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants.MAX_ADMIN_LEVEL_SUPPORTED;
+
 public class QueryUtil {
     protected static Logger logger = Logger.getLogger(QueryUtil.class);
-
-    public static List<String> getAdminLevels() {
-        return new ArrayList<String>(Arrays.asList("Country", "Region", "Zone", "District"));
-    }
 
     public static AmpActivity getActivity(Long ampActivityId) {
         return (AmpActivity) PersistenceManager.getSession().load(AmpActivity.class, ampActivityId);
@@ -446,7 +432,9 @@ public class QueryUtil {
     @SuppressWarnings("unchecked")
     public static List<AmpCategoryValue> getClusterLevels() {
         List<AmpCategoryValue> al = null;
-        String queryString = "select distinct a.parentCategoryValue from " + AmpCategoryValueLocations.class.getName()+ " a";
+        String queryString = "select distinct a.parentCategoryValue from "
+                + AmpCategoryValueLocations.class.getName() + " a"
+                + " where a.parentCategoryValue.index < " + MAX_ADMIN_LEVEL_SUPPORTED;
         Query q = PersistenceManager.getSession().createQuery(queryString);
         q.setMaxResults(100);
         al = q.list();

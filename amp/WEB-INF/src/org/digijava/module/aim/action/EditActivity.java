@@ -1669,23 +1669,22 @@ public class EditActivity extends Action {
             if (request.getParameter("editingUserId") != null) {
                 Long editingUserId = Long.valueOf(request.getParameter("editingUserId"));
                 if (TeamUtil.getCurrentMember().getMemberId().equals(editingUserId)) {
-                    message = TranslatorWorker.translateText("You may only edit one activity at a time.");
+                    message = "sameUserEditing=true";
                 } else {
-                    message = TranslatorWorker.translateText("Current activity is being edited by:")
-                            + TeamMemberUtil.getTeamMember(editingUserId).getMemberName();
+                    message = "editingUser="
+                            + URLEncoder.encode(TeamMemberUtil.getTeamMember(editingUserId).getMemberName(), "UTF-8");
                 }
             }
 
             if (request.getParameter("editPermissionError") != null) {
-                message = TranslatorWorker.translateText("You do not have permissions to edit this activity.");
+                message = message != null ? "&" + message : "" + "editPermissionError=true";
             }
-            //
             if (message != null) {
-                message = "?message=" + URLEncoder.encode(message, "UTF-8");
+                message = "?" + message;
             } else {
                 message = "";
             }
-            response.sendRedirect("/TEMPLATE/reamp/modules/activity-preview/index.html#/activity/" + ampActivityId
+            response.sendRedirect("/TEMPLATE/reamp/modules/activity/preview/index.html#/activity/" + ampActivityId
                     + message);
         } catch (IOException e) {
             logger.error("Cannot redirect to activity preview");

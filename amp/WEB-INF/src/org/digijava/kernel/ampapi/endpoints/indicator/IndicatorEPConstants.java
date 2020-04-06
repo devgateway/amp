@@ -23,6 +23,7 @@ public class IndicatorEPConstants {
     
     public static final long RED_GREEN_PALETTE_INDEX = 9;
     public static final long BLUE_PURPLE_PALETTE_INDEX = 10;
+    public static final Integer MAX_ADMIN_LEVEL_SUPPORTED = 4;
    
     public static final String RESULT = "result";
     public static final String VALUES = "values";

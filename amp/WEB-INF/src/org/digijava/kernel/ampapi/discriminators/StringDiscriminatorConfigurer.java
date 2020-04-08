@@ -12,7 +12,7 @@ public class StringDiscriminatorConfigurer implements DiscriminationConfigurer {
     @Override
     public void configure(Object obj, String fieldName, String discriminationValue) {
         try {
-            PropertyUtils.setProperty(obj, fieldName, discriminationValue);
+            PropertyUtils.setProperty(obj, fieldName, discriminationValue); // FIXME this is slow
         } catch (ReflectiveOperationException e) {
             String msg = String.format("Could not restore discriminator value for object %s field %s value %s",
                     obj, fieldName, discriminationValue);

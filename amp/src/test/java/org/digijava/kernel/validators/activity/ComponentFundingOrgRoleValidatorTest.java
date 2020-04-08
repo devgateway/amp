@@ -11,8 +11,9 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.persistence.InMemoryOrganisationManager;
+import org.digijava.kernel.persistence.InMemoryRoleManager;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
@@ -47,20 +48,20 @@ public class ComponentFundingOrgRoleValidatorTest {
 
     @Test
     public void testOneUndeclaredOrg() {
-        HardcodedOrgs orgs = new HardcodedOrgs();
-        AmpActivityVersion activity = activityWithOneUndeclaredOrg(orgs.getWorldBank());
+        InMemoryOrganisationManager organisationManager = InMemoryOrganisationManager.getInstance();
+        AmpActivityVersion activity = activityWithOneUndeclaredOrg(organisationManager.getWorldBank());
 
         assertThat(getViolations(activityField, activity), contains(violationFor(COMM_FIELD_PATH, 1L)));
     }
 
     @Test
     public void testOneUndeclaredOrgInMultipleTransactions() {
-        HardcodedOrgs orgs = new HardcodedOrgs();
+        InMemoryOrganisationManager organisationManager = InMemoryOrganisationManager.getInstance();
 
         AmpActivityVersion activity = new ActivityBuilder()
                 .buildComponent()
-                        .buildFunding(Constants.COMMITMENT).withOrg(orgs.getWorldBank()).addFunding()
-                        .buildFunding(Constants.COMMITMENT).withOrg(orgs.getWorldBank()).addFunding()
+                        .buildFunding(Constants.COMMITMENT).withOrg(organisationManager.getWorldBank()).addFunding()
+                        .buildFunding(Constants.COMMITMENT).withOrg(organisationManager.getWorldBank()).addFunding()
                         .addComponent()
                 .getActivity();
 
@@ -70,12 +71,12 @@ public class ComponentFundingOrgRoleValidatorTest {
 
     @Test
     public void testOneUndeclaredOrgMultiplePaths() {
-        HardcodedOrgs orgs = new HardcodedOrgs();
+        InMemoryOrganisationManager organisationManager = InMemoryOrganisationManager.getInstance();
 
         AmpActivityVersion activity = new ActivityBuilder()
                 .buildComponent()
-                        .buildFunding(Constants.COMMITMENT).withOrg(orgs.getWorldBank()).addFunding()
-                        .buildFunding(Constants.DISBURSEMENT).withOrg(orgs.getWorldBank()).addFunding()
+                        .buildFunding(Constants.COMMITMENT).withOrg(organisationManager.getWorldBank()).addFunding()
+                        .buildFunding(Constants.DISBURSEMENT).withOrg(organisationManager.getWorldBank()).addFunding()
                 .addComponent()
                 .getActivity();
 
@@ -87,12 +88,12 @@ public class ComponentFundingOrgRoleValidatorTest {
 
     @Test
     public void testTwoOrgsNotDeclared() {
-        HardcodedOrgs orgs = new HardcodedOrgs();
+        InMemoryOrganisationManager organisationManager = InMemoryOrganisationManager.getInstance();
 
         AmpActivityVersion activity = new ActivityBuilder()
                 .buildComponent()
-                        .buildFunding(Constants.COMMITMENT).withOrg(orgs.getWorldBank()).addFunding()
-                        .buildFunding(Constants.DISBURSEMENT).withOrg(orgs.getBelgium()).addFunding()
+                        .buildFunding(Constants.COMMITMENT).withOrg(organisationManager.getWorldBank()).addFunding()
+                        .buildFunding(Constants.DISBURSEMENT).withOrg(organisationManager.getBelgium()).addFunding()
                         .addComponent()
                 .getActivity();
 
@@ -104,13 +105,13 @@ public class ComponentFundingOrgRoleValidatorTest {
 
     @Test
     public void testDeclaredOrg() {
-        HardcodedOrgs orgs = new HardcodedOrgs();
-        HardcodedRoles roles = new HardcodedRoles();
+        InMemoryOrganisationManager organisationManager = InMemoryOrganisationManager.getInstance();
+        InMemoryRoleManager roleManager = InMemoryRoleManager.getInstance();
 
         AmpActivityVersion activity = new ActivityBuilder()
-                .addOrgRole(roles.getDonorRole(), orgs.getWorldBank(), 100f)
+                .addOrgRole(roleManager.getDonorRole(), organisationManager.getWorldBank(), 100f)
                 .buildComponent()
-                        .buildFunding(Constants.COMMITMENT).withOrg(orgs.getWorldBank()).addFunding()
+                        .buildFunding(Constants.COMMITMENT).withOrg(organisationManager.getWorldBank()).addFunding()
                         .addComponent()
                 .getActivity();
 
@@ -119,8 +120,8 @@ public class ComponentFundingOrgRoleValidatorTest {
 
     @Test
     public void testDisabledComponents() {
-        HardcodedOrgs orgs = new HardcodedOrgs();
-        AmpActivityVersion activity = activityWithOneUndeclaredOrg(orgs.getWorldBank());
+        InMemoryOrganisationManager organisationManager = InMemoryOrganisationManager.getInstance();
+        AmpActivityVersion activity = activityWithOneUndeclaredOrg(organisationManager.getWorldBank());
 
         APIField activityField = ValidatorUtil.getMetaData(ImmutableSet.of("/Activity Form/Components"));
 
@@ -129,8 +130,8 @@ public class ComponentFundingOrgRoleValidatorTest {
 
     @Test
     public void testDisabledCommitments() {
-        HardcodedOrgs orgs = new HardcodedOrgs();
-        AmpActivityVersion activity = activityWithOneUndeclaredOrg(orgs.getWorldBank());
+        InMemoryOrganisationManager organisationManager = InMemoryOrganisationManager.getInstance();
+        AmpActivityVersion activity = activityWithOneUndeclaredOrg(organisationManager.getWorldBank());
 
         APIField activityField = ValidatorUtil.getMetaData(
                 ImmutableSet.of("/Activity Form/Components/Component/Components Commitments/Commitment Table"));
@@ -140,8 +141,8 @@ public class ComponentFundingOrgRoleValidatorTest {
 
     @Test
     public void testDisabledComponentOrg() {
-        HardcodedOrgs orgs = new HardcodedOrgs();
-        AmpActivityVersion activity = activityWithOneUndeclaredOrg(orgs.getWorldBank());
+        InMemoryOrganisationManager organisationManager = InMemoryOrganisationManager.getInstance();
+        AmpActivityVersion activity = activityWithOneUndeclaredOrg(organisationManager.getWorldBank());
 
         APIField activityField = ValidatorUtil.getMetaData(ImmutableSet.of(
                 "/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization"));
@@ -151,15 +152,15 @@ public class ComponentFundingOrgRoleValidatorTest {
 
     @Test
     public void testAllTransactionTypes() {
-        HardcodedOrgs orgs = new HardcodedOrgs();
-        HardcodedRoles roles = new HardcodedRoles();
+        InMemoryOrganisationManager organisationManager = InMemoryOrganisationManager.getInstance();
+        InMemoryRoleManager roleManager = InMemoryRoleManager.getInstance();
 
         AmpActivityVersion activity = new ActivityBuilder()
-                .addOrgRole(roles.getDonorRole(), orgs.getWorldBank(), 100f)
+                .addOrgRole(roleManager.getDonorRole(), organisationManager.getWorldBank(), 100f)
                 .buildComponent()
-                        .buildFunding(Constants.COMMITMENT).withOrg(orgs.getWorldBank()).addFunding()
-                        .buildFunding(Constants.DISBURSEMENT).withOrg(orgs.getWorldBank()).addFunding()
-                        .buildFunding(Constants.EXPENDITURE).withOrg(orgs.getWorldBank()).addFunding()
+                        .buildFunding(Constants.COMMITMENT).withOrg(organisationManager.getWorldBank()).addFunding()
+                        .buildFunding(Constants.DISBURSEMENT).withOrg(organisationManager.getWorldBank()).addFunding()
+                        .buildFunding(Constants.EXPENDITURE).withOrg(organisationManager.getWorldBank()).addFunding()
                         .addComponent()
                 .getActivity();
 

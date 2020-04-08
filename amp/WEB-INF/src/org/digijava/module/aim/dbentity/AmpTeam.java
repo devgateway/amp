@@ -8,13 +8,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
@@ -30,7 +25,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 @TranslatableClass (displayName = "Team")
 @JsonSerialize(using = AmpTeamSerializer.class)
-public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versionable,*/ FilterDataSetInterface<AmpTeamFilterData>,  
+public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterDataSetInterface<AmpTeamFilterData>,
                                     NameableOrIdentifiable {
     private static final Logger logger = Logger.getLogger(AmpTeam.class);
     @PossibleValueId
@@ -49,23 +44,16 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 
     private AmpTeamMember teamLead; // Denotes the Team Leader
 
-    //private String type;          // Whether Bilateral or Multilateral
-    
-
-    
-
     private AmpTeam parentTeamId;
     
     private Collection childrenWorkspaces;
     
     private String accessType;      // Management or Team
-    
 
     private AmpTeam relatedTeamId;  // a donor team referring a mofed team
     private Set<AmpActivityVersion> activityList;       // activities assigned to donor team
     
     private Set organizations;      // activities assigned to donor team
-    private NpdSettings npdSettings;
     
     private AmpCategoryValue workspaceGroup;
     
@@ -76,7 +64,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     private AmpTemplatesVisibility fmTemplate;
     private AmpCategoryValue workspacePrefix;
     private Boolean crossteamvalidation;
-    private AmpSummaryNotificationSettings sumaryNotificationSettings;
 
     @Override
     public AmpFilterData newAmpFilterData(FilterDataSetInterface filterRelObj,
@@ -101,14 +88,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 
     public void setPermissionStrategy(String permissionStrategy) {
         this.permissionStrategy = permissionStrategy;
-    }
-
-    public NpdSettings getNpdSettings() {
-        return npdSettings;
-    }
-
-    public void setNpdSettings(NpdSettings npdSettings) {
-        this.npdSettings = npdSettings;
     }
 
     /**
@@ -345,13 +324,5 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
         } else {
             this.isolated = isolated;
         }
-    }
-
-    public AmpSummaryNotificationSettings getSumaryNotificationSettings() {
-        return sumaryNotificationSettings;
-    }
-
-    public void setSumaryNotificationSettings(AmpSummaryNotificationSettings sumaryNotificationSettings) {
-        this.sumaryNotificationSettings = sumaryNotificationSettings;
     }
 }

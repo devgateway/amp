@@ -7,35 +7,41 @@ public class AvailableMethod {
         this.ui = false;
     }
     
-    @ApiModelProperty(value = "Name to display", example = "Translations")
+    @ApiModelProperty(value = "Name to display", example = "Type Of Assistance")
     private String name;
 
     @ApiModelProperty(value = "Should be visible in UI?", example = "false")
     private Boolean ui;
 
-    @ApiModelProperty(value = "Path to operation", example = "/rest/translations/label-translations")
+    @ApiModelProperty(value = "Path to operation", example = "/rest/filters/typeOfAssistance/")
     private String endpoint;
 
     @ApiModelProperty(value = "Http method", example = "POST")
     private String method;
 
-    @ApiModelProperty(value = "Method id", example = "Translations")
+    @ApiModelProperty(value = "Method id", example = "type-of-assistance")
     private String id;
 
-    @ApiModelProperty(value = "Used to group filters under different tabs", example = "Unassigned")
+    @ApiModelProperty(value = "Used to group filters under different tabs", example = "Financial")
     private String tab;
 
-    @ApiModelProperty("Columns linked to this filter")
+    @ApiModelProperty(value = "Columns linked to this filter", example = "[\"Type Of Assistance\"]")
     private String[] columns;
-  
+    
+    @ApiModelProperty(value = "The type of the filter. Used for building the Filter Widget.")
     private FilterType[] filterType;
-  
+    
+    @ApiModelProperty(value = "The type of the filter field. Used for building the Filter Widget.")
     private FilterFieldType fieldType;
-  
+    
+    @ApiModelProperty(value = "The type of the filter data. Used for building the Filter Widget.")
     private FilterDataType dataType;
-  
+    
+    @ApiModelProperty(value = "The AMP component where the filter can be visible. Used for building the Filter Widget.")
     private FilterComponentType[] componentType;
-  
+    
+    @ApiModelProperty(value = "Can be selected multiple values for the specific filter. "
+            + "Used for building the Filter Widget.")
     private boolean multiple;
 
     public String getName() {

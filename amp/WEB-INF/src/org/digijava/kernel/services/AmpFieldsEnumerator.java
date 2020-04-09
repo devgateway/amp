@@ -1,13 +1,13 @@
 package org.digijava.kernel.services;
 
-import java.util.function.Function;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import org.digijava.kernel.ampapi.endpoints.activity.AMPFMService;
-import org.digijava.kernel.ampapi.endpoints.activity.AllowMultipleProgramsPredicate;
-import org.digijava.kernel.ampapi.endpoints.activity.field.AmpFieldInfoProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList;
 import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
-import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
-import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
+import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumeratorFactory;
+import org.digijava.kernel.ampapi.endpoints.common.fm.FMService;
 import org.digijava.kernel.services.sync.SyncDAO;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,22 +19,48 @@ import org.springframework.stereotype.Component;
 @Component
 public final class AmpFieldsEnumerator implements InitializingBean {
 
-    private static CachingFieldsEnumerator enumerator;
+    private static CachingFieldsEnumeratorFactory enumeratorFactory;
 
     @Autowired
     private SyncDAO syncDAO;
 
     public static CachingFieldsEnumerator getEnumerator() {
-        return enumerator;
+        return enumeratorFactory.getDefaultEnumerator();
     }
 
     @Override
     public void afterPropertiesSet() {
-        AmpFieldInfoProvider fieldProvider = new AmpFieldInfoProvider();
-        Function<String, Boolean> allowMultiplePrograms = new AllowMultipleProgramsPredicate();
+       enumeratorFactory = new CachingFieldsEnumeratorFactory(syncDAO);
+       enumeratorFactory.buildDefaultEnumerator();
+    }
 
-        AMPFMService fmService = new AMPFMService();
-        enumerator = new CachingFieldsEnumerator(syncDAO,
-                new FieldsEnumerator(fieldProvider, fmService, AMPTranslatorService.INSTANCE, allowMultiplePrograms));
+    /**
+     * Group the fields by workspace member
+     *
+     * @param wsMemberIds
+     * @return
+     */
+    public static List<APIWorkspaceMemberFieldList> getAvailableActivityFieldsBasedOnWs(List<Long> wsMemberIds) {
+        List<APIWorkspaceMemberFieldList> wsList = new ArrayList<>();
+
+        Map<Long, List<Long>> fmTreesWsMap = FMService.getFMTreeWsMap();
+
+        for (Map.Entry<Long, List<Long>> t : fmTreesWsMap.entrySet()) {
+            Long templateId = t.getKey();
+            List<Long> wsIds = t.getValue();
+
+            if (!wsMemberIds.isEmpty()) {
+                wsIds.retainAll(wsMemberIds);
+            }
+
+            if (!wsIds.isEmpty()) {
+                CachingFieldsEnumerator cachingFieldsEnumerator = enumeratorFactory.getEnumerator(templateId);
+                APIWorkspaceMemberFieldList fieldList = new APIWorkspaceMemberFieldList(wsIds,
+                        cachingFieldsEnumerator.getActivityFields());
+                wsList.add(fieldList);
+            }
+        }
+
+        return wsList;
     }
 }

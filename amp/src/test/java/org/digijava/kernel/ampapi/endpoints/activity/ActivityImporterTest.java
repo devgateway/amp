@@ -120,7 +120,7 @@ public class ActivityImporterTest {
     public AMPRequestRule ampRequestRule = new AMPRequestRule();
     
     private TestTranslatorService translatorService;
-    private FMService fmService;
+    private FeatureManagerService fmService;
     private TeamMemberService tmService;
     private FieldsEnumerator enumerator;
     

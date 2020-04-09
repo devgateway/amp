@@ -56,7 +56,7 @@ public class PossibleValuesEnumeratorTest {
     @Mock private TranslatorService translatorService;
 
     @Mock private FieldInfoProvider provider;
-    @Mock private FMService fmService;
+    @Mock private FeatureManagerService fmService;
 
     @Before
     public void setup() throws WorkerException {

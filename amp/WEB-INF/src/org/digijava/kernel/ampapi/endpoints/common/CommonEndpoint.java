@@ -17,14 +17,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
-import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsResult;
+import org.digijava.kernel.ampapi.endpoints.common.fm.FMMemberSettingsResult;
+import org.digijava.kernel.ampapi.endpoints.common.fm.FMService;
 import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsFlat;
+import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsResult;
 import org.digijava.kernel.ampapi.endpoints.common.fm.FMSettingsTree;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
-import org.digijava.kernel.ampapi.endpoints.common.fm.FMService;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
@@ -46,7 +47,7 @@ public class CommonEndpoint implements AmpEndpoint {
             @ApiParam("FM Settings with requested options") FMSettingsConfig config) {
         return FMService.getFMSettingsResult(config);
     }
-    
+
     @POST
     @Path("/fm/flat")
     @Produces(MediaType.APPLICATION_JSON)
@@ -56,6 +57,61 @@ public class CommonEndpoint implements AmpEndpoint {
             @ApiParam("FM Settings with requested options") FMSettingsConfig config) {
         config.setDetailsFlat(true);
         return FMService.getFMSettingsResult(config);
+    }
+
+    @POST
+    @Path("/fm-by-ws-member")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiMethod(ui = false, name = "fm-by-ws-member", id = "fm-by-ws-member")
+    @ApiOperation(
+            value = "Provides Feature Manager settings for the requested options grouped by workspaces.",
+            notes = "The settings will be taken from each FM template.\n"
+                    + "### Sample response:\n"
+                    + "```\n"
+                    + "{\n"
+                    + "  \"ws-member-ids\": [1, 3, 5, ...],\n"
+                    + "  \"fm-tree\":\n"
+                    + "    {\n"
+                    + "      \"reporting-fields\": [\"Project Title\", \"Primary Sector\"],\n"
+                    + "      \"enabled-modules\": \"[\"GIS\", \"Dashboards\"]\",\n"
+                    + "      \"fm-settings\": {\n"
+                    + "        \"GIS\": {"
+                    + "            \"GPI Item\": {...}\n"
+                    + "         }\n"
+                    + "      }\n"
+                    + "    }\n"
+                    + "  ]\n"
+                    + "}\n"
+                    + "```")
+    public List<FMMemberSettingsResult> getFMSettingsByWsMember(FMSettingsConfig config) {
+        return FMService.getFMSettingsResultGroupedByWsMember(config);
+    }
+
+    @POST
+    @Path("/fm-by-ws-member/flat")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiMethod(ui = false, name = "fm-by-ws-member", id = "fm-by-ws-member")
+    @ApiOperation(
+            value = "Provides Feature Manager settings for the requested options grouped by workspaces in flat mode.",
+            notes = "The settings will be taken from each FM template.\n"
+                    + "### Sample response:\n"
+                    + "```\n"
+                    + "{\n"
+                    + "  \"ws-member-ids\": [1, 3, 5, ...],\n"
+                    + "  \"fm-tree\":\n"
+                    + "    {\n"
+                    + "      \"reporting-fields\": [\"Project Title\", \"Primary Sector\"],\n"
+                    + "      \"enabled-modules\": \"[\"GIS\", \"Dashboards\"]\",\n"
+                    + "      \"fm-settings\": {\n"
+                    + "         \"GIS\": [\"/gis-enabled-setting1/enabled-childX\", \"/enabled-setting2\"]\n"
+                    + "      }\n"
+                    + "    }\n"
+                    + "  ]\n"
+                    + "}\n"
+                    + "```")
+    public List<FMMemberSettingsResult> getFMSettingsFlatByWsMember(FMSettingsConfig config) {
+        config.setDetailsFlat(true);
+        return FMService.getFMSettingsResultGroupedByWsMember(config);
     }
 
     @POST

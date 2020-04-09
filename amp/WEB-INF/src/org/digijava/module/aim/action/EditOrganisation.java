@@ -138,6 +138,9 @@ public class EditOrganisation extends DispatchAction {
       editForm.setAcronym(organization.getAcronym());
       editForm.setFundingorgid(organization.getFundingorgid());
       Collection orgGroups = null;
+      if (organization.getCountry() != null) {
+          editForm.setCountryId(organization.getCountry().getId());
+      }
       AmpOrgType orgType = null;
       if (organization.getOrgGrpId() != null) {
           orgType = organization.getOrgGrpId().getOrgType();
@@ -183,9 +186,7 @@ public class EditOrganisation extends DispatchAction {
              List<AmpOrgRecipient> recipients=new ArrayList<AmpOrgRecipient>(organization.getRecipients());
               Collections.sort(recipients, new DbUtil.HelperAmpOrgRecipientByOrgName());
               editForm.setRecipients(recipients);
-              if (organization.getCountry() != null) {
-                  editForm.setCountryId(organization.getCountry().getId());
-              }
+
 
               editForm.setTaxNumber(organization.getTaxNumber());
 
@@ -827,7 +828,6 @@ public class EditOrganisation extends DispatchAction {
           editForm.setLegalPersonNum(null);
           editForm.setLegalPersonRegDate(null);
           editForm.setRecipients(null);
-          editForm.setCountryId(null);
           editForm.setTaxNumber(null);
           editForm.setOrgInfos(null);
           editForm.setOrgInfoCurrId(null);

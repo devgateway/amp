@@ -13,9 +13,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
     private static final Logger logger = LoggerFactory.getLogger(AmpOrganisationSearchModel.class);
 
     public enum PARAM implements AmpAutoCompleteModelParam {
-    TYPE_FILTER, GROUP_FILTER
+    TYPE_FILTER, GROUP_FILTER, TEMPLATE_FILTER
     };
 
     public AmpOrganisationSearchModel(String input, String language, Map<AmpAutoCompleteModelParam, Object> params) {
@@ -95,6 +95,10 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
             sqlQuery = sqlQuery + " AND org_grp_id in( "+
                     " select  amp_org_grp_id from amp_org_group where org_type=?)";
             }
+
+            if (getParams() != null && getParams().get(PARAM.TEMPLATE_FILTER) != null) {
+                sqlQuery = sqlQuery + " AND template_id = ?";
+            }
             
             Integer maxResults = (Integer) getParams().get(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
             if (maxResults != null && maxResults.intValue() != 0) {
@@ -113,7 +117,12 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
             if (getParams() != null && getParams().get(PARAM.TYPE_FILTER) != null) {
                 params.add(new FilterParam(orgtype.getIdentifier(), java.sql.Types.BIGINT));
             }
-            
+
+            if (getParams() != null && getParams().get(PARAM.TEMPLATE_FILTER) != null) {
+                AmpTemplatesVisibility template = (AmpTemplatesVisibility) getParams().get(PARAM.TEMPLATE_FILTER);
+                params.add(new FilterParam(template.getIdentifier(), java.sql.Types.BIGINT));
+            }
+
             RsInfo rsi = SQLUtils.rawRunQuery(connection, sqlQuery, params);
             ResultSet rs = rsi.rs;
             while (rs.next()) {

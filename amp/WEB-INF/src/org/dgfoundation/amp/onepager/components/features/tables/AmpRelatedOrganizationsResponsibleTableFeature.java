@@ -4,9 +4,6 @@
 */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,6 +26,9 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author aartimon@dginternational.org
  * @since Nov 12, 2012
@@ -49,8 +49,7 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
         if (value.longValue()!=-1) {
         setDefaultOrgGroup(DbUtil.getAmpOrgGroup(value));
         }
-        
-        
+
         setTitleHeaderColSpan(5);
         list.setObject(new ListView<AmpOrgRole>("list", listModel) {
             private static final long serialVersionUID = 7218457979728871528L;

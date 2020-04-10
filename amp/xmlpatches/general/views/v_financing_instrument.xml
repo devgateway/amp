@@ -20,7 +20,7 @@
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
 				DROP VIEW IF EXISTS v_financing_instrument;
-				CREATE VIEW v_financing_instrument AS
+				CREATE or REPLACE VIEW v_financing_instrument AS
 				SELECT aav.amp_activity_id, 
 				    v.category_value,
                     COALESCE(v.id, -999999999) AS id,
@@ -32,7 +32,8 @@
                     v.agreement_id,
                     v.funding_id,
                     v.vulnerable_group_id,
-                    v.project_results_available_id
+                    v.project_results_available_id,
+                    v.donor_org_country_id
                 FROM amp_activity_version aav
                 LEFT JOIN (
 				  SELECT f.amp_activity_id, val.category_value,
@@ -45,9 +46,11 @@
 					f.agreement as agreement_id,
 					f.amp_funding_id as funding_id,
 					f.vulnerable_group_va as vulnerable_group_id,
-					CASE WHEN f.project_results_available THEN 1 ELSE 2 END AS project_results_available_id
+					CASE WHEN f.project_results_available THEN 1 ELSE 2 END AS project_results_available_id,
+					o.amp_country_id AS donor_org_country_id
 				  FROM amp_funding f
 					JOIN amp_category_value val ON f.financing_instr_category_value = val.id
+					JOIN amp_organisation o ON f.amp_donor_org_id = o.amp_org_id
 				  UNION
 				  SELECT eu.amp_activity_id, val.category_value, eu_con.financing_instr_category_value AS id,
 					null::bigint as terms_assist_id,
@@ -58,7 +61,8 @@
 					null::bigint as agreement_id,
 					null::bigint as funding_id,
 					null::bigint as vulnerable_group_id,
-					null::bigint as project_results_available_id
+					null::bigint as project_results_available_id,
+					null::bigint as donor_org_country_id
 				  FROM amp_eu_activity eu
 					JOIN amp_eu_activity_contributions eu_con ON eu_con.eu_activity_id = eu.id
 					JOIN amp_category_value val ON eu_con.financing_instr_category_value = val.id

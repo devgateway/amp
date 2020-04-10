@@ -275,6 +275,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     // various single-dimension-usage 
     public final static NiDimensionUsage LOC_DIM_USG = locsDimension.getDimensionUsage("LOCS");
     public final static NiDimensionUsage AGR_DIM_USG = agreementsDimension.getDimensionUsage("agr");
+    public static final NiDimensionUsage DN_COUNTRY_DIM_USG = locsDimension.getDimensionUsage("DN Country");
+    public static final NiDimensionUsage BA_COUNTRY_DIM_USG = locsDimension.getDimensionUsage("BA Country");
+    public static final NiDimensionUsage EA_COUNTRY_DIM_USG = locsDimension.getDimensionUsage("EA Country");
     public final static LevelColumn AGR_LEVEL_COLUMN = AGR_DIM_USG.getLevelColumn(0);
     
     public final static NiDimensionUsage ACT_DIM_USG = activitiesDimension.getDimensionUsage("acts");
@@ -366,6 +369,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             .put(ColumnConstants.REGIONAL_REGION, "region_location_id")
             .put(ColumnConstants.PROJECT_RESULTS_AVAILABLE, "project_results_available_id")
             .put(ColumnConstants.VULNERABLE_GROUP, "vulnerable_group_id")
+            .put(ColumnConstants.DONOR_COUNTRY, "donor_org_country_id")
             .build());
 
     /**
@@ -555,6 +559,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         single_dimension(ColumnConstants.DONOR_TYPE, "v_ni_donor_orgstypes", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_TYPE));
         single_dimension(ColumnConstants.DONOR_BUDGET_CODE, "v_ni_donor_orgbudget_code",
                 DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        single_dimension(ColumnConstants.DONOR_COUNTRY, "v_ni_donor_orgs_country",
+                DN_COUNTRY_DIM_USG.getLevelColumn(0), true);
 
         single_dimension(ColumnConstants.DONOR_ACRONYM, "v_ni_donor_orgsacronyms", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
         
@@ -566,10 +572,15 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         with_percentage(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, "v_beneficiary_agency_groups", BA_DIM_USG, LEVEL_ORGANISATION_GROUP);
         with_percentage(ColumnConstants.BENEFICIARY_AGENCY_TYPE, "v_beneficiary_agency_type", BA_DIM_USG,
                 LEVEL_ORGANISATION_TYPE);
-        
+        with_percentage(ColumnConstants.BENEFICIARY_AGENCY_COUNTRY, "v_beneficiary_agency_country",
+                BA_COUNTRY_DIM_USG, ADM_LEVEL_0);
+
+
         with_percentage(ColumnConstants.EXECUTING_AGENCY, "v_executing_agency", EA_DIM_USG, LEVEL_ORGANISATION);
         with_percentage(ColumnConstants.EXECUTING_AGENCY_GROUPS, "v_executing_agency_groups", EA_DIM_USG, LEVEL_ORGANISATION_GROUP);
         with_percentage(ColumnConstants.EXECUTING_AGENCY_TYPE, "v_executing_agency_type", EA_DIM_USG, LEVEL_ORGANISATION_TYPE);
+        with_percentage(ColumnConstants.EXECUTING_AGENCY_COUNTRY, "v_executing_agency_country",
+                EA_COUNTRY_DIM_USG, ADM_LEVEL_0);
 
         with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION, "v_responsible_organisation", RO_DIM_USG, LEVEL_ORGANISATION);
         with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, "v_responsible_org_groups", RO_DIM_USG, LEVEL_ORGANISATION_GROUP);

@@ -19,6 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
+				DROP VIEW IF EXISTS v_grace_period;
 				CREATE OR REPLACE VIEW v_grace_period AS
 				  SELECT a.amp_activity_id, fund.grace_period, fund.amp_donor_org_id,
 					fund.type_of_assistance_category_va as terms_assist_id,
@@ -29,10 +30,12 @@
 					fund.agreement as agreement_id,
 					fund.amp_funding_id as funding_id,
 					fund.vulnerable_group_va AS vulnerable_group_id,
-					CASE WHEN fund.project_results_available THEN 1 ELSE 2 END AS project_results_available_id
+					CASE WHEN fund.project_results_available THEN 1 ELSE 2 END AS project_results_available_id,
+					o.amp_country_id AS donor_org_country_id
 				  FROM amp_activity_version a
 					JOIN amp_funding fund ON fund.amp_activity_id = a.amp_activity_id
-				  WHERE fund.grace_period IS NOT NULL
+					JOIN amp_organisation o ON fund.amp_donor_org_id = o.amp_org_id
+				  WHERE fund.grace_period IS NOT NULL;
 			]]></lang>
 		</script>
 	</apply>

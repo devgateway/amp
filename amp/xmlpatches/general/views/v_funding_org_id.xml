@@ -19,6 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
+				DROP VIEW IF EXISTS v_funding_org_id;
 				CREATE OR REPLACE VIEW v_funding_org_id AS
 				  SELECT f.amp_activity_id, f.financing_id AS funding_org_id,
 					f.type_of_assistance_category_va as terms_assist_id,
@@ -29,9 +30,11 @@
 					f.agreement as agreement_id,
 					f.amp_funding_id as funding_id,
                     f.vulnerable_group_va AS vulnerable_group_id,
-                    CASE WHEN f.project_results_available THEN 1 ELSE 2 END AS project_results_available_id
+                    CASE WHEN f.project_results_available THEN 1 ELSE 2 END AS project_results_available_id,
+                    o.amp_country_id AS donor_org_country_id
 				  FROM amp_funding f
 					JOIN amp_activity_version a ON f.amp_activity_id = a.amp_activity_id
+					JOIN amp_organisation o ON f.amp_donor_org_id = o.amp_org_id
 												   AND f.financing_id IS NOT NULL
 												   AND f.financing_id != '';
 			]]></lang>

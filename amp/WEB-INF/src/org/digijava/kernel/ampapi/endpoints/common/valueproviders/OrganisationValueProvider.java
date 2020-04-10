@@ -14,7 +14,7 @@ public class OrganisationValueProvider extends GenericInterchangeableValueProvid
 
     @Override
     public Object getExtraInfo(AmpOrganisation organisation) {
-        ImmutableMap.Builder<String, String> builder = new ImmutableMap.Builder<>();
+        ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<>();
         if (organisation.getAcronym() != null) {
             builder.put("acronym", organisation.getAcronym());
         }
@@ -23,6 +23,9 @@ public class OrganisationValueProvider extends GenericInterchangeableValueProvid
         }
         if (organisation.getBudgetOrgCode() != null) {
             builder.put("budget_organization_code", organisation.getBudgetOrgCode());
+        }
+        if (organisation.getTemplate() != null) {
+            builder.put("template", organisation.getTemplate().getId());
         }
         return builder.build();
     }

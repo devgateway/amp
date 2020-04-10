@@ -31,11 +31,10 @@
 					f.amp_funding_id as funding_id,
 					f.vulnerable_group_va AS vulnerable_group_id,
 					CASE WHEN f.project_results_available THEN 1 ELSE 2 END AS project_results_available_id,
-					og.country_id AS donor_org_country_id
+					o.amp_country_id AS donor_org_country_id
 				  FROM amp_funding f
 					JOIN amp_funding_detail fd ON fd.amp_funding_id = f.amp_funding_id
 					JOIN amp_organisation o ON f.amp_donor_org_id = o.amp_org_id
-					JOIN amp_org_group og ON o.org_grp_id = og.amp_org_grp_id
 				  WHERE ((fd.transaction_type = 0) AND (f.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN')));
 			]]></lang>
 		</script>

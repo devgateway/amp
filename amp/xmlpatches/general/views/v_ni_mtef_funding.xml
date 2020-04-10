@@ -40,13 +40,12 @@
         f.source_role_id AS source_role_id,
 		f.vulnerable_group_va AS vulnerable_group_id,
 		CASE WHEN f.project_results_available THEN 1 ELSE 2 END AS project_results_available_id,
-		og.country_id AS donor_org_country_id
+		org.amp_country_id AS donor_org_country_id
         
        FROM
         amp_funding f
         JOIN amp_funding_mtef_projection m ON m.amp_funding_id = f.amp_funding_id
-		JOIN amp_organisation org ON f.amp_donor_org_id = org.amp_org_id
-		JOIN amp_org_group og ON org.org_grp_id = og.amp_org_grp_id;
+		JOIN amp_organisation org ON f.amp_donor_org_id = org.amp_org_id;
 
  <!-- now here it comes the debug counterpart -->
 	DROP VIEW IF EXISTS v_ni_mtef_funding_debug;

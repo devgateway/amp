@@ -96,6 +96,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Budget Structure'
                 , 'Indirect On Budget'
                 , 'Humanitarian Aid'
+                , 'Multi Stakeholder Partnership'
                 , 'Concessionality Level'
                 , 'Disaster Response Marker'
                 , 'Indicator Name'

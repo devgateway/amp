@@ -387,6 +387,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_dimension(ColumnConstants.ACTIVITY_ID, "v_activity_ids");
         no_dimension(ColumnConstants.TEAM, "v_teams");
         no_entity(ColumnConstants.OBJECTIVE, "v_objectives", DG_EDITOR_POSTPROCESSOR);
+        no_entity(ColumnConstants.MULTI_STAKEHOLDER_PARTNERS, "v_multi_stakeholder_partners", DG_EDITOR_POSTPROCESSOR);
         no_dimension(ColumnConstants.ISSUES, "v_issues");
         date_column(ColumnConstants.ISSUE_DATE, "v_issue_date");
 
@@ -426,6 +427,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         degenerate_dimension(ColumnConstants.FINANCING_INSTRUMENT, "v_financing_instrument", catsDimension);
         degenerate_dimension(ColumnConstants.FUNDING_STATUS, "v_funding_status", catsDimension);
         degenerate_dimension(ColumnConstants.HUMANITARIAN_AID, "v_humanitarian_aid", boolDimension);
+        degenerate_dimension(ColumnConstants.MULTI_STAKEHOLDER_PARTNERSHIP, "v_multi_stakeholder_partnership",
+                boolDimension);
         degenerate_dimension(ColumnConstants.IMPLEMENTATION_LEVEL, "v_implementation_level", catsDimension);
         degenerate_dimension(ColumnConstants.PERFORMANCE_ALERT_TYPE, "v_performance_alert_type", 
                 PERF_TYPE_DIM, PERFORMANCE_ALERT_POSTPROCESSOR);

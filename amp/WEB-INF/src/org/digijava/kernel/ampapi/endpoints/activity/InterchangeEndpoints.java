@@ -69,20 +69,6 @@ public class InterchangeEndpoints {
     private UriInfo uri;
 
     @GET
-    @Path("fields/locations~location")
-    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getValues", ui = false)
-    @ApiOperation(
-            value = "Returns a list of JSON objects, to match new and old activity locations.",
-            notes = "See getPossibleValuesFlat")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of possible values",
-            response = PossibleValue.class, responseContainer = "List"))
-    public Response getPossibleValuesFlatForLocations() {
-        String fieldName = "locations~location";
-        return getPossibleValuesFlatGeneral(fieldName);
-    }
-
-    @GET
     @Path("fields/{fieldName}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getValues", ui = false)
@@ -99,10 +85,6 @@ public class InterchangeEndpoints {
             @PathParam("fieldName")
             @ApiParam(value = "fully qualified activity field", example = "locations~location")
                     String fieldName) {
-        return getPossibleValuesFlatGeneral(fieldName);
-    }
-
-    private Response getPossibleValuesFlatGeneral(final String fieldName) {
         List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
         List<PossibleValue> possibleValues = InterchangeUtils.possibleValuesFor(fieldName, apiFields);
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;

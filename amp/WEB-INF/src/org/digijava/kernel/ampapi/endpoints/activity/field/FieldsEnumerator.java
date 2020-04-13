@@ -8,6 +8,7 @@ import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -106,7 +107,6 @@ public class FieldsEnumerator {
         // for discriminated case we can override the type here
         Class<?> type = InterchangeUtils.getClassOfField(field);
         FieldType fieldType = null;
-        apiField.setIsCollection(Collection.class.isAssignableFrom(field.getType()));
         if (interchangeable.pickIdOnly()) {
             fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
         } else if (InterchangeUtils.isCollection(field)) {
@@ -116,6 +116,11 @@ public class FieldsEnumerator {
             }
         } else if (field.getType().equals(java.util.Date.class)) {
             fieldType = InterchangeUtils.isTimestampField(field) ? FieldType.TIMESTAMP : FieldType.DATE;
+        }
+
+        if (Collection.class.isAssignableFrom(field.getType()) && interchangeable.pickIdOnly()
+                && interchangeable.multipleValues()) {
+            throw new RuntimeException("Fields with pickIdOnly and multipleValues are not supported yet.");
         }
 
         APIType apiType = new APIType(type, fieldType);
@@ -389,7 +394,7 @@ public class FieldsEnumerator {
                 context.getIntchStack().push(interchangeable);
                 if (isFieldVisible(context)) {
                     APIField descr = describeField(field, context);
-                    descr.setFieldAccessor(new SimpleFieldAccessor(field.getName()));
+                    descr.setFieldAccessor(new SimpleFieldAccessor(field));
                     result.add(descr);
                 }
                 context.getIntchStack().pop();
@@ -397,15 +402,22 @@ public class FieldsEnumerator {
             InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
             if (discriminator != null) {
                 Interchangeable[] settings = discriminator.settings();
+                Set<String> discriminatorOptions = new HashSet<>();
                 for (int i = 0; i < settings.length; i++) {
                     context.getDiscriminationInfoStack().push(getDiscriminationInfo(field, settings[i]));
                     context.getIntchStack().push(settings[i]);
                     if (isFieldVisible(context)) {
+                        String discriminatorOption = settings[i].discriminatorOption();
+                        if (!discriminatorOptions.add(discriminatorOption)) {
+                            throw new RuntimeException("Discriminator option " + discriminatorOption
+                                    + " must be unique.");
+                        }
                         APIField descr = describeField(field, context);
                         descr.setDiscriminatorField(discriminator.discriminatorField());
                         descr.setDiscriminationConfigurer(discriminator.configurer());
-                        descr.setFieldAccessor(new DiscriminatedFieldAccessor(new SimpleFieldAccessor(field.getName()),
-                                discriminator.discriminatorField(), settings[i].discriminatorOption()));
+                        descr.setFieldAccessor(new DiscriminatedFieldAccessor(new SimpleFieldAccessor(field),
+                                discriminator.discriminatorField(), discriminatorOption,
+                                settings[i].multipleValues()));
                         result.add(descr);
                     }
                     context.getIntchStack().pop();

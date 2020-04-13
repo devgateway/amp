@@ -1,14 +1,17 @@
 /**
- * 
+ *
  */
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Activity Endpoint related constants
- * 
+ *
  * @author Nadejda Mandrescu
  */
 public class ActivityEPConstants {
@@ -18,7 +21,7 @@ public class ActivityEPConstants {
         SUBMIT,
         ALWAYS
     }
-    
+
     // JSON fields
     public static final String ACTIVITY = "activity";
     public static final String FIELD_NAME = "field_name";
@@ -35,7 +38,7 @@ public class ActivityEPConstants {
     public static final String PERCENTAGE = "percentage";
     public static final String SIZE_LIMIT = "size-limit";
     public static final String UNIQUE = "unique";
-    public static final String REQUIRED = "required";   
+    public static final String REQUIRED = "required";
     public static final String ID_ONLY = "id_only";
     public static final String TRANSLATABLE = "translatable";
     public static final String INVALID = "invalid";
@@ -50,17 +53,17 @@ public class ActivityEPConstants {
     public static final String VALUE = "value";
     public static final String UNIQUE_CONSTRAINT = "unique_constraint";
     public static final String PERCENTAGE_CONSTRAINT = "percentage_constraint";
-    public static final String DEPENDENCIES ="dependencies";
+    public static final String DEPENDENCIES = "dependencies";
     public static final String TREE_COLLECTION_CONSTRAINT = "tree_collection";
     public static final String COMMON_POSSIBLE_VALUES = "common-possible-values";
-    
+
     public static final String PREVIEW_CURRENCY_ID = "currency-id";
-    
+
     // fields constants
-    public static final String AMP_ACTIVITY_ID_FIELD_NAME = 
+    public static final String AMP_ACTIVITY_ID_FIELD_NAME =
             FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
     public static final String AMP_ID_FIELD_NAME = FieldMap.underscorify(ActivityFieldsConstants.AMP_ID);
-    public static final String MODIFIED_BY_FIELD_NAME = 
+    public static final String MODIFIED_BY_FIELD_NAME =
             FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY);
     public static final String VERSION_FIELD_NAME = FieldMap.underscorify(ActivityFieldsConstants.VERSION);
 
@@ -69,7 +72,13 @@ public class ActivityEPConstants {
 
     public static final String VALIDATION_STATUS = "validation-status";
     public static final String DAYS_FOR_AUTOMATIC_VALIDATION = "days-for-automatic-validation";
-    public static final String ACTIVITY_TEAM = "activity-team";
+    public static final String ACTIVITY_WORKSPACE = "activityWorkspace";
+
+    public static final String TEAM_MEMBER = "teamMember";
+    public static final String TEAM_MEMBER_ROLE = "teamMemberRole";
+    public static final String ACTIVITY_TEAM_LEAD_DATA = "activity-workspace-lead-data";
+
+
     public static final String VERSION_HISTORY = "version-history";
     public static final String MODIFIED_BY = "modified-by";
     public static final String MODIFIED_DATE = "modified-date";
@@ -77,21 +86,21 @@ public class ActivityEPConstants {
 
     // max length constants
     public static final String TYPE_VARCHAR = "character varying";
-    
+
     // validator names constants
     public static final String UNIQUE_VALIDATOR_NAME = "unique";
     public static final String TREE_COLLECTION_VALIDATOR_NAME = "treeCollection";
-    
+
     // floating comparison constant
     public static final Double EPSILON = 0.0001;
     
     public static final Integer MAX_BULK_ACTIVITIES_ALLOWED = 20;
 
-    /* 
-     * Based on local stats, 7 is the minimum DB query batch size with best outcome. 6-5 is pretty close, but going 
+    /*
+     * Based on local stats, 7 is the minimum DB query batch size with best outcome. 6-5 is pretty close, but going
      * lower makes the difference more noticeable. Growing the value up won't make a significant difference for some
      * time. At about 16 and especially higher like 32 the performance impact is seen.
-     * Keeping it at the smallest optimal will allow a better performance for multiple users sync up (e.g. training). 
+     * Keeping it at the smallest optimal will allow a better performance for multiple users sync up (e.g. training).
      */
     public static final Integer BATCH_DB_QUERY_SIZE = 7;
 
@@ -106,11 +115,11 @@ public class ActivityEPConstants {
             + "/Disbursement Orders/Disbursement Orders Table";
     public static final String EST_DISB_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH
             + "/Estimated Disbursements/Estimated Disbursements Table";
-    public static final String RELEASE_FUNDS_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH 
+    public static final String RELEASE_FUNDS_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH
             + "/Release of Funds/Release of Funds Table";
     public static final String EXPENDITURES_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH
             + "/Expenditures/Expenditures Table";
-    
+
     public static final String RECIPIENT_ROLE_FM_PATH = "/Funding Flows OrgRole Selector/Recipient Org Role";
     public static final String RECIPIENT_ORG_FM_PATH = "/Funding Flows OrgRole Selector/Recipient Organization";
 
@@ -119,11 +128,19 @@ public class ActivityEPConstants {
     public static final String BUDGET_EXTRAS_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Budget Extras/Project Code";
 
     public static final String CONTACTS_PATH = "/Activity Form/Contacts";
-    
-    public static final String REGEX_PATTERN_EMAIL = 
+
+    public static final String REGEX_PATTERN_EMAIL =
             "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)";
-    public static final String REGEX_PATTERN_PHONE = 
+    public static final String REGEX_PATTERN_PHONE =
             "^\\+?\\d?(\\([\\d]{1,3}\\))?[\\s\\d\\-\\/]*\\d+[\\s\\d\\-\\/]*";
     public static final String REGEX_PATTERN_PHONE_EXTENSION = "^\\d{1,4}$";
-    
+
+    public static final List PUBLIC_ACTIVITY_FIELDS = new ArrayList<String>() {{
+        add("fundings~commitments~adjustment_type");
+        add("fundings~disbursements~adjustment_type");
+        add("fundings~expenditures~adjustment_type");
+        add("fundings~estimated_disbursements~adjustment_type");
+    }};
+
+
 }

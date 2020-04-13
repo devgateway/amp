@@ -1,7 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * 
@@ -11,7 +12,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 public class PreviewFundingTotal {
 
     @JsonProperty("transaction_type")
-    private Long transactionType;
+    private String transactionType;
 
     @JsonProperty("adjustment_type")
     private Long adjustmentType;
@@ -19,11 +20,11 @@ public class PreviewFundingTotal {
     @JsonSerialize(using = AmountSerializer.class)
     private Double amount;
 
-    public Long getTransactionType() {
+    public String getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(Long transactionType) {
+    public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
     }
 

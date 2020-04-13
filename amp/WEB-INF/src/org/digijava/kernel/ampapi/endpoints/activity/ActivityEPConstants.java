@@ -9,6 +9,8 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import java.util.ArrayList;
 import java.util.List;
 
+import  org.dgfoundation.amp.ar.ArConstants;
+
 /**
  * Activity Endpoint related constants
  *
@@ -56,6 +58,7 @@ public class ActivityEPConstants {
     public static final String DEPENDENCIES = "dependencies";
     public static final String TREE_COLLECTION_CONSTRAINT = "tree_collection";
     public static final String COMMON_POSSIBLE_VALUES = "common-possible-values";
+
 
     public static final String PREVIEW_CURRENCY_ID = "currency-id";
 
@@ -146,10 +149,17 @@ public class ActivityEPConstants {
     public static final String REGEX_PATTERN_PHONE_EXTENSION = "^\\d{1,4}$";
 
     public static final List PUBLIC_ACTIVITY_FIELDS = new ArrayList<String>() {{
-        add("fundings~commitments~adjustment_type");
-        add("fundings~disbursements~adjustment_type");
-        add("fundings~expenditures~adjustment_type");
-        add("fundings~estimated_disbursements~adjustment_type");
+        add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~" + ArConstants.COMMITMENT.toLowerCase()
+                + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
+        add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~" + ArConstants.DISBURSEMENT.toLowerCase()
+                + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
+        add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~" + ArConstants.EXPENDITURE.toLowerCase()
+                + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
+        add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~"
+                + FieldMap.underscorify(ArConstants.ESTIMATED_DISBURSEMENTS).toLowerCase()
+                + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
+        add(ActivityFieldsConstants.LOCATIONS.toLowerCase() + "~"
+                + ActivityFieldsConstants.Locations.LOCATION.toLowerCase());
     }};
 
 

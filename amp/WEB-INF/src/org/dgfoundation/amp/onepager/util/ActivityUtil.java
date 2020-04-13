@@ -234,6 +234,7 @@ public class ActivityUtil {
         //this is not a valid use case but a possible due to the flexibility of the configurations in FM mode
         if (af != null && Hibernate.isInitialized(af)) {
             updateFundingDetails(af);
+            updateFundingProjectResults(af);
         }
 
         if (ContentTranslationUtil.multilingualIsEnabled())
@@ -482,6 +483,14 @@ public class ActivityUtil {
                     }
                     afm.setAmpFunding(ampFunding);
                 }
+            }
+        }
+    }
+
+    private static void updateFundingProjectResults(Set<AmpFunding> fundings) {
+        for (AmpFunding funding : fundings) {
+            if (!Boolean.TRUE.equals(funding.getProjectResultsAvailable())) {
+                funding.setProjectResultsLink(null);
             }
         }
     }

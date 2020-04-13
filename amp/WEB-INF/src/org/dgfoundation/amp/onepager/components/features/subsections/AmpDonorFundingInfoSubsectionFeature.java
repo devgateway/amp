@@ -36,6 +36,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_JOINT_DECISION_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_MONITORING_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_PROBLEMS_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_RESULTS_AVAILABLE_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_RESULTS_LINK_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_SUSTAINABILITY_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_VULNERABLE_GROUP_LABEL;
+
 /**
  * @author mpostelnicu@dgateway.org since Nov 4, 2010
  */
@@ -108,7 +116,7 @@ implements AmpRequiredComponentContainer{
                 CategoryConstants.VULNERABLE_GROUP_LEVEL_NAME, true, false) {
             @Override
             protected void configureLabelText() {
-                setLabelText("Which vulnerable groups does this project/action work with?");
+                setLabelText(FUNDING_VULNERABLE_GROUP_LABEL);
             }
         };
         vulnerableGroup.getChoiceContainer().setRequired(false);
@@ -131,7 +139,7 @@ implements AmpRequiredComponentContainer{
                 "Project Results Available") {
             @Override
             public void configureLabelText() {
-                this.setLabelText("Are the project results available to the public?");
+                this.setLabelText(FUNDING_PROJECT_RESULTS_AVAILABLE_LABEL);
             }
         };
         add(projectResultsAvailable);
@@ -151,7 +159,7 @@ implements AmpRequiredComponentContainer{
                 new PropertyModel<String>(model, "projectResultsLink"), "Project Results Link") {
             @Override
             protected void configureLabelText() {
-                this.setLabelText("Please provide link if available");
+                this.setLabelText(FUNDING_PROJECT_RESULTS_LINK_LABEL);
             }
         };
         projectResultsLink.setOutputMarkupPlaceholderTag(true);
@@ -174,7 +182,7 @@ implements AmpRequiredComponentContainer{
                 "Project Joint Decision", false, false, false) {
             @Override
             public void configureLabelText() {
-                this.setLabelText("How is joint decision making made in this project/action?");
+                this.setLabelText(FUNDING_PROJECT_JOINT_DECISION_LABEL);
             }
         };
         add(projectJointDecision);
@@ -194,7 +202,7 @@ implements AmpRequiredComponentContainer{
                 "Project Monitoring", false, false, false) {
             @Override
             public void configureLabelText() {
-                this.setLabelText("How do you monitor and evaluate this project/action?");
+                this.setLabelText(FUNDING_PROJECT_MONITORING_LABEL);
             }
         };
         add(projectMonitoring);
@@ -214,7 +222,7 @@ implements AmpRequiredComponentContainer{
                 "Project Sustainability", false, false, false) {
             @Override
             public void configureLabelText() {
-                this.setLabelText("Sustainability: what happens when the project/action ends?");
+                this.setLabelText(FUNDING_PROJECT_SUSTAINABILITY_LABEL);
             }
         };
         add(projectSustainability);
@@ -234,7 +242,7 @@ implements AmpRequiredComponentContainer{
                 "Project Problems", false, false, false) {
             @Override
             public void configureLabelText() {
-                this.setLabelText("What problems were encountered in this project?");
+                this.setLabelText(FUNDING_PROJECT_PROBLEMS_LABEL);
             }
         };
         add(projectProblems);

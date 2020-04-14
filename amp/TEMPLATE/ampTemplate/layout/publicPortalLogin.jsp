@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
@@ -18,7 +18,7 @@
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/digest-auth.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/sha1.js"/>" ></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"></script>
-<link rel="stylesheet" href="tabs/css/bootstrap.css">
+<link rel="stylesheet" href="/TEMPLATE/ampTemplate/tabs/css/bootstrap.css">
 <digi:ref href="/TEMPLATE/ampTemplate/css_2/amp_public_portal_login.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript">
 var loginFailed = function(data, status) {
@@ -46,7 +46,7 @@ var loginFailed = function(data, status) {
 					<table width="480" border="0" cellspacing="0" cellpadding="0">
 						<tr>
 							<td width="50" style="vertical-align: middle;">
-								<a href="/" style="text-decoration: none"> 
+								<a href="/" style="text-decoration: none">
 									<img src="/aim/default/displayFlag.do" border="0" width="30px" height="20px"><br />
 								</a>
 							</td>
@@ -62,15 +62,15 @@ var loginFailed = function(data, status) {
 			</div>
 		</center>
           <div class="clear"></div>
-		 
-        <div id="loginbox">  
+
+        <div id="loginbox">
         	<div class="logintitle"><h2><digi:trn>Member Login</digi:trn></h2></div>
         	<form action="/aim/postLogin.do" id="loginForm" method="post"
 				onsubmit="ajaxLogin();return false;">
             	<p class="userfield">
 					<label><digi:trn>Username</digi:trn>:</label> <input
 						name="j_username" type="text" id="j_username"/>
-						
+
 				</p>
 				<p class="passfield">
 					<label><digi:trn>Password</digi:trn>:</label> <input name="j_password" type="password" id="j_password">
@@ -78,7 +78,7 @@ var loginFailed = function(data, status) {
 				<div id="result" style="display:none;">
 					<div id="loader" style="display:none;">
 						<img src='/TEMPLATE/ampTemplate/img_2/ajax-loader.gif'>
-					</div> 
+					</div>
 					<div class="error_text_login">
 						<img src='/TEMPLATE/ampTemplate/img_2/login_error.gif'> <span
 							id="invalid_user_pwd"><digi:trn>Invalid username or password</digi:trn>.</span>
@@ -115,10 +115,12 @@ var loginFailed = function(data, status) {
         <div>
 
      <div id="footer"></div>
-       </div></div>
-      
+       </div>
+
+	</div>
     </div>
+	<jsp:include page="broswerDetection.jsp" />
+
 	<digi:insert attribute="footer"/>
-	
 </body>
 </html>

@@ -61,3 +61,5 @@
       </c:if>
     </div> 
 </div>
+
+<jsp:include page="/TEMPLATE/ampTemplate/layout/broswerDetection.jsp"/>

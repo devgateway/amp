@@ -535,14 +535,14 @@ public class ImportExportUtil {
             HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
             HSSFSheet hssfSheet = workBook.getSheetAt(0);
             option.setDbSession(PersistenceManager.getRequestDBSession());
-            targetLanguage = hssfSheet.getRow(0).getCell(2).getStringCellValue();
+            targetLanguage = getStringCellValue(hssfSheet.getRow(0), 2);
 
             int physicalNumberOfRows = hssfSheet.getPhysicalNumberOfRows();
 
             for (int i = 1; i < physicalNumberOfRows; i++) {
                 Row hssfRow = hssfSheet.getRow(i);
                 hssfRow.getCell(COL_KEY).setCellType(HSSFCell.CELL_TYPE_STRING);
-                String key = hssfRow.getCell(COL_KEY).getStringCellValue();
+                String key = getStringCellValue(hssfRow, COL_KEY);
                 // We need to discard those keys that are not numbers or the whole process will fail when trying to make insert
                 // in table amp_etl_changelog(entity_name, entity_id).
                 try {
@@ -565,12 +565,13 @@ public class ImportExportUtil {
                 }
                 hssfRow.getCell(COL_ENGLISH_TEXT).setCellType(HSSFCell.CELL_TYPE_STRING);
                 String englishText = (hssfRow.getCell(COL_ENGLISH_TEXT) == null) ? ""
-                        : hssfRow.getCell(COL_ENGLISH_TEXT).getStringCellValue();
+                        : getStringCellValue(hssfRow, COL_ENGLISH_TEXT);
                 //for AMP-16681 when the cell content is #N/A on third column you are getting an erro if getStringCellValue is called
                 //so if its an error cell the target text is "" as if the cell would be empty
+
                 String targetText = (hssfRow.getCell(COL_TARGET_TEXT) == null
                         || hssfRow.getCell(COL_TARGET_TEXT).getCellType() == HSSFCell.CELL_TYPE_ERROR) ? ""
-                        : hssfRow.getCell(COL_TARGET_TEXT).getStringCellValue();
+                        : getStringCellValue(hssfRow, COL_TARGET_TEXT);
 
                 Date englishDate = null;
                 Date targetDate = null;
@@ -632,6 +633,11 @@ public class ImportExportUtil {
         return errors;
     }
 
+    private static String getStringCellValue(Row hssfRow, int colTargetText) {
+        hssfRow.getCell(colTargetText).setCellType(HSSFCell.CELL_TYPE_STRING);
+        return hssfRow.getCell(colTargetText).getStringCellValue();
+    }
+
     private static Future<ImportResult> getMessage(ImportExportOption option, Site site, String targetLanguage,
                                                    ExecutorService executorPool, String key, String targetText,
                                                    Timestamp dateCreated) {
@@ -648,9 +654,9 @@ public class ImportExportUtil {
         if (hssfRow.getCell(col) != null) {
             if (hssfRow.getCell(col).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
                 return hssfRow.getCell(col).getDateCellValue();
-            } else if (StringUtils.isNotEmpty(hssfRow.getCell(col).getStringCellValue())) {
+            } else if (StringUtils.isNotEmpty(getStringCellValue(hssfRow, col))) {
                 return LocalizationUtil.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.ENGLISH)
-                                                .parse(hssfRow.getCell(col).getStringCellValue());
+                                                .parse(getStringCellValue(hssfRow, col));
             }
         }
         return null;
@@ -671,7 +677,7 @@ public class ImportExportUtil {
             fsFileSystem = new POIFSFileSystem(inputStreame);
             HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
             HSSFSheet hssfSheet = workBook.getSheetAt(0);
-            String targetLanguage=hssfSheet.getRow(0).getCell(2).getStringCellValue();
+            String targetLanguage = getStringCellValue(hssfSheet.getRow(0), 2);
             if(DbUtil.isAvailableLanguage(targetLanguage)){
                 importedLanguages.add(targetLanguage);
             }

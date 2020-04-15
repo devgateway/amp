@@ -62,4 +62,4 @@
     </div> 
 </div>
 
-<jsp:include page="/TEMPLATE/ampTemplate/layout/broswerDetection.jsp"/>
+<jsp:include page="/TEMPLATE/ampTemplate/layout/browserDetection.jsp"/>

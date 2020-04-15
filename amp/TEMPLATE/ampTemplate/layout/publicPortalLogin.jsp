@@ -119,7 +119,7 @@ var loginFailed = function(data, status) {
 
 	</div>
     </div>
-	<jsp:include page="broswerDetection.jsp" />
+	<jsp:include page="browserDetection.jsp" />
 
 	<digi:insert attribute="footer"/>
 </body>

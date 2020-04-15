@@ -32,11 +32,8 @@
 		dataType: "script"
 		});
 		var browserInfo = get_browser();
-		var debug = '';
-		debug += 'browser.name = ' + browserInfo.name + '\n\r';
-		debug += 'browser.version = ' + browserInfo.version + '\n\r';
-		alert(debug);
-		if(browserInfo.name !== BROWSER_IE && browserInfo.name !== BROWSER_CHROME && browserInfo.name!=BROWSER_FIREFOX){
+		if(browserInfo.name !== BROWSER_IE && browserInfo.name !== BROWSER_CHROME
+		&& browserInfo.name !== BROWSER_FIREFOX && browserInfo.name!== BROWSER_EDGE ){
 			$('#browserIncompatibleModal').modal();
 		}else if(browserInfo.name === BROWSER_IE && browserInfo.version < 11){
 			$('#browserIncompatibleModal').modal();

@@ -63,15 +63,7 @@ function ajaxLogin() {
 							reportError("suspend");
 							break;
 						case 'noError':
-							if(serverResponse.generate_token && serverResponse.generate_token === true){
-								$('#generateToken').val(serverResponse.generate_token || "");
-								$('#callbackUrl').val(serverResponse.callback_url || "");
-							$('form#selectWorkspaceForm').submit();
-
-							}else{
-								location.href = '/index.do';	
-							}
-							
+							location.href = '/index.do';
 							break;
 						}
 					},
@@ -89,8 +81,7 @@ function ajaxLogin() {
 				$("#" + id).show();
 			};
 
-  			digestAuth.setCredentials($('#j_username').val(),$('#j_password').val());
-  			digestAuth.setTokenInformation(getParameterByName('generate-token'),getParameterByName('callback-url'));
+  			digestAuth.setCredentials($('#j_username').val().trim(),$('#j_password').val());
    			digestAuth.call('/aim/postLogin.do');
 	}
 
@@ -115,22 +106,13 @@ $.Class("pl.arrowgroup.DigestAuthentication", {
 		this.settings.username = username;
 		this.settings.password = password;
 	},
-	setTokenInformation: function(generateToken, callbackUrl){
-		this.settings.generateToken = generateToken;
-		this.settings.callbackUrl = callbackUrl;
-	},	
 	call : function(uri){
 		this.attempts = 0;
 		this.invokeCall(uri);
 	},
 	invokeCall: function(uri,authorizationHeader){
-		var tokenParameters={};
-		tokenParameters.generateToken = this.settings.generateToken;
-		tokenParameters.callbackUrl = this.settings.callbackUrl;
-
 		var digestAuth = this;
 		$.ajax({
-				data:tokenParameters,
 		        url: uri,
 		        type: this.HTTP_METHOD,
 		        beforeSend: function(request){
@@ -193,10 +175,3 @@ $.Class("pl.arrowgroup.HeaderParamsParser",{
 		return paramVal;
 	}
 });
-
-function getParameterByName(name) {
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}

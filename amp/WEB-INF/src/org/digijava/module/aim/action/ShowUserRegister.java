@@ -48,7 +48,7 @@ public class ShowUserRegister extends Action {
                 if (!FeaturesUtil.isVisibleModule("Login - User Management")
                         || !FeaturesUtil.isVisibleFeature("Enable New User Registration")) {
                     logger.error("UNAUTHORIZED ATTEMPT TO CREATE NEW USER.");
-                    return mapping.findForward(null);
+                    return mapping.findForward("index");
                 }
             }
             

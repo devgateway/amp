@@ -9,6 +9,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.ampapi.endpoints.filters.ApprovalStatusFilterListManager;
 import org.digijava.kernel.ampapi.endpoints.filters.FilterList;
@@ -25,63 +28,23 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterReportType;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 
 /**
- * Retrieve available filters.
- * 
- * @author vchihai@developmentgateway.org
+ * Filters Endpoint
+ *
+ * @author Viorel Chihai
  * 
  */
 @Path("filters")
+@Api("filters")
 public class FiltersEndpoint {
 
     public FiltersEndpoint() { }
 
-    /**
-     * Retrieve all filter definitions.
-     * </br>
-     * 
-     * <dl>
-     * Each filter definition holds information regarding:
-     * <dt><b>id</b><dd> - the id of the filter
-     * <dt><b>name</b><dd> - the name of the filter
-     * <dt><b>endpoint</b><dd> - the relative URL where the values should be fetched
-     * <dt><b>ui</b><dd> - whenever to display this filter in UI (widget)
-     * <dt><b>method</b><dd> - the used method for fetching the values (see endpoint attribute)
-     * <dt><b>columns</b><dd> - the visibility of the filters depends on the columns
-     * <dt><b>tab</b><dd> - under which tab in Filter Widget should be visible the filter
-     * <dt><b>fieldType</b><dd> - the type of the filter field. Used for building the Filter Widget
-     * Possible Values (TREE|OPTIONS|DATE)
-     * <dt><b>dataType</b><dd> - the type of the filter data. Used for building the Filter Widget
-     * Possible Values (TEXT|DATE)
-     * <dt><b>componentType</b><dd> - the AMP component where the filter can be visible
-     * Used for building the Filter Widget. Possible Values (ALL|DASHBOARD|REPORTS|GIS|TAB|GPI_REPORT)
-     * <dt><b>multiple</b><dd> - can be selected multiple values for the specific filter
-     * </dl></br></br>
-     *
-     * </br>
-     * <h3>Sample Output:</h3><pre>
-     * [
-     *   ...
-     *   {
-     *     "id": "type-of-assistance",
-     *     "name": "Type Of Assistance",
-     *     "endpoint": "/rest/filters/typeOfAssistance/",
-     *     "ui": true,
-     *     "method": "GET",
-     *     "columns": ["Type Of Assistance"],
-     *     "tab": "Financial",
-     *     "fieldType": "TREE",
-     *     "dataType": "TEXT",
-     *     "componentType": ["ALL"],
-     *     "multiple" : true
-     *   }
-     *   ....
-     * ]</pre>
-     *
-     * @return list of filter definitions
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public List<AvailableMethod> getAvailableFilters(@DefaultValue("D") @QueryParam("report-type") String reportType) {
+    @ApiOperation(value = "Retrieve available filters.")
+    public List<AvailableMethod> getAvailableFilters(
+            @ApiParam(value = "Report Type, D=donor, P=pledges", allowableValues = "D,P")
+            @DefaultValue("D") @QueryParam("report-type") String reportType) {
         return EndpointUtils.getAvailableFilterMethods(FiltersEndpoint.class.getName(), reportType);
     }
     
@@ -101,7 +64,7 @@ public class FiltersEndpoint {
      * If the filterId is an empty string, that level should removed form the tree.
      * <dt><b>tab</b><dd> - under which tab should be shown the filter tree
      * <dt><b>items</b><dd> - the name of the object from which the values should be fetched
-     * <dt><b>filtered</b><dd> - if the tree should be build dynamically. 
+     * <dt><b>filtered</b><dd> - if the tree should be built dynamically.
      * If it is false, the list of items should be taken as it is. 
      * </dl></br></br>
      * 
@@ -178,6 +141,9 @@ public class FiltersEndpoint {
     @Path("/organizations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "organizations", name = "Organizations")
+    @ApiOperation(value = "Retrieve the data needed for building the 'Organizations' filters.",
+            notes = "The response contains 2 objects - the list definitions and the values. \n"
+                    + "The filter widget should create a tree for each organization type.")
     @FilterDefinition(tab = EPConstants.TAB_ORGANIZATIONS)
     public FilterList getOrganizations() {
         return FiltersManager.getInstance().getOrganizationFilterList();
@@ -194,6 +160,9 @@ public class FiltersEndpoint {
     @Path("/programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "programs", name = "Programs")
+    @ApiOperation(value = "Retrieve the data needed for building the 'Programs' filters.",
+            notes = "The response contains 2 objects - the list definitions and the values. \n"
+                    + "The filter widget should create a tree for each program settings.")
     @FilterDefinition(tab = EPConstants.TAB_PROGRAMS)
     public FilterList getPrograms() {
         return FiltersManager.getInstance().getProgramFilterList();
@@ -211,6 +180,9 @@ public class FiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "sectors", name = "Sectors")
     @FilterDefinition(tab = EPConstants.TAB_SECTORS)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Sectors' filters.",
+            notes = "The response contains 2 objects - the list definitions and the values. \n"
+                    + "The filter widget should create a tree for each sector scheme.")
     public FilterList getSectors() {
         return FiltersManager.getInstance().getSectorFilterList();
     }
@@ -227,13 +199,16 @@ public class FiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "locations", name = "Locations")
     @FilterDefinition(tab = EPConstants.TAB_LOCATIONS)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Locations' filters.",
+            notes = "The response contains 2 objects - the list definitions and the values. \n"
+                    + "The filter widget should create a tree for each country.")
     public FilterList getLocations() {
         return FiltersManager.getInstance().getLocationFilterList();
     }
 
     /**
      * List the possible values of 'Approval Status' filter.
-     * 
+     *
      * @return filter definition and values of 'approval-status' filter
      */
     @GET
@@ -242,13 +217,16 @@ public class FiltersEndpoint {
     @ApiMethod(id = FiltersConstants.APPROVAL_STATUS, name = ColumnConstants.APPROVAL_STATUS)
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.APPROVAL_STATUS, 
                         visibilityCheck = "hasToShowActivityApprovalStatusFilter")
+    @ApiOperation(value = "Retrieve the data needed for building the 'Approval Status' filter.",
+            notes = "The response contains 2 objects - the list definition and the values. \n"
+                    + "The filter widget should create a tree for 'Approval Status' values.")
     public FilterList getActivityApprovalStatus() {
         return FiltersManager.getInstance().getApprovalStatusFilter();
     }
 
     /**
      * List the possible values of 'Type Of Assistance' filter.
-     * 
+     *
      * @return filter definition and values of 'type-of-assistance' filter.
      */
     @GET
@@ -256,13 +234,16 @@ public class FiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.TYPE_OF_ASSISTANCE, name = ColumnConstants.TYPE_OF_ASSISTANCE)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.TYPE_OF_ASSISTANCE)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Type of Assistance' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Type of Assistance' values.")
     public FilterList getTypeOfAssistance() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.TYPE_OF_ASSISTANCE);
     }
     
     /**
      * List the possible values of 'Mode of Payment' filter.
-     * 
+     *
      * @return filter definition and values of 'mode-of-payment' filter.
      */
     @GET
@@ -270,6 +251,9 @@ public class FiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.MODE_OF_PAYMENT, name = ColumnConstants.MODE_OF_PAYMENT)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.MODE_OF_PAYMENT)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Mode of Payment' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Mode of Payment' values.")
     public FilterList getModeOfPayment() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.MODE_OF_PAYMENT);
     }
@@ -283,6 +267,9 @@ public class FiltersEndpoint {
     @Path("/activityStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.STATUS, name = FiltersConstants.ACTIVITY_STATUS_NAME)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Activity Status' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Activity Status' values.")
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.STATUS)
     public FilterList getActivityStatus() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.STATUS);
@@ -297,6 +284,9 @@ public class FiltersEndpoint {
     @Path("/activityBudget/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.ACTIVITY_BUDGET, name = FiltersConstants.ACTIVITY_BUDGET_NAME)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Activity Budget' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Activity Budget' values.")
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.ACTIVITY_BUDGET)
     public FilterList getActivityBudget() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.ACTIVITY_BUDGET);
@@ -311,6 +301,9 @@ public class FiltersEndpoint {
     @Path("/fundingStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.FUNDING_STATUS)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Funding Status' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Funding Status' values.")
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.FUNDING_STATUS)
     public FilterList getFundingStatus() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.FUNDING_STATUS);
@@ -325,6 +318,9 @@ public class FiltersEndpoint {
     @Path("/expenditureClass/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.EXPENDITURE_CLASS, name = ColumnConstants.EXPENDITURE_CLASS)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Expenditure Class' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Expenditure Class' values.")
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.EXPENDITURE_CLASS)
     public FilterList getExpenditureClass() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.EXPENDITURE_CLASS);
@@ -339,6 +335,9 @@ public class FiltersEndpoint {
     @Path("/concessionalityLevel/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.CONCESSIONALITY_LEVEL, name = ColumnConstants.CONCESSIONALITY_LEVEL)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Concessionality Level' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Concessionality Level' values.")
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.CONCESSIONALITY_LEVEL)
     public FilterList getConcessionalityLevel() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.CONCESSIONALITY_LEVEL);
@@ -354,6 +353,9 @@ public class FiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.PERFORMANCE_ALERT_LEVEL,
             columns = ColumnConstants.PERFORMANCE_ALERT_LEVEL, name = ColumnConstants.PERFORMANCE_ALERT_LEVEL)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Performance Alert Level' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Performance Alert Level' values.")
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.PERFORMANCE_ALERT_LEVEL)
     public FilterList getPerformanceAlertLevel() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PERFORMANCE_ALERT_LEVEL);
@@ -368,6 +370,9 @@ public class FiltersEndpoint {
     @Path("/financingInstruments/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.FINANCING_INSTRUMENT, name = ColumnConstants.FINANCING_INSTRUMENT)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Financing Instrument' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Financing Instrument' values.")
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.FINANCING_INSTRUMENT)
     public FilterList getFinancingInstruments() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.FINANCING_INSTRUMENT);
@@ -382,6 +387,9 @@ public class FiltersEndpoint {
     @Path("/humanitarianAid/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.HUMANITARIAN_AID, name = ColumnConstants.HUMANITARIAN_AID)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Humanitarian Aid' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Humanitarian Aid' values.")
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.HUMANITARIAN_AID)
     public FilterList getHumanitarianAid() {
         return FiltersManager.getInstance().getBooleanFilter(FiltersConstants.HUMANITARIAN_AID);
@@ -397,6 +405,9 @@ public class FiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.DISASTER_RESPONSE_MARKER, 
                     name = ColumnConstants.DISASTER_RESPONSE_MARKER)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Disaster Response Marker' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Disaster Response Marker' values.")
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.DISASTER_RESPONSE_MARKER)
     public FilterList getDisasterResponse() {
         return FiltersManager.getInstance().getBooleanFilter(FiltersConstants.DISASTER_RESPONSE_MARKER);
@@ -411,6 +422,9 @@ public class FiltersEndpoint {
     @Path("/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.TEAM, name = "Workspaces")
+    @ApiOperation(value = "Retrieve the data needed for building the 'Workspaces' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Workspaces' values.")
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.TEAM, 
                         visibilityCheck = "hasToShowWorkspaceFilter")
     public FilterList getWorkspaces() {
@@ -426,20 +440,23 @@ public class FiltersEndpoint {
     @Path("/computedYear")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.COMPUTED_YEAR, name = ColumnConstants.COMPUTED_YEAR)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Computed Year' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Computed Year' values.")
     @FilterDefinition(tab = EPConstants.TAB_OTHER,  columns = ColumnConstants.COMPUTED_YEAR,
                          fieldType = FilterFieldType.OPTIONS, multiple = false)
     public FilterList getComputedYear() {
         return FiltersManager.getInstance().getComputedYearFilter();
     }
-
+    
     /**
      * List the values of startYear and endYear of 'Date' filter.
-     * 
+     *
      * The startYear and endYear values are taken from the items.values object.
-     * 
+     *
      * </br>
      * <h3>Sample Output:</h3><pre>
-     * "listDefinitions" : 
+     * "listDefinitions" :
      *  [
      *    {
      *     "name": "Date",
@@ -448,7 +465,7 @@ public class FiltersEndpoint {
      *     "items": "values",
      *     "filtered": true
      *    }
-     *  ], 
+     *  ],
      * "items" : {
      *   "values": [
      *      {
@@ -464,184 +481,137 @@ public class FiltersEndpoint {
      *   ]
      *  }
      * </pre>
-     * 
+     *
      * @return filter definition and year values (star and end) of 'date' filter.
      */
     @GET
     @Path("/date/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "date", name = "Date")
+    @ApiOperation(value = "Retrieve the data needed for building the 'Date' filter.",
+            notes = "This endpoint is used for fetching information about 'Date' filter. "
+                    + "The items attribute contains information about the startYear and the endYear.")
     @FilterDefinition(tab = EPConstants.TAB_OTHER, dataType = FilterDataType.DATE)
     public FilterList getDates() {
         return FiltersManager.getInstance().getDateFilter();
     }
     
-    /**
-     * Generic endpoint for 'Proposed Start Date' filter.
-     * 
-     * Since the date filters doesn't have possible values, this endpoint return an empty list.
-     * 
-     * @return empty list
-     */
     @GET
     @Path("/proposedStartDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.PROPOSED_START_DATE, name = ColumnConstants.PROPOSED_START_DATE)
+    @ApiOperation(value = "Generic endpoint for 'Proposed Start Date' filter.", hidden = true,
+            notes = "Since the date filters doesn't have possible values, this endpoint returns an empty list.")
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_START_DATE,
                         fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     public FilterList getProposedStartDate() {
         return new FilterList();
     }
     
-    /**
-     * Generic endpoint for 'Actual Start Date' filter.
-     * 
-     * Since the date filters doesn't have possible values, this endpoint return an empty list.
-     * 
-     * @return empty list
-     */
     @GET
     @Path("/actualStartDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.ACTUAL_START_DATE, name = ColumnConstants.ACTUAL_START_DATE)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_START_DATE,
                         fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    @ApiOperation(value = "Generic endpoint for 'Actual Start Date' filter.", hidden = true,
+            notes = "Since the date filters doesn't have possible values, this endpoint returns an empty list.")
     public FilterList getActualStartDate() {
         return new FilterList();
     }
     
-    /**
-     * Generic endpoint for 'Actual Approval Date' filter.
-     * 
-     * Since the date filters doesn't have possible values, this endpoint return an empty list.
-     * 
-     * @return empty list
-     */
     @GET
     @Path("/actualApprovalDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.ACTUAL_APPROVAL_DATE, name = ColumnConstants.ACTUAL_APPROVAL_DATE)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_APPROVAL_DATE,
                         fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    @ApiOperation(value = "Generic endpoint for 'Actual Approval Date' filter.", hidden = true,
+            notes = "Since the date filters doesn't have possible values, this endpoint returns an empty list.")
     public FilterList getActualApprovalDate() {
         return new FilterList();
     }
     
-    /**
-     * Generic endpoint for 'Actual Completion Date' filter.
-     * 
-     * Since the date filters doesn't have possible values, this endpoint return an empty list.
-     * 
-     * @return empty list
-     */
     @GET
     @Path("/actualCompletionDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.ACTUAL_COMPLETION_DATE, name = ColumnConstants.ACTUAL_COMPLETION_DATE)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_COMPLETION_DATE,
                         fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    @ApiOperation(value = "Generic endpoint for 'Actual Completion Date' filter.", hidden = true,
+            notes = "Since the date filters doesn't have possible values, this endpoint returns an empty list.")
     public FilterList getActualCompletionDate() {
         return new FilterList();
     }
     
-    /**
-     * Generic endpoint for 'Effective Funding Date' filter.
-     * 
-     * Since the date filters doesn't have possible values, this endpoint return an empty list.
-     * 
-     * @return empty list
-     */
     @GET
     @Path("/effectiveFundingDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.EFFECTIVE_FUNDING_DATE, name = ColumnConstants.EFFECTIVE_FUNDING_DATE)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.EFFECTIVE_FUNDING_DATE,
                         fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    @ApiOperation(value = "Generic endpoint for 'Effective Funding Date' filter.", hidden = true,
+            notes = "Since the date filters doesn't have possible values, this endpoint returns an empty list.")
     public FilterList getEffectiveFundingDate() {
         return new FilterList();
     }
     
-    /**
-     * Generic endpoint for 'Final Date for Contracting' filter.
-     * 
-     * Since the date filters doesn't have possible values, this endpoint return an empty list.
-     * 
-     * @return empty list
-     */
     @GET
     @Path("/finalDateContracting/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING,
                         fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    @ApiOperation(value = "Generic endpoint for 'Final Date for Contracting' filter.", hidden = true,
+            notes = "Since the date filters doesn't have possible values, this endpoint returns an empty list.")
     public FilterList getFinalDateForContracting() {
         return new FilterList();
     }
 
-    /**
-     * Generic endpoint for 'Funding Closing Date' filter.
-     * 
-     * Since the date filters doesn't have possible values, this endpoint return an empty list.
-     * 
-     * @return empty list
-     */
     @GET
     @Path("/fundingClosingDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.FUNDING_CLOSING_DATE, name = ColumnConstants.FUNDING_CLOSING_DATE)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.FUNDING_CLOSING_DATE,
                         fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    @ApiOperation(value = "Generic endpoint for 'Funding Closing Date' filter.", hidden = true,
+            notes = "Since the date filters doesn't have possible values, this endpoint returns an empty list.")
     public FilterList getFundingClosingDate() {
         return new FilterList();
     }
 
-    /**
-     * Generic endpoint for 'Issue Date' filter.
-     * 
-     * Since the date filters doesn't have possible values, this endpoint return an empty list.
-     * 
-     * @return empty list
-     */
     @GET
     @Path("/issueDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.ISSUE_DATE, name = ColumnConstants.ISSUE_DATE)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ISSUE_DATE,
                         fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    @ApiOperation(value = "Generic endpoint for 'Issue Date' filter.", hidden = true,
+            notes = "Since the date filters doesn't have possible values, this endpoint returns an empty list.")
     public FilterList getIssueDate() {
         return new FilterList();
     }
     
-    /**
-     * Generic endpoint for 'Proposed Approval Date' filter.
-     * 
-     * Since the date filters doesn't have possible values, this endpoint return an empty list.
-     * 
-     * @return empty list
-     */
     @GET
     @Path("/proposedApprovalDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.PROPOSED_APPROVAL_DATE, name = ColumnConstants.PROPOSED_APPROVAL_DATE)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_APPROVAL_DATE,
                         fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    @ApiOperation(value = "Generic endpoint for 'Proposed Approval Date' filter.", hidden = true,
+            notes = "Since the date filters doesn't have possible values, this endpoint returns an empty list.")
     public FilterList getProposedApprovalDate() {
         return new FilterList();
     }  
     
-    /**
-     * Generic endpoint for 'Proposed Compledtion Date' filter.
-     * 
-     * Since the date filters doesn't have possible values, this endpoint return an empty list.
-     * 
-     * @return empty list
-     */
     @GET
     @Path("/proposedCompletionDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.PROPOSED_COMPLETION_DATE, name = ColumnConstants.PROPOSED_COMPLETION_DATE)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_COMPLETION_DATE,
                         fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
+    @ApiOperation(value = "Generic endpoint for 'Proposed Completion Date' filter.", hidden = true,
+            notes = "Since the date filters doesn't have possible values, this endpoint returns an empty list.")
     public FilterList getProposedCompletionDate() {
         return new FilterList();
     }
@@ -657,6 +627,9 @@ public class FiltersEndpoint {
     @Path("/pledgesDonors")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "pledges-donors", name = "Pledges Donors")
+    @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Donors' filter.",
+            notes = "The response contains 2 objects - the list definitions and the values. \n"
+                    + "The filter widget should create a tree for 'Pledges Donors' values.")
     @FilterDefinition(tab = EPConstants.TAB_ORGANIZATIONS, reportType = FilterReportType.PLEDGE)
     public FilterList getPledgesDonros() {
         return FiltersManager.getInstance().getPledgesDonorFilterList();
@@ -673,6 +646,9 @@ public class FiltersEndpoint {
     @Path("/pledgesPrograms")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "pledges-programs", name = "Pledges Programs")
+    @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Programs' filter.",
+            notes = "The response contains 2 objects - the list definitions and the values. \n"
+                    + "The filter widget should create a tree for each pledge program settings.")
     @FilterDefinition(tab = EPConstants.TAB_PROGRAMS, reportType = FilterReportType.PLEDGE)
     public FilterList getPledgesPrograms() {
         return FiltersManager.getInstance().getPledgesProgramFilterList();
@@ -689,6 +665,9 @@ public class FiltersEndpoint {
     @Path("/pledgesSectors")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "pledges-sectors", name = "Pledges Sectors")
+    @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Sectors' filter.",
+            notes = "The response contains 2 objects - the list definitions and the values. \n"
+                    + "The filter widget should create a tree for each pledge sector scheme.")
     @FilterDefinition(tab = EPConstants.TAB_SECTORS, reportType = FilterReportType.PLEDGE)
     public FilterList getPledgesSectors() {
         return FiltersManager.getInstance().getPledgesSectorFilterList();
@@ -706,6 +685,9 @@ public class FiltersEndpoint {
     @Path("/pledgesLocations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "pledges-locations", name = "Pledges Locations")
+    @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Locations' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for each country.")
     @FilterDefinition(tab = EPConstants.TAB_LOCATIONS, reportType = FilterReportType.PLEDGE)
     public FilterList getPledgesLocations() {
         return FiltersManager.getInstance().getPledgesLocationFilterList();
@@ -720,6 +702,9 @@ public class FiltersEndpoint {
     @Path("/pledgesStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.STATUS, name = ColumnConstants.PLEDGE_STATUS)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Status' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Pledges Status' values.")
     @FilterDefinition(tab = EPConstants.TAB_PLEDGE, columns = ColumnConstants.PLEDGE_STATUS, 
                         componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
     public FilterList getPledgesStatus() {
@@ -735,6 +720,9 @@ public class FiltersEndpoint {
     @Path("/pledgesAidOfModality/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.PLEDGES_AID_MODALITY, name = ColumnConstants.PLEDGES_AID_MODALITY)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Aid of Modality' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Pledges Aid of Modality' values.")
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.PLEDGES_AID_MODALITY,
                         componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
     public FilterList getPledgesAidOfModality() {
@@ -750,19 +738,15 @@ public class FiltersEndpoint {
     @Path("/pledgesTypeOfAssistance/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE, name = ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Type of Assistance' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Pledges Type of Assistance' values.")
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE,
                         componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
     public FilterList getPledgesTypeOfAssistance() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE);
     }
     
-    /**
-     * Generic endpoint for 'Pledges Detail Start Date' filter.
-     * 
-     * Since the date filters doesn't have possible values, this endpoint return an empty list.
-     * 
-     * @return empty list
-     */
     @GET
     @Path("/pledgesDetailStartDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -770,17 +754,12 @@ public class FiltersEndpoint {
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PLEDGES_DETAIL_START_DATE,
                         fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
                         componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
+    @ApiOperation(value = "Generic endpoint for 'Pledges Detail Start Date' filter.", hidden = true,
+            notes = "Since the date filters doesn't have possible values, this endpoint returns an empty list.")
     public FilterList getPledgesDetailStartDate() {
         return new FilterList();
     }
     
-    /**
-     * Generic endpoint for 'Pledges Detail End Date' filter.
-     * 
-     * Since the date filters doesn't have possible values, this endpoint return an empty list.
-     * 
-     * @return empty list
-     */
     @GET
     @Path("/pledgesDetailEndDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -788,6 +767,8 @@ public class FiltersEndpoint {
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PLEDGES_DETAIL_END_DATE,
                         fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
                         componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
+    @ApiOperation(value = "Generic endpoint for 'Pledges Detail End Date' filter.", hidden = true,
+            notes = "Since the date filters doesn't have possible values, this endpoint returns an empty list.")
     public FilterList getPledgesDetailEndDate() {
         return new FilterList();
     }
@@ -801,6 +782,9 @@ public class FiltersEndpoint {
     @Path("/boundaries")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "boundaries", name = "Boundaries")
+    @ApiOperation(value = "Retrieve the data needed for building the 'Boundaries' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Boundaries' values.")
     @FilterDefinition(ui = false, tab = EPConstants.TAB_LOCATIONS)
     public List<String> getBoundaries() {
         return QueryUtil.getImplementationLocationsInUse();

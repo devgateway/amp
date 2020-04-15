@@ -11,7 +11,7 @@
 				</div>
 				<div class="modal-body">
 					<br/>
-					<p><digi:trn>You are trying to access amp with a non supported browser version</digi:trn>.</p>
+					<p><digi:trn>You are trying to access AMP with a non supported browser version</digi:trn>.</p>
 					<p><digi:trn>AMP currently supports Internet Explorer 11, Microsoft Edge, Google Chrome and Firefox</digi:trn></p>
 					<br/>
 				</div>
@@ -31,14 +31,14 @@
 		url: "/repository/aim/view/scripts/browserDetection/browser.js",
 		dataType: "script"
 		});
-		var e = browserDetection.init();
+		var browserInfo = get_browser();
 		var debug = '';
-		debug += 'browser.name = ' + e.browser.name + '\n\r';
-		debug += 'browser.version = ' + e.browser.version + '\n\r';
+		debug += 'browser.name = ' + browserInfo.name + '\n\r';
+		debug += 'browser.version = ' + browserInfo.version + '\n\r';
 		alert(debug);
-		if(e.browser.name!= BROWSER_IE && e.browser.name!=BROWSER_CHROME && e.browser.name!=BROWSER_FIREFOX){
+		if(browserInfo.name !== BROWSER_IE && browserInfo.name !== BROWSER_CHROME && browserInfo.name!=BROWSER_FIREFOX){
 			$('#browserIncompatibleModal').modal();
-		}else if(e.browser.name!= BROWSER_IE && e.browser.version < 11){
+		}else if(browserInfo.name === BROWSER_IE && browserInfo.version < 11){
 			$('#browserIncompatibleModal').modal();
 		}
 	}

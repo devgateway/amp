@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.MachineTranslation" table="machine_translation">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">machine_translation_seq</param>
+			</generator>
+		</id>
+		<property access="field" name="sourceLanguage" column="src_lang" type="java.lang.String" length="2" not-null="true" unique-key="mt_uniq" />
+		<property access="field" name="targetLanguage" column="dst_lang" type="java.lang.String" length="2" not-null="true" unique-key="mt_uniq" />
+		<property access="field" name="text" type="java.lang.String" unique-key="mt_uniq">
+			<column name="src_text" sql-type="text" not-null="true" />
+		</property>
+		<property access="field" name="translatedText" type="java.lang.String">
+			<column name="dst_text" sql-type="text" not-null="true" />
+		</property>
+	</class>
+</hibernate-mapping>

@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -541,10 +542,17 @@ public class PersistenceManager {
      * @param runnable the runnable to execute with open session in view context
      */
     public static void inTransaction(Runnable runnable) {
+        supplyInTransaction(() -> {
+            runnable.run();
+            return null;
+        });
+    }
+
+    public static <T> T supplyInTransaction(Supplier<T> supplier) {
         boolean prevManagedFlag = CURRENT_SESSION_IS_MANAGED.get();
         try {
             CURRENT_SESSION_IS_MANAGED.set(true);
-            runnable.run();
+            return supplier.get();
         } catch (Throwable e) {
             PersistenceManager.rollbackCurrentSessionTx();
             throw e;

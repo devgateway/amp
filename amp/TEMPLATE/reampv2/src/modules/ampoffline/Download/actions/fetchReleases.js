@@ -1,21 +1,21 @@
-import {fetchFilesSuccess, fetchFilesPending, fetchFilesError} from '../actions/startupAction';
+import {fetchReleasesSuccess, fetchReleasesPending, fetchReleasesError} from '../actions/startupAction';
 import {AMP_OFFLINE_INSTALLERS} from '../constants/Constants'
 
-function fetchFiles() {
+function fetchReleases() {
     return dispatch => {
-        dispatch(fetchFilesPending());
+        dispatch(fetchReleasesPending());
         fetch(AMP_OFFLINE_INSTALLERS)
             .then(res => res.json())
             .then(res => {
                 if (res.error) {
                     throw(res.error);
                 }
-                dispatch(fetchFilesSuccess(res));
+                dispatch(fetchReleasesSuccess(res));
                 return res;
             })
             .catch(error => {
-                dispatch(fetchFilesError(error));
+                dispatch(fetchReleasesError(error));
             })
     }
 }
-export default fetchFiles;
+export default fetchReleases;

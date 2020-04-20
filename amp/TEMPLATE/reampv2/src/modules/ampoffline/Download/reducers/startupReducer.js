@@ -1,26 +1,25 @@
-import {FETCH_FILES_PENDING, FETCH_FILES_SUCCESS, FETCH_FILES_ERROR} from '../actions/startupAction';
+import {FETCH_RELEASES_PENDING, FETCH_RELEASES_SUCCESS, FETCH_RELEASES_ERROR} from '../actions/startupAction';
 
 const initialState = {
     pending: false,
-    files: [],
+    releases: [],
     error: null
 }
 
 export default function startupReducer(state = initialState, action) {
     switch(action.type) {
-        case FETCH_FILES_PENDING:
+        case FETCH_RELEASES_PENDING:
             return {
                 ...state,
                 pending: true
             }
-        case FETCH_FILES_SUCCESS:
-            debugger;
+        case FETCH_RELEASES_SUCCESS:
             return {
                 ...state,
                 pending: false,
-                files: action.payload
+                releases: action.payload
             }
-        case FETCH_FILES_ERROR:
+        case FETCH_RELEASES_ERROR:
             return {
                 ...state,
                 pending: false,
@@ -31,6 +30,6 @@ export default function startupReducer(state = initialState, action) {
     }
 }
 
-export const getFiles = state => state.files;
-export const getFilesPending = state => state.pending;
-export const getFilesError = state => state.error;
+export const getReleases = state => state.releases;
+export const getReleasesPending = state => state.pending;
+export const getReleasesError = state => state.error;

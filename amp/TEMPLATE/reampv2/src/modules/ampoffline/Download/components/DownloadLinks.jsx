@@ -2,8 +2,8 @@
 import React, {Component} from "react";
 import platform from "platform";
 //import {loadTranslations} from "amp/modules/translate";
-import {getFiles, getFilesError, getFilesPending} from '../reducers/startupReducer';
-import fetchFilesAction from '../actions/fetchFiles';
+import {getReleases, getReleasesError, getReleasesPending} from '../reducers/startupReducer';
+import fetchReleases from '../actions/fetchReleases';
 import {
     AMP_OFFLINE_INSTALLERS, DEBIAN_LINUX, LINUX, MAC, MACINTOSH, OS_X, REDHAT_LINUX, WINDOWS
 } from '../constants/Constants';
@@ -27,9 +27,8 @@ class DownloadLinks extends Component {
 
 
     componentDidMount() {
-        const {fetchFiles} = this.props;
-
-        fetchFiles();
+        const {fetchReleases} = this.props;
+        fetchReleases();
     }
 
     shouldComponentRender() {
@@ -39,9 +38,10 @@ class DownloadLinks extends Component {
 
     _buildLinksTable() {
         const links = [];
-        if (this.props.files) {
-            this.props.files.sort((i, j) => i.os > j.os).map(i => {
-                return links.push(<a href={`${AMP_OFFLINE_INSTALLERS}/${i.id}`}>{this._getInstallerName(i.os, i.arch)}</a>);
+        if (this.props.releases) {
+            this.props.releases.sort((i, j) => i.os > j.os).map(i => {
+                return links.push(<a
+                    href={`${AMP_OFFLINE_INSTALLERS}/${i.id}`}>{this._getInstallerName(i.os, i.arch)}</a>);
             });
             return (<ul>
                 {links.map((l, j) => (<li key={j}>{l}</li>))}
@@ -86,7 +86,7 @@ class DownloadLinks extends Component {
             return [];
         }
         debugger;
-        const installer = this.props.files.filter(i => (osNames.filter(os => os === i.os).length > 0 && i.arch === arch.toString()));
+        const installer = this.props.releases.filter(i => (osNames.filter(os => os === i.os).length > 0 && i.arch === arch.toString()));
         const links = installer.map(i => {
             const installerName = this._getInstallerName(i.os, i.arch);
             return (<div key={i.id} className="link"><a
@@ -95,6 +95,7 @@ class DownloadLinks extends Component {
         });
         const message = this.translations['amp.offline:best-version-message'];
         return (
+            links.length > 0 &&
             <div className="alert alert-info" role="alert"><span className="info-text">{message}</span>{links}</div>);
     }
 
@@ -118,11 +119,11 @@ class DownloadLinks extends Component {
 }
 
 const mapStateToProps = state => ({
-    error: getFilesError(state.startupReducer),
-    files: getFiles(state.startupReducer),
-    pending: getFilesPending(state.startupReducer)
+    error: getReleasesError(state.startupReducer),
+    releases: getReleases(state.startupReducer),
+    pending: getReleasesPending(state.startupReducer)
 });
-const mapDispatchToProps = dispatch => bindActionCreators({fetchFiles: fetchFilesAction}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({fetchReleases: fetchReleases}, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(DownloadLinks);
 /*);
 DownloadLinks.translations = {

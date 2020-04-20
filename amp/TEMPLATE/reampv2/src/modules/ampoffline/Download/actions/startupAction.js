@@ -1,33 +1,24 @@
-export const FETCH_FILES_PENDING = 'FETCH_FILES_PENDING';
-export const FETCH_FILES_SUCCESS = 'FETCH_FILES_SUCCESS';
-export const FETCH_FILES_ERROR = 'FETCH_FILES_ERROR';
+export const FETCH_RELEASES_PENDING = 'FETCH_RELEASES_PENDING';
+export const FETCH_RELEASES_SUCCESS = 'FETCH_RELEASES_SUCCESS';
+export const FETCH_RELEASES_ERROR = 'FETCH_RELEASES_ERROR';
 
-export const startupAction = () => dispatch => {
-    debugger;
-    dispatch({
-        type: 'SIMPLE_ACTION',
-        payload: 'result_of_simple_action'
-    })
-}
-
-export function fetchFilesPending() {
-    debugger;
+export function fetchReleasesPending() {
     return {
-        type: FETCH_FILES_PENDING
+        type: FETCH_RELEASES_PENDING
     }
 }
 
-export function fetchFilesSuccess(files) {
+export function fetchReleasesSuccess(releases) {
     return {
-        type: FETCH_FILES_SUCCESS,
-        payload: files
+        type: FETCH_RELEASES_SUCCESS,
+        payload: releases
     }
 
 }
 
-export function fetchFilesError(error) {
+export function fetchReleasesError(error) {
     return {
-        type: FETCH_FILES_ERROR,
+        type: FETCH_RELEASES_ERROR,
         error: error
     }
 };

@@ -13,9 +13,7 @@ export function fetchReleasesSuccess(releases) {
         type: FETCH_RELEASES_SUCCESS,
         payload: releases
     }
-
 }
-
 export function fetchReleasesError(error) {
     return {
         type: FETCH_RELEASES_ERROR,

@@ -1,7 +1,5 @@
-//import * as AMP from "amp/architecture";
 import React, {Component} from "react";
 import platform from "platform";
-//import {loadTranslations} from "amp/modules/translate";
 import {getReleases, getReleasesError, getReleasesPending} from '../reducers/startupReducer';
 import fetchReleases from '../actions/fetchReleases';
 import {
@@ -16,12 +14,7 @@ class DownloadLinks extends Component {
     constructor(props) {
         super(props);
         this.shouldComponentRender = this.shouldComponentRender.bind(this);
-        this.translations = {
-            "amp.offline:download": "Download AMP Offline",
-            "amp.offline:all-versions": "All installer versions",
-            "amp.offline:best-version-message": "We have automatically detected which version of the application meets your operating system requirements. Other versions are available below.",
-            "amp.offline:bits": "bits"
-        }
+        const {translations} = props.translationsReducer;
 
     }
 
@@ -85,7 +78,6 @@ class DownloadLinks extends Component {
         } else {
             return [];
         }
-        debugger;
         const installer = this.props.releases.filter(i => (osNames.filter(os => os === i.os).length > 0 && i.arch === arch.toString()));
         const links = installer.map(i => {
             const installerName = this._getInstallerName(i.os, i.arch);
@@ -125,14 +117,5 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => bindActionCreators({fetchReleases: fetchReleases}, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(DownloadLinks);
-/*);
-DownloadLinks.translations = {
-    "amp.offline:download": "Download AMP Offline",
-    "amp.offline:all-versions": "All installer versions",
-    "amp.offline:best-version-message": "We have automatically detected which version of the application meets your operating system requirements. Other versions are available below.",
-    "amp.offline:bits": "bits"
-};
 
-module.exports = DownloadLinks;
-*/
 

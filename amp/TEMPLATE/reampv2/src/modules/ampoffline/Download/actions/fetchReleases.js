@@ -15,7 +15,7 @@ function fetchReleases() {
             })
             .catch(error => {
                 dispatch(fetchReleasesError(error));
-            })
+            });
     }
 }
 export default fetchReleases;

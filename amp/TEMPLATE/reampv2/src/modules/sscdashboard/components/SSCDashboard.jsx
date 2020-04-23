@@ -1,17 +1,14 @@
 import React, {Component} from "react";
-import * as StartupActions from '../actions/startupAction';
+  // import * as StartupActions from './actions/startupAction';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import Sidebar from './sidebar';
-import MapContainer from './map-content';
+import Sidebar from './layout/sidebar/sidebar';
+import MapContainer from './layout/map/map-content';
 
 class SSCDashboard extends Component {
 
     constructor(props) {
         super(props);
-    }
-    componentDidMount() {
-        this.props.startupAction();
     }
 
     render() {
@@ -26,7 +23,4 @@ class SSCDashboard extends Component {
     }
 }
 
-const mapStateToProps = state => ({...state});
-
-const mapDispatchToProps = dispatch => bindActionCreators(Object.assign({}, StartupActions), dispatch);
-export default connect(mapStateToProps, mapDispatchToProps)(SSCDashboard);
+export default SSCDashboard;

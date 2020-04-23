@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import * as StartupActions from '../actions/startupAction';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 

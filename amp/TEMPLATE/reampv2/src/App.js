@@ -1,4 +1,4 @@
-import React, {Suspense, lazy, useState} from 'react';
+  import React, {Suspense, lazy, useState} from 'react';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import './App.css';
 const SSCDashboardApp = lazy(() => import('./modules/sscdashboard'));

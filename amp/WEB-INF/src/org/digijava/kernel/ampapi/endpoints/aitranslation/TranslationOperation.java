@@ -9,17 +9,17 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Octavian Ciubotaru
  */
 @ApiModel("Represents a long running operation")
-public class TranslationOperation {
+public final class TranslationOperation {
 
     @ApiModelProperty("If the value is false, it means that the operation is still in progress. If value is true,"
             + " then either error or result value is present.")
-    private boolean done;
+    private final boolean done;
 
     @ApiModelProperty("The error result of the operation in case of failure or cancellation.")
-    private String error;
+    private final String error;
 
     @ApiModelProperty("The normal response of the operation in case of success.")
-    private Map<String, String> result;
+    private final Map<String, String> result;
 
     public static TranslationOperation inProgress() {
         return new TranslationOperation(false, null, null);

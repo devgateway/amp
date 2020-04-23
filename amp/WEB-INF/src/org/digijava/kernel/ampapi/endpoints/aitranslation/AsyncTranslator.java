@@ -26,12 +26,13 @@ import org.digijava.module.aim.util.FeaturesUtil;
 public class AsyncTranslator {
 
     private static final int MAX_CACHE_SIZE = 100;
+    private static final int EXPIRE_AFTER_MIN = 10;
 
     private CachedMachineTranslationService service =
             new CachedMachineTranslationService(new GoogleMachineTranslationService());
 
     private Cache<String, Future<Map<String, String>>> cache = CacheBuilder.newBuilder()
-            .expireAfterWrite(10, TimeUnit.MINUTES)
+            .expireAfterWrite(EXPIRE_AFTER_MIN, TimeUnit.MINUTES)
             .build();
 
     /**

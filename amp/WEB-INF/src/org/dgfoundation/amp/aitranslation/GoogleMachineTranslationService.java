@@ -43,6 +43,7 @@ import com.google.cloud.translate.v3.OutputConfig;
 import com.google.cloud.translate.v3.TranslationServiceClient;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpStatus;
 import org.dgfoundation.amp.nireports.NiUtils;
 
 /**
@@ -63,6 +64,8 @@ public class GoogleMachineTranslationService implements MachineTranslationServic
      * Batch translation works only in us-central1 location. Using this location for Google Cloud Storage as well.
      */
     private static final String LOCATION = "us-central1";
+
+    private static final int MAX_RETRIES = 10;
 
     private String projectId;
 
@@ -117,7 +120,8 @@ public class GoogleMachineTranslationService implements MachineTranslationServic
                         .setLocation(LOCATION)
                         .setLabels(ImmutableMap.of(trnBucketKey, trnBucketValue))
                         .setStorageClass(StorageClass.STANDARD)
-                        .build()).getName(), e -> e.getCode() == 409 && "conflict".equals(e.getReason()));
+                        .build()).getName(),
+                        e -> e.getCode() == HttpStatus.SC_CONFLICT && "conflict".equals(e.getReason()));
             }
 
             client = TranslationServiceClient.create();
@@ -149,7 +153,7 @@ public class GoogleMachineTranslationService implements MachineTranslationServic
         return CompletableFuture
                 .supplyAsync(() -> uploadSourceFile(contents))
                 .thenCompose(id -> batchTranslateText(srcLang, destLang, id)
-                        .whenCompleteAsync((_id, e) -> deleteSourceFile(id)))
+                        .whenCompleteAsync((r, e) -> deleteSourceFile(id)))
                 .thenApplyAsync(this::readTranslatedContent);
     }
 
@@ -207,7 +211,7 @@ public class GoogleMachineTranslationService implements MachineTranslationServic
             BlobInfo inBlobInfo = BlobInfo.newBuilder(bucketName, newId + ".tsv").build();
             storage.create(inBlobInfo, bytes, Storage.BlobTargetOption.doesNotExist());
             return newId;
-        }, e -> e.getCode() == 412 && "conditionNotMet".equals(e.getReason()));
+        }, e -> e.getCode() == HttpStatus.SC_PRECONDITION_FAILED && "conditionNotMet".equals(e.getReason()));
     }
 
     /**
@@ -221,7 +225,7 @@ public class GoogleMachineTranslationService implements MachineTranslationServic
      */
     private <T> T withRetry(Supplier<T> supplier, Predicate<StorageException> predicate) {
         StorageException last = null;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < MAX_RETRIES; i++) {
             try {
                 return supplier.get();
             } catch (StorageException e) {

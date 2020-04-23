@@ -29,6 +29,7 @@ import org.hibernate.criterion.Restrictions;
  */
 public class CachedMachineTranslationService implements MachineTranslationService {
 
+    public static final int BATCH_SIZE = 1000;
     private final MachineTranslationService delegate;
 
     public CachedMachineTranslationService(MachineTranslationService delegate) {
@@ -46,7 +47,8 @@ public class CachedMachineTranslationService implements MachineTranslationServic
      * Returns a completable future that will translate the contents by delegating the call to the service.
      * If contents is empty then will return immediately.
      */
-    private CompletableFuture<Map<String, String>> delegateTranslate(String srcLang, String destLang, List<String> contents) {
+    private CompletableFuture<Map<String, String>> delegateTranslate(String srcLang, String destLang,
+            List<String> contents) {
         if (contents.isEmpty()) {
             return CompletableFuture.completedFuture(ImmutableMap.of());
         } else {
@@ -69,9 +71,8 @@ public class CachedMachineTranslationService implements MachineTranslationServic
         Map<String, String> translated = PersistenceManager.supplyInTransaction(() -> {
             List<Object> translations = new ArrayList<>();
 
-            int batchSize = 1000;
-            for (int i = 0; i < contents.size(); i += batchSize) {
-                List<String> batchContents = contents.subList(i,  Math.min(i + batchSize, contents.size()));
+            for (int i = 0; i < contents.size(); i += BATCH_SIZE) {
+                List<String> batchContents = contents.subList(i,  Math.min(i + BATCH_SIZE, contents.size()));
                 translations.addAll(PersistenceManager.getSession()
                         .createCriteria(MachineTranslation.class)
                         .add(Restrictions.eq("sourceLanguage", srcLang))

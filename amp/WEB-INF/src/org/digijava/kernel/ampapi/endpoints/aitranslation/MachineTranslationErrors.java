@@ -7,7 +7,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 /**
  * @author Octavian Ciubotaru
  */
-public class MachineTranslationErrors {
+public final class MachineTranslationErrors {
 
     public static final ApiErrorMessage NOT_ENABLED =
             new ApiErrorMessage(ERROR_CLASS_MACHINE_TRANSLATION_ID, 1, "Machine Translation is not enabled.");

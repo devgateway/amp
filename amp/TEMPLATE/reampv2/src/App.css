@@ -1,9 +1,6 @@
 .container-fluid.no-padding{
   padding: 0;
 }
-.map-wrapper{
-  padding: 0;
-}
 .content-wrapper{
   padding: 0;
   margin-top: -30px;
@@ -11,11 +8,7 @@
 .content-wrapper > .row{
   margin: 0;
 }
-.h-filter-wrapper{
-  background-color: #273142;
-  height: 60px;
-  padding: 20px 0;
-}
+
 .footer{
   bottom: 0;
   position: absolute;

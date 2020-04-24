@@ -11,7 +11,7 @@ class FilterSector extends Component {
              <div class="panel panel-default">
 
               <div class="panel-heading">
-                <h4 class="panel-title" data-toggle="collapse" data-target="#sector">
+                <h4 class="panel-title sector" data-toggle="collapse" data-target="#sector">
                   Secteur
                 </h4>
               </div>

@@ -11,7 +11,7 @@ class FilterSupport extends Component {
              <div class="panel panel-default">
 
               <div class="panel-heading">
-                <h4 class="panel-title" data-toggle="collapse" data-target="#support">
+                <h4 class="panel-title support" data-toggle="collapse" data-target="#support">
                   Types de Support
                 </h4>
               </div>

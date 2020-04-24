@@ -11,7 +11,7 @@
 .btn.btn-home{
   background-color: #22569e;
   background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI0LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6bm9uZTtzdHJva2U6I0ZGRkZGRjtzdHJva2Utd2lkdGg6MjA7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO30KPC9zdHlsZT4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTgwLDIxMnYyMzZjMCw4LjgsNy4yLDE2LDE2LDE2aDk2VjMyOGMwLTEzLjMsMTAuNy0yNCwyNC0yNGg4MGMxMy4zLDAsMjQsMTAuNywyNCwyNHYxMzZoOTYKCWM4LjgsMCwxNi03LjIsMTYtMTZWMjEyIi8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik00ODAsMjU2TDI2Ni45LDUyYy01LTUuMy0xNi43LTUuMy0yMS44LDBMMzIsMjU2Ii8+Cjxwb2x5bGluZSBjbGFzcz0ic3QwIiBwb2ludHM9IjQwMCwxNzkgNDAwLDY0IDM1Miw2NCAzNTIsMTMzICIvPgo8L3N2Zz4K");
-  background-position: 20% center;
+  background-position: 20px center;
   background-repeat: no-repeat;
   background-size: 20px 20px  ;
   border-radius: 0;
@@ -20,6 +20,8 @@
   font-weight: bold;
   height: 60px;
   outline: none;
+  padding-left: 50px;
+  text-align: left;
   width: 100%;
 }
 .btn.btn-home:hover,

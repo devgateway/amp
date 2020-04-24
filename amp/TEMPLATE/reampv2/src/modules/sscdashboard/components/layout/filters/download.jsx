@@ -11,7 +11,7 @@ class FilterDownload extends Component {
              <div class="panel panel-default">
 
               <div class="panel-heading">
-                <h4 class="panel-title" data-toggle="collapse" data-target="#download">
+                <h4 class="panel-title download" data-toggle="collapse" data-target="#download">
                   Téléchargez la Cart
                 </h4>
               </div>

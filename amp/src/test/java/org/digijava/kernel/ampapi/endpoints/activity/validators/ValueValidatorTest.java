@@ -65,20 +65,20 @@ public class ValueValidatorTest {
         sectorFieldDescription.setFieldName(SECTOR_FIELD);
         sectorFieldDescription.setImportable(true);
         sectorFieldDescription.setIdOnly(true);
-        sectorFieldDescription.setApiType(new APIType(String.class));
+        sectorFieldDescription.setApiType(new APIType(String.class, FieldType.STRING));
 
         fyFieldDescription = new APIField();
         fyFieldDescription.setFieldName(FY_FIELD);
         fyFieldDescription.setImportable(true);
         fyFieldDescription.setIdOnly(true);
-        fyFieldDescription.setApiType(new APIType(Long.class, FieldType.LIST));
+        fyFieldDescription.setApiType(new APIType(Long.class, FieldType.LIST, FieldType.LONG));
 
         List<APIField> apiFields = Arrays.asList(sectorFieldDescription, fyFieldDescription);
         
         draftFieldDescription = new APIField();
         draftFieldDescription.setFieldName(DRAFT_FIELD);
         draftFieldDescription.setImportable(true);
-        draftFieldDescription.setApiType(new APIType(Boolean.class));
+        draftFieldDescription.setApiType(new APIType(Boolean.class, FieldType.BOOLEAN));
 
         pvEnumerator = mock(PossibleValuesEnumerator.class);
         when(pvEnumerator.getPossibleValuesForField(SECTOR_FIELD, apiFields)).thenReturn(SECTOR_POSSIBLE_VALUES);

@@ -102,22 +102,7 @@ public class FieldsEnumerator {
 
         apiField.setId(field.isAnnotationPresent(InterchangeableId.class));
 
-        // for discriminated case we can override the type here
-        Class<?> type = InterchangeUtils.getClassOfField(field);
-        FieldType fieldType = null;
-        apiField.setIsCollection(Collection.class.isAssignableFrom(field.getType()));
-        if (interchangeable.pickIdOnly()) {
-            fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
-        } else if (InterchangeUtils.isCollection(field)) {
-            type = getType(field, context);
-            if (interchangeable.multipleValues()) {
-                fieldType = FieldType.LIST;
-            }
-        } else if (field.getType().equals(java.util.Date.class)) {
-            fieldType = InterchangeUtils.isTimestampField(field) ? FieldType.TIMESTAMP : FieldType.DATE;
-        }
-
-        APIType apiType = new APIType(type, fieldType);
+        APIType apiType = getApiType(field, context, interchangeable);
         apiField.setApiType(apiType);
 
         boolean isList = apiType.getFieldType().isList();
@@ -151,7 +136,7 @@ public class FieldsEnumerator {
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             if (!interchangeable.pickIdOnly()) {
-                apiField.setChildren(getAllAvailableFields(type, context));
+                apiField.setChildren(getAllAvailableFields(apiType.getType(), context));
             }
             if (isList) {
                 String uniqueConstraint = getUniqueConstraint(apiField, field, context);
@@ -237,6 +222,36 @@ public class FieldsEnumerator {
                 apiField.getUnconditionalRequired()));
 
         return apiField;
+    }
+
+    private APIType getApiType(Field field, FEContext context, Interchangeable interchangeable) {
+        Class<?> type = getType(field, context);
+        FieldType fieldType;
+        FieldType itemType;
+
+        if (InterchangeUtils.isCollection(field) && interchangeable.multipleValues()) {
+            fieldType = FieldType.LIST;
+            itemType = getFieldType(type, interchangeable, field);
+        } else {
+            fieldType = getFieldType(type, interchangeable, field);
+            itemType = null;
+        }
+
+        return new APIType(type, fieldType, itemType);
+    }
+
+    private FieldType getFieldType(Class<?> type, Interchangeable interchangeable, Field field) {
+        if (interchangeable.pickIdOnly()) {
+            return FieldType.LONG;
+        } else {
+            if (InterchangeUtils.isTimestampField(field)) {
+                return FieldType.TIMESTAMP;
+            } else {
+                return InterchangeableClassMapper.containsSimpleClass(type)
+                        ? InterchangeableClassMapper.getCustomMapping(type)
+                        : FieldType.OBJECT;
+            }
+        }
     }
 
     private boolean hasTotalPercentageConstraint(List<ConstraintDescriptor> descriptors) {
@@ -349,7 +364,7 @@ public class FieldsEnumerator {
 
     public APIField getMetaModel(Class<?> clazz) {
         APIField root = new APIField();
-        root.setApiType(new APIType(clazz));
+        root.setApiType(new APIType(clazz, FieldType.OBJECT));
         FEContext context = new FEContext();
         root.setChildren(getAllAvailableFields(clazz, context));
         root.setBeanConstraints(new ConstraintDescriptors(findBeanConstraints(clazz, context)));
@@ -393,7 +408,8 @@ public class FieldsEnumerator {
                         descr.setDiscriminatorField(discriminator.discriminatorField());
                         descr.setDiscriminationConfigurer(discriminator.configurer());
                         descr.setFieldAccessor(new DiscriminatedFieldAccessor(new SimpleFieldAccessor(field.getName()),
-                                discriminator.discriminatorField(), settings[i].discriminatorOption()));
+                                discriminator.discriminatorField(), settings[i].discriminatorOption(),
+                                settings[i].multipleValues()));
                         result.add(descr);
                     }
                     context.getIntchStack().pop();

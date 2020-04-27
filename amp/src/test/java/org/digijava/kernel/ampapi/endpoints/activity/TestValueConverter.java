@@ -9,7 +9,10 @@ public class TestValueConverter extends ValueConverter {
     
     public static final Map<Class<?>, Map<Object, Object>> TEST_OBJECTS = ImmutableMap.of(
             ObjectImporterTest.PersonAttribute.class, ImmutableMap.of(
-                    "10", new ObjectImporterTest.PersonAttribute("10", "Height", "Small")
+                    "10", new ObjectImporterTest.PersonAttribute("10", "Height", "Small"),
+                    55, new ObjectImporterTest.PersonAttribute("55", "Character", "ch1"),
+                    56, new ObjectImporterTest.PersonAttribute("56", "Character", "ch2"),
+                    57, new ObjectImporterTest.PersonAttribute("57", "Character", "ch3")
             )
     );
     

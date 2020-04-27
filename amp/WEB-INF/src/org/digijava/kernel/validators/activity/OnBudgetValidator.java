@@ -1,6 +1,5 @@
 package org.digijava.kernel.validators.activity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.DiscriminatedFieldAccessor.unwrapSingleElement;
 import static org.digijava.kernel.ampapi.endpoints.activity.field.APIFieldUtil.readFieldValueOrDefault;
 
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -29,8 +28,7 @@ public class OnBudgetValidator extends ConditionalRequiredValidator {
     public boolean isActive(APIField type, Object value) {
         APIField activityBudgetField = type.getField(ACTIVITY_BUDGET_FIELD_NAME);
 
-        AmpCategoryValue activityBudget = unwrapSingleElement(
-                readFieldValueOrDefault(activityBudgetField, value, null));
+        AmpCategoryValue activityBudget = readFieldValueOrDefault(activityBudgetField, value, null);
 
         return activityBudget != null
                 && activityBudget.getValue().equals(CategoryConstants.ACTIVITY_BUDGET_ON.getValueKey());

@@ -14,8 +14,7 @@ class DownloadLinks extends Component {
     constructor(props) {
         super(props);
         this.shouldComponentRender = this.shouldComponentRender.bind(this);
-        const {translations} = props.translationsReducer;
-
+        this.translations = props.translations;
     }
 
 
@@ -113,7 +112,8 @@ class DownloadLinks extends Component {
 const mapStateToProps = state => ({
     error: getReleasesError(state.startupReducer),
     releases: getReleases(state.startupReducer),
-    pending: getReleasesPending(state.startupReducer)
+    pending: getReleasesPending(state.startupReducer),
+    translations:state.translationsReducer.translations
 });
 const mapDispatchToProps = dispatch => bindActionCreators({fetchReleases: fetchReleases}, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(DownloadLinks);

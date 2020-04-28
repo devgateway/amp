@@ -1,22 +1,13 @@
-  import React, {Suspense, lazy, useState} from 'react';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import React, {Suspense, lazy, useState, Component} from 'react';
 import './App.css';
-const SSCDashboardApp = lazy(() => import('./modules/sscdashboard'));
+import AppRoute from './App.route';
 
-const AMPOfflineDownloadApp = lazy(() => import('./modules/ampoffline/Download'));
-
-function App() {
-    const [currentTab, setCurrentTab] = useState('dashboard');
-    return (
-        <Router>
-            <Suspense fallback={<div>Loading...</div>}>
-                <Switch>
-                    <Route exact path="/" component={SSCDashboardApp}/>
-                    <Route path="/ampofflinedownload" component={AMPOfflineDownloadApp}/>
-                </Switch>
-            </Suspense>
-        </Router>
-    );
+class App extends Component {
+    render() {
+        return (
+            <AppRoute/>
+        );
+    }
 }
 
 export default App;

@@ -133,10 +133,16 @@ public class CachedTranslatorWorker extends TranslatorWorker {
     }
 
     public Message getByKey(String key, String locale, Long siteId, boolean overwriteKeywords,String keywords) {
-        return internalGetByKey(key, locale, siteId, overwriteKeywords, keywords);
+        return getByKey(key, locale, siteId,  overwriteKeywords, keywords, null);
     }
 
-    private Message internalGetByKey(String key, String locale, Long siteId, boolean overwriteKeywords, String keywords) {
+    public Message getByKey(String key, String locale, Long siteId, boolean overwriteKeywords, String keywords,
+                            Session dbSession) {
+        return internalGetByKey(key, locale, siteId, overwriteKeywords, keywords, dbSession);
+    }
+
+    private Message internalGetByKey(String key, String locale, Long siteId, boolean overwriteKeywords, String keywords,
+                                     Session dbSession) {
         Message message = new Message();
         message.setLocale(locale);
         message.setSite(SiteCache.lookupById(siteId));
@@ -147,7 +153,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
             //try loading it from db
             Session ses;
             try {
-                ses = PersistenceManager.getSession();
+                ses = dbSession != null ? dbSession : PersistenceManager.getSession();
                 Message realMsg = (Message) ses.get(Message.class, message);
                 if (realMsg != null) {
                     obj = realMsg;

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import boilerplate from '/Users/juliandeanquin/dev/code/AmpIntelliJ/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js';
+import boilerplate from '/Users/galinakalvatcheva/Documents/amp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js';
 
 
 ReactDOM.render(
@@ -18,4 +18,3 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 new boilerplate.layout({});
 serviceWorker.unregister();
-

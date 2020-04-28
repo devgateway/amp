@@ -1,11 +1,19 @@
-.dashboard-container {
-    height: 100%;
+.container-fluid.no-padding{
+  padding: 0;
+}
+.content-wrapper{
+  padding: 0;
+  margin-top: -30px;
+}
+.content-wrapper > .row{
+  margin: 0;
 }
 
-.map-container {
-    height: 100%;
+.footer{
+  bottom: 0;
+  position: absolute;
+  width: 100%;
 }
-
-.leaflet-container {
-    height: 100%;
+.dgf_footer{
+  display: none;
 }

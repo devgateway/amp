@@ -46,3 +46,102 @@
   background-repeat: no-repeat;
   background-size: 17px 17px;
 }
+
+/* horizontal filters */
+.h-filter-wrapper .inner{
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.horizontal-filter .btn{
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI0LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6bm9uZTtzdHJva2U6I0ZGRkZGRjtzdHJva2Utd2lkdGg6NDg7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO30KPC9zdHlsZT4KPHBvbHlsaW5lIGNsYXNzPSJzdDAiIHBvaW50cz0iMTEyLDE4NCAyNTYsMzI4IDQwMCwxODQgIi8+Cjwvc3ZnPgo=");
+  background-position: 95% center;
+  background-repeat: no-repeat;
+  background-size: 15px 15px;
+  background-color: #22569e;
+  color: #ffffff;
+  font-weight: bold;
+  outline: none;
+  text-align: left;
+  width: 100%;
+}
+.horizontal-filter .btn[aria-expanded="false"]{
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI0LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6bm9uZTtzdHJva2U6I0ZGRkZGRjtzdHJva2Utd2lkdGg6NDg7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO30KPC9zdHlsZT4KPHBvbHlsaW5lIGNsYXNzPSJzdDAiIHBvaW50cz0iMTEyLDE4NCAyNTYsMzI4IDQwMCwxODQgIi8+Cjwvc3ZnPgo=");
+}
+.horizontal-filter .btn[aria-expanded="true"]{
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI0LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6bm9uZTtzdHJva2U6I0ZGRkZGRjtzdHJva2Utd2lkdGg6NDg7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO30KPC9zdHlsZT4KPHBvbHlsaW5lIGNsYXNzPSJzdDAiIHBvaW50cz0iNDAwLDMyOCAyNTYsMTg0IDExMiwzMjggIi8+Cjwvc3ZnPgo=");
+}
+
+.horizontal-filter .btn .select-count{
+  color: #cccccc;
+  font-weight: normal;
+}
+
+.horizontal-filter .filter-list ul{
+  list-style: none;
+  padding: 0;
+}
+.horizontal-filter .filter-list .well{
+  border-radius: 0;
+}
+.horizontal-filter .filter-list .well .well-inner{
+  height: 195px;
+  overflow: auto;
+  width:100%;
+}
+/* custom checkbox */
+.horizontal-filter .filter-list input[type="checkbox"]{
+  opacity: 0;
+  position: absolute;
+}
+.horizontal-filter .filter-list label{
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 0 0 20px;
+  position: relative;
+}
+
+.horizontal-filter .filter-list label:before,
+.horizontal-filter .filter-list label:after{
+  display: block;
+  height: 15px;
+  left: 0;
+  position: absolute;
+  top: 3px;
+  width: 15px;
+}
+.horizontal-filter .filter-list label:before{
+  border: 2px solid #cccccc;
+  border-radius: 20%;
+  content: " ";
+}
+.horizontal-filter .filter-list input[type="checkbox"] + label:after {
+  content: "";
+  background-color: #2e6da4;
+  line-height: 1.5;
+  text-align: center;
+}
+.horizontal-filter .filter-list input[type="checkbox"]:checked + label:before{
+  background: #eeeeee;
+  border-color: #cccccc;
+}
+.horizontal-filter .filter-list input[type="checkbox"] + label:after{
+  -webkit-transform: scale(0);
+  -ms-transform: scale(0);
+  -o-transform: scale(0);
+  transform: scale(0);
+}
+.horizontal-filter .filter-list input[type="checkbox"]:checked + label::after{
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transform: scale(1);
+}
+.horizontal-filter .filter-list input[type="checkbox"]:checked + label{
+  color: #22569e;
+}
+.horizontal-filter .filter-list label::before,
+.horizontal-filter .filter-list label::after {
+  -webkit-transition: .25s all ease;
+  -o-transition: .25s all ease;
+  transition: .25s all ease;
+}

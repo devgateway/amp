@@ -3,17 +3,13 @@ import L from 'leaflet';
 import {curve} from 'leaflet-curve';
 
 export default class ConnectionLayer extends React.Component {
-
-
     constructor(props) {
-
         super(props);
         this.lines = [];
     }
 
     componentDidMount() {
         this.map = this.props.leaflet.map;
-        //this.map = this.context.map;
         const {points} = this.props;
         if (points) {
             this.update()
@@ -73,7 +69,7 @@ export default class ConnectionLayer extends React.Component {
         let weight = 5;
         if (breaks && breaks.length) {
             const breakUnit = maxWeigth / breaks.length;
-            for (var i = 0; i < breaks.length - 1; i++) {
+            for (let i = 0; i < breaks.length - 1; i++) {
                 if (point2.value > breaks[i] && point2.value < breaks[i + 1]) {
                     weight = breakUnit * (i + 1);
                 }
@@ -86,8 +82,8 @@ export default class ConnectionLayer extends React.Component {
             weight: lineWeight || weight,
             pointData: point2,
             dashOffset: '51',
-            dashArray:'10 10',
-            stroke:'white'
+            dashArray: '10 10',
+            stroke: 'white'
         }
 
         const line = new L.curve(
@@ -97,7 +93,9 @@ export default class ConnectionLayer extends React.Component {
                 latlng2
             ], pathOptions);
         line.addTo(this.map);
-        line.on('click', f => onClick(f.target.options.pointData, f.latlng));
+        if (onClick) {
+            line.on('click', f => onClick(f.target.options.pointData, f.latlng));
+        }
         this.lines.push(line);
     }
 

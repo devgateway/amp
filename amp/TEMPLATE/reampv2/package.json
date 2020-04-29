@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "export PUBLIC_URL=/TEMPLATE/reampv2/build/ && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

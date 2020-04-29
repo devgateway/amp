@@ -1,8 +1,15 @@
-.map-wrapper{
-  padding: 0;
+.map-wrapper {
+    padding: 0;
 }
-.h-filter-wrapper{
-  background-color: #273142;
-  height: 60px;
+
+.h-filter-wrapper {
+    background-color: #273142;
+    height: 60px;
   padding: 12px 0;
+}
+
+.map-container {
+    height: 100%;
+    width: 100%;
+    position: fixed;
 }

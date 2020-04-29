@@ -11,7 +11,7 @@ class AppRoute extends Component {
             <Router>
                 <Suspense fallback={<div>Loading...</div>}>
                     <Switch>
-                        <Route path="/sscdashboard" component={SSCDashboard}/>
+                        <Route path="/" component={SSCDashboard}/>
                         <Route path="/ampofflinedownload" component={AMPOfflineDownloadApp}/>
                     </Switch>
                 </Suspense>

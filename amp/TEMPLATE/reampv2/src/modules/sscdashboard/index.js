@@ -4,7 +4,9 @@ import thunk from 'redux-thunk';
 import rootReducer from './reducers/rootReducer';
 import {Provider} from 'react-redux'
 import {Link} from "react-router-dom";
-import DashboardRouter from "./components/SSCDashboard.router";
+import SSCDashboardRouter from "./components/SSCDashboard.router";
+import Sidebar from "./components/layout/sidebar/sidebar";
+import MapContainer from "./components/layout/map/map-content";
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -22,7 +24,7 @@ class SSCDashboardApp extends Component {
         const active = 'active';
         const modules = [];
         // modules need to be loaded dynamically
-        modules.push({name: 'Map', link: '/sscdashboard/map'});
+        modules.push({name: 'Map', link: '/sscdashboard/home'});
         modules.push({name: 'Sectors', link: '/sscdashboard/sectors'});
         modules.push({name: 'MapWithFigures', link: '/sscdashboard/figures'});
         const navItem = 'nav-item';
@@ -30,25 +32,13 @@ class SSCDashboardApp extends Component {
         const styleMargin = {'marginLeft': '0px'};
         const classHeight = {height: '700px'};
         return (<Provider store={this.store}>
-            <div style={styleMargin}>
-                <div style={styleMargin}>
-                    <div>INNER HEADER</div>
+            return (
+            <div className="container-fluid content-wrapper">
+                <div className="row">
+                    <Sidebar/>
+                    <SSCDashboardRouter/>
                 </div>
-                <div className="row" style={styleMargin}>
-                    <div className="col-xs-12 col-sm-2 col-lg-2">
-                        <ul className="nav-item">
-                            {modules.map(module => ( // with a name, and routes
-                                <li key={module.name}
-                                    className={[navItem, this.state.currentTab === module.name ? classActive : ''].join('')}>
-                                    <Link to={module.link}
-                                          onClick={() => this.setState({currentState: module.name})}>{module.name}</Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className="col-sm-10 col-lg-10" style={classHeight}><DashboardRouter/></div>
-                </div>
-            </div>
+            </div>);
         </Provider>);
     }
 }

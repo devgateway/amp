@@ -151,4 +151,9 @@ public class ActivityBuilder {
         activity.setTeam(ampTeam);
         return this;
     }
+
+    public ActivityBuilder withMultiStakeholderPartnership(boolean multiStakeholderPartnership) {
+        activity.setMultiStakeholderPartnership(multiStakeholderPartnership);
+        return this;
+    }
 }

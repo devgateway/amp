@@ -234,6 +234,7 @@ public class ActivityUtil {
         //this is not a valid use case but a possible due to the flexibility of the configurations in FM mode
         if (af != null && Hibernate.isInitialized(af)) {
             updateFundingDetails(af);
+            updateFundingProjectResults(af);
         }
 
         if (ContentTranslationUtil.multilingualIsEnabled())
@@ -298,7 +299,7 @@ public class ActivityUtil {
         }
 
         a.setAmpActivityGroup(group);
-
+        updateMultiStakeholderField(a);
         if (isActivityForm) {
 
             saveIndicators(a, session);
@@ -339,7 +340,13 @@ public class ActivityUtil {
 
         return a;
     }
-    
+
+    private static void updateMultiStakeholderField(AmpActivityVersion a) {
+        if (!Boolean.TRUE.equals(a.getMultiStakeholderPartnership())) {
+            a.setMultiStakeholderPartners(null);
+        }
+    }
+
     public static boolean detectDraftChange(AmpActivityVersion a, boolean draft) {
         return Boolean.TRUE.equals(a.getDraft()) != draft;
     }
@@ -476,6 +483,14 @@ public class ActivityUtil {
                     }
                     afm.setAmpFunding(ampFunding);
                 }
+            }
+        }
+    }
+
+    private static void updateFundingProjectResults(Set<AmpFunding> fundings) {
+        for (AmpFunding funding : fundings) {
+            if (!Boolean.TRUE.equals(funding.getProjectResultsAvailable())) {
+                funding.setProjectResultsLink(null);
             }
         }
     }

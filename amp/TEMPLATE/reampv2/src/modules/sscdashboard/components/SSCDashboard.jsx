@@ -13,7 +13,6 @@ class SSCDashboard extends Component {
 
     render() {
         return (
-
           <div className="container-fluid content-wrapper">
             <div className="row">
               <Sidebar/>

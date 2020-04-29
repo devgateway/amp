@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import boilerplate from '/Users/galinakalvatcheva/Documents/amp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js';
+import boilerplate from '../../ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js';
 
 
 ReactDOM.render(

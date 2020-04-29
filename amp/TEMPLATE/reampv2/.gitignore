@@ -9,7 +9,8 @@
 /coverage
 
 # production
-/build
+#build being committed until we add the build process to mvn
+#/build
 
 # misc
 .DS_Store

@@ -3,13 +3,15 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import HorizontalFilters from '../filters/horizontal-filters';
 import './map.css';
+import MapHome from "../../map/MapHome";
 
 class MapContainer extends Component {
     render() {
         return (
-          <div className="col-md-10 col-md-offset-2 map-wrapper">
-            <HorizontalFilters/>
-          </div>
+            <div className="col-md-10 col-md-offset-2 map-wrapper">
+                <HorizontalFilters/>
+                <MapHome/>
+            </div>
         );
     }
 }

@@ -3,11 +3,12 @@ import {Map, TileLayer, withLeaflet, CircleMarker} from 'react-leaflet';
 import * as L from 'leaflet';
 import '../../../../App.css';
 import ConnectionLayer from "./d3Layer/ConnectionLayer";
+import '../layout/map/map.css';
 
 export default class MapHome extends Component {
     state = {
-        lat: 0,
-        lng: 0,
+        lat: -7.798078531355303,
+        lng: 27.070312500000004,
         zoom: 2.5,
     };
 
@@ -38,16 +39,16 @@ export default class MapHome extends Component {
                 center={centerCountry}
                 radius={12}
                 stroke={true}
-                color={'#789D67'}
-                opacity={0.7}
+                color={'#006600'}
+                opacity={0.3}
                 weight={2}
                 fill={true}
-                fillColor={'transparent'}
-                fillOpacity={0.9}
+                fillColor={'#006600'}
+                fillOpacity={0.3}
                 dashArray
             >
             </CircleMarker>
-        )
+        );
         return result;
     }
 
@@ -56,18 +57,28 @@ export default class MapHome extends Component {
         const WrappedConnectionLayer = withLeaflet(ConnectionLayer);
         const center = {latitude: 18.567634, longitude: -72.315361};
         const points = [];
+        //this will come from the api
         points.push({latitude: -14.235004, longitude: -51.92528});
         points.push({latitude: 35.86166, longitude: 104.195397});
         points.push({latitude: 4.570868, longitude: -74.297333});
+        points.push({latitude: 14.058324, longitude: 108.277199});
+        points.push({latitude: 4.535277, longitude: 114.727669});
+        points.push({latitude: -9.189967, longitude: -75.015152});
+        points.push({latitude: -38.416097, longitude: -63.616672});
+        points.push({latitude: -35.675147, longitude: -71.542969});
+        points.push({latitude: -4.038333, longitude: 21.758664});
+        points.push({latitude: 20.593684, longitude: 78.96288});
         return (
-            <Map classname='map-container' center={mapCenter} zoom={this.state.zoom}>
+            <Map className={'map-container'} center={mapCenter} zoom={this.state.zoom} >
                 <TileLayer
                     attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 <WrappedConnectionLayer points={points} nodePoint={center}/>
                 {this.getPoints(points, center)}
-            </Map>);
+
+            </Map>
+        );
     }
 
 }

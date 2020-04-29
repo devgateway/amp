@@ -116,6 +116,8 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     private String  lineMinRegNumber;
     
     private boolean translateable   = true;
+
+    private AmpTemplatesVisibility template;
     
     @OrganizationReportColumn(columnName="Line Ministry Registration Number",propertyType=PropertyType.NGO)
     public String getLineMinRegNumber() {
@@ -714,6 +716,14 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public AmpTemplatesVisibility getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(AmpTemplatesVisibility template) {
+        this.template = template;
     }
 
     public String getOrgKeyAreas() {

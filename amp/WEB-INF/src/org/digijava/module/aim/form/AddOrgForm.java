@@ -128,6 +128,9 @@ public class AddOrgForm extends ActionForm {
     private String orgTypeName;
     private String orgGroupName;
 
+    private Collection templates;
+    private Long templateId;
+
     public String getOrgTypeName() {
         return orgTypeName;
     }
@@ -262,6 +265,8 @@ public class AddOrgForm extends ActionForm {
           saveFlag = "no";
           mode=null;
           sectors = null;
+          templates = null;
+          templateId = null;
           if ("resetMode".equals(request.getParameter("mode"))){
               request.removeAttribute("mode");
           }
@@ -896,7 +901,23 @@ public class AddOrgForm extends ActionForm {
     public void setBudgetOrgs(Set<AmpOrganisation> budgetOrgs) {
         this.budgetOrgs = budgetOrgs;
     }
-    
+
+    public Collection getTemplates() {
+        return templates;
+    }
+
+    public void setTemplates(Collection templates) {
+        this.templates = templates;
+    }
+
+    public Long getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(Long templateId) {
+        this.templateId = templateId;
+    }
+
     public MultilingualInputFieldValues buildMultilingualNameInputInstance()
     {
         return new MultilingualInputFieldValues(AmpOrganisation.class, this.getAmpOrgId(), "name", null, null);

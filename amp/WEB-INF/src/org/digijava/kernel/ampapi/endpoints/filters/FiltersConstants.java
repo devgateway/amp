@@ -44,6 +44,7 @@ public class FiltersConstants {
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";
     public static final String BENEFICIARY_AGENCY_GROUP = "beneficiary-agency-group";
     public static final String BENEFICIARY_AGENCY_TYPE = "beneficiary-agency-type";
+    public static final String BENEFICIARY_AGENCY_COUNTRY = "beneficiary-agency-country";
     public static final String COMPONENT_FUNDING_ORGANIZATION = "component-funding-organization";
     public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "component-second-responsible-organization";
     public static final String COMPUTED_YEAR = "computed-year";
@@ -60,9 +61,11 @@ public class FiltersConstants {
     public static final String DONOR_AGENCY = "donor-agency";
     public static final String DONOR_GROUP = "donor-group";
     public static final String DONOR_TYPE = "donor-type";
+    public static final String DONOR_AGENCY_COUNTRY = "donor-agency-country";
     public static final String EXECUTING_AGENCY = "executing-agency";
     public static final String EXECUTING_AGENCY_GROUP = "executing-agency-group";
     public static final String EXECUTING_AGENCY_TYPE = "executing-agency-type";
+    public static final String EXECUTING_AGENCY_COUNTRY = "executing-agency-country";
     public static final String EXPENDITURE_CLASS = "expenditure-class";
     public static final String FINANCING_INSTRUMENT = "financing-instrument";
     public static final String FUNDING_STATUS = "funding-status";

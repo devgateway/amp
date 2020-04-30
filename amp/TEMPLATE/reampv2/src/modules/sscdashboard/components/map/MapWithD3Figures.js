@@ -1,9 +1,7 @@
-import React, {createRef, Component} from 'react';
-import {Map, TileLayer, Marker, Popup, withLeaflet} from 'react-leaflet';
-import {LatLng} from 'leaflet';
-import * as d3 from 'd3'
+import React, { Component } from 'react';
+import { Map, TileLayer, Marker, Popup, withLeaflet } from 'react-leaflet';
 import '../../../../App.css';
-import D3AddShapeToLeafLet from "./d3Layer/D3AddShapeToLeafLet";
+import D3AddShapeToLeafLet from './d3Layer/D3AddShapeToLeafLet' ;
 
 export default class MapWithD3Figures extends Component {
     state = {
@@ -11,6 +9,7 @@ export default class MapWithD3Figures extends Component {
         lng: 0,
         zoom: 2,
     };
+
     render() {
         const position = [this.state.lat, this.state.lng];
         const WrappedD3AddShapeToLeafLet = withLeaflet(D3AddShapeToLeafLet);

@@ -1,17 +1,18 @@
-import React, {Component} from "react";
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 
-class HomeButton extends Component {
-    render() {
-        return (
-          <div>
-          <button class="btn btn-home" type="button">
-              Page d’Accueil
-          </button>
-          </div>
-        );
-    }
-}
+import { ROUTES_HOME } from '../../../utils/constants';
+import { SSCTranslationContext } from '../../StartUp';
 
-export default HomeButton;
+export const HomeButton = () => {
+    const {translations} = useContext(SSCTranslationContext)
+    return (
+        <div>
+            <Link to={ROUTES_HOME}>
+                <button className="btn btn-home" type="button">
+                    {translations['amp.ssc.dashboard:Home-Page']}
+                </button>
+            </Link>
+        </div>
+    );
+};

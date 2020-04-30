@@ -10,7 +10,7 @@
 
 # production
 #build being committed until we add the build process to mvn
-#/build
+/build
 
 # misc
 .DS_Store

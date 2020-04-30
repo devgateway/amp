@@ -93,6 +93,7 @@ public class ActivityImporterTest {
     
     private static final Set<String> DISABLED_FM_PATHS = ImmutableSet.of(
             "/Activity Form/Identification/Required Validator for Description",
+            "/Activity Form/Identification/Required Validator for Multi Stakeholder Partnership",
             "/Activity Form/Identification/Required Validator for Objective",
             "/Activity Form/Planning/Required Validator for Proposed Start Date",
             "/Activity Form/Planning/Required Validator for Original Completion Date",

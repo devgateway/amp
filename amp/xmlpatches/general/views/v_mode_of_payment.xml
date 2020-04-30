@@ -19,6 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
+					 DROP VIEW IF EXISTS v_mode_of_payment;
 			         CREATE OR REPLACE VIEW v_mode_of_payment AS
 			             SELECT aav.amp_activity_id,
 	                        v.mode_of_payment_name,
@@ -29,7 +30,10 @@
 	                        v.mode_of_payment_id,
 	                        v.funding_status_id,
 	                        v.agreement_id,
-	                        v.funding_id
+	                        v.funding_id,
+	                        v.vulnerable_group_id,
+	                        v.project_results_available_id,
+	                        v.donor_org_country_id
 	                       FROM amp_activity_version aav
 	                       LEFT JOIN (
 						         SELECT DISTINCT a.amp_activity_id,
@@ -41,10 +45,14 @@
 						             f.mode_of_payment_category_va as mode_of_payment_id,
 						             f.funding_status_category_va as funding_status_id,
 						             f.agreement as agreement_id,
-						             f.amp_funding_id as funding_id
+						             f.amp_funding_id as funding_id,
+									 f.vulnerable_group_va AS vulnerable_group_id,
+									 CASE WHEN f.project_results_available THEN 1 ELSE 2 END AS project_results_available_id,
+									 o.amp_country_id AS donor_org_country_id
 						         FROM amp_activity_version a
 						         JOIN amp_funding f ON f.amp_activity_id = a.amp_activity_id
 						         JOIN amp_category_value val ON val.id = f.mode_of_payment_category_va
+						         JOIN amp_organisation o ON f.amp_donor_org_id = o.amp_org_id
 					       ) v
                            ON aav.amp_activity_id = v.amp_activity_id;
 			]]></lang>

@@ -45,7 +45,6 @@ export default class MapHome extends Component {
                 fill={true}
                 fillColor={'#006600'}
                 fillOpacity={0.3}
-                dashArray
             >
             </CircleMarker>
         );

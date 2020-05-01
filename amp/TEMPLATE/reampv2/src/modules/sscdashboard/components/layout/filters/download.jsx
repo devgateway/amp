@@ -1,6 +1,4 @@
-import React, {Component} from "react";
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, {Component} from 'react';
 import './filters.css';
 
 class FilterDownload extends Component {
@@ -8,15 +6,15 @@ class FilterDownload extends Component {
         return (
           <div className="sidebar-filter-wrapper">
 
-             <div class="panel panel-default">
+             <div className="panel panel-default">
 
-              <div class="panel-heading">
-                <h4 class="panel-title download" data-toggle="collapse" data-target="#download">
+              <div className="panel-heading">
+                <h4 className="panel-title download" data-toggle="collapse" data-target="#download">
                   Téléchargez la Cart
                 </h4>
               </div>
-              <div id="download" class="panel-collapse collapse">
-                <div class="panel-body">
+              <div id="download" className="panel-collapse collapse">
+                <div className="panel-body">
                   Download options
                 </div>
               </div>

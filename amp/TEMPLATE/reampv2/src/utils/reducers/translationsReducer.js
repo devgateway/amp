@@ -3,7 +3,7 @@ import {
 } from '../actions/translationsActions';
 
 const initialState = {
-    pending: false,
+    pending: true,
     translations: {},
     error: null
 }
@@ -14,7 +14,7 @@ export default function translationsReducer(state = initialState, action) {
             return {
                 ...state,
                 pending: true,
-                translations: action.payload.defaultTrnPack
+                translations: action.payload
             }
         case FETCH_TRANSLATIONS_SUCCESS:
             return {

@@ -1,6 +1,4 @@
-import React, {Component} from "react";
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, {Component} from 'react';
 import FilterCountries from './countries';
 import FilterSectorsHorizontal from './sectors-horizontal';
 import FilterYears from './years';

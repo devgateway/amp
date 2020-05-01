@@ -145,3 +145,65 @@
   -o-transition: .25s all ease;
   transition: .25s all ease;
 }
+
+/* carousel */
+.carousel-filters-wrapper{
+  height: 50px;
+}
+.carousel-filters-wrapper .infinite-carousel-dots{
+  /* display: none; */
+}
+.country-search-wrapper{
+  padding: 0;
+}
+.country-search-wrapper .country-search-content{
+  position: absolute;
+  width: 100%;
+}
+.country-search-wrapper .country-search-content .well{
+  border-radius: 0;
+  height: 100%;
+  position: fixed;
+  width: 100%;
+}
+.country-search-wrapper .btn{
+  background-color: #223f67;
+  border: 1px solid #223f67;
+  border-radius: 0;
+  color: #798dad;
+  font-size: 13px;
+  height: 60px;
+  margin-top: -12px;
+  outline: none;
+  width:100%;
+}
+.InfiniteCarousel{
+  margin-top: -12px;
+}
+.InfiniteCarouselArrowIcon {
+  border-width: 0 2px 2px 0 !important;
+  padding: 3px !important;
+}
+.InfiniteCarouselSlide > div{
+  cursor: pointer;
+  padding-bottom:3px;
+  padding-top: 8px;
+}
+.InfiniteCarouselSlide:hover{
+  background-color: #223f67;
+}
+.InfiniteCarouselSlide > div.selected{
+  background-color: #223f67;
+}
+.InfiniteCarouselSlide span{
+  color: #ffffff;
+  display: block;
+  font-size: 10px;
+  text-align: center;
+}
+.InfiniteCarouselSlide img{
+  display: block;
+  height: auto;
+  margin: 0 auto 5px auto;
+  width: 40px !important;
+}

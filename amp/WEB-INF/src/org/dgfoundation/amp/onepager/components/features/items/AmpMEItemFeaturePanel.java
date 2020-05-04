@@ -62,7 +62,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         final Label indicatorCodeLabel = new Label("indicatorCode", new Model<String>(indCodeString));
         add(indicatorCodeLabel);
 
-        final IModel<AmpCategoryValue> logFrameModel = new PersistentObjectModel<AmpCategoryValue>();
+        final IModel<AmpCategoryValue> logFrameModel = new PropertyModel<>(conn, "logFrame");
         try {
             AmpCategorySelectFieldPanel logframe = new AmpCategorySelectFieldPanel("logframe", CategoryConstants.LOGFRAME_KEY, logFrameModel, "Logframe Category", true, true);
             add(logframe);
@@ -70,7 +70,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
             logger.error(e.getMessage(), e);
         }
 
-        final IModel<AmpIndicatorRiskRatings> riskModel = new PersistentObjectModel<AmpIndicatorRiskRatings>();
+        final IModel<AmpIndicatorRiskRatings> riskModel = new PropertyModel<>(conn, "risk");
         ChoiceRenderer cr = new ChoiceRenderer(){
             @Override
             public Object getDisplayValue(Object object) {
@@ -86,14 +86,12 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                         return (List<AmpIndicatorRiskRatings>) MEIndicatorsUtil.getAllIndicatorRisks();
                     }
                 }, cr).setNullValid(true);
-        
-        risk.setOutputMarkupId(true);
-                risk.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
-                    riskModel.setObject(risk.getConvertedInput());
-                }
-                });
+        risk.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                riskModel.setObject(risk.getConvertedInput());
+            }
+        });
                 
         add(risk);
 
@@ -117,8 +115,6 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                 break;
             case AmpIndicatorValue.TARGET:
                 val.copyValuesTo(targetVal);
-                logFrameModel.setObject(val.getLogFrame());
-                riskModel.setObject(val.getRisk());
                 valuesSet.setObject(true);
                 break;
             case AmpIndicatorValue.REVISED:
@@ -169,36 +165,25 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
             @Override
             protected void onClick(AjaxRequestTarget art) {
                 
-                AmpCategoryValue logFrame = logFrameModel.getObject();
-                AmpIndicatorRiskRatings riskVal = riskModel.getObject();
-                
                 Set<AmpIndicatorValue> vals = values.getObject();
                 vals.clear();
                 
                 AmpIndicatorValue tmp = (AmpIndicatorValue) baseVal.clone();
-                tmp.setLogFrame(logFrame);
-                tmp.setRisk(riskVal);
                 tmp.setIndicatorConnection(conn.getObject());
                 tmp.setIndValId(null); //for hibernate to think it's a new object
                 vals.add(tmp);
                 
                 tmp = (AmpIndicatorValue) revisedVal.clone();
-                tmp.setLogFrame(logFrame);
-                tmp.setRisk(riskVal);
                 tmp.setIndicatorConnection(conn.getObject());
                 tmp.setIndValId(null); //for hibernate to think it's a new object
                 vals.add(tmp);
                 
                 tmp = (AmpIndicatorValue) targetVal.clone(); 
-                tmp.setLogFrame(logFrame);
-                tmp.setRisk(riskVal);
                 tmp.setIndicatorConnection(conn.getObject());
                 tmp.setIndValId(null); //for hibernate to think it's a new object
                 vals.add(tmp);
                 
                 tmp = (AmpIndicatorValue) currentVal.clone(); 
-                tmp.setLogFrame(logFrame);
-                tmp.setRisk(riskVal);
                 tmp.setIndicatorConnection(conn.getObject());
                 tmp.setIndValId(null); //for hibernate to think it's a new object
                 vals.add(tmp);

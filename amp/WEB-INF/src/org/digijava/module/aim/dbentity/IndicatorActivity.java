@@ -1,6 +1,12 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.kernel.ampapi.endpoints.activity.values.AmpIndicatorRiskRatingsPossibleValuesProvider;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,16 +35,21 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
     /**
      * Activity
      */
-//  @Interchangeable(fieldTitle="Activity", recursive=true)
+    @InterchangeableBackReference
     private AmpActivityVersion activity;
     
     /**
      * Indicator risk.
      * Actually risk is in each connection of indicator and activity.
      */
-//  @Interchangeable(fieldTitle="Risk", importable = true)
+    @PossibleValues(AmpIndicatorRiskRatingsPossibleValuesProvider.class)
+    @Interchangeable(fieldTitle = "Risk", importable = true, pickIdOnly = true)
     private AmpIndicatorRiskRatings risk;
-        
+
+    @Interchangeable(fieldTitle = "Log Frame", importable = true, pickIdOnly = true,
+            discriminatorOption = CategoryConstants.LOGFRAME_KEY,
+            fmPath = "/Activity Form/M&E/ME Item/Logframe Category")
+    private AmpCategoryValue logFrame;
 
     public AmpActivityVersion getActivity() {
         return activity;
@@ -55,17 +66,19 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
     public void setRisk(AmpIndicatorRiskRatings risk) {
         this.risk = risk;
     }
-    
-    @Override
-    public boolean equals(Object obj) {
-        IndicatorActivity ia = (IndicatorActivity) obj; 
-        return getId().compareTo(ia.getId()) == 0;
+
+    public AmpCategoryValue getLogFrame() {
+        return logFrame;
+    }
+
+    public void setLogFrame(AmpCategoryValue logFrame) {
+        this.logFrame = logFrame;
     }
 
     @Override
     public boolean equalsForVersioning(Object obj) {
         IndicatorActivity aux = (IndicatorActivity) obj;
-        return aux.getIndicator().getIndicatorId() == getIndicator().getIndicatorId();
+        return aux.getIndicator().getIndicatorId().equals(getIndicator().getIndicatorId());
     }
 
     @Override
@@ -90,11 +103,12 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
                 AmpIndicatorValue ind = (AmpIndicatorValue) it
                         .next();
                 value += ind.getValueType() + "" + ind.getValue() + "" + ind.getValueDate();
-                if (ind.getLogFrame() != null)
-                    value += ind.getLogFrame().getValue();
             }
         }
-        
+        if (logFrame != null) {
+            value += logFrame.getValue();
+        }
+
         return value;
     }
 
@@ -135,6 +149,9 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
                         new Output(null, new String[] {typeString}, new Object[]{ind.getValue()}));
             }
         }
+        if (logFrame != null) {
+            out.getOutputs().add(new Output(null, new String[]{"Log frame"}, new Object[]{logFrame.getValue()}));
+        }
         return out;
     }
 
@@ -164,16 +181,6 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
     protected Object clone() throws CloneNotSupportedException {
         // TODO Auto-generated method stub
         return super.clone();
-    }
-
-    public String getLogFrame() {
-        if (this.getValues() != null && this.getValues().size() > 0) {
-            AmpIndicatorValue indicatorValue = this.getValues().iterator().next();
-            if (indicatorValue != null && indicatorValue.getLogFrame() != null) {
-                return indicatorValue.getLogFrame().getValue();
-            }
-        }
-        return "";
     }
 
     public List<AmpIndicatorValue> getValuesSorted() {

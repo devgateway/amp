@@ -38,5 +38,7 @@ public class SyncConstants {
         public static final String FEATURE_MANAGER = "feature manager";
         public static final String MAP_TILES = "map_tiles";
         public static final String LOCATORS = "locators";
+        public static final String INDICATOR = "indicator";
+        public static final String INDICATOR_RISK_RATING = "indicator risk rating";
     }
 }

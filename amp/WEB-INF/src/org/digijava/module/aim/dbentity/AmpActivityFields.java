@@ -724,10 +724,10 @@ LoggerIdentifiable, Cloneable {
      * and contain set of values for this connection.
      * Please refer to AmpActivity.hbm.xml and IndicatorConnection.hbm.xml for details.
      */
-//  @Interchangeable(fieldTitle = "Indicators",fmPath="/Activity Form/M&E")
+    @Interchangeable(fieldTitle = "Indicators", fmPath = "/Activity Form/M&E",
+            validators = @Validators(unique = "/Activity Form/M&E/Unique MEs Validator"))
     @VersionableCollection(fieldTitle = "Indicators")
-//  @Validators (unique="/Activity Form/M&E/Unique MEs Validator")
-    protected Set<IndicatorActivity> indicators;
+    protected Set<IndicatorActivity> indicators = new HashSet<>();
 
     @Interchangeable(fieldTitle = "Activity Documents", fmPath = "/Activity Form/Related Documents", importable = true)
     @VersionableCollection(fieldTitle = "Activity Documents")

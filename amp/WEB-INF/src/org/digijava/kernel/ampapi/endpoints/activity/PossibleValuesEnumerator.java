@@ -34,6 +34,8 @@ import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -76,6 +78,8 @@ public class PossibleValuesEnumerator {
                 .putAll(User.class, Entities.USER)
                 .putAll(AmpComponentType.class, Entities.COMPONENT_TYPE)
                 .putAll(AmpFiscalCalendar.class, Entities.CALENDAR)
+                .putAll(AmpIndicator.class, Entities.INDICATOR)
+                .putAll(AmpIndicatorRiskRatings.class, Entities.INDICATOR_RISK_RATING)
                 .build();
 
     private PossibleValuesDAO possibleValuesDAO;

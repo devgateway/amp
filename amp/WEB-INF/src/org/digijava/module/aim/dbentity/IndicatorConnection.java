@@ -38,13 +38,13 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
     @InterchangeableDiscriminator(discriminatorField = "valueType",
             configurer = AmpIndicatorValueDiscriminationConfigurer.class, settings = {
             @Interchangeable(fieldTitle = "Base", discriminatorOption = "" + AmpIndicatorValue.BASE,
-                    multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Base Value"),
+                    multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Base Value", importable = true),
             @Interchangeable(fieldTitle = "Target", discriminatorOption = "" + AmpIndicatorValue.TARGET,
-                    multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Target Value"),
+                    multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Target Value", importable = true),
             @Interchangeable(fieldTitle = "Revised", discriminatorOption = "" + AmpIndicatorValue.REVISED,
-                    multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Revised Value"),
+                    multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Revised Value", importable = true),
             @Interchangeable(fieldTitle = "Actual", discriminatorOption = "" + AmpIndicatorValue.ACTUAL,
-                    multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Current Value")})
+                    multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Current Value", importable = true)})
     protected Set<AmpIndicatorValue> values = new HashSet<>();
     
     public Long getId() {

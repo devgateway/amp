@@ -1,0 +1,63 @@
+.country-popup-wrapper{
+  background: rgba(0,0,0,0.6);
+  bottom: 0;
+  height: 100%;
+  padding-left: 2%;
+  padding-top: 2%;
+  position: fixed;
+  top: 145px;
+  z-index: 10px;
+  width: 100%;
+}
+.country-popup-wrapper > .container-fluid{
+  float: left;
+  height: 450px;
+  overflow: auto;
+  padding: 0;
+  width: 80%;
+}
+.country-popup-wrapper .country-popup{
+  background-color: #273142;
+  border-radius: 5px;
+  color: #ffffff;
+  margin-right: 10px;
+  padding: 20px;
+  width: 32%;
+}
+.country-popup-wrapper .country-popup:last-of-type{
+  margin-right: 0;
+}
+
+/* country popup content */
+.country-popup .header{
+  border-bottom: 1px solid #313d4f;
+  overflow: hidden;
+  padding-bottom: 10px;
+}
+.country-popup .header .country-name{
+  padding: 0;
+}
+.country-popup .header .projects{
+  padding: 0;
+}
+
+.country-popup .header .projects .label{
+  color: #7c8ca5;
+  float: right;
+}
+.country-popup .header .projects .count{
+  display: inline-block;
+  float: right;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: -5px;
+}
+.country-popup .sector-list{
+  border-bottom: 1px solid #313d4f;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+.country-popup .description{
+  font-size: 12px;
+  padding-top: 10px;
+}

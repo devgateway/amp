@@ -27,7 +27,6 @@ export default class ConnectionLayer extends React.Component {
                 return true;
             }
         }
-        ;
         return false;
     }
 

@@ -1,12 +1,36 @@
-/*
- src/reducers/simpleReducer.js
-*/
-export default (state = {}, action) => {
+import {
+    FETCH_AMP_SETTINGS_SUCCESS,
+    FETCH_AMP_SETTINGS_PENDING,
+    FETCH_AMP_SETTINGS_ERROR
+} from '../actions/startupAction';
+
+const initialState = {
+    settingsLoaded: false,
+    settingsPending: false,
+    settings: {},
+    error: null
+};
+export default (state = initialState, action) => {
     switch (action.type) {
-        case 'SIMPLE_ACTION':
+        case FETCH_AMP_SETTINGS_PENDING:
             return {
-                result: action.payload
-            }
+                ...state,
+                settingsPending: true
+            };
+        case FETCH_AMP_SETTINGS_SUCCESS:
+            return {
+                ...state,
+                settingsPending: false,
+                settingsLoaded: true,
+                settings: action.payload
+            };
+        case FETCH_AMP_SETTINGS_ERROR:
+            return {
+                ...state,
+                settingsPending: false,
+                settingsLoaded: false,
+                error: action.payload.error
+            };
         default:
             return state
     }

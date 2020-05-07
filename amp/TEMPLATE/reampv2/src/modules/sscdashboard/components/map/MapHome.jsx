@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Map, TileLayer, withLeaflet, CircleMarker} from 'react-leaflet';
+import {Map, TileLayer, withLeaflet, CircleMarker, Marker} from 'react-leaflet';
 import * as L from 'leaflet';
 import '../../../../App.css';
 import ConnectionLayer from "./d3Layer/ConnectionLayer";
@@ -7,8 +7,8 @@ import '../layout/map/map.css';
 
 export default class MapHome extends Component {
     state = {
-        lat: -7.798078531355303,
-        lng: 27.070312500000004,
+        lat: -38.41,
+        lng: -63.61,
         zoom: 2.5,
     };
 
@@ -69,6 +69,7 @@ export default class MapHome extends Component {
         points.push({latitude: 20.593684, longitude: 78.96288});
         return (
             <Map className={'map-container'} center={mapCenter} zoom={this.state.zoom} >
+                <Marker position={mapCenter}/>
                 <TileLayer
                     attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import fetchTranslations from '../../../utils/actions/fetchTranslations';
-
+import loadAmpSettings from '../actions/loadAmpSettings';
 import defaultTrnPack from '../config/initialTranslations';
 import { Loading } from '../../../utils/components/Loading';
+
 export const SSCTranslationContext = React.createContext({translations: defaultTrnPack});
 
 /**
@@ -20,6 +21,7 @@ class Startup extends Component {
 
     componentDidMount() {
         this.props.fetchTranslations(defaultTrnPack);
+        this.props.loadAmpSettings();
     }
 
     render() {
@@ -38,6 +40,9 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({fetchTranslations: fetchTranslations}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+    fetchTranslations: fetchTranslations,
+    loadAmpSettings: loadAmpSettings
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Startup);

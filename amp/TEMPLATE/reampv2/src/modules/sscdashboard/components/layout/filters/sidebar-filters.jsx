@@ -6,6 +6,8 @@ import FilterDownload from './download';
 import './filters.css';
 
 class SidebarFilters extends Component {
+
+
     render() {
         return (
             <div className="sidebar-filter-wrapper">

@@ -60,7 +60,9 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
             ArrayList<FilterParam> params = new ArrayList<FilterParam>();
             boolean multilingualEnabled = ContentTranslationUtil.multilingualIsEnabled();
             if (multilingualEnabled) {
-               sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type, orgname.translation  from amp_organisation org LEFT OUTER JOIN amp_content_translation orgname ON org.amp_org_id = orgname.object_id"
+                sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type, orgname.translation  "
+                        + "from amp_organisation org LEFT OUTER JOIN amp_content_translation orgname ON "
+                        + " org.amp_org_id = orgname.object_id "
                         + " AND orgname.field_name = ? "
                         + " AND orgname.object_class =? "
                         + " AND orgname.locale = ?" ;
@@ -72,7 +74,9 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
             else {
                 sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type from amp_organisation org";
             }
-            sqlQuery+= " WHERE (org.deleted IS NULL OR org.deleted = ?)";
+            sqlQuery += " left outer join amp_category_value_location acvl ON"
+                    + "  org.amp_country_id = acvl.id"
+                    + " WHERE (org.deleted IS NULL OR org.deleted = ?)";
             AmpOrgGroup orgroup =null;
 
             if (getParams()!=null && getParams().get(PARAM.GROUP_FILTER) != null) {
@@ -97,7 +101,7 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
             }
 
             if (getParams() != null && getParams().get(PARAM.TEMPLATE_FILTER) != null) {
-                sqlQuery = sqlQuery + " AND template_id = ?";
+                sqlQuery = sqlQuery + " AND acvl.template_id = ?";
             }
             
             Integer maxResults = (Integer) getParams().get(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);

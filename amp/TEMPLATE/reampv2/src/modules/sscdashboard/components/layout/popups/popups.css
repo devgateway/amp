@@ -1,0 +1,99 @@
+.country-popup-wrapper{
+  background: rgba(0,0,0,0.6);
+  bottom: 0;
+  height: 100%;
+  padding-left: 2%;
+  padding-top: 2%;
+  position: fixed;
+  top: 145px;
+  z-index: 10px;
+  width: 100%;
+}
+.country-popup-wrapper > .container-fluid{
+  float: left;
+  height: 450px;
+  overflow: auto;
+  padding: 0;
+  width: 80%;
+}
+.country-popup-wrapper h2{
+  color: #ffffff;
+  font-size: 20px;
+  margin-bottom :20px;
+  margin-top: 0;
+}
+.country-popup-wrapper .country-popup{
+  background-color: #273142;
+  border-radius: 5px;
+  color: #ffffff;
+  margin-right: 10px;
+  padding: 20px;
+}
+.country-popup-wrapper .country-popup:last-of-type{
+  margin-right: 0;
+}
+
+/* country popup content */
+.country-popup .header{
+  border-bottom: 1px solid #313d4f;
+  overflow: hidden;
+  padding-bottom: 10px;
+}
+.country-popup .header .country-name{
+  font-size: 25px;
+  font-weight: bold;
+  padding: 0;
+}
+.country-popup .header .country-name img{
+  display: block;
+  float: left;
+  margin-right: 12px;
+  margin-top: 5px;
+  width: 40px;
+}
+.country-popup .header .projects{
+  margin-top: 5px;
+  padding: 0;
+}
+
+.country-popup .header .projects .label{
+  color: #7c8ca5;
+  float: left;
+  line-height: 270%;
+}
+.country-popup .header .projects .count{
+  display: inline-block;
+  float: left;
+  font-size: 25px;
+  font-weight: bold;
+  margin-top: -5px;
+}
+.country-popup .chart-container{
+  border-bottom: 1px solid #313d4f;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+.country-popup .popup-footer{
+  background: none;
+  font-size: 12px;
+  overflow: hidden;
+  padding-top: 10px;
+}
+.country-popup .popup-footer .label{
+  color: #7c8ca5;
+}
+.country-popup .popup-footer .project-list{
+  height: 70px;
+  overflow: auto;
+}
+.country-popup .popup-footer ul li{
+  float: left;
+  margin-right: 5px;
+  width: 47%;
+}
+.country-popup .popup-footer a.more{
+  bottom: 10px;
+  display: block;
+  float: right;
+  margin-top: 50%;
+}

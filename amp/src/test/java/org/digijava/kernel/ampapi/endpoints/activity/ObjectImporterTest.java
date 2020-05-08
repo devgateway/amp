@@ -26,6 +26,7 @@ import java.util.StringJoiner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
@@ -82,7 +83,9 @@ public class ObjectImporterTest {
                 @Interchangeable(fieldTitle = "Hair Color", discriminatorOption = "Hair", importable = true,
                         multipleValues = false, pickIdOnly = true),
                 @Interchangeable(fieldTitle = "Height", discriminatorOption = "Height", importable = true,
-                        multipleValues = false, pickIdOnly = true)})
+                        multipleValues = false, pickIdOnly = true),
+                @Interchangeable(fieldTitle = "Character", discriminatorOption = "Character", importable = true,
+                        pickIdOnly = true)})
         private Set<PersonAttribute> attributes = new HashSet<>();
 
         @Independent
@@ -91,6 +94,12 @@ public class ObjectImporterTest {
 
         @Interchangeable(fieldTitle = "Details", importable = true)
         private ParentDetails details;
+
+        @Interchangeable(fieldTitle = "Status", importable = true, pickIdOnly = true)
+        private Long status;
+
+        @Interchangeable(fieldTitle = "Statuses", importable = true, pickIdOnly = true)
+        private Set<Long> statuses = new HashSet<>();
 
         public Parent() {
         }
@@ -198,6 +207,22 @@ public class ObjectImporterTest {
 
         public void setDetails(ParentDetails details) {
             this.details = details;
+        }
+
+        public void setStatus(Long status) {
+            this.status = status;
+        }
+
+        public Long getStatus() {
+            return status;
+        }
+
+        public Set<Long> getStatuses() {
+            return statuses;
+        }
+
+        public void setStatuses(Set<Long> statuses) {
+            this.statuses = statuses;
         }
     }
 
@@ -977,6 +1002,57 @@ public class ObjectImporterTest {
 
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, hasProperty("details", detail(null, "Detail A")));
+    }
+
+    @Test
+    public void testListOfPickIdOnly() {
+        Map<String, Object> json = (Map<String, Object>) examples.get("list-of-pick-id-only");
+
+        Parent parent = new Parent("Leonidas", 45);
+
+        importer.validateAndImport(parent, json);
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, parentWithAttributes("Leonidas", 45,
+                containsInAnyOrder(
+                        attribute("Character", "55", "ch1"),
+                        attribute("Character", "56", "ch2"),
+                        attribute("Character", "57", "ch3"))));
+    }
+
+    @Test
+    public void testPickIdOnlyForSimpleType() {
+        Parent parent = new Parent();
+
+        Map<String, Object> json = new HashMap<>();
+        json.put("status", 1L);
+        json.put("statuses", ImmutableList.of(3L, 4L));
+
+        importer.validateAndImport(parent, json);
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, allOf(
+                hasProperty("status", is(1L)),
+                hasProperty("statuses", containsInAnyOrder(3L, 4L))));
+    }
+
+    @Test
+    public void testPickIdOnlyCleared() {
+        Parent parent = new Parent();
+        parent.setStatus(1L);
+        parent.getStatuses().add(5L);
+        parent.getStatuses().add(7L);
+
+        Map<String, Object> json = new HashMap<>();
+        json.put("status", null);
+        json.put("statuses", null);
+
+        importer.validateAndImport(parent, json);
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, allOf(
+                hasProperty("status", is(nullValue())),
+                hasProperty("statuses", emptyIterable())));
     }
 
     private Matcher<Agreement> agreement(Long id, String desc) {

@@ -1,6 +1,5 @@
 package org.digijava.kernel.validators.activity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.DiscriminatedFieldAccessor.unwrapSingleElement;
 import static org.digijava.kernel.ampapi.endpoints.activity.field.APIFieldUtil.readFieldValueOrDefault;
 
 import java.util.Collection;
@@ -58,8 +57,7 @@ public class ImplementationLevelValidator implements ConstraintValidator {
         context.disableDefaultConstraintViolation();
 
         APIField implLevelField = type.getField(IMPL_LEVEL_FIELD_NAME);
-        AmpCategoryValue implLevel =
-                unwrapSingleElement(readFieldValueOrDefault(implLevelField, value, ImmutableList.of()));
+        AmpCategoryValue implLevel = readFieldValueOrDefault(implLevelField, value, null);
 
         return isImplLocationValid(type, value, context, implLevel)
                 & areLocationsValid(type, value, context, implLevel);
@@ -112,8 +110,7 @@ public class ImplementationLevelValidator implements ConstraintValidator {
     private boolean isImplLocationValid(APIField type, Object value, ConstraintValidatorContext context,
             AmpCategoryValue implLevel) {
         APIField implLocationField = type.getField(IMPL_LOC_FIELD_NAME);
-        AmpCategoryValue implLocation =
-                unwrapSingleElement(readFieldValueOrDefault(implLocationField, value, ImmutableList.of()));
+        AmpCategoryValue implLocation = readFieldValueOrDefault(implLocationField, value, null);
 
         if (implLocation != null) {
             if (implLevel != null) {

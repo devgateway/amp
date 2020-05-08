@@ -14,15 +14,8 @@ public class LocationSkeleton extends HierEntitySkeleton<LocationSkeleton> {
     protected Double lat;
     protected Double lon;
 
-    public LocationSkeleton(LocationSkeletonBuilder locationSkeletonBuilder) {
-        super(locationSkeletonBuilder.getId(),
-                locationSkeletonBuilder.getLocName(),
-                locationSkeletonBuilder.getCode(),
-                locationSkeletonBuilder.getParentId());
-        this.cvId = locationSkeletonBuilder.getCvId();
-        this.templateId = locationSkeletonBuilder.getTemplateId();
-        this.lat = locationSkeletonBuilder.getLat();
-        this.lon = locationSkeletonBuilder.getLon();
+    protected LocationSkeleton(Long id, String locName, String code, Long parentId) {
+        super(id, locName, code, parentId);
     }
 
     public Long getCvId() {
@@ -49,16 +42,13 @@ public class LocationSkeleton extends HierEntitySkeleton<LocationSkeleton> {
         return HierEntitySkeleton.fetchTree("amp_category_value_location", condition, new EntityFetcher<LocationSkeleton>() {
             @Override
             public LocationSkeleton fetch(ResultSet rs) throws SQLException {
-                return new LocationSkeletonBuilder()
-                        .setId(nullInsteadOfZero(rs.getLong("id")))
-                        .setLocName(rs.getString("location_name"))
-                        .setCode(rs.getString("code"))
-                        .setParentId(nullInsteadOfZero(rs.getLong("parent_location")))
-                        .setCvId(nullInsteadOfZero(rs.getLong("parent_category_value")))
-                        .setTemplateId(nullInsteadOfZero(rs.getLong("template_id")))
-                        .setLat(nullInsteadOfZero(rs.getDouble("gs_lat")))
-                        .setLon(nullInsteadOfZero(rs.getDouble("gs_long")))
-                        .createLocationSkeleton();
+                return new LocationSkeletonBuilder(nullInsteadOfZero(rs.getLong("id")), rs.getString("location_name"),
+                        rs.getString("code"), nullInsteadOfZero(rs.getLong("parent_location")))
+                        .withCvId(nullInsteadOfZero(rs.getLong("parent_category_value")))
+                        .withTemplateId(nullInsteadOfZero(rs.getLong("template_id")))
+                        .withLat(nullInsteadOfZero(rs.getDouble("gs_lat")))
+                        .withLon(nullInsteadOfZero(rs.getDouble("gs_long")))
+                        .getLocationSkeleton();
             }
 
             @Override

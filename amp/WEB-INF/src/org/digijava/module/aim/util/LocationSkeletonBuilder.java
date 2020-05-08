@@ -1,88 +1,33 @@
 package org.digijava.module.aim.util;
 
 public class LocationSkeletonBuilder {
-    private Long id;
-    private String locName;
-    private String code;
-    private Long parentId;
-    private Long cvId;
-    private Long templateId;
-    private Double lat;
-    private Double lon;
 
-    public LocationSkeletonBuilder setId(Long id) {
-        this.id = id;
+    private LocationSkeleton locationSkeleton;
+
+    public LocationSkeletonBuilder(Long id, String locName, String code, Long parentId) {
+        locationSkeleton = new LocationSkeleton(id, locName, code, parentId);
+    }
+
+    public LocationSkeletonBuilder withCvId(Long cvId) {
+        locationSkeleton.cvId = cvId;
         return this;
     }
 
-    public LocationSkeletonBuilder setLocName(String locName) {
-        this.locName = locName;
+    public LocationSkeletonBuilder withTemplateId(Long templateId) {
+        locationSkeleton.templateId = templateId;
         return this;
     }
 
-    public LocationSkeletonBuilder setCode(String code) {
-        this.code = code;
+    public LocationSkeletonBuilder withLat(Double lat) {
+        locationSkeleton.lat = lat;
         return this;
     }
 
-    public LocationSkeletonBuilder setParentId(Long parentId) {
-        this.parentId = parentId;
+    public LocationSkeletonBuilder withLon(Double lon) {
+        locationSkeleton.lon = lon;
         return this;
     }
-
-    public LocationSkeletonBuilder setCvId(Long cvId) {
-        this.cvId = cvId;
-        return this;
-    }
-
-    public LocationSkeletonBuilder setTemplateId(Long templateId) {
-        this.templateId = templateId;
-        return this;
-    }
-
-    public LocationSkeletonBuilder setLat(Double lat) {
-        this.lat = lat;
-        return this;
-    }
-
-    public LocationSkeletonBuilder setLon(Double lon) {
-        this.lon = lon;
-        return this;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getLocName() {
-        return locName;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public Long getParentId() {
-        return parentId;
-    }
-
-    public Long getCvId() {
-        return cvId;
-    }
-
-    public Long getTemplateId() {
-        return templateId;
-    }
-
-    public Double getLat() {
-        return lat;
-    }
-
-    public Double getLon() {
-        return lon;
-    }
-
-    public LocationSkeleton createLocationSkeleton() {
-        return new LocationSkeleton(this);
+    public LocationSkeleton getLocationSkeleton() {
+        return locationSkeleton;
     }
 }

@@ -16,6 +16,12 @@
   padding: 0;
   width: 80%;
 }
+.country-popup-wrapper h2{
+  color: #ffffff;
+  font-size: 20px;
+  margin-bottom :20px;
+  margin-top: 0;
+}
 .country-popup-wrapper .country-popup{
   background-color: #273142;
   border-radius: 5px;

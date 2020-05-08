@@ -1,8 +1,7 @@
 import { fetchAmpSettingsPending, fetchAmpSettingsError, fetchAmpSettingsSuccess }
     from './startupAction';
 import { fetchApiData } from '../../../utils/loadTranslations';
-
-const API_AMP_SETTINGS_URL = '/rest/amp/settings';
+import { API_AMP_SETTINGS_URL } from '../utils/constants';
 
 function loadAmpSettings() {
     return dispatch => {

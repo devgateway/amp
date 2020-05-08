@@ -1,22 +1,26 @@
 import React, { Component } from 'react';
-import FilterCountries from './countries';
-import MultiSelectionDropDown from './years';
+//import FilterCountries from './countries';
+import MultiSelectionDropDown from './MultiSelectionDropDown';
 import CountryCarousel from './carousel';
 import CountrySearch from './country-search';
 import './filters.css';
 import { DASHBOARD_DEFAULT_MAX_YEAR_RANGE, DASHBOARD_DEFAULT_MIN_YEAR_RANGE } from '../../../utils/constants';
 import { bindActionCreators } from 'redux';
-import { loadSectorsFilters } from '../../../actions/loadFilters';
+import { loadSectorsFilters, loadCountriesFilters } from '../../../actions/loadFilters';
 import { connect } from 'react-redux';
 
 class HorizontalFilters extends Component {
+
     componentDidMount(): void {
         this.props.loadSectorsFilters();
+        this.props.loadCountriesFilters();
     }
 
     render() {
         const years = [];
+        const {selectedYears = [], selectedCountries = [], selectedSectors = []} = this.props.selectedFilters;
         const {sectors} = this.props.filters.sectors;
+        const {countries} = this.props.filters.countries;
         this._generateYearsFilters(years);
         return (
             <div className="h-filter-wrapper">
@@ -25,20 +29,33 @@ class HorizontalFilters extends Component {
                     <CountrySearch/>
                 </div>
                 <div className="row inner">
-                    <div id="dropdown-filters-wrapper" id="accordion-filter">
-                        <div className="col-md-3" id="accordion-filter"><FilterCountries/></div>
+                    <div id="accordion-filter">
+                        <div className="col-md-3" id="accordion-filter">
+                            <MultiSelectionDropDown options={countries}
+                                                    filterName='amp.ssc.dashboard:Country'
+                                                    filterId='ddCountry'
+                                                    parentId="accordion-filter"
+                                                    sortData={true}
+                                                    selectedOptions={selectedCountries}
+                                                    onChange={this.props.handleSelectedCountryChanged}
+                            /></div>
                         <div className="col-md-4" id="accordion-filter">
                             <MultiSelectionDropDown options={sectors}
                                                     filterName='amp.ssc.dashboard:Sector'
                                                     filterId='ddSector'
-                                                    parentId="accordion-filter"/>
-
+                                                    parentId="accordion-filter"
+                                                    selectedOptions={selectedSectors}
+                                                    onChange={this.props.handleSelectedSectorChanged}
+                            />
                         </div>
                         <div className="col-md-3" id="accordion-filter">
                             <MultiSelectionDropDown options={years}
+                                                    selectedOptions={selectedYears}
                                                     filterName='amp.ssc.dashboard:Year'
                                                     filterId='ddYear'
-                                                    parentId="accordion-filter"/></div>
+                                                    parentId="accordion-filter"
+                                                    onChange={this.props.handleSelectedYearChanged}
+                            /></div>
                     </div>
                 </div>
             </div>
@@ -67,13 +84,19 @@ const mapStateToProps = state => {
             sectors: {
                 sectors: state.filtersReducer.sectors,
                 sectorsLoaded: state.filtersReducer.sectorsLoaded
+            },
+            countries: {
+                countries: state.filtersReducer.countries,
+                countriesLoaded: state.filtersReducer.countriesLoaded
             }
+
         }
     };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    loadSectorsFilters: loadSectorsFilters
+    loadSectorsFilters: loadSectorsFilters,
+    loadCountriesFilters: loadCountriesFilters
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(HorizontalFilters);

@@ -22,7 +22,6 @@
   color: #ffffff;
   margin-right: 10px;
   padding: 20px;
-  width: 32%;
 }
 .country-popup-wrapper .country-popup:last-of-type{
   margin-right: 0;
@@ -35,29 +34,60 @@
   padding-bottom: 10px;
 }
 .country-popup .header .country-name{
+  font-size: 25px;
+  font-weight: bold;
   padding: 0;
 }
+.country-popup .header .country-name img{
+  display: block;
+  float: left;
+  margin-right: 12px;
+  margin-top: 5px;
+  width: 40px;
+}
 .country-popup .header .projects{
+  margin-top: 5px;
   padding: 0;
 }
 
 .country-popup .header .projects .label{
   color: #7c8ca5;
-  float: right;
+  float: left;
+  line-height: 270%;
 }
 .country-popup .header .projects .count{
   display: inline-block;
-  float: right;
-  font-size: 18px;
+  float: left;
+  font-size: 25px;
   font-weight: bold;
   margin-top: -5px;
 }
-.country-popup .sector-list{
+.country-popup .chart-container{
   border-bottom: 1px solid #313d4f;
   padding-bottom: 10px;
   padding-top: 10px;
 }
-.country-popup .description{
+.country-popup .popup-footer{
+  background: none;
   font-size: 12px;
+  overflow: hidden;
   padding-top: 10px;
+}
+.country-popup .popup-footer .label{
+  color: #7c8ca5;
+}
+.country-popup .popup-footer .project-list{
+  height: 70px;
+  overflow: auto;
+}
+.country-popup .popup-footer ul li{
+  float: left;
+  margin-right: 5px;
+  width: 47%;
+}
+.country-popup .popup-footer a.more{
+  bottom: 10px;
+  display: block;
+  float: right;
+  margin-top: 50%;
 }

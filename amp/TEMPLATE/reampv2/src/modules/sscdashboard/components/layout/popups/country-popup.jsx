@@ -2,7 +2,9 @@ import React, {Component} from "react";
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import './popups.css';
-import CountryPopupContent from "./country-popup-content";
+import CountryPopupHeader from "./country-popup-header";
+import CountryPopupChart from "./country-popup-chart";
+import CountryPopupFooter from "./country-popup-footer";
 
 class CountryPopup extends Component {
     render() {
@@ -10,14 +12,10 @@ class CountryPopup extends Component {
             <div className="country-popup-wrapper">
                 <div className="container-fluid">
 
-                  <div class="col-md-4 country-popup">
-                    <CountryPopupContent/>
-                  </div>
-                  <div class="col-md-4 country-popup">
-                    <CountryPopupContent/>
-                  </div>
-                  <div class="col-md-4 country-popup">
-                    <CountryPopupContent/>
+                  <div class="col-md-9 country-popup">
+                    <CountryPopupHeader/>
+                    <CountryPopupChart/>
+                    <CountryPopupFooter/>
                   </div>
 
                 </div>

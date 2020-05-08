@@ -81,7 +81,7 @@ public abstract class HierEntitySkeleton<K extends HierEntitySkeleton<?>> implem
     public Set<K> getChildLocations() {
         return this.childLocations;
     }
-    
+
     @Override public Long getIdentifier() {
         return this.id; 
     }
@@ -145,7 +145,14 @@ public abstract class HierEntitySkeleton<K extends HierEntitySkeleton<?>> implem
         return ret;
     }
 
-    
+    protected static Double nullInsteadOfZero(double val) {
+        if (val == 0D) {
+            return null;
+        } else {
+            return val;
+        }
+    }
+
     protected static Long nullInsteadOfZero(long val) {
         if (val == 0) {
             return null;

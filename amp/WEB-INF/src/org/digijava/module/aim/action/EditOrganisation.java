@@ -154,9 +154,6 @@ public class EditOrganisation extends DispatchAction {
           Collections.sort(sortedCol, new DbUtil.HelperAmpOrgGroupNameComparator());
           editForm.setOrgGroup(sortedCol);
           editForm.setType(orgType.getClassification());
-          if (organization.getTemplate() != null) {
-              editForm.setTemplateId(organization.getTemplate().getId());
-          }
           if (orgType.getClassification() != null && orgType.getClassification().equals(Constants.ORG_TYPE_NGO)) {
 
               if (organization.getStaffInfos() != null) {
@@ -237,7 +234,6 @@ public class EditOrganisation extends DispatchAction {
           editForm.setOrgGroup(null);
           editForm.setAmpOrgGrpId(null);
           editForm.setType(null);
-          editForm.setTemplateId(null);
       }
       if(request.getSession().getAttribute("reloadOrgDocsFromDb")!=null){
           request.getSession().removeAttribute("reloadOrgDocsFromDb");
@@ -1303,9 +1299,6 @@ public class EditOrganisation extends DispatchAction {
             }
                 organization.getOrganizationContacts().addAll(allContacts);
       }
-
-      organization.setTemplate(FeaturesUtil.getTemplateById(editForm.getTemplateId()));
-
       this.saveDocuments(request, organization);
       DbUtil.saveOrg(organization);
       if (ContentTranslationUtil.multilingualIsEnabled()) {
@@ -1436,8 +1429,6 @@ public class EditOrganisation extends DispatchAction {
               Collections.sort(sortedCol, new DbUtil.HelperAmpOrgTypeNameComparator());
               form.setOrgType(sortedCol);
           }
-          form.setTemplates(FeaturesUtil.getAMPTemplatesVisibility());
-          form.setTemplateId(null);
           form.setOrgGroup(null);
           form.setSectorScheme(SectorUtil.getAllSectorSchemes());
           form.setFiscalCal(DbUtil.getAllFisCalenders());

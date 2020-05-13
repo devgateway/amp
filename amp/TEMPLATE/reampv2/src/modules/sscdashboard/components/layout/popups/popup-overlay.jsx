@@ -4,6 +4,7 @@ import {bindActionCreators} from 'redux';
 import './popups.css';
 import CountryPopup from "./country-popup";
 import CountryPopupOverlayTitle from "./popup-overlay-title";
+import CountryPopupExport from "./popup-export";
 
 class CountryPopupOverlay extends Component {
     render() {
@@ -11,7 +12,7 @@ class CountryPopupOverlay extends Component {
             <div className="country-popup-wrapper">
                 <div className="container-fluid">
                 <CountryPopupOverlayTitle/>
-
+                <CountryPopupExport/>
                   <div class="col-md-9 country-popup">
                     <CountryPopup/>
                   </div>

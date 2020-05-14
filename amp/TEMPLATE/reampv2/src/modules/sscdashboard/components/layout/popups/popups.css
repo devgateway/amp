@@ -18,7 +18,7 @@
 }
 .country-popup-wrapper h2{
   color: #ffffff;
-  font-size: 20px;
+  font-size: 22px;
   margin-bottom :20px;
   margin-top: 0;
 }
@@ -96,4 +96,65 @@
   display: block;
   float: right;
   margin-top: 50%;
+}
+/* country popup export wrapper */
+.export-wrapper{
+  color: #ffffff;
+  float: right;
+  margin-top: -43px;
+}
+.export-wrapper ul{
+  list-style: none;
+  padding-left: 0;
+}
+.export-wrapper ul li{
+  cursor: pointer;
+  float: left;
+  margin-right: 10px;
+  opacity: 1;
+}
+.export-wrapper ul li:hover{
+  opacity: 0.8;
+}
+.export-wrapper ul li.jpg{
+  background-color: #ea484a;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 3px 10px;
+}
+.export-wrapper ul li.xls{
+  background-color: #50ba54;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 3px 10px;
+}
+.export-wrapper ul li.print{
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI0LjEuMiwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxMDAgMTAwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6I0ZGRkZGRjt9Cjwvc3R5bGU+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik05Ni40LDQ1LjJjMC01LjctNC43LTEwLjQtMTAuNC0xMC40SDc1VjMuM0gyNS40djMxLjVIMTQuMmMtNS43LDAtMTAuNCw0LjctMTAuNCwxMC40djM1LjFoMjEuNnYxMi4zSDc1VjkwCgl2LTkuOGgyMS40VjQ1LjJ6IE02OS45LDguNXYzNS4ySDMwLjZWOC41SDY5Ljl6IE0zMC42LDg3LjRWNjcuOGgzOS4ydjE5LjZIMzAuNnoiLz4KPC9zdmc+Cg==");
+  background-repeat: no-repeat;
+  background-size: 25px 25px;
+  background-position: 0 0;
+  height: 25px;
+  text-indent: -9999px;
+  width: 25px;
+}
+.export-wrapper ul li.email{
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI0LjEuMiwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxMDAgMTAwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6I0ZGRkZGRjt9Cjwvc3R5bGU+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik04Ni45LDEzLjFIMTMuMWMtNS40LDAtOS43LDQuMy05LjcsOS43djUzLjljMCw1LjQsNC4zLDkuNyw5LjcsOS43SDg3YzUuNCwwLDkuNy00LjMsOS43LTkuN1YyMi44CglDOTYuNiwxNy40LDkyLjMsMTMuMSw4Ni45LDEzLjF6IE05MC45LDIzLjd2NTJjMCwwLjUtMC4xLDAuOS0wLjIsMS4zTDU4LjksNDUuM2wyNi40LTI2LjRoMC45Qzg4LjgsMTguOSw5MC45LDIxLDkwLjksMjMuN3oKCSBNOS4xLDIzLjdjMC0yLjcsMi4yLTQuOCw0LjgtNC44bDI2LjUsMjYuNUw5LjIsNzYuN2MtMC4xLTAuMy0wLjEtMC42LTAuMS0wLjlDOS4xLDc1LjgsOS4xLDIzLjcsOS4xLDIzLjd6IE04Ni4xLDgwLjZIMTMuOQoJYy0xLjEsMC0yLTAuNC0yLjgtMC45bDMxLjgtMzEuOGw2LjcsNi43bDYuOC02LjhMODguNiw4MGwxLjctMS43Qzg5LjUsNzkuNiw4Ny45LDgwLjYsODYuMSw4MC42eiIvPgo8L3N2Zz4K");
+  background-repeat: no-repeat;
+  background-size: 25px 25px;
+  background-position: 0 0;
+  font-size: 100%;
+  height: 25px;
+  text-indent: -9999px;
+  width: 25px;
+}
+.export-wrapper ul li.return-link{
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI0LjEuMiwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyMDAgMjAwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6I0ZGRkZGRjt9Cjwvc3R5bGU+Cjxwb2x5Z29uIGNsYXNzPSJzdDAiIHBvaW50cz0iNjIsMzUuOCA2Mi43LDE2OS40IDE1MywxMDkuNyAiLz4KPC9zdmc+Cg==");
+  background-repeat: no-repeat;
+  background-size: 12px 12px;
+  background-position: right 6px;
+  line-height: 160%;
+  padding-left: 30px;
+  padding-right: 15px;
 }

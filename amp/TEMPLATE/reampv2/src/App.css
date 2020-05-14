@@ -18,3 +18,11 @@
 .dgf_footer{
   display: none;
 }
+[id^=accordion] .panel{
+  margin-bottom: 0px;
+  background-color: inherit;
+  border: 0px;
+  border-radius: 0px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}

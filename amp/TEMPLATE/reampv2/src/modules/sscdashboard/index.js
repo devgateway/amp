@@ -8,6 +8,7 @@ import Sidebar from './components/layout/sidebar/sidebar';
 import fetchTranslations from '../../utils/actions/fetchTranslations';
 import defaultTrnPack from './config/initialTranslations';
 import Startup from './components/StartUp';
+import MapContainer from "./components/layout/map/map-content";
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -28,7 +29,7 @@ class SSCDashboardApp extends Component {
                 <div className="container-fluid content-wrapper">
                     <div className="row">
                         <Sidebar/>
-                        <SSCDashboardRouter/>
+                        <MapContainer/>
                     </div>
                 </div>
             </Startup>

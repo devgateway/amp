@@ -1,6 +1,4 @@
 import React, {Component} from "react";
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import './popups.css';
 import CountryPopup from "./country-popup";
 import CountryPopupOverlayTitle from "./popup-overlay-title";

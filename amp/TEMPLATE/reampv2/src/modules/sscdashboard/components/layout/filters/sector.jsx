@@ -22,8 +22,6 @@ class FilterSector extends Component {
                             Sector Options
                         </div>
                     </div>
-
-
                 </div>
 
 

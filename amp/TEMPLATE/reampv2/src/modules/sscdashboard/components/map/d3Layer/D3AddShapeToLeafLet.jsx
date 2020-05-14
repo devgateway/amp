@@ -4,10 +4,6 @@ import * as d3 from "d3";
 
 export default class D3Shape extends MapLayer {
 
-    constructor(props) {
-        super(props);
-    }
-
     createLeafletElement(props) {
         return L.geoJson();
     }

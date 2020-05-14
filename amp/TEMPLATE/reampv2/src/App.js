@@ -1,4 +1,4 @@
-import React, {Suspense, lazy, useState, Component} from 'react';
+import React, { Component} from 'react';
 import './App.css';
 import AppRoute from './App.route';
 

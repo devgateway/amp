@@ -1,6 +1,4 @@
 import React, {Component} from "react";
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import HorizontalFilters from '../filters/horizontal-filters';
 import './map.css';
 import MapHome from "../../map/MapHome";

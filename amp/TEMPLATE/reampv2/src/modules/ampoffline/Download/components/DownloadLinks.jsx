@@ -1,20 +1,20 @@
-import React, {Component} from "react";
-import platform from "platform";
-import {getReleases, getReleasesError, getReleasesPending} from '../reducers/startupReducer';
+import React, { Component } from 'react';
+import platform from 'platform';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { getReleases, getReleasesError, getReleasesPending } from '../reducers/startupReducer';
 import fetchReleases from '../actions/fetchReleases';
 import {
     AMP_OFFLINE_INSTALLERS, DEBIAN_LINUX, LINUX, MAC, MACINTOSH, OS_X, REDHAT_LINUX, WINDOWS
 } from '../constants/Constants';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+
+import { TranslationContext } from './Startup';
 
 
 class DownloadLinks extends Component {
-
     constructor(props) {
         super(props);
         this.shouldComponentRender = this.shouldComponentRender.bind(this);
-        this.translations = props.translations;
     }
 
 
@@ -47,17 +47,19 @@ class DownloadLinks extends Component {
         let name = '';
         switch (os) {
             case WINDOWS:
-                name = `Windows Vista/7/8/10 - ${arch} ${this.translations['amp.offline:bits']}`;
+                name = `Windows Vista/7/8/10 - ${arch} ${this.context.translations['amp.offline:bits']}`;
                 break;
             case DEBIAN_LINUX:
-                name = `Ubuntu Linux (.deb) - ${arch} ${this.translations['amp.offline:bits']}`;
+                name = `Ubuntu Linux (.deb) - ${arch} ${this.context.translations['amp.offline:bits']}`;
                 break;
             case REDHAT_LINUX:
-                name = `RedHat Linux (.rpm) - ${arch} ${this.translations['amp.offline:bits']}`;
+                name = `RedHat Linux (.rpm) - ${arch} ${this.context.translations['amp.offline:bits']}`;
                 break;
             case MAC:
-                name = `Mac OS - ${arch} ${this.translations['amp.offline:bits']}`;
+                name = `Mac OS - ${arch} ${this.context.translations['amp.offline:bits']}`;
                 break;
+            default:
+                name = `${this.context.translations['amp.offline:unknown']}`;
         }
         return name;
     }
@@ -81,10 +83,10 @@ class DownloadLinks extends Component {
         const links = installer.map(i => {
             const installerName = this._getInstallerName(i.os, i.arch);
             return (<div key={i.id} className="link"><a
-                href={`${AMP_OFFLINE_INSTALLERS}/${i.id}`}>{this.translations['amp.offline:download']} {i.version} - {installerName}</a>
+                href={`${AMP_OFFLINE_INSTALLERS}/${i.id}`}>{this.context.translations['amp.offline:download']} {i.version} - {installerName}</a>
             </div>);
         });
-        const message = this.translations['amp.offline:best-version-message'];
+        const message = this.context.translations['amp.offline:best-version-message'];
         return (
             links.length > 0 &&
             <div className="alert alert-info" role="alert"><span className="info-text">{message}</span>{links}</div>);
@@ -99,7 +101,7 @@ class DownloadLinks extends Component {
                     <div>
                         {this._detectBestInstaller()}
                     </div>
-                    <h4>{this.translations['amp.offline:all-versions']}</h4>
+                    <h4>{this.context.translations['amp.offline:all-versions']}</h4>
                     <div>
                         {this._buildLinksTable()}
                     </div>
@@ -109,11 +111,13 @@ class DownloadLinks extends Component {
     }
 }
 
+DownloadLinks.contextType = TranslationContext;
+
 const mapStateToProps = state => ({
     error: getReleasesError(state.startupReducer),
     releases: getReleases(state.startupReducer),
     pending: getReleasesPending(state.startupReducer),
-    translations:state.translationsReducer.translations
+    translations: state.translationsReducer.translations
 });
 const mapDispatchToProps = dispatch => bindActionCreators({fetchReleases: fetchReleases}, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(DownloadLinks);

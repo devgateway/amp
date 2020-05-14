@@ -1,6 +1,4 @@
-import React, {Component} from "react";
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, {Component} from 'react';
 import './filters.css';
 
 class FilterCountries extends Component {
@@ -18,47 +16,47 @@ class FilterCountries extends Component {
             <ul>
               <li>
                 <input type="checkbox" name="af" id="af"/>
-                <label for="af">Afghanistan</label>
+                <label htmlFor="af">Afghanistan</label>
               </li>
               <li>
                 <input type="checkbox" name="al" id="al"/>
-                <label for="al">Albania</label>
+                <label htmlFor="al">Albania</label>
               </li>
               <li>
                 <input type="checkbox" name="dz" id="dz"/>
-                <label for="dz">Algeria</label>
+                <label htmlFor="dz">Algeria</label>
               </li>
               <li>
                 <input type="checkbox" name="ao" id="ao"/>
-                <label for="ao">Angola</label>
+                <label htmlFor="ao">Angola</label>
               </li>
               <li>
                 <input type="checkbox" name="ar" id="ar"/>
-                <label for="ar">Argentina</label>
+                <label htmlFor="ar">Argentina</label>
               </li>
               <li>
                 <input type="checkbox" name="am" id="am"/>
-                <label for="am">Armenia</label>
+                <label htmlFor="am">Armenia</label>
               </li>
               <li>
                 <input type="checkbox" name="aw" id="aw"/>
-                <label for="aw">Aruba</label>
+                <label htmlFor="aw">Aruba</label>
               </li>
               <li>
                 <input type="checkbox" name="au" id="au"/>
-                <label for="au">Australia</label>
+                <label htmlFor="au">Australia</label>
               </li>
               <li>
                 <input type="checkbox" name="at" id="at"/>
-                <label for="at">Austria</label>
+                <label htmlFor="at">Austria</label>
               </li>
               <li>
                 <input type="checkbox" name="az" id="az"/>
-                <label for="az">Azerbaijan</label>
+                <label htmlFor="az">Azerbaijan</label>
               </li>
               <li>
                 <input type="checkbox" name="bs" id="bs"/>
-                <label for="bs">Bahamas</label>
+                <label htmlFor="bs">Bahamas</label>
               </li>
 
             </ul>

@@ -181,6 +181,7 @@
   margin-top: -12px;
 }
 .InfiniteCarouselArrowIcon {
+  border: solid #4374c7 !important;
   border-width: 0 2px 2px 0 !important;
   padding: 3px !important;
 }

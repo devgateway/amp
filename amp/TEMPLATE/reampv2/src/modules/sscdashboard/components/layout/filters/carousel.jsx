@@ -35,52 +35,52 @@ class CountryCarousel extends Component {
   >
   <div>
     <img
-      src={require('./flags/argentina.svg')}/>
+      src={require('../../../images/flags/argentina.svg')}/>
     <span>Argentina</span>
   </div>
     <div className="selected">
       <img
-        src={require('./flags/brazil.svg')}/>
+        src={require('../../../images/flags/brazil.svg')}/>
       <span>Brazil</span>
     </div>
     <div>
       <img
-        src={require('./flags/china.svg')}/>
+        src={require('../../../images/flags/china.svg')}/>
       <span>China</span>
     </div>
     <div>
       <img
-        src={require('./flags/india.svg')}/>
+        src={require('../../../images/flags/india.svg')}/>
       <span>India</span>
     </div>
     <div>
       <img
-        src={require('./flags/indonesia.svg')}/>
+        src={require('../../../images/flags/indonesia.svg')}/>
       <span>Indonesia</span>
     </div>
     <div>
       <img
-        src={require('./flags/japan.svg')}/>
+        src={require('../../../images/flags/japan.svg')}/>
       <span>Japan</span>
     </div>
     <div>
       <img
-        src={require('./flags/mozambique.svg')}/>
+        src={require('../../../images/flags/mozambique.svg')}/>
       <span>Mozambique</span>
     </div>
     <div>
       <img
-        src={require('./flags/nigeria.svg')}/>
+        src={require('../../../images/flags/nigeria.svg')}/>
       <span>Nigeria</span>
     </div>
     <div>
       <img
-        src={require('./flags/senegal.svg')}/>
+        src={require('../../../images/flags/senegal.svg')}/>
       <span>Senegal</span>
     </div>
     <div>
       <img
-        src={require('./flags/ghana.svg')}/>
+        src={require('../../../images/flags/ghana.svg')}/>
       <span>Ghana</span>
     </div>
 

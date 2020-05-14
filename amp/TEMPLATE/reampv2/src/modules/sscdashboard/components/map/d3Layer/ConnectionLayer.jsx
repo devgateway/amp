@@ -1,8 +1,10 @@
 import React from "react";
 import L from 'leaflet';
-import {curve} from 'leaflet-curve';
-
-export default class ConnectionLayer extends React.Component {
+// eslint-disable-next-line no-unused-vars
+import { curve } from 'leaflet-curve';
+import { withLeaflet } from 'react-leaflet';
+//TODO make it configurable and parametrized
+class ConnectionLayer extends React.Component {
     constructor(props) {
         super(props);
         this.lines = [];
@@ -21,11 +23,11 @@ export default class ConnectionLayer extends React.Component {
             return true;
         }
         for (let i = 0; i < prevProps.points.length; i++) {
-            if (prevProps.points[i].latitude !== newProps.points[i].latitude || prevProps.points[i].longitude !== newProps.points[i].longitude) {
+            if (prevProps.points[i].latitude !== newProps.points[i].latitude
+                || prevProps.points[i].longitude !== newProps.points[i].longitude) {
                 return true;
             }
         }
-        ;
         return false;
     }
 
@@ -74,7 +76,6 @@ export default class ConnectionLayer extends React.Component {
                     weight = breakUnit * (i + 1);
                 }
             }
-            ;
         }
 
         const pathOptions = {
@@ -111,3 +112,5 @@ export default class ConnectionLayer extends React.Component {
         return (<div/>)
     }
 }
+
+export default withLeaflet(ConnectionLayer);

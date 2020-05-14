@@ -29,6 +29,6 @@
 			<key column="parent_location"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" />
 		</set>
-
+		<many-to-one name="template" column="template_id" class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" cascade="none" />
 	</class>
 </hibernate-mapping>

@@ -1,6 +1,4 @@
-import React, {Component} from "react";
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, {Component} from 'react';
 import './filters.css';
 
 class FilterSupport extends Component {
@@ -8,15 +6,15 @@ class FilterSupport extends Component {
         return (
           <div className="sidebar-filter-wrapper">
 
-             <div class="panel panel-default">
+             <div className="panel panel-default">
 
-              <div class="panel-heading">
-                <h4 class="panel-title support" data-toggle="collapse" data-target="#support">
+              <div className="panel-heading">
+                <h4 className="panel-title support" data-toggle="collapse" data-target="#support">
                   Types de Support
                 </h4>
               </div>
-              <div id="support" class="panel-collapse collapse">
-                <div class="panel-body">
+              <div id="support" className="panel-collapse collapse">
+                <div className="panel-body">
                   Support options
                 </div>
               </div>

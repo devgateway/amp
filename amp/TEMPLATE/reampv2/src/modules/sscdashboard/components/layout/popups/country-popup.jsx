@@ -1,6 +1,4 @@
 import React, {Component} from "react";
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import './popups.css';
 import CountryPopupHeader from "./country-popup-header";
 import CountryPopupChart from "./country-popup-chart";

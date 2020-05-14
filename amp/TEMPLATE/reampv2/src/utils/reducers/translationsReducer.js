@@ -3,10 +3,10 @@ import {
 } from '../actions/translationsActions';
 
 const initialState = {
-    pending: false,
+    pending: true,
     translations: {},
     error: null
-}
+};
 
 export default function translationsReducer(state = initialState, action) {
     switch(action.type) {
@@ -14,20 +14,20 @@ export default function translationsReducer(state = initialState, action) {
             return {
                 ...state,
                 pending: true,
-                translations: action.payload.defaultTrnPack
-            }
+                translations: action.payload
+            };
         case FETCH_TRANSLATIONS_SUCCESS:
             return {
                 ...state,
                 pending: false,
                 translations: action.payload
-            }
+            };
         case FETCH_TRANSLATIONS_ERROR:
             return {
                 ...state,
                 pending: false,
                 error: action.error
-            }
+            };
         default:
             return state;
     }

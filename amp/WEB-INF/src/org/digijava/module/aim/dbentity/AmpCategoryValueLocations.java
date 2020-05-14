@@ -40,11 +40,20 @@ public class AmpCategoryValueLocations implements Identifiable,
     private String fullName;
     
     private Boolean deleted;
-    
+
     private boolean translateable   = false;
     private String iso;
     
-    
+    private AmpTemplatesVisibility template;
+
+    public AmpTemplatesVisibility getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(AmpTemplatesVisibility template) {
+        this.template = template;
+    }
+
     public String getFullName() {
         return fullName;
     }

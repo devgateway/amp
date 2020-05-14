@@ -560,7 +560,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         single_dimension(ColumnConstants.DONOR_BUDGET_CODE, "v_ni_donor_orgbudget_code",
                 DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
         single_dimension(ColumnConstants.DONOR_COUNTRY, "v_ni_donor_orgs_country",
-                DN_COUNTRY_DIM_USG.getLevelColumn(0), true);
+                DN_COUNTRY_DIM_USG.getLevelColumn(0));
 
         single_dimension(ColumnConstants.DONOR_ACRONYM, "v_ni_donor_orgsacronyms", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
         

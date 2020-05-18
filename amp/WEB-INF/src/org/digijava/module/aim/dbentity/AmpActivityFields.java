@@ -1826,7 +1826,7 @@ LoggerIdentifiable, Cloneable {
             return draft;
         }
 
-        public Set getActPrograms() {
+        public Set<AmpActivityProgram> getActPrograms() {
             return actPrograms;
         }
         
@@ -1870,7 +1870,7 @@ LoggerIdentifiable, Cloneable {
             this.lastImportedBy = lastImportedBy;
         }
 
-        public void setActPrograms(Set actPrograms) {
+        public void setActPrograms(Set<AmpActivityProgram> actPrograms) {
             this.actPrograms = actPrograms;
         }
 

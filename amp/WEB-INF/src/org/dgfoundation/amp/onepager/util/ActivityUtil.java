@@ -335,11 +335,17 @@ public class ActivityUtil {
             session.update(a);
         }
 
+        updateIndirectPrograms(a, session);
+
         logAudit(ampCurrentMember, a, newActivity);
 
         return a;
     }
-    
+
+    private static void updateIndirectPrograms(AmpActivityVersion a, Session session) {
+        new IndirectProgramUpdater().updateIndirectPrograms(a, session);
+    }
+
     public static boolean detectDraftChange(AmpActivityVersion a, boolean draft) {
         return Boolean.TRUE.equals(a.getDraft()) != draft;
     }

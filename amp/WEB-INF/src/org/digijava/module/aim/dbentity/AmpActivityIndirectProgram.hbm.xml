@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="org.digijava.module.aim.dbentity.AmpActivityIndirectProgram" table="AMP_ACTIVITY_INDIRECT_PROGRAM">
+
+		<cache usage="read-write" />
+
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_ACTIVITY_INDIRECT_PROGRAM_SEQ</param>
+			</generator>
+		</id>
+
+		<many-to-one name="activityProgram" column="amp_activity_program_id"
+			class="org.digijava.module.aim.dbentity.AmpActivityProgram" cascade="none" not-null="true" />
+
+		<many-to-one name="program" column="amp_program_id"
+			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" not-null="true" />
+
+		<property name="percentage" column="program_percentage" type="java.math.BigDecimal" precision="5" scale="2" />
+
+	</class>
+
+</hibernate-mapping>

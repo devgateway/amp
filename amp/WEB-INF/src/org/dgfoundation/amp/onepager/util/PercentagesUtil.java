@@ -6,7 +6,7 @@ import java.math.RoundingMode;
 /**
  * @author Octavian Ciubotaru
  */
-public class PercentagesUtil {
+public final class PercentagesUtil {
 
     public static class SplitResult {
 
@@ -28,6 +28,9 @@ public class PercentagesUtil {
     }
 
     private static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
+
+    private PercentagesUtil() {
+    }
 
     /**
      * Splits sum into n parts such that sum of all parts is equal to the original sum.

@@ -265,7 +265,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     
     // the programs-based NiDimensionUsage's
     public final static NiDimensionUsage PP_DIM_USG = progsDimension.getDimensionUsage("Primary Program");
-    public final static NiDimensionUsage IPP_DIM_USG = progsDimension.getDimensionUsage("Indirect Primary Program");
+    public static final NiDimensionUsage IPP_DIM_USG = progsDimension.getDimensionUsage("Indirect Primary Program");
     public final static NiDimensionUsage SP_DIM_USG = progsDimension.getDimensionUsage("Secondary Program");    
     public final static NiDimensionUsage TP_DIM_USG = progsDimension.getDimensionUsage("Tertiary Program");
     public final static NiDimensionUsage NPO_DIM_USG = progsDimension.getDimensionUsage("National Plan Objective");

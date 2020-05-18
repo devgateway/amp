@@ -71,7 +71,8 @@ public class IndirectProgramUpdaterJob implements Job {
     }
 
     private void loadAndSaveActivity(Long id) {
-        AmpActivityVersion activity = (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, id);
+        AmpActivityVersion activity = (AmpActivityVersion)
+                PersistenceManager.getSession().load(AmpActivityVersion.class, id);
 
         AmpTeamMember member = getTeamMember(activity.getTeam(), user);
 

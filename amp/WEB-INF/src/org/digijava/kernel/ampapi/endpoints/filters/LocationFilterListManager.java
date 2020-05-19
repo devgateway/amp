@@ -156,6 +156,7 @@ public class LocationFilterListManager implements FilterListManager {
         node.setCode(location.getCode());
         node.setName(location.getName());
         node.setExtraInfo(this.getExtraInfo(location));
+        node.setDescription(location.getDescription());
 
         List<LocationSkeleton> orderedLocations = location.getChildLocations().stream()
                 .sorted(Comparator.comparing(LocationSkeleton::getName))
@@ -175,11 +176,15 @@ public class LocationFilterListManager implements FilterListManager {
         if (location.getTemplateId() != null) {
             builder.put("template", location.getTemplateId());
         }
+        if (location.getGroupId() != null) {
+            builder.put("group-id", location.getGroupId());
+        }
         if (location.getLat() != null && location.getLon() != null) {
             ImmutableMap.Builder<String, Object> centroid = new ImmutableMap.Builder<>();
             centroid.put("lat", location.getLat());
             centroid.put("lon", location.getLon());
             builder.put("centro-id", centroid.build());
+
         }
         ImmutableMap extraInfo = builder.build();
         return extraInfo.isEmpty() ? null : extraInfo;

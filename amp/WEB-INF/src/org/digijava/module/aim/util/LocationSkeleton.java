@@ -13,6 +13,8 @@ public class LocationSkeleton extends HierEntitySkeleton<LocationSkeleton> {
     protected Long templateId;
     protected Double lat;
     protected Double lon;
+    protected Long groupId;
+    protected String description;
 
     protected LocationSkeleton(Long id, String locName, String code, Long parentId) {
         super(id, locName, code, parentId);
@@ -34,6 +36,14 @@ public class LocationSkeleton extends HierEntitySkeleton<LocationSkeleton> {
         return lon;
     }
 
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     /**
      * @return a map of all locations from amp_category_value_location, indexed by their id'sstatic
      */
@@ -48,13 +58,15 @@ public class LocationSkeleton extends HierEntitySkeleton<LocationSkeleton> {
                         .withTemplateId(nullInsteadOfZero(rs.getLong("template_id")))
                         .withLat(nullInsteadOfZero(rs.getDouble("gs_lat")))
                         .withLon(nullInsteadOfZero(rs.getDouble("gs_long")))
+                        .withGroup(nullInsteadOfZero(rs.getLong("amp_category_value_group_id")))
+                        .withDescription(rs.getString("description"))
                         .getLocationSkeleton();
             }
 
             @Override
             public String[] getNeededColumnNames() {
                 return new String[]{"id", "location_name", "code", "parent_location", "parent_category_value",
-                        "template_id", "gs_lat", "gs_long"};
+                        "template_id", "gs_lat", "gs_long", "amp_category_value_group_id", "description"};
             }
         });
     }

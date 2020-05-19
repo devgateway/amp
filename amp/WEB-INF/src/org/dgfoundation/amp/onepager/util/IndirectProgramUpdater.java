@@ -30,7 +30,7 @@ public class IndirectProgramUpdater {
     /**
      * Level at which we have explicit indirect program mappings defined.
      */
-    private static final int INDIRECT_MAPPING_LEVEL = 2;
+    public static final int INDIRECT_MAPPING_LEVEL = 2;
 
     public void updateIndirectPrograms(AmpActivityVersion activity, Session session) {
         Map<AmpTheme, Set<AmpTheme>> mapping = loadMapping(session);

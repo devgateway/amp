@@ -50,6 +50,7 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityProgramSettings" />
 		</set>
 		<set name="siblings" table="AMP_THEME" lazy="true" inverse="true" cascade="none">
+			<cache usage="read-write" />
 			<key column="parent_theme_id"/>      
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpTheme"/>
 		</set>

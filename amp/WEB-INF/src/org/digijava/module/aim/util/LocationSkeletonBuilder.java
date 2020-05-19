@@ -27,6 +27,17 @@ public class LocationSkeletonBuilder {
         locationSkeleton.lon = lon;
         return this;
     }
+
+    public LocationSkeletonBuilder withGroup(Long groupId) {
+        locationSkeleton.groupId = groupId;
+        return this;
+    }
+
+    public LocationSkeletonBuilder withDescription(String description) {
+        locationSkeleton.description = description;
+        return this;
+    }
+
     public LocationSkeleton getLocationSkeleton() {
         return locationSkeleton;
     }

@@ -25,7 +25,11 @@ public class FilterListTreeNode {
     
     @ApiModelProperty(value = "The translated name", example = "Belgium")
     private String value;
-    
+
+    @ApiModelProperty(value = "The translated description ( use in case we want to add tooltips to a filter item)",
+            example = "Eastern Europe and Central Asia")
+    private String description;
+
     private List<Long> listDefinitionIds;
     
     private List<FilterListTreeNode> children;
@@ -119,6 +123,14 @@ public class FilterListTreeNode {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Object getExtraInfo() {

@@ -10,6 +10,7 @@
 				<param name="sequence">AMP_BUDGET_SECTOR_seq</param>
 			</generator>
 		</id>
+
 		<set name="organisations" table="AMP_ORGANISATION_BUDGETSECTOR" lazy="true">
 			<key column="idsector" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="amp_org_id" />

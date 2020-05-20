@@ -12,8 +12,10 @@ class MapContainer extends Component {
     //TODO once we implement side filters maybe we need to move state up
     constructor(props) {
         super();
+        this.countriesWithData = [];
         this.state = {
             filteredProjects: [],
+            countriesWithData: [],
             selectedFilters: {
                 selectedYears: [],
                 selectedCountries: [],
@@ -23,35 +25,36 @@ class MapContainer extends Component {
     }
 
     componentDidMount(): void {
-        this.getFilteredData();
+        const initialData = this.getFilteredData();
+        this.countriesWithData = initialData.map(c => c.countryId);
+        this.setState({
+            filteredProjects: initialData
+        });
     }
 
-    handleSelectedSectorChanged(pSelectedSector) {
-        this.updateFilterState('selectedSectors', parseInt(pSelectedSector));
+    handleSelectedSectorChanged(pSelectedSectors) {
+        this.updateFilterState('selectedSectors', pSelectedSectors);
     }
 
-    handleSelectedYearChanged(pSelectedYear) {
-        this.updateFilterState('selectedYears', parseInt(pSelectedYear));
+    handleSelectedYearChanged(pSelectedYears) {
+        this.updateFilterState('selectedYears', pSelectedYears);
     }
 
-    handleSelectedCountryChanged(pSelectedCountry) {
-        this.updateFilterState('selectedCountries', parseInt(pSelectedCountry));
+    handleSelectedCountryChanged(pSelectedCountries) {
+        this.updateFilterState('selectedCountries', pSelectedCountries);
     }
 
-    updateFilterState(filterSelector, ipSelectedFilter) {
+    updateFilterState(filterSelector, updatedSelectedFilters) {
         this.setState((currentState) => {
-            const oneSelectedFilters = [...currentState.selectedFilters[filterSelector]]
-            const selectedFilters = {...currentState.selectedFilters}
-            if (oneSelectedFilters.includes(ipSelectedFilter)) {
-                selectedFilters[filterSelector] = oneSelectedFilters.filter(sc => sc !== ipSelectedFilter);
-            } else {
-                oneSelectedFilters.push(ipSelectedFilter);
-                selectedFilters[filterSelector] = oneSelectedFilters;
-            }
+            const selectedFilters = {...currentState.selectedFilters};
+            selectedFilters[filterSelector] = updatedSelectedFilters;
             return {selectedFilters};
-        }, this.getFilteredData);
+        }, this.getFilteredProjects);
     }
 
+    getFilteredProjects() {
+        this.setState({filteredProjects: this.getFilteredData()});
+    }
 
     getFilteredData() {
         const {selectedYears = [], selectedCountries = [], selectedSectors = []} = this.state.selectedFilters;
@@ -84,18 +87,19 @@ class MapContainer extends Component {
                 return false;
             }
         });
-
-        this.setState({filteredProjects: filteredData});
+        return filteredData;
     }
 
 
     render() {
         // TODO countries are loaded
         const {countries} = this.props.filters.countries;
+        const filtersRestrictions = {countriesWithData: this.countriesWithData};
 
         return (
             <div className="col-md-10 col-md-offset-2 map-wrapper">
                 <HorizontalFilters selectedFilters={this.state.selectedFilters}
+                                   filtersRestrictions={filtersRestrictions}
                                    handleSelectedYearChanged={this.handleSelectedYearChanged.bind(this)}
                                    handleSelectedCountryChanged={this.handleSelectedCountryChanged.bind(this)}
                                    handleSelectedSectorChanged={this.handleSelectedSectorChanged.bind(this)}

@@ -16,11 +16,36 @@ class HorizontalFilters extends Component {
         this.props.loadCountriesFilters();
     }
 
+    getCategoryForCountry(country) {
+        //TODO move to constants
+        if (country && country['extra_info']) {
+            return country['extra_info']['group-id'];
+        } else {
+            return null;
+        }
+
+    }
+
+    generateCountriesCategories() {
+        const {countries} = this.props.filters.countries;
+        const categories = [...new Set(countries.map(c => c['extra_info']['group-id']))];
+        return countries.filter(c => categories.includes(c.id)).map(c => {
+            const category = {};
+            category.id = c.id;
+            category.name = c.description;
+            category.tooltip = c.name;
+            return category;
+        });
+    }
+
     render() {
         const years = [];
         const {selectedYears = [], selectedCountries = [], selectedSectors = []} = this.props.selectedFilters;
         const {sectors} = this.props.filters.sectors;
-        const {countries} = this.props.filters.countries;
+        let {countries} = this.props.filters.countries;
+        if (countries.length > 0 && this.props.filtersRestrictions.countriesWithData.length > 0) {
+            countries = countries.filter(c => this.props.filtersRestrictions.countriesWithData.includes(c.id));
+        }
         this._generateYearsFilters(years);
         return (
             <div className="h-filter-wrapper">
@@ -35,9 +60,12 @@ class HorizontalFilters extends Component {
                                                     filterName='amp.ssc.dashboard:Country'
                                                     filterId='ddCountry'
                                                     parentId="accordion-filter"
+                                                    categoryFetcher={this.getCategoryForCountry}
                                                     sortData={true}
+                                                    categoriesSelection={this.generateCountriesCategories()}
                                                     selectedOptions={selectedCountries}
                                                     onChange={this.props.handleSelectedCountryChanged}
+
                             /></div>
                         <div className="col-md-4" id="accordion-filter">
                             <MultiSelectionDropDown options={sectors}
@@ -55,6 +83,7 @@ class HorizontalFilters extends Component {
                                                     filterId='ddYear'
                                                     parentId="accordion-filter"
                                                     onChange={this.props.handleSelectedYearChanged}
+                                                    columnsCount={3}
                             /></div>
                     </div>
                 </div>

@@ -26,6 +26,7 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterDefinition;
 import org.digijava.kernel.ampapi.endpoints.util.FilterFieldType;
 import org.digijava.kernel.ampapi.endpoints.util.FilterReportType;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
+import org.digijava.kernel.request.TLSUtils;
 
 /**
  * Filters Endpoint
@@ -237,7 +238,7 @@ public class FiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.TYPE_OF_ASSISTANCE, name = ColumnConstants.TYPE_OF_ASSISTANCE)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.TYPE_OF_ASSISTANCE)
-    @ApiOperation(value = "Retrieve the data needed for building the 'Type of Assistance' filter.",
+    @ApiOperation(value = "Retrieve the data needed for building the 'Type           of Assistance' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Type of Assistance' values.")
     public FilterList getTypeOfAssistance() {
@@ -245,7 +246,26 @@ public class FiltersEndpoint {
     }
 
     /**
-     * List the possible values of 'Mode of Payment' filter.
+     * List the possible values of 'modalities' filter.
+     *
+     * @return filter definition and values of 'modalities' filter.
+     */
+    @GET
+    @Path("/modalities/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.MODALITIES, name = ColumnConstants.MODALITIES)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.MODALITIES)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Type           of Assistance' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Type of Assistance' values.")
+    public FilterList getModalities(@ApiParam(value = "Force SSC workspace, default false")
+                                    @QueryParam("sscWorkspace") @DefaultValue("false") boolean forceSscWorkspace) {
+        TLSUtils.getThreadLocalInstance().setForcedSSCWorkspace(forceSscWorkspace);
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.MODALITIES);
+    }
+
+    /**
+     * Li∂st the possible values of 'Mode of Payment' filter.
      *
      * @return filter definition and values of 'mode-of-payment' filter.
      */

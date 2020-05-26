@@ -6,7 +6,7 @@ import CountrySearch from './country-search';
 import './filters.css';
 import { DASHBOARD_DEFAULT_MAX_YEAR_RANGE, DASHBOARD_DEFAULT_MIN_YEAR_RANGE } from '../../../utils/constants';
 import { bindActionCreators } from 'redux';
-import { loadSectorsFilters, loadCountriesFilters } from '../../../actions/loadFilters';
+import { loadSectorsFilters, loadCountriesFilters, loadModalitiesFilters } from '../../../actions/loadFilters';
 import { connect } from 'react-redux';
 
 class HorizontalFilters extends Component {
@@ -14,6 +14,7 @@ class HorizontalFilters extends Component {
     componentDidMount(): void {
         this.props.loadSectorsFilters();
         this.props.loadCountriesFilters();
+        this.props.loadModalitiesFilters();
     }
 
     getCategoryForCountry(country) {
@@ -40,13 +41,17 @@ class HorizontalFilters extends Component {
 
     render() {
         const years = [];
-        const {selectedYears = [], selectedCountries = [], selectedSectors = []} = this.props.selectedFilters;
+        const {selectedYears = [], selectedCountries = [], selectedSectors = [], selectedModalities = []} = this.props.selectedFilters;
         const {sectors} = this.props.filters.sectors;
         let {countries} = this.props.filters.countries;
-        if (countries.length > 0 && this.props.filtersRestrictions.countriesWithData.length > 0) {
+        const {modalities} = this.props.filters.modalities;
+        /*if (countries.length > 0 && this.props.filtersRestrictions.countriesWithData.length > 0) {
             countries = countries.filter(c => this.props.filtersRestrictions.countriesWithData.includes(c.id));
-        }
+        }*/
+
         this._generateYearsFilters(years);
+        //this.generateFiltersMockData(countries, sectors, years, modalities);
+
         return (
             <div className="h-filter-wrapper">
                 <div className="carousel-filters-wrapper" style={{display: "none"}}>
@@ -67,7 +72,7 @@ class HorizontalFilters extends Component {
                                                     onChange={this.props.handleSelectedCountryChanged}
 
                             /></div>
-                        <div className="col-md-4" id="accordion-filter">
+                        <div className="col-md-3" id="accordion-filter">
                             <MultiSelectionDropDown options={sectors}
                                                     filterName='amp.ssc.dashboard:Sector'
                                                     filterId='ddSector'
@@ -76,7 +81,17 @@ class HorizontalFilters extends Component {
                                                     onChange={this.props.handleSelectedSectorChanged}
                             />
                         </div>
-                        <div className="col-md-3" id="accordion-filter">
+                        <div className="col-md-4" id="accordion-filter">
+                            <MultiSelectionDropDown options={modalities}
+                                                    selectedOptions={selectedModalities}
+                                                    filterName='amp.ssc.dashboard:Modalities'
+                                                    filterId='ddModalities'
+                                                    parentId="accordion-filter"
+                                                    onChange={this.props.handleSelectedModalityChanged}
+                                                    columnsCount={2}
+                            /></div>
+
+                        <div className="col-md-2" id="accordion-filter">
                             <MultiSelectionDropDown options={years}
                                                     selectedOptions={selectedYears}
                                                     filterName='amp.ssc.dashboard:Year'
@@ -89,6 +104,59 @@ class HorizontalFilters extends Component {
                 </div>
             </div>
         );
+    }
+
+    generateFiltersMockData(countries, sectors, years, modalities) {
+        let projectCount = 0;
+        if (countries && countries.length > 0 && sectors && sectors.length > 0
+            && years && years.length > 0 && modalities && modalities.length > 0
+        ) {
+            const filter = {countries: []};
+            const pCountries = countries.filter(c => c.id < 2881);
+            pCountries.forEach(c => {
+                const country = {
+                    countryId: c.id,
+                    sectors: []
+                };
+                const sectorCount = Math.floor(Math.random() * 3);
+                for (let j = 0; j < sectorCount; j++) {
+                    const sSectorIdRandom = Math.floor(Math.random() * 28);
+                    const sector = {
+                        sectorId: sectors[sSectorIdRandom].id,
+                        modalities: []
+                    };
+                    const modalityCount = Math.floor(Math.random() * 3);
+                    for (let m = 0; m < modalityCount; m++) {
+                        const sModalityIdRandom = Math.floor(Math.random() * 18);
+                        const modality = {
+                            modalityId: modalities[sModalityIdRandom].id,
+                            projects: []
+                        };
+                        for (let i = 0; i < 5; i++) {
+                            projectCount += 1;
+                            const projectId = Math.floor(Math.random() * 1000);
+                            const yearId = Math.floor(Math.random() * 30);
+                            //const title = `project ${projectId}`;
+                            const year = years[yearId].id;
+                            const project = {projectId, year};
+                            modality.projects.push(project);
+                        }
+                        sector.modalities.push(modality)
+                    }
+
+
+                    country.sectors.push(sector);
+
+                }
+                filter.countries.push(country);
+            });
+            console.log("*****");
+            console.log(JSON.stringify(filter));
+            //console.log(filter);
+            console.log("*****");
+            console.log(`Project count ${projectCount}`);
+
+        }
     }
 
     _generateYearsFilters(years) {
@@ -117,7 +185,11 @@ const mapStateToProps = state => {
             countries: {
                 countries: state.filtersReducer.countries,
                 countriesLoaded: state.filtersReducer.countriesLoaded
-            }
+            },
+            modalities: {
+                modalities: state.filtersReducer.modalities,
+                modalitiesLoaded: state.filtersReducer.modalitiesLoaded
+            },
 
         }
     };
@@ -125,7 +197,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     loadSectorsFilters: loadSectorsFilters,
-    loadCountriesFilters: loadCountriesFilters
+    loadCountriesFilters: loadCountriesFilters,
+    loadModalitiesFilters: loadModalitiesFilters
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(HorizontalFilters);

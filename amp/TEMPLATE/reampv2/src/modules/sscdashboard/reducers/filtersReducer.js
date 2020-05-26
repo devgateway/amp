@@ -4,7 +4,10 @@ import {
     FETCH_FILTERS_SECTORS_PENDING,
     FETCH_FILTERS_COUNTRIES_ERROR,
     FETCH_FILTERS_COUNTRIES_PENDING,
-    FETCH_FILTERS_COUNTRIES_SUCCESS
+    FETCH_FILTERS_COUNTRIES_SUCCESS,
+    FETCH_FILTERS_MODALITIES_ERROR,
+    FETCH_FILTERS_MODALITIES_PENDING,
+    FETCH_FILTERS_MODALITIES_SUCCESS
 } from '../actions/filtersActions';
 
 const initialState = {
@@ -15,7 +18,10 @@ const initialState = {
     countriesLoaded: false,
     countriesPending: false,
     countries: [],
-    countriesLoadingErrors: null
+    countriesLoadingErrors: null,
+    modalitiesPending: false,
+    modalitiesLoaded: false,
+    modalities: []
 };
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -56,6 +62,25 @@ export default (state = initialState, action) => {
                 ...state,
                 countriesPending: false,
                 countriesLoaded: false,
+                error: action.payload.error
+            };
+        case FETCH_FILTERS_MODALITIES_PENDING:
+            return {
+                ...state,
+                modalitiesPending: true
+            };
+        case FETCH_FILTERS_MODALITIES_SUCCESS:
+            return {
+                ...state,
+                modalitiesPending: false,
+                modalitiesLoaded: true,
+                modalities: action.payload
+            };
+        case FETCH_FILTERS_MODALITIES_ERROR:
+            return {
+                ...state,
+                modalitiesPending: false,
+                modalitiesLoaded: false,
                 error: action.payload.error
             };
 

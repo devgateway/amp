@@ -37,6 +37,7 @@ export const loadCountriesFilters = () => {
             });
     }
 };
+
 export const loadModalitiesFilters = () => {
     return dispatch => {
         dispatch(fetchModalitiesPending());

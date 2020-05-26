@@ -2,7 +2,7 @@
   "name": "create-react-app",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://amp-haiti-future-v3-5-tc9.ampsite.net",
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -15,6 +15,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-ellipsis-text": "^1.2.1",
     "react-leaf-carousel": "^2.0.0",
     "react-leaflet": "^2.6.3",
     "react-redux": "^7.2.0",
@@ -39,12 +40,14 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "ie 11"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "ie 11"
     ]
   }
 }

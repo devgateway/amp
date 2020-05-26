@@ -1,3 +1,6 @@
+import { UNDEFINED_FILTER } from '../utils/constants';
+import { EXTRA_INFO } from '../utils/FieldsConstants';
+
 export const FETCH_FILTERS_SECTORS_PENDING = 'FETCH_FILTERS_SECTORS_PENDING';
 export const FETCH_FILTERS_SECTORS_SUCCESS = 'FETCH_FILTERS_SECTORS_SUCCESS';
 export const FETCH_FILTERS_SECTORS_ERROR = 'FETCH_FILTERS_SECTORS_ERROR';
@@ -17,7 +20,7 @@ export function fetchSectorsPending() {
 export function fetchSectorsSuccess(sectorsfilter) {
     return {
         type: FETCH_FILTERS_SECTORS_SUCCESS,
-        payload: sectorsfilter.items.primary
+        payload: filterUndefined(sectorsfilter.items.primary)
     }
 }
 
@@ -37,7 +40,7 @@ export function fetchCountriesPending() {
 export function fetchCountriesSuccess(countriesFilter) {
     //this filter should check the SSC template as parameter
     const countries =
-        countriesFilter.items.locations.filter(c => c['extra_info'] && c['extra_info'].template);
+        countriesFilter.items.locations.filter(c => c[EXTRA_INFO] && c[EXTRA_INFO].template && c.id !== UNDEFINED_FILTER);
     return {
         type: FETCH_FILTERS_COUNTRIES_SUCCESS,
         payload: countries
@@ -57,10 +60,14 @@ export function fetchModalitiesPending() {
     }
 }
 
+function filterUndefined(theFilter) {
+    return theFilter.filter(f => f.id !== UNDEFINED_FILTER);
+}
+
 export function fetchModalitiesSuccess(sectorsFilter) {
     return {
         type: FETCH_FILTERS_MODALITIES_SUCCESS,
-        payload: sectorsFilter.items.values
+        payload: filterUndefined(sectorsFilter.items.values)
     }
 }
 

@@ -3,6 +3,7 @@ import L from 'leaflet';
 // eslint-disable-next-line no-unused-vars
 import { curve } from 'leaflet-curve';
 import { withLeaflet } from 'react-leaflet';
+
 //TODO make it configurable and parametrized
 class ConnectionLayer extends React.Component {
     constructor(props) {
@@ -24,7 +25,8 @@ class ConnectionLayer extends React.Component {
         }
         for (let i = 0; i < prevProps.points.length; i++) {
             if (prevProps.points[i].latitude !== newProps.points[i].latitude
-                || prevProps.points[i].longitude !== newProps.points[i].longitude) {
+                || prevProps.points[i].longitude !== newProps.points[i].longitude
+                || prevProps.points[i].color !== newProps.points[i].color) {
                 return true;
             }
         }
@@ -47,8 +49,8 @@ class ConnectionLayer extends React.Component {
     }
 
     drawLine(point1, point2) {
-        const {lineColor, lineWeight, breaks, maxWeigth = 20, onClick} = this.props;
-
+        const {lineWeight, breaks, maxWeight = 20, onClick} = this.props;
+        const lineColor = point2.color;
         const latlng1 = [point1.latitude, point1.longitude],
             latlng2 = [point2.latitude, point2.longitude];
 
@@ -68,9 +70,9 @@ class ConnectionLayer extends React.Component {
 
         const midpointLatLng = [midpointY, midpointX];
 
-        let weight = 5;
+        let weight = 1;
         if (breaks && breaks.length) {
-            const breakUnit = maxWeigth / breaks.length;
+            const breakUnit = maxWeight / breaks.length;
             for (let i = 0; i < breaks.length - 1; i++) {
                 if (point2.value > breaks[i] && point2.value < breaks[i + 1]) {
                     weight = breakUnit * (i + 1);
@@ -83,7 +85,7 @@ class ConnectionLayer extends React.Component {
             weight: lineWeight || weight,
             pointData: point2,
             dashOffset: '51',
-            dashArray: '10 10',
+            dashArray: '5 5',
             stroke: 'white'
         }
 

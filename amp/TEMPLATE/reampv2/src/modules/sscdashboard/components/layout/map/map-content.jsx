@@ -19,7 +19,8 @@ class MapContainer extends Component {
             selectedFilters: {
                 selectedYears: [],
                 selectedCountries: [],
-                selectedSectors: []
+                selectedSectors: [],
+                selectedModalities: []
             }
         };
     }
@@ -44,6 +45,10 @@ class MapContainer extends Component {
         this.updateFilterState('selectedCountries', pSelectedCountries);
     }
 
+    handleSelectedModalityChanged(pSelectedModalities) {
+        this.updateFilterState('selectedModalities', pSelectedModalities);
+    }
+
     updateFilterState(filterSelector, updatedSelectedFilters) {
         this.setState((currentState) => {
             const selectedFilters = {...currentState.selectedFilters};
@@ -57,21 +62,34 @@ class MapContainer extends Component {
     }
 
     getFilteredData() {
-        const {selectedYears = [], selectedCountries = [], selectedSectors = []} = this.state.selectedFilters;
+        //TODO see how we can simply or make a bit more generic this function
+        const {selectedYears = [], selectedCountries = [], selectedSectors = [], selectedModalities = []} = this.state.selectedFilters;
         const projects = mapData.countries;
         const filteredData = projects.filter(p => {
             if (selectedCountries.length === 0 || selectedCountries.includes(p.countryId)) {
                 const sectors = p.sectors.filter(sector => {
                     if (selectedSectors.length === 0 || selectedSectors.includes(sector.sectorId)) {
-                        if (selectedYears.length > 0) {
-                            const filteredProjects = sector.projects.filter(p => selectedYears.includes(p.year));
-                            if (filteredProjects.length === 0) {
-                                return false;
+                        const modalities = sector.modalities.filter(modality => {
+                            if (selectedModalities.length === 0 || selectedModalities.includes(modality.modalityId)) {
+                                if (selectedYears.length > 0) {
+                                    const filteredProjects = modality.projects.filter(p => selectedYears.includes(p.year));
+                                    if (filteredProjects.length === 0) {
+                                        return false;
+                                    } else {
+                                        sector.projects = filteredProjects;
+                                        return true;
+                                    }
+                                } else {
+                                    return true;
+                                }
                             } else {
-                                sector.projects = filteredProjects;
-                                return true;
+                                return false;
                             }
+                        });
+                        if (modalities.length == 0) {
+                            return false;
                         } else {
+                            sector.modalities = modalities;
                             return true;
                         }
                     } else {
@@ -103,6 +121,8 @@ class MapContainer extends Component {
                                    handleSelectedYearChanged={this.handleSelectedYearChanged.bind(this)}
                                    handleSelectedCountryChanged={this.handleSelectedCountryChanged.bind(this)}
                                    handleSelectedSectorChanged={this.handleSelectedSectorChanged.bind(this)}
+                                   handleSelectedModalityChanged={this.handleSelectedModalityChanged.bind(this)}
+
                 />
                 <MapHome filteredProjects={this.state.filteredProjects} countries={countries}/>
                 {/* TODO commented out until we implement the popin
@@ -111,6 +131,8 @@ class MapContainer extends Component {
             </div>
         );
     }
+
+
 }
 
 const mapStateToProps = state => {

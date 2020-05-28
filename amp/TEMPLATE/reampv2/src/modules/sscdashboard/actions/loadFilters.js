@@ -4,10 +4,13 @@ import {
     fetchSectorsError,
     fetchCountriesError,
     fetchCountriesPending,
-    fetchCountriesSuccess
+    fetchCountriesSuccess,
+    fetchModalitiesError,
+    fetchModalitiesPending,
+    fetchModalitiesSuccess
 } from './filtersActions';
 import { fetchApiData } from '../../../utils/loadTranslations';
-import { API_FILTERS_SECTORS_URL, API_FILTERS_COUNTRIES_URL } from '../utils/constants';
+import { API_FILTERS_SECTORS_URL, API_FILTERS_COUNTRIES_URL, API_FILTERS_MODALITIES_URL } from '../utils/constants';
 
 export const loadSectorsFilters = () => {
     return dispatch => {
@@ -31,6 +34,18 @@ export const loadCountriesFilters = () => {
             })
             .catch(error => {
                 return dispatch(fetchCountriesError(error))
+            });
+    }
+};
+export const loadModalitiesFilters = () => {
+    return dispatch => {
+        dispatch(fetchModalitiesPending());
+        return fetchApiData({url: API_FILTERS_MODALITIES_URL})
+            .then(typesOfSupport => {
+                return dispatch(fetchModalitiesSuccess(typesOfSupport));
+            })
+            .catch(error => {
+                return dispatch(fetchModalitiesError(error))
             });
     }
 };

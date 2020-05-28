@@ -172,7 +172,8 @@ class MultiSelectionDropDown extends Component {
                             {categoryFetcher && categoriesSelection && categoriesSelection.map((category, idx) => {
                                 const {id, name, tooltip} = category;
                                 return (
-                                    <span className="select-all all" onClick={e => this.selectCategory(id)}>
+                                    <span className="select-all all" onClick={e => this.selectCategory(id)}
+                                          key={`all-none-${id}`}>
                                 <input type='radio' value={idx + 4} name={`radio-${this.props.filterId}`} id={name}
                                        checked={this.isCategorySelected(id)}
                                 />

@@ -4,6 +4,9 @@ export const FETCH_FILTERS_SECTORS_ERROR = 'FETCH_FILTERS_SECTORS_ERROR';
 export const FETCH_FILTERS_COUNTRIES_PENDING = 'FETCH_FILTERS_COUNTRIES_PENDING';
 export const FETCH_FILTERS_COUNTRIES_SUCCESS = 'FETCH_FILTERS_COUNTRIES_SUCCESS';
 export const FETCH_FILTERS_COUNTRIES_ERROR = 'FETCH_FILTERS_COUNTRIES_ERROR';
+export const FETCH_FILTERS_MODALITIES_PENDING = 'FETCH_FILTERS_MODALITIES_PENDING';
+export const FETCH_FILTERS_MODALITIES_SUCCESS = 'FETCH_FILTERS_MODALITIES_SUCCESS';
+export const FETCH_FILTERS_MODALITIES_ERROR = 'FETCH_FILTERS_MODALITIES_ERROR';
 
 export function fetchSectorsPending() {
     return {
@@ -46,4 +49,24 @@ export function fetchCountriesError(error) {
         type: FETCH_FILTERS_COUNTRIES_ERROR,
         error: error
     }
-};
+}
+
+export function fetchModalitiesPending() {
+    return {
+        type: FETCH_FILTERS_MODALITIES_PENDING
+    }
+}
+
+export function fetchModalitiesSuccess(sectorsFilter) {
+    return {
+        type: FETCH_FILTERS_MODALITIES_SUCCESS,
+        payload: sectorsFilter.items.values
+    }
+}
+
+export function fetchModalitiesError(error) {
+    return {
+        type: FETCH_FILTERS_MODALITIES_ERROR,
+        error: error
+    }
+}

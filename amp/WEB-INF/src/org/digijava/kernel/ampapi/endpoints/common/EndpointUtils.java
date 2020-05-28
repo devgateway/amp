@@ -356,7 +356,7 @@ public class EndpointUtils {
     }
     
     public static List<AvailableMethod> getAvailableFilterMethods(String className, String reportType) {
-        List<AvailableMethod> availableFilters = new ArrayList<AvailableMethod>(); 
+            List<AvailableMethod> availableFilters = new ArrayList<AvailableMethod>();
         try {
             Set<String> visibleColumns = ColumnsVisibility.getVisibleColumnsWithFakeOnes();
             Class<?> c = Class.forName(className);

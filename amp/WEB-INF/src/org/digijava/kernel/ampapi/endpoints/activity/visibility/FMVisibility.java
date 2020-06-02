@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
@@ -30,8 +29,25 @@ public class FMVisibility {
     public static final String ANY_FM = "_ANY_FM_";
     public static final String ALWAYS_VISIBLE_FM = "_ALWAYS_VISIBLE_FM_";
 
-    private final static Map<String, Boolean> visibilityMap = new HashMap<String, Boolean>();
-    private static Date lastTreeVisibilityUpdate;
+    private boolean isSession = true;
+
+    private AmpTreeVisibility ampTreeVisibility;
+
+    private Long templateId;
+
+    private Map<String, Boolean> visibilityMap = new HashMap<String, Boolean>();
+
+    private Date lastTreeVisibilityUpdate;
+
+    public FMVisibility() {
+    }
+
+    public FMVisibility(Long templateId) {
+        this.templateId = templateId;
+        ampTreeVisibility = new AmpTreeVisibility();
+        ampTreeVisibility.buildAmpTreeVisibility(FeaturesUtil.getTemplateVisibility(templateId));
+        isSession = false;
+    }
 
     public static String handleParentFMPath(String fmPath, Deque<Interchangeable> intchStack) {
         // pre-process
@@ -58,7 +74,7 @@ public class FMVisibility {
      * @param fmPath, the String with the FM path
      * @return true if is enabled, false otherwise
      */
-    public static boolean isFmPathEnabled(String fmPath) {
+    public boolean isFmPathEnabled(String fmPath) {
         if (fmPath.startsWith(ANY_FM)) {
             for(String anyFMOption : fmPath.substring(ANY_FM.length()).split("\\|")) {
                 if (StringUtils.isNotBlank(anyFMOption) && isFinalFmPathEnabled(anyFMOption)) {
@@ -93,36 +109,30 @@ public class FMVisibility {
         return updatedPath;
     }
     
-    protected static boolean isFinalFmPathEnabled(String fmPath) {
+    protected boolean isFinalFmPathEnabled(String fmPath) {
         boolean isEnabled = false;
-        HttpSession session = TLSUtils.getRequest().getSession();
-        ServletContext ampContext = session.getServletContext();
-        AmpTreeVisibility ampTreeVisibility = FeaturesUtil.getAmpTreeVisibility(ampContext, session);
+
         String ancestorVerifiedPath = getLastVerifiedPath(fmPath);
         if (ancestorVerifiedPath.equals("")) {
             ancestorVerifiedPath = getChildFMPath(fmPath, ancestorVerifiedPath);
         }
-        isEnabled = isVisibleInFM(ampTreeVisibility, fmPath,ancestorVerifiedPath);
+        isEnabled = isVisibleInFM(fmPath, ancestorVerifiedPath);
 
         return isEnabled;
     }
     
     /**
-     * Checks whether a Field is visible or not according to the Feature
-     * Manager. It checks the @Interchangeable annotation for its fmPath. If the
-     * the Module is enabled on the Feature Manager or there is no defined
-     * Feature Manager path for the Field the it returns true Otherwise it
-     * returns false
-     * 
-     * @param field the field to determine its visibility
-     * @return true if the field is visible, false otherwise
+     * If the Module identified by fmPath is enabled in the Feature Manager
+     *
+     * @return true if the path is enabled
      */
-    public static boolean isVisible(String fmPath) {
+    public boolean isVisible(String fmPath) {
         if (fmPath == null)
             return true;
-        HttpSession session = TLSUtils.getRequest().getSession();
-        checkTreeVisibilityUpdate(session);
-        boolean isVisible;
+
+        checkTreeVisibilityUpdate();
+
+        boolean isVisible = false;
         if (fmPath.equals(FMVisibility.ALWAYS_VISIBLE_FM) || fmPath.equals("")) {
             isVisible = true;
         } else {
@@ -139,7 +149,7 @@ public class FMVisibility {
      * @param fmPath
      * @return
      */
-    private static boolean isFieldVisibleInPublicView(String fmPath) {
+    private boolean isFieldVisibleInPublicView(String fmPath) {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         if (tm == null && ActivityEPConstants.CONTACTS_PATH.equals(fmPath)) {
             return FeaturesUtil.isVisibleFeature("Contacts");
@@ -151,12 +161,15 @@ public class FMVisibility {
     /**
      * Checks if there was any update under Feature Manager tree visibility.
      * If that the case all FM paths need to be rechecked again.
-     * 
-     * @param session, HttpSession containing the tree last modification date.
+     *
      */
-    private static void checkTreeVisibilityUpdate(HttpSession session) {
+    private void checkTreeVisibilityUpdate() {
+        HttpSession session = TLSUtils.getRequest().getSession();
         Date lastUpdate = (Date) session.getAttribute("ampTreeVisibilityModificationDate");
-        if (lastTreeVisibilityUpdate!=null && lastUpdate.after(lastTreeVisibilityUpdate)) {
+        if (lastTreeVisibilityUpdate != null && lastUpdate.after(lastTreeVisibilityUpdate)) {
+            if (templateId != null) {
+                ampTreeVisibility.buildAmpTreeVisibility(FeaturesUtil.getTemplateVisibility(templateId));
+            }
             visibilityMap.clear();
         }
         lastTreeVisibilityUpdate = lastUpdate;
@@ -165,15 +178,18 @@ public class FMVisibility {
 
     /**
      * Checks if a FM Path is visible. In order to be visible, the FM path and all its ancestors need to be checked.
-     * 
-     * @param ampTreeVisibility, the AmpTreeVisibility that contains all modules visibility
+     *
      * @param fmPath, the path to check for its visibility
      * @param lastVerifiedPath, the last FM verified path. This is needed in order to avoid checking all FM path ancestors 
      * multiple times
      * @return, whether a FM path is visible or not
      */
-    private static boolean isVisibleInFM(AmpTreeVisibility ampTreeVisibility, String fmPath,String lastVerifiedPath) {
+    private boolean isVisibleInFM(String fmPath, String lastVerifiedPath) {
         boolean isVisible = false;
+
+        if (ampTreeVisibility == null || isSession) {
+            ampTreeVisibility = FeaturesUtil.getCurrentAmpTreeVisibility();
+        }
         AmpModulesVisibility modulesVisibility = ampTreeVisibility.getModuleByNameFromRoot(lastVerifiedPath);
         if (modulesVisibility != null) {
             isVisible = modulesVisibility.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
@@ -187,7 +203,7 @@ public class FMVisibility {
         }
         if (!fmPath.equals(lastVerifiedPath) && isVisible) {
             lastVerifiedPath = getChildFMPath(fmPath, lastVerifiedPath);
-            isVisible = isVisibleInFM(ampTreeVisibility, fmPath, lastVerifiedPath);
+            isVisible = isVisibleInFM(fmPath, lastVerifiedPath);
         }
         return isVisible;
     }
@@ -201,7 +217,7 @@ public class FMVisibility {
      * @param lastVerifiedPath, the last FM ancestor path that was already verified for its visibility
      * @return a String with the child FM path 
      */
-    private static String getChildFMPath(String fmPath, String lastVerifiedPath) {
+    private String getChildFMPath(String fmPath, String lastVerifiedPath) {
         String pathDifference ;
         if (lastVerifiedPath.equals("")) {
             pathDifference = fmPath;
@@ -227,7 +243,7 @@ public class FMVisibility {
      * @param fmPath, the path to check if it was already verified
      * @return the last verified FM path.
      */
-    private static String getLastVerifiedPath(String fmPath) {
+    private String getLastVerifiedPath(String fmPath) {
         String fmPathToCheck = fmPath;
         boolean alreadyVerified = false;
         do {
@@ -248,7 +264,16 @@ public class FMVisibility {
      * @param fmPath, the path under Feature Manager
      * @return true if it was already verified, false otherwise
      */
-    private static boolean isInMap(String fmPath) {
+    private boolean isInMap(String fmPath) {
         return visibilityMap.containsKey(fmPath);
     }
+
+    public boolean isSession() {
+        return isSession;
+    }
+
+    public AmpTreeVisibility getAmpTreeVisibility() {
+        return ampTreeVisibility;
+    }
+
 }

@@ -94,6 +94,8 @@ public class EPConstants {
     public static final String FULL_ENABLED_PATHS = "full-enabled-paths";
     public static final String FM_ENABLED = "__enabled";
     public static final String FM_PATHS_FILTER = "fm-paths";
+    public static final String WS_MEMBER_IDS = "ws-member-ids";
+    public static final String FM_TREE = "fm-tree";
 
     //tab dependency of each filter
     /*

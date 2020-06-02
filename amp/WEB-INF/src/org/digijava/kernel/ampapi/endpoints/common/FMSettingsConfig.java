@@ -88,17 +88,17 @@ public class FMSettingsConfig {
     }
     
     @JsonIgnore
-    public Set<String> getAllowedModules() {
+    public Set<String> getAllowedModules(Long templateId) {
         if (fullEnabledPaths) {
-            return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES);
+            return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MODULES, templateId);
         }
         
-        return FMSettingsMediator.getSettings(FMSettingsMediator.FMGROUP_MODULES);
+        return FMSettingsMediator.getSettings(FMSettingsMediator.FMGROUP_MODULES, templateId);
     }
     
     @JsonIgnore
-    public boolean isValid() {
-        if (detailModules != null && !getAllowedModules().containsAll(detailModules)) {
+    public boolean isValid(Long templateId) {
+        if (detailModules != null && !getAllowedModules(templateId).containsAll(detailModules)) {
             return false;
         }
     

@@ -5,15 +5,16 @@ import MapHome from "../../map/MapHome";
 import CountryPopupOverlay from "../popups/popup-overlay";
 import mapData from './mapData';
 import { bindActionCreators } from 'redux';
-import { loadCountriesFilters, loadSectorsFilters } from '../../../actions/loadFilters';
 import { connect } from 'react-redux';
+import { loadActivitiesDetails } from '../../../actions/callReports';
 
 class MapContainer extends Component {
     //TODO once we implement side filters maybe we need to move state up
     constructor(props) {
-        super();
+        super(props);
         this.countriesWithData = [];
         this.state = {
+            showModal: true,
             filteredProjects: [],
             countriesWithData: [],
             selectedFilters: {
@@ -25,8 +26,21 @@ class MapContainer extends Component {
         };
     }
 
+    getProjectsData() {
+        this.props.loadActivitiesDetails(this.getProjectsIds());
+    }
+
+    //TODO the Array of activities ID will be returned together with the datastructure to filter on the fly
+    getProjectsIds() {
+        return [19284, 10475, 10476, 10477, 19171, 11933, 19191, 19317, 19299, 19333, 19362, 19376, 19110, 19190, 11930,
+            11931, 10544, 9975, 9976, 9978, 9979, 9980, 9981, 9982, 9983, 9988, 9990, 9991, 9993, 9998, 19172, 19173,
+            19183, 19186, 19189, 10479, 10407, 10403, 10333, 10410, 17394, 17395, 19204, 17442, 18896, 19193, 19197,
+            21345, 21591, 21592, 21593, 21594, 21595, 21596]
+    }
+
     componentDidMount(): void {
         const initialData = this.getFilteredData();
+        this.getProjectsData();
         this.countriesWithData = initialData.map(c => c.countryId);
         this.setState({
             filteredProjects: initialData
@@ -58,7 +72,11 @@ class MapContainer extends Component {
     }
 
     getFilteredProjects() {
-        this.setState({filteredProjects: this.getFilteredData()});
+        const filteredProjects = this.getFilteredData();
+        this.setState({filteredProjects});
+        if (filteredProjects.length === 0) {
+            this.setState({showModal: true});
+        }
     }
 
     getFilteredData() {
@@ -110,7 +128,6 @@ class MapContainer extends Component {
 
 
     render() {
-        // TODO countries are loaded
         const {countries} = this.props.filters.countries;
         const filtersRestrictions = {countriesWithData: this.countriesWithData};
 
@@ -125,9 +142,8 @@ class MapContainer extends Component {
 
                 />
                 <MapHome filteredProjects={this.state.filteredProjects} countries={countries}/>
-                {/* TODO commented out until we implement the popin
-                <CountryPopupOverlay/>
-                */}
+                { /* TODO commented out until we implement the popin
+                <CountryPopupOverlay/>*/}
             </div>
         );
     }
@@ -152,8 +168,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    loadSectorsFilters: loadSectorsFilters,
-    loadCountriesFilters: loadCountriesFilters
+    loadActivitiesDetails: loadActivitiesDetails,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapContainer);

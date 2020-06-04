@@ -1,38 +1,59 @@
 import React, { Component } from 'react';
-import { Map, TileLayer, CircleMarker, Marker, Tooltip } from 'react-leaflet';
+import { Map, TileLayer, CircleMarker, Marker, Popup } from 'react-leaflet';
 import * as L from 'leaflet';
 import '../../../../App.css';
 import ConnectionLayer from "./d3Layer/ConnectionLayer";
+import {
+    NON_SELECTED_LINE_COLOR,
+    SELECTED_BUBBLE_COLOR,
+    NON_SELECTED_BUBBLE_COLOR,
+    SELECTED_LINE_COLOR
+} from '../../utils/constants';
 import '../layout/map/map.css';
+import HomePopup from '../layout/popups/homepopup/HomePopup';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-export default class MapHome extends Component {
+
+class MapHome extends Component {
     //TODO map config should come from configuration
     state = {
         zoom: 3,
         lat: -6.227933930268672,
-        lng: 48.33984375
+        lng: 48.33984375,
+        selectedCountries: [],
+        showSector: true
     };
+
+    handleChangeDataToShow(checked) {
+        this.setState({showSector: checked});
+    }
+
     getPoints(dataFiltered, center) {
         let result = [];
+        const {selectedCountries} = this.state;
         dataFiltered.forEach(data => {
             const countryCenter = new L.LatLng(data.latitude, data.longitude);
             //TODO make circleMarker returned by a parametrized method
+            const bubbleColor = selectedCountries.includes(data.objectData.countryId)
+                ? SELECTED_BUBBLE_COLOR : NON_SELECTED_BUBBLE_COLOR;
             result.push(
                 <CircleMarker
                     center={countryCenter}
                     radius={8}
                     stroke={true}
-                    color={'#FAB47D'}
+                    color={bubbleColor}
                     opacity={0.7}
                     weight={2}
                     fill={true}
-                    fillColor={'#FAB47D'}
+                    fillColor={bubbleColor}
                     fillOpacity={0.9}
-                    key={data.objectId}
-                >{/*TODO check if this tooltip is correct and if the desing needs to be adjusted*/}
-                    <Tooltip direction="bottom" offset={[0, 20]} opacity={1}>
-                        {data.objectName}
-                    </Tooltip>
+                    key={data.objectData.countryId}
+                    onClick={e => this.onBubbleClick(e)}
+                    onPopupClose={e => this.popUpClosed(e)}
+                    dataPoint={data}
+                > <Popup><HomePopup data={data} showSector={this.state.showSector}
+                                    handleChangeDataToShow={this.handleChangeDataToShow.bind(this)}/></Popup>
                 </CircleMarker>
             )
         });
@@ -56,17 +77,44 @@ export default class MapHome extends Component {
         return result;
     }
 
+    onLineClick(feature, position) {
+        //TODO add the popin on the line click
+        console.log(feature);
+        console.log(position);
+    }
+
+    popUpClosed(e) {
+        this.setState({showSector: true});
+        this.setState(previousState => {
+            const selectedCountries = previousState.selectedCountries.filter(c => c !== e.target.options.dataPoint.objectData.countryId)
+            return {selectedCountries};
+        })
+    }
+
+    onBubbleClick(e) {
+        this.setState(previousState => {
+                const selectedCountries = [...previousState.selectedCountries, e.target.options.dataPoint.objectData.countryId];
+                return {selectedCountries};
+            }
+        );
+    }
+
+    //TODO see if we can avoid iterating the points twice (one to generate it and another one to
+    // create the circle marker.
     _generateDataPoints(points) {
+        const {selectedCountries} = this.state;
         this.props.filteredProjects.forEach(fp => {
             const countryFound = this.props.countries.find(element => element.id === fp.countryId);
             if (countryFound) {
-                //TODO move fields to constants
                 if (countryFound['extra_info'] && countryFound['extra_info']['centro-id']) {
-                    const latitude = countryFound['extra_info']['centro-id'].lat;
-                    const longitude = countryFound['extra_info']['centro-id'].lon;
-                    const objectId = fp.countryId;
-                    const objectName = countryFound.name;
-                    points.push({objectId, latitude, longitude, objectName});
+                    const dataPoint = {};
+                    dataPoint.color = selectedCountries.includes(fp.countryId) ? SELECTED_LINE_COLOR : NON_SELECTED_LINE_COLOR;
+                    dataPoint.latitude = countryFound['extra_info']['centro-id'].lat;
+                    dataPoint.longitude = countryFound['extra_info']['centro-id'].lon;
+                    dataPoint.objectData = fp;
+                    dataPoint.objectName = countryFound.name;
+                    dataPoint.value = {sectors: []};
+                    points.push(dataPoint);
                 }
             }
         });
@@ -89,10 +137,30 @@ export default class MapHome extends Component {
                     attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <ConnectionLayer points={points} nodePoint={center}/>
+                <ConnectionLayer points={points} nodePoint={center}
+                                 onClick={(feature, position) => this.onLineClick(feature, position)}/>
                 {this.getPoints(points, center)}
             </Map>
         );
     }
 
 }
+
+const mapStateToProps = state => {
+    return {
+        filters: {
+            sectors: {
+                sectors: state.filtersReducer.sectors,
+                sectorsLoaded: state.filtersReducer.sectorsLoaded
+            },
+            countries: {
+                countries: state.filtersReducer.countries,
+                countriesLoaded: state.filtersReducer.countriesLoaded
+            }
+
+        }
+    };
+};
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapHome);

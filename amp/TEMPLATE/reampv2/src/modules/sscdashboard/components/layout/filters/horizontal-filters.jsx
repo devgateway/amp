@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-//import FilterCountries from './countries';
 import MultiSelectionDropDown from './MultiSelectionDropDown';
 import CountryCarousel from './carousel';
 import CountrySearch from './country-search';
 import './filters.css';
 import { DASHBOARD_DEFAULT_MAX_YEAR_RANGE, DASHBOARD_DEFAULT_MIN_YEAR_RANGE } from '../../../utils/constants';
+import { EXTRA_INFO, GROUP_ID } from '../../../utils/FieldsConstants';
 import { bindActionCreators } from 'redux';
 import { loadSectorsFilters, loadCountriesFilters, loadModalitiesFilters } from '../../../actions/loadFilters';
 import { connect } from 'react-redux';
@@ -18,9 +18,8 @@ class HorizontalFilters extends Component {
     }
 
     getCategoryForCountry(country) {
-        //TODO move to constants
-        if (country && country['extra_info']) {
-            return country['extra_info']['group-id'];
+        if (country && country[EXTRA_INFO]) {
+            return country[EXTRA_INFO][GROUP_ID];
         } else {
             return null;
         }
@@ -29,7 +28,7 @@ class HorizontalFilters extends Component {
 
     generateCountriesCategories() {
         const {countries} = this.props.filters.countries;
-        const categories = [...new Set(countries.map(c => c['extra_info']['group-id']))];
+        const categories = [...new Set(countries.map(c => c[EXTRA_INFO][GROUP_ID]))];
         return countries.filter(c => categories.includes(c.id)).map(c => {
             const category = {};
             category.id = c.id;
@@ -118,35 +117,44 @@ class HorizontalFilters extends Component {
                     countryId: c.id,
                     sectors: []
                 };
-                const sectorCount = Math.floor(Math.random() * 3);
+                const sectorCount = Math.floor(Math.random() * 13);
                 for (let j = 0; j < sectorCount; j++) {
-                    const sSectorIdRandom = Math.floor(Math.random() * 28);
-                    const sector = {
-                        sectorId: sectors[sSectorIdRandom].id,
-                        modalities: []
-                    };
-                    const modalityCount = Math.floor(Math.random() * 3);
-                    for (let m = 0; m < modalityCount; m++) {
-                        const sModalityIdRandom = Math.floor(Math.random() * 18);
-                        const modality = {
-                            modalityId: modalities[sModalityIdRandom].id,
-                            projects: []
+
+                    const sSectorIdRandom = Math.floor(Math.random() * 27);
+                    const sectorAlreadyExisting = country.sectors.find(s => s.sectorId === sectors[sSectorIdRandom].id);
+                    if (!sectorAlreadyExisting) {
+                        const sector = {
+                            sectorId: sectors[sSectorIdRandom].id,
+                            modalities: []
                         };
-                        for (let i = 0; i < 5; i++) {
-                            projectCount += 1;
-                            const projectId = Math.floor(Math.random() * 1000);
-                            const yearId = Math.floor(Math.random() * 30);
-                            //const title = `project ${projectId}`;
-                            const year = years[yearId].id;
-                            const project = {projectId, year};
-                            modality.projects.push(project);
+                        const modalityCount = Math.floor(Math.random() * 12);
+                        for (let m = 0; m < modalityCount; m++) {
+
+
+                            const sModalityIdRandom = Math.floor(Math.random() * 17);
+                            const modalityAlreadyExisting = sector.modalities.find(m => m.modalityId === modalities[sModalityIdRandom].id);
+                            if (!modalityAlreadyExisting) {
+                                const modality = {
+                                    modalityId: modalities[sModalityIdRandom].id,
+                                    projects: []
+                                };
+                                for (let i = 0; i < 5; i++) {
+                                    projectCount += 1;
+
+                                    const projectId = this.getProjectsIds()[Math.floor(Math.random() * 54)];
+                                    const yearId = Math.floor(Math.random() * 30);
+                                    //const title = `project ${projectId}`;
+                                    const year = years[yearId].id;
+                                    const project = {projectId, year};
+                                    modality.projects.push(project);
+                                }
+                                sector.modalities.push(modality)
+                            }
                         }
-                        sector.modalities.push(modality)
+
+
+                        country.sectors.push(sector);
                     }
-
-
-                    country.sectors.push(sector);
-
                 }
                 filter.countries.push(country);
             });
@@ -157,6 +165,13 @@ class HorizontalFilters extends Component {
             console.log(`Project count ${projectCount}`);
 
         }
+    }
+    // TODO to be removed
+    getProjectsIds() {
+        return [19284, 10475, 10476, 10477, 19171, 11933, 19191, 19317, 19299, 19333, 19362, 19376, 19110, 19190, 11930,
+            11931, 10544, 9975, 9976, 9978, 9979, 9980, 9981, 9982, 9983, 9988, 9990, 9991, 9993, 9998, 19172, 19173,
+            19183, 19186, 19189, 10479, 10407, 10403, 10333, 10410, 17394, 17395, 19204, 17442, 18896, 19193, 19197,
+            21345, 21591, 21592, 21593, 21594, 21595, 21596]
     }
 
     _generateYearsFilters(years) {

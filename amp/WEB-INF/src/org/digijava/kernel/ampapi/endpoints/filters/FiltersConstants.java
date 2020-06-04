@@ -78,6 +78,7 @@ public class FiltersConstants {
     public static final String LOCATION = "location";
     public static final String RAW_LOCATION = "raw-location";
     public static final String MODE_OF_PAYMENT = "mode-of-payment";
+    public static final String MODALITIES = "modalities";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_0 = "national-planning-objectives-level-0";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_1 = "national-planning-objectives-level-1";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_2 = "national-planning-objectives-level-2";

@@ -8,4 +8,14 @@ export const API_FILTERS_COUNTRIES_URL = '/rest/filters/locations?firstLevelOnly
 export const API_AMP_SETTINGS_URL = '/rest/amp/settings';
 export const API_FILTERS_MODALITIES_URL = '/rest/filters/modalities?sscWorkspace=true';
 
+export const API_REPORTS_ACTIVITY_DETAIL_URL = '/rest/gis/activities';
 
+
+export const NON_SELECTED_LINE_COLOR = '#fd8f00';
+export const NON_SELECTED_BUBBLE_COLOR = '#fd8f00';
+
+export const SELECTED_LINE_COLOR = '#007236';
+export const SELECTED_BUBBLE_COLOR = '#007236';
+
+export const PROJECT_LENGTH_HOME_PAGE = 50;
+export const UNDEFINED_FILTER = -999999999;

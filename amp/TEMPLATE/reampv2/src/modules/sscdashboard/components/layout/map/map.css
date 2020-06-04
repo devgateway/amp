@@ -1,13 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
 .map-wrapper {
     padding: 0;
 }
 
 .h-filter-wrapper {
-  background-color: #273142;
-  height: 60px;
-  padding: 12px 0;
-  position: relative;
-  z-index: 1;
+    background-color: #273142;
+    height: 60px;
+    padding: 12px 0;
+    position: relative;
+    z-index: 1;
 }
 
 .map-container {
@@ -15,3 +17,6 @@
     width: 100%;
     position: fixed;
 }
+
+
+

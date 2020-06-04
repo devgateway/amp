@@ -3,5 +3,6 @@
   "amp.ssc.dashboard:Year": "Year",
   "amp.ssc.dashboard:Sector": "Sector",
   "amp.ssc.dashboard:Country": "Country",
-  "amp.ssc.dashboard:Modalities": "Modalities"
+  "amp.ssc.dashboard:Modalities": "Modalities",
+  "amp.ssc.dashboard:NA": "N/A"
 }

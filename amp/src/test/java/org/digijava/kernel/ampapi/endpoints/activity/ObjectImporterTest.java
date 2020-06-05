@@ -689,7 +689,7 @@ public class ObjectImporterTest {
     }
 
     private void createObjectImporter() {
-        FMService fmService = new TestFMService();
+        FeatureManagerService fmService = new TestFMService();
         FieldInfoProvider provider = new TestFieldInfoProvider();
         TranslatorService translatorService = new TestTranslatorService();
 

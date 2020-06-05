@@ -41,7 +41,7 @@ public class MenuItemsProcessor {
     
     public static List<MenuItem> processForCurrentRequest(List<MenuItem> items, AmpView view) {
         // retrieve the list of enabled menu entries for the current FM Template
-        Set<String> visibleMenuEntries = FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MENU);
+        Set<String> visibleMenuEntries = FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MENU, null);
         
         return (new MenuItemsProcessor(view)).process(items, visibleMenuEntries);
     }

@@ -59,6 +59,9 @@ public class ActivityEPConstants {
 
     public static final String PREVIEW_CURRENCY_ID = "currency-id";
 
+    public static final String API_WS_MEMBER_IDS = "ws-member-ids";
+    public static final String API_FIELDS = "fields";
+
     // fields constants
     public static final String AMP_ACTIVITY_ID_FIELD_NAME =
             FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);

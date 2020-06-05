@@ -32,6 +32,7 @@ import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.FilterValue;
 import org.digijava.kernel.ampapi.endpoints.dto.GisActivity;
+import org.digijava.kernel.ampapi.endpoints.dto.gis.SscDashboardResult;
 import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -260,7 +261,50 @@ public class ActivityService {
                 headerAdded = true;
             }
         }
-    return new RecentlyUpdatedActivities(headers, activities);
+        return new RecentlyUpdatedActivities(headers, activities);
 
+    }
+
+    public static SscDashboardResult getSscDashboardResult() {
+        SscDashboardResult result = new SscDashboardResult();
+        ReportSpecificationImpl spec = new ReportSpecificationImpl("SccDashboard", ArConstants.DONOR_TYPE);
+        spec.addColumn(new ReportColumn(ColumnConstants.DONOR_COUNTRY));
+        spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+        spec.addColumn(new ReportColumn(ColumnConstants.SSC_MODALITIES));
+        spec.getHierarchies().addAll(spec.getColumns());
+        ReportsUtil.configureSSCWorkspaceFilter(spec, true);
+        GeneratedReport report = EndpointUtils.runReport(spec);
+
+        if (report != null) {
+            for (ReportArea reportArea : report.reportContents.getChildren()) {
+                SscDashboardObject countries = SscDashboardObjectFactory.
+                        getSscDashboardObject(reportArea.getOwner().columnName, reportArea.getOwner().id);
+                result.getChildren().add(countries);
+                List<ReportArea> sectorsReportArea;
+                sectorsReportArea = reportArea.getChildren();
+                for (ReportArea sectorReportArea : sectorsReportArea) {
+                    SscDashboardObject sectors = SscDashboardObjectFactory.
+                            getSscDashboardObject(sectorReportArea.getOwner().columnName,
+                                    sectorReportArea.getOwner().id);
+                    List<ReportArea> modalities = sectorReportArea.getChildren();
+                    for (ReportArea modalitiesReportArea : modalities) {
+                        SscDashboardObject modality = SscDashboardObjectFactory.
+                                getSscDashboardObject(modalitiesReportArea.getOwner().columnName,
+                                        modalitiesReportArea.getOwner().id);
+                        for (ReportArea activitiesReportArea : modalitiesReportArea.getChildren()) {
+
+                            modality.getChildren().add(SscDashboardObjectFactory.
+                                    getSscDashboardObject(ColumnConstants.ACTIVITY_ID,
+                                            activitiesReportArea.getOwner().id));
+                            result.getActivitiesId().add(activitiesReportArea.getOwner().id);
+                        }
+
+                        sectors.getChildren().add(modality);
+                    }
+                    countries.getChildren().add(sectors);
+                }
+            }
+        }
+        return result;
     }
 }

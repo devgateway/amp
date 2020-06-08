@@ -14,8 +14,7 @@ export const ACTIVITY_WS_INFO = '/rest/activity/{ACTIVITY_ID}/preview/workspaces
 export const FM_ROOT = 'fm-settings';
 export const RTL_DIRECTION = 'rtl-direction';
 export const SHOW_ACTIVITY_WORKSPACES = 'show-activity-workspaces';
-
-
+export const HIDE_CONTACTS_PUBLIC_VIEW = 'hide-contacts-public-view';
 export const ACTIVITY_WORKSPACE_LEAD_DATA = 'activity-workspace-lead-data';
 const CALENDAR = 'calendar';
 export const CALENDAR_ID = CALENDAR + '-id';

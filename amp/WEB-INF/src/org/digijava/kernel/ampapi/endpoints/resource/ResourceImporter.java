@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,6 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
+import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
@@ -34,6 +36,9 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
+
+import static org.dgfoundation.amp.ar.ArConstants.MIN_SUPPORTED_YEAR;
+import static org.digijava.module.aim.util.AmpMath.isLong;
 
 /**
  * @author Viorel Chihai
@@ -123,6 +128,12 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
             }
         }
 
+        ApiErrorMessage errorMessage = validateYearOfPublication(newJson);
+        if (errorMessage != null) {
+            addError(errorMessage);
+            return this;
+        }
+
         try {
             resource = new AmpResource();
             validateAndImport(resource, newJson);
@@ -177,10 +188,13 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
             tdd.setCmDocTypeId(resource.getType().getId());
         }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(resource.getAddingDate());
-        tdd.setDate(calendar.getTime());
-        tdd.setYearofPublication(String.valueOf(calendar.get(Calendar.YEAR)));
+        if (StringUtils.isBlank(resource.getYearOfPublication())) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(resource.getAddingDate());
+            tdd.setDate(calendar.getTime());
+            resource.setYearOfPublication(String.valueOf(calendar.get(Calendar.YEAR)));
+        }
+        tdd.setYearofPublication(resource.getYearOfPublication());
 
         if (ResourceType.LINK.equals(resource.getResourceType())) {
             tdd.setWebLink(resource.getWebLink());
@@ -188,6 +202,10 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
             tdd.setWebLink(null);
             tdd.setFileSize(formFile.getFileSize());
             tdd.setFormFile(formFile);
+        }
+
+        if (AmpClientModeHolder.isIatiImporterClient()) {
+            tdd.setCreatorClient(ClientMode.IATI_IMPORTER.name());
         }
 
         return tdd;
@@ -263,6 +281,21 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
             errorDetails.add(ResourceEPConstants.TEAM);
 
             return ResourceErrors.INVALID_TEAM_MEMBER.withDetails(errorDetails);
+        }
+
+        return null;
+    }
+
+    private ApiErrorMessage validateYearOfPublication(Map<String, Object> newJson) {
+        String yearOfPublication = String.valueOf(newJson.get(ResourceEPConstants.YEAR_OF_PUBLICATION));
+        if (yearOfPublication != null) {
+            Long year = isLong(yearOfPublication) ? Long.valueOf(yearOfPublication) : null;
+            int currentYear = LocalDate.now().getYear();
+            if (year == null || year < MIN_SUPPORTED_YEAR || year > LocalDate.now().getYear()) {
+                String errorMessage = String.format("%s %s-%s", TranslatorWorker.translateText("Allowed values are"),
+                        MIN_SUPPORTED_YEAR, currentYear);
+                return ResourceErrors.INVALID_YEAR_OF_PUBLICATION.withDetails(errorMessage);
+            }
         }
 
         return null;

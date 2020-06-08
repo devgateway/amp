@@ -278,16 +278,6 @@ public class ImportExportTranslations extends Action {
             errors = ImportExportUtil.importExcelFile((POIFSFileSystem)session.getAttribute(SESSION_FILE), option, site);
             ioForm.setErrors(errors.toArray(new String[0]));
         } else {
-            /*if (translations == null) {
-                ActionErrors errors = new ActionErrors();
-                errors.add(
-                        ActionMessages.GLOBAL_MESSAGE,
-                        new ActionMessage(
-                                "error.aim.importErrorFileContentTranslation"));
-                saveErrors(request, errors);
-                return mapping.findForward("forward");
-            }*/
-
             // Do work - import translation
             ImportExportUtil.importTranslations(translations, option);
         }

@@ -426,6 +426,7 @@ public class SettingsUtils {
     
         settings.setPublicChangeSummary(FeaturesUtil.isVisibleField("Show Change Summary"));
     
+        settings.setHideContactsPublicView(!FeaturesUtil.isVisibleFeature("Contacts"));
         AmpCurrency effCurrency = CurrencyUtil.getEffectiveCurrency();
         settings.setEffectiveCurrency(new CurrencySettings(effCurrency.getId(), effCurrency.getCurrencyCode()));
 

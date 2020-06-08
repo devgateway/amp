@@ -16,6 +16,7 @@ public class CrConstants {
     public static final String PROPERTY_ADDING_DATE                 = "ampdoc:addingDate";
     public static final String PROPERTY_CREATOR                     = "ampdoc:creator";
     public static final String PROPERTY_CREATOR_TEAM                = "ampdoc:creatorTeam";
+    public static final String PROPERTY_CREATOR_CLIENT              = "ampdoc:creatorClient";
     public static final String PROPERTY_VERSION_CREATOR             = "ampdoc:versionCreator";
     public static final String PROPERTY_VERSION_CREATOR_TEAM        = "ampdoc:versionCreatorTeam";
     public static final String PROPERTY_VERSION_NUMBER              = "ampdoc:versionNumber";

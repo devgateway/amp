@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-29642</jira>
+    <keyword>Fix FY</keyword>
+    <author>Julian de Anquin</author>
+    <description>Fix fiscal year for old activities</description>
+    <trigger type="all">
+        <condition type="custom">
+            <script returnVar="country">
+                <lang type="sql">
+                    select settingsvalue from amp_global_settings where settingsname = 'Default Country';
+                </lang>
+            </script>
+            <test>country.equalsIgnoreCase("cd")</test>
+        </condition>
+    </trigger>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+                UPDATE amp_activity_version
+                SET fy = NULL
+                WHERE amp_activity_id IN ( 11380, 3136, 15906, 2017,
+                2141, 2213, 2430, 2444,
+                3120, 3137, 95723, 95768,
+                54327, 79106, 25808, 69609,
+                77237, 77294, 77396, 77553,
+                77554, 26318, 26322, 68913,
+                69050, 69152, 69153, 69158,
+                69209, 96062, 96066, 96090, 96191 );
+
+                UPDATE amp_activity_version av SET fy = newFyValues.newFy
+                FROM(
+                SELECT amp_activity_id, string_agg(fyYear,',') AS newFy FROM (
+                SELECT amp_activity_id,
+                GENERATE_SERIES(SPLIT_PART(fy, ' - ', 1)::int,SPLIT_PART(fy, ' - ', 2)::INT)::VARCHAR AS fyYear
+                FROM amp_activity WHERE
+                fy ILIKE '% - %'
+                )AS tbl
+                GROUP BY amp_activity_id) AS newFyValues
+                WHERE newFyValues.amp_activity_id = av.amp_activity_id;
+
+                UPDATE amp_activity_version av SET fy = newFyValues.newFy
+                FROM(
+                SELECT amp_activity_id, string_agg(fyYear,',') AS newFy FROM (
+                SELECT amp_activity_id,
+                GENERATE_SERIES(SPLIT_PART(fy, ' -', 1)::int,SPLIT_PART(fy, ' -', 2)::INT)::VARCHAR AS fyYear
+                FROM amp_activity WHERE
+                fy ILIKE '% -%'
+                )AS tbl
+                GROUP BY amp_activity_id) AS newFyValues
+                WHERE newFyValues.amp_activity_id = av.amp_activity_id;
+
+                UPDATE amp_activity_version av SET fy = newFyValues.newFy
+                FROM(
+                SELECT amp_activity_id, string_agg(fyYear,',') AS newFy FROM (
+                SELECT amp_activity_id,
+                GENERATE_SERIES(SPLIT_PART(fy, ' ', 1)::int,SPLIT_PART(fy, ' ', 2)::INT)::VARCHAR AS fyYear
+                FROM amp_activity WHERE
+                fy ILIKE '% %' and length(TRIM(fy)) <> 0
+                )AS tbl
+                GROUP BY amp_activity_id) AS newFyValues
+                WHERE newFyValues.amp_activity_id = av.amp_activity_id;
+                ]]>
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

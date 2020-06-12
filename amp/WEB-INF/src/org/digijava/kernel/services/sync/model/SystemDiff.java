@@ -26,16 +26,16 @@ public class SystemDiff {
 
     @JsonProperty("workspace-members")
     private ListDiff<Long> workspaceMembers;
-    
+
     @JsonProperty("map-tiles")
     private boolean mapTiles;
-    
+
     @JsonProperty("locators")
     private boolean locators;
-    
+
     @JsonProperty
     private ListDiff<Long> calendars;
-    
+
     @JsonProperty
     private ListDiff<Long> users;
 
@@ -44,28 +44,28 @@ public class SystemDiff {
 
     @JsonProperty("activity-possible-values-fields")
     private List<String> activityPossibleValuesFields;
-    
+
     @JsonProperty("activity-fields-structural-changes")
     private boolean activityFieldsStructuralChanges;
 
     @JsonProperty
     private ListDiff<Long> contacts;
-    
+
     @JsonProperty("contact-possible-values-fields")
     private List<String> contactPossibleValuesFields;
-    
+
     @JsonProperty("contact-fields-structural-changes")
     private boolean contactFieldsStructuralChanges;
-    
+
     @JsonProperty
     private ListDiff<String> resources;
-    
+
     @JsonProperty("resource-possible-values-fields")
     private List<String> resourcePossibleValuesFields;
-    
+
     @JsonProperty("resource-fields-structural-changes")
     private boolean resourceFieldsStructuralChanges;
-    
+
     @JsonProperty("common-possible-values-fields")
     private List<String> commonPossibleValuesFields;
 
@@ -77,10 +77,8 @@ public class SystemDiff {
 
     @JsonProperty("feature-manager")
     private boolean featureManager;
-    
-    /**
-     * Set when field definitions any entity changed.
-     */
+
+    @JsonProperty("fields")
     private boolean fields;
 
     public void updateTimestamp(Date timestamp) {
@@ -124,7 +122,7 @@ public class SystemDiff {
     public void setContacts(ListDiff<Long> contacts) {
         this.contacts = contacts;
     }
-    
+
     public void setResources(ListDiff<String> resources) {
         this.resources = resources;
     }
@@ -136,39 +134,39 @@ public class SystemDiff {
     public void setActivityPossibleValuesFields(List<String> activityPossibleValuesFields) {
         this.activityPossibleValuesFields = activityPossibleValuesFields;
     }
-    
+
     public void setActivityFieldsStructuralChanges(boolean activityFieldsStructuralChanges) {
         this.activityFieldsStructuralChanges = activityFieldsStructuralChanges;
     }
-    
+
     public boolean isActivityFieldsStructuralChanges() {
         return activityFieldsStructuralChanges;
     }
-    
+
     public void setContactPossibleValuesFields(List<String> contactPossibleValuesFields) {
         this.contactPossibleValuesFields = contactPossibleValuesFields;
     }
-    
+
     public void setContactFieldsStructuralChanges(boolean contactFieldsStructuralChanges) {
         this.contactFieldsStructuralChanges = contactFieldsStructuralChanges;
     }
-    
+
     public boolean isContactFieldsStructuralChanges() {
         return contactFieldsStructuralChanges;
     }
-    
+
     public void setResourcePossibleValuesFields(List<String> resourcePossibleValuesFields) {
         this.resourcePossibleValuesFields = resourcePossibleValuesFields;
     }
-    
+
     public void setResourceFieldsStructuralChanges(boolean resourceFieldsStructuralChanges) {
         this.resourceFieldsStructuralChanges = resourceFieldsStructuralChanges;
     }
-    
+
     public boolean isResourceFieldsStructuralChanges() {
         return resourceFieldsStructuralChanges;
     }
-    
+
     public void setCommonPossibleValuesFields(List<String> commonPossibleValuesFields) {
         this.commonPossibleValuesFields = commonPossibleValuesFields;
     }
@@ -180,11 +178,11 @@ public class SystemDiff {
     public void setFeatureManager(boolean featureManager) {
         this.featureManager = featureManager;
     }
-    
+
     public void setMapTiles(boolean mapTiles) {
         this.mapTiles = mapTiles;
     }
-    
+
     public void setLocators(boolean locators) {
         this.locators = locators;
     }

@@ -30,9 +30,9 @@ public class GenericVisibility extends DataVisibility implements FMSettings {
     private volatile FMTree tree;
     private AmpTemplatesVisibility template;
     
-    protected GenericVisibility(String groupName) {
+    protected GenericVisibility(String groupName, Long templateId) {
         this.groupName = groupName;
-        this.template = FeaturesUtil.getCurrentTemplate();
+        this.template = FeaturesUtil.getTemplateVisibility(templateId);
         this.init();
     }
     
@@ -57,7 +57,7 @@ public class GenericVisibility extends DataVisibility implements FMSettings {
     }
 
     @Override
-    public Set<String> getEnabledSettings() {
+    public Set<String> getEnabledSettings(Long templateId) {
         reInit();
         return getEnabledSettingsAsFMTree().toFlattenedTree(true);
     }
@@ -72,7 +72,8 @@ public class GenericVisibility extends DataVisibility implements FMSettings {
         FMTree tree = null;
         String moduleRoot = null;
         boolean enabled = false;
-        AmpTreeVisibility vTree = FeaturesUtil.getCurrentAmpTreeVisibility();
+        AmpTreeVisibility vTree = new AmpTreeVisibility();
+        vTree.buildAmpTreeVisibility(template);
         if (vTree != null) {
             vTree = vTree.getModuleTreeByNameFromRoot(groupName);
         }
@@ -109,15 +110,15 @@ public class GenericVisibility extends DataVisibility implements FMSettings {
         for (AmpObjectVisibility feature : modulesVisibility.getItems()) {
             items.put(feature.getName(), buildFeaturesTree((AmpFeaturesVisibility) feature));
         }
-        return new FMTree(items, FeaturesUtil.isVisible(modulesVisibility));
+        return new FMTree(items, FeaturesUtil.isVisible(modulesVisibility, template.getId()));
     }
 
     private FMTree buildFeaturesTree(AmpFeaturesVisibility feature) {
         Map<String, FMTree> items = new LinkedHashMap<>();
         for (AmpObjectVisibility field : feature.getItems()) {
-            items.put(field.getName(), new FMTree(null, FeaturesUtil.isVisible(field)));
+            items.put(field.getName(), new FMTree(null, FeaturesUtil.isVisible(field, template.getId())));
         }
-        return new FMTree(items, FeaturesUtil.isVisible(feature));
+        return new FMTree(items, FeaturesUtil.isVisible(feature, template.getId()));
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////

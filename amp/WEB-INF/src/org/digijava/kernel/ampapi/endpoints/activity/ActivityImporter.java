@@ -110,11 +110,11 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     private AmpTeamMember modifiedBy;
     private String sourceURL;
     private String endpointContextPath;
-    private FMService fmService;
+    private FeatureManagerService fmService;
     private ActivityService activityService;
     private TeamMemberService teamMemberService;
     private PersistenceTransactionManager persistenceTransactionManager;
-    
+
     public ActivityImporter(APIField apiField, ActivityImportRules rules) {
        this(apiField, rules, new ValueConverter());
     }
@@ -126,11 +126,11 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         this.rules = rules;
         this.saveContext = SaveContext.api(!rules.isProcessApprovalFields());
         this.activityService = new AMPActivityService();
-        this.fmService = new AMPFMService();
+        this.fmService = new AMPFeatureManagerService();
         this.teamMemberService = new AMPTeamMemberService();
         this.persistenceTransactionManager = new DBPersistenceTransactionManager();
     }
-    
+
     /**
      * Returns an executor that is able to validate in the presence of db & services.
      */
@@ -183,7 +183,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
 
         // get existing activity if this is an update request
         Long activityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
-        
+
         if (update && activityId == null) {
             addError(ActivityErrors.FIELD_ACTIVITY_ID_NULL);
             return this;
@@ -201,7 +201,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         }
 
         checkPermissions(update, activityId, modifiedBy);
-        
+
         if (!errors.isEmpty()) {
             return this;
         }
@@ -236,12 +236,12 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         } finally {
             ActivityValidationContext.set(null);
         }
-    
+
         updateResponse(update);
 
         return this;
     }
-    
+
     /**
      * Import or updates activity.
      * @param activityId
@@ -257,17 +257,17 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                     errors.put(ActivityErrors.ACTIVITY_NOT_LOADED.id, ActivityErrors.ACTIVITY_NOT_LOADED);
                 }
             }
-    
+
             sanityChecks();
             
             if (oldActivity != null) {
                 oldActivityDraft = oldActivity.getDraft();
-            
+
                 newActivity = oldActivity;
                 oldActivity = ActivityVersionUtil.cloneActivity(oldActivity);
                 oldActivity.setAmpId(newActivity.getAmpId());
                 oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
-            
+
                 newActivity.getAmpActivityGroup().setVersion(-1L);
                 // TODO AMP-28993: remove explicitly resetting createdBy since it is cleared during init
                 if (!rules.isTrackEditors()) {
@@ -286,16 +286,16 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             } else if (!update) {
                 newActivity = new AmpActivityVersion();
             }
-    
+
             validateAndImport(newActivity, newJson);
             
             if (errors.isEmpty()) {
                 prepareToSave();
                 boolean draftChange = ActivityUtil.detectDraftChange(newActivity, oldActivityDraft);
-    
+
                 newActivity = activityService.saveActivity(newActivity, getTranslations(), modifiedBy, draftChange,
                         saveContext, getEditorStore(), getSite());
-                
+
                 activityService.updateLuceneIndex(newActivity, oldActivity, update, trnSettings, getTranslations(),
                         getSite());
             }
@@ -303,7 +303,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             logger.error(e.getMessage(), e);
             addError(new ApiExceptionMapper().getApiErrorMessageFromException(e));
         }
-        
+
         if (!errors.isEmpty()) {
             throw new ImportFailedException("Trigger rollback");
         }
@@ -368,7 +368,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     public AmpTeamMember getModifiedBy() {
         return modifiedBy;
     }
-    
+
     /**
      * Check if specified team member can add/edit the activity in question.
      *
@@ -769,19 +769,19 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
     public void setActivityService(ActivityService activityService) {
         this.activityService = activityService;
     }
-    
-    public void setFmService(FMService fmService) {
+
+    public void setFmService(FeatureManagerService  fmService) {
         this.fmService = fmService;
     }
-    
+
     public void setTeamMemberService(TeamMemberService teamMemberService) {
         this.teamMemberService = teamMemberService;
     }
-    
+
     public void setPersistenceTransactionManager(PersistenceTransactionManager persistenceTransactionManager) {
         this.persistenceTransactionManager = persistenceTransactionManager;
     }
-    
+
     @Override
     public ActivitySummary getImportResult() {
         if (newActivity != null && newActivity.getAmpActivityId() != null) {

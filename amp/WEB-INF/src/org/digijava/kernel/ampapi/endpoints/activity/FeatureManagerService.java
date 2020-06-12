@@ -5,7 +5,7 @@ package org.digijava.kernel.ampapi.endpoints.activity;
  *
  * @author Octavian Ciubotaru
  */
-public interface FMService {
+public interface FeatureManagerService {
 
     boolean isVisible(String fmPath);
 }

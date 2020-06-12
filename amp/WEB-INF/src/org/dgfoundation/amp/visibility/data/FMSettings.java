@@ -12,8 +12,8 @@ import java.util.Set;
  */
 public interface FMSettings {
     
-    /** @return a set of enabled FM settings */
-    Set<String> getEnabledSettings();
+    /** @return a set of enabled FM settings based on templateId*/
+    Set<String> getEnabledSettings(Long templateId);
 
     /**
      * @return return all possible FM settings

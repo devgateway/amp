@@ -127,7 +127,7 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
      * this should be {@link #detectVisibleData()} in case AF is taken into account
      * @return
      */
-    public Set<String> detectVisibleData_AF(long visibilityTemplateId) {
+    public Set<String> detectVisibleDataAF(long visibilityTemplateId) {
         sanityCheck();
         Set<String> visiblePrecursors = new HashSet<String>(); // Measure Names
         Set<String> visibleData = new HashSet<String>(); // Measure Names
@@ -153,12 +153,11 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
      * this should be {@link #detectVisibleData()} in case FM is taken into account
      * @return
      */
-    protected Set<String> detectVisibleData_FM() {
+    protected Set<String> detectVisibleDataFM(Long templateId) {
         Set<String> visibleData = new HashSet<String>(); // Measure Names
         Set<String> invisibleData = new HashSet<String>(getAllData()); // Measure Names
-        long currentTemplateId = FeaturesUtil.getCurrentTemplateId();
         
-        List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(allMeasures, currentTemplateId);
+        List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(allMeasures, templateId);
         splitObjectsByVisibility(features, featuresToMeasuresMap, visibleData, invisibleData);
         return Collections.unmodifiableSet(visibleData);
     }
@@ -169,9 +168,9 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
      * @param visibilityEnum
      * @return
      */
-    public Set<String> detectVisibleData() {        
+    public Set<String> detectVisibleData(Long templateId) {        
         String measVS = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.REPORT_WIZARD_VISIBILITY_SOURCE);
-        return detectVisibleData(Integer.parseInt(measVS));
+        return detectVisibleData(Integer.parseInt(measVS), templateId);
     }
 
     /**
@@ -179,21 +178,20 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
      * @param src - one of {@link VisibilitySourceOptions} codes
      * @return
      */
-    public Set<String> detectVisibleData(int src) {
-        long visibilityTemplateId = FeaturesUtil.getCurrentTemplateId();
-
+    public Set<String> detectVisibleData(int src, Long templateId) {
         switch(src) {
             case VisibilitySourceOptions.ACTIVITY_FORM_VISIBILITY:
-                return detectVisibleData_AF(visibilityTemplateId);
+                return detectVisibleDataAF(templateId);
             
             case VisibilitySourceOptions.FEATURE_MANAGER_VISIBILITY:
-                return detectVisibleData_FM();
+                return detectVisibleDataFM(templateId);
                 
             case VisibilitySourceOptions.FEATURE_MANAGER_AND_ACTIVITY_FORM_VISIBILITY:
-                return Sets.intersection(detectVisibleData_AF(visibilityTemplateId), detectVisibleData_FM()).immutableCopy();
+                return Sets.intersection(detectVisibleDataAF(templateId), 
+                        detectVisibleDataFM(templateId)).immutableCopy();
                 
             case VisibilitySourceOptions.FEATURE_MANAGER_OR_ACTIVITY_FORM_VISIBILITY:
-                return Sets.union(detectVisibleData_AF(visibilityTemplateId), detectVisibleData_FM()).immutableCopy();
+                return Sets.union(detectVisibleDataAF(templateId), detectVisibleDataFM(templateId)).immutableCopy();
             
             default:
                 throw new RuntimeException("unknown value in ReportWizardVisibilitySource: " + src);
@@ -204,12 +202,12 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
      * @return the current set of visible measures
      */
     synchronized public static Set<String> getVisibleMeasures() {
-        return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MEASURES);
+        return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MEASURES, null);
     }
     
     @Override
-    public Set<String> getEnabledSettings() {
-        return getCurrentVisibleData();
+    public Set<String> getEnabledSettings(Long templateId) {
+        return getVisibleData(templateId);
     }
         
     @SuppressWarnings("serial")

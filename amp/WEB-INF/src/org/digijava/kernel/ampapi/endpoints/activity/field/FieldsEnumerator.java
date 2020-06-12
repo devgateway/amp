@@ -27,7 +27,7 @@ import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.DiscriminatedFieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.FEContext;
-import org.digijava.kernel.ampapi.endpoints.activity.FMService;
+import org.digijava.kernel.ampapi.endpoints.activity.FeatureManagerService;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.SimpleFieldAccessor;
@@ -70,7 +70,7 @@ public class FieldsEnumerator {
 
     private FieldInfoProvider fieldInfoProvider;
 
-    private FMService fmService;
+    private FeatureManagerService fmService;
 
     private TranslatorService translatorService;
 
@@ -79,7 +79,7 @@ public class FieldsEnumerator {
     /**
      * Fields Enumerator
      */
-    public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
+    public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FeatureManagerService fmService,
             TranslatorService translatorService, Function<String, Boolean> allowMultiplePrograms) {
         this.fieldInfoProvider = fieldInfoProvider;
         this.fmService = fmService;
@@ -618,14 +618,6 @@ public class FieldsEnumerator {
     private boolean isFieldVisible(FEContext context) {
         Interchangeable interchangeable = context.getIntchStack().peek();
         return isVisible(interchangeable.fmPath(), context);
-    }
-
-    protected boolean isRequiredVisible(String fmPath, FEContext context) {
-        Interchangeable peek = context.getIntchStack().pop();
-        boolean isVisible = fmService.isVisible(FMVisibility.handleParentFMPath(fmPath, context.getIntchStack()));
-        context.getIntchStack().push(peek);
-
-        return isVisible;
     }
 
     protected boolean isVisible(String fmPath, FEContext context) {

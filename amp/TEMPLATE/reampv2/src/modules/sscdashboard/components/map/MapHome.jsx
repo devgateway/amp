@@ -13,6 +13,7 @@ import '../layout/map/map.css';
 import HomePopup from '../layout/popups/homepopup/HomePopup';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { EXTRA_INFO, CENTRO_ID } from '../../utils/FieldsConstants';
 
 
 class MapHome extends Component {
@@ -104,16 +105,16 @@ class MapHome extends Component {
     _generateDataPoints(points) {
         const {selectedCountries} = this.state;
         this.props.filteredProjects.forEach(fp => {
-            const countryFound = this.props.countries.find(element => element.id === fp.countryId);
+            const countryFound = this.props.countries.find(element => element.id === fp.id);
             if (countryFound) {
-                if (countryFound['extra_info'] && countryFound['extra_info']['centro-id']) {
+                if (countryFound[EXTRA_INFO] && countryFound[EXTRA_INFO][CENTRO_ID]) {
+                    const centroId = countryFound[EXTRA_INFO][CENTRO_ID];
                     const dataPoint = {};
                     dataPoint.color = selectedCountries.includes(fp.countryId) ? SELECTED_LINE_COLOR : NON_SELECTED_LINE_COLOR;
-                    dataPoint.latitude = countryFound['extra_info']['centro-id'].lat;
-                    dataPoint.longitude = countryFound['extra_info']['centro-id'].lon;
+                    dataPoint.latitude = centroId.lat;
+                    dataPoint.longitude = centroId.lon;
                     dataPoint.objectData = fp;
                     dataPoint.objectName = countryFound.name;
-                    dataPoint.value = {sectors: []};
                     points.push(dataPoint);
                 }
             }

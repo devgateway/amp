@@ -12,15 +12,16 @@ class HomePopup extends Component {
 
 
     generateStructureBasedOnSector() {
+
         const {objectData} = this.props.data;
         const sectors = [];
-        objectData.sectors.forEach(s => {
+        objectData[FieldsConstants.PRIMARY_SECTOR].forEach(s => {
             const sector = {};
-            sector.id = s.sectorId;
-            sector.projects = new Set();
-            s.modalities.forEach(m => {
-                    m.projects.forEach(p => {
-                        sector.projects.add(p.projectId);
+            sector.id = s.id;
+            sector.activities = new Set();
+            s[FieldsConstants.MODALITIES].forEach(m => {
+                    m.activities.forEach(p => {
+                        sector.activities.add(p.id);
                     });
                 }
             );
@@ -32,16 +33,16 @@ class HomePopup extends Component {
     generateStructureBasedOnModalities() {
         const {objectData} = this.props.data;
         const modalities = new Map();
-        objectData.sectors.forEach(s => {
-            s.modalities.forEach(m => {
-                    if (!modalities.has(m.modalityId)) {
+        objectData[FieldsConstants.PRIMARY_SECTOR].forEach(s => {
+            s[FieldsConstants.MODALITIES].forEach(m => {
+                    if (!modalities.has(m.id)) {
                         const modality = {};
-                        modality.id = m.modalityId;
-                        modality.projects = new Set();
-                        modalities.set(m.modalityId, modality);
+                        modality.id = m.id;
+                        modality.activities = new Set();
+                        modalities.set(m.id, modality);
                     }
-                    m.projects.forEach(p => {
-                        modalities.get(m.modalityId).projects.add(p.projectId)
+                    m.activities.forEach(p => {
+                        modalities.get(m.id).activities.add(p.id)
                     });
                 }
             );
@@ -79,7 +80,7 @@ class HomePopup extends Component {
                 </span>
                 </div>
                 <div className="project-list">
-                    <ul>{this.getProjects(m.projects, m.id)}</ul>
+                    <ul>{this.getProjects(m.activities, m.id)}</ul>
                 </div>
             </div>);
         });
@@ -101,15 +102,14 @@ class HomePopup extends Component {
     }
 
     getProject(projectId) {
-        const {activitiesDetails, activitiesDetailLoaded} = this.props.projects;
-        if (activitiesDetailLoaded) {
+        const {activitiesDetails, activitiesDetailsLoaded} = this.props.projects;
+        if (activitiesDetailsLoaded) {
             return activitiesDetails.activities.find(a => a[FieldsConstants.ACTIVITY_ID] === projectId);
         }
 
     }
 
     render() {
-
         const {translations} = this.context;
         const {data, showSector, handleChangeDataToShow} = this.props;
         const flag = require(`../../../../images/flags/${data.objectName.toLowerCase().replace(/ /g, "_")}.svg`);
@@ -149,7 +149,7 @@ const mapStateToProps = state => {
         },
         projects: {
             activitiesDetails: state.reportsReducer.activitiesDetails,
-            activitiesDetailLoaded: state.reportsReducer.activitiesDetails,
+            activitiesDetailsLoaded: state.reportsReducer.activitiesDetailsLoaded,
         }
     };
 };

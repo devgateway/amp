@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import
+    React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import fetchTranslations from '../../../utils/actions/fetchTranslations';
+import { loadActivities } from '../actions/callReports';
 import loadAmpSettings from '../actions/loadAmpSettings';
 import defaultTrnPack from '../config/initialTranslations';
 import { Loading } from '../../../utils/components/Loading';
@@ -22,6 +24,7 @@ class Startup extends Component {
     componentDidMount() {
         this.props.fetchTranslations(defaultTrnPack);
         this.props.loadAmpSettings();
+        this.props.loadActivities();
     }
 
     render() {
@@ -42,7 +45,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     fetchTranslations: fetchTranslations,
-    loadAmpSettings: loadAmpSettings
+    loadAmpSettings: loadAmpSettings,
+    loadActivities: loadActivities
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Startup);

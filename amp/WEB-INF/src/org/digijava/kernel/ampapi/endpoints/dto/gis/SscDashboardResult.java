@@ -12,12 +12,15 @@ public class SscDashboardResult {
 
     private Set<Long> activitiesId;
 
+    private Integer mostRecentYear;
+
     @JsonProperty(ColumnConstants.DONOR_COUNTRY)
     private List<SscDashboardObject> children;
 
     public SscDashboardResult() {
         activitiesId = new HashSet<>();
         children = new ArrayList<>();
+        mostRecentYear = 0;
     }
 
     public Set<Long> getActivitiesId() {
@@ -26,5 +29,13 @@ public class SscDashboardResult {
 
     public List<SscDashboardObject> getChildren() {
         return children;
+    }
+
+    public Integer getMostRecentYear() {
+        return mostRecentYear;
+    }
+
+    public void setMostRecentYear(Integer mostRecentYear) {
+        this.mostRecentYear = mostRecentYear;
     }
 }

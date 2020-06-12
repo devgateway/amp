@@ -26,10 +26,11 @@ class HorizontalFilters extends Component {
 
     }
 
-    generateCountriesCategories() {
-        const {countries} = this.props.filters.countries;
+    generateCountriesCategories(countries) {
         const categories = [...new Set(countries.map(c => c[EXTRA_INFO][GROUP_ID]))];
-        return countries.filter(c => categories.includes(c.id)).map(c => {
+        return this.props.filters.countries.countries.filter(c => {
+            return categories.includes(c.id);
+        }).map(c => {
             const category = {};
             category.id = c.id;
             category.name = c.description;
@@ -44,12 +45,13 @@ class HorizontalFilters extends Component {
         const {sectors} = this.props.filters.sectors;
         let {countries} = this.props.filters.countries;
         const {modalities} = this.props.filters.modalities;
-        /*if (countries.length > 0 && this.props.filtersRestrictions.countriesWithData.length > 0) {
+        let categoriesSelection = [];
+        if (countries.length > 0 && this.props.filtersRestrictions.countriesWithData.length > 0) {
             countries = countries.filter(c => this.props.filtersRestrictions.countriesWithData.includes(c.id));
-        }*/
+            categoriesSelection = this.generateCountriesCategories(countries);
+        }
 
         this._generateYearsFilters(years);
-        //this.generateFiltersMockData(countries, sectors, years, modalities);
 
         return (
             <div className="h-filter-wrapper">
@@ -66,7 +68,7 @@ class HorizontalFilters extends Component {
                                                     parentId="accordion-filter"
                                                     categoryFetcher={this.getCategoryForCountry}
                                                     sortData={true}
-                                                    categoriesSelection={this.generateCountriesCategories()}
+                                                    categoriesSelection={categoriesSelection}
                                                     selectedOptions={selectedCountries}
                                                     onChange={this.props.handleSelectedCountryChanged}
 
@@ -103,75 +105,6 @@ class HorizontalFilters extends Component {
                 </div>
             </div>
         );
-    }
-
-    generateFiltersMockData(countries, sectors, years, modalities) {
-        let projectCount = 0;
-        if (countries && countries.length > 0 && sectors && sectors.length > 0
-            && years && years.length > 0 && modalities && modalities.length > 0
-        ) {
-            const filter = {countries: []};
-            const pCountries = countries.filter(c => c.id < 2881);
-            pCountries.forEach(c => {
-                const country = {
-                    countryId: c.id,
-                    sectors: []
-                };
-                const sectorCount = Math.floor(Math.random() * 13);
-                for (let j = 0; j < sectorCount; j++) {
-
-                    const sSectorIdRandom = Math.floor(Math.random() * 27);
-                    const sectorAlreadyExisting = country.sectors.find(s => s.sectorId === sectors[sSectorIdRandom].id);
-                    if (!sectorAlreadyExisting) {
-                        const sector = {
-                            sectorId: sectors[sSectorIdRandom].id,
-                            modalities: []
-                        };
-                        const modalityCount = Math.floor(Math.random() * 12);
-                        for (let m = 0; m < modalityCount; m++) {
-
-
-                            const sModalityIdRandom = Math.floor(Math.random() * 17);
-                            const modalityAlreadyExisting = sector.modalities.find(m => m.modalityId === modalities[sModalityIdRandom].id);
-                            if (!modalityAlreadyExisting) {
-                                const modality = {
-                                    modalityId: modalities[sModalityIdRandom].id,
-                                    projects: []
-                                };
-                                for (let i = 0; i < 5; i++) {
-                                    projectCount += 1;
-
-                                    const projectId = this.getProjectsIds()[Math.floor(Math.random() * 54)];
-                                    const yearId = Math.floor(Math.random() * 30);
-                                    //const title = `project ${projectId}`;
-                                    const year = years[yearId].id;
-                                    const project = {projectId, year};
-                                    modality.projects.push(project);
-                                }
-                                sector.modalities.push(modality)
-                            }
-                        }
-
-
-                        country.sectors.push(sector);
-                    }
-                }
-                filter.countries.push(country);
-            });
-            console.log("*****");
-            console.log(JSON.stringify(filter));
-            //console.log(filter);
-            console.log("*****");
-            console.log(`Project count ${projectCount}`);
-
-        }
-    }
-    // TODO to be removed
-    getProjectsIds() {
-        return [19284, 10475, 10476, 10477, 19171, 11933, 19191, 19317, 19299, 19333, 19362, 19376, 19110, 19190, 11930,
-            11931, 10544, 9975, 9976, 9978, 9979, 9980, 9981, 9982, 9983, 9988, 9990, 9991, 9993, 9998, 19172, 19173,
-            19183, 19186, 19189, 10479, 10407, 10403, 10333, 10410, 17394, 17395, 19204, 17442, 18896, 19193, 19197,
-            21345, 21591, 21592, 21593, 21594, 21595, 21596]
     }
 
     _generateYearsFilters(years) {

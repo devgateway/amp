@@ -7,6 +7,7 @@ export const API_FILTERS_SECTORS_URL = '/rest/filters/sectors';
 export const API_FILTERS_COUNTRIES_URL = '/rest/filters/locations?firstLevelOnly=true&showAllCountries=true';
 export const API_AMP_SETTINGS_URL = '/rest/amp/settings';
 export const API_FILTERS_MODALITIES_URL = '/rest/filters/modalities?sscWorkspace=true';
+export const API_SSC_DASHBOARD_URL = '/rest/gis/sscdashboard';
 
 export const API_REPORTS_ACTIVITY_DETAIL_URL = '/rest/gis/activities';
 

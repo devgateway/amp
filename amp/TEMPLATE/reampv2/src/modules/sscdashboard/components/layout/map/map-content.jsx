@@ -3,10 +3,12 @@ import HorizontalFilters from '../filters/horizontal-filters';
 import './map.css';
 import MapHome from "../../map/MapHome";
 import CountryPopupOverlay from "../popups/popup-overlay";
-import mapData from './mapData';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { loadActivitiesDetails } from '../../../actions/callReports';
+import SimplePopup from '../popups/homepopup/SimplePopup';
+import { SSCTranslationContext } from '../../StartUp';
+import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from '../../../utils/FieldsConstants';
 
 class MapContainer extends Component {
     //TODO once we implement side filters maybe we need to move state up
@@ -14,7 +16,7 @@ class MapContainer extends Component {
         super(props);
         this.countriesWithData = [];
         this.state = {
-            showModal: true,
+            showModal: false,
             filteredProjects: [],
             countriesWithData: [],
             selectedFilters: {
@@ -27,24 +29,33 @@ class MapContainer extends Component {
     }
 
     getProjectsData() {
-        this.props.loadActivitiesDetails(this.getProjectsIds());
-    }
-
-    //TODO the Array of activities ID will be returned together with the datastructure to filter on the fly
-    getProjectsIds() {
-        return [19284, 10475, 10476, 10477, 19171, 11933, 19191, 19317, 19299, 19333, 19362, 19376, 19110, 19190, 11930,
-            11931, 10544, 9975, 9976, 9978, 9979, 9980, 9981, 9982, 9983, 9988, 9990, 9991, 9993, 9998, 19172, 19173,
-            19183, 19186, 19189, 10479, 10407, 10403, 10333, 10410, 17394, 17395, 19204, 17442, 18896, 19193, 19197,
-            21345, 21591, 21592, 21593, 21594, 21595, 21596]
+        this.props.loadActivitiesDetails(this.props.projects.activities.activitiesId);
     }
 
     componentDidMount(): void {
+        if (this.props.projects.activitiesLoaded) {
+            this.getProjectsData();
+        }
         const initialData = this.getFilteredData();
-        this.getProjectsData();
-        this.countriesWithData = initialData.map(c => c.countryId);
+
         this.setState({
             filteredProjects: initialData
         });
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props !== prevProps) {
+            if (this.props.projects.activitiesLoaded) {
+                const initialData = this.getFilteredData();
+                this.countriesWithData = initialData.map(c => c.id);
+                const selectedYears = [];
+                selectedYears.push(this.props.projects.activities.mostRecentYear);
+                //this.handleSelectedYearChanged(selectedYears);
+                this.setState({
+                    filteredProjects: initialData
+                });
+            }
+        }
     }
 
     handleSelectedSectorChanged(pSelectedSectors) {
@@ -79,22 +90,28 @@ class MapContainer extends Component {
         }
     }
 
+    modalOnClose(e) {
+        this.setState({showModal: false});
+    }
+
     getFilteredData() {
         //TODO see how we can simply or make a bit more generic this function
         const {selectedYears = [], selectedCountries = [], selectedSectors = [], selectedModalities = []} = this.state.selectedFilters;
-        const projects = mapData.countries;
-        const filteredData = projects.filter(p => {
-            if (selectedCountries.length === 0 || selectedCountries.includes(p.countryId)) {
-                const sectors = p.sectors.filter(sector => {
-                    if (selectedSectors.length === 0 || selectedSectors.includes(sector.sectorId)) {
-                        const modalities = sector.modalities.filter(modality => {
-                            if (selectedModalities.length === 0 || selectedModalities.includes(modality.modalityId)) {
+        if (!this.props.projects.activitiesLoaded) {
+            return [];
+        }
+        return this.props.projects.activities[DONOR_COUNTRY].filter(p => {
+            if (selectedCountries.length === 0 || selectedCountries.includes(p.id)) {
+                const sectors = p[PRIMARY_SECTOR].filter(sector => {
+                    if (selectedSectors.length === 0 || selectedSectors.includes(sector.id)) {
+                        const modalities = sector[MODALITIES].filter(modality => {
+                            if (selectedModalities.length === 0 || selectedModalities.includes(modality.id)) {
                                 if (selectedYears.length > 0) {
-                                    const filteredProjects = modality.projects.filter(p => selectedYears.includes(p.year));
+                                    const filteredProjects = modality.activities.filter(p => selectedYears.includes(p.year));
                                     if (filteredProjects.length === 0) {
                                         return false;
                                     } else {
-                                        sector.projects = filteredProjects;
+                                        modality.activities = filteredProjects;
                                         return true;
                                     }
                                 } else {
@@ -107,7 +124,7 @@ class MapContainer extends Component {
                         if (modalities.length == 0) {
                             return false;
                         } else {
-                            sector.modalities = modalities;
+                            sector[MODALITIES] = modalities;
                             return true;
                         }
                     } else {
@@ -117,20 +134,19 @@ class MapContainer extends Component {
                 if (sectors.length === 0) {
                     return false;
                 }
-                p.sectors = sectors;
+                p[PRIMARY_SECTOR] = sectors;
                 return true;
             } else {
                 return false;
             }
         });
-        return filteredData;
     }
 
 
     render() {
         const {countries} = this.props.filters.countries;
         const filtersRestrictions = {countriesWithData: this.countriesWithData};
-
+        const {translations} = this.context;
         return (
             <div className="col-md-10 col-md-offset-2 map-wrapper">
                 <HorizontalFilters selectedFilters={this.state.selectedFilters}
@@ -142,8 +158,11 @@ class MapContainer extends Component {
 
                 />
                 <MapHome filteredProjects={this.state.filteredProjects} countries={countries}/>
-                { /* TODO commented out until we implement the popin
-                <CountryPopupOverlay/>*/}
+                {/*TODO refactor country popup in next story*/}
+                <CountryPopupOverlay show={this.state.showModal}>
+                    <SimplePopup message={translations['amp.ssc.dashboard:no-date']}
+                                 onClose={this.modalOnClose.bind(this)}/>
+                </CountryPopupOverlay>
             </div>
         );
     }
@@ -162,7 +181,10 @@ const mapStateToProps = state => {
                 countries: state.filtersReducer.countries,
                 countriesLoaded: state.filtersReducer.countriesLoaded
             }
-
+        },
+        projects: {
+            activities: state.reportsReducer.activities,
+            activitiesLoaded: state.reportsReducer.activitiesLoaded,
         }
     };
 };
@@ -171,5 +193,6 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     loadActivitiesDetails: loadActivitiesDetails,
 }, dispatch);
 
+MapContainer.contextType = SSCTranslationContext;
 export default connect(mapStateToProps, mapDispatchToProps)(MapContainer);
 

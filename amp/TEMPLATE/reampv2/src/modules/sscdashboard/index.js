@@ -15,7 +15,7 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 class SSCDashboardApp extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
         this.store = createStore(rootReducer, composeEnhancer(applyMiddleware(thunk)));
     }
 

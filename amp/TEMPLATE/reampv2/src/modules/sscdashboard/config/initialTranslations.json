@@ -4,5 +4,6 @@
   "amp.ssc.dashboard:Sector": "Sector",
   "amp.ssc.dashboard:Country": "Country",
   "amp.ssc.dashboard:Modalities": "Modalities",
-  "amp.ssc.dashboard:NA": "N/A"
+  "amp.ssc.dashboard:NA": "N/A",
+  "amp.ssc.dashboard:no-date": "There is no data for this selection"
 }

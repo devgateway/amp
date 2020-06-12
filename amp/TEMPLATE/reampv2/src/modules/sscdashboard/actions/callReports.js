@@ -1,10 +1,13 @@
 import {
     fetchActivitiesDetailError,
     fetchActivitiesDetailPending,
-    fetchActivitiesDetailSuccess
+    fetchActivitiesDetailSuccess,
+    fetchActivitiesError,
+    fetchActivitiesPending,
+    fetchActivitiesSuccess
 } from './reportsActions';
 import { fetchApiData } from '../../../utils/loadTranslations';
-import { API_REPORTS_ACTIVITY_DETAIL_URL } from '../utils/constants';
+import { API_REPORTS_ACTIVITY_DETAIL_URL, API_SSC_DASHBOARD_URL } from '../utils/constants';
 
 export const loadActivitiesDetails = (activitiesId) => {
     return dispatch => {
@@ -17,6 +20,20 @@ export const loadActivitiesDetails = (activitiesId) => {
             })
             .catch(error => {
                 return dispatch(fetchActivitiesDetailError(error))
+            });
+    }
+};
+
+export const loadActivities = () => {
+    return dispatch => {
+        dispatch(fetchActivitiesPending());
+        return fetchApiData({url: API_SSC_DASHBOARD_URL})
+            .then(activities => {
+                dispatch(loadActivitiesDetails(activities.activitiesId));
+                return dispatch(fetchActivitiesSuccess(activities));
+            })
+            .catch(error => {
+                return dispatch(fetchActivitiesError(error))
             });
     }
 };

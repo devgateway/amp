@@ -179,6 +179,8 @@ public class SyncService implements InitializingBean {
         systemDiff.setFields(shouldSyncFieldsDefinitions(lastSyncTime, systemDiff));
         
         updateDiffForFeatureManager(systemDiff, syncRequest);
+        
+        systemDiff.setFields(true);
 
         if (systemDiff.getTimestamp() == null) {
             systemDiff.setTimestamp(syncRequest.getLastSyncTime());

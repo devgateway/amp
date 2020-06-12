@@ -32,6 +32,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
+import org.digijava.kernel.ampapi.endpoints.dto.gis.SscDashboardResult;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityList;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
@@ -69,7 +70,6 @@ import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
-
 
 /**
  * Class that holds entrypoing for GIS api methods
@@ -222,6 +222,16 @@ public class GisEndPoints {
         return ActivityService.getActivities(config,
                 activityIds.stream().map(Object::toString).collect(Collectors.toList()),
                 reqNumber, pageSize);
+    }
+
+
+    @GET
+    @Path("/sscdashboard")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "sscactivities")
+    @ApiOperation(value = "List ssc activities", notes = "Returns a list of SSC activities for SSC dashboard")
+    public SscDashboardResult getSscDashboards() {
+        return ActivityService.getSscDashboardResult();
     }
 
     @POST

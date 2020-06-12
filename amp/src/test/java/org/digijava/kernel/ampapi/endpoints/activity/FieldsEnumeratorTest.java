@@ -82,7 +82,7 @@ public class FieldsEnumeratorTest {
     private static final int SIZE_LIMIT = 3;
 
     private TranslatorService translatorService;
-    private FMService fmService;
+    private FeatureManagerService fmService;
     private FieldInfoProvider provider;
 
     @Rule public MockitoRule rule = MockitoJUnit.rule();
@@ -273,7 +273,7 @@ public class FieldsEnumeratorTest {
 
     @Test
     public void testInvisibleField() {
-        FMService invisibleFmService = mock(FMService.class);
+        FeatureManagerService invisibleFmService = mock(FeatureManagerService.class);
 
         when(invisibleFmService.isVisible(any())).thenReturn(false);
 

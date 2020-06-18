@@ -62,5 +62,10 @@ export function compareArrayNumber(a, b) {
         return false;
     }
     return a.length === both.length;
+}
+
+export function toCamelCase(str) {
+    return str.toLowerCase().split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)
+    ).join(' ');
 
 }

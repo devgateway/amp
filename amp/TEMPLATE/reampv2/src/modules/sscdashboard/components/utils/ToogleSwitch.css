@@ -64,7 +64,7 @@
     content: "No";
     text-transform: uppercase;
     padding-right: 10px;
-    background-color: #ccc;
+    background-color: #007236;
     color: #fff;
     text-align: right;
 }
@@ -102,7 +102,7 @@
 }
 
 .toggle-switch.big-switch {
-    width: 115px;
+    width: 85px;
     float: right;
     right: 20px;
 }
@@ -125,7 +125,7 @@
 
 .toggle-switch.big-switch .toggle-switch-switch {
     width: 16px;
-    right: 93px;
+    right: 65px;
     margin: 2px;
 }
 

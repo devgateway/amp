@@ -19,10 +19,6 @@ class SSCDashboardApp extends Component {
         this.store = createStore(rootReducer, composeEnhancer(applyMiddleware(thunk)));
     }
 
-    componentDidMount(): void {
-        this.store.dispatch(fetchTranslations(defaultTrnPack));
-    }
-
     render() {
         return (<Provider store={this.store}>
             <Startup>

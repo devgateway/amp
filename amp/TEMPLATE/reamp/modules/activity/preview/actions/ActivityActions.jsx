@@ -16,7 +16,8 @@ import {
     PUBLIC_CHANGE_SUMMARY,
     TEAM_ID,
     PUBLIC_VERSION_HISTORY,
-    HIDE_CONTACTS_PUBLIC_VIEW
+    HIDE_CONTACTS_PUBLIC_VIEW,
+    ACTIVITY_FORM_URL_SSC
 } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
@@ -30,7 +31,7 @@ import ActivityFundingTotals from '../utils/ActivityFundingTotals.jsx'
 import translate from '../utils/translate.jsx';
 import * as ContactAction from './ContactsAction.jsx';
 import * as ResourceAction from './ResourceAction.jsx';
-import {ACTIVITY_PREVIEW_URL} from "../common/ReampConstants";
+import { ACTIVITY_PREVIEW_URL } from "../common/ReampConstants";
 
 export const ACTIVITY_LOAD_LOADING = 'ACTIVITY_LOAD_LOADING';
 export const ACTIVITY_LOAD_LOADED = 'ACTIVITY_LOAD_LOADED';
@@ -110,11 +111,12 @@ export function loadActivityForActivityPreview(activityId) {
 
     function _registerSettings(lang, pGSDateFormat) {
         const editLink = {url: ACTIVITY_FORM_URL, isExternal: true};
+        const editSscLink = {url: ACTIVITY_FORM_URL_SSC, isExternal: true};
         const viewLink = {url: ACTIVITY_PREVIEW_URL, isExternal: true};
         const versionHistoryLink = {url: VERSION_HISTORY_URL, isExternal: true};
         const compareActivityLink = {url: COMPARE_ACTIVITY_URL, isExternal: true};
 
-        ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink, viewLink});
+        ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink, viewLink, editSscLink});
         DateUtils.registerSettings({lang, pGSDateFormat});
     }
 

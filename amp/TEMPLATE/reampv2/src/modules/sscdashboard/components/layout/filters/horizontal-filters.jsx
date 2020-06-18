@@ -8,6 +8,7 @@ import { EXTRA_INFO, GROUP_ID } from '../../../utils/FieldsConstants';
 import { bindActionCreators } from 'redux';
 import { loadSectorsFilters, loadCountriesFilters, loadModalitiesFilters } from '../../../actions/loadFilters';
 import { connect } from 'react-redux';
+import { SSCTranslationContext } from '../../StartUp';
 
 class HorizontalFilters extends Component {
 
@@ -39,7 +40,15 @@ class HorizontalFilters extends Component {
         });
     }
 
+    clearFilters(event) {
+        this.props.handleSelectedCountryChanged([]);
+        this.props.handleSelectedCountryChanged([]);
+        this.props.handleSelectedModalityChanged([]);
+        this.props.handleSelectedYearChanged([]);
+    }
+
     render() {
+        const {translations} = this.context;
         const years = [];
         const {selectedYears = [], selectedCountries = [], selectedSectors = [], selectedModalities = []} = this.props.selectedFilters;
         const {sectors} = this.props.filters.sectors;
@@ -79,10 +88,10 @@ class HorizontalFilters extends Component {
                                                     filterId='ddSector'
                                                     parentId="accordion-filter"
                                                     selectedOptions={selectedSectors}
-                                                    onChange={this.props.handleSelectedSectorChanged}
+                                                    onChange={this.props.handleSelectedCountryChanged}
                             />
                         </div>
-                        <div className="col-md-4" id="accordion-filter">
+                        <div className="col-md-3" id="accordion-filter">
                             <MultiSelectionDropDown options={modalities}
                                                     selectedOptions={selectedModalities}
                                                     filterName='amp.ssc.dashboard:Modalities'
@@ -101,6 +110,11 @@ class HorizontalFilters extends Component {
                                                     onChange={this.props.handleSelectedYearChanged}
                                                     columnsCount={3}
                             /></div>
+                        <div className="reset col-md-1">
+                            <button className="btn btn-primary"
+                                    type="button"
+                                    onClick={this.clearFilters.bind(this)}>{translations['amp.ssc.dashboard:reset']}</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -150,3 +164,5 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(HorizontalFilters);
+HorizontalFilters
+    .contextType = SSCTranslationContext;

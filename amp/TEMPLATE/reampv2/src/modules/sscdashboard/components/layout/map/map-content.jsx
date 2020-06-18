@@ -87,6 +87,8 @@ class MapContainer extends Component {
         this.setState({filteredProjects});
         if (filteredProjects.length === 0) {
             this.setState({showModal: true});
+        }else{
+            this.setState({showModal: false});
         }
     }
 

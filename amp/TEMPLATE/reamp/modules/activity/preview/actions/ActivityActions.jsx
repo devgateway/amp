@@ -133,7 +133,7 @@ export function loadActivityForActivityPreview(activityId) {
     function _configureNumberUtils(settings) {
         NumberUtils.registerSettings({
             gsDefaultGroupSeparator: settings['number-group-separator'],
-            gsDefaultDecimalSeparator: settings,
+            gsDefaultDecimalSeparator: settings['number-decimal-separator'],
             gsDefaultNumberFormat: settings['gs-number-format'],
             gsAmountInThousands: settings['number-divider'] + '',
             Translate: translate,

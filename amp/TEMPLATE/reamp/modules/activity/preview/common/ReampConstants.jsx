@@ -5,7 +5,7 @@ export const FIELDS_DEFINITION_API = '/rest/activity/fields-no-workspace';
 export const POSSIBLE_VALUES_API = '/rest/activity/field/values/public';
 export const FM_API = '/rest/common/fm';
 export const SETTINGS_API = '/rest/amp/settings';
-export const ACTIVITY_FIELDS_ID_VALUES_API = '/rest/activity/field/id-values';
+export const ACTIVITY_FIELDS_ID_VALUES_API = '/rest/activity/field/id-values?translations=en&language=en';
 export const RESOURCES_POSSIBLE_VALUES_API = '/rest/resource/field/values';
 export const RESOURCES_ENABLED_FIELDS_API = '/rest/resource/fields';
 export const RESOURCES_API = '/rest/resource';

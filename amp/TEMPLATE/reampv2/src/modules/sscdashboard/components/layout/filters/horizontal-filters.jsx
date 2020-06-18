@@ -42,7 +42,7 @@ class HorizontalFilters extends Component {
 
     clearFilters(event) {
         this.props.handleSelectedCountryChanged([]);
-        this.props.handleSelectedCountryChanged([]);
+        this.props.handleSelectedSectorChanged([]);
         this.props.handleSelectedModalityChanged([]);
         this.props.handleSelectedYearChanged([]);
     }
@@ -88,7 +88,7 @@ class HorizontalFilters extends Component {
                                                     filterId='ddSector'
                                                     parentId="accordion-filter"
                                                     selectedOptions={selectedSectors}
-                                                    onChange={this.props.handleSelectedCountryChanged}
+                                                    onChange={this.props.handleSelectedSectorChanged}
                             />
                         </div>
                         <div className="col-md-3" id="accordion-filter">

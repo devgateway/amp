@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
+import VisibilitySensor from 'react-visibility-sensor'
+
 import './filters.css';
 import { SSCTranslationContext } from '../../StartUp';
 import { splitArray, compareArrayNumber } from '../../../utils/Utils';
@@ -36,7 +38,7 @@ class MultiSelectionDropDown extends Component {
         const {options = [], selectedOptions = [], sortData, columnsCount} = this.props;
         const {searchText} = this.state;
         const optionsFilteredByText = options.filter(p => {
-            return (searchText === '' ? true : p.name.toUpperCase().startsWith(searchText.toUpperCase()));
+            return (searchText === '' ? true : p.name.toUpperCase().indexOf(searchText.toUpperCase()) > 0);
         });
 
         const optionsFiltered = optionsFilteredByText.filter(of => {
@@ -130,6 +132,13 @@ class MultiSelectionDropDown extends Component {
         return compareArrayNumber(this.getCategoryOptions(categoryId), selectedOptions);
     }
 
+
+    onDropdownVisible(isVisible) {
+        if (isVisible) {
+            this.searchBox.focus();
+        }
+    }
+
     render() {
         const {translations} = this.context;
         const showQuickSelectionLinks = true;
@@ -144,24 +153,28 @@ class MultiSelectionDropDown extends Component {
                     {translations[this.props.filterName]} <span
                     className="select-count">{`${this.getSelectedCount()}/${this.getOptionsCount()}`}</span>
                 </button>
-                <div className="filter-list collapse" id={this.props.filterId}>
-                    <div className="well">
-                        <div className="autocomplete-box">
-                            <input onChange={this.onSearchBoxChange.bind(this)} value={this.state.searchText}/>
-                            <span className="clear" onClick={this.handleClearText.bind(this)}>×</span>
-                        </div>
-                        {showQuickSelectionLinks &&
-                        <div className="select-all-none">
-                            {showSelectAll &&
-                            <span className="select-all all">
+                <VisibilitySensor onChange={this.onDropdownVisible.bind(this)}>
+                    <div className="filter-list collapse" id={this.props.filterId}>
+                        <div className="well">
+                            <div className="autocomplete-box">
+                                <input onChange={this.onSearchBoxChange.bind(this)} value={this.state.searchText}
+                                       placeholder={`${translations['amp.ssc.dashboard:search']}...`}
+                                       ref={input => this.searchBox = input}
+                                />
+                                <span className="clear" onClick={this.handleClearText.bind(this)}>×</span>
+                            </div>
+                            {showQuickSelectionLinks &&
+                            <div className="select-all-none">
+                                {showSelectAll &&
+                                <span className="select-all all">
                                 <input type='radio' value='1' name={`radio-${this.props.filterId}`}
                                        id={`select-all-${this.props.filterId}`}
                                        checked={this.getSelectedCount() == this.getOptionsCount()}
                                 />
                                 <label htmlFor='select-all' onClick={e => this.selectAll()}>Select All</label>
                             </span>
-                            }
-                            <span className="select-all all">
+                                }
+                                <span className="select-all all">
                                 <input type='radio' value='2' name={`radio-${this.props.filterId}`}
                                        id={`select-none-${this.props.filterId}`}
                                        checked={this.getSelectedCount() == 0}
@@ -169,36 +182,37 @@ class MultiSelectionDropDown extends Component {
                                 <label htmlFor='select-none' onClick={e => this.selectNone()}>Select None</label>
                             </span>
 
-                            {categoryFetcher && categoriesSelection && categoriesSelection.map((category, idx) => {
-                                const {id, name, tooltip} = category;
-                                return (
-                                    <span className="select-all all" onClick={e => this.selectCategory(id)}
-                                          key={`all-none-${id}`}>
+                                {categoryFetcher && categoriesSelection && categoriesSelection.map((category, idx) => {
+                                    const {id, name, tooltip} = category;
+                                    return (
+                                        <span className="select-all all" onClick={e => this.selectCategory(id)}
+                                              key={`all-none-${id}`}>
                                 <input type='radio' value={idx + 4} name={`radio-${this.props.filterId}`} id={name}
                                        checked={this.isCategorySelected(id)}
                                 />
                                 <label htmlFor={name} id={`${name}-label`}
                                        data-tip={tooltip}>{name}</label>
                             </span>
-                                );
-                            })}
-                        </div>
-                        }
-                        <div className="well-inner filter-list-inner">
-                            <div className="selected">
-                                <div className="title">selected</div>
-                                {this.getOptions(true)}
+                                    );
+                                })}
                             </div>
-                        </div>
-                        <div className="well-inner filter-list-inner">
-                            <div className="unselected">
-                                <div className="title">un selected</div>
-                                {this.getOptions(false)}
+                            }
+                            <div className="well-inner filter-list-inner">
+                                <div className="selected">
+                                    <div className="title">{translations['amp.ssc.dashboard:selected']}</div>
+                                    {this.getOptions(true)}
+                                </div>
                             </div>
-                        </div>
+                            <div className="well-inner filter-list-inner">
+                                <div className="unselected">
+                                    <div className="title">{translations['amp.ssc.dashboard:un-selected']}</div>
+                                    {this.getOptions(false)}
+                                </div>
+                            </div>
 
+                        </div>
                     </div>
-                </div>
+                </VisibilitySensor>
                 <ReactTooltip/>
             </div>
         );

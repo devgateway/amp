@@ -1,5 +1,6 @@
 import { UNDEFINED_FILTER } from '../utils/constants';
 import { EXTRA_INFO } from '../utils/FieldsConstants';
+import { toCamelCase } from '../utils/Utils';
 
 export const FETCH_FILTERS_SECTORS_PENDING = 'FETCH_FILTERS_SECTORS_PENDING';
 export const FETCH_FILTERS_SECTORS_SUCCESS = 'FETCH_FILTERS_SECTORS_SUCCESS';
@@ -20,7 +21,7 @@ export function fetchSectorsPending() {
 export function fetchSectorsSuccess(sectorsfilter) {
     return {
         type: FETCH_FILTERS_SECTORS_SUCCESS,
-        payload: filterUndefined(sectorsfilter.items.primary)
+        payload: makeFilterCamelCase(filterUndefined(sectorsfilter.items.primary))
     }
 }
 
@@ -58,6 +59,13 @@ export function fetchModalitiesPending() {
     return {
         type: FETCH_FILTERS_MODALITIES_PENDING
     }
+}
+
+function makeFilterCamelCase(theFilter) {
+    return theFilter.map(f => {
+        f.name = toCamelCase(f.name);
+        return f;
+    });
 }
 
 function filterUndefined(theFilter) {

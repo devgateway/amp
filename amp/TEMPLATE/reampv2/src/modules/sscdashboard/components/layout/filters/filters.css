@@ -97,7 +97,8 @@
 .horizontal-filter .filter-list .well .well-inner {
     min-height: 30px;
     max-height: 90px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     width: 100%;
 }
 
@@ -269,7 +270,7 @@
 
 .filter-list-inner .title {
     color: #9f9f9f;
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .select-all-none input {
@@ -305,10 +306,26 @@
     margin-left: 0px;
 }
 
+.filter-list-inner .selected {
+    padding-top: 5px;
+}
+
+.filter-list-inner .unselected {
+    padding-bottom: 5px;
+}
+
 .select-all-none input + label {
     font-weight: 500;
 }
 
 .select-all-none input:checked + label {
     font-weight: 700;
+}
+.reset .btn{
+    background-color: #22569e;
+    color: #ffffff;
+    font-weight: bold;
+    outline: none;
+    text-align: center;
+    width: 100%;
 }

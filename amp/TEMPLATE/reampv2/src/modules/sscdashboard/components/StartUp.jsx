@@ -28,11 +28,15 @@ class Startup extends Component {
     }
 
     render() {
-        return this.props.translationPending
-            ? (<Loading/>) :
-            <SSCTranslationContext.Provider value={{translations: this.props.translations}}>
+        if (this.props.translationPending) {
+            return (<Loading/>);
+        } else {
+            const {translations} = this.props;
+            document.title = translations['amp.ssc.dashboard:page-title'];
+            return (<SSCTranslationContext.Provider value={{translations}}>
                 {this.props.children}
-            </SSCTranslationContext.Provider>;
+            </SSCTranslationContext.Provider>);
+        }
     }
 }
 

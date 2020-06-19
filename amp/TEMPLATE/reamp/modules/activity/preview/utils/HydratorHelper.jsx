@@ -1,4 +1,4 @@
-import { ActivityConstants } from "amp-ui";
+import {ActivityConstants} from "amp-ui";
 
 export default class HydratorHelper {
     static fetchRequestDataForHydration(object, fieldsManager, parent) {
@@ -6,6 +6,7 @@ export default class HydratorHelper {
         HydratorHelper.hydrateObject(object, fieldsManager, parent, requestData);
         return requestData;
     }
+
     static hydrateObject(objectToHydrate, fieldsManager, parent, requestData, valuesForHydration) {
         function _hydratorHelper(objectToHydrate, key) {
             let newParent = '';
@@ -15,6 +16,7 @@ export default class HydratorHelper {
             newParent = newParent + key;
             HydratorHelper.hydrateObject(objectToHydrate, fieldsManager, newParent, requestData, valuesForHydration);
         }
+
         Object.keys(objectToHydrate).forEach(objectField => {
             if (objectToHydrate[objectField] instanceof Object) {
                 if (Array.isArray(objectToHydrate[objectField])) {
@@ -42,9 +44,13 @@ export default class HydratorHelper {
                         }
                         if (objectToHydrate[objectField].ancestorValues) {
                             objectToHydrate[objectField][ActivityConstants.HIERARCHICAL_VALUE] =
-                                objectToHydrate[objectField].ancestorValues.map(i=>'[' + i + ']').join('');
+                                objectToHydrate[objectField].ancestorValues.map(i => '[' + i + ']').join('');
                             objectToHydrate[objectField][ActivityConstants.HIERARCHICAL_VALUE_DEPTH] =
                                 objectToHydrate[objectField].ancestorValues ? objectToHydrate[objectField].ancestorValues.length : 0;
+                        }
+                        if (objectToHydrate[objectField].translatedValue
+                            && Object.keys(objectToHydrate[objectField].translatedValue).length > 0) {
+                            objectToHydrate[objectField]['translated-value'] = objectToHydrate[objectField].translatedValue;
                         }
                     }
                 }

@@ -282,7 +282,7 @@ public class ActivityService {
 
         spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_COUNTRY));
         spec.getHierarchies().add(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
-        spec.getHierarchies(    ).add(new ReportColumn(ColumnConstants.SSC_MODALITIES));
+        spec.getHierarchies().add(new ReportColumn(ColumnConstants.SSC_MODALITIES));
 
         ReportsUtil.configureSSCWorkspaceFilter(spec, true);
         GeneratedReport report = EndpointUtils.runReport(spec);

@@ -44,7 +44,8 @@ class MapContainer extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.props !== prevProps) {
+        if (this.props !== prevProps && this.countriesWithData.length === 0) {
+            //TOD check
             if (this.props.projects.activitiesLoaded) {
                 const initialData = this.getFilteredData();
                 this.countriesWithData = initialData.map(c => c.id);
@@ -87,6 +88,8 @@ class MapContainer extends Component {
         this.setState({filteredProjects});
         if (filteredProjects.length === 0) {
             this.setState({showModal: true});
+        }else{
+            this.setState({showModal: false});
         }
     }
 
@@ -155,6 +158,7 @@ class MapContainer extends Component {
                                    handleSelectedCountryChanged={this.handleSelectedCountryChanged.bind(this)}
                                    handleSelectedSectorChanged={this.handleSelectedSectorChanged.bind(this)}
                                    handleSelectedModalityChanged={this.handleSelectedModalityChanged.bind(this)}
+                                   chartSelected={this.props.chartSelected}
 
                 />
                 <MapHome filteredProjects={this.state.filteredProjects} countries={countries}/>

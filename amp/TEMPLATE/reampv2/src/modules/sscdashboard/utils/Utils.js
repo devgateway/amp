@@ -1,3 +1,7 @@
+import { Img } from 'react-image';
+import { FLAG_DEFAULT, FLAGS_DIRECTORY } from './constants';
+import React from 'react';
+
 export function splitArray(a, n, balanced) {
     if (n < 2)
         return [a];
@@ -62,5 +66,28 @@ export function compareArrayNumber(a, b) {
         return false;
     }
     return a.length === both.length;
+}
+
+export function toCamelCase(str) {
+    return str.toLowerCase().split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)
+    ).join(' ');
 
 }
+
+//TODO move to another utility class.
+export function getCountryFlag(name) {
+    return [`${process.env.PUBLIC_URL}${FLAGS_DIRECTORY}${name.toLowerCase().replace(/ /g, "_")}.svg`
+        , `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAbCAQAAACkGQXlAAAAI0lEQVR42mP8L8lAVcA4auCogaMGjho4auCogaMGjhpINAAAOBcdpLw/CDsAAAAASUVORK5CYII=`];
+}
+
+export function calculateUpdatedValuesForDropDowns(ipSelectedFilter, selectedOptions) {
+    let updatedSelectedOptions;
+    if (selectedOptions.includes(ipSelectedFilter)) {
+        updatedSelectedOptions = selectedOptions.filter(sc => sc !== ipSelectedFilter);
+    } else {
+        updatedSelectedOptions = [...selectedOptions];
+        updatedSelectedOptions.push(ipSelectedFilter);
+    }
+    return updatedSelectedOptions;
+}
+

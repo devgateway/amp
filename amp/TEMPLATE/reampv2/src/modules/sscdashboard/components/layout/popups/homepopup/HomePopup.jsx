@@ -6,7 +6,9 @@ import { SSCTranslationContext } from '../../../StartUp';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as FieldsConstants from '../../../../utils/FieldsConstants';
-import { PROJECT_LENGTH_HOME_PAGE } from '../../../../utils/constants';
+import { FLAG_DEFAULT, FLAGS_DIRECTORY, PROJECT_LENGTH_HOME_PAGE } from '../../../../utils/constants';
+import * as Utils from '../../../../utils/Utils';
+import { Img } from 'react-image';
 
 class HomePopup extends Component {
 
@@ -73,11 +75,11 @@ class HomePopup extends Component {
     getTableData(showSector) {
         const data = showSector ? this.generateStructureBasedOnSector() : this.generateStructureBasedOnModalities();
         return data.map(m => {
+            m.description = showSector ? this.getSectorName(m.id) : this.getModalityName(m.id);
+            return m;
+        }).sort((a, b) => a.description > b.description ? 1 : -1).map(m => {
             return (<div className="content-row" key={m.id}>
-                <div><span
-                    className="title filter-element">
-                    {showSector ? this.getSectorName(m.id) : this.getModalityName(m.id)}
-                </span>
+                <div><span className={`title filter-element${showSector ? '' : ' alternative'}`}>{m.description}</span>
                 </div>
                 <div className="project-list">
                     <ul>{this.getProjects(m.activities, m.id)}</ul>
@@ -89,13 +91,19 @@ class HomePopup extends Component {
     getProjects(projects, elementId) {
         return [...projects].map(p => {
             const project = this.getProject(p);
-            const projectName = project
+            const prj = {};
+            prj.projectName = project
                 ? project[FieldsConstants.PROJECT_TITLE] : this.context.translations['amp.ssc.dashboard:NA'];
-            const ampUrl = project
+            prj.ampUrl = project
                 ? project.ampUrl : "/";
-            return (<li key={`prj_list_${elementId}_${p}`}><a href={ampUrl} target="_blank">
+            prj.id = p;
+            return prj;
+
+        }).sort((a, b) => a.projectName > b.projectName ? 1 : -1).map(p => {
+
+            return (<li key={`prj_list_${elementId}_${p.id}`}><a href={p.ampUrl} target="_blank">
                 <EllipsisText
-                    text={projectName}
+                    text={p.projectName}
                     length={PROJECT_LENGTH_HOME_PAGE}/></a>
             </li>)
         })
@@ -112,12 +120,12 @@ class HomePopup extends Component {
     render() {
         const {translations} = this.context;
         const {data, showSector, handleChangeDataToShow} = this.props;
-        const flag = require(`../../../../images/flags/${data.objectName.toLowerCase().replace(/ /g, "_")}.svg`);
         return (
             <div className="homepage-popup">
                 <div className="header">
                     <div className="country-name">
-                        <img src={flag}/>
+                        <Img
+                            src={Utils.getCountryFlag(data.objectName)}/>
                         <span>{data.objectName}</span>
                         <ToggleSwitch big defaultChecked={showSector} id='sectorsToggle'
                                       text={[translations['amp.ssc.dashboard:Sector'],

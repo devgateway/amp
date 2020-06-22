@@ -36,7 +36,7 @@ class MapHome extends Component {
         dataFiltered.forEach(data => {
             const countryCenter = new L.LatLng(data.latitude, data.longitude);
             //TODO make circleMarker returned by a parametrized method
-            const bubbleColor = selectedCountries.includes(data.objectData.countryId)
+            const bubbleColor = selectedCountries.includes(data.objectData.id)
                 ? SELECTED_BUBBLE_COLOR : NON_SELECTED_BUBBLE_COLOR;
             result.push(
                 <CircleMarker
@@ -49,7 +49,7 @@ class MapHome extends Component {
                     fill={true}
                     fillColor={bubbleColor}
                     fillOpacity={0.9}
-                    key={data.objectData.countryId}
+                    key={data.objectData.id}
                     onClick={e => this.onBubbleClick(e)}
                     onPopupClose={e => this.popUpClosed(e)}
                     dataPoint={data}
@@ -87,14 +87,14 @@ class MapHome extends Component {
     popUpClosed(e) {
         this.setState({showSector: true});
         this.setState(previousState => {
-            const selectedCountries = previousState.selectedCountries.filter(c => c !== e.target.options.dataPoint.objectData.countryId)
+            const selectedCountries = previousState.selectedCountries.filter(c => c !== e.target.options.dataPoint.objectData.id)
             return {selectedCountries};
         })
     }
 
     onBubbleClick(e) {
         this.setState(previousState => {
-                const selectedCountries = [...previousState.selectedCountries, e.target.options.dataPoint.objectData.countryId];
+                const selectedCountries = [...previousState.selectedCountries, e.target.options.dataPoint.objectData.id];
                 return {selectedCountries};
             }
         );
@@ -110,7 +110,7 @@ class MapHome extends Component {
                 if (countryFound[EXTRA_INFO] && countryFound[EXTRA_INFO][CENTRO_ID]) {
                     const centroId = countryFound[EXTRA_INFO][CENTRO_ID];
                     const dataPoint = {};
-                    dataPoint.color = selectedCountries.includes(fp.countryId) ? SELECTED_LINE_COLOR : NON_SELECTED_LINE_COLOR;
+                    dataPoint.color = selectedCountries.includes(fp.id) ? SELECTED_LINE_COLOR : NON_SELECTED_LINE_COLOR;
                     dataPoint.latitude = centroId.lat;
                     dataPoint.longitude = centroId.lon;
                     dataPoint.objectData = fp;

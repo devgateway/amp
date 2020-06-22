@@ -72,17 +72,6 @@ class HorizontalFilters extends Component {
                                      selectedOptions={selectedCountries}
                     />
                     <div className="col-md-2 country-year-search-wrapper first-element dropdown" id={"country-accordion-filter"}>
-                        <MultiSelectionDropDown options={years}
-                                                selectedOptions={selectedYears}
-                                                filterName='amp.ssc.dashboard:search-by-year'
-                                                filterId='ddYearCarousel'
-                                                parentId="country-accordion-filter"
-                                                onChange={this.props.handleSelectedYearChanged}
-                                                columnsCount={2}
-                        />
-
-                    </div>
-                    <div className="col-md-2 country-year-search-wrapper dropdown" id={"country-accordion-filter"}>
                         <MultiSelectionDropDown options={countries}
                                                 filterName='amp.ssc.dashboard:search-by-country'
                                                 filterId='ddCountryCarousel'
@@ -95,7 +84,17 @@ class HorizontalFilters extends Component {
 
                         />
                     </div>
+                    <div className="col-md-2 country-year-search-wrapper dropdown" id={"country-accordion-filter"}>
+                        <MultiSelectionDropDown options={years}
+                                                selectedOptions={selectedYears}
+                                                filterName='amp.ssc.dashboard:search-by-year'
+                                                filterId='ddYearCarousel'
+                                                parentId="country-accordion-filter"
+                                                onChange={this.props.handleSelectedYearChanged}
+                                                columnsCount={2}
+                        />
 
+                    </div>
                 </div>
                 }
                 {this.props.chartSelected === HOME_CHART &&

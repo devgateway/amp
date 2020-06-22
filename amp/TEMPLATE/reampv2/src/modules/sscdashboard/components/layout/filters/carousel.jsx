@@ -19,12 +19,12 @@ export default class CountryCarousel extends Component {
         const {options, selectedOptions} = this.props;
         return options.sort((a, b) => a.name > b.name ? 1 : -1).map((c) => {
                 return (<div key={`flag-${c.id}`} onClick={this.onFlagClick(c.id)}
-                             className={selectedOptions.includes(c.id) ? 'selected' : ''}>
+                             className={`flag ${selectedOptions.includes(c.id) ? 'selected' : ''}`}>
                     <Img
                         src={Utils.getCountryFlag(c.name)}/>
-                    <span><EllipsisText
+                    <EllipsisText
                         text={c.name}
-                        length={14} tail={''}/></span>
+                        length={9} tail={''}/>
                 </div>);
             }
         );

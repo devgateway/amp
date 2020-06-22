@@ -1,21 +1,19 @@
-import React, { Component } from 'react';
-import { HomeButton } from './home-button';
+import React from 'react';
 import SidebarIntro from './sidebar-intro';
 import SidebarFilters from '../filters/sidebar-filters';
 
 import './sidebar.css';
 
 
-class Sidebar extends Component {
-    render() {
-        return (
-            <div className="col-md-2 sidebar">
-                <HomeButton/>
-                <SidebarFilters/>
-                <SidebarIntro/>
-            </div>
-        );
-    }
+const Sidebar = props => {
+    //TODO this is temporal until side bar is addressed
+    const {chartSelected, onChangeChartSelected} = props;
+    return (
+        <div className="col-md-2 sidebar">
+            <SidebarFilters chartSelected={chartSelected} onChangeChartSelected={onChangeChartSelected}/>
+            <SidebarIntro/>
+        </div>
+    );
 }
 
 export default Sidebar;

@@ -3,7 +3,11 @@ import MultiSelectionDropDown from './MultiSelectionDropDown';
 import CountryCarousel from './carousel';
 import CountrySearch from './country-search';
 import './filters.css';
-import { DASHBOARD_DEFAULT_MAX_YEAR_RANGE, DASHBOARD_DEFAULT_MIN_YEAR_RANGE } from '../../../utils/constants';
+import {
+    DASHBOARD_DEFAULT_MAX_YEAR_RANGE,
+    DASHBOARD_DEFAULT_MIN_YEAR_RANGE, HOME_CHART,
+    SECTORS_CHART
+} from '../../../utils/constants';
 import { EXTRA_INFO, GROUP_ID } from '../../../utils/FieldsConstants';
 import { bindActionCreators } from 'redux';
 import { loadSectorsFilters, loadCountriesFilters, loadModalitiesFilters } from '../../../actions/loadFilters';
@@ -59,17 +63,43 @@ class HorizontalFilters extends Component {
             countries = countries.filter(c => this.props.filtersRestrictions.countriesWithData.includes(c.id));
             categoriesSelection = this.generateCountriesCategories(countries);
         }
-
         this._generateYearsFilters(years);
-
         return (
             <div className="h-filter-wrapper">
-                <div className="carousel-filters-wrapper" style={{display: "none"}}>
-                    <CountryCarousel/>
-                    <CountrySearch/>
+                {this.props.chartSelected === SECTORS_CHART &&
+                <div className="carousel-filters-wrapper" id={"country-accordion-filter"}>
+                    <CountryCarousel options={countries} onChange={this.props.handleSelectedCountryChanged}
+                                     selectedOptions={selectedCountries}
+                    />
+                    <div className="col-md-2 country-year-search-wrapper first-element dropdown" id={"country-accordion-filter"}>
+                        <MultiSelectionDropDown options={countries}
+                                                filterName='amp.ssc.dashboard:search-by-country'
+                                                filterId='ddCountryCarousel'
+                                                parentId="country-accordion-filter"
+                                                categoryFetcher={this.getCategoryForCountry}
+                                                sortData={true}
+                                                categoriesSelection={categoriesSelection}
+                                                selectedOptions={selectedCountries}
+                                                onChange={this.props.handleSelectedCountryChanged}
+
+                        />
+                    </div>
+                    <div className="col-md-2 country-year-search-wrapper dropdown" id={"country-accordion-filter"}>
+                        <MultiSelectionDropDown options={years}
+                                                selectedOptions={selectedYears}
+                                                filterName='amp.ssc.dashboard:search-by-year'
+                                                filterId='ddYearCarousel'
+                                                parentId="country-accordion-filter"
+                                                onChange={this.props.handleSelectedYearChanged}
+                                                columnsCount={2}
+                        />
+
+                    </div>
                 </div>
+                }
+                {this.props.chartSelected === HOME_CHART &&
                 <div className="row inner">
-                    <div id="accordion-filter">
+                    <div id="accordion-filter" className="home-filter">
                         <div className="col-md-3" id="accordion-filter">
                             <MultiSelectionDropDown options={countries}
                                                     filterName='amp.ssc.dashboard:Country'
@@ -91,14 +121,13 @@ class HorizontalFilters extends Component {
                                                     onChange={this.props.handleSelectedSectorChanged}
                             />
                         </div>
-                        <div className="col-md-3" id="accordion-filter">
+                        <div className="col-md-2" id="accordion-filter">
                             <MultiSelectionDropDown options={modalities}
                                                     selectedOptions={selectedModalities}
                                                     filterName='amp.ssc.dashboard:Modalities'
                                                     filterId='ddModalities'
                                                     parentId="accordion-filter"
                                                     onChange={this.props.handleSelectedModalityChanged}
-                                                    columnsCount={2}
                             /></div>
 
                         <div className="col-md-2" id="accordion-filter">
@@ -108,15 +137,16 @@ class HorizontalFilters extends Component {
                                                     filterId='ddYear'
                                                     parentId="accordion-filter"
                                                     onChange={this.props.handleSelectedYearChanged}
-                                                    columnsCount={3}
+                                                    columnsCount={2}
                             /></div>
-                        <div className="reset col-md-1">
+                        <div className="reset col-md-2">
                             <button className="btn btn-primary"
                                     type="button"
                                     onClick={this.clearFilters.bind(this)}>{translations['amp.ssc.dashboard:reset']}</button>
                         </div>
                     </div>
                 </div>
+                }
             </div>
         );
     }

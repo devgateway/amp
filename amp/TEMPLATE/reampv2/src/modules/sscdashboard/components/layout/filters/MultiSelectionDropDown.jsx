@@ -5,7 +5,8 @@ import VisibilitySensor from 'react-visibility-sensor'
 
 import './filters.css';
 import { SSCTranslationContext } from '../../StartUp';
-import { splitArray, compareArrayNumber } from '../../../utils/Utils';
+import { splitArray, compareArrayNumber, calculateUpdatedValuesForDropDowns } from '../../../utils/Utils';
+import { Util } from 'leaflet/dist/leaflet-src.esm';
 
 const MultiSelectionDropDownContainer = (props) => {
     const {elements, columnsCount} = props;
@@ -18,7 +19,7 @@ const MultiSelectionDropDownContainerRow = (props) => {
     const {elements = [], columnsCount = 0} = props;
     return splitArray(elements, columnsCount, true).map((e, idx) => {
         const width = Math.floor(12 / columnsCount);
-        return (<div className={`col-md-${width}`} key={idx}>
+        return (<div className={`filter-content col-md-${width}`} key={idx}>
             <ul>{e}</ul>
         </div>);
     });
@@ -89,14 +90,8 @@ class MultiSelectionDropDown extends Component {
     onChange(e) {
         const ipSelectedFilter = parseInt(e.target.id);
         const {selectedOptions} = this.props;
-        let updatedSelectedOptions;
-        if (selectedOptions.includes(ipSelectedFilter)) {
-            updatedSelectedOptions = selectedOptions.filter(sc => sc !== ipSelectedFilter);
-        } else {
-            updatedSelectedOptions = [...selectedOptions];
-            updatedSelectedOptions.push(ipSelectedFilter);
-        }
-        this.props.onChange(updatedSelectedOptions);
+
+        this.props.onChange(calculateUpdatedValuesForDropDowns(ipSelectedFilter, selectedOptions));
     }
 
     onSearchBoxChange(e) {
@@ -148,7 +143,7 @@ class MultiSelectionDropDown extends Component {
         return (
             <div className="horizontal-filter dropdown panel">
                 <button className="btn btn-primary" type="button" data-toggle="collapse"
-                        data-parent="#accordion-filter" href={`#${this.props.filterId}`}
+                        data-parent={`#${this.props.parentId}`} href={`#${this.props.filterId}`}
                         aria-controls={this.props.filterId}>
                     {translations[this.props.filterName]} <span
                     className="select-count">{`${this.getSelectedCount()}/${this.getOptionsCount()}`}</span>
@@ -219,19 +214,16 @@ class MultiSelectionDropDown extends Component {
     }
 }
 
-MultiSelectionDropDown
-    .contextType = SSCTranslationContext;
-MultiSelectionDropDown
-    .propTypes = {
+MultiSelectionDropDown.contextType = SSCTranslationContext;
+
+MultiSelectionDropDown.propTypes = {
     sortData: PropTypes.bool.isRequired,
-    selectedOptions: PropTypes.array.isRequired,
     options: PropTypes.array.isRequired,
-    columnsCount: PropTypes.number.isRequired
+    columnsCount: PropTypes.number
 };
-MultiSelectionDropDown
-    .defaultProps = {
-    sortData: false,
+
+MultiSelectionDropDown.defaultProps = {
     selectedOptions: [],
-    columnsCount: 2
+    columnsCount: 1
 };
 export default MultiSelectionDropDown;

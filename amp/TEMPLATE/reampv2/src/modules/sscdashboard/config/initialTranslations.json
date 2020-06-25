@@ -1,10 +1,12 @@
 {
   "amp.ssc.dashboard:Home-Page": "Home Page",
+  "amp.ssc.dashboard:Download-Page": "Download data",
   "amp.ssc.dashboard:Year": "Year",
   "amp.ssc.dashboard:Sector": "Sector",
   "amp.ssc.dashboard:search-by-year": "Search by year",
   "amp.ssc.dashboard:search-by-country": "Search by country",
   "amp.ssc.dashboard:Sector-Analysis": "Sector Analysis",
+  "amp.ssc.dashboard:Modalities-Analysis":"Modalities Analysis",
   "amp.ssc.dashboard:Country": "Country",
   "amp.ssc.dashboard:Modalities": "Modalities",
   "amp.ssc.dashboard:NA": "N/A",
@@ -13,5 +15,7 @@
   "amp.ssc.dashboard:selected": "Selected",
   "amp.ssc.dashboard:un-selected": "Unselected",
   "amp.ssc.dashboard:reset": "Reset",
-  "amp.ssc.dashboard:page-title": "Aid Management Platform - SSC Dashboard"
+  "amp.ssc.dashboard:page-title": "Aid Management Platform - SSC Dashboard",
+  "amp.ssc.dashboard:home-text-1": "Welcome to the South South Cooperation Dashboard for Haiti! You can use this interactive, visual tool to explore foreign aid assistance that comes from development partners in the Global South.",
+  "amp.ssc.dashboard:home-text-2": "South South Cooperation (SSC) is characterized by partners who share similar historical and geopolitical backgrounds to Haiti. Unlike more traditional aid, which tends to focus on financing, SSC partners often provide support in-kind, including technical assistance, which can be difficult to accurately capture in numbers. Happy exploring!"
 }

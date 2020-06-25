@@ -6,7 +6,7 @@
   padding-top: 2%;
   position: fixed;
   top: 145px;
-  z-index: 10px;
+  z-index: 10;
   width: 100%;
 }
 .country-popup-wrapper > .container-fluid{

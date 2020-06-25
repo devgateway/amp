@@ -1,25 +1,23 @@
 import React, { Component } from 'react';
 import './filters.css';
 import { SSCTranslationContext } from '../../StartUp';
-import { HOME_CHART } from '../../../utils/constants';
+class HomeLink extends Component {
 
-class FilterHome extends Component {
-
-    onSelectOptions(e) {
-        const {onChangeChartSelect} = this.props;
-        onChangeChartSelect(HOME_CHART);
+    onSelectOptions() {
+        const {onChangeChartSelect, chartName} = this.props;
+        onChangeChartSelect(chartName);
     }
 
     render() {
-        const {chartSelected} = this.props;
+        const {chartSelected, title, chartName} = this.props;
         const {translations} = this.context;
         return (
             <div className="sidebar-filter-wrapper">
                 <div className="panel panel-default">
-                    <div className={`panel-heading ${chartSelected === HOME_CHART ? `selected` : ``}`}>
-                        <h4 className="panel-title home " data-toggle="collapse" data-target="#home">
+                    <div className={`panel-heading${chartSelected === chartName ? ` selected` : ``}`}>
+                        <h4 className={`panel-title ${chartName}`} data-toggle="collapse" data-target={`#${chartName}`}>
                             <a onClick={this.onSelectOptions.bind(this)}>
-                                {translations['amp.ssc.dashboard:Home-Page']}
+                                {translations[title]}
                             </a>
                         </h4>
                     </div>
@@ -29,6 +27,6 @@ class FilterHome extends Component {
     }
 }
 
-export default FilterHome;
-FilterHome
+export default HomeLink;
+HomeLink
     .contextType = SSCTranslationContext;

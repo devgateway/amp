@@ -30,6 +30,16 @@ class MapHome extends Component {
         this.setState({showSector: checked});
     }
 
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>): void {
+        if (prevProps.filteredProjects !== this.props.filteredProjects) {
+            this.setState(previousState => {
+                const availableCountries = this.props.filteredProjects.map(p => p.id);
+                const selectedCountries = previousState.selectedCountries.filter(c => availableCountries.includes(c))
+                return {selectedCountries};
+            })
+        }
+    }
+
     getPoints(dataFiltered, center) {
         let result = [];
         const {selectedCountries} = this.state;
@@ -104,6 +114,8 @@ class MapHome extends Component {
     // create the circle marker.
     _generateDataPoints(points) {
         const {selectedCountries} = this.state;
+        //at this point selected countries can contain countries that are no longer in the result list
+        //we need to filter the out so if they appear again in the result they are drawn orange instead of yellow
         this.props.filteredProjects.forEach(fp => {
             const countryFound = this.props.countries.find(element => element.id === fp.id);
             if (countryFound) {

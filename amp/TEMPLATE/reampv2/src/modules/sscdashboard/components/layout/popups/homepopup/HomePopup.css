@@ -16,12 +16,14 @@
 .map-container .homepage-popup .content {
     max-height: 120px;
     overflow-y: auto;
+    margin-left: 5px;
 }
 
 .map-container .homepage-popup .content .content-row .title {
     color: #269af3;
     font-size: 9px;
 }
+
 .map-container .homepage-popup .content .content-row .alternative {
     color: #007236;
 }
@@ -65,10 +67,6 @@
 
 }
 
-
-.map-container .homepage-popup .content {
-    margin-left: 5px;
-}
 
 .map-container .homepage-popup .header .country-name {
     height: inherit;

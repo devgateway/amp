@@ -87,7 +87,7 @@ class ConnectionLayer extends React.Component {
             dashOffset: '51',
             dashArray: '5 5',
             stroke: 'white'
-        }
+        };
 
         const line = new L.curve(
             [

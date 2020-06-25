@@ -30,12 +30,10 @@ export default class CountryCarousel extends Component {
         );
     }
 
-
     render() {
         const {options} = this.props;
         return (
-            <div className="col-md-8">
-                {options.length > 0 ?
+                options.length > 0 ?
                     <InfiniteCarousel
                         breakpoints={[
                             {
@@ -62,8 +60,7 @@ export default class CountryCarousel extends Component {
                         scrollOnDevice
                     >{this.getFlags()}
                     </InfiniteCarousel>
-                    : null}
-            </div>
+                    : null
         );
     }
 }

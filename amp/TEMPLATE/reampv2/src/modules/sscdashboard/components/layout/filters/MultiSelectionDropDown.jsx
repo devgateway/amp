@@ -39,7 +39,8 @@ class MultiSelectionDropDown extends Component {
         const {options = [], selectedOptions = [], sortData, columnsCount} = this.props;
         const {searchText} = this.state;
         const optionsFilteredByText = options.filter(p => {
-            return (searchText === '' ? true : p.name.toUpperCase().indexOf(searchText.toUpperCase()) > 0);
+            return (searchText === '' ? true :
+                p.name.toString().toUpperCase().indexOf(searchText.toUpperCase()) >= 0);
         });
 
         const optionsFiltered = optionsFilteredByText.filter(of => {
@@ -90,7 +91,6 @@ class MultiSelectionDropDown extends Component {
     onChange(e) {
         const ipSelectedFilter = parseInt(e.target.id);
         const {selectedOptions} = this.props;
-
         this.props.onChange(calculateUpdatedValuesForDropDowns(ipSelectedFilter, selectedOptions));
     }
 
@@ -137,19 +137,28 @@ class MultiSelectionDropDown extends Component {
     render() {
         const {translations} = this.context;
         const showQuickSelectionLinks = true;
-        const {categoriesSelection, categoryFetcher} = this.props;
-
+        const {categoriesSelection, categoryFetcher, chartName, chartSelected, onChangeChartSelected} = this.props;
         const showSelectAll = true;
         return (
             <div className="horizontal-filter dropdown panel">
-                <button className="btn btn-primary" type="button" data-toggle="collapse"
-                        data-parent={`#${this.props.parentId}`} href={`#${this.props.filterId}`}
-                        aria-controls={this.props.filterId}>
-                    {translations[this.props.filterName]} <span
-                    className="select-count">{`${this.getSelectedCount()}/${this.getOptionsCount()}`}</span>
+                <button
+                    className={`btn btn-primary${chartName ? ' ' + chartName : ''}${chartName
+                    && chartSelected && chartName === chartSelected ? ' selected' : ''}`}
+                    type="button" data-toggle="collapse"
+                    data-parent={`#${this.props.parentId}`}
+                    href={`#${this.props.filterId}`}
+                    aria-control={this.props.filterId}
+                    onClick={() =>
+                        (onChangeChartSelected && chartName !== chartSelected ? onChangeChartSelected(chartName) : false)
+                    }>
+                    {translations[this.props.filterName]} {!this.props.label && <span
+                    className="select-count">{`${this.getSelectedCount()}/${this.getOptionsCount()}`}</span>}
                 </button>
                 <VisibilitySensor onChange={this.onDropdownVisible.bind(this)}>
-                    <div className="filter-list collapse" id={this.props.filterId}>
+                    <div
+                        className={`filter-list collapse${chartName && chartSelected
+                        && chartName === chartSelected ? ' in ' : ''}`}
+                        id={this.props.filterId}>
                         <div className="well">
                             <div className="autocomplete-box">
                                 <input onChange={this.onSearchBoxChange.bind(this)} value={this.state.searchText}
@@ -194,7 +203,10 @@ class MultiSelectionDropDown extends Component {
                             }
                             <div className="well-inner filter-list-inner">
                                 <div className="selected">
-                                    <div className="title">{translations['amp.ssc.dashboard:selected']}</div>
+                                    <div
+                                        className="title">{translations['amp.ssc.dashboard:selected']} {this.props.label &&
+                                    <span
+                                        className="select-count">{`${translations[this.props.label]} ${this.getSelectedCount()}/${this.getOptionsCount()}`}</span>}</div>
                                     {this.getOptions(true)}
                                 </div>
                             </div>
@@ -217,7 +229,7 @@ class MultiSelectionDropDown extends Component {
 MultiSelectionDropDown.contextType = SSCTranslationContext;
 
 MultiSelectionDropDown.propTypes = {
-    sortData: PropTypes.bool.isRequired,
+    sortData: PropTypes.bool,
     options: PropTypes.array.isRequired,
     columnsCount: PropTypes.number
 };

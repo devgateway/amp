@@ -14,154 +14,30 @@ class MapContainer extends Component {
     //TODO once we implement side filters maybe we need to move state up
     constructor(props) {
         super(props);
-        this.countriesWithData = [];
         this.state = {
             showModal: false,
             filteredProjects: [],
             countriesWithData: [],
-            selectedFilters: {
-                selectedYears: [],
-                selectedCountries: [],
-                selectedSectors: [],
-                selectedModalities: []
-            }
+
         };
-    }
-
-    getProjectsData() {
-        this.props.loadActivitiesDetails(this.props.projects.activities.activitiesId);
-    }
-
-    componentDidMount(): void {
-        if (this.props.projects.activitiesLoaded) {
-            this.getProjectsData();
-        }
-        const initialData = this.getFilteredData();
-
-        this.setState({
-            filteredProjects: initialData
-        });
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (this.props !== prevProps && this.countriesWithData.length === 0) {
-            //TOD check
-            if (this.props.projects.activitiesLoaded) {
-                const initialData = this.getFilteredData();
-                this.countriesWithData = initialData.map(c => c.id);
-                const selectedYears = [];
-                selectedYears.push(this.props.projects.activities.mostRecentYear);
-                //this.handleSelectedYearChanged(selectedYears);
-                this.setState({
-                    filteredProjects: initialData
-                });
-            }
-        }
-    }
-
-    handleSelectedSectorChanged(pSelectedSectors) {
-        this.updateFilterState('selectedSectors', pSelectedSectors);
-    }
-
-    handleSelectedYearChanged(pSelectedYears) {
-        this.updateFilterState('selectedYears', pSelectedYears);
-    }
-
-    handleSelectedCountryChanged(pSelectedCountries) {
-        this.updateFilterState('selectedCountries', pSelectedCountries);
-    }
-
-    handleSelectedModalityChanged(pSelectedModalities) {
-        this.updateFilterState('selectedModalities', pSelectedModalities);
-    }
-
-    updateFilterState(filterSelector, updatedSelectedFilters) {
-        this.setState((currentState) => {
-            const selectedFilters = {...currentState.selectedFilters};
-            selectedFilters[filterSelector] = updatedSelectedFilters;
-            return {selectedFilters};
-        }, this.getFilteredProjects);
-    }
-
-    getFilteredProjects() {
-        const filteredProjects = this.getFilteredData();
-        this.setState({filteredProjects});
-        if (filteredProjects.length === 0) {
-            this.setState({showModal: true});
-        }else{
-            this.setState({showModal: false});
-        }
     }
 
     modalOnClose(e) {
         this.setState({showModal: false});
     }
 
-    getFilteredData() {
-        //TODO see how we can simply or make a bit more generic this function
-        const {selectedYears = [], selectedCountries = [], selectedSectors = [], selectedModalities = []} = this.state.selectedFilters;
-        if (!this.props.projects.activitiesLoaded) {
-            return [];
-        }
-        return this.props.projects.activities[DONOR_COUNTRY].filter(p => {
-            if (selectedCountries.length === 0 || selectedCountries.includes(p.id)) {
-                const sectors = p[PRIMARY_SECTOR].filter(sector => {
-                    if (selectedSectors.length === 0 || selectedSectors.includes(sector.id)) {
-                        const modalities = sector[MODALITIES].filter(modality => {
-                            if (selectedModalities.length === 0 || selectedModalities.includes(modality.id)) {
-                                if (selectedYears.length > 0) {
-                                    const filteredProjects = modality.activities.filter(p => selectedYears.includes(p.year));
-                                    if (filteredProjects.length === 0) {
-                                        return false;
-                                    } else {
-                                        modality.activities = filteredProjects;
-                                        return true;
-                                    }
-                                } else {
-                                    return true;
-                                }
-                            } else {
-                                return false;
-                            }
-                        });
-                        if (modalities.length == 0) {
-                            return false;
-                        } else {
-                            sector[MODALITIES] = modalities;
-                            return true;
-                        }
-                    } else {
-                        return false;
-                    }
-                });
-                if (sectors.length === 0) {
-                    return false;
-                }
-                p[PRIMARY_SECTOR] = sectors;
-                return true;
-            } else {
-                return false;
-            }
-        });
-    }
-
-
     render() {
         const {countries} = this.props.filters.countries;
-        const filtersRestrictions = {countriesWithData: this.countriesWithData};
         const {translations} = this.context;
         return (
             <div className="col-md-10 col-md-offset-2 map-wrapper">
-                <HorizontalFilters selectedFilters={this.state.selectedFilters}
-                                   filtersRestrictions={filtersRestrictions}
-                                   handleSelectedYearChanged={this.handleSelectedYearChanged.bind(this)}
-                                   handleSelectedCountryChanged={this.handleSelectedCountryChanged.bind(this)}
-                                   handleSelectedSectorChanged={this.handleSelectedSectorChanged.bind(this)}
-                                   handleSelectedModalityChanged={this.handleSelectedModalityChanged.bind(this)}
+                <HorizontalFilters selectedFilters={this.props.selectedFilters}
+                                   filtersRestrictions={this.props.filtersRestrictions}
+                                   handleSelectedFiltersChange={this.props.handleSelectedFiltersChange}
                                    chartSelected={this.props.chartSelected}
 
                 />
-                <MapHome filteredProjects={this.state.filteredProjects} countries={countries}/>
+                <MapHome filteredProjects={this.props.filteredProjects} countries={countries}/>
                 {/*TODO refactor country popup in next story*/}
                 <CountryPopupOverlay show={this.state.showModal}>
                     <SimplePopup message={translations['amp.ssc.dashboard:no-date']}

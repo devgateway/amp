@@ -2,8 +2,8 @@
 export const ROUTES_SECTOR = '/ssc/sectors';
 export const ROUTES_HOME = '/ssc/home';
 //TODO DELETE THIS ROUTE
-export const FLAGS_DIRECTORY='/assets/img/flags/';
-export const FLAG_DEFAULT='/assets/img/flags/';
+export const FLAGS_DIRECTORY = '/assets/img/flags/';
+export const FLAG_DEFAULT = '/assets/img/flags/';
 
 export const DASHBOARD_DEFAULT_MIN_YEAR_RANGE = 'dashboard-default-min-year-range';
 export const DASHBOARD_DEFAULT_MAX_YEAR_RANGE = 'dashboard-default-max-year-range';
@@ -26,5 +26,7 @@ export const SELECTED_BUBBLE_COLOR = '#007236';
 export const PROJECT_LENGTH_HOME_PAGE = 50;
 export const UNDEFINED_FILTER = -999999999;
 
-export const HOME_CHART = 'HOME_CHART';
-export const SECTORS_CHART = 'SECTORS_CHART';
+export const HOME_CHART = 'home';
+export const SECTORS_CHART = 'sector';
+export const MODALITY_CHART = 'modality';
+export const DOWNLOAD_CHART = 'download';

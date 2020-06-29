@@ -20,7 +20,7 @@ const MultiSelectionDropDownContainerRow = (props) => {
     return splitArray(elements, columnsCount, true).map((e, idx) => {
         const width = Math.floor(12 / columnsCount);
         return (<div className={`filter-content col-md-${width}`} key={idx}>
-            <ul>{e}</ul>
+            <ul className={'elements-list'}>{e}</ul>
         </div>);
     });
 };
@@ -152,7 +152,7 @@ class MultiSelectionDropDown extends Component {
                         (onChangeChartSelected && chartName !== chartSelected ? onChangeChartSelected(chartName) : false)
                     }>
                     {translations[this.props.filterName]} {!this.props.label && <span
-                    className="select-count">{`${this.getSelectedCount()}/${this.getOptionsCount()}`}</span>}
+                    className="select-count">{`(${this.getSelectedCount()}/${this.getOptionsCount()})`}</span>}
                 </button>
                 <VisibilitySensor onChange={this.onDropdownVisible.bind(this)}>
                     <div
@@ -201,18 +201,24 @@ class MultiSelectionDropDown extends Component {
                                 })}
                             </div>
                             }
-                            <div className="well-inner filter-list-inner">
-                                <div className="selected">
-                                    <div
-                                        className="title">{translations['amp.ssc.dashboard:selected']} {this.props.label &&
-                                    <span
-                                        className="select-count">{`${translations[this.props.label]} ${this.getSelectedCount()}/${this.getOptionsCount()}`}</span>}</div>
+                            <div className="selected">
+                                <div
+                                    className="title">{translations['amp.ssc.dashboard:selected']} {this.props.label &&
+                                <span
+                                    className="select-count">{`${translations[this.props.label]} (${this.getSelectedCount()}/${this.getOptionsCount()})`}</span>}
+                                </div>
+
+                                <div className="well-inner filter-list-inner">
                                     {this.getOptions(true)}
                                 </div>
                             </div>
-                            <div className="well-inner filter-list-inner">
-                                <div className="unselected">
-                                    <div className="title">{translations['amp.ssc.dashboard:un-selected']}</div>
+                            <div className="unselected">
+                                <div
+                                    className="title">{translations['amp.ssc.dashboard:un-selected']} {this.props.label &&
+                                <span
+                                    className="select-count">{`${translations[this.props.label]} (${this.getOptionsCount()-this.getSelectedCount()})`}</span>}</div>
+                                <div className="well-inner filter-list-inner">
+
                                     {this.getOptions(false)}
                                 </div>
                             </div>

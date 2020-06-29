@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { ROUTES_HOME } from '../../../utils/constants';
 import { SSCTranslationContext } from '../../StartUp';
 
-export const HomeButton = () => {
+export const HomeButton = (props) => {
     const {translations} = useContext(SSCTranslationContext)
     return (
         <div>

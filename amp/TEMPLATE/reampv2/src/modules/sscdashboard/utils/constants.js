@@ -25,6 +25,8 @@ export const SELECTED_BUBBLE_COLOR = '#007236';
 
 export const PROJECT_LENGTH_HOME_PAGE = 50;
 export const UNDEFINED_FILTER = -999999999;
+export const FLAGS_TO_SHOW_DEFAULT = 9;
+export const FLAGS_TO_SHOW_SMALL = 6;
 
 export const HOME_CHART = 'home';
 export const SECTORS_CHART = 'sector';

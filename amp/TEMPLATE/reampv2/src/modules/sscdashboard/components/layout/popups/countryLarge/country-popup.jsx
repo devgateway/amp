@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import './popups.css';
+import '../popups.css';
 import CountryPopupHeader from "./country-popup-header";
 import CountryPopupChart from "./country-popup-chart";
 import CountryPopupFooter from "./country-popup-footer";

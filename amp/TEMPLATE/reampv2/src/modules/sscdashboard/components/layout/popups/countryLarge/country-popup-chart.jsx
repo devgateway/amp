@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import './popups.css';
+import '../popups.css';
 
 class CountryPopupChart extends Component {
     render() {

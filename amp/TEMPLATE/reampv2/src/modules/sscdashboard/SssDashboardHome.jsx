@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Sidebar from './components/layout/sidebar/sidebar';
 import MapContainer from './components/layout/map/map-content';
 import { SSCTranslationContext } from './components/StartUp';
-import { HOME_CHART } from './utils/constants';
+import { HOME_CHART, SECTORS_CHART } from './utils/constants';
 import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from './utils/FieldsConstants';
 import { bindActionCreators } from 'redux';
 import { loadActivitiesDetails } from './actions/callReports';
@@ -17,6 +17,8 @@ class SssDashboardHome extends Component {
 
         this.state = {
             chartSelected: HOME_CHART,
+            showEmptyProjects: false,
+            showLargeCountryPopin: false,
             selectedFilters: {
                 selectedYears: [],
                 selectedCountries: [],
@@ -73,6 +75,12 @@ class SssDashboardHome extends Component {
     }
 
     handleSelectedCountryChanged(pSelectedCountries) {
+        if (this.state.chartSelected === SECTORS_CHART && pSelectedCountries && pSelectedCountries.length >= 1) {
+            //currently we open large popin, in next tickets we will open also the popin for 2/3 countries selected
+            this.setState({showLargeCountryPopin: true});
+        } else {
+            this.setState({showLargeCountryPopin: false});
+        }
         this.updateFilterState('selectedCountries', pSelectedCountries);
     }
 
@@ -92,14 +100,18 @@ class SssDashboardHome extends Component {
         const filteredProjects = this.getFilteredData();
         this.setState({filteredProjects});
         if (filteredProjects.length === 0) {
-            this.setState({showModal: true});
+            this.setState({showEmptyProjects: true});
         } else {
-            this.setState({showModal: false});
+            this.setState({showEmptyProjects: false});
         }
     }
 
     getProjectsData() {
         this.props.loadActivitiesDetails(this.props.projects.activities.activitiesId);
+    }
+
+    onNoProjectsModalClose() {
+        this.setState({showEmptyProjects: false});
     }
 
     getFilteredData() {
@@ -172,6 +184,9 @@ class SssDashboardHome extends Component {
                                   handleSelectedFiltersChange={handleSelectedFiltersChange}
                                   filteredProjects={this.state.filteredProjects}
                                   filtersRestrictions={filtersRestrictions}
+                                  showEmptyProjects={this.state.showEmptyProjects}
+                                  showLargeCountryPopin={this.state.showLargeCountryPopin}
+                                  onNoProjectsModalClose={this.onNoProjectsModalClose.bind(this)}
                     />
                 </div>
             </div>

@@ -8,23 +8,14 @@ import { connect } from 'react-redux';
 import { loadActivitiesDetails } from '../../../actions/callReports';
 import SimplePopup from '../popups/homepopup/SimplePopup';
 import { SSCTranslationContext } from '../../StartUp';
-import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from '../../../utils/FieldsConstants';
+import CountryPopupContainer from '../popups/countryLarge/CountryPopupContainer';
 
 class MapContainer extends Component {
     //TODO once we implement side filters maybe we need to move state up
     constructor(props) {
         super(props);
-        this.state = {
-            showModal: false,
-            filteredProjects: [],
-            countriesWithData: [],
-
-        };
     }
 
-    modalOnClose(e) {
-        this.setState({showModal: false});
-    }
 
     render() {
         const {countries} = this.props.filters.countries;
@@ -39,10 +30,15 @@ class MapContainer extends Component {
                 />
                 <MapHome filteredProjects={this.props.filteredProjects} countries={countries}/>
                 {/*TODO refactor country popup in next story*/}
-                <CountryPopupOverlay show={this.state.showModal}>
+                <CountryPopupOverlay show={this.props.showEmptyProjects}>
                     <SimplePopup message={translations['amp.ssc.dashboard:no-date']}
-                                 onClose={this.modalOnClose.bind(this)}/>
+                                 onClose={this.props.onNoProjectsModalClose}/>
                 </CountryPopupOverlay>
+                <CountryPopupOverlay show={this.props.showLargeCountryPopin}>
+                    <CountryPopupContainer/>
+                </CountryPopupOverlay>
+
+
             </div>
         );
     }

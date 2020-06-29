@@ -34,7 +34,7 @@ class Sidebar extends Component {
                                                 parentId="side-accordion-filter"
                                                 selectedOptions={selectedSectors}
                                                 onChange={handleSelectedSectorChanged}
-                                                label={'amp.ssc.dashboard:Sector'}
+                                                label={'amp.ssc.dashboard:Sectors'}
                                                 chartSelected={chartSelected}
                                                 chartName={SECTORS_CHART}
                                                 onChangeChartSelected={onChangeChartSelected}

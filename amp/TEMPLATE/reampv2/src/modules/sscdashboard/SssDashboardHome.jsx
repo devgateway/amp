@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Sidebar from './components/layout/sidebar/sidebar';
 import MapContainer from './components/layout/map/map-content';
 import { SSCTranslationContext } from './components/StartUp';
-import { SECTORS_CHART } from './utils/constants';
+import { HOME_CHART } from './utils/constants';
 import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from './utils/FieldsConstants';
 import { bindActionCreators } from 'redux';
 import { loadActivitiesDetails } from './actions/callReports';
@@ -16,7 +16,7 @@ class SssDashboardHome extends Component {
         this.countriesWithData = [];
 
         this.state = {
-            chartSelected: SECTORS_CHART,
+            chartSelected: HOME_CHART,
             selectedFilters: {
                 selectedYears: [],
                 selectedCountries: [],

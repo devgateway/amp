@@ -64,6 +64,10 @@ class SssDashboardHome extends Component {
 
     onChangeChartSelected(chartSelected) {
         this.setState({chartSelected});
+        if (chartSelected !== SECTORS_CHART) {
+            this.setState({showLargeCountryPopin: false});
+
+        }
     }
 
     handleSelectedSectorChanged(pSelectedSectors) {
@@ -104,6 +108,12 @@ class SssDashboardHome extends Component {
         } else {
             this.setState({showEmptyProjects: false});
         }
+
+        const countryWithProjects = filteredProjects.map(p => p.id);
+        const intersection = this.state.selectedFilters.selectedCountries.filter(c => countryWithProjects.includes(c));
+        if (!intersection || intersection.length === 0) {
+            this.setState({showLargeCountryPopin: false});
+        }
     }
 
     getProjectsData() {
@@ -120,7 +130,8 @@ class SssDashboardHome extends Component {
         if (!this.props.projects.activitiesLoaded) {
             return [];
         }
-        return this.props.projects.activities[DONOR_COUNTRY].filter(p => {
+        const clonedProjectsActivities = this.props.projects.activities[DONOR_COUNTRY].map(a => ({...a}));
+        return clonedProjectsActivities.filter(p => {
             if (selectedCountries.length === 0 || selectedCountries.includes(p.id)) {
                 const sectors = p[PRIMARY_SECTOR].filter(sector => {
                     if (selectedSectors.length === 0 || selectedSectors.includes(sector.id)) {
@@ -209,7 +220,8 @@ const mapStateToProps = state => {
         projects: {
             activities: state.reportsReducer.activities,
             activitiesLoaded: state.reportsReducer.activitiesLoaded,
-        }
+            activitiesDetailsLoaded: state.reportsReducer.activitiesDetailsLoaded,
+        },
     };
 };
 

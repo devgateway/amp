@@ -9,28 +9,9 @@ import * as FieldsConstants from '../../../../utils/FieldsConstants';
 import { FLAG_DEFAULT, FLAGS_DIRECTORY, PROJECT_LENGTH_HOME_PAGE } from '../../../../utils/constants';
 import * as Utils from '../../../../utils/Utils';
 import { Img } from 'react-image';
+import { generateStructureBasedOnSector, getProjects } from '../../../../utils/ProjectUtils';
 
 class HomePopup extends Component {
-
-
-    generateStructureBasedOnSector() {
-
-        const {objectData} = this.props.data;
-        const sectors = [];
-        objectData[FieldsConstants.PRIMARY_SECTOR].forEach(s => {
-            const sector = {};
-            sector.id = s.id;
-            sector.activities = new Set();
-            s[FieldsConstants.MODALITIES].forEach(m => {
-                    m.activities.forEach(p => {
-                        sector.activities.add(p.id);
-                    });
-                }
-            );
-            sectors.push(sector);
-        });
-        return sectors;
-    }
 
     generateStructureBasedOnModalities() {
         const {objectData} = this.props.data;
@@ -73,7 +54,9 @@ class HomePopup extends Component {
     }
 
     getTableData(showSector) {
-        const data = showSector ? this.generateStructureBasedOnSector() : this.generateStructureBasedOnModalities();
+        const data = showSector ? generateStructureBasedOnSector(this.props.data.objectData) : this.generateStructureBasedOnModalities();
+        const {activitiesDetails, activitiesDetailsLoaded} = this.props.projects;
+
         return data.map(m => {
             m.description = showSector ? this.getSectorName(m.id) : this.getModalityName(m.id);
             return m;
@@ -82,39 +65,12 @@ class HomePopup extends Component {
                 <div><span className={`title filter-element${showSector ? '' : ' alternative'}`}>{m.description}</span>
                 </div>
                 <div className="project-list">
-                    <ul>{this.getProjects(m.activities, m.id)}</ul>
+                    <ul>{getProjects(m.activities, m.id, activitiesDetails,
+                        PROJECT_LENGTH_HOME_PAGE, this.context.translations['amp.ssc.dashboard:NA'])}
+                    </ul>
                 </div>
             </div>);
         });
-    }
-
-    getProjects(projects, elementId) {
-        return [...projects].map(p => {
-            const project = this.getProject(p);
-            const prj = {};
-            prj.projectName = project
-                ? project[FieldsConstants.PROJECT_TITLE] : this.context.translations['amp.ssc.dashboard:NA'];
-            prj.ampUrl = project
-                ? project.ampUrl : "/";
-            prj.id = p;
-            return prj;
-
-        }).sort((a, b) => a.projectName > b.projectName ? 1 : -1).map(p => {
-
-            return (<li key={`prj_list_${elementId}_${p.id}`}><a href={p.ampUrl} target="_blank">
-                <EllipsisText
-                    text={p.projectName}
-                    length={PROJECT_LENGTH_HOME_PAGE}/></a>
-            </li>)
-        })
-    }
-
-    getProject(projectId) {
-        const {activitiesDetails, activitiesDetailsLoaded} = this.props.projects;
-        if (activitiesDetailsLoaded) {
-            return activitiesDetails.activities.find(a => a[FieldsConstants.ACTIVITY_ID] === projectId);
-        }
-
     }
 
     render() {

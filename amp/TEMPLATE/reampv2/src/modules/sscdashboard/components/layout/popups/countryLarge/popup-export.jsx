@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import '../popups.css';
 
 class CountryPopupExport extends Component {
@@ -6,11 +6,11 @@ class CountryPopupExport extends Component {
         return (
             <div className="export-wrapper">
                 <ul>
-                  <li class="jpg">jpg</li>
-                  <li class="xls">xls</li>
-                  <li class="print">print</li>
-                  <li class="email">email</li>
-                  <li class="return-link">Retour vers la carte</li>
+                    <li class="jpg" onClick={() => alert('Its not yet implemented!')}>jpg</li>
+                    <li class="xls">xls</li>
+                    <li class="print">print</li>
+                    <li class="email">email</li>
+                    <li class="return-link">X</li>
                 </ul>
             </div>
         );

@@ -89,7 +89,6 @@
 
 .sidebar-filter-wrapper .panel-heading:hover,
 .sidebar-filter-wrapper .panel-title:hover {
-    /*background-color: red;*/
     color: #FFFFFF;
     cursor: pointer;
 }

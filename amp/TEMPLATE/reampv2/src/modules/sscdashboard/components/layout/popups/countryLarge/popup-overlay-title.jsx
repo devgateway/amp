@@ -5,7 +5,7 @@ class CountryPopupOverlayTitle extends Component {
     render() {
         return (
           <div>
-            <h2>Apercu de Secteur</h2>
+            <h2>&nbsp;</h2>
           </div>
         );
     }

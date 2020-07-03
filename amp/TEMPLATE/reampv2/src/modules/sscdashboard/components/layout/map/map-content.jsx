@@ -35,7 +35,7 @@ class MapContainer extends Component {
                                  onClose={this.props.onNoProjectsModalClose}/>
                 </CountryPopupOverlay>
                 <CountryPopupOverlay show={this.props.showLargeCountryPopin}>
-                    <CountryPopupContainer/>
+                    <CountryPopupContainer projects={this.props.filteredProjects}/>
                 </CountryPopupOverlay>
 
 
@@ -60,6 +60,7 @@ const mapStateToProps = state => {
         },
         projects: {
             activities: state.reportsReducer.activities,
+            activitiesDetails: state.reportsReducer.activitiesDetails,
             activitiesLoaded: state.reportsReducer.activitiesLoaded,
         }
     };

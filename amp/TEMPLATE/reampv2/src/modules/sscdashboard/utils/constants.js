@@ -27,6 +27,11 @@ export const PROJECT_LENGTH_HOME_PAGE = 50;
 export const UNDEFINED_FILTER = -999999999;
 export const FLAGS_TO_SHOW_DEFAULT = 9;
 export const FLAGS_TO_SHOW_SMALL = 6;
+export const SECTORS_LIMIT_CHART = 7;
+export const SECTORS_DECIMAL_POINTS_CHART = 2;
+export const SECTORS_OTHERS_ID_CHART = 2;
+export const DEFAULT_SCREEN_SIZE = 1920;
+export const DEFAULT_ELLIPSIS = 145;
 
 export const HOME_CHART = 'home';
 export const SECTORS_CHART = 'sector';

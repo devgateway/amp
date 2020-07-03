@@ -46,6 +46,9 @@ export default class HydratorHelper {
                             objectToHydrate[objectField][ActivityConstants.HIERARCHICAL_VALUE_DEPTH] =
                                 objectToHydrate[objectField].ancestorValues ? objectToHydrate[objectField].ancestorValues.length : 0;
                         }
+                        if (objectToHydrate[objectField].translatedValue) {
+                            objectToHydrate[objectField]['translated-value'] = objectToHydrate[objectField].translatedValue;
+                        }
                     }
                 }
             }

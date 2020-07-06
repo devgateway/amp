@@ -207,6 +207,8 @@
 /*TODO move charts to its own css*/
 .chart-container {
     width: 100%;
-    transform: translate(-38%, 0px);
+}
+.chart-container div{
+    transform: translate(-18%, 0px);
 }
 

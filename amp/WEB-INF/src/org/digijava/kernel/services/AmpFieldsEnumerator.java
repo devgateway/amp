@@ -30,8 +30,8 @@ public final class AmpFieldsEnumerator implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-       enumeratorFactory = new CachingFieldsEnumeratorFactory(syncDAO);
-       enumeratorFactory.buildDefaultEnumerator();
+        enumeratorFactory = new CachingFieldsEnumeratorFactory(syncDAO);
+        enumeratorFactory.buildDefaultEnumerator();
     }
 
     /**
@@ -57,6 +57,66 @@ public final class AmpFieldsEnumerator implements InitializingBean {
                 CachingFieldsEnumerator cachingFieldsEnumerator = enumeratorFactory.getEnumerator(templateId);
                 APIWorkspaceMemberFieldList fieldList = new APIWorkspaceMemberFieldList(wsIds,
                         cachingFieldsEnumerator.getActivityFields());
+                wsList.add(fieldList);
+            }
+        }
+
+        return wsList;
+    }
+
+    /**
+     * Group the fields by workspace member
+     *
+     * @param wsMemberIds
+     * @return
+     */
+    public static List<APIWorkspaceMemberFieldList> getAvailableResourceFieldsBasedOnWs(List<Long> wsMemberIds) {
+        List<APIWorkspaceMemberFieldList> wsList = new ArrayList<>();
+
+        Map<Long, List<Long>> fmTreesWsMap = FMService.getFMTreeWsMap();
+
+        for (Map.Entry<Long, List<Long>> t : fmTreesWsMap.entrySet()) {
+            Long templateId = t.getKey();
+            List<Long> wsIds = t.getValue();
+
+            if (!wsMemberIds.isEmpty()) {
+                wsIds.retainAll(wsMemberIds);
+            }
+
+            if (!wsIds.isEmpty()) {
+                CachingFieldsEnumerator cachingFieldsEnumerator = enumeratorFactory.getEnumerator(templateId);
+                APIWorkspaceMemberFieldList fieldList = new APIWorkspaceMemberFieldList(wsIds,
+                        cachingFieldsEnumerator.getResourceFields());
+                wsList.add(fieldList);
+            }
+        }
+
+        return wsList;
+    }
+
+    /**
+     * Group the fields by workspace member
+     *
+     * @param wsMemberIds
+     * @return
+     */
+    public static List<APIWorkspaceMemberFieldList> getAvailableContactFieldsBasedOnWs(List<Long> wsMemberIds) {
+        List<APIWorkspaceMemberFieldList> wsList = new ArrayList<>();
+
+        Map<Long, List<Long>> fmTreesWsMap = FMService.getFMTreeWsMap();
+
+        for (Map.Entry<Long, List<Long>> t : fmTreesWsMap.entrySet()) {
+            Long templateId = t.getKey();
+            List<Long> wsIds = t.getValue();
+
+            if (!wsMemberIds.isEmpty()) {
+                wsIds.retainAll(wsMemberIds);
+            }
+
+            if (!wsIds.isEmpty()) {
+                CachingFieldsEnumerator cachingFieldsEnumerator = enumeratorFactory.getEnumerator(templateId);
+                APIWorkspaceMemberFieldList fieldList = new APIWorkspaceMemberFieldList(wsIds,
+                        cachingFieldsEnumerator.getContactFields());
                 wsList.add(fieldList);
             }
         }

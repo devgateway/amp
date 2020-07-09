@@ -27,6 +27,7 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
 import org.apache.commons.io.FileUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -59,6 +60,23 @@ public class ResourceEndpoint {
     private static final Logger logger = LoggerFactory.getLogger(ResourceEndpoint.class);
 
     private static ResourceService resourceService = new ResourceService();
+
+    /**
+     * Provides full set of available fields and their settings/rules in a hierarchical structure
+     * grouped by workspace member id
+     *
+     * @param wsMemberIds
+     * @return JSON with fields information grouped by ws-member-ids
+     * @see <a href="https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration">Fields Enumeration Wiki<a/>
+     */
+    @POST
+    @Path("ws-member-fields")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getAvailableFieldsBasedOnWs", ui = false)
+    public List<APIWorkspaceMemberFieldList>
+    getAvailableFieldsBasedOnWs(@ApiParam(value = "List of WS ids", required = true) List<Long> ids) {
+        return AmpFieldsEnumerator.getAvailableResourceFieldsBasedOnWs(ids);
+    }
 
     @GET
     @Path("fields")

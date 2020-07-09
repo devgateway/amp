@@ -142,6 +142,7 @@ public class ActivityEPConstants {
         add("fundings~disbursements~adjustment_type");
         add("fundings~expenditures~adjustment_type");
         add("fundings~estimated_disbursements~adjustment_type");
+        add("locations~location");
     }};
 
     public static final String FUNDING_VULNERABLE_GROUP_LABEL =

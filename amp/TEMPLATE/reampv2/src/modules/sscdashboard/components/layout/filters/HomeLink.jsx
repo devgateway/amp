@@ -16,7 +16,7 @@ class HomeLink extends Component {
                 <div className="panel panel-default">
                     <div className={`panel-heading${chartSelected === chartName ? ` selected` : ``}`}>
                         <h4 className={`panel-title ${chartName}`} data-toggle="collapse" data-target={`#${chartName}`}>
-                            <a onClick={this.onSelectOptions.bind(this)}>
+                            <a onClick={this.onSelectOptions.bind(this)} >
                                 {translations[title]}
                             </a>
                         </h4>

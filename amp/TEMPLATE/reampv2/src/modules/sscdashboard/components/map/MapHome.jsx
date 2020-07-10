@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Map, TileLayer, CircleMarker, Marker, Popup } from 'react-leaflet';
+import { Map, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import * as L from 'leaflet';
 import '../../../../App.css';
 import ConnectionLayer from "./d3Layer/ConnectionLayer";

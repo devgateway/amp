@@ -6,7 +6,6 @@ import VisibilitySensor from 'react-visibility-sensor'
 import './filters.css';
 import { SSCTranslationContext } from '../../StartUp';
 import { splitArray, compareArrayNumber, calculateUpdatedValuesForDropDowns } from '../../../utils/Utils';
-import { Util } from 'leaflet/dist/leaflet-src.esm';
 
 const MultiSelectionDropDownContainer = (props) => {
     const {elements, columnsCount} = props;
@@ -147,7 +146,7 @@ class MultiSelectionDropDown extends Component {
                     type="button" data-toggle="collapse"
                     data-parent={`#${this.props.parentId}`}
                     href={`#${this.props.filterId}`}
-                    aria-control={this.props.filterId}
+                    aria-controls={this.props.filterId}
                     onClick={() =>
                         (onChangeChartSelected && chartName !== chartSelected ? onChangeChartSelected(chartName) : false)
                     }>
@@ -173,7 +172,7 @@ class MultiSelectionDropDown extends Component {
                                 <span className="select-all all">
                                 <input type='radio' value='1' name={`radio-${this.props.filterId}`}
                                        id={`select-all-${this.props.filterId}`}
-                                       checked={this.getSelectedCount() == this.getOptionsCount()}
+                                       checked={this.getSelectedCount() === this.getOptionsCount()}
                                 />
                                 <label htmlFor='select-all' onClick={e => this.selectAll()}>Select All</label>
                             </span>
@@ -181,7 +180,7 @@ class MultiSelectionDropDown extends Component {
                                 <span className="select-all all">
                                 <input type='radio' value='2' name={`radio-${this.props.filterId}`}
                                        id={`select-none-${this.props.filterId}`}
-                                       checked={this.getSelectedCount() == 0}
+                                       checked={this.getSelectedCount() === 0}
                                 />
                                 <label htmlFor='select-none' onClick={e => this.selectNone()}>Select None</label>
                             </span>
@@ -216,7 +215,7 @@ class MultiSelectionDropDown extends Component {
                                 <div
                                     className="title">{translations['amp.ssc.dashboard:un-selected']} {this.props.label &&
                                 <span
-                                    className="select-count">{`${translations[this.props.label]} (${this.getOptionsCount()-this.getSelectedCount()})`}</span>}</div>
+                                    className="select-count">{`${translations[this.props.label]} (${this.getOptionsCount() - this.getSelectedCount()})`}</span>}</div>
                                 <div className="well-inner filter-list-inner">
 
                                     {this.getOptions(false)}

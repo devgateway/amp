@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Sidebar from './components/layout/sidebar/sidebar';
-import MapContainer from './components/layout/map/map-content';
+import MapContainer from './components/layout/map/MapContainer';
 import { SSCTranslationContext } from './components/StartUp';
 import { HOME_CHART, SECTORS_CHART } from './utils/constants';
 import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from './utils/FieldsConstants';
@@ -65,9 +65,13 @@ class SssDashboardHome extends Component {
     onChangeChartSelected(chartSelected) {
         this.setState({chartSelected});
         if (chartSelected !== SECTORS_CHART) {
-            this.setState({showLargeCountryPopin: false});
+            this.closeLargeCountryPopin();
 
         }
+    }
+
+    closeLargeCountryPopin() {
+        this.setState({showLargeCountryPopin: false});
     }
 
     handleSelectedSectorChanged(pSelectedSectors) {
@@ -83,7 +87,7 @@ class SssDashboardHome extends Component {
             //currently we open large popin, in next tickets we will open also the popin for 2/3 countries selected
             this.setState({showLargeCountryPopin: true});
         } else {
-            this.setState({showLargeCountryPopin: false});
+            this.closeLargeCountryPopin();
         }
         this.updateFilterState('selectedCountries', pSelectedCountries);
     }
@@ -112,7 +116,7 @@ class SssDashboardHome extends Component {
         const countryWithProjects = filteredProjects.map(p => p.id);
         const intersection = this.state.selectedFilters.selectedCountries.filter(c => countryWithProjects.includes(c));
         if (!intersection || intersection.length === 0) {
-            this.setState({showLargeCountryPopin: false});
+            this.closeLargeCountryPopin();
         }
     }
 
@@ -152,7 +156,7 @@ class SssDashboardHome extends Component {
                                 return false;
                             }
                         });
-                        if (modalities.length == 0) {
+                        if (modalities.length === 0) {
                             return false;
                         } else {
                             sector[MODALITIES] = modalities;
@@ -197,6 +201,7 @@ class SssDashboardHome extends Component {
                                   filtersRestrictions={filtersRestrictions}
                                   showEmptyProjects={this.state.showEmptyProjects}
                                   showLargeCountryPopin={this.state.showLargeCountryPopin}
+                                  closeLargeCountryPopin={this.closeLargeCountryPopin.bind(this)}
                                   onNoProjectsModalClose={this.onNoProjectsModalClose.bind(this)}
                     />
                 </div>

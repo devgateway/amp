@@ -1,6 +1,5 @@
 import * as FieldsConstants from './FieldsConstants';
 import EllipsisText from 'react-ellipsis-text';
-import { PROJECT_LENGTH_HOME_PAGE } from './constants';
 import React from 'react';
 
 
@@ -42,7 +41,7 @@ export function getProjects(projects, elementId, activitiesDetails, ellipsisLeng
 
     }).sort((a, b) => a.projectName > b.projectName ? 1 : -1).map(p => {
 
-        return (<li key={`prj_list_${elementId}_${p.id}`}><a href={p.ampUrl} target="_blank">
+        return (<li key={`prj_list_${elementId}_${p.id}`}><a href={p.ampUrl} target="_blank" rel="noopener noreferrer">
             <EllipsisText
                 text={p.projectName}
                 length={ellipsisLength}/></a>

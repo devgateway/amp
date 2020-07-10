@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
-import HorizontalFilters from '../filters/horizontal-filters';
+import HorizontalFilters from '../filters/HorizontalFilters';
 import './map.css';
 import MapHome from "../../map/MapHome";
-import CountryPopupOverlay from "../popups/popup-overlay";
+import PopupOverlay from "../popups/popupOverlay";
+import CountryPopupOverlay from "../popups/CountryPopupOverlay";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { loadActivitiesDetails } from '../../../actions/callReports';
 import SimplePopup from '../popups/homepopup/SimplePopup';
 import { SSCTranslationContext } from '../../StartUp';
-import CountryPopupContainer from '../popups/countryLarge/CountryPopupContainer';
 
 class MapContainer extends Component {
-    //TODO once we implement side filters maybe we need to move state up
-    constructor(props) {
-        super(props);
-    }
-
-
     render() {
         const {countries} = this.props.filters.countries;
         const {translations} = this.context;
@@ -30,13 +24,13 @@ class MapContainer extends Component {
                 />
                 <MapHome filteredProjects={this.props.filteredProjects} countries={countries}/>
                 {/*TODO refactor country popup in next story*/}
-                <CountryPopupOverlay show={this.props.showEmptyProjects}>
+                <PopupOverlay show={this.props.showEmptyProjects}>
                     <SimplePopup message={translations['amp.ssc.dashboard:no-date']}
                                  onClose={this.props.onNoProjectsModalClose}/>
-                </CountryPopupOverlay>
-                <CountryPopupOverlay show={this.props.showLargeCountryPopin}>
-                    <CountryPopupContainer projects={this.props.filteredProjects}/>
-                </CountryPopupOverlay>
+                </PopupOverlay>
+                <CountryPopupOverlay show={this.props.showLargeCountryPopin} projects={this.props.filteredProjects}
+                                     closeLargeCountryPopin={this.props.closeLargeCountryPopin}
+                />
 
 
             </div>

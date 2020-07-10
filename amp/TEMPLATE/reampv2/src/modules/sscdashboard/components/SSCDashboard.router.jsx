@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Route} from 'react-router-dom';
 import './../../../App.css';
 import SectorsHome from './sectors/SectorsHome';
-import MapContainer from "./layout/map/map-content";
+import MapContainer from "./layout/map/MapContainer";
 import MapWithD3Figures from './map/MapWithD3Figures';
 
 

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import InfiniteCarousel from 'react-leaf-carousel';
 import { Img } from 'react-image'
 import EllipsisText from 'react-ellipsis-text';
-import PropTypes from 'prop-types';
 import * as Utils from '../../../utils/Utils';
 import './filters.css';
 import { FLAGS_TO_SHOW_DEFAULT, FLAGS_TO_SHOW_SMALL } from '../../../utils/constants';

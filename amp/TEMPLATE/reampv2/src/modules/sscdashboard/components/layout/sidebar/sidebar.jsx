@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import SidebarIntro from './sidebar-intro';
+import SidebarIntro from './SidebarIntro';
 
 import './sidebar.css';
 import HomeLink from '../filters/HomeLink';
@@ -14,7 +14,6 @@ class Sidebar extends Component {
 
     render() {
         const {chartSelected, onChangeChartSelected} = this.props;
-        const {translations} = this.context;
         const {selectedSectors = [], selectedModalities = []} = this.props.selectedFilters;
         const {handleSelectedSectorChanged, handleSelectedModalityChanged} = this.props.handleSelectedFiltersChange;
         const {sectors} = this.props.filters.sectors;
@@ -60,7 +59,7 @@ class Sidebar extends Component {
                 </div>
                 {(!chartSelected || chartSelected === HOME_CHART || chartSelected === DOWNLOAD_CHART) &&
                 <SidebarIntro
-                    text={[translations['amp.ssc.dashboard:home-text-1'], translations['amp.ssc.dashboard:home-text-2']]}/>}
+                    text={['amp.ssc.dashboard:home-text-1', 'amp.ssc.dashboard:home-text-2']}/>}
             </div>
         );
     }

@@ -28,7 +28,7 @@ class CountryPopupFooter extends Component {
                     <div className="label">{translations['amp.ssc.dashboard:sectors-projects']}</div>
                 </div>
                 <div className="col-md-11 project-list">
-                    <ul>{getProjects(projects, 'country-popup',
+                    <ul >{getProjects(projects, 'country-popup',
                         activitiesDetails, this.state.ellipsisSize, translations['amp.ssc.dashboard:NA'])}
                     </ul>
                 </div>

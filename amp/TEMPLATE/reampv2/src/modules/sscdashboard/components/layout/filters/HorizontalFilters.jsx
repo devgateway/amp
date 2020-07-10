@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import MultiSelectionDropDown from './MultiSelectionDropDown';
 import CountryCarousel from './carousel';
+
 import './filters.css';
 import {
     DASHBOARD_DEFAULT_MAX_YEAR_RANGE,
@@ -8,9 +11,6 @@ import {
     SECTORS_CHART
 } from '../../../utils/constants';
 import { EXTRA_INFO, GROUP_ID } from '../../../utils/FieldsConstants';
-import { bindActionCreators } from 'redux';
-import { loadSectorsFilters, loadCountriesFilters, loadModalitiesFilters } from '../../../actions/loadFilters';
-import { connect } from 'react-redux';
 import { SSCTranslationContext } from '../../StartUp';
 
 class HorizontalFilters extends Component {

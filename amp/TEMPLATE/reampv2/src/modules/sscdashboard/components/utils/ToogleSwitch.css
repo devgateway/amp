@@ -88,17 +88,15 @@
 }
 
 .toggle-switch-checkbox:checked + .toggle-switch-label .toggle-switch-switch {
-    right: 0px;
+    right: 0;
 }
 
 .toggle-switch-inner::before {
     content: attr(data-yes);
-    /* other styles */
 }
 
 .toggle-switch-inner::after {
     content: attr(data-no);
-    /* other styles */
 }
 
 .toggle-switch.big-switch {

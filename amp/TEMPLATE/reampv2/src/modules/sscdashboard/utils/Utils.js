@@ -1,6 +1,4 @@
-import { Img } from 'react-image';
-import { FLAG_DEFAULT, FLAGS_DIRECTORY } from './constants';
-import React from 'react';
+import { FLAGS_DIRECTORY } from './constants';
 
 export function splitArray(a, n, balanced) {
     if (n < 2)
@@ -89,5 +87,27 @@ export function calculateUpdatedValuesForDropDowns(ipSelectedFilter, selectedOpt
         updatedSelectedOptions.push(ipSelectedFilter);
     }
     return updatedSelectedOptions;
+}
+
+export function calculateColumnCount(length) {
+    let columnCount = 1;
+    switch (length) {
+        case 1:
+            columnCount = 1;
+            break;
+        case 2:
+        case 4:
+            columnCount = 2;
+            break;
+        case 3:
+        case 5:
+        case 6:
+            columnCount = 3;
+            break;
+        default:
+            break;
+
+    }
+    return columnCount;
 }
 

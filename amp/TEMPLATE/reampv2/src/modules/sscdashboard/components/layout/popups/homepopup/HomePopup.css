@@ -1,6 +1,6 @@
 
 .map-container .leaflet-popup-content-wrapper {
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .map-container .leaflet-popup-content {
@@ -45,7 +45,7 @@
     list-style: none;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2NgYGD4DwABBAEAcCBlCwAAAABJRU5ErkJggg==);
     background-repeat: no-repeat;
-    background-position: 0px 50%;
+    background-position: 0 50%;
     padding-left: 7px;
 }
 

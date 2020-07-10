@@ -16,6 +16,7 @@ export const API_SSC_DASHBOARD_URL = '/rest/gis/sscdashboard';
 
 export const API_REPORTS_ACTIVITY_DETAIL_URL = '/rest/gis/activities';
 
+export const BOOTSTRAP_COLUMNS_COUNT = 12;
 
 export const NON_SELECTED_LINE_COLOR = '#fd8f00';
 export const NON_SELECTED_BUBBLE_COLOR = '#fd8f00';
@@ -27,13 +28,24 @@ export const PROJECT_LENGTH_HOME_PAGE = 50;
 export const UNDEFINED_FILTER = -999999999;
 export const FLAGS_TO_SHOW_DEFAULT = 9;
 export const FLAGS_TO_SHOW_SMALL = 6;
-export const SECTORS_LIMIT_CHART = 7;
+export const SECTORS_LIMIT_CHART = 5;
 export const SECTORS_DECIMAL_POINTS_CHART = 2;
-export const SECTORS_OTHERS_ID_CHART = 2;
+export const SECTORS_OTHERS_ID_CHART = "-1";
 export const DEFAULT_SCREEN_SIZE = 1920;
 export const DEFAULT_ELLIPSIS = 145;
+export const SECTOR_MIN_SIZE = 2;
+export const SECTOR_LEADING_LEFT = '0';
 
 export const HOME_CHART = 'home';
 export const SECTORS_CHART = 'sector';
 export const MODALITY_CHART = 'modality';
 export const DOWNLOAD_CHART = 'download';
+export const COLOR_MAP = [
+    '#4bbc4e',
+    '#40557d',
+    '#9a0000',
+    '#ffd400',
+    '#346fad',
+    '#ee4545'
+];
+

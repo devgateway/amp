@@ -6,7 +6,7 @@
     border-top: 1px solid #273142;
     border-radius: 0;
     box-shadow: none;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .sidebar-filter-wrapper .filter-list,
@@ -29,16 +29,19 @@
 .panel-title > a {
     text-decoration: none;
 }
-.sidebar-filter-wrapper .well{
+
+.sidebar-filter-wrapper .well {
     background-color: #FFFFFF;
 }
+
 .sidebar-filter-wrapper .selected .title,
-.sidebar-filter-wrapper .unselected .title{
+.sidebar-filter-wrapper .unselected .title {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
 .horizontal-filter .selected .title,
-.horizontal-filter .unselected .title{
+.horizontal-filter .unselected .title {
     padding-top: 5px;
     padding-bottom: 5px;
 }
@@ -178,7 +181,7 @@
 
 .selected .filter-list-inner {
     border-bottom: 1px solid #e6eaee;
-    margin-bottom:5px;
+    margin-bottom: 5px;
 }
 
 .sidebar-filter-wrapper .horizontal-filter .filter-list .well .well-inner {
@@ -271,11 +274,11 @@
 
 @media (max-width: 1366px) {
     .carousel-filters-wrapper .InfiniteCarouselArrowPrev {
-        left: 0px;
+        left: 0;
     }
 
     .carousel-filters-wrapper .InfiniteCarouselArrowNext {
-        right: 0px;
+        right: 0;
     }
 }
 
@@ -290,7 +293,7 @@
 }
 
 .country-year-search-wrapper {
-    padding: 0px;
+    padding: 0;
 }
 
 .country-year-search-wrapper .select-count {
@@ -314,7 +317,7 @@
 
 .country-year-search-wrapper .panel {
     background-color: inherit;
-    border: 0px;
+    border: 0;
 }
 
 .carousel-filters-wrapper .reset .btn:before {
@@ -334,7 +337,7 @@
     border: 10px solid #273142;
     border-color: #273142 transparent transparent #273142;
     top: -11px;
-    left: 0px;
+    left: 0;
 }
 
 .country-year-search-wrapper .horizontal-filter .btn {
@@ -488,15 +491,15 @@
 }
 
 .select-all.all:last-of-type {
-    border-right: 0px;
-    margin-right: 0px;
-    padding-right: 0px;
+    border-right: 0;
+    margin-right: 0;
+    padding-right: 0;
 }
 
 .unselected > .filter-list-inner > .row,
 .selected > .filter-list-inner > .row {
-    margin-right: 0px;
-    margin-left: 0px;
+    margin-right: 0;
+    margin-left: 0;
 }
 
 .filter-content {

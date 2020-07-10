@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import ToggleSwitch from '../../../utils/ToggleSwitch';
-import EllipsisText from 'react-ellipsis-text';
 import './HomePopup.css';
 import { SSCTranslationContext } from '../../../StartUp';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as FieldsConstants from '../../../../utils/FieldsConstants';
-import { FLAG_DEFAULT, FLAGS_DIRECTORY, PROJECT_LENGTH_HOME_PAGE } from '../../../../utils/constants';
+import { PROJECT_LENGTH_HOME_PAGE } from '../../../../utils/constants';
 import * as Utils from '../../../../utils/Utils';
 import { Img } from 'react-image';
 import { generateStructureBasedOnSector, getProjects } from '../../../../utils/ProjectUtils';
@@ -55,7 +54,7 @@ class HomePopup extends Component {
 
     getTableData(showSector) {
         const data = showSector ? generateStructureBasedOnSector(this.props.data.objectData) : this.generateStructureBasedOnModalities();
-        const {activitiesDetails, activitiesDetailsLoaded} = this.props.projects;
+        const {activitiesDetails} = this.props.projects;
 
         return data.map(m => {
             m.description = showSector ? this.getSectorName(m.id) : this.getModalityName(m.id);

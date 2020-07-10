@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import './popups.css';
 
 
-class CountryPopupOverlay extends Component {
+class PopupOverlay extends Component {
     render() {
         if (!this.props.show) {
             return null;
@@ -17,4 +17,4 @@ class CountryPopupOverlay extends Component {
     }
 }
 
-export default CountryPopupOverlay;
+export default PopupOverlay;

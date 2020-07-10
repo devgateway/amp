@@ -35,7 +35,6 @@ public class CachingFieldsEnumeratorFactory {
         CachingFieldsEnumerator cacheFieldsEnumerator = buildEnumerator(new FMVisibility(templateId));
         CachingFieldsEnumerator result = cache.putIfAbsent(templateId, cacheFieldsEnumerator);
         if (result == null) {
-            System.out.println("Cache result null");
             result = cache.putIfAbsent(templateId, cacheFieldsEnumerator);
         }
         return result;
